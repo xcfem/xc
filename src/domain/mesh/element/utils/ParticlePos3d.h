@@ -44,12 +44,12 @@ class ParticlePos3d: public ParticlePos2d
     double t;
 
   public:
-    ParticlePos3d(const double &r_coord = 0,
-                  const double &s_coord = 0,
-		  const double &t_coord = 0);
+    ParticlePos3d(const double &r_coord = 0.0,
+                  const double &s_coord = 0.0,
+		  const double &t_coord = 0.0);
     ParticlePos3d(const Pos2d &);
     ParticlePos3d(const Pos3d &);
-    void set_coordinates(const double &r_coord = 0,const double &s_coord = 0,const double &t_coord = 0);
+    void set_coordinates(const double &r_coord = 0.0,const double &s_coord = 0.0, const double &t_coord = 0.0);
     void set_coordinates(const Pos3d &);
     void set_coordinates(const Pos2d &);
     

@@ -42,7 +42,9 @@ XC::GaussPoint::GaussPoint(const double &r_coord,
 //! @brief  Constructor
 XC::GaussPoint::GaussPoint(const Pos2d &p,const double &w)
   : ParticlePos3d(p)
-  { set_weights(w); }
+  {
+    set_weights(w);
+  }
 
 //! @brief  Constructor
 XC::GaussPoint::GaussPoint(const Pos3d &p,const double &w)

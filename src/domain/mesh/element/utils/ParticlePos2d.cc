@@ -31,13 +31,13 @@
 //! @brief  Constructor
 XC::ParticlePos2d::ParticlePos2d(const double &r_coord,
                                  const double &s_coord)
-  {
-    set_coordinates(r_coord,s_coord);
-  }
+  : r(r_coord), s(s_coord)
+  {}
 
 //! @brief  Constructor
 XC::ParticlePos2d::ParticlePos2d(const Pos2d &p)
-  { set_coordinates(p); }
+  : r(p.x()), s(p.y())
+  {}
 
 //! @brief Set coordinates.
 void XC::ParticlePos2d::set_coordinates(const double &r_coord,const double &s_coord)

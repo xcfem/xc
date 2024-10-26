@@ -44,10 +44,10 @@ class ParticlePos2d
     double s;
 
   public:
-    ParticlePos2d(const double &r_coord = 0,
-                  const double &s_coord = 0);
+    ParticlePos2d(const double &r_coord = 0.0,
+                  const double &s_coord = 0.0);
     ParticlePos2d(const Pos2d &);
-    void set_coordinates(const double &r_coord = 0,const double &s_coord = 0);
+    void set_coordinates(const double &r_coord = 0.0,const double &s_coord = 0.0);
     void set_coordinates(const Pos2d &);
     
     inline const double &r_coordinate(void) const

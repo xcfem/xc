@@ -33,18 +33,18 @@
 XC::ParticlePos3d::ParticlePos3d(const double &r_coord,
                                  const double &s_coord,
 				 const double &t_coord)
-  : ParticlePos2d(r_coord, s_coord)
-  {
-    t= t_coord;
-  }
+  : ParticlePos2d(r_coord, s_coord), t(t_coord)
+  {}
 
 //! @brief  Constructor
 XC::ParticlePos3d::ParticlePos3d(const Pos2d &p)
-  { ParticlePos2d::set_coordinates(p); }
+  : ParticlePos2d(p.x(), p.y()), t(0.0)
+  {}
 
 //! @brief  Constructor
 XC::ParticlePos3d::ParticlePos3d(const Pos3d &p)
-  { set_coordinates(p); }
+  : ParticlePos2d(p.x(), p.y()), t(p.z())
+  {}
 
 //! @brief Set coordinates.
 void XC::ParticlePos3d::set_coordinates(const double &r_coord,const double &s_coord,const double &t_coord)
@@ -62,7 +62,10 @@ void XC::ParticlePos3d::set_coordinates(const Pos3d &p)
 
 //! @brief Set coordinates.
 void XC::ParticlePos3d::set_coordinates(const Pos2d &p)
-  { ParticlePos2d::set_coordinates(p.x(),p.y());}
+  {
+    ParticlePos2d::set_coordinates(p.x(),p.y());
+    t= 0.0;
+  }
 
 //! @brief Equal operator.
 bool XC::ParticlePos3d::operator==(const ParticlePos3d &other) const
