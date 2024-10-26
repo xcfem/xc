@@ -18,6 +18,7 @@ xc is a C++ (and fortran) library, so a C++ and a Fortran compiler are necessary
     - Git version control system (<https://git-scm.com/>).
 	- GLib library (libglib2.0-dev).
 	- GMSH Three-dimensional finite element mesh generator (<https://gmsh.info>).
+	- Spectra C++ Library For Large Scale Eigenvalue Problems](https://spectralib.org/)
 	- GTK GIMP Tookit (libgtk2.0-dev, libgtkgl2.0-dev, libgtkglextmm-x11-1.2-dev, libgtkmm-2.4-dev).
 	- GNU plotutils libraries (libplot gnuplot).
 	- GNU Triangulated Surface Library (libgts-bin libgts-dev).
