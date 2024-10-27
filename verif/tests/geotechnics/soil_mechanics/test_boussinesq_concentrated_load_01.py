@@ -20,7 +20,9 @@ import geom
 import math
 from geotechnics import boussinesq
 from scipy import integrate
+from scipy import version
 import numpy as np
+from packaging.version import Version
 
 # Wall height
 H= 4.0
@@ -54,7 +56,11 @@ pi= [ pressure(z) for z in zi]
 
 ##  call quad to integrate f from -4 to 0
 #force, int_err = integrate.quad(pressure, -4, 0)
-force= integrate.simpson(pi, zi)
+scipy_version= version.full_version
+if(Version(scipy_version)<Version('1.5.0')):
+    force= integrate.simps(pi, zi)
+else:
+    force= integrate.simpson(pi, zi)
 err= abs(force-10e3)/10e3
 
 '''
