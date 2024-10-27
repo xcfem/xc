@@ -19,6 +19,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //python_interface.cxx
+
 class_<CooSys, bases<ProtoGeom>, boost::noncopyable >("CooSys", no_init)
   .add_property("numberOfAxis",&CooSys::numberOfAxis)
   .add_property("EsNormal",&CooSys::EsNormal)
@@ -89,4 +90,8 @@ class_<Rect3d3dCooSys, bases<Xd3dCooSys> >("CooSysRect3d3d")
   .def("getLocalCoordinates",&Rect3d3dCooSys::getLocalCoordinates)
   ;
 
+class_<FrenetTrihedron, bases<ProtoGeom> >("FrenetTrihedron")
+  .def(init<>())
+  .def(init<Polyline3d>())
+  ;
 

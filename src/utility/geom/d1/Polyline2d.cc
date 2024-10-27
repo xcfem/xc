@@ -54,12 +54,7 @@ Polyline2d::Polyline2d(const Polygon2d &plg)
 
 //! @brief Constructor (Python interface).
 Polyline2d::Polyline2d(const boost::python::list &l)
-  {
-    const int sz= len(l);
-    // copy the components
-    for(int i=0; i<sz; i++)
-      push_back(boost::python::extract<Pos2d>(l[i]));
-  }
+  { this->setVertices(l); }
 
 //! @brief Append a vertex to the polyline.
 const Pos2d *Polyline2d::appendVertex(const Pos2d &p)
@@ -90,6 +85,15 @@ const GeomObj::list_Pos2d &Polyline2d::getVertices(void) const
               << " is deprecated. Use getVertexList."
               << std::endl;
     return *this;
+  }
+
+//! @brief Set the polyline vertices from the given Python list.
+void Polyline2d::setVertices(const boost::python::list &l)
+  {
+    const int sz= len(l);
+    // copy the components
+    for(int i=0; i<sz; i++)
+      push_back(boost::python::extract<Pos2d>(l[i]));
   }
 
 //! @brief Return the list of the vertices.
@@ -879,6 +883,23 @@ Polyline2d::iterator Polyline2d::getFarthestPointFromSegment(iterator it1, itera
     return maxIt;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict Polyline2d::getPyDict(void) const
+  {
+    boost::python::dict retval= Linear2d::getPyDict(); // Call parent method.
+    const boost::python::list vList= this->getVertexListPy(); // Get vertex list.
+    retval["vertex_list"]= vList; // Put the list in the dictionary.
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void Polyline2d::setPyDict(const boost::python::dict &d)
+  {
+    Linear2d::setPyDict(d); // Call parent method.
+    const boost::python::list vList= boost::python::extract<boost::python::list>(d["vertex_list"]); // Retrieve vertex list.
+    this->clear(); // Remove current vertices (if any).
+    this->setVertices(vList); // Set the new ones.
+  }
 
 void Polyline2d::Print(std::ostream &stream) const
   {

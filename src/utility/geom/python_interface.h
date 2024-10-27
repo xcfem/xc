@@ -87,6 +87,7 @@
 #include "utility/geom/d2/Grid2d.h"
 #include "utility/geom/pos_vec/SlidingVectorsSystem2d.h"
 #include "utility/geom/pos_vec/SlidingVectorsSystem3d.h"
+#include "utility/geom/coo_sys/FrenetTrihedron.h"
 #include "utility/geom/coo_sys/ref_sys/PrincipalAxesOfInertia2D.h"
 #include "utility/geom/coo_sys/ref_sys/Ref1d3d.h"
 #include "utility/geom/coo_sys/ref_sys/Ref2d3d.h"

@@ -47,9 +47,6 @@
 //============================================================================
 //*/
 
-#ifndef VonMisesPotentialSurface_CPP
-#define VonMisesPotentialSurface_CPP
-
 #include "material/nD/template_3d_ep/VonMisesPotentialSurface.h"
 #include "material/nD/template_3d_ep/EPState.h"
 
@@ -124,8 +121,5 @@ XC::BJtensor XC::VonMisesPotentialSurface::d2Qodsdt1(const EPState *EPS) const
 void XC::VonMisesPotentialSurface::print(std::ostream &os) const
   {
     os << "Von Mises Potential Surface Parameters: " << std::endl;
-  }; 
-
-
-#endif
+  }
 

@@ -54,6 +54,7 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     inline size_t getNumVertices(void) const
       { return GeomObj::list_Pos2d::size(); }
     size_t getNumSegments(void) const;
+    void setVertices(const boost::python::list &);
     inline const_iterator vertices_begin(void) const
       { return GeomObj::list_Pos2d::begin(); }
     const const_iterator vertices_end(void) const
@@ -136,6 +137,9 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
       { return GeomObj::list_Pos2d::getCenterOfMass(); }
 
     iterator getFarthestPointFromSegment(iterator it1, iterator it2, GEOM_FT &pMaxDist);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
 
     void Print(std::ostream &stream) const;
     void Plot(Plotter &) const;

@@ -41,12 +41,7 @@ Polyline3d::Polyline3d(const Pos3dList &l)
 
 //! @brief Constructor (Python interface).
 Polyline3d::Polyline3d(const boost::python::list &l)
-  {
-    const int sz= len(l);
-    // copy the components
-    for(int i=0; i<sz; i++)
-      push_back(boost::python::extract<Pos3d>(l[i]));
-  }
+  { this->setVertices(l); }
 
 //! @brief Comparison operator.
 bool Polyline3d::operator==(const Polyline3d &other) const
@@ -70,6 +65,15 @@ const GeomObj::list_Pos3d &Polyline3d::getVertices(void) const
               << " is deprecated. Use getVertexList."
               << std::endl;
     return *this;
+  }
+
+//! @brief Set the polyline vertices from the given Python list.
+void Polyline3d::setVertices(const boost::python::list &l)
+  {
+    const int sz= len(l);
+    // copy the components
+    for(int i=0; i<sz; i++)
+      push_back(boost::python::extract<Pos3d>(l[i]));
   }
 
 //! @brief Return the list of the vertices.
@@ -839,6 +843,23 @@ Polyline3d::iterator Polyline3d::getFarthestPointFromSegment(iterator it1, itera
     return maxIt;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict Polyline3d::getPyDict(void) const
+  {
+    boost::python::dict retval= Linear3d::getPyDict(); // Call parent method.
+    const boost::python::list vList= this->getVertexListPy(); // Get vertex list.
+    retval["vertex_list"]= vList; // Put the list in the dictionary.
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void Polyline3d::setPyDict(const boost::python::dict &d)
+  {
+    Linear3d::setPyDict(d); // Call parent method.
+    const boost::python::list vList= boost::python::extract<boost::python::list>(d["vertex_list"]); // Retrieve vertex list.
+    this->clear(); // Remove current vertices (if any).
+    this->setVertices(vList); // Set the new ones.
+  }
 
 void Polyline3d::Print(std::ostream &stream) const
   {

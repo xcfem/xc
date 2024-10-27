@@ -51,6 +51,7 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     inline size_t getNumVertices(void) const
       { return GeomObj::list_Pos3d::size(); }
     size_t getNumSegments(void) const;
+    void setVertices(const boost::python::list &);
 
 /*     inline virtual void GiraX(double ang) */
 /*       { Ref3d::GiraX(ang); TrfPoints(); } */
@@ -113,7 +114,10 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
       { return GeomObj::list_Pos3d::getCenterOfMass(); }
 
     iterator getFarthestPointFromSegment(iterator it1, iterator it2, GEOM_FT &pMaxDist);
-
+  
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     void Print(std::ostream &stream) const;
   };
 

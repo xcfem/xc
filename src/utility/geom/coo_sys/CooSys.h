@@ -31,13 +31,13 @@
 //
 //!  @defgroup CooSys Coordinate systems.
 //
-//!  @ingroup CooSys
 //! 
 //!  @brief Coordinate systems base class.
+//!  @ingroup CooSys
 //!  
 class CooSys: public ProtoGeom
   {
-    FT_matrix rot; //Basis vector matrix (as rows).
+    FT_matrix rot; //!< Basis vector matrix (as rows).
   protected:
     void identity(void);
     void put(const size_t &i,const size_t &j,const GEOM_FT &);

@@ -52,9 +52,6 @@
 //================================================================================
 */
 
-#ifndef YS_CPP
-#define YS_CPP
-
 #include "material/nD/template_3d_ep/YieldSurface.h"
 #include "utility/matrix/nDarray/BJtensor.h"
 #include "utility/matrix/nDarray/stresst.h"
@@ -146,7 +143,7 @@ void XC::YieldSurface::print(std::ostream &os) const
     os << getClassName() << "::" << __FUNCTION__
        << "; not implemented yet."
        << std::endl;
-  }; 
+  }
 
 //! @brief Overload ostream insertion operator.
 std::ostream &XC::operator<<(std::ostream &os, const YieldSurface & YS)
@@ -156,5 +153,4 @@ std::ostream &XC::operator<<(std::ostream &os, const YieldSurface & YS)
   }
 
 
-#endif
 
