@@ -93,5 +93,6 @@ class_<Rect3d3dCooSys, bases<Xd3dCooSys> >("CooSysRect3d3d")
 class_<FrenetTrihedron, bases<ProtoGeom> >("FrenetTrihedron")
   .def(init<>())
   .def(init<Polyline3d>())
+  .def("getTangent",&FrenetTrihedron::getTangent, "Return the tangent vector at te given arc length.")
   ;
 

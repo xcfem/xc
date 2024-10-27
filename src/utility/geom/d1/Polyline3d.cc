@@ -134,6 +134,25 @@ Segment3d Polyline3d::getSegment(const size_t &i) const
     return Segment3d((*this)[i-1],(*this)[i]);
   }
 
+//! @brief Return a vector containing the consecutive segments of the polyline.
+std::vector<Segment3d> Polyline3d::getSegments(void) const
+  {
+    const size_t ns= getNumSegments();
+    std::vector<Segment3d> retval(ns);
+    if(ns>0)
+      {
+	list_Pos3d::const_iterator i= begin();
+	Pos3d vi(*i);
+	size_t count= 0;
+	for(list_Pos3d::const_iterator j=i+1;j!=end(); j++, count++)
+	  {
+	    const Pos3d vj(*j);
+	    retval[count]= Segment3d(vi, vj);
+	    vi= vj;
+	  }
+      }
+    return retval;
+  }
 
 //! @brief Moves the polyline.
 void Polyline3d::Move(const Vector3d &v)

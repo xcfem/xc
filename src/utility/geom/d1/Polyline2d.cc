@@ -388,6 +388,26 @@ Segment2d Polyline2d::getSegment0(const size_t &i) const
     return s;
   }
 
+//! @brief Return a vector containing the consecutive segments of the polyline.
+std::vector<Segment2d> Polyline2d::getSegments(void) const
+  {
+    const size_t ns= getNumSegments();
+    std::vector<Segment2d> retval(ns);
+    if(ns>0)
+      {
+	list_Pos2d::const_iterator i= begin();
+	Pos2d vi(*i);
+	size_t count= 0;
+	for(list_Pos2d::const_iterator j=i+1;j!=end(); j++, count++)
+	  {
+	    const Pos2d vj(*j);
+	    retval[count]= Segment2d(vi, vj);
+	    vi= vj;
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Return the approximate curvature of the polyline at
 //! the vertex pointed by the iterator argument.
 //

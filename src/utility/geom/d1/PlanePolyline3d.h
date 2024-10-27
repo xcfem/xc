@@ -89,6 +89,10 @@ class PlanePolyline3d: public D2to3d
     //! @brief Return the length of the object.
     inline GEOM_FT getLength(void) const
       { return pline2d.getLength(); }
+    inline std::vector<GEOM_FT> getLengths(void) const
+      { return pline2d.getLengths(); }
+    inline boost::python::list getLengthsPy(void) const
+      { return pline2d.getLengthsPy(); }
     GEOM_FT getLengthUpTo(const Pos3d &) const;
     inline GEOM_FT getLambda(const Pos3d &p) const
       { return getLengthUpTo(p); }

@@ -91,6 +91,8 @@ class PolyPos : public std::deque<pos>
     void close(void);
     bool isClosed(const GEOM_FT &tol= 1e-6) const;
     GEOM_FT getLength(void) const;
+    std::vector<GEOM_FT> getLengths(void) const;
+    boost::python::list getLengthsPy(void) const;
     GEOM_FT getLengthUntilVertex(const_iterator) const;
     const_iterator getSegmentAtLength(const GEOM_FT &s) const;
     int getIndexOfSegmentAtLength(const GEOM_FT &s) const;
@@ -176,7 +178,7 @@ GEOM_FT PolyPos<pos>::getLengthUntilVertex(const_iterator nth) const
     if(this->size()<2) return 0.0;
     GEOM_FT temp = 0;
     const_iterator last= this->end();
-    if(nth<this->end())
+    if(nth<last)
        last= nth;
     const_iterator j;
     for(const_iterator i=this->begin(); i != last; i++)
@@ -185,6 +187,39 @@ GEOM_FT PolyPos<pos>::getLengthUntilVertex(const_iterator nth) const
         if (j!=this->end()) temp += dist(*i,*j);
       }
     return temp;
+  }
+
+//! @brief Return the lengths corresponding to each vertex.
+template <class pos>
+std::vector<GEOM_FT> PolyPos<pos>::getLengths(void) const
+  {
+    const size_t sz= this->size();
+    std::vector<GEOM_FT> retval(sz, 0.0);
+    if(sz>1)
+      {
+	GEOM_FT temp = 0;
+	const_iterator last= this->end();
+	const_iterator j;
+	size_t count= 1;
+	for(const_iterator i=this->begin(); i != std::prev(last); i++, count++)
+	  {
+	    j= std::next(i);
+	    temp+= dist(*i,*j);
+	    retval[count]= temp;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the lengths corresponding to each vertex in a Python list.
+template <class pos>
+boost::python::list PolyPos<pos>::getLengthsPy(void) const
+  {
+    const std::vector<GEOM_FT> lengths= this->getLengths();
+    boost::python::list retval;
+    for(std::vector<GEOM_FT>::const_iterator i= lengths.begin(); i!=lengths.end(); i++)
+      retval.append(*i);
+    return retval;
   }
 
 //! @brief Return an iterator pointing to the vertex that is just before the
@@ -387,6 +422,7 @@ std::deque<GEOM_FT> &PolyPos<pos>::GetSeparaciones(void) const
       }
     return retval;
   }
+
 //! @brief Return the average distance between points.
 template <class pos>
 GEOM_FT PolyPos<pos>::GetSeparacionMedia(void) const

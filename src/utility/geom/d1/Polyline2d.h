@@ -115,6 +115,7 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     Segment2d getSegment(const const_iterator &i) const;
     Segment2d getSegment(const size_t &i) const;
     Segment2d getSegment0(const size_t &i) const;
+    std::vector<Segment2d> getSegments(void) const;
     const_iterator getNearestSegmentIter(const Pos2d &) const;    
     int getNearestSegmentIndex(const Pos2d &) const;
     Segment2d getNearestSegment(const Pos2d &) const;

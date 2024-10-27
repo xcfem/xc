@@ -26,18 +26,31 @@
 
 #include "../ProtoGeom.h"
 #include "utility/geom/d1/Polyline3d.h"
-
+#include "utility/geom/pos_vec/Vector3d.h"
+#include <map>
 
 //!  @brief Coordinate systems base class.
 //!  @ingroup CooSys
 class FrenetTrihedron: public ProtoGeom
   {
-    Polyline3d path; //!< Reference path).
+    Polyline3d path; //!< Reference path.
+    typedef std::map<double, Polyline3d::const_iterator> IntervalMap;
+    
+    IntervalMap interval_map;
+    std::vector<Vector3d> tangent_vectors; //!< Tangent vectors at each vertex.
+    
+    IntervalMap compute_interval_map(void);
+    IntervalMap::const_iterator get_interval_end(const double &) const;
+    std::vector<Vector3d> compute_tangent_vectors(void);   
   public:
     FrenetTrihedron(void);
     FrenetTrihedron(const Polyline3d &);
+
+    Vector3d getTangent(const double &) const;
+    
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);
+    
     virtual void Print(std::ostream &os) const;
     friend std::ostream &operator<<(std::ostream &os,const FrenetTrihedron &sc);
   };

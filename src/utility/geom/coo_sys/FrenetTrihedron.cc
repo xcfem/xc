@@ -30,8 +30,91 @@ FrenetTrihedron::FrenetTrihedron(void)
 //! @brief Constructor.
 FrenetTrihedron::FrenetTrihedron(const Polyline3d &pth)
   : ProtoGeom(), path(pth) 
-  {}
+  {
+    interval_map= compute_interval_map();
+    tangent_vectors= compute_tangent_vectors();
+  }
 
+//! @brief Compute a map that relates a lenght with its
+//! corresponding segment (v_i, v_(i+1)) in the path.
+FrenetTrihedron::IntervalMap FrenetTrihedron::compute_interval_map(void)
+  {
+    IntervalMap retval;
+    std::vector<double> lengths= path.getLengths();
+    Polyline3d::const_iterator vi= path.begin(); // vertex iterator.
+    for(std::vector<double>::const_iterator li= lengths.begin(); li!= lengths.end(); li++, vi++)
+      {
+	retval[*li]= vi;
+      }
+    return retval;
+  }
+
+//! @brief Return the end of the interval corresponding to the given arc length.
+//! @param s: arc length.
+FrenetTrihedron::IntervalMap::const_iterator FrenetTrihedron::get_interval_end(const double &s) const
+  {
+    const double length= path.getLength();
+    FrenetTrihedron::IntervalMap::const_iterator retval= interval_map.end();
+    if(!interval_map.empty())
+      {
+	if(s<length)
+	  retval= interval_map.upper_bound(s);
+	else
+	  retval= std::prev(interval_map.end()); // last item.
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "The interval map is empty."
+		<< std::endl;
+    return retval;
+  }
+
+//! @brief Compute the tangent vectors at each of the
+//! of the path vertices.
+std::vector<Vector3d> FrenetTrihedron::compute_tangent_vectors(void)
+  {
+    const std::vector<Segment3d> segments= path.getSegments();
+    const size_t sz= segments.size();
+    std::vector<Vector3d> retval(sz+1);
+    if(sz>0)
+      {
+        Vector3d t0= segments[0].getIVector();
+	retval[0]= t0; // first tangent.
+	Vector3d t1;
+	for(size_t i=1; i<sz; i++)
+	  {
+	    t1= segments[i].getIVector();
+	    retval[i]= ((t1+t0)*0.5).getNormalized();
+	    t0= t1; // update previous vector.
+	  }
+	retval[sz]= t1; // last tangent.
+      }
+    return retval;
+  }
+
+//! @brief Return the tangent vector corresponding to the given arc length.
+//! @param s: arc length.
+Vector3d FrenetTrihedron::getTangent(const double &s) const
+  {
+    Vector3d retval;
+    const IntervalMap::const_iterator i1= get_interval_end(s);
+    const IntervalMap::const_iterator i0= std::prev(i1);
+    const double s0= (*i0).first;
+    const Pos3d v0= (*(*i0).second);
+    const size_t j0= std::distance(path.begin(),(*i0).second);
+    if(j0<tangent_vectors.size())
+      {
+	const Vector3d t0= tangent_vectors[j0];
+	const double s1= (*i1).first;
+	const Pos3d v1= (*(*i1).second);
+	const size_t j1= j0+1; //std::distance(path.begin(),(*i1).second);
+	const Vector3d t1= tangent_vectors[j1];
+	retval= (t1-t0)/(s1-s0)*(s-s0)+t0;
+      }
+    else
+      std::cerr << "Index out of range." << std::endl;
+    return retval;
+  }
 
 //! @brief Prints the matrix.
 void FrenetTrihedron::Print(std::ostream &os) const

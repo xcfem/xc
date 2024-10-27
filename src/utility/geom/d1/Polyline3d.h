@@ -96,6 +96,7 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     
     Segment3d getSegment(const list_Pos3d::const_iterator &) const;
     Segment3d getSegment(const size_t &) const;
+    std::vector<Segment3d> getSegments(void) const;
     const_iterator getNearestSegmentIter(const Pos3d &) const;
     int getNearestSegmentIndex(const Pos3d &) const;
     Segment3d getNearestSegment(const Pos3d &) const;
