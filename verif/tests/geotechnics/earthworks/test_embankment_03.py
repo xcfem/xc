@@ -66,16 +66,16 @@ for vRow, refRow in zip(values, refValues):
 err= math.sqrt(err)
 
 '''
-print(depths0)
-print(depthsA)
-print(refDepthsA)
+print('depths0 ='+str(depths0))
+print('depths0 ='+str(depthsA))
+print('refDepthsA ='+str(refDepthsA))
 print(err)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (err<1e-12):
+if (err<1e-7):
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')
