@@ -155,8 +155,8 @@ testOK= (errorRef<0.1) and (errorCheck<1e-3)
 '''
 print('beta= ', beta)
 print('betaRef= ', betaRef)
-print('betaCheck= ', betaCheck)
 print('errorRef= ', errorRef)
+print('betaCheck= ', betaCheck)
 print('errorCheck= ', errorCheck)
 '''
 
