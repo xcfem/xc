@@ -190,6 +190,8 @@ ratio3= (nNodes-nNodPos)
 ratio4= (nElements-nquads)
 
 '''
+print(nNodPos, ratio1)
+print(nquads, ratio2)
 print(nNodes, nNodPos, ratio3)
 print(nElements, nquads, ratio4)
 '''
