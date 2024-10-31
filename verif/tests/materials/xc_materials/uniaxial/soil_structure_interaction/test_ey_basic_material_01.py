@@ -14,7 +14,6 @@ import xc
 from geotechnics import earth_pressure
 from model import predefined_spaces
 from materials import typical_materials
-import numpy as np
 
 # Define soil model.
 phi= math.pi/6.0
