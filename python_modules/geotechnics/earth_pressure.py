@@ -18,7 +18,15 @@ import geom
 from misc_utils import log_messages as lmsg
 
 class RankineSoil(fs.FrictionalSoil):
-    '''From Wikipedia: Rankine's theory, developed in 1857, is a stress field solution that predicts active and passive earth pressure. It assumes that the soil is cohesionless, the wall is frictionless, the soil-wall interface is vertical, the failure surface on which the soil moves is planar, and the resultant force is angled parallel to the backfill surface. The equations for active and passive lateral earth pressure coefficients are given below. Note that φ is the angle of shearing resistance of the soil and the backfill is inclined at angle β to the horizontal.
+    '''From Wikipedia: Rankine's theory, developed in 1857, is a stress field
+       solution that predicts active and passive earth pressure. It assumes
+       that the soil is cohesionless, the wall is frictionless, the soil-wall
+       interface is vertical, the failure surface on which the soil moves is 
+       planar, and the resultant force is angled parallel to the backfill
+       surface. The equations for active and passive lateral earth pressure 
+       coefficients are given below. Note that φ is the angle of shearing 
+       resistance of the soil and the backfill is inclined at angle β to 
+       the horizontal.
 
     :ivar phi:    internal friction angle of the soil
     :ivar beta:   angle of backfill with horizontal
