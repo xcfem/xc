@@ -33,9 +33,8 @@
 #include <material/uniaxial/ElasticBaseMaterial.h>
 
 namespace XC {
-//! @ingroup MatUnx
-//
 //! @brief Base class for elastic perfectly plastic materials.
+//! @ingroup MatUnx
 class EPPBaseMaterial: public ElasticBaseMaterial
   {
   protected:
