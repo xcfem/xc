@@ -119,6 +119,7 @@ XC::ElasticPPMaterialBase::ElasticPPMaterialBase(int tag, int classTag, double e
 //! @param[in] e material elastic modulus.
 //! @param[in] eyp positive yield strain value (tension).
 //! @param[in] eyn negative yield strain value (compression).
+//! @param[in] ez initial strain.
 XC::ElasticPPMaterialBase::ElasticPPMaterialBase(int tag, int classTag, double e, double eyp,double eyn, double ez )
   :EPPBaseMaterial(tag, classTag, e, ez), fyp(0.0), fyn(0.0),
    ep(0.0), commitStress(0.0), EnergyP(0.0)
