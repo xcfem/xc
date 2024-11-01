@@ -43,6 +43,7 @@ void XC::EyBasic::set_fyp(const double &f)
 	          << Color::def << std::endl;
         fyp*= -1.;
       }
+    this->split_stress= (fyp+fyn)/2.0;
   }
 
 //! @brief Set the yield stress a compression value.
@@ -56,19 +57,23 @@ void XC::EyBasic::set_fyn(const double &f)
 	          << Color::def << std::endl;
         fyn*= -1.;
       }  
+    this->split_stress= (fyp+fyn)/2.0;
   }
 
 //! @brief Constructor.
 //! @param[in] tag material identifier.
 //! @param[in] e material elastic modulus.
-//! @param[in] upper yield strain value (decompression).
-//! @param[in] lower yield strain value (compression).
+//! @param[in] eyp upper yield strain value (decompression).
+//! @param[in] eyn lower yield strain value (compression).
+//! @param[in] ez initial strain.
 XC::EyBasic::EyBasic(int tag, double e, double eyp,double eyn, double ez )
-  : ElasticPPMaterialBase(tag, MAT_TAG_EyBasic, e,eyp, eyn, ez) {}
+  : ElasticPPMaterialBase(tag, MAT_TAG_EyBasic, e,eyp, eyn, ez),
+    split_stress(0.0) {}
 
 //! @brief Constructor.
 XC::EyBasic::EyBasic(int tag)
-  :ElasticPPMaterialBase(tag, MAT_TAG_EyBasic){}
+  :ElasticPPMaterialBase(tag, MAT_TAG_EyBasic),
+   split_stress(0.0) {}
 
 //! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::EyBasic::getCopy(void) const
@@ -82,3 +87,58 @@ void XC::EyBasic::setParameters(const double &E, const double &lowerYS, const do
     this->setUpperYieldStress(upperYS); // upper yield stress (decompression).
     this->revertToStart(); // recompute internal parameters.
   }
+
+//! @brief Sets trial strain.
+int XC::EyBasic::setTrialStrain(double strain, double strainRate)
+  {
+  /*
+    if (fabs(trialStrain - strain) < DBL_EPSILON)
+      return 0;
+  */
+    trialStrain= strain;
+
+    // compute trial stress
+    const double sigtrial= E * get_total_strain(); // trial stress
+    const double f= yield_function(sigtrial); //yield function
+    const double fYieldSurface= - E * DBL_EPSILON;
+    if(f<=fYieldSurface) // elastic.
+      {
+        // elastic
+        trialStress= sigtrial;
+        trialTangent= E;
+      }
+    else // plastic
+      {
+        if(sigtrial>split_stress)
+          { trialStress = fyp; }
+        else
+          { trialStress = fyn; }
+        trialTangent = 0.0;
+      }
+    return 0;
+  }
+
+//! @brief Commit material state.
+int XC::EyBasic::commitState(void)
+  {
+    // compute trial stress
+    const double sigtrial= E * get_total_strain(); // trial stress
+
+    const double f= yield_function(sigtrial); //yield function
+
+    const double fYieldSurface= - E * DBL_EPSILON;
+    if(f>fYieldSurface)
+      {
+        // plastic
+        if(sigtrial>0.0)
+          { ep+= f / E; }
+        else
+          { ep-= f / E; }
+      }
+    //added by SAJalali for energy recorder
+    EnergyP+= 0.5*(commitStress + trialStress)*(trialStrain - commitStrain);
+    
+    EPPBaseMaterial::commitState();
+    commitStress= trialStress;
+    return 0;
+  }        

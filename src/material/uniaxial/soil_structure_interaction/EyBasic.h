@@ -52,11 +52,25 @@ namespace XC {
 //! use to model the lateral reaction of soil.
 class EyBasic: public ElasticPPMaterialBase
   {
+  private:
+    double split_stress;
+    //! @brief Computes yield function value.
+    inline double yield_function(const double &sigtrial) const
+      {
+        if(sigtrial>=split_stress)
+          return (sigtrial - fyp);
+        else
+          return (-sigtrial + fyn);
+      }
   public:
     EyBasic(int tag= 0);    
     EyBasic(int tag, double E, double eyp, double eyn, double ezero);
     UniaxialMaterial *getCopy(void) const;    
 
+    int setTrialStrain(double strain, double strainRate = 0.0);
+
+    int commitState(void);
+    
     void set_fyp(const double &);
     void set_fyn(const double &);
     

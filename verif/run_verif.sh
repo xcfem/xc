@@ -1123,8 +1123,11 @@ echo "$BLEU" "      Connected materials." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/connected/test_series_material_01.py
 python tests/materials/xc_materials/uniaxial/connected/test_series_material_02.py
 echo "$BLEU" "      Soil structure interaction materials." "$NORMAL"
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_reaction_diagram.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_ey_basic_material_01.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_ey_basic_material_02.py
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_ey_basic_material_03.py
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_ey_basic_material_04.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/py_simple1_test.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_01.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_02.py
