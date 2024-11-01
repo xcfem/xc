@@ -198,6 +198,7 @@ class RankineSoil(fs.FrictionalSoil):
             matName= uuid.uuid1().hex            
         eyMatName= 'ey'+matName
         eyBasicMaterial= def_ey_basic_material(preprocessor, name= eyMatName, E= Kh, upperYieldStress= -Ea, lowerYieldStress= -Ep)
+        # Create initial stress material.
         materialHandler= preprocessor.getMaterialHandler
         retval= materialHandler.newMaterial("init_stress_material", matName)
         retval.setMaterial(eyBasicMaterial.name)
