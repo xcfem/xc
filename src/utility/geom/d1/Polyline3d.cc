@@ -523,7 +523,55 @@ Vector3d Polyline3d::getCurvatureVectorAtVertex(const_iterator nth) const
 	const Pos3d &A= *thisVertexIter;
 	const Pos3d &B= *previousVertexIter;
 	const Pos3d &C= *nextVertexIter;
-	retval= curvatureVector(A,B,C);
+	retval= curvature_vector(A,B,C);
+      }
+    return retval;
+  }
+
+//! @brief Return the approximate curvature of the polyline at
+//! each of its vertices.
+std::vector<Vector3d> Polyline3d::getCurvatureVectorAtVertices(void) const
+  {
+    const size_t sz= this->getNumVertices();
+    std::vector<Vector3d> retval(sz);
+    if(sz<2) // No segments.
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ";ERROR: no segments, so no curvature vectors."
+		  << std::endl;
+      }
+    else if(sz==2) // One segment only.
+      {
+	Segment3d sg= this->getSegment(1);
+	retval[0]= sg.getJVector();
+	retval[1]= retval[0];
+      }
+    else // 3 vertex at least.
+      {
+	std::vector<Vector3d> vertex_normals(sz);
+	size_t count= 0; // vertex iterator.
+	for(Polyline3d::const_iterator vi= this->begin(); vi!=this->end(); vi++, count++)
+	  {
+	    Polyline3d::const_iterator previousVertexIter= vi-1;
+	    Polyline3d::const_iterator thisVertexIter= vi;
+	    Polyline3d::const_iterator nextVertexIter= vi+1;
+	    if(thisVertexIter == this->begin()) // No previous vertex.
+	      {
+		previousVertexIter= vi;
+		thisVertexIter= vi+1;
+		nextVertexIter= vi+2;
+	      }
+	    else if(thisVertexIter == this->end()) // No following vertex.
+	      {
+		previousVertexIter= vi-2;
+		thisVertexIter= vi-1;
+		nextVertexIter= vi;
+	      }
+	    const Pos3d &A= *thisVertexIter;
+	    const Pos3d &B= *previousVertexIter;
+	    const Pos3d &C= *nextVertexIter;
+	    retval[count]= curvature_vector(A,B,C);
+	  }
       }
     return retval;
   }
@@ -540,7 +588,8 @@ Vector3d Polyline3d::getCurvatureVectorAtLength(const GEOM_FT &s) const
     if(sz<2) // No segments.
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
-	      << ";ERROR: no segments, so no curvature vector." << std::endl;
+		  << ";ERROR: no segments, so no curvature vector."
+		  << std::endl;
       }
     else if(sz==2) // One segment only.
       {

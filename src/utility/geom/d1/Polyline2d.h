@@ -85,6 +85,7 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     GEOM_FT getCurvatureAtVertex(const_iterator) const;
     GEOM_FT getCurvatureAtLength(const GEOM_FT &) const;
     Vector2d getCurvatureVectorAtVertex(const_iterator) const;
+    std::vector<Vector2d> getCurvatureVectorAtVertices(void) const;
     Vector2d getCurvatureVectorAtLength(const GEOM_FT &) const;
     Pos2d getPointAtLength(const GEOM_FT &) const;
     Vector2d getIVectorAtLength(const GEOM_FT &) const;

@@ -72,6 +72,7 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     GEOM_FT getCurvatureAtVertex(const_iterator) const;
     GEOM_FT getCurvatureAtLength(const GEOM_FT &) const;
     Vector3d getCurvatureVectorAtVertex(const_iterator) const;
+    std::vector<Vector3d> getCurvatureVectorAtVertices(void) const;
     Vector3d getCurvatureVectorAtLength(const GEOM_FT &) const;
     Pos3d getPointAtLength(const GEOM_FT &) const;
     Vector3d getIVectorAtLength(const GEOM_FT &) const;
