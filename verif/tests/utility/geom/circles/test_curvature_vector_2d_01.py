@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test curvatureVector function.'''
+''' Test curvature_vector function.'''
 
 from __future__ import print_function
 
@@ -33,15 +33,15 @@ A= geom.Pos2d(0, 1)
 B= geom.Pos2d(-c, s)
 C= geom.Pos2d(c, s)
 
-vA= geom.curvatureVector(A,B,C)
+vA= geom.curvature_vector(A,B,C)
 ratio1= (vA-(O-A)).getModulus()
-vB= geom.curvatureVector(B,C,A)
+vB= geom.curvature_vector(B,C,A)
 ratio2= (vB-(O-B)).getModulus()
-vC= geom.curvatureVector(C,A,B)
+vC= geom.curvature_vector(C,A,B)
 ratio3= (vC-(O-C)).getModulus()
 curvature= geom.curvature(A,B,C)
 ratio4= abs(curvature-1.0)
-radius= geom.curvatureRadius(A,B,C)
+radius= geom.curvature_radius(A,B,C)
 ratio5= abs(radius-1.0)
 
 '''
