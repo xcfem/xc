@@ -121,7 +121,7 @@ void XC::PotentialSurface::print(std::ostream &os) const
     os << getClassName() << "::" << __FUNCTION__
        << "; not implemented yet."
        << std::endl;
-  }; 
+  }
 
 //! @brief Print stuff.
 std::ostream& XC::operator<<(std::ostream &os, const XC::PotentialSurface & PS)
