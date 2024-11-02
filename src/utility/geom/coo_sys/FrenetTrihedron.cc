@@ -21,6 +21,7 @@
 //FrenetTrihedron.cc
 
 #include "FrenetTrihedron.h"
+#include "utility/geom/d2/Circle3d.h" //Circle center.
 
 //! @brief Default constructor.
 FrenetTrihedron::FrenetTrihedron(void)
@@ -33,6 +34,7 @@ FrenetTrihedron::FrenetTrihedron(const Polyline3d &pth)
   {
     interval_map= compute_interval_map();
     tangent_vectors= compute_tangent_vectors();
+    normal_vectors= compute_normal_vectors();
   }
 
 //! @brief Compute a map that relates a lenght with its
@@ -92,6 +94,55 @@ std::vector<Vector3d> FrenetTrihedron::compute_tangent_vectors(void)
     return retval;
   }
 
+//! @brief Compute the normal vectors at each of the
+//! of the path vertices.
+std::vector<Vector3d> FrenetTrihedron::compute_normal_vectors(void)
+  {
+    const size_t sz= path.getNumVertices();
+    std::vector<Vector3d> retval(sz);
+    if(sz<2) // No segments.
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ";ERROR: no segments, so no curvature vectors."
+		  << std::endl;
+      }
+    else if(sz==2) // One segment only.
+      {
+	Segment3d sg= path.getSegment(1);
+	retval[0]= sg.getJVector();
+	retval[1]= retval[0];
+      }
+    else // 3 vertex at least.
+      {
+	std::vector<Vector3d> vertex_normals(sz);
+	size_t count= 0; // vertex iterator.
+	for(Polyline3d::const_iterator vi= path.begin(); vi!=path.end(); vi++, count++)
+	  {
+	    Polyline3d::const_iterator previousVertexIter= vi-1;
+	    Polyline3d::const_iterator thisVertexIter= vi;
+	    Polyline3d::const_iterator nextVertexIter= vi+1;
+	    if(thisVertexIter == path.begin()) // No previous vertex.
+	      {
+		previousVertexIter= vi;
+		thisVertexIter= vi+1;
+		nextVertexIter= vi+2;
+	      }
+	    else if(thisVertexIter == path.end()) // No following vertex.
+	      {
+		previousVertexIter= vi-2;
+		thisVertexIter= vi-1;
+		nextVertexIter= vi;
+	      }
+	    const Pos3d &A= *thisVertexIter;
+	    const Pos3d &B= *previousVertexIter;
+	    const Pos3d &C= *nextVertexIter;
+	    const Pos3d center= circle_center(A, B, C);
+	    retval[count]= (center-*vi).getNormalized();
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Return the tangent vector corresponding to the given arc length.
 //! @param s: arc length.
 Vector3d FrenetTrihedron::getTangent(const double &s) const
@@ -110,6 +161,30 @@ Vector3d FrenetTrihedron::getTangent(const double &s) const
 	const size_t j1= j0+1; //std::distance(path.begin(),(*i1).second);
 	const Vector3d t1= tangent_vectors[j1];
 	retval= (t1-t0)/(s1-s0)*(s-s0)+t0;
+      }
+    else
+      std::cerr << "Index out of range." << std::endl;
+    return retval;
+  }
+
+//! @brief Return the normal vector corresponding to the given arc length.
+//! @param s: arc length.
+Vector3d FrenetTrihedron::getNormal(const double &s) const
+  {
+    Vector3d retval;
+    const IntervalMap::const_iterator i1= get_interval_end(s);
+    const IntervalMap::const_iterator i0= std::prev(i1);
+    const double s0= (*i0).first;
+    const Pos3d v0= (*(*i0).second);
+    const size_t j0= std::distance(path.begin(),(*i0).second);
+    if(j0<normal_vectors.size())
+      {
+	const Vector3d n0= normal_vectors[j0];
+	const double s1= (*i1).first;
+	const Pos3d v1= (*(*i1).second);
+	const size_t j1= j0+1; //std::distance(path.begin(),(*i1).second);
+	const Vector3d n1= normal_vectors[j1];
+	retval= (n1-n0)/(s1-s0)*(s-s0)+n0;
       }
     else
       std::cerr << "Index out of range." << std::endl;

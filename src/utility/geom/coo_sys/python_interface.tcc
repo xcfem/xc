@@ -94,5 +94,6 @@ class_<FrenetTrihedron, bases<ProtoGeom> >("FrenetTrihedron")
   .def(init<>())
   .def(init<Polyline3d>())
   .def("getTangent",&FrenetTrihedron::getTangent, "Return the tangent vector at te given arc length.")
+  .def("getNormal",&FrenetTrihedron::getNormal, "Return the normal vector at te given arc length.")
   ;
 
