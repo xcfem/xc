@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
-
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2024, LCPT and AO_O"
 __license__= "GPL"
@@ -22,6 +20,14 @@ halfSqrt2= math.sqrt(2)/2.0
 t1Ref= geom.Vector3d(halfSqrt2, halfSqrt2, 0)
 t2= ft.getTangent(2.0)
 t2Ref= geom.Vector3d(0,1,0)
+
+# XXX Continue here.
+# n0= ft.getNormal(0.0)
+# n1= ft.getNormal(1.0)
+# n2= ft.getNormal(2.0)
+# print(n0)
+# print(n1)
+# print(n2)
 
 err= math.sqrt((t0-t0Ref).getModulus2()+(t1-t1Ref).getModulus2()+(t2-t2Ref).getModulus2())
 
