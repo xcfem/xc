@@ -226,3 +226,24 @@ void Circle2d::Plot(Plotter &plotter) const
   }
 
 
+//! @brief Return the center of the circumscribed circle
+//! for the triangle ABC. Inspired on: https://github.com/sergarrido/random/blob/master/circle3d/circle3d.cpp
+//
+//! @param A: first point.
+//! @param B: second point.
+//! @param C: third point.
+Pos2d circle_center(const Pos2d &p1,const Pos2d &p2,const Pos2d &p3)
+  {
+    const Vector2d v1= p2-p1;
+    const Vector2d v2= p3-p1;
+
+    const GEOM_FT v1v1= v1.GetDot(v1);
+    const GEOM_FT v2v2= v2.GetDot(v2);
+    const GEOM_FT v1v2= v1.GetDot(v2);
+
+    const GEOM_FT base= 0.5/(v1v1*v2v2-v1v2*v1v2);
+    const GEOM_FT k1= base*v2v2*(v1v1-v1v2);
+    const GEOM_FT k2= base*v1v1*(v2v2-v1v2);
+    const Pos2d retval= p1 + v1*k1 + v2*k2; // center
+    return retval;
+  }

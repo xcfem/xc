@@ -82,12 +82,13 @@ class Circle3d : public D2to3d
   };
 
 Circle3d Circle3dThreepoints(const Pos3d &,const Pos3d &,const Pos3d &);
-Vector3d curvatureVector(const Pos3d &,const Pos3d &,const Pos3d &);
-Vector2d curvatureVector(const Pos2d &,const Pos2d &,const Pos2d &);
-GEOM_FT curvatureRadius(const Pos3d &,const Pos3d &,const Pos3d &);
-GEOM_FT curvatureRadius(const Pos2d &,const Pos2d &,const Pos2d &);
+Vector3d curvature_vector(const Pos3d &,const Pos3d &,const Pos3d &);
+Vector2d curvature_vector(const Pos2d &,const Pos2d &,const Pos2d &);
+GEOM_FT curvature_radius(const Pos3d &,const Pos3d &,const Pos3d &);
+GEOM_FT curvature_radius(const Pos2d &,const Pos2d &,const Pos2d &);
 GEOM_FT curvature(const Pos3d &,const Pos3d &,const Pos3d &);
 GEOM_FT curvature(const Pos2d &,const Pos2d &,const Pos2d &);
+Pos3d circle_center(const Pos3d &,const Pos3d &,const Pos3d &);
 
 #endif
 

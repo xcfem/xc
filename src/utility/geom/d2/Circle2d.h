@@ -91,6 +91,7 @@ class Circle2d : public Surface2d
   };
 
 Circle2d Circle2dRTT(const GEOM_FT &,const Line2d &,const Line2d &,const bool &left,const bool &far);
+Pos2d circle_center(const Pos2d &,const Pos2d &,const Pos2d &);
 
 #endif
 

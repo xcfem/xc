@@ -73,10 +73,10 @@ class_<Circle2d, bases<Surface2d> >("Circle2d")
   .def("getCenterOfMass", &Circle2d::getCenterOfMass, " return the center of mass.")
   .def("offset",&Circle2d::offset,"returns a parallel circle obtained by adding argument to the radius of this object.")
   ;
-Vector2d (*curvature_vector_2d)(const Pos2d &,const Pos2d &,const Pos2d &)= curvatureVector;
-def("curvatureVector", curvature_vector_2d, "curvatureVector(ptA, ptB, ptC): return the curvature vector of the circumscribed circle");
-double (*curvature_radius_2d)(const Pos2d &,const Pos2d &,const Pos2d &)= curvatureRadius;
-def("curvatureRadius", curvature_radius_2d, "curvatureRadius(ptA, ptB, ptC): return the curvature radius of the circumscribed circle");
+Vector2d (*curvature_vector_2d)(const Pos2d &,const Pos2d &,const Pos2d &)= curvature_vector;
+def("curvature_vector", curvature_vector_2d, "curvature_vector(ptA, ptB, ptC): return the curvature vector of the circumscribed circle");
+double (*curvature_radius_2d)(const Pos2d &,const Pos2d &,const Pos2d &)= curvature_radius;
+def("curvature_radius", curvature_radius_2d, "curvature_radius(ptA, ptB, ptC): return the curvature radius of the circumscribed circle");
 double (*curvature_2d)(const Pos2d &,const Pos2d &,const Pos2d &)= curvature;
 def("curvature", curvature_2d, "curvature(ptA, ptB, ptC): return the curvature of the circumscribed circle");
 
@@ -305,10 +305,10 @@ class_<Circle3d, bases<D2to3d> >("Circle3d")
   .def("getCenterOfMass", &Circle3d::getCenterOfMass, " return the center of mass.")
   ;
 
-Vector3d (*curvature_vector_3d)(const Pos3d &,const Pos3d &,const Pos3d &)= curvatureVector;
-def("curvatureVector", curvature_vector_3d, "curvatureVector(ptA, ptB, ptC): return the curvature vector of the circumscribed circle");
-double (*curvature_radius_3d)(const Pos3d &,const Pos3d &,const Pos3d &)= curvatureRadius;
-def("curvatureRadius", curvature_radius_3d, "curvatureRadius(ptA, ptB, ptC): return the curvature radius of the circumscribed circle");
+Vector3d (*curvature_vector_3d)(const Pos3d &,const Pos3d &,const Pos3d &)= curvature_vector;
+def("curvature_vector", curvature_vector_3d, "curvature_vector(ptA, ptB, ptC): return the curvature vector of the circumscribed circle");
+double (*curvature_radius_3d)(const Pos3d &,const Pos3d &,const Pos3d &)= curvature_radius;
+def("curvature_radius", curvature_radius_3d, "curvature_radius(ptA, ptB, ptC): return the curvature radius of the circumscribed circle");
 double (*curvature_3d)(const Pos3d &,const Pos3d &,const Pos3d &)= curvature;
 def("curvature", curvature_3d, "curvature(ptA, ptB, ptC): return the curvature of the circumscribed circle");
 
