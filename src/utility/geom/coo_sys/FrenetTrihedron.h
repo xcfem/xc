@@ -39,17 +39,19 @@ class FrenetTrihedron: public ProtoGeom
     IntervalMap interval_map;
     std::vector<Vector3d> tangent_vectors; //!< Tangent vectors at each vertex.
     std::vector<Vector3d> normal_vectors; //!< Normal vectors at each vertex.
+    std::vector<Vector3d> binormal_vectors; //!< Binormal vectors at each vertex.
     
     IntervalMap compute_interval_map(void);
     IntervalMap::const_iterator get_interval_end(const double &) const;
-    std::vector<Vector3d> compute_tangent_vectors(void);   
-    std::vector<Vector3d> compute_normal_vectors(void);
+    void compute_tangent_vectors(void);   
+    void compute_vectors(void);
   public:
     FrenetTrihedron(void);
     FrenetTrihedron(const Polyline3d &);
 
     Vector3d getTangent(const double &) const;
     Vector3d getNormal(const double &) const;
+    Vector3d getBinormal(const double &) const;
     
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);

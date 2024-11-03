@@ -13,28 +13,42 @@ pth= geom.Polyline3d([geom.Pos3d(0,0,0), geom.Pos3d(1,0,0), geom.Pos3d(1,1,0)])
 
 ft= geom.FrenetTrihedron(pth)
 
-t0= ft.getTangent(0.0)
-t0Ref= geom.Vector3d(1,0,0)
-t1= ft.getTangent(1.0)
 halfSqrt2= math.sqrt(2)/2.0
+t0= ft.getTangent(0.0)
+t0Ref= geom.Vector3d(halfSqrt2, -halfSqrt2,0)
+t1= ft.getTangent(1.0)
 t1Ref= geom.Vector3d(halfSqrt2, halfSqrt2, 0)
 t2= ft.getTangent(2.0)
-t2Ref= geom.Vector3d(0,1,0)
+t2Ref= geom.Vector3d(-halfSqrt2, halfSqrt2,0)
 
-# XXX Continue here.
-# n0= ft.getNormal(0.0)
-# n1= ft.getNormal(1.0)
-# n2= ft.getNormal(2.0)
-# print(n0)
-# print(n1)
-# print(n2)
+n0= ft.getNormal(0.0)
+n0Ref= geom.Vector3d(halfSqrt2, halfSqrt2,0)
+n1= ft.getNormal(1.0)
+n1Ref= geom.Vector3d(-halfSqrt2, halfSqrt2, 0)
+n2= ft.getNormal(2.0)
+n2Ref= geom.Vector3d(-halfSqrt2, -halfSqrt2,0)
 
-err= math.sqrt((t0-t0Ref).getModulus2()+(t1-t1Ref).getModulus2()+(t2-t2Ref).getModulus2())
+bRef= geom.Vector3d(0, 0, 1)
+b0= ft.getBinormal(0.0)
+b1= ft.getBinormal(1.0)
+b2= ft.getBinormal(2.0)
+
+err= (t0-t0Ref).getModulus2()+(t1-t1Ref).getModulus2()+(t2-t2Ref).getModulus2()
+err+= (n0-n0Ref).getModulus2()+(n1-n1Ref).getModulus2()+(n2-n2Ref).getModulus2()
+err+= (b0-bRef).getModulus2()+(b1-bRef).getModulus2()+(b2-bRef).getModulus2()
+
+err= math.sqrt(err)
 
 '''
 print('t0= ', t0)
 print('t1= ', t1)
 print('t2= ', t2)
+print('\nn0= ', n0)
+print('n1= ', n1)
+print('n2= ', n2)
+print('\nb0= ', b0)
+print('b1= ', b1)
+print('b2= ', b2)
 print(err)
 '''
 
