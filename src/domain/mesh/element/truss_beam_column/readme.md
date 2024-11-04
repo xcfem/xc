@@ -36,6 +36,13 @@ To capture the P-little delta effecs in beam elements you need to use at least s
 ### Element orientation
 - [Flipping Rotation Axes](https://portwooddigital.com/2023/11/12/flipping-rotation-axes/)
 - [A Vector in the x-z Plane](https://portwooddigital.com/2020/08/08/a-vector-in-the-x-z-plane/)
+### Material nonlinearity
+- [A Tale of Two Element Formulations](https://portwooddigital.com/2020/02/23/a-tale-of-two-element-formulations/)
+- [Force-based Element vs. Displacement-based Element](https://opensees.berkeley.edu/wiki/images/c/c5/FBEvsDBE.pdf)
 ### Geometric nonlinearity
 - [Geometric Transformation](https://portwooddigital.com/2022/11/15/geometric-transformation/)
 - [One and Only One](https://portwooddigital.com/2023/11/18/one-and-only-one/)
+### Buckling
+- [Meshing for Column Loads](https://portwooddigital.com/2020/05/10/meshing-for-column-loads/)
+### Lateral-torsional buckling
+- [Torsional Buckling](https://portwooddigital.com/2024/11/01/torsional-buckling/)

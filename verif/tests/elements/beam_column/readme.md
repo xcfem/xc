@@ -19,6 +19,13 @@ To capture the P-little delta effecs in beam elements you need to use at least s
 - [Shear Verse, Same as the First](https://portwooddigital.com/2022/07/10/shear-verse-same-as-the-first/)
 - [Force-Based Element Moment Release](https://portwooddigital.com/2022/10/16/force-based-element-moment-release/)
 - [Simple Loads on a Cantilever](https://portwooddigital.com/2022/11/04/simple-loads-on-a-cantilever/)
+### Material nonlinearity
+- [A Tale of Two Element Formulations](https://portwooddigital.com/2020/02/23/a-tale-of-two-element-formulations/)
+- [Force-based Element vs. Displacement-based Element](https://opensees.berkeley.edu/wiki/images/c/c5/FBEvsDBE.pdf)
 ### Geometric nonlinearity
 - [Geometric Transformation](https://portwooddigital.com/2022/11/15/geometric-transformation/)
 - [One and Only One](https://portwooddigital.com/2023/11/18/one-and-only-one/)
+### Buckling
+- [Meshing for Column Loads](https://portwooddigital.com/2020/05/10/meshing-for-column-loads/)
+### Lateral-torsional buckling
+- [Torsional Buckling](https://portwooddigital.com/2024/11/01/torsional-buckling/)

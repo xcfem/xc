@@ -12,3 +12,5 @@
 - [Force-Based Element Moment Release](https://portwooddigital.com/2022/10/16/force-based-element-moment-release/)
 - [You Never Forget](https://portwooddigital.com/2023/11/02/you-never-forget/)
 - [Could Not Invert Element Flexibility](https://portwooddigital.com/2023/11/20/could-not-invert-element-flexibility/)
+- [A Tale of Two Element Formulations](https://portwooddigital.com/2020/02/23/a-tale-of-two-element-formulations/)
+- [Force-based Element vs. Displacement-based Element](https://opensees.berkeley.edu/wiki/images/c/c5/FBEvsDBE.pdf)
