@@ -43,6 +43,11 @@ Utility classes and functions.
 - [Indentation style](https://en.wikipedia.org/wiki/Indentation_style)
 - [A Better Way to Find Memory Leaks in OpenSees](https://portwooddigital.com/2023/12/27/a-better-way-to-find-memory-leaks-in-opensees/)
 
+### PFEM (not yet implemented in XC)
+- [The PFEM in OpenSees](https://portwooddigital.com/2023/11/06/the-pfem-in-opensees/)
+- [Just Fillin’ Up the Tank](https://portwooddigital.com/2024/08/08/just-fillin-up-the-tank/)
+- [Sloshing Around](https://portwooddigital.com/2024/11/03/sloshing-around/)
+
 <!-- NOTES FOR MYSELF: -->
 <!-- notes for alpha cluster: -->
 <!--   1) change 'ssh' in ~/remote/remote.c to 'rsh' -->
