@@ -16,6 +16,7 @@ This folder contains the code that deals with the solution of the finite element
  - [Non-Convergence Is Not Structural Collapse](https://portwooddigital.com/2022/03/20/non-convergence-is-not-structural-collapse/)
  - [Negative Feedback Loop](https://portwooddigital.com/2022/07/17/negative-feedback-loop/)
  - [Don’t Invert the Matrix](https://portwooddigital.com/2022/11/18/dont-invert-the-matrix/)
+ - [A Load at a Fixed DOF](https://portwooddigital.com/2024/11/04/a-load-at-a-fixed-dof/)
 
 ### Failure to solve
  - [Ill-conditioning in structural finite element models](https://github.com/xcfem/xc/blob/master/verif/tests/solution/ill_conditioning/readme.md)
