@@ -110,14 +110,15 @@ int XC::KrylovNewton::solveCurrentStep(void)
 
     // Get size information from SOE
     numEqns  = theSOE->getNumEqn();
-    if(maxDimension > numEqns)
+    if(maxDimension > numEqns) // maxDimension not bigger than system size.
       maxDimension = numEqns;
 
+    const Vector templateVector(numEqns);  
     if(v.empty())
-      v= std::vector<Vector>(maxDimension+1,Vector(numEqns));
+      v= std::vector<Vector>(maxDimension+1, templateVector);
 
     if(Av.empty())
-      Av= std::vector<Vector>(maxDimension+1,Vector(numEqns));
+      Av= std::vector<Vector>(maxDimension+1, templateVector);
 
     AvData.resize(maxDimension*numEqns);
 
@@ -140,7 +141,7 @@ int XC::KrylovNewton::solveCurrentStep(void)
         return -2;
       }
 
-    // set itself as the XC::ConvergenceTest objects XC::EquiSolnAlgo
+    // set itself as the ConvergenceTest objects EquiSolnAlgo
     theTest->set_owner(getSolutionStrategy());
     if(theTest->start() < 0)
       {
@@ -179,6 +180,7 @@ int XC::KrylovNewton::solveCurrentStep(void)
                 return -1;
               }
           }
+	
         // Solve for residual f(y_k) = J^{-1} R(y_k)
         if(theSOE->solve() < 0)
           {
@@ -186,6 +188,7 @@ int XC::KrylovNewton::solveCurrentStep(void)
                       << "; the LinearSysOfEqn failed in solve()\n";
             return -3;
           }
+
         // Solve least squares A w_{k+1} = r_k
         if(this->leastSquares(dim) < 0)
           {
@@ -210,7 +213,7 @@ int XC::KrylovNewton::solveCurrentStep(void)
 
         // Increase current dimension of Krylov subspace
         dim++;
-	
+
         result = theTest->test();
         this->record(k++); //Call the record(...) method of all the recorders.
       }
@@ -227,7 +230,7 @@ int XC::KrylovNewton::solveCurrentStep(void)
 
     // note - if positive result we are returning what the convergence
     // test returned which should be the number of iterations
-    
+
     return result;
   }
 
@@ -249,72 +252,72 @@ extern "C" int dgels_(char *T, int *M, int *N, int *NRHS,
                       double *WORK, int *LWORK, int *INFO);
 
 int XC::KrylovNewton::leastSquares(int k)
-{
-  LinearSOE *theSOE = this->getLinearSOEPtr();
-  const Vector &r = theSOE->getX();
+  {
+    LinearSOE *theSOE = this->getLinearSOEPtr();
+    const Vector &r = theSOE->getX();
 
-  // v_{k+1} = w_{k+1} + q_{k+1}
-  v[k]= r;
-  Av[k]= r;
+    // v_{k+1} = w_{k+1} + q_{k+1}
+    v[k]= r;
+    Av[k]= r;
 
-  // Subspace is empty
-  if(k == 0)
-    return 0;
+    // Subspace is empty
+    if(k == 0)
+      return 0;
 
-  // Compute Av_k = f(y_{k-1}) - f(y_k) = r_{k-1} - r_k
-  Av[k-1].addVector(1.0, r, -1.0);
+    // Compute Av_k = f(y_{k-1}) - f(y_k) = r_{k-1} - r_k
+    Av[k-1].addVector(1.0, r, -1.0);
 
-  int i,j;
+    // Put subspace vectors into AvData
+    Matrix A(AvData.getDataPtr(), numEqns, k);
+    for(int i = 0; i < k; i++)
+      {
+	Vector &Ai = Av[i];
+	for(int j = 0; j < numEqns; j++)
+	  A(j,i)= Ai(j);
+      }
 
-  // Put subspace vectors into AvData
-  Matrix A(AvData.getDataPtr(), numEqns, k);
-  for(i = 0; i < k; i++) {
-    Vector &Ai = Av[i];
-    for(j = 0; j < numEqns; j++)
-      A(j,i) = Ai(j);
-  }
+    // Put residual vector into rData (need to save r for later!)
+    Vector B(rData.getDataPtr(), numEqns);
+    B= r;
 
-  // Put residual vector into rData (need to save r for later!)
-  Vector B(rData.getDataPtr(), numEqns);
-  B = r;
+    // No transpose
+    char trans[]= "N";
 
-  // No transpose
-  char trans[]= "N";
+    // The number of right hand side vectors
+    int nrhs = 1;
 
-  // The number of right hand side vectors
-  int nrhs = 1;
+    // Leading dimension of the right hand side vector
+    int ldb = (numEqns > k) ? numEqns : k;
 
-  // Leading dimension of the right hand side vector
-  int ldb = (numEqns > k) ? numEqns : k;
+    // Subroutine error flag
+    int info = 0;
 
-  // Subroutine error flag
-  int info = 0;
+    // Call the LAPACK least squares subroutine
+    dgels_(trans, &numEqns, &k, &nrhs, AvData.getDataPtr(), &numEqns, rData.getDataPtr(), &ldb, work.getDataPtr(), &lwork, &info);
 
-  // Call the LAPACK least squares subroutine
-  dgels_(trans, &numEqns, &k, &nrhs, AvData.getDataPtr(), &numEqns, rData.getDataPtr(), &ldb, work.getDataPtr(), &lwork, &info);
-
-  // Check for error returned by subroutine
-  if(info < 0)
-    {
-      std::cerr << getClassName() << "::" << __FUNCTION__
+    // Check for error returned by subroutine
+    if(info < 0)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "error code " << info << " returned by LAPACK dgels\n";
-      return info;
-    }
+	return info;
+      }
 
-  // Compute the correction vector
-  double cj;
-  for(j = 0; j < k; j++) {
+    // Compute the correction vector
+    double cj;
+    for(int j = 0; j < k; j++)
+      {
 
-    // Solution to least squares is written to rData
-    cj = rData[j];
+	// Solution to least squares is written to rData
+	cj = rData[j];
 
-    // Compute w_{k+1} = c_1 v_1 + ... + c_k v_k
-    v[k].addVector(1.0, v[j], cj);
+	// Compute w_{k+1} = c_1 v_1 + ... + c_k v_k
+	v[k].addVector(1.0, v[j], cj);
 
-    // Compute least squares residual q_{k+1} = r_k - (c_1 Av_1 + ... + c_k Av_k)
-    v[k].addVector(1.0, Av[j], -cj);
+	// Compute least squares residual q_{k+1} = r_k - (c_1 Av_1 + ... + c_k Av_k)
+	v[k].addVector(1.0, Av[j], -cj);
+      }
+
+    return 0;
   }
-
-  return 0;
-}
 
