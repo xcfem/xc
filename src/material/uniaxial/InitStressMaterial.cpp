@@ -51,16 +51,18 @@
 #include <material/uniaxial/InitStressMaterial.h>
 #include <domain/mesh/element/utils/Information.h>
 #include "domain/component/Parameter.h"
+#include "utility/utils/misc_utils/matem.h"
 #include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Determine the initial strain.
 int XC::InitStressMaterial::findInitialStrain(void)
   {
     // determine the initial strain
-    double tol= 1e-12;
+    const double abs_tol= 1e-12;
+    const double rel_tol= abs_tol*1e2;
     double dSig= sigInit;
     double tStrain = 0.0, tStress = 0.0;
-    int count = 0;
+    int count= 0;
 
     UniaxialMaterial *tmp= this->getMaterial();
     double K= tmp->getTangent();
@@ -72,14 +74,14 @@ int XC::InitStressMaterial::findInitialStrain(void)
         tmp->setTrialStrain(tStrain);
         tStress = tmp->getStress();
         dSig= sigInit-tStress; // residual.
-        K = tmp->getTangent();
-        dStrain = dSig/K;
+        K= tmp->getTangent();
+        dStrain= dSig/K;
       }
-    while ((fabs(dSig) > tol) && (count <= 100));
+    while ((std::abs(dSig) > abs_tol) && (count <= 100));
 
     epsInit = tStrain;
 
-    if ((fabs(tStress-sigInit) < tol)) 
+    if (isclose(tStress, sigInit, rel_tol, abs_tol)) 
       tmp->setTrialStrain(epsInit);
     else
       {
@@ -88,6 +90,11 @@ int XC::InitStressMaterial::findInitialStrain(void)
 		  << tmp->getTag()
 		  << " wanted sigInit: " << sigInit
 		  << " using tStress: " << tmp->getStress()
+	          << " residual: " << std::abs(dSig)
+	          << " absolute tolerance: " << abs_tol
+	          << " relative tolerance: " << rel_tol
+	          << " number of iterations: " << count
+	          << " close: " << isclose(tStress, sigInit, rel_tol, abs_tol)
 		  << Color::def << std::endl;
         return -1;
       }
@@ -107,7 +114,7 @@ void XC::InitStressMaterial::setMaterial(const UniaxialMaterial &material)
   }
 
 XC::InitStressMaterial::InitStressMaterial(int tag, const UniaxialMaterial &material, double sigini)
-  : InitStrainBaseMaterial(tag,MAT_TAG_InitStress, material, 0.0),
+  : InitStrainBaseMaterial(tag, MAT_TAG_InitStress, material, 0.0),
     sigInit(sigini)
   {
     UniaxialMaterial *tmp= this->getMaterial();
