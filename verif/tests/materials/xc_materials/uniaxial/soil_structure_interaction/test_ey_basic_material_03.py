@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Use elastic perfectly plastic material to model a soil.'''
+''' Use elastic perfectly plastic material to model a soil.
+    Check results for predefined unloading then reloading path.'''
 
 from __future__ import print_function
 

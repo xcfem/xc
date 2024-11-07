@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-''' Use elastic perfectly plastic material to model a soil.'''
+''' Use elastic perfectly plastic material to model a soil. 
+    Check at-rest pressure.
+'''
 
 from __future__ import print_function
 
