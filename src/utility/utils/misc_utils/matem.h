@@ -150,31 +150,7 @@ inline double ALOG(double value)
 
 
 //Raices.
-inline double dicot_zero(double f(double), double a, double b,double &err)
-  {
-    double epsi= err;
-    enum {inf=0,sup=1} modif;
-    double c,xx;
-    double x[2];
-    x[0]= a;
-    x[1]= b;
-    if (f(a) > 0)
-      c=1;
-    else
-      c=-1;
-    err= x[sup]-x[inf];
-    while ( err > epsi )
-      {
-	xx = 0.5*(x[inf]+x[sup]);
-	if ( (c*f(xx)) > 0)
-	  modif= inf;
-	else
-	  modif= sup;
-	x[modif]= xx;
-	err= x[sup]-x[inf];
-      }
-    return xx; 
-  }
+double dicot_zero(double f(double), double a, double b,double &err);
 
 //Interpolation.
 inline double IntRecta(double x0,double y0,double x1,double y1, double x)
@@ -204,6 +180,23 @@ inline double CentToRad(const double &ang)
 
 inline double HMSToRad(const double &hms)
   { return DegToRad(HMS_C(hms)); } 
+
+/*
+isclose() function migrated from Python
+
+This is the result of much discussion on the python-ideas list
+in January, 2015:
+
+   https://mail.python.org/pipermail/python-ideas/2015-January/030947.html
+
+   https://mail.python.org/pipermail/python-ideas/2015-January/031124.html
+
+   https://mail.python.org/pipermail/python-ideas/2015-January/031313.html
+
+Copyright: Christopher H. Barker
+License: Apache License 2.0 http://opensource.org/licenses/apache2.0.php
+*/
+bool isclose(const double &a, const double &b, const double rel_tol=1e-9, const double abs_tol=0.0);
 
 #endif
 
