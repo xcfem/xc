@@ -191,7 +191,7 @@ SET(text_utils utility/utils/text/text_string.cc utility/utils/text/LabelContain
 
 SET(stream_utils utility/utils/streams/imanip.cc utility/utils/streams/prep.cc)
 
-SET(misc_utils utility/utils/misc_utils/cmd_args.cc utility/utils/misc_utils/memoria.cc utility/utils/misc_utils/inertia.cc utility/utils/misc_utils/print_trace.cc)
+SET(misc_utils utility/utils/misc_utils/cmd_args.cc utility/utils/misc_utils/matem.cc utility/utils/misc_utils/memoria.cc utility/utils/misc_utils/inertia.cc utility/utils/misc_utils/print_trace.cc)
 
 SET(SQLITE utility/sqlite/SqLiteObject.cc utility/sqlite/SqLiteQuery.cc utility/sqlite/SqLiteDatabase.cc)
 
