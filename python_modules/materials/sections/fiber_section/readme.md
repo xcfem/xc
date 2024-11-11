@@ -14,6 +14,9 @@ A fiber section object is composed of Fibers, with each fiber containing a Uniax
 - [How to Find the Neutral Axis](http://portwooddigital.com/2022/11/09/how-to-find-the-neutral-axis/)
 - [Section modulus](https://en.wikipedia.org/wiki/Section_modulus)
 
+### Shell materials
+- [Plate Rebar Material](https://portwooddigital.com/2024/11/08/plate-rebar-material/)
+
 ### Reinforced concrete
 <!-- language: lang-none -->
 
