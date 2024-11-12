@@ -50,13 +50,6 @@ backfillDelta=math.radians(18.3)
 frontFillDepth= 0.25
 zGroundBackfill=0 #Back fill
 
-# Foundation stratified soil properties
-hi=[100]
-rhoi= [rhoS]
-phii= [math.radians(phiS)]
-ci=[0e3]
-
-
 #Loads
 gravity=9.81 #Gravity acceleration (m/s2)
 HwaterAcc=2.0 # height of water over the top face of the footing
