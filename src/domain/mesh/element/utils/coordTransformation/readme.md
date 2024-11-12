@@ -12,3 +12,4 @@ The geometric coordinate transformation objects handle rigid joint offsets for f
 - [The Basic Natural Kernel in a Corotating Frame of Reference](https://portwooddigital.com/2022/09/18/the-basic-natural-kernel-in-a-corotating-frame-of-reference/)
 - [Rigid joint offsets](https://portwooddigital.com/2020/11/19/rigid-joint-offsets/)
 - [Geometric transformation](https://portwooddigital.com/2022/11/15/geometric-transformation/)
+- [Corotational Rigid Offsets](https://portwooddigital.com/2024/11/11/corotational-rigid-offsets/)
