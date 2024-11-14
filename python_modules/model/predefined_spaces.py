@@ -406,6 +406,10 @@ class PredefinedSpace(object):
         :param node: node to remove:
         '''
         return self.preprocessor.removeNode(node)
+
+    def duplicateNode(self, node):
+        ''' Duplicate the given node.'''
+        return self.getNodeHandler().duplicateNode(node.tag)
     
     def getNodes(self, tags: Sequence[int]):
         ''' Return the nodes that correspond to the argument
