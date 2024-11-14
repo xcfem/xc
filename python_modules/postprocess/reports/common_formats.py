@@ -10,7 +10,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com, ana.ortega.ort@gmail.com"
 
-Esf= "{:6.2f}"
+Force= "{:6.2f}"
+Esf= Force
 Stress= "{:6.2f}"
 Diam= "{:2.0f}"
 Length= "{:4.2f}"
