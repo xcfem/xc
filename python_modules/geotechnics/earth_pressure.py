@@ -153,7 +153,7 @@ class RankineSoil(fs.FrictionalSoil):
         return self.getPressureAtDepth(K= Kp, z= z, waterTableDepth= waterTableDepth)
     
     def getAtRestPressureAtDepth(self, z, waterTableDepth= 6371e3, designValue= False):
-        ''' Returns the active presure at depth z
+        ''' Returns the at-rest presure at depth z
 
         :param z: depth to compute the pressure.
         :param waterTableDepth: depth of the water table.
@@ -164,7 +164,7 @@ class RankineSoil(fs.FrictionalSoil):
         return self.getPressureAtDepth(K= K0, z= z, waterTableDepth= waterTableDepth)
 
     def getEarthThrusts(self, depth, tributaryArea, waterTableDepth= 6371e3, designValue= False):
-        ''' Returns the active presure at depth z
+        ''' Returns the active, at-rest and passive presure at depth z
 
         :param depth: depth to compute the pressure.
         :param tributaryArea: area on which the pressure acts.
