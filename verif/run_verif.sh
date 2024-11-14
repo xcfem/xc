@@ -1622,6 +1622,10 @@ python tests/geotechnics/earthworks/test_embankment_02.py
 python tests/geotechnics/earthworks/test_embankment_03.py
 python tests/geotechnics/earthworks/test_embankment_04.py
 python tests/geotechnics/earthworks/test_embankment_05.py
+echo  "$BLEU" "  Earth retaining." "$NORMAL"
+python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_test_01.py
+python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_test_02.py
+python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_test_03.py
 
 #Database tests
 echo "$BLEU" "Database tests (MySQL, Berkeley db, sqlite,...)." "$NORMAL"
