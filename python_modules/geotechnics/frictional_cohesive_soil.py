@@ -654,7 +654,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         return typical_materials.defDruckerPragerPlaneStrain(preprocessor, name= name, k= k, G= G, sigY= sigY, mRho= rho, mRhoBar= rhoB, Kinf= Kinf, Ko= Ko, delta1= delta1, H= H, theta= theta, delta2= delta2, mDen= mDen, elastFlag= elastFlag, pAtm= pAtm)
 
 class StratifiedSoil(object):
-    '''Soil with layers with different properties.
+    '''Soil with layers of different properties.
 
     Soil with layers of different properties as described in
     4.5.5.7 "Guía de cimentaciones en obras de carreteras"
