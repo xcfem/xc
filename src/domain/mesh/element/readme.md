@@ -24,3 +24,6 @@ This directory contains the classes that define the finite elements available in
 ### PFEM
 PFEM has not been migrated from OpenSees yet.
 - [The PFEM in OpenSees](https://portwooddigital.com/2023/11/06/the-pfem-in-opensees/)
+- [Just Fillin’ Up the Tank](https://portwooddigital.com/2024/08/08/just-fillin-up-the-tank/)
+- [Sloshing Around](https://portwooddigital.com/2024/11/03/sloshing-around/)
+- [Hydrostatic Loading on a Wall](https://portwooddigital.com/2024/11/13/hydrostatic-loading-on-a-wall/)
