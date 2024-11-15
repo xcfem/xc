@@ -32,7 +32,7 @@ soil1= earth_pressure.RankineSoil(phi= math.radians(30), rho= 105*pcf/g, rhoSat=
 soil1.Kh= 2.9*pci
 soil2= earth_pressure.RankineSoil(phi= math.radians(30), rho= 128.5*pcf/g, rhoSat= 128.5*pcf/g)
 soil2.Kh= 15*pci
-soil3= earth_pressure.CoulombSoil(phi= math.radians(1), c= 1500*psf, rho= 128.5*pcf/g, rhoSat= 128.5*pcf/g)
+soil3= earth_pressure.CoulombSoil(phi= math.radians(1), c= 1500*psf, rho= 122.5*pcf/g, rhoSat= 122.5*pcf/g)
 soil2.Kh= 15*pci
 print(1500*psf/1e3)
 
