@@ -137,10 +137,11 @@ class SoilLayers(object):
 
     :ivar depths: (float list) layer depths.
     :ivar soils: soil objects for each layer.
-    :ivar waterTableDepthIndex: index of the water table depth in self.depths.
+    :ivar leftWaterTableDepthIndex: index of the left water table depth in self.depths.
+    :ivar rightWaterTableDepthIndex: index of the right water table depth in self.depths.
     :ivar excavationDepthIndex: index of the excavation depth in self.depths.
     '''
-    def __init__(self, depths, soils, waterTableDepth= None, excavationDepth= None):
+    def __init__(self, depths, soils, waterTableDepth= [None, None], excavationDepth= None):
         '''Constructor.
 
         :param depths: (float list) layer depths.
@@ -186,13 +187,14 @@ class SoilLayers(object):
                 retval= newDepthIndex
         return retval
             
-    def setWaterTableDepth(self, waterTableDepth= None):
+    def setWaterTableDepth(self, waterTableDepth= [None, None]):
         ''' Recomputes the depths and soils list to take account of
             the water table.
 
         :param waterTableDepth: depth of the water table.
         '''
-        self.waterTableDepthIndex= self.splitAtDepth(waterTableDepth)
+        self.leftWaterTableDepthIndex= self.splitAtDepth(waterTableDepth[0])
+        self.rightWaterTableDepthIndex= self.splitAtDepth(waterTableDepth[1])
         
     def setExcavationDepth(self, excavationDepth= None):
         ''' Recomputes the depths and soils list to take account of
@@ -202,13 +204,28 @@ class SoilLayers(object):
         '''
         self.excavationDepthIndex= self.splitAtDepth(excavationDepth)
         
-    def getWaterTableDepth(self):
-        ''' Return the index that corresponds to the depth of the water table.
+    def getLeftWaterTableDepth(self):
+        ''' Return the index that corresponds to the depth of the water table at            the left of the pile wall.
         '''
         retval= 6378e3
-        if(self.waterTableDepthIndex>0):
-            retval= self.depths[self.waterTableDepthIndex]
+        if(self.leftWaterTableDepthIndex>0):
+            retval= self.depths[self.leftWaterTableDepthIndex]
         return retval
+    
+    def getRightWaterTableDepth(self):
+        ''' Return the index that corresponds to the depth of the water table at            the right of the pile wall.
+        '''
+        retval= 6378e3
+        if(self.rightWaterTableDepthIndex>0):
+            retval= self.depths[self.rightWaterTableDepthIndex]
+        return retval
+    
+    def getWaterTableDepths(self):
+        ''' Return the index that corresponds to the depth of the water table
+            at both sides [left, right] of the pile wall.
+        '''
+
+        return [self.getLeftWaterTableDepth(), self.getRightWaterTableDepth()]
         
     def getExcavationDepth(self):
         ''' Return the index that corresponds to the excavation depth.
@@ -244,15 +261,21 @@ class SoilLayers(object):
             retval= self.soils[soilIndex]
         return retval
     
-    def getHydrostaticPressureAtDepth(self, depth):
-        ''' Returns the hydrostatic presure at the given depth.
+    def getNetHydrostaticPressureAtDepth(self, depth):
+        ''' Returns the net hydrostatic presure at the given depth.
 
         :param depth: depth to compute the pressure at.
         '''
         retval= 0.0
-        waterTableDepth= self.getWaterTableDepth()
-        if(depth>waterTableDepth):
-            retval= 1e3*g*(depth-waterTableDepth)
+        waterUnitWeight= 1e3*g
+        # Pressure to the right.
+        leftWaterTableDepth= self.getLeftWaterTableDepth()
+        if(depth>leftWaterTableDepth):
+            retval+= waterUnitWeight*(depth-leftWaterTableDepth) # to the right.
+        # Pressure to the left.
+        rightWaterTableDepth= self.getRightWaterTableDepth()
+        if(depth>rightWaterTableDepth):
+            retval-= waterUnitWeight*(depth-rightWaterTableDepth) # to the left.
         return retval
 
     def getVerticalPressureAtDepth(self, depth):
@@ -282,7 +305,9 @@ class SoilLayers(object):
         :param K: pressure coefficient.
         :param depth: depth to compute the pressure at.
         '''
-        return self.getVerticalPressureAtDepth(depth= depth)*K
+        retval= self.getVerticalPressureAtDepth(depth= depth)*K
+        retval+= getNetHydrostaticPressureAtDepth(depth= depth)
+        return retval
 
     
 class PileWall(object):
@@ -293,7 +318,7 @@ class PileWall(object):
     :ivar soilLayers: SoilLayers object.
     '''
     
-    def __init__(self, pileSection, soilLayersDepths, soilLayers, excavationDepth, pileSpacing= 1.0, waterTableDepth= None):
+    def __init__(self, pileSection, soilLayersDepths, soilLayers, excavationDepth, pileSpacing= 1.0, waterTableDepth= [None, None]):
         '''Constructor.
 
         :param pileSection: 2D elastic shear section for the pile wall beam
@@ -302,22 +327,33 @@ class PileWall(object):
         :param soilLayers: soil object for each layer.
         :param excavationDepth: depth of the excavation.
         :param pileSpacing: distance between pile axes.
-        :param waterTableDepth: (float) depth of the water table.
+        :param waterTableDepth: [float, float] depth of the water table at both
+                                sides of the pile wall [left, right].
         '''
         self.pileSection= pileSection
         self.soilLayers= SoilLayers(depths= soilLayersDepths, soils= soilLayers, waterTableDepth= waterTableDepth, excavationDepth= excavationDepth)
         self.pileSpacing= pileSpacing
+        self.solProc= None
 
     def defineFEProblem(self):
-        ''' Define the FE problem.'''
+        ''' Define the FE problem.
+
+        '''
         self.feProblem= xc.FEProblem()
         preprocessor=  self.feProblem.getPreprocessor   
         nodes= preprocessor.getNodeHandler
         ## Problem type
         self.modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-        # Solution procedure. 
-        #solProc= predefined_solutions.PenaltyKrylovNewton(prb= feProblem, numSteps= numSteps, maxNumIter= 300, convergenceTestTol= 1e-6, printFlag= 0)
-        self.solProc= predefined_solutions.PenaltyNewtonRaphson(prb= self.feProblem, numSteps= 10, maxNumIter= 300, convergenceTestTol= 1e-5, printFlag= 0)
+        
+    def defineSolutionProcedure(self, convergenceTestTol= 1e-5):
+        ''' Define the solution procedure.
+
+        :param convergenceTestTol: tolerance for the convergence test of the
+                                   solver.
+        '''
+        # Solution procedure.
+        #solProc= predefined_solutions.PenaltyKrylovNewton(prb= feProblem, numSteps= numSteps, maxNumIter= 300, convergenceTestTol= convergenceTestTol, printFlag= 0)
+        self.solProc= predefined_solutions.PenaltyNewtonRaphson(prb= self.feProblem, numSteps= 10, maxNumIter= 300, convergenceTestTol= convergenceTestTol, printFlag= 0)
         
     def setNodeSoils(self):
         ''' Compute the soil corresponding to each node.'''
@@ -329,8 +365,6 @@ class PileWall(object):
             
     def genMesh(self):
         '''Define the FE mesh.
-
-        :param modelSpace:
         '''
         # Define finite element problem.
         self.defineFEProblem()
@@ -508,12 +542,16 @@ class PileWall(object):
                         exit(1)
         return updatedElements
                 
-    def solve(self, reactionCheckTolerance= 1e-6, excavationSide= 'left'):
+    def solve(self, convergenceTestTol= 1e-5, reactionCheckTolerance= 1e-6, excavationSide= 'left'):
         '''Compute the solution.
 
+        :param convergenceTestTol: tolerance for the convergence test of the
+                                   solver.
         :param reactionCheckTolerance: tolerance when checking nodal reactions.
         :param excavationSide: side for the excavation ('left' or 'right')
         '''
+        if(not self.solProc):
+            self.defineSolutionProcedure(convergenceTestTol= convergenceTestTol)
         ok= self.solProc.solve()
         if(ok!=0):
             lmsg.error('Can\'t solve')
