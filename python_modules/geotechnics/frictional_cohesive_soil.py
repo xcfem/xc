@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''FrictionalCohesiveSoil.py: soil with friction and cohesion.
+'''frictional_cohesive_soil.py: soil with friction and cohesion.
 
 References: 
 
@@ -144,7 +144,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
             retval= max(a1-a2,0.0)
         return retval
 
-    def eah_coulomb(self, sg_v,a,b,d= 0.0):
+    def eah_coulomb(self, sg_v, a, b,d= 0.0):
         '''
         Return the horizontal component of the lateral earth active pressure.
 
@@ -155,7 +155,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         '''
         return (self.ea_coulomb(sg_v= sg_v, a= a, b= b, d= d)*math.cos(a+d))
 
-    def eav_coulomb(self, sg_v,a,b,d= 0.0):
+    def eav_coulomb(self, sg_v, a, b, d= 0.0):
         '''
         Return the vertical component of the active earth pressure coefficient
         according to Coulomb's theory.
@@ -185,7 +185,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
             retval= max(a1+a2,0.0)
         return retval
 
-    def eph_coulomb(self, sg_v,a,b,d):
+    def eph_coulomb(self, sg_v, a, b, d):
         '''
         Return the horizontal component of the lateral earth passive pressure.
 
@@ -196,7 +196,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         '''
         return (self.ep_coulomb(sg_v= sg_v, a= a, b= b, d= d)*math.cos(a+d))
 
-    def epv_coulomb(self, sg_v,a,b,d):
+    def epv_coulomb(self, sg_v, a, b, d):
         '''
         Return the vertical component of the passive earth pressure
         according to Coulomb's theory.
@@ -222,7 +222,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         '''
         return(self.Ka_bell(p,a,b,d)*p*math.cos(a)/float(math.cos(b-a)))
 
-    def sq(self,Beff,Leff):
+    def sq(self, Beff, Leff):
         '''Factor that introduces the effect of foundation shape on
            the overburden component.
 
@@ -262,7 +262,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         retval= (1+sinPhi*math.sin(2*alphaAngle-self.phi))/(1+sinPhi)*math.exp(-(0.5*math.pi+self.phi-2*alphaAngle)*math.tan(self.phi))
         return retval
 
-    def dq(self,D,Beff):
+    def dq(self, D, Beff):
         '''Overburden factor for foundation depth.
 
            :param D: foundation depth.
@@ -308,7 +308,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         '''
         return self.sq(Beff,Leff)
 
-    def ic(self,Vload, HloadB, HloadL, Beff, Leff):
+    def ic(self, Vload, HloadB, HloadL, Beff, Leff):
         '''Factor that introduces the effect of load inclination on
            the cohesion component.
 
@@ -333,7 +333,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
                 lmsg.warning('Load (H= '+str(Hload)+') greater than soil strength R='+str(resist)+' returns 0.0')
                 return 0.0
 
-    def dc(self,D,Beff):
+    def dc(self, D, Beff):
         '''Depth factor for cohesion.
 
            :param D: foundation depth.
