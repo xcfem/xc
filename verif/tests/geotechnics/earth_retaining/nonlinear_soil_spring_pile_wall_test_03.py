@@ -16,8 +16,6 @@ from materials.ehe import EHE_limit_state_checking
 from misc_utils import log_messages as lmsg
 from tabulate import tabulate
 
-lmsg.log('WARNING: work in progress. Use with caution.')
-
 # Materials definition
 ## Soil materials
 ### Dry soil.

@@ -13,8 +13,6 @@ from materials.ehe import EHE_limit_state_checking
 from misc_utils import log_messages as lmsg
 from tabulate import tabulate
 
-lmsg.log('WARNING: work in progress. Use with caution.')
-
 # Materials definition
 ## Soil material
 soil= earth_pressure.RankineSoil(phi= math.radians(32), rho= 15.90e3/g, rhoSat= 19.33e3/g)
