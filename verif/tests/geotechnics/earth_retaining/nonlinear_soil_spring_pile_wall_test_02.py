@@ -10,7 +10,6 @@ from geotechnics.earth_retaining import pile_wall as pw
 from materials.sections.fiber_section import def_column_RC_section
 from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking
-from misc_utils import log_messages as lmsg
 from tabulate import tabulate
 
 # Materials definition
