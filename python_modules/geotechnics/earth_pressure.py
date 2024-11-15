@@ -12,6 +12,7 @@ __email__= "l.pereztato@gmail.com"
 import math
 import sys
 from geotechnics import frictional_soil as fs
+from geotechnics import frictional_cohesive_soil as fcs
 from scipy import interpolate
 from scipy import optimize
 import geom
@@ -28,17 +29,16 @@ class RankineSoil(fs.FrictionalSoil):
        resistance of the soil and the backfill is inclined at angle β to 
        the horizontal.
 
-    :ivar phi:    internal friction angle of the soil
-    :ivar beta:   angle of backfill with horizontal
+    :ivar beta: angle of backfill with horizontal.
     '''
     def __init__(self,phi, beta= 0.0, rho= 2100.0, rhoSat= None, gammaMPhi= 1.0):
         ''' Constructor.
 
-        :param phi: internal friction angle of the soil
-        :param beta: angle of backfill with horizontal
+        :param phi: internal friction angle of the soil.
+        :param beta: angle of backfill with horizontal.
         :param rho: soil density.
-        :param rhoSat: saturated density of the soil (mass per unit volume)
-        :param gammaMPhi: (float) partial reduction factor for internal 
+        :param rhoSat: saturated density of the soil (mass per unit volume).
+        :param gammaMPhi: (float) partial reduction factor for internal
                           friction angle of the soil.
         '''
         super(RankineSoil,self).__init__(phi= phi, rho= rho, rhoSat= rhoSat, gammaMPhi= gammaMPhi)
@@ -552,3 +552,25 @@ def def_ey_basic_material(preprocessor, name, E, upperYieldStress, lowerYieldStr
     retval.revertToStart() # Compute material derived parameters.
     return retval
 
+class CoulombSoil(fcs.FrictionalCohesiveSoil):
+    '''Soil response according to Coulomb's theory.
+
+    :ivar beta: angle of backfill with horizontal
+    '''
+    def __init__(self,phi, c, beta= 0.0, rho= 2100.0, rhoSat= None, phi_cv= None, gammaMPhi= 1.0, gammaMc= 1.0, E= 1e8, nu= 0.3):
+        ''' Constructor.
+
+        :param phi: internal friction angle of the soil
+        :param c: (float) soil cohesion.
+        :param beta: angle of backfill with horizontal
+        :param rho: soil density.
+        :param rhoSat: saturated density of the soil (mass per unit volume)
+        :param phi_cv: critical state (constant volume) angle of shearing resistance of the soil. See clause 6.5.3 (10) of Eurocode 7 part 1. 
+        :param gammaMPhi: (float) partial reduction factor for internal 
+                          friction angle of the soil.
+        :param gammaMc: (float) partial reduction factor for soil cohesion.
+        :param E: Young's modulus (defaults to 1e8 Pa).
+        :param nu: Poisson's ratio (defaults to 0.3).
+        '''
+        super(CoulombSoil,self).__init__(phi= phi, c= c, rho= rho, rhoSat= rhoSat, phi_cv= phi_cv, gammaMPhi= gammaMPhi, gammaMc= gammaMc, E= E, nu= nu)
+        self.beta= beta
