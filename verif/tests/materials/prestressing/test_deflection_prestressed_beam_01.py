@@ -106,7 +106,7 @@ geomSectBeam=sectpr.RectangularSection(name='geomSectBeam',b=wBeam,h=hBeam)
 # Material definition
 concrete=tm.MaterialData(name='concrete',E=Ec,nu=nuc,rho=densc)
 beamMat=tm.BeamMaterialData(name= 'beamMat', section=geomSectBeam, material=concrete)
-beamMat.setupElasticShear3DSection(prep)
+beamMat.defElasticShearSection3d(prep)
 
 #Meshing
 for l in beamSet.getLines:

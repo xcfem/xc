@@ -69,7 +69,7 @@ class Bolt(object):
         gsect=sectpr.CircularSection('gsect',self.diam)
         mName=str(uuid.uuid1())
         self.sectMat=tm.BeamMaterialData(mName+'_mat',gsect,self.mat)
-        self.sectMat.setupElasticShear3DSection(prep)
+        self.sectMat.defElasticShearSection3d(prep)
 
     def createBolt(self,entLst,setName):
         '''Creates the bolt elements and appends them to a set which 
@@ -127,7 +127,7 @@ class Bolt(object):
         gsectR=sectpr.RectangularSection('gsectR',l,l)
         mRname=str(uuid.uuid1())
         radMat=tm.BeamMaterialData(mRname+'_Rmat',gsectR,self.mat)
-        radMat.setupElasticShear3DSection(prep)
+        radMat.defElasticShearSection3d(prep)
         return radMat
 
     def getMatsRelease(self,prep,tPlate):

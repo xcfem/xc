@@ -69,7 +69,7 @@ wall_mat.setupElasticSection(preprocessor=prep)   #creates de section-material
 #rectangular sections
 geomSectColumns=sectpr.RectangularSection(name='geomSectColumns',b=0.25,h=0.25)
 columns_mat= tm.BeamMaterialData(name= 'columns_mat', section=geomSectColumns, material=mat_cols)
-columns_mat.setupElasticShear3DSection(preprocessor=prep)
+columns_mat.defElasticShearSection3d(preprocessor=prep)
 
 
 #                         ***FE model - MESH***

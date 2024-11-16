@@ -58,7 +58,7 @@ from materials.sections import section_properties as sectpr
 geomSect=sectpr.RectangularSection(name='geomSect',b=0.2,h=0.2)
 
 linel_mat= tm.BeamMaterialData(name= 'linel_mat', section=geomSect, material=concrProp)
-linel_mat.setupElasticShear3DSection(preprocessor=prep)
+linel_mat.defElasticShearSection3d(preprocessor=prep)
 
 beams_mesh=fem.LinSetToMesh(linSet=beams,matSect=linel_mat,elemSize=0.5,vDirLAxZ=xc.Vector([0,0,1]),elemType='ElasticBeam3d',coordTransfType='linear')
 beams_mesh.generateMesh(prep)

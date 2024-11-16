@@ -87,7 +87,7 @@ from materials.sections import section_properties as sectpr
 geomSectPile= sectpr.RectangularSection(name='geomSectPile',b=LeqPile,h=LeqPile)
 # Elastic material-section
 pile_mat= tm.BeamMaterialData(name='pile_mat', section=geomSectPile, material=concrProp)
-pile_mat.setupElasticShear3DSection(preprocessor=prep)
+pile_mat.defElasticShearSection3d(preprocessor=prep)
 
 #                         ***FE model - MESH***
 pile_mesh= fem.LinSetToMesh(linSet=pile,matSect=pile_mat,elemSize=eSize,vDirLAxZ=xc.Vector([0,1,0]),elemType='ElasticBeam3d',dimElemSpace=3,coordTransfType='linear')
