@@ -1109,8 +1109,8 @@ class GenericSection2D(SectionProperties):
         '''Return section modulus with respect to local z-axis'''
         return self.W
   
-    def alphaZ(self):
-        '''Return shear shape factor with respect to local z-axis'''
+    def alphaY(self):
+        '''Return shear shape factor with respect to local y-axis'''
         return self.alph
 
 class GenericSection(SectionProperties):
