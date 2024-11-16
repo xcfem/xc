@@ -10,6 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
+import sys
 from misc_utils import log_messages as lmsg
 import uuid
 
@@ -139,7 +140,56 @@ def defElasticMaterial(preprocessor, name:str, E:float, rho= 0.0, nu= 0.3, initS
     tmp= BasicElasticMaterial(E= E, nu= nu, rho= rho)
     return tmp.defElasticMaterial(preprocessor, name= name, initStrain= initStrain)
 
-def defElasticPPMaterial(preprocessor,name, E, fyp, fyn, initStrain= 0.0):
+class ElasticPerfectlyPlasticMaterial(BasicElasticMaterial):
+    ''' Elastic perperfectly-plastic material.
+
+    :ivar fyp: stress at which material reaches plastic state in tension.
+    :ivar fyn: stress at which material reaches plastic state in compression.
+    '''
+
+    def __init__(self, E:float, fyp:float, fyn:float, rho= 0.0, nu= 0.3):
+        ''' Constructor.
+
+        :param E: Young’s modulus of the material
+        :param fyp: stress at which material reaches plastic state in tension.
+        :param fyn: stress at which material reaches plastic state in 
+                    compression.
+        :param nu: Poisson’s ratio
+        :param rho: mass density
+        '''
+        super().__init__(E= E, rho= rho, nu= nu)
+        self.fyp= fyp
+        self.fyn= fyn
+        
+    def defElasticPPMaterial(self, preprocessor, name= None, overrideRho= None, initStrain= 0.0):
+        ''' Return an perfectly-plastic uniaxial material appropriate for 
+            example for truss elements
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param name: name for the new material (if None compute a suitable 
+                     name).
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        :param initStrain: initial strain.
+        '''        
+        materialHandler= preprocessor.getMaterialHandler
+        matName= name
+        if(not matName):
+            matName= uuid.uuid1().hex
+        retval= materialHandler.newMaterial("elasticpp_material", matName)
+        retval.E= self.E
+        retval.fyp= self.fyp
+        retval.fyn= self.fyn
+        matRho= self.rho
+        if(overrideRho):
+            matRho= overrideRho
+        retval.rho= matRho
+        if(initStrain!=0.0):
+            retval.setInitialStrain(initStrain)
+        retval.revertToStart() # Compute material derived parameters.
+        return retval
+
+def defElasticPPMaterial(preprocessor, name, E, fyp, fyn, initStrain= 0.0):
     '''Constructs an elastic perfectly-plastic uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
@@ -149,18 +199,8 @@ def defElasticPPMaterial(preprocessor,name, E, fyp, fyn, initStrain= 0.0):
     :param fyn: stress at which material reaches plastic state in compression.
     :param initStrain: initial strain.
     '''
-    materialHandler= preprocessor.getMaterialHandler
-    matName= name
-    if(not matName):
-        matName= uuid.uuid1().hex
-    retval= materialHandler.newMaterial("elasticpp_material", matName)
-    retval.E= E
-    retval.fyp= fyp
-    retval.fyn= fyn
-    if(initStrain!=0.0):
-        retval.setInitialStrain(initStrain)
-    retval.revertToStart() # Compute material derived parameters.
-    return retval
+    tmp= ElasticPerfectlyPlasticMaterial(E= E, fyp= fyp, fyn= fyn, nu= nu, rho= rho)
+    return tmp.defElasticPPMaterial(preprocessor, name= name, initStrain= initStrain)
 
 def defElastNoTensMaterial(preprocessor,name,E):
     '''Constructs a uniaxial elastic - no tension material.
@@ -1390,7 +1430,7 @@ class BeamMaterialData(MaterialData):
         '''return the mass per unit length'''
         return self.rho*self.section.A()
     
-    def setupElasticShear3DSection(self,preprocessor, overrideRho= None):
+    def defElasticShearSection3d(self, preprocessor, overrideRho= None):
         '''Return an elastic section appropriate for 3D beam linear 
            elastic analysis.
 
@@ -1411,7 +1451,7 @@ class BeamMaterialData(MaterialData):
             lmsg.warning('Material: '+ self.name+ ' already defined.')
         return self.xc_material
     
-    def setupElasticShear2DSection(self, preprocessor, overrideRho= None):
+    def defElasticShearSection2d(self, preprocessor, overrideRho= None):
         '''Return an elastic section appropriate for 2D beam linear 
            elastic analysis.
 
@@ -1431,3 +1471,28 @@ class BeamMaterialData(MaterialData):
         else:
             lmsg.warning('Material: '+ self.name+ ' already defined.')
         return self.xc_material
+
+    def setupElasticShear3DSection(self, preprocessor, overrideRho= None):
+        '''Return an elastic section appropriate for 3D beam linear 
+           elastic analysis.
+
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(className+'.'+methodName+'; DEPRECATED, use defElasticShearSection3d')
+        self.defElasticShearSection3d(preprocessor= preprocessor, overrideRho= overrideRho)
+ 
+    def setupElasticShear2DSection(self, preprocessor, overrideRho= None):
+        '''Return an elastic section appropriate for 2D beam linear 
+           elastic analysis.
+
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(className+'.'+methodName+'; DEPRECATED, use defElasticShearSection2d')
+        self.defElasticShearSection2d(preprocessor= preprocessor, overrideRho= overrideRho)
+
