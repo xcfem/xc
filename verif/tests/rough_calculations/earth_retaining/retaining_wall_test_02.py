@@ -99,9 +99,9 @@ wall.createSelfWeightLoads(rho= concrete.density(),grav= gravity)
 ## Earth pressure. (drainage ok)
 ### Backfill soil properties
 backfillSoilModel= ep.RankineSoil(phi= math.radians(phiS),rho= rhoS) #Characteristic values.
-gSoil= backfillSoilModel.rho*gravity
+gSoil= backfillSoilModel.rho()*gravity
 earthPress= loadCaseManager.setCurrentLoadCase('earthPress')
-wall.createDeadLoad(heelFillDepth= wall.stemHeight,toeFillDepth= frontFillDepth,rho= backfillSoilModel.rho, grav= gravity)
+wall.createDeadLoad(heelFillDepth= wall.stemHeight,toeFillDepth= frontFillDepth,rho= backfillSoilModel.rho(), grav= gravity)
 Ka= backfillSoilModel.Ka()
 backfillPressureModel=  earth_pressure.EarthPressureModel(zGround= zGroundBackfill, zBottomSoils=[-1e3],KSoils= [Ka], gammaSoils= [gSoil], zWater= -1e3, gammaWater= 1000*gravity,qUnif=0)
 wall.createBackfillPressures(backfillPressureModel, Delta= backfillDelta)
@@ -110,9 +110,9 @@ frontFillPressureModel=  earth_pressure.EarthPressureModel(zGround= zGroundFront
 wall.createFrontFillPressures(frontFillPressureModel)
 
 ## Accidental: earth pressure failure drainage system.
-gSoil= backfillSoilModel.rho*gravity
+gSoil= backfillSoilModel.rho()*gravity
 earthPressAcc= loadCaseManager.setCurrentLoadCase('earthPressAcc')
-wall.createDeadLoad(heelFillDepth= wall.stemHeight,toeFillDepth= frontFillDepth,rho= backfillSoilModel.rho, grav= gravity)
+wall.createDeadLoad(heelFillDepth= wall.stemHeight,toeFillDepth= frontFillDepth,rho= backfillSoilModel.rho(), grav= gravity)
 Ka= backfillSoilModel.Ka()
 backfillPressureModelAcc=  earth_pressure.EarthPressureModel(zGround= zGroundBackfill, zBottomSoils=[-1e3],KSoils= [Ka], gammaSoils= [gSoil], zWater=zGroundBackfill-stemHeight+HwaterAcc, gammaWater= 1000*gravity,qUnif=0)
 wall.createBackfillPressures(backfillPressureModelAcc, Delta= backfillDelta)

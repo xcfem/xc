@@ -97,7 +97,7 @@ refWallWeight= 183e3/10*g
 ratioWallWeight= abs(wallWeight-refWallWeight)/refWallWeight
 # Characteristic self-weight of the backfill above the heel.
 backfillAboveHeelArea= wall.getBackfillAvobeHeelArea(beta= granularFillM1.beta)
-backfillAboveHeelWeight= granularFillM1.rho*g*backfillAboveHeelArea
+backfillAboveHeelWeight= granularFillM1.rho()*g*backfillAboveHeelArea
 refBackfillAboveHeelWeight= 274e3
 ratioBFWeight= abs(backfillAboveHeelWeight-refBackfillAboveHeelWeight)/refBackfillAboveHeelWeight
 wallWeightOK= (abs(ratioWallWeight)<1e-9 and abs(ratioBFWeight)<1e-4)
@@ -133,7 +133,7 @@ ratioWselfk= abs(Wselfk.getResultant().y+183e3)/183e3
 
 ## Dead load on the heel.
 heelFillDepth= wall.getBackfillAvobeHeelAvgHeight(beta= granularFillM1.beta, zGround= 0.0)
-Wfillk= wall.createDeadLoad(heelFillDepth= heelFillDepth, toeFillDepth= 0.0, rho= granularFillM1.rho, grav= g)
+Wfillk= wall.createDeadLoad(heelFillDepth= heelFillDepth, toeFillDepth= 0.0, rho= granularFillM1.rho(), grav= g)
 ### Check characteristic self weight of backfill
 ratioWfillk= abs(Wfillk.getResultant().y+refBackfillAboveHeelWeight)/refBackfillAboveHeelWeight
 weightLoadsOK= (abs(ratioWselfk)<.05 and abs(ratioWfillk)<.01)
@@ -143,7 +143,7 @@ weightLoadsOK= (abs(ratioWselfk)<.05 and abs(ratioWfillk)<.01)
 KaM1= granularFillM1.Ka()
 ratioKa= abs(KaM1-0.365)/0.365
 earthPressureOK= (abs(ratioKa)<1e-2)
-gSoil= granularFillM1.rho*g
+gSoil= granularFillM1.rho()*g
 zBottomSoils=[-1e3]
 KSoils= [KaM1]
 gammaSoils= [gSoil]
@@ -269,7 +269,7 @@ gammaR2Bearing= 1.4
 ## Critical state (constant volume) angle of shearing resistance of the soil.
 ## See clause 6.5.3 (10) of Eurocode 7 part 1. 
 phi_cv= math.radians(30)
-foundationSoilModel= fcs.FrictionalCohesiveSoil(phi= granularFillM1.phi, c= 0.0, rho= granularFillM1.rho, phi_cv= phi_cv, gammaMPhi= gammaMPhiM1)
+foundationSoilModel= fcs.FrictionalCohesiveSoil(phi= granularFillM1.phi(), c= 0.0, rho= granularFillM1.rho(), phi_cv= phi_cv, gammaMPhi= gammaMPhiM1)
 ## Perform GEO verifications.
 sr= wall.performGEOVerifications(geoULSCombinations, foundationSoilModel= foundationSoilModel, toeFillDepth= wall.footingThickness, gammaRSliding= gammaR2Sliding, gammaRBearing= gammaR2Bearing)
 
