@@ -1009,6 +1009,109 @@ class CircularSection(SectionProperties):
         for x,y in zip(x1,x2):
             retval.append(geom.Pos2d(x, y))
         return retval
+    
+class GenericSection1D(SectionProperties):
+    '''Mechanical properties of a generic section in a one-dimensional space. 
+
+    :ivar area: cross-sectional area.
+    '''
+    def __init__(self, name, area):
+        ''' Constructor.
+        :param area: cross-sectional area
+        '''
+
+        super(GenericSection1D,self).__init__(name)
+        self.area= area
+      
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(other is not None):
+            if(self is not other):
+                retval= super(GenericSection1D,self).__eq__(other)
+                if(retval):
+                    retval= (self.area == other.area)
+            else:
+                retval= True
+        else:
+            retval= False
+        return retval
+    
+    def A(self):
+        '''Return cross-sectional area'''
+        return self.area
+    
+class GenericSection2D(SectionProperties):
+    '''Mechanical properties of a generic section in a two-dimensional space. 
+
+    :ivar area: cross-sectional area.
+    :ivar I: second moment of area.
+    :ivar W: section modulus.
+    :ivar alph: shear shape factor.
+    '''
+    def __init__(self, name, area, I, W, alph):
+        ''' Constructor.
+        :param area: cross-sectional area
+        :param I: second moment of area about the local z-axis
+        :param W: section modulus with respect to local y-axis
+        :param alph: shear shape factor with respect to local y-axis
+        '''
+
+        super(GenericSection2D,self).__init__(name)
+        self.area= area
+        self.I= I
+        self.W= W
+        self.alph=alph
+      
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(other is not None):
+            if(self is not other):
+                retval= super(GenericSection2D,self).__eq__(other)
+                if(retval):
+                    retval= (self.area == other.area)
+                if(retval):
+                    retval= (self.I == other.I)
+                if(retval):
+                    retval= (self.W == other.W)
+                if(retval):
+                    retval= (self.alph == other.alph)
+            else:
+                retval= True
+        else:
+            retval= False
+        return retval
+    
+    def A(self):
+        '''Return cross-sectional area'''
+        return self.area
+    
+    def yMax(self):
+        ''' Return the maximum distance from the section contour
+            to the local Z axis.'''
+        retval= None
+        if(self.Iz()>0.0):
+            if(self.Wzel()>0.0):
+                retval= self.Iz()/self.Wzel()
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errMsg= 'section modulus is zero, so yMax is infinity.'
+                lmsg.error(className+'.'+methodName+'; '+errMsg)
+        else:
+            retval= 0.0
+        return retval
+    
+    def Iz(self):
+        '''Return second moment of area about the local z-axis'''
+        return self.I
+  
+    def Wzel(self):
+        '''Return section modulus with respect to local z-axis'''
+        return self.W
+  
+    def alphaZ(self):
+        '''Return shear shape factor with respect to local z-axis'''
+        return self.alph
 
 class GenericSection(SectionProperties):
     '''Mechanical properties of generic section 
@@ -1021,6 +1124,7 @@ class GenericSection(SectionProperties):
     :ivar Wz: section modulus with respect to local z-axis
     :ivar alphY: shear shape factor with respect to local y-axis
     :ivar alphZ: shear shape factor with respect to local z-axis
+    :ivar Iw: warping constant.
     '''
     def __init__(self,name,area,I_y,I_z,Jtors,W_y,W_z,alphY,alphZ, Iw= 0.0):
         ''' Constructor.
