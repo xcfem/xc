@@ -18,61 +18,17 @@ from scipy import optimize
 import geom
 from misc_utils import log_messages as lmsg
 
-class RankineSoil(fs.FrictionalSoil):
-    '''From Wikipedia: Rankine's theory, developed in 1857, is a stress field
-       solution that predicts active and passive earth pressure. It assumes
-       that the soil is cohesionless, the wall is frictionless, the soil-wall
-       interface is vertical, the failure surface on which the soil moves is 
-       planar, and the resultant force is angled parallel to the backfill
-       surface. The equations for active and passive lateral earth pressure 
-       coefficients are given below. Note that φ is the angle of shearing 
-       resistance of the soil and the backfill is inclined at angle β to 
-       the horizontal.
+class SoilModel(object):
+    '''Soil response abstract base class.
 
-    :ivar beta: angle of backfill with horizontal.
+    :ivar beta: angle of backfill with horizontal
     '''
-    def __init__(self,phi, beta= 0.0, rho= 2100.0, rhoSat= None, gammaMPhi= 1.0):
+    def __init__(self, beta= 0.0):
         ''' Constructor.
 
-        :param phi: internal friction angle of the soil.
-        :param beta: angle of backfill with horizontal.
-        :param rho: soil density.
-        :param rhoSat: saturated density of the soil (mass per unit volume).
-        :param gammaMPhi: (float) partial reduction factor for internal
-                          friction angle of the soil.
+        :param beta: angle of backfill with horizontal
         '''
-        super(RankineSoil,self).__init__(phi= phi, rho= rho, rhoSat= rhoSat, gammaMPhi= gammaMPhi)
         self.beta= beta
-        
-    def Ka(self, alphaAngle= 0.0, designValue= False):
-        '''Returns Rankine's active earth pressure coefficient.
-
-        :param alphaAngle: inclination of the back face.
-        :param designValue: if true use the design value of the internal friction.
-        '''
-        if(designValue):
-            phi= self.getDesignPhi()
-        else:
-            phi= self.phi
-        if(phi<self.beta):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; backfill soil internal friction angle: '+str(math.degrees(phi))+" can't be smaller than the slope of the backfill: "+str(math.degrees(self.beta))+' otherwise the backfill slope is not stable. Assuming a big enough internal friction angle: '+str(math.degrees(self.beta))+' for the purpose of determine the active pressure coefficient only.')
-            phi= self.beta
-        cPhi= math.cos(phi)
-        cBeta= math.cos(self.beta)
-        if(alphaAngle==0.0):
-            r= math.sqrt(cBeta**2-cPhi**2)
-            retval= cBeta*(cBeta-r)/(cBeta+r)
-        else:
-            # See figure 3.7.13 in ROM 0.5-05 chapter 3
-            # https://www.puertos.es/es-es/BibliotecaV2/ROM%200.5-05%20(EN).pdf
-            rhoAngle= 2*alphaAngle-self.beta+math.asin(math.sin(self.beta)/math.sin(phi))
-            sPhi= math.sin(phi)
-            r= math.sqrt(sPhi**2- math.sin(self.beta)**2)
-            n= math.sqrt(1+sPhi**2-2*sPhi*math.cos(rhoAngle))
-            retval= math.cos(alphaAngle-self.beta)/(math.cos(alphaAngle)**2)*n/(math.cos(self.beta)*r)
-        return retval
 
     def getDeltaAngleActivePressure(self, alphaAngle= 0.0):
         '''Returns the angle of the earth pressure with respect to the
@@ -83,8 +39,8 @@ class RankineSoil(fs.FrictionalSoil):
         if(alphaAngle==0.0):
             retval= self.beta
         else:
-            rhoAngle= 2*alphaAngle-self.beta+math.asin(math.sin(self.beta)/math.sin(phi))
-            sPhi= math.sin(phi)
+            rhoAngle= 2*alphaAngle-self.beta+math.asin(math.sin(self.beta)/math.sin(self.soil.phi))
+            sPhi= math.sin(self.soil.phi)
             retval= math.atan(sPhi*math.sin(rhoAngle)/(1-sPhi*math.cos(rhoAngle)))
         return retval
 
@@ -96,27 +52,12 @@ class RankineSoil(fs.FrictionalSoil):
         :param waterTableDepth: depth of the water table.
         '''
         if(z<=waterTableDepth):
-            retval= self.gamma()*z*K
+            retval= self.soil.gamma()*z*K
         else:
-            retval= self.gamma()*waterTableDepth
+            retval= self.soil.gamma()*waterTableDepth
             retval+= self.submergedGamma()*(z-waterTableDepth)
             retval*= K
         return retval
-      
-          
-    def Kp(self, designValue= False):
-        '''Returns Rankine's passive earth pressure coefficient.
-
-        :param designValue: if true use the design value of the internal 
-                            friction.
-        '''
-        cBeta= math.cos(self.beta)
-        if(designValue):
-            cPhi= math.cos(self.getDesignPhi())
-        else:
-            cPhi= math.cos(self.phi)
-        r= math.sqrt(cBeta**2-cPhi**2)
-        return cBeta*(cBeta+r)/(cBeta-r)
     
     def K0Jaky(self, designValue= False):
         '''Returns Jaky's coefficient (earth pressure at rest).
@@ -126,11 +67,11 @@ class RankineSoil(fs.FrictionalSoil):
         '''
         
         if(designValue):
-            sPhi= math.sin(self.getDesignPhi())
+            sPhi= math.sin(self.soil.getDesignPhi())
         else:
-            sPhi= math.sin(self.phi)
+            sPhi= math.sin(self.soil.phi)
         return 1.0-sPhi
-      
+    
     def getActivePressureAtDepth(self, z, waterTableDepth= 6371e3, designValue= False):
         ''' Returns the active presure at depth z
 
@@ -177,7 +118,7 @@ class RankineSoil(fs.FrictionalSoil):
         E0= self.getAtRestPressureAtDepth(z= depth, waterTableDepth= waterTableDepth, designValue= designValue)*tributaryArea # at rest.
         Ep= self.getPassivePressureAtDepth(z= depth, waterTableDepth= waterTableDepth, designValue= designValue)*tributaryArea # passive.
         return Ea, E0, Ep
-        
+    
     def defHorizontalSubgradeReactionNlMaterial(self, preprocessor, name, depth, tributaryArea, Kh, waterTableDepth= 6371e3, designValue= False):
         ''' Return the points of the force-displacement diagram.
 
@@ -204,6 +145,97 @@ class RankineSoil(fs.FrictionalSoil):
         retval.setMaterial(eyBasicMaterial.name)
         retval.setInitialStress(-E0)
         return retval
+      
+class RankineSoil(SoilModel):
+    '''From Wikipedia: Rankine's theory, developed in 1857, is a stress field
+       solution that predicts active and passive earth pressure. It assumes
+       that the soil is cohesionless, the wall is frictionless, the soil-wall
+       interface is vertical, the failure surface on which the soil moves is 
+       planar, and the resultant force is angled parallel to the backfill
+       surface. The equations for active and passive lateral earth pressure 
+       coefficients are given below. Note that φ is the angle of shearing 
+       resistance of the soil and the backfill is inclined at angle β to 
+       the horizontal.
+    '''
+    def __init__(self, phi, beta= 0.0, rho= 2100.0, rhoSat= None, gammaMPhi= 1.0):
+        ''' Constructor.
+
+        :param phi: internal friction angle of the soil.
+        :param beta: angle of backfill with horizontal.
+        :param rho: soil density.
+        :param rhoSat: saturated density of the soil (mass per unit volume).
+        :param gammaMPhi: (float) partial reduction factor for internal
+                          friction angle of the soil.
+        '''
+        super(RankineSoil,self).__init__(beta= beta)
+        self.soil= fs.FrictionalSoil(phi= phi, rho= rho, rhoSat= rhoSat, gammaMPhi= gammaMPhi)
+        
+    def Ka(self, alphaAngle= 0.0, designValue= False):
+        '''Returns Rankine's active earth pressure coefficient.
+
+        :param alphaAngle: inclination of the back face.
+        :param designValue: if true use the design value of the internal friction.
+        '''
+        if(designValue):
+            phi= self.soil.getDesignPhi()
+        else:
+            phi= self.soil.phi
+        if(phi<self.beta):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; backfill soil internal friction angle: '+str(math.degrees(phi))+" can't be smaller than the slope of the backfill: "+str(math.degrees(self.beta))+' otherwise the backfill slope is not stable. Assuming a big enough internal friction angle: '+str(math.degrees(self.beta))+' for the purpose of determine the active pressure coefficient only.')
+            phi= self.beta
+        cPhi= math.cos(phi)
+        cBeta= math.cos(self.beta)
+        if(alphaAngle==0.0):
+            r= math.sqrt(cBeta**2-cPhi**2)
+            retval= cBeta*(cBeta-r)/(cBeta+r)
+        else:
+            # See figure 3.7.13 in ROM 0.5-05 chapter 3
+            # https://www.puertos.es/es-es/BibliotecaV2/ROM%200.5-05%20(EN).pdf
+            rhoAngle= 2*alphaAngle-self.beta+math.asin(math.sin(self.beta)/math.sin(phi))
+            sPhi= math.sin(phi)
+            r= math.sqrt(sPhi**2- math.sin(self.beta)**2)
+            n= math.sqrt(1+sPhi**2-2*sPhi*math.cos(rhoAngle))
+            retval= math.cos(alphaAngle-self.beta)/(math.cos(alphaAngle)**2)*n/(math.cos(self.beta)*r)
+        return retval
+          
+    def Kp(self, designValue= False):
+        '''Returns Rankine's passive earth pressure coefficient.
+
+        :param designValue: if true use the design value of the internal 
+                            friction.
+        '''
+        cBeta= math.cos(self.beta)
+        if(designValue):
+            cPhi= math.cos(self.soil.getDesignPhi())
+        else:
+            cPhi= math.cos(self.soil.phi)
+        r= math.sqrt(cBeta**2-cPhi**2)
+        return cBeta*(cBeta+r)/(cBeta-r)
+          
+class CoulombSoil(SoilModel):
+    '''Soil response according to Coulomb's theory.
+
+    '''
+    def __init__(self,phi, c, beta= 0.0, rho= 2100.0, rhoSat= None, phi_cv= None, gammaMPhi= 1.0, gammaMc= 1.0, E= 1e8, nu= 0.3):
+        ''' Constructor.
+
+        :param phi: internal friction angle of the soil
+        :param c: (float) soil cohesion.
+        :param beta: angle of backfill with horizontal
+        :param rho: soil density.
+        :param rhoSat: saturated density of the soil (mass per unit volume)
+        :param phi_cv: critical state (constant volume) angle of shearing resistance of the soil. See clause 6.5.3 (10) of Eurocode 7 part 1. 
+        :param gammaMPhi: (float) partial reduction factor for internal 
+                          friction angle of the soil.
+        :param gammaMc: (float) partial reduction factor for soil cohesion.
+        :param E: Young's modulus (defaults to 1e8 Pa).
+        :param nu: Poisson's ratio (defaults to 0.3).
+        '''
+        super(CoulombSoil,self).__init__(beta= beta)
+        self.soil= fcs.FrictionalCohesiveSoil(phi= phi, c= c, rho= rho, rhoSat= rhoSat, phi_cv= phi_cv, gammaMPhi= gammaMPhi, gammaMc= gammaMc, E= E, nu= nu)
+
 
 # Earth pressure according to Coulomb's Theory.
 # This theory is valid if the backfill surface is plane and the wall-bacfill
@@ -552,25 +584,3 @@ def def_ey_basic_material(preprocessor, name, E, upperYieldStress, lowerYieldStr
     retval.revertToStart() # Compute material derived parameters.
     return retval
 
-class CoulombSoil(fcs.FrictionalCohesiveSoil):
-    '''Soil response according to Coulomb's theory.
-
-    :ivar beta: angle of backfill with horizontal
-    '''
-    def __init__(self,phi, c, beta= 0.0, rho= 2100.0, rhoSat= None, phi_cv= None, gammaMPhi= 1.0, gammaMc= 1.0, E= 1e8, nu= 0.3):
-        ''' Constructor.
-
-        :param phi: internal friction angle of the soil
-        :param c: (float) soil cohesion.
-        :param beta: angle of backfill with horizontal
-        :param rho: soil density.
-        :param rhoSat: saturated density of the soil (mass per unit volume)
-        :param phi_cv: critical state (constant volume) angle of shearing resistance of the soil. See clause 6.5.3 (10) of Eurocode 7 part 1. 
-        :param gammaMPhi: (float) partial reduction factor for internal 
-                          friction angle of the soil.
-        :param gammaMc: (float) partial reduction factor for soil cohesion.
-        :param E: Young's modulus (defaults to 1e8 Pa).
-        :param nu: Poisson's ratio (defaults to 0.3).
-        '''
-        super(CoulombSoil,self).__init__(phi= phi, c= c, rho= rho, rhoSat= rhoSat, phi_cv= phi_cv, gammaMPhi= gammaMPhi, gammaMc= gammaMc, E= E, nu= nu)
-        self.beta= beta
