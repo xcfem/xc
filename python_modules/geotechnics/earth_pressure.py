@@ -30,6 +30,22 @@ class SoilModel(object):
         '''
         self.beta= beta
 
+    def rho(self):
+        ''' Return the soil density.'''
+        return self.soil.rho
+
+    def gamma(self):
+        ''' Return the specific weight of soil.'''
+        return self.soil.gamma()
+    
+    def submergedGamma(self):
+        ''' Return the submerged gamma of the soil.'''
+        return self.soil.submergedGamma()
+    
+    def phi(self):
+        ''' Return the specific weight of soil.'''
+        return self.soil.phi
+    
     def getDeltaAngleActivePressure(self, alphaAngle= 0.0):
         '''Returns the angle of the earth pressure with respect to the
            wall back face.
