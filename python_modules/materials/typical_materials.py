@@ -133,6 +133,7 @@ def defElasticMaterial(preprocessor, name:str, E:float, rho= 0.0, nu= 0.3, initS
     :param name: name identifying the material
     :param E: tangent in the stress-strain diagram
     :param rho: mass density
+    :param nu: Poisson’s ratio
     :param overrideRho: if defined (not None), override the value of 
                         the material density.
     :param initStrain: initial strain.
@@ -189,7 +190,19 @@ class ElasticPerfectlyPlasticMaterial(BasicElasticMaterial):
         retval.revertToStart() # Compute material derived parameters.
         return retval
 
-def defElasticPPMaterial(preprocessor, name, E, fyp, fyn, initStrain= 0.0):
+    def getDict(self):
+        ''' Returns a dictionary whith the values of the internal forces.
+            Makes easier export it to json.'''
+        retval= super().getDict()
+        retval.update({'fyp':self.fyp,'fyn':self.fyn})
+    
+    def setFromDict(self,dct):
+        '''Sets the internal forces from the dictionary argument.'''
+        super().setFromDict(dct)
+        self.fyp= dct['fyp']
+        self.fyn= dct['fyn']
+        
+def defElasticPPMaterial(preprocessor, name, E, fyp, fyn, rho= 0.0, nu= 0.3, initStrain= 0.0):
     '''Constructs an elastic perfectly-plastic uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
@@ -197,6 +210,8 @@ def defElasticPPMaterial(preprocessor, name, E, fyp, fyn, initStrain= 0.0):
     :param E: tangent in the elastic zone of the stress-strain diagram,
     :param fyp: stress at which material reaches plastic state in tension.
     :param fyn: stress at which material reaches plastic state in compression.
+    :param rho: mass density
+    :param nu: Poisson’s ratio
     :param initStrain: initial strain.
     '''
     tmp= ElasticPerfectlyPlasticMaterial(E= E, fyp= fyp, fyn= fyn, nu= nu, rho= rho)
