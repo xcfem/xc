@@ -100,6 +100,29 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
             a2= 2.0*c*math.sqrt(ka)
             retval= max(a1-a2,0.0)/sg_v
         return retval
+    
+    def Kah_bell(self, sg_v, a, b, d= 0.0, designValue= False):
+        ''' Return horizontal component of the the active earth pressure 
+            coefficient according to Bell's relationship.
+
+        :param sg_v: vertical stress.
+        :param a: angle of the back of the retaining wall (radians).
+        :param b: slope of the backfill (radians).
+        :param d: friction angle between soil an back of retaining wall (radians).
+        :param designValue: if true use the design value of the internal
+                            friction and the cohesion.
+        '''
+        retval= 0.0
+        if(sg_v>0.0):
+            kah= super(FrictionalCohesiveSoil,self).Kah_coulomb(a,b,d, designValue= designValue)
+            a1= kah*sg_v
+            if(designValue):
+                c= self.getDesignC()
+            else:
+                c= self.c
+            a2= 2.0*c*math.sqrt(kah)
+            retval= max(a1-a2,0.0)/sg_v
+        return retval
 
     def Kp_bell(self, sg_v, a, b, d= 0.0, designValue= False):
         ''' Return the passive earth pressure coefficient according to Bell's
@@ -266,7 +289,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         :param designValue: if true use the design value of the internal
                             friction and the cohesion.
         '''
-        return(self.Ka_bell(sg_v= q, a= a, b= b, d= d, esignValue= designValue)*p*math.cos(a)/float(math.cos(b-a)))
+        return(self.Ka_bell(sg_v= q, a= a, b= b, d= d, designValue= designValue)*p*math.cos(a)/float(math.cos(b-a)))
 
     def sq(self, Beff, Leff):
         '''Factor that introduces the effect of foundation shape on
