@@ -68,21 +68,20 @@ class SoilModel(object):
             retval= math.atan(sPhi*math.sin(rhoAngle)/(1-sPhi*math.cos(rhoAngle)))
         return retval
 
-    def getPressureAtDepth(self, K, z, waterTableDepth= 6371e3):
-        ''' Returns the active presure at depth z
+    def getVerticalStressAtDepth(self, z, waterTableDepth= 6371e3):
+        ''' Returns the vertical presure at depth z assuming that the soil is
+        homogeneous along the given depth.
 
-        :param K: pressure coefficient.
         :param z: depth to compute the pressure.
         :param waterTableDepth: depth of the water table.
         '''
         if(z<=waterTableDepth):
-            retval= self.soil.gamma()*z*K
+            retval= self.soil.gamma()*z
         else:
             retval= self.soil.gamma()*waterTableDepth
             retval+= self.submergedGamma()*(z-waterTableDepth)
-            retval*= K
         return retval
-    
+
     def K0Jaky(self, designValue= False):
         '''Returns Jaky's coefficient (earth pressure at rest).
 
@@ -92,31 +91,33 @@ class SoilModel(object):
         sPhi= math.sin(self.phi(designValue))
         return 1.0-sPhi
     
-    def getActivePressureAtDepth(self, z, sg_v, waterTableDepth= 6371e3, designValue= False):
-        ''' Returns the active presure at depth z
+    def getActivePressure(self, sg_v, designValue= False):
+        ''' Returns the active presure corresponding to the given vertical
+            pressure.
 
-        :param z: depth to compute the pressure.
         :param sg_v: vertical stress.
         :param waterTableDepth: depth of the water table.
         :param designValue: if true use the design value of the internal 
                             friction.
         '''
         Ka= self.Ka(sg_v= sg_v, designValue= designValue)
-        return self.getPressureAtDepth(K= Ka, z= z, waterTableDepth= waterTableDepth)
-    def getPassivePressureAtDepth(self, z, sg_v, waterTableDepth= 6371e3, designValue= False):
-        ''' Returns the passive presure at depth z
+        return Ka*sg_v
+    
+    def getPassivePressure(self, sg_v, designValue= False):
+        ''' Returns the passive presure corresponding to the given vertical
+            pressure.
 
-        :param z: depth to compute the pressure.
         :param sg_v: vertical stress.
         :param waterTableDepth: depth of the water table.
         :param designValue: if true use the design value of the internal 
                             friction.
         '''
         Kp= self.Kp(sg_v= sg_v, designValue= designValue)
-        return self.getPressureAtDepth(K= Kp, z= z, waterTableDepth= waterTableDepth)
+        return Kp*sg_v
     
-    def getAtRestPressureAtDepth(self, z, waterTableDepth= 6371e3, designValue= False):
-        ''' Returns the at-rest presure at depth z
+    def getAtRestPressure(self, sg_v, designValue= False):
+        ''' Returns the at-rest presure corresponding to the given vertical
+            pressure.
 
         :param z: depth to compute the pressure.
         :param waterTableDepth: depth of the water table.
@@ -124,39 +125,36 @@ class SoilModel(object):
                             friction.
         '''
         K0= self.K0Jaky(designValue= designValue)
-        return self.getPressureAtDepth(K= K0, z= z, waterTableDepth= waterTableDepth)
+        return K0*sg_v
 
-    def getEarthThrusts(self, depth, sg_v, tributaryArea, waterTableDepth= 6371e3, designValue= False):
-        ''' Returns the active, at-rest and passive presure at depth z
+    def getEarthThrusts(self, sg_v, tributaryArea, designValue= False):
+        ''' Returns the active, at-rest and passive presure corresponding to 
+            the given vertical pressure.
 
-        :param depth: depth to compute the pressure.
         :param sg_v: vertical stress.
         :param tributaryArea: area on which the pressure acts.
-        :param waterTableDepth: depth of the water table.
         :param designValue: if true use the design value of the internal 
                             friction.
         '''
 
-        Ea= self.getActivePressureAtDepth(z= depth, sg_v= sg_v, waterTableDepth= waterTableDepth, designValue= designValue)*tributaryArea # active.
-        E0= self.getAtRestPressureAtDepth(z= depth, waterTableDepth= waterTableDepth, designValue= designValue)*tributaryArea # at rest.
-        Ep= self.getPassivePressureAtDepth(z= depth, sg_v= sg_v, waterTableDepth= waterTableDepth, designValue= designValue)*tributaryArea # passive.
+        Ea= self.getActivePressure(sg_v= sg_v, designValue= designValue)*tributaryArea # active.
+        E0= self.getAtRestPressure(sg_v= sg_v, designValue= designValue)*tributaryArea # at rest.
+        Ep= self.getPassivePressure(sg_v= sg_v, designValue= designValue)*tributaryArea # passive.
         return Ea, E0, Ep
     
-    def defHorizontalSubgradeReactionNlMaterial(self, preprocessor, name, depth, sg_v, tributaryArea, Kh, waterTableDepth= 6371e3, designValue= False):
+    def defHorizontalSubgradeReactionNlMaterial(self, preprocessor, name, sg_v, tributaryArea, Kh, designValue= False):
         ''' Return the points of the force-displacement diagram.
 
         :param preprocessor: preprocessor of the finite element problem.
         :param name: name identifying the material (if None compute a suitable name)
-        :param depth: depth of the point.
         :param sg_v: vertical stress.
         :param tributaryArea: area on which the pressure acts.
         :param Kh: horizontal Winkler modulus.
-        :param waterTableDepth: depth of the water table.
         :param designValue: if true use the design value of the internal 
                             friction.
         '''
         # Compute corresponding earth thrusts (active, at rest, passive).
-        Ea, E0, Ep= self.getEarthThrusts(depth= depth, sg_v= sg_v, tributaryArea= tributaryArea, waterTableDepth= waterTableDepth, designValue= designValue)
+        Ea, E0, Ep= self.getEarthThrusts(sg_v= sg_v, tributaryArea= tributaryArea, designValue= designValue)
         # Define nonlinear spring material
         matName= name
         if(not matName):
@@ -194,10 +192,10 @@ class RankineSoil(SoilModel):
         super(RankineSoil,self).__init__(beta= beta)
         self.soil= fs.FrictionalSoil(phi= phi, rho= rho, rhoSat= rhoSat, gammaMPhi= gammaMPhi)
         
-    def Ka(self, sg_v, alphaAngle= 0.0, deltaAngle= 0.0, designValue= False):
+    def Ka(self, sg_v= None, alphaAngle= 0.0, deltaAngle= 0.0, designValue= False):
         '''Returns Rankine's active earth pressure coefficient.
 
-        :param sg_v: vertical stress.
+        :param sg_v: vertical stress (not used for Rankine soils).
         :param alphaAngle: inclination of the back face.
         :param deltaAngle: friction angle between the soil and the back surface
                            of the retaining wall (radians).
@@ -228,10 +226,10 @@ class RankineSoil(SoilModel):
             retval= math.cos(alphaAngle-self.beta)/(math.cos(alphaAngle)**2)*n/(math.cos(self.beta)*r)
         return retval
           
-    def Kp(self, sg_v, alphaAngle= 0.0, deltaAngle= 0.0, designValue= False):
+    def Kp(self, sg_v= None, alphaAngle= 0.0, deltaAngle= 0.0, designValue= False):
         '''Returns Rankine's passive earth pressure coefficient.
 
-        :param sg_v: vertical stress.
+        :param sg_v: vertical stress (not used for Rankine soils).
         :param alphaAngle: angle of the back of the retaining wall (radians).
         :param deltaAngle: friction angle between the soil and the back surface
                            of the retaining wall (radians).
@@ -250,7 +248,7 @@ class RankineSoil(SoilModel):
         cPhi= math.cos(self.phi(designValue))
         r= math.sqrt(cBeta**2-cPhi**2)
         return cBeta*(cBeta+r)/(cBeta-r)
-          
+    
 class CoulombSoil(SoilModel):
     '''Soil response according to Coulomb's theory.
 
@@ -273,12 +271,12 @@ class CoulombSoil(SoilModel):
         super(CoulombSoil,self).__init__(beta= beta)
         self.soil= fcs.FrictionalSoil(phi= phi, rho= rho, rhoSat= rhoSat, phi_cv= phi_cv, gammaMPhi= gammaMPhi, E= E, nu= nu)
 
-    def Ka(self, sg_v, alphaAngle= 0.0, deltaAngle= 0.0, designValue= False):
+    def Ka(self, sg_v= None, alphaAngle= 0.0, deltaAngle= 0.0, designValue= False):
         '''
         Return the horizontal component of the active earth pressure coefficient
         according to Coulomb's theory.
 
-        :param sg_v: vertical stress.
+        :param sg_v: vertical stress (not used for Coulomb soils).
         :param alphaAngle: angle of the back of the retaining wall (radians).
         :param deltaAngle: friction angle between the soil and the back surface
                            of the retaining wall (radians).
@@ -287,12 +285,12 @@ class CoulombSoil(SoilModel):
         '''
         return self.soil.Kah_coulomb(a= alphaAngle, b= self.beta, d= deltaAngle, designValue= designValue)
 
-    def Kp(self, sg_v, alphaAngle= 0.0, deltaAngle= 0.0, designValue= False):
+    def Kp(self, sg_v= None, alphaAngle= 0.0, deltaAngle= 0.0, designValue= False):
         '''
         Return the horizontal component of the passive earth pressure 
         coefficient according to Coulomb's theory.
 
-        :param sg_v: vertical stress.
+        :param sg_v: vertical stress (not used for Coulomb soils).
         :param alphaAngle: angle of the back of the retaining wall (radians).
         :param deltaAngle: friction angle between the soil and the back surface
                            of the retaining wall (radians).
