@@ -71,7 +71,8 @@ class CantileverSheetPileWall(object):
 
         :param z: depth of the point to calculate pressure for.
         '''
-        return self.soil.getActivePressureAtDepth(z= z, waterTableDepth= self.waterTableDepth)
+        sg_v= self.soil.getVerticalStressAtDepth(z= z, waterTableDepth= self.waterTableDepth)
+        return self.soil.getActivePressure(sg_v= sg_v)
 
     def getZeroNetPressureDepth(self):
         ''' Return the depth of the point which has zero net pressure (point E
