@@ -42,9 +42,17 @@ class SoilModel(object):
         ''' Return the submerged gamma of the soil.'''
         return self.soil.submergedGamma()
     
-    def phi(self):
-        ''' Return the specific weight of soil.'''
-        return self.soil.phi
+    def phi(self, designValue= False):
+        ''' Return the specific weight of soil.
+
+        :param designValue: if true use the design value of the angle of 
+                            internal friction.
+        '''
+        if(designValue):
+            retval= self.soil.getDesignPhi()
+        else:
+            retval= self.soil.phi
+        return retval
     
     def getDeltaAngleActivePressure(self, alphaAngle= 0.0):
         '''Returns the angle of the earth pressure with respect to the
@@ -81,11 +89,7 @@ class SoilModel(object):
         :param designValue: if true use the design value of the internal 
                             friction.
         '''
-        
-        if(designValue):
-            sPhi= math.sin(self.soil.getDesignPhi())
-        else:
-            sPhi= math.sin(self.soil.phi)
+        sPhi= math.sin(self.phi(designValue))
         return 1.0-sPhi
     
     def getActivePressureAtDepth(self, z, waterTableDepth= 6371e3, designValue= False):
@@ -192,10 +196,7 @@ class RankineSoil(SoilModel):
         :param alphaAngle: inclination of the back face.
         :param designValue: if true use the design value of the internal friction.
         '''
-        if(designValue):
-            phi= self.soil.getDesignPhi()
-        else:
-            phi= self.soil.phi
+        phi= self.phi(designValue)
         if(phi<self.beta):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -223,10 +224,7 @@ class RankineSoil(SoilModel):
                             friction.
         '''
         cBeta= math.cos(self.beta)
-        if(designValue):
-            cPhi= math.cos(self.soil.getDesignPhi())
-        else:
-            cPhi= math.cos(self.soil.phi)
+        cPhi= math.cos(self.phi(designValue))
         r= math.sqrt(cBeta**2-cPhi**2)
         return cBeta*(cBeta+r)/(cBeta-r)
           
@@ -252,6 +250,31 @@ class CoulombSoil(SoilModel):
         super(CoulombSoil,self).__init__(beta= beta)
         self.soil= fcs.FrictionalCohesiveSoil(phi= phi, c= c, rho= rho, rhoSat= rhoSat, phi_cv= phi_cv, gammaMPhi= gammaMPhi, gammaMc= gammaMc, E= E, nu= nu)
 
+    def Ka(self, alphaAngle= 0.0, deltaAngle= 0.0, designValue= False):
+        '''
+        Return the horizontal component of the active earth pressure coefficient
+        according to Coulomb's theory.
+
+        :param alphaAngle: angle of the back of the retaining wall (radians).
+        :param deltaAngle: friction angle between the soil and the back surface
+                           of the retaining wall (radians).
+        :param designValue: if true use the design value of the internal
+                            friction.
+        '''
+        return self.soil.Kah_coulomb(a= alphaAngle, b= self.beta, d= deltaAngle, designValue= designValue)
+
+    def Kp(self, alphaAngle= 0.0, deltaAngle= 0.0, designValue= False):
+        '''
+        Return the horizontal component of the passive earth pressure 
+        coefficient according to Coulomb's theory.
+
+        :param alphaAngle: angle of the back of the retaining wall (radians).
+        :param deltaAngle: friction angle between the soil and the back surface
+                           of the retaining wall (radians).
+        :param designValue: if true use the design value of the internal
+                            friction.
+        '''
+        return self.soil.Kp_coulomb(a= alphaAngle, b= self.beta, d= deltaAngle, designValue= designValue)
 
 # Earth pressure according to Coulomb's Theory.
 # This theory is valid if the backfill surface is plane and the wall-bacfill
