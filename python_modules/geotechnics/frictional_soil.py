@@ -58,25 +58,35 @@ class FrictionalSoil(object):
         sinPhi= math.sin(self.phi)
         return (1+sinPhi)/(1-sinPhi)
       
-    def Ka_coulomb(self, a, b, d= 0.0):
+    def Ka_coulomb(self, a, b, d= 0.0, designValue= False):
         '''
-        Return the active earth pressure coefficient according to Coulomb's theory (see Recomendaciones para obras marítimas ROM 0.5-05 figure 3.7.12.).
+        Return the active earth pressure coefficient according to Coulomb's 
+        theory (see Recomendaciones para obras marítimas ROM 0.5-05 
+        figure 3.7.12.).
 
-        :param a:  angle of the back of the retaining wall (radians, 0 if vertical).
+        :param a:  angle of the back of the retaining wall (radians, 0 if 
+                   vertical).
         :param b:  slope of the backfill (radians, 0 if horizontal).
-        :param d:  friction angle between soil and the back of retaining wall (radians).
+        :param d:  friction angle between soil and the back of retaining 
+                   wall (radians).
+        :param designValue: if true use the design value of the internal
+                            friction.
         '''
-        phi= self.phi
-        num= 1.0/math.cos(a)*math.cos(phi-a)
-        r1=math.sqrt(math.cos(a+d))
-        if(b>phi):
+        if(designValue):
+            phi= self.getDesignPhi()
+        else:
+            phi= self.phi
+        if(phi<b):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; the angle of the backfill: '+str(math.degrees(b))+' is greater than the friction angle: '+str(math.degrees(phi)))
-        r2=math.sqrt(math.sin(phi+d)*math.sin(phi-b)/math.cos(b-a))
+            lmsg.error(className+'.'+methodName+'; backfill soil internal friction angle: '+str(math.degrees(phi))+" can't be smaller than the slope of the backfill: "+str(math.degrees(b))+' otherwise the backfill slope is not stable. Assuming a big enough internal friction angle: '+str(math.degrees(b))+' for the purpose of determine the active pressure coefficient only.')
+            phi= b
+        num= 1.0/math.cos(a)*math.cos(phi-a)
+        r1= math.sqrt(math.cos(a+d))
+        r2= math.sqrt(math.sin(phi+d)*math.sin(phi-b)/math.cos(b-a))
         return (math.pow((num/(r1+r2)),2))
 
-    def Kah_coulomb(self,a,b,d):
+    def Kah_coulomb(self,a,b,d, designValue= False):
         '''
         Return the horizontal component of the active earth pressure coefficient
         according to Coulomb's theory.
@@ -84,10 +94,12 @@ class FrictionalSoil(object):
         :param a:  angle of the back of the retaining wall (radians).
         :param b:  slope of the backfill (radians).
         :param d:  friction angle between soil an back of retaining wall (radians).
+        :param designValue: if true use the design value of the internal
+                            friction.
         '''
-        return (self.Ka_coulomb(a,b,d)*math.cos(a+d))
+        return (self.Ka_coulomb(a,b,d, designValue= designValue)*math.cos(a+d))
       
-    def Kav_coulomb(self,a,b,d):
+    def Kav_coulomb(self,a,b,d, designValue= False):
         '''
         Return the vertical component of the active earth pressure coefficient
         according to Coulomb's theory.
@@ -95,19 +107,27 @@ class FrictionalSoil(object):
         :param a:  angle of the back of the retaining wall (radians).
         :param b:  slope of the backfill (radians).
         :param phi: internal friction angle of the soil (radians).
-        :param d:  friction angle between soil an back of retaining wall (radians).
+        :param d:  friction angle between the soil an the back surface of the
+                   retaining wall (radians).
+        :param designValue: if true use the design value of the internal
+                            friction.
         '''
-        return (self.Ka_coulomb(a,b,d)*math.sin(a+d))
+        return (self.Ka_coulomb(a,b,d, designValue= False)*math.sin(a+d))
 
-    def Kp_coulomb(self, a, b, d= 0.0):
+    def Kp_coulomb(self, a, b, d= 0.0, designValue= False):
         '''
         Return the passive earth pressure coefficient according to Coulomb's theory.
 
         :param a:  angle of the back of the retaining wall (radians).
         :param b:  slope of the backfill (radians).
         :param d:  friction angle between soil an back of retaining wall (radians).
+        :param designValue: if true use the design value of the internal
+                            friction.
         '''
-        phi= self.phi
+        if(designValue):
+            phi= getDesignPhi()
+        else:
+            phi= self.phi
         if(b>phi):
             lmsg.error('The angle of the backfill: '+str(math.degrees(b))+' is greater than the friction angle: '+str(math.degrees(phi)))
         p1= 1.0/(math.cos(a)**2)
@@ -117,7 +137,7 @@ class FrictionalSoil(object):
         retval= p1*((num/denom)**2)/math.cos(a+d)
         return retval
 
-    def eq_coulomb(self, a, b, d, p):
+    def eq_coulomb(self, a, b, d, p, designValue= False):
         '''
         eq_coulomb(a,b,d,p):
         Return the lateral earth pressure caused by a uniform load q
@@ -127,8 +147,10 @@ class FrictionalSoil(object):
         :param b: slope of the backfill (radians).
         :param d: friction angle between soil an back of retaining wall (radians).
         :param p: Uniform load.
+        :param designValue: if true use the design value of the internal
+                            friction.
         '''
-        return(self.Ka_coulomb(a,b,d)*p*math.cos(a)/float(math.cos(b-a)))
+        return(self.Ka_coulomb(a,b,d, designValue= designValue)*p*math.cos(a)/float(math.cos(b-a)))
       
     def gamma(self):
         '''Unit weight of soil'''
@@ -159,14 +181,13 @@ class FrictionalSoil(object):
     def getMononobeOkabeDryOverpressure(self,H,kv,kh,psi= math.radians(90),delta_ad= 0.0,beta= 0.0,Kas= None,g= 9.81):
         ''' Overpressure due to seismic action according to Mononobe-Okabe
 
-            Args:
-            :H: height of the structure.
-            :kv: seismic coefficient of vertical acceleration.
-            :kh: seismic coefficient of horizontal acceleration.
-            :psi: back face inclination of the structure (< PI/2)
-            :beta: slope inclination of backfill.
-            :delta_ad: angle of friction soil - structure.
-            :Kas: static earth pressure coefficient 
+        :param H: height of the structure.
+        :param kv: seismic coefficient of vertical acceleration.
+        :param kh: seismic coefficient of horizontal acceleration.
+        :param psi: back face inclination of the structure (< PI/2)
+        :param beta: slope inclination of backfill.
+        :param delta_ad: angle of friction soil - structure.
+        :param Kas: static earth pressure coefficient 
         '''
         gamma_soil= self.rho*g
         phi_d= math.atan(math.tan(self.phi)/1.25)
