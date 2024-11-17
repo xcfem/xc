@@ -36,9 +36,12 @@ def get_results_table(resultsDict):
         outputRow.append(cf.Force.format(nodeResults['V']/1e3)) # shear force at the node.
         outputRow.append(cf.Force.format(nodeResults['pDif']/1e3)) # shear force at the node.
         outputRow.append(cf.Force.format(nodeResults['Rx']/1e3)) # reaction of the soil.
-        outputRow.append(cf.Force.format(nodeResults['Ea']/1e3)) # active force.
-        outputRow.append(cf.Force.format(nodeResults['E0']/1e3)) # at-rest force.
-        outputRow.append(cf.Force.format(nodeResults['Ep']/1e3)) # passive force.
+        outputRow.append(cf.Force.format(nodeResults['leftEa']/1e3)) # active force at the left side.
+        outputRow.append(cf.Force.format(nodeResults['leftE0']/1e3)) # at-rest force at the left side.
+        outputRow.append(cf.Force.format(nodeResults['leftEp']/1e3)) # passive force at the left side.
+        outputRow.append(cf.Force.format(nodeResults['rightEa']/1e3)) # active force at the right side.
+        outputRow.append(cf.Force.format(nodeResults['rightE0']/1e3)) # at-rest force at the right side.
+        outputRow.append(cf.Force.format(nodeResults['rightEp']/1e3)) # passive force at the right side.
         retval.append(outputRow)
     # Sort on depth
     retval= sorted(retval, key=lambda x: float(x[2]))
@@ -221,11 +224,25 @@ class SoilLayers(object):
         return retval
     
     def getWaterTableDepths(self):
-        ''' Return the index that corresponds to the depth of the water table
-            at both sides [left, right] of the pile wall.
+        ''' Return he depth of the water table  at both sides [left, right] of
+            the pile wall.
         '''
 
         return [self.getLeftWaterTableDepth(), self.getRightWaterTableDepth()]
+
+    def getWaterTableDepth(self, rightSide:bool):
+        ''' Return he depth of the water table at the given side of the pile
+            wall.
+
+        :param rightSide: if true consider the water pressure at the right side 
+                          of the wall, otherwise, consider the water pressure at
+                          the left side.
+        '''        
+        if(rightSide): 
+            retval= self.getRightWaterTableDepth()
+        else:
+            retval= self.getLeftWaterTableDepth()
+        return retval
         
     def getExcavationDepth(self):
         ''' Return the index that corresponds to the excavation depth.
@@ -278,34 +295,40 @@ class SoilLayers(object):
             retval-= waterUnitWeight*(depth-rightWaterTableDepth) # to the left.
         return retval
 
-    def getVerticalPressureAtDepth(self, depth):
+    def getVerticalPressureAtDepth(self, depth, rightSide:bool):
         ''' Returns the vertical presure at the given depth.
 
         :param depth: depth to compute the pressure at.
+        :param rightSide: if true consider the water pressure at the right side 
+                          of the wall, otherwise, consider the water pressure at
+                          the left side.
         '''
         retval= 0.0
         if(depth>self.depths[0]):
-          lastDepth= self.depths[0]
-          for i, d in enumerate(self.depths):
-              soil= self.soils[i]
-              gamma= soil.gamma()
-              currentDepth= min(depth, d)
-              if(currentDepth>self.getWaterTableDepth()):
-                  gamma= soil.submergedGamma()
-              soilThickness= currentDepth-lastDepth
-              retval+= gamma*soilThickness
-              if(abs(currentDepth-depth)<1e-6):
-                  break
-              lastDepth= d
+            lastDepth= self.depths[0]
+            for i, d in enumerate(self.depths):
+                soil= self.soils[i]
+                gamma= soil.gamma()
+                currentDepth= min(depth, d)
+                if(currentDepth>self.getWaterTableDepth(rightSide= rightSide)):
+                    gamma= soil.submergedGamma()
+                soilThickness= currentDepth-lastDepth
+                retval+= gamma*soilThickness
+                if(abs(currentDepth-depth)<1e-6):
+                    break
+                lastDepth= d
         return retval
         
-    def getHorizontalPressureAtDepth(self, K, depth):
+    def getHorizontalPressureAtDepth(self, K, depth, rightSide:bool):
         ''' Returns the horizontal presure at the given depth.
 
         :param K: pressure coefficient.
         :param depth: depth to compute the pressure at.
+        :param rightSide: if true consider the water pressure at the right side 
+                          of the wall, otherwise, consider the water pressure at
+                          the left side.
         '''
-        retval= self.getVerticalPressureAtDepth(depth= depth)*K
+        retval= self.getVerticalPressureAtDepth(depth= depth, rightSide= rightSide)*K
         retval+= getNetHydrostaticPressureAtDepth(depth= depth)
         return retval
 
@@ -415,17 +438,21 @@ class PileWall(object):
         #### Define non-linear springs.
         for n in self.pileSet.nodes:
             nodeDepth= -n.getInitialPos3d.y
-            nonLinearSpringMaterial= None
+            left_sg_v= self.soilLayers.getVerticalPressureAtDepth(depth= nodeDepth, rightSide= False) # Vertical pressure at left.
+            right_sg_v= self.soilLayers.getVerticalPressureAtDepth(depth= nodeDepth, rightSide= True) # Vertical pressure at right.
+            leftNonLinearSpringMaterial= None
+            rightNonLinearSpringMaterial= None
             tributaryArea= 0.0
             if(nodeDepth>0.0): # Avoid zero soil response.
                 tributaryLength= n.getTributaryLength()
                 tributaryArea= tributaryLength*self.pileSpacing
                 materialName= 'soilResponse_z_'+str(n.tag)
                 nodeSoil= self.soilsAtNodes[n.tag]
-                nonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName, depth= nodeDepth, tributaryArea= tributaryArea, Kh= nodeSoil.Kh)
+                leftNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_left', sg_v= left_sg_v, tributaryArea= tributaryArea, Kh= nodeSoil.Kh)
+                rightNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_right', sg_v= right_sg_v, tributaryArea= tributaryArea, Kh= nodeSoil.Kh)
 
             self.tributaryAreas[n.tag]= tributaryArea
-            soilResponseMaterials[n.tag]= nonLinearSpringMaterial
+            soilResponseMaterials[n.tag]= (leftNonLinearSpringMaterial, rightNonLinearSpringMaterial)
 
         ### Duplicate nodes below ground level.
         self.springPairs= list()
@@ -443,28 +470,33 @@ class PileWall(object):
         self.rightZLElements= dict()
         for i, pair in enumerate(self.springPairs):
             nodeTag= pair[0].tag
-            soilResponseMaterial= soilResponseMaterials[nodeTag]
-            if(soilResponseMaterial): # Spring defined for this node.
+            (leftSoilResponseMaterial, rightSoilResponseMaterial)= soilResponseMaterials[nodeTag]
+            if(leftSoilResponseMaterial): # Spring at left defined for this node.
                 # Material for the left spring
-                elements.defaultMaterial= soilResponseMaterial.name
+                elements.defaultMaterial= leftSoilResponseMaterial.name
                 # Springs on the left side of the beam
                 zlLeft= elements.newElement("ZeroLength",xc.ID([pair[1].tag, pair[0].tag]))
                 zlLeft.setupVectors(xc.Vector([-1,0,0]),xc.Vector([0,-1,0]))
                 self.leftZLElements[nodeTag]= zlLeft
-
+            if(rightSoilResponseMaterial): # Spring at right defined for this node.
+                # Material for the right spring
+                elements.defaultMaterial= rightSoilResponseMaterial.name
                 # Springs on the right side of the beam
                 zlRight= elements.newElement("ZeroLength",xc.ID([pair[0].tag, pair[1].tag]))
                 zlRight.setupVectors(xc.Vector([1,0,0]),xc.Vector([0,1,0]))
                 self.rightZLElements[nodeTag]= zlRight
                 
-    def updateSpringStiffness(self, remainingLeftElements, currentExcavationDepth):
+    def updateSpringStiffness(self, remainingLeftElements, currentExcavationDepth, excavationSide):
         ''' Update the stiffness of the remaining materials after each 
             excavation step.
 
         :param remainingLeftElements: elements that remain "alive".
         :param currentExcavationDepth: current excavation depth.
+        :param excavationSide: side for the excavation ('left' or 'right')
         '''
         updatedElements= list()
+        rightSide= (excavationSide=='right')
+        sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= currentExcavationDepth, rightSide= rightSide) # Vertical stress to remove at the excavation side.
         for nodeTag in remainingLeftElements:
             leftElement= remainingLeftElements[nodeTag]
             elemNodes= leftElement.nodes
@@ -477,7 +509,8 @@ class PileWall(object):
             newDepth= nodeDepth-currentExcavationDepth
             # Compute new soil response.
             soil= self.soilsAtNodes[nodeTag]
-            newEa, newE0, newEp= soil.getEarthThrusts(depth= newDepth, tributaryArea= self.tributaryAreas[nodeTag])
+            sg_v= self.soilLayers.getVerticalPressureAtDepth(depth= nodeDepth, rightSide= rightSide)-sg_v0 # Vertical pressure at the excavation side.
+            newEa, newE0, newEp= soil.getEarthThrusts(sg_v= sg_v, tributaryArea= self.tributaryAreas[nodeTag])
             # Update soil response.
             leftElementInitStrainMaterial= leftElement.getMaterials()[0]
             leftElementEyBasicMaterial= leftElementInitStrainMaterial.material
@@ -534,7 +567,7 @@ class PileWall(object):
                         lmsg.error('Can\'t solve')
                         exit(1)
                     # Update left springs.
-                    updatedElements= self.updateSpringStiffness(remainingLeftElements, currentExcavationDepth= currentExcavationDepth)
+                    updatedElements= self.updateSpringStiffness(remainingLeftElements, currentExcavationDepth= currentExcavationDepth, excavationSide= excavationSide)
                     # Solve again.
                     ok= self.solProc.solve()
                     if(ok!=0):
@@ -560,6 +593,71 @@ class PileWall(object):
         updatedElements= self.excavationProcess(excavationSide= excavationSide)
         self.modelSpace.calculateNodalReactions(reactionCheckTolerance= reactionCheckTolerance)
 
+    def computeExcavationSide(self):
+        ''' Returns the excavation side according to the sizes of the element
+            containers at each side of the pile wall.'''
+        retval= None
+        if(len(self.leftZLElements)<len(self.rightZLElements)):
+            retval= 'left'
+        else:
+            retval= 'right'
+        return retval
+    
+    def getEarthThrustsAtNode(self, node):
+        ''' Extracts the values of the earth thrusts at the given node.
+
+        :param node: node of interest.
+        '''
+        nodeTag= node.tag
+        tributaryArea= self.tributaryAreas[nodeTag]
+        leftMaterial= None
+        if(nodeTag in self.leftZLElements):
+            leftElement= self.leftZLElements[nodeTag]
+            leftMaterial= leftElement.getMaterials()[0].material
+        rightMaterial= None
+        if(nodeTag in self.rightZLElements):
+            rightElement= self.rightZLElements[nodeTag]
+            rightMaterial= rightElement.getMaterials()[0].material
+        if(leftMaterial):
+            leftEp= -leftMaterial.getLowerYieldStress()*tributaryArea
+            leftEa= -leftMaterial.getUpperYieldStress()*tributaryArea
+        else:
+            leftEa= 0.0
+            leftEp= 0.0
+        if(rightMaterial):
+            rightEp= -rightMaterial.getLowerYieldStress()*tributaryArea
+            rightEa= -rightMaterial.getUpperYieldStress()*tributaryArea
+        else:
+            rightEa= 0.0
+            rightEp= 0.0
+        excavationSide= self.computeExcavationSide()
+        excavationDepth= self.soilLayers.getExcavationDepth()
+        depth= -node.getInitialPos3d.y
+        if(excavationSide=='left'):
+            leftDepth= max(depth-excavationDepth, 0.0)
+            rightDepth= depth
+            left_sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= excavationDepth, rightSide= False) # Vertical stress to remove at the excavation side.
+            right_sg_v0= 0.0
+        else: # excavation at right.
+            rightDepth= max(depth-excavationDepth, 0.0)
+            sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= excavationDepth, rightSide= True) # Vertical stress to remove at the excavation side.
+            leftDepth= depth
+            left_sg_v0= 0.0
+            right_sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= excavationDepth, rightSide= True) # Vertical stress to remove at the excavation side.
+        soil= self.soilsAtNodes[nodeTag]
+        if(leftDepth>0):
+            left_sg_v= self.soilLayers.getVerticalPressureAtDepth(depth= depth, rightSide= False)-left_sg_v0 # Vertical pressure at left.
+            leftE0= soil.getAtRestPressure(sg_v= left_sg_v)
+        else:
+            leftE0= 0.0
+        if(rightDepth>0.0):
+            right_sg_v= self.soilLayers.getVerticalPressureAtDepth(depth= depth, rightSide= True)-right_sg_v0 # Vertical pressure at right.
+            rightE0= soil.getAtRestPressure(sg_v= right_sg_v)
+        else:
+            rightE0= 0.0
+        
+        return (leftEa, leftE0, leftEp), (rightEa, rightE0, rightEp)
+        
     def getResultsDict(self):
         ''' Extracts earth pressures and internal forces from the model.'''
         retval= dict()
@@ -571,14 +669,9 @@ class PileWall(object):
             depth= -fixedNode.getInitialPos3d.y
             soil= self.soilsAtNodes[pileNode.tag]
             tributaryArea= self.tributaryAreas[pileNode.tag]
-            Ea, E0, Ep= soil.getEarthThrusts(depth= depth, tributaryArea= tributaryArea)
-            nodeResults= {'depth': depth, 'fixed_node':fixedNode.tag, 'Rx':Rx, 'E0':E0, 'Ea':Ea, 'Ep':Ep, 'Ux':Ux}
-            # if(pileNode.tag in leftZLElements):
-            #     leftElement= leftZLElements[pileNode.tag]
-            #     leftN= leftElement.getResistingForce()[0]
-            #     rightElement= rightZLElements[pileNode.tag]
-            #     rightN= rightElement.getResistingForce()[0]
-            #     print('  leftN= ', leftN/1e3, 'rightN= ', rightN/1e3)
+            
+            (leftEa, leftE0, leftEp), (rightEa, rightE0, rightEp)= self.getEarthThrustsAtNode(pileNode)
+            nodeResults= {'depth': depth, 'fixed_node':fixedNode.tag, 'Rx':Rx, 'leftE0':leftE0, 'leftEa':leftEa, 'leftEp':leftEp, 'rightE0':rightE0, 'rightEa':rightEa, 'rightEp':rightEp, 'Ux':Ux}
             retval[pileNode.tag]= nodeResults
         # Get internal forces.
         for ln in self.pileSet.lines: # for lines in list
