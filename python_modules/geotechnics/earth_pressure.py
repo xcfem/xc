@@ -253,11 +253,10 @@ class CoulombSoil(SoilModel):
     '''Soil response according to Coulomb's theory.
 
     '''
-    def __init__(self,phi, c, beta= 0.0, rho= 2100.0, rhoSat= None, phi_cv= None, gammaMPhi= 1.0, gammaMc= 1.0, E= 1e8, nu= 0.3):
+    def __init__(self,phi, beta= 0.0, rho= 2100.0, rhoSat= None, phi_cv= None, gammaMPhi= 1.0, gammaMc= 1.0, E= 1e8, nu= 0.3):
         ''' Constructor.
 
         :param phi: internal friction angle of the soil
-        :param c: (float) soil cohesion.
         :param beta: angle of backfill with horizontal
         :param rho: soil density.
         :param rhoSat: saturated density of the soil (mass per unit volume)
@@ -626,32 +625,32 @@ def active_pressure_culmann_method(soil, wallBack, backfillProfile, delta= 0.0, 
     maxPressure= pressureFunction(xMax)
     return maxPressure, pressureFunction, minWeight, maxWeight
 
-def get_earth_thrusts(depth,  tributaryArea, gamma, Ka, K0, Kp):
+def get_earth_thrusts(sg_v, tributaryArea, Ka, K0, Kp):
     ''' Return the earth thrusts corresponding to the given argumenst.
 
-    :param depth: depth of the point.
+    :param sg_v: vertical stress.
     :param tributaryArea: area on which the pressure acts.
     :param Ka: active earth pressure coefficient.
     :param K0: earth pressure at rest coefficient.
     :param Kp: passive earth pressure coefficient.
     '''
-    factor= depth*gamma*tributaryArea
+    factor= sg_v*tributaryArea
     Ea= Ka*factor # active.
     E0= K0*factor # at rest.
     Ep= Kp*factor # passive.
     return Ea, E0, Ep
     
-def get_horizontal_soil_reaction_diagram(depth, tributaryArea, gamma, Ka, K0, Kp, Kh):
+def get_horizontal_soil_reaction_diagram(sg_v, tributaryArea, Ka, K0, Kp, Kh):
     ''' Return the points of the force-displacement diagram.
 
-    :param depth: depth of the point.
+    :param sg_v: vertical stress.
     :param tributaryArea: area on which the pressure acts.
     :param Ka: active earth pressure coefficient.
     :param K0: earth pressure at rest coefficient.
     :param Kp: passive earth pressure coefficient.
     :param Kh: horizontal Winkler modulus.
     '''
-    Ea, E0, Ep= get_earth_thrusts(depth= depth, tributaryArea= tributaryArea, gamma= gamma, Ka= Ka, K0= K0, Kp= Kp)
+    Ea, E0, Ep= get_earth_thrusts(sg_v= sg_v, tributaryArea= tributaryArea, Ka= Ka, K0= K0, Kp= Kp)
     # Compute active and passive limits.
     activeLimit= (Ea-E0)/Kh
     passiveLimit= (Ep-E0)/Kh
