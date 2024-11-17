@@ -29,11 +29,11 @@ ksi= 1000*psi
 # Materials definition
 ## Soil materials
 ### Dry soil.
-soil1= earth_pressure.RankineSoil(phi= math.radians(30), rho= 105*pcf/g, rhoSat= 105*pcf/g)
+soil1= earth_pressure.CoulombSoil(phi= math.radians(30), rho= 105*pcf/g, rhoSat= 105*pcf/g)
 soil1.Kh= 2.9*pci
-soil2= earth_pressure.RankineSoil(phi= math.radians(30), rho= 128.5*pcf/g, rhoSat= 128.5*pcf/g)
+soil2= earth_pressure.CoulombSoil(phi= math.radians(30), rho= 128.5*pcf/g, rhoSat= 128.5*pcf/g)
 soil2.Kh= 15*pci
-soil3= earth_pressure.CoulombSoil(phi= math.radians(1), c= 1500*psf, rho= 122.5*pcf/g, rhoSat= 122.5*pcf/g)
+soil3= earth_pressure.BellSoil(phi= math.radians(1), c= 1500*psf, rho= 122.5*pcf/g, rhoSat= 122.5*pcf/g)
 soil3.Kh= 87*pci
 ### Soil strata.
 L0= -8*ft # pile wall top (m).
@@ -59,5 +59,10 @@ pileWall= pw.PileWall(pileSection= sheetPileSectionMaterial, soilLayersDepths= s
 # Mesh generation
 pileWall.genMesh()
 
-print(87*pci/1e6)
+# Get top node.
+topNode= pileWall.getTopNode()
+
+# Get node to attach the anchor
+anchorNode= pileWall.getNodeAtDepth(depth= L1)
+
 
