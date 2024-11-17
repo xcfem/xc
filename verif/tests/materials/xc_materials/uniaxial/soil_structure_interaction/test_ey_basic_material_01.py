@@ -35,7 +35,8 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics1D(nodes)
 
 ## Nonlinear spring material
-nlSpringMaterial= rankineSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= 'nlSpringMaterial', depth= depth, tributaryArea= tributaryArea, Kh= Kh)
+sg_v= rankineSoil.getVerticalStressAtDepth(z= depth)
+nlSpringMaterial= rankineSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= 'nlSpringMaterial', sg_v= sg_v, tributaryArea= tributaryArea, Kh= Kh)
 
 nlSpringMaterial.setTrialStrain(0.0, 0.0)
 nlSpringMaterial.commitState()

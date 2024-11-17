@@ -37,12 +37,13 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 ## Nonlinear spring material
-nlSpringMaterial= rankineSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= 'nlSpringMaterial', depth= depth, tributaryArea= tributaryArea, Kh= Kh)
+sg_v= rankineSoil.getVerticalStressAtDepth(z= depth)
+nlSpringMaterial= rankineSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= 'nlSpringMaterial', sg_v= sg_v, tributaryArea= tributaryArea, Kh= Kh)
 
 # Spring opposed to soil movement to simulate the earth-retaining structure.
 k= typical_materials.defElasticMaterial(preprocessor, "k",E= 1e9)
 
-maxForce= rankineSoil.getPassivePressureAtDepth(z= depth)*tributaryArea
+maxForce= rankineSoil.getPassivePressure(sg_v= sg_v)*tributaryArea
 xMax= maxForce/k.E
 
 
@@ -97,7 +98,8 @@ ratio2= abs(leftMaterialForce+44129.924999999996)/44129.924999999996
 # Update element stiffness.
 newDepth= 0.1 #2.99
 ## Compute the new yield stresses.
-newEa, newE0, newEp= rankineSoil.getEarthThrusts(depth= newDepth, tributaryArea= tributaryArea)
+new_sg_v= rankineSoil.getVerticalStressAtDepth(z= newDepth)
+newEa, newE0, newEp= rankineSoil.getEarthThrusts(sg_v= new_sg_v, tributaryArea= tributaryArea)
 eyBasicMaterialLeft= soilMaterialLeft.material
 eyBasicMaterialLeft.setParameters(Kh, -newEp, -newEa)
 soilMaterialLeft.setInitialStress(-newE0)

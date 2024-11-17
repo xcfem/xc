@@ -35,10 +35,11 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics1D(nodes)
 
 ## Nonlinear spring material
-nlSpringMaterial= rankineSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= 'nlSpringMaterial', depth= depth, tributaryArea= tributaryArea, Kh= Kh)
+sg_v= rankineSoil.getVerticalStressAtDepth(z= depth)
+nlSpringMaterial= rankineSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= 'nlSpringMaterial', sg_v= sg_v, tributaryArea= tributaryArea, Kh= Kh)
 
 # Compute sample points.    
-samplePoints, initStrain= earth_pressure.get_horizontal_soil_reaction_diagram(depth= depth, tributaryArea= tributaryArea, gamma= rankineSoil.gamma(), Ka= rankineSoil.Ka(), K0= rankineSoil.K0Jaky(), Kp= rankineSoil.Kp(), Kh= Kh)
+samplePoints, initStrain= earth_pressure.get_horizontal_soil_reaction_diagram(sg_v= sg_v, tributaryArea= tributaryArea, Ka= rankineSoil.Ka(), K0= rankineSoil.K0Jaky(), Kp= rankineSoil.Kp(), Kh= Kh)
 
 E0= rankineSoil.K0Jaky()*tributaryArea*rankineSoil.gamma()*depth
 Ea= rankineSoil.Ka()*tributaryArea*rankineSoil.gamma()*depth
