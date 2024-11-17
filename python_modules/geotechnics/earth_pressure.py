@@ -268,7 +268,7 @@ class CoulombSoil(SoilModel):
         :param nu: Poisson's ratio (defaults to 0.3).
         '''
         super(CoulombSoil,self).__init__(beta= beta)
-        self.soil= fcs.FrictionalSoil(phi= phi, rho= rho, rhoSat= rhoSat, phi_cv= phi_cv, gammaMPhi= gammaMPhi, E= E, nu= nu)
+        self.soil= fs.FrictionalSoil(phi= phi, rho= rho, rhoSat= rhoSat, phi_cv= phi_cv, gammaMPhi= gammaMPhi, E= E, nu= nu)
 
     def Ka(self, sg_v= None, alphaAngle= 0.0, deltaAngle= 0.0, designValue= False):
         '''
