@@ -442,6 +442,8 @@ class PileWall(object):
         self.pileSet.computeTributaryLengths(False) # Compute tributary lenghts.
         #### Compute soils at nodes.
         self.setNodeSoils()
+        #### Minimum depth.
+        minimumDepth= -self.getTopPoint().getPos.y
         #### Define non-linear springs.
         for n in self.pileSet.nodes:
             nodeDepth= -n.getInitialPos3d.y
@@ -450,7 +452,7 @@ class PileWall(object):
             leftNonLinearSpringMaterial= None
             rightNonLinearSpringMaterial= None
             tributaryArea= 0.0
-            if(nodeDepth>0.0): # Avoid zero soil response.
+            if(nodeDepth>minimumDepth): # Avoid zero soil response.
                 tributaryLength= n.getTributaryLength()
                 tributaryArea= tributaryLength*self.pileSpacing
                 materialName= 'soilResponse_z_'+str(n.tag)
@@ -608,14 +610,18 @@ class PileWall(object):
                     remainingLeftElements.pop(nodeTag) # remove it from the dictionary.
                     ok= self.solProc.solve()
                     if(ok!=0):
-                        lmsg.error('Can\'t solve')
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        lmsg.error(className+'.'+methodName+'; can\'t solve.')
                         exit(1)
                     # Update left springs.
                     updatedElements= self.updateSpringStiffness(remainingLeftElements, currentExcavationDepth= currentExcavationDepth, excavationSide= excavationSide)
                     # Solve again.
                     ok= self.solProc.solve()
                     if(ok!=0):
-                        lmsg.error('Can\'t solve')
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        lmsg.error(className+'.'+methodName+'; can\'t solve.')
                         exit(1)
         return updatedElements
                 
