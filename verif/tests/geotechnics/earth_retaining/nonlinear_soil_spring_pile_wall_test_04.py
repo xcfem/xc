@@ -54,15 +54,19 @@ anchorSectionGeometry= section_properties.GenericSection1D(name= 'anchor_section
 anchorMaterial= typical_materials.ElasticPerfectlyPlasticMaterial(E= 29e6*psi, nu= 0.3, fyp= 40*ksi, fyn= 40e3*ksi)
 anchorSectionMaterial= typical_materials.BeamMaterialData(name= 'anchor_section', section= anchorSectionGeometry, material= anchorMaterial)
 
-pileWall= pw.PileWall(pileSection= sheetPileSectionMaterial, soilLayersDepths= soilLayersDepths, soilLayers= soilLayers, excavationDepth= L4, pileSpacing= 1.0*ft, waterTableDepth= [L2, L3])
+pileWall= pw.PileWall(pileSection= sheetPileSectionMaterial, soilLayersDepths= soilLayersDepths, soilLayers= soilLayers, excavationDepths= [L1, L4], pileSpacing= 1.0*ft, waterTableDepth= [L2, L3])
 
 # Mesh generation
 pileWall.genMesh()
 
-# Get top node.
-topNode= pileWall.getTopNode()
+# Excavate until the anchor depth.
+reactionCheckTolerance= 1e-6
+pileWall.solve(excavationDepthIndex= 0, excavationSide= 'left', reactionCheckTolerance= reactionCheckTolerance)
+
 
 # Get node to attach the anchor
-anchorNode= pileWall.getNodeAtDepth(depth= L1)
+anchorNode, dist= pileWall.getNodeAtDepth(depth= L1)
+print(anchorNode.tag, dist)
 
-
+# Get top node.
+topNode= pileWall.getTopNode()
