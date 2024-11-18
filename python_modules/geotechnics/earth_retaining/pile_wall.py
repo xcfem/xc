@@ -142,9 +142,9 @@ class SoilLayers(object):
     :ivar soils: soil objects for each layer.
     :ivar leftWaterTableDepthIndex: index of the left water table depth in self.depths.
     :ivar rightWaterTableDepthIndex: index of the right water table depth in self.depths.
-    :ivar excavationDepthIndex: index of the excavation depth in self.depths.
+    :ivar excavationDepthIndexes: index of the excavation depth in self.depths.
     '''
-    def __init__(self, depths, soils, waterTableDepth= [None, None], excavationDepth= None):
+    def __init__(self, depths, soils, waterTableDepth= [None, None], excavationDepths= None):
         '''Constructor.
 
         :param depths: (float list) layer depths.
@@ -154,7 +154,7 @@ class SoilLayers(object):
         self.depths= depths
         self.soils= soils
         self.setWaterTableDepth(waterTableDepth= waterTableDepth)
-        self.setExcavationDepth(excavationDepth= excavationDepth)
+        self.setExcavationDepths(excavationDepths= excavationDepths)
 
     def getTotalDepth(self):
         ''' Return the distance from the deepest to the shallwest depth in the
@@ -199,13 +199,17 @@ class SoilLayers(object):
         self.leftWaterTableDepthIndex= self.splitAtDepth(waterTableDepth[0])
         self.rightWaterTableDepthIndex= self.splitAtDepth(waterTableDepth[1])
         
-    def setExcavationDepth(self, excavationDepth= None):
+    def setExcavationDepths(self, excavationDepths= None):
         ''' Recomputes the depths and soils list to take account of
             the water table.
 
         :param excavationDepth: depth of the water table.
         '''
-        self.excavationDepthIndex= self.splitAtDepth(excavationDepth)
+        if(excavationDepths):
+            self.excavationDepthIndexes= list()
+            for excavationDepth in excavationDepths:
+                excavationDepthIndex= self.splitAtDepth(excavationDepth)
+                self.excavationDepthIndexes.append(excavationDepthIndex)
         
     def getLeftWaterTableDepth(self):
         ''' Return the index that corresponds to the depth of the water table at            the left of the pile wall.
@@ -244,12 +248,15 @@ class SoilLayers(object):
             retval= self.getLeftWaterTableDepth()
         return retval
         
-    def getExcavationDepth(self):
-        ''' Return the index that corresponds to the excavation depth.
+    def getExcavationDepth(self, i):
+        ''' Return the index that corresponds to the i-th excavation depth.
         '''
         retval= 6378e3
-        if(self.excavationDepthIndex>0):
-            retval= self.depths[self.excavationDepthIndex]
+        sz= len(self.excavationDepthIndexes)
+        if((sz>0) and (i<sz)):
+            excavationDepthIndex= self.excavationDepthIndexes[i]
+            if(excavationDepthIndex>0):
+                retval= self.depths[excavationDepthIndex]
         return retval
 
     def getDepths(self):
@@ -341,20 +348,20 @@ class PileWall(object):
     :ivar soilLayers: SoilLayers object.
     '''
     
-    def __init__(self, pileSection, soilLayersDepths, soilLayers, excavationDepth, pileSpacing= 1.0, waterTableDepth= [None, None]):
+    def __init__(self, pileSection, soilLayersDepths, soilLayers, excavationDepths, pileSpacing= 1.0, waterTableDepth= [None, None]):
         '''Constructor.
 
         :param pileSection: 2D elastic shear section for the pile wall beam
                             elements.
         :param soilLayersDepths: (float list) layer depths.
         :param soilLayers: soil object for each layer.
-        :param excavationDepth: depth of the excavation.
+        :param excavationDepths: list of excavation depths.
         :param pileSpacing: distance between pile axes.
         :param waterTableDepth: [float, float] depth of the water table at both
                                 sides of the pile wall [left, right].
         '''
         self.pileSection= pileSection
-        self.soilLayers= SoilLayers(depths= soilLayersDepths, soils= soilLayers, waterTableDepth= waterTableDepth, excavationDepth= excavationDepth)
+        self.soilLayers= SoilLayers(depths= soilLayersDepths, soils= soilLayers, waterTableDepth= waterTableDepth, excavationDepths= excavationDepths)
         self.pileSpacing= pileSpacing
         self.solProc= None
 
@@ -485,7 +492,44 @@ class PileWall(object):
                 zlRight= elements.newElement("ZeroLength",xc.ID([pair[0].tag, pair[1].tag]))
                 zlRight.setupVectors(xc.Vector([1,0,0]),xc.Vector([0,1,0]))
                 self.rightZLElements[nodeTag]= zlRight
-                
+
+    def getTopPoint(self):
+        ''' Return the top point of the pile wall model.'''
+        retval= None
+        points= list(self.pileSet.points)
+        sz= len(points)
+        if(sz>0):
+            retval= points[0]
+            yMax= retval.getPos.y
+            for pt in points[1:]:
+                y= pt.getPos.y
+                if(y>yMax):
+                    retval= pt
+                    yMax= y
+        return retval
+        
+    def getTopNode(self):
+        ''' Return the top node of the pile wall mesh.'''
+        topPoint= self.getTopPoint()
+        return topPoint.getNode()
+    
+    def getNodeAtDepth(self, depth):
+        ''' Return the nearest node to the given depth.'''
+        pileNodes= list(self.pileSet.nodes)
+        retval= None
+        sz= len(pileNodes)
+        if(sz>0):
+            retval= pileNodes[0]
+            nodeDepth= -retval.getInitialPos3d.y
+            dMin= abs(nodeDepth-depth)
+            for n in pileNodes[1:]:
+                nodeDepth= -n.getInitialPos3d.y
+                d= abs(nodeDepth-depth)
+                if(d<dMin):
+                    retval= n
+                    dMin= d
+        return retval, dMin
+        
     def updateSpringStiffness(self, remainingLeftElements, currentExcavationDepth, excavationSide):
         ''' Update the stiffness of the remaining materials after each 
             excavation step.
@@ -521,17 +565,18 @@ class PileWall(object):
             #print('node: ', nodeTag, ' node depth: ', '{:.2f}'.format(nodeDepth), ' left node depth: ', '{:.2f}'.format(newDepth), ' tributary area: ', '{:.2f}'.format(tributaryAreas[nodeTag]), 'strains: ', oldInitStrain, -newInitStrain, newInitStrain+oldInitStrain, ' elementTag= ', leftElement.tag)
         return updatedElements
     
-    def excavationProcess(self, excavationSide):
+    def excavationProcess(self, excavationSide, excavationDepthIndex):
         ''' Deactivates the excavated elements and updates the stiffness of the
             remaining ones.
 
         :param excavationSide: side for the excavation ('left' or 'right')
+        :param excavationDepthIndex: index of the excavation depth to reach.
         '''
         self.nodesToExcavate= list() # Nodes in the excavation depth.
-        excavationDepth= self.soilLayers.getExcavationDepth()
+        self.currentExcavationDepth= self.soilLayers.getExcavationDepth(i= excavationDepthIndex)
         for n in self.pileSet.nodes:
             nodeDepth= -n.getInitialPos3d.y
-            if(nodeDepth<=excavationDepth):
+            if(nodeDepth<=self.currentExcavationDepth):
                 self.nodesToExcavate.append((nodeDepth, n))
         ## Sort nodes to excavate on its depth
         self.nodesToExcavate.sort(key=itemgetter(0))
@@ -546,10 +591,9 @@ class PileWall(object):
             exit(1)
         ## Elements to deactivate.
         remainingLeftElements= elementsOnExcavationSide
-        excavationDepth= self.soilLayers.getExcavationDepth()
         for tp in self.nodesToExcavate:
             currentExcavationDepth= tp[0]
-            if(currentExcavationDepth>excavationDepth): # if excavation depth is reached, stop.
+            if(currentExcavationDepth>self.currentExcavationDepth): # if excavation depth is reached, stop.
                 break
             node= tp[1]
             nodeTag= node.tag
@@ -575,9 +619,10 @@ class PileWall(object):
                         exit(1)
         return updatedElements
                 
-    def solve(self, convergenceTestTol= 1e-5, reactionCheckTolerance= 1e-6, excavationSide= 'left'):
+    def solve(self, excavationDepthIndex= 0, convergenceTestTol= 1e-5, reactionCheckTolerance= 1e-6, excavationSide= 'left'):
         '''Compute the solution.
 
+        :param excavationDepthIndex: index of the excavation depth to reach.
         :param convergenceTestTol: tolerance for the convergence test of the
                                    solver.
         :param reactionCheckTolerance: tolerance when checking nodal reactions.
@@ -590,7 +635,7 @@ class PileWall(object):
             lmsg.error('Can\'t solve')
             exit(1)
             
-        updatedElements= self.excavationProcess(excavationSide= excavationSide)
+        updatedElements= self.excavationProcess(excavationSide= excavationSide, excavationDepthIndex= excavationDepthIndex)
         self.modelSpace.calculateNodalReactions(reactionCheckTolerance= reactionCheckTolerance)
 
     def computeExcavationSide(self):
@@ -631,19 +676,18 @@ class PileWall(object):
             rightEa= 0.0
             rightEp= 0.0
         excavationSide= self.computeExcavationSide()
-        excavationDepth= self.soilLayers.getExcavationDepth()
         depth= -node.getInitialPos3d.y
         if(excavationSide=='left'):
-            leftDepth= max(depth-excavationDepth, 0.0)
+            leftDepth= max(depth-self.currentExcavationDepth, 0.0)
             rightDepth= depth
-            left_sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= excavationDepth, rightSide= False) # Vertical stress to remove at the excavation side.
+            left_sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= self.currentExcavationDepth, rightSide= False) # Vertical stress to remove at the excavation side.
             right_sg_v0= 0.0
         else: # excavation at right.
-            rightDepth= max(depth-excavationDepth, 0.0)
-            sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= excavationDepth, rightSide= True) # Vertical stress to remove at the excavation side.
+            rightDepth= max(depth-self.currentExcavationDepth, 0.0)
+            sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= self.currentExcavationDepth, rightSide= True) # Vertical stress to remove at the excavation side.
             leftDepth= depth
             left_sg_v0= 0.0
-            right_sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= excavationDepth, rightSide= True) # Vertical stress to remove at the excavation side.
+            right_sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= self.currentExcavationDepth, rightSide= True) # Vertical stress to remove at the excavation side.
         soil= self.soilsAtNodes[nodeTag]
         if(leftDepth>0):
             left_sg_v= self.soilLayers.getVerticalPressureAtDepth(depth= depth, rightSide= False)-left_sg_v0 # Vertical pressure at left.
