@@ -31,10 +31,9 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
     We will not compute stresses so we can use an arbitrary
     cross section of unit area.'''
 
-elements= preprocessor.getElementHandler
-elements.dimElem= 2 #Bars defined in a two dimensional space.
-elements.defaultMaterial= elast.name
-truss= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
+modelSpace.setDefaultMaterial(elast) # Set the material for the new element.
+modelSpace.setElementDimension(2) # Truss defined in a two-dimensional space.
+truss= modelSpace.newElement("Truss",nodeTags= [n1.tag,n2.tag])
 truss.sectionArea= 1
 
 vI= truss.getIVector3d(True)
