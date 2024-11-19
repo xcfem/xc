@@ -18,6 +18,7 @@ from scipy.interpolate import interp1d
 from postprocess.reports import common_formats as cf
 import matplotlib.pyplot as plt
 import matplotlib.ticker as plticker
+from misc_utils import log_messages as lmsg
 
 def get_results_table(resultsDict):
     ''' Return the given results in tabular format.
@@ -383,15 +384,18 @@ class PileWall(object):
         ## Problem type
         self.modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
         
-    def defineSolutionProcedure(self, convergenceTestTol= 1e-5):
+    def defineSolutionProcedure(self, convergenceTestTol= 1e-5, krylov= False):
         ''' Define the solution procedure.
 
         :param convergenceTestTol: tolerance for the convergence test of the
                                    solver.
+        :param krylov: if true use Krylow-Newton method.
         '''
         # Solution procedure.
-        #solProc= predefined_solutions.PenaltyKrylovNewton(prb= feProblem, numSteps= numSteps, maxNumIter= 300, convergenceTestTol= convergenceTestTol, printFlag= 0)
-        self.solProc= predefined_solutions.PenaltyNewtonRaphson(prb= self.feProblem, numSteps= 10, maxNumIter= 300, convergenceTestTol= convergenceTestTol, printFlag= 0)
+        if(krylov):
+            self.solProc= predefined_solutions.PenaltyKrylovNewton(prb= self.feProblem, numSteps= 10, maxNumIter= 300, convergenceTestTol= convergenceTestTol, printFlag= 0)
+        else:
+            self.solProc= predefined_solutions.PenaltyNewtonRaphson(prb= self.feProblem, numSteps= 10, maxNumIter= 300, convergenceTestTol= convergenceTestTol, printFlag= 0)
         
     def setNodeSoils(self):
         ''' Compute the soil corresponding to each node.'''
@@ -401,8 +405,10 @@ class PileWall(object):
             nodeSoil= self.soilLayers.getSoilAtDepth(nodeDepth)
             self.soilsAtNodes[n.tag]= nodeSoil
             
-    def genMesh(self):
+    def genMesh(self, elemSize= 0.25):
         '''Define the FE mesh.
+
+        :param elemSize: size of the beam elements for the pile wall.
         '''
         # Define finite element problem.
         self.defineFEProblem()
@@ -416,7 +422,7 @@ class PileWall(object):
         kPt0= kPoints[0]
         for kPt1 in kPoints[1:]:
             newLine= self.modelSpace.newLine(kPt0, kPt1)
-            newLine.setElemSize(0.25)
+            newLine.setElemSize(elemSize)
             kPt0= kPt1
             lines.append(newLine)
         
@@ -503,6 +509,15 @@ class PileWall(object):
                 zlRight.setupVectors(xc.Vector([1,0,0]),xc.Vector([0,1,0]))
                 self.rightZLElements[nodeTag]= zlRight
 
+    def getElemSize(self):
+        ''' Return the size of the elements of the pile wall mesh.'''
+        retval= None
+        lines= list(self.pileSet.lines)
+        sz= len(lines)
+        if(sz>0):
+            retval= lines[0].getElemSize()
+        return retval
+
     def getTopPoint(self):
         ''' Return the top point of the pile wall model.'''
         retval= None
@@ -575,12 +590,13 @@ class PileWall(object):
             #print('node: ', nodeTag, ' node depth: ', '{:.2f}'.format(nodeDepth), ' left node depth: ', '{:.2f}'.format(newDepth), ' tributary area: ', '{:.2f}'.format(tributaryAreas[nodeTag]), 'strains: ', oldInitStrain, -newInitStrain, newInitStrain+oldInitStrain, ' elementTag= ', leftElement.tag)
         return updatedElements
     
-    def excavationProcess(self, excavationSide, excavationDepthIndex):
+    def excavationProcess(self, excavationSide, excavationDepthIndex, logDepth= False):
         ''' Deactivates the excavated elements and updates the stiffness of the
             remaining ones.
 
         :param excavationSide: side for the excavation ('left' or 'right')
         :param excavationDepthIndex: index of the excavation depth to reach.
+        :param logDepth: if true, issue a message on each excavation step.
         '''
         self.nodesToExcavate= list() # Nodes in the excavation depth.
         self.currentExcavationDepth= self.soilLayers.getExcavationDepth(i= excavationDepthIndex)
@@ -623,6 +639,7 @@ class PileWall(object):
                         lmsg.error(className+'.'+methodName+'; can\'t solve.')
                         exit(1)
                     # Update left springs.
+                    lmsg.log('current excavation depth: '+str(currentExcavationDepth))
                     updatedElements= self.updateSpringStiffness(remainingLeftElements, currentExcavationDepth= currentExcavationDepth, excavationSide= excavationSide)
                     # Solve again.
                     ok= self.solProc.solve()
@@ -633,23 +650,25 @@ class PileWall(object):
                         exit(1)
         return updatedElements
                 
-    def solve(self, excavationDepthIndex= 0, convergenceTestTol= 1e-5, reactionCheckTolerance= 1e-6, excavationSide= 'left'):
+    def solve(self, excavationDepthIndex= 0, convergenceTestTol= 1e-5, reactionCheckTolerance= 1e-6, excavationSide= 'left', krylov= False, logDepth= False):
         '''Compute the solution.
 
         :param excavationDepthIndex: index of the excavation depth to reach.
         :param convergenceTestTol: tolerance for the convergence test of the
                                    solver.
         :param reactionCheckTolerance: tolerance when checking nodal reactions.
-        :param excavationSide: side for the excavation ('left' or 'right')
+        :param excavationSide: side for the excavation ('left' or 'right').
+        :param krylov: if true use Krylow-Newton method.
+        :param logDepth: if true, issue a message on each excavation step.
         '''
         if(not self.solProc):
-            self.defineSolutionProcedure(convergenceTestTol= convergenceTestTol)
+            self.defineSolutionProcedure(convergenceTestTol= convergenceTestTol, krylov= krylov)
         ok= self.solProc.solve()
         if(ok!=0):
             lmsg.error('Can\'t solve')
             exit(1)
             
-        updatedElements= self.excavationProcess(excavationSide= excavationSide, excavationDepthIndex= excavationDepthIndex)
+        updatedElements= self.excavationProcess(excavationSide= excavationSide, excavationDepthIndex= excavationDepthIndex, logDepth= logDepth)
         self.modelSpace.calculateNodalReactions(reactionCheckTolerance= reactionCheckTolerance)
 
     def computeExcavationSide(self):

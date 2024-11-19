@@ -1604,6 +1604,7 @@ python tests/geotechnics/soil_mechanics/test_brinch_hansen_01.py
 python tests/geotechnics/soil_mechanics/test_brinch_hansen_02.py
 python tests/geotechnics/soil_mechanics/test_stratified_soil.py
 python tests/geotechnics/soil_mechanics/test_cohesive_soil_01.py
+python tests/geotechnics/soil_mechanics/test_cohesive_soil_02.py
 python tests/geotechnics/soil_mechanics/test_mononobe_okabe_01.py
 python tests/geotechnics/soil_mechanics/test_mononobe_okabe_02.py
 python tests/geotechnics/soil_mechanics/test_iskander_01.py
@@ -1623,9 +1624,13 @@ python tests/geotechnics/earthworks/test_embankment_03.py
 python tests/geotechnics/earthworks/test_embankment_04.py
 python tests/geotechnics/earthworks/test_embankment_05.py
 echo  "$BLEU" "  Earth retaining." "$NORMAL"
-python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_test_01.py
-python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_test_02.py
-python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_test_03.py
+python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_rankine_soil_test_01.py
+python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_rankine_soil_test_02.py
+python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_rankine_soil_test_03.py
+python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_coulomb_soil_test_01.py
+python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_coulomb_soil_test_02.py
+python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_coulomb_soil_test_03.py
+python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_bell_soil_test_01.py
 
 #Database tests
 echo "$BLEU" "Database tests (MySQL, Berkeley db, sqlite,...)." "$NORMAL"
