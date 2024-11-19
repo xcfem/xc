@@ -14,6 +14,7 @@ from materials.sections import section_properties
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials.sections.fiber_section import def_column_RC_section
+from misc_utils import log_messages as lmsg
 # from tabulate import tabulate
 
 # Units
@@ -33,7 +34,7 @@ soil1= earth_pressure.CoulombSoil(phi= math.radians(30), rho= 105*pcf/g, rhoSat=
 soil1.Kh= 2.9*pci
 soil2= earth_pressure.CoulombSoil(phi= math.radians(30), rho= 128.5*pcf/g, rhoSat= 128.5*pcf/g)
 soil2.Kh= 15*pci
-soil3= earth_pressure.BellSoil(phi= math.radians(1), c= 1500*psf, rho= 122.5*pcf/g, rhoSat= 122.5*pcf/g)
+soil3= earth_pressure.BellSoil(phi= math.radians(0.0), c= 1500*psf, rho= 122.5*pcf/g, rhoSat= 122.5*pcf/g)
 soil3.Kh= 87*pci
 ### Soil strata.
 L0= -8*ft # pile wall top (m).
@@ -51,22 +52,62 @@ sheetPileMaterial= typical_materials.BasicElasticMaterial(E= 29e6*psi, nu= 0.3)
 sheetPileSectionMaterial= typical_materials.BeamMaterialData(name= 'sheet_pile_section', section= sheetPileSectionGeometry, material= sheetPileMaterial)
 ## Anchor material.
 anchorSectionGeometry= section_properties.GenericSection1D(name= 'anchor_section_geometry', area= 1*inch**2)
-anchorMaterial= typical_materials.ElasticPerfectlyPlasticMaterial(E= 29e6*psi, nu= 0.3, fyp= 40*ksi, fyn= 40e3*ksi)
+anchorMaterial= typical_materials.ElasticPerfectlyPlasticMaterial(E= 29e6*psi, nu= 0.3, fyp= 40*ksi, fyn= -40e3*ksi)
 anchorSectionMaterial= typical_materials.BeamMaterialData(name= 'anchor_section', section= anchorSectionGeometry, material= anchorMaterial)
 
-pileWall= pw.PileWall(pileSection= sheetPileSectionMaterial, soilLayersDepths= soilLayersDepths, soilLayers= soilLayers, excavationDepths= [L1, L4], pileSpacing= 1.0*ft, waterTableDepth= [L2, L3])
+lastExcavationDepth= L4 # L4 (debugging)
+pileWall= pw.PileWall(pileSection= sheetPileSectionMaterial, soilLayersDepths= soilLayersDepths, soilLayers= soilLayers, excavationDepths= [L1, lastExcavationDepth], pileSpacing= 1.0*ft, waterTableDepth= [L2, L3])
 
 # Mesh generation
-pileWall.genMesh()
+pileWall.genMesh(elemSize= 0.1)
 
 # Excavate until the anchor depth.
 reactionCheckTolerance= 1e-6
-pileWall.solve(excavationDepthIndex= 0, excavationSide= 'left', reactionCheckTolerance= reactionCheckTolerance)
-
+lmsg.setLevel(lmsg.INFO) # print excavation level at each step.
+pileWall.solve(excavationDepthIndex= 0, excavationSide= 'left', convergenceTestTol= 1e-4, reactionCheckTolerance= reactionCheckTolerance, krylov= False, logDepth= False)
 
 # Get node to attach the anchor
 anchorNode, dist= pileWall.getNodeAtDepth(depth= L1)
-print(anchorNode.tag, dist)
+## Create the anchor.
+modelSpace= pileWall.modelSpace
+newNode= modelSpace.newNodeXY(40*ft, anchorNode.getInitialPos3d.y)
+## Fix the new node.
+modelSpace.fixNode('000', newNode.tag)
+modelSpace.setElementDimension(2) # Truss defined in a two-dimensional space.
+#xcAnchorMaterial= anchorMaterial.defElasticPPMaterial(preprocessor= modelSpace.preprocessor, name= 'anchor_material')
+xcAnchorMaterial= anchorMaterial.defElasticMaterial(preprocessor= modelSpace.preprocessor, name= 'anchor_material')
+modelSpace.setDefaultMaterial(xcAnchorMaterial) # Set the material for the new element.
+anchorElement= modelSpace.newElement("Truss",nodeTags= [anchorNode.tag, newNode.tag])
+anchorElement.sectionArea= 1.0*inch**2
 
 # Get top node.
 topNode= pileWall.getTopNode()
+
+# Excavate until the soil 3 is reached.
+reactionCheckTolerance= 1e-5
+pileWall.solve(excavationDepthIndex= 1, excavationSide= 'left', reactionCheckTolerance= reactionCheckTolerance, krylov= True, logDepth= False)
+
+# Get results.
+results= pileWall.getResultsDict()
+
+anchorElement.getResistingForce()
+N= anchorElement.getN()
+Nref= 8455.33*lbf
+
+print('anchor node displacement: ', anchorNode.getDisp[0]*1e3, 'mm')
+print('anchor axial force N= ', N/1e3, 'kN')
+print('reference anchor axial force Nref= ', Nref/1e3, 'kN')
+
+# Matplotlib output.
+pw.plot_results(resultsDict= results, title= 'Test based on the example 2 of the CWALSSI program manual.')
+
+# VTK Graphic output.
+from postprocess import output_handler
+oh= output_handler.OutputHandler(pileWall.modelSpace)
+oh.displayFEMesh()
+# oh.displayLocalAxes()
+# oh.displayLoads()
+oh.displayReactions(reactionCheckTolerance= reactionCheckTolerance)
+oh.displayDispRot('uX', defFScale= 10.0)
+# oh.displayIntForcDiag('M')
+# oh.displayIntForcDiag('V')
