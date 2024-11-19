@@ -10,7 +10,6 @@ from geotechnics.earth_retaining import pile_wall as pw
 from materials.sections.fiber_section import def_column_RC_section
 from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking
-# from tabulate import tabulate
 
 # Materials definition
 ## Soil material
@@ -20,8 +19,8 @@ soil.Kh= 30e6
 L1= 5.0 #5.0 # Excavation depth (m)
 Dteory= 4.7
 L= L1+1.3*Dteory # Total lenght (m)
-soilLayersDepths= [0.0, L]
-soilLayers= [soil, soil]
+soilLayersDepths= [0.0, L1, L]
+soilLayers= [soil, soil, soil]
 
 ## Pile material.
 concr= EHE_materials.HA30
@@ -59,6 +58,7 @@ err= abs(max(abs(MMax), abs(MMin))+refValue)/refValue
 '''
 import os
 fname= os.path.basename(__file__)
+from tabulate import tabulate
 content= tabulate(outputTable, headers= 'firstrow', tablefmt="tsv")
 print('\nASCII output:')
 print(content)
@@ -69,6 +69,7 @@ print('MMax= ', MMax/1e3, 'kN.m')
 print('MMin= ', MMin/1e3, 'kN.m')
 print('err= ', err)
 '''
+
 
 import os
 fname= os.path.basename(__file__)
