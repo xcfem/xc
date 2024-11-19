@@ -28,6 +28,7 @@ steel= EHE_materials.B500S
 diameter= 450e-3 # Cross-section diameter [m]
 pileSection= def_column_RC_section.RCCircularSection(name='test',Rext= diameter/2.0, concrType=concr, reinfSteelType= steel)
 
+## Pile wall.
 pileWall= pw.PileWall(pileSection= pileSection, soilLayersDepths= soilLayersDepths, soilLayers= soilLayers, excavationDepths= [L1], pileSpacing= 1.0, waterTableDepth= [None, None])
 
 # Mesh generation
