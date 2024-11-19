@@ -12,14 +12,14 @@ from scipy.constants import g
 # Problem geometry. 
 H= 6.0
 D= 2.88
+alphaAngle= 0.0 #angle of the back of the retaining wall (radians).
+backFillSlope= 0.0 # slope of the backfill (radians).
 
 # Soil
 qu= 70e3 # unconfined compressive strength.
 Cu= qu/2.0
 soil= fcs.FrictionalCohesiveSoil(phi= 0.0, c= Cu, rho= 17e3/g)
 
-alphaAngle= 0.0 #angle of the back of the retaining wall (radians).
-backFillSlope= 0.0 # slope of the backfill (radians).
 wallFrictionAngle= 0.0 # friction angle between soil an back of retaining wall (radians).
 
 h0= soil.getCoulombTensionCrackDepth(sg_v= 0.0, a= alphaAngle, b= backFillSlope, d= wallFrictionAngle)
