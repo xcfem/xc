@@ -83,13 +83,11 @@ pileWall.genMesh(elemSize= 0.1)
 
 # Solve 
 reactionCheckTolerance= 1e-5
-# lmsg.setLevel(lmsg.INFO) print excavation level at each step.
+# lmsg.setLevel(lmsg.INFO) # print excavation level at each step.
 pileWall.solve(excavationSide= 'left', reactionCheckTolerance= reactionCheckTolerance, krylov= True, logDepth= False)
 
 # Get results.
 results= pileWall.getResultsDict()
-
-outputTable= pw.get_results_table(resultsDict= results)
 
 # Compute maximum bending moment, and maximum and minimum values of soil reaction.
 MMin= 6.023e23
