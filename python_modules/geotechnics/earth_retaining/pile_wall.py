@@ -350,6 +350,7 @@ class PileWall(object):
     :ivar alphaAngle: inclination of the back face.
     :ivar deltaAngle: friction angle between the soil and the back surface
                       of the retaining wall (radians).
+    :ivar previousExcavationDepthIndex: index of the last computed excavation depth.
     '''
     
     def __init__(self, pileSection, soilLayersDepths, soilLayers, excavationDepths, pileSpacing= 1.0, waterTableDepth= [None, None], alphaAngle= 0.0, deltaAngle= 0.0):
@@ -373,6 +374,7 @@ class PileWall(object):
         self.alphaAngle= alphaAngle
         self.deltaAngle= deltaAngle
         self.solProc= None
+        self.previousExcavationDepthIndex= -1
 
     def defineFEProblem(self):
         ''' Define the FE problem.
@@ -457,7 +459,7 @@ class PileWall(object):
         #### Compute soils at nodes.
         self.setNodeSoils()
         #### Minimum depth.
-        minimumDepth= -self.getTopPoint().getPos.y
+        minimumDepth= self.getMinimumDepth()
         #### Define non-linear springs.
         for n in self.pileSet.nodes:
             nodeDepth= -n.getInitialPos3d.y
@@ -532,6 +534,11 @@ class PileWall(object):
                     retval= pt
                     yMax= y
         return retval
+
+    def getMinimumDepth(self):
+        ''' Return the depth of the pile wall top.'''
+        topPoint= self.getTopPoint()
+        return -topPoint.getPos.y
         
     def getTopNode(self):
         ''' Return the top node of the pile wall mesh.'''
@@ -587,7 +594,6 @@ class PileWall(object):
             leftElementEyBasicMaterial.setParameters(soil.Kh, -newEp, -newEa)
             leftElementInitStrainMaterial.setInitialStress(-newE0)
             updatedElements.append(leftElement)
-            #print('node: ', nodeTag, ' node depth: ', '{:.2f}'.format(nodeDepth), ' left node depth: ', '{:.2f}'.format(newDepth), ' tributary area: ', '{:.2f}'.format(tributaryAreas[nodeTag]), 'strains: ', oldInitStrain, -newInitStrain, newInitStrain+oldInitStrain, ' elementTag= ', leftElement.tag)
         return updatedElements
     
     def excavationProcess(self, excavationSide, excavationDepthIndex, logDepth= False):
@@ -600,9 +606,12 @@ class PileWall(object):
         '''
         self.nodesToExcavate= list() # Nodes in the excavation depth.
         self.currentExcavationDepth= self.soilLayers.getExcavationDepth(i= excavationDepthIndex)
+        previousExcavationDepth= self.getMinimumDepth()
+        if(self.previousExcavationDepthIndex>=0):
+            previousExcavationDepth= self.soilLayers.getExcavationDepth(i= self.previousExcavationDepthIndex)
         for n in self.pileSet.nodes:
             nodeDepth= -n.getInitialPos3d.y
-            if(nodeDepth<=self.currentExcavationDepth):
+            if(nodeDepth>previousExcavationDepth) and (nodeDepth<=self.currentExcavationDepth):
                 self.nodesToExcavate.append((nodeDepth, n))
         ## Sort nodes to excavate on its depth
         self.nodesToExcavate.sort(key=itemgetter(0))
@@ -639,7 +648,8 @@ class PileWall(object):
                         lmsg.error(className+'.'+methodName+'; can\'t solve.')
                         exit(1)
                     # Update left springs.
-                    lmsg.log('current excavation depth: '+str(currentExcavationDepth))
+                    if(logDepth):
+                        lmsg.log('current excavation depth: '+str(currentExcavationDepth))
                     updatedElements= self.updateSpringStiffness(remainingLeftElements, currentExcavationDepth= currentExcavationDepth, excavationSide= excavationSide)
                     # Solve again.
                     ok= self.solProc.solve()
@@ -670,6 +680,7 @@ class PileWall(object):
             
         updatedElements= self.excavationProcess(excavationSide= excavationSide, excavationDepthIndex= excavationDepthIndex, logDepth= logDepth)
         self.modelSpace.calculateNodalReactions(reactionCheckTolerance= reactionCheckTolerance)
+        self.previousExcavationDepthIndex= excavationDepthIndex
 
     def computeExcavationSide(self):
         ''' Returns the excavation side according to the sizes of the element
