@@ -346,9 +346,12 @@ class PileWall(object):
 
     :ivar pileSection: 2D elastic shear section for the pile wall beam elements.
     :ivar soilLayers: SoilLayers object.
+    :ivar alphaAngle: inclination of the back face.
+    :ivar deltaAngle: friction angle between the soil and the back surface
+                      of the retaining wall (radians).
     '''
     
-    def __init__(self, pileSection, soilLayersDepths, soilLayers, excavationDepths, pileSpacing= 1.0, waterTableDepth= [None, None]):
+    def __init__(self, pileSection, soilLayersDepths, soilLayers, excavationDepths, pileSpacing= 1.0, waterTableDepth= [None, None], alphaAngle= 0.0, deltaAngle= 0.0):
         '''Constructor.
 
         :param pileSection: 2D elastic shear section for the pile wall beam
@@ -359,10 +362,15 @@ class PileWall(object):
         :param pileSpacing: distance between pile axes.
         :param waterTableDepth: [float, float] depth of the water table at both
                                 sides of the pile wall [left, right].
+        :param alphaAngle: inclination of the back face.
+        :param deltaAngle: friction angle between the soil and the back surface
+                           of the retaining wall (radians).
         '''
         self.pileSection= pileSection
         self.soilLayers= SoilLayers(depths= soilLayersDepths, soils= soilLayers, waterTableDepth= waterTableDepth, excavationDepths= excavationDepths)
         self.pileSpacing= pileSpacing
+        self.alphaAngle= alphaAngle
+        self.deltaAngle= deltaAngle
         self.solProc= None
 
     def defineFEProblem(self):
@@ -457,8 +465,8 @@ class PileWall(object):
                 tributaryArea= tributaryLength*self.pileSpacing
                 materialName= 'soilResponse_z_'+str(n.tag)
                 nodeSoil= self.soilsAtNodes[n.tag]
-                leftNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_left', sg_v= left_sg_v, tributaryArea= tributaryArea, Kh= nodeSoil.Kh)
-                rightNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_right', sg_v= right_sg_v, tributaryArea= tributaryArea, Kh= nodeSoil.Kh)
+                leftNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_left', sg_v= left_sg_v, tributaryArea= tributaryArea, Kh= nodeSoil.Kh, alphaAngle= self.alphaAngle, deltaAngle= self.deltaAngle)
+                rightNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_right', sg_v= right_sg_v, tributaryArea= tributaryArea, Kh= nodeSoil.Kh, alphaAngle= self.alphaAngle, deltaAngle= self.deltaAngle)
 
             self.tributaryAreas[n.tag]= tributaryArea
             soilResponseMaterials[n.tag]= (leftNonLinearSpringMaterial, rightNonLinearSpringMaterial)
@@ -556,7 +564,7 @@ class PileWall(object):
             # Compute new soil response.
             soil= self.soilsAtNodes[nodeTag]
             sg_v= self.soilLayers.getVerticalPressureAtDepth(depth= nodeDepth, rightSide= rightSide)-sg_v0 # Vertical pressure at the excavation side.
-            newEa, newE0, newEp= soil.getEarthThrusts(sg_v= sg_v, tributaryArea= self.tributaryAreas[nodeTag])
+            newEa, newE0, newEp= soil.getEarthThrusts(sg_v= sg_v, tributaryArea= self.tributaryAreas[nodeTag], alphaAngle= self.alphaAngle, deltaAngle= self.deltaAngle)
             # Update soil response.
             leftElementInitStrainMaterial= leftElement.getMaterials()[0]
             leftElementEyBasicMaterial= leftElementInitStrainMaterial.material

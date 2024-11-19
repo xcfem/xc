@@ -124,29 +124,29 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
             retval= max(a1-a2,0.0)/sg_v
         return retval
 
-    def Kp_bell(self, sg_v, a, b, d= 0.0, designValue= False):
-        ''' Return the passive earth pressure coefficient according to Bell's
-        relationship.
+    # def Kp_bell(self, sg_v, a, b, d= 0.0, designValue= False):
+    #     ''' Return the passive earth pressure coefficient according to Bell's
+    #     relationship.
 
-        :param sg_v:  vertical stress.
-        :param a: angle of the back of the retaining wall (radians).
-        :param b: slope of the backfill (radians).
-        :param d: friction angle between soil an back of retaining 
-                  wall (radians).
-        :param designValue: if true use the design value of the internal
-                            friction and the cohesion.
-        '''
-        retval= 0.0
-        if(sg_v>0.0):
-            kp= super(FrictionalCohesiveSoil,self).Kp_coulomb(a,b,d, designValue= designValue)
-            a1= kp*sg_v
-            if(designValue):
-                c= self.getDesignC()
-            else:
-                c= self.c
-            a2= 2.0*c*math.sqrt(kp)
-            retval= max(a1+a2,0.0)/sg_v
-        return retval
+    #     :param sg_v:  vertical stress.
+    #     :param a: angle of the back of the retaining wall (radians).
+    #     :param b: slope of the backfill (radians).
+    #     :param d: friction angle between soil an back of retaining 
+    #               wall (radians).
+    #     :param designValue: if true use the design value of the internal
+    #                         friction and the cohesion.
+    #     '''
+    #     retval= 0.0
+    #     if(sg_v>0.0):
+    #         kp= super(FrictionalCohesiveSoil,self).Kp_coulomb(a,b,d, designValue= designValue)
+    #         a1= kp*sg_v
+    #         if(designValue):
+    #             c= self.getDesignC()
+    #         else:
+    #             c= self.c
+    #         a2= 2.0*c*math.sqrt(kp)
+    #         retval= max(a1+a2,0.0)/sg_v
+    #     return retval
 
     def getCoulombTensionCrackDepth(self, sg_v, a, b, d= 0.0, designValue= False):
         ''' Return the depth of the tension crack (the depth at which
@@ -191,7 +191,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
             retval= max(a1-a2,0.0)
         return retval
 
-    def eah_coulomb(self, sg_v, a, b,d= 0.0, designValue= False):
+    def eah_coulomb(self, sg_v, a, b, d= 0.0, designValue= False):
         '''
         Return the horizontal component of the lateral earth active pressure.
 
@@ -235,15 +235,14 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
                             friction and the cohesion.
         '''
         retval= 0.0
-        if(sg_v>0.0):
-            kp= super(FrictionalCohesiveSoil,self).Kp_coulomb(a,b,d, designValue= designValue)
-            a1= kp*sg_v
-            if(designValue):
-                c= self.getDesignC()
-            else:
-                c= self.c
-            a2= 2.0*c*math.sqrt(kp)
-            retval= max(a1+a2,0.0)
+        kp= super(FrictionalCohesiveSoil,self).Kp_coulomb(a,b,d, designValue= designValue)
+        a1= max(kp*sg_v, 0.0) # No tension.
+        if(designValue):
+            c= self.getDesignC()
+        else:
+            c= self.c
+        a2= 2.0*c*math.sqrt(kp)
+        retval= max(a1+a2,0.0) # No tension.
         return retval
 
     def eph_coulomb(self, sg_v, a, b, d, designValue= False):
