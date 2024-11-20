@@ -19,13 +19,13 @@ import numpy as np
 
 # Define soil model.
 phi= math.pi/6.0
-rankineSoil= earth_pressure.RankineSoil(phi, rho= 2000)
+rankineSoil= earth_pressure.RankineSoil(phi, rho= 2000, Kh= 15e5)
 
 # Define depth and tributary area corresponding to the spring simulating
 # the soil reaction.
 depth= 3.0 # 3 m
 tributaryArea= 1.5 # 1.5 m2
-Kh= 15e5 # horizontal subgrade modulus.
+ # horizontal subgrade modulus.
 
 # FE problem definition
 feProblem= xc.FEProblem()
@@ -36,10 +36,10 @@ modelSpace= predefined_spaces.SolidMechanics1D(nodes)
 
 ## Nonlinear spring material
 sg_v= rankineSoil.getVerticalStressAtDepth(z= depth)
-nlSpringMaterial= rankineSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= 'nlSpringMaterial', sg_v= sg_v, tributaryArea= tributaryArea, Kh= Kh)
+nlSpringMaterial= rankineSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= 'nlSpringMaterial', sg_v= sg_v, tributaryArea= tributaryArea)
 
 # Compute sample points.    
-samplePoints, initStrain= earth_pressure.get_horizontal_soil_reaction_diagram(sg_v= sg_v, tributaryArea= tributaryArea, Ka= rankineSoil.Ka(), K0= rankineSoil.K0Jaky(), Kp= rankineSoil.Kp(), Kh= Kh)
+samplePoints, initStrain= earth_pressure.get_horizontal_soil_reaction_diagram(sg_v= sg_v, tributaryArea= tributaryArea, Ka= rankineSoil.Ka(), K0= rankineSoil.K0Jaky(), Kp= rankineSoil.Kp(), Kh= rankineSoil.Kh)
 
 E0= rankineSoil.K0Jaky()*tributaryArea*rankineSoil.gamma()*depth
 Ea= rankineSoil.Ka()*tributaryArea*rankineSoil.gamma()*depth
