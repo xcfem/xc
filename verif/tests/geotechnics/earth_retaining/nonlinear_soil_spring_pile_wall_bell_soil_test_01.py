@@ -29,14 +29,14 @@ wallFrictionAngle= 0.0 # friction angle between soil an back of retaining wall (
 
 # Solve the analytical problem to compute reference values.
 
-ep= earth_pressure.BellSoil(phi= math.radians(0.0), c= Cu, rho= 17e3/g, rhoSat= 17e3/g)
+ep= earth_pressure.BellSoil(phi= math.radians(0.0), c= Cu, rho= 17e3/g, rhoSat= 17e3/g, Kh= 30e6, deltaAngle= wallFrictionAngle)
 
 # Tension crack depth.
 h0= ep.getCoulombTensionCrackDepth(sg_v= 0.0)
 
 ## Horizontal active pressure.
 sg_v= ep.soil.gamma()*H
-eah= ep.getActivePressure(sg_v= sg_v, alphaAngle= alphaAngle, deltaAngle= wallFrictionAngle)
+eah= ep.getActivePressure(sg_v= sg_v, alphaAngle= alphaAngle)
 Pa= 1/2.0*eah*(H-h0)
 
 ## Moment residual.
@@ -62,8 +62,7 @@ D= root[0]
 z= root[1]
 
 # Build the pila wall model.
-ep.Kh= 30e6
-### Soil strata.
+## Soil strata.
 L1= 6.0 #5.0 # Excavation depth (m)
 L= L1+1.4*D # Total lenght (m)
 soilLayersDepths= [0.0, L]
@@ -76,7 +75,7 @@ diameter= 450e-3 # Cross-section diameter [m]
 pileSection= def_column_RC_section.RCCircularSection(name='test',Rext= diameter/2.0, concrType=concr, reinfSteelType= steel)
 
 ## Pile wall.
-pileWall= pw.PileWall(pileSection= pileSection, soilLayersDepths= soilLayersDepths, soilLayers= soilLayers, excavationDepths= [L1], pileSpacing= 1.0, waterTableDepth= [None, None])
+pileWall= pw.PileWall(pileSection= pileSection, soilLayersDepths= soilLayersDepths, soilLayers= soilLayers, excavationDepths= [L1], pileSpacing= 1.0, waterTableDepths= [None, None])
 
 # Mesh generation
 pileWall.genMesh(elemSize= 0.1)
