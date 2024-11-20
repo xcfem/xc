@@ -120,7 +120,8 @@ class FrictionalSoil(object):
 
         :param a:  angle of the back of the retaining wall (radians).
         :param b:  slope of the backfill (radians).
-        :param d:  friction angle between soil an back of retaining wall (radians).
+        :param d:  friction angle between the soil and the back surface
+                   of the retaining wall (radians).
         :param designValue: if true use the design value of the internal
                             friction.
         '''
