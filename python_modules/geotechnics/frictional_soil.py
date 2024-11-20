@@ -130,11 +130,11 @@ class FrictionalSoil(object):
             phi= self.phi
         if(b>phi):
             lmsg.error('The angle of the backfill: '+str(math.degrees(b))+' is greater than the friction angle: '+str(math.degrees(phi)))
-        p1= 1.0/(math.cos(a)**2)
+        p1= 1.0/(math.cos(a)**2)/math.cos(d-a)
         num= math.cos(phi+a)
-        r1=math.sqrt(math.sin(phi-d)*math.sin(phi+b)/(math.cos(a+d)*math.cos(b-a)))
+        r1= math.sqrt(math.sin(phi+d)*math.sin(phi+b)/(math.cos(d-a)*math.cos(b-a)))
         denom= 1.0-r1
-        retval= p1*((num/denom)**2)/math.cos(a+d)
+        retval= p1*((num/denom)**2)
         return retval
 
     def eq_coulomb(self, a, b, d, p, designValue= False):
