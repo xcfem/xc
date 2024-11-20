@@ -25,7 +25,7 @@ def get_results_table(resultsDict):
 
     :param resultsDict: dictionary containing the results.
     '''
-    headerRow= ['#', 'fixed node', 'depth (m)', 'Ux (mm)', 'M (kN.m)', 'V (kN)', 'pres. dif. (kN/m)', 'Rx (kN)', 'leftEa (kN)', 'leftE0 (kN)', 'leftEp (kN)', 'rightEa (kN)', 'rightE0 (kN)', 'rightEp (kN)', 'netWp (kN)']
+    headerRow= ['#', 'fixed node', 'depth (m)', 'Ux (mm)', 'M (kN.m)', 'V (kN)', 'pres. dif. (kN/m)', 'Rx (kN)', 'leftEa (kN)', 'leftE0 (kN)', 'leftEp (kN)', 'rightEa (kN)', 'rightE0 (kN)', 'rightEp (kN)', 'netWp (kN)', 'a (m2)']
     retval= list()
     for nodeTag in resultsDict:
         nodeResults= resultsDict[nodeTag]
@@ -44,6 +44,7 @@ def get_results_table(resultsDict):
         outputRow.append(cf.Force.format(nodeResults['rightE0']/1e3)) # at-rest force at the right side.
         outputRow.append(cf.Force.format(nodeResults['rightEp']/1e3)) # passive force at the right side.
         outputRow.append(cf.Force.format(nodeResults['netWp']/1e3)) # net hydrostatic force.
+        outputRow.append(cf.Area.format(nodeResults['tributaryArea'])) # tributary area.
         retval.append(outputRow)
     # Sort on depth
     retval= sorted(retval, key=lambda x: float(x[2]))
@@ -730,7 +731,6 @@ class PileWall(object):
         :param node: node of interest.
         '''
         nodeTag= node.tag
-        tributaryArea= self.tributaryAreas[nodeTag]
         leftMaterial= None
         if(nodeTag in self.leftZLElements):
             leftElement= self.leftZLElements[nodeTag]
@@ -740,39 +740,41 @@ class PileWall(object):
             rightElement= self.rightZLElements[nodeTag]
             rightMaterial= rightElement.getMaterials()[0].material
         if(leftMaterial):
-            leftEp= -leftMaterial.getLowerYieldStress()*tributaryArea
-            leftEa= -leftMaterial.getUpperYieldStress()*tributaryArea
+            leftEp= -leftMaterial.getLowerYieldStress()
+            leftEa= -leftMaterial.getUpperYieldStress()
         else:
             leftEa= 0.0
             leftEp= 0.0
         if(rightMaterial):
-            rightEp= -rightMaterial.getLowerYieldStress()*tributaryArea
-            rightEa= -rightMaterial.getUpperYieldStress()*tributaryArea
+            rightEp= -rightMaterial.getLowerYieldStress()
+            rightEa= -rightMaterial.getUpperYieldStress()
         else:
             rightEa= 0.0
             rightEp= 0.0
         excavationSide= self.computeExcavationSide()
-        depth= -node.getInitialPos3d.y
+        nodeDepth= -node.getInitialPos3d.y
         if(excavationSide=='left'):
-            leftDepth= max(depth-self.currentExcavationDepth, 0.0)
-            rightDepth= depth
+            depthAtLeft= max(nodeDepth-self.currentExcavationDepth, 0.0)
+            depthAtRight= nodeDepth
             left_sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= self.currentExcavationDepth, rightSide= False) # Vertical stress to remove at the excavation side.
             right_sg_v0= 0.0
         else: # excavation at right.
-            rightDepth= max(depth-self.currentExcavationDepth, 0.0)
-            sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= self.currentExcavationDepth, rightSide= True) # Vertical stress to remove at the excavation side.
-            leftDepth= depth
+            depthAtRight= max(nodeDepth-self.currentExcavationDepth, 0.0)
+            depthAtLeft= nodeDepth
+            right_sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= self.currentExcavationDepth, rightSide= True) # Vertical stress to remove at the excavation side.
             left_sg_v0= 0.0
             right_sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= self.currentExcavationDepth, rightSide= True) # Vertical stress to remove at the excavation side.
         soil= self.soilsAtNodes[nodeTag]
-        if(leftDepth>0):
-            left_sg_v= self.soilLayers.getVerticalPressureAtDepth(depth= depth, rightSide= False)-left_sg_v0 # Vertical pressure at left.
-            leftE0= soil.getAtRestPressure(sg_v= left_sg_v)
+        tributaryArea= self.tributaryAreas[nodeTag]
+        zeroDepth= self.getMinimumDepth() # Depth of the pile top.
+        if(depthAtLeft>zeroDepth):
+            left_sg_v= max(self.soilLayers.getVerticalPressureAtDepth(depth= nodeDepth, rightSide= False)-left_sg_v0, 0.0) # Vertical pressure at left.
+            leftE0= soil.getAtRestPressure(sg_v= left_sg_v)*tributaryArea
         else:
             leftE0= 0.0
-        if(rightDepth>0.0):
-            right_sg_v= self.soilLayers.getVerticalPressureAtDepth(depth= depth, rightSide= True)-right_sg_v0 # Vertical pressure at right.
-            rightE0= soil.getAtRestPressure(sg_v= right_sg_v)
+        if(depthAtRight>zeroDepth):
+            right_sg_v= max(self.soilLayers.getVerticalPressureAtDepth(depth= nodeDepth, rightSide= True)-right_sg_v0, 0.0) # Vertical pressure at right.
+            rightE0= soil.getAtRestPressure(sg_v= right_sg_v)*tributaryArea
         else:
             rightE0= 0.0
         
@@ -815,7 +817,7 @@ class PileWall(object):
             
             (leftEa, leftE0, leftEp), (rightEa, rightE0, rightEp)= self.getEarthThrustsAtNode(node= pileNode)
             netWp= self. getNetWaterForceAtNode(node= pileNode)
-            nodeResults= {'depth': depth, 'fixed_node':fixedNode.tag, 'Rx':Rx, 'leftE0':leftE0, 'leftEa':leftEa, 'leftEp':leftEp, 'rightE0':rightE0, 'rightEa':rightEa, 'rightEp':rightEp, 'Ux':Ux, 'netWp':netWp}
+            nodeResults= {'depth': depth, 'fixed_node':fixedNode.tag, 'Rx':Rx, 'leftE0':leftE0, 'leftEa':leftEa, 'leftEp':leftEp, 'rightE0':rightE0, 'rightEa':rightEa, 'rightEp':rightEp, 'Ux':Ux, 'netWp':netWp, 'tributaryArea':tributaryArea}
             retval[pileNode.tag]= nodeResults
         # Get internal forces.
         for ln in self.pileSet.lines: # for lines in list
