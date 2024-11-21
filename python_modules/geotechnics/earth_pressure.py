@@ -169,7 +169,8 @@ class SoilModel(object):
         if(not matName):
             matName= uuid.uuid1().hex            
         eyMatName= 'ey'+matName
-        eyBasicMaterial= def_ey_basic_material(preprocessor, name= eyMatName, E= self.Kh, upperYieldStress= -Ea, lowerYieldStress= -Ep)
+        kh= self.Kh*tributaryArea # horizontal subgrade reaction for that node.
+        eyBasicMaterial= def_ey_basic_material(preprocessor, name= eyMatName, E= kh, upperYieldStress= -Ea, lowerYieldStress= -Ep)
         # Create initial stress material.
         materialHandler= preprocessor.getMaterialHandler
         retval= materialHandler.newMaterial("init_stress_material", matName)
