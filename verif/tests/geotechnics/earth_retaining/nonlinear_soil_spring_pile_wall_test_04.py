@@ -29,7 +29,6 @@ ksi= 1000*psi
 
 # Materials definition
 ## Soil materials
-### Dry soil.
 soil1= earth_pressure.CoulombSoil(phi= math.radians(30), rho= 105*pcf/g, rhoSat= 105*pcf/g, Kh= 2.9*pci, deltaAngle= math.radians(20))
 soil2= earth_pressure.CoulombSoil(phi= math.radians(30), rho= 128.5*pcf/g, rhoSat= 128.5*pcf/g, Kh= 15*pci, deltaAngle= math.radians(20))
 soil3= earth_pressure.BellSoil(phi= math.radians(0.0), c= 1500*psf, rho= 122.5*pcf/g, rhoSat= 122.5*pcf/g, Kh= 87*pci, deltaAngle= math.radians(0))
@@ -127,6 +126,16 @@ MMaxRef= 6.171e4*lbf*ft
 ratio4= abs(MMax-MMaxRef)/MMaxRef
 MMinRef= -4.824e3*lbf*ft 
 ratio5= abs(MMin-MMinRef)/MMinRef
+
+
+import os
+fname= os.path.basename(__file__)
+csvFileName= fname.replace(".py", ".csv")
+from tabulate import tabulate
+outputTable= pw.get_results_table(resultsDict= results)
+content= tabulate(outputTable, headers= 'firstrow', tablefmt="tsv")
+with open(csvFileName, "w") as csvFile:
+    csvFile.write(content)
 
 print('anchor node displacement: ', anchorNode.getDisp[0]*1e3, 'mm')
 print('anchor axial force N= ', N/1e3, 'kN')
