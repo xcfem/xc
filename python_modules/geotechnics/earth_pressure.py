@@ -46,9 +46,12 @@ class SoilModel(object):
         ''' Return the specific weight of soil.'''
         return self.soil.gamma()
     
-    def submergedGamma(self):
-        ''' Return the submerged gamma of the soil.'''
-        return self.soil.submergedGamma()
+    def submergedGamma(self, waterDensity= 1e3):
+        ''' Return the submerged gamma of the soil.
+
+        :param waterDensity: water density.
+        '''
+        return self.soil.submergedGamma(waterDensity= waterDensity)
     
     def phi(self, designValue= False):
         ''' Return the specific weight of soil.
@@ -76,18 +79,19 @@ class SoilModel(object):
             retval= math.atan(sPhi*math.sin(rhoAngle)/(1-sPhi*math.cos(rhoAngle)))
         return retval
 
-    def getVerticalStressAtDepth(self, z, waterTableDepth= 6371e3):
+    def getVerticalStressAtDepth(self, z, waterTableDepth= 6371e3, waterDensity= 1e3):
         ''' Returns the vertical presure at depth z assuming that the soil is
         homogeneous along the given depth.
 
         :param z: depth to compute the pressure.
         :param waterTableDepth: depth of the water table.
+        :param waterDensity: water density.
         '''
         if(z<=waterTableDepth):
             retval= self.soil.gamma()*z
         else:
             retval= self.soil.gamma()*waterTableDepth
-            retval+= self.submergedGamma()*(z-waterTableDepth)
+            retval+= self.submergedGamma(waterDensity= waterDensity)*(z-waterTableDepth)
         return retval
 
     def K0Jaky(self, designValue= False):
