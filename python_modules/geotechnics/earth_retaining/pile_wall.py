@@ -176,25 +176,40 @@ class SoilLayers(object):
         '''
         retval= -1
         if(newDepth is not None):
-            calculationDepths= list()
-            calculationSoils= list()
-            newDepthIndex= self.getSoilIndexAtDepth(depth= newDepth)
+            existingDepthIndex= self.getSoilIndexAtDepth(depth= newDepth)
             # Check if already in depths list.
-            soilDepth= self.depths[newDepthIndex]
+            existingDepth= self.depths[existingDepthIndex]
             totalDepth= self.getTotalDepth()
             tol= totalDepth/1e3
-            if(abs(soilDepth-newDepth)>tol): # not in depths list.
+            if(abs(existingDepth-newDepth)>tol): # not in depths list.
+                calculationDepths= list()
+                calculationSoils= list()
                 for i, (d, soil) in enumerate(zip(self.depths, self.soils)):
                     calculationDepths.append(d)
                     calculationSoils.append(soil)
-                    if(i==newDepthIndex):
+                    if(i==existingDepthIndex):
                         calculationDepths.append(newDepth)
                         calculationSoils.append(soil)
-                        retval= newDepthIndex+1
+                        retval= existingDepthIndex+1
                 self.depths= calculationDepths
                 self.soils= calculationSoils
+                # Update indexes.
+                if(hasattr(self,'excavationDepthIndexes')):
+                   for i, excavationIndex in enumerate(self.excavationDepthIndexes):
+                       # update excavationIndexes
+                       if(self.excavationIndex>=retval):
+                           self.excavationDepthIndexes[i]+= 1
+
+                if(hasattr(self,'leftWaterTableDepthIndex')):
+                    # update leftWaterTableDepthIndex
+                    if(self.leftWaterTableDepthIndex>=retval):
+                        self.leftWaterTableDepthIndex+= 1
+                if(hasattr(self,'rightWaterTableDepthIndex')):
+                    # update rightWaterTableDepthIndex
+                    if(self.rightWaterTableDepthIndex>=retval):
+                        self.rightWaterTableDepthIndex+= 1
             else:
-                retval= newDepthIndex
+                retval= existingDepthIndex
         return retval
             
     def setWaterTableDepths(self, waterTableDepths= [None, None]):
@@ -610,13 +625,14 @@ class PileWall(object):
             newDepth= nodeDepth-currentExcavationDepth
             # Compute new soil response.
             soil= self.soilsAtNodes[nodeTag]
+            tributaryArea= self.tributaryAreas[nodeTag]
             sg_v= self.soilLayers.getVerticalPressureAtDepth(depth= nodeDepth, rightSide= rightSide)-sg_v0 # Vertical pressure at the excavation side.
-            newEa, newE0, newEp= soil.getEarthThrusts(sg_v= sg_v, tributaryArea= self.tributaryAreas[nodeTag], alphaAngle= self.alphaAngle)
+            newEa, newE0, newEp= soil.getEarthThrusts(sg_v= sg_v, tributaryArea= tributaryArea, alphaAngle= self.alphaAngle)
             # Update soil response.
             leftElementInitStrainMaterial= leftElement.getMaterials()[0]
             leftElementEyBasicMaterial= leftElementInitStrainMaterial.material
-
-            leftElementEyBasicMaterial.setParameters(soil.Kh, -newEp, -newEa)
+            kh= soil.Kh*tributaryArea # horizontal subgrade reaction for that node.
+            leftElementEyBasicMaterial.setParameters(kh, -newEp, -newEa)
             leftElementInitStrainMaterial.setInitialStress(-newE0)
             updatedElements.append(leftElement)
         return updatedElements
