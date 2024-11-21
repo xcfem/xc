@@ -149,19 +149,23 @@ class SoilLayers(object):
     :ivar leftWaterTableDepthIndex: index of the left water table depth in self.depths.
     :ivar rightWaterTableDepthIndex: index of the right water table depth in self.depths.
     :ivar excavationDepthIndexes: index of the excavation depth in self.depths.
-    '''
-    def __init__(self, depths, soils, waterTableDepths= [None, None], excavationDepths= None):
+    :ivar waterUnitWeight: water weight per volume unit.
+     '''
+    def __init__(self, depths, soils, waterTableDepths= [None, None], waterUnitWeight= 1e3*g, excavationDepths= None):
         '''Constructor.
 
         :param depths: (float list) layer depths.
         :param soils: soil objects for each layer.
         :param waterTableDepths: depth of the water table ag both sides of the
                                  wall.
+        :param waterUnitWeight: water weight per volume unit.
+        :param excavationDepths: excavation levels for each phase.
         '''
         self.depths= depths
         self.soils= soils
         self.setWaterTableDepths(waterTableDepths= waterTableDepths)
         self.setExcavationDepths(excavationDepths= excavationDepths)
+        self.waterUnitWeight= waterUnitWeight
 
     def getTotalDepth(self):
         ''' Return the distance from the deepest to the shallwest depth in the
@@ -319,19 +323,18 @@ class SoilLayers(object):
         :param depth: depth to compute the pressure at.
         '''
         retval= 0.0
-        waterUnitWeight= 1e3*g
         # Pressure to the right.
         leftWaterTableDepth= self.getLeftWaterTableDepth()
         leftHead= depth-leftWaterTableDepth
         leftPressure= 0.0
         if(leftHead>0):
-            leftPressure= waterUnitWeight*leftHead # to the right.
+            leftPressure= self.waterUnitWeight*leftHead # to the right.
         # Pressure to the left.
         rightWaterTableDepth= self.getRightWaterTableDepth()
         rightHead= depth-rightWaterTableDepth
         rightPressure= 0.0
         if(rightHead>0):
-            rightPressure= waterUnitWeight*rightHead # to the left.
+            rightPressure= self.waterUnitWeight*rightHead # to the left.
         retval= leftPressure-rightPressure
         return retval
 
@@ -346,12 +349,13 @@ class SoilLayers(object):
         retval= 0.0
         if(depth>self.depths[0]):
             lastDepth= self.depths[0]
+            waterDensity= self.waterUnitWeight/g
             for i, d in enumerate(self.depths):
                 soil= self.soils[i]
                 gamma= soil.gamma()
                 currentDepth= min(depth, d)
                 if(currentDepth>self.getWaterTableDepth(rightSide= rightSide)):
-                    gamma= soil.submergedGamma()
+                    gamma= soil.submergedGamma(waterDensity= waterDensity)
                 soilThickness= currentDepth-lastDepth
                 retval+= gamma*soilThickness
                 if(abs(currentDepth-depth)<1e-6):
@@ -383,7 +387,7 @@ class PileWall(object):
     :ivar previousExcavationDepthIndex: index of the last computed excavation depth.
     '''
     
-    def __init__(self, pileSection, soilLayersDepths, soilLayers, excavationDepths, pileSpacing= 1.0, waterTableDepths= [None, None], alphaAngle= 0.0):
+    def __init__(self, pileSection, soilLayersDepths, soilLayers, excavationDepths, pileSpacing= 1.0, waterTableDepths= [None, None], waterUnitWeight= 1e3*g, alphaAngle= 0.0):
         '''Constructor.
 
         :param pileSection: 2D elastic shear section for the pile wall beam
@@ -394,10 +398,11 @@ class PileWall(object):
         :param pileSpacing: distance between pile axes.
         :param waterTableDepths: [float, float] depth of the water table at both
                                 sides of the pile wall [left, right].
+        :param waterUnitWeight: water weight per volume unit.
         :param alphaAngle: inclination of the back face.
         '''
         self.pileSection= pileSection
-        self.soilLayers= SoilLayers(depths= soilLayersDepths, soils= soilLayers, waterTableDepths= waterTableDepths, excavationDepths= excavationDepths)
+        self.soilLayers= SoilLayers(depths= soilLayersDepths, soils= soilLayers, waterTableDepths= waterTableDepths, waterUnitWeight= waterUnitWeight, excavationDepths= excavationDepths)
         self.pileSpacing= pileSpacing
         self.alphaAngle= alphaAngle
         self.solProc= None
