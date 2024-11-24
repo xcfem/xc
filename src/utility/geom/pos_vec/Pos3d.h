@@ -70,6 +70,8 @@ class Pos3d : public ProtoGeom
       { return cgpt; }
     GEOM_FT at0(const size_t &i) const;
     GEOM_FT operator()(const size_t &i) const;
+    inline GEOM_FT operator[](const size_t &j) const //Base 0
+      { return at0(j); }
     inline const GEOM_FT x() const
       { return Pos3d::operator()(1); }
     inline const GEOM_FT y() const

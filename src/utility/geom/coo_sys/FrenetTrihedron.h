@@ -27,6 +27,8 @@
 #include "../ProtoGeom.h"
 #include "utility/geom/d1/Polyline3d.h"
 #include "utility/geom/pos_vec/Vector3d.h"
+#include "Rect3d3dCooSys.h"
+#include "utility/geom/coo_sys/ref_sys/Ref3d3d.h"
 #include <map>
 
 //!  @brief Coordinate systems base class.
@@ -49,9 +51,13 @@ class FrenetTrihedron: public ProtoGeom
     FrenetTrihedron(void);
     FrenetTrihedron(const Polyline3d &);
 
+    const Polyline3d &getPath(void) const;
+
     Vector3d getTangent(const double &) const;
     Vector3d getNormal(const double &) const;
     Vector3d getBinormal(const double &) const;
+    Rect3d3dCooSys getCooSys(const double &) const;
+    Ref3d3d getRefSys(const double &) const;    
     
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);

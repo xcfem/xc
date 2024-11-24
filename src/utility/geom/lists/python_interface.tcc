@@ -28,6 +28,7 @@ class_<dq_pos2d>("dq_pos2d")
 class_<polyPos2d, bases<dq_pos2d> >("PolyPos2d")
   .def("getCenterOfMass", &polyPos2d::getCenterOfMass, "Return the center of mass of the point list.")
   .def("close", &polyPos2d::close, "Close the point list (insert the first point as its last one).")
+  .def("getIthCoordinates", &polyPos2d::getIthCoordinates, "Return the list of values for j-th coordinate.")
   ;
 
 class_<dq_pos3d>("dq_pos3d")
@@ -37,5 +38,6 @@ class_<dq_pos3d>("dq_pos3d")
 class_<polyPos3d, bases<dq_pos3d> >("PolyPos3d")
   .def("getCenterOfMass", &polyPos3d::getCenterOfMass, "Return the center of mass of the point list.")
   .def("close", &polyPos3d::close, "Close the point list (insert the first point as its last one).")
+  .def("getIthCoordinates", &polyPos3d::getIthCoordinates, "Return the list of values for j-th coordinate.")
   ;
 

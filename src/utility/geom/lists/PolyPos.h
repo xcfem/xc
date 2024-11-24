@@ -97,6 +97,7 @@ class PolyPos : public std::deque<pos>
     const_iterator getSegmentAtLength(const GEOM_FT &s) const;
     int getIndexOfSegmentAtLength(const GEOM_FT &s) const;
     int getIndexOfSegmentAtParam(const GEOM_FT &lambda) const;
+    boost::python::list getIthCoordinates(unsigned short i) const;
     GEOM_FT GetMax(unsigned short i) const;
     GEOM_FT GetMin(unsigned short i) const;
     PolyPos GetMayores(unsigned short int i,const GEOM_FT &d) const;
@@ -300,6 +301,22 @@ int PolyPos<pos>::getIndexOfSegmentAtLength(const GEOM_FT &s) const
 template <class pos>
 int PolyPos<pos>::getIndexOfSegmentAtParam(const GEOM_FT &lambda) const
   { return this->getIndexOfSegmentAtParam(lambda*this->getLength()); }
+
+//! @brief Return the list of values for j-th coordinate.
+template <class pos>
+boost::python::list PolyPos<pos>::getIthCoordinates(unsigned short j) const
+  {
+    boost::python::list retval;
+    if(!this->empty())
+      {
+        for(const_iterator i=this->begin();i!=this->end(); i++)
+	  {
+	    const GEOM_FT value= (*i)[j];
+	    retval.append(value);
+	  }
+      }
+    return retval;
+  }
 
 //! @brief Return the maximum value of j-th coordinate.
 template <class pos>

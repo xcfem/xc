@@ -36,6 +36,10 @@ FrenetTrihedron::FrenetTrihedron(const Polyline3d &pth)
     compute_vectors();
   }
 
+//! @brief Return the underlying path.
+const Polyline3d &FrenetTrihedron::getPath(void) const
+  { return this->path; }
+
 //! @brief Compute a map that relates a lenght with its
 //! corresponding segment (v_i, v_(i+1)) in the path.
 FrenetTrihedron::IntervalMap FrenetTrihedron::compute_interval_map(void)
@@ -133,8 +137,8 @@ void FrenetTrihedron::compute_vectors(void)
 		thisVertexIter= vi-1;
 		nextVertexIter= vi;
 	      }
-	    const Pos3d &A= *thisVertexIter;
-	    const Pos3d &B= *previousVertexIter;
+	    const Pos3d &A= *previousVertexIter;
+	    const Pos3d &B= *thisVertexIter;
 	    const Pos3d &C= *nextVertexIter;
 	    const Pos3d center= circle_center(A, B, C);
 	    const Vector3d normal= (center-*vi);
@@ -218,6 +222,25 @@ Vector3d FrenetTrihedron::getBinormal(const double &s) const
     else
       std::cerr << "Index out of range." << std::endl;
     return retval;
+  }
+
+//! @brief Return the coordinate system corresponding to the given arc length.
+//! @param s: arc length.
+Rect3d3dCooSys FrenetTrihedron::getCooSys(const double &s) const
+  {
+    const Vector3d t= this->getTangent(s);
+    const Vector3d n= this->getNormal(s);
+    const Vector3d b= this->getBinormal(s);
+    return Rect3d3dCooSys(t, n, b);
+  }
+
+//! @brief Return the coordinate reference system corresponding to the
+//! given arc length.
+//! @param s: arc length.
+Ref3d3d FrenetTrihedron::getRefSys(const double &s) const
+  {
+    const Pos3d org= path.getPointAtLength(s);
+    return Ref3d3d(org,this->getCooSys(s));
   }
 
 //! @brief Prints the matrix.
