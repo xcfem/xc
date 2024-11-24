@@ -43,7 +43,7 @@ n2= nodes.newNodeXYZ(L,0.0,0.0)
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 
 # Materials definition
-scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
+scc= typical_materials.defElasticSection3d(preprocessor, "scc",A= A, E= E, G= G, Iz= Iz, Iy= Iy, J= J)
 scc.sectionProperties.rotate(math.radians(90))
 
 # Elements definition

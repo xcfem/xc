@@ -35,7 +35,7 @@ scc10x20= section_properties.RectangularSection(name="rectang",b=.10,h=.20) # Se
 matscc10x20= typical_materials.MaterialData(name='mtrectang',E=2.1e6,nu=0.3,rho=2500) # Section material.
 
 # Material definition
-matPoteau= scc10x20.defElasticSection3d(preprocessor,matscc10x20)
+matPoteau= scc10x20.defElasticSection3d(preprocessor, matscc10x20)
 matPoteau.setProp('Test', 2.71828)
 
 propNamesA= matPoteau.getPropNames()

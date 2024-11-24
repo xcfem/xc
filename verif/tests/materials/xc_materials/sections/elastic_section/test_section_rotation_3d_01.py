@@ -17,7 +17,7 @@ __email__= "l.pereztato@gmail.com"
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 # Define materials
-scc= typical_materials.defElasticSection3d(preprocessor, "scc",1,1,1,Iz,Iy,4)
+scc= typical_materials.defElasticSection3d(preprocessor, name= "scc", A= 1, E= 1, G= 1, Iz= Iz, Iy= Iy, J= 4)
 scc.sectionProperties.rotate(math.radians(90))
 ratio0= abs(Iy-scc.sectionProperties.Iz)/Iy
 ratio1= abs(Iz-scc.sectionProperties.Iy)/Iz

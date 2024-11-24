@@ -22,7 +22,7 @@ ratio3= 10
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 # Define materials
-scc= typical_materials.defElasticSection3d(preprocessor, "scc",1,1,1,Iz,Iy,4)
+scc= typical_materials.defElasticSection3d(preprocessor, "scc",A= 1, E= 1, G= 1, Iz= Iz, Iy= Iy, J= 4)
 scc.sectionProperties.rotate(math.radians(45))
 
 I1= scc.sectionProperties.getI1()
