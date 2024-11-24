@@ -15,13 +15,13 @@ from geotechnics import earth_pressure
 from materials import typical_materials
 
 phi= math.pi/6.0
-rankineSoil= earth_pressure.RankineSoil(phi, rho= 2000)
+rankineSoil= earth_pressure.RankineSoil(phi, rho= 2000, Kh= 30e6)
 
 depth= 3.0 # 3 m
 tributaryArea= 1.5 # 1.5 m2
 
 sg_v= rankineSoil.getVerticalStressAtDepth(z= depth)
-samplePoints, initStrain= earth_pressure.get_horizontal_soil_reaction_diagram(sg_v= sg_v, tributaryArea= tributaryArea, Ka= rankineSoil.Ka(), K0= rankineSoil.K0Jaky(), Kp= rankineSoil.Kp(), Kh= 30e6)
+samplePoints, initStrain= earth_pressure.get_horizontal_soil_reaction_diagram(sg_v= sg_v, tributaryArea= tributaryArea, Ka= rankineSoil.Ka(), K0= rankineSoil.K0Jaky(), Kp= rankineSoil.Kp(), Kh= rankineSoil.Kh)
 
 # Model definition
 feProblem= xc.FEProblem()

@@ -13,8 +13,7 @@ from materials.ehe import EHE_limit_state_checking
 
 # Materials definition
 ## Soil material
-soil= earth_pressure.RankineSoil(phi= math.radians(32), rho= 15.90e3/g, rhoSat= 19.33e3/g)
-soil.Kh= 30e6
+soil= earth_pressure.RankineSoil(phi= math.radians(32), rho= 15.90e3/g, rhoSat= 19.33e3/g, Kh= 30e6)
 ### Soil strata.
 L1= 5.0 #5.0 # Excavation depth (m)
 Dteory= 4.7
@@ -28,7 +27,7 @@ steel= EHE_materials.B500S
 diameter= 450e-3 # Cross-section diameter [m]
 pileSection= def_column_RC_section.RCCircularSection(name='test',Rext= diameter/2.0, concrType=concr, reinfSteelType= steel)
 
-pileWall= pw.PileWall(pileSection= pileSection, soilLayersDepths= soilLayersDepths, soilLayers= soilLayers, excavationDepths= [L1], pileSpacing= 1.0, waterTableDepth= [None, None])
+pileWall= pw.PileWall(pileSection= pileSection, soilLayersDepths= soilLayersDepths, soilLayers= soilLayers, excavationDepths= [L1], pileSpacing= 1.0, waterTableDepths= [None, None])
 
 # Mesh generation
 pileWall.genMesh()
@@ -40,7 +39,6 @@ pileWall.solve(excavationSide= 'left', reactionCheckTolerance= reactionCheckTole
 # Get results.
 results= pileWall.getResultsDict()
 
-outputTable= pw.get_results_table(resultsDict= results)
 
 # Compute maximum bending moment.
 MMin= 6.023e23
@@ -59,6 +57,7 @@ err= abs(max(abs(MMax), abs(MMin))+refValue)/refValue
 import os
 fname= os.path.basename(__file__)
 from tabulate import tabulate
+outputTable= pw.get_results_table(resultsDict= results)
 content= tabulate(outputTable, headers= 'firstrow', tablefmt="tsv")
 print('\nASCII output:')
 print(content)

@@ -19,13 +19,12 @@ from materials import typical_materials
 
 # Define soil model.
 phi= math.pi/6.0
-rankineSoil= earth_pressure.RankineSoil(phi, rho= 2000)
+rankineSoil= earth_pressure.RankineSoil(phi, rho= 2000, Kh= 15e5)
 
 # Define depth and tributary area corresponding to the spring simulating
 # the soil reaction.
 depth= 3.0 # 3 m
 tributaryArea= 1.5 # 1.5 m2
-Kh= 15e5 # horizontal subgrade modulus.
 
 # FE problem definition
 feProblem= xc.FEProblem()
@@ -36,7 +35,7 @@ modelSpace= predefined_spaces.SolidMechanics1D(nodes)
 
 ## Nonlinear spring material
 sg_v= rankineSoil.getVerticalStressAtDepth(z= depth)
-nlSpringMaterial= rankineSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= 'nlSpringMaterial', sg_v= sg_v, tributaryArea= tributaryArea, Kh= Kh)
+nlSpringMaterial= rankineSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= 'nlSpringMaterial', sg_v= sg_v, tributaryArea= tributaryArea)
 
 nlSpringMaterial.setTrialStrain(0.0, 0.0)
 nlSpringMaterial.commitState()

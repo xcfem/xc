@@ -29,13 +29,9 @@ ksi= 1000*psi
 
 # Materials definition
 ## Soil materials
-### Dry soil.
-soil1= earth_pressure.CoulombSoil(phi= math.radians(30), rho= 105*pcf/g, rhoSat= 105*pcf/g)
-soil1.Kh= 2.9*pci
-soil2= earth_pressure.CoulombSoil(phi= math.radians(30), rho= 128.5*pcf/g, rhoSat= 128.5*pcf/g)
-soil2.Kh= 15*pci
-soil3= earth_pressure.BellSoil(phi= math.radians(0.0), c= 1500*psf, rho= 122.5*pcf/g, rhoSat= 122.5*pcf/g)
-soil3.Kh= 87*pci
+soil1= earth_pressure.CoulombSoil(phi= math.radians(30), rho= 105*pcf/g, rhoSat= 105*pcf/g, Kh= 2.9*pci, deltaAngle= math.radians(20))
+soil2= earth_pressure.CoulombSoil(phi= math.radians(30), rho= 128.5*pcf/g, rhoSat= 128.5*pcf/g, Kh= 15*pci, deltaAngle= math.radians(20))
+soil3= earth_pressure.BellSoil(phi= math.radians(0.0), c= 1500*psf, rho= 122.5*pcf/g, rhoSat= 122.5*pcf/g, Kh= 87*pci, deltaAngle= math.radians(0))
 ### Soil strata.
 L0= -8*ft # pile wall top (m).
 L1= L0+4*ft # position of the anchor (m).
@@ -55,8 +51,8 @@ anchorSectionGeometry= section_properties.GenericSection1D(name= 'anchor_section
 anchorMaterial= typical_materials.ElasticPerfectlyPlasticMaterial(E= 29e6*psi, nu= 0.3, fyp= 40*ksi, fyn= -40e3*ksi)
 anchorSectionMaterial= typical_materials.BeamMaterialData(name= 'anchor_section', section= anchorSectionGeometry, material= anchorMaterial)
 
-lastExcavationDepth= L4 # L4 (debugging)
-pileWall= pw.PileWall(pileSection= sheetPileSectionMaterial, soilLayersDepths= soilLayersDepths, soilLayers= soilLayers, excavationDepths= [L1, lastExcavationDepth], pileSpacing= 1.0*ft, waterTableDepth= [L2, L3])
+lastExcavationDepth= L4
+pileWall= pw.PileWall(pileSection= sheetPileSectionMaterial, soilLayersDepths= soilLayersDepths, soilLayers= soilLayers, excavationDepths= [L1, lastExcavationDepth], pileSpacing= 1.0*ft, waterTableDepths= [L3, L2])
 
 # Mesh generation
 pileWall.genMesh(elemSize= 0.1)
@@ -74,14 +70,25 @@ newNode= modelSpace.newNodeXY(40*ft, anchorNode.getInitialPos3d.y)
 ## Fix the new node.
 modelSpace.fixNode('000', newNode.tag)
 modelSpace.setElementDimension(2) # Truss defined in a two-dimensional space.
-#xcAnchorMaterial= anchorMaterial.defElasticPPMaterial(preprocessor= modelSpace.preprocessor, name= 'anchor_material')
-xcAnchorMaterial= anchorMaterial.defElasticMaterial(preprocessor= modelSpace.preprocessor, name= 'anchor_material')
+xcAnchorMaterial= anchorMaterial.defElasticPPMaterial(preprocessor= modelSpace.preprocessor, name= 'anchor_material')
+# xcAnchorMaterial= anchorMaterial.defElasticMaterial(preprocessor= modelSpace.preprocessor, name= 'anchor_material')
 modelSpace.setDefaultMaterial(xcAnchorMaterial) # Set the material for the new element.
 anchorElement= modelSpace.newElement("Truss",nodeTags= [anchorNode.tag, newNode.tag])
 anchorElement.sectionArea= 1.0*inch**2
 
-# Get top node.
+# Apply the load on the top node.
+## Get top node.
 topNode= pileWall.getTopNode()
+## Load definition.
+F= 1000*lbf
+lp0= pileWall.modelSpace.newLoadPattern(name= '0')
+lp0.newNodalLoad(topNode.tag,xc.Vector([-F,0,0]))
+## Add the load case to the domain.
+pileWall.modelSpace.addLoadCaseToDomain(lp0.name)
+ok= pileWall.solProc.solve()
+if(ok!=0):
+    lmsg.error('Can\'t solve.')
+    exit(1)
 
 # Excavate until the soil 3 is reached.
 reactionCheckTolerance= 1e-5
@@ -90,13 +97,62 @@ pileWall.solve(excavationDepthIndex= 1, excavationSide= 'left', reactionCheckTol
 # Get results.
 results= pileWall.getResultsDict()
 
+# Compute maximum bending moment and displacement.
+MMin= 6.023e23
+MMax= -MMin
+UMax= MMax
+UMin= MMin
+for nodeTag in results:
+    nodeResults= results[nodeTag]
+    depth= nodeResults['depth']
+    M= nodeResults['M']
+    MMin= min(MMin, M)
+    MMax= max(MMax, M)
+    U= nodeResults['Ux']
+    UMin= min(UMin, U)
+    UMax= max(UMax, U)
+
+# Compare results.
 anchorElement.getResistingForce()
 N= anchorElement.getN()
 Nref= 8455.33*lbf
+ratio1= abs(N-Nref)/Nref
+
+UMaxRef= 6.129e-1*inch
+ratio2= abs(UMax-UMaxRef)/UMaxRef
+UMinRef= -2.26*inch # See page 65 of the reference document.
+ratio3= abs(UMin-UMinRef)/UMinRef
+MMaxRef= 6.171e4*lbf*ft
+ratio4= abs(MMax-MMaxRef)/MMaxRef
+MMinRef= -4.824e3*lbf*ft 
+ratio5= abs(MMin-MMinRef)/MMinRef
+
+
+import os
+fname= os.path.basename(__file__)
+csvFileName= fname.replace(".py", ".csv")
+from tabulate import tabulate
+outputTable= pw.get_results_table(resultsDict= results)
+content= tabulate(outputTable, headers= 'firstrow', tablefmt="tsv")
+with open(csvFileName, "w") as csvFile:
+    csvFile.write(content)
 
 print('anchor node displacement: ', anchorNode.getDisp[0]*1e3, 'mm')
 print('anchor axial force N= ', N/1e3, 'kN')
+print('ratio1= ', ratio1)
 print('reference anchor axial force Nref= ', Nref/1e3, 'kN')
+print('\nUMax= ', UMax*1e3, 'mm')
+print('UMaxRef= ', UMaxRef*1e3, 'mm')
+print('ratio2= ', ratio2)
+print('UMin= ', UMin*1e3, 'mm')
+print('UMinRef= ', UMinRef*1e3, 'mm')
+print('ratio3= ', ratio3)
+print('\nMMax= ', MMax/1e3, 'kN.m')
+print('MMaxRef= ', MMaxRef/1e3, 'kN.m')
+print('ratio4= ', ratio4)
+print('MMin= ', MMin/1e3, 'kN.m')
+print('MMinRef= ', MMinRef/1e3, 'kN.m')
+print('ratio5= ', ratio5)
 
 # Matplotlib output.
 pw.plot_results(resultsDict= results, title= 'Test based on the example 2 of the CWALSSI program manual.')
@@ -106,8 +162,8 @@ from postprocess import output_handler
 oh= output_handler.OutputHandler(pileWall.modelSpace)
 oh.displayFEMesh()
 # oh.displayLocalAxes()
-# oh.displayLoads()
+oh.displayLoads()
 oh.displayReactions(reactionCheckTolerance= reactionCheckTolerance)
 oh.displayDispRot('uX', defFScale= 10.0)
-# oh.displayIntForcDiag('M')
+oh.displayIntForcDiag('M')
 # oh.displayIntForcDiag('V')

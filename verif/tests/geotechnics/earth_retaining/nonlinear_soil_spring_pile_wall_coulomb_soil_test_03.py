@@ -17,11 +17,9 @@ from materials.ehe import EHE_limit_state_checking
 # Materials definition
 ## Soil materials
 ### Dry soil.
-drySoil= earth_pressure.CoulombSoil(phi= math.radians(32), rho= 15.90e3/g, rhoSat= 19.33e3/g)
-drySoil.Kh= 30e6
+drySoil= earth_pressure.CoulombSoil(phi= math.radians(32), rho= 15.90e3/g, rhoSat= 19.33e3/g, Kh= 30e6)
 ### Wet soil.
-wetSoil= earth_pressure.CoulombSoil(phi= math.radians(32), rho= 15.90e3/g, rhoSat= 19.33e3/g)
-wetSoil.Kh= 30e6
+wetSoil= earth_pressure.CoulombSoil(phi= math.radians(32), rho= 15.90e3/g, rhoSat= 19.33e3/g, Kh= 30e6)
 ### Soil strata.
 L1= 2.0 # Water table depth (m).
 L2= L1+3.0 # Dredge line depth (m).
@@ -36,7 +34,7 @@ steel= EHE_materials.B500S
 diameter= 450e-3 # Cross-section diameter [m]
 pileSection= def_column_RC_section.RCCircularSection(name='test',Rext= diameter/2.0, concrType=concr, reinfSteelType= steel)
 
-pileWall= pw.PileWall(pileSection= pileSection, soilLayersDepths= soilLayersDepths, soilLayers= soilLayers, excavationDepths= [L2], pileSpacing= 1.0, waterTableDepth= [L1, L1])
+pileWall= pw.PileWall(pileSection= pileSection, soilLayersDepths= soilLayersDepths, soilLayers= soilLayers, excavationDepths= [L2], pileSpacing= 1.0, waterTableDepths= [L1, L1])
 
 # Mesh generation
 pileWall.genMesh()

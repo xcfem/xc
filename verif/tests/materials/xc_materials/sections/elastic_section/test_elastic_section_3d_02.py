@@ -45,7 +45,7 @@ SHS50x50x2_5.alpha= 5/6 # XXX Corregir
 
 
 # Materials definition
-mat= SHS50x50x2_5.defElasticSection3d(preprocessor,matSHS50x50x2_5)
+mat= SHS50x50x2_5.defElasticSection3d(preprocessor, matSHS50x50x2_5)
 elemZLS= zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, SHS50x50x2_5.name)
 
 # Constraints

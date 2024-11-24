@@ -15,17 +15,16 @@ from geotechnics import earth_pressure
 
 # Define soil model.
 phi= math.pi/6.0
-rankineSoil= earth_pressure.RankineSoil(phi, rho= 2000)
+rankineSoil= earth_pressure.RankineSoil(phi, rho= 2000, Kh= 15e5)
 
 # Define depth and tributary area corresponding to the spring simulating
 # the soil reaction.
 depth= 3.0 # 3 m
 tributaryArea= 1.5 # 1.5 m2
-Kh= 15e5 # horizontal subgrade modulus.
 
 # Compute sample points.
 sg_v= rankineSoil.getVerticalStressAtDepth(z= depth)
-samplePoints, initStrain= earth_pressure.get_horizontal_soil_reaction_diagram(sg_v= sg_v, tributaryArea= tributaryArea, Ka= rankineSoil.Ka(), K0= rankineSoil.K0Jaky(), Kp= rankineSoil.Kp(), Kh= Kh)
+samplePoints, initStrain= earth_pressure.get_horizontal_soil_reaction_diagram(sg_v= sg_v, tributaryArea= tributaryArea, Ka= rankineSoil.Ka(), K0= rankineSoil.K0Jaky(), Kp= rankineSoil.Kp(), Kh= rankineSoil.Kh)
 refPoints= [(0.0, 29125.750500000006), (1.46119335, 29419.950000000004), (1.471, 44129.924999999996), (1.61809975, 264779.54999999993), (2.9419975, 267427.34549999994)]
 
 err= 0.0

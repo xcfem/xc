@@ -1444,6 +1444,14 @@ class BeamMaterialData(MaterialData):
     def getRho(self):
         '''return the mass per unit length'''
         return self.rho*self.section.A()
+
+    def EIz(self):
+        ''' Returm the bending stiffness.'''
+        return self.material.E*self.section.Iz()
+    
+    def EIy(self):
+        ''' Returm the bending stiffness.'''
+        return self.material.E*self.section.Iy()
     
     def defElasticShearSection3d(self, preprocessor, overrideRho= None):
         '''Return an elastic section appropriate for 3D beam linear 

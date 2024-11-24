@@ -25,7 +25,7 @@ def get_results_table(resultsDict):
 
     :param resultsDict: dictionary containing the results.
     '''
-    headerRow= ['#', 'fixed node', 'depth (m)', 'Ux (mm)', 'M (kN.m)', 'V (kN)', 'pres. dif. (kN/m)', 'Rx (kN)', 'Ea (kN)', 'E0 (kN)', 'Ep (kN)']
+    headerRow= ['#', 'fixed node', 'depth (m)', 'Ux (mm)', 'M (kN.m)', 'V (kN)', 'pres. dif. (kN/m)', 'Rx (kN)', 'leftEa (kN)', 'leftE0 (kN)', 'leftEp (kN)', 'rightEa (kN)', 'rightE0 (kN)', 'rightEp (kN)', 'netWp (kN)', 'a (m2)']
     retval= list()
     for nodeTag in resultsDict:
         nodeResults= resultsDict[nodeTag]
@@ -43,6 +43,8 @@ def get_results_table(resultsDict):
         outputRow.append(cf.Force.format(nodeResults['rightEa']/1e3)) # active force at the right side.
         outputRow.append(cf.Force.format(nodeResults['rightE0']/1e3)) # at-rest force at the right side.
         outputRow.append(cf.Force.format(nodeResults['rightEp']/1e3)) # passive force at the right side.
+        outputRow.append(cf.Force.format(nodeResults['netWp']/1e3)) # net hydrostatic force.
+        outputRow.append(cf.Area.format(nodeResults['tributaryArea'])) # tributary area.
         retval.append(outputRow)
     # Sort on depth
     retval= sorted(retval, key=lambda x: float(x[2]))
@@ -109,7 +111,7 @@ def plot_results(resultsDict, title= None):
         ax.set_title(title)
         ax.grid()
         
-    fig, (disp, moment, shear, presDif, soilReact) = plt.subplots(1, 5)
+    fig, (disp, moment, shear, presDif, soilReact, netWp) = plt.subplots(1, 6)
     pileWallColor= 'tab:blue'
     diagramsColor= 'tab:red'
     # Plot displacements.
@@ -126,6 +128,9 @@ def plot_results(resultsDict, title= None):
     
     # Plot soil reactions.
     plot_diagram(ax= soilReact, resultsDict= resultsDict, title= 'Soil Reac.', x_field= 'Rx', x_scale_factor= 1e-3, x_label= '$Rx (kN)$', y_field= 'depth', y_label= None)
+
+    # Plot hydrostatic force.
+    plot_diagram(ax= netWp, resultsDict= resultsDict, title= 'Net water force', x_field= 'netWp', x_scale_factor= 1e-3, x_label= '$net Wp (kN)$', y_field= 'depth', y_label= None)
 
     if(title):
         fig.suptitle(title)
@@ -144,18 +149,23 @@ class SoilLayers(object):
     :ivar leftWaterTableDepthIndex: index of the left water table depth in self.depths.
     :ivar rightWaterTableDepthIndex: index of the right water table depth in self.depths.
     :ivar excavationDepthIndexes: index of the excavation depth in self.depths.
-    '''
-    def __init__(self, depths, soils, waterTableDepth= [None, None], excavationDepths= None):
+    :ivar waterUnitWeight: water weight per volume unit.
+     '''
+    def __init__(self, depths, soils, waterTableDepths= [None, None], waterUnitWeight= 1e3*g, excavationDepths= None):
         '''Constructor.
 
         :param depths: (float list) layer depths.
         :param soils: soil objects for each layer.
-        :param waterTableDepth: depth of the water table.
+        :param waterTableDepths: depth of the water table ag both sides of the
+                                 wall.
+        :param waterUnitWeight: water weight per volume unit.
+        :param excavationDepths: excavation levels for each phase.
         '''
         self.depths= depths
         self.soils= soils
-        self.setWaterTableDepth(waterTableDepth= waterTableDepth)
+        self.setWaterTableDepths(waterTableDepths= waterTableDepths)
         self.setExcavationDepths(excavationDepths= excavationDepths)
+        self.waterUnitWeight= waterUnitWeight
 
     def getTotalDepth(self):
         ''' Return the distance from the deepest to the shallwest depth in the
@@ -169,36 +179,52 @@ class SoilLayers(object):
         :param newDepth: depth of interest.
         '''
         retval= -1
-        if(newDepth):
-            calculationDepths= list()
-            calculationSoils= list()
-            newDepthIndex= self.getSoilIndexAtDepth(depth= newDepth)
+        if(newDepth is not None):
+            existingDepthIndex= self.getSoilIndexAtDepth(depth= newDepth)
             # Check if already in depths list.
-            soilDepth= self.depths[newDepthIndex]
+            existingDepth= self.depths[existingDepthIndex]
             totalDepth= self.getTotalDepth()
             tol= totalDepth/1e3
-            if(abs(soilDepth-newDepth)>tol): # not in depths list.
+            if(abs(existingDepth-newDepth)>tol): # not in depths list.
+                calculationDepths= list()
+                calculationSoils= list()
                 for i, (d, soil) in enumerate(zip(self.depths, self.soils)):
                     calculationDepths.append(d)
                     calculationSoils.append(soil)
-                    if(i==newDepthIndex):
+                    if(i==existingDepthIndex):
                         calculationDepths.append(newDepth)
                         calculationSoils.append(soil)
-                        retval= newDepthIndex+1
+                        retval= existingDepthIndex+1
                 self.depths= calculationDepths
                 self.soils= calculationSoils
+                # Update indexes.
+                if(hasattr(self,'excavationDepthIndexes')):
+                   for i, excavationIndex in enumerate(self.excavationDepthIndexes):
+                       # update excavationIndexes
+                       if(self.excavationIndex>=retval):
+                           self.excavationDepthIndexes[i]+= 1
+
+                if(hasattr(self,'leftWaterTableDepthIndex')):
+                    # update leftWaterTableDepthIndex
+                    if(self.leftWaterTableDepthIndex>=retval):
+                        self.leftWaterTableDepthIndex+= 1
+                if(hasattr(self,'rightWaterTableDepthIndex')):
+                    # update rightWaterTableDepthIndex
+                    if(self.rightWaterTableDepthIndex>=retval):
+                        self.rightWaterTableDepthIndex+= 1
             else:
-                retval= newDepthIndex
+                retval= existingDepthIndex
         return retval
             
-    def setWaterTableDepth(self, waterTableDepth= [None, None]):
+    def setWaterTableDepths(self, waterTableDepths= [None, None]):
         ''' Recomputes the depths and soils list to take account of
             the water table.
 
-        :param waterTableDepth: depth of the water table.
+        :param waterTableDepths: depths of the water table at both sides
+                                 of the wall.
         '''
-        self.leftWaterTableDepthIndex= self.splitAtDepth(waterTableDepth[0])
-        self.rightWaterTableDepthIndex= self.splitAtDepth(waterTableDepth[1])
+        self.leftWaterTableDepthIndex= self.splitAtDepth(waterTableDepths[0])
+        self.rightWaterTableDepthIndex= self.splitAtDepth(waterTableDepths[1])
         
     def setExcavationDepths(self, excavationDepths= None):
         ''' Recomputes the depths and soils list to take account of
@@ -285,6 +311,11 @@ class SoilLayers(object):
         if(soilIndex>=0):
             retval= self.soils[soilIndex]
         return retval
+
+    def getHydrostaticGradient(self):
+        ''' Return the difference of water table levels between the sides of the
+            wall.'''
+        return self.getLeftWaterTableDepth()-self.getRightWaterTableDepth()
     
     def getNetHydrostaticPressureAtDepth(self, depth):
         ''' Returns the net hydrostatic presure at the given depth.
@@ -292,15 +323,19 @@ class SoilLayers(object):
         :param depth: depth to compute the pressure at.
         '''
         retval= 0.0
-        waterUnitWeight= 1e3*g
         # Pressure to the right.
         leftWaterTableDepth= self.getLeftWaterTableDepth()
-        if(depth>leftWaterTableDepth):
-            retval+= waterUnitWeight*(depth-leftWaterTableDepth) # to the right.
+        leftHead= depth-leftWaterTableDepth
+        leftPressure= 0.0
+        if(leftHead>0):
+            leftPressure= self.waterUnitWeight*leftHead # to the right.
         # Pressure to the left.
         rightWaterTableDepth= self.getRightWaterTableDepth()
-        if(depth>rightWaterTableDepth):
-            retval-= waterUnitWeight*(depth-rightWaterTableDepth) # to the left.
+        rightHead= depth-rightWaterTableDepth
+        rightPressure= 0.0
+        if(rightHead>0):
+            rightPressure= self.waterUnitWeight*rightHead # to the left.
+        retval= leftPressure-rightPressure
         return retval
 
     def getVerticalPressureAtDepth(self, depth, rightSide:bool):
@@ -314,12 +349,13 @@ class SoilLayers(object):
         retval= 0.0
         if(depth>self.depths[0]):
             lastDepth= self.depths[0]
+            waterDensity= self.waterUnitWeight/g
             for i, d in enumerate(self.depths):
                 soil= self.soils[i]
                 gamma= soil.gamma()
                 currentDepth= min(depth, d)
                 if(currentDepth>self.getWaterTableDepth(rightSide= rightSide)):
-                    gamma= soil.submergedGamma()
+                    gamma= soil.submergedGamma(waterDensity= waterDensity)
                 soilThickness= currentDepth-lastDepth
                 retval+= gamma*soilThickness
                 if(abs(currentDepth-depth)<1e-6):
@@ -337,7 +373,7 @@ class SoilLayers(object):
                           the left side.
         '''
         retval= self.getVerticalPressureAtDepth(depth= depth, rightSide= rightSide)*K
-        retval+= getNetHydrostaticPressureAtDepth(depth= depth)
+        retval-= getNetHydrostaticPressureAtDepth(depth= depth)
         return retval
 
     
@@ -348,12 +384,10 @@ class PileWall(object):
     :ivar pileSection: 2D elastic shear section for the pile wall beam elements.
     :ivar soilLayers: SoilLayers object.
     :ivar alphaAngle: inclination of the back face.
-    :ivar deltaAngle: friction angle between the soil and the back surface
-                      of the retaining wall (radians).
     :ivar previousExcavationDepthIndex: index of the last computed excavation depth.
     '''
     
-    def __init__(self, pileSection, soilLayersDepths, soilLayers, excavationDepths, pileSpacing= 1.0, waterTableDepth= [None, None], alphaAngle= 0.0, deltaAngle= 0.0):
+    def __init__(self, pileSection, soilLayersDepths, soilLayers, excavationDepths, pileSpacing= 1.0, waterTableDepths= [None, None], waterUnitWeight= 1e3*g, alphaAngle= 0.0):
         '''Constructor.
 
         :param pileSection: 2D elastic shear section for the pile wall beam
@@ -362,17 +396,15 @@ class PileWall(object):
         :param soilLayers: soil object for each layer.
         :param excavationDepths: list of excavation depths.
         :param pileSpacing: distance between pile axes.
-        :param waterTableDepth: [float, float] depth of the water table at both
+        :param waterTableDepths: [float, float] depth of the water table at both
                                 sides of the pile wall [left, right].
+        :param waterUnitWeight: water weight per volume unit.
         :param alphaAngle: inclination of the back face.
-        :param deltaAngle: friction angle between the soil and the back surface
-                           of the retaining wall (radians).
         '''
         self.pileSection= pileSection
-        self.soilLayers= SoilLayers(depths= soilLayersDepths, soils= soilLayers, waterTableDepth= waterTableDepth, excavationDepths= excavationDepths)
+        self.soilLayers= SoilLayers(depths= soilLayersDepths, soils= soilLayers, waterTableDepths= waterTableDepths, waterUnitWeight= waterUnitWeight, excavationDepths= excavationDepths)
         self.pileSpacing= pileSpacing
         self.alphaAngle= alphaAngle
-        self.deltaAngle= deltaAngle
         self.solProc= None
         self.previousExcavationDepthIndex= -1
 
@@ -473,8 +505,8 @@ class PileWall(object):
                 tributaryArea= tributaryLength*self.pileSpacing
                 materialName= 'soilResponse_z_'+str(n.tag)
                 nodeSoil= self.soilsAtNodes[n.tag]
-                leftNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_left', sg_v= left_sg_v, tributaryArea= tributaryArea, Kh= nodeSoil.Kh, alphaAngle= self.alphaAngle, deltaAngle= self.deltaAngle)
-                rightNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_right', sg_v= right_sg_v, tributaryArea= tributaryArea, Kh= nodeSoil.Kh, alphaAngle= self.alphaAngle, deltaAngle= self.deltaAngle)
+                leftNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_left', sg_v= left_sg_v, tributaryArea= tributaryArea, alphaAngle= self.alphaAngle)
+                rightNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_right', sg_v= right_sg_v, tributaryArea= tributaryArea, alphaAngle= self.alphaAngle)
 
             self.tributaryAreas[n.tag]= tributaryArea
             soilResponseMaterials[n.tag]= (leftNonLinearSpringMaterial, rightNonLinearSpringMaterial)
@@ -511,6 +543,19 @@ class PileWall(object):
                 zlRight.setupVectors(xc.Vector([1,0,0]),xc.Vector([0,1,0]))
                 self.rightZLElements[nodeTag]= zlRight
 
+    def defWaterPressureLP(self, loadPatternName= 'Wp'):
+        ''' Apply the water pressure to the wall.'''
+        waterForceAtNodes= self.getNetWaterForceAtNodes()
+        retval= None
+        if(waterForceAtNodes): # if not empty.
+            tsName= loadPatternName+'_ts'
+            ts= self.modelSpace.newTimeSeries(name= tsName, tsType= 'constant_ts')
+            retval= self.modelSpace.newLoadPattern(name= loadPatternName)
+            for nodeTag in waterForceAtNodes:
+                F= waterForceAtNodes[nodeTag]
+                nl= retval.newNodalLoad(nodeTag, xc.Vector([F, 0, 0]))
+        return retval
+        
     def getElemSize(self):
         ''' Return the size of the elements of the pile wall mesh.'''
         retval= None
@@ -585,13 +630,14 @@ class PileWall(object):
             newDepth= nodeDepth-currentExcavationDepth
             # Compute new soil response.
             soil= self.soilsAtNodes[nodeTag]
+            tributaryArea= self.tributaryAreas[nodeTag]
             sg_v= self.soilLayers.getVerticalPressureAtDepth(depth= nodeDepth, rightSide= rightSide)-sg_v0 # Vertical pressure at the excavation side.
-            newEa, newE0, newEp= soil.getEarthThrusts(sg_v= sg_v, tributaryArea= self.tributaryAreas[nodeTag], alphaAngle= self.alphaAngle, deltaAngle= self.deltaAngle)
+            newEa, newE0, newEp= soil.getEarthThrusts(sg_v= sg_v, tributaryArea= tributaryArea, alphaAngle= self.alphaAngle)
             # Update soil response.
             leftElementInitStrainMaterial= leftElement.getMaterials()[0]
             leftElementEyBasicMaterial= leftElementInitStrainMaterial.material
-
-            leftElementEyBasicMaterial.setParameters(soil.Kh, -newEp, -newEa)
+            kh= soil.Kh*tributaryArea # horizontal subgrade reaction for that node.
+            leftElementEyBasicMaterial.setParameters(kh, -newEp, -newEa)
             leftElementInitStrainMaterial.setInitialStress(-newE0)
             updatedElements.append(leftElement)
         return updatedElements
@@ -677,6 +723,14 @@ class PileWall(object):
         if(ok!=0):
             lmsg.error('Can\'t solve')
             exit(1)
+        if(excavationDepthIndex == 0): # initial state.
+            waterPressureLP= self.defWaterPressureLP()
+            if(waterPressureLP):
+                self.modelSpace.addLoadCaseToDomain(waterPressureLP.name)
+                ok= self.solProc.solve()
+                if(ok!=0):
+                    lmsg.error('Can\'t solve')
+                    exit(1)
             
         updatedElements= self.excavationProcess(excavationSide= excavationSide, excavationDepthIndex= excavationDepthIndex, logDepth= logDepth)
         self.modelSpace.calculateNodalReactions(reactionCheckTolerance= reactionCheckTolerance)
@@ -698,7 +752,6 @@ class PileWall(object):
         :param node: node of interest.
         '''
         nodeTag= node.tag
-        tributaryArea= self.tributaryAreas[nodeTag]
         leftMaterial= None
         if(nodeTag in self.leftZLElements):
             leftElement= self.leftZLElements[nodeTag]
@@ -708,43 +761,68 @@ class PileWall(object):
             rightElement= self.rightZLElements[nodeTag]
             rightMaterial= rightElement.getMaterials()[0].material
         if(leftMaterial):
-            leftEp= -leftMaterial.getLowerYieldStress()*tributaryArea
-            leftEa= -leftMaterial.getUpperYieldStress()*tributaryArea
+            leftEp= -leftMaterial.getLowerYieldStress()
+            leftEa= -leftMaterial.getUpperYieldStress()
         else:
             leftEa= 0.0
             leftEp= 0.0
         if(rightMaterial):
-            rightEp= -rightMaterial.getLowerYieldStress()*tributaryArea
-            rightEa= -rightMaterial.getUpperYieldStress()*tributaryArea
+            rightEp= -rightMaterial.getLowerYieldStress()
+            rightEa= -rightMaterial.getUpperYieldStress()
         else:
             rightEa= 0.0
             rightEp= 0.0
         excavationSide= self.computeExcavationSide()
-        depth= -node.getInitialPos3d.y
+        nodeDepth= -node.getInitialPos3d.y
         if(excavationSide=='left'):
-            leftDepth= max(depth-self.currentExcavationDepth, 0.0)
-            rightDepth= depth
+            depthAtLeft= max(nodeDepth-self.currentExcavationDepth, 0.0)
+            depthAtRight= nodeDepth
             left_sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= self.currentExcavationDepth, rightSide= False) # Vertical stress to remove at the excavation side.
             right_sg_v0= 0.0
         else: # excavation at right.
-            rightDepth= max(depth-self.currentExcavationDepth, 0.0)
-            sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= self.currentExcavationDepth, rightSide= True) # Vertical stress to remove at the excavation side.
-            leftDepth= depth
+            depthAtRight= max(nodeDepth-self.currentExcavationDepth, 0.0)
+            depthAtLeft= nodeDepth
+            right_sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= self.currentExcavationDepth, rightSide= True) # Vertical stress to remove at the excavation side.
             left_sg_v0= 0.0
             right_sg_v0= self.soilLayers.getVerticalPressureAtDepth(depth= self.currentExcavationDepth, rightSide= True) # Vertical stress to remove at the excavation side.
         soil= self.soilsAtNodes[nodeTag]
-        if(leftDepth>0):
-            left_sg_v= self.soilLayers.getVerticalPressureAtDepth(depth= depth, rightSide= False)-left_sg_v0 # Vertical pressure at left.
-            leftE0= soil.getAtRestPressure(sg_v= left_sg_v)
+        tributaryArea= self.tributaryAreas[nodeTag]
+        zeroDepth= self.getMinimumDepth() # Depth of the pile top.
+        if(depthAtLeft>zeroDepth):
+            left_sg_v= max(self.soilLayers.getVerticalPressureAtDepth(depth= nodeDepth, rightSide= False)-left_sg_v0, 0.0) # Vertical pressure at left.
+            leftE0= soil.getAtRestPressure(sg_v= left_sg_v)*tributaryArea
         else:
             leftE0= 0.0
-        if(rightDepth>0.0):
-            right_sg_v= self.soilLayers.getVerticalPressureAtDepth(depth= depth, rightSide= True)-right_sg_v0 # Vertical pressure at right.
-            rightE0= soil.getAtRestPressure(sg_v= right_sg_v)
+        if(depthAtRight>zeroDepth):
+            right_sg_v= max(self.soilLayers.getVerticalPressureAtDepth(depth= nodeDepth, rightSide= True)-right_sg_v0, 0.0) # Vertical pressure at right.
+            rightE0= soil.getAtRestPressure(sg_v= right_sg_v)*tributaryArea
         else:
             rightE0= 0.0
         
         return (leftEa, leftE0, leftEp), (rightEa, rightE0, rightEp)
+        
+    def getNetWaterForceAtNode(self, node):
+        ''' Extracts the values of the earth thrusts at the given node.
+
+        :param node: node of interest.
+        '''
+        nodeTag= node.tag
+        tributaryArea= self.tributaryAreas[nodeTag]
+        nodeDepth= -node.getInitialPos3d.y
+        netHydrostaticPressure= self.soilLayers.getNetHydrostaticPressureAtDepth(depth= nodeDepth)
+        return netHydrostaticPressure*tributaryArea
+
+    def getNetWaterForceAtNodes(self):
+        ''' Returns a dictionary containing the forces due to net hydrostatic 
+            pressure for each node.'''
+        hGradient= self.soilLayers.getHydrostaticGradient()
+        retval= dict()
+        if(abs(hGradient)>1e-6):
+            for n in self.pileSet.nodes:
+                force= self.getNetWaterForceAtNode(node= n)
+                if(abs(force)>1e-6):
+                    retval[n.tag]= force
+        return retval
         
     def getResultsDict(self):
         ''' Extracts earth pressures and internal forces from the model.'''
@@ -758,8 +836,9 @@ class PileWall(object):
             soil= self.soilsAtNodes[pileNode.tag]
             tributaryArea= self.tributaryAreas[pileNode.tag]
             
-            (leftEa, leftE0, leftEp), (rightEa, rightE0, rightEp)= self.getEarthThrustsAtNode(pileNode)
-            nodeResults= {'depth': depth, 'fixed_node':fixedNode.tag, 'Rx':Rx, 'leftE0':leftE0, 'leftEa':leftEa, 'leftEp':leftEp, 'rightE0':rightE0, 'rightEa':rightEa, 'rightEp':rightEp, 'Ux':Ux}
+            (leftEa, leftE0, leftEp), (rightEa, rightE0, rightEp)= self.getEarthThrustsAtNode(node= pileNode)
+            netWp= self. getNetWaterForceAtNode(node= pileNode)
+            nodeResults= {'depth': depth, 'fixed_node':fixedNode.tag, 'Rx':Rx, 'leftE0':leftE0, 'leftEa':leftEa, 'leftEp':leftEp, 'rightE0':rightE0, 'rightEa':rightEa, 'rightEp':rightEp, 'Ux':Ux, 'netWp':netWp, 'tributaryArea':tributaryArea}
             retval[pileNode.tag]= nodeResults
         # Get internal forces.
         for ln in self.pileSet.lines: # for lines in list
