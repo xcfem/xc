@@ -134,14 +134,14 @@ class RCSectionReportGenerator(object):
         grRltvFileName= self.graphicOutputRelPath+rcSection.name+'NMz'
         self.plotInteractionDiag(diag=diagNMz,title=rcSection.name+ ' N-Mz interaction diagram',xAxLab='Mz [kNm]',yAxLab='N [kN]',grFileNm=grFileName,reportFile= reportFile,grRltvFileNm=grRltvFileName)
 
-    def rcSectionsReport(self, preprocessor, rcSectionsToReport, reportFile, writeSection2= True):
+    def rcSectionsReport(self, preprocessor, rcSectionsToReport, writeSection2= True):
         ''' Write the RC section report in LaTeX format.
 
         :param preprocessor: pre-processor of the FE problem.
         :param rcSection: reinforced concrete section to write the report for.
-        :param reportFile: name of the LaTeX file where the figure will be included.
         :param writeSection2: if true, also report the 2nd section.
         '''
+        reportFile=open(self.reportFileName,'w')
         lastSteel= None
         lastConcrete= None
         #for sect in sections.sections:
@@ -163,3 +163,4 @@ class RCSectionReportGenerator(object):
                 # Section 2
                 # plotting of section geometric and mechanical properties
                 self.rcSectionLatexReport(preprocessor= preprocessor, rcSection= sect2, reportFile= reportFile)
+        reportFile.close()
