@@ -25,6 +25,7 @@ class SoilModel(object):
     ;ivar Kh: horizontal reaction modulus of the soil.
     :ivar deltaAngle: friction angle between the soil and the back surface
                       of the retaining wall.
+    :ivar gammaRe: partial safety factor for passive earth resistance.
     '''
     def __init__(self, beta= 0.0, Kh= None, deltaAngle= 0.0, gammaRe= 1.0):
         ''' Constructor.
@@ -129,7 +130,7 @@ class SoilModel(object):
         Kp= self.Kp(sg_v= sg_v, alphaAngle= alphaAngle, designValue= designValue)
         retval= Kp*sg_v
         if(designValue): # apply factor for passive earth resistance, 
-            retval*= self.gammaRe
+            retval/= self.gammaRe
         return retval
     
     def getAtRestPressure(self, sg_v, designValue= False):
@@ -198,7 +199,7 @@ class RankineSoil(SoilModel):
        resistance of the soil and the backfill is inclined at angle β to 
        the horizontal.
     '''
-    def __init__(self, phi, beta= 0.0, rho= 2100.0, rhoSat= None, gammaMPhi= 1.0, Kh= None, deltaAngle= 0.0):
+    def __init__(self, phi, beta= 0.0, rho= 2100.0, rhoSat= None, gammaMPhi= 1.0, Kh= None, deltaAngle= 0.0, gammaRe= 1.0):
         ''' Constructor.
 
         :param phi: internal friction angle of the soil.
@@ -210,8 +211,9 @@ class RankineSoil(SoilModel):
         ;param Kh: horizontal reaction modulus of the soil.
         :param deltaAngle: friction angle between the soil and the back surface
                            of the retaining wall.
+        :param gammaRe: partial safety factor for passive earth resistance.
         '''
-        super(RankineSoil,self).__init__(beta= beta, Kh= Kh, deltaAngle= deltaAngle)
+        super(RankineSoil,self).__init__(beta= beta, Kh= Kh, deltaAngle= deltaAngle, gammaRe= gammaRe)
         self.soil= fs.FrictionalSoil(phi= phi, rho= rho, rhoSat= rhoSat, gammaMPhi= gammaMPhi)
         
     def Ka(self, sg_v= None, alphaAngle= 0.0, designValue= False):
@@ -271,7 +273,7 @@ class CoulombSoil(SoilModel):
     '''Soil response according to Coulomb's theory.
 
     '''
-    def __init__(self, phi, beta= 0.0, rho= 2100.0, rhoSat= None, phi_cv= None, gammaMPhi= 1.0, E= 1e8, nu= 0.3, Kh= None, deltaAngle= 0.0):
+    def __init__(self, phi, beta= 0.0, rho= 2100.0, rhoSat= None, phi_cv= None, gammaMPhi= 1.0, E= 1e8, nu= 0.3, Kh= None, deltaAngle= 0.0, gammaRe= 1.0):
         ''' Constructor.
 
         :param phi: internal friction angle of the soil
@@ -286,8 +288,9 @@ class CoulombSoil(SoilModel):
         ;param Kh: horizontal reaction modulus of the soil.
         :param deltaAngle: friction angle between the soil and the back surface
                            of the retaining wall.
+        :param gammaRe: partial safety factor for passive earth resistance.
         '''
-        super(CoulombSoil,self).__init__(beta= beta, Kh= Kh, deltaAngle= deltaAngle)
+        super(CoulombSoil,self).__init__(beta= beta, Kh= Kh, deltaAngle= deltaAngle, gammaRe= gammaRe)
         self.soil= fs.FrictionalSoil(phi= phi, rho= rho, rhoSat= rhoSat, phi_cv= phi_cv, gammaMPhi= gammaMPhi, E= E, nu= nu)
 
     def Ka(self, sg_v= None, alphaAngle= 0.0, designValue= False):
@@ -318,7 +321,7 @@ class BellSoil(SoilModel):
     '''Soil response according to Bell's theory of earth pressure for clay.
 
     '''
-    def __init__(self, phi, c, beta= 0.0, rho= 2100.0, rhoSat= None, phi_cv= None, gammaMPhi= 1.0, gammaMc= 1.0, E= 1e8, nu= 0.3, Kh= None, deltaAngle= 0.0):
+    def __init__(self, phi, c, beta= 0.0, rho= 2100.0, rhoSat= None, phi_cv= None, gammaMPhi= 1.0, gammaMc= 1.0, E= 1e8, nu= 0.3, Kh= None, deltaAngle= 0.0, gammaRe= 1.0):
         ''' Constructor.
 
         :param phi: internal friction angle of the soil
@@ -335,8 +338,9 @@ class BellSoil(SoilModel):
         ;param Kh: horizontal reaction modulus of the soil.
         :param deltaAngle: friction angle between the soil and the back surface
                            of the retaining wall.
+        :param gammaRe: partial safety factor for passive earth resistance.
         '''
-        super(BellSoil,self).__init__(beta= beta, Kh= Kh, deltaAngle= deltaAngle)
+        super(BellSoil,self).__init__(beta= beta, Kh= Kh, deltaAngle= deltaAngle, gammaRe= gammaRe)
         self.soil= fcs.FrictionalCohesiveSoil(phi= phi, c= c, rho= rho, rhoSat= rhoSat, phi_cv= phi_cv, gammaMPhi= gammaMPhi, gammaMc= gammaMc, E= E, nu= nu)
 
     def getActivePressure(self, sg_v, alphaAngle= 0.0, designValue= False):
@@ -361,7 +365,7 @@ class BellSoil(SoilModel):
         '''
         retval= self.soil.eph_coulomb(sg_v= sg_v, a= alphaAngle, b= self.beta, d= self.deltaAngle, designValue= designValue)
         if(designValue): # apply factor for passive earth resistance, 
-            retval*= self.gammaRe
+            retval/= self.gammaRe
         return retval
     
     def getCoulombTensionCrackDepth(self, sg_v, alphaAngle= 0.0, designValue= False):
