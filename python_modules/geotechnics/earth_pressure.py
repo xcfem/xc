@@ -26,17 +26,19 @@ class SoilModel(object):
     :ivar deltaAngle: friction angle between the soil and the back surface
                       of the retaining wall.
     '''
-    def __init__(self, beta= 0.0, Kh= None, deltaAngle= 0.0):
+    def __init__(self, beta= 0.0, Kh= None, deltaAngle= 0.0, gammaRe= 1.0):
         ''' Constructor.
 
         :param beta: angle of backfill with horizontal
         ;param Kh: horizontal reaction modulus of the soil.
         :param deltaAngle: friction angle between the soil and the back surface
                            of the retaining wall.
+        :param gammaRe: partial safety factor for passive earth resistance.
         '''
         self.beta= beta
         self.Kh= Kh
         self.deltaAngle= deltaAngle
+        self.gammaRe= gammaRe
 
     def rho(self):
         ''' Return the soil density.'''
@@ -74,8 +76,8 @@ class SoilModel(object):
         if(alphaAngle==0.0):
             retval= self.beta
         else:
-            rhoAngle= 2*alphaAngle-self.beta+math.asin(math.sin(self.beta)/math.sin(self.soil.phi))
             sPhi= math.sin(self.soil.phi)
+            rhoAngle= 2*alphaAngle-self.beta+math.asin(math.sin(self.beta)/sPhi)
             retval= math.atan(sPhi*math.sin(rhoAngle)/(1-sPhi*math.cos(rhoAngle)))
         return retval
 
@@ -125,7 +127,10 @@ class SoilModel(object):
                             friction.
         '''
         Kp= self.Kp(sg_v= sg_v, alphaAngle= alphaAngle, designValue= designValue)
-        return Kp*sg_v
+        retval= Kp*sg_v
+        if(designValue): # apply factor for passive earth resistance, 
+            retval*= self.gammaRe
+        return retval
     
     def getAtRestPressure(self, sg_v, designValue= False):
         ''' Returns the at-rest presure corresponding to the given vertical
@@ -163,8 +168,8 @@ class SoilModel(object):
         :param sg_v: vertical stress.
         :param tributaryArea: area on which the pressure acts.
         :param alphaAngle: inclination of the back face.
-        :param designValue: if true use the design value of the internal 
-                            friction.
+        :param designValue: if true use the design value of the geotechnical 
+                            parameters.
         '''
         # Compute corresponding earth thrusts (active, at rest, passive).
         Ea, E0, Ep= self.getEarthThrusts(sg_v= sg_v, alphaAngle= alphaAngle, tributaryArea= tributaryArea, designValue= designValue)
@@ -234,8 +239,8 @@ class RankineSoil(SoilModel):
         else:
             # See figure 3.7.13 in ROM 0.5-05 chapter 3
             # https://www.puertos.es/es-es/BibliotecaV2/ROM%200.5-05%20(EN).pdf
-            rhoAngle= 2*alphaAngle-self.beta+math.asin(math.sin(self.beta)/math.sin(phi))
             sPhi= math.sin(phi)
+            rhoAngle= 2*alphaAngle-self.beta+math.asin(math.sin(self.beta)/sPhi)
             r= math.sqrt(sPhi**2- math.sin(self.beta)**2)
             n= math.sqrt(1+sPhi**2-2*sPhi*math.cos(rhoAngle))
             retval= math.cos(alphaAngle-self.beta)/(math.cos(alphaAngle)**2)*n/(math.cos(self.beta)*r)
@@ -266,7 +271,7 @@ class CoulombSoil(SoilModel):
     '''Soil response according to Coulomb's theory.
 
     '''
-    def __init__(self, phi, beta= 0.0, rho= 2100.0, rhoSat= None, phi_cv= None, gammaMPhi= 1.0, gammaMc= 1.0, E= 1e8, nu= 0.3, Kh= None, deltaAngle= 0.0):
+    def __init__(self, phi, beta= 0.0, rho= 2100.0, rhoSat= None, phi_cv= None, gammaMPhi= 1.0, E= 1e8, nu= 0.3, Kh= None, deltaAngle= 0.0):
         ''' Constructor.
 
         :param phi: internal friction angle of the soil
@@ -276,7 +281,6 @@ class CoulombSoil(SoilModel):
         :param phi_cv: critical state (constant volume) angle of shearing resistance of the soil. See clause 6.5.3 (10) of Eurocode 7 part 1. 
         :param gammaMPhi: (float) partial reduction factor for internal 
                           friction angle of the soil.
-        :param gammaMc: (float) partial reduction factor for soil cohesion.
         :param E: Young's modulus (defaults to 1e8 Pa).
         :param nu: Poisson's ratio (defaults to 0.3).
         ;param Kh: horizontal reaction modulus of the soil.
@@ -355,7 +359,10 @@ class BellSoil(SoilModel):
         :param designValue: if true use the design value of the internal 
                             friction.
         '''
-        return self.soil.eph_coulomb(sg_v= sg_v, a= alphaAngle, b= self.beta, d= self.deltaAngle, designValue= designValue)
+        retval= self.soil.eph_coulomb(sg_v= sg_v, a= alphaAngle, b= self.beta, d= self.deltaAngle, designValue= designValue)
+        if(designValue): # apply factor for passive earth resistance, 
+            retval*= self.gammaRe
+        return retval
     
     def getCoulombTensionCrackDepth(self, sg_v, alphaAngle= 0.0, designValue= False):
         ''' Return the depth of the tension crack (the depth at which
