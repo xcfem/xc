@@ -180,7 +180,7 @@ const XC::VectorReinfBar &XC::CircReinfLayer::getReinfBars(void) const
 
     if(num_barras > 1)
       {
-        const double dtheta = (finalAng-initAng) /(num_barras - 1);
+        const double dtheta = (finalAng-initAng)/num_barras;
 
         reinfBars.resize(num_barras);
 

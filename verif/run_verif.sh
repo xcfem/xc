@@ -1303,6 +1303,7 @@ python tests/materials/concrete_shapes/test_reinforcement_placement_08.py
 python tests/materials/concrete_shapes/test_reinforcement_definition_01.py
 python tests/materials/concrete_shapes/test_reinforcement_definition_02.py
 python tests/materials/concrete_shapes/test_reinforcement_definition_03.py
+python tests/materials/concrete_shapes/test_reinforcement_definition_04.py
 echo "$BLEU" "    Misc. (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_concrete_corbel_ehe.py
 python tests/materials/ehe/test_Ecm_concrete.py
