@@ -126,7 +126,7 @@ class FrictionalSoil(object):
                             friction.
         '''
         if(designValue):
-            phi= getDesignPhi()
+            phi= self.getDesignPhi()
         else:
             phi= self.phi
         if(b>phi):
