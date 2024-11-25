@@ -90,7 +90,7 @@ secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')
 
 scc= zlElement.getSection()
 secHAParamsFis.computeWk(scc,concr.matTagK,steel.matTagK,concr.fctm())
-ratio1= ((secHAParamsFis.Wk-0.383585469616e-3)/0.383585469616e-3)
+ratio1= ((secHAParamsFis.Wk-0.3540443136789274e-3)/0.3540443136789274e-3)
 
 
 
