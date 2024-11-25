@@ -41,17 +41,17 @@ section.defRCSection(preprocessor,matDiagType= 'd')
 diagIntsecHA= section.defInteractionDiagram(preprocessor)
 
 # Compute capacity factors.
-fc1= diagIntsecHA.getCapacityFactor(geom.Pos3d(1850e3,0,0))
-fc2= diagIntsecHA.getCapacityFactor(geom.Pos3d(-152e3,530e3,0))
-fc3= diagIntsecHA.getCapacityFactor(geom.Pos3d(-152e3,0,590e3))
-fc4= diagIntsecHA.getCapacityFactor(geom.Pos3d(-9097e3,0.0,0.0))
+fc1= diagIntsecHA.getCapacityFactor(geom.Pos3d(1930e3,0,0))
+fc2= diagIntsecHA.getCapacityFactor(geom.Pos3d(-152e3,548e3,0))
+fc3= diagIntsecHA.getCapacityFactor(geom.Pos3d(-152e3,0,551e3))
+fc4= diagIntsecHA.getCapacityFactor(geom.Pos3d(-9050e3,0.0,0.0))
 
 ratio1= abs(fc1-1)
 ratio2= abs(fc2-1)
 ratio3= abs(fc3-1.0)
 ratio4= abs(fc4-1.0)
 
-''' 
+'''
 print("fc1= ",fc1)
 print("ratio1= ",ratio1)
 print("fc2= ",fc2)
@@ -60,7 +60,7 @@ print("fc3= ",fc3)
 print("ratio3= ",ratio3)
 print("fc4= ",fc4)
 print("ratio4= ",ratio4)
- '''
+''' 
 
 import os
 from misc_utils import log_messages as lmsg
