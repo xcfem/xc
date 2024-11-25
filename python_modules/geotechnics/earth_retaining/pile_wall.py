@@ -906,6 +906,6 @@ class PileWall(object):
             nodeResults= retval[nodeTag]
             depth= nodeResults['depth']
             pDif= presDif(depth)
-            nodeResults['pDif']= pDif
+            nodeResults['pDif']= float(pDif)
         return retval
 
