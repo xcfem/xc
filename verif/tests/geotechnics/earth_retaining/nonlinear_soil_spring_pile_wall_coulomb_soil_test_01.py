@@ -39,8 +39,6 @@ pileWall.solve(excavationSide= 'left', reactionCheckTolerance= reactionCheckTole
 # Get results.
 results= pileWall.getResultsDict()
 
-outputTable= pw.get_results_table(resultsDict= results)
-
 # Compute maximum bending moment.
 MMin= 6.023e23
 MMax= -MMin
@@ -58,6 +56,7 @@ err= abs(max(abs(MMax), abs(MMin))+refValue)/refValue
 import os
 fname= os.path.basename(__file__)
 from tabulate import tabulate
+outputTable= pw.get_results_table(resultsDict= results)
 content= tabulate(outputTable, headers= 'firstrow', tablefmt="tsv")
 print('\nASCII output:')
 print(content)
