@@ -843,7 +843,7 @@ class PileWall(object):
         for n in self.pileSet.nodes:
             tributaryArea= self.tributaryAreas[n.tag]
             nodeSoil= self.soilsAtNodes[n.tag]
-            Ka= nodeSoil.Ka(sg_v= q, alphaAngle= alphaAngle, designValue= designValue)
+            Ka= nodeSoil.Ka(alphaAngle= alphaAngle, designValue= designValue)
             loadVector= xc.Vector([-Ka*q, 0, 0])*tributaryArea
             depth= -n.getInitialPos3d.y
             lp.newNodalLoad(n.tag, loadVector)
