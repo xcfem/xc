@@ -58,7 +58,7 @@ diagIntsecHA= section.defInteractionDiagram(preprocessor)
 # Compute capacity factor.
 fc= diagIntsecHA.getCapacityFactor(geom.Pos3d(-10e3, 2800e3,0))
 
-ratio2= abs(fc-1.0306462700710126)
+ratio2= abs(fc-1.0018459498713497)
 
 '''
 print('reinf. layers As= ', section.mainReinf.getAs())

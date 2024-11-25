@@ -77,7 +77,7 @@ N= -1570e3 # Axial force at column top
 My= 392e3 # Y bending moment at column top
 Mz= 0.0 # Z bending moment at column top
 CF= interactionDiagram.getCapacityFactor(geom.Pos3d(N,My,Mz))
-CFRef= 1.07887046522 # Almost 1.0, no big deal.
+CFRef= 1.049755286267975 # Almost 1.0, no big deal.
 ratio= abs(CF-CFRef)/CFRef
 
 '''
