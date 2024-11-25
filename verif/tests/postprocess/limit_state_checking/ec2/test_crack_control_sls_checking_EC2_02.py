@@ -81,7 +81,7 @@ modelSpace.fixNode('000_000',pt1.getNode().tag) # Fully supported at bottom.
 
 # Actions
 ## Load definition
-Mx= 85.945e3
+Mx= 79.6336e3
 My= -Mx
 Fz= -100e3 # Axial force.
 
