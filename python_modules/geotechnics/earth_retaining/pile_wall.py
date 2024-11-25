@@ -25,7 +25,7 @@ def get_results_table(resultsDict):
 
     :param resultsDict: dictionary containing the results.
     '''
-    headerRow= ['#', 'fixed node', 'depth (m)', 'Ux (mm)', 'M (kN.m)', 'V (kN)', 'pres. dif. (kN/m)', 'Rx (kN)', 'leftEa (kN)', 'leftE0 (kN)', 'leftEp (kN)', 'rightEa (kN)', 'rightE0 (kN)', 'rightEp (kN)', 'netWp (kN)', 'a (m2)']
+    headerRow= ['#', 'fixed node', 'depth (m)', 'Ux (mm)', 'M (kN.m)', 'V (kN)', 'pres. dif. (kN/m)', 'Rx (kN)', 'leftEa (kPa)', 'leftE0 (kPa)', 'leftEp (kPa)', 'rightEa (kPa)', 'rightE0 (kPa)', 'rightEp (kPa)', 'netWp (kPa)', 'a (m2)']
     retval= list()
     for nodeTag in resultsDict:
         nodeResults= resultsDict[nodeTag]
@@ -439,10 +439,12 @@ class PileWall(object):
             nodeSoil= self.soilLayers.getSoilAtDepth(nodeDepth)
             self.soilsAtNodes[n.tag]= nodeSoil
             
-    def genMesh(self, elemSize= 0.25):
+    def genMesh(self, elemSize= 0.25, designValue= False):
         '''Define the FE mesh.
 
         :param elemSize: size of the beam elements for the pile wall.
+        :param designValue: if true use the design value of the geotechnical 
+                            parameters.
         '''
         # Define finite element problem.
         self.defineFEProblem()
@@ -505,8 +507,8 @@ class PileWall(object):
                 tributaryArea= tributaryLength*self.pileSpacing
                 materialName= 'soilResponse_z_'+str(n.tag)
                 nodeSoil= self.soilsAtNodes[n.tag]
-                leftNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_left', sg_v= left_sg_v, tributaryArea= tributaryArea, alphaAngle= self.alphaAngle)
-                rightNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_right', sg_v= right_sg_v, tributaryArea= tributaryArea, alphaAngle= self.alphaAngle)
+                leftNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_left', sg_v= left_sg_v, tributaryArea= tributaryArea, alphaAngle= self.alphaAngle, designValue= designValue)
+                rightNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_right', sg_v= right_sg_v, tributaryArea= tributaryArea, alphaAngle= self.alphaAngle, designValue= designValue)
 
             self.tributaryAreas[n.tag]= tributaryArea
             soilResponseMaterials[n.tag]= (leftNonLinearSpringMaterial, rightNonLinearSpringMaterial)
@@ -810,7 +812,8 @@ class PileWall(object):
         tributaryArea= self.tributaryAreas[nodeTag]
         nodeDepth= -node.getInitialPos3d.y
         netHydrostaticPressure= self.soilLayers.getNetHydrostaticPressureAtDepth(depth= nodeDepth)
-        return netHydrostaticPressure*tributaryArea
+        retval= netHydrostaticPressure*tributaryArea
+        return retval
 
     def getNetWaterForceAtNodes(self):
         ''' Returns a dictionary containing the forces due to net hydrostatic 
@@ -837,7 +840,15 @@ class PileWall(object):
             tributaryArea= self.tributaryAreas[pileNode.tag]
             
             (leftEa, leftE0, leftEp), (rightEa, rightE0, rightEp)= self.getEarthThrustsAtNode(node= pileNode)
-            netWp= self. getNetWaterForceAtNode(node= pileNode)
+            netWp= self.getNetWaterForceAtNode(node= pileNode)
+            if(tributaryArea>0.0):
+                netWp/= tributaryArea
+                rightEa/= tributaryArea
+                rightE0/= tributaryArea
+                rightEp/= tributaryArea
+                leftEa/= tributaryArea
+                leftE0/= tributaryArea
+                leftEp/= tributaryArea
             nodeResults= {'depth': depth, 'fixed_node':fixedNode.tag, 'Rx':Rx, 'leftE0':leftE0, 'leftEa':leftEa, 'leftEp':leftEp, 'rightE0':rightE0, 'rightEa':rightEa, 'rightEp':rightEp, 'Ux':Ux, 'netWp':netWp, 'tributaryArea':tributaryArea}
             retval[pileNode.tag]= nodeResults
         # Get internal forces.
