@@ -829,6 +829,24 @@ class PileWall(object):
                 if(abs(force)>1e-6):
                     retval[n.tag]= force
         return retval
+
+    def addUniformLoad(self, lp, q, alphaAngle= 0.0, designValue= False):
+        ''' Apply the given load at the backfill surface.
+
+        :param lp: load pattern to add the given load to.
+        :param q: load to apply.
+        :param alphaAngle: inclination of the back face.
+        :param designValue: if true use the design value of the internal 
+                            friction.
+        '''
+        ## Define loads.
+        for n in self.pileSet.nodes:
+            tributaryArea= self.tributaryAreas[n.tag]
+            nodeSoil= self.soilsAtNodes[n.tag]
+            Ka= nodeSoil.Ka(sg_v= q, alphaAngle= alphaAngle, designValue= designValue)
+            loadVector= xc.Vector([-Ka*q, 0, 0])*tributaryArea
+            depth= -n.getInitialPos3d.y
+            lp.newNodalLoad(n.tag, loadVector)
         
     def getResultsDict(self):
         ''' Extracts earth pressures and internal forces from the model.'''

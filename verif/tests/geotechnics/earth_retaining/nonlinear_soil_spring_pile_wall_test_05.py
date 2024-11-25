@@ -60,11 +60,7 @@ def apply_surcharge():
     Ka= gravellySand.Ka()
     loadVector= xc.Vector([-Ka*surcharge, 0, 0])
     lp0= pileWall.modelSpace.newLoadPattern(name= '0')
-    for n in pileWall.pileSet.nodes:
-        tributaryArea= pileWall.tributaryAreas[n.tag]
-        f= loadVector*tributaryArea
-        depth= -n.getInitialPos3d.y
-        lp0.newNodalLoad(n.tag, f)
+    pileWall.addUniformLoad(lp= lp0, q= surcharge)
     ## Add the load case to the domain.
     pileWall.modelSpace.addLoadCaseToDomain(lp0.name)
     ## Solve.
