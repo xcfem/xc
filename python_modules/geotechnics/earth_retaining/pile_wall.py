@@ -385,9 +385,11 @@ class PileWall(object):
     :ivar soilLayers: SoilLayers object.
     :ivar alphaAngle: inclination of the back face.
     :ivar previousExcavationDepthIndex: index of the last computed excavation depth.
+    :ivar designValue: if true use the design value of the geotechnical 
+                       parameters.
     '''
     
-    def __init__(self, pileSection, soilLayersDepths, soilLayers, excavationDepths, pileSpacing= 1.0, waterTableDepths= [None, None], waterUnitWeight= 1e3*g, alphaAngle= 0.0):
+    def __init__(self, pileSection, soilLayersDepths, soilLayers, excavationDepths, pileSpacing= 1.0, waterTableDepths= [None, None], waterUnitWeight= 1e3*g, alphaAngle= 0.0, designValue= False):
         '''Constructor.
 
         :param pileSection: 2D elastic shear section for the pile wall beam
@@ -400,11 +402,14 @@ class PileWall(object):
                                 sides of the pile wall [left, right].
         :param waterUnitWeight: water weight per volume unit.
         :param alphaAngle: inclination of the back face.
+        :param designValue: if true use the design value of the geotechnical 
+                            parameters.
         '''
         self.pileSection= pileSection
         self.soilLayers= SoilLayers(depths= soilLayersDepths, soils= soilLayers, waterTableDepths= waterTableDepths, waterUnitWeight= waterUnitWeight, excavationDepths= excavationDepths)
         self.pileSpacing= pileSpacing
         self.alphaAngle= alphaAngle
+        self.designValue= designValue
         self.solProc= None
         self.previousExcavationDepthIndex= -1
 
@@ -439,12 +444,10 @@ class PileWall(object):
             nodeSoil= self.soilLayers.getSoilAtDepth(nodeDepth)
             self.soilsAtNodes[n.tag]= nodeSoil
             
-    def genMesh(self, elemSize= 0.25, designValue= False):
+    def genMesh(self, elemSize= 0.25):
         '''Define the FE mesh.
 
         :param elemSize: size of the beam elements for the pile wall.
-        :param designValue: if true use the design value of the geotechnical 
-                            parameters.
         '''
         # Define finite element problem.
         self.defineFEProblem()
@@ -507,8 +510,8 @@ class PileWall(object):
                 tributaryArea= tributaryLength*self.pileSpacing
                 materialName= 'soilResponse_z_'+str(n.tag)
                 nodeSoil= self.soilsAtNodes[n.tag]
-                leftNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_left', sg_v= left_sg_v, tributaryArea= tributaryArea, alphaAngle= self.alphaAngle, designValue= designValue)
-                rightNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_right', sg_v= right_sg_v, tributaryArea= tributaryArea, alphaAngle= self.alphaAngle, designValue= designValue)
+                leftNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_left', sg_v= left_sg_v, tributaryArea= tributaryArea, alphaAngle= self.alphaAngle, designValue= self.designValue)
+                rightNonLinearSpringMaterial= nodeSoil.defHorizontalSubgradeReactionNlMaterial(preprocessor, name= materialName+'_right', sg_v= right_sg_v, tributaryArea= tributaryArea, alphaAngle= self.alphaAngle, designValue= self.designValue)
 
             self.tributaryAreas[n.tag]= tributaryArea
             soilResponseMaterials[n.tag]= (leftNonLinearSpringMaterial, rightNonLinearSpringMaterial)
@@ -634,7 +637,7 @@ class PileWall(object):
             soil= self.soilsAtNodes[nodeTag]
             tributaryArea= self.tributaryAreas[nodeTag]
             sg_v= self.soilLayers.getVerticalPressureAtDepth(depth= nodeDepth, rightSide= rightSide)-sg_v0 # Vertical pressure at the excavation side.
-            newEa, newE0, newEp= soil.getEarthThrusts(sg_v= sg_v, tributaryArea= tributaryArea, alphaAngle= self.alphaAngle)
+            newEa, newE0, newEp= soil.getEarthThrusts(sg_v= sg_v, tributaryArea= tributaryArea, alphaAngle= self.alphaAngle, designValue= self.designValue)
             # Update soil response.
             leftElementInitStrainMaterial= leftElement.getMaterials()[0]
             leftElementEyBasicMaterial= leftElementInitStrainMaterial.material
