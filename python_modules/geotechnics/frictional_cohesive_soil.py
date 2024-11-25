@@ -338,7 +338,8 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
                         (see figure 12 in page 44 of reference[2]).
         '''
         k= min(D,2.0*Beff)/Beff
-        return 1+2*math.tan(self.getDesignPhi())*(1-math.sin(self.getDesignPhi()))**2*math.atan(k)
+        dphi= self.getDesignPhi()
+        return 1+2*math.tan(dphi)*(1-math.sin(dphi))**2*math.atan(k)
 
     def tq(self, psi= 0.0):
         '''Factor that introduces the effect of the proximity of an slope.
@@ -356,10 +357,11 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
                        (see figure 4.8 in page 104 of reference [3])
                        favourable effect when eta<0.0.
         '''
-        if(self.getDesignPhi()!=0):
-          return math.exp(-2*eta*math.tan(self.getDesignPhi()))
+        dphi= self.getDesignPhi()
+        if(dphi!=0.0):
+            return math.exp(-2*eta*math.tan(dphi))
         else:
-          return 1.0
+            return 1.0
 
     def Nq(self):
         '''Returns the overburden multiplier for the Brinch-Hansen formula.'''
@@ -437,8 +439,9 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
 
     def Nc(self):
         '''Returns the cohesion multiplier for the Brinch-Hasen formula.'''
-        if(self.getDesignPhi()!=0.0):
-            return (self.Nq()-1.0)*(1.0/math.tan(self.getDesignPhi()))
+        dphi= self.getDesignPhi()
+        if(dphi!=0.0):
+            return (self.Nq()-1.0)*(1.0/math.tan(dphi))
         else:
             return math.pi+2.0
 
