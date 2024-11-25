@@ -115,7 +115,7 @@ class SoilModel(object):
         :param designValue: if true use the design value of the internal 
                             friction.
         '''
-        Ka= self.Ka(sg_v= sg_v, alphaAngle= alphaAngle, designValue= designValue)
+        Ka= self.Ka(alphaAngle= alphaAngle, designValue= designValue)
         return Ka*sg_v
     
     def getPassivePressure(self, sg_v, alphaAngle= 0.0, designValue= False):
@@ -127,7 +127,7 @@ class SoilModel(object):
         :param designValue: if true use the design value of the internal 
                             friction.
         '''
-        Kp= self.Kp(sg_v= sg_v, alphaAngle= alphaAngle, designValue= designValue)
+        Kp= self.Kp(alphaAngle= alphaAngle, designValue= designValue)
         retval= Kp*sg_v
         if(designValue): # apply factor for passive earth resistance, 
             retval/= self.gammaRe
@@ -216,10 +216,9 @@ class RankineSoil(SoilModel):
         super(RankineSoil,self).__init__(beta= beta, Kh= Kh, deltaAngle= deltaAngle, gammaRe= gammaRe)
         self.soil= fs.FrictionalSoil(phi= phi, rho= rho, rhoSat= rhoSat, gammaMPhi= gammaMPhi)
         
-    def Ka(self, sg_v= None, alphaAngle= 0.0, designValue= False):
+    def Ka(self, alphaAngle= 0.0, designValue= False):
         '''Returns Rankine's active earth pressure coefficient.
 
-        :param sg_v: vertical stress (not used for Rankine soils).
         :param alphaAngle: inclination of the back face.
         :param designValue: if true use the design value of the internal friction.
         '''
@@ -248,10 +247,9 @@ class RankineSoil(SoilModel):
             retval= math.cos(alphaAngle-self.beta)/(math.cos(alphaAngle)**2)*n/(math.cos(self.beta)*r)
         return retval
           
-    def Kp(self, sg_v= None, alphaAngle= 0.0, designValue= False):
+    def Kp(self, alphaAngle= 0.0, designValue= False):
         '''Returns Rankine's passive earth pressure coefficient.
 
-        :param sg_v: vertical stress (not used for Rankine soils).
         :param alphaAngle: angle of the back of the retaining wall (radians).
         :param designValue: if true use the design value of the internal 
                             friction.
@@ -293,24 +291,22 @@ class CoulombSoil(SoilModel):
         super(CoulombSoil,self).__init__(beta= beta, Kh= Kh, deltaAngle= deltaAngle, gammaRe= gammaRe)
         self.soil= fs.FrictionalSoil(phi= phi, rho= rho, rhoSat= rhoSat, phi_cv= phi_cv, gammaMPhi= gammaMPhi, E= E, nu= nu)
 
-    def Ka(self, sg_v= None, alphaAngle= 0.0, designValue= False):
+    def Ka(self, alphaAngle= 0.0, designValue= False):
         '''
         Return the horizontal component of the active earth pressure coefficient
         according to Coulomb's theory.
 
-        :param sg_v: vertical stress (not used for Coulomb soils).
         :param alphaAngle: angle of the back of the retaining wall (radians).
         :param designValue: if true use the design value of the internal
                             friction.
         '''
         return self.soil.Kah_coulomb(a= alphaAngle, b= self.beta, d= self.deltaAngle, designValue= designValue)
 
-    def Kp(self, sg_v= None, alphaAngle= 0.0, designValue= False):
+    def Kp(self, alphaAngle= 0.0, designValue= False):
         '''
         Return the horizontal component of the passive earth pressure 
         coefficient according to Coulomb's theory.
 
-        :param sg_v: vertical stress (not used for Coulomb soils).
         :param alphaAngle: angle of the back of the retaining wall (radians).
         :param designValue: if true use the design value of the internal
                             friction.
@@ -343,6 +339,28 @@ class BellSoil(SoilModel):
         super(BellSoil,self).__init__(beta= beta, Kh= Kh, deltaAngle= deltaAngle, gammaRe= gammaRe)
         self.soil= fcs.FrictionalCohesiveSoil(phi= phi, c= c, rho= rho, rhoSat= rhoSat, phi_cv= phi_cv, gammaMPhi= gammaMPhi, gammaMc= gammaMc, E= E, nu= nu)
 
+    def Ka(self, alphaAngle= 0.0, designValue= False):
+        '''
+        Return the horizontal component of the active earth pressure coefficient
+        according to Coulomb's theory.
+
+        :param alphaAngle: angle of the back of the retaining wall (radians).
+        :param designValue: if true use the design value of the internal
+                            friction.
+        '''
+        return self.soil.Kah_coulomb(a= alphaAngle, b= self.beta, d= self.deltaAngle, designValue= designValue)
+
+    def Kp(self, alphaAngle= 0.0, designValue= False):
+        '''
+        Return the horizontal component of the passive earth pressure 
+        coefficient according to Coulomb's theory.
+
+        :param alphaAngle: angle of the back of the retaining wall (radians).
+        :param designValue: if true use the design value of the internal
+                            friction.
+        '''
+        return self.soil.Kp_coulomb(a= alphaAngle, b= self.beta, d= self.deltaAngle, designValue= designValue)
+    
     def getActivePressure(self, sg_v, alphaAngle= 0.0, designValue= False):
         ''' Returns the active presure corresponding to the given vertical
             pressure.
