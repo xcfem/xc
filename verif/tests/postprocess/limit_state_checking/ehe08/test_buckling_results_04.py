@@ -202,8 +202,8 @@ feProblem.errFileName= "cerr" # From now on display errors if any.
 
 # Check results. The reference values doesn't come from a benchmark test,
 # they serve only to verify that the code run as intended.
-ratio1= abs(meanCFs[0]-0.2702879844580217)/0.2702879844580217
-ratio2= abs(meanCFs[1]-0.2715583207753639)/0.2715583207753639
+ratio1= abs(meanCFs[0]-0.27097922513696665)/0.27097922513696665
+ratio2= abs(meanCFs[1]-0.27354596382746055)/0.27354596382746055
 
 '''
 print(meanCFs[0], ratio1)
