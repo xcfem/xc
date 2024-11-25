@@ -55,15 +55,13 @@ def create_anchor():
     
 def apply_surcharge():
     # Apply the load at the backfill surface.
-    ## Define loads.
-    surcharge= 13e3
-    Ka= gravellySand.Ka()
-    loadVector= xc.Vector([-Ka*surcharge, 0, 0])
+    # Define load pattern.
     lp0= pileWall.modelSpace.newLoadPattern(name= '0')
+    # Define loads.
     pileWall.addUniformLoad(lp= lp0, q= surcharge)
-    ## Add the load case to the domain.
+    # Add the load case to the domain.
     pileWall.modelSpace.addLoadCaseToDomain(lp0.name)
-    ## Solve.
+    # Solve.
     if(pileWall.solProc is None):
         pileWall.defineSolutionProcedure(convergenceTestTol= 1e-5, krylov= False)
     ok= pileWall.solProc.solve()
