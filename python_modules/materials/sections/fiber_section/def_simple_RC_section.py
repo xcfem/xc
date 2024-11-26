@@ -863,8 +863,6 @@ class RCFiberSectionParameters(object):
         :param matDiagType: type of stress-strain diagram 
                     ("k" for characteristic diagram, "d" for design diagram)
         '''
-        print('RCFiberSectionParameters::defDiagrams diagram type: ', matDiagType)
-        print('   preprocessor: ',preprocessor)
         self.diagType= matDiagType
         if(self.diagType=="d"): # design diagram.
             if(self.concrType.matTagD<0):
@@ -912,13 +910,11 @@ class RCFiberSectionParameters(object):
             exit(1)
             
     def clearDiagrams(self):
-        '''Clear the stress-strain diagrams of the section.
-
-        :param preprocessor: preprocessor of the finite element problem.
-        :param matDiagType: type of stress-strain diagram 
-                    ("k" for characteristic diagram, "d" for design diagram)
+        '''Clear the previously defined stress-strain diagrams for the section
+           materials.
         '''
-        print('RCFiberSectionParameters::clearDiagrams')
+        self.concrType.clearDiagrams()
+        self.reinfSteelType.clearDiagrams()
         self.diagType= None
         self.concrDiagName= None
         self.reinfDiagName= None
@@ -1187,8 +1183,6 @@ class RCSectionBase(object):
         :param matDiagType: type of stress-strain diagram 
                     ("k" for characteristic diagram, "d" for design diagram)
         '''
-        print('RCSectionBase::defRCSection diagram type: ', matDiagType)
-        print('tipo: ', type(self))
         self.defShearResponse(preprocessor= preprocessor)
         self.defSectionGeometry(preprocessor= preprocessor, matDiagType= matDiagType)
         self.defFiberSection(preprocessor= preprocessor)
@@ -1201,7 +1195,6 @@ class RCSectionBase(object):
         :param matDiagType: type of stress-strain diagram 
                     ("k" for characteristic diagram, "d" for design diagram)
         '''
-        print('RCSectionBase::clearRCSection')
         self.clearShearResponse()
         self.clearSectionGeometry()
         self.clearFiberSection()

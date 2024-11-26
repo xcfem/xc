@@ -301,7 +301,6 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         :param matDiagType: type of stress-strain diagram 
                      ("k" for characteristic diagram, "d" for design diagram)
         '''
-        print('*** RCCircularSection::defSectionGeometry, matDiagType= ', matDiagType)
         self.defDiagrams(preprocessor= preprocessor, matDiagType= matDiagType)
         self.geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
         self.defConcreteRegion(self.geomSection)
@@ -315,7 +314,6 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
             section.
 
         '''
-        print('*** RCCircularSection::clearSectionGeometry')
         self.minCover= None
         self.mainReinf.clearLayers()
         self.geomSection.clear()

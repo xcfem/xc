@@ -344,6 +344,13 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         self.matTagE= self.materialDiagramE.tag
         return self.materialDiagramE
 
+    
+    def clearDiagE(self):
+        ''' Clear previously defined diagram.'''
+        if(self.materialDiagramE):
+            self.matTagE= -1
+            self.materialDiagramE= None
+            
     def defDiagK(self,preprocessor):
         ''' Defines a uniaxial material to represent the characteristic stress-strain diagram
 
@@ -376,7 +383,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             Etsdiag=abs(self.tensionStiffparam.regresLine()['slope'])
             self.Ets=Etsdiag
             self.epsctu=ectdiag+ftdiag/Etsdiag
-            self.materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
+            self.materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
             self.materialDiagramK.epsct0=ectdiag
             self.materialDiagramK.epsctu=ectdiag+ftdiag/Etsdiag
             '''
@@ -387,7 +394,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             '''
             # ftdiag=self.tensionStiffparam.f_ct
             # Etsdiag=-self.tensionStiffparam.slopeRegresLineFixedPoint()
-            # self.materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
+            # self.materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
         elif(self.initTensStiff):
             ftdiag=self.fctk()/10.
 #            self.ft=ftdiag
@@ -397,14 +404,20 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             Etsdiag=ftdiag/(5*ectdiag)
 #            self.Ets=Etsdiag
 #            self.epsctu=ectdiag+ftdiag/Etsdiag
-            self.materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
+            self.materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
 #            self.materialDiagramK.epsct0=ectdiag
 #            self.materialDiagramK.epsctu=ectdiag+ftdiag/Etsdiag
             
         else:
-            self.materialDiagramK= typical_materials.defConcrete01(preprocessor=preprocessor,name=self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=self.fmaxK(),epscu=self.epsilonU())
+            self.materialDiagramK= typical_materials.defConcrete01(preprocessor=preprocessor,name= self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=self.fmaxK(),epscu=self.epsilonU())
         self.matTagK= self.materialDiagramK.tag
         return self.materialDiagramK #30160925 was 'return self.matTagK'
+    
+    def clearDiagK(self):
+        ''' Clear previously defined diagram.'''
+        if(self.materialDiagramK):
+            self.matTagK= -1
+            self.materialDiagramK= None
 
     def defDiagD(self,preprocessor):
         ''' Defines a uniaxial material to represent the design stress-strain 
@@ -435,19 +448,25 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             Etsdiag=abs(self.tensionStiffparam.regresLine()['slope'])
             self.Ets=Etsdiag
             self.epsctu=ectdiag+ftdiag/Etsdiag
-            self.materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=0.85*self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
+            self.materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=0.85*self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
             self.materialDiagramD.epsct0=ectdiag
             self.materialDiagramD.epsctu=ectdiag+ftdiag/Etsdiag
         elif(self.initTensStiff):
             ftdiag=self.fctk()/10.
             ectdiag=ftdiag/self.E0()
             Etsdiag=ftdiag/(5*ectdiag)
-            self.materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=0.85*self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
+            self.materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=0.85*self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
         else:
-            self.materialDiagramD= typical_materials.defConcrete01(preprocessor=preprocessor,name=self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=self.fmaxD(),epscu=self.epsilonU())
+            self.materialDiagramD= typical_materials.defConcrete01(preprocessor=preprocessor,name= self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=self.fmaxD(),epscu=self.epsilonU())
         self.matTagD= self.materialDiagramD.tag
         return self.materialDiagramD #30160925 was 'return self.matTagD'
     
+    def clearDiagD(self):
+        ''' Clear previously defined diagram.'''
+        if(self.materialDiagramD):
+            self.matTagD= -1
+            self.materialDiagramD= None
+            
     def defDiagTD(self, preprocessor):
         ''' Returns and XC TDConcreteMC10 uniaxial material.
 
@@ -456,6 +475,15 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         self.materialDiagramTD= self.defTDConcreteMC10(preprocessor= preprocessor)
         self.matTagTD= self.materialDiagramTD.tag
         return self.materialDiagramTD
+    
+    def clearDiagTD(self):
+        ''' Clear previously defined diagram.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        '''
+        if(self.materialDiagramTD):
+            self.matTagTD= -1
+            self.materialDiagramTD= None
     
     def defDiag(self, preprocessor, matDiagType):
         ''' Returns an XC uniaxial material corresponding to the stress-strain
@@ -492,6 +520,13 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; diagram type : '+str(self.matDiagTyp)+' is not known.')
         return retval
+
+    def clearDiagrams(self):
+        ''' Clear previously defined material diagrams.'''
+        self.clearDiagD()
+        self.clearDiagK()
+        self.clearDiagE()
+        self.clearDiagTD()
 
     def sigmaPR(self,eps):
         ''' stress as function of strain according to parabola-rectangle diagram'''
@@ -1393,9 +1428,15 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
 
         :param preprocessor: pre-processor for the finite element problem.
         '''
-        self.materialDiagramK= typical_materials.defSteel01(preprocessor,self.nmbDiagK,self.Es,self.fyk,self.bsh())
+        self.materialDiagramK= typical_materials.defSteel01(preprocessor, self.nmbDiagK,self.Es,self.fyk,self.bsh())
         self.matTagK= self.materialDiagramK.tag
         return self.materialDiagramK #30160925 was 'return self.matTagK'
+    
+    def clearDiagK(self):
+        ''' Clear previously defined diagram.'''
+        if(self.materialDiagramK):
+            self.matTagK= -1
+            self.materialDiagramK= None
 
     def defDiagD(self, preprocessor):
         ''' Returns and XC uniaxial material corresponding to the design values
@@ -1403,9 +1444,15 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
 
         :param preprocessor: pre-processor for the finite element problem.
         '''
-        self.materialDiagramD= typical_materials.defSteel01(preprocessor,self.nmbDiagD,self.Es,self.fyd(),self.bsh())
+        self.materialDiagramD= typical_materials.defSteel01(preprocessor, self.nmbDiagD,self.Es,self.fyd(),self.bsh())
         self.matTagD= self.materialDiagramD.tag
         return self.materialDiagramD #30160925 was 'return self.matTagD'
+    
+    def clearDiagD(self):
+        ''' Clear previously defined diagram.'''
+        if(self.materialDiagramD):
+            self.matTagD= -1
+            self.materialDiagramD= None
 
     def defDiagE(self, preprocessor):
         ''' Returns and XC linear elastic uniaxial material.
@@ -1415,6 +1462,12 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         self.materialDiagramE= typical_materials.defElasticMaterial(preprocessor= preprocessor, name= self.nmbDiagE, E= self.Es, rho= self.rho)
         self.matTagE= self.materialDiagramE.tag
         return self.materialDiagramE
+    
+    def clearDiagE(self):
+        ''' Clear previously defined diagram.'''
+        if(self.materialDiagramE):
+            self.matTagE= -1
+            self.materialDiagramE= None
         
     def defDiag(self, preprocessor, matDiagType):
         ''' Returns an XC uniaxial material corresponding to the stress-strain
@@ -1447,6 +1500,12 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
             lmsg.error(className+'.'+methodName+'; diagram types : '+str(matDiagType)+' is not known.')
             exit(1)
         return retval
+
+    def clearDiagrams(self):
+        ''' Clear the previously defined diagrams.'''
+        self.clearDiagD()
+        self.clearDiagK()
+        self.clearDiagE()        
 
     def plotDesignStressStrainDiagram(self,preprocessor,path=''):
         '''Draws the steel design diagram.'''
