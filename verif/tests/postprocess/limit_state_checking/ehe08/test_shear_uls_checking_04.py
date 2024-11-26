@@ -87,6 +87,7 @@ for e in s.elements:
 combContainer= combs.CombContainer()
 ### ULS combination.
 combContainer.ULS.perm.add('combULS01','1.6*load')
+
 xcTotalSet= preprocessor.getSets.getSet('total')
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
