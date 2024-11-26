@@ -34,15 +34,13 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 ## Materials.
 concrete= EHE_materials.HA30
 steel= EHE_materials.B500S
-## Geometry
-b= 1.42 # width
-h= 0.20 # depth
 ## RC section.
-rcSection= def_simple_RC_section.RCRectangularSection(name='BeamSection', width= 1.0, depth= h, concrType= concrete, reinfSteelType= steel)
+h= 0.20 # section depth
+rcSection= def_simple_RC_section.RCRectangularSection(name='SlabSection', width= 1.0, depth= h, concrType= concrete, reinfSteelType= steel)
 dummySection= rcSection.defElasticMembranePlateSection(preprocessor) # Elastic membrane plate section.
 
-
 # Problem geometry.
+b= 1.42 # width
 span= 5
 
 ## K-points.
@@ -177,11 +175,30 @@ print('meanCFs= ',meanCFs)
 print("ratio1= ",ratio1)
 print("ratio2= ",ratio2)
 '''
+
 import os
-cfg.cleandirs()  # Clean after yourself.
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-4) and (ratio2<1e-4):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+
+# # # oh.displayBlocks()
+# # oh.displayFEMesh()
+# oh.displayLocalAxes()
+# oh.displayReactions()
+# # # oh.displayLoads()
+# # # oh.displayReactions()
+# # # oh.displayDispRot(itemToDisp='uX')
+# # # oh.displayDispRot(itemToDisp='uY')
+# # # oh.displayDispRot(itemToDisp='uZ')
+# limitState.readControlVars(modelSpace= modelSpace)
+# oh.displayFieldDirs1and2(limitStateLabel= limitState.label, argument= 'CF', setToDisplay= xcTotalSet, component=None, fileName=None, defFScale=0.0,rgMinMax= None)
+
+
+cfg.cleandirs() # Clean after yourself.
