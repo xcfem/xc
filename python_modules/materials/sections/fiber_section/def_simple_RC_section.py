@@ -686,6 +686,10 @@ class LongReinfLayers(object):
                     self.reinfLayers.append(layer)
         else:
             lmsg.warning('No longitudinal reinforcement.')
+
+    def clearLayers(self):
+        ''' Clear the previously defined reinforcement layers.'''
+        self.reinfLayers.clear()
             
     def report(self, os= sys.stdout, indentation= ''):
         ''' Get a report of the object contents.
@@ -859,6 +863,8 @@ class RCFiberSectionParameters(object):
         :param matDiagType: type of stress-strain diagram 
                     ("k" for characteristic diagram, "d" for design diagram)
         '''
+        print('RCFiberSectionParameters::defDiagrams diagram type: ', matDiagType)
+        print('   preprocessor: ',preprocessor)
         self.diagType= matDiagType
         if(self.diagType=="d"): # design diagram.
             if(self.concrType.matTagD<0):
@@ -905,6 +911,17 @@ class RCFiberSectionParameters(object):
             lmsg.error(className+'.'+methodName+"; diagram type: '"+self.diagType+"' unknown.\n")
             exit(1)
             
+    def clearDiagrams(self):
+        '''Clear the stress-strain diagrams of the section.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param matDiagType: type of stress-strain diagram 
+                    ("k" for characteristic diagram, "d" for design diagram)
+        '''
+        print('RCFiberSectionParameters::clearDiagrams')
+        self.diagType= None
+        self.concrDiagName= None
+        self.reinfDiagName= None
             
     def defInteractionDiagramParameters(self, preprocessor):
         ''' Defines the parameters for interaction diagrams.
@@ -1090,7 +1107,10 @@ class RCSectionBase(object):
                     ("k" for characteristic diagram, "d" for design diagram)
         '''
         return self.fiberSectionParameters.defDiagrams(preprocessor, matDiagType)
-
+    def clearDiagrams(self):
+        '''Clear previously defined diagrams.'''
+        return self.fiberSectionParameters.clearDiagrams()
+    
     def defShearResponse2d(self, preprocessor):
         ''' Define the shear response of the 2D section.
 
@@ -1106,6 +1126,15 @@ class RCSectionBase(object):
         self.respT= self.getRespT(preprocessor) # Torsional response of the section.
         self.respVy= self.getRespVy(preprocessor)
         self.respVz= self.getRespVz(preprocessor)
+        
+    def clearShearResponse(self):
+        ''' Clear the shear/torsional response of the section.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
+        self.respT= None # Torsional response of the section.
+        self.respVy= None
+        self.respVz= None
 
     def defFiberSection2d(self, preprocessor):
         '''Define 2D fiber section from geometry data.
@@ -1144,6 +1173,13 @@ class RCSectionBase(object):
         self.fs.setRespTByName(self.respTName())
         self.fs.setProp('sectionData',self)
         
+    def clearFiberSection(self):
+        '''Clear the previously defined fiber section.'''
+        self.fiberSectionRepr.clear()
+        self.fs.clear()
+        self.fiberSectionRepr= None
+        self.fs= None
+        
     def defRCSection(self, preprocessor, matDiagType):
         ''' Definition of an XC reinforced concrete section.
 
@@ -1151,9 +1187,24 @@ class RCSectionBase(object):
         :param matDiagType: type of stress-strain diagram 
                     ("k" for characteristic diagram, "d" for design diagram)
         '''
-        self.defShearResponse(preprocessor)
-        self.defSectionGeometry(preprocessor,matDiagType)
-        self.defFiberSection(preprocessor)
+        print('RCSectionBase::defRCSection diagram type: ', matDiagType)
+        print('tipo: ', type(self))
+        self.defShearResponse(preprocessor= preprocessor)
+        self.defSectionGeometry(preprocessor= preprocessor, matDiagType= matDiagType)
+        self.defFiberSection(preprocessor= preprocessor)
+        
+    def clearRCSection(self):
+        ''' Clear a previously defined XC reinforced concrete section (possibly
+            with a different preprocessor, which can lead to errors).
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param matDiagType: type of stress-strain diagram 
+                    ("k" for characteristic diagram, "d" for design diagram)
+        '''
+        print('RCSectionBase::clearRCSection')
+        self.clearShearResponse()
+        self.clearSectionGeometry()
+        self.clearFiberSection()
 
     def isCircular(self):
         ''' Return true if it's a circular section.
@@ -1317,10 +1368,12 @@ class RCSectionBase(object):
                             material, if "d" use the design values one.
         '''
         temporaryFiles= list()
+        clearTemporarySectionData= False
         # Retrieve section geometry definition.
         if(not self.fiberSectionRepr):
             if(preprocessor):
                 self.defRCSection(preprocessor= preprocessor, matDiagType= matDiagType)
+                clearTemporarySectionData= True
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
@@ -1441,6 +1494,8 @@ class RCSectionBase(object):
             methodName= sys._getframe(0).f_code.co_name
             errMsg= "; no section representation for section: '"+self.name+"'. Can't create report. Have you called defRCSection (or defRCSection2d) method?"
             lmsg.error(className+'.'+methodName+errMsg)
+        if(clearTemporarySectionData):
+            self.clearRCSection()
         return temporaryFiles
 
     def pdfReport(self, outputFileName:str= None, graphicWidth='70mm', showPDF= False, keepPDF= True, preprocessor= None, matDiagType= 'k'):
@@ -2327,6 +2382,21 @@ class RCRectangularSection(BasicRectangularRCSection):
         self.positvRebarRows.defStraightLayers(reinforcement,"pos",self.fiberSectionParameters.reinfDiagName,posPoints)
         self.minCover= self.getMinCover()
 
+    def clearSectionGeometry(self):
+        ''' Clear the XC section geometry object previously defined for this
+            section.
+
+        '''
+        self.minCover= None
+        # Clear reinforcement layers.
+        self.negatvRebarRows.clear()
+        self.positvRebarRows.clear()
+        # Clear concrete region.
+        self.clearConcreteRegion()
+        self.geomSection.clear()
+        self.geomSection= None
+        self.clearDiagrams(preprocessor, matDiagType)
+        
     def getTorsionalThickness(self):
         '''Return the section thickness for torsion.'''
         return min(self.b,self.h)/2.0

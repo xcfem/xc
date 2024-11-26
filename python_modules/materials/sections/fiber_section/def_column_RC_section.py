@@ -71,7 +71,7 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
         :param preprocessor: XC preprocessor for the finite element problem.
         :param matDiagType: type of stress-strain diagram (="k" for characteristic diagram, ="d" for design diagram)
         '''
-        self.defDiagrams(preprocessor,matDiagType)
+        self.defDiagrams(preprocessor, matDiagType)
 
         self.geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
         self.defConcreteRegion(self.geomSection)
@@ -301,13 +301,26 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         :param matDiagType: type of stress-strain diagram 
                      ("k" for characteristic diagram, "d" for design diagram)
         '''
-        self.defDiagrams(preprocessor,matDiagType)
+        print('*** RCCircularSection::defSectionGeometry, matDiagType= ', matDiagType)
+        self.defDiagrams(preprocessor= preprocessor, matDiagType= matDiagType)
         self.geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
         self.defConcreteRegion(self.geomSection)
         reinforcement= self.geomSection.getReinfLayers
         self.mainReinf.defCircularLayers(reinforcement, "reinf", self.fiberSectionParameters.reinfDiagName, self.Rext)
 
         self.minCover= self.getMinCover()
+        
+    def clearSectionGeometry(self):
+        ''' Clear the XC section geometry object previously defined for this
+            section.
+
+        '''
+        print('*** RCCircularSection::clearSectionGeometry')
+        self.minCover= None
+        self.mainReinf.clearLayers()
+        self.geomSection.clear()
+        self.geomSection= None
+        self.clearDiagrams()        
 
     def getTorsionalThickness(self):
         '''Return the section thickness for torsion.'''
