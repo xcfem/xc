@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 ''' Verify crack control limit state checking.
 
-    The results seem reasonable but no tests have been found with which to compare them.
+    The results seem reasonable but no tests had been found with which 
+    to compare them.
 '''
 
 from __future__ import print_function
