@@ -62,6 +62,8 @@ class FiberSectionShear2d: public FiberSection2d
     FiberSectionShear2d &operator=(const FiberSectionShear2d &);
     ~FiberSectionShear2d(void);
 
+    void clear(void);
+
     void setRespVyByName(const std::string &);
     UniaxialMaterial *getRespVy(void);
 

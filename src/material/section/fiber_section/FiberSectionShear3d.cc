@@ -228,6 +228,13 @@ void XC::FiberSectionShear3d::setRespVyVzTByName(const std::string &rvy,const st
 XC::FiberSectionShear3d::~FiberSectionShear3d(void)
   { free_mem(); }
 
+//! @brief Clear the material responses.
+void XC::FiberSectionShear3d::clear(void)
+  {
+    FiberSection3d::clear();
+    this->free_mem();
+  }
+
 //! @brief Asigna la initial strain.
 int XC::FiberSectionShear3d::setInitialSectionDeformation(const Vector &def)
   {

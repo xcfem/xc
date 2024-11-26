@@ -68,6 +68,8 @@ class FiberSectionShear3d: public FiberSection3d
     XC::FiberSectionShear3d &operator=(const FiberSectionShear3d &);
     ~FiberSectionShear3d(void);
 
+    void clear(void);
+
     void setRespVyByName(const std::string &);
     UniaxialMaterial *getRespVy(void);
     void setRespVzByName(const std::string &);

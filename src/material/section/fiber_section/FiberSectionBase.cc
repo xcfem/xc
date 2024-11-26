@@ -53,6 +53,21 @@
 #include "material/uniaxial/UniaxialMaterial.h"
 #include "utility/utils/misc_utils/colormod.h"
 
+void XC::FiberSectionBase::free_section_repres(void)
+  {
+    if(this->section_repres)
+      {
+        delete section_repres;
+        this->section_repres= nullptr;
+      }
+  }
+
+void XC::FiberSectionBase::alloc_section_repres(const FiberSectionRepr *other)
+  {
+    this->free_section_repres();
+    if(other)
+      this->section_repres= other->getCopy();
+  }
 
 //! @brief Constructor.
 XC::FiberSectionBase::FiberSectionBase(int tag,int num,int classTag,int dim,MaterialHandler *mat_ldr)
@@ -74,7 +89,7 @@ XC::FiberSectionBase::FiberSectionBase(const FiberSectionBase &other)
   : PrismaticBarCrossSection(other), eTrial(other.eTrial), eInic(other.eInic), eCommit(other.eCommit), kr(other.kr), fibers(other.fibers), fiberTag(other.fiberTag), section_repres(nullptr)
   {
     if(other.section_repres)
-      section_repres= other.section_repres->getCopy();
+      alloc_section_repres(other.section_repres);
   }
 
 //! @brief Assignment operator.
@@ -88,12 +103,9 @@ XC::FiberSectionBase &XC::FiberSectionBase::operator=(const FiberSectionBase &ot
     fibers= other.fibers;
     fiberTag= other.fiberTag;
     if(other.section_repres)
-      section_repres= other.section_repres->getCopy();
+      alloc_section_repres(other.section_repres);
     else
-      {
-        delete section_repres;
-        section_repres= nullptr;
-      }
+      free_section_repres();
     return *this;
   }
 
@@ -170,10 +182,16 @@ XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::resel_mat_tag(con
 //! @brief Destructor:
 XC::FiberSectionBase::~FiberSectionBase(void)
   {
-    if(section_repres)
-      delete section_repres;
-    section_repres= nullptr;
+    free_section_repres();
   }
+
+void XC::FiberSectionBase::clear(void)
+  {
+    fiber_sets.clear();
+    fibers.clear();
+    free_section_repres();
+  }
+
 
 
 //! @brief Add a fiber to the section.

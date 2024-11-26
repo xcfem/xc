@@ -118,6 +118,13 @@ XC::UniaxialMaterial *XC::FiberSectionShear2d::getRespVy(void)
 XC::FiberSectionShear2d::~FiberSectionShear2d(void)
   { free_mem(); }
 
+//! @brief Clear the material responses.
+void XC::FiberSectionShear2d::clear(void)
+  {
+    FiberSection2d::clear();
+    this->free_mem();
+  }
+
 //! @brief Asigna la initial strain.
 int XC::FiberSectionShear2d::setInitialSectionDeformation(const Vector &def)
   {

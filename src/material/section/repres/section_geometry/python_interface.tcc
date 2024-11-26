@@ -62,6 +62,7 @@ class_<XC::SectionGeometry, XC::SectionGeometry *, bases<XC::SectionMassProperti
   .add_property("tagLine",&XC::SectionGeometry::getAxisTag,&XC::SectionGeometry::setAxisTag)
   .def("newSegment",make_function(&XC::SectionGeometry::newSegment,return_internal_reference<>()))
   .add_property("name", make_function( &XC::SectionGeometry::Name, return_value_policy<copy_const_reference>()),"returns object name.")
+  .def("clear", &XC::SectionGeometry::clear,"Clear the containers of this object.")
   ;
 
 

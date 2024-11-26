@@ -89,6 +89,8 @@ class SectionGeometry: public SectionMassProperties
     SectionGeometry(MaterialHandler *ml);    
     inline virtual ~SectionGeometry(void) {}
 
+    void clear(void);
+
     inline int getReferenceFrameTag(void) const
       { return tag_ref_sys; }
     void setReferenceFrameTag(int i)

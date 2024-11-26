@@ -92,6 +92,8 @@ class FiberSectionRepr: public SectionRepres
     FiberSectionRepr &operator=(const FiberSectionRepr &);
     virtual FiberSectionRepr *getCopy(void) const;
     ~FiberSectionRepr(void);
+
+    void clear(void);
         
     // edition functions
     int addFiber(Fiber &theFiber);

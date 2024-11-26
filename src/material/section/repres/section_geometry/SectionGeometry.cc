@@ -55,7 +55,19 @@
 #include "utility/utils/misc_utils/colormod.h"
 
 XC::SectionGeometry::SectionGeometry(MaterialHandler *ml)
-  : SectionMassProperties(),material_handler(ml), regions(ml), reinforcement_layers(this,ml), tag_ref_sys(0),tag_spot(0) {}
+  : SectionMassProperties(),material_handler(ml), regions(ml), reinforcement_layers(this,ml), tag_ref_sys(0), tag_spot(0) {}
+
+//! @brief Clear the containers of this object.
+void XC::SectionGeometry::clear(void)
+  {
+    this->reference_systems.clear();
+    this->tag_ref_sys= 0;
+    this->spots.clear();
+    this->tag_spot= 0;
+    this->axes.clear();
+    this->reinforcement_layers.clear();
+    this->regions.clear();
+  }
 
 //! @brief Returns a geometry that contains only the regions
 //! defined in this object.

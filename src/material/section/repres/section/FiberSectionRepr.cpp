@@ -96,11 +96,17 @@ XC::FiberSectionRepr &XC::FiberSectionRepr::operator=(const FiberSectionRepr &ot
     return *this;
   }
 
+//! @brief Virtual constructor.
 XC::FiberSectionRepr *XC::FiberSectionRepr::getCopy(void) const
   { return new FiberSectionRepr(*this); }
 
 
+//! @brief Destructor.
 XC::FiberSectionRepr::~FiberSectionRepr(void)
+  { clear_fibers(); }
+
+//! @brief Clear the fiber container.
+void XC::FiberSectionRepr::clear(void)
   { clear_fibers(); }
 
 

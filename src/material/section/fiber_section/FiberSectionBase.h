@@ -63,7 +63,10 @@ class FiberSectionBase: public PrismaticBarCrossSection
   private:
     Vector eTrial; //!< trial section deformations 
     Vector eInic; //!< initial section deformations 
-    Vector eCommit; //!< committed section deformations 
+    Vector eCommit; //!< committed section deformations
+
+    void free_section_repres(void);
+    void alloc_section_repres(const FiberSectionRepr *);
   protected:
     CrossSectionKR kr; //!< Stiffness and internal forces resultant on the section.
     FiberContainer fibers; //!< Pointers to fibers container.
@@ -95,6 +98,8 @@ class FiberSectionBase: public PrismaticBarCrossSection
     FiberSectionBase &operator=(const FiberSectionBase &);
     ~FiberSectionBase(void);
 
+    void clear(void);
+    
     virtual void setupFibers(void) = 0;
     inline size_t getNumFibers(void) const
       { return fibers.getNumFibers(); }

@@ -51,7 +51,7 @@ class_<list_ptr_reinf_layer, boost::noncopyable>("list_ptr_reinf_layer")
 //.def(vector_indexing_suite<list_ptr_reinf_layer>() )
   .def("__iter__", boost::python::iterator<list_ptr_reinf_layer>())
   .def("__len__", &list_ptr_reinf_layer::size)
-  .def("clear", &list_ptr_reinf_layer::clear)
+.def("clear", &list_ptr_reinf_layer::clear,"Clear the container.")
   // APPEND NOT ALLOWED .def("append", &std_item<list_ptr_reinf_layer>::add,
   //       with_custodian_and_ward<1,2>()) // to let container keep value
   //.def("__getitem__", &std_item<list_ptr_reinf_layer>::get,
