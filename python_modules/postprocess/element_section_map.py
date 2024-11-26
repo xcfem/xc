@@ -741,7 +741,7 @@ class RCSlabBeamSection(SetRCSections2SetElVerif):
         nu= 0.3
         thickness= self.depth
         rho= self.concrType.density()
-        return typical_materials.defElasticMembranePlateSection(preprocessor,shellMatName,Ec,nu,rho,thickness)
+        return typical_materials.defElasticMembranePlateSection(preprocessor= preprocessor, name= shellMatName,E= Ec, nu= nu, rho= rho, h= thickness)
     
 class LegacyRCSlabBeamSection(RCSlabBeamSection):
     '''This class is used for compatibility with older code. The main

@@ -1032,6 +1032,7 @@ python tests/loads/inertia_loads/shell/test_inertia_loads_shell_03.py
 python tests/loads/inertia_loads/shell/test_inertia_loads_shell_04.py
 python tests/loads/inertia_loads/shell/test_inertia_loads_shell_05.py
 python tests/loads/inertia_loads/shell/test_inertia_loads_shell_06.py
+python tests/loads/inertia_loads/shell/test_inertia_loads_shell_07.py
 echo "$BLEU" "      Inertia loads on quads." "$NORMAL"
 python tests/loads/inertia_loads/quad/test_inertia_loads_quad_01.py
 echo "$BLEU" "      Inertia loads on bricks." "$NORMAL"

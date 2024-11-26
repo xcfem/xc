@@ -815,7 +815,7 @@ class RectangularSection(SectionProperties):
                 lmsg.warning(className+'.'+methodName+'; section: '+self.name+' already defined.')
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
-                rho= material.rho*self.h
+                rho= material.rho # mass per volume unit.
                 if(overrideRho!=None):
                     rho= overrideRho
                 E= material.E
