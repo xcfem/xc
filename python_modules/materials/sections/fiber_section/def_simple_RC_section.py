@@ -690,6 +690,11 @@ class LongReinfLayers(object):
     def clearLayers(self):
         ''' Clear the previously defined reinforcement layers.'''
         self.reinfLayers.clear()
+
+    def clear(self):
+        ''' Clear previously defined longitudinal reinforcement.'''
+        self.clearLayers()
+        self.rebarRows.clear()
             
     def report(self, os= sys.stdout, indentation= ''):
         ''' Get a report of the object contents.
@@ -1027,7 +1032,11 @@ class RCSectionBase(object):
         
     def getSectionGeometry(self):
         ''' Return the geometry defined for this section in XC.'''
-        return self.getMaterialHandler().getSectionGeometry(self.gmSectionName())
+        geomSectionName= self.gmSectionName()
+        materialHandler= self.getMaterialHandler()
+        retval= materialHandler.getSectionGeometry(geomSectionName)
+        return retval
+            
     
     def getConcreteType(self):
         ''' returns the concrete type of this sections.'''
@@ -1137,12 +1146,12 @@ class RCSectionBase(object):
 
         :param preprocessor: preprocessor of the finite element problem.
         '''
-        self.fs= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear2d", self.name)
-        self.fiberSectionRepr= self.fs.getFiberSectionRepr()
+        self.fiberSection= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear2d", self.name)
+        self.fiberSectionRepr= self.fiberSection.getFiberSectionRepr()
         self.fiberSectionRepr.setGeomNamed(self.gmSectionName())
-        self.fs.setupFibers()
-        self.fs.setRespVyByName(self.respVyName())
-        self.fs.setProp('sectionData',self)
+        self.fiberSection.setupFibers()
+        self.fiberSection.setRespVyByName(self.respVyName())
+        self.fiberSection.setProp('sectionData',self)
         
     def defRCSection2d(self, preprocessor, matDiagType):
         ''' Definition of a 2D reinforced concrete section.
@@ -1160,21 +1169,21 @@ class RCSectionBase(object):
 
         :param preprocessor: preprocessor of the finite element problem.
         '''
-        self.fs= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d", self.name)
-        self.fiberSectionRepr= self.fs.getFiberSectionRepr()
+        self.fiberSection= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d", self.name)
+        self.fiberSectionRepr= self.fiberSection.getFiberSectionRepr()
         self.fiberSectionRepr.setGeomNamed(self.gmSectionName())
-        self.fs.setupFibers()
-        self.fs.setRespVyByName(self.respVyName())
-        self.fs.setRespVzByName(self.respVzName())
-        self.fs.setRespTByName(self.respTName())
-        self.fs.setProp('sectionData',self)
+        self.fiberSection.setupFibers()
+        self.fiberSection.setRespVyByName(self.respVyName())
+        self.fiberSection.setRespVzByName(self.respVzName())
+        self.fiberSection.setRespTByName(self.respTName())
+        self.fiberSection.setProp('sectionData',self)
         
     def clearFiberSection(self):
         '''Clear the previously defined fiber section.'''
         self.fiberSectionRepr.clear()
-        self.fs.clear()
         self.fiberSectionRepr= None
-        self.fs= None
+        self.fiberSection.clear()
+        self.fiberSection= None
         
     def defRCSection(self, preprocessor, matDiagType):
         ''' Definition of an XC reinforced concrete section.
@@ -1387,6 +1396,7 @@ class RCSectionBase(object):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+'; geometry of section: '+self.name+' not defined\n')
+
             # Some convenience lines.
             os.write('%% ****** Packages needed for LaTeX document: ****** \n')
             os.write('%%\\usepackage{graphicx} %%\\postscript includes\n')
@@ -1408,6 +1418,7 @@ class RCSectionBase(object):
             os.write('\\begin{minipage}{85mm}\n')
             os.write('\\vspace{2mm}\n')
             os.write('\\begin{center}\n')
+
             #  name without extension to allow pdfLatex choose the file
             nameWOExt= Path(crossSectionFigureFName).stem
             if(includeGraphicsPath):
@@ -1433,6 +1444,7 @@ class RCSectionBase(object):
             # Write section mechanical properties.
             os.write('\\textbf{Sections - geometric and mechanical characteristics}:\\\\\n')
             os.write('\\hline\n')
+
             os.write('Gross section:\\\\\n')
             GB= self.geomSection.getCenterOfMassGrossSection() # Center of mass.
             AB= self.geomSection.getAreaGrossSection() # Area
@@ -1508,15 +1520,16 @@ class RCSectionBase(object):
                 outputFileName= self.gmSectionName()+'.tex'
             outputPath= '/tmp/'
             ltxIOString= io.StringIO()
-            crossSectionFigures= self.latexReport(os= ltxIOString, graphicWidth= graphicWidth, outputPath= outputPath, includeGraphicsPath= outputPath, preprocessor= preprocessor, matDiagType= matDiagType)
-            if(crossSectionFigures):
+            temporaryFiles= self.latexReport(os= ltxIOString, graphicWidth= graphicWidth, outputPath= outputPath, includeGraphicsPath= outputPath, preprocessor= preprocessor, matDiagType= matDiagType)
+            # Compile LaTeX document.
+            if(temporaryFiles):
                 ltxIOString.seek(0)
                 ltxString= ltxr.rc_section_report_latex_header+str(ltxIOString.read())+ltxr.rc_section_report_latex_tail
                 ltxIOString.close()
                 pdfFile= ltxr.latex_string_to_pdf(texString= str(ltxString), outputFileName= outputFileName, showPDF= showPDF)
                 # Remove temporary files
                 ## cross-section graphics.
-                for f in crossSectionFigures:
+                for f in temporaryFiles:
                     f.unlink()
                 ## LaTeX source file
                 Path(outputPath+outputFileName).unlink()
@@ -1768,15 +1781,20 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         vertices= [pMin, geom.Pos2d(pMax.x, pMin.y), pMax, geom.Pos2d(pMin.x, pMax.y), pMin]
         return vertices
 
-    def defConcreteRegion(self, geomSection):
+    def defConcreteRegion(self):
         ''' Define a rectangular region filled with concrete.
         '''
-        regions= geomSection.getRegions
+        regions= self.geomSection.getRegions
         rg= regions.newQuadRegion(self.fiberSectionParameters.concrDiagName)
         rg.nDivIJ= self.fiberSectionParameters.nDivIJ
         rg.nDivJK= self.fiberSectionParameters.nDivJK
         rg.pMin= geom.Pos2d(-self.b/2,-self.h/2)
         rg.pMax= geom.Pos2d(self.b/2,self.h/2)
+
+    def clearConcreteRegions(self):
+        ''' Clear previously defined concrete regions.'''
+        regions= self.geomSection.getRegions
+        regions.clear()
     
     def defElasticSection1d(self, preprocessor, overrideRho= None, reductionFactor= 1.0):
         ''' Return an elastic section appropriate for truss analysis.
@@ -2365,7 +2383,7 @@ class RCRectangularSection(BasicRectangularRCSection):
         '''
         self.defDiagrams(preprocessor, matDiagType)
         self.geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
-        self.defConcreteRegion(self.geomSection)
+        self.defConcreteRegion()
         reinforcement= self.geomSection.getReinfLayers
         # Placement of the negative reinforcement.
         ## Compute positions.
@@ -2385,10 +2403,10 @@ class RCRectangularSection(BasicRectangularRCSection):
         self.negatvRebarRows.clear()
         self.positvRebarRows.clear()
         # Clear concrete region.
-        self.clearConcreteRegion()
+        self.clearConcreteRegions()
         self.geomSection.clear()
         self.geomSection= None
-        self.clearDiagrams(preprocessor, matDiagType)
+        self.clearDiagrams()
         
     def getTorsionalThickness(self):
         '''Return the section thickness for torsion.'''
