@@ -90,6 +90,13 @@ class SectionContainer(object):
         else:
             retval= False
         return retval
+
+    def getSectionNames(self):
+        ''' Return the names of the sections stored in the container.'''
+        retval= list()
+        for key in self.mapSections:
+            retval.append(key)
+        return retval
     
     def append(self, rcSections):
         ''' Append the argument to the container.
@@ -134,6 +141,11 @@ class SectionContainer(object):
             for rcs in s.lstRCSects:
                 rcs.defRCSection(preprocessor= preprocessor, matDiagType= matDiagType)
 
+    def clearRCsections(self):
+        '''Clear previously defined RC sections.'''
+        for s in self.sections:
+            for rcs in s.lstRCSects:
+                rcs.clearRCSection()
 
     def calcInteractionDiagrams(self, preprocessor, diagramType= 'NMyMz'):
         '''Calculates 3D interaction diagrams for each section.
@@ -161,3 +173,67 @@ class SectionContainer(object):
         ''' Get a report of the object contents.'''
         for s in self.sections:
             s.report(os= os, indentation= indentation)
+
+    def latexReport(self, os= sys.stdout, graphicWidth='70mm', outputPath= None, includeGraphicsPath= None, preprocessor= None, matDiagType= 'k'):
+        ''' Write a report of the contained sections in LaTeX format.
+
+        :param os: output stream.
+        :param graphicWidth: width for the cross-section graphic.
+        :param outputPath: directory to write the section plot into.
+        :param includeGraphicsPath: directory to use in the latex includegraphics command.
+        :param preprocessor: pre-processor of the FE problem.
+        :param matDiagType: diagram type; if "k" use the diagram 
+                            corresponding to characteristic values of the 
+                            material, if "d" use the design values one.
+        '''
+        for s in self.sections:
+            for rcs in s.lstRCSects:
+                rcs.latexReport(os= os, graphicWidth= graphicWidth, outputPath= outputPath, includeGraphicsPath= includeGraphicsPath, preprocessor= preprocessor, matDiagType= matDiagType)
+            
+    def pdfReport(self, outputFileName:str= None, graphicWidth='70mm', showPDF= False, keepPDF= True, preprocessor= None, matDiagType= 'k'):
+        ''' Write a report of the contained sections in LaTeX format.
+
+        :param outputFileName: name of the output file.
+        :param graphicWidth: width for the cross-section graphic.
+        :param showPDF: if true display the PDF output on the screen.
+        :param keepPDF: if true don't remove the PDF output.
+        :param preprocessor: pre-processor of the FE problem.
+        :param matDiagType: diagram type; if "k" use the diagram 
+                            corresponding to characteristic values of the 
+                            material, if "d" use the design values one.
+        '''
+        if(showPDF or keepPDF):
+            if(not outputFileName):
+                outputFileName= str()
+                sectionNames= self.getSectionNames()
+                for name in sectionNames:
+                    outputFileName+= name.replace(' ', '_')
+                outputFileName+= '.tex'
+            outputPath= '/tmp/'
+            ltxIOString= io.StringIO()
+            temporaryFiles= self.latexReport(os= ltxIOString, graphicWidth= graphicWidth, outputPath= outputPath, includeGraphicsPath= outputPath, preprocessor= preprocessor, matDiagType= matDiagType)
+            # Compile LaTeX document.
+            if(temporaryFiles):
+                ltxIOString.seek(0)
+                ltxString= ltxr.rc_section_report_latex_header+str(ltxIOString.read())+ltxr.rc_section_report_latex_tail
+                ltxIOString.close()
+                pdfFile= ltxr.latex_string_to_pdf(texString= str(ltxString), outputFileName= outputFileName, showPDF= showPDF)
+                # Remove temporary files
+                ## cross-section graphics.
+                for f in temporaryFiles:
+                    f.unlink()
+                ## LaTeX source file
+                Path(outputPath+outputFileName).unlink()
+                if(showPDF):
+                    input("Press Enter to continue...")
+                if(not keepPDF): # remove PDF file.
+                    if os.path.exists(pdfFile):
+                        os.remove(pdfFile)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; latexReport returned nothing.')                     
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; both showPDF and keepPDF are false; nothing to do.')
