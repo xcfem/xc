@@ -328,3 +328,7 @@ if (result<1e-10):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# Report sections.
+# reinfConcreteSectionDistribution.pdfReport(preprocessor= preprocessor, showPDF= True, keepPDF= False)
+
