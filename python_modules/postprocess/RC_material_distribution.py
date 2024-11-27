@@ -15,6 +15,7 @@ from postprocess import phantom_model as phm
 from materials.sections import RC_sections_container as sc
 from model.sets import sets_mng as sUtils
 from postprocess import limit_state_data as lsd
+import io # strstream Python equivalent
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2016, LCPT and AO_O"
@@ -133,7 +134,7 @@ class RCMaterialDistribution(object):
         '''
         return self.sectionDistribution.getElementDimension(tagElem)
         
-    def getSectionNamesForElement(self,elementTag):
+    def getSectionNamesForElement(self, elementTag):
         '''Returns the section names for the element whose tag is being passed
            as a parameter.
 
@@ -269,6 +270,8 @@ class RCMaterialDistribution(object):
                    generation or not of lists, ...)
         '''
         (tmp, retval)= self.runChecking(limitStateData= limitStateData, matDiagType= matDiagType, threeDim= True, outputCfg= outputCfg)
+        self.sectionDefinition.clearRCsections() # they are created under a
+                                                 # temporary preprocessor.
         tmp.clearAll() #Free memory.
         return retval
 
@@ -288,6 +291,8 @@ class RCMaterialDistribution(object):
                    generation or not of lists, ...)
         '''
         (tmp, retval)= self.runChecking(limitStateData= limitStateData, matDiagType= matDiagType, threeDim= False, outputCfg= outputCfg)
+        self.sectionDefinition.clearRCsections() # they are created under a
+                                                 # temporary preprocessor.
         tmp.clearAll() #Free memory.
         return retval
 
@@ -320,6 +325,70 @@ class RCMaterialDistribution(object):
         self.sectionDefinition.report(os, indentation)
         #self.sectionDistribution(os)
         #self.elementSetNames.report(os)
+
+    def latexReport(self, os= sys.stdout, graphicWidth='70mm', outputPath= None, includeGraphicsPath= None, preprocessor= None, matDiagType= 'k'):
+        ''' Write a report of the object in LaTeX format.
+
+        :param os: output stream.
+        :param graphicWidth: width for the cross-section graphic.
+        :param outputPath: directory to write the section plot into.
+        :param includeGraphicsPath: directory to use in the latex includegraphics command.
+        :param preprocessor: pre-processor of the FE problem.
+        :param matDiagType: diagram type; if "k" use the diagram 
+                            corresponding to characteristic values of the 
+                            material, if "d" use the design values one.
+        '''
+        return self.sectionDefinition.latexReport(os= os, graphicWidth= graphicWidth, outputPath= outputPath, includeGraphicsPath= includeGraphicsPath, preprocessor= preprocessor, matDiagType= matDiagType)
+        
+    def pdfReport(self, outputFileName:str= None, graphicWidth='70mm', showPDF= False, keepPDF= True, preprocessor= None, matDiagType= 'k'):
+        ''' Write a report of the object in LaTeX format.
+
+        :param outputFileName: name of the output file.
+        :param graphicWidth: width for the cross-section graphic.
+        :param showPDF: if true display the PDF output on the screen.
+        :param keepPDF: if true don't remove the PDF output.
+        :param preprocessor: pre-processor of the FE problem.
+        :param matDiagType: diagram type; if "k" use the diagram 
+                            corresponding to characteristic values of the 
+                            material, if "d" use the design values one.
+        '''
+        if(showPDF or keepPDF):
+            if(not outputFileName):
+                outputFileName= str()
+                sectionNames= self.sectionDefinition.getSectionNames()
+                for name in sectionNames:
+                    outputFileName+= name.replace(' ', '_')
+                outputFileName+= '.tex'
+            outputPath= '/tmp/'
+            ltxIOString= io.StringIO()
+            temporaryFiles= self.latexReport(os= ltxIOString, graphicWidth= graphicWidth, outputPath= outputPath, includeGraphicsPath= outputPath, preprocessor= preprocessor, matDiagType= matDiagType)
+            # Compile LaTeX document.
+            if(temporaryFiles):
+                ltxIOString.seek(0)
+                ltxString= ltxr.rc_section_report_latex_header+str(ltxIOString.read())+ltxr.rc_section_report_latex_tail
+                ltxIOString.close()
+                pdfFile= ltxr.latex_string_to_pdf(texString= str(ltxString), outputFileName= outputFileName, showPDF= showPDF)
+                # Remove temporary files
+                ## cross-section graphics.
+                for f in temporaryFiles:
+                    f.unlink()
+                ## LaTeX source file
+                Path(outputPath+outputFileName).unlink()
+                if(showPDF):
+                    input("Press Enter to continue...")
+                if(not keepPDF): # remove PDF file.
+                    if os.path.exists(pdfFile):
+                        os.remove(pdfFile)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; latexReport returned nothing.')                     
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; both showPDF and keepPDF are false; nothing to do.')
+
+                
 
 def loadRCMaterialDistribution():
     '''Load the reinforced concrete sections on each element from file.'''
