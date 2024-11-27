@@ -49,10 +49,12 @@ print(xcData)
 print(testOK)
 '''
 
-
 from misc_utils import log_messages as lmsg
 fName= os.path.basename(__file__)
 if(testOK):
     print("test "+fName+": ok.")
 else:
     lmsg.error('test: '+fName+' ERROR.')
+    
+# Report sections.
+# reinfConcreteSectionDistribution.pdfReport(preprocessor= preprocessor, showPDF= True, keepPDF= False)

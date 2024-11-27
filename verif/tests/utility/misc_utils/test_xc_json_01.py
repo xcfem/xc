@@ -57,3 +57,6 @@ if(testOK):
     print("test "+fName+": ok.")
 else:
     lmsg.error('test: '+fName+' ERROR.')
+    
+# Report sections.
+# reinfConcreteSectionDistribution.pdfReport(preprocessor= preprocessor, showPDF= True, keepPDF= False)
