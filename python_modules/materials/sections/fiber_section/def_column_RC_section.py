@@ -74,7 +74,7 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
         self.defDiagrams(preprocessor, matDiagType)
 
         self.geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
-        self.defConcreteRegion(self.geomSection)
+        self.defConcreteRegion()
 
         reinforcement= self.geomSection.getReinfLayers
 
@@ -262,8 +262,8 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         '''Material for modeling Z shear response of section'''
         return section_properties.CircularSection.getRespVz(self,preprocessor,self.getConcreteType().Gcm())
         
-    def defConcreteRegion(self,geomSection):
-        regions= geomSection.getRegions
+    def defConcreteRegion(self):
+        regions= self.geomSection.getRegions
         rg= regions.newCircularRegion(self.fiberSectionParameters.concrDiagName)
         rg.nDivCirc= self.fiberSectionParameters.nDivCirc()
         rg.nDivRad= self.fiberSectionParameters.nDivRad()
@@ -303,7 +303,7 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         '''
         self.defDiagrams(preprocessor= preprocessor, matDiagType= matDiagType)
         self.geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
-        self.defConcreteRegion(self.geomSection)
+        self.defConcreteRegion()
         reinforcement= self.geomSection.getReinfLayers
         self.mainReinf.defCircularLayers(reinforcement, "reinf", self.fiberSectionParameters.reinfDiagName, self.Rext)
 
