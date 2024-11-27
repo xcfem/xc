@@ -245,6 +245,9 @@ else:
 # Mathplotlib graphic output.
 # wall.draw()
 
+# Report sections.
+# reinfConcreteSectionDistribution.pdfReport(preprocessor= preprocessor, showPDF= True, keepPDF= False)
+
 # #########################################################
 # # VTK Graphic stuff.
 # from postprocess import output_handler
