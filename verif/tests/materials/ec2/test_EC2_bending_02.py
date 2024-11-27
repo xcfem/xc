@@ -41,7 +41,7 @@ section.mainReinf= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.
 section.defRCSection(preprocessor,matDiagType= 'd')
 
 ## Check that reinforcement area is correctly defined.
-fiberSection= section.fs
+fiberSection= section.fiberSection
 As= 0.0
 numBars= 0
 for fiber in fiberSection.getFibers():
