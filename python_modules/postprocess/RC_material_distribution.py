@@ -4,6 +4,7 @@
 from __future__ import print_function
 from __future__ import division
 
+import os
 import sys
 from postprocess import element_section_map
 import json
@@ -15,7 +16,9 @@ from postprocess import phantom_model as phm
 from materials.sections import RC_sections_container as sc
 from model.sets import sets_mng as sUtils
 from postprocess import limit_state_data as lsd
+from postprocess.reports import latex_reports as ltxr
 import io # strstream Python equivalent
+from pathlib import Path
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2016, LCPT and AO_O"
@@ -255,6 +258,10 @@ class RCMaterialDistribution(object):
         result= phantomModel.runChecking(intForcItems= intForcItems, outputCfg= outputCfg)
         return (feProblem, result)
 
+    def clearRCsections(self):
+        '''Clear previously defined RC sections.'''
+        self.sectionDefinition.clearRCsections()
+
     def internalForcesVerification3D(self, limitStateData, matDiagType, outputCfg):
         '''Limit state verification based on internal force (Fx,Fy,Fz,Mx,My,Mz) values.
 
@@ -270,8 +277,8 @@ class RCMaterialDistribution(object):
                    generation or not of lists, ...)
         '''
         (tmp, retval)= self.runChecking(limitStateData= limitStateData, matDiagType= matDiagType, threeDim= True, outputCfg= outputCfg)
-        self.sectionDefinition.clearRCsections() # they are created under a
-                                                 # temporary preprocessor.
+        self.clearRCsections() # they are created under a
+                               # temporary preprocessor.
         tmp.clearAll() #Free memory.
         return retval
 
@@ -291,8 +298,8 @@ class RCMaterialDistribution(object):
                    generation or not of lists, ...)
         '''
         (tmp, retval)= self.runChecking(limitStateData= limitStateData, matDiagType= matDiagType, threeDim= False, outputCfg= outputCfg)
-        self.sectionDefinition.clearRCsections() # they are created under a
-                                                 # temporary preprocessor.
+        self.clearRCsections() # they are created under a
+                               # temporary preprocessor.
         tmp.clearAll() #Free memory.
         return retval
 

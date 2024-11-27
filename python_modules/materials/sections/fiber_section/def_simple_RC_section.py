@@ -1180,10 +1180,11 @@ class RCSectionBase(object):
         
     def clearFiberSection(self):
         '''Clear the previously defined fiber section.'''
-        self.fiberSectionRepr.clear()
-        self.fiberSectionRepr= None
-        self.fiberSection.clear()
-        self.fiberSection= None
+        if(self.fiberSectionRepr):
+            self.fiberSectionRepr.clear()
+            self.fiberSectionRepr= None
+            self.fiberSection.clear()
+            self.fiberSection= None
         
     def defRCSection(self, preprocessor, matDiagType):
         ''' Definition of an XC reinforced concrete section.
@@ -1370,12 +1371,12 @@ class RCSectionBase(object):
                             material, if "d" use the design values one.
         '''
         temporaryFiles= list()
-        clearTemporarySectionData= False
+        clearRCSection= False
         # Retrieve section geometry definition.
         if(not self.fiberSectionRepr):
             if(preprocessor):
                 self.defRCSection(preprocessor= preprocessor, matDiagType= matDiagType)
-                clearTemporarySectionData= True
+                clearRCSection= True
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
@@ -1499,7 +1500,7 @@ class RCSectionBase(object):
             methodName= sys._getframe(0).f_code.co_name
             errMsg= "; no section representation for section: '"+self.name+"'. Can't create report. Have you called defRCSection (or defRCSection2d) method?"
             lmsg.error(className+'.'+methodName+errMsg)
-        if(clearTemporarySectionData):
+        if(clearRCSection):
             self.clearRCSection()
         return temporaryFiles
 
@@ -1793,8 +1794,9 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
 
     def clearConcreteRegions(self):
         ''' Clear previously defined concrete regions.'''
-        regions= self.geomSection.getRegions
-        regions.clear()
+        if(self.geomSection):
+            regions= self.geomSection.getRegions
+            regions.clear()
     
     def defElasticSection1d(self, preprocessor, overrideRho= None, reductionFactor= 1.0):
         ''' Return an elastic section appropriate for truss analysis.
@@ -2398,14 +2400,11 @@ class RCRectangularSection(BasicRectangularRCSection):
             section.
 
         '''
-        self.minCover= None
-        # Clear reinforcement layers.
-        self.negatvRebarRows.clear()
-        self.positvRebarRows.clear()
         # Clear concrete region.
         self.clearConcreteRegions()
-        self.geomSection.clear()
-        self.geomSection= None
+        if(self.geomSection):
+            self.geomSection.clear()
+            self.geomSection= None
         self.clearDiagrams()
         
     def getTorsionalThickness(self):

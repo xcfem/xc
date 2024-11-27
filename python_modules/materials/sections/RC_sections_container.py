@@ -186,9 +186,12 @@ class SectionContainer(object):
                             corresponding to characteristic values of the 
                             material, if "d" use the design values one.
         '''
+        retval= list()
         for s in self.sections:
             for rcs in s.lstRCSects:
-                rcs.latexReport(os= os, graphicWidth= graphicWidth, outputPath= outputPath, includeGraphicsPath= includeGraphicsPath, preprocessor= preprocessor, matDiagType= matDiagType)
+                tmp= rcs.latexReport(os= os, graphicWidth= graphicWidth, outputPath= outputPath, includeGraphicsPath= includeGraphicsPath, preprocessor= preprocessor, matDiagType= matDiagType)
+                retval+= tmp
+        return retval
             
     def pdfReport(self, outputFileName:str= None, graphicWidth='70mm', showPDF= False, keepPDF= True, preprocessor= None, matDiagType= 'k'):
         ''' Write a report of the contained sections in LaTeX format.
