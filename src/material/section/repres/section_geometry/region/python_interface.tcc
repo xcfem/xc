@@ -81,5 +81,6 @@ class_<XC::RegionContainer, bases<XC::SectionMassProperties>, boost::noncopyable
   .add_property("getBnd",&XC::RegionContainer::getBnd, "Returns regions boundary.")
   .def("newQuadRegion",make_function(&XC::RegionContainer::newQuadRegion,return_internal_reference<>()), "newQuadRegion(regionName) creates a new quadrilateral region named with the string argument.")
   .def("newCircularRegion",make_function(&XC::RegionContainer::newCircularRegion,return_internal_reference<>()), "newQuadRegion(regionName) creates a new circular region named with the string argument.")
+  .def("clear", &XC::RegionContainer::clear, "Removes previously defined regions from the container.")
    ;
 
