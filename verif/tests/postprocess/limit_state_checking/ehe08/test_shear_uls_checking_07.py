@@ -118,6 +118,9 @@ if (ratio1<1e-4) and (ratio2<1e-4):
 else:
     lmsg.error(fname+' ERROR.')
     
+# Report sections.
+# reinfConcreteSectionDistribution.pdfReport(preprocessor= preprocessor, showPDF= True, keepPDF= False)
+    
 # # Matplotlib output
 # testRCSection.plot(preprocessor= preprocessor)
     

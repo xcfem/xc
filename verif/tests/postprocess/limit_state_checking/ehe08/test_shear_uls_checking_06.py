@@ -227,6 +227,9 @@ if testOK:
 else:
     lmsg.error(fname+' ERROR.')
     
+# Report sections.
+# reinfConcreteSectionDistribution.pdfReport(preprocessor= preprocessor, showPDF= True, keepPDF= False)
+    
 # # #########################################################
 # # # Graphic stuff.
 # from postprocess import output_handler

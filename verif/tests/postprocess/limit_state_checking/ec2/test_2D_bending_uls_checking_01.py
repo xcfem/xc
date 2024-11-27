@@ -204,6 +204,9 @@ if (ratio1<1e-3):
 else:
     lmsg.error(fname+' ERROR.')
     
+# Report sections.
+# reinfConcreteSectionDistribution.pdfReport(preprocessor= preprocessor, showPDF= True, keepPDF= False)
+    
 # # #########################################################
 # # # Graphic stuff.
 # from postprocess import output_handler

@@ -134,6 +134,9 @@ if (ratio1<1e-4) & (ratio2<1e-4):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# Report sections.
+# reinfConcreteSectionDistribution.pdfReport(preprocessor= preprocessor, showPDF= True, keepPDF= False)
 
 # #########################################################
 # # Graphic stuff.
