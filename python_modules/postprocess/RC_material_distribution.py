@@ -53,6 +53,7 @@ class RCMaterialDistribution(object):
         self.sectionDefinition= sc.SectionContainer()
         self.sectionDistribution= element_section_map.ElementSectionMap()
         self.elementSetNames= list() #Elements sets with an assigned section.
+        self.phantomModelFEProblem= None # FE problem used by the phantom model
 
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
@@ -235,8 +236,8 @@ class RCMaterialDistribution(object):
                    elements to be analyzed, append or not the results to a file,
                    generation or not of lists, ...)
         '''
-        feProblem= xc.FEProblem()
-        preprocessor= feProblem.getPreprocessor
+        self.phantomModelFEProblem= xc.FEProblem()
+        preprocessor= self.phantomModelFEProblem.getPreprocessor
         # Check if a tension-stiffening model is expected.
         if outputCfg.controller.expectsTensionStiffeningModel():
              for s in self.sectionDefinition.sections:
@@ -248,7 +249,7 @@ class RCMaterialDistribution(object):
             self.sectionDefinition.calcInteractionDiagrams(preprocessor)
         else:
             self.sectionDefinition.calcInteractionDiagrams(preprocessor, 'NMy')
-        outputCfg.controller.solutionProcedure= outputCfg.controller.solutionProcedureType(feProblem)
+        outputCfg.controller.solutionProcedure= outputCfg.controller.solutionProcedureType(self.phantomModelFEProblem)
         phantomModel= phm.PhantomModel(preprocessor, self)
         # Read internal forces to check against.
         intForcItems= limitStateData.getInternalForcesTuple(setCalc= outputCfg.setCalc)
@@ -256,7 +257,7 @@ class RCMaterialDistribution(object):
         # of the load combinations and the values of the
         # internal forces.        
         result= phantomModel.runChecking(intForcItems= intForcItems, outputCfg= outputCfg)
-        return (feProblem, result)
+        return result
 
     def clearRCsections(self):
         '''Clear previously defined RC sections.'''
@@ -276,10 +277,10 @@ class RCMaterialDistribution(object):
                    elements to be analyzed, append or not the results to a file,
                    generation or not of lists, ...)
         '''
-        (tmp, retval)= self.runChecking(limitStateData= limitStateData, matDiagType= matDiagType, threeDim= True, outputCfg= outputCfg)
+        retval= self.runChecking(limitStateData= limitStateData, matDiagType= matDiagType, threeDim= True, outputCfg= outputCfg)
         self.clearRCsections() # they are created under a
                                # temporary preprocessor.
-        tmp.clearAll() #Free memory.
+        self.phantomModelFEProblem.clearAll() #Free memory.
         return retval
 
     def internalForcesVerification2D(self, limitStateData, matDiagType, outputCfg):
@@ -297,10 +298,10 @@ class RCMaterialDistribution(object):
                    elements to be analyzed, append or not the results to a file,
                    generation or not of lists, ...)
         '''
-        (tmp, retval)= self.runChecking(limitStateData= limitStateData, matDiagType= matDiagType, threeDim= False, outputCfg= outputCfg)
+        retval= self.runChecking(limitStateData= limitStateData, matDiagType= matDiagType, threeDim= False, outputCfg= outputCfg)
         self.clearRCsections() # they are created under a
                                # temporary preprocessor.
-        tmp.clearAll() #Free memory.
+        self.phantomModelFEProblem.clearAll() #Free memory.
         return retval
 
     def check(self, limitStateData, matDiagType, outputCfg, threeDim= True):
@@ -345,6 +346,9 @@ class RCMaterialDistribution(object):
                             corresponding to characteristic values of the 
                             material, if "d" use the design values one.
         '''
+        if(preprocessor is None):
+            if(self.phantomModelFEProblem):
+                preprocessor= self.phantomModelFEProblem.getPreprocessor
         return self.sectionDefinition.latexReport(os= os, graphicWidth= graphicWidth, outputPath= outputPath, includeGraphicsPath= includeGraphicsPath, preprocessor= preprocessor, matDiagType= matDiagType)
         
     def pdfReport(self, outputFileName:str= None, graphicWidth='70mm', showPDF= False, keepPDF= True, preprocessor= None, matDiagType= 'k'):
@@ -359,6 +363,9 @@ class RCMaterialDistribution(object):
                             corresponding to characteristic values of the 
                             material, if "d" use the design values one.
         '''
+        if(preprocessor is None):
+            if(self.phantomModelFEProblem):
+                preprocessor= self.phantomModelFEProblem.getPreprocessor
         if(showPDF or keepPDF):
             if(not outputFileName):
                 outputFileName= str()
