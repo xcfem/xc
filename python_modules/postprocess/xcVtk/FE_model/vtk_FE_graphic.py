@@ -208,11 +208,12 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self.cameraParameters= cameraParameters
         self.displayFEMesh(setToDisplay,caption,defFScale)
 
-    def displayFEMesh(self, setToDisplay, caption= '', defFScale=0.0):
+    def displayFEMesh(self, setToDisplay, caption= '', fileName= None, defFScale=0.0):
         ''' Graphic of the FE mesh
 
         :param setToDisplay: XC set of elements to be displayed.
         :param caption: text title to write in the graphic.
+        :param fileName: file name to store the image. If none -> window on screen.
         :param defFScale: factor to apply to current displacement of nodes 
                    so that the display position of each node equals to
                    the initial position plus its displacement multiplied
@@ -221,9 +222,9 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         '''
         self.setupGrid(setToDisplay)
         self.defineMeshScene(field= None)
-        self.displayScene(caption= caption)
+        self.displayScene(caption= caption, unitDescription= '', fileName= fileName)
         
-    def displayLocalAxes(self,setToDisplay,caption= 'local axis', vectorScale=1.0, fileName= None, defFScale= 0.0):
+    def displayLocalAxes(self, setToDisplay, caption= 'local axis', vectorScale=1.0, fileName= None, defFScale= 0.0):
         '''Display the element local axes.
 
         :param setToDisplay:   set of elements to be displayed (defaults to total set)
@@ -244,21 +245,22 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         vField.dumpVectors(setToDisplay)
         self.defineMeshScene(field= None) 
         vField.addToDisplay(self)
-        self.displayScene(caption, fileName)
+        self.displayScene(caption= caption, unitDescription= '', fileName= fileName)
 
-    def displayStrongWeakAxis(self, setToDisplay, caption= 'strong [red] and weak [blue] axes', vectorScale=1.0):
+    def displayStrongWeakAxis(self, setToDisplay, caption= 'strong [red] and weak [blue] axes', vectorScale=1.0, fileName= None):
         '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
 
         :param setToDisplay:   set of elements to be displayed (defaults to total set)
         :param caption:        text to display in the graphic 
         :param vectorScale:    factor to apply to the vectors length in the representation
+        :param fileName: file name to store the image. If none -> window on screen.
         '''
         self.setupGrid(setToDisplay)
         vField= lavf.StrongWeakAxisVectorField(setToDisplay.name+'_strongWeakAxis',vectorScale)
         vField.dumpVectors(setToDisplay)
         self.defineMeshScene(field= None) 
         vField.addToDisplay(self)
-        self.displayScene(caption)
+        self.displayScene(caption= caption, unitDescription= '', fileName= fileName)
 
     def defineMeshActorsSet(self, elemSet, field: fields.ScalarField, defFScale, nodeSize):
         ''' Define mesh
@@ -279,13 +281,14 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self.VtkDefineNodesActor(nodeSize)
         self.VtkDefineElementsActor("surface", field, elemSet.color)
 
-    def displayMesh(self, xcSets, field: fields.ScalarField = None, diagrams= None, caption= '',fileName= None, defFScale=0.0, nodeSize=0.01, scaleConstr= 0.2):
+    def displayMesh(self, xcSets, field: fields.ScalarField = None, diagrams= None, caption= '', unitDescription= '', fileName= None, defFScale=0.0, nodeSize=0.01, scaleConstr= 0.2):
         '''Display the finite element mesh 
 
         :param xcSets: set or list of sets to be displayed
         :param field: scalar field to show (optional)
         :param diagrams: diagrams to show (optional)
         :param caption: text to display in the graphic.
+        :param unitDescription: description of the units.
         :param fileName: name of the graphic file to create (if None -> screen window).
         :param defFScale: factor to apply to current displacement of nodes 
                     so that the display position of each node equals to
@@ -309,7 +312,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         if(diagrams):
             for d in diagrams:
                 self.appendDiagram(d)
-        self.displayScene(caption,fileName)
+        self.displayScene(caption= caption, unitDescription= unitDescription, fileName= fileName)
 
     def displayLoadOnNode(self, nod, color, force, moment, fScale,defFScale=0.0):
         '''Display loads on one node

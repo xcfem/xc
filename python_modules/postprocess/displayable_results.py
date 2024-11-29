@@ -94,7 +94,7 @@ class ResultsDescriptionContainer(dict):
         lmsg.info('latexFigsFilename= '+str(latexFigsFilename))
         latexListFilename= self.getLaTeXFigureListFileName(partToDisplay.getShortName())
         figList= self.getFigureDefinitionList(partToDisplay)
-        tp.displayFigures(figList,latexFigsFilename,latexListFilename)
+        tp.displayFigures(figList, latexFigsFilename, latexListFilename)
 
 
 #Issues sous charges quasi-permanentes (fissuration)

@@ -721,8 +721,8 @@ class EnvConfig(output_styles.OutputStyle):
 
 
         self.capTexts= self.getCaptionTextsDict()
-        self.colors=setBasicColors
-        self.grWidth=grWidth
+        self.colors= setBasicColors
+        self.grWidth= grWidth
 
     def setWorkingDirectory(self, pth):
         ''' Assign the working directory.

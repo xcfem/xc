@@ -280,9 +280,12 @@ class DisplaySettings(object):
         # axes.SetXAxisLabelText("test")
         self.renderer.AddActor(axes)
 
-    def setupWindow(self, caption= 'XC window'):
+    def setupWindow(self, caption= 'XC window',  unitDescription= ''):
         '''sets the rendering window. A rendering window is a window in a
            graphical user interface where renderers draw their images.
+
+        :param caption: caption of the image.
+        :param unitDescription: description of the units.
         '''
         self.renWin= vtk.vtkRenderWindow()
         self.renWin.SetSize(self.windowWidth,self.windowHeight)
@@ -294,7 +297,7 @@ class DisplaySettings(object):
         #Time stamp and window decorations.
         if(caption==''):
             lmsg.warning('setupWindow; window caption empty.')
-        vtkCornerAnno= self.annotation.getVtkCornerAnnotation(caption)
+        vtkCornerAnno= self.annotation.getVtkCornerAnnotation(caption= caption, unitDescription= unitDescription)
         self.renderer.AddActor(vtkCornerAnno)
         return self.renWin
 
@@ -317,14 +320,15 @@ class DisplaySettings(object):
         self.renWin.Finalize()
         iren.TerminateApp()
         
-    def displayScene(self, caption= '', fileName= None):
+    def displayScene(self, caption= '',  unitDescription= '', fileName= None):
         ''' Displaying scene
 
         :param caption: caption to display with the scene.
+        :param unitDescription: description of the units.
         :param fileName: name of the image file, in none -> screen window.
         '''
         self.setView()
-        self.setupWindow(caption)
+        self.setupWindow(caption= caption, unitDescription= unitDescription)
         if(fileName):
             self.plot(fileName)
         else:

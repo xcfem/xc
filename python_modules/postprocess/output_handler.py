@@ -40,10 +40,14 @@ class OutputHandler(object):
         self.modelSpace= modelSpace
         self.outputStyle= outputStyle
 
-    def getCaptionText(self, itemToDisp, unitDescription, setToDisplay):
-        ''' Return the text to use in the image caption.'''
+    def getCaptionText(self, itemToDisp, setToDisplay):
+        ''' Return the text to use in the image caption.
+
+        :param itemToDisp: magnitude to display.
+        :param setToDisplay: name of the set that will be displayed.
+        '''
         loadCaseName= self.modelSpace.getCurrentLoadCaseName()
-        return loadCaseName+' '+itemToDisp+' '+unitDescription+' '+setToDisplay.description
+        return loadCaseName+' '+itemToDisp+' '+setToDisplay.description
 
     def getOutputLengthUnitSym(self):
         return self.outputStyle.outputUnits.dynamicUnits.lengthUnit.symbol
@@ -224,7 +228,7 @@ class OutputHandler(object):
             n.setProp(propertyName,n.getDisp[vCompDisp])
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
         if not captionText:
-            captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
+            captionText= self.getCaptionText(itemToDisp, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
 
     def displayStresses(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None, captionText= None, transformToLocalCoord= False):
@@ -255,7 +259,7 @@ class OutputHandler(object):
         propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStressComponentFromName, propToDefine= 'stress', transformToLocalCoord= transformToLocalCoord)
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
         if not captionText:
-            captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
+            captionText= self.getCaptionText(itemToDisp, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
 
     def displayStrains(self, itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None, captionText= None, transformToLocalCoord= False):
@@ -287,7 +291,7 @@ class OutputHandler(object):
         propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStrainComponentFromName, propToDefine= 'strain', transformToLocalCoord= transformToLocalCoord)
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
         if not captionText:
-            captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
+            captionText= self.getCaptionText(itemToDisp, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
         
     def displayVonMisesStresses(self, vMisesCode= 'von_mises_stress', setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None,captionText=None):
@@ -320,7 +324,7 @@ class OutputHandler(object):
         propertyName= self.modelSpace.setNodePropertyFromElements(compName= None, xcSet= setToDisplay, function= self.modelSpace.getStressComponentFromName, propToDefine= vMisesCode, transformToLocalCoord= False)
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters('stress')
         if not captionText:
-            captionText= self.getCaptionText(vMisesCode, unitDescription, setToDisplay)
+            captionText= self.getCaptionText(vMisesCode, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
         
     def displayState(self, itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
@@ -348,7 +352,7 @@ class OutputHandler(object):
         propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStateComponentFromName, propToDefine= 'state', transformToLocalCoord= False)
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
 
-        captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
+        captionText= self.getCaptionText(itemToDisp, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
         
     def displayReactions(self, setToDisplay=None, fileName=None, defFScale=0.0, inclInertia= False, reactionCheckTolerance= 1e-7,captionText=None):
@@ -396,7 +400,7 @@ class OutputHandler(object):
         if(maxAbs>0):
             scaleFactor*=0.15*LrefModSize/(maxAbs*unitConversionFactor)
         if not captionText:
-            captionText= self.getCaptionText('Reactions', unitDescription, setToDisplay)
+            captionText= self.getCaptionText('Reactions', setToDisplay)
         vFieldF= vf.VectorField(name='Freact', fUnitConv=unitConversionFactor,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Force
         vFieldM= vf.VectorField(name='Mreact', fUnitConv=unitConversionFactor,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Moment
         vFieldF.populateFromPairList(forcePairs)
@@ -415,7 +419,7 @@ class OutputHandler(object):
             if(len(momentPairs)>0):
                 vFieldM.addToDisplay(displaySettings,orientation=scOrient,
                                      title='Moments (' + self.getOutputForceUnitSym() + self.getOutputLengthUnitSym() +')')
-            displaySettings.displayScene(captionText,fileName)
+            displaySettings.displayScene(caption= captionText, unitDescription= unitDescription, fileName= fileName)
         
     def displayReactionsOnSets(self, setsToDisplayReactions, fileName=None, defFScale=0.0, inclInertia= False, reactionCheckTolerance= 1e-7):
         '''displays the reactions as vector on affected nodes
@@ -435,7 +439,7 @@ class OutputHandler(object):
         for st in setsToDisplayReactions:
             self.displayReactions(setToDisplay= st, fileName= fileName, defFScale= defFScale, inclInertia= inclInertia, reactionCheckTolerance= reactionCheckTolerance)
             
-    def displayDiagram(self, attributeName, component, setToDispRes, setToDisplay,caption, scaleFactor= 1.0, fileName= None, defFScale= 0.0,orientScbar=1,titleScbar=None, defaultDirection= 'J'):
+    def displayDiagram(self, attributeName, component, setToDispRes, setToDisplay, caption, unitDescription, scaleFactor= 1.0, fileName= None, defFScale= 0.0,orientScbar=1,titleScbar=None, defaultDirection= 'J'):
         '''Auxiliary function to display results on linear elements.
 
         :param attributeName: attribute name(e.g. 'ULS_normalStressesResistance')
@@ -446,6 +450,7 @@ class OutputHandler(object):
         :param scaleFactor:  factor of scale to apply to the auto-scaled display
                              (defaults to 1).
         :param caption:      caption to display
+        :param unitDescription: description of the units.
         :param fileName:     file to dump the display
         :param defFScale:    factor to apply to current displacement of nodes 
                     so that the display position of each node equals to
@@ -467,7 +472,7 @@ class OutputHandler(object):
         meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
         if(meshSceneOk):
             displaySettings.appendDiagram(diagram,orientScbar,titleScbar) #Append diagram to the scene.
-            displaySettings.displayScene(caption=caption,fileName=fileName)
+            displaySettings.displayScene(caption= caption, unitDescription= unitDescription, fileName=fileName)
 
     def displayIntForcDiag(self, itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0, overrideScaleFactor= None,orientScbar=1, titleScbar=None, defaultDirection= 'J',captionText=None):
         '''displays the component of internal forces in the set of entities as
@@ -490,7 +495,7 @@ class OutputHandler(object):
         :param defaultDirection: default direction of the diagram (J: element 
                                  local j vector or K: element local K vector).
         :param captionText: caption text. Defaults to None, in which case the default 
-                                 caption text (internal force +  units + set name) is created
+                            caption text (internal force +  units + set name) is created
         '''
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
@@ -503,7 +508,7 @@ class OutputHandler(object):
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         unitDescription= self.outputStyle.getForceUnitsDescription()
         if not captionText:
-            captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
+            captionText= self.getCaptionText(itemToDisp, setToDisplay)
         diagram= ifd.InternalForceDiagram(scaleFactor= scaleFactor, lRefModSize= LrefModSize,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp, defaultDirection= defaultDirection)
         diagram.addDiagram() # add the diagram to the scene.
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
@@ -512,7 +517,7 @@ class OutputHandler(object):
         meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color= setToDisplay.color)
         if(meshSceneOk):
             displaySettings.appendDiagram(diagram,orientScbar,titleScbar) #Append diagram to the scene.
-            displaySettings.displayScene(caption= captionText,fileName= fileName)
+            displaySettings.displayScene(caption= captionText, unitDescription= unitDescription, fileName= fileName)
         
     def displayIntForc(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None, captionText=None):
         '''displays the component of internal forces in the 
@@ -556,10 +561,11 @@ class OutputHandler(object):
             field= fields.ExtrapolatedProperty(propName,"getProp",setToDisplay,fUnitConv= unitConversionFactor,rgMinMax=rgMinMax)
             displaySettings= vtk_FE_graphic.DisplaySettingsFE()
             displaySettings.cameraParameters= self.getCameraParameters()
-            if not captionText: captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
-            field.display(displaySettings=displaySettings,caption= captionText,fileName=fileName, defFScale=defFScale)
+            if not captionText:
+                captionText= self.getCaptionText(itemToDisp, setToDisplay)
+            field.display(displaySettings=displaySettings,caption= captionText, unitDescription= unitDescription, fileName=fileName, defFScale=defFScale)
 
-    def displayElementProp(self, propName:str, setToDisplay= None, fileName= None, defFScale=0.0, rgMinMax= None, captionText=None):
+    def displayElementProp(self, propName:str, unitDescription= '', setToDisplay= None, fileName= None, defFScale=0.0, rgMinMax= None, captionText=None):
         '''displays the given property component of internal forces in the 
         set of entities as a scalar field (i.e. appropriated for 2D elements; 
         shells...).
@@ -567,6 +573,7 @@ class OutputHandler(object):
         :param propName: string that identifies the property to display.
         :param setToDisplay: set of entities to be represented (defaults to all 
              entities)
+        :param unitDescription: description of the displayed units.
         :param fileName: name of the file to plot the graphic. Defaults to None,
              in that case an screen display is generated
         :param defFScale: factor to apply to current displacement of nodes 
@@ -591,8 +598,8 @@ class OutputHandler(object):
             displaySettings= vtk_FE_graphic.DisplaySettingsFE()
             displaySettings.cameraParameters= self.getCameraParameters()
             if not captionText:
-                captionText= self.getCaptionText(propName, '', setToDisplay)
-            field.display(displaySettings=displaySettings,caption= captionText,fileName=fileName, defFScale=defFScale)            
+                captionText= self.getCaptionText(propName, setToDisplay)
+            field.display(displaySettings=displaySettings, caption= captionText, unitDescription= unitDescription, fileName=fileName, defFScale=defFScale)            
             
     def displayLoadVectors(self, setToDisplay= None, caption= None, fileName= None, defFScale= 0.0):
         '''Displays load vectors on the set argument.
@@ -617,7 +624,7 @@ class OutputHandler(object):
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         unitDescription= self.outputStyle.getForceUnitsDescription()
         if(not caption):
-            caption= 'load case: ' + loadCaseName + ', set: ' + setToDisplay.name + ', '  + unitDescription
+            caption= 'load case: ' + loadCaseName + ', set: ' + setToDisplay.name
         LrefModSize=setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to auto-scale)
         vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.
         vField= lvf.LoadVectorField(loadCaseName,setToDisplay,unitConversionFactor,vectorScale)
@@ -629,7 +636,7 @@ class OutputHandler(object):
         meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
         if(meshSceneOk):
             vField.addToDisplay(displaySettings)
-            displaySettings.displayScene(caption,fileName)
+            displaySettings.displayScene(caption= caption, unitDescription= unitDescription, fileName= fileName)
         return displaySettings
         
     def displayLoads(self,  setToDisplay=None, elLoadComp='xyzComponents',fUnitConv=1,caption= None,fileName=None, defFScale=0.0, scaleConstr= 0.2):
@@ -714,7 +721,7 @@ class OutputHandler(object):
             if(not caption):
               caption= 'load case: ' + loadCaseName +' '+elLoadComp + ', set: ' + setToDisplay.name + ', '  + unitDescription
             displaySettings.displaySPconstraints(setToDisplay= setToDisplay, scale= scaleConstr)
-            displaySettings.displayScene(caption=caption,fileName=fileName)
+            displaySettings.displayScene(caption=caption, unitDescription= unitDescription, fileName=fileName)
 
     def displayNodeValueDiagram(self, itemToDisp, setToDisplay=None,caption= None,fileName=None,defFScale=0.0):
         '''displays the a displacement (uX,uY,...) or a property defined in 
@@ -749,8 +756,8 @@ class OutputHandler(object):
 
             loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
             if(not caption):
-                caption= loadCaseName+' '+itemToDisp+' '+unitDescription +' '+setToDisplay.description
-            displaySettings.displayScene(caption=caption,fileName=fileName)
+                caption= loadCaseName+' '+itemToDisp+' '+setToDisplay.description
+            displaySettings.displayScene(caption=caption, unitDescription= unitDescription, fileName= fileName)
 
     def displayElementValueDiagram(self, itemToDisp, setToDisplay=None,caption= None,fileName=None,defFScale=0.0):
         '''displays the a displacement (uX,uY,...) or a property defined in 
@@ -785,8 +792,8 @@ class OutputHandler(object):
 
             loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
             if(not caption):
-                caption= loadCaseName+' '+itemToDisp+' '+unitDescription +' '+setToDisplay.description
-            displaySettings.displayScene(caption=caption,fileName=fileName)
+                caption= loadCaseName+' '+itemToDisp+' '+setToDisplay.description
+            displaySettings.displayScene(caption= caption, unitDescription= unitDescription, fileName=fileName)
 
     def extractEigenvectorComponents(self, mode= 1, setToDisplay=None, defFScale=0.0, extractDispComponents= True, extractRotComponents= True):
         '''Displays the computed eigenvectors on the set argument.
@@ -902,7 +909,7 @@ class OutputHandler(object):
                 scOrient+=1
             if(len(rotPairs)>0):
                 vFieldR.addToDisplay(displaySettings, orientation= scOrient, title= 'Rotation')
-            displaySettings.displayScene(caption,fileName)
+            displaySettings.displayScene(caption= caption, unitDescription= unitDescription, fileName= fileName)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -948,7 +955,7 @@ class OutputHandler(object):
                 vField.addToDisplay(displaySettings)
             if(not caption):
                 caption= 'Mode '+ str(eigenMode) + ' shape' + ' '+setToDisplay.description            
-            displaySettings.displayScene(caption,fileName)
+            displaySettings.displayScene(caption= caption, unitDescription= unitDescription, fileName= fileName)
         return displaySettings
 
     def displayBeamResult(self, attributeName, itemToDisp, beamSetDispRes, setToDisplay=None, caption=None, fileName=None, defFScale=0.0, defaultDirection= 'J', rgMinMax= None):
@@ -1000,7 +1007,7 @@ class OutputHandler(object):
                 meshSceneOk= displaySettings.defineMeshScene(None, defFScale,color= setToDisplay.color)
                 if(meshSceneOk):
                     displaySettings.appendDiagram(diagram) #Append diagram to the scene.
-                    displaySettings.displayScene(caption= caption,fileName= fileName)
+                    displaySettings.displayScene(caption= caption, unitDescription= unitDescription, fileName= fileName)
             else:
                 lmsg.warning('Some elements in set: \''+beamSetDispRes.name+"' don\'t have the required property: '"+str(propName)+"' can't display the results.")
         else:
@@ -1098,8 +1105,9 @@ class OutputHandler(object):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; caption for argument: '+str(argument)+" not found, we leave it empty.")
             argumentCaption= ''
-        captionBaseText= limitStateLabelCaption + ', ' + argumentCaption+ ', ' + unitDescription + '. '+ setToDisplay.description.capitalize()
-        field.display(displaySettings,caption=  captionBaseText + ', ' + sectDescr, fileName= fileName, defFScale= defFScale)
+        captionBaseText= limitStateLabelCaption + ', ' + argumentCaption+ '. '+ setToDisplay.description.capitalize()
+        caption= captionBaseText + ', ' + sectDescr
+        field.display(displaySettings, caption= caption, unitDescription= unitDescription, fileName= fileName, defFScale= defFScale)
 
 def insertGrInTex(texFile, grFileNm, grWdt, capText, labl=''):
     '''Include a graphic in a LaTeX file.

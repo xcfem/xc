@@ -85,7 +85,7 @@ class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
         self.setupGrid(setToDisplay)
         meshSceneOk= self.defineMeshScene(displayCellTypes= displayCellTypes)
         if(meshSceneOk):
-            self.displayScene(caption,fileName)
+            self.displayScene(caption= caption, unitDescription= '', fileName= fileName)
 
     def displayLocalAxes(self, setToDisplay, caption, displayCellTypes, fileName= None):
         '''Display the element local axes.
@@ -104,7 +104,7 @@ class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
                 lineAxesField.addToDisplay(self) # Draw lines local axes.
             if(surfAxesField):
                 surfAxesField.addToDisplay(self) # Draw quad surfaces local axes.
-            self.displayScene(caption, fileName)
+            self.displayScene(caption= caption, unitDescription= '', fileName= fileName)
 
     def displayBlocks(self, setToDisplay, displayLocalAxes= True, caption= '', fileName= None, displayCellTypes= ['lines', 'faces', 'bodies']):
         '''Display the element local axes.
