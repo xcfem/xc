@@ -216,6 +216,7 @@ else:
 # # oh.displayFEMesh()
 # # Load control variables to display:
 # bucklingParametersLSD.readControlVars(modelSpace= modelSpace)
+# # Display them.
 # arguments= ['My', 'Mz', 'CF', 'Leff', 'mechLambda', 'efY', 'efZ', 'mode'] 
 # for arg in arguments:
 #     oh.displayBeamResult(attributeName= bucklingParametersLSD.label, itemToDisp= arg, setToDisplay= xcTotalSet, beamSetDispRes= xcTotalSet, fileName=None, defFScale=0.0)

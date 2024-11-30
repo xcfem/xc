@@ -235,7 +235,9 @@ else:
 # # oh.displayFEMesh()
 # #Load properties to display:
 # from postprocess.control_vars import *
-# modelSpace.readControlVars(inputFileName= cfg.projectDirTree.getVerifShearFile())
+# # Read the control variables to display.
+# limitState.readControlVars(modelSpace= modelSpace)
+# # Display them.
 # arguments= ['Vy', 'Vz', 'CF'] #Possible arguments: 'CF','Vy','Vz'
 # for arg in arguments:
 #     oh.displayFieldDirs1and2(limitStateLabel=lsd.shearResistance.label, argument= arg, setToDisplay= xcTotalSet, component=None, fileName=None, defFScale=0.0,rgMinMax= None)

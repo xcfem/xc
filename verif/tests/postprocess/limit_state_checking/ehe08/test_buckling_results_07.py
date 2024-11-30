@@ -179,6 +179,7 @@ else:
 # # oh.displayFEMesh()
 # # Load control variables to display:
 # bucklingParametersLSD.readControlVars(modelSpace= modelSpace)
+# # Display them.
 # # arguments= ['My', 'Mz', 'CF', 'Leff', 'mechLambda', 'efY', 'efZ', 'mode'] 
 # arguments= ['My'] 
 # for arg in arguments:

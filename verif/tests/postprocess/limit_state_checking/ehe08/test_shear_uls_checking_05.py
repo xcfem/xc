@@ -224,6 +224,7 @@ else:
 # # oh.displayFEMesh()
 # # Load control variables to display:
 # limitState.readControlVars(modelSpace= modelSpace)
+# # Display them.
 # argument= 'CF' #Possible arguments: 'CF','Vy','Vz'
 # oh.displayFieldDirs1and2(limitStateLabel= limitState.label, argument=argument, setToDisplay= xcTotalSet, component=None, fileName=None, defFScale=0.0,rgMinMax= None)
 

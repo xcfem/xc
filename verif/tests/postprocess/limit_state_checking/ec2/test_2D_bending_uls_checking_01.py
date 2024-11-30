@@ -154,14 +154,17 @@ for e in xcTotalSet.elements:
 reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()
 reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet.getElements)
 
-## Compute internal forces.
+# Check normal stresses.
+
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
-lsd.normalStressesResistance.analyzeLoadCombinations(combContainer,xcTotalSet)
 
-## Check normal stresses.
-## Limit state to check.
+## Set limit state to check.
 limitState= lsd.normalStressesResistance
+
+## Compute internal forces.
+limitState.analyzeLoadCombinations(combContainer,xcTotalSet)
+
 ## Elements to check.
 setCalc= xcTotalSet
 ## Build controller.
@@ -182,7 +185,7 @@ controller= EC2_limit_state_checking.UniaxialBendingNormalStressController(limit
 limitState.check(setCalc= setCalc, crossSections= reinfConcreteSectionDistribution,appendToResFile='N',listFile='N',calcMeanCF='N', controller= controller, threeDim= False)
 
 ## Check results.
-modelSpace.readControlVars(inputFileName= cfg.projectDirTree.getVerifNormStrFile())
+limitState.readControlVars(modelSpace= modelSpace)
 maxCF= -1e3
 for e in xcTotalSet.elements:
     ULS_normalStressesResistanceSect1= e.getProp('ULS_normalStressesResistanceSect1')

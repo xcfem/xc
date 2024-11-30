@@ -201,7 +201,9 @@ else:
 # # # oh.displayDispRot(itemToDisp='uX')
 # # # oh.displayDispRot(itemToDisp='uY')
 # # # oh.displayDispRot(itemToDisp='uZ')
+# # Read control variables to display.
 # limitState.readControlVars(modelSpace= modelSpace)
+# # Display them.
 # oh.displayFieldDirs1and2(limitStateLabel= limitState.label, argument= 'CF', setToDisplay= xcTotalSet, component=None, fileName=None, defFScale=0.0,rgMinMax= None)
 
 

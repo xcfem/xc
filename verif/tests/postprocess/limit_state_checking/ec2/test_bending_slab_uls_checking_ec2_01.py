@@ -195,7 +195,9 @@ controller= EC2_limit_state_checking.BiaxialBendingNormalStressController(limitS
 limitState.check(setCalc= setCalc, crossSections= reinfConcreteSectionDistribution,appendToResFile='N',listFile='N',calcMeanCF='N', controller= controller, threeDim= False)
 
 ## Check results.
-modelSpace.readControlVars(inputFileName= cfg.projectDirTree.getVerifNormStrFile())
+### Read the control variables.
+limitState.readControlVars(modelSpace= modelSpace)
+### Compute the maximum efficiency.
 maxCF= -1e3
 for e in xcTotalSet.elements:
     ULS_normalStressesResistanceSect1= e.getProp('ULS_normalStressesResistanceSect1')
