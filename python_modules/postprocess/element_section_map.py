@@ -462,7 +462,7 @@ class RCSlabBeamSection(SetRCSections2SetElVerif):
         :param depth:           cross-section depth.
         :param width:           cross-section width (defaults to 1.0).
         '''
-        super(RCSlabBeamSection,self).__init__(name,directions= [1,2], gaussPoints= [1])
+        super(RCSlabBeamSection,self).__init__(name, directions= [1,2], gaussPoints= [1])
         self.sectionDescr= sectionDescr
         self.concrType= concrType
         self.reinfSteelType= reinfSteelType
