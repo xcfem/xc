@@ -83,7 +83,7 @@ for e in s.elements:
 
 ## Load combinations
 combContainer= combs.CombContainer()
-### ULS combination.
+### SLS combination.
 combContainer.SLS.freq.add('combSLS01','1.0*load')
 
 # Compute and store load combination results.
