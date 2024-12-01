@@ -113,8 +113,8 @@ lsd.LimitStateData.envConfig= cfg
 loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
 
 ## Limit states to calculate internal forces for.
-limitStates= [lsd.woodNormalStressesResistance, # Normal stresses resistance.
-lsd.woodShearResistance, # Shear stresses resistance (IS THE SAME AS NORMAL STRESSES, THIS IS WHY IT'S COMMENTED OUT).
+limitStates= [nds.normalStressesResistance, # Normal stresses resistance.
+nds.shearResistance, # Shear stresses resistance (IS THE SAME AS NORMAL STRESSES, THIS IS WHY IT'S COMMENTED OUT).
 ]
 
 ## Create NDS Member objects.
@@ -132,9 +132,9 @@ for ls in limitStates:
     ls.analyzeLoadCombinations(combContainer, ndsCalcSet)
 # Check normal stresses.
 ## Limit state to check.
-limitState= lsd.woodNormalStressesResistance
+limitState= limitStates[0]
 ## Build controller.
-controller= nds.BiaxialBendingNormalStressController(limitState.label)
+controller= limitState.getController()
 ## Perform checking.
 average= limitState.check(setCalc=ndsCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y', controller= controller)
 
