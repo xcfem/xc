@@ -21,6 +21,7 @@ from materials import wood_member_base
 from materials import limit_state_checking_base as lsc
 from materials.awc_nds import AWCNDS_materials
 from postprocess import control_vars as cv
+from postprocess import limit_state_data as lsd
 from misc_utils import units_utils
 from model import predefined_spaces
 from actions import load_cases as lcm
@@ -904,6 +905,15 @@ class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
         self.FcE= dct['FcE']
         self.FbE= dct['FbE']
 
+#       _    _       _ _        _        _       
+#      | |  (_)_ __ (_) |_   __| |_ __ _| |_ ___ 
+#      | |__| | '  \| |  _| (_-<  _/ _` |  _/ -_)
+#      |____|_|_|_|_|_|\__| /__/\__\__,_|\__\___|
+#       __ ___ _ _| |_ _ _ ___| | |___ _ _ ___   
+#      / _/ _ \ ' \  _| '_/ _ \ | / -_) '_(_-<   
+#      \__\___/_||_\__|_| \___/_|_\___|_| /__/   
+# Limit state controllers.
+
 class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections):
     '''Object that controls normal stresses limit state.'''
 
@@ -942,7 +952,28 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
                 # Update efficiency.
                 if(CFtmp>elem.getProp(label).CF):
                     elem.setProp(label,self.ControlVars(idSection= sectionLabel, combName= lf.idComb, CF= CFtmp, N= lf.N, My= lf.My, Mz= lf.Mz, FcE= lf.FcE, FbE= lf.FbE, chiN= lf.chiN, chiLT= lf.chiLT))
-                
+
+class NormalStressesRCLimitStateData(lsd.NormalStressesSteelLimitStateData):
+    ''' Reinforced concrete normal stresses data for limit state checking.'''
+    
+    def getController(self, biaxialBending= True):
+        ''' Return a controller corresponding to this limit state.
+
+        :param biaxialBending: if True use a controller that checks bending
+                               around both cross-section axes.
+        '''
+        retval= None
+        if(biaxialBending):
+            retval= BiaxialBendingNormalStressController(self.label)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+"; not implemented yet for uniaxial bending.") 
+            retval= None
+        return retval
+    
+normalStressesResistance= NormalStressesRCLimitStateData()
+                    
 class ShearController(lsc.LimitStateControllerBase2Sections):
     '''Object that controls shear limit state.'''
 
@@ -981,3 +1012,22 @@ class ShearController(lsc.LimitStateControllerBase2Sections):
                 # Update efficiency.
                 if(CFtmp>elem.getProp(label).CF):
                     elem.setProp(label,self.ControlVars(sectionLabel+'s',sectionIForces.idComb,CFtmp,sectionIForces.Vy))
+
+class ShearResistanceRCLimitStateData(lsd.ShearResistanceSteelLimitStateData):
+    ''' Reinforced concrete normal stresses data for limit state checking.'''
+    
+    def getController(self, solutionProcedureType= None):
+        ''' Return a controller corresponding to this limit state.
+
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results
+                                      (if None, use the default one).
+        '''
+        retval= None
+        if(solutionProcedureType):
+            retval= ShearController(limitStateLabel= self.label, solutionProcedureType= solutionProcedureType)
+        else:
+            retval= ShearController(limitStateLabel= self.label)
+        return retval;
+    
+shearResistance= ShearResistanceRCLimitStateData()

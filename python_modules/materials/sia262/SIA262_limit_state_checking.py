@@ -17,6 +17,8 @@ from materials.sia262 import SIA262_materials
 from materials.sections import rebar_family as rf
 from materials import limit_state_checking_base as lsc
 from postprocess import control_vars as cv
+from postprocess import limit_state_data as lsd
+from postprocess.config import file_names as fn
 from rough_calculations import ng_simple_bending_reinforcement
 from materials.sections.fiber_section import fiber_sets
 from misc_utils import log_messages as lmsg
@@ -135,8 +137,16 @@ class RebarController(lsc.RebarController):
         return MinReinfAreaUnderFlexion(concrete,concreteCover,self.crackControlRequirement,spacing,t)
   
 
-#Check normal stresses limit state.
+#       _    _       _ _        _        _       
+#      | |  (_)_ __ (_) |_   __| |_ __ _| |_ ___ 
+#      | |__| | '  \| |  _| (_-<  _/ _` |  _/ -_)
+#      |____|_|_|_|_|_|\__| /__/\__\__,_|\__\___|
+#       __ ___ _ _| |_ _ _ ___| | |___ _ _ ___   
+#      / _/ _ \ ' \  _| '_/ _ \ | / -_) '_(_-<   
+#      \__\___/_||_\__|_| \___/_|_\___|_| /__/   
+# Limit state controllers.
 
+# Check normal stresses limit state.
 class BiaxialBendingNormalStressController(lsc.BiaxialBendingNormalStressControllerBase):
     '''Object that controls normal stresses limit state.'''
 
@@ -157,8 +167,25 @@ class UniaxialBendingNormalStressController(lsc.UniaxialBendingNormalStressContr
         '''
         super(UniaxialBendingNormalStressController,self).__init__(limitStateLabel)
 
-# Shear checking.
+class NormalStressesRCLimitStateData(lsd.NormalStressesRCLimitStateData):
+    ''' Reinforced concrete normal stresses data for limit state checking.'''
+    
+    def getController(self, biaxialBending= True):
+        ''' Return a controller corresponding to this limit state.
 
+        :param biaxialBending: if True use a controller that checks bending
+                               around both cross-section axes.
+        '''
+        retval= None
+        if(biaxialBending):
+            retval= BiaxialBendingNormalStressController(self.label)
+        else:
+            retval= UniaxialBendingNormalStressController(self.label)
+        return retval
+    
+normalStressesResistance= NormalStressesRCLimitStateData()
+
+# Shear checking.
 def VuNoShearRebars(concrete,steel,Nd,Md,AsTrac,b,d, z= None):
     '''Section shear capacity without shear reinforcement.
 
@@ -311,6 +338,25 @@ class ShearController(lsc.ShearControllerBase):
                 e.setProp(self.limitStateLabel,self.ControlVars(idSection= idSection, combName= nmbComb, CF= FCtmp, N= NTmp, My= MyTmp, Mz= MzTmp, Mu= Mu, Vy= VyTmp, Vz= VzTmp, theta= theta, Vcu= self.Vcu, Vsu= self.Vsu, Vu=VuTmp)) # Worst case
             #13.02.2018 End of changes
 
+class ShearResistanceRCLimitStateData(lsd.ShearResistanceRCLimitStateData):
+    ''' Reinforced concrete normal stresses data for limit state checking.'''
+    
+    def getController(self, solutionProcedureType= None):
+        ''' Return a controller corresponding to this limit state.
+
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results
+                                      (if None, use the default one).
+        '''
+        retval= None
+        if(solutionProcedureType):
+            retval= ShearController(limitStateLabel= self.label, solutionProcedureType= solutionProcedureType)
+        else:
+            retval= ShearController(limitStateLabel= self.label)
+        return retval;
+    
+shearResistance= ShearResistanceRCLimitStateData()
+
 
 class CrackControlSIA262(lsc.CrackControlBaseParameters):
     '''Crack control checking of a reinforced concrete section
@@ -414,6 +460,83 @@ class CrackControlSIA262PlanB(CrackControlSIA262):
             if(CFNeg>elementControlVars.crackControlVarsNeg.CF):
                 elementControlVars.crackControlVarsNeg= cv.CrackControlBaseVars(nmbComb,CFNeg,Ntmp,MyTmp,MzTmp,sigma_sNeg)
             e.setProp(self.limitStateLabel,elementControlVars)
+            
+class CrackControlLimitStateData(lsd.CrackControlRCLimitStateData):
+    ''' SIA 262 crack control limit state data.'''
+        
+    def getController(self,  limitStress, planB= False):
+        ''' Return a controller corresponding to this limit state.
+
+        :param limitStress: limit value for rebar stresses.
+        '''
+        retval= None
+        if(planB):
+            retval= CrackControlSIA262PlanB(limitStateLabel= self.label, limitStress= limitStress)
+        else:
+            retval= CrackControlSIA262(limitStateLabel= self.label, limitStress= limitStress)
+        return retval
+
+        
+class RareLoadsCrackControlLimitStateData(CrackControlLimitStateData):
+    ''' Reinforced concrete crack control under rare loads limit state data.'''
+    def __init__(self, designSituations= ['sls_rare']):
+        '''Limit state data constructor 
+
+        :param designSituations: design situations that will be checked; 
+                                 i. e. sls_quasi-permanent, sls_frequent, 
+                                 sls_rare, sls_earthquake, etc. 
+        '''
+        super(RareLoadsCrackControlLimitStateData,self).__init__(limitStateLabel= 'SLS_rareLoadsCrackControl', outputDataBaseFileName= fn.crackControlRareVerificationResultsFile, designSituations= designSituations)
+        
+    def readControlVars(self, modelSpace):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
+        '''
+        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackRareFile())
+
+class FreqLoadsCrackControlLimitStateData(CrackControlLimitStateData):
+    ''' Reinforced concrete crack control under frequent loads limit state data.'''
+    def __init__(self, designSituations= ['sls_frequent']):
+        '''Constructor. 
+
+        :param designSituations: design situations that will be checked; 
+                                 i. e. sls_quasi-permanent, sls_frequent, 
+                                 sls_rare, sls_earthquake, etc. 
+        '''
+        super(FreqLoadsCrackControlLimitStateData,self).__init__(limitStateLabel= 'SLS_frequentLoadsCrackControl', outputDataBaseFileName= fn.crackControlFreqVerificationResultsFile, designSituations= designSituations)
+        
+    def readControlVars(self, modelSpace):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
+        '''
+        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackFreqFile())
+            
+class QPLoadsCrackControlLimitStateData(CrackControlLimitStateData):
+    ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
+    def __init__(self, designSituations= ['sls_quasi-permanent']):
+        '''Constructor. 
+
+        :param designSituations: design situations that will be checked; 
+                                 i. e. sls_quasi-permanent, sls_frequent, 
+                                 sls_rare, sls_earthquake, etc. 
+        '''
+        super(QPLoadsCrackControlLimitStateData,self).__init__(limitStateLabel= 'SLS_quasiPermanentLoadsCrackControl', outputDataBaseFileName= fn.crackControlQpermVerificationResultsFile, designSituations= designSituations)
+        
+    def readControlVars(self, modelSpace):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
+        '''
+        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackQpermFile())
+
+rareLoadsCrackControl= RareLoadsCrackControlLimitStateData()
+freqLoadsCrackControl= FreqLoadsCrackControlLimitStateData()
+quasiPermanentLoadsCrackControl= QPLoadsCrackControlLimitStateData()
 
 
 def procesResultVerifFISSIA262(preprocessor, nmbComb, limitStress, limitStateLabel= 'SLS_crackControl'):

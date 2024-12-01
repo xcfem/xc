@@ -194,10 +194,10 @@ reinfConcreteSectionDistribution= wall.createConcreteSectionDistribution()
 ### Set of elements to be checked.
 setCalc= wall.wallSet
 ### Limit state to check.
-limitState= lsd.normalStressesResistance
+limitState= EC2_limit_state_checking.normalStressesResistance
 
 ### Build the controller.
-controller= limitState.getController(code_limit_state_checking= EC2_limit_state_checking, biaxialBending= False) # Get controller for uniaxial bending.
+controller= limitState.getController(biaxialBending= False) # Get controller for uniaxial bending.
 
 ### Perform the checking.
 ### variables that control the output of the checking:

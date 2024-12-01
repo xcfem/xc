@@ -14,6 +14,7 @@ from materials.aci import ACI_materials
 from materials.sections import rebar_family as rf
 from materials import limit_state_checking_base as lsc
 from postprocess import control_vars as cv
+from postprocess import limit_state_data as lsd
 import math
 from misc_utils import log_messages as lmsg
 from misc_utils import units_utils
@@ -86,8 +87,17 @@ class RebarController(lsc.RebarController):
         retval*= phi
         return max(retval,12*0.0254) #Clause 25.4.2.1b
 
-#Check normal stresses limit state.
 
+#       _    _       _ _        _        _       
+#      | |  (_)_ __ (_) |_   __| |_ __ _| |_ ___ 
+#      | |__| | '  \| |  _| (_-<  _/ _` |  _/ -_)
+#      |____|_|_|_|_|_|\__| /__/\__\__,_|\__\___|
+#       __ ___ _ _| |_ _ _ ___| | |___ _ _ ___   
+#      / _/ _ \ ' \  _| '_/ _ \ | / -_) '_(_-<   
+#      \__\___/_||_\__|_| \___/_|_\___|_| /__/   
+# Limit state controllers.
+
+# Check normal stresses limit state.
 class BiaxialBendingNormalStressController(lsc.BiaxialBendingNormalStressControllerBase):
     '''Object that controls normal stresses limit state.'''
 
@@ -107,9 +117,26 @@ class UniaxialBendingNormalStressController(lsc.UniaxialBendingNormalStressContr
         :param limitStateLabel: label that identifies the limit state.
         '''
         super(UniaxialBendingNormalStressController,self).__init__(limitStateLabel)
+        
+class NormalStressesRCLimitStateData(lsd.NormalStressesRCLimitStateData):
+    ''' Reinforced concrete normal stresses data for limit state checking.'''
+    
+    def getController(self, biaxialBending= True):
+        ''' Return a controller corresponding to this limit state.
 
+        :param biaxialBending: if True use a controller that checks bending
+                               around both cross-section axes.
+        '''
+        retval= None
+        if(biaxialBending):
+            retval= BiaxialBendingNormalStressController(self.label)
+        else:
+            retval= UniaxialBendingNormalStressController(self.label)
+        return retval
+    
+normalStressesResistance= NormalStressesRCLimitStateData()
+    
 # Shear checking.
-
 def VcNoShearRebars(concrete,Nd,b,d):
     '''Return concrete shear capacity on a (b x thickness)
        rectangular section according to clause 22.5.5.1 of ACI 318-14.
@@ -249,6 +276,25 @@ class ShearController(lsc.ShearControllerBase):
                 theta= None # Not used in ACI-318
                 e.setProp(self.limitStateLabel,self.ControlVars(idSection= idSection, combName= nmbComb, CF= FCtmp, N= NTmp, My= MyTmp, Mz= MzTmp, Mu= Mu, Vy= VyTmp, Vz= VzTmp, theta= theta, Vcu= self.Vc, Vsu= self.Vsu, Vu= VuTmp)) # Worst cas
 
+class ShearResistanceRCLimitStateData(lsd.ShearResistanceRCLimitStateData):
+    ''' Reinforced concrete normal stresses data for limit state checking.'''
+    
+    def getController(self, solutionProcedureType= None):
+        ''' Return a controller corresponding to this limit state.
+
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results
+                                      (if None, use the default one).
+        '''
+        retval= None
+        if(solutionProcedureType):
+            retval= ShearController(limitStateLabel= self.label, solutionProcedureType= solutionProcedureType)
+        else:
+            retval= ShearController(limitStateLabel= self.label)
+        return retval;
+    
+shearResistance= ShearResistanceRCLimitStateData()
+       
 ##################
 # Rebar families.#
 ##################
@@ -947,4 +993,6 @@ class AnchorBolt(object):
         return Vdd
         
 
- 
+
+    
+    

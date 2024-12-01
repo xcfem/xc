@@ -191,9 +191,9 @@ class CustomSolver(predefined_solutions.PlainNewtonRaphson):
 
 # Checking shear.
 ## Limit state to check.
-limitState= lsd.shearResistance
+limitState= EC2_limit_state_checking.shearResistance
 ## Build the controller.
-controller= limitState.getController(code_limit_state_checking= EC2_limit_state_checking, solutionProcedureType= CustomSolver)
+controller= limitState.getController(solutionProcedureType= CustomSolver)
 controller.verbose= False # Don't display log messages.
 ## Perform checking.
 feProblem.logFileName= "/tmp/erase.log" # Ignore warning messagess about computation of the interaction diagram.

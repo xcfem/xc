@@ -102,8 +102,8 @@ if(analOk<0):
     quit()
 
 
-limitState= lsd.shearResistance
-shearController= limitState.getController(code_limit_state_checking= EHE_limit_state_checking)
+limitState= EHE_limit_state_checking.shearResistance
+shearController= limitState.getController()
 
 secHAParamsTorsion= EHE_limit_state_checking.computeEffectiveHollowSectionParametersRCSection(section)
 

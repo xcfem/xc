@@ -155,9 +155,9 @@ for ls in limitStates:
     
 # Check limit state.
 ## Limit state to check.
-limitState= lsd.steelNormalStressesResistance
+limitState= EC3_limit_state_checking.normalStressesResistance
 ## Build controller.
-controller= limitState.getController(code_limit_state_checking= EC3_limit_state_checking, biaxialBending= True)
+controller= limitState.getController(biaxialBending= True)
 
 ## Perform checking.
 average= limitState.check(setCalc=ec3CalcSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)

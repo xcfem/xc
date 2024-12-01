@@ -542,6 +542,94 @@ class CrackStraightController(CrackController):
             if (wk>e.getProp(self.limitStateLabel).wk):
                 R=e.getProp('ResF')
                 e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp('idSection'),combName=loadCombinationName,N=-R[0],My=-R[4],Mz=-R[5],s_rmax=srmax,eps_sm=eps_sm,wk=wk))
+
+class CrackControlLimitStateData(lsd.CrackControlRCLimitStateData):
+    ''' EHE crack control limit state data.'''
+        
+    def getController(self, wk_lim= 0.3e-3, k1= 0.8, shortTermLoading= False, solutionProcedureType= None):
+        ''' Return a controller corresponding to this limit state.
+
+        :param wk_lim: maximum allowable crack width. 
+        :param k1: coefficient which takes account of the bond properties
+                   of the bonded reinforcement:
+
+               - = 0.8 for high bond bars
+               - = 1.6 for bars with an effectively plain surface (e.g. 
+                      prestressing tendons)
+        :param shortTermLoading: if true, consider short therm loading 
+                                 (k_t= 0.6), otherwise consider long term 
+                                 loading (k_t= 0.4).
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results
+                                      (if None, use the default one).
+        '''
+        retval= None
+        if(solutionProcedureType):
+            retval= CrackController(limitStateLabel= self.label, wk_lim= wk_lim, k1= k1, shortTermLoading= shortTermLoading, solutionProcedureType= solutionProcedureType)
+        else:
+            retval= CrackController(limitStateLabel= self.label, wk_lim= wk_lim, k1= k1, shortTermLoading= shortTermLoading)
+        return retval
+        
+class RareLoadsCrackControlLimitStateData(CrackControlLimitStateData):
+    ''' Reinforced concrete crack control under rare loads limit state data.'''
+    def __init__(self, designSituations= ['sls_rare']):
+        '''Limit state data constructor 
+
+        :param designSituations: design situations that will be checked; 
+                                 i. e. sls_quasi-permanent, sls_frequent, 
+                                 sls_rare, sls_earthquake, etc. 
+        '''
+        super(RareLoadsCrackControlLimitStateData,self).__init__(limitStateLabel= 'SLS_rareLoadsCrackControl', outputDataBaseFileName= fn.crackControlRareVerificationResultsFile, designSituations= designSituations)
+        
+    def readControlVars(self, modelSpace):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
+        '''
+        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackRareFile())
+
+class FreqLoadsCrackControlLimitStateData(CrackControlLimitStateData):
+    ''' Reinforced concrete crack control under frequent loads limit state data.'''
+    def __init__(self, designSituations= ['sls_frequent']):
+        '''Constructor. 
+
+        :param designSituations: design situations that will be checked; 
+                                 i. e. sls_quasi-permanent, sls_frequent, 
+                                 sls_rare, sls_earthquake, etc. 
+        '''
+        super(FreqLoadsCrackControlLimitStateData,self).__init__(limitStateLabel= 'SLS_frequentLoadsCrackControl', outputDataBaseFileName= fn.crackControlFreqVerificationResultsFile, designSituations= designSituations)
+        
+    def readControlVars(self, modelSpace):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
+        '''
+        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackFreqFile())
+            
+class QPLoadsCrackControlLimitStateData(CrackControlLimitStateData):
+    ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
+    def __init__(self, designSituations= ['sls_quasi-permanent']):
+        '''Constructor. 
+
+        :param designSituations: design situations that will be checked; 
+                                 i. e. sls_quasi-permanent, sls_frequent, 
+                                 sls_rare, sls_earthquake, etc. 
+        '''
+        super(QPLoadsCrackControlLimitStateData,self).__init__(limitStateLabel= 'SLS_quasiPermanentLoadsCrackControl', outputDataBaseFileName= fn.crackControlQpermVerificationResultsFile, designSituations= designSituations)
+        
+    def readControlVars(self, modelSpace):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
+        '''
+        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackQpermFile())
+
+rareLoadsCrackControl= RareLoadsCrackControlLimitStateData()
+freqLoadsCrackControl= FreqLoadsCrackControlLimitStateData()
+quasiPermanentLoadsCrackControl= QPLoadsCrackControlLimitStateData()
                 
 ###################
 # Rebar families. #
@@ -1207,6 +1295,15 @@ def getAsMinWalls(concrete, reinfSteel, Ac, thickness, vertical= True, compresse
                 retval= None
     return retval
 
+#       _    _       _ _        _        _       
+#      | |  (_)_ __ (_) |_   __| |_ __ _| |_ ___ 
+#      | |__| | '  \| |  _| (_-<  _/ _` |  _/ -_)
+#      |____|_|_|_|_|_|\__| /__/\__\__,_|\__\___|
+#       __ ___ _ _| |_ _ _ ___| | |___ _ _ ___   
+#      / _/ _ \ ' \  _| '_/ _ \ | / -_) '_(_-<   
+#      \__\___/_||_\__|_| \___/_|_\___|_| /__/   
+# Limit state controllers.
+
 # Check normal stresses limit state.
 class BiaxialBendingNormalStressController(lscb.BiaxialBendingNormalStressControllerBase):
     '''Object that controls normal stresses limit state.'''
@@ -1228,10 +1325,26 @@ class UniaxialBendingNormalStressController(lscb.UniaxialBendingNormalStressCont
         '''
         super(UniaxialBendingNormalStressController,self).__init__(limitStateLabel)
 
+class NormalStressesLimitStateData(lsd.NormalStressesRCLimitStateData):
+    ''' Reinforced concrete normal stresses data for limit state checking.'''
+    
+    def getController(self, biaxialBending= True):
+        ''' Return a controller corresponding to this limit state.
+
+        :param biaxialBending: if True use a controller that checks bending
+                               around both cross-section axes.
+        '''
+        retval= None
+        if(biaxialBending):
+            retval= BiaxialBendingNormalStressController(self.label)
+        else:
+            retval= UniaxialBendingNormalStressController(self.label)
+        return retval
+    
+normalStressesResistance= NormalStressesLimitStateData()
 
 
 # Shear checking.
-
 class ShearController(lscb.ShearControllerBase):
     '''Shear control according to EHE-08.'''
 
@@ -1478,6 +1591,26 @@ class ShearController(lscb.ShearControllerBase):
             Mu= 0.0 #Apparently EC2 doesn't use Mu
             if(FCtmp>=e.getProp(self.limitStateLabel).CF):
                 e.setProp(self.limitStateLabel, self.ControlVars(idSection= idSection, combName= combName, CF= FCtmp, N= NTmp, My= MyTmp, Mz= MzTmp, Mu= Mu, Vy= VyTmp, Vz= VzTmp, theta= self.theta, Vu=VuTmp)) # Worst case
+
+
+class ShearResistanceLimitStateData(lsd.ShearResistanceRCLimitStateData):
+    ''' Reinforced concrete normal stresses data for limit state checking.'''
+    
+    def getController(self, solutionProcedureType= None):
+        ''' Return a controller corresponding to this limit state.
+
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results
+                                      (if None, use the default one).
+        '''
+        retval= None
+        if(solutionProcedureType):
+            retval= ShearController(limitStateLabel= self.label, solutionProcedureType= solutionProcedureType)
+        else:
+            retval= ShearController(limitStateLabel= self.label)
+        return retval;
+    
+shearResistance= ShearResistanceLimitStateData()
                 
 def get_nu_mu(concrete, steel, b, h, d, dp, x, As1, As2):
     ''' Return internal forces at failure for a rectangular section according

@@ -95,8 +95,8 @@ if(analOk<0):
     lmsg.error(fname+' ERROR. Failed to converge.')
     quit()
 
-limitState= lsd.shearResistance
-shearController= limitState.getController(code_limit_state_checking= EHE_limit_state_checking)
+limitState= EHE_limit_state_checking.shearResistance
+shearController= limitState.getController()
 
 scc= zlElement.getSection()
 shearCF= shearController.checkSection(sct= scc, elementDimension= zlElement.getDimension)

@@ -89,7 +89,7 @@ totalSet= preprocessor.getSets.getSet('total')
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
 # Limit state to check.
-limitState= lsd.shearResistance
+limitState= ACI_limit_state_checking.shearResistance
 ## Save internal forces.
 limitState.analyzeLoadCombinations(combContainer,totalSet) 
 
@@ -128,7 +128,7 @@ reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=
 
 # Checking shear.
 ## Build controller.
-controller= limitState.getController(code_limit_state_checking= ACI_limit_state_checking)
+controller= limitState.getController()
 
 limitState.outputDataBaseFileName= 'resVerif'
 ## Perform checking.

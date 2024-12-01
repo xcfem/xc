@@ -37,8 +37,8 @@ sg_max= 175.74e6 # maximum stress in the reinforcement immediately after
                  # formation of the crack.
 
 # Crack control.
-limitState= lsd.freqLoadsCrackControl # Crack control under frequent loads.
-crackController= limitState.getControllerEC2(code_limit_state_checking= EC2_limit_state_checking, shortTermLoading= False)
+limitState= EC2_limit_state_checking.freqLoadsCrackControl # Crack control under frequent loads.
+crackController= limitState.getController(shortTermLoading= False)
 
 # maximum final crack spacing
 k2= 0.5 # Bending (see EC2 clause 7.3.4).

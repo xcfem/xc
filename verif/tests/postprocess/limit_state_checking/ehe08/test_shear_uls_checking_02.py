@@ -102,9 +102,9 @@ shutil.copy(internalForcesFName, limit_state_data.shearResistance.getInternalFor
 
 # Check limit state.
 ## Limit state to check.
-limitState= limit_state_data.shearResistance
+limitState= EHE_limit_state_checking.shearResistance
 ## Build controller.
-controller= limitState.getController(code_limit_state_checking= EHE_limit_state_checking, solutionProcedureType= CustomNewtonRaphson)
+controller= limitState.getController(solutionProcedureType= CustomNewtonRaphson)
 controller.verbose= False # Don't display log messages.
 ## Perform checking.
 meanCFs= limitState.check(setCalc= None, listFile='N',calcMeanCF='Y', controller= controller, threeDim= True, crossSections= reinfConcreteSectionDistribution)

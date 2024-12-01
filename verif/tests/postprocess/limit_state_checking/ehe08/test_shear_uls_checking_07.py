@@ -88,13 +88,13 @@ cfg.projectDirTree.createTree() # To allow copying existing internal force data 
 
 # Check limit state.
 ## Limit state to check.
-limitState= limit_state_data.shearResistance
+limitState= EHE_limit_state_checking.shearResistance
 limitState.setEnvConfig(cfg= cfg)
 internalForcesFName= pth+"/../../../aux/internal_forces/intForce_ULS_9565.json"
 shutil.copy(internalForcesFName, limitState.getInternalForcesFileName())
 
 ## Build controller.
-controller= limitState.getController(code_limit_state_checking= EHE_limit_state_checking, solutionProcedureType= CustomNewtonRaphson)
+controller= limitState.getController(solutionProcedureType= CustomNewtonRaphson)
 controller.verbose= False # Don't display log messages.
 ## Perform checking.
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.

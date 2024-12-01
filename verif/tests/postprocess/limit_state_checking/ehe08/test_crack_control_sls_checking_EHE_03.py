@@ -89,13 +89,13 @@ cfg= default_config.get_temporary_env_config()
 cfg.projectDirTree.createTree() # To allow copying existing internal force data into.
 # Check limit state.
 ## Limit state to check.
-limitState= limit_state_data.quasiPermanentLoadsCrackControl # Crack control under quasi permanent loads.
+limitState= EHE_limit_state_checking.quasiPermanentLoadsCrackControl # Crack control under quasi permanent loads.
 limitState.setEnvConfig(cfg= cfg)
 internalForcesFName= pth+"/../../../aux/internal_forces/intForce_SLS_9565.json"
 shutil.copy(internalForcesFName, limitState.getInternalForcesFileName())
 
 ## Build controller.
-controller= limitState.getControllerEHE(code_limit_state_checking= EHE_limit_state_checking, solutionProcedureType= CustomNewtonRaphson, beta= 1.7)
+controller= limitState.getController(solutionProcedureType= CustomNewtonRaphson, beta= 1.7)
 controller.verbose= True #False # Don't display log messages.
 ## Perform checking.
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.

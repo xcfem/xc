@@ -160,7 +160,7 @@ cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
 
 ## Set limit state to check.
-limitState= lsd.normalStressesResistance
+limitState= EC2_limit_state_checking.normalStressesResistance
 
 ## Compute internal forces.
 limitState.analyzeLoadCombinations(combContainer,xcTotalSet)
@@ -168,7 +168,7 @@ limitState.analyzeLoadCombinations(combContainer,xcTotalSet)
 ## Elements to check.
 setCalc= xcTotalSet
 ## Build controller.
-controller= limitState.getController(code_limit_state_checking= EC2_limit_state_checking, biaxialBending= False)
+controller= limitState.getController(biaxialBending= False)
 ## Perform checking.
 ## variables that control the output of the checking:
 ### setCalc: set of elements to be checked.

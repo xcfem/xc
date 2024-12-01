@@ -114,7 +114,7 @@ cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
 
 ## Set limit state to check.
-limitState= lsd.shearResistance
+limitState= EHE_limit_state_checking.shearResistance
 ### In 2/07/2024 the default value for woodArmerAlsoForAxialForces has been
 ### changed to True because (it is safer and the user can set it to False if
 ### needed). Here we set it to False to get the same results than before.
@@ -202,7 +202,7 @@ class CustomSolver(predefined_solutions.PlainNewtonRaphson):
 
 # Checking shear stresses.
 ## Build controller.
-controller= limitState.getController(code_limit_state_checking= EHE_limit_state_checking, solutionProcedureType= CustomSolver)
+controller= limitState.getController(solutionProcedureType= CustomSolver)
 controller.verbose= False # Don't display log messages.
 ## Perform checking
 meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N', calcMeanCF='Y', threeDim= False, controller= controller)

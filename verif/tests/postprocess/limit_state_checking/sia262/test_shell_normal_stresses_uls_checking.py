@@ -78,9 +78,9 @@ shutil.copy(internalForcesFName, lsd.normalStressesResistance.getInternalForcesF
 
 # Check limit state.
 ## Limit state to check.
-limitState= lsd.normalStressesResistance
+limitState= SIA262_limit_state_checking.normalStressesResistance
 ## Build controller.
-controller= limitState.getController(code_limit_state_checking= SIA262_limit_state_checking, biaxialBending= True)
+controller= limitState.getController(biaxialBending= True)
 ## Perform checking.
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
 meanCFs= limitState.check(setCalc= None, crossSections=reinfConcreteSections, listFile='N',calcMeanCF='Y', controller= controller)

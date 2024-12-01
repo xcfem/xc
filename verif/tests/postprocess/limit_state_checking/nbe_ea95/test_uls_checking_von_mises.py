@@ -127,7 +127,7 @@ lsd.LimitStateData.envConfig= cfg
 loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
 
 ### Limit states to calculate internal forces for.
-limitStates= [lsd.vonMisesStressResistance]
+limitStates= [NBE_EA95_limit_state_checking.vonMisesStressResistance]
 
 ### Compute internal forces for each combination
 for ls in limitStates:
@@ -137,7 +137,7 @@ for ls in limitStates:
 #### Limit state to check.
 limitState= limitStates[0]
 #### Build controller.
-controller= limitState.getController(code_limit_state_checking= NBE_EA95_limit_state_checking)
+controller= limitState.getController()
 # controller= NBE_EA95_limit_state_checking.VonMisesStressController(limitState.label)
 #### Perform checking.
 average= limitState.check(setCalc=xcTotalSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)

@@ -173,11 +173,11 @@ lsd.normalStressesResistance.analyzeLoadCombinations(combContainer,xcTotalSet)
 
 # Check normal stresses.
 ## Limit state to check.
-limitState= lsd.normalStressesResistance
+limitState= EC2_limit_state_checking.normalStressesResistance
 ## Elements to check.
 setCalc= xcTotalSet
 ## Build controller.
-controller= limitState.getController(code_limit_state_checking= EC2_limit_state_checking, biaxialBending= True)
+controller= limitState.getController(biaxialBending= True)
 
 ## Perform checking.
 ## variables that control the output of the checking:

@@ -130,9 +130,9 @@ reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet
 #reinfConcreteSectionDistribution.report()
 # Checking cracking
 ## Limit state to check.
-limitState= lsd.freqLoadsCrackControl # Crack control under frequent loads.
+limitState= EC2_limit_state_checking.freqLoadsCrackControl # Crack control under frequent loads.
 ## Build controller.
-controller= limitState.getControllerEC2(code_limit_state_checking= EC2_limit_state_checking)
+controller= limitState.getController()
 controller.verbose= True #False # Don't display log messages.
 ## Perform checking.
 ## variables that control the output of the checking:

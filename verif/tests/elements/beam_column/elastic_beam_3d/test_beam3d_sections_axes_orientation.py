@@ -205,11 +205,11 @@ lsd.normalStressesResistance.analyzeLoadCombinations(combContainer,totalSet)
 reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=beamRCsect)
 
 # Checking normal stresses.
-limitState= lsd.normalStressesResistance
+limitState= SIA262_limit_state_checking.normalStressesResistance
 ## Use a custom file for the autput.
 lsd.normalStressesResistance.outputDataBaseFileName= 'resVerif'
 ## Get a suitable controller. 
-controller= limitState.getController(code_limit_state_checking= SIA262_limit_state_checking, biaxialBending= True)
+controller= limitState.getController(biaxialBending= True)
 # Using runChecking method we create the phantom model and run the checking on it. Unlike other check methods that also creates the phantom model this one doesn't clear the model after carrying out the verification. This method returns a tuple with the FE model (phantom model) and the result of verification
 feProblem.errFileName= "/tmp/erase.err" # Don't print errors.
 outputCfg= lsd.VerifOutVars(controller= controller, outputDataBaseFileName= lsd.normalStressesResistance.getOutputDataBaseFileName())

@@ -66,3 +66,12 @@ class VonMisesStressController(lsc.LimitStateControllerBase):
             # Update efficiency.
             if(CFtmp>elem.getProp(self.limitStateLabel).CF):
                 elem.setProp(self.limitStateLabel,self.ControlVars(lf.idComb,CFtmp,lf.vonMisesStress))
+
+class VonMisesStressLimitStateData(lsd.VonMisesStressLimitStateData):
+    ''' AISC Von Mises stress limit state data.'''
+    
+    def getController(self, code_limit_state_checking):
+        ''' Return a controller corresponding to this limit state.'''
+        return VonMisesStressController(limitStateLabel= self.label)
+    
+vonMisesStressResistance= VonMisesStressLimitStateData()

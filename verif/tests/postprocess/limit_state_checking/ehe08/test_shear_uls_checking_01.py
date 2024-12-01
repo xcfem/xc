@@ -125,9 +125,9 @@ reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=
 
 # Checking shear.
 ## Limit state to check.
-limitState= lsd.shearResistance
+limitState= EHE_limit_state_checking.shearResistance
 ## Build controller.
-controller= limitState.getController(code_limit_state_checking= EHE_limit_state_checking)
+controller= limitState.getController()
 ## Perform checking.
 meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y',threeDim= True, controller= controller)
 

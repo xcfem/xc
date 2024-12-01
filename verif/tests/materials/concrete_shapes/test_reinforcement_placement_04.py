@@ -175,9 +175,9 @@ reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet
 
 # Checking normal stresses.
 ## Set limit state to check.
-limitState= lsd.normalStressesResistance
+limitState= EC2_limit_state_checking.normalStressesResistance
 ## Build the controller for biaxial bending.
-controller= limitState.getController(code_limit_state_checking= EC2_limit_state_checking, biaxialBending= True)
+controller= limitState.getController(biaxialBending= True)
 controller.verbose= False # Don't display log messages.
 ## Perform the checking.
 feProblem.logFileName= "/tmp/erase.log" # Ignore warning messagess about computation of the interaction diagram.
