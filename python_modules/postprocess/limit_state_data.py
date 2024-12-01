@@ -472,6 +472,16 @@ class LimitStateData(object):
         methodName= sys._getframe(0).f_code.co_name
         lmsg.error(className+'.'+methodName+"; not implemented yet.")
 
+    def getController(self, code_limit_state_checking):
+        ''' Return a controller corresponding to this limit state.
+
+        :param code_limit_state_checking: code used to check the limit state.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+"; not implemented yet.")
+        return None       
+
     def getCriticalLCombs(self,threshold):
         '''Pick the load combinations for which the capacity factor exceeds the given threshold.
         
@@ -674,6 +684,16 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
         '''
         modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifBucklingFile())
     
+    def getController(self, code_limit_state_checking):
+        ''' Return a controller corresponding to this limit state.
+
+        :param code_limit_state_checking: code used to check the limit state.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+"; not implemented yet.")
+        return None       
+    
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' Perform buckling limit state checking.
 
@@ -741,7 +761,22 @@ class NormalStressesRCLimitStateData(ULS_LimitStateData):
                            (see predefined_spaces.py).
         '''
         modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifNormStrFile())
+    
+    def getController(self, code_limit_state_checking, biaxialBending= True):
+        ''' Return a controller corresponding to this limit state.
 
+        :param code_limit_state_checking: code used to check the limit state.
+        :param biaxialBending: if True use a controller that checks bending
+                               around both cross-section axes.
+        '''
+        retval= None
+        if(biaxialBending):
+            retval= code_limit_state_checking.BiaxialBendingNormalStressController(self.label)
+        else:
+            retval= code_limit_state_checking.UniaxialBendingNormalStressController(self.label)
+        return retval
+
+        
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' Perform limit state checking.
 
@@ -780,7 +815,21 @@ class NormalStressesSteelLimitStateData(ULS_LimitStateData):
                            (see predefined_spaces.py).
         '''
         modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifNormStrFile())
+    
+    def getController(self, code_limit_state_checking, biaxialBending= True):
+        ''' Return a controller corresponding to this limit state.
 
+        :param code_limit_state_checking: code used to check the limit state.
+        :param biaxialBending: if True use a controller that checks bending
+                               around both cross-section axes.
+        '''
+        retval= None
+        if(biaxialBending):
+            retval= code_limit_state_checking.BiaxialBendingNormalStressController(self.label)
+        else:
+            retval= code_limit_state_checking.UniaxialBendingNormalStressController(self.label)
+        return retval
+    
     def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
         ''' Perform limit state checking.
 
@@ -815,6 +864,21 @@ class ShearResistanceRCLimitStateData(ULS_LimitStateData):
                            (see predefined_spaces.py).
         '''
         modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifShearFile())
+    
+    def getController(self, code_limit_state_checking, solutionProcedureType= None):
+        ''' Return a controller corresponding to this limit state.
+
+        :param code_limit_state_checking: code used to check the limit state.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results
+                                      (if None, use the default one).
+        '''
+        retval= None
+        if(solutionProcedureType):
+            retval= code_limit_state_checking.ShearController(limitStateLabel= self.label, solutionProcedureType= solutionProcedureType)
+        else:
+            retval= code_limit_state_checking.ShearController(limitStateLabel= self.label)
+        return retval;
         
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' Perform limit state checking.
@@ -853,6 +917,13 @@ class ShearResistanceSteelLimitStateData(ULS_LimitStateData):
                            (see predefined_spaces.py).
         '''
         modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifShearFile())
+    
+    def getController(self, code_limit_state_checking):
+        ''' Return a controller corresponding to this limit state.
+
+        :param code_limit_state_checking: code used to check the limit state.
+        '''
+        return code_limit_state_checking.ShearController(self.label)
         
     def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
         ''' Perform limit state checking.
@@ -889,6 +960,13 @@ class TorsionResistanceRCLimitStateData(ULS_LimitStateData):
                            (see predefined_spaces.py).
         '''
         modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifTorsionFile())
+    
+    def getController(self, code_limit_state_checking):
+        ''' Return a controller corresponding to this limit state.
+
+        :param code_limit_state_checking: code used to check the limit state.
+        '''
+        return code_limit_state_checking.TorsionController(self.label)
         
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' Perform limit state checking.
@@ -942,6 +1020,16 @@ class SLS_LimitStateData(LimitStateData):
         retval= cv.write_control_vars_from_phantom_elements(controlVarsDict= controlVarsDict, outputCfg= outputCfg)
         return retval
 
+    def getController(self, code_limit_state_checking):
+        ''' Return a controller corresponding to this limit state.
+
+        :param code_limit_state_checking: code used to check the limit state.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+"; not implemented yet.")
+        return None       
+
 class CrackControlRCLimitStateData(SLS_LimitStateData):
     ''' Reinforced concrete crack control limit state data base class.'''
         
@@ -964,6 +1052,82 @@ class CrackControlRCLimitStateData(SLS_LimitStateData):
         '''
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
+    
+    def getController(self, code_limit_state_checking):
+        ''' Return a controller corresponding to this limit state.
+
+        :param code_limit_state_checking: code used to check the limit state.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+"; for crack control limit state the controller parameters depend on the code, use getControlerEHE, getControllerEC2 or getControllerSIA.")
+        return None
+    
+    def getControllerEHE(self, code_limit_state_checking, wk_lim= 0.3e-3, beta= 1.7, k2= 1.0, solutionProcedureType= None):
+        ''' Return a controller corresponding to this limit state.
+
+        :param code_limit_state_checking: code used to check the limit state
+                                          (EHE_limit_state_checking in this
+                                          case).
+        :param wk_lim: maximum allowable crack width. 
+        :param beta: Coefficient which relates the mean crack opening to the 
+                     characteristic value and is equal to 1.3 in the case 
+                     of cracking caused by indirect actions only, and 1.7 
+                     in other cases.
+        :param k2: coefficient of value 1.0 in the case of non-repeating 
+                   temporary load and 0.5 in other cases.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results
+                                      (if None, use the default one).
+        '''
+        retval= None
+        if(solutionProcedureType):
+            retval= code_limit_state_checking.CrackController(limitStateLabel= self.label, wk_lim= wk_lim, beta= beta, k2= k2, solutionProcedureType= solutionProcedureType)
+        else:
+            retval= code_limit_state_checking.CrackController(limitStateLabel= self.label, wk_lim= wk_lim, beta= beta, k2= k2)
+        return retval
+
+    def getControllerEC2(self, code_limit_state_checking,  wk_lim= 0.3e-3, k1= 0.8, shortTermLoading= False, solutionProcedureType= None):
+        ''' Return a controller corresponding to this limit state.
+
+        :param code_limit_state_checking: code used to check the limit state
+                                          (EC2_limit_state_checking in this
+                                          case).
+        :param wk_lim: maximum allowable crack width. 
+        :param k1: coefficient which takes account of the bond properties
+                   of the bonded reinforcement:
+
+               - = 0.8 for high bond bars
+               - = 1.6 for bars with an effectively plain surface (e.g. 
+                      prestressing tendons)
+        :param shortTermLoading: if true, consider short therm loading 
+                                 (k_t= 0.6), otherwise consider long term 
+                                 loading (k_t= 0.4).
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results
+                                      (if None, use the default one).
+        '''
+        retval= None
+        if(solutionProcedureType):
+            retval= code_limit_state_checking.CrackController(limitStateLabel= self.label, wk_lim= wk_lim, k1= k1, shortTermLoading= shortTermLoading, solutionProcedureType= solutionProcedureType)
+        else:
+             retval= code_limit_state_checking.CrackController(limitStateLabel= self.label, wk_lim= wk_lim, k1= k1, shortTermLoading= shortTermLoading)
+        return retval
+    
+    def getControllerSIA(self, code_limit_state_checking,  limitStress, planB= False):
+        ''' Return a controller corresponding to this limit state.
+
+        :param code_limit_state_checking: code used to check the limit state
+                                          (SIA_limit_state_checking in this
+                                          case).
+        :param limitStress: limit value for rebar stresses.
+        '''
+        retval= None
+        if(planB):
+            retval= code_limit_state_checking.CrackControlSIA262PlanB(limitStateLabel= self.label, limitStress= limitStress)
+        else:
+            retval= code_limit_state_checking.CrackControlSIA262(limitStateLabel= self.label, limitStress= limitStress)
+        return retval
         
 class RareLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under rare loads limit state data.'''
@@ -974,7 +1138,15 @@ class RareLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
                                  i. e. sls_quasi-permanent, sls_frequent, 
                                  sls_rare, sls_earthquake, etc. 
         '''
-        super(RareLoadsCrackControlRCLimitStateData,self).__init__('SLS_rareLoadsCrackControl', fn.crackControlRareVerificationResultsFile, designSituations= designSituations)
+        super(RareLoadsCrackControlRCLimitStateData,self).__init__(limitStateLabel= 'SLS_rareLoadsCrackControl', outputDataBaseFileName= fn.crackControlRareVerificationResultsFile, designSituations= designSituations)
+        
+    def readControlVars(self, modelSpace):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
+        '''
+        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackRareFile())
 
 class FreqLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under frequent loads limit state data.'''
@@ -985,7 +1157,7 @@ class FreqLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
                                  i. e. sls_quasi-permanent, sls_frequent, 
                                  sls_rare, sls_earthquake, etc. 
         '''
-        super(FreqLoadsCrackControlRCLimitStateData,self).__init__('SLS_frequentLoadsCrackControl', fn.crackControlFreqVerificationResultsFile, designSituations= designSituations)
+        super(FreqLoadsCrackControlRCLimitStateData,self).__init__(limitStateLabel= 'SLS_frequentLoadsCrackControl', outputDataBaseFileName= fn.crackControlFreqVerificationResultsFile, designSituations= designSituations)
         
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
@@ -994,7 +1166,7 @@ class FreqLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
                            (see predefined_spaces.py).
         '''
         modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackFreqFile())
-        
+            
 class QPLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
     def __init__(self, designSituations= ['sls_quasi-permanent']):
@@ -1004,7 +1176,7 @@ class QPLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
                                  i. e. sls_quasi-permanent, sls_frequent, 
                                  sls_rare, sls_earthquake, etc. 
         '''
-        super(QPLoadsCrackControlRCLimitStateData,self).__init__('SLS_quasiPermanentLoadsCrackControl', fn.crackControlQpermVerificationResultsFile, designSituations= designSituations)
+        super(QPLoadsCrackControlRCLimitStateData,self).__init__(limitStateLabel= 'SLS_quasiPermanentLoadsCrackControl', outputDataBaseFileName= fn.crackControlQpermVerificationResultsFile, designSituations= designSituations)
         
     def readControlVars(self, modelSpace):
         ''' Read the control vars associated with this limit state.
@@ -1078,6 +1250,13 @@ class VonMisesStressLimitStateData(ULS_LimitStateData):
         :param setCalc: elements to read internal forces for.
         '''
         return read_internal_forces_file(self.getInternalForcesFileName(), setCalc, vonMisesStressId= self.vonMisesStressId)
+
+    def getController(self, code_limit_state_checking):
+        ''' Return a controller corresponding to this limit state.
+
+        :param code_limit_state_checking: code used to check the limit state.
+        '''
+        return code_limit_state_checking.VonMisesStressController(limitStateLabel= self.label)
         
     def checkElements(self, elementsToCheck, outputCfg= VerifOutVars()):
         '''Checking of fatigue under fatigue combinations loads in

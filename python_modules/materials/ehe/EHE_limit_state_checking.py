@@ -1367,6 +1367,17 @@ class BucklingParametersLimitStateData(lsd.BucklingParametersLimitStateData):
         super(BucklingParametersLimitStateData, self).__init__(numModes= numModes, limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituations= designSituations)
         self.eigenvectorNormThreshold= eigenvectorNormThreshold
         self.alpha_cr_threshold= alpha_cr_threshold
+
+    def getController(self, biaxialBuckling= True):
+        ''' Return a controller corresponding to this limit state.
+
+        :param biaxialBuckling: if True, consider bending aroung both 
+                                cross-section axes.
+        '''
+        if(biaxialBuckling):
+            return BiaxialBucklingController(limitStateLabel= self.label)
+        else:
+            return UniaxialBucklingController(limitStateLabel= self.label)
         
     def getEHEBucklingParametersDict(self, nmbComb, xcSet):
         '''Creates a dictionary with the buckling parameters of the given

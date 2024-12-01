@@ -1578,6 +1578,13 @@ class Ec2InPlaneStressLimitStateData(lsd.ULS_LimitStateData):
         :param setCalc: elements to read stresses for.
         '''
         return lsd.read_stresses_dict(self.getStressesFileName(), setCalc)
+
+    def getController(self):
+        ''' Return a controller corresponding to this limit state.
+
+        :param code_limit_state_checking: code used to check the limit state.
+        '''
+        return Ec2InPlaneStressController(limitStateLabel= self.label)
         
     def checkElements(self, elementsToCheck, outputCfg= lsd.VerifOutVars()):
         '''Checking of stresses in ultimate limit states
