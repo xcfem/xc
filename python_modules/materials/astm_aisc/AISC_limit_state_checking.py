@@ -574,6 +574,8 @@ class VonMisesStressLimitStateData(lsd.VonMisesStressLimitStateData):
     def getController(self, code_limit_state_checking):
         ''' Return a controller corresponding to this limit state.'''
         return VonMisesStressController(limitStateLabel= self.label)
+
+vonMisesStressResistance= VonMisesStressLimitStateData()
                         
 def controlULSCriterion():
     return '''recorder= self.getProp('ULSControlRecorder')
