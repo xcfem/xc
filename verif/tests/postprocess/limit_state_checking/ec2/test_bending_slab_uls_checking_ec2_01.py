@@ -22,6 +22,7 @@ from postprocess import limit_state_data as lsd
 from postprocess.config import default_config
 from postprocess import RC_material_distribution
 from scipy.constants import g
+from misc_utils import log_messages as lmsg
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -165,15 +166,15 @@ reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistributio
 xcTotalSet= modelSpace.getTotalSet()
 reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet.getElements)
 
-
-# Compute internal forces.
-cfg= default_config.get_temporary_env_config()
-lsd.LimitStateData.envConfig= cfg
-lsd.normalStressesResistance.analyzeLoadCombinations(combContainer,xcTotalSet)
-
-# Check normal stresses.
 ## Limit state to check.
 limitState= EC2_limit_state_checking.normalStressesResistance
+
+cfg= default_config.get_temporary_env_config()
+lsd.LimitStateData.envConfig= cfg
+# Compute internal forces.
+limitState.analyzeLoadCombinations(combContainer,xcTotalSet)
+
+# Check normal stresses.
 ## Elements to check.
 setCalc= xcTotalSet
 ## Build controller.
@@ -200,12 +201,12 @@ limitState.readControlVars(modelSpace= modelSpace)
 ### Compute the maximum efficiency.
 maxCF= -1e3
 for e in xcTotalSet.elements:
-    ULS_normalStressesResistanceSect1= e.getProp('ULS_normalStressesResistanceSect1')
-    maxCF= max(maxCF,ULS_normalStressesResistanceSect1.CF)
-    ULS_normalStressesResistanceSect2= e.getProp('ULS_normalStressesResistanceSect2')
-    maxCF= max(maxCF,ULS_normalStressesResistanceSect2.CF)
+    controlVarsSect1= e.getProp(limitState.label+'Sect1')
+    maxCF= max(maxCF,controlVarsSect1.CF)
+    controlVarsSect2= e.getProp(limitState.label+'Sect2')
+    maxCF= max(maxCF,controlVarsSect2.CF)
 
-ratio1= abs(maxCF-0.9135590413756935)/-0.9135590413756935
+ratio1= abs(maxCF-0.9135590413756935)/0.9135590413756935
 
 '''
 print(maxCF)
@@ -214,7 +215,7 @@ print(ratio1)
 
 import os
 fname= os.path.basename(__file__)
-if (ratio1<1e-3):
+if (abs(ratio1)<1e-3):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
