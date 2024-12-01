@@ -90,9 +90,11 @@ combContainer.SLS.freq.add('combSLS01','1.0*load')
 # Compute and store load combination results.
 cfg= default_config.get_temporary_env_config() # Store results in temporary files.
 lsd.LimitStateData.envConfig= cfg
-## Save internal forces.
 xcTotalSet= modelSpace.getTotalSet()
-lsd.freqLoadsCrackControl.analyzeLoadCombinations(combContainer,xcTotalSet)
+## Limit state to check.
+limitState= EHE_limit_state_checking.freqLoadsCrackControl # Crack control under frequent loads.
+l## Save internal forces.
+sd.freqLoadsCrackControl.analyzeLoadCombinations(combContainer,xcTotalSet)
 
 # Define reinforcement.
 # Reinforcement row scheme:
@@ -130,8 +132,6 @@ reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistributio
 reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet.getElements)
 #reinfConcreteSectionDistribution.report()
 # Checking cracking
-## Limit state to check.
-limitState= EHE_limit_state_checking.freqLoadsCrackControl # Crack control under frequent loads.
 ## Build controller.
 controller= limitState.getController()
 controller.verbose= False #False # Don't display log messages.

@@ -93,7 +93,7 @@ xcTotalSet= preprocessor.getSets.getSet('total')
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
 ### Limit state to check.
-limitState= lsd.shearResistance # Shear limit state.
+limitState= EC2_limit_state_checking.shearResistance
 ### Save internal forces.
 limitState.analyzeLoadCombinations(combContainer,xcTotalSet) 
 
@@ -190,8 +190,6 @@ class CustomSolver(predefined_solutions.PlainNewtonRaphson):
         super(CustomSolver,self).__init__(prb= prb, name= 'test', maxNumIter= 20, printFlag= 1, convergenceTestTol= 1e-3)
 
 # Checking shear.
-## Limit state to check.
-limitState= EC2_limit_state_checking.shearResistance
 ## Build the controller.
 controller= limitState.getController(solutionProcedureType= CustomSolver)
 controller.verbose= False # Don't display log messages.

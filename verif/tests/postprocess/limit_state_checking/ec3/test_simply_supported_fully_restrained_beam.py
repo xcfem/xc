@@ -229,6 +229,6 @@ else:
 # oh.displayElementValueDiagram('chiLT', setToDisplay= ec3CalcSet)
 
 # # Display normal stresses efficiency.
-# oh.displayBeamResult(attributeName=lsd.normalStressesResistance.label, itemToDisp='CF', beamSetDispRes=ec3CalcSet, setToDisplay=xcTotalSet)
+# oh.displayBeamResult(attributeName= limitState.label, itemToDisp='CF', beamSetDispRes=ec3CalcSet, setToDisplay=xcTotalSet)
 # # Display shear efficiency.
-# oh.displayBeamResult(attributeName=lsd.shearResistance.label, itemToDisp='CF', beamSetDispRes=ec3CalcSet, setToDisplay=xcTotalSet)
+# oh.displayBeamResult(attributeName= limitState.label, itemToDisp='CF', beamSetDispRes=ec3CalcSet, setToDisplay=xcTotalSet)

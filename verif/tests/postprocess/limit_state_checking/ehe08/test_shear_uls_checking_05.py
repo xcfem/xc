@@ -110,8 +110,10 @@ combContainer.ULS.perm.add('combULS01','1.6*load')
 xcTotalSet= preprocessor.getSets.getSet('total')
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
+### Limit state to check.
+limitState= EHE_limit_state_checking.shearResistance
 ### Save internal forces.
-lsd.shearResistance.analyzeLoadCombinations(combContainer,xcTotalSet) 
+limitState.analyzeLoadCombinations(combContainer,xcTotalSet) 
 
 # Define reinforcement.
 # Reinforcement row scheme:
@@ -187,8 +189,6 @@ class CustomSolver(predefined_solutions.PlainNewtonRaphson):
         super(CustomSolver,self).__init__(prb= prb, name= 'test', maxNumIter= 20, printFlag= 0, convergenceTestTol= 1e-3)
 
 # Checking shear stresses.
-## Limit state to check.
-limitState= EHE_limit_state_checking.shearResistance
 ## Build controller.
 controller= limitState.getController(solutionProcedureType= CustomSolver)
 controller.verbose= False # Don't display log messages.

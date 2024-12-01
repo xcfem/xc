@@ -218,6 +218,6 @@ else:
 # # oh.displayFEMesh()
 # #Load properties to display:
 # argument= 'CF' #Possible arguments: 'CF', 'N', 'Mz'
-# oh.displayBeamResult(attributeName=lsd.normalStressesResistance.label, itemToDisp= argument, beamSetDispRes= xcTotalSet, setToDisplay= xcTotalSet)
+# oh.displayBeamResult(attributeName= limitState.label, itemToDisp= argument, beamSetDispRes= xcTotalSet, setToDisplay= xcTotalSet)
 
 cfg.cleandirs()  # Clean after yourself.

@@ -72,16 +72,17 @@ pth= os.path.dirname(__file__)
 if(not pth):
     pth= "."
 
-#Checking normal stresses.
+# Checking normal stresses.
+## Limit state to check.
+limitState= EHE_limit_state_checking.normalStressesResistance
+
 cfg= default_config.get_temporary_env_config()
 cfg.projectDirTree.createTree() # To allow copying existing internal force data into.
 lsd.LimitStateData.envConfig= cfg
 internalForcesFName= pth+"/../../../aux/internal_forces/intForce_ULS_normalStressesResistance.csv"
-shutil.copy(internalForcesFName, lsd.normalStressesResistance.getInternalForcesFileName())
+shutil.copy(internalForcesFName, limitState.getInternalForcesFileName())
 
 # Check limit state.
-## Limit state to check.
-limitState= EHE_limit_state_checking.normalStressesResistance
 ## Build controller.
 controller= limitState.getController(biaxialBending= True)
 ## Perform checking.

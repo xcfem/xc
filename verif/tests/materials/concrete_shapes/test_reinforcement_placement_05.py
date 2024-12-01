@@ -94,9 +94,10 @@ combContainer.ULS.perm.add('combULS01','1.6*load')
 xcTotalSet= preprocessor.getSets.getSet('total')
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
-### Limit state to check.
-limitState= lsd.normalStressesResistance
-### Save internal forces.
+
+## Set limit state to check.
+limitState= EC2_limit_state_checking.normalStressesResistance
+## Save internal forces.
 limitState.analyzeLoadCombinations(combContainer,xcTotalSet) 
 
 # Define reinforcement.
@@ -174,8 +175,6 @@ reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistributio
 reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet.getElements)
 
 #Checking normal stresses.
-## Set limit state to check.
-limitState= EC2_limit_state_checking.normalStressesResistance
 ## Build the controller for biaxial bending.
 controller= limitState.getController(biaxialBending= True)
 controller.verbose= False # Don't display log messages.

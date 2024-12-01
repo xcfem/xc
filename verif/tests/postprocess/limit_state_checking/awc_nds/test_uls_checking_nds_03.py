@@ -130,7 +130,7 @@ loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
 
 ## Limit states to calculate internal forces for.
 limitStates= [nds.normalStressesResistance, # Normal stresses resistance.
-#lsd.shearResistance, 
+#nds.shearResistance, 
 ]
 
 ## Create NDS Member objects.
@@ -200,5 +200,5 @@ else:
 
 # oh.displayElementValueDiagram('chiLT', setToDisplay= ndsCalcSet)
 
-# oh.displayBeamResult(attributeName=lsd.normalStressesResistance.label, itemToDisp='CF', beamSetDispRes=ndsCalcSet, setToDisplay=xcTotalSet)
+# oh.displayBeamResult(attributeName= limitState.label, itemToDisp='CF', beamSetDispRes=ndsCalcSet, setToDisplay=xcTotalSet)
 

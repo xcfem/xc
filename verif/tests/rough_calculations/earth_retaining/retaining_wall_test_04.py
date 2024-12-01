@@ -184,7 +184,10 @@ ratio2= abs(topFootingDesignShear-topFootingDesignShearRef)/abs(topFootingDesign
 ## Compute internal forces.
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
-lsd.normalStressesResistance.analyzeLoadCombinations(combContainer,wall.wallSet) 
+### Limit state to check.
+limitState= EC2_limit_state_checking.normalStressesResistance
+
+limitState.analyzeLoadCombinations(combContainer, wall.wallSet) 
 
 ## Transfer the reinforcement to the finite element model.
 reinfConcreteSectionDistribution= wall.createConcreteSectionDistribution()
@@ -193,8 +196,6 @@ reinfConcreteSectionDistribution= wall.createConcreteSectionDistribution()
 
 ### Set of elements to be checked.
 setCalc= wall.wallSet
-### Limit state to check.
-limitState= EC2_limit_state_checking.normalStressesResistance
 
 ### Build the controller.
 controller= limitState.getController(biaxialBending= False) # Get controller for uniaxial bending.
@@ -257,6 +258,6 @@ else:
 # # oh.displayFEMesh()
 # #Load properties to display:
 # argument= 'CF' #Possible arguments: 'CF', 'N', 'Mz'
-# oh.displayBeamResult(attributeName=lsd.normalStressesResistance.label, itemToDisp= argument, beamSetDispRes= wall.wallSet, setToDisplay= wall.wallSet)
+# oh.displayBeamResult(attributeName= limitState.label, itemToDisp= argument, beamSetDispRes= wall.wallSet, setToDisplay= wall.wallSet)
 
 cfg.cleandirs()  # Clean after yourself.

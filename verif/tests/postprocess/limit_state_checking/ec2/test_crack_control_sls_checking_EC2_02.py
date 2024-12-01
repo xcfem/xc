@@ -134,8 +134,6 @@ controller.verbose= True #False # Don't display log messages.
 ###               meant to be calculated (defaults to 'N')
 meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution,listFile='N',calcMeanCF='Y', controller= controller)
 
-#(FEcheckedModel, meanCFs)= reinfConcreteSectionDistribution.runChecking(lsd.freqLoadsCrackControl, matDiagType="k", threeDim= True, outputCfg= outCfg)
-
 ratio1= abs(meanCFs[0]-1.0000530846623346)/1.0000530846623346
 ratio2= abs(meanCFs[1]-1.0000530846614253)/1.0000530846614253
 

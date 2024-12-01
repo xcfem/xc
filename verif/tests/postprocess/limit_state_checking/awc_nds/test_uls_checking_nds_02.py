@@ -175,5 +175,5 @@ else:
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
-# oh.displayBeamResult(attributeName=lsd.shearResistance.label, itemToDisp='CF', beamSetDispRes=ndsCalcSet, setToDisplay=xcTotalSet)
+# oh.displayBeamResult(attributeName= limitState.label, itemToDisp='CF', beamSetDispRes=ndsCalcSet, setToDisplay=xcTotalSet)
 

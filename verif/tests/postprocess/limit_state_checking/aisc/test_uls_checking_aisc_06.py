@@ -167,7 +167,7 @@ else:
 #oh.displayElementValueDiagram('chiN', setToDisplay= aiscCalcSet)
 #oh.displayElementValueDiagram('chiLT', setToDisplay= aiscCalcSet)
 
-# oh.displayBeamResult(attributeName=lsd.normalStressesResistance.label, itemToDisp='CF', beamSetDispRes=aiscCalcSet, setToDisplay=xcTotalSet)
-# oh.displayBeamResult(attributeName=lsd.normalStressesResistance.label, itemToDisp='N', beamSetDispRes=aiscCalcSet, setToDisplay=xcTotalSet)
-# oh.displayBeamResult(attributeName=lsd.normalStressesResistance.label, itemToDisp='My', beamSetDispRes=aiscCalcSet, setToDisplay=xcTotalSet)
-# oh.displayBeamResult(attributeName=lsd.normalStressesResistance.label, itemToDisp='Mz', beamSetDispRes=aiscCalcSet, setToDisplay=xcTotalSet)
+# oh.displayBeamResult(attributeName= limitState.label, itemToDisp='CF', beamSetDispRes=aiscCalcSet, setToDisplay=xcTotalSet)
+# oh.displayBeamResult(attributeName= limitState.label, itemToDisp='N', beamSetDispRes=aiscCalcSet, setToDisplay=xcTotalSet)
+# oh.displayBeamResult(attributeName= limitState.label, itemToDisp='My', beamSetDispRes=aiscCalcSet, setToDisplay=xcTotalSet)
+# oh.displayBeamResult(attributeName= limitState.label, itemToDisp='Mz', beamSetDispRes=aiscCalcSet, setToDisplay=xcTotalSet)

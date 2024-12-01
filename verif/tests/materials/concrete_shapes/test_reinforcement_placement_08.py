@@ -92,9 +92,9 @@ combContainer.ULS.perm.add('combULS01','1.6*load')
 xcTotalSet= preprocessor.getSets.getSet('total')
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
+### Set limit state to check.
+limitState= EC2_limit_state_checking.shearResistance # Shear limit state.
 ### Save internal forces.
-limitState= lsd.shearResistance # Shear limit state.
-#limitState= lsd.normalStressesResistance # Normal stresses limit state.
 limitState.analyzeLoadCombinations(combContainer,xcTotalSet) 
 
 # Define reinforcement.
@@ -211,7 +211,6 @@ feProblem.errFileName= "/tmp/erase.err" # Ignore error messagess about maximum e
 ### threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
 ###           false if it's 2D (Fx,Fy,Mz).
 meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N', calcMeanCF='Y', controller= controller)
-#meanCFs= lsd.normalStressesResistance.check(reinfConcreteSectionDistribution, outCfg)
 feProblem.errFileName= "cerr" # From now on display errors if any.
 feProblem.logFileName= "clog" # From now on display warnings if any.
 

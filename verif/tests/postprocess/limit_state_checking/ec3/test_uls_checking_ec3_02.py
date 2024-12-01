@@ -203,4 +203,4 @@ else:
 
 # # oh.displayElementValueDiagram('chiN', setToDisplay= aiscCalcSet)
 
-# oh.displayBeamResult(attributeName=lsd.normalStressesResistance.label, itemToDisp='CF', beamSetDispRes=ec3CalcSet, setToDisplay=xcTotalSet)
+# oh.displayBeamResult(attributeName= limitState.label, itemToDisp='CF', beamSetDispRes=ec3CalcSet, setToDisplay=xcTotalSet)

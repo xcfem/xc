@@ -140,7 +140,7 @@ cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
 
 ## Set limit state to check.
-limitState= lsd.normalStressesResistance # normal stresses.
+limitState= EHE_limit_state_checking.normalStressesResistance # normal stresses.
 
 ## Define set of elements to check.
 setCalc= modelSpace.defSet(setName= 'setCalc', surfaces= [s1])
@@ -149,8 +149,6 @@ setCalc.fillDownwards() # populate with the elements of the face.
 # Compute internal forces for each load combination.
 limitState.analyzeLoadCombinations(combContainer= combContainer, setCalc= setCalc) 
 
-## Set limit state to check.
-limitState= EHE_limit_state_checking.normalStressesResistance # normal stresses.
 ## Build controller.
 controller= limitState.getController(biaxialBending= True)
 ## Perform checking.

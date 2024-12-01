@@ -193,27 +193,29 @@ lcZbeam.newNodalLoad(n3.tag,xc.Vector([F/math.sqrt(2),-F/math.sqrt(2),0,M/math.s
 
 # lPatterns.addToDomain("lcbeams")
 
+# Checking normal stresses.
+limitState= SIA262_limit_state_checking.normalStressesResistance
+
 # Load combinations
 combContainer= combs.CombContainer()
 combContainer.ULS.perm.add('allLoads', '1.0*lcXbeam+1.0*lcYbeam+1.0*lcZbeam')
 totalSet= preprocessor.getSets.getSet('total')
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
-lsd.normalStressesResistance.analyzeLoadCombinations(combContainer,totalSet) 
+
+limitState.analyzeLoadCombinations(combContainer,totalSet) 
 
 # Spatial distribution of reinforced concrete sections.
 reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=beamRCsect)
 
-# Checking normal stresses.
-limitState= SIA262_limit_state_checking.normalStressesResistance
 ## Use a custom file for the autput.
-lsd.normalStressesResistance.outputDataBaseFileName= 'resVerif'
+limitState.outputDataBaseFileName= 'resVerif'
 ## Get a suitable controller. 
 controller= limitState.getController(biaxialBending= True)
 # Using runChecking method we create the phantom model and run the checking on it. Unlike other check methods that also creates the phantom model this one doesn't clear the model after carrying out the verification. This method returns a tuple with the FE model (phantom model) and the result of verification
 feProblem.errFileName= "/tmp/erase.err" # Don't print errors.
-outputCfg= lsd.VerifOutVars(controller= controller, outputDataBaseFileName= lsd.normalStressesResistance.getOutputDataBaseFileName())
-controlVarsDict= reinfConcreteSectionDistribution.runChecking(lsd.normalStressesResistance, matDiagType="d",threeDim= True, outputCfg= outputCfg)
+outputCfg= lsd.VerifOutVars(controller= controller, outputDataBaseFileName= limitState.getOutputDataBaseFileName())
+controlVarsDict= reinfConcreteSectionDistribution.runChecking(limitState, matDiagType="d",threeDim= True, outputCfg= outputCfg)
 FEcheckedModel= reinfConcreteSectionDistribution.phantomModelFEProblem
 cv.write_control_vars_from_phantom_elements(controlVarsDict= controlVarsDict, outputCfg= outputCfg)
 feProblem.errFileName= "cerr" # Print errors if any

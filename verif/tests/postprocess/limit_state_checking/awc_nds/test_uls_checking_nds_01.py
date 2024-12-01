@@ -178,5 +178,5 @@ else:
 
 # oh.displayElementValueDiagram('chiLT', setToDisplay= ndsCalcSet)
 
-# oh.displayBeamResult(attributeName=lsd.normalStressesResistance.label, itemToDisp='CF', beamSetDispRes=ndsCalcSet, setToDisplay=xcTotalSet)
+# oh.displayBeamResult(attributeName= limitState.label, itemToDisp='CF', beamSetDispRes=ndsCalcSet, setToDisplay=xcTotalSet)
 

@@ -127,7 +127,7 @@ lsd.LimitStateData.envConfig= cfg
 loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
 
 ### Limit states to calculate internal forces for.
-limitStates= [lsd.vonMisesStressResistance]
+limitStates= [aisc.vonMisesStressResistance]
 
 ### Compute internal forces for each combination
 for ls in limitStates:
@@ -135,7 +135,7 @@ for ls in limitStates:
 
 ### Check material resistance.
 #### Limit state to check.
-limitState= lsd.vonMisesStressResistance
+limitState= limitStates[0]
 #### Build controller.
 controller= aisc.VonMisesStressController(limitState.label)
 #### Perform checking.

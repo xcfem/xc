@@ -82,10 +82,13 @@ lp0.newNodalLoad(n3.tag,xc.Vector([Fx,Fy,Fz,0,0,0]))
 combContainer= combs.CombContainer()
 combContainer.ULS.perm.add('allLoads', '1.0*'+lp0.name)
 totalSet= preprocessor.getSets.getSet('total')
-## Compute internal forces.
+
 cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
-lsd.shearResistance.analyzeLoadCombinations(combContainer,totalSet) 
+## Limit state to check.
+limitState= EC2_limit_state_checking.shearResistance
+## Compute internal forces.
+limitState.analyzeLoadCombinations(combContainer,totalSet) 
 
 # Define available sections for the elements (spatial distribution of RC sections).
 # It refers to the reinforced concrete sections associated with the element
@@ -119,8 +122,6 @@ sections.append(beamRCsect)
 reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=beamRCsect)
 
 # Checking shear.
-## Limit state to check.
-limitState= EC2_limit_state_checking.shearResistance
 ## Build controller.
 controller= limitState.getController()
 ## Perform checking.
