@@ -70,7 +70,7 @@ class VonMisesStressController(lsc.LimitStateControllerBase):
 class VonMisesStressLimitStateData(lsd.VonMisesStressLimitStateData):
     ''' AISC Von Mises stress limit state data.'''
     
-    def getController(self, code_limit_state_checking):
+    def getController(self):
         ''' Return a controller corresponding to this limit state.'''
         return VonMisesStressController(limitStateLabel= self.label)
     

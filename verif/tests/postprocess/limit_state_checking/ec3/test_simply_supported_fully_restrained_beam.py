@@ -138,8 +138,8 @@ lsd.LimitStateData.envConfig= cfg
 loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
 
 ## Limit states to calculate internal forces for.
-limitStates= [lsd.steelNormalStressesResistance, # Normal stresses resistance.
-lsd.steelShearResistance, # Shear stresses resistance
+limitStates= [EC3_limit_state_checking.normalStressesResistance, # Normal stresses resistance.
+EC3_limit_state_checking.shearResistance, # Shear stresses resistance
 ]
 
 ## Create EC3 Member objects.
@@ -156,7 +156,7 @@ for ls in limitStates:
 
 ## Check normal stresses.
 ### Limit state to check.
-limitState= EC3_limit_state_checking.steelNormalStressesResistance
+limitState= limitStates[0]
 ### Build controller.
 controller= limitState.getController(biaxialBending= True)
 ### Perform checking.
@@ -171,7 +171,7 @@ for e in xcTotalSet.elements:
 
 ## Check shear.
 ### Limit state to check.
-limitState= lsd.steelShearResistance
+limitState= limitStates[1]
 ### Build controller.
 controller= EC3_limit_state_checking.ShearController(limitState.label)
 ### Perform checking.

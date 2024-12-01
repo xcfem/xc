@@ -111,8 +111,8 @@ lsd.LimitStateData.envConfig= cfg
 loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
 
 ## Limit states to calculate internal forces for.
-limitStates= [lsd.steelNormalStressesResistance, # Normal stresses resistance.
-lsd.steelShearResistance, # Shear stresses resistance (IS THE SAME AS NORMAL STRESSES, THIS IS WHY IT'S COMMENTED OUT).
+limitStates= [aisc.normalStressesResistance, # Normal stresses resistance.
+aisc.shearResistance, # Shear stresses resistance (IS THE SAME AS NORMAL STRESSES, THIS IS WHY IT'S COMMENTED OUT).
 ] 
 
 ## Create AISC Member objects.
@@ -131,9 +131,9 @@ for ls in limitStates:
 
 # Check limit state.
 ## Limit state to check.
-limitState=lsd.steelNormalStressesResistance
+limitState= limitStates[0]
 ## Build controller.
-controller= aisc.BiaxialBendingNormalStressController(limitState.label)
+controller= limitState.getController()
 ## Perform checking.
 average= limitState.check(setCalc=aiscCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y', controller= controller)
 
