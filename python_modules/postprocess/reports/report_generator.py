@@ -18,12 +18,9 @@ from misc_utils import log_messages as lmsg
 class ReportGenerator(oh.OutputHandler):
     '''Class intended to generate reports of data, loads and  
     calculation results.
-
-    :ivar modelSpace: FE model data.
-    :ivar outputStyle: style of the output.
     '''
     
-    def __init__(self,modelSpace= None, envConfig= default_config.EnvConfig()):
+    def __init__(self, modelSpace= None, envConfig= default_config.EnvConfig()):
         super(ReportGenerator,self).__init__(modelSpace,outputStyle= envConfig)
 
     def getEnvConfig(self):
@@ -82,6 +79,27 @@ class ReportGenerator(oh.OutputHandler):
                 oh.insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt, labl= label)
         report.close()
 
+    def loadsReport(self, loadCaseNames, setToDisplay= None):
+        ''' Create a report of the given loads.
+
+        :param loadCaseNames: list of names of the loads to report.
+        :param setToDisplay: set to display the loads on.
+        '''
+        cfg= self.getEnvConfig()
+        texReportFile= cfg.projectDirTree.getReportLoadsFile() # laTex file where the graphics will be included.
+        outputPath= cfg.projectDirTree.getReportLoadsGrPath() # directory to place the figures.
+        if(setToDisplay is None):
+            setToDisplay= self.modelSpace.getTotalSet()
+        with open(texReportFile, 'w') as latexOutputFile:
+            for lcName in loadCaseNames:
+                caption= lcName+' on set: '+setToDisplay.name
+                fLabel= lcName+setToDisplay.name
+                self.modelSpace.addLoadCaseToDomain(lcName)
+                outputFileName= outputPath+fLabel+'.png'
+                self.displayLoads(setToDisplay= setToDisplay, fileName= outputFileName, caption= caption)
+                oh.insertGrInTex(texFile= latexOutputFile, grFileNm= outputFileName, grWdt= cfg.grWidth, capText= caption, labl= fLabel)
+                self.modelSpace.removeLoadCaseFromDomain(lcName)
+ 
     
   
             
