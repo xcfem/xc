@@ -93,8 +93,8 @@ lsd.LimitStateData.envConfig= cfg
 xcTotalSet= modelSpace.getTotalSet()
 ## Limit state to check.
 limitState= EHE_limit_state_checking.freqLoadsCrackControl # Crack control under frequent loads.
-l## Save internal forces.
-sd.freqLoadsCrackControl.analyzeLoadCombinations(combContainer,xcTotalSet)
+## Save internal forces.
+limitState.analyzeLoadCombinations(combContainer,xcTotalSet)
 
 # Define reinforcement.
 # Reinforcement row scheme:
