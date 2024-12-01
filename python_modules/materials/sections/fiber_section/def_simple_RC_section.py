@@ -966,8 +966,9 @@ class RCSectionBase(object):
         :param nDivIJ: number of cells in IJ (width or radial) direction.
         :param nDivJK: number of cells in JK (height or tangential) direction.
         '''
-        self.sectionDescr= 'Text describing the role/position of the section in the structure.'
-        if(not sectionDescr is None):
+        if(sectionDescr is None):
+            self.sectionDescr= 'Text describing the role/position of the section in the structure.'
+        else:
             self.sectionDescr= sectionDescr
         self.fiberSectionParameters= RCFiberSectionParameters(concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK)
         self.fiberSectionRepr= None
@@ -2594,6 +2595,7 @@ def compute_element_rc_sections(elements, propName= None):
     # Rename the new sections.        
     for i, s in enumerate(retval):
         s.name+= str(i)
+        s.sectionDescr+= ' '+str(i)
 
     if(not propName is None and (len(elements)>0)):
         # Assign the sections names to the elements
