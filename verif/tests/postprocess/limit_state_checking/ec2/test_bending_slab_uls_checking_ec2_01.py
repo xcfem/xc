@@ -177,7 +177,7 @@ limitState= lsd.normalStressesResistance
 ## Elements to check.
 setCalc= xcTotalSet
 ## Build controller.
-controller= EC2_limit_state_checking.BiaxialBendingNormalStressController(limitState.label)
+controller= limitState.getController(code_limit_state_checking= EC2_limit_state_checking, biaxialBending= True)
 
 ## Perform checking.
 ## variables that control the output of the checking:

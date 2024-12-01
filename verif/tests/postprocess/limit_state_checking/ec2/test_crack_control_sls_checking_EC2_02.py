@@ -119,7 +119,7 @@ reinfConcreteSectionDistribution.assign(elemSet= xcTotalSet.elements, setRCSects
 
 # Check cracking
 ## Build controller.
-controller= EC2_limit_state_checking.CrackController(limitState.label)
+controller= limitState.getControllerEC2(code_limit_state_checking= EC2_limit_state_checking)
 controller.verbose= True #False # Don't display log messages.
 ## Perform checking.
 ## variables that control the output of the checking:

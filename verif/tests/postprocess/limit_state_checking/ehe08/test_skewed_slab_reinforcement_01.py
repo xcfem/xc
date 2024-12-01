@@ -152,7 +152,7 @@ limitState.analyzeLoadCombinations(combContainer= combContainer, setCalc= setCal
 ## Set limit state to check.
 limitState= lsd.normalStressesResistance # normal stresses.
 ## Build controller.
-controller= EHE_limit_state_checking.BiaxialBendingNormalStressController(limitState.label)
+controller= limitState.getController(code_limit_state_checking= EHE_limit_state_checking, biaxialBending= True)
 ## Perform checking.
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
 meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSections, listFile='N', calcMeanCF='Y', threeDim= False, controller= controller)

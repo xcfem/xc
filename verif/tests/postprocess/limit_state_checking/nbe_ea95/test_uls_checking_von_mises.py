@@ -137,7 +137,8 @@ for ls in limitStates:
 #### Limit state to check.
 limitState= limitStates[0]
 #### Build controller.
-controller= NBE_EA95_limit_state_checking.VonMisesStressController(limitState.label)
+controller= limitState.getController(code_limit_state_checking= NBE_EA95_limit_state_checking)
+# controller= NBE_EA95_limit_state_checking.VonMisesStressController(limitState.label)
 #### Perform checking.
 average= limitState.check(setCalc=xcTotalSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)
 

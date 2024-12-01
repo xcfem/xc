@@ -118,7 +118,7 @@ reinfConcreteSectionDistribution.assign(elemSet= xcTotalSet.elements, setRCSects
 ## Limit state to check.
 limitState= lsd.freqLoadsCrackControl # Crack control under frequent loads.
 ## Build controller.
-controller= EHE_limit_state_checking.CrackController(limitState.label)
+controller= limitState.getControllerEHE(code_limit_state_checking= EHE_limit_state_checking)
 controller.verbose= True #False # Don't display log messages.
 ## Perform checking.
 meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y', threeDim= True, controller= controller)

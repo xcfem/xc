@@ -7,6 +7,7 @@ from __future__ import division
 from __future__ import print_function
 
 
+import math
 from misc import scc3d_testing_bench
 from materials.sections.fiber_section import def_simple_RC_section
 
@@ -15,7 +16,7 @@ from materials.ehe import EHE_limit_state_checking
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-import math
+from postprocess import limit_state_data as lsd
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -80,8 +81,8 @@ if(analOk!=0):
     exit()
 
 
-
-shearController= EHE_limit_state_checking.ShearController('ULS_shear')
+limitState= lsd.shearResistance
+shearController= limitState.getController(code_limit_state_checking= EHE_limit_state_checking)
 
 
 

@@ -168,7 +168,7 @@ limitState.analyzeLoadCombinations(combContainer,xcTotalSet)
 ## Elements to check.
 setCalc= xcTotalSet
 ## Build controller.
-controller= EC2_limit_state_checking.UniaxialBendingNormalStressController(limitState.label)
+controller= limitState.getController(code_limit_state_checking= EC2_limit_state_checking, biaxialBending= False)
 ## Perform checking.
 ## variables that control the output of the checking:
 ### setCalc: set of elements to be checked.

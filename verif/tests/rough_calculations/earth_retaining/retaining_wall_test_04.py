@@ -197,7 +197,8 @@ setCalc= wall.wallSet
 limitState= lsd.normalStressesResistance
 
 ### Build the controller.
-controller= EC2_limit_state_checking.UniaxialBendingNormalStressController(limitState.label)
+controller= limitState.getController(code_limit_state_checking= EC2_limit_state_checking, biaxialBending= False) # Get controller for uniaxial bending.
+
 ### Perform the checking.
 ### variables that control the output of the checking:
 ### setCalc: set of elements to be checked.

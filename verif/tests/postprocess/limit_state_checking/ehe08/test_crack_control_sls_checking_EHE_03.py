@@ -95,7 +95,7 @@ internalForcesFName= pth+"/../../../aux/internal_forces/intForce_SLS_9565.json"
 shutil.copy(internalForcesFName, limitState.getInternalForcesFileName())
 
 ## Build controller.
-controller= EHE_limit_state_checking.CrackController(limitState.label, solutionProcedureType= CustomNewtonRaphson, beta= 1.7)
+controller= limitState.getControllerEHE(code_limit_state_checking= EHE_limit_state_checking, solutionProcedureType= CustomNewtonRaphson, beta= 1.7)
 controller.verbose= True #False # Don't display log messages.
 ## Perform checking.
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.

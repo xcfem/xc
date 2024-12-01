@@ -11,7 +11,13 @@
 from __future__ import division
 from __future__ import print_function
 
-from misc_utils import log_messages as lmsg
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+
+import math
 import xc
 from misc import scc3d_testing_bench
 from solution import predefined_solutions
@@ -21,14 +27,8 @@ from materials.sections.fiber_section import def_column_RC_section
 
 from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking
-
-import math
-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
-__copyright__= "Copyright 2015, LCPT and AO_O"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+from postprocess import limit_state_data as lsd
+from misc_utils import log_messages as lmsg
 
 # Materials definition
 concr= EHE_materials.HA40
@@ -102,7 +102,9 @@ if(analOk<0):
     quit()
 
 
-shearController= EHE_limit_state_checking.ShearController('ULS_shear')
+limitState= lsd.shearResistance
+shearController= limitState.getController(code_limit_state_checking= EHE_limit_state_checking)
+
 secHAParamsTorsion= EHE_limit_state_checking.computeEffectiveHollowSectionParametersRCSection(section)
 
 scc= zlElement.getSection()
@@ -125,7 +127,6 @@ ratio1= ((Vcu-VcuRef)/VcuRef)
 ratio2= ((Vsu-VsuRef)/VsuRef)
 ratio3= ((Vu-VuRef)/VuRef)
 
-'''
 print("\ntheta= ", math.degrees(shearController.theta))
 print("Vu1= ",Vu1/1e3," kN")
 print("z= ", z,'m')
@@ -140,6 +141,7 @@ print("ratio2= ",ratio2)
 print("Vu= ",Vu/1e3," kN")
 print("VuRef= ",VuRef/1e3," kN")
 print("ratio3= ",ratio3)
+'''
 '''
 
 

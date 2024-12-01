@@ -30,7 +30,7 @@ slab30RCSect.dir2NegatvRebarRows= def_simple_RC_section.LongReinfLayers([fi14s15
 
 slab30RCSect.createSections()
 
-shearController= SIA262_limit_state_checking.ShearController(lsd.shearResistance.label)
+shearController= lsd.shearResistance.getController(SIA262_limit_state_checking)
 
 #rcSection= slab30RCSect.lstRCSects[0]
 rcSection= slab30RCSect.lstRCSects[1]

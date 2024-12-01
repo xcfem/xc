@@ -190,7 +190,7 @@ class CustomSolver(predefined_solutions.PlainNewtonRaphson):
 ## Limit state to check.
 limitState= lsd.shearResistance
 ## Build controller.
-controller= EHE_limit_state_checking.ShearController(limitStateLabel= limitState.label, solutionProcedureType= CustomSolver)
+controller= limitState.getController(code_limit_state_checking= EHE_limit_state_checking, solutionProcedureType= CustomSolver)
 controller.verbose= False # Don't display log messages.
 ## Perform checking
 meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N', calcMeanCF='Y', threeDim= False, controller= controller)

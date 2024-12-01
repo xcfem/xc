@@ -160,7 +160,8 @@ for ls in limitStates:
 ## Limit state to check.
 limitState= lsd.steelNormalStressesResistance
 ## Build controller.
-controller= EC3_limit_state_checking.BiaxialBendingNormalStressController(limitStateLabel= limitState.label)
+controller= limitState.getController(code_limit_state_checking= EC3_limit_state_checking, biaxialBending= True)
+
 ## Perform checking.
 average= limitState.check(setCalc=ec3CalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y', controller= controller)
 

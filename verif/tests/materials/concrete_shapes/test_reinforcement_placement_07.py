@@ -190,8 +190,10 @@ class CustomSolver(predefined_solutions.PlainNewtonRaphson):
         super(CustomSolver,self).__init__(prb= prb, name= 'test', maxNumIter= 20, printFlag= 1, convergenceTestTol= 1e-3)
 
 # Checking shear.
+## Limit state to check.
+limitState= lsd.shearResistance
 ## Build the controller.
-controller= EC2_limit_state_checking.ShearController(limitState.label, solutionProcedureType= CustomSolver)
+controller= limitState.getController(code_limit_state_checking= EC2_limit_state_checking, solutionProcedureType= CustomSolver)
 controller.verbose= False # Don't display log messages.
 ## Perform checking.
 feProblem.logFileName= "/tmp/erase.log" # Ignore warning messagess about computation of the interaction diagram.

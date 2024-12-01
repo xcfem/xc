@@ -198,7 +198,7 @@ class CustomSolver(predefined_solutions.PlainNewtonRaphson):
         
 # Checking shear stresses.
 ## Build controller.
-controller= EC2_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label, solutionProcedureType= CustomSolver)
+controller= limitState.getController(code_limit_state_checking= EC2_limit_state_checking, solutionProcedureType= CustomSolver)
 controller.verbose= False # Don't display log messages.
 ## Peform checking.
 meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y',controller= controller, threeDim= False)

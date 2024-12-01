@@ -29,7 +29,7 @@ import logging
 from misc_utils import log_messages as lmsg
 
 #Hide INFO messages from modules.
-rootLogger = logging.getLogger()
+rootLogger= logging.getLogger()
 rootLogger.setLevel(logging.ERROR)
 
 
@@ -122,8 +122,7 @@ reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=
 ## Limit state to check.
 limitState= lsd.shearResistance
 ## Build controller.
-controller= EC2_limit_state_checking.ShearController(limitStateLabel= limitState.label)
-controller.analysisToPerform= predefined_solutions.plain_newton_raphson
+controller= limitState.getController(EC2_limit_state_checking)
 ## Perform checking.
 meanFCs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y', threeDim= True, controller= controller)
 

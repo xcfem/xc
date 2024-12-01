@@ -49,8 +49,8 @@ torsionParameters= EHE_limit_state_checking.computeEffectiveHollowSectionParamet
 he= torsionParameters.he() # effective thickness of the wall of the design section.
 Ae= torsionParameters.Ae() # Area enclosed by the middle line of the design effective hollow section (figure 45.2.1).
 ue= torsionParameters.ue() # perimeter of the middle line in the design effective hollow section Ae.
-
-torsionController= EHE_limit_state_checking.TorsionController(limitStateLabel= lsd.torsionResistance)
+limitState= lsd.torsionResistance # Torsion strength limit state.
+torsionController= limitState.getController(code_limit_state_checking= EHE_limit_state_checking)
 
 Tu1= torsionController.calcTu1(rcSection= section, Ncd= 0.0, Ae= Ae, he= he, alpha= 0.6)
 Tu2= torsionController.calcTu2(rcSection= section, Ae= Ae)

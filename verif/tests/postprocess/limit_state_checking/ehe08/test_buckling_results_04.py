@@ -181,7 +181,7 @@ flatColumnRCSects= element_section_map.RCMemberSection('flat', [rcFlatSection, r
 sectContainer.append(flatColumnRCSects)
 reinfConcreteSectionDistribution.assign(elemSet= flatSectionElements.elements, setRCSects= flatColumnRCSects)
 ## Build controller.
-controller= EHE_limit_state_checking.BiaxialBucklingController(bucklingParametersLSD.label)
+controller= bucklingParametersLSD.getController()
 
 # And now check normal stresses.
 ## variables that control the output of the checking:

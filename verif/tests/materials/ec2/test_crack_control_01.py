@@ -16,6 +16,7 @@ import math
 from materials.ec2 import EC2_materials
 from materials.ec2 import EC2_limit_state_checking
 from materials.sections import rebar_family
+from postprocess import limit_state_data as lsd
 
 # Geometry.
 b= 0.4 # Section width (m).
@@ -36,7 +37,8 @@ sg_max= 175.74e6 # maximum stress in the reinforcement immediately after
                  # formation of the crack.
 
 # Crack control.
-crackController= EC2_limit_state_checking.CrackController(limitStateLabel= 'SLS_crack', shortTermLoading= False)
+limitState= lsd.freqLoadsCrackControl # Crack control under frequent loads.
+crackController= limitState.getControllerEC2(code_limit_state_checking= EC2_limit_state_checking, shortTermLoading= False)
 
 # maximum final crack spacing
 k2= 0.5 # Bending (see EC2 clause 7.3.4).

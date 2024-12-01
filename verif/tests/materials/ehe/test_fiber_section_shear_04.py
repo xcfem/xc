@@ -6,7 +6,13 @@
 from __future__ import division
 from __future__ import print_function
 
-from misc_utils import log_messages as lmsg
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+
+import math
 import xc
 from misc import scc3d_testing_bench
 from solution import predefined_solutions
@@ -16,14 +22,8 @@ from materials.sections.fiber_section import def_column_RC_section
 
 from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking
-
-import math
-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
-__copyright__= "Copyright 2015, LCPT and AO_O"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+from postprocess import limit_state_data as lsd
+from misc_utils import log_messages as lmsg
 
 # Materials definition
 concr= EHE_materials.HA40
@@ -86,7 +86,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution procedure
-analysis= predefined_solutions.plain_newton_raphson(feProblem, maxNumIter= 10)
+analysis= predefined_solutions.plain_newton_raphson(feProblem, maxNumIter= 10, convergenceTestTol= 1e-5)
 analOk= analysis.analyze(10)
 
 import os
@@ -95,8 +95,8 @@ if(analOk<0):
     lmsg.error(fname+' ERROR. Failed to converge.')
     quit()
 
-
-shearController= EHE_limit_state_checking.ShearController('ULS_shear')
+limitState= lsd.shearResistance
+shearController= limitState.getController(code_limit_state_checking= EHE_limit_state_checking)
 
 scc= zlElement.getSection()
 shearCF= shearController.checkSection(sct= scc, elementDimension= zlElement.getDimension)
@@ -122,7 +122,6 @@ ratio3= abs(Vu2-VuRef)/VuRef
 Vu= shearController.Vu
 ratio4= abs(Vu-VuRef)/VuRef
 
-'''
 print("\ntheta= ", math.degrees(shearController.theta))
 print("Vu1= ",Vu1/1e3," kN")
 print("z= ", z,'m', ratio0)
@@ -130,6 +129,7 @@ print("Vcu= ",Vcu/1e3," kN", ratio1)
 print("Vsu= ",Vsu/1e3," kN", ratio2)
 print("Vu= ",Vu2/1e3," kN", ratio3)
 print("Vu= ",Vu/1e3," kN", ratio4)
+'''
 '''
 
 if ((abs(ratio0)<1e-2) & (abs(ratio1)<1e-3) & (abs(ratio2)<1e-3) & (abs(ratio3)<1e-3)):

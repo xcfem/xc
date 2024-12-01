@@ -128,8 +128,8 @@ reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=
 
 # Checking shear.
 ## Build controller.
-controller= ACI_limit_state_checking.ShearController(limitStateLabel= limitState.label)
-controller.analysisToPerform= predefined_solutions.plain_newton_raphson
+controller= limitState.getController(code_limit_state_checking= ACI_limit_state_checking)
+
 limitState.outputDataBaseFileName= 'resVerif'
 ## Perform checking.
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.

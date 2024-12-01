@@ -165,7 +165,7 @@ for ls in limitStates:
 limitState= limitStates[0]
 
 #### Build controller.
-controller= EC2_limit_state_checking.Ec2InPlaneStressController(limitState.label)
+controller= limitState.getController()
 #### Perform checking.
 average= limitState.check(setCalc= deepBeamSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)
 ratio2= abs(average[0]-0.18752881267174293)/0.18752881267174293
