@@ -113,8 +113,8 @@ lsd.LimitStateData.envConfig= cfg
 loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
 
 ## Limit states to calculate internal forces for.
-limitStates= [lsd.woodNormalStressesResistance, # Normal stresses resistance.
-lsd.woodShearResistance, # Shear stresses resistance (IS THE SAME AS NORMAL STRESSES, THIS IS WHY IT'S COMMENTED OUT).
+limitStates= [nds.normalStressesResistance, # Normal stresses resistance.
+nds.shearResistance, # Shear stresses resistance (IS THE SAME AS NORMAL STRESSES, THIS IS WHY IT'S COMMENTED OUT).
 ]
 
 ## Create NDS Member objects.
@@ -131,9 +131,9 @@ for l in xcTotalSet.getLines:
 for ls in limitStates:
     ls.analyzeLoadCombinations(combContainer, ndsCalcSet)
 # Limit state to check.
-limitState= lsd.woodShearResistance
+limitState= limitStates[1]
 # Build controller.
-controller= nds.ShearController(limitState.label)
+controller= limitState.getController()
 # Perform checking.
 average= limitState.check(setCalc=ndsCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y', controller= controller)
 

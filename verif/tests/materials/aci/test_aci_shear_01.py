@@ -32,7 +32,9 @@ bw= 12*0.0254 # 12 in
 d= 15*0.0254 # 15 in
 section= def_simple_RC_section.RCRectangularSection(name='test',concrType=concrete, reinfSteelType=reinfSteel,width= bw, depth= d/0.9)
 section.shReinfY= def_simple_RC_section.ShearReinforcement(nShReinfBranches= 1.0,areaShReinfBranch= 0.592*0.0254**2,shReinfSpacing= 1.0*0.3048)
-shearController= lsc.ShearController(lsd.shearResistance.label)
+
+limitState= lsc.shearResistance
+shearController= limitState.getController()
 shearController.setSection(section)
 
 Vc= shearController.getVcNoShearRebars(Nd= 0.0)

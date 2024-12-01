@@ -173,7 +173,7 @@ for e in xcTotalSet.elements:
 ### Limit state to check.
 limitState= limitStates[1]
 ### Build controller.
-controller= EC3_limit_state_checking.ShearController(limitState.label)
+controller= limitState.getController()
 ### Perform checking.
 shearAverage= limitState.check(setCalc=ec3CalcSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)
 
