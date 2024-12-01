@@ -68,7 +68,7 @@ class PhantomModel(object):
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; no elements to check in internal forces file.')
+            lmsg.error(className+'.'+methodName+'; no load combinations (so no elements) to check in internal forces file.')
             exit(1)
 
     def createPhantomElement(self, masterElementId, masterElementDimension, sectionName, sectionDefinition, sectionIndex, interactionDiagram, fakeSection):

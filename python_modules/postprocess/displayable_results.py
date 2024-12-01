@@ -97,7 +97,7 @@ class ResultsDescriptionContainer(dict):
         tp.displayFigures(figList, latexFigsFilename, latexListFilename)
 
 
-#Issues sous charges quasi-permanentes (fissuration)
+# Issues sous charges quasi-permanentes (fissuration)
 qplCrackControl= lsd.quasiPermanentLoadsCrackControl
 issQPfisFrench= ResultsDescriptionContainer(qplCrackControl,[
     ResultDescription(qplCrackControl.label+'Sect1','crackControlVarsPos.steelStress',"Enveloppe de contraintes maximales sous charges quasi-permanentes, face positive", 'MPa'),

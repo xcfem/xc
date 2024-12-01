@@ -1742,6 +1742,10 @@ python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_06.py
 echo "$BLEU" "      EC2 limit state checking: crack control." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec2/test_crack_control_sls_checking_EC2_01.py
 python tests/postprocess/limit_state_checking/ec2/test_crack_control_sls_checking_EC2_02.py
+echo "$BLEU" "      EC2 limit state checking: slab example." "$NORMAL"
+python tests/postprocess/limit_state_checking/ec2/test_bending_slab_sls_checking_ec2_01.py
+python tests/postprocess/limit_state_checking/ec2/test_bending_slab_uls_checking_ec2_01.py
+python tests/postprocess/limit_state_checking/ec2/test_bending_slab_uls_checking_ec2_02.py
 echo "$BLEU" "      EC2 limit state checking: annex F." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec2/eurocode2_annex_f_test.py
 echo "$BLEU" "    EC3 limit state checking." "$NORMAL"
