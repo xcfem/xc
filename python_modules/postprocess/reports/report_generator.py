@@ -45,11 +45,12 @@ class ReportGenerator(oh.OutputHandler):
                                         1D elements (J: element local j vector 
                                         or K: element local K vector).
         '''
+        retval= list()
         cfg= self.getEnvConfig()
         texReportFile= cfg.projectDirTree.getReportFile(limitStateLabel)
-        report= open(texReportFile,'w') # report latex file
+        report= cfg.projectDirTree.open(fileName= texReportFile, mode= 'w') # report latex file
         fullPath= cfg.projectDirTree.getReportGrPath(limitStateLabel)
-        cfg.makedirs(fullPath)
+        cfg.makedirs(fullPath) # crate the directory if needed.
         rltvPath= cfg.projectDirTree.getReportRltvGrPath(limitStateLabel)
         for st in setsShEl:
             for arg in argsShEl:
@@ -57,10 +58,12 @@ class ReportGenerator(oh.OutputHandler):
                     capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'dir. '+str(idSection)
                     sectionName= 'Sect'+str(idSection)
                     suffix= st.name+arg+sectionName # set name + argument identifier + section name
-                    fullgrFileNm=fullPath+suffix
-                    rltvgrFileNm=rltvPath+suffix
-                    fullgrFileNmAndExt= fullgrFileNm+'.jpg'
-                    self.displayField(limitStateLabel, section= idSection,argument=arg, component=None, setToDisplay=st, fileName=fullgrFileNmAndExt,rgMinMax=rgMinMax)
+                    bitmapFileName= suffix+'.jpg'
+                    retval.append(bitmapFileName)
+                    fullgrFileNm= fullPath+suffix
+                    rltvgrFileNm= rltvPath+suffix
+                    fullgrFileNmAndExt= fullPath+bitmapFileName
+                    self.displayField(limitStateLabel, section= idSection,argument=arg, component=None, setToDisplay=st, fileName=fullgrFileNmAndExt, rgMinMax=rgMinMax)
                     if not os.path.exists(fullgrFileNmAndExt):
                         className= type(self).__name__
                         methodName= sys._getframe(0).f_code.co_name
@@ -72,34 +75,45 @@ class ReportGenerator(oh.OutputHandler):
             for argS in argsBmEl:
                 capt= cfg.capTexts[limitStateLabel]  + '. '+ stV.description.capitalize() + ', ' + cfg.capTexts[argS]
                 suffix= stV.name+argS # set name + argument identifier.
-                fullgrFileNm=fullPath+suffix
-                rltvgrFileNm=rltvPath+suffix
-                self.displayBeamResult(attributeName=limitStateLabel,itemToDisp=argS,beamSetDispRes=stV,setToDisplay=stV,caption=capt,fileName=fullgrFileNm+'.jpg', defaultDirection= defaultDiagramDirection)
+                bitmapFileName= suffix+'.jpg'
+                fullgrFileNm= fullPath+suffix
+                rltvgrFileNm= rltvPath+suffix
+                fullgrFileNmAndExt= fullPath+bitmapFileName
+                self.displayBeamResult(attributeName=limitStateLabel,itemToDisp=argS,beamSetDispRes=stV,setToDisplay=stV,caption=capt,fileName= fullgrFileNmAndExt, defaultDirection= defaultDiagramDirection)
                 label= limitStateLabel+suffix
                 oh.insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt, labl= label)
         report.close()
+        return retval
 
-    def loadsReport(self, loadCaseNames, setToDisplay= None):
+    def loadsReport(self, loadCasesAndSets:dict):
         ''' Create a report of the given loads.
 
-        :param loadCaseNames: list of names of the loads to report.
-        :param setToDisplay: set to display the loads on.
+        :param loadCasesAndSets: dictionary whose keys are the names of the
+                                 load cases to represent and the associated
+                                 values are lists of sets to represent the
+                                 load case on.
         '''
         cfg= self.getEnvConfig()
         texReportFile= cfg.projectDirTree.getReportLoadsFile() # laTex file where the graphics will be included.
         outputPath= cfg.projectDirTree.getReportLoadsGrPath() # directory to place the figures.
-        if(setToDisplay is None):
-            setToDisplay= self.modelSpace.getTotalSet()
-        with open(texReportFile, 'w') as latexOutputFile:
-            for lcName in loadCaseNames:
-                caption= lcName+' on set: '+setToDisplay.name
-                fLabel= lcName+setToDisplay.name
+        cfg.projectDirTree.makedirs(outputPath) # Create the directory if doesn't exists.
+        retval= list()
+        with cfg.projectDirTree.open(fileName= texReportFile, mode= 'w') as latexOutputFile:
+            for lcName in loadCasesAndSets:
+                setsToDisplay= loadCasesAndSets[lcName]
                 self.modelSpace.addLoadCaseToDomain(lcName)
-                outputFileName= outputPath+fLabel+'.png'
-                self.displayLoads(setToDisplay= setToDisplay, fileName= outputFileName, caption= caption)
-                oh.insertGrInTex(texFile= latexOutputFile, grFileNm= outputFileName, grWdt= cfg.grWidth, capText= caption, labl= fLabel)
+                for xcSet in setsToDisplay:
+                    if(xcSet is None):
+                        xcSet= self.modelSpace.getTotalSet()
+                    caption= lcName+' on set: '+xcSet.name
+                    fLabel= lcName+xcSet.name
+                    bitmapFileName= fLabel+'.png'
+                    outputFileName= outputPath+bitmapFileName
+                    self.displayLoads(setToDisplay= xcSet, fileName= outputFileName, caption= caption)
+                    oh.insertGrInTex(texFile= latexOutputFile, grFileNm= outputFileName, grWdt= cfg.grWidth, capText= caption, labl= fLabel)
+                    retval.append(bitmapFileName)
                 self.modelSpace.removeLoadCaseFromDomain(lcName)
- 
+        return retval
     
   
             

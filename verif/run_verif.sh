@@ -1803,6 +1803,10 @@ python tests/postprocess/limit_state_checking/generic/test_select_critical_combs
 echo "$BLEU" "  Graphic output." "$NORMAL"
 python tests/postprocess/vtk/test_beam3d_bending_moment_belly_01.py
 python tests/postprocess/vtk/test_beam3d_bending_moment_belly_02.py
+# Report tests.
+echo "$BLEU" "  Report output." "$NORMAL"
+python tests/postprocess/report/test_report_loads_01.py
+python tests/postprocess/report/test_report_check_01.py
 
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)
