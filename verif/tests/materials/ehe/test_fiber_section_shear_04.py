@@ -71,10 +71,10 @@ modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(nodA.tag)
 
 # Loads definition
-Nd= -6000e3 # Axial force when checking shear (last row of the table 5-11).
+Nd= -6000e3 # Axial force when checking shear.
 Myd= 0.0 # Y bending moment value when checking shear.
 Mzd= 0.0 # Z bending moment value when checking shear.
-Vd= 1460e3 # Shear value (last row, third column of the table 5-11).
+Vd= 1460e3 # Shear value.
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -102,34 +102,38 @@ scc= zlElement.getSection()
 shearCF= shearController.checkSection(sct= scc, elementDimension= zlElement.getDimension)
 
 # Check results
-# The reference values have been obtained solving the problem for a very
-# small bending moment (My= 1 N.m). They are compared here with the results
-# computed without bending (see calcVuEHE08SiAt method in ShearController
-# controller class.
+# The reference values have been changed the 3/12/2024. The previous ones
+# were computed when the error in XC::CircReinfLayer::getReinfBars(void)
+# was not fixed yet. As a result those values were not correct.
+# On the other hand, fixing that error has revealed another one in
+# XC::FiberPtrDeque::getLeverArmSegment when the bending moments are zero.
+# The calculation of the lever arm in those case was wrong. It has been
+# fixing using the inertia values of the section to get an approximation
+# of the lever arm as the tratidional one: 0.8*depth.
 z= shearController.mechanicLeverArm
-zRef= 0.426
+zRef= 0.683 # No documentary support (check that all runs as usual). 
 ratio0= abs(z-zRef)/zRef
 Vu1= shearController.Vu1
 Vcu= shearController.Vcu
-VcuRef= 693.63e3 # Obtained for Myd= 1 N.m
+VcuRef= 713.75e3 # No documentary support (check that all runs as usual). 
 ratio1= abs(Vcu-VcuRef)/VcuRef
 Vsu= shearController.Vsu
-VsuRef= 1057.39e3 # Obtained for Myd= 1 N.m
+VsuRef= 1682.01e3 # No documentary support (check that all runs as usual).
 ratio2= abs(Vsu-VsuRef)/VsuRef
-VuRef= 1751.01e3 # Obtained for Myd= 1 N.m
+VuRef= 2395.76e3 # No documentary support (check that all runs as usual).
 Vu2= shearController.Vu2
 ratio3= abs(Vu2-VuRef)/VuRef
 Vu= shearController.Vu
 ratio4= abs(Vu-VuRef)/VuRef
 
+'''
 print("\ntheta= ", math.degrees(shearController.theta))
 print("Vu1= ",Vu1/1e3," kN")
 print("z= ", z,'m', ratio0)
 print("Vcu= ",Vcu/1e3," kN", ratio1)
 print("Vsu= ",Vsu/1e3," kN", ratio2)
-print("Vu= ",Vu2/1e3," kN", ratio3)
+print("Vu2= ",Vu2/1e3," kN", ratio3)
 print("Vu= ",Vu/1e3," kN", ratio4)
-'''
 '''
 
 if ((abs(ratio0)<1e-2) & (abs(ratio1)<1e-3) & (abs(ratio2)<1e-3) & (abs(ratio3)<1e-3)):
