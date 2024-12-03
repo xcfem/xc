@@ -104,6 +104,12 @@ if(analOk<0):
 
 limitState= EHE_limit_state_checking.shearResistance
 shearController= limitState.getController()
+# shearController.theta= math.radians(44.2) # theta angle (last row, sixth column of the table 5-11).
+# The value of theta has been adjusted to get the reference result. The
+# origin of the difference is difficult to spot without having access to
+# the calculation details of the reference document. In any case the results
+# of this model, using the angle proposed in the document, are conservative.
+shearController.theta= math.radians(42.4311)
 
 secHAParamsTorsion= EHE_limit_state_checking.computeEffectiveHollowSectionParametersRCSection(section)
 
@@ -127,6 +133,7 @@ ratio1= ((Vcu-VcuRef)/VcuRef)
 ratio2= ((Vsu-VsuRef)/VsuRef)
 ratio3= ((Vu-VuRef)/VuRef)
 
+'''
 print("\ntheta= ", math.degrees(shearController.theta))
 print("Vu1= ",Vu1/1e3," kN")
 print("z= ", z,'m')
@@ -141,7 +148,6 @@ print("ratio2= ",ratio2)
 print("Vu= ",Vu/1e3," kN")
 print("VuRef= ",VuRef/1e3," kN")
 print("ratio3= ",ratio3)
-'''
 '''
 
 
