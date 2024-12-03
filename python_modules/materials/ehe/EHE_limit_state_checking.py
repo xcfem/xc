@@ -1771,8 +1771,8 @@ class ShearController(lscb.ShearControllerBase):
             self.theta= th
             self.calcVuEHE08(scc= sct, torsionParameters= torsionParameters, Nd= Nd, Md= Md, Vd= Vd, Td= Td, rcSets= rcSets, circular= circular)
             return -self.Vu
-        
-        th= math.pi/4.0
+
+        th= self.theta # math.pi/4.0
         Vu= -vu_theta(th)
         if(self.Vu<Vd):
             options= {'maxiter':10}#{'xatol':tol}
