@@ -32,10 +32,11 @@ GeomObj::list_Pos2d (Line2d::*intersectionWithPline2D)(const Polyline2d &) const
 Pos2d (Line2d::*Pos2dProj)(const Pos2d &) const= &Line2d::Projection;
 Vector2d (Line2d::*Vector2dProj)(const Vector2d &) const= &Line2d::Projection;
 class_<Line2d, bases<Linear2d> >("Line2d")
-  .def(init<Pos2d, Pos2d>()) //Constructs the line from two points.
-  .def(init<Pos2d, Dir2d>()) //Constructs the line from a point and a direction.
-  .def(init<Pos2d, Vector2d>()) //Constructs the line from a point and a vector.
+  .def(init<Pos2d, Pos2d>()) // Constructs the line from two points.
+  .def(init<Pos2d, Dir2d>()) // Constructs the line from a point and a direction.
+  .def(init<Pos2d, Vector2d>()) // Constructs the line from a point and a vector.
   .def(init<Line2d>()) //Copy constructor.
+  .def(init<const boost::python::list &>()) // Least squares constructor. 
   .def("offset",OffsetVector,"returns a parallel segment obtained by adding the vector to the points that define this line.")
   .def("offset",OffsetDouble,"returns a parallel segment.")
   .def("getParamA",&Line2d::GetParamA,"returns line slope; 'a' parameter from equation (y= a*x+b).")
@@ -136,6 +137,7 @@ class_<Line3d, bases<Linear3d> >("Line3d")
   .def(init<Pos3d, Dir3d>()) //Constructs the line from a point and a direction.
   .def(init<Pos3d, Vector3d>()) //Constructs the line from a point and a vector.
   .def(init<Line3d>()) //Copy constructor.
+  .def(init<const boost::python::list &>()) // Least squares constructor. 
   .def("getPos3dProj",LinePos3dProj,"TO DEPRECATE return the projection of a point onto the line.")
   .def("getProjection",LinePos3dProj,"return the projection of a point onto the line.")
   .def("getVector3dProj",Vector3dProj,"return the projection of a vector onto the line.")

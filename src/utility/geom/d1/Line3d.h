@@ -74,6 +74,8 @@ class Line3d : public Linear3d
     Line3d(const Pos3d &,const Vector3d &);
     Line3d(const Plane &,const Plane &);
     explicit Line3d(const Line3dParametricForm &param);
+    explicit Line3d(const GeomObj3d::list_Pos3d &lp);
+    explicit Line3d(const boost::python::list &lp);
     virtual GeomObj *getCopy(void) const
       { return new Line3d(*this); }
     void swap(void);
@@ -139,6 +141,7 @@ class Line3d : public Linear3d
       { return r1.getAngle(r2.VDir()); }
 
     GEOM_FT linearLeastSquaresFitting(const GeomObj3d::list_Pos3d &lp);
+    GEOM_FT linearLeastSquaresFittingPy(const boost::python::list &lp);
 
     //! @brief Moment of inertia with respect to the local axis x
     //! passing through the center of mass.

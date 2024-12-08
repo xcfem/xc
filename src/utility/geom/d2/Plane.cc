@@ -31,6 +31,7 @@
 #include "utility/geom/d2/Triangle3d.h"
 #include "utility/geom/d3/GeomGroup3d.h"
 #include "utility/utils/misc_utils/mchne_eps.h"
+#include "utility/geom/lists/utils_list_pos3d.h"
 
 const double quiet_nan= std::numeric_limits<double>::quiet_NaN();
 
@@ -77,11 +78,7 @@ Plane::Plane(const GeomObj3d::list_Pos3d &lp)
 //! @brief Constructor (Python interface).
 Plane::Plane(const boost::python::list &l)
   {
-    GeomObj3d::list_Pos3d points;
-    const int sz= len(l);
-    // copy the components
-    for(int i=0; i<sz; i++)
-      points.push_back(boost::python::extract<Pos3d>(l[i]));
+    GeomObj3d::list_Pos3d points= python_to_list_pos3d(l);
     Plane tmp(points);
     (*this)= tmp;    
   }

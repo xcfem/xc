@@ -25,6 +25,7 @@
 #include "../pos_vec/Dir3d.h"
 #include "../d2/Plane.h"
 #include "CGAL/linear_least_squares_fitting_3.h"
+#include "utility/geom/lists/utils_list_pos3d.h"
 
 
 const Pos3d Line3d::defaultOrg= Pos3d(0,0,0);
@@ -98,6 +99,43 @@ Line3d::Line3d(const Plane &p1,const Plane &p2)
 Line3d::Line3d(const Line3dParametricForm &param)
   : Linear3d(), cgr(defaultOrg.ToCGAL(),defaultDest.ToCGAL())
   { Parametricas(param); }
+
+//! @brief Constructs the line from the given point list (least squares
+//! method).
+//! @param lp: list of 3D points.
+Line3d::Line3d(const GeomObj3d::list_Pos3d &lp)
+  : Linear3d(), cgr()
+  {
+    const size_t sz= lp.size();
+    if(sz>2)
+      this->linearLeastSquaresFitting(lp);
+    else if(sz>1)
+      this->TwoPoints(lp[0], lp[1]);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; requires at least two points, got: "
+	        << sz
+		<< std::endl;
+  }
+
+//! @brief Constructs the line from the given point list (least squares
+//! method).
+//! @param lp: list of 3D points.
+Line3d::Line3d(const boost::python::list &l)
+  : Linear3d(), cgr()
+  {
+    const GeomObj3d::list_Pos3d lp= python_to_list_pos3d(l);
+    const size_t sz= lp.size();
+    if(sz>2)
+      this->linearLeastSquaresFitting(lp);
+    else if(sz>1)
+      this->TwoPoints(lp[0], lp[1]);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; requires at least two points, got: "
+	        << sz
+		<< std::endl;
+  }
 
 //! @ brief Swaps the line orientation.
 void Line3d::swap(void)
@@ -300,6 +338,13 @@ GEOM_FT Line3d::linearLeastSquaresFitting(const GeomObj3d::list_Pos3d &lp)
       points.push_back((*i).ToCGAL()); 
     GEOM_FT quality= linear_least_squares_fitting_3(points.begin(),points.end(),cgr,CGAL::Dimension_tag<0>());
     return quality;
+  }
+
+//! @brief Compute the line that best suits the point cloud.
+GEOM_FT Line3d::linearLeastSquaresFittingPy(const boost::python::list &lp)
+  {
+    GeomObj3d::list_Pos3d tmp= python_to_list_pos3d(lp);
+    return this->linearLeastSquaresFitting(tmp);
   }
 
 //! @brief Return true if the lines are parallel.

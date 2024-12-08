@@ -50,3 +50,13 @@ Pos3d getPMin(const GeomObj::list_Pos3d &l)
 BND3d getBnd(const GeomObj::list_Pos3d &l)
   { return BND3d(getPMin(l),getPMax(l)); }
 
+//! @brief Construct a Point3d list from the given Python list.
+GeomObj::list_Pos3d python_to_list_pos3d(const boost::python::list &l)
+  {
+    GeomObj3d::list_Pos3d retval;
+    const int sz= len(l);
+    // copy the components
+    for(int i=0; i<sz; i++)
+      retval.push_back(boost::python::extract<Pos3d>(l[i]));
+    return retval;
+  }
