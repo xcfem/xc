@@ -77,9 +77,13 @@ python tests/utility/geom/pos3d_list_test_01.py
 python tests/utility/geom/closest_pair_of_points.py
 echo "$BLEU" "    Lines and rays." "$NORMAL"
 python tests/utility/geom/line2d_test_01.py
+python tests/utility/geom/line2d_test_02.py
+python tests/utility/geom/line2d_test_03.py
 python tests/utility/geom/line3d_test_01.py
 python tests/utility/geom/line3d_test_02.py
 python tests/utility/geom/line3d_test_03.py
+python tests/utility/geom/line3d_test_04.py
+python tests/utility/geom/line3d_test_05.py
 python tests/utility/geom/line2d_intersection_test.py
 python tests/utility/geom/line_segment_intersection_test.py
 python tests/utility/geom/ray2d_test.py

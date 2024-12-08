@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Test the constructor from a point list
-
-This constructor is based on least squares method.
+'''Test the sortPointsAlong method.
 '''
 
 from __future__ import division
@@ -19,13 +17,27 @@ import geom
 points= list()
 for i in range(0,50):
     points.append(geom.Pos3d(i,i,i))
+    if(i!=0):
+        points.append(geom.Pos3d(-i,-i,-i))
 
-# Test constructor from point list (least squares method).
+sqrt3= math.sqrt(3)
+
 l3d= geom.Line3d(points)
 
+sortedPoints= l3d.sortPointsAlong(points)
+
 # Check results.
-iVector= l3d.getIVector
-err= math.sqrt((iVector.x-iVector.y)**2+(iVector.x-iVector.z)**2+(iVector.y-iVector.z)**2)
+err= 0.0
+ptLambda0= sortedPoints[0][1]
+for (pt, ptLambda) in sortedPoints[1:]:
+    deltaLambda= (ptLambda-ptLambda0)/sqrt3
+    ptLambda0= ptLambda
+    err+= (deltaLambda-1.0)**2
+
+err= math.sqrt(err)
+
+# print(err)
+
 
 import os
 from misc_utils import log_messages as lmsg

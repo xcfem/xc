@@ -18,14 +18,14 @@ import geom
 
 points= list()
 for i in range(0,50):
-    points.append(geom.Pos3d(i,i,i))
+    points.append(geom.Pos2d(i,i))
 
 # Test constructor from point list (least squares method).
-l3d= geom.Line3d(points)
+l2d= geom.Line2d(points)
 
 # Check results.
-iVector= l3d.getIVector
-err= math.sqrt((iVector.x-iVector.y)**2+(iVector.x-iVector.z)**2+(iVector.y-iVector.z)**2)
+iVector= l2d.getIVector
+err= abs(iVector.x-iVector.y)
 
 import os
 from misc_utils import log_messages as lmsg
