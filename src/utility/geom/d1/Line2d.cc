@@ -21,6 +21,7 @@
 //Line2d.cc
 
 #include "Line2d.h"
+#include "CGAL/linear_least_squares_fitting_2.h"
 #include "utility/utils/misc_utils/matem.h"
 #include <plotter.h>
 
@@ -30,7 +31,6 @@
 #include "Segment2d.h"
 #include "Polyline2d.h"
 #include "utility/geom/trf/Trf2d.h"
-// #include "CGAL/linear_least_squares_fitting_2.h"
 #include "utility/geom/lists/utils_list_pos2d.h"
 
 const double quiet_nan= std::numeric_limits<double>::quiet_NaN();
@@ -169,17 +169,11 @@ void Line2d::TwoPoints(const Pos2d &p1,const Pos2d &p2)
 //! @brief Compute the line that best suits the point cloud.
 GEOM_FT Line2d::linearLeastSquaresFitting(const GeomObj2d::list_Pos2d &lp)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented yet."
-	      << std::endl;
-      /*
     std::list<CGPoint_2> points;
     for(GeomObj2d::list_Pos2d::const_iterator i=lp.begin(); i!=lp.end();i++)
       points.push_back((*i).ToCGAL()); 
     GEOM_FT quality= linear_least_squares_fitting_2(points.begin(),points.end(),cgr,CGAL::Dimension_tag<0>());
     return quality;
-      */
-    return 0.0;
   }
 
 //! @brief Compute the line that best suits the point cloud.
