@@ -231,6 +231,15 @@ Vector2d Line2d::getJVector(void) const
 double Line2d::getLambda(unsigned short int i,const double &d,const Vector2d &i_) const
   { return (d-Point(0)(i))/i_(i);}
 
+//! @brief Return the length along the line until the given point is reached:
+//! p= Point(0)+lambda*VDir()
+GEOM_FT Line2d::getLambda(const Pos2d &p) const
+  {
+    const Vector2d v(Point(0),p);
+    const Vector2d dir(normalize(VDir()));
+    return dot(v,dir);
+  }
+
 //! @brief Return orthogonal projection of p onto the line.
 Pos2d Line2d::Projection(const Pos2d &p) const
   { return Pos2d(cgr.projection(p.ToCGAL())); }

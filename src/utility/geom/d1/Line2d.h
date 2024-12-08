@@ -72,9 +72,9 @@ class Line2d : public Linear2d
     Line2d(const Pos2d &,const Pos2d &);
     Line2d(const Pos2d &,const Dir2d &);
     Line2d(const Pos2d &,const Vector2d &);
-    explicit Line2d(const Line2dParametricForm &param);
-    explicit Line2d(const GeomObj2d::list_Pos2d &lp);
-    explicit Line2d(const boost::python::list &lp);
+    explicit Line2d(const Line2dParametricForm &);
+    explicit Line2d(const GeomObj2d::list_Pos2d &);
+    explicit Line2d(const boost::python::list &);
     
     virtual bool operator==(const Line2d &) const;
     const CGLine_2 &ToCGAL(void) const;
@@ -104,6 +104,7 @@ class Line2d : public Linear2d
     Pos2d Point(const int &i=0) const;
 
     double getLambda(unsigned short int i,const double &d,const Vector2d &i_) const;
+    virtual GEOM_FT getLambda(const Pos2d &) const;
 
     Line2dParametricForm GetParametricas(void) const;
     Pos2d PtoParametricas(const GEOM_FT &lambda) const;

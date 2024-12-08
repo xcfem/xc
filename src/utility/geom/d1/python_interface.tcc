@@ -23,6 +23,8 @@
 class_<Linear2d, bases<GeomObj2d>, boost::noncopyable  >("Linear2d", no_init)
   .def("getArea", &Linear2d::getArea, "return the object area.")
   .def("getVolume", &Linear2d::getVolume, "return the object volume.")
+  .def("getLambda", &Linear2d::getLambda, "Return the length along the line until the given point is reached.")
+  .def("sortPointsAlong", &Linear2d::sortPointsAlongPy, "Return the given points sorted by its parameter along the line (assuming they are on the line) in the form of a list of (position, lambda) pairs.")
   ;
 
 Line2d (Line2d::*OffsetVector)(const Vector2d &v) const= &Line2d::offset;
@@ -128,7 +130,10 @@ class_<Segment2d, bases<Linear2d> >("Segment2d")
   .def("getBufferPolygon", &Segment2d::getBufferPolygon, "Return a buffer polygon around the segment.")
   ;
 
-class_<Linear3d, bases<GeomObj3d>, boost::noncopyable  >("Linear3d", no_init);
+class_<Linear3d, bases<GeomObj3d>, boost::noncopyable  >("Linear3d", no_init)
+  .def("getLambda", &Linear3d::getLambda, "Return the length along the line until the given point is reached.")
+  .def("sortPointsAlong", &Linear3d::sortPointsAlongPy, "Return the given points sorted by its parameter along the line (assuming they are on the line) in the form of a list of (position, lambda) pairs.")
+  ;
 
 Pos3d (Line3d::*LinePos3dProj)(const Pos3d &) const= &Line3d::Projection;
 Vector3d (Line3d::*Vector3dProj)(const Vector3d &) const= &Line3d::Projection;
@@ -334,7 +339,6 @@ class_<PlanePolyline3d, bases<Linear3d> >("PlanePolyline3d")
   .def("getNearestSegment", &PlanePolyline3d::getNearestSegment, "Return the nearest segment to the given point.")
   .def("getProjection", &PlanePolyline3d::Projection, "Return the projection of the given point onto the polyline.")
   .def("getLengthUpTo", &PlanePolyline3d::getLengthUpTo, "Return the length along the polyline until the point p is reached.")
-  .def("getLambda", &PlanePolyline3d::getLambda, "Return the length along the polyline until the point p is reached.")
   .def("isClosed",&PlanePolyline3d::isClosed,"returns true if the last vertex is coincident with the first one -dist(first,last)<tol*length-.")
   .def("simplify", simplifyPP3DPoly,"simplification of the polyline (Douglas-Peucker algorithm).")
   .def("getCenterOfMass", &PlanePolyline3d::getCenterOfMass)
@@ -383,7 +387,6 @@ class_<Polyline3d, bases<Linear3d, polyPos3d> >("Polyline3d")
   .def("getNearestSegment", &Polyline3d::getNearestSegment, "Return the nearest segment to the given point.")
   .def("getProjection", &Polyline3d::Projection, "Return the projection of the given point onto the polyline.")
   .def("getLengthUpTo", &Polyline3d::getLengthUpTo, "Return the length along the polyline until the point p is reached.")
-  .def("getLambda", &Polyline3d::getLambda, "Return the length along the polyline until the point p is reached.")
   .def("isClosed",&Polyline3d::isClosed,"returns true if the last vertex is coincident with the first one -dist(first,last)<tol*length-.")
   .def("simplify", simplify3DPoly,"simplification of the polyline (Douglas-Peucker algorithm).")
   .def("getCenterOfMass", &Polyline3d::getCenterOfMass)

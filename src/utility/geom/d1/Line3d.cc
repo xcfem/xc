@@ -189,6 +189,15 @@ Vector3d Line3d::getKVector(void) const
 double Line3d::getLambda(unsigned short int i,const double &d,const Vector3d &i_) const
       { return (d-Point(0)(i))/i_(i);}
 
+//! @brief Return the length along the line until the given point is reached:
+//! p= Point(0)+lambda*VDir()
+GEOM_FT Line3d::getLambda(const Pos3d &p) const
+  {
+    const Vector3d v(Point(0),p);
+    const Vector3d dir(normalize(VDir()));
+    return dot(v,dir);
+  }
+
 //! @brief Return the orthogonal projection onto the line.
 //! @param p: point to project.
 Pos3d Line3d::Projection(const Pos3d &p) const

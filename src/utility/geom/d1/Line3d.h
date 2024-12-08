@@ -90,6 +90,7 @@ class Line3d : public Linear3d
       { return Pos3d(cgr.point(i)); }
 
     double getLambda(unsigned short int i,const double &d,const Vector3d &i_) const;
+    virtual GEOM_FT getLambda(const Pos3d &) const;
 
     Pos3d Projection(const Pos3d &) const;
     Vector3d Projection(const Vector3d &) const;
