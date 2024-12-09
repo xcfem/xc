@@ -17,3 +17,4 @@ Transient dynamic analysis (also known as time-history analysis) aims at finding
 - [Projectile OpenSeesing](https://portwooddigital.com/2024/01/21/projectile-openseesing/)
 - [Centripetal Acceleration](https://portwooddigital.com/2024/01/28/centripetal-acceleration/)
 - [The Hard Dynamics](https://portwooddigital.com/2024/01/07/the-hard-dynamics/)
+- [A Simple Base-Isolated Model](https://portwooddigital.com/2024/11/26/a-simple-base-isolated-model/)
