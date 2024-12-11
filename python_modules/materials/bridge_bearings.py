@@ -328,7 +328,7 @@ class PTFEPotBearingMat(Bearing):
     '''
     teflonMuTable= scipy.interpolate.interp1d(xT,yT)
 
-    def __init__(self,d,unidirX=False,unidirY=False,factStiff=1e5,deltaFrict=20e-3,Fperp=None, bearing_type= None):
+    def __init__(self,d,unidirX=False,unidirY=False,factStiff=1e5,deltaFrict=20e-3,Fperp=None, bearing_type= None, rotStiff=1e-5):
         '''Class constructor.
 
         :param d: pot diameter.
@@ -336,9 +336,10 @@ class PTFEPotBearingMat(Bearing):
         :param unidirY: unidirectional POT in local-Y direction (uX constrained) (defaults to False)
         :param factStiff: factor to increase stiffness in constrained locad directions (defaults to 1e5)
         :param deltaFrict: Displacement when the friction force is reached (defaults to 20 mm).
-        :parma Fperp: compressive force perperdicular to the pot surface. If Fperp is not given, the 
+        :parma Fperp: mean compressive force perperdicular to the pot surface. If Fperp is not given, the 
                       compressive stress is taken as 35Mpa
         :param bearing_type: string that identifies the type of the bearing in the problem.
+        :param rotStiff: rotational stiffness 
         '''
         super(PTFEPotBearingMat,self).__init__(bearing_type= bearing_type)
         self.d= d
@@ -347,14 +348,23 @@ class PTFEPotBearingMat(Bearing):
         self.factStiff=factStiff
         self.deltaFrict=deltaFrict
         self.Fperp=Fperp
-         
-    def getHorizontalStiffness(self):
-        '''Returns the fictitious stiffness with respect to the horizontal displacement of a PTFE slide bearing.
-        '''
+        self.rotStiff=rotStiff
+
+    def getMeanStress(self):
         Apot=math.pi*(self.d/2.0)**2
         if self.Fperp is None: self.Fperp=35e6*Apot
         sigma=self.Fperp/Apot
-        mu=self.teflonMuTable(sigma)
+        return sigma
+
+    def getMu(self):
+        sigma=self.getMeanStress()
+        mu=1.0*self.teflonMuTable(sigma)
+        return mu
+        
+    def getHorizontalStiffness(self):
+        '''Returns the fictitious stiffness with respect to the horizontal displacement of a PTFE slide bearing.
+        '''
+        mu=self.getMu()
         K=mu*self.Fperp/self.deltaFrict
         return K
 
@@ -370,7 +380,10 @@ class PTFEPotBearingMat(Bearing):
             self.matXName= nameRoot+'X'
             self.matYName= nameRoot+'Y'
             self.matZName= nameRoot+'Z'
+            self.matTHXName= nameRoot+'THX'
+            self.matTHYName= nameRoot+'THY'
             self.materials.extend([self.matXName, self.matYName,self.matZName])
+            self.materials.extend([self.matTHXName, self.matTHYName])
             # Material objects.
             horizStiff=self.getHorizontalStiffness()
             if self.unidirY:
@@ -382,6 +395,8 @@ class PTFEPotBearingMat(Bearing):
             else:
                  self.matKY= typical_materials.defElasticMaterial(preprocessor, name=self.matYName, E=horizStiff)
             self.matKZ= typical_materials.defElasticMaterial(preprocessor, name=self.matZName, E=self.factStiff*horizStiff)
+            self.matKTHX= typical_materials.defElasticMaterial(preprocessor, self.matTHXName, E=self.rotStiff)
+            self.matKTHY= typical_materials.defElasticMaterial(preprocessor, self.matTHYName, E=self.rotStiff)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -468,6 +483,14 @@ class PotBearing(object):
     def getMatZlocal(self):
         m=self.potElem.getMaterials()[2]
         return m
+    
+    def getMatTHXlocal(self):
+        m=self.potElem.getMaterials()[3]
+        return m
+    
+    def getMatTHYlocal(self):
+        m=self.potElem.getMaterials()[4]
+        return m
 
     def getFXlocal(self):
         ''' Returns the force in local-X direction 
@@ -510,6 +533,20 @@ class PotBearing(object):
         m=self.getMatZlocal()
         Elz=m.getStrain()
         return Elz
+    
+    def getRotXlocal(self):
+        ''' Return the rotation around local -X direction
+        '''
+        m=self.getMatTHXlocal()
+        rotX=m.getStrain()
+        return rotX
+    
+    def getRotYlocal(self):
+        ''' Return the rotation around local -Y direction
+        '''
+        m=self.getMatTHYlocal()
+        rotY=m.getStrain()
+        return rotY
     
     def getVdispNodA(self):
         ''' Return the nodA displacement vector'''
