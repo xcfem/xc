@@ -21,6 +21,7 @@
 //Line2d.cc
 
 #include "Line2d.h"
+#include "CGAL/linear_least_squares_fitting_2.h"
 #include "utility/utils/misc_utils/matem.h"
 #include <plotter.h>
 
@@ -30,6 +31,7 @@
 #include "Segment2d.h"
 #include "Polyline2d.h"
 #include "utility/geom/trf/Trf2d.h"
+#include "utility/geom/lists/utils_list_pos2d.h"
 
 const double quiet_nan= std::numeric_limits<double>::quiet_NaN();
 
@@ -120,12 +122,66 @@ const CGLine_2 &Line2d::ToCGAL(void) const
 GeomObj *Line2d::getCopy(void) const
   { return new Line2d(*this); }
 
+//! @brief Constructs the line from the given point list (least squares
+//! method).
+//! @param lp: list of 2D points.
+Line2d::Line2d(const GeomObj2d::list_Pos2d &lp)
+  : Linear2d(), cgr()
+  {
+    const size_t sz= lp.size();
+    if(sz>2)
+      this->linearLeastSquaresFitting(lp);
+    else if(sz>1)
+      this->TwoPoints(lp[0], lp[1]);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; requires at least two points, got: "
+	        << sz
+		<< std::endl;
+  }
+
+//! @brief Constructs the line from the given point list (least squares
+//! method).
+//! @param lp: list of 2D points.
+Line2d::Line2d(const boost::python::list &l)
+  : Linear2d(), cgr()
+  {
+    const GeomObj2d::list_Pos2d lp= python_to_list_pos2d(l);
+    const size_t sz= lp.size();
+    if(sz>2)
+      this->linearLeastSquaresFitting(lp);
+    else if(sz>1)
+      this->TwoPoints(lp[0], lp[1]);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; requires at least two points, got: "
+	        << sz
+		<< std::endl;
+  }
+
 //! @ brief Swaps the line orientation.
 void Line2d::swap(void)
   { cgr= cgr.opposite(); }
 
 void Line2d::TwoPoints(const Pos2d &p1,const Pos2d &p2)
   { (*this)= Line2d(p1,p2); }
+
+//! @brief Compute the line that best suits the point cloud.
+GEOM_FT Line2d::linearLeastSquaresFitting(const GeomObj2d::list_Pos2d &lp)
+  {
+    std::list<CGPoint_2> points;
+    for(GeomObj2d::list_Pos2d::const_iterator i=lp.begin(); i!=lp.end();i++)
+      points.push_back((*i).ToCGAL()); 
+    GEOM_FT quality= linear_least_squares_fitting_2(points.begin(),points.end(),cgr,CGAL::Dimension_tag<0>());
+    return quality;
+  }
+
+//! @brief Compute the line that best suits the point cloud.
+GEOM_FT Line2d::linearLeastSquaresFittingPy(const boost::python::list &lp)
+  {
+    GeomObj2d::list_Pos2d tmp= python_to_list_pos2d(lp);
+    return this->linearLeastSquaresFitting(tmp);
+  }
 
 //! @brief Return object length.
 GEOM_FT Line2d::getLength(void) const
@@ -168,6 +224,15 @@ Vector2d Line2d::getJVector(void) const
 
 double Line2d::getLambda(unsigned short int i,const double &d,const Vector2d &i_) const
   { return (d-Point(0)(i))/i_(i);}
+
+//! @brief Return the length along the line until the given point is reached:
+//! p= Point(0)+lambda*VDir()
+GEOM_FT Line2d::getLambda(const Pos2d &p) const
+  {
+    const Vector2d v(Point(0),p);
+    const Vector2d dir(normalize(VDir()));
+    return dot(v,dir);
+  }
 
 //! @brief Return orthogonal projection of p onto the line.
 Pos2d Line2d::Projection(const Pos2d &p) const

@@ -154,7 +154,8 @@ Vector3d Segment3d::getJVector(void) const
 Vector3d Segment3d::getKVector(void) const
   { return getSupportLine().getKVector(); }
 
-//! @brief Return the lambda parameter: p= getFromPoint()+lambda*VDir()
+//! @brief Return the lambda parameter for the given point:
+//! p= getFromPoint()+lambda*VDir()
 GEOM_FT Segment3d::getLambda(const Pos3d &p) const
   {
     const Vector3d v(getFromPoint(),p);

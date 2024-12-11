@@ -67,3 +67,14 @@ std::deque<GEOM_FT> &getCovers(const GeomObj::list_Pos2d &l,const Polygon2d &plg
       retval[i]= plg.getCover(l[i]);
     return retval;
   }
+
+//! @brief Construct a Point2d list from the given Python list.
+GeomObj::list_Pos2d python_to_list_pos2d(const boost::python::list &l)
+  {
+    GeomObj2d::list_Pos2d retval;
+    const int sz= len(l);
+    // copy the components
+    for(int i=0; i<sz; i++)
+      retval.push_back(boost::python::extract<Pos2d>(l[i]));
+    return retval;
+  }

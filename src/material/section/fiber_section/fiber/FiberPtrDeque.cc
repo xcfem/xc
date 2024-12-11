@@ -731,7 +731,7 @@ double XC::FiberPtrDeque::getSNegHomogenizedSection(const double &E0,const HalfP
 inline double R(const double &Iy,const double &Iz,const double Pyz)
   { return sqrt(sqr((Iy-Iz)/2)+sqr(Pyz)); }
 
-//! @brief Return the major principal moment of inertia.
+//! @brief Return the major principal moment of inertia with respect to the axesis passing through y0, z0.
 double XC::FiberPtrDeque::getI1(const double &factor,const double &y0,const double &z0) const
   {
     const double iy= getIy(factor,z0);
@@ -742,7 +742,7 @@ double XC::FiberPtrDeque::getI1(const double &factor,const double &y0,const doub
   }
 
 
-//! @brief Return the moment of inertia principal menor.
+//! @brief Return the minor principal moment of inertia with respect to the axesis passing through y0, z0.
 double XC::FiberPtrDeque::getI2(const double &factor,const double &y0,const double &z0) const
   {
     const double iy= getIy(factor,z0);
@@ -1397,7 +1397,26 @@ Segment2d XC::FiberPtrDeque::getLeverArmSegment(void) const
         retval= Segment2d(Pos2d(T[0],T[1]),Pos2d(C[0],C[1]));
       }
     else
-      retval.setExists(false);
+      {
+	// No bending, so no bending plane to rely on.
+	// Get the minor axis of inertia (we assume that
+	// this is the direction of the section web).
+        const Vector minorAxisOfInertia= this->getAxis2();
+	const Vector2d direction(minorAxisOfInertia[0], minorAxisOfInertia[1]);
+	// Minor principal moment of inertia. 
+	const double I1= this->getI1(1, 0.0, 0.0);
+	// Compute the area:
+	const double area= this->getArea();
+	// Compute the equivalent depth of a rectangle with
+	// the same inertia.
+	const double eq_depth= sqrt(12.0*I1/area);
+	const double eq_z= 0.8*eq_depth;
+	// Get the center of mass.
+	const Pos2d centroid= this->getCenterOfMass();
+	const Pos2d C= centroid+0.5*eq_z*direction;
+	const Pos2d T= centroid-0.5*eq_z*direction;
+        retval= Segment2d(T,C);
+      }
     return retval;
   }
 

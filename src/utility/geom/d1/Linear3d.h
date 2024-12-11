@@ -46,6 +46,9 @@ class Linear3d : public GeomObj3d
     //@brief Return true if the points is on sobre la Linea.
     virtual bool In(const Pos3d &p, const double &tol= 0.0) const= 0;
     
+    virtual GEOM_FT getLambda(const Pos3d &) const;
+    std::vector<std::pair<Pos3d, GEOM_FT> > sortPointsAlong(const GeomObj3d::list_Pos3d &) const;
+    boost::python::list sortPointsAlongPy(const boost::python::list &) const;
     //Return the intersection of the line with the plane
     // defined by the equation coord_i= d.
 /*     virtual list_Pos3d Int(unsigned short int i, const double &d) const= 0; */

@@ -77,8 +77,13 @@ python tests/utility/geom/pos3d_list_test_01.py
 python tests/utility/geom/closest_pair_of_points.py
 echo "$BLEU" "    Lines and rays." "$NORMAL"
 python tests/utility/geom/line2d_test_01.py
+python tests/utility/geom/line2d_test_02.py
+python tests/utility/geom/line2d_test_03.py
 python tests/utility/geom/line3d_test_01.py
 python tests/utility/geom/line3d_test_02.py
+python tests/utility/geom/line3d_test_03.py
+python tests/utility/geom/line3d_test_04.py
+python tests/utility/geom/line3d_test_05.py
 python tests/utility/geom/line2d_intersection_test.py
 python tests/utility/geom/line_segment_intersection_test.py
 python tests/utility/geom/ray2d_test.py
@@ -1803,6 +1808,10 @@ python tests/postprocess/limit_state_checking/generic/test_select_critical_combs
 echo "$BLEU" "  Graphic output." "$NORMAL"
 python tests/postprocess/vtk/test_beam3d_bending_moment_belly_01.py
 python tests/postprocess/vtk/test_beam3d_bending_moment_belly_02.py
+# Report tests.
+echo "$BLEU" "  Report output." "$NORMAL"
+python tests/postprocess/report/test_report_loads_01.py
+python tests/postprocess/report/test_report_check_01.py
 
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)

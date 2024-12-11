@@ -47,6 +47,9 @@ class Linear2d : public GeomObj2d
       { return 0.0; }
     //@brief Return true if the points is on sobre la Linea.
     virtual bool In(const Pos2d &p, const double &tol= 0.0) const= 0;
+    virtual GEOM_FT getLambda(const Pos2d &) const;
+     std::vector<std::pair<Pos2d, GEOM_FT> > sortPointsAlong(const GeomObj2d::list_Pos2d &) const;
+    boost::python::list sortPointsAlongPy(const boost::python::list &) const;
   };
 #endif
 

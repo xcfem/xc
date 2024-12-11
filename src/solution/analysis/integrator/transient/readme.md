@@ -24,3 +24,4 @@ Determing the next time step for an analysis including inertial effects can be d
 - [Two Sprung Masses and Some Friction Force](https://portwooddigital.com/2024/02/10/two-sprung-masses-and-some-friction-force/)
 - [Spreader Beam Analysis](https://portwooddigital.com/2024/02/21/spreader-beam-analysis/)
 - [All About Making that ZPA](https://portwooddigital.com/2024/10/06/all-about-making-that-zpa/)
+- [A Simple Base-Isolated Model](https://portwooddigital.com/2024/11/26/a-simple-base-isolated-model/)

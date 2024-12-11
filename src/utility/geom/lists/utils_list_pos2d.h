@@ -38,6 +38,7 @@ void plot(Plotter &,const GeomObj::list_Pos2d &l);
 Pos2d getPMax(const GeomObj::list_Pos2d &l);
 Pos2d getPMin(const GeomObj::list_Pos2d &l);
 BND2d getBnd(const GeomObj::list_Pos2d &l);
+GeomObj::list_Pos2d python_to_list_pos2d(const boost::python::list &);
 std::deque<GEOM_FT> &getCovers(const GeomObj::list_Pos2d &l,const Polygon2d &);
 #endif
 

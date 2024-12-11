@@ -72,7 +72,9 @@ class Line2d : public Linear2d
     Line2d(const Pos2d &,const Pos2d &);
     Line2d(const Pos2d &,const Dir2d &);
     Line2d(const Pos2d &,const Vector2d &);
-    explicit Line2d(const Line2dParametricForm &param);
+    explicit Line2d(const Line2dParametricForm &);
+    explicit Line2d(const GeomObj2d::list_Pos2d &);
+    explicit Line2d(const boost::python::list &);
     
     virtual bool operator==(const Line2d &) const;
     const CGLine_2 &ToCGAL(void) const;
@@ -102,6 +104,7 @@ class Line2d : public Linear2d
     Pos2d Point(const int &i=0) const;
 
     double getLambda(unsigned short int i,const double &d,const Vector2d &i_) const;
+    virtual GEOM_FT getLambda(const Pos2d &) const;
 
     Line2dParametricForm GetParametricas(void) const;
     Pos2d PtoParametricas(const GEOM_FT &lambda) const;
@@ -148,6 +151,9 @@ class Line2d : public Linear2d
     friend double angle(const Line2d &r,const Vector2d &v);
     friend double angle(const Line2d &r1,const Line2d &r2);
 
+    GEOM_FT linearLeastSquaresFitting(const GeomObj2d::list_Pos2d &lp);
+    GEOM_FT linearLeastSquaresFittingPy(const boost::python::list &lp);
+    
     virtual GEOM_FT Ix(void) const;
     virtual GEOM_FT Iy(void) const;
     virtual GEOM_FT Pxy(void) const;
