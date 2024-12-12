@@ -145,9 +145,7 @@ class ControlVarDiagram(cd.ColoredDiagram):
         diagramIndex= 0
         diagramIndex= self.appendDataFromElementEnds(dirVectors= self.dirVectors, elements= self.elements, diagramIndex= diagramIndex, valueCouples= self.valueCouples)
         self.createLookUpTable()
-        #self.updateLookUpTable()
         self.createDiagramActor()
-        # self.updateDiagramActor()
         self.clear()
 
 

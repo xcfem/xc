@@ -20,7 +20,7 @@ class PropertyDiagram(cd.ColoredDiagram):
                          those greater than vmax in red (defaults to None)
         '''
         super(PropertyDiagram,self).__init__(scaleFactor= scaleFactor, fUnitConv= fUnitConv, rgMinMax= rgMinMax)
-        self.lstSets= sets
+        self.elemSets= sets
         self.propertyName= attributeName
         self.lRefModSize= lRefModSize
 
@@ -52,8 +52,8 @@ class PropertyDiagram(cd.ColoredDiagram):
                   by this factor. (Defaults to 0.0, i.e. display of 
                   initial/undeformed shape)
         ''' 
-        self.computeDiagramValues(eSet= eSet);
-        return self.appendDataToDiagram(elements= self.elements, diagramIndex= diagramIndex, valueCouples= self.valueCouples, defFScale= defFScale)
+        self.computeDiagramValues();
+        return self.appendDataToDiagram(elements= self.elements, diagramIndex= diagramIndex, valueCouples= self.valueCouples, directions= self.directions, defFScale= defFScale)
 
     def clear(self):
         ''' Clear the diagram data.'''
@@ -61,15 +61,25 @@ class PropertyDiagram(cd.ColoredDiagram):
         self.valueCouples.clear()
 
     def addDiagram(self, defFScale= 0.0):
+        '''
+
+        :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor. (Defaults to 0.0, i.e. display of 
+                  initial/undeformed shape)
+        '''
+        '''Add diagram to the scene.'''
+        self.computeDiagramValues()
+        
         self.createDiagramDataStructure()
+        diagramIndex= 0
+        diagramIndex= self.appendDataFromElementEnds(dirVectors= self.directions, elements= self.elements, diagramIndex= diagramIndex, valueCouples= self.valueCouples)
+        # for s in self.elemSets:
+        #     diagramIndex= self.appendDataSetToDiagram(eSet= s, diagramIndex= diagramIndex, defFScale= defFScale)
         self.createLookUpTable()
         self.createDiagramActor()
-
-        diagramIndex= 0
-        for s in self.lstSets:
-            diagramIndex= self.appendDataSetToDiagram(eSet= s, diagramIndex= diagramIndex, defFScale= defFScale)
-
         self.clear()
-        self.updateLookUpTable()
-        self.updateDiagramActor()
+        
+
 
