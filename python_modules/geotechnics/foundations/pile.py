@@ -35,7 +35,7 @@ def get_node_ys(nodes):
     retval.sort(key=takeSecond, reverse=True) # y in descending order
     return retval
 
-def generate_springs_pile_2d(modelSpace, nodes, linearSpringsConstants):
+def generate_springs_pile_2d(modelSpace, nodes, linearSpringsConstants, storeAsPileNodeProperties= True):
     '''Generate the springs that simulate the soils along the pile in a 2D
        problem.
 
@@ -44,6 +44,8 @@ def generate_springs_pile_2d(modelSpace, nodes, linearSpringsConstants):
     :param nodes: nodes that will be attached by the springs.
     :param linearSpringsConstants: dictionary containing the linear spring
                                    constants corresponding to each node.
+    :param storeAsPileNodeProperties: if true store the spring constants as
+                                      properties of the pile nodes.
     '''
     #init spring elastic materials
     prep= modelSpace.preprocessor
@@ -57,9 +59,13 @@ def generate_springs_pile_2d(modelSpace, nodes, linearSpringsConstants):
             springY.E= k_i[1] # vertical component.
             newNode, newElement= modelSpace.setBearing(n.tag, [springX.name, springY.name])
             retval.append(newElement) # append the "spring" element.
+            # store spring constants as node properties.
+            if(storeAsPileNodeProperties): 
+                n.setProp('k_x', k_i[0])
+                n.setProp('k_y', k_i[1])
     return retval
 
-def generate_springs_pile_3d(modelSpace, nodes, linearSpringsConstants):
+def generate_springs_pile_3d(modelSpace, nodes, linearSpringsConstants, storeAsPileNodeProperties= True):
     '''Generate the springs that simulate the soils along the pile in a 3D
        problem.
 
@@ -68,6 +74,8 @@ def generate_springs_pile_3d(modelSpace, nodes, linearSpringsConstants):
     :param nodes: nodes that will be attached by the springs.
     :param linearSpringsConstants: dictionary containing the linear spring
                                    constants corresponding to each node.
+    :param storeAsPileNodeProperties: if true store the spring constants as
+                                      properties of the pile nodes.
     '''
     #init spring elastic materials
     prep= modelSpace.preprocessor
@@ -83,6 +91,11 @@ def generate_springs_pile_3d(modelSpace, nodes, linearSpringsConstants):
             springZ.E= k_i[2]
             newNode, newElement= modelSpace.setBearing(n.tag,['springX','springY','springZ'])
             retval.append(newElement) # append the "spring" element.
+            # store spring constants as node properties.
+            if(storeAsPileNodeProperties):
+                n.setProp('k_x', k_i[0])
+                n.setProp('k_y', k_i[1])
+                n.setProp('k_z', k_i[2])
     return retval
 
 class SoilLayers(object):
@@ -277,7 +290,7 @@ class Pile(object):
         raise Exception('Abstract method, please override')
         return None
     
-    def generateSpringsPile2D(self, alphaKh_x, alphaKv_y):
+    def generateSpringsPile2D(self, alphaKh_x, alphaKv_y, storeAsPileNodeProperties= True):
         '''Generate the springs that simulate the soils along the pile in a 2D
            problem.
 
@@ -285,17 +298,19 @@ class Pile(object):
                           of a single pile in X direction
         :param alphaKv_y: coefficient to be applied to the vertical stiffness of
                           a single pile in Y direction
+        :param storeAsPileNodeProperties: if true store the spring constants as
+                                          properties of the pile nodes.
         '''
         # Compute the 3D spring constants and ignore the second horizontal
         # component.
         linearSpringsConstants= self.getLinearSpringsConstants2D(alphaKh_x= alphaKh_x, alphaKv_y= alphaKv_y)
         prep= self.pileSet.getPreprocessor
         modelSpace= predefined_spaces.getModelSpace(prep)
-        self.springs= generate_springs_pile_2d(modelSpace= modelSpace, nodes= self.pileSet.nodes, linearSpringsConstants= linearSpringsConstants) 
+        self.springs= generate_springs_pile_2d(modelSpace= modelSpace, nodes= self.pileSet.nodes, linearSpringsConstants= linearSpringsConstants, storeAsPileNodeProperties= storeAsPileNodeProperties)
         return self.springs
 
     
-    def generateSpringsPile3D(self, alphaKh_x, alphaKh_y, alphaKv_z):
+    def generateSpringsPile3D(self, alphaKh_x, alphaKh_y, alphaKv_z, storeAsPileNodeProperties= True):
         '''Generate the springs that simulate the soils along the pile in a 3D
            problem.
 
@@ -305,14 +320,16 @@ class Pile(object):
                           of a single pile in Y direction
         :param alphaKh_Z: coefficient to be applied to the vertical stiffness of
                           a single pile in Z direction
+        :param storeAsPileNodeProperties: if true store the spring constants as
+                                          properties of the pile nodes.
         '''
         linearSpringsConstants= self.getLinearSpringsConstants3D(alphaKh_x= alphaKh_x, alphaKh_y= alphaKh_y, alphaKv_z= alphaKv_z)
         prep= self.pileSet.getPreprocessor
         modelSpace= predefined_spaces.getModelSpace(prep)
-        self.springs= generate_springs_pile_3d(modelSpace= modelSpace, nodes= self.pileSet.nodes, linearSpringsConstants= linearSpringsConstants)
+        self.springs= generate_springs_pile_3d(modelSpace= modelSpace, nodes= self.pileSet.nodes, linearSpringsConstants= linearSpringsConstants, storeAsPileNodeProperties= storeAsPileNodeProperties)
         return self.springs
         
-    def generateSpringsPile(self, alphaKh_x, alphaKh_y, alphaKv_z):
+    def generateSpringsPile(self, alphaKh_x, alphaKh_y, alphaKv_z, storeAsPileNodeProperties= True):
         '''Generate the springs that simulate the soils along the pile
 
         :param alphaKh_x: coefficient to be applied to the horizontal stiffness
@@ -321,21 +338,22 @@ class Pile(object):
                           of a single pile in Y direction
         :param alphaKh_Z: coefficient to be applied to the vertical stiffness of
                           a single pile in Z direction
+        :param storeAsPileNodeProperties: if true store the spring constants as
+                                          properties of the pile nodes.
         '''
         preprocessor= self.pileSet.getPreprocessor
         numDOFs= preprocessor.getNodeHandler.numDOFs
         retval= None
         if(numDOFs==6): # 3D structural mechanics
-            retval= self.generateSpringsPile3D(alphaKh_x= alphaKh_x, alphaKh_y= alphaKh_y, alphaKv_z= alphaKv_z)
+            retval= self.generateSpringsPile3D(alphaKh_x= alphaKh_x, alphaKh_y= alphaKh_y, alphaKv_z= alphaKv_z, storeAsPileNodeProperties= storeAsPileNodeProperties)
         elif(numDOFs==3):
-            retval= self.generateSpringsPile2D(alphaKh_x= alphaKh_x, alphaKv_y= alphaKv_z)
+            retval= self.generateSpringsPile2D(alphaKh_x= alphaKh_x, alphaKv_y= alphaKv_z, storeAsPileNodeProperties= storeAsPileNodeProperties)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; not implemented for '+str(numDOFs) + ' degrees of freedom.')
         return retval
             
-
 class CircularPile(Pile):
     ''' Pile with circular cross-section.'''
     def __init__(self, E, pileType, diameter, soilLayers, pileSet):
