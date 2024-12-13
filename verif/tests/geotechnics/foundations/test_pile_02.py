@@ -169,13 +169,16 @@ if abs(err_ux)<0.1 and abs(err_Kx)<5e-5 and abs(err_V)<0.5 and abs(err_M)<0.5:
 else:
     lmsg.error(fname+' ERROR.')
 
-# # Graphic stuff.
-# from postprocess import output_handler
-# oh= output_handler.OutputHandler(modelSpace)
-# # oh.displayFEMesh()
-# # oh.displayReactions()
-# oh.displayDispRot(itemToDisp='uX',defFScale= 100.0,setToDisplay=pileSet)
-# # oh.displayDispRot(itemToDisp='uY',defFScale= 2.0,setToDisplay=pileSet)
-# # oh.displayIntForcDiag(itemToDisp='N',setToDisplay=pileSet)
-# oh.displayIntForcDiag(itemToDisp='V',setToDisplay=pileSet)
-# oh.displayIntForcDiag(itemToDisp='M',setToDisplay=pileSet)
+'''
+# Graphic stuff.
+from postprocess import output_handler
+oh= output_handler.OutputHandler(modelSpace)
+# oh.displayFEMesh()
+# oh.displayReactions()
+oh.displayNodeValueDiagram(itemToDisp= 'k_x', caption= 'Spring stiffness x direction', defaultDirection= 'X', defaultValue= 0.0)
+oh.displayDispRot(itemToDisp='uX',defFScale= 100.0,setToDisplay=pileSet)
+# oh.displayDispRot(itemToDisp='uY',defFScale= 2.0,setToDisplay=pileSet)
+# oh.displayIntForcDiag(itemToDisp='N',setToDisplay=pileSet)
+oh.displayIntForcDiag(itemToDisp='V',setToDisplay=pileSet)
+oh.displayIntForcDiag(itemToDisp='M',setToDisplay=pileSet)
+'''

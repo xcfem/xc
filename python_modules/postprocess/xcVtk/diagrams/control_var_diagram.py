@@ -43,8 +43,8 @@ class ControlVarDiagram(cd.ColoredDiagram):
                               variable.
         :param component: component of the control variable to be displayed 
                          (possible arguments: 'N', 'My', 'Mz'Vz,...).
-        :param defaultDirection: default direction of the diagram (J: element local
-                                 j vector or K: element local K vector).
+        :param defaultDirection: default direction of the diagram (J: element 
+                                 local j vector or K: element local K vector).
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
                          of the scalar field (if any) to be represented. All 
                          the values less than vmin are displayed in blue and 
@@ -145,9 +145,7 @@ class ControlVarDiagram(cd.ColoredDiagram):
         diagramIndex= 0
         diagramIndex= self.appendDataFromElementEnds(dirVectors= self.dirVectors, elements= self.elements, diagramIndex= diagramIndex, valueCouples= self.valueCouples)
         self.createLookUpTable()
-        #self.updateLookUpTable()
         self.createDiagramActor()
-        # self.updateDiagramActor()
         self.clear()
 
 

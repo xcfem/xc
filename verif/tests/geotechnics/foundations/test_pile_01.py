@@ -195,6 +195,8 @@ else:
 from postprocess import output_handler
 oh= output_handler.OutputHandler(modelSpace)
 
+oh.displayNodeValueDiagram(itemToDisp= 'k_x', caption= 'Spring stiffness x direction', defaultDirection= 'X', defaultValue= 0.0)
+oh.displayNodeValueDiagram(itemToDisp= 'k_y', caption= 'Spring stiffness y direction', defaultDirection= 'Y', defaultValue= 0.0)
 oh.displayDispRot(itemToDisp='uX',setToDisplay=pile)
 oh.displayIntForcDiag(itemToDisp='Vy',setToDisplay=pile)
 oh.displayIntForcDiag(itemToDisp='Mz',setToDisplay=pile)

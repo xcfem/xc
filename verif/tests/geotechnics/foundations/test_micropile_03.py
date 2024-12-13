@@ -155,15 +155,17 @@ else:
     lmsg.error(fname+' ERROR.')
 
 
-'''
 # Graphic stuff.
 dispSet= modelSpace.defSet('dispSet')
 dispSet.lines.append(l)
 dispSet.fillDownwards()
     
+'''
 from postprocess import output_handler
 oh= output_handler.OutputHandler(modelSpace)
 oh.displayFEMesh()
+oh.displayNodeValueDiagram(itemToDisp= 'k_x', caption= 'Spring stiffness x direction', defaultDirection= 'X', defaultValue= 0.0)
+oh.displayNodeValueDiagram(itemToDisp= 'k_y', caption= 'Spring stiffness y direction', defaultDirection= 'Y', defaultValue= 0.0)
 oh.displayDispRot(itemToDisp='uX',defFScale= 2.0,setToDisplay=dispSet)
 oh.displayDispRot(itemToDisp='uZ',defFScale= 2.0,setToDisplay=dispSet)
 oh.displayIntForcDiag(itemToDisp='N',setToDisplay=dispSet)
