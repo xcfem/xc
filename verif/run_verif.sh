@@ -1806,6 +1806,7 @@ python tests/postprocess/limit_state_checking/generic/test_select_critical_combs
 # Graphic output tests
 ##python tests/postprocess/vtk/dibuja_edges.py
 echo "$BLEU" "  Graphic output." "$NORMAL"
+python tests/postprocess/vtk/test_display_blocks.py
 python tests/postprocess/vtk/test_beam3d_bending_moment_belly_01.py
 python tests/postprocess/vtk/test_beam3d_bending_moment_belly_02.py
 python tests/postprocess/vtk/test_display_node_value_diagram.py
