@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-'''
-Check that the Mz bending moment diagram is oriented towards the the "belly" 
-due that belly.'''
+''' Check display that the displayNodeValueDiagram method works. The test does
+ not verify the output contents, only that the method runs and the file is
+ created.'''
 
 from __future__ import division
 from __future__ import print_function
