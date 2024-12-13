@@ -35,6 +35,7 @@ nu= 0.3 # Poisson's ratio.
 G= E/(2.0*(1+nu))
 p= 1e5 # Transverse load.
 
+# Define FE problem.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
