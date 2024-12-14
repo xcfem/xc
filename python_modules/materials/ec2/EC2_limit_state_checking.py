@@ -1908,7 +1908,7 @@ def get_punching_v_min(concrete, dy= 0.0, dz= 0.0, isFoundation= False, national
         retval*= 0.035
     return retval
         
-def get_puching_shear_resistance_whitout_punching_shear_reinforcement(concrete, dy, dz, rho_ly, rho_lz, sigma_cp_y= 0.0, sigma_cp_z= 0.0, isFoundation= False, nationalAnnex= None):
+def get_punching_shear_resistance_whitout_punching_shear_reinforcement(concrete, dy, dz, rho_ly, rho_lz, sigma_cp_y= 0.0, sigma_cp_z= 0.0, isFoundation= False, nationalAnnex= None):
     ''' Return the punching shear strength according to clause expression 
         (6.47) of 6.4.4(1) of of EC2:2004.
 
