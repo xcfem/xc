@@ -23,4 +23,6 @@ Verification test for the checkings made according to Eurocode 2.
    - [Punching shear design for internal column with circular cross-section (slab support or foundation base)](https://eurocodeapplied.com/design/en1992/punching-shear-circular-internal-column)
    - [SCIA Engineer theoretical background. Simplified method](https://help.scia.net/20.0/en/val/concrete/betafactor_04_theoretical_background.htm?tocpath=Design%20and%20check%7CConcrete%20Advanced%7CPunching%20shear%7CBeta%20factor%20for%20punching%7C_____4)
    - [Punching shear](https://www.concretecentre.com/Codes/Eurocode-2/Punching-Shear.aspx)
+   - [Punching Design of Internal Column](https://calcpad.eu/Worksheet/108/punching-design-of-internal-column)
+   - [Sampoong Department Store collapse](https://en.wikipedia.org/wiki/Sampoong_Department_Store_collapse)
 
