@@ -9,11 +9,19 @@ Once the analyst has defined the model, the next step is to define the analysis 
  - [Not All at Once](https://portwooddigital.com/2021/10/26/not-all-at-once/)
  - [Finite Differences](https://portwooddigital.com/2021/11/27/finite-differences/)
  - [See the Convergence](https://portwooddigital.com/2022/01/24/see-the-convergence/)
+ - [Don’t Invert the Matrix](https://portwooddigital.com/2022/11/18/dont-invert-the-matrix/)
+ 
+### Ill conditioning
+
+ - [Like spinning nodes](https://portwooddigital.com/2021/09/19/like-spinning-nodes)
+ - [See the Convergence](https://portwooddigital.com/2022/01/24/see-the-convergence/)
  - [Failure to Solve](https://portwooddigital.com/2021/09/12/failure-to-solve)
  - [OpenSees Spy](https://portwooddigital.com/2022/03/13/opensees-spy)
  - [Non-Convergence Is Not Structural Collapse](https://portwooddigital.com/2022/03/20/non-convergence-is-not-structural-collapse/)
- - [Don’t Invert the Matrix](https://portwooddigital.com/2022/11/18/dont-invert-the-matrix/)
- 
+ - [Failures detected by LAPACK routines](https://www.netlib.org/lapack/lug/node136.html)
+ - [Examining finite element characteristics by eigen modes](http://www.visualfea.com/manual-cbt/chapter/05_02chap.htm)
+ - [Invertible Does Not Mean Stable](https://portwooddigital.com/2024/12/11/invertible-does-not-mean-stable/)
+
 ### Constraint handling
 - [Handling a Doubt](https://portwooddigital.com/2023/11/09/handling-a-doubt/)
 - [What Is a Good Penalty Number?](https://portwooddigital.com/2023/11/29/what-is-a-good-penalty-number/)

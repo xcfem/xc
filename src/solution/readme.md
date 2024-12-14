@@ -21,6 +21,7 @@ This folder contains the code that deals with the solution of the finite element
 ### Failure to solve
  - [Ill-conditioning in structural finite element models](https://github.com/xcfem/xc/blob/master/verif/tests/solution/ill_conditioning/readme.md)
  - [Failure to Solve](https://portwooddigital.com/2021/09/12/failure-to-solve)
+ - [Invertible Does Not Mean Stable](https://portwooddigital.com/2024/12/11/invertible-does-not-mean-stable/)
 
 ### Continuation methods
 

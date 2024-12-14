@@ -57,6 +57,7 @@ oh.displayEigenvectors()
 
 ## References
 
+ - [Ill-conditioning in structural finite element models](https://github.com/xcfem/xc/blob/master/verif/tests/solution/ill_conditioning/readme.md)
  - [Like spinning nodes](https://portwooddigital.com/2021/09/19/like-spinning-nodes)
  - [See the Convergence](https://portwooddigital.com/2022/01/24/see-the-convergence/)
  - [Failure to Solve](https://portwooddigital.com/2021/09/12/failure-to-solve)
@@ -64,3 +65,4 @@ oh.displayEigenvectors()
  - [Non-Convergence Is Not Structural Collapse](https://portwooddigital.com/2022/03/20/non-convergence-is-not-structural-collapse/)
  - [Failures detected by LAPACK routines](https://www.netlib.org/lapack/lug/node136.html)
  - [Examining finite element characteristics by eigen modes](http://www.visualfea.com/manual-cbt/chapter/05_02chap.htm)
+ - [Invertible Does Not Mean Stable](https://portwooddigital.com/2024/12/11/invertible-does-not-mean-stable/)
