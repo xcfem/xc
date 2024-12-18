@@ -76,9 +76,11 @@ class TimeSeriesIntegrator: public MovableObject
   {
   public:
     TimeSeriesIntegrator(int classTag);
+    virtual TimeSeriesIntegrator *getCopy(void) const= 0;
     virtual ~TimeSeriesIntegrator(void)
       {}
-    virtual TimeSeries* integrate(TimeSeries *theSeries, double delta) = 0;
+    virtual TimeSeries* integrate(TimeSeries *theSeries, double delta) const= 0;
+    virtual TimeSeries* differentiate(TimeSeries *theSeries, double delta) const= 0;
   };
 } // end of XC namespace
 

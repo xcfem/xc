@@ -61,7 +61,7 @@
 //
 // What: "@(#) TrapezoidalTimeSeriesIntegrator.cpp, revA"
 
-#include <domain/load/pattern/time_series_integrator/TrapezoidalTimeSeriesIntegrator.h>
+#include "domain/load/pattern/time_series_integrator/TrapezoidalTimeSeriesIntegrator.h"
 #include <domain/load/pattern/TimeSeries.h>
 #include <utility/matrix/Vector.h>
 #include <domain/load/pattern/time_series/PathSeries.h>
@@ -70,7 +70,11 @@ XC::TrapezoidalTimeSeriesIntegrator::TrapezoidalTimeSeriesIntegrator()
   :TimeSeriesIntegrator(TIMESERIES_INTEGRATOR_TAG_Trapezoidal)
   {}
 
-XC::TimeSeries *XC::TrapezoidalTimeSeriesIntegrator::integrate(TimeSeries *theSeries, double delta)
+//! @brief Virtual constructor.
+XC::TimeSeriesIntegrator *XC::TrapezoidalTimeSeriesIntegrator::getCopy(void) const
+  { return new TrapezoidalTimeSeriesIntegrator(*this);}
+
+XC::TimeSeries *XC::TrapezoidalTimeSeriesIntegrator::integrate(TimeSeries *theSeries, double delta) const
   {	
     // Check for zero time step, before dividing to get number of steps
     if(delta <= 0.0)
@@ -84,7 +88,7 @@ XC::TimeSeries *XC::TrapezoidalTimeSeriesIntegrator::integrate(TimeSeries *theSe
     if(!theSeries)
       {
         std::cerr << "TrapezoidalTimeSeriesIntegrator::" << __FUNCTION__
-	          << "; no TimeSeries passed.\n";
+	          << "; no TimeSeries given.\n";
         return 0;
       }
     const double duration= theSeries->getDuration();
@@ -94,37 +98,111 @@ XC::TimeSeries *XC::TrapezoidalTimeSeriesIntegrator::integrate(TimeSeries *theSe
       
 
     // Add one to get ceiling out of type cast
-    const int numSteps= static_cast<int>(duration/delta + 1.0);
+    const size_t numSteps= static_cast<size_t>(duration/delta + 1.0);
 
+    // create new vector for integrated values
     Vector theIntegratedValues(numSteps);
 
     // Set the first point
-    // Assuming initial condition is zero, i.e. F(0) = 0
-    theIntegratedValues[0]= 0.0; //theSeries->getFactor(0.0) * delta * 0.5;
 
-    double previousValue= theSeries->getFactor(0.0); // Temporary storage to avoid accessing same value twice
-	                                             // through identical method calls  
-    double dummyTime= delta;
+    double dummyTime= theSeries->getStartTime();
+    double previousValue= theSeries->getFactor(dummyTime);
+    theIntegratedValues[0]= 0.0;
+    dummyTime+= delta;
     double currentValue;
     
-    for(int i=1;i<numSteps;i++,dummyTime+= delta)
+    for(size_t i=1;i<numSteps;i++)
       {
         currentValue= theSeries->getFactor(dummyTime);
         // Apply the trapezoidal rule to update the integrated value
         theIntegratedValues[i]= theIntegratedValues[i-1]+ delta*(0.5*(currentValue + previousValue));
         previousValue= currentValue;
+	dummyTime+= delta;
       }
 
     // Set the method return value
-    PathSeries *returnSeries= new PathSeries(theIntegratedValues, delta);
+    PathSeries *retval= new PathSeries(theIntegratedValues, delta);
 
-    if(returnSeries == 0)
+    if(retval == 0)
       {
         std::cerr << "TrapezoidalTimeSeriesIntegrator::" << __FUNCTION__
 		  << "; ran out of memory creating PathSeries\n";
         return 0;
       }
-    return returnSeries;
+    return retval;
+  }
+
+//! @brief Differentiate the given series.
+XC::TimeSeries* XC::TrapezoidalTimeSeriesIntegrator::differentiate(TimeSeries *theSeries, double delta) const
+  {	
+    // Check for zero time step, before dividing to get number of steps
+    if(delta <= 0.0)
+      {
+        std::cerr << "TrapezoidalTimeSeriesIntegrator::" << __FUNCTION__
+	          << "; attempting to integrate time step"
+		  << delta << "<= 0\n";
+        return 0;
+      }
+
+    // check a TimeSeries object was passed
+    if(!theSeries)
+      {
+        std::cerr << "TrapezoidalTimeSeriesIntegrator::" << __FUNCTION__
+	          << "; no TimeSeries given.\n";
+        return 0;
+      }
+    const double duration= theSeries->getDuration();
+    if(duration<=0.0)
+        std::cerr << "TrapezoidalTimeSeriesIntegrator::" << __FUNCTION__
+	          << "; WARNING: duration is zero.\n";
+
+    // Add one to get ceiling out of type cast
+    size_t numSteps= static_cast<size_t>(duration/delta + 1.0)-1;
+    
+    Vector theDif(numSteps);
+
+
+    double dummyTime= theSeries->getStartTime(); // Dummy variable for integrating
+    // function values
+    double Fi= theSeries->getFactor(dummyTime);
+    double Fj= theSeries->getFactor(dummyTime+delta);
+    double fi= (Fj-Fi)/delta; // derivative value
+    double fj;
+
+    for(size_t j= 1; j < numSteps; j++)
+      {
+	dummyTime+= delta;
+        Fj= theSeries->getFactor(dummyTime);
+
+        // Apply the trapezoidal rule to update the derivative
+        fj= (Fj - Fi)/delta;
+	const double f= (fi+fj)/2.0;
+
+	theDif[j-1]= f; 
+	Fi= Fj;
+	fi= fj;
+      }
+    size_t j= numSteps-1;
+    theDif[j]= fj;
+    
+    // Set the method return value
+    PathSeries *retval= new PathSeries(theDif, delta);    
+    if(retval == 0)
+      {
+        std::cerr << "TrapezoidalTimeSeriesIntegrator::" << __FUNCTION__
+		  << "; ran out of memory creating PathSeries\n";
+        return 0;
+      }
+    else
+      {
+	const PathSeriesBase *tmp= dynamic_cast<const PathSeriesBase *>(theSeries);
+	if(tmp)
+	  {
+	    const bool useLast= tmp->getUseLast();
+	    retval->setUseLast(useLast);
+	  }
+      }
+    return retval;
   }
 
 int XC::TrapezoidalTimeSeriesIntegrator::sendSelf(Communicator &comm)

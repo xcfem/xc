@@ -47,17 +47,24 @@ namespace XC {
 class MotionHistory: public CommandEntity
   {
   private:
-    TimeSeries *theAccelSeries; //!< Ground acceleration.
+    mutable TimeSeries *theAccelSeries; //!< Ground acceleration.
     mutable TimeSeries *theVelSeries; //!< Ground velocity.
     mutable TimeSeries *theDispSeries; //!< Ground displacement.
     mutable TimeSeriesIntegrator *theIntegrator; //!< Integrator to use.
     double delta;
 
+    void calcAccel(void) const;
     void calcVel(void) const;
     void calcDisp(void) const;
     void clearSeries(void);
+    void clearIntegrator(void);
   public:
     MotionHistory(const double &dt= 0.0);
+    MotionHistory(TimeSeries *dispSeries, 
+		  TimeSeries *velSeries, 
+		  TimeSeries *accelSeries,
+		  TimeSeriesIntegrator *theIntegrator = 0,
+		  double dTintegration = 0.01);
     MotionHistory(const MotionHistory &);
     MotionHistory &operator=(const MotionHistory &);
     
@@ -69,6 +76,10 @@ class MotionHistory: public CommandEntity
       { delta= dT; }
     void setAccelHistory(const TimeSeries *);
     TimeSeries *getAccelHistory(void);
+    void setVelHistory(const TimeSeries *);
+    TimeSeries *getVelHistory(void);
+    void setDispHistory(const TimeSeries *);
+    TimeSeries *getDispHistory(void);
 
     size_t getNumDataPoints(void) const;
     double getDuration(void) const;
@@ -82,9 +93,12 @@ class MotionHistory: public CommandEntity
     double getDisp(double time) const;
     const Vector &getDispVelAccel(Vector &data,const double &time) const;
     
-    void setIntegrator(TimeSeriesIntegrator *integrator);
+    void setIntegrator(const std::string &integratorType= "trapezoidal");
+    void setIntegrator(const TimeSeriesIntegrator *integrator);
+    TimeSeriesIntegrator *getIntegrator(void);
     TimeSeries *integrate(TimeSeries *theSeries) const; 
-
+    TimeSeries *differentiate(TimeSeries *theSeries) const;
+    
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     double getAccelSensitivity(double time);
     int setParameter(const std::vector<std::string> &argv, Parameter &param);

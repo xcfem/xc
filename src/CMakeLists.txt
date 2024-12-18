@@ -314,7 +314,7 @@ SET(domain_pattern_time_series domain/load/pattern/time_series/CFactorSeries.cc 
 
 SET(domain_pattern_load_patterns domain/load/pattern/load_patterns/EQBasePattern.cc domain/load/pattern/load_patterns/EarthquakePattern.cpp domain/load/pattern/load_patterns/PBowlLoading.cpp domain/load/pattern/load_patterns/UniformExcitation.cpp domain/load/pattern/load_patterns/MultiSupportPattern.cpp domain/load/pattern/load_patterns/load_pattern_class_names.cc) 
 
-SET(domain_pattern_time_series_integ domain/load/pattern/time_series_integrator/TrapezoidalTimeSeriesIntegrator.cpp) 
+SET(domain_pattern_time_series_integ domain/load/pattern/time_series_integrator/TrapezoidalTimeSeriesIntegrator.cpp domain/load/pattern/time_series_integrator/SimpsonTimeSeriesIntegrator.cpp) 
 
 SET(domain_pattern domain/load/pattern/NodeLocker.cc domain/load/pattern/NodeLockerIter.cc domain/load/pattern/LoadContainer.cc domain/load/pattern/LoadPattern.cpp domain/load/pattern/MapLoadPatterns.cc domain/load/pattern/LoadPatternCombination.cc domain/load/pattern/LoadCombination.cc domain/load/pattern/LoadCombinationGroup.cc domain/load/pattern/LoadPatternIter.cpp domain/load/pattern/TimeSeries.cpp domain/load/pattern/TimeSeriesIntegrator.cpp ${domain_pattern_time_series_integ} ${domain_pattern_time_series} ${domain_pattern_load_patterns})
 

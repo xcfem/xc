@@ -62,44 +62,6 @@
 XC::GroundMotion::GroundMotion(int theClassTag)
  :MovableObject(theClassTag), data(3) {}
 
-// void XC::GroundMotion::setIntegrator(TimeSeriesIntegrator *integrator)
-//   {
-//     if(theIntegrator)
-//       delete theIntegrator;
-//     theIntegrator = integrator;
-//   }
-
-// XC::TimeSeries *XC::GroundMotion::integrate(TimeSeries *theSeries, double delta)
-//   {
-//   // check that an integrator & accel series exist
-//     if(!theIntegrator)
-//       {
-//         std::cerr << "WARNING:XC::GroundMotion::integrate() - no XC::TimeSeriesIntegrator provided - will use Trapezoidal. \n";
-//         theIntegrator = new TrapezoidalTimeSeriesIntegrator();
-//         if(theIntegrator == 0)
-//           {
-//             std::cerr << "WARNING:XC::GroundMotion::integrate() - no XC::TimeSeriesIntegrator provided - failed to create a Trapezoidal .. memory problems! \n";
-//             return 0;
-//           }
-//       }
-//     if(!theSeries)
-//       {
-//         std::cerr << "XC::GroundMotion::integrate - no XC::TimeSeries specified\n";
-//         return 0;
-//       }
-
-//     // integrate the series, if no vel series exists set it to new one
-//     TimeSeries *theNewSeries = theIntegrator->integrate(theSeries, delta);
-
-//     if(!theNewSeries)
-//       {
-//         std::cerr << "XC::GroundMotion::integrate - no XC::TimeSeriesIntegrator failed to integrate\n";
-//         return 0;
-//       }
-//     return theNewSeries;
-//   }
-
-
 const XC::Vector &XC::GroundMotion::getDispVelAccel(double time) const
   {
     if(time < 0.0)

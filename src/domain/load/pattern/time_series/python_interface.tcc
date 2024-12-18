@@ -33,7 +33,7 @@ class_<XC::ConstantSeries, bases<XC::CFactorSeries>, boost::noncopyable >("Const
 class_<XC::LinearSeries , bases<XC::CFactorSeries>, boost::noncopyable >("LinearSeries", no_init);
 
 class_<XC::PulseBaseSeries, bases<XC::CFactorSeries>, boost::noncopyable >("PulseBaseSeries", no_init)
-  .add_property("tStart", &XC::PulseBaseSeries::getStart,&XC::PulseBaseSeries::setStart)
+  .add_property("tStart", &XC::PulseBaseSeries::getStartTime,&XC::PulseBaseSeries::setStartTime)
   .add_property("tFinish", &XC::PulseBaseSeries::getFinish,&XC::PulseBaseSeries::setFinish)
   ;
 class_<XC::PeriodSeries, bases<XC::PulseBaseSeries>, boost::noncopyable >("PeriodSeries", no_init)

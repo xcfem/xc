@@ -73,8 +73,10 @@ class TrapezoidalTimeSeriesIntegrator: public TimeSeriesIntegrator
   {
    public:
      TrapezoidalTimeSeriesIntegrator(void);
+     TimeSeriesIntegrator *getCopy(void) const;
 
-     TimeSeries* integrate(TimeSeries *theTimeSeries, double delta);
+     TimeSeries* integrate(TimeSeries *theTimeSeries, double delta) const;
+     TimeSeries* differentiate(TimeSeries *theSeries, double delta) const;
 
      // methods for output    
      int sendSelf(Communicator &);

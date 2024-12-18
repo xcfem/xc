@@ -53,9 +53,9 @@ class PulseBaseSeries: public CFactorSeries
     inline double getPeakFactor(void) const {return cFactor;}
     inline double getTimeIncr(double pseudoTime) const {return tFinish-tStart;}
 
-    inline double getStart(void) const
+    inline double getStartTime(void) const
       { return tStart; }
-    inline void setStart(const double &d)
+    inline void setStartTime(const double &d)
       { tStart= d; }
     inline double getFinish(void) const
       { return tFinish; }

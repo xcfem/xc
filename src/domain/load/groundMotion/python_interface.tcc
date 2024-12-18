@@ -34,9 +34,13 @@ class_<XC::GroundMotion, bases<CommandEntity>, boost::noncopyable >("GroundMotio
   .def("getDispVelAccel",make_function(&XC::GroundMotion::getDispVelAccel,return_internal_reference<>()),"Returns displacement, velocity and acceleration at time t.")
   ;
 
+void (XC::MotionHistory::*setTimeSeriesIntegratorType)(const std::string &)= &XC::MotionHistory::setIntegrator;
 class_<XC::MotionHistory, bases<CommandEntity>, boost::noncopyable >("MotionHistory", no_init)
+  .def("setIntegrator", setTimeSeriesIntegratorType, "Assing the type of integrator to compute velocities from accelerations and displacements from velocities.")
   .add_property("delta", &XC::MotionHistory::getDelta,&XC::MotionHistory::setDelta,"Integration step size.")
-  .add_property("accel", make_function( &XC::MotionHistory::getAccelHistory, return_internal_reference<>()),&XC::MotionHistory::setAccelHistory,"Integration step size.")
+  .add_property("accel", make_function( &XC::MotionHistory::getAccelHistory, return_internal_reference<>()),&XC::MotionHistory::setAccelHistory,"Get/set the history of accelerations.")
+  .add_property("vel", make_function( &XC::MotionHistory::getVelHistory, return_internal_reference<>()),&XC::MotionHistory::setVelHistory,"Get/set the history of velocities.")
+  .add_property("disp", make_function( &XC::MotionHistory::getDispHistory, return_internal_reference<>()),&XC::MotionHistory::setDispHistory,"Get/set the history of displacements.")
   .def("getNumberOfDataPoints",&XC::MotionHistory::getNumDataPoints,"Returns the number of data points.")
   ;
 

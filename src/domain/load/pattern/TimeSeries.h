@@ -101,6 +101,8 @@ class TimeSeries: public MovableObject, public CommandEntity
     //! a LoadPattern based on the value of \p pseudoTime.
     virtual double getFactor(double pseudoTime) const= 0;
     virtual double getDuration(void) const= 0;
+    virtual double getStartTime(void) const
+      { return 0.0; }
     virtual double getPeakFactor(void) const= 0;
 
     virtual double getTimeIncr(double pseudoTime) const= 0;

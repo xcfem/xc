@@ -30,7 +30,8 @@
 #include "MotionHistory.h"
 #include <domain/load/pattern/TimeSeries.h>
 #include <domain/load/pattern/TimeSeriesIntegrator.h>
-#include <domain/load/pattern/time_series_integrator/TrapezoidalTimeSeriesIntegrator.h>
+#include "domain/load/pattern/time_series_integrator/TrapezoidalTimeSeriesIntegrator.h"
+#include "domain/load/pattern/time_series_integrator/SimpsonTimeSeriesIntegrator.h"
 #include <domain/load/pattern/time_series/PathSeries.h>
 #include <domain/load/pattern/time_series/PathTimeSeries.h>
 #include <utility/matrix/Vector.h>
@@ -43,6 +44,25 @@ XC::MotionHistory::MotionHistory(const double &dt)
   :CommandEntity(), theAccelSeries(nullptr), theVelSeries(nullptr), theDispSeries(nullptr),
   theIntegrator(nullptr), delta(dt) {}
 
+XC::MotionHistory::MotionHistory(TimeSeries *dispSeries, 
+				 TimeSeries *velSeries, 
+				 TimeSeries *accelSeries,
+				 TimeSeriesIntegrator *theIntegratr,
+				 double dTintegration)
+  : CommandEntity(), 
+    theAccelSeries(accelSeries), theVelSeries(velSeries), 
+    theDispSeries(dispSeries), theIntegrator(theIntegratr),
+    delta(dTintegration)
+  {
+
+    if(!theVelSeries)
+      calcVel();
+    if(!theDispSeries)
+      calcDisp();
+    if(!theAccelSeries)
+      calcAccel();
+  }
+
 XC::MotionHistory::MotionHistory(const MotionHistory &other)
   : CommandEntity(other), theAccelSeries(nullptr), theVelSeries(nullptr), theDispSeries(nullptr),
   theIntegrator(nullptr), delta(other.delta)
@@ -53,23 +73,23 @@ XC::MotionHistory::MotionHistory(const MotionHistory &other)
       theVelSeries= other.theVelSeries->getCopy();
     if(other.theDispSeries)
       theDispSeries= other.theDispSeries->getCopy();
-    //Don't copy integrator.
+    if(other.theIntegrator)
+      this->setIntegrator(other.theIntegrator); //Copy integrator.
   }
 
 XC::MotionHistory &XC::MotionHistory::operator=(const MotionHistory &other)
   {
     CommandEntity::operator=(other);
     clearSeries();
-    if(theIntegrator)
-      delete(theIntegrator);
-    theIntegrator= nullptr;
+    clearIntegrator();
     if(other.theAccelSeries)
       theAccelSeries= other.theAccelSeries->getCopy();
     if(other.theVelSeries)
       theVelSeries= other.theVelSeries->getCopy();
     if(other.theDispSeries)
       theDispSeries= other.theDispSeries->getCopy();
-    //Don't copy integrator.
+    if(other.theIntegrator)
+      this->setIntegrator(other.theIntegrator); //Copy integrator.
     return *this;
   }
 
@@ -80,13 +100,48 @@ void XC::MotionHistory::setAccelHistory(const TimeSeries *ts)
     theAccelSeries= ts->getCopy();
   }
 
+//! @brief Return the acceleration history.
 XC::TimeSeries *XC::MotionHistory::getAccelHistory(void)
-  { return theAccelSeries; }
+  {
+    if(!theAccelSeries)
+      calcAccel();
+    return theAccelSeries;
+  }
+
+//! @brief Set velocities history.
+void XC::MotionHistory::setVelHistory(const TimeSeries *ts)
+  {
+    clearSeries();
+    theVelSeries= ts->getCopy();
+  }
+
+//! @brief Return the acceleration history.
+XC::TimeSeries *XC::MotionHistory::getVelHistory(void)
+  {
+    if(!theVelSeries)
+      calcVel();
+    return theVelSeries;
+  }
+  
+//! @brief Set displacements history.
+void XC::MotionHistory::setDispHistory(const TimeSeries *ts)
+  {
+    clearSeries();
+    theDispSeries= ts->getCopy();
+  }
+
+//! @brief Return the displacement history.
+XC::TimeSeries *XC::MotionHistory::getDispHistory(void)
+  {
+    if(!theDispSeries)
+      calcDisp();
+    return theDispSeries;
+  }
 
 XC::MotionHistory::~MotionHistory(void)
   {
     clearSeries();
-    if(theIntegrator) delete theIntegrator;
+    clearIntegrator();
   }
 
 void XC::MotionHistory::clearSeries(void)
@@ -108,12 +163,53 @@ void XC::MotionHistory::clearSeries(void)
       }
   }
 
-void XC::MotionHistory::setIntegrator(TimeSeriesIntegrator *integrator)
+void XC::MotionHistory::clearIntegrator(void)
   {
     if(theIntegrator)
       delete theIntegrator;
-    theIntegrator= integrator;
+    theIntegrator= nullptr;    
   }
+
+void XC::MotionHistory::setIntegrator(const std::string &integratorType)
+  {
+    if(integratorType=="trapezoidal")
+      {
+	TrapezoidalTimeSeriesIntegrator tmp;
+	this->setIntegrator(&tmp);
+      }
+    else if(integratorType=="simpson")
+      {
+	SimpsonTimeSeriesIntegrator tmp;
+	this->setIntegrator(&tmp);
+      }
+    else
+      {
+        std::cerr << getClassName() << "::" <<__FUNCTION__
+	          << "; unknown integrator type: '"
+	          << integratorType
+	          << "'; using trapezoidal type as default."
+	          << std::endl;
+	TrapezoidalTimeSeriesIntegrator tmp;
+	this->setIntegrator(&tmp);
+      }
+    if(!theIntegrator)
+      {
+	std::cerr << getClassName() << "::" <<__FUNCTION__
+		  << "; no TimeSeriesIntegrator provided"
+		  << " and failed to create a Trapezoidal one..."
+		  << " memory problems! \n";
+      }		
+  }
+
+void XC::MotionHistory::setIntegrator(const TimeSeriesIntegrator *integrator)
+  {
+    clearIntegrator();
+    if(integrator)
+      theIntegrator= integrator->getCopy();
+  }
+
+XC::TimeSeriesIntegrator *XC::MotionHistory::getIntegrator(void)
+  { return theIntegrator; }
 
 XC::TimeSeries *XC::MotionHistory::integrate(TimeSeries *theSeries) const
   {
@@ -126,15 +222,8 @@ XC::TimeSeries *XC::MotionHistory::integrate(TimeSeries *theSeries) const
           std::cerr << method_identifier
 		    << ";no TimeSeriesIntegrator provided,"
 	            << " will use Trapezoidal.\n";
-        theIntegrator= new TrapezoidalTimeSeriesIntegrator();
-        if(!theIntegrator)
-          {
-            std::cerr << method_identifier
-		      << "; no TimeSeriesIntegrator provided"
-	              << " and failed to create a Trapezoidal one..."
-	              << " memory problems! \n";
-            return retval;
-          }
+	MotionHistory *this_no_const= const_cast<MotionHistory *>(this);
+	this_no_const->setIntegrator("trapezoidal");
       }
     if(!theSeries)
       {
@@ -160,6 +249,46 @@ XC::TimeSeries *XC::MotionHistory::integrate(TimeSeries *theSeries) const
     return retval;
   }
 
+
+XC::TimeSeries* XC::MotionHistory::differentiate(TimeSeries *theSeries) const
+  {
+    // check that an integrator & accel series exist
+    const std::string method_identifier=  getClassName() +"::"+__FUNCTION__;
+    TimeSeries *retval= nullptr;
+    if(theIntegrator == 0)
+      {
+        if(verbosity>1)
+          std::cerr << method_identifier
+		    << ";no TimeSeriesIntegrator provided,"
+	            << " will use Trapezoidal.\n";
+	MotionHistory *this_no_const= const_cast<MotionHistory *>(this);
+	this_no_const->setIntegrator("trapezoidal");
+      }
+
+    if(!theSeries)
+      {
+        std::cerr << method_identifier
+	          << "; no TimeSeries specified.\n";
+        return retval;
+      }
+
+    // differentiate the series, if no vel series exists set it to new one
+    const double dT= getDelta();
+    if(dT>0.0)
+      {
+	retval= theIntegrator->differentiate(theSeries, dT);
+        if(!retval)
+          std::cerr << method_identifier
+	            << "; no TimeSeriesIntegrator defined, "
+		    << "failed to integrate\n";
+      }
+    else
+      std::cerr << method_identifier
+		<< "; differentiation increment must not be zero, dT="
+		<< dT << std::endl;
+    return retval;
+  }
+
 size_t XC::MotionHistory::getNumDataPoints(void) const
   {
     const PathSeriesBase *tmp= dynamic_cast<const PathSeriesBase *>(theAccelSeries);
@@ -172,37 +301,64 @@ size_t XC::MotionHistory::getNumDataPoints(void) const
 //! @brief Return the duration of the motion history.
 double XC::MotionHistory::getDuration(void) const
   {
+    double retval= 0.0;
     if(theAccelSeries)
-      return theAccelSeries->getDuration();
-    else
-      return 0.0;
+      retval= theAccelSeries->getDuration();
+    else if(theVelSeries)
+      retval= theVelSeries->getDuration();
+    else if(theDispSeries)
+      retval= theDispSeries->getDuration();
+    return retval;
+  }
+
+//! @brief If necessary, compute the acceleration series.
+void XC::MotionHistory::calcAccel(void) const
+  {
+    if(!theAccelSeries) //Not allready computed.
+      {
+        if(theVelSeries) 
+          theAccelSeries= this->differentiate(theVelSeries); // Compute accelerations.
+	else if(theDispSeries)
+	  {
+	    theVelSeries= this->differentiate(theDispSeries); // Compute velocities.
+	    if(theVelSeries)
+	      theAccelSeries= this->differentiate(theVelSeries); // Compute displacements.
+	  }
+      }
   }
 
 //! @brief Return the peak value of the acceleration.
 double XC::MotionHistory::getPeakAccel(void) const
   {
+    if(!theAccelSeries) calcAccel();
     if(theAccelSeries)
       return theAccelSeries->getPeakFactor();
     else
       return 0.0;
   }
 
-// if theAccel is not nullptr, integrate accel series to get a vel series
+//! @brief If necessary, compute the velocity series.
 void XC::MotionHistory::calcVel(void) const
   {
-    if(theVelSeries) return; //Already computed.
-    if(theAccelSeries) 
-      theVelSeries = this->integrate(theAccelSeries); //Computes velocities.
+    if(!theVelSeries) //Not allready computed.
+      {
+        if(theAccelSeries) 
+          theVelSeries= this->integrate(theAccelSeries); //Computes velocities.
+	else if(theDispSeries)
+	  theVelSeries= this->differentiate(theDispSeries);
+      }
   }
 
 // if theVel or theAccel is not nullptr, integrate vel series to get disp series
 void XC::MotionHistory::calcDisp(void) const
   {
-    if(theDispSeries) return; //Already computed.
-    if(!theVelSeries)
-      calcVel(); //Calcula velocidades.
-    if(theVelSeries)
-      theDispSeries = this->integrate(theVelSeries); //Computes displacements.
+    if(!theDispSeries) // Not already computed.
+      {
+        if(!theVelSeries)
+          calcVel(); //Calcula velocidades.
+        if(theVelSeries)
+          theDispSeries= this->integrate(theVelSeries); //Computes displacements.
+      }
   }
 
 //! @brief Return the peak value of the velocity.
@@ -228,48 +384,58 @@ double XC::MotionHistory::getPeakDisp(void) const
 //! @brief Return acceleration at specified time.
 double XC::MotionHistory::getAccel(double time) const
   {
-    if(time < 0.0)
-      return 0.0;
-    if(theAccelSeries)
-      return theAccelSeries->getFactor(time);
-    else
-      return 0.0;
+    double retval= 0.0;
+    if(time>=0.0)
+      {
+	if(!theAccelSeries)
+	  calcAccel();
+	if(theAccelSeries)
+	  retval= theAccelSeries->getFactor(time);
+      }
+    return retval;
   }     
 
 //! @brief Return acceleration sensitivity at specified time.
 double XC::MotionHistory::getAccelSensitivity(double time)
   {
-    if(time < 0.0)
-      return 0.0;
-  
-    if(theAccelSeries)
-      return theAccelSeries->getFactorSensitivity(time);
-    else
-      return 0.0;
+    double retval= 0.0;
+    if(time>=0.0)
+      {
+	if(!theAccelSeries)
+	  calcAccel();
+	if(theAccelSeries)
+	  retval= theAccelSeries->getFactorSensitivity(time);
+      }
+    return retval;
   }
 
 //! @brief Return velocity at specified time.
 double XC::MotionHistory::getVel(double time) const
   {
-    if(time < 0.0)
-      return 0.0;
-    if(!theVelSeries) calcVel();
-    if(theVelSeries)
-      return theVelSeries->getFactor(time);      
-    else
-      return 0.0;
+    double retval= 0.0;
+    if(time>=0.0)
+      {
+
+	if(!theVelSeries)
+	  calcVel();
+	if(theVelSeries)
+	  retval= theVelSeries->getFactor(time);      
+      }
+    return retval;
   }
 
 //! @brief Return displacement at specified time.
 double XC::MotionHistory::getDisp(double time) const
   {
-    if(time < 0.0)
-      return 0.0;
-    if(!theDispSeries) calcDisp();
-    if(theDispSeries)
-      return theDispSeries->getFactor(time);
-    else
-      return 0.0;
+    double retval= 0.0;
+    if(time>=0.0)
+      {
+	if(!theDispSeries)
+	  calcDisp();
+	if(theDispSeries)
+	  retval= theDispSeries->getFactor(time);
+      }
+    return retval;
   }
 
 const XC::Vector &XC::MotionHistory::getDispVelAccel(Vector &data,const double &time) const

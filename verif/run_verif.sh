@@ -908,6 +908,10 @@ python tests/loads/time_series/test_ground_motion_05.py
 python tests/loads/time_series/test_ground_motion_06.py
 python tests/loads/time_series/test_ground_motion_07.py
 python tests/loads/time_series/test_ground_motion_08.py
+python tests/loads/time_series/test_ground_motion_09.py
+python tests/loads/time_series/test_ground_motion_10.py
+python tests/loads/time_series/test_ground_motion_11.py
+python tests/loads/time_series/test_ground_motion_12.py
 echo "$BLEU" "    Path time series tests." "$NORMAL"
 python tests/loads/time_series/test_path_01.py
 python tests/loads/time_series/test_path_time_01.py
