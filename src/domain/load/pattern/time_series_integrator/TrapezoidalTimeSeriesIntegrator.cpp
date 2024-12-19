@@ -129,6 +129,15 @@ XC::TimeSeries *XC::TrapezoidalTimeSeriesIntegrator::integrate(TimeSeries *theSe
 		  << "; ran out of memory creating PathSeries\n";
         return 0;
       }
+    else
+      {
+	const PathSeriesBase *tmp= dynamic_cast<const PathSeriesBase *>(theSeries);
+	if(tmp)
+	  {
+	    const bool useLast= tmp->getUseLast();
+	    retval->setUseLast(useLast);
+	  }
+      }
     return retval;
   }
 
