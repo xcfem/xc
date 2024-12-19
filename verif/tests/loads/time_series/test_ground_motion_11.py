@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Checks computation of velocities and displacements from velocities history
+''' Checks computation of accelerations and displacements from velocities 
+    history.
 
     The equations of motion are as follows:
     x= 10*t**2
@@ -10,7 +11,7 @@
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__copyright__= "Copyright 2024, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"

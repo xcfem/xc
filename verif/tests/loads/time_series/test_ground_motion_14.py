@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-''' Checks computation of velocities and displacements from acceleration history
+''' Checks computation of acceleration and displacements from velocities
+    history using the Simpson integrator.
 
     The equations of motion are as follows:
-    x= 9*t**3+10*t**2
-    xdot= 27*t**2+20*t
-    xdotdot= 54*t+20
+    x= 10*t**2
+    xdot= 20*t
+    xdotdot= 20
 '''
 
 from __future__ import print_function
@@ -29,33 +30,40 @@ ts= lPatterns.newTimeSeries("constant_ts","ts")
 gm= lPatterns.newLoadPattern("uniform_excitation","gm")
 mr= gm.motionRecord
 hist= mr.history
-accel= lPatterns.newTimeSeries("path_ts","accel")
-accel.path= xc.Vector([20,74,128,182,236,290,344,398])
-hist.accel= accel
+hist.setIntegrator('simpson')
+vel= lPatterns.newTimeSeries("path_ts","vel")
+vel.path= xc.Vector([0, 20, 40, 60, 80, 100, 120, 140, 160, 180])
+vel.useLast= True
+hist.vel= vel
 hist.delta= 1.0
 
-accelerations= hist.accel.path
 velocities= hist.vel.path
+accelerations= hist.accel.path
 displacements= hist.disp.path
 
-sz= len(accelerations)
-errVel= 0.0 # error in velocities.
+sz= len(accelerations)-2 # The last two accelerations are wrong due
+                         # to unavoidable numerical errors.
+errAccel= 0.0 # error in velocities.
 errDisp= 0.0 # error in displacements.
 for i in range(0,sz):
     t= float(i)
-    refVel= 27*t**2+20*t
-    errVel+= ((refVel-velocities[i])/max(refVel,1))**2
-    refDisp= 9*t**3+10*t**2
+    refAccel= 20.0
+    errAccel+= ((refAccel-accelerations[i])/max(refAccel,1))**2
+    refDisp= 10*t**2
     errDisp+= ((refDisp-displacements[i])/max(refDisp,1))**2
-errVel= math.sqrt(errVel/sz) # root mean square relative error.
+
+errAccel= math.sqrt(errAccel/sz) # root mean square relative error.
 errDisp= math.sqrt(errDisp/sz) # root mean square relative error.
 
 '''
-print('errVel= ', errVel)
+print(accelerations, len(accelerations))
+print('errAccel= ', errAccel)
+print(velocities, len(velocities))
+print(displacements, len(displacements))
 print('errDisp= ', errDisp)
 '''
 
-testOK= (errVel<0.1) and (errDisp<0.2)
+testOK= (errAccel<0.001) and (errDisp<0.001)
 
 import os
 from misc_utils import log_messages as lmsg

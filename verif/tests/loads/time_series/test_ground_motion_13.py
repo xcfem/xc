@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-''' Checks computation of velocities and displacements from acceleration history
+''' Checks computation of velocities and displacements from accelearion history
+    using the Simpson integrator.
 
     The equations of motion are as follows:
-    x= 9*t**3+10*t**2
-    xdot= 27*t**2+20*t
-    xdotdot= 54*t+20
+    x= 10*t**2
+    xdot= 20*t
+    xdotdot= 20
 '''
 
 from __future__ import print_function
@@ -29,8 +30,10 @@ ts= lPatterns.newTimeSeries("constant_ts","ts")
 gm= lPatterns.newLoadPattern("uniform_excitation","gm")
 mr= gm.motionRecord
 hist= mr.history
+hist.setIntegrator('simpson')
 accel= lPatterns.newTimeSeries("path_ts","accel")
-accel.path= xc.Vector([20,74,128,182,236,290,344,398])
+accel.path= xc.Vector([20,20,20,20,20,20,20,20,20])
+accel.useLast= True
 hist.accel= accel
 hist.delta= 1.0
 
@@ -43,9 +46,9 @@ errVel= 0.0 # error in velocities.
 errDisp= 0.0 # error in displacements.
 for i in range(0,sz):
     t= float(i)
-    refVel= 27*t**2+20*t
+    refVel= 20*t
     errVel+= ((refVel-velocities[i])/max(refVel,1))**2
-    refDisp= 9*t**3+10*t**2
+    refDisp= 10*t**2
     errDisp+= ((refDisp-displacements[i])/max(refDisp,1))**2
 errVel= math.sqrt(errVel/sz) # root mean square relative error.
 errDisp= math.sqrt(errDisp/sz) # root mean square relative error.
@@ -55,7 +58,7 @@ print('errVel= ', errVel)
 print('errDisp= ', errDisp)
 '''
 
-testOK= (errVel<0.1) and (errDisp<0.2)
+testOK= (errVel<0.001) and (errDisp<0.001)
 
 import os
 from misc_utils import log_messages as lmsg

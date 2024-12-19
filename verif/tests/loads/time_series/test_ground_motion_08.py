@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-'''  Checks ground_motion_record function
-    by integrating the accelerations calculated as follows:
+'''  Checks ground_motion_record function by integrating the accelerations
+     calculated as follows:
+
     x= 9*t**3+10*t**2
     xdot= 27*t**2+20*t
-    xdotdot= 54*t+20  '''
+    xdotdot= 54*t+20
+'''
 
 from __future__ import print_function
 
