@@ -8,6 +8,7 @@ __email__= "ana.Ortega@ciccp.es l.pereztato@ciccp.es"
 
 from misc_utils import log_messages as lmsg
 from misc.latex import latex_utils
+import csv
 
 class LoadCase(object):
     '''Definition of a load case.
@@ -21,7 +22,7 @@ class LoadCase(object):
     :ivar timeSName: name of the Time Serie
     :ivar lstOfLoadDef: list of load definitions added to the load case
     '''
-    def __init__(self,preprocessor,name,loadPType="default",timeSType="constant_ts"):
+    def __init__(self, preprocessor, name, loadPType="default", timeSType="constant_ts"):
         self.preprocessor=preprocessor
         self.name= name
         self.loadPType=loadPType
@@ -109,7 +110,32 @@ class LoadCaseManager(object):
     def getLoadCasesNames(self):
         ''' Return the names of the load cases in the container.'''
         return list(self.loadCases.keys())
-    
+
+    def getCodesAndDescriptions(self, header= False):
+        ''' Return a list with the defined load cases and their descriptions.
+
+        :param header: if true put a header in the first row.
+        '''
+        retval= list()
+        if(header):
+            retval.append(('Code', 'description'))
+        for key in self.loadCases:
+            loadCase= self.loadCases[key]
+            retval.append((key, loadCase.description))
+        return retval
+
+    def exportToCSV(self, fileName, header= False):
+        ''' Creates a CSV file with the defined load cases and their
+            descriptions.
+
+        :param fileName: output file name.
+        '''
+        rows= self.getCodesAndDescriptions()
+        with open(fileName, 'w') as file:
+            writer = csv.writer(file)
+            for r in rows:
+                writer.writerow(r)
+            
     def getLaTeXCode(self, small= True):
         ''' Return the LaTeX string corresponding to load cases in the
             container.
