@@ -104,15 +104,17 @@ XC::TimeSeries* XC::SimpsonTimeSeriesIntegrator::integrate(TimeSeries *theSeries
     double dummyTime= theSeries->getStartTime();
     // function values
     double fi= theSeries->getFactor(dummyTime);
-    double fj= theSeries->getFactor(dummyTime+delta);
-    double fk= theSeries->getFactor(dummyTime+2*delta);  
+    dummyTime+= delta;
+    double fj= theSeries->getFactor(dummyTime);
+    dummyTime+= delta;
+    double fk= theSeries->getFactor(dummyTime);  
     // Integral values
     double Fi= 0.0;
     double Fj= delta/12.0*(5.0*fi + 8.0*fj - fk);
     double Fk= 0.0; 
     theIntegratedValues[0]= Fi;
     theIntegratedValues[1]= Fj;
-    for(size_t i = 2; i < numSteps-1; i++)
+    for(size_t i = 2; i < numSteps; i++)
       {
 	// Apply the Simpson's rule to update the integral
 	Fk = Fi + delta / 3.0 * (fi + 4.0 * fj + fk);
@@ -126,7 +128,6 @@ XC::TimeSeries* XC::SimpsonTimeSeriesIntegrator::integrate(TimeSeries *theSeries
 	Fj= Fk;
 	dummyTime+= delta;
 	fk= theSeries->getFactor(dummyTime);
-	std::cout << "fi= " << fi << " fj= " << fj << " fk= " << fk << std::endl;
       }
 
     // Set the method return value
@@ -134,12 +135,31 @@ XC::TimeSeries* XC::SimpsonTimeSeriesIntegrator::integrate(TimeSeries *theSeries
 
     if(retval == 0)
       {
-        std::cerr << "TrapezoidalTimeSeriesIntegrator::" << __FUNCTION__
+        std::cerr << "SimpsonTimeSeriesIntegrator::" << __FUNCTION__
 		  << "; ran out of memory creating PathSeries\n";
         return 0;
       }
+    else
+      {
+	const PathSeriesBase *tmp= dynamic_cast<const PathSeriesBase *>(theSeries);
+	if(tmp)
+	  {
+	    const bool useLast= tmp->getUseLast();
+	    retval->setUseLast(useLast);
+	  }
+      }
     return retval;
   }
+
+// Naive central step derivative
+double derivative1(XC::TimeSeries *theSeries, const double &t, const double &delta)
+  { return (theSeries->getFactor(t+delta) - theSeries->getFactor(t-delta))/2.0/delta; }
+
+// Richardson 5-point rule
+double gderivative(XC::TimeSeries *theSeries, const double &t, const double &delta){
+ return(4.0*derivative1(theSeries, t, delta) - derivative1(theSeries, t,2.0*delta))/3.0;
+}
+
 
 
 XC::TimeSeries* XC::SimpsonTimeSeriesIntegrator::differentiate(TimeSeries *theSeries, double delta) const
@@ -147,7 +167,7 @@ XC::TimeSeries* XC::SimpsonTimeSeriesIntegrator::differentiate(TimeSeries *theSe
     // Check for zero time step, before dividing to get number of steps
     if(delta <= 0.0)
       {
-        std::cerr << "TrapezoidalTimeSeriesIntegrator::" << __FUNCTION__
+        std::cerr << "SimpsonTimeSeriesIntegrator::" << __FUNCTION__
 	          << "; attempting to integrate time step"
 		  << delta << "<= 0\n";
         return 0;
@@ -156,49 +176,57 @@ XC::TimeSeries* XC::SimpsonTimeSeriesIntegrator::differentiate(TimeSeries *theSe
     // check a TimeSeries object was passed
     if(!theSeries)
       {
-        std::cerr << "TrapezoidalTimeSeriesIntegrator::" << __FUNCTION__
+        std::cerr << "SimpsonTimeSeriesIntegrator::" << __FUNCTION__
 	          << "; no TimeSeries given.\n";
         return 0;
       }
     const double duration= theSeries->getDuration();
     if(duration<=0.0)
-        std::cerr << "TrapezoidalTimeSeriesIntegrator::" << __FUNCTION__
+        std::cerr << "SimpsonTimeSeriesIntegrator::" << __FUNCTION__
 	          << "; WARNING: duration is zero.\n";
   
     // Add one to get ceiling out of type cast
-    const size_t numSteps= static_cast<size_t>(duration/delta + 1.0);
+    const size_t numSteps= static_cast<size_t>(duration/delta + 1.0)-1;
   
     // create new vector for integrated values
     Vector theDif(numSteps);
   
-    double Fi= 0.0, Fj= 0.0, Fk= 0.0;  //function values
-    double fi= 0.0, fj= 0.0, fk= 0.0;  //derivative values
-
     double dummyTime = theSeries->getStartTime();
+    // function values.
+    double Fi= theSeries->getFactor(dummyTime);
+    dummyTime+= delta;
+    double Fj= theSeries->getFactor(dummyTime);
+    dummyTime+= delta;
+    double Fk= theSeries->getFactor(dummyTime);
+    // derivative values.
+    double fi= (Fj-Fi)/delta;
+    theDif[0]= fi;
+    double fj= ((Fk-Fj)/delta+fi)/2.0;
+    theDif[1]= fj;
 
-    for(size_t i = 0; i < numSteps; i++, dummyTime += delta)
+    for(size_t i= 2; i < numSteps; i++)
       {
-
-	Fk= theSeries->getFactor(dummyTime);
-	// Apply the Simpson's rule to update the derivative
-	fk = 3.0 * (Fk - Fi) / delta - fi - 4.0 * fj;
-
-	theDif[i] = fk;
-
-	fi = fj;
-	fj = fk;
-
-	Fi = Fj;
-	Fj = Fk;
+	// theDif[i]= fk;
+	theDif[i]= gderivative(theSeries, dummyTime, delta);
+	dummyTime+= delta;
       }
 
     // Set the method return value
     PathSeries *retval= new PathSeries(theDif, delta);
     if(retval == 0)
       {
-        std::cerr << "TrapezoidalTimeSeriesIntegrator::" << __FUNCTION__
+        std::cerr << "SimpsonTimeSeriesIntegrator::" << __FUNCTION__
 		  << "; ran out of memory creating PathSeries\n";
         return 0;
+      }
+    else
+      {
+	const PathSeriesBase *tmp= dynamic_cast<const PathSeriesBase *>(theSeries);
+	if(tmp)
+	  {
+	    const bool useLast= tmp->getUseLast();
+	    retval->setUseLast(useLast);
+	  }
       }
     return retval;
   }
