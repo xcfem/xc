@@ -2,7 +2,10 @@
 ''' home made test
     SlidingVectorLoad class verification (3D structural mechanics).
 
-    In this example the moment is XXX.
+    This example illustrates how, in certain cases, the algorithm gives a
+    result that is statically correct but mechanically unsatisfactory due to 
+    the load concentrations it produces (see reaction in fourth node -n4- 
+    below).
 '''
 
 from __future__ import print_function
