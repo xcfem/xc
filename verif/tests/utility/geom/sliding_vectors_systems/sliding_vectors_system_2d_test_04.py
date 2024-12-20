@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' Check force distribution algorithm.'''
 
 from __future__ import print_function
 
@@ -24,6 +25,7 @@ for i in range(11):
 
 vectors1= svs1.distribute(points,weights)
 
+# Check results
 error= 0.0
 for v in vectors1:
     error+= (v.getVector2d()-geom.Vector2d(0,2)).getModulus()
