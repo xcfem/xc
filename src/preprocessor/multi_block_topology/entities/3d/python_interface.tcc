@@ -30,7 +30,8 @@ const XC::Pnt *(XC::Body::*getBodyVertexPtr)(const size_t &) const= &XC::Body::g
 class_<XC::Body, XC::Body *, bases<XC::EntMdlr>, boost::noncopyable >("Body","Six-faced body." ,no_init)
   .add_property("getIdxVertices",&XC::Body::getIndicesVertices)
   .def("getVertex",make_function(getBodyVertexPtr,return_internal_reference<>()),"Return the vertex corresponding to the index argument.")
-  .def("getVertices", &XC::Body::getVerticesPy, "Return the vertices that define the body in a Python list.")
+  .def("getVertices", &XC::Body::getVerticesPy, "Return the vertices (or points) that define the body in a Python list.")
+  .def("points", &XC::Body::getVerticesPy, "Return the points (or vertices) that define the body in a Python list.")
   .def("getVolume",&XC::Body::getVolume,"Return the volume of the body.")
    ;
 
