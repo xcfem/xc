@@ -26,7 +26,7 @@ preprocessor=  feProblem.getPreprocessor
 #Load modulation.
 loadHandler= preprocessor.getLoadHandler
 lPatterns= loadHandler.getLoadPatterns
-ts= lPatterns.newTimeSeries("constant_ts","ts")
+dummyTs= lPatterns.newTimeSeries("constant_ts","dummyTs") # Dummy time series.
 gm= lPatterns.newLoadPattern("uniform_excitation","gm")
 mr= gm.motionRecord
 hist= mr.history
