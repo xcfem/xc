@@ -253,7 +253,7 @@ XC::TimeSeries *XC::MotionHistory::integrate(TimeSeries *theSeries) const
 XC::TimeSeries* XC::MotionHistory::differentiate(TimeSeries *theSeries) const
   {
     // check that an integrator & accel series exist
-    const std::string method_identifier=  getClassName() +"::"+__FUNCTION__;
+    const std::string method_identifier= getClassName() +"::"+__FUNCTION__;
     TimeSeries *retval= nullptr;
     if(theIntegrator == 0)
       {
