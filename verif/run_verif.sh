@@ -912,6 +912,12 @@ python tests/loads/time_series/test_ground_motion_09.py
 python tests/loads/time_series/test_ground_motion_10.py
 python tests/loads/time_series/test_ground_motion_11.py
 python tests/loads/time_series/test_ground_motion_12.py
+python tests/loads/time_series/test_ground_motion_13.py
+python tests/loads/time_series/test_ground_motion_14.py
+python tests/loads/time_series/test_ground_motion_15.py
+python tests/loads/time_series/test_ground_motion_16.py
+python tests/loads/time_series/test_ground_motion_17.py
+python tests/loads/time_series/test_ground_motion_18.py
 echo "$BLEU" "    Path time series tests." "$NORMAL"
 python tests/loads/time_series/test_path_01.py
 python tests/loads/time_series/test_path_time_01.py

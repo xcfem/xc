@@ -18,10 +18,17 @@ __email__= "l.pereztato@gmail.com"
 
 import math
 import xc
+import numpy as np
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
+stop= 5.0
+DT= .02
+num= int(stop/DT)+1
+time_values= np.linspace(0.0, stop, num).tolist()
+duration= time_values[-1] - time_values[0]
+dt= time_values[1] - time_values[0]
 
 #Load modulation.
 loadHandler= preprocessor.getLoadHandler
@@ -32,12 +39,13 @@ mr= gm.motionRecord
 hist= mr.history
 disp= lPatterns.newTimeSeries("path_ts","disp")
 sample= list()
-for i in range(0,100):
-    sample.append(10.0*float(i)**2)
+for t in time_values:
+    sample.append(10.0*float(t)**2)
 disp.path= xc.Vector(sample)
 disp.useLast= True
+disp.timeIncr= dt
 hist.disp= disp
-hist.delta= 1.0
+hist.delta= dt
 
 # Compute accelerations and velocities.
 displacements= hist.disp.path
@@ -47,15 +55,17 @@ accelerations= hist.accel.path
 sz= len(accelerations)
 errVel= 0.0 # error in velocities.
 errAccel= 0.0 # error in accelerations.
-# The first element of the velocities path is incorrect
-# due to the derivative numeric error. Thats why we use
-# the range (1,sz) instead of (0,sz).
-for i in range(1,sz):
-    t= float(i)
+# The first and last elements of the velocities and accelerations path are
+# incorrect due to the derivative numeric error. Thats why we remove the first
+# and last two elements from the lists.
+time_values= time_values[2:-2]
+accelerations= list(accelerations)[2:-2]
+velocities= list(velocities)[2:-2]
+for a, v, t in zip(accelerations, velocities, time_values):
     refVel= 20*t
-    errVel+= ((refVel-velocities[i])/max(refVel,1))**2
+    errVel+= ((refVel-v)/max(refVel,1))**2
     refAccel= 20
-    errAccel+= ((refAccel-accelerations[i])/max(refAccel,1))**2
+    errAccel+= ((refAccel-a)/max(refAccel,1))**2
 
 errVel= math.sqrt(errVel/sz) # root mean square relative error.
 errAccel= math.sqrt(errAccel/sz) # root mean square relative error.
