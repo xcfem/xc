@@ -35,8 +35,11 @@
 #include "DqPtrs.h"
 #include "utility/geom/pos_vec/Pos3d.h"
 #include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/d2/Polygon3d.h"
+#include "utility/geom/d1/Segment3d.h"
 #include "utility/geom/d3/BND3d.h"
 #include "boost/icl/interval_map.hpp"
+#include "utility/utils/misc_utils/colormod.h"
 
 class GeomObj3d;
 class BND3d;
@@ -75,6 +78,10 @@ class DqPtrsEntities: public DqPtrs<T>
     T *getNearest(const Pos3d &p);
     Pos3d getCentroid(void) const;
     const T *getNearest(const Pos3d &p) const;
+    GEOM_FT getDistanceTo(const Pos3d &p) const;
+    bool isCloserThan(const Pos3d &, const GEOM_FT &) const;
+    bool isCloserThan(const Segment3d &, const GEOM_FT &) const;
+    bool isCloserThan(const Polygon3d &, const GEOM_FT &) const;
     DqPtrsEntities<T> pickEntitiesInside(const GeomObj3d &, const double &tol= 0.0) const;
     BND3d Bnd(void) const;
   };
@@ -127,8 +134,9 @@ Pos3d DqPtrsEntities<T>::getCentroid(void) const
 	  }
       }
     else
-      std::cerr << this->getClassName() << "::" << __FUNCTION__
-		<< "; point set is empty." << std::endl;
+      std::cerr << Color::red << this->getClassName() << "::" << __FUNCTION__
+		<< "; set is empty, so it has no centroid."
+		<< Color::def << std::endl;
     return retval;
   }
   
@@ -180,6 +188,83 @@ const T *DqPtrsEntities<T>::getNearest(const Pos3d &p) const
     return retval;
   }
 
+//! @brief Return the minimum of the distances to the given point
+template <class T>
+GEOM_FT DqPtrsEntities<T>::getDistanceTo(const Pos3d &p) const
+  {
+    GEOM_FT retval= std::numeric_limits<GEOM_FT>::quiet_NaN();
+    const T *nearest= this->getNearest(p);
+    if(nearest)
+      retval= nearest->getDistanceTo(p);
+    else
+      {
+	if(!this->empty())
+	  {
+	    std::cerr  << Color::red << this->getClassName() << "::" << __FUNCTION__
+		       << "; this set is empty, so there is no distance."
+		       << Color::def << std::endl;
+	  }
+	else
+	  {
+	    std::cerr  << Color::red << this->getClassName() << "::" << __FUNCTION__
+		       << "; something went wrong, can't compute distance."
+		       << Color::def << std::endl;
+	  }
+      }
+    return retval;  
+  }
+
+//! @brief Return true if the distance to the given point is smaller
+//! than the given one.
+//! @param p: point to measure the distance to.
+//! @param d: distance threshold.
+template <class T>
+bool DqPtrsEntities<T>::isCloserThan(const Pos3d &p, const GEOM_FT &d) const
+  { return (this->getDistanceTo(p)<=d); }
+
+//! @brief Return true if the distance to both extremities of the given segment
+//! are smaller than the given one.
+//! @param s: segment to measure the distance to.
+//! @param d: distance threshold.
+template <class T>
+bool DqPtrsEntities<T>::isCloserThan(const Segment3d &s, const GEOM_FT &d) const
+{
+    const Pos3d &p1= s.getFromPoint();
+    const GEOM_FT d1= this->getDistanceTo(p1);
+    const Pos3d &p2= s.getToPoint();
+    const GEOM_FT d2= this->getDistanceTo(p2);
+    return ((d1<=d) && (d2<=d)); 
+  }
+
+//! @brief Return true if the distance to all the vertices of the given polygon
+//! are smaller than the given one.
+//! @param s: segment to measure the distance to.
+//! @param d: distance threshold.
+template <class T>
+bool DqPtrsEntities<T>::isCloserThan(const Polygon3d &plg, const GEOM_FT &d) const
+  {
+    bool retval= false;
+    const GeomObj::list_Pos3d vertices= plg.getVertexList();
+    if(!vertices.empty())
+      {
+	GeomObj::list_Pos3d::const_iterator i= vertices.begin();
+        const Pos3d &pi= *i;
+	retval= this->isCloserThan(pi, d);
+	if(retval)
+	  {
+	    i++;
+	    for(;i!=vertices.end();i++)
+	      {
+		const Pos3d &pj= *i;
+		retval= this->isCloserThan(pj, d);
+		if(!retval)
+		  break;
+	      }
+	  }
+      }
+    return retval;
+  }
+  
 //! @brief Return a container with the entities that lie inside the
 //! geometric object.
 //!

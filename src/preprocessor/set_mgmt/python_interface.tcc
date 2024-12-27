@@ -277,7 +277,11 @@ class_<dq_ptrs_surfaces, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_sur
   .def("clear",&dq_ptrs_surfaces::clear,"Removes all items.")
    ;
 
+
 typedef XC::DqPtrsEntities<XC::Face> dq_ptrs_faces;
+bool (dq_ptrs_faces::*pos3dIsCloserThan)(const Pos3d &, const GEOM_FT &) const= &dq_ptrs_faces::isCloserThan;
+bool (dq_ptrs_faces::*segment3dIsCloserThan)(const Segment3d &, const GEOM_FT &)const= &dq_ptrs_faces::isCloserThan;
+bool (dq_ptrs_faces::*polygon3dIsCloserThan)(const Polygon3d &, const GEOM_FT &)const= &dq_ptrs_faces::isCloserThan;
 class_<dq_ptrs_faces, bases<dq_ptrs_surfaces> >("dq_ptrs_faces",no_init)
   .def("append", &dq_ptrs_faces::push_back,"Appends surface at the end of the list.")
   .def("pushFront", &dq_ptrs_faces::push_front,"Push surface at the beginning of the list.")
@@ -287,6 +291,9 @@ class_<dq_ptrs_faces, bases<dq_ptrs_surfaces> >("dq_ptrs_faces",no_init)
   .def("getBnd", &dq_ptrs_faces::Bnd, "Returns surfaces boundary.")
   .def("findTag",make_function(&dq_ptrs_faces::findTag, return_internal_reference<>() ),"Returns the surface identified by the tag argument.")
   .def("getCentroid", &dq_ptrs_faces::getCentroid, "Returns the centroid of the points.")
+  .def("isCloserThan", pos3dIsCloserThan, "Returns true if the given point is closer than the specified distance.")
+  .def("isCloserThan", segment3dIsCloserThan, "Returns true if the given segment is closer than the specified distance.")
+  .def("isCloserThan", polygon3dIsCloserThan, "Returns true if the given segment is closer than the specified distance.")
    ;
 
 XC::Face *(XC::DqPtrsFaces::*getNearestFace)(const Pos3d &)= &XC::DqPtrsFaces::getNearest;
