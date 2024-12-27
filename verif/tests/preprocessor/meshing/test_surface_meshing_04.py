@@ -45,7 +45,7 @@ pt1= points.newPoint(1,geom.Pos3d(R,0.0,0.0))
 pt2= points.newPoint(geom.Pos3d((R*cos45),(R*sin45),0.0))
 pt3= points.newPoint(geom.Pos3d(0.0,R,0.0))
 pt4= points.newPoint(geom.Pos3d(R,0.0,1.0))
-pt4= points.newPoint(geom.Pos3d((R*cos45),(R*sin45),1.0))
+pt5= points.newPoint(geom.Pos3d((R*cos45),(R*sin45),1.0))
 pt6= points.newPoint(geom.Pos3d(0.0,R,1.0))
 
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
