@@ -81,6 +81,7 @@ class DqPtrsEntities: public DqPtrs<T>
     GEOM_FT getDistanceTo(const Pos3d &p) const;
     bool isCloserThan(const Pos3d &, const GEOM_FT &) const;
     bool isCloserThan(const Segment3d &, const GEOM_FT &) const;
+    bool isCloserThan(const GeomObj::list_Pos3d &, const GEOM_FT &) const;
     bool isCloserThan(const Polygon3d &, const GEOM_FT &) const;
     DqPtrsEntities<T> pickEntitiesInside(const GeomObj3d &, const double &tol= 0.0) const;
     BND3d Bnd(void) const;
@@ -228,7 +229,7 @@ bool DqPtrsEntities<T>::isCloserThan(const Pos3d &p, const GEOM_FT &d) const
 //! @param d: distance threshold.
 template <class T>
 bool DqPtrsEntities<T>::isCloserThan(const Segment3d &s, const GEOM_FT &d) const
-{
+  {
     const Pos3d &p1= s.getFromPoint();
     const GEOM_FT d1= this->getDistanceTo(p1);
     const Pos3d &p2= s.getToPoint();
@@ -236,33 +237,44 @@ bool DqPtrsEntities<T>::isCloserThan(const Segment3d &s, const GEOM_FT &d) const
     return ((d1<=d) && (d2<=d)); 
   }
 
-//! @brief Return true if the distance to all the vertices of the given polygon
-//! are smaller than the given one.
+
+//! @brief Return true if the distance to all the vertices of the given sequence
+//! is smaller than the given one.
 //! @param s: segment to measure the distance to.
 //! @param d: distance threshold.
 template <class T>
-bool DqPtrsEntities<T>::isCloserThan(const Polygon3d &plg, const GEOM_FT &d) const
+bool DqPtrsEntities<T>::isCloserThan(const GeomObj::list_Pos3d &vertices, const GEOM_FT &d) const
   {
     bool retval= false;
-    const GeomObj::list_Pos3d vertices= plg.getVertexList();
     if(!vertices.empty())
       {
 	GeomObj::list_Pos3d::const_iterator i= vertices.begin();
         const Pos3d &pi= *i;
 	retval= this->isCloserThan(pi, d);
-	if(retval)
+	if(!retval)
 	  {
 	    i++;
 	    for(;i!=vertices.end();i++)
 	      {
 		const Pos3d &pj= *i;
 		retval= this->isCloserThan(pj, d);
-		if(!retval)
+		if(retval)
 		  break;
 	      }
 	  }
       }
     return retval;
+  }
+  
+//! @brief Return true if the distance to all the vertices of the given polygon
+//! are smaller than the given one.
+//! @param plg: polygon to measure the distance to.
+//! @param d: distance threshold.
+template <class T>
+bool DqPtrsEntities<T>::isCloserThan(const Polygon3d &plg, const GEOM_FT &d) const
+  {
+    const GeomObj::list_Pos3d vertices= plg.getVertexList();
+    return this->isCloserThan(vertices, d);
   }
   
 //! @brief Return a container with the entities that lie inside the

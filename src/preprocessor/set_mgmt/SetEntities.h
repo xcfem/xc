@@ -153,9 +153,12 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void sel_points_from_list(const ID &);
     void selPointsFromListPy(const boost::python::list &);
     bool In(const Pnt *) const;
+    bool isCloserThan(const Pnt &, const double &) const;
     SetEntities pickPointsInside(const GeomObj3d &, const double &tol= 0.0) const;
     Pnt *getNearestPoint(const Pos3d &);
     const Pnt *getNearestPoint(const Pos3d &) const;
+    bool isCloserThan(const Pos3d &, const double &) const;
+    bool isCloserThan(const GeomObj::list_Pos3d &, const double &) const;
 
 
     //! @brief Return a const reference to the line container.
@@ -170,6 +173,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void sel_lines_from_list(const ID &);
     void selLinesFromListPy(const boost::python::list &);
     bool In(const Edge *) const;
+    bool isCloserThan(const Edge &, const double &) const;
     SetEntities pickLinesInside(const GeomObj3d &, const double &tol= 0.0) const;
     edge_intersection_pairs getLineIntersections(const double &tol= 1e-6) const;
     void splitLinesAtIntersections(const double &tol= 1e-6);
@@ -188,6 +192,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void sel_surfaces_from_list(const ID &);
     void selSurfacesFromListPy(const boost::python::list &);
     bool In(const Face *) const;
+    bool isCloserThan(const Face &, const double &) const;
     SetEntities pickSurfacesInside(const GeomObj3d &, const double &tol= 0.0) const;
 
     //! @brief Return a const reference to the body container.
@@ -202,6 +207,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void sel_bodies_from_list(const ID &);
     void selBodiesFromListPy(const boost::python::list &);
     bool In(const Body *) const;
+    bool isCloserThan(const Body &, const double &) const;
     SetEntities pickBodiesInside(const GeomObj3d &, const double &tol= 0.0) const;
 
     //! @brief Return a const reference to the UniformGrids container.
@@ -213,6 +219,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void sel_ugrids_from_list(const ID &);
     void selUgridsFromListPy(const boost::python::list &);
     bool In(const UniformGrid *) const;
+    bool isCloserThan(const UniformGrid &, const double &) const;
 
     BND3d Bnd(void) const;
     double getAverageSize(void) const;

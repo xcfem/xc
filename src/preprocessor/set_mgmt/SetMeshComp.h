@@ -139,6 +139,7 @@ class SetMeshComp: public SetBase
       { nodes.clearAll(); }
     void sel_nodes_from_list(const ID &);
     bool In(const Node *) const;
+    bool isCloserThan(const Pos3d &, const double &) const;
     bool remove(Node *);
     SetMeshComp pickNodesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
     SetMeshComp pickNodesInside(const std::string &, const GeomObj2d &, const double &tol= 0.0);
@@ -163,6 +164,7 @@ class SetMeshComp: public SetBase
       { elements.clearAll(); }
     void sel_elements_from_list(const ID &tags);
     bool In(const Element *) const;
+    bool isCloserThan(const GeomObj::list_Pos3d &, const double &) const;
     bool remove(Element *);
     SetMeshComp pickElemsInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
     SetMeshComp pickElemsInside(const std::string &, const GeomObj2d &, const double &tol= 0.0);

@@ -33,6 +33,7 @@
 
 #include "DqPtrsKDTree.h"
 #include "domain/mesh/element/utils/KDTreeElements.h"
+#include "utility/geom/GeomObj.h"
 
 class Polyline3d;
 class GeomObj3d;
@@ -86,6 +87,8 @@ class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
     DqPtrsElem pickElemsOfMaterial(const std::string &);
     void numerate(void);
     double getAverageSize(bool initialGeometry= true) const;
+    bool isCloserThan(const Pos3d &, const double &) const;
+    bool isCloserThan(const GeomObj::list_Pos3d &, const double &) const;
     
     // Loads on elements.
     void createInertiaLoads(const Vector &);

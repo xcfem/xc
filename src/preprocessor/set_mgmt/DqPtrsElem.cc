@@ -556,6 +556,49 @@ boost::python::list XC::DqPtrsElem::getDimensionsPy(void) const
     return retval;
   }
 
+//! @brief Return true if the distance to the given point is smaller
+//! than the given one.
+//! @param p: point to measure the distance to.
+//! @param d: distance threshold.
+bool XC::DqPtrsElem::isCloserThan(const Pos3d &p, const double &d) const
+  {
+    bool retval= false;
+    const Element *e= this->getNearest(p);
+    if(e)
+      {
+	const double dist= e->getDist(p);
+        retval= (dist<=d);
+      }
+    return retval;
+  }
+
+//! @brief Return true if the distance to all the vertices of the given sequence
+//! is smaller than the given one.
+//! @param s: segment to measure the distance to.
+//! @param d: distance threshold.
+bool XC::DqPtrsElem::isCloserThan(const GeomObj::list_Pos3d &vertices, const double &d) const
+  {
+    bool retval= false;
+    if(!vertices.empty())
+      {
+	GeomObj::list_Pos3d::const_iterator i= vertices.begin();
+        const Pos3d &pi= *i;
+	retval= this->isCloserThan(pi, d);
+	if(!retval)
+	  {
+	    i++;
+	    for(;i!=vertices.end();i++)
+	      {
+		const Pos3d &pj= *i;
+		retval= this->isCloserThan(pj, d);
+		if(retval)
+		  break;
+	      }
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Return a container with the elements whose class name
 //! contains the string.
 //!

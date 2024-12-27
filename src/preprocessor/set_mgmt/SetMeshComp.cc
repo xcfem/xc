@@ -258,6 +258,30 @@ void XC::SetMeshComp::addElement(Element *ePtr)
 bool XC::SetMeshComp::In(const Node *n) const
   { return nodes.in(n); }
 
+//! @brief Return true if the distance to the given point is smaller
+//! than the given one.
+//! @param p: point to measure the distance to.
+//! @param d: distance threshold.
+bool XC::SetMeshComp::isCloserThan(const Pos3d &p, const double &d) const
+  {
+    bool retval= nodes.isCloserThan(p, d);
+    if(!retval)
+      retval= elements.isCloserThan(p, d);
+    return retval;
+  }
+
+//! @brief Return true if the distance to the given point is smaller
+//! than the given one.
+//! @param p: point to measure the distance to.
+//! @param d: distance threshold.
+bool XC::SetMeshComp::isCloserThan(const GeomObj::list_Pos3d &vertices, const double &d) const
+  {
+    bool retval= nodes.isCloserThan(vertices, d);
+    if(!retval)
+      retval= elements.isCloserThan(vertices, d);
+    return retval;
+  }
+
 //! @brief Remove the given node from the set.
 bool XC::SetMeshComp::remove(Node *n)
   { return nodes.remove(n); }

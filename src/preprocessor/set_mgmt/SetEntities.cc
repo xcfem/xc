@@ -795,6 +795,85 @@ XC::Pnt *XC::SetEntities::getNearestPoint(const Pos3d &p)
 const XC::Pnt *XC::SetEntities::getNearestPoint(const Pos3d &p) const
   { return points.getNearest(p); }
 
+//! @brief Return true if the distance to the given point is smaller
+//! than the given one.
+//! @param p: point to measure the distance to.
+//! @param d: distance threshold.
+bool XC::SetEntities::isCloserThan(const Pnt &p, const double &d) const
+  { return this->isCloserThan(p.getPos(), d); }
+
+//! @brief Return true if the distance to the given point is smaller
+//! than the given one.
+//! @param p: point to measure the distance to.
+//! @param d: distance threshold.
+bool XC::SetEntities::isCloserThan(const Pos3d &p, const double &d) const
+  {
+    bool retval= points.isCloserThan(p, d);
+    if(!retval)
+      {
+	retval= lines.isCloserThan(p, d);
+	if(!retval)
+	  {
+	    retval= surfaces.isCloserThan(p, d);
+	    if(!retval)
+	      {
+		retval= bodies.isCloserThan(p, d);
+		if(!retval)
+		  retval= uniform_grids.isCloserThan(p, d);
+	      }
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return true if the distance to all the vertices of the given sequence
+//! is smaller than the given one.
+//! @param s: segment to measure the distance to.
+//! @param d: distance threshold.
+bool XC::SetEntities::isCloserThan(const GeomObj::list_Pos3d &vertices, const double &d) const
+  {
+    bool retval= false;
+    if(!vertices.empty())
+      {
+	GeomObj::list_Pos3d::const_iterator i= vertices.begin();
+        const Pos3d &pi= *i;
+	retval= this->isCloserThan(pi, d);
+	if(!retval)
+	  {
+	    i++;
+	    for(;i!=vertices.end();i++)
+	      {
+		const Pos3d &pj= *i;
+		retval= this->isCloserThan(pj, d);
+		if(retval)
+		  break;
+	      }
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return true if the distance to the vertices of the edge is smaller
+//! than the given one.
+//! @param e: edge to measure the distance to its vertices.
+//! @param d: distance threshold.
+bool XC::SetEntities::isCloserThan(const Edge &e, const double &d) const
+  {
+    bool retval= false;
+    const size_t nv= e.getNumberOfVertices();
+    if(nv>0)
+      {
+	GeomObj::list_Pos3d tmp;
+	for(size_t i= 1; i<nv; i++)
+	  {
+	    const Pnt *pnt= e.getVertex(i);
+	    const Pos3d &p= pnt->getPos();
+	    tmp.push_back(p);
+	  }
+	retval= this->isCloserThan(tmp, d);
+      }
+    return retval;
+  }
 
 //! @brief Returns true if the edge belongs to the set.
 bool XC::SetEntities::In(const Edge *e) const
@@ -981,6 +1060,27 @@ XC::Edge *XC::SetEntities::getNearestLine(const Pos3d &p)
 const XC::Edge *XC::SetEntities::getNearestLine(const Pos3d &p) const
   { return lines.getNearest(p); }
 
+//! @brief Return true if the distance to the vertices of the face is smaller
+//! than the given one.
+//! @param e: face to measure the distance to its vertices.
+//! @param d: distance threshold.
+bool XC::SetEntities::isCloserThan(const Face &f, const double &d) const
+  {
+    bool retval= false;
+    const size_t nv= f.getNumberOfVertices();
+    if(nv>0)
+      {
+	GeomObj::list_Pos3d tmp;
+	for(size_t i= 1; i<nv; i++)
+	  {
+	    const Pnt *pnt= f.getVertex(i);
+	    const Pos3d &p= pnt->getPos();
+	    tmp.push_back(p);
+	  }
+	retval= this->isCloserThan(tmp, d);
+      }
+    return retval;
+  }
 
 //! @brief Returns true if the surface belongs to the set.
 bool XC::SetEntities::In(const Face *f) const
@@ -999,6 +1099,28 @@ XC::SetEntities XC::SetEntities::pickSurfacesInside(const GeomObj3d &geomObj, co
     return retval;
   }
 
+//! @brief Return true if the distance to the vertices of the body is smaller
+//! than the given one.
+//! @param e: face to measure the distance to its vertices.
+//! @param d: distance threshold.
+bool XC::SetEntities::isCloserThan(const Body &b, const double &d) const
+  {
+    bool retval= false;
+    const size_t nv= b.getNumberOfVertices();
+    if(nv>0)
+      {
+	GeomObj::list_Pos3d tmp;
+	for(size_t i= 1; i<nv; i++)
+	  {
+	    const Pnt *pnt= b.getVertex(i);
+	    const Pos3d &p= pnt->getPos();
+	    tmp.push_back(p);
+	  }
+	retval= this->isCloserThan(tmp, d);
+      }
+    return retval;
+  }
+
 //! @brief Returns true if the body belongs to the set.
 bool XC::SetEntities::In(const Body *b) const
   { return bodies.in(b); }
@@ -1013,6 +1135,28 @@ XC::SetEntities XC::SetEntities::pickBodiesInside(const GeomObj3d &geomObj, cons
     Preprocessor *prep= const_cast<Preprocessor *>(getPreprocessor());
     SetEntities retval(prep);
     retval.bodies= bodies.pickEntitiesInside(geomObj,tol);
+    return retval;
+  }
+
+//! @brief Return true if the distance to the vertices of the uniform grid is
+//! smaller than the given one.
+//! @param e: face to measure the distance to its vertices.
+//! @param d: distance threshold.
+bool XC::SetEntities::isCloserThan(const UniformGrid &ug, const double &d) const
+  {
+    bool retval= false;
+    const size_t nv= ug.getNumberOfNodes();
+    if(nv>0)
+      {
+	GeomObj::list_Pos3d tmp;
+	for(size_t i= 1; i<nv; i++)
+	  {
+	    const Node *n= ug.getNode(i);
+	    const Pos3d &p= n->getInitialPosition3d();
+	    tmp.push_back(p);
+	  }
+	retval= this->isCloserThan(tmp, d);
+      }
     return retval;
   }
 

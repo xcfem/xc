@@ -34,6 +34,7 @@
 
 #include "DqPtrsKDTree.h"
 #include "domain/mesh/node/KDTreeNodes.h"
+#include "utility/geom/GeomObj.h"
 
 class Vector3d;
 class ExprAlgebra;
@@ -67,6 +68,8 @@ class DqPtrsNode: public DqPtrsKDTree<Node,KDTreeNodes>
     bool InNodeTag(const int ) const;
     bool InNodeTags(const ID &) const;
     std::set<int> getTags(void) const;
+    bool isCloserThan(const Pos3d &, const double &) const;
+    bool isCloserThan(const GeomObj::list_Pos3d &, const double &) const;
     DqPtrsNode pickNodesInside(const GeomObj3d &, const double &tol= 0.0);
     DqPtrsNode pickNodesInside(const GeomObj2d &, const double &tol= 0.0);
     BND3d Bnd(const double &) const;

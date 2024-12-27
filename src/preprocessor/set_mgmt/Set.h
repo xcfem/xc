@@ -90,8 +90,10 @@ class Set: public SetMeshComp
     Set getMeshComponentsSet(void) const;
 
     bool In(const Node *) const;
+    bool isCloserThan(const Node &, const double &) const;
     bool remove(Node *);
     bool In(const Element *) const;
+    bool isCloserThan(const Element &, const double &) const;
     bool remove(Element *);
     Set pickNodesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
     Set pickNodesInside(const std::string &, const GeomObj2d &, const double &tol= 0.0);
@@ -129,6 +131,7 @@ class Set: public SetMeshComp
     void sel_points_from_list(const ID &);
     void selPointsFromListPy(const boost::python::list &);
     bool In(const Pnt *) const;
+    bool isCloserThan(const Pnt &, const double &) const;
     Set pickPointsInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
     //! @brief Return a const reference to the line container.
@@ -143,6 +146,7 @@ class Set: public SetMeshComp
     void sel_lines_from_list(const ID &);
     void selLinesFromListPy(const boost::python::list &);
     bool In(const Edge *) const;
+    bool isCloserThan(const Edge &, const double &) const;
     Set pickLinesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
     //! @brief Returns a const reference to the surface container.
@@ -157,6 +161,7 @@ class Set: public SetMeshComp
     void sel_surfaces_from_list(const ID &);
     void selSurfacesFromListPy(const boost::python::list &);
     bool In(const Face *) const;
+    bool isCloserThan(const Face &, const double &) const;
     Set pickSurfacesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
     //! @brief Return a const reference to the body container.
@@ -171,6 +176,7 @@ class Set: public SetMeshComp
     void sel_bodies_from_list(const ID &);
     void selBodiesFromListPy(const boost::python::list &);
     bool In(const Body *) const;
+    bool isCloserThan(const Body &, const double &) const;
     Set pickBodiesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
     //! @brief Return a const reference to the UniformGrids container.
@@ -181,6 +187,7 @@ class Set: public SetMeshComp
       { return entities.getUniformGrids(); }
     void sel_ugrids_from_list(const ID &);
     void selUgridsFromListPy(const boost::python::list &);
+    bool isCloserThan(const UniformGrid &, const double &) const;
     bool In(const UniformGrid *) const;
 
     BND3d Bnd(const double &) const;

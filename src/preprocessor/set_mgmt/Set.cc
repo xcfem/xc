@@ -248,6 +248,19 @@ bool XC::Set::getUseGmsh(void) const
 bool XC::Set::In(const Node *n) const
   { return SetMeshComp::In(n); }
 
+//! @brief Return true if the distance to the given node is smaller
+//! than the given one.
+//! @param n: node to measure the distance to.
+//! @param d: distance threshold.
+bool XC::Set::isCloserThan(const Node &n, const double &d) const
+  {
+    const Pos3d p= n.getInitialPosition3d();
+    bool retval= SetMeshComp::isCloserThan(p, d);
+    if(!retval)
+      retval= entities.isCloserThan(p, d);
+    return retval;
+  }
+
 //! @brief Removes the given node from the set.
 bool XC::Set::remove(Node *n)
   {
