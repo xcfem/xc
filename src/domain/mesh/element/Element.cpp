@@ -189,6 +189,7 @@ size_t XC::Element::getDimension(void) const
   }
 
 //! @brief Return the element length
+//! @param initialGeometry: if true, use undeformed element geometry.
 double XC::Element::getLength(bool initialGeometry) const
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -198,6 +199,7 @@ double XC::Element::getLength(bool initialGeometry) const
   }
 
 //! @brief Return the element area
+//! @param initialGeometry: if true, use undeformed element geometry.
 double XC::Element::getArea(bool initialGeometry) const
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -207,6 +209,7 @@ double XC::Element::getArea(bool initialGeometry) const
   }
 
 //! @brief Return the element volume
+//! @param initialGeometry: if true, use undeformed element geometry.
 double XC::Element::getVolume(bool initialGeometry) const
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -844,6 +847,8 @@ int XC::Element::addResistingForceToNodalReaction(bool inclInertia)
     return result;
   }
 
+//! @brief Return the natural coordinates that correspond to the given position.
+//! @param initialGeometry: if true, use undeformed element geometry.
 XC::ParticlePos3d XC::Element::getNaturalCoordinates(const Pos3d &, bool initialGeometry) const
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -1080,6 +1085,7 @@ const XC::Matrix &XC::Element::getCooNodes(void) const
   { return getNodePtrs().getCoordinates(); }
 
 //! @brief Returns the coordinates of the nodes.
+//! @param initialGeometry: if true, use undeformed element geometry.
 std::deque<Pos3d> XC::Element::getPosNodes(bool initialGeometry) const
   { return getNodePtrs().getPositions(initialGeometry); }
 
@@ -1111,6 +1117,7 @@ bool XC::Element::Crosses(const GeomObj2d &obj,const double &factor, const doubl
 
 //! @brief Returns a matrix with the axes of the element as matrix rows
 //! [[x1,y1,z1],[x2,y2,z2],...·]
+//! @param initialGeometry: if true, use undeformed element geometry.
 XC::Matrix XC::Element::getLocalAxes(bool initialGeometry) const
   {
     Matrix retval;
@@ -1123,7 +1130,7 @@ XC::Matrix XC::Element::getLocalAxes(bool initialGeometry) const
 //! @brief Returns a base vector in the direction of the local i-th axis
 //! from the i-th row of the matrix returned by getLocalAxes.
 //! @param i: index of the base vector.
-//! @param initialGeometry: if true use initial geometry (instead of the deformed one).
+//! @param initialGeometry: if true, use undeformed element geometry.
 XC::Vector XC::Element::getBaseVector(size_t i, bool initialGeometry) const
   {
     const Matrix localAxes= getLocalAxes(initialGeometry);
@@ -1140,29 +1147,34 @@ XC::Vector XC::Element::getBaseVector(size_t i, bool initialGeometry) const
 
 //! @brief Returns a base vector in the direction of the local i-th axis
 //! from the i-th row of the matrix returned by getLocalAxes.
+//! @param initialGeometry: if true, use undeformed element geometry.
 Vector3d XC::Element::getBaseVector3d(size_t i,bool initialGeometry) const
   {
-    const Vector base= getBaseVector(i);
+    const Vector base= getBaseVector(i, initialGeometry);
     return Vector3d(base(0),base(1),base(2));
   }    
 
 //! @brief Returns a vector in the direction of the local x axis
 //! from the first row of the matrix returned by getLocalAxes.
+//! @param initialGeometry: if true, use undeformed element geometry.
 Vector3d XC::Element::getIVector3d(bool initialGeometry) const
-  { return getBaseVector3d(0); }
+  { return this->getBaseVector3d(0, initialGeometry); }
 
 //! @brief Returns a vector in the direction of the local y axis
 //! from the second row of the matrix returned by getLocalAxes.
+//! @param initialGeometry: if true, use undeformed element geometry.
 Vector3d XC::Element::getJVector3d(bool initialGeometry) const
-  { return getBaseVector3d(1); }
+  { return this->getBaseVector3d(1, initialGeometry); }
 
 //! @brief Returns a vector in the direction of the local z axis
 //! from the third row of the matrix returned by getLocalAxes.
+//! @param initialGeometry: if true, use undeformed element geometry.
 Vector3d XC::Element::getKVector3d(bool initialGeometry) const
-  { return getBaseVector3d(2); }
+  { return this->getBaseVector3d(2, initialGeometry); }
 
 //! @brief Returns the element coordinate system from the
 //! matrix returned by getLocalAxes.
+//! @param initialGeometry: if true, use undeformed element geometry.
 Rect3d3dCooSys XC::Element::getCooSys(bool initialGeometry) const
   {
     const Matrix localAxes= getLocalAxes(initialGeometry);
@@ -1183,6 +1195,7 @@ Rect3d3dCooSys XC::Element::getCooSys(bool initialGeometry) const
 
 //! @brief Returns the element coordinate system from the
 //! matrix returned by getLocalAxes.
+//! @param initialGeometry: if true, use undeformed element geometry.
 Rect2d2dCooSys XC::Element::getCooSys2d(bool initialGeometry) const
   {
     const Matrix localAxes= getLocalAxes(initialGeometry);
@@ -1207,7 +1220,8 @@ Rect2d2dCooSys XC::Element::getCooSys2d(bool initialGeometry) const
 Pos3d XC::Element::getPosNode(const size_t &i,bool initialGeometry) const
   { return getNodePtrs().getPosNode(i,initialGeometry); }
 
-//! @brief Returns a grid of points distributed along the line.
+//! @brief Returns a grid of points distributed along the element.
+//! @param initialGeometry: if true, use undeformed element geometry.
 Pos3dArray3d XC::Element::getPoints(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry)
   {
     Pos3dArray3d retval;
@@ -1228,6 +1242,7 @@ void XC::Element::dumpTributaries(const std::vector<double> &t) const
 
 //! @brief Computes the tributary lengths that corresponds to each
 //! node of the element
+//! @param initialGeometry: if true, use undeformed element geometry.
 void XC::Element::computeTributaryLengths(bool initialGeometry) const
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -1249,6 +1264,7 @@ double XC::Element::getTributaryLengthByTag(const int &tag) const
   }
 
 //! @brief Compute tributary areas for each element node.
+//! @param initialGeometry: if true, use undeformed element geometry.
 void XC::Element::computeTributaryAreas(bool initialGeometry) const
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -1269,6 +1285,7 @@ double XC::Element::getTributaryAreaByTag(const int &tag) const
 
 //! @brief Computes the tributary volumes that corresponds to each
 //! node of the element
+//! @param initialGeometry: if true, use undeformed element geometry.
 void XC::Element::computeTributaryVolumes(bool initialGeometry) const
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -1293,7 +1310,7 @@ double XC::Element::getTributaryVolumeByTag(const int &tag) const
 //! being passed as parameter.
 //!
 //! @param p: point to query.
-//! @param initialGeometry: if true check with undeformed model.
+//! @param initialGeometry: if true, use undeformed element geometry.
 double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -1306,7 +1323,7 @@ double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
 //! being passed as parameter.
 //!
 //! @param p: point to query.
-//! @param initialGeometry: if true check with undeformed model.
+//! @param initialGeometry: if true, use undeformed element geometry.
 double XC::Element::getDist(const Pos2d &p,bool initialGeometry) const
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -1317,6 +1334,7 @@ double XC::Element::getDist(const Pos2d &p,bool initialGeometry) const
 
 //! @brief Returns the squared distance from the element to the point
 //! being passed as parameter.
+//! @param initialGeometry: if true, use undeformed element geometry.
 double XC::Element::getDist2(const Pos3d &p,bool initialGeometry) const
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -1327,6 +1345,7 @@ double XC::Element::getDist2(const Pos3d &p,bool initialGeometry) const
 
 //! @brief Returns the the distance from the element to the point
 //! being passed as parameter.
+//! @param initialGeometry: if true, use undeformed element geometry.
 double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -1337,7 +1356,7 @@ double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
 
 //! @brief Return the projection of the argument on the element.
 //! @param p: position to project.
-//! @param initialGeometry: if true use undeformed element geometry.
+//! @param initialGeometry: if true, use undeformed element geometry.
 Pos2d XC::Element::getProjection(const Pos2d &p,bool initialGeometry) const
   {
     Pos2d retval;
@@ -1349,7 +1368,7 @@ Pos2d XC::Element::getProjection(const Pos2d &p,bool initialGeometry) const
   
 //! @brief Return the projection of the argument on the element.
 //! @param p: position to project.
-//! @param initialGeometry: if true use undeformed element geometry.
+//! @param initialGeometry: if true, use undeformed element geometry.
 Pos3d XC::Element::getProjection(const Pos3d &p,bool initialGeometry) const
   {
     Pos3d retval;
@@ -1360,6 +1379,7 @@ Pos3d XC::Element::getProjection(const Pos3d &p,bool initialGeometry) const
   }
 
 //! @brief Returns the coordinates of the center of gravity of the element.
+//! @param initialGeometry: if true, use undeformed element geometry.
 Pos3d XC::Element::getCenterOfMassPosition(bool initialGeometry) const
   {
     Pos3d retval;
@@ -1370,6 +1390,7 @@ Pos3d XC::Element::getCenterOfMassPosition(bool initialGeometry) const
   }
 
 //! @brief Returns the coordinates of the center of mass of the element.
+//! @param initialGeometry: if true, use undeformed element geometry.
 XC::Vector XC::Element::getCenterOfMassCoordinates(bool initialGeometry) const
   {
     const Pos3d center_of_mass= getCenterOfMassPosition(initialGeometry);
