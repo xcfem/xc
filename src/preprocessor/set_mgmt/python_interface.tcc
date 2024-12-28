@@ -389,11 +389,13 @@ class_<XC::Set, XC::Set *,bases<XC::SetMeshComp> >("Set")
   .def("clear",&XC::Set::clear,"Removes all items.")
   .def("empty",&XC::Set::empty,"Return true if the set is empty.")
   .def("getBnd", &XC::Set::Bnd, "Returns set boundary.")
+
   .def("selectPointsFromTagList", &XC::Set::selPointsFromListPy,"Add to the set the points identified by the given tags.")
   .def("selectLinesFromTagList", &XC::Set::selLinesFromListPy,"Add to the set the lines identified by the given tags.")
   .def("selectSurfacesFromTagList", &XC::Set::selSurfacesFromListPy,"Add to the set the surfaces identified by the given tags.")
   .def("selectBodiesFromTagList", &XC::Set::selBodiesFromListPy,"Add to the set the bodies identified by the given tags.")
   .def("selectUgridsFromTagList", &XC::Set::selUgridsFromListPy,"Add to the set the ugrids identified by the given tags.")
+
   .def("pickNodesInside",SETpickNodesInside3D,"pickNodesInside(newSetName, geomObj, tol) return a set with the nodes inside the geometric object.") 
   .def("pickNodesInside",SETpickNodesInside2D,"pickNodesInside(newSetName, geomObj, tol) return a set with the nodes inside the geometric object.") 
   .def("pickElemsInside", SETpickElemsInside3D,"pickElemsInside(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 

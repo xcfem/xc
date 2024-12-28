@@ -2498,7 +2498,7 @@ def compute_element_reinforcement(element):
     baseSection= element.getProp('baseSection').getCopy()
     dim= element.getDimension
     if(dim==1):
-        elementUpOrientation= element.getJVector3d(False)
+        elementUpOrientation= element.getJVector3d(True) # initial geometry
         upOrientation= reinforcementUpVector.dot(elementUpOrientation)
         pR= element.getProp("bottomReinforcement")
         nR= element.getProp("topReinforcement")
@@ -2513,10 +2513,10 @@ def compute_element_reinforcement(element):
             baseSection.shReinfY= shR
         retval= [baseSection, baseSection] # Section at element integration points.
     elif(dim==2):
-        elementUpOrientation= element.getKVector3d(False)
+        elementUpOrientation= element.getKVector3d(True) # initial geometry
         upOrientation= reinforcementUpVector.dot(elementUpOrientation)
         reinforcementIVector= element.getProp('reinforcementIVector') # direction of the reinforcement in the slab.
-        elementIOrientation= element.getIVector3d(False)
+        elementIOrientation= element.getIVector3d(True) # initial geometry
         iOrientation= reinforcementIVector.dot(elementIOrientation)
         theta= reinforcementIVector.getAngle(elementIOrientation)
         pRI= element.getProp("bottomReinforcementI")
