@@ -59,6 +59,7 @@ class NodePtrArray3d: public PtrArray3dBase<NodePtrArray>
     Node *getNearestNode(const Pos3d &p);
     const Node *getNearestNode(const Pos3d &p) const;
     ID getNodeIndices(const Node *) const;
+    std::deque<const Node *> getNodePtrs(void) const;
     boost::python::list getPyNodeList(void) const;
     bool removeNode(Node *);
     bool removeNode(const int &);

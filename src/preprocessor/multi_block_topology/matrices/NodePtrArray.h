@@ -46,8 +46,6 @@ class SFreedom_Constraint;
 //! @brief Two-dimensional array of pointers to nodes.
 class NodePtrArray: public PtrArrayBase<Node>
   {
-  protected:
-
   public:
     //! @brief Constructor.
     NodePtrArray(const size_t &f=0,const size_t &c=0)
@@ -61,8 +59,8 @@ class NodePtrArray: public PtrArrayBase<Node>
     const Node *getNearestNode(const Pos3d &p) const;
     bool removeNode(Node *);
     bool removeNode(const int &);
+    std::deque<const Node *> getNodePtrs(void) const;
     boost::python::list getPyNodeList(void) const;
-
   };
 
 } //end of XC namespace

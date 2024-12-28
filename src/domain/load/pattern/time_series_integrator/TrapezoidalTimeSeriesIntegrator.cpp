@@ -122,7 +122,7 @@ XC::TimeSeries *XC::TrapezoidalTimeSeriesIntegrator::integrate(TimeSeries *theSe
 
     // Set the method return value
     PathSeries *retval= new PathSeries(theIntegratedValues, delta);
-
+    
     if(retval == 0)
       {
         std::cerr << "TrapezoidalTimeSeriesIntegrator::" << __FUNCTION__
@@ -131,6 +131,7 @@ XC::TimeSeries *XC::TrapezoidalTimeSeriesIntegrator::integrate(TimeSeries *theSe
       }
     else
       {
+	retval->setStartTime(theSeries->getStartTime());
 	const PathSeriesBase *tmp= dynamic_cast<const PathSeriesBase *>(theSeries);
 	if(tmp)
 	  {
@@ -176,7 +177,7 @@ XC::TimeSeries* XC::TrapezoidalTimeSeriesIntegrator::differentiate(TimeSeries *t
     double Fi= theSeries->getFactor(dummyTime);
     double Fj= theSeries->getFactor(dummyTime+delta);
     double fi= (Fj-Fi)/delta; // derivative value
-    double fj;
+    double fj= 0.0;
 
     for(size_t j= 1; j < numSteps; j++)
       {
@@ -204,6 +205,7 @@ XC::TimeSeries* XC::TrapezoidalTimeSeriesIntegrator::differentiate(TimeSeries *t
       }
     else
       {
+	retval->setStartTime(theSeries->getStartTime());
 	const PathSeriesBase *tmp= dynamic_cast<const PathSeriesBase *>(theSeries);
 	if(tmp)
 	  {

@@ -157,10 +157,10 @@ bool XC::NodePtrArray::removeNode(const int &tag)
     return removeNode(nPtr);
   }
 
-//! @brief Returns a Python list containing the nodes of this array.
-boost::python::list XC::NodePtrArray::getPyNodeList(void) const
+//! @brief Returns the pointers to the nodes of this array.
+std::deque<const XC::Node *> XC::NodePtrArray::getNodePtrs(void) const
   {
-    boost::python::list retval;
+    std::deque<const Node *> retval;
     if(!Null())
       {
 	const size_t numberOfRows= getNumberOfRows();
@@ -169,8 +169,25 @@ boost::python::list XC::NodePtrArray::getPyNodeList(void) const
 	  for(size_t k= 1;k<=numberOfColumns;k++)
 	    {
 	      const Node *node= operator()(j,k);
-   	      retval.append(node);
+   	      retval.push_back(node);
 	    }
+      }
+    return retval;
+  }
+
+//! @brief Returns a Python list containing the nodes of this array.
+boost::python::list XC::NodePtrArray::getPyNodeList(void) const
+  {
+    boost::python::list retval;
+    if(!Null())
+      {
+	const std::deque<const Node *> tmp= this->getNodePtrs();
+	const size_t sz= tmp.size();
+	for(size_t j= 0;j<sz;j++)
+	  {
+	    const Node *node= tmp[j];
+   	    retval.append(node);
+	  }
       }
     return retval;
   }

@@ -106,6 +106,7 @@ class EntMdlr: public SetEstruct
 
     virtual Node *getNode(const size_t &i=1,const size_t &j=1,const size_t &k=1);
     virtual const Node *getNode(const size_t &i=1,const size_t &j=1,const size_t &k=1) const;
+    std::deque<const Node *> getNodePtrs(void) const;    
     Node *getNearestNode(const Pos3d &p);
     const Node *getNearestNode(const Pos3d &p) const;
     ID getNodeIndices(const Node *) const;

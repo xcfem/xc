@@ -272,6 +272,19 @@ bool XC::Set::remove(Node *n)
 bool XC::Set::In(const Element *e) const
   { return SetMeshComp::In(e); }
 
+//! @brief Return true if the distance to the element nodes is smaller
+//! than the given one.
+//! @param e: element to measure the distance to.
+//! @param d: distance threshold.
+bool XC::Set::isCloserThan(const Element &e, const double &d) const
+  {
+    const GeomObj::list_Pos3d nodePositions(e.getPosNodes());
+    bool retval= SetMeshComp::isCloserThan(nodePositions, d);
+    if(!retval)
+      retval= entities.isCloserThan(nodePositions, d);
+    return retval;
+  }
+
 //! @brief Removes the given element from the set.
 //! @param ePtr: pointer to the element to remove.
 bool XC::Set::remove(Element *e)
@@ -293,6 +306,19 @@ void XC::Set::genMesh(meshing_dir dm)
 //! @brief Returns true if the point belongs to the set.
 bool XC::Set::In(const Pnt *p) const
   { return entities.In(p); }
+
+//! @brief Return true if the distance to the given point is smaller
+//! than the given one.
+//! @param p: point to measure the distance to.
+//! @param d: distance threshold.
+bool XC::Set::isCloserThan(const Pnt &pt, const double &d) const
+  {
+    const Pos3d p= pt.getPos();
+    bool retval= SetMeshComp::isCloserThan(p, d);
+    if(!retval)
+      retval= entities.isCloserThan(p, d);
+    return retval;
+  }
 
 //! @brief Return a set with the entities of this one.
 XC::Set XC::Set::getEntitiesSet(void) const
@@ -441,6 +467,26 @@ XC::Set XC::Set::pickPointsInside(const std::string &newSetName, const GeomObj3d
 bool XC::Set::In(const Edge *e) const
   { return entities.In(e); }
 
+//! @brief Return true if the distance to the edge points is smaller
+//! than the given one.
+//! @param e: element to measure the distance to.
+//! @param d: distance threshold.
+bool XC::Set::isCloserThan(const Edge &e, const double &d) const
+  {
+    std::deque<const Pnt *> vertices(e.getVertices());
+    GeomObj::list_Pos3d positions;
+    for(std::deque<const Pnt *>::const_iterator i=vertices.begin();i!=vertices.end(); i++)
+      {
+	const Pnt *pt= *i;
+	const Pos3d &p= pt->getPos();
+	positions.push_back(p);
+      }
+    bool retval= SetMeshComp::isCloserThan(positions, d);
+    if(!retval)
+      retval= entities.isCloserThan(positions, d);
+    return retval;
+  }
+
 //! @brief Return a new set that contains the lines that lie insiof the
 //! geometric object.
 //!
@@ -451,6 +497,26 @@ XC::Set XC::Set::pickLinesInside(const std::string &newSetName, const GeomObj3d 
   {
     Set retval(newSetName,getPreprocessor());
     retval.setLines(entities.getLines().pickEntitiesInside(geomObj,tol));
+    return retval;
+  }
+
+//! @brief Return true if the distance to the face points is smaller
+//! than the given one.
+//! @param e: element to measure the distance to.
+//! @param d: distance threshold.
+bool XC::Set::isCloserThan(const Face &f, const double &d) const
+  {
+    std::deque<const Pnt *> vertices(f.getVertices());
+    GeomObj::list_Pos3d positions;
+    for(std::deque<const Pnt *>::const_iterator i=vertices.begin();i!=vertices.end(); i++)
+      {
+	const Pnt *pt= *i;
+	const Pos3d &p= pt->getPos();
+	positions.push_back(p);
+      }
+    bool retval= SetMeshComp::isCloserThan(positions, d);
+    if(!retval)
+      retval= entities.isCloserThan(positions, d);
     return retval;
   }
 
@@ -475,6 +541,26 @@ XC::Set XC::Set::pickSurfacesInside(const std::string &newSetName, const GeomObj
 bool XC::Set::In(const Body *b) const
   { return entities.In(b); }
 
+//! @brief Return true if the distances to the body vertices are smaller
+//! than the given one.
+//! @param e: element to measure the distance to.
+//! @param d: distance threshold.
+bool XC::Set::isCloserThan(const Body &b, const double &d) const
+  {
+    std::deque<const Pnt *> vertices(b.getVertices());
+    GeomObj::list_Pos3d positions;
+    for(std::deque<const Pnt *>::const_iterator i=vertices.begin();i!=vertices.end(); i++)
+      {
+	const Pnt *pt= *i;
+	const Pos3d &p= pt->getPos();
+	positions.push_back(p);
+      }
+    bool retval= SetMeshComp::isCloserThan(positions, d);
+    if(!retval)
+      retval= entities.isCloserThan(positions, d);
+    return retval;
+  }
+
 //! @brief Return a new set that contains the bodies that lie insiof the
 //! geometric object.
 //!
@@ -491,6 +577,19 @@ XC::Set XC::Set::pickBodiesInside(const std::string &newSetName, const GeomObj3d
 //! @brief Returns true if the «uniform grid» belongs to the set.
 bool XC::Set::In(const UniformGrid *ug) const
   { return entities.In(ug); }
+
+//! @brief Return true if the distances to the uniform grid vertices are smaller
+//! than the given one.
+//! @param e: element to measure the distance to.
+//! @param d: distance threshold.
+bool XC::Set::isCloserThan(const UniformGrid &ug, const double &d) const
+  {
+    const GeomObj::list_Pos3d nodePositions(ug.getPosNodes());
+    bool retval= SetMeshComp::isCloserThan(nodePositions, d);
+    if(!retval)
+      retval= entities.isCloserThan(nodePositions, d);
+    return retval;
+  }
 
 //! @brief Return the set boundary.
 //!

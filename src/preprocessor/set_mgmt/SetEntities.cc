@@ -1145,17 +1145,11 @@ XC::SetEntities XC::SetEntities::pickBodiesInside(const GeomObj3d &geomObj, cons
 bool XC::SetEntities::isCloserThan(const UniformGrid &ug, const double &d) const
   {
     bool retval= false;
-    const size_t nv= ug.getNumberOfNodes();
-    if(nv>0)
+    const GeomObj::list_Pos3d nodePositions(ug.getPosNodes());
+    const size_t sz= nodePositions.size();
+    if(sz>0)
       {
-	GeomObj::list_Pos3d tmp;
-	for(size_t i= 1; i<nv; i++)
-	  {
-	    const Node *n= ug.getNode(i);
-	    const Pos3d &p= n->getInitialPosition3d();
-	    tmp.push_back(p);
-	  }
-	retval= this->isCloserThan(tmp, d);
+	retval= this->isCloserThan(nodePositions, d);
       }
     return retval;
   }

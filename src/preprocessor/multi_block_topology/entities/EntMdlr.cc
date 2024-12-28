@@ -182,6 +182,10 @@ const XC::Node *XC::EntMdlr::getNode(const size_t &i,const size_t &j,const size_
     return retval;
   }
 
+//! @brief Returns the pointers to the nodes of this array.
+std::deque<const XC::Node *> XC::EntMdlr::getNodePtrs(void) const
+  { return ttzNodes.getNodePtrs(); }
+
 //! @brief Return the node closest to the point being passed as parameter.
 XC::Node *XC::EntMdlr::getNearestNode(const Pos3d &p)
   { return ttzNodes.getNearestNode(p); }

@@ -93,6 +93,7 @@ class UniformGrid: public EntMdlr
 
     virtual BND3d Bnd(void) const;
     Pos3d getCenter(void) const;
+    std::deque<Pos3d> getPosNodes(bool initialGeometry= true) const;
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);

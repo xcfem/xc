@@ -132,7 +132,7 @@ XC::TimeSeries* XC::SimpsonTimeSeriesIntegrator::integrate(TimeSeries *theSeries
 
     // Set the method return value
     PathSeries *retval= new PathSeries(theIntegratedValues, delta);
-
+    
     if(retval == 0)
       {
         std::cerr << "SimpsonTimeSeriesIntegrator::" << __FUNCTION__
@@ -141,6 +141,7 @@ XC::TimeSeries* XC::SimpsonTimeSeriesIntegrator::integrate(TimeSeries *theSeries
       }
     else
       {
+	retval->setStartTime(theSeries->getStartTime());
 	const PathSeriesBase *tmp= dynamic_cast<const PathSeriesBase *>(theSeries);
 	if(tmp)
 	  {
@@ -213,6 +214,7 @@ XC::TimeSeries* XC::SimpsonTimeSeriesIntegrator::differentiate(TimeSeries *theSe
 
     // Set the method return value
     PathSeries *retval= new PathSeries(theDif, delta);
+    
     if(retval == 0)
       {
         std::cerr << "SimpsonTimeSeriesIntegrator::" << __FUNCTION__
@@ -221,11 +223,12 @@ XC::TimeSeries* XC::SimpsonTimeSeriesIntegrator::differentiate(TimeSeries *theSe
       }
     else
       {
+	retval->setStartTime(theSeries->getStartTime());
 	const PathSeriesBase *tmp= dynamic_cast<const PathSeriesBase *>(theSeries);
 	if(tmp)
 	  {
 	    const bool useLast= tmp->getUseLast();
-	    retval->setUseLast(useLast);
+	    retval->setUseLast(useLast);	    
 	  }
       }
     return retval;

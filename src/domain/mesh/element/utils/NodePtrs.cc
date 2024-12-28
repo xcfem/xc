@@ -40,6 +40,7 @@
 
 #include "utility/geom/d2/Plane.h"
 #include "utility/geom/d3/HalfSpace3d.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 //! @brief Constructor.
@@ -137,9 +138,10 @@ void XC::NodePtrs::setPtrs(Domain *theDomain, const ID &theNodeTags)
           (*this)[i]->connect(owr);
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	              << "; node with tag " << theNodeTags(i)
-		      << " does not exist in the domain.\n";
+		      << " does not exist in the domain."
+	              << Color::def << std::endl;
           }
       }
   }
@@ -288,19 +290,19 @@ bool XC::NodePtrs::checkDimension(const size_t &dim) const
 	  {
             if(dim!= (*this)[i]->getDim())
 	      {
-	        std::cerr << getClassName() << "::" << __FUNCTION__
+	        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	                  << " wrong dimension of node coordinates in node: "
 	                  << i << " was: " << (*this)[i]->getDim()
 		          << ", must be: " << dim
-	                  << std::endl;
+	                  << Color::def << std::endl;
 	        retval= false;
 	        break;
               }
 	  }
 	else
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; pointer to node 0 is null."
-	            << std::endl;
+	            << Color::def << std::endl;
       }
     return retval;
   }
@@ -315,15 +317,15 @@ size_t XC::NodePtrs::getDimension(void) const
 	  { retval= (*this)[0]->getDim(); }
         else
 	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	              << "; pointer to node 0 is null."
-	              << std::endl;
+	              << Color::def << std::endl;
 	  }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; node pointers container is empty."
-                << std::endl;
+                << Color::def << std::endl;
     return retval;
   }
 
@@ -359,8 +361,9 @@ Pos3d XC::NodePtrs::getPosNode(const size_t &i,bool initialGeometry) const
           retval= ptrNod->getCurrentPosition3d();
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; null pointer for node: " << i << std::endl; 
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; null pointer for node: " << i
+		<< Color::def << std::endl; 
     return retval;
   }
 

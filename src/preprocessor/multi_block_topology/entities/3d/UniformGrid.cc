@@ -35,6 +35,7 @@
 #include "domain/mesh/node/Node.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/set_mgmt/Set.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 XC::UniformGrid::UniformGrid(Preprocessor *m,const size_t &i)
@@ -114,8 +115,9 @@ std::set<XC::SetBase *> XC::UniformGrid::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << getClassName() << __FUNCTION__
-	        << "; preprocessor needed." << std::endl;
+      std::cerr << Color::red << getClassName() << __FUNCTION__
+	        << "; preprocessor needed."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -141,6 +143,36 @@ void XC::UniformGrid::genMesh(meshing_dir dm)
   {
     create_nodes();
     create_elements(dm);
+  }
+
+//! @brief Return the positions of the nodes.
+//! @param initialGeometry: if true, use undeformed geometry.
+std::deque<Pos3d> XC::UniformGrid::getPosNodes(bool initialGeometry) const
+  {
+    std::deque<const XC::Node *> nodePtrs= this->getNodePtrs();
+    const size_t sz= nodePtrs.size();
+    std::deque<Pos3d> retval;
+    if(sz>0)
+      {
+	for(size_t i= 0; i<sz; i++)
+	  {
+	    const Node *ptrNod= nodePtrs[i];
+	    if(ptrNod)
+	      {
+		Pos3d tmp;
+		if(initialGeometry)
+		  tmp= ptrNod->getInitialPosition3d();
+		else
+		  tmp= ptrNod->getCurrentPosition3d();
+	        retval.push_back(tmp);
+	      }
+	    else
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			<< " null pointer to node in uniform grid."
+			<< Color::def << std::endl;
+	  }
+      }
+    return retval;
   }
 
 

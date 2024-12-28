@@ -150,21 +150,30 @@ const XC::Node *XC::NodePtrArray3d::findNode(const int &tag) const
     return retval;
   }
 
-//! @brief Returns a Python list containing the nodes of this array.
-boost::python::list XC::NodePtrArray3d::getPyNodeList(void) const
+//! @brief Returns the pointers to the nodes of this array.
+std::deque<const XC::Node *> XC::NodePtrArray3d::getNodePtrs(void) const
   {
-    boost::python::list retval;
+    std::deque<const Node *> retval;
     const size_t numberOfLayers= getNumberOfLayers();
     for(size_t i=1;i<=numberOfLayers;i++)
       {
         const NodePtrArray &layer= operator()(i);
-	boost::python::list tmp= layer.getPyNodeList();
-	const size_t sz= len(tmp);
-        for(size_t i= 0;i<sz;i++)
-          {
-	    const Node *node= boost::python::extract<const Node *>(tmp[i]);
-	    retval.append(node);
-	  }
+	std::deque<const Node *> tmp= layer.getNodePtrs();
+	retval.insert(retval.end(), tmp.begin(), tmp.end());
+      }
+    return retval;
+  }
+
+//! @brief Returns a Python list containing the nodes of this array.
+boost::python::list XC::NodePtrArray3d::getPyNodeList(void) const
+  {
+    boost::python::list retval;
+    const std::deque<const Node *> tmp= this->getNodePtrs();
+    const size_t sz= tmp.size();
+    for(size_t j= 0;j<sz;j++)
+      {
+	const Node *node= tmp[j];
+	retval.append(node);
       }
     return retval;
   }

@@ -360,6 +360,13 @@ XC::Set (XC::Set::*SETpickElemsInside3D)(const std::string &, const GeomObj3d &,
 XC::Set (XC::Set::*SETpickElemsInside2D)(const std::string &, const GeomObj2d &, const double &)= &XC::Set::pickElemsInside;
 XC::Set (XC::Set::*SETpickElemsCrossing3D)(const std::string &, const GeomObj3d &, const double &)= &XC::Set::pickElemsCrossing;
 XC::Set (XC::Set::*SETpickElemsCrossing2D)(const std::string &, const GeomObj2d &, const double &)= &XC::Set::pickElemsCrossing;
+bool (XC::Set::*nodeIsCloserToSetThan)(const XC::Node &, const double &) const= &XC::Set::isCloserThan;
+bool (XC::Set::*elementIsCloserToSetThan)(const XC::Element &, const double &) const= &XC::Set::isCloserThan;
+bool (XC::Set::*pointIsCloserToSetThan)(const XC::Pnt &, const double &) const= &XC::Set::isCloserThan;
+bool (XC::Set::*edgeIsCloserToSetThan)(const XC::Edge &, const double &) const= &XC::Set::isCloserThan;
+bool (XC::Set::*faceIsCloserToSetThan)(const XC::Face &, const double &) const= &XC::Set::isCloserThan;
+bool (XC::Set::*bodyIsCloserToSetThan)(const XC::Body &, const double &) const= &XC::Set::isCloserThan;
+bool (XC::Set::*uGridIsCloserToSetThan)(const XC::UniformGrid &, const double &) const= &XC::Set::isCloserThan;
 class_<XC::Set, XC::Set *,bases<XC::SetMeshComp> >("Set")
   .add_property("description", make_function( &XC::Set::getDescription, return_value_policy<copy_const_reference>() ), &XC::Set::setDescription,"Description (string) of the set.")
   .add_property("useGmsh", &XC::Set::getUseGmsh, &XC::Set::setUseGmsh, "Get/set the useGmsh member value.")
@@ -392,7 +399,16 @@ class_<XC::Set, XC::Set *,bases<XC::SetMeshComp> >("Set")
   .def("pickElemsInside", SETpickElemsInside3D,"pickElemsInside(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
   .def("pickElemsInside", SETpickElemsInside2D,"pickElemsInside(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
   .def("pickElemsCrossing", SETpickElemsCrossing3D,"pickElemsCrossing(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
-  .def("pickElemsCrossing", SETpickElemsCrossing2D,"pickElemsCrossing(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
+  .def("pickElemsCrossing", SETpickElemsCrossing2D,"pickElemsCrossing(newSetName, geomObj, tol) return a set with the elements inside the geometric object.")
+
+  .def("isCloserThan", nodeIsCloserToSetThan, "Returns true if the given node is closer than the specified distance.")
+  .def("isCloserThan", elementIsCloserToSetThan, "Returns true if the given element is closer than the specified distance.")
+  .def("isCloserThan", pointIsCloserToSetThan, "Returns true if the given point is closer than the specified distance.")
+  .def("isCloserThan", edgeIsCloserToSetThan, "Returns true if the given edge is closer than the specified distance.")
+  .def("isCloserThan", faceIsCloserToSetThan, "Returns true if the given face is closer than the specified distance.")
+  .def("isCloserThan", bodyIsCloserToSetThan, "Returns true if the given body is closer than the specified distance.")
+  .def("isCloserThan", uGridIsCloserToSetThan, "Returns true if the given uniform grid is closer than the specified distance.")
+
   .def("extend", extend_nodes, "Appends the nodes in the argument to the set.")
   .def("extend", extend_elements, "Appends the elements in the argument to the set.")
   .def("extend", extend_constraints, "Appends the constraints in the argument to the set.")
