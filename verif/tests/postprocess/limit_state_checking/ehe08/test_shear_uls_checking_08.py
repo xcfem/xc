@@ -96,6 +96,7 @@ limitState= EHE_limit_state_checking.shearResistance
 ## Build controller.
 controller= limitState.getController(solutionProcedureType= CustomNewtonRaphson)
 controller.verbose= False # Don't display log messages.
+controller.exhaustedSectionsThresholdCF= 1.03 # Accept some yielding. 
 ## Perform checking.
 meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y', controller= controller,threeDim= True)
 
