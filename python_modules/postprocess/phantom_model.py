@@ -10,6 +10,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com  ana.ortega@ciccp.es"
 
 import sys
+import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
@@ -49,16 +50,13 @@ class PhantomModel(object):
         self.preprocessor= preprocessor
         self.sectionsDistribution= sectionDistribution
 
-    def setupForElementsAndCombinations(self, intForcItems, setCalc=None):
+    def setupForElementsAndCombinations(self, intForcItems):
         '''Extracts element and combination identifiers from the internal
            forces listing file.
 
         :param intForcItems: tuple containing the element tags, the identifiers
                              of the load combinations and the values of the
                              internal forces.
-        :param setCalc: set of elements to be analyzed (defaults to None which 
-                        means that all the elements in the file of internal forces
-                        results are analyzed) 
         '''
         numberOfElements= len(intForcItems[0])
         if(numberOfElements>0):
@@ -104,8 +102,79 @@ class PhantomModel(object):
         phantomElement.setProp("diagInt",interactionDiagram)
         return phantomElement
 
+    def computeExhaustedSections(self, intForcItems, outputCfg, thresholdCF= 1.0):
+        ''' Compute the elements for which the capacity factor is greater than 1.0,
+            so they will cause the solver crash when performing a non-linear analysis.
 
-    def createElements(self, intForcItems, outputCfg):
+        :param intForcItems: tuple containing the element tags, the identifiers
+                             of the load combinations and the values of the
+                             internal forces.
+        :param outputCfg: instance of class 'VerifOutVars' which defines the 
+                   variables that control the output of the checking (set of 
+                   elements to be analyzed, append or not the results to a file,
+                   generation or not of lists, ...)
+        :param thresholdCF: value of the capacity factor above which the 
+                            section will be considered exhausted.
+        '''
+        retval= defaultdict(list)
+        # If fakeSection is true, there is no need to compute exhausted elements
+        # because a linear elastic analysis will be performed.
+        if(not outputCfg.controller.fakeSection):
+            elementsWithoutSection= set()
+            sectionNames= self.sectionsDistribution.getSectionNames(self.elementTags)
+            for tagElem, elementSectionNames in zip(self.elementTags, sectionNames):
+                if(elementSectionNames):
+                    mapInteractionDiagrams= self.sectionsDistribution.sectionDefinition.mapInteractionDiagrams
+                    for i, sectionName in enumerate(elementSectionNames):
+                        diagInt= None
+                        if(mapInteractionDiagrams is not None):
+                            diagInt= mapInteractionDiagrams[sectionName]
+                        internalForcesElem= self.internalForcesValues[tagElem]
+                        internalForcesSection= list()
+                        for iForce in internalForcesElem:
+                            if(iForce.idSection== i):
+                                internalForcesSection.append(iForce)
+                        # Check capacity factor if the analysis is performed on
+                        # fiber sections to avoid solver crashes due to internal
+                        # forces beyond the section capacity.
+                        if(diagInt and not outputCfg.controller.fakeSection):
+                            for iForces in internalForcesSection:
+                                N= iForces.N
+                                My= iForces.My
+                                Mz= iForces.Mz
+                                idComb= iForces.idComb
+                                idSection= iForces.idSection
+                                diagDimension= diagInt.getDimension()
+                                if(diagDimension==2):
+                                    posEsf= geom.Pos2d(N,My) # assume Mz is zero.
+                                    if(abs(Mz)>1e-3):
+                                        className= type(self).__name__
+                                        methodName= sys._getframe(0).f_code.co_name
+                                        warningMsg= className+'.'+methodName+' element: '+str(tagElem)+'; using a two-dimensional interaction with biaxial bending internal forces (Mz!=0) use a three-dimensional one instead.'
+                                        lmsg.warning(warningMsg)
+                                else:
+                                    posEsf= geom.Pos3d(N,My,Mz)                    
+                                CF= diagInt.getCapacityFactor(posEsf)
+                                if(CF>thresholdCF):
+                                    retval[tagElem].append(idSection)
+                                    className= type(self).__name__
+                                    methodName= sys._getframe(0).f_code.co_name
+                                    msg= className+'.'+methodName+'; section: '+str(idSection)
+                                    msg+= ' of element: '+str(tagElem)
+                                    msg+= ' is exhausted (CF= '+str(CF)+'>1)'
+                                    msg+= ' under internal forces for load combination: '+str(idComb)
+                                    msg+= '. The section will be excluded from the analysis to avoid the solver to crash.'
+                                    lmsg.warning(msg)
+                else:
+                    elementsWithoutSection.add(tagElem)
+            if(elementsWithoutSection):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; element section names not found for element with tags: '+str(elementsWithoutSection))
+        return retval
+            
+
+    def createElements(self, intForcItems, outputCfg, exhaustedSections):
         '''Creates the phantom model elements from the data read on the file.
 
         :param intForcItems: tuple containing the element tags, the identifiers
@@ -115,21 +184,22 @@ class PhantomModel(object):
                    variables that control the output of the checking (set of 
                    elements to be analyzed, append or not the results to a file,
                    generation or not of lists, ...)
+        :param exhaustedSections: dictionary containing the sections that will
+                                  be exhausted (and will make the solver to crash)
+                                  if a non-linear analysis is performed.
         '''
-        self.setupForElementsAndCombinations(intForcItems= intForcItems, setCalc= outputCfg.setCalc)
-
-        retval= []
+        retval= list()
         nodes= self.preprocessor.getNodeHandler
         self.modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
         elements= self.preprocessor.getElementHandler
-        # Define materials
-        fkSection= sccFICT.defElasticShearSection3d(self.preprocessor,matSccFICT) # The problem is isostatic, so the section is not a matter
-        if __debug__:
-            if(not fkSection):
-                AssertionError('Can\'t define material.')
         elements.dimElem= 1
         self.tagsNodesToLoad= defaultdict(list)
+        # If fakeSection is true, then define default material.
         if(outputCfg.controller.fakeSection):
+            fkSection= sccFICT.defElasticShearSection3d(self.preprocessor,matSccFICT) # The problem is isostatic, so the section is not a matter
+            if __debug__:
+                if(not fkSection):
+                    AssertionError('Can\'t define material.')
             elements.defaultMaterial= sccFICT.name
         elementsWithoutSection= set()
         sectionNames= self.sectionsDistribution.getSectionNames(self.elementTags)
@@ -142,10 +212,15 @@ class PhantomModel(object):
                     diagInt= None
                     if(mapInteractionDiagrams is not None):
                         diagInt= mapInteractionDiagrams[sectionName]
-                    phantomElem= self.createPhantomElement(masterElementId= tagElem, masterElementDimension= masterElementDimension, sectionName= sectionName, sectionDefinition= elementSectionDefinitions[i], sectionIndex= i+1, interactionDiagram= diagInt, fakeSection= outputCfg.controller.fakeSection)
-                    retval.append(phantomElem)
-                    self.tagsNodesToLoad[tagElem].append(phantomElem.getNodes[1].tag) #Node to load
-                                                                                      #for this element
+                    createPhantomElement= True
+                    if(tagElem in exhaustedSections):
+                        if(i in exhaustedSections[tagElem]):
+                            createPhantomElement= False # section exhausted.
+                    if(createPhantomElement):
+                        phantomElem= self.createPhantomElement(masterElementId= tagElem, masterElementDimension= masterElementDimension, sectionName= sectionName, sectionDefinition= elementSectionDefinitions[i], sectionIndex= i+1, interactionDiagram= diagInt, fakeSection= outputCfg.controller.fakeSection)
+                        retval.append(phantomElem)
+                        self.tagsNodesToLoad[tagElem].append(phantomElem.getNodes[1].tag) # Node to load
+                                                                                          # for this element
             else:
                 elementsWithoutSection.add(tagElem)
         if(elementsWithoutSection):
@@ -155,8 +230,14 @@ class PhantomModel(object):
         outputCfg.controller.initControlVars(retval)
         return retval
 
-    def createLoads(self):
-        '''Creates the loads from the data read from the file.'''
+    def createLoads(self, exhaustedSections):
+        '''Creates the loads from the data read from the file.
+
+        :param exhaustedSections: dictionary containing the sections that
+                                  will be exhausted (and will make the 
+                                  solver to crash) if a non-linear analysis
+                                  is performed.
+        '''
         cargas= self.preprocessor.getLoadHandler
         casos= cargas.getLoadPatterns
         #Load modulation.
@@ -172,18 +253,25 @@ class PhantomModel(object):
             internalForcesElem= self.internalForcesValues[key]
             for iforce in internalForcesElem:
                 lp= mapCombs[iforce.idComb]
-                tagsNodesToLoad=  self.tagsNodesToLoad[iforce.tagElem]
-                if(tagsNodesToLoad):
-                    nodeTag= tagsNodesToLoad[iforce.idSection]
-                    lp.newNodalLoad(nodeTag,xc.Vector(iforce.getComponents()))
-                else:
-                    elementsWithoutLoadedNodes.add(iforce.tagElem)
+                tagElem= iforce.tagElem
+                idSection= iforce.idSection
+                createLoad= True
+                if(tagElem in exhaustedSections):
+                    if(idSection in exhaustedSections[tagElem]):
+                        createLoad= False # section exhausted.
+                if(createLoad):
+                    tagsNodesToLoad= self.tagsNodesToLoad[iforce.tagElem]
+                    if(tagsNodesToLoad):
+                        nodeTag= tagsNodesToLoad[iforce.idSection]
+                        lp.newNodalLoad(nodeTag,xc.Vector(iforce.getComponents()))
+                    else:
+                        elementsWithoutLoadedNodes.add(iforce.tagElem)
         if(elementsWithoutLoadedNodes):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; no loaded nodes for elements with tags: '+str(elementsWithoutLoadedNodes))                    
 
-    def build(self, intForcItems, outputCfg):
+    def build(self, intForcItems, outputCfg, thresholdCF= 1.0):
         '''Builds the phantom model from the data read from the file.
 
         :param intForcItems: tuple containing the element tags, the identifiers
@@ -193,9 +281,19 @@ class PhantomModel(object):
                    variables that control the output of the checking (set of 
                    elements to be analyzed, append or not the results to a file,
                    generation or not of lists, ...)
+        :param thresholdCF: value of the capacity factor above which the 
+                            section will be considered exhausted.
         '''
-        retval= self.createElements(intForcItems, outputCfg)
-        self.createLoads()
+        self.setupForElementsAndCombinations(intForcItems= intForcItems)
+        exhaustedSections= self.computeExhaustedSections(intForcItems= intForcItems, outputCfg= outputCfg, thresholdCF= thresholdCF)
+        retval= self.createElements(intForcItems= intForcItems, outputCfg= outputCfg, exhaustedSections= exhaustedSections)
+        if(retval):
+            self.createLoads(exhaustedSections= exhaustedSections)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; no elements to check.')
+            exit(1)
         return retval
 
     def check(self, controller):
@@ -246,7 +344,8 @@ class PhantomModel(object):
         retval=None
         controller= outputCfg.controller
         if(controller):
-            self.build(intForcItems= intForcItems, outputCfg= outputCfg)
+            thresholdCF= controller.exhaustedSectionsThresholdCF
+            self.build(intForcItems= intForcItems, outputCfg= outputCfg, thresholdCF= thresholdCF)
             self.check(controller)
             # Return the values of the control variables in a dictionary.
             retval= self.getControlVarsDict(outputCfg)

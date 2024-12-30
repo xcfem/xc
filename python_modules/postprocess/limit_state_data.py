@@ -566,8 +566,7 @@ class ULS_LimitStateData(LimitStateData):
         super(ULS_LimitStateData,self).__init__(limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituations= designSituations)
 
     def check(self, crossSections, outputCfg= VerifOutVars(), threeDim= True):
-        '''Checking of normal stresses in ultimate limit states
-        (see self.dumpCombinations).
+        '''Checking of ultimate limit state (see self.dumpCombinations).
 
         :param crossSections: cross sections on each element.
         :param outputCfg: instance of class 'VerifOutVars' which defines the 
@@ -1267,14 +1266,20 @@ def read_int_forces_dict(intForcCombFileName, setCalc=None, vonMisesStressId= 'm
     json_file.close()
     
     internalForcesValues= defaultdict(list)
-    
-    if(not setCalc):
-        for comb in combInternalForcesDict.keys():
-            idComb= str(comb)
-            idCombs.add(idComb)
-            elements= combInternalForcesDict[comb]
-            for elemId in elements.keys():
-                tagElem= eval(elemId)
+
+    setElTags= None
+    if(setCalc):
+        setElTags= frozenset(setCalc.getElementTags()) # We construct a frozen set to accelerate searching.
+    for idComb in combInternalForcesDict.keys():
+        idCombs.add(idComb)
+        elements= combInternalForcesDict[idComb]
+        for elemId in elements.keys():
+            tagElem= eval(elemId)
+            processElement= True
+            if(setElTags):
+                if(not (tagElem in setElTags)):
+                    processElement= False
+            if(processElement): # search element tag
                 elementData= elements[elemId]
                 #elementType= elementData['type']
                 internalForces= elementData['internalForces']
@@ -1282,21 +1287,6 @@ def read_int_forces_dict(intForcCombFileName, setCalc=None, vonMisesStressId= 'm
                     elementTags.add(tagElem)
                     crossSectionInternalForces= get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, key= k, vonMisesStressId= vonMisesStressId)
                     internalForcesValues[tagElem].append(crossSectionInternalForces)
-    else:
-        setElTags= frozenset(setCalc.getElementTags()) # We construct a frozen set to accelerate searching.
-        for idComb in combInternalForcesDict.keys():
-            idCombs.add(idComb)
-            elements= combInternalForcesDict[idComb]
-            for elemId in elements.keys():
-                tagElem= eval(elemId)
-                if(tagElem in setElTags): # search element tag
-                    elementData= elements[elemId]
-                    #elementType= elementData['type']
-                    internalForces= elementData['internalForces']
-                    for k in internalForces.keys():
-                        elementTags.add(tagElem)
-                        crossSectionInternalForces= get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, key= k, vonMisesStressId= vonMisesStressId)
-                        internalForcesValues[tagElem].append(crossSectionInternalForces)
     return (elementTags, idCombs, internalForcesValues)
 
 class GaussPointStresses(stresses.Stresses3D):
@@ -1490,11 +1480,11 @@ def read_internal_forces_file(intForcCombFileName, setCalc=None, vonMisesStressI
     else:
         f= open(intForcCombFileName,"r")
         c= f.read(1)
+        f.close()
         if(c=='{'):
             retval= read_int_forces_dict(intForcCombFileName,setCalc, vonMisesStressId)
         else: # legacy file format.
             retval= old_read_int_forces_file(intForcCombFileName,setCalc)
-        f.close()
     return retval
 
 def string_el_max_axial_force(element,section,setName,combName,axialForc):

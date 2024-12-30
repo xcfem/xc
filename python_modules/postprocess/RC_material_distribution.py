@@ -242,9 +242,8 @@ class RCMaterialDistribution(object):
         if outputCfg.controller.expectsTensionStiffeningModel():
              for s in self.sectionDefinition.sections:
                  s.getConcreteType().initTensStiff= True
+        # Create the fiber sections ((RCsimpleSections) associated whith each element in the container.
         self.sectionDefinition.createRCsections(preprocessor= preprocessor, matDiagType= matDiagType) #creates
-                          #for each element in the container the fiber sections
-                          #(RCsimpleSections) associated with it.
         if(threeDim):
             self.sectionDefinition.calcInteractionDiagrams(preprocessor)
         else:

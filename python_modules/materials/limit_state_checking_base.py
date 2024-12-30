@@ -110,7 +110,27 @@ defaultLinearBucklingAnalysisProcedure= predefined_solutions.SpectraLinearBuckli
 
 class LimitStateControllerBase(object):
     '''
-    Basic parameters for limit state control (normal stresses, shear, crack,...)    .'''
+    Basic parameters for limit state control (normal stresses, shear, crack,...)    .
+
+    :ivar limitStateLabel: property name in the check results file 
+                           (something like 'ULS_shear' or 'SLS_crack_freq' 
+                           or ...).
+    :ivar fakeSection: true if a fiber section model of the section is 
+               not needed to perform control. In that case a fake section 
+               of type 'xc.ElasticShearSection3d' is generated for each 
+               element of the phantom model. Otherwise, when fakeSection 
+               is set to False (shear and cracking LS checking), a true fiber 
+               section of type 'xc.FiberSectionShear3d' is generated. 
+    :ivar preprocessor: only used to perform the crack straight control.
+    :ivar solutionProcedureType: type of the solution procedure to use
+                                  when computing load combination results.
+    :ivar exhaustedSectionsThresholdCF: value of the capacity factor above 
+                                        which the section will be considered 
+                                        exhausted. It is used when building
+                                        the a non-linear phantom model to avoid
+                                        the solver to crash (see phantom model
+                                        module). 
+    '''
     tensionedRebarsFiberSetName= "tensionedReinforcement" #Name of the tensiones rebar fibers set.
 
     def __init__(self, limitStateLabel, fakeSection= True, solutionProcedureType= defaultStaticLinearSolutionProcedure):
@@ -133,6 +153,7 @@ class LimitStateControllerBase(object):
         self.solutionProcedureType= solutionProcedureType
         self.preprocessor=None
         self.verbose= True # display log messages by default
+        self.exhaustedSectionsThresholdCF= 1.0
 
     def checkSolverAdequacy(self):
         ''' Check if the solver is adequate for the materials.'''
