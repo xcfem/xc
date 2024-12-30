@@ -279,9 +279,12 @@ bool XC::SetMeshComp::isCloserThan(const Pos3d &p, const double &d) const
 //! @param d: distance threshold.
 bool XC::SetMeshComp::isCloserThan(const GeomObj::list_Pos3d &vertices, const double &d) const
   {
-    bool retval= nodes.isCloserThan(vertices, d);
+    bool retval= false;
+    if(!nodes.empty())
+      retval= nodes.isCloserThan(vertices, d);
     if(!retval)
-      retval= elements.isCloserThan(vertices, d);
+      if(!elements.empty())
+	retval= elements.isCloserThan(vertices, d);
     return retval;
   }
 

@@ -257,14 +257,14 @@ bool DqPtrsEntities<T>::isCloserThan(const GeomObj::list_Pos3d &vertices, const 
 	GeomObj::list_Pos3d::const_iterator i= vertices.begin();
         const Pos3d &pi= *i;
 	retval= this->isCloserThan(pi, d);
-	if(!retval)
+	if(retval) // The first one is OK.
 	  {
 	    i++;
 	    for(;i!=vertices.end();i++)
 	      {
 		const Pos3d &pj= *i;
 		retval= this->isCloserThan(pj, d);
-		if(retval)
+		if(!retval)
 		  break;
 	      }
 	  }
