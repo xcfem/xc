@@ -808,18 +808,24 @@ bool XC::SetEntities::isCloserThan(const Pnt &p, const double &d) const
 //! @param d: distance threshold.
 bool XC::SetEntities::isCloserThan(const Pos3d &p, const double &d) const
   {
-    bool retval= points.isCloserThan(p, d);
+    bool retval= false;
+    if(!points.empty())
+      retval= points.isCloserThan(p, d);
     if(!retval)
       {
-	retval= lines.isCloserThan(p, d);
+	if(!lines.empty())
+	  retval= lines.isCloserThan(p, d);
 	if(!retval)
 	  {
-	    retval= surfaces.isCloserThan(p, d);
+	    if(!surfaces.empty())
+	      retval= surfaces.isCloserThan(p, d);
 	    if(!retval)
 	      {
-		retval= bodies.isCloserThan(p, d);
+		if(!bodies.empty())
+		  retval= bodies.isCloserThan(p, d);
 		if(!retval)
-		  retval= uniform_grids.isCloserThan(p, d);
+		  if(!uniform_grids.empty())
+		    retval= uniform_grids.isCloserThan(p, d);
 	      }
 	  }
       }

@@ -16,10 +16,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+# Define FE problem.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
-# Problem type
+## Problem type
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 
 # Material definition

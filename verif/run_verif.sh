@@ -733,6 +733,7 @@ python tests/preprocessor/geom_entities/test_block_05.py
 python tests/preprocessor/geom_entities/test_block_06.py
 python tests/preprocessor/geom_entities/test_block_07.py
 python tests/preprocessor/geom_entities/test_block_08.py
+python tests/preprocessor/geom_entities/test_is_closer_than_method_01.py
 
 echo "$BLEU" "  Meshing routines tests." "$NORMAL"
 python tests/preprocessor/meshing/test_surface_axes_01.py

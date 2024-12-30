@@ -264,9 +264,12 @@ bool XC::SetMeshComp::In(const Node *n) const
 //! @param d: distance threshold.
 bool XC::SetMeshComp::isCloserThan(const Pos3d &p, const double &d) const
   {
-    bool retval= nodes.isCloserThan(p, d);
+    bool retval= false;
+    if(!nodes.empty())
+      retval= nodes.isCloserThan(p, d);
     if(!retval)
-      retval= elements.isCloserThan(p, d);
+      if(!elements.empty())
+	retval= elements.isCloserThan(p, d);
     return retval;
   }
 

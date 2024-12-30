@@ -194,23 +194,23 @@ template <class T>
 GEOM_FT DqPtrsEntities<T>::getDistanceTo(const Pos3d &p) const
   {
     GEOM_FT retval= std::numeric_limits<GEOM_FT>::quiet_NaN();
-    const T *nearest= this->getNearest(p);
-    if(nearest)
-      retval= nearest->getDistanceTo(p);
-    else
+    if(!this->empty())
       {
-	if(!this->empty())
-	  {
-	    std::cerr  << Color::red << this->getClassName() << "::" << __FUNCTION__
-		       << "; this set is empty, so there is no distance."
-		       << Color::def << std::endl;
-	  }
+	const T *nearest= this->getNearest(p);
+	if(nearest)
+	  retval= nearest->getDistanceTo(p);
 	else
 	  {
 	    std::cerr  << Color::red << this->getClassName() << "::" << __FUNCTION__
 		       << "; something went wrong, can't compute distance."
 		       << Color::def << std::endl;
 	  }
+      }
+    else
+      {
+	std::cerr  << Color::red << this->getClassName() << "::" << __FUNCTION__
+		   << "; this set is empty, so there is no distance."
+		   << Color::def << std::endl;
       }
     return retval;  
   }
@@ -221,7 +221,13 @@ GEOM_FT DqPtrsEntities<T>::getDistanceTo(const Pos3d &p) const
 //! @param d: distance threshold.
 template <class T>
 bool DqPtrsEntities<T>::isCloserThan(const Pos3d &p, const GEOM_FT &d) const
-  { return (this->getDistanceTo(p)<=d); }
+  {
+    bool retval= false;
+    const GEOM_FT dist= this->getDistanceTo(p);
+    if(!std::isnan(dist))
+      retval= (this->getDistanceTo(p)<=d);
+    return retval;
+  }
 
 //! @brief Return true if the distance to both extremities of the given segment
 //! are smaller than the given one.
