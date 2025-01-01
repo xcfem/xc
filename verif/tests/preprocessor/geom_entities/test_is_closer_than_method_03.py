@@ -82,21 +82,23 @@ for bq in smallQuads:
 smallQuadsSet.fillDownwards()
 
 # Start checking isCloserThan method.
-linesCloseEnough= list()
-for ln in smallQuadsSet.lines:
-    if(bigQuadsSet.isCloserThan(ln, 0.02)):
-        linesCloseEnough.append(ln)
-        
-testOK= (len(linesCloseEnough)==15)
+facesCloseEnough= list()
+for s in smallQuadsSet.surfaces:
+    if(bigQuadsSet.isCloserThan(s, 0.02)):
+        facesCloseEnough.append(s)
+testOK= (len(facesCloseEnough)==4)
 
-for ln in linesCloseEnough:
-    pos1= ln.getP1().getPos
-    pos2= ln.getP2().getPos
-    pt1OK= (pos1.y>=0.0) and (pos1.y<=1.0) and (pos1.x>=1.3232) and (pos1.x<=2.6768)
-    pt2OK= (pos2.y>=0.0) and (pos2.y<=1.0) and (pos2.x>=1.3232) and (pos2.x<=2.6768)
-    testOK= pt1OK and pt2OK and testOK
+for f in facesCloseEnough:
+    points= f.getVertices
+    for pt in points:
+        pos= pt.getPos
+        ptOK= (pos.y>=0.0) and (pos.y<=1.0) and (pos.x>=1.3232) and (pos.x<=2.6768)
+        testOK= ptOK and testOK
 
-# print(len(linesCloseEnough))
+'''
+print(len(facesCloseEnough))
+print(testOK)
+'''
 
 import os
 from misc_utils import log_messages as lmsg

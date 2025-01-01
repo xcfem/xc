@@ -8,6 +8,7 @@ import math
 import geom
 import xc
 from model import predefined_spaces
+from materials import typical_materials
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2024, LCPT"
@@ -81,22 +82,33 @@ for bq in smallQuads:
     smallQuadsSet.surfaces.append(bq)
 smallQuadsSet.fillDownwards()
 
+### Generate mesh.
+#### Material definition
+mat= typical_materials.defElasticMembranePlateSection(preprocessor, "matPrb",E= 30e6,nu= 0.3,rho= 0.0, h= 0.25)
+modelSpace.setDefaultMaterial(mat)
+modelSpace.newSeedElement("ShellMITC4")
+smallQuadsSet.genMesh(xc.meshDir.I)
+smallQuadsSet.fillDownwards()
+
 # Start checking isCloserThan method.
-linesCloseEnough= list()
-for ln in smallQuadsSet.lines:
-    if(bigQuadsSet.isCloserThan(ln, 0.02)):
-        linesCloseEnough.append(ln)
-        
-testOK= (len(linesCloseEnough)==15)
+nodesCloseEnough= list()
+for n in smallQuadsSet.nodes:
+    if(bigQuadsSet.isCloserThan(n, 0.02)):
+        nodesCloseEnough.append(n)
+testOK= (len(nodesCloseEnough)==115)
 
-for ln in linesCloseEnough:
-    pos1= ln.getP1().getPos
-    pos2= ln.getP2().getPos
-    pt1OK= (pos1.y>=0.0) and (pos1.y<=1.0) and (pos1.x>=1.3232) and (pos1.x<=2.6768)
-    pt2OK= (pos2.y>=0.0) and (pos2.y<=1.0) and (pos2.x>=1.3232) and (pos2.x<=2.6768)
-    testOK= pt1OK and pt2OK and testOK
+for n in nodesCloseEnough:
+    pos= n.getInitialPos3d
+    ptOK= (pos.y>=0.0) and (pos.y<=1.0) and (pos.x>=1.3232) and (pos.x<=2.6768)
+    testOK= ptOK and testOK
 
-# print(len(linesCloseEnough))
+# Define set.
+nodesCloseEnoughSet= modelSpace.defSet(setName= 'nodesCloseEnoughSet', nodes= nodesCloseEnough)
+    
+'''
+print(len(nodesCloseEnough))
+print(testOK)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
@@ -110,9 +122,10 @@ else:
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
-# oh.displayBlocks(setToDisplay= bigQuadsSet)
-# oh.displayBlocks(setToDisplay= smallQuadsSet)
-# oh.displayBlocks()
+# # oh.displayBlocks(setToDisplay= bigQuadsSet)
+# # oh.displayBlocks(setToDisplay= smallQuadsSet)
+# # oh.displayBlocks()
+# # oh.displayFEMesh(setsToDisplay= [nodesCloseEnoughSet])
 
 
 
