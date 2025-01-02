@@ -39,6 +39,10 @@ bool (XC::Node::*In3D)(const GeomObj3d &,const double &,const double &) const= &
 bool (XC::Node::*Out3D)(const GeomObj3d &,const double &,const double &) const= &XC::Node::Out;
 bool (XC::Node::*In2D)(const GeomObj2d &,const double &,const double &) const= &XC::Node::In;
 bool (XC::Node::*Out2D)(const GeomObj2d &,const double &,const double &) const= &XC::Node::Out;
+double (XC::Node::*getDistPos2dNode)(const Pos2d &,bool initialGeometry) const= &XC::Node::getDist;
+double (XC::Node::*getDistPos3dNode)(const Pos3d &,bool initialGeometry) const= &XC::Node::getDist;
+double (XC::Node::*getDist2Pos2dNode)(const Pos2d &,bool initialGeometry) const= &XC::Node::getDist2;
+double (XC::Node::*getDist2Pos3dNode)(const Pos3d &,bool initialGeometry) const= &XC::Node::getDist2;
 class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Node", no_init)
   .add_property("getCoo", make_function( getCooRef, return_internal_reference<>() ),"Return node coordinates.")
   .add_property("getNumberDOF", &XC::Node::getNumberDOF,"Return the number of DOFs of the node.")
@@ -54,6 +58,10 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("getCurrentPos2d", &XC::Node::getCurrentPosition2d,"Returns 2D current position of node scaled by a factor: initialPos+factor*currentDisplacement.")
   .def("getCurrentPos3d", &XC::Node::getCurrentPosition3d,"\n""getCurrentPos3d(factor) \n""Return 3D current position of node scaled by a factor: initialPos+factor*currentDisplacement.")
   .def("setPos", &XC::Node::setPos,"\n""setPos(Pos3d) \n""Set node position.")
+  .def("getDist", getDistPos3dNode, "Return the distance from the point to this node.")
+  .def("getDist2", getDist2Pos3dNode, "Return the squared distance from the point to this node.")
+  .def("getDist", getDistPos2dNode, "Return the distance from the point to this node.")
+  .def("getDist2", getDist2Pos2dNode, "Return the squared distance from the point to this node.")
   .def("In", In3D,"\n""In(geomObject,factor,tolerance) \n""Return true if current position of node scaled by a factor: initialPos+factor*currentDisplacement lies inside the geometric object.")
   .def("Out", Out3D,"\n""Out(geomObject,factor,tolerance) \n""Return true if current position of node scaled by a factor: initialPos+factor*currentDisplacement lies outside the geometric object.")
   .def("In", In2D,"\n""In(geomObject,factor,tolerance) \n""Return true if current position of node scaled by a factor: initialPos+factor*currentDisplacement lies inside the geometric object.")
