@@ -780,6 +780,21 @@ void XC::CmbEdge::insert(Edge *l)
       }
   }
 
+//! @brief Return true if the given edge makes part of this compound line.
+bool XC::CmbEdge::hasEdge(const Edge *l) const
+  {
+    bool retval= false;
+    for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
+      {
+        if((*i).getEdge() == l)
+	  {	    
+            retval= true;
+	    break;
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Searches the line l from those of this compound line.
 size_t XC::CmbEdge::IndiceEdge(const Edge *l) const
   {

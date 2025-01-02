@@ -173,7 +173,8 @@ class CmbEdge: public Edge
     const Pnt *P1(void) const;
     const Pnt *P2(void) const;
 
-    size_t IndiceEdge(const Edge *l) const;
+    bool hasEdge(const Edge *) const;
+    size_t IndiceEdge(const Edge *) const;
     const Side *getSide(const size_t &i) const;
     Side *getSide(const size_t &i);
     const Side *getSideByPoints(const Pnt *,const Pnt *) const;
