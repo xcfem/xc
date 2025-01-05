@@ -349,20 +349,60 @@ std::deque<Polyline3d> Polyline3d::clip(const HalfSpace3d &hs, const GEOM_FT &to
 	  }
 	else // vertices at both sides of the half-space.
 	  {
+	    const Plane boundary_plane= hs.getBoundaryPlane();
 	    Polyline3d::const_iterator start= this->begin();
-	    std::deque<Polyline3d::const_iterator> int_iters= this->getIntersectionIters(hs.getBoundaryPlane());
-	    for(std::deque<Polyline3d::const_iterator>::const_iterator i= int_iters.begin(); i!= int_iters.end(); i++)
+	    Polyline3d::const_iterator last= std::prev(this->end());
+	    bool start_inside=  hs.In(*start, tol);
+	    std::deque<Polyline3d::const_iterator> int_iters= this->getIntersectionIters(boundary_plane);
+	    std::deque<Polyline3d::const_iterator>::const_iterator i= int_iters.begin();
+	    do
 	      {
-		Polyline3d::const_iterator stop= std::next(*i);
-		const bool chunk_inside= hs.In(*start, tol);
-		if(chunk_inside)
+		std::deque<Polyline3d::const_iterator>::const_iterator ii= std::next(i);
+		Polyline3d::const_iterator stop;
+		
+		if(ii != int_iters.end())
+		  stop= *ii;
+		else
+		  stop= std::next(*i);
+		const bool stop_inside= hs.In(*stop, tol);
+		const bool pline_enters= !start_inside and stop_inside;
+		const bool pline_exits= start_inside and !stop_inside;
+		if(pline_enters)
 		  {
 		    Polyline3d chunk;
-		    for(list_Pos3d::const_iterator i= start; i!= stop; i++)
-		      { chunk.appendVertex(*i); }
+		    Segment3d sg= this->getSegment(start);
+		    list_Pos3d tmp= intersection(sg,boundary_plane);
+		    chunk.appendVertex(tmp[0]);
+		    start++;
+		    for(list_Pos3d::const_iterator j= start; j!= stop; j++)
+		      { chunk.appendVertex(*j); }
+		    chunk.appendVertex(*stop);
+		    i++;
+		    if(stop!=last)
+		      {
+			sg= this->getSegment(stop);
+			tmp= intersection(sg,boundary_plane);
+			chunk.appendVertex(tmp[0]);
+			stop++;
+		      }
+		    retval.push_back(chunk);
+		  }
+		if(pline_exits)
+		  {
+		    Polyline3d chunk;
+		    chunk.appendVertex(*start); // Starts inside.
+		    Segment3d sg= this->getSegment(start);
+		    list_Pos3d tmp= intersection(sg,boundary_plane);
+		    chunk.appendVertex(tmp[0]);
+		    retval.push_back(chunk);
 		  }
 		start= stop;
+		start_inside= hs.In(*start, tol);
+		i++;
+		if(start==last)
+		  break;
 	      }
+	    while(i!= int_iters.end());
 	  }
       }
     return retval;

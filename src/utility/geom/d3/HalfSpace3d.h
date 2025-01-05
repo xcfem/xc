@@ -69,6 +69,8 @@ class HalfSpace3d : public GeomObj3d
     virtual bool In(const Ray3d &, const double &tol= 0.0) const;
     virtual bool In(const Segment3d &, const double &tol= 0.0) const;
     virtual bool In(const Polyline3d &, const double &tol= 0.0) const;
+    inline bool intersects(const HalfSpace3d &hs) const
+      { return lim.intersects(hs.lim); }
     bool intersects(const Line3d &) const;
     bool intersects(const Ray3d &) const;
     bool intersects(const Segment3d &) const;
