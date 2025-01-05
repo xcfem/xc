@@ -957,7 +957,7 @@ std::deque<Polyline2d> Polyline2d::clip(const HalfPlane2d &hp, const GEOM_FT &to
 	    Polyline2d::const_iterator start= this->begin();
 	    Polyline2d::const_iterator last= std::prev(this->end());
 	    bool start_inside=  hp.In(*start, tol);
-	    std::deque<Polyline2d::const_iterator> int_iters= this->getIntersectionIters(hp.getBoundaryLine());
+	    std::deque<Polyline2d::const_iterator> int_iters= this->getIntersectionIters(boundary_line);
 	    std::deque<Polyline2d::const_iterator>::const_iterator i= int_iters.begin();
 	    do
 	      {
