@@ -24,9 +24,21 @@ class_<Surface2d, bases<GeomObj2d>, boost::noncopyable  >("Surface2d", no_init)
   .def("getDimension", &Surface2d::Dimension, "Return the dimension of the object.")
   ;
 
+bool (HalfPlane2d::*HalfPlaneExistIntersHalfPlane)(const HalfPlane2d &) const= &HalfPlane2d::intersects;
+bool (HalfPlane2d::*HalfPlaneExistIntersLine)(const Line2d &) const= &HalfPlane2d::intersects;
+bool (HalfPlane2d::*HalfPlaneExistIntersRay)(const Ray2d &) const= &HalfPlane2d::intersects;
+bool (HalfPlane2d::*HalfPlaneExistIntersSegment)(const Segment2d &) const= &HalfPlane2d::intersects;
+bool (HalfPlane2d::*HalfPlaneExistIntersPolyline)(const Polyline2d &) const= &HalfPlane2d::intersects;
 class_<HalfPlane2d, bases<Surface2d> >("HalfPlane2d")
   .def(init<>())
   .def(init<Line2d>())
+  .def(init<Line2d, Pos2d>())
+  .def("intersects", HalfPlaneExistIntersHalfPlane, "return true if the intersection with the given half-plane exists.")
+  .def("intersects", HalfPlaneExistIntersLine, "return true if the intersection with the given line exists.")
+  .def("intersects", HalfPlaneExistIntersRay, "return true if the intersection with the given ray exists.")
+  .def("intersects", HalfPlaneExistIntersSegment, "return true if the intersection with the given segment exists.")
+  .def("intersects", HalfPlaneExistIntersPolyline, "return true if the intersection with the given polyline exists.")
+  .def("clip", &HalfPlane2d::clipPy, "Return the polyline chunks that result from clipping the given polyline with this half plane.")
   ;
 
 class_<BND2d, bases<GeomObj2d> >("BND2d")
@@ -200,11 +212,11 @@ class_<Plane, bases<Surface3d> >("Plane3d")
   .def("getIntersection",IntersSegment3d,"return the intersection with the segment argument.")
   .def("getIntersection",IntersPolygon3d,"return the intersection with the polygon argument.")
 
-  .def("intersects",ExistIntersPlane, "return the intersection with the plane argument.")
-  .def("intersects",ExistIntersLine3d,"return the intersection with the line argument.")
-  .def("intersects",ExistIntersRay3d,"return the intersection with the ray argument.")
-  .def("intersects",ExistIntersSegment3d,"return the intersection with the segment argument.")
-  .def("intersects",ExistIntersPolygon3d,"return the intersection with the polygon argument.")
+  .def("intersects",ExistIntersPlane, "return true if the intersection with the given plane exits.")
+  .def("intersects",ExistIntersLine3d,"return true if the intersection with the given line exists.")
+  .def("intersects",ExistIntersRay3d,"return true if the intersection with the given ray exists.")
+  .def("intersects",ExistIntersSegment3d,"return true if the intersection with the given segment exists.")
+  .def("intersects",ExistIntersPolygon3d,"return true if the intersection with the given polygon exists.")
 
   .def("getPoint()", &Plane::Point, "return an arbitrary point on the plane.")
   .def("getNormal", &Plane::Normal,"return the plane normal or local k vector.")

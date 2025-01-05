@@ -67,13 +67,14 @@ class HalfPlane2d : public Surface2d
       { return NAN; }
     inline bool isDegenerated(void) const
       { return lim.isDegenerated(); }
-    inline const Line2d &getBorde(void) const
+    inline const Line2d &getBoundaryLine(void) const
       { return lim; }
     
     virtual bool In(const Pos2d &p, const double &tol= 0.0) const;
     virtual bool In(const Line2d &, const double &tol= 0.0) const;
     virtual bool In(const Ray2d &, const double &tol= 0.0) const;
     virtual bool In(const Segment2d &, const double &tol= 0.0) const;
+    virtual bool In(const Polyline2d &, const double &tol= 0.0) const;
 
     //! @brief Return the signed distance from the point to the half-plane.
     GEOM_FT DistSigno(const Pos2d &p) const
@@ -94,6 +95,7 @@ class HalfPlane2d : public Surface2d
       { return lim.intersects(r); }
     bool intersects(const Ray2d &sr) const;
     bool intersects(const Segment2d &sg) const;
+    bool intersects(const Polyline2d &) const;
     GeomGroup2d getIntersection(const Line2d &r) const;
     GeomGroup2d getIntersection(const Ray2d &sr) const;
     GeomGroup2d getIntersection(const Segment2d &sg) const;
@@ -119,6 +121,8 @@ class HalfPlane2d : public Surface2d
     Ray2d clip(const Line2d &) const;
     Ray2d clip(const Ray2d &) const;
     Segment2d clip(const Segment2d &) const;
+    std::deque<Polyline2d> clip(const Polyline2d &, const GEOM_FT &tol= 0.0) const;
+    boost::python::list clipPy(const Polyline2d &, const GEOM_FT &tol= 0.0) const;
 
     void Transform(const Trf2d &trf2d);
 

@@ -29,6 +29,7 @@
 #include "Segment3d.h"
 
 class Pos3dList;
+class HalfSpace3d;
 
 //! @ingroup GEOM
 //
@@ -103,10 +104,11 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     Segment3d getNearestSegment(const Pos3d &) const;
     Pos3d Projection(const Pos3d &) const;
 
-    
-    //list_Pos3d Int(unsigned short int i,const GEOM_FT &d) const;
+
+    std::deque<const_iterator> getIntersectionIters(const Plane &) const;
     list_Pos3d getIntersection(const Plane &) const;
-    //Polyline3d Corta(unsigned short int i,const GEOM_FT &d) const;
+    std::deque<Polyline3d> clip(const HalfSpace3d &, const GEOM_FT &tol= 0.0) const;
+    boost::python::list clipPy(const HalfSpace3d &, const GEOM_FT &tol= 0.0) const;
     void insertVertex(const Pos3d &, const GEOM_FT &tol= 1e-6);
     Polyline3d getChunk(const Pos3d &,const short int &, const GEOM_FT &) const;
     Polyline3d getLeftChunk(const Pos3d &, const GEOM_FT &tol) const;

@@ -26,6 +26,7 @@
 #include "utility/utils/misc_utils/matem.h" // RadToDeg
 #include "utility/geom/pos_vec/VectorPos3d.h"
 #include "utility/kernel/python_utils.h"
+#include "utility/geom/d3/HalfSpace3d.h"
 
 //! @brief Default constructor.
 Polyline3d::Polyline3d(void)
@@ -291,6 +292,25 @@ GEOM_FT Polyline3d::getLengthUpTo(const Pos3d &p) const
     return retval;
   }
 
+//! @brief Return the iterators to the origin vertices of the polyline segments
+//! where the intersection with the plane occur.
+std::deque<Polyline3d::const_iterator> Polyline3d::getIntersectionIters(const Plane &p) const
+  {
+    std::deque<Polyline3d::const_iterator> retval;
+    if(!empty())
+      {
+	list_Pos3d::const_iterator first= begin();
+	list_Pos3d::const_iterator last= std::prev(end());
+	for(list_Pos3d::const_iterator j=first;j != last;j++)
+	  {
+	    const Segment3d s= getSegment(j);
+	    if(p.intersects(s))
+	      retval.push_back(j);
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Return the points of intersection of the polyline with
 //! the argument.
 GeomObj3d::list_Pos3d Polyline3d::getIntersection(const Plane &p) const
@@ -310,6 +330,51 @@ GeomObj3d::list_Pos3d Polyline3d::getIntersection(const Plane &p) const
 	    i= retval.end();
 	  }
       }
+    return retval;
+  }
+
+//! @brief Return the polyline chunks that result from clipping this polyline
+//! with the given half space.
+std::deque<Polyline3d> Polyline3d::clip(const HalfSpace3d &hs, const GEOM_FT &tol) const
+  {
+    std::deque<Polyline3d> retval;
+    if(!empty())
+      {
+	const bool intersects= hs.intersects(*this);
+	if(!intersects)
+	  {
+	    if(hs.In(*this))
+	      retval.push_back(*this); // The whole polyline is inside the
+	                               // half space.
+	  }
+	else // vertices at both sides of the half-space.
+	  {
+	    Polyline3d::const_iterator start= this->begin();
+	    std::deque<Polyline3d::const_iterator> int_iters= this->getIntersectionIters(hs.getBoundaryPlane());
+	    for(std::deque<Polyline3d::const_iterator>::const_iterator i= int_iters.begin(); i!= int_iters.end(); i++)
+	      {
+		Polyline3d::const_iterator stop= std::next(*i);
+		const bool chunk_inside= hs.In(*start, tol);
+		if(chunk_inside)
+		  {
+		    Polyline3d chunk;
+		    for(list_Pos3d::const_iterator i= start; i!= stop; i++)
+		      { chunk.appendVertex(*i); }
+		  }
+		start= stop;
+	      }
+	  }
+      }
+    return retval;
+  }
+
+boost::python::list Polyline3d::clipPy(const HalfSpace3d &hs, const GEOM_FT &tol) const
+  {
+    boost::python::list retval;
+    std::deque<Polyline3d> tmp= this->clip(hs, tol);
+    std::deque<Polyline3d>::const_iterator i= tmp.begin();
+    for(;i!=tmp.end();i++)
+      retval.append(*i);
     return retval;
   }
 

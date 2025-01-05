@@ -29,6 +29,7 @@
 class Segment2d;
 class Ray2d;
 class Line2d;
+class HalfPlane2d;
 class Pos2dList;
 class Polygon2d;
 class Circle2d;
@@ -123,13 +124,13 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     Pos2d Projection(const Pos2d &) const;
     Polyline2d offset(const GEOM_FT &d) const;
     Polygon2d getBufferPolygon(const GEOM_FT &d, const size_t &numVertices= 8) const;
-    //! @brief Return the intersections of the polyline with
-    //! the line coord_i= d
-    // list_Pos2d Int(unsigned short int i,const GEOM_FT &d) const;
+    
+    std::deque<const_iterator> getIntersectionIters(const Line2d &) const;
     list_Pos2d getIntersection(const Line2d &r) const;
     list_Pos2d getIntersection(const Ray2d &sr) const;
     list_Pos2d getIntersection(const Segment2d &sr) const;
-    //Polyline2d Corta(unsigned short int i,const GEOM_FT &d) const;
+    std::deque<Polyline2d> clip(const HalfPlane2d &, const GEOM_FT &tol= 0.0) const;
+    boost::python::list clipPy(const HalfPlane2d &, const GEOM_FT &tol= 0.0) const;
     void insertVertex(const Pos2d &, const GEOM_FT &tol= 1e-6);
     Polyline2d getChunk(const Pos2d &,const short int &, const GEOM_FT &tol) const;
     Polyline2d getLeftChunk(const Pos2d &, const GEOM_FT &tol) const;

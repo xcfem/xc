@@ -24,6 +24,7 @@
 #include "utility/geom/pos_vec/Vector3d.h"
 #include "utility/geom/d1/Line3d.h"
 #include "utility/geom/d1/Segment3d.h"
+#include "utility/geom/d1/Polyline3d.h"
 
 
 //! @brief Default constructor.
@@ -110,6 +111,22 @@ bool HalfSpace3d::In(const Segment3d &sg, const double &tol) const
     return retval;
   }
 
+//! @brief Return true if the polyline is inside the half-space.
+bool HalfSpace3d::In(const Polyline3d &pline, const double &tol) const
+  {
+    bool retval= true;
+    for(list_Pos3d::const_iterator i= pline.begin(); i!= pline.end(); i++)
+      {
+	const Pos3d &pos= *i;
+	if(!this->In(pos))
+	  {
+	    retval= false;
+	    break;
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Return true if part of the line is inside
 //! the half-space.
 bool HalfSpace3d::intersects(const Line3d &l) const
@@ -143,6 +160,31 @@ bool HalfSpace3d::intersects(const Segment3d &sg) const
       retval= true;
     else // ray parallel to the limit plane.
       retval= (In(sg.getFromPoint()) || In(sg.getToPoint()));
+    return retval;
+  }
+
+//! @brief Return true if part of the polyline is inside
+//! the half-space.
+bool HalfSpace3d::intersects(const Polyline3d &pline) const
+  {
+    bool retval= false;
+    list_Pos3d::const_iterator i= pline.begin();
+    bool pline_in= this->In(*i);
+    i++;
+    for(; i!= pline.end(); i++)
+      {
+	const Pos3d &pos= *i;
+	if(!this->In(pos) and pline_in)
+	  {
+	    retval= false;
+	    break;
+	  }
+	else if(this->In(pos) and !pline_in)
+	  {
+	    retval= false;
+	    break;
+	  }
+      }
     return retval;
   }
 
@@ -231,6 +273,16 @@ Segment3d HalfSpace3d::clip(const Segment3d &sg) const
       }
     return retval;
   }
+
+//! @brief Return the polyline chunks that result from clipping the given
+//! polyline with this half space.
+std::deque<Polyline3d> HalfSpace3d::clip(const Polyline3d &pline, const GEOM_FT &tol) const
+  { return pline.clip(*this, tol); }
+
+//! @brief Return the polyline chunks that result from clipping the given
+//! polyline with this half space.
+boost::python::list HalfSpace3d::clipPy(const Polyline3d &pline, const GEOM_FT &tol) const
+  { return pline.clipPy(*this, tol); } 
 
 //! @brief Return the signed distance from the point to the half plane.
 GEOM_FT HalfSpace3d::distSigno(const Pos3d &p) const

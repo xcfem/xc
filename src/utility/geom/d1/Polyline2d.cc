@@ -31,6 +31,7 @@
 #include "utility/geom/pos_vec/VectorPos2d.h"
 #include "utility/kernel/python_utils.h"
 #include "utility/geom/d2/2d_polygons/Polygon2d.h"
+#include "utility/geom/d2/HalfPlane2d.h"
 
 //! @brief Default constructor.
 Polyline2d::Polyline2d(void)
@@ -866,6 +867,24 @@ boost::python::list Polyline2d::split(const Pos2d &p) const
     return retval;
   }
   
+//! @brief Return the iterators to the origin vertices of the polyline segments
+//! where the intersection with the plane occur.
+std::deque<Polyline2d::const_iterator> Polyline2d::getIntersectionIters(const Line2d &l) const
+  {
+    std::deque<Polyline2d::const_iterator> retval;
+    if(!empty())
+      {
+	list_Pos2d::const_iterator first= begin();
+	list_Pos2d::const_iterator last= std::prev(end());
+	for(list_Pos2d::const_iterator j=first;j != last;j++)
+	  {
+	    const Segment2d s= getSegment(j);
+	    if(l.intersects(s))
+	      retval.push_back(j);
+	  }
+      }
+    return retval;
+  }
 
 //! @brief Return the points of intersection of the polyline with
 //! the argument.
@@ -915,6 +934,91 @@ GeomObj::list_Pos2d Polyline2d::getIntersection(const Segment2d &sg) const
         if(!tmp.empty())
           retval.AgregaSiNuevo(tmp);
       }
+    return retval;
+  }
+
+//! @brief Return the polyline chunks that result from clippin this polyline
+//! with the given half space.
+std::deque<Polyline2d> Polyline2d::clip(const HalfPlane2d &hp, const GEOM_FT &tol) const
+  {
+    std::deque<Polyline2d> retval;
+    if(!empty())
+      {
+	const bool intersects= hp.intersects(*this);
+	if(!intersects)
+	  {
+	    if(hp.In(*this))
+	      retval.push_back(*this); // The whole polyline is inside the
+	                               // half space.
+	  }
+	else // vertices at both sides of the half-space.
+	  {
+	    const Line2d boundary_line= hp.getBoundaryLine();
+	    Polyline2d::const_iterator start= this->begin();
+	    Polyline2d::const_iterator last= std::prev(this->end());
+	    bool start_inside=  hp.In(*start, tol);
+	    std::deque<Polyline2d::const_iterator> int_iters= this->getIntersectionIters(hp.getBoundaryLine());
+	    std::deque<Polyline2d::const_iterator>::const_iterator i= int_iters.begin();
+	    do
+	      {
+		std::deque<Polyline2d::const_iterator>::const_iterator ii= std::next(i);
+		Polyline2d::const_iterator stop;
+		
+		if(ii != int_iters.end())
+		  stop= *ii;
+		else
+		  stop= std::next(*i);
+		const bool stop_inside= hp.In(*stop, tol);
+		const bool pline_enters= !start_inside and stop_inside;
+		const bool pline_exits= start_inside and !stop_inside;
+		if(pline_enters)
+		  {
+		    Polyline2d chunk;
+		    Segment2d sg= this->getSegment(start);
+		    list_Pos2d tmp= intersection(sg,boundary_line);
+		    chunk.appendVertex(tmp[0]);
+		    start++;
+		    for(list_Pos2d::const_iterator j= start; j!= stop; j++)
+		      { chunk.appendVertex(*j); }
+		    chunk.appendVertex(*stop);
+		    i++;
+		    if(stop!=last)
+		      {
+			sg= this->getSegment(stop);
+			tmp= intersection(sg,boundary_line);
+			chunk.appendVertex(tmp[0]);
+			stop++;
+		      }
+		    retval.push_back(chunk);
+		  }
+		if(pline_exits)
+		  {
+		    Polyline2d chunk;
+		    chunk.appendVertex(*start); // Starts inside.
+		    Segment2d sg= this->getSegment(start);
+		    list_Pos2d tmp= intersection(sg,boundary_line);
+		    chunk.appendVertex(tmp[0]);
+		    retval.push_back(chunk);
+		  }
+		start= stop;
+		start_inside= hp.In(*start, tol);
+		i++;
+		if(start==last)
+		  break;
+	      }
+	    while(i!= int_iters.end());
+	  }
+      }
+    return retval;
+  }
+
+boost::python::list Polyline2d::clipPy(const HalfPlane2d &hp, const GEOM_FT &tol) const
+  {
+    boost::python::list retval;
+    std::deque<Polyline2d> tmp= this->clip(hp, tol);
+    std::deque<Polyline2d>::const_iterator i= tmp.begin();
+    for(;i!=tmp.end();i++)
+      retval.append(*i);
     return retval;
   }
 

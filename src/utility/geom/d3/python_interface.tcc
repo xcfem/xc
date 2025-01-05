@@ -42,6 +42,7 @@ class_<HalfSpace3d, bases<GeomObj3d> >("HalfSpace3d")
   .def("clip", clipLine, "Returns the part of the object that is inside the half-space.")
   .def("clip", clipRay, "Returns the part of the object that is inside the half-space.")
   .def("clip", clipSegment, "Returns the part of the object that is inside the half-space.")
+  .def("clip", &HalfSpace3d::clipPy, "Return the polyline chunks that result from clipping the given polyline with this half space.")
  ;
 
 class_<BND3d, bases<GeomObj3d> >("BND3d")
