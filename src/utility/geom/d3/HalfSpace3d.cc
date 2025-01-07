@@ -176,12 +176,12 @@ bool HalfSpace3d::intersects(const Polyline3d &pline) const
 	const Pos3d &pos= *i;
 	if(!this->In(pos) and pline_in)
 	  {
-	    retval= false;
+	    retval= true;
 	    break;
 	  }
 	else if(this->In(pos) and !pline_in)
 	  {
-	    retval= false;
+	    retval= true;
 	    break;
 	  }
       }
