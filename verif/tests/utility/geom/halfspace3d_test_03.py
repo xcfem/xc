@@ -19,13 +19,13 @@ p3= geom.Pos3d(1,1,1)
 
 plane= geom.Plane3d(p1, p2, p3)
 
-hs= geom.HalfSpace3d(plane, p0)
+hp= geom.HalfSpace3d(plane, p0)
 
-points= [geom.Pos3d(-2,0,2), geom.Pos3d(0,0,0)]
+points= [geom.Pos3d(0,0,0), geom.Pos3d(2,0,2)]
 pline= geom.Polyline3d(points)
 
-clipped= hs.clip(pline, 0.0)[0]
-ref_pline= geom.Polyline3d([geom.Pos3d(-1,0,1), geom.Pos3d(0,0,0)])
+clipped= hp.clip(pline, 0.0)[0]
+ref_pline= geom.Polyline3d([geom.Pos3d(0,0,0), geom.Pos3d(1,0,1)])
 err= 0.0
 for p1, p2 in zip(clipped.getVertices(), ref_pline.getVertices()):
     err+= (p1.x-p2.x)**2+(p1.y-p2.y)**2+(p1.z-p2.z)**2
