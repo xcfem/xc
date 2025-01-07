@@ -7,6 +7,7 @@ stress. See [von Mises yield criterion](https://en.wikipedia.org/wiki/Von_Mises_
 
 ## References
 
+- [J2 Plasticity Parameters](https://portwooddigital.com/2025/01/05/j2-plasticity-parameters/)
 - [von Mises yield criterion](https://en.wikipedia.org/wiki/Von_Mises_yield_criterion)
 - [Flow plasticity theory](https://en.wikipedia.org/wiki/Von_Mises_yield_criterion)
 - [A simple J2-plasticity-damage model for metals in the small strain regime](https://www.researchgate.net/publication/236880384_A_simple_J2-plasticity-damage_model_for_metals_in_the_small_strain_regime)

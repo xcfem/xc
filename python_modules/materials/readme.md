@@ -8,6 +8,7 @@ Python modules that make easier to define materials as defined in structural cod
  - [Multi-Linear Parallel](https://portwooddigital.com/2024/09/08/multi-linear-parallel/)
 
 ### Steel
+- [J2 Plasticity Parameters](https://portwooddigital.com/2025/01/05/j2-plasticity-parameters/)
 - [Eurocode 3](https://eurocodes.jrc.ec.europa.eu/showpage.php?id=133)
 - [AISC 360](https://www.aisc.org/globalassets/aisc/publications/standards/a360-16-spec-and-commentary_march-2021_linked.pdf)
 
