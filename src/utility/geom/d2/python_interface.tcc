@@ -76,7 +76,7 @@ class_<Circle2d, bases<Surface2d> >("Circle2d")
   .def("getRadius",&Circle2d::getRadius,"Return the object radius.")
   .def("getDiameter",&Circle2d::getDiameter, "Return the object diameter.")
   .def("getPerimeter",&Circle2d::getPerimeter, "Return the object perimeter.")
-  .def("getInscribedPolygon",&Circle2d::getInscribedPolygon,"getInscribedPolygon(n,theta_inic) return an inscribed regular polygon with n sides starting in the angle argument")
+  .def("getInscribedPolygon",&Circle2d::getInscribedPolygon,"getInscribedPolygon(n,theta_inic) return an inscribed regular polygon with n sides starting in the given angle")
   .def("getAngle", &Circle2d::getAngle, "Return the angle of the point with respect to the circle.")
   .def("getArea", &Circle2d::getArea, "Return the object area.")
   .def("getIx", &Circle2d::Ix)
@@ -172,11 +172,13 @@ Pos3d (Plane::*IntersLine3d)(const Line3d &) const= &Plane::getIntersection;
 Pos3d (Plane::*IntersRay3d)(const Ray3d &) const= &Plane::getIntersection;
 Pos3d (Plane::*IntersSegment3d)(const Segment3d &) const= &Plane::getIntersection;
 Segment3d (Plane::*IntersPolygon3d)(const Polygon3d &) const= &Plane::getIntersection;
+GeomObj::list_Pos3d (Plane::*IntersPolyline3d)(const Polyline3d &) const= &Plane::getIntersection;
 bool (Plane::*ExistIntersPlane)(const Plane &) const= &Plane::intersects;
 bool (Plane::*ExistIntersLine3d)(const Line3d &) const= &Plane::intersects;
 bool (Plane::*ExistIntersRay3d)(const Ray3d &) const= &Plane::intersects;
 bool (Plane::*ExistIntersSegment3d)(const Segment3d &) const= &Plane::intersects;
 bool (Plane::*ExistIntersPolygon3d)(const Polygon3d &) const= &Plane::intersects;
+bool (Plane::*ExistIntersPolyline3d)(const Polyline3d &) const= &Plane::intersects;
 double (Plane::*linearLeastSquaresFittingPtr)(const GeomObj3d::list_Pos3d &)= &Plane::linearLeastSquaresFitting;
 class_<Plane, bases<Surface3d> >("Plane3d")
   .def(init<Pos3d,Pos3d,Pos3d>())
@@ -201,22 +203,24 @@ class_<Plane, bases<Surface3d> >("Plane3d")
   .def("getXZTrace",&Plane::XZTrace,"return the trace on the XZ plane.")
   .def("getYZTrace",&Plane::YZTrace,"return the trace on the YZ plane.")
   // Boost.Python supports function overloading
-  .def("getIntersPlane",IntersPlane,"TO DEPRECATE return the intersection with the plane argument.")
-  .def("getIntersLine3d",IntersLine3d,"TO DEPRECATE return the intersection with the line argument.")
-  .def("getIntersRay3d",IntersRay3d,"TO DEPRECATE return the intersection with the ray argument.")
-  .def("getIntersSegment3d",IntersSegment3d,"TO DEPRECATE return the intersection with the segment argument.")
+  .def("getIntersPlane",IntersPlane,"TO DEPRECATE return the intersection with the given plane.")
+  .def("getIntersLine3d",IntersLine3d,"TO DEPRECATE return the intersection with the given line.")
+  .def("getIntersRay3d",IntersRay3d,"TO DEPRECATE return the intersection with the given ray.")
+  .def("getIntersSegment3d",IntersSegment3d,"TO DEPRECATE return the intersection with the given segment.")
   // Overloaded methods.
-  .def("getIntersection",IntersPlane, "return the intersection with the plane argument.")
-  .def("getIntersection",IntersLine3d,"return the intersection with the line argument.")
-  .def("getIntersection",IntersRay3d,"return the intersection with the ray argument.")
-  .def("getIntersection",IntersSegment3d,"return the intersection with the segment argument.")
-  .def("getIntersection",IntersPolygon3d,"return the intersection with the polygon argument.")
+  .def("getIntersection",IntersPlane, "return the intersection with the given plane.")
+  .def("getIntersection",IntersLine3d,"return the intersection with the given line.")
+  .def("getIntersection",IntersRay3d,"return the intersection with the given ray.")
+  .def("getIntersection",IntersSegment3d,"return the intersection with the given segment.")
+  .def("getIntersection",IntersPolygon3d,"return the intersection with the given polygon.")
+  .def("getIntersection",IntersPolyline3d,"return the intersection with the given polyline.")
 
   .def("intersects",ExistIntersPlane, "return true if the intersection with the given plane exits.")
   .def("intersects",ExistIntersLine3d,"return true if the intersection with the given line exists.")
   .def("intersects",ExistIntersRay3d,"return true if the intersection with the given ray exists.")
   .def("intersects",ExistIntersSegment3d,"return true if the intersection with the given segment exists.")
   .def("intersects",ExistIntersPolygon3d,"return true if the intersection with the given polygon exists.")
+  .def("intersects",ExistIntersPolyline3d,"return true if the intersection with the given polyline exists.")
 
   .def("getPoint()", &Plane::Point, "return an arbitrary point on the plane.")
   .def("getNormal", &Plane::Normal,"return the plane normal or local k vector.")
