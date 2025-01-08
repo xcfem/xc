@@ -304,9 +304,9 @@ def getTrapezoidalPressureDistribution(h:float, heightFraction:float= 0.6, avera
         0.6*h over the bottom edge of the surface.
 
     :param h: height of the surface loaded by the wind.
-    :param pointOfApplicationHeight: fraction of the surface height of the 
-     desired point of application (defaults to 0.6 according to 
-     clause 4.2.5.1.3 of IAP-11).
+    :param heightFraction: fraction of the surface height of the desired point
+                           of application (defaults to 0.6 according to clause
+                           4.2.5.1.3 of IAP-11).
     :param averagePressure: average value of the wind pressure. 
     '''
     (topSide, bottomSide)= base_wind.getLinearDistribution(h= h, hR= h*heightFraction) 
