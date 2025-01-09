@@ -168,7 +168,7 @@ while(nLoad):
 # totalLoadRef= geom.SlidingVectorsSystem3d(geom.Pos3d(0,0,0), geom.Vector3d(19754.8, 163256, 497.355), geom.Vector3d(-1.19714e+06,267081,2.65238e+07))
 # 20250109: reference values must change after fixing the error in
 # getDeckLoadedContourThroughLayers method of RailRoadBase class
-# see commit https://github.com/xcfem/xc/commit/7ed09e6b71c1c63b86547559312b669375fdf4f1
+# (see commit https://github.com/xcfem/xc/commit/7ed09e6b71c1c63b86547559312b669375fdf4f1)
 totalLoadRef= geom.SlidingVectorsSystem3d(geom.Pos3d(0,0,0), geom.Vector3d(19329.8, 160786, -3275.2), geom.Vector3d(-1.135e+06,391703,2.64643e+07))
 
 test= totalLoad-totalLoadRef
