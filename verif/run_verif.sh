@@ -291,6 +291,7 @@ echo "$BLEU" "  Wind action tests." "$NORMAL"
 python tests/actions/wind/test_wind_cylindr_01.py
 python tests/actions/wind/test_wind_cylindr_02.py
 python tests/actions/wind/test_wind_beam_truss.py
+python tests/actions/wind/test_wind_vertical_pressure_distribution_01.py
 echo "$BLEU" "    ASCE7 wind action tests." "$NORMAL"
 python tests/actions/wind/asce7/test_windASCE7.py
 python tests/actions/wind/asce7/test_windASCE7_16.py

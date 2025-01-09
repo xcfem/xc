@@ -14,6 +14,7 @@ import math
 from enum import Enum
 from misc_utils import log_messages as lmsg
 import geom
+import xc
 
 class windSurfaceOrientation(Enum):
     windward= 0
@@ -51,7 +52,7 @@ class windParams(object):
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warnint(className+'.'+methodName+'; can\'t evaluate Kz for z= '+ str(z) + ' > zg= '+ str(self.zg))
+            lmsg.warning(className+'.'+methodName+'; can\'t evaluate Kz for z= '+ str(z) + ' > zg= '+ str(self.zg))
         return Kz
 
     def qz(self,z):
@@ -162,3 +163,72 @@ def getLinearDistribution(h:float, hR:float):
     a= 2*(3*ratio-1)
     b= 2*(2-3*ratio)
     return (a,b)
+
+def get_windward_borders(windDirection, face, angleThreshold= math.radians(60)):
+    ''' Return the borders of the face that lie at the windward side with
+        respect to the centroid of the face.
+
+    :param windDirection: wind direction vector.
+    :param face: face to get the windward sides from.
+    :param angleThreshold: minimum angle between the face border and the wind
+                           direction to consider that the border is "normal"
+                           to the wind.
+    '''
+    windDirection= windDirection.Normalized()
+    dotThreshold= math.cos(angleThreshold)
+    faceCentroid= face.getCentroid()
+    retval= list()
+    for edge in face.getEdges:
+        iVector= xc.Vector(edge.getIVector)
+        windProj= abs(windDirection.dot(iVector))
+        if(windProj<dotThreshold): # edge can be considered "normal" to
+                                   # the wind.
+            edgeCentroid= edge.getCentroid()
+            v= xc.Vector(edgeCentroid-faceCentroid)
+            vDot= v.dot(windDirection)
+            if(vDot<0): # Windward side.
+                retval.append(edge)
+    if(len(retval)>1):
+        methodName= sys._getframe(0).f_code.co_name
+        warningMsg= methodName+'; given face has more than one edge on winward side: '+str(len(retval))+' edges.'
+        lmsg.warning(warningMsg)
+    return retval
+
+def def_vertical_pressure_load(surfaces, pressureDistribution, horizontalWindDirection, verticalWindDirection= xc.Vector([0, 0, 1]), angleThreshold= math.radians(60)):
+    ''' Define the vertical pressure due to wind on the given surfaces.
+
+    :param surfaces: surfaces whose elements will receive the wind vertical
+                     pressure.
+    :param pressureDistribution: functions that returns the vertical pressure
+                                 over a point given its distance from the
+                                 winward border of the surface.
+    :param horizontalWindDirection: wind direction vector on the horizontal 
+                                    plate.
+    :param angleThreshold: minimum angle between the face border and the wind
+                           direction to consider that the border is "normal"
+                           to the wind.
+    '''
+    ##### Compute winward borders of the slab.
+    windward_borders= list()
+    load_vectors= list()
+    for face in surfaces:
+        wb= get_windward_borders(windDirection= horizontalWindDirection, face= face, angleThreshold= angleThreshold)
+        windward_borders.append(wb)
+    already_visited_elements= set()
+    for face, wbs in zip(surfaces, windward_borders):
+        # Compute winward border.
+        windward_border= wbs[0]
+        for e in face.elements:
+            if e.tag in already_visited_elements:
+                lmsg.warning('already visited element: '+str(e.tag)+' ignored.')
+            else:
+                already_visited_elements.add(e.tag)
+                centroid= e.getPosCentroid(True)
+                dist= windward_border.dist(centroid)
+                pressureOnElement= float(pressureDistribution(dist))
+                loadVector= pressureOnElement*verticalWindDirection
+                e.vector3dUniformLoadGlobal(loadVector)
+                lv= loadVector*e.getArea(True)
+                lv= geom.Vector3d(lv[0], lv[1], lv[2])
+                load_vectors.append(geom.SlidingVector3d(e.getPosCentroid(True), lv))
+    return load_vectors
