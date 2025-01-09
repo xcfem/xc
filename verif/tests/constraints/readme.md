@@ -22,3 +22,4 @@ This folder contain tests relative to constraint creation and removal. All the e
 - [MultiFreedom constraints II](https://quickfem.com/wp-content/uploads/IFEM.Ch09.pdf)
 - [What Is a Good Penalty Number?](https://portwooddigital.com/2023/11/29/what-is-a-good-penalty-number/)
  - [Concepts and Applications of Finite Element Analysis](https://books.google.es/books/about/Concepts_and_Applications_of_Finite_Elem.html?id=b8seAQAAIAAJ&redir_esc=y)
+ - [No reaction](https://portwooddigital.com/2024/11/20/no-reaction/)
