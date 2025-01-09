@@ -111,6 +111,7 @@ class Pnt: public EntMdlr
     double getSquaredDistanceTo(const Pos3d &pt) const;
 
     const std::set<const Face *> getConnectedSurfaces(void) const;
+    boost::python::list getConnectedSurfacesPy(void) const;
     
     void Move(const Vector3d &);
     void Transform(const TrfGeom &trf);

@@ -207,7 +207,7 @@ bool XC::Pnt::isConnectedTo(const Body &b) const
     return false;
   }
 
-//! @brief Returns the faces connected with the point.
+//! @brief Returns the faces connected with this point (neighbors).
 const std::set<const XC::Face *> XC::Pnt::getConnectedSurfaces(void) const
   {
     std::set<const Face *> retval;
@@ -215,6 +215,20 @@ const std::set<const XC::Face *> XC::Pnt::getConnectedSurfaces(void) const
       {
 	const std::set<const Face *> tmp= (*i)->getConnectedSurfaces();
         retval.insert(tmp.begin(), tmp.end());
+      }
+    return retval;
+  }
+
+//! @brief Return the surfaces that touch this point (neighbors).
+boost::python::list XC::Pnt::getConnectedSurfacesPy(void) const
+  {
+    const std::set<const Face *> tmp= this->getConnectedSurfaces();
+    boost::python::list retval;
+    for(std::set<const Face *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      {
+	const Face *pFace= *i;	
+        boost::python::object pyObj(boost::ref(*pFace));
+	retval.append(pyObj);
       }
     return retval;
   }

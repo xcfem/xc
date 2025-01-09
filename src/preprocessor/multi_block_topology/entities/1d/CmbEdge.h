@@ -194,6 +194,8 @@ class CmbEdge: public Edge
     virtual void SetVertice(const size_t &,Pnt *);
     virtual ID getKPoints(void) const;
     Pnt *findVertex(const Pos3d &);
+
+    
     
     Polyline3d getPolyline(void) const;
 

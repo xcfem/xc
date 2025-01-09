@@ -28,6 +28,7 @@
 
 #include "Face.h"
 #include "PolygonalFace.h"
+#include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
 #include "utility/geom/pos_vec/Vector3d.h"
 #include "utility/geom/coo_sys/ref_sys/Ref2d3d.h"
 #include "utility/geom/d3/BND3d.h"
@@ -790,8 +791,8 @@ std::deque<std::pair<const XC::Edge *, const XC::Edge *> > XC::Face::getOpposite
     return retval;
   }
 
-//! @brief Returns the index of the edge in common with the surface
-//! being passed as parameter (if it exists).
+//! @brief Returns the index of the edge in common with the given surface
+//! (if it exists).
 size_t XC::Face::CommonEdge(const Face &other) const
   {
     size_t retval= 0;
@@ -807,6 +808,37 @@ size_t XC::Face::CommonEdge(const Face &other) const
       }
     return retval;
   }
+
+//! @brief Returns the edges in common with the given surface.
+std::set<const XC::Edge *> XC::Face::getCommonEdges(const Face &other)
+  {
+    std::set<const Edge *> retval;
+    for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
+      {
+	const Edge *candidate= (*i).getEdge();
+        if(candidate->isConnectedTo(other))
+	  {
+            retval.insert(candidate);
+	    break;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Returns the edges in common with the given surface.
+boost::python::list XC::Face::getCommonEdgesPy(const Face &other)
+  {
+    const std::set<const Edge *> tmp= this->getCommonEdges(other);
+    boost::python::list retval;
+    for(std::set<const Edge *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      {
+	const Edge *pEdge= *i;	
+        boost::python::object pyObj(boost::ref(*pEdge));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
 
 //! Returns:
 //! - 1 if the line belongs to both surfaces and the orientation is the same.
@@ -1043,6 +1075,39 @@ double XC::Face::getArea(void) const
 //! @brief Return the surfaces that touch the line.
 std::set<const XC::Face *> XC::getConnectedSurfaces(const Edge &p)
   { return p.getConnectedSurfaces(); }
+
+//! @brief Return the surfaces that touch this surface (neighbors).
+const std::set<const XC::Face *> XC::Face::getConnectedSurfaces(void) const
+  {
+    std::set<const Face *> retval;
+    const std::deque<const Pnt *> vertices= this->getVertices();
+    for(std::deque<const Pnt *>::const_iterator i= vertices.begin(); i!=vertices.end(); i++)
+      {
+	const Pnt *pt= *i;
+	const std::set<const Face *> tmp= pt->getConnectedSurfaces();
+	for(std::set<const Face *>::const_iterator j= tmp.begin(); j!=tmp.end(); j++)
+	  {
+	    const Face *face= *j;
+	    if(face!=this)
+	      retval.insert(face);
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the surfaces that touch this surface (neighbors).
+boost::python::list XC::Face::getConnectedSurfacesPy(void) const
+  {
+    const std::set<const Face *> tmp= this->getConnectedSurfaces();
+    boost::python::list retval;
+    for(std::set<const Face *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      {
+	const Face *pFace= *i;	
+        boost::python::object pyObj(boost::ref(*pFace));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
 
 //! @brief Returns true if the lines touches the body (neighbor).
 bool XC::Face::isConnectedTo(const XC::Body &b) const

@@ -132,6 +132,7 @@ class Edge: public EntMdlr
     void update_topology(void);
     const size_t getNumConnectedSurfaces(void) const;
     const std::set<const Face *> &getConnectedSurfaces(void) const;
+    boost::python::list getConnectedSurfacesPy(void) const;
     const std::string &getConnectedSurfacesNames(void) const;
     bool isConnectedTo(const Face &s) const;
     bool isConnectedTo(const Body &b) const;

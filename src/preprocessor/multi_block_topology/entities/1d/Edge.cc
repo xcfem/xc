@@ -502,6 +502,20 @@ const size_t XC::Edge::getNumConnectedSurfaces(void) const
 const std::set<const XC::Face *> &XC::Edge::getConnectedSurfaces(void) const
   { return surfaces_line; }
 
+//! @brief Return the surfaces that touch this point (neighbors).
+boost::python::list XC::Edge::getConnectedSurfacesPy(void) const
+  {
+    const std::set<const Face *> tmp= this->getConnectedSurfaces();
+    boost::python::list retval;
+    for(std::set<const Face *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      {
+	const Face *pFace= *i;	
+        boost::python::object pyObj(boost::ref(*pFace));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
 //! @brief Return names of the surfaces that touch the line (neighbors).
 const std::string &XC::Edge::getConnectedSurfacesNames(void) const
   {
