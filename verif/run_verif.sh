@@ -136,6 +136,7 @@ python tests/utility/geom/polylines/3d/polyline3d_test_08.py
 python tests/utility/geom/polylines/3d/polyline3d_test_09.py
 python tests/utility/geom/polylines/3d/polyline3d_test_10.py
 python tests/utility/geom/polylines/3d/polyline3d_test_11.py
+python tests/utility/geom/polylines/3d/polyline3d_test_12.py
 echo "$BLEU" "      plane 3D Polylines" "$NORMAL"
 python tests/utility/geom/polylines/plane_polyline3d_test_01.py
 echo "$BLEU" "    Polygons." "$NORMAL"

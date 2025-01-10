@@ -13,12 +13,48 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 
 import sys
-import vtk
+from vtk.vtkRenderingCore import (
+    vtkRenderWindow,
+    vtkRenderWindowInteractor,
+    vtkRenderer,
+    vtkWindowToImageFilter
+)
+from vtk.vtkCommonTransforms import (
+    vtkTransform,
+)
+from vtk.vtkRenderingAnnotation import vtkAxesActor
+from vtk.vtkIOImage import vtkJPEGWriter
+
 import geom
 import xc
 import random as rd 
 from postprocess.xcVtk import screen_annotation as sa
 from misc_utils import log_messages as lmsg
+
+def setup_render_window(windowName, actors, backgroundColor, xSize= 800, ySize= 600):
+    ''' Setup render window, renderer, and interactor.
+
+    :param windowName: window name.
+    :param actors: actors that will be added to the renderer.
+    :param backgroundColor: color for the window background.
+    :param xSize: horizontal size in pixels.
+    :param ySize: vertical size in pixels.
+    '''
+    renderer = vtkRenderer()
+    renderWindow = vtkRenderWindow()
+    renderWindow.SetWindowName(windowName)
+    renderWindow.AddRenderer(renderer)
+    renderWindow.SetSize(xSize, ySize)
+    # Setup interactor.
+    renderWindowInteractor = vtkRenderWindowInteractor()
+    renderWindowInteractor.SetRenderWindow(renderWindow)
+    for actor in actors:
+        renderer.AddActor(actor)
+    renderer.SetBackground(backgroundColor)
+
+    renderWindow.Render()
+    renderWindowInteractor.Start()
+    
 
 
 class RecordDefGrid(object):
@@ -254,9 +290,9 @@ class DisplaySettings(object):
         offsetVector= bnd.diagonal*0.1
         offset= offsetVector.getModulus()
         axesPosition= bnd.pMin-offsetVector
-        transform = vtk.vtkTransform()
+        transform = vtkTransform()
         transform.Translate(axesPosition.x, axesPosition.y, axesPosition.z)
-        axes= vtk.vtkAxesActor()
+        axes= vtkAxesActor()
         #  The axes are positioned with a user transform
         axes.SetUserTransform(transform)
         if math.isnan(float(offset)):
@@ -287,7 +323,7 @@ class DisplaySettings(object):
         :param caption: caption of the image.
         :param unitDescription: description of the units.
         '''
-        self.renWin= vtk.vtkRenderWindow()
+        self.renWin= vtkRenderWindow()
         self.renWin.SetSize(self.windowWidth,self.windowHeight)
         self.renWin.AddRenderer(self.renderer)
         self.renWin.SetWindowName(caption)
@@ -305,7 +341,7 @@ class DisplaySettings(object):
         '''sets the window interactor, which provides a platform-independent
         interaction mechanism for mouse/key/time events.
         '''
-        iren= vtk.vtkRenderWindowInteractor()
+        iren= vtkRenderWindowInteractor()
         iren.SetRenderWindow(self.renWin)
         iren.SetSize(self.windowWidth,self.windowHeight)
         iren.Initialize()
@@ -357,7 +393,7 @@ class DisplaySettings(object):
         self.renWin.SetOffScreenRendering(True) # Don't use screen.
         self.renWin.Render()
 
-        w2if = vtk.vtkWindowToImageFilter()
+        w2if = vtkWindowToImageFilter()
         oldSB = self.renWin.GetSwapBuffers()
         # Tell render window to not swap buffers at end of render.
         self.renWin.SwapBuffersOff()
@@ -374,7 +410,7 @@ class DisplaySettings(object):
         w2if.Update()
         # restore swapping state
         self.renWin.SetSwapBuffers(oldSB)
-        writer= vtk.vtkJPEGWriter()
+        writer= vtkJPEGWriter()
         writer.SetInputConnection(w2if.GetOutputPort())
         writer.SetFileName(fileName)
         writer.Write()
