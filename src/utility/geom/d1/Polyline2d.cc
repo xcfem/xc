@@ -541,7 +541,6 @@ std::vector<Vector2d> Polyline2d::getCurvatureVectorAtVertices(void) const
       }
     else // 3 vertex at least.
       {
-	std::vector<Vector2d> vertex_normals(sz);
 	size_t count= 0; // vertex iterator.
 	for(Polyline2d::const_iterator vi= this->begin(); vi!=this->end(); vi++, count++)
 	  {
@@ -608,6 +607,97 @@ Vector2d Polyline2d::getCurvatureVectorAtLength(const GEOM_FT &s) const
 	      }
 	  }
       }
+    return retval;
+  }
+
+//! @brief Compute the tangent vectors at each of the polyline vertices.
+std::vector<Vector2d> Polyline2d::getTangentVectorAtVertices(void) const
+  {
+    const std::vector<Segment2d> segments= this->getSegments();
+    const size_t sz= segments.size();
+    std::vector<Vector2d> retval(sz+1);
+    if(sz>0)
+      {
+        Vector2d t0= segments[0].getIVector();
+	retval[0]= t0; // first tangent.
+	Vector2d t1;
+	for(size_t i=1; i<sz; i++)
+	  {
+	    t1= segments[i].getIVector();
+	    retval[i]= ((t1+t0)*0.5);
+	    t0= t1; // update previous vector.
+	  }
+	retval[sz]= t1; // last tangent.
+      }
+    return retval;
+  }
+
+//! @brief Return a Python list containing the tangent vectors at each of the
+//! polyline vertices.
+boost::python::list Polyline2d::getTangentVectorAtVerticesPy(void) const
+  {
+    const std::vector<Vector2d> tangent_vectors= this->getTangentVectorAtVertices();
+    boost::python::list retval;
+    std::vector<Vector2d>::const_iterator i= tangent_vectors.begin();
+    for(;i!=tangent_vectors.end();i++)
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Compute the normal vectors at each of the polyline vertices.
+std::vector<Vector2d> Polyline2d::getNormalVectorAtVertices(void) const
+  {
+
+    const size_t sz= this->size();
+    std::vector<Vector2d> retval(sz);
+    if(sz<2) // No segments.
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ";ERROR: no segments, so no normal vectors."
+		  << std::endl;
+      }
+    else if(sz==2) // One segment only.
+      {
+	const Segment2d sg= this->getSegment(1);
+	retval[0]= sg.getJVector();
+	retval[1]= retval[0];
+      }
+    else // 3 vertex at least.
+      {
+	Polyline2d::const_iterator last= std::prev(this->end());
+	Polyline2d::const_iterator vi= this->begin();
+	// Compute first vertex normal.
+	Segment2d sg= this->getSegment(vi);
+	retval[0]= sg.getJVector();
+	size_t count= 1; // vertex iterator.
+        vi++;
+	for(; vi!=last; vi++, count++)
+	  {
+	    Polyline2d::const_iterator previousVertexIter= std::prev(vi);
+	    Polyline2d::const_iterator thisVertexIter= vi;
+	    Polyline2d::const_iterator nextVertexIter= std::next(vi);
+	    const Segment2d sg1= this->getSegment(previousVertexIter);
+	    const Segment2d sg2= this->getSegment(thisVertexIter);
+	    const Vector2d j1= sg1.getJVector();
+	    const Vector2d j2= sg2.getJVector();
+	    retval[count]= (j1+j2).getNormalized();
+	  }
+	// Compute last vertex normal.
+	sg= this->getSegment(std::prev(last));
+	retval[sz-1]= sg.getJVector();
+      }
+    return retval;
+  }
+
+//! @brief Return a Python list containing the normal vectors at each of the
+//! polyline vertices.
+boost::python::list Polyline2d::getNormalVectorAtVerticesPy(void) const
+  {
+    const std::vector<Vector2d> normal_vectors= this->getNormalVectorAtVertices();
+    boost::python::list retval;
+    std::vector<Vector2d>::const_iterator i= normal_vectors.begin();
+    for(;i!=normal_vectors.end();i++)
+      retval.append(*i);
     return retval;
   }
 

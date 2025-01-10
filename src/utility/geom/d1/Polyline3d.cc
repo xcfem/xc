@@ -653,7 +653,6 @@ std::vector<Vector3d> Polyline3d::getCurvatureVectorAtVertices(void) const
       }
     else // 3 vertex at least.
       {
-	std::vector<Vector3d> vertex_normals(sz);
 	size_t count= 0; // vertex iterator.
 	for(Polyline3d::const_iterator vi= this->begin(); vi!=this->end(); vi++, count++)
 	  {
@@ -678,6 +677,112 @@ std::vector<Vector3d> Polyline3d::getCurvatureVectorAtVertices(void) const
 	    retval[count]= curvature_vector(A,B,C);
 	  }
       }
+    return retval;
+  }
+
+//! @brief Compute the tangent vectors at each of the polyline vertices.
+std::vector<Vector3d> Polyline3d::getTangentVectorAtVertices(void) const
+  {
+    const std::vector<Segment3d> segments= this->getSegments();
+    const size_t sz= segments.size();
+    std::vector<Vector3d> retval(sz+1);
+    if(sz>0)
+      {
+        Vector3d t0= segments[0].getIVector();
+	retval[0]= t0; // first tangent.
+	Vector3d t1;
+	for(size_t i=1; i<sz; i++)
+	  {
+	    t1= segments[i].getIVector();
+	    retval[i]= ((t1+t0)*0.5);
+	    t0= t1; // update previous vector.
+	  }
+	retval[sz]= t1; // last tangent.
+      }
+    return retval;
+  }
+
+//! @brief Return a Python list containing the tangent vectors at each of the
+//! polyline vertices.
+boost::python::list Polyline3d::getTangentVectorAtVerticesPy(void) const
+  {
+    const std::vector<Vector3d> tangent_vectors= this->getTangentVectorAtVertices();
+    boost::python::list retval;
+    std::vector<Vector3d>::const_iterator i= tangent_vectors.begin();
+    for(;i!=tangent_vectors.end();i++)
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Compute the normal vectors at each of the polyline vertices.
+std::vector<Vector3d> Polyline3d::getNormalVectorAtVertices(void) const
+  {
+    const size_t sz= this->size();
+    std::vector<Vector3d> retval(sz);
+    if(sz<2) // No segments.
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ";ERROR: no segments, so no normal vectors."
+		  << std::endl;
+      }
+    else if(sz==2) // One segment only.
+      {
+	Segment3d sg= this->getSegment(1);
+	retval[0]= sg.getJVector();
+	retval[1]= retval[0];
+      }
+    else // 3 vertex at least.
+      {
+	size_t count= 0; // vertex iterator.
+	Polyline3d::const_iterator last= std::prev(this->end());
+	for(Polyline3d::const_iterator vi= this->begin(); vi!=this->end(); vi++, count++)
+	  {
+	    Polyline3d::const_iterator previousVertexIter= std::prev(vi);
+	    Polyline3d::const_iterator thisVertexIter= vi;
+	    Polyline3d::const_iterator nextVertexIter= std::next(vi);
+	    const bool firstVertex= thisVertexIter == this->begin();
+	    const bool lastVertex= thisVertexIter == last;
+	    if(firstVertex) // No previous vertex.
+	      {
+		previousVertexIter= vi;
+		thisVertexIter= std::next(previousVertexIter);
+		nextVertexIter= std::next(thisVertexIter);
+	      }
+	    else if(lastVertex) // No following vertex.
+	      {
+		nextVertexIter= vi;
+		thisVertexIter= std::prev(nextVertexIter);
+		previousVertexIter= std::prev(thisVertexIter);
+	      }
+	    const Pos3d &A= *previousVertexIter;
+	    const Pos3d &B= *thisVertexIter;
+	    const Pos3d &C= *nextVertexIter;
+	    const Segment3d sg1= this->getSegment(previousVertexIter);
+	    const Segment3d sg2= this->getSegment(thisVertexIter);
+	    const Plane plane(A, B, C);
+	    const Vector3d binormal= plane.Normal();
+	    const Vector3d j1= sg1.getIVector().getCross(binormal);
+	    const Vector3d j2= sg2.getIVector().getCross(binormal);
+	    if(firstVertex)
+	      retval[count]= j1;
+	    else if(lastVertex)
+	      retval[count]= j2;
+	    else
+	      retval[count]= (j1+j2).getNormalized();
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return a Python list containing the normal vectors at each of the
+//! polyline vertices.
+boost::python::list Polyline3d::getNormalVectorAtVerticesPy(void) const
+  {
+    const std::vector<Vector3d> normal_vectors= this->getNormalVectorAtVertices();
+    boost::python::list retval;
+    std::vector<Vector3d>::const_iterator i= normal_vectors.begin();
+    for(;i!=normal_vectors.end();i++)
+      retval.append(*i);
     return retval;
   }
 

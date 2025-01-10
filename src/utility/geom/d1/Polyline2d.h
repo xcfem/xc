@@ -91,6 +91,10 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     Pos2d getPointAtLength(const GEOM_FT &) const;
     Vector2d getIVectorAtLength(const GEOM_FT &) const;
     Vector2d getJVectorAtLength(const GEOM_FT &) const;
+    std::vector<Vector2d> getTangentVectorAtVertices(void) const;
+    boost::python::list getTangentVectorAtVerticesPy(void) const;
+    std::vector<Vector2d> getNormalVectorAtVertices(void) const;
+    boost::python::list getNormalVectorAtVerticesPy(void) const;
     
     VectorPos2d Divide(int num_partes) const;
     boost::python::list DividePy(int num_partes) const;

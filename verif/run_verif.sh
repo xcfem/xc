@@ -123,6 +123,7 @@ python tests/utility/geom/polylines/2d/polyline2d_test_15.py
 python tests/utility/geom/polylines/2d/polyline2d_test_16.py
 python tests/utility/geom/polylines/2d/polyline2d_test_17.py
 python tests/utility/geom/polylines/2d/polyline2d_test_18.py
+python tests/utility/geom/polylines/2d/polyline2d_test_19.py
 echo "$BLEU" "      3D Polylines" "$NORMAL"
 python tests/utility/geom/polylines/3d/polyline3d_test_01.py
 python tests/utility/geom/polylines/3d/polyline3d_test_02.py
@@ -134,6 +135,7 @@ python tests/utility/geom/polylines/3d/polyline3d_test_07.py
 python tests/utility/geom/polylines/3d/polyline3d_test_08.py
 python tests/utility/geom/polylines/3d/polyline3d_test_09.py
 python tests/utility/geom/polylines/3d/polyline3d_test_10.py
+python tests/utility/geom/polylines/3d/polyline3d_test_11.py
 echo "$BLEU" "      plane 3D Polylines" "$NORMAL"
 python tests/utility/geom/polylines/plane_polyline3d_test_01.py
 echo "$BLEU" "    Polygons." "$NORMAL"

@@ -78,25 +78,10 @@ FrenetTrihedron::IntervalMap::const_iterator FrenetTrihedron::get_interval_end(c
 //! of the path vertices.
 void FrenetTrihedron::compute_tangent_vectors(void)
   {
-    const std::vector<Segment3d> segments= path.getSegments();
-    const size_t sz= segments.size();
-    tangent_vectors.resize(sz+1);
-    if(sz>0)
-      {
-        Vector3d t0= segments[0].getIVector();
-	tangent_vectors[0]= t0; // first tangent.
-	Vector3d t1;
-	for(size_t i=1; i<sz; i++)
-	  {
-	    t1= segments[i].getIVector();
-	    tangent_vectors[i]= ((t1+t0)*0.5);
-	    t0= t1; // update previous vector.
-	  }
-	tangent_vectors[sz]= t1; // last tangent.
-      }
+    tangent_vectors= path.getTangentVectorAtVertices();
   }
 
-//! @brief Compute the normal vectors at each of the
+//! @brief Compute the normal and binormal vectors at each of the
 //! of the path vertices.
 void FrenetTrihedron::compute_vectors(void)
   {
@@ -114,11 +99,14 @@ void FrenetTrihedron::compute_vectors(void)
       {
 	Segment3d sg= path.getSegment(1);
 	normal_vectors[0]= sg.getJVector();
+	Vector3d tangent= tangent_vectors[0];
+	const Vector3d binormal= tangent.getCross(normal_vectors[0]);
+	binormal_vectors[0]= binormal.getNormalized();
 	normal_vectors[1]= normal_vectors[0];
+	binormal_vectors[1]= binormal_vectors[0];
       }
     else // 3 vertex at least.
       {
-	std::vector<Vector3d> vertex_normals(sz);
 	size_t count= 0; // vertex iterator.
 	for(Polyline3d::const_iterator vi= path.begin(); vi!=path.end(); vi++, count++)
 	  {

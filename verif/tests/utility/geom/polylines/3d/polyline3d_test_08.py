@@ -37,7 +37,7 @@ def computeMaxAngle(pline3d):
 pth= os.path.dirname(__file__)
 if(not pth):
     pth= "."
-verticesFilePath= pth+'/../../../aux/polyline3d_test_points.json'
+verticesFilePath= pth+'/../../../../aux/polyline3d_test_points.json'
 
 coordinateData= open(verticesFilePath, 'r')
 coordinateValues= json.load(coordinateData)
