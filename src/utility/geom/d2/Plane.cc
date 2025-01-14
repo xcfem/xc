@@ -30,6 +30,7 @@
 #include "utility/geom/d2/Polygon3d.h"
 #include "utility/geom/d2/Triangle3d.h"
 #include "utility/geom/d3/GeomGroup3d.h"
+#include "utility/geom/d3/HalfSpace3d.h"
 #include "utility/utils/misc_utils/mchne_eps.h"
 #include "utility/geom/lists/utils_list_pos3d.h"
 
@@ -367,6 +368,19 @@ bool Plane::intersects(const Plane &p) const
 //! @brief Returns (if exists) the intersection with the plane argument.
 Line3d Plane::getIntersection(const Plane &p) const
   { return intersection_line(*this,p); }
+
+//! @brief Returns true if intersection exists.
+bool Plane::intersects(const Polyline3d &pline) const
+  {
+    const HalfSpace3d tmp(*this);
+    return tmp.intersects(pline);
+  }
+
+//! @brief Returns (if exists) the intersection with the plane argument.
+GeomObj3d::list_Pos3d Plane::getIntersection(const Polyline3d &pline) const
+  {
+    return pline.getIntersection(*this);
+  }
 
 //! @brief Returns true if intersection exists.
 bool Plane::intersects(const Polygon3d &plg) const

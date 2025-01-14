@@ -43,6 +43,9 @@ class_<XC::Face, XC::Face *,bases<XC::CmbEdge>, boost::noncopyable >("Face", no_
   .def("addHole", &XC::Face::addHole, "Add a hole to the face.")
   .def("getHoles", &XC::Face::getPyHoles, "Return a list with the face holes in it.")
   .def("getOppositeEdge", make_function(getFaceOppositeEdge, return_internal_reference<>()), "Return the opposite side with respect to the one being passed as parameter.")
+  .def("getCommonEdges", &XC::Face::getCommonEdgesPy, "Return a list with the edges that are common with the given surface.")
+  .add_property("getConnectedSurfaces", &XC::Face::getConnectedSurfacesPy,"Returns the surfaces connected to this surface.")
+
    ;
 
 class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >("QuadSurface", no_init)

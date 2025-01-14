@@ -68,9 +68,13 @@ class HalfSpace3d : public GeomObj3d
     virtual bool In(const Line3d &, const double &tol= 0.0) const;
     virtual bool In(const Ray3d &, const double &tol= 0.0) const;
     virtual bool In(const Segment3d &, const double &tol= 0.0) const;
+    virtual bool In(const Polyline3d &, const double &tol= 0.0) const;
+    inline bool intersects(const HalfSpace3d &hs) const
+      { return lim.intersects(hs.lim); }
     bool intersects(const Line3d &) const;
     bool intersects(const Ray3d &) const;
     bool intersects(const Segment3d &) const;
+    bool intersects(const Polyline3d &) const;
     GEOM_FT distSigno(const Pos3d &) const;
     GEOM_FT distSigno2(const Pos3d &p) const;
     virtual GEOM_FT dist(const Pos3d &p) const;
@@ -95,6 +99,8 @@ class HalfSpace3d : public GeomObj3d
     Ray3d clip(const Line3d &) const;
     Ray3d clip(const Ray3d &) const;
     Segment3d clip(const Segment3d &) const;
+    std::deque<Polyline3d> clip(const Polyline3d &, const GEOM_FT &tol= 0.0) const;
+    boost::python::list clipPy(const Polyline3d &, const GEOM_FT &tol= 0.0) const;
     
     void Print(std::ostream &os) const;
   };

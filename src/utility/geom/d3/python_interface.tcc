@@ -26,6 +26,11 @@ double (HalfSpace3d::*getAngleWithVector3d)(const Vector3d &) const= &HalfSpace3
 Ray3d (HalfSpace3d::*clipLine)(const Line3d &) const= &HalfSpace3d::clip;
 Ray3d (HalfSpace3d::*clipRay)(const Ray3d &) const= &HalfSpace3d::clip;
 Segment3d (HalfSpace3d::*clipSegment)(const Segment3d &) const= &HalfSpace3d::clip;
+bool (HalfSpace3d::*HalfSpaceExistIntersHalfSpace)(const HalfSpace3d &) const= &HalfSpace3d::intersects;
+bool (HalfSpace3d::*HalfSpaceExistIntersLine)(const Line3d &) const= &HalfSpace3d::intersects;
+bool (HalfSpace3d::*HalfSpaceExistIntersRay)(const Ray3d &) const= &HalfSpace3d::intersects;
+bool (HalfSpace3d::*HalfSpaceExistIntersSegment)(const Segment3d &) const= &HalfSpace3d::intersects;
+bool (HalfSpace3d::*HalfSpaceExistIntersPolyline)(const Polyline3d &) const= &HalfSpace3d::intersects;
 class_<HalfSpace3d, bases<GeomObj3d> >("HalfSpace3d")
   .def(init<Plane>())
   .def(init<Plane, Pos3d>())
@@ -39,9 +44,15 @@ class_<HalfSpace3d, bases<GeomObj3d> >("HalfSpace3d")
   .def("getBoundaryPlane", &HalfSpace3d::getBoundaryPlane,return_internal_reference<>() )
   .def("swap", &HalfSpace3d::swap, "flip the half space.")
   .def("getSwapped", &HalfSpace3d::getSwap, "Returns the opposite half space.")
+  .def("intersects", HalfSpaceExistIntersHalfSpace, "return true if the intersection with the given half-space exists.")
+  .def("intersects", HalfSpaceExistIntersLine, "return true if the intersection with the given line exists.")
+  .def("intersects", HalfSpaceExistIntersRay, "return true if the intersection with the given ray exists.")
+  .def("intersects", HalfSpaceExistIntersSegment, "return true if the intersection with the given segment exists.")
+  .def("intersects", HalfSpaceExistIntersPolyline, "return true if the intersection with the given polyline exists.")
   .def("clip", clipLine, "Returns the part of the object that is inside the half-space.")
   .def("clip", clipRay, "Returns the part of the object that is inside the half-space.")
   .def("clip", clipSegment, "Returns the part of the object that is inside the half-space.")
+  .def("clip", &HalfSpace3d::clipPy, "Return the polyline chunks that result from clipping the given polyline with this half space.")
  ;
 
 class_<BND3d, bases<GeomObj3d> >("BND3d")

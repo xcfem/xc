@@ -35,5 +35,6 @@ class_<XC::Pnt, XC::Pnt *, bases<XC::EntMdlr>, boost::noncopyable >("Pnt", no_in
   .add_property("getNumConnectedEdges",&XC::Pnt::getNumConnectedEdges,"Returns number of lines that touch the point.")
   .add_property("getConnectedEdgesTags",&XC::Pnt::getConnectedEdgesTags,"Returns the tags of the lines connected to the point.")
   .add_property("getConnectedEdges",&XC::Pnt::getConnectedEdgesPy,"Returns the lines connected to the point.")
+  .add_property("getConnectedSurfaces", &XC::Pnt::getConnectedSurfacesPy,"Returns the surfaces connected to the point.")
   .def("getAverageElementSize", &XC::Pnt::getAverageElementSize,"Returns the centroid of the object.")
    ;

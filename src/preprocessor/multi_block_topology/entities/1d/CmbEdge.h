@@ -173,7 +173,8 @@ class CmbEdge: public Edge
     const Pnt *P1(void) const;
     const Pnt *P2(void) const;
 
-    size_t IndiceEdge(const Edge *l) const;
+    bool hasEdge(const Edge *) const;
+    size_t IndiceEdge(const Edge *) const;
     const Side *getSide(const size_t &i) const;
     Side *getSide(const size_t &i);
     const Side *getSideByPoints(const Pnt *,const Pnt *) const;
@@ -193,6 +194,8 @@ class CmbEdge: public Edge
     virtual void SetVertice(const size_t &,Pnt *);
     virtual ID getKPoints(void) const;
     Pnt *findVertex(const Pos3d &);
+
+    
     
     Polyline3d getPolyline(void) const;
 

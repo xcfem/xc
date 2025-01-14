@@ -24,6 +24,7 @@
 #include "GeomGroup2d.h"
 #include "utility/geom/d1/Ray2d.h"
 #include "utility/geom/d1/Segment2d.h"
+#include "utility/geom/d1/Polyline2d.h"
 
 #include "../pos_vec/Dir2d.h"
 #include "../pos_vec/Vector2d.h"
@@ -64,10 +65,40 @@ GeomObj *HalfPlane2d::getCopy(void) const
 void HalfPlane2d::swap(void)
   { lim.swap(); }
 
+//! @brief Return true if part of the ray is inside
+//! the half-plane.
 bool HalfPlane2d::intersects(const Ray2d &sr) const
   { return sr.intersects(lim); }
+
+//! @brief Return true if part of the segment is inside
+//! the half-plane.
 bool HalfPlane2d::intersects(const Segment2d &sg) const
   { return sg.intersects(lim); }
+
+//! @brief Return true if part of the polyline is inside
+//! the half-space.
+bool HalfPlane2d::intersects(const Polyline2d &pline) const
+  {
+    bool retval= false;
+    list_Pos2d::const_iterator i= pline.begin();
+    bool pline_in= this->In(*i);
+    i++;
+    for(; i!= pline.end(); i++)
+      {
+	const Pos2d &pos= *i;
+	if(!this->In(pos) and pline_in)
+	  {
+	    retval= true;
+	    break;
+	  }
+	else if(this->In(pos) and !pline_in)
+	  {
+	    retval= true;
+	    break;
+	  }
+      }
+    return retval;
+  }
 
 HalfPlane2d HalfPlane2d::getSwap(void) const
   {
@@ -112,6 +143,22 @@ bool HalfPlane2d::In(const Segment2d &sg, const double &tol) const
     bool retval= false;
     if(In(sg.getFromPoint()) && In(sg.getToPoint()))
       retval= true;
+    return retval;
+  }
+
+//! @brief Return true if the polyline is inside the half-space.
+bool HalfPlane2d::In(const Polyline2d &pline, const double &tol) const
+  {
+    bool retval= true;
+    for(list_Pos2d::const_iterator i= pline.begin(); i!= pline.end(); i++)
+      {
+	const Pos2d &pos= *i;
+	if(!this->In(pos))
+	  {
+	    retval= false;
+	    break;
+	  }
+      }
     return retval;
   }
 
@@ -245,6 +292,16 @@ Segment2d HalfPlane2d::clip(const Segment2d &sg) const
     return retval;
   }
 
+//! @brief Return the polyline chunks that result from clipping the given
+//! polyline with this half plane.
+std::deque<Polyline2d> HalfPlane2d::clip(const Polyline2d &pline, const GEOM_FT &tol) const
+  { return pline.clip(*this, tol); } 
+
+//! @brief Return the polyline chunks that result from clipping the given
+//! polyline with this half plane.
+boost::python::list HalfPlane2d::clipPy(const Polyline2d &pline, const GEOM_FT &tol) const
+  { return pline.clipPy(*this, tol); } 
+  
 GeomGroup2d intersection(const HalfPlane2d &sp,const Line2d &r)
   { return sp.getIntersection(r); }
 GeomGroup2d intersection(const HalfPlane2d &sp,const Ray2d &sr)

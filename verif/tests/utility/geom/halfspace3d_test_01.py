@@ -1,42 +1,34 @@
 # -*- coding: utf-8 -*-
-
-'''Angle between two planes.
- Example 1.7 of the thesis «La teoría de bloque aplicada a la dinámica
- de rocas» by Juan Carlos Ayes Zamudio.'''
+'''Trivial half-space test.'''
 
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
-__copyright__= "Copyright 2015, LCPT and AO_O"
+__copyright__= "Copyright 2025, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import geom
-import math
-import teoria_bloques
 
-alpha1=math.radians(30)
-beta1=math.radians(320)
-alpha2=math.radians(50)
-beta2=math.radians(160)
+p0= geom.Pos3d(0,0,0)
+p1= geom.Pos3d(1,0,0)
+p2= geom.Pos3d(0,1,0)
+p3= geom.Pos3d(1,0,1)
 
-p=geom.Pos3d(0,0,0)
+plane= geom.Plane3d(p1, p2, p3)
 
-plBuz1=teoria_bloques.computeDipPlane(alpha1,beta1,p)
-P1=geom.HalfSpace3d(plBuz1)
+hp= geom.HalfSpace3d(plane, p0)
 
-plBuz2=teoria_bloques.computeDipPlane(alpha2,beta2,p)
-P2=geom.HalfSpace3d(plBuz2)
+testOK= hp.In(p0, 0.0)
+testOK= testOK and not hp.In(geom.Pos3d(1,1,0), 0.0)
 
-delta= P1.getAngle(P2)
-deltaTeor=math.acos(0.1968/0.8907/0.99)
+# print(testOK)
 
-ratio1= math.fabs(deltaTeor-delta)/deltaTeor
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if math.fabs(ratio1)<0.021:
+if testOK:
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')

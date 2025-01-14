@@ -142,18 +142,20 @@ class Plane : public Surface3d
     Line3d getMaximumSlopeLineXZ(void) const;
     Line3d getMaximumSlopeLineYZ(void) const;
 
-    bool intersects(const Plane &p) const;
-    Line3d getIntersection(const Plane &p) const;
-    bool intersects(const Line3d &p) const;
-    Pos3d getIntersection(const Line3d &p) const;
-    bool intersects(const Ray3d &p) const;
-    Pos3d getIntersection(const Ray3d &p) const;
-    bool intersects(const Segment3d &p) const;
-    Pos3d getIntersection(const Segment3d &p) const;
-    bool intersects(const Polygon3d &p) const;
-    Segment3d getIntersection(const Polygon3d &p) const;
+    bool intersects(const Plane &) const;
+    Line3d getIntersection(const Plane &) const;
+    bool intersects(const Line3d &) const;
+    Pos3d getIntersection(const Line3d &) const;
+    bool intersects(const Ray3d &) const;
+    Pos3d getIntersection(const Ray3d &) const;
+    bool intersects(const Segment3d &) const;
+    Pos3d getIntersection(const Segment3d &) const;
+    bool intersects(const Polyline3d &) const;
+    list_Pos3d getIntersection(const Polyline3d &) const;
+    bool intersects(const Polygon3d &) const;
+    Segment3d getIntersection(const Polygon3d &) const;
 
-    GEOM_FT getAngle(const Plane &p) const;
+    GEOM_FT getAngle(const Plane &) const;
     GEOM_FT getAngle(const Vector3d &) const;
     GEOM_FT getAngle(const Line3d &) const;
     GEOM_FT getAngle(const Ray3d &) const;
@@ -166,24 +168,24 @@ class Plane : public Surface3d
     template <typename InputIterator>
     GEOM_FT linearLeastSquaresFitting(InputIterator begin,InputIterator end);
 
-    friend Plane FromCGAL(const CGPlane_3 &p);
+    friend Plane FromCGAL(const CGPlane_3 &);
     void Print(std::ostream &os) const;
   };
 
-Plane FromCGAL(const CGPlane_3 &p);
+Plane FromCGAL(const CGPlane_3 &);
 
 const Plane XYPlane3d(Pos3d(0,0,0),Pos3d(1,0,0),Pos3d(0,1,0));
 const Plane XZPlane3d(Pos3d(0,0,0),Pos3d(1,0,0),Pos3d(0,0,1));
 const Plane YZPlane3d(Pos3d(0,0,0),Pos3d(0,1,0),Pos3d(0,0,1));
 
-GEOM_FT angle(const Line3d &r,const Plane &p);
-GEOM_FT angle(const Plane &p,const Line3d &r);
+GEOM_FT angle(const Line3d &r,const Plane &);
+GEOM_FT angle(const Plane &p,const Line3d &);
 GEOM_FT angle(const Vector3d &,const Plane &);
 GEOM_FT angle(const Plane &,const Vector3d &);
 GEOM_FT angle(const Plane &,const Plane &);
 
 
-Plane perpendicular(const Line3d &r, const Pos3d &p);
+Plane perpendicular(const Line3d &r, const Pos3d &);
 
 bool parallel(const Plane &p, const Line3d &r);
 bool parallel(const Plane &p1, const Plane &p2);

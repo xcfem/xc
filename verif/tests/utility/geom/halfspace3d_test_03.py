@@ -1,41 +1,42 @@
 # -*- coding: utf-8 -*-
-''' Projection of a vector onto a plane.
- Example 1.13 of the thesis «La teoría de bloque aplicada a la dinámica
- de rocas» by Juan Carlos Ayes Zamudio.'''
+'''Trivial half-plane test. Clip a polyline with a half-plane.'''
 
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
-__copyright__= "Copyright 2015, LCPT and AO_O"
+__copyright__= "Copyright 2025, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
-import geom
 import math
-import teoria_bloques
+import geom
 
-alpha=math.radians(50)
-beta=math.radians(290)
-p=geom.Pos3d(0,0,0)
+p0= geom.Pos3d(0,0,0)
+p1= geom.Pos3d(0,0,1)
+p2= geom.Pos3d(1,0,1)
+p3= geom.Pos3d(1,1,1)
 
-r=geom.Vector3d(1,2,1)
+plane= geom.Plane3d(p1, p2, p3)
 
-plBuz= teoria_bloques.computeDipPlane(alpha,beta,p)
-P=geom.HalfSpace3d(plBuz)
-plLim= P.getBoundaryPlane()
-s= plLim.getProjection(r)
-s= s.normalized()
+hp= geom.HalfSpace3d(plane, p0)
 
-sTeor=geom.Vector3d(0.5488,0.7818,0.2959)
-ratio1= (sTeor-s)
-ratio1=ratio1.getModulus()
+points= [geom.Pos3d(0,0,0), geom.Pos3d(2,0,2)]
+pline= geom.Polyline3d(points)
+
+clipped= hp.clip(pline, 0.0)[0]
+ref_pline= geom.Polyline3d([geom.Pos3d(0,0,0), geom.Pos3d(1,0,1)])
+err= 0.0
+for p1, p2 in zip(clipped.getVertices(), ref_pline.getVertices()):
+    err+= (p1.x-p2.x)**2+(p1.y-p2.y)**2+(p1.z-p2.z)**2
+err= math.sqrt(err)
+
+# print(err)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio1)<1e-4:
+if (err<1e-6):
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')
-

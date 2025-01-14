@@ -104,34 +104,40 @@ python tests/utility/geom/segments/segment3d_connect_01.py
 python tests/utility/geom/segments/segment3d_connect_02.py
 echo "$BLEU" "    Polylines." "$NORMAL"
 echo "$BLEU" "      2D Polylines." "$NORMAL"
-python tests/utility/geom/polylines/polyline2d_test_00.py
-python tests/utility/geom/polylines/polyline2d_test_01.py
-python tests/utility/geom/polylines/polyline2d_test_02.py
-python tests/utility/geom/polylines/polyline2d_test_03.py
-python tests/utility/geom/polylines/polyline2d_test_04.py
-python tests/utility/geom/polylines/polyline2d_test_05.py
-python tests/utility/geom/polylines/polyline2d_test_06.py
-python tests/utility/geom/polylines/polyline2d_test_07.py
-python tests/utility/geom/polylines/polyline2d_test_08.py
-python tests/utility/geom/polylines/polyline2d_test_09.py
-python tests/utility/geom/polylines/polyline2d_test_10.py
-python tests/utility/geom/polylines/polyline2d_test_11.py
-python tests/utility/geom/polylines/polyline2d_test_12.py
-python tests/utility/geom/polylines/polyline2d_test_13.py
-python tests/utility/geom/polylines/polyline2d_test_14.py
-python tests/utility/geom/polylines/polyline2d_test_15.py
-python tests/utility/geom/polylines/polyline2d_test_16.py
-python tests/utility/geom/polylines/polyline2d_test_17.py
+python tests/utility/geom/polylines/2d/polyline2d_test_00.py
+python tests/utility/geom/polylines/2d/polyline2d_test_01.py
+python tests/utility/geom/polylines/2d/polyline2d_test_02.py
+python tests/utility/geom/polylines/2d/polyline2d_test_03.py
+python tests/utility/geom/polylines/2d/polyline2d_test_04.py
+python tests/utility/geom/polylines/2d/polyline2d_test_05.py
+python tests/utility/geom/polylines/2d/polyline2d_test_06.py
+python tests/utility/geom/polylines/2d/polyline2d_test_07.py
+python tests/utility/geom/polylines/2d/polyline2d_test_08.py
+python tests/utility/geom/polylines/2d/polyline2d_test_09.py
+python tests/utility/geom/polylines/2d/polyline2d_test_10.py
+python tests/utility/geom/polylines/2d/polyline2d_test_11.py
+python tests/utility/geom/polylines/2d/polyline2d_test_12.py
+python tests/utility/geom/polylines/2d/polyline2d_test_13.py
+python tests/utility/geom/polylines/2d/polyline2d_test_14.py
+python tests/utility/geom/polylines/2d/polyline2d_test_15.py
+python tests/utility/geom/polylines/2d/polyline2d_test_16.py
+python tests/utility/geom/polylines/2d/polyline2d_test_17.py
+python tests/utility/geom/polylines/2d/polyline2d_test_18.py
+python tests/utility/geom/polylines/2d/polyline2d_test_19.py
 echo "$BLEU" "      3D Polylines" "$NORMAL"
-python tests/utility/geom/polylines/polyline3d_test_01.py
-python tests/utility/geom/polylines/polyline3d_test_02.py
-python tests/utility/geom/polylines/polyline3d_test_03.py
-python tests/utility/geom/polylines/polyline3d_test_04.py
-python tests/utility/geom/polylines/polyline3d_test_05.py
-python tests/utility/geom/polylines/polyline3d_test_06.py
-python tests/utility/geom/polylines/polyline3d_test_07.py
-python tests/utility/geom/polylines/polyline3d_test_08.py
-python tests/utility/geom/polylines/polyline3d_test_09.py
+python tests/utility/geom/polylines/3d/polyline3d_test_01.py
+python tests/utility/geom/polylines/3d/polyline3d_test_02.py
+python tests/utility/geom/polylines/3d/polyline3d_test_03.py
+python tests/utility/geom/polylines/3d/polyline3d_test_04.py
+python tests/utility/geom/polylines/3d/polyline3d_test_05.py
+python tests/utility/geom/polylines/3d/polyline3d_test_06.py
+python tests/utility/geom/polylines/3d/polyline3d_test_07.py
+python tests/utility/geom/polylines/3d/polyline3d_test_08.py
+python tests/utility/geom/polylines/3d/polyline3d_test_09.py
+python tests/utility/geom/polylines/3d/polyline3d_test_10.py
+python tests/utility/geom/polylines/3d/polyline3d_test_11.py
+python tests/utility/geom/polylines/3d/polyline3d_test_12.py
+echo "$BLEU" "      plane 3D Polylines" "$NORMAL"
 python tests/utility/geom/polylines/plane_polyline3d_test_01.py
 echo "$BLEU" "    Polygons." "$NORMAL"
 echo "$BLEU" "      2D Polygons." "$NORMAL"
@@ -211,13 +217,27 @@ python tests/utility/geom/plane_test_02.py
 python tests/utility/geom/plane_test_03.py
 #python tests/utility/geom/plane_test_04.py
 python tests/utility/geom/plane_test_05.py
-echo "$BLEU" "  3D polyhedrons." "$NORMAL"
+echo "$BLEU" "    3D polyhedrons." "$NORMAL"
 python tests/utility/geom/polyhedrons/test_hexahedron_01.py
+echo "$BLEU" "    2D half planes." "$NORMAL"
+python tests/utility/geom/halfplane2d_test_01.py
+python tests/utility/geom/halfplane2d_test_02.py
+python tests/utility/geom/halfplane2d_test_03.py
+python tests/utility/geom/halfplane2d_test_04.py
+python tests/utility/geom/halfplane2d_test_05.py
+python tests/utility/geom/halfplane2d_test_06.py
+python tests/utility/geom/halfplane2d_test_07.py
+
 # echo "$BLEU" "  3D half spaces." "$NORMAL"
-# python tests/utility/geom/halfspace3d_test_01.py
-# python tests/utility/geom/halfspace3d_test_02.py
-# python tests/utility/geom/halfspace3d_test_03.py
-# python tests/utility/geom/halfspace3d_test_04.py
+python tests/utility/geom/halfspace3d_test_01.py
+python tests/utility/geom/halfspace3d_test_02.py
+python tests/utility/geom/halfspace3d_test_03.py
+python tests/utility/geom/halfspace3d_test_04.py
+python tests/utility/geom/halfspace3d_test_05.py
+python tests/utility/geom/halfspace3d_test_06.py
+python tests/utility/geom/halfspace3d_test_07.py
+# python tests/utility/geom/halfspace3d_test_08.py
+# python tests/utility/geom/halfspace3d_test_09.py
 echo "$BLEU" "    Coordinate systems." "$NORMAL"
 python tests/utility/geom/coordinate_systems/coosys_test_01.py
 python tests/utility/geom/coordinate_systems/refsys3d3d_test_01.py
@@ -275,6 +295,7 @@ echo "$BLEU" "  Wind action tests." "$NORMAL"
 python tests/actions/wind/test_wind_cylindr_01.py
 python tests/actions/wind/test_wind_cylindr_02.py
 python tests/actions/wind/test_wind_beam_truss.py
+python tests/actions/wind/test_wind_vertical_pressure_distribution_01.py
 echo "$BLEU" "    ASCE7 wind action tests." "$NORMAL"
 python tests/actions/wind/asce7/test_windASCE7.py
 python tests/actions/wind/asce7/test_windASCE7_16.py
@@ -981,6 +1002,7 @@ python tests/loads/load_distribution/railway_traffic/test_track_axis_load_04.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_05.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_06.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_07.py
+python tests/loads/load_distribution/railway_traffic/test_track_axis_load_08.py
 
 echo "$BLEU" "    Strain loads." "$NORMAL"
 echo "$BLEU" "      Strain loads on trusses." "$NORMAL"

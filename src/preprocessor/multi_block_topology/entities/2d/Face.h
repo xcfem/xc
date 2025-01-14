@@ -137,7 +137,11 @@ class Face: public CmbEdge
     //! @brief Return the bodies that touch this surface (neighbors).
     const std::set<const Body *> &getConnectedBodies(void) const
       { return bodies_surf; }
-    size_t CommonEdge(const Face &other) const;
+    const std::set<const Face *> getConnectedSurfaces(void) const;
+    boost::python::list getConnectedSurfacesPy(void) const;
+    size_t CommonEdge(const Face &) const;
+    std::set<const Edge *> getCommonEdges(const Face &);
+    boost::python::list getCommonEdgesPy(const Face &);
     int SenseOfEdge(const Edge *l,const Face &other) const;
     bool isConnectedTo(const Body &b) const;
     std::deque<const Edge *> getNDivErrors(const size_t &) const;

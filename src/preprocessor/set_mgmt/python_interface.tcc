@@ -360,6 +360,15 @@ XC::Set (XC::Set::*SETpickElemsInside3D)(const std::string &, const GeomObj3d &,
 XC::Set (XC::Set::*SETpickElemsInside2D)(const std::string &, const GeomObj2d &, const double &)= &XC::Set::pickElemsInside;
 XC::Set (XC::Set::*SETpickElemsCrossing3D)(const std::string &, const GeomObj3d &, const double &)= &XC::Set::pickElemsCrossing;
 XC::Set (XC::Set::*SETpickElemsCrossing2D)(const std::string &, const GeomObj2d &, const double &)= &XC::Set::pickElemsCrossing;
+
+bool (XC::Set::*nodeBelongsToSet)(const XC::Node *) const= &XC::Set::In;
+bool (XC::Set::*elementBelongsToSet)(const XC::Element *) const= &XC::Set::In;
+bool (XC::Set::*pointBelongsToSet)(const XC::Pnt *) const= &XC::Set::In;
+bool (XC::Set::*edgeBelongsToSet)(const XC::Edge *) const= &XC::Set::In;
+bool (XC::Set::*faceBelongsToSet)(const XC::Face *) const= &XC::Set::In;
+bool (XC::Set::*bodyBelongsToSet)(const XC::Body *) const= &XC::Set::In;
+bool (XC::Set::*uGridBelongsToSet)(const XC::UniformGrid *) const= &XC::Set::In;
+
 bool (XC::Set::*nodeIsCloserToSetThan)(const XC::Node &, const double &) const= &XC::Set::isCloserThan;
 bool (XC::Set::*elementIsCloserToSetThan)(const XC::Element &, const double &) const= &XC::Set::isCloserThan;
 bool (XC::Set::*pointIsCloserToSetThan)(const XC::Pnt &, const double &) const= &XC::Set::isCloserThan;
@@ -402,6 +411,14 @@ class_<XC::Set, XC::Set *,bases<XC::SetMeshComp> >("Set")
   .def("pickElemsInside", SETpickElemsInside2D,"pickElemsInside(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
   .def("pickElemsCrossing", SETpickElemsCrossing3D,"pickElemsCrossing(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
   .def("pickElemsCrossing", SETpickElemsCrossing2D,"pickElemsCrossing(newSetName, geomObj, tol) return a set with the elements inside the geometric object.")
+
+  .def("In", nodeBelongsToSet, "Returns true if the node belongs to this set.")
+  .def("In", elementBelongsToSet, "Returns true if the given element belongs to this set.")
+  .def("In", pointBelongsToSet, "Returns true if the given point belongs to this set.")
+  .def("In", edgeBelongsToSet, "Returns true if the given edge belongs to this set.")
+  .def("In", faceBelongsToSet, "Returns true if the given face belongs to this set.")
+  .def("In", bodyBelongsToSet, "Returns true if the given body belongs to this set.")
+  .def("In", uGridBelongsToSet, "Returns true if the given uniform grid belongs to this set.")
 
   .def("isCloserThan", nodeIsCloserToSetThan, "Returns true if the given node is closer than the specified distance.")
   .def("isCloserThan", elementIsCloserToSetThan, "Returns true if the given element is closer than the specified distance.")

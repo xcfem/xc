@@ -149,9 +149,9 @@ class RailLoadBase(dfl.DynamicFactorLoad):
                                    clause 4.3.6 on Eurocode 1-2:2003).
         '''
         ## Append the deck spreading to the list.
-        spreadingLayers.append((deckThickness/2.0, deckSpreadingRatio))
+        sLayers= spreadingLayers+[(deckThickness/2.0, deckSpreadingRatio)]
         # Call the regular method.
-        return self.getLoadedContour(midplane= deckMidplane, spreadingLayers= spreadingLayers)
+        return self.getLoadedContour(midplane= deckMidplane, spreadingLayers= sLayers)
     
     def getDeckLoadedContourThroughEmbankment(self, embankment, deckMidplane, deckThickness, deckSpreadingRatio= 1/1):
         ''' Return the loaded contour of the rail taking into account

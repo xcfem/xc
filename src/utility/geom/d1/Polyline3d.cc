@@ -26,6 +26,7 @@
 #include "utility/utils/misc_utils/matem.h" // RadToDeg
 #include "utility/geom/pos_vec/VectorPos3d.h"
 #include "utility/kernel/python_utils.h"
+#include "utility/geom/d3/HalfSpace3d.h"
 
 //! @brief Default constructor.
 Polyline3d::Polyline3d(void)
@@ -291,6 +292,25 @@ GEOM_FT Polyline3d::getLengthUpTo(const Pos3d &p) const
     return retval;
   }
 
+//! @brief Return the iterators to the origin vertices of the polyline segments
+//! where the intersection with the plane occur.
+std::deque<Polyline3d::const_iterator> Polyline3d::getIntersectionIters(const Plane &p) const
+  {
+    std::deque<Polyline3d::const_iterator> retval;
+    if(!empty())
+      {
+	list_Pos3d::const_iterator first= begin();
+	list_Pos3d::const_iterator last= std::prev(end());
+	for(list_Pos3d::const_iterator j=first;j != last;j++)
+	  {
+	    const Segment3d s= getSegment(j);
+	    if(p.intersects(s))
+	      retval.push_back(j);
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Return the points of intersection of the polyline with
 //! the argument.
 GeomObj3d::list_Pos3d Polyline3d::getIntersection(const Plane &p) const
@@ -310,6 +330,91 @@ GeomObj3d::list_Pos3d Polyline3d::getIntersection(const Plane &p) const
 	    i= retval.end();
 	  }
       }
+    return retval;
+  }
+
+//! @brief Return the polyline chunks that result from clipping this polyline
+//! with the given half space.
+std::deque<Polyline3d> Polyline3d::clip(const HalfSpace3d &hs, const GEOM_FT &tol) const
+  {
+    std::deque<Polyline3d> retval;
+    if(!empty())
+      {
+	const bool intersects= hs.intersects(*this);
+	if(!intersects)
+	  {
+	    if(hs.In(*this))
+	      retval.push_back(*this); // The whole polyline is inside the
+	                               // half space.
+	  }
+	else // vertices at both sides of the half-space.
+	  {
+	    const Plane boundary_plane= hs.getBoundaryPlane();
+	    Polyline3d::const_iterator start= this->begin();
+	    Polyline3d::const_iterator last= std::prev(this->end());
+	    bool start_inside=  hs.In(*start, tol);
+	    std::deque<Polyline3d::const_iterator> int_iters= this->getIntersectionIters(boundary_plane);
+	    std::deque<Polyline3d::const_iterator>::const_iterator i= int_iters.begin();
+	    do
+	      {
+		std::deque<Polyline3d::const_iterator>::const_iterator ii= std::next(i);
+		Polyline3d::const_iterator stop;
+		
+		if(ii != int_iters.end())
+		  stop= *ii;
+		else
+		  stop= std::next(*i);
+		const bool stop_inside= hs.In(*stop, tol);
+		const bool pline_enters= !start_inside and stop_inside;
+		const bool pline_exits= start_inside and !stop_inside;
+		if(pline_enters)
+		  {
+		    Polyline3d chunk;
+		    Segment3d sg= this->getSegment(start);
+		    list_Pos3d tmp= intersection(sg,boundary_plane);
+		    chunk.appendVertex(tmp[0]);
+		    start++;
+		    for(list_Pos3d::const_iterator j= start; j!= stop; j++)
+		      { chunk.appendVertex(*j); }
+		    chunk.appendVertex(*stop);
+		    i++;
+		    if(stop!=last)
+		      {
+			sg= this->getSegment(stop);
+			tmp= intersection(sg,boundary_plane);
+			chunk.appendVertex(tmp[0]);
+			stop++;
+		      }
+		    retval.push_back(chunk);
+		  }
+		if(pline_exits)
+		  {
+		    Polyline3d chunk;
+		    chunk.appendVertex(*start); // Starts inside.
+		    Segment3d sg= this->getSegment(start);
+		    list_Pos3d tmp= intersection(sg,boundary_plane);
+		    chunk.appendVertex(tmp[0]);
+		    retval.push_back(chunk);
+		  }
+		start= stop;
+		start_inside= hs.In(*start, tol);
+		i++;
+		if(start==last)
+		  break;
+	      }
+	    while(i!= int_iters.end());
+	  }
+      }
+    return retval;
+  }
+
+boost::python::list Polyline3d::clipPy(const HalfSpace3d &hs, const GEOM_FT &tol) const
+  {
+    boost::python::list retval;
+    std::deque<Polyline3d> tmp= this->clip(hs, tol);
+    std::deque<Polyline3d>::const_iterator i= tmp.begin();
+    for(;i!=tmp.end();i++)
+      retval.append(*i);
     return retval;
   }
 
@@ -548,7 +653,6 @@ std::vector<Vector3d> Polyline3d::getCurvatureVectorAtVertices(void) const
       }
     else // 3 vertex at least.
       {
-	std::vector<Vector3d> vertex_normals(sz);
 	size_t count= 0; // vertex iterator.
 	for(Polyline3d::const_iterator vi= this->begin(); vi!=this->end(); vi++, count++)
 	  {
@@ -573,6 +677,112 @@ std::vector<Vector3d> Polyline3d::getCurvatureVectorAtVertices(void) const
 	    retval[count]= curvature_vector(A,B,C);
 	  }
       }
+    return retval;
+  }
+
+//! @brief Compute the tangent vectors at each of the polyline vertices.
+std::vector<Vector3d> Polyline3d::getTangentVectorAtVertices(void) const
+  {
+    const std::vector<Segment3d> segments= this->getSegments();
+    const size_t sz= segments.size();
+    std::vector<Vector3d> retval(sz+1);
+    if(sz>0)
+      {
+        Vector3d t0= segments[0].getIVector();
+	retval[0]= t0; // first tangent.
+	Vector3d t1;
+	for(size_t i=1; i<sz; i++)
+	  {
+	    t1= segments[i].getIVector();
+	    retval[i]= ((t1+t0)*0.5);
+	    t0= t1; // update previous vector.
+	  }
+	retval[sz]= t1; // last tangent.
+      }
+    return retval;
+  }
+
+//! @brief Return a Python list containing the tangent vectors at each of the
+//! polyline vertices.
+boost::python::list Polyline3d::getTangentVectorAtVerticesPy(void) const
+  {
+    const std::vector<Vector3d> tangent_vectors= this->getTangentVectorAtVertices();
+    boost::python::list retval;
+    std::vector<Vector3d>::const_iterator i= tangent_vectors.begin();
+    for(;i!=tangent_vectors.end();i++)
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Compute the normal vectors at each of the polyline vertices.
+std::vector<Vector3d> Polyline3d::getNormalVectorAtVertices(void) const
+  {
+    const size_t sz= this->size();
+    std::vector<Vector3d> retval(sz);
+    if(sz<2) // No segments.
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ";ERROR: no segments, so no normal vectors."
+		  << std::endl;
+      }
+    else if(sz==2) // One segment only.
+      {
+	Segment3d sg= this->getSegment(1);
+	retval[0]= sg.getJVector();
+	retval[1]= retval[0];
+      }
+    else // 3 vertex at least.
+      {
+	size_t count= 0; // vertex iterator.
+	Polyline3d::const_iterator last= std::prev(this->end());
+	for(Polyline3d::const_iterator vi= this->begin(); vi!=this->end(); vi++, count++)
+	  {
+	    Polyline3d::const_iterator previousVertexIter= std::prev(vi);
+	    Polyline3d::const_iterator thisVertexIter= vi;
+	    Polyline3d::const_iterator nextVertexIter= std::next(vi);
+	    const bool firstVertex= thisVertexIter == this->begin();
+	    const bool lastVertex= thisVertexIter == last;
+	    if(firstVertex) // No previous vertex.
+	      {
+		previousVertexIter= vi;
+		thisVertexIter= std::next(previousVertexIter);
+		nextVertexIter= std::next(thisVertexIter);
+	      }
+	    else if(lastVertex) // No following vertex.
+	      {
+		nextVertexIter= vi;
+		thisVertexIter= std::prev(nextVertexIter);
+		previousVertexIter= std::prev(thisVertexIter);
+	      }
+	    const Pos3d &A= *previousVertexIter;
+	    const Pos3d &B= *thisVertexIter;
+	    const Pos3d &C= *nextVertexIter;
+	    const Segment3d sg1= this->getSegment(previousVertexIter);
+	    const Segment3d sg2= this->getSegment(thisVertexIter);
+	    const Plane plane(A, B, C);
+	    const Vector3d binormal= plane.Normal();
+	    const Vector3d j1= sg1.getIVector().getCross(binormal);
+	    const Vector3d j2= sg2.getIVector().getCross(binormal);
+	    if(firstVertex)
+	      retval[count]= j1;
+	    else if(lastVertex)
+	      retval[count]= j2;
+	    else
+	      retval[count]= (j1+j2).getNormalized();
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return a Python list containing the normal vectors at each of the
+//! polyline vertices.
+boost::python::list Polyline3d::getNormalVectorAtVerticesPy(void) const
+  {
+    const std::vector<Vector3d> normal_vectors= this->getNormalVectorAtVertices();
+    boost::python::list retval;
+    std::vector<Vector3d>::const_iterator i= normal_vectors.begin();
+    for(;i!=normal_vectors.end();i++)
+      retval.append(*i);
     return retval;
   }
 

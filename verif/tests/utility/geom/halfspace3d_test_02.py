@@ -1,38 +1,42 @@
 # -*- coding: utf-8 -*-
-'''Angle between two planes.
- Example 1.7 from the thesis «La teoría de bloque aplicada a la dinámica
- de rocas» by Juan Carlos Ayes Zamudio.'''
+'''Trivial half-plane test. Clip a polyline with a half-plane.'''
 
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
-__copyright__= "Copyright 2015, LCPT and AO_O"
+__copyright__= "Copyright 2025, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
-import geom
 import math
-import teoria_bloques
+import geom
 
-alpha1=math.radians(30)
-beta1=math.radians(320)
-p=geom.Pos3d(0,0,0)
+p0= geom.Pos3d(0,0,0)
+p1= geom.Pos3d(0,0,1)
+p2= geom.Pos3d(1,0,1)
+p3= geom.Pos3d(1,1,1)
 
-plBuz1=teoria_bloques.computeDipPlane(alpha1,beta1,p)
-P1=geom.HalfSpace3d(plBuz1)
-v=geom.Vector3d(1,2,1)
+plane= geom.Plane3d(p1, p2, p3)
 
-delta= P1.getAngle(v)
-deltaTeor=math.radians(32.349)
+hs= geom.HalfSpace3d(plane, p0)
 
-ratio1=math.fabs(deltaTeor-delta)/deltaTeor
+points= [geom.Pos3d(-2,0,2), geom.Pos3d(0,0,0)]
+pline= geom.Polyline3d(points)
+
+clipped= hs.clip(pline, 0.0)[0]
+ref_pline= geom.Polyline3d([geom.Pos3d(-1,0,1), geom.Pos3d(0,0,0)])
+err= 0.0
+for p1, p2 in zip(clipped.getVertices(), ref_pline.getVertices()):
+    err+= (p1.x-p2.x)**2+(p1.y-p2.y)**2+(p1.z-p2.z)**2
+err= math.sqrt(err)
+
+# print(err)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if math.fabs(ratio1)<1e-4:
+if (err<1e-6):
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')
-

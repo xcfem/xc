@@ -19,3 +19,4 @@ The modules on this folder compute the loads due to wind according to the follow
 - [Efectos de la Modelación de Presiones por Viento en Altura sobre la Estabilidad de Tanques de Almacenamiento de Fluidos](https://cimec.org.ar/ojs/index.php/mc/article/view/4697)
 - [OpenFOAM](https://www.openfoam.com/)
 - [Static wind loads estimation on buildings using OPENFOAM](https://repositorio.uniandes.edu.co/entities/publication/44aa7aff-5c8b-4bb9-9cd9-d763f409d103)
+- [Windward and leeward](https://en.wikipedia.org/wiki/Windward_and_leeward)
