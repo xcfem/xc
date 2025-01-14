@@ -48,6 +48,7 @@ Once the analyst has defined the model, the next step is to define the analysis 
 - [No Element Required](https://portwooddigital.com/2024/01/14/no-element-required/)
 - [Two Sprung Masses and Some Friction Force](https://portwooddigital.com/2024/02/10/two-sprung-masses-and-some-friction-force/)
 - [A Simple Base-Isolated Model](https://portwooddigital.com/2024/11/26/a-simple-base-isolated-model/)
+- [Minimal Damper Example](https://portwooddigital.com/2025/01/12/minimal-damper-example/)
 
 ### Eigenvalue analysis
  - [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)

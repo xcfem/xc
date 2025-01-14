@@ -16,3 +16,4 @@ A UniaxialMaterial object represents uniaxial stress-strain (or force-deformatio
 ## Material testing
 
 - [Material Testing with White Noise](https://portwooddigital.com/2024/04/21/material-testing-with-white-noise/)
+- [Minimal Damper Example](https://portwooddigital.com/2025/01/12/minimal-damper-example/)

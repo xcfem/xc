@@ -19,3 +19,4 @@ Transient dynamic analysis (also known as time-history analysis) aims at finding
 - [The Hard Dynamics](https://portwooddigital.com/2024/01/07/the-hard-dynamics/)
 - [A Simple Base-Isolated Model](https://portwooddigital.com/2024/11/26/a-simple-base-isolated-model/)
 - [Sequential Ground Motions](https://portwooddigital.com/2024/11/18/sequential-ground-motions/)
+- [Minimal Damper Example](https://portwooddigital.com/2025/01/12/minimal-damper-example/)
