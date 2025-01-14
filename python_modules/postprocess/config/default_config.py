@@ -272,7 +272,7 @@ class ProjectDirTree(object):
                 rltvTextReportPath= compat.removeprefix(rltvTextReportPath, self.reportPath)
             else:
                 rltvTextReportPath= rltvTextReportPath.removeprefix(self.reportPath)
-            retval+= rltvTextReportPath # Don't repeat the same directory.
+        retval+= rltvTextReportPath # Don't repeat the same directory.
         return retval
 
     def getFullGraphicsPath(self):
