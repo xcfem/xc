@@ -1003,6 +1003,7 @@ python tests/loads/load_distribution/railway_traffic/test_track_axis_load_05.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_06.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_07.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_08.py
+python tests/loads/load_distribution/railway_traffic/test_track_axis_load_09.py
 
 echo "$BLEU" "    Strain loads." "$NORMAL"
 echo "$BLEU" "      Strain loads on trusses." "$NORMAL"

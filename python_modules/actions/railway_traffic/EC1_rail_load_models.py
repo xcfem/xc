@@ -360,3 +360,22 @@ class TrackAxis(ta.TrackAxis):
         retval= trainModel.locomotive.defDeckNosingLoadThroughLayers(nosingDirection= -ref.getJVector(), ref= ref, spreadingLayers= spreadingLayers, originSet= originSet, deckThickness= deckThickness, deckSpreadingRatio= deckSpreadingRatio)
         return retval
     
+
+    def getAxisForDerailmentSituationI(self, factor= 1.0):
+        ''' Compute an axis parallel to this one at the a distance equal to the
+            track gauge multiplied by the given factor (usually +1 or -1) so the
+            train loads correspond to those defined in clause 6.7.1 of
+            Eurocode 1-2:2003.
+        '''
+        track_axis_normals= self.trackAxis.getNormalVectorAtVertices()
+        derailmentI_track_axis_points= list()
+        offset= factor*self.trackGauge
+        for v, n in zip(self.trackAxis.getVertices(), track_axis_normals):
+            newPoint= v+offset*n
+            derailmentI_track_axis_points.append(newPoint)
+            derailmentI_track_axis= geom.Polyline3d(derailmentI_track_axis_points)
+        retval= TrackAxis(derailmentI_track_axis, trackGauge= self.trackGauge, u= self.u)
+        return retval
+
+        
+            
