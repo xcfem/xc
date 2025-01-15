@@ -220,7 +220,7 @@ def def_vertical_pressure_load(surfaces, pressureDistribution, horizontalWindDir
         windward_border= wbs[0]
         for e in face.elements:
             if e.tag in already_visited_elements:
-                lmsg.warning('already visited element: '+str(e.tag)+' ignored.')
+                lmsg.warning('Element: '+str(e.tag)+' already visited, so it is ignored.')
             else:
                 already_visited_elements.add(e.tag)
                 centroid= e.getPosCentroid(True)
