@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
-'''Railway bridge loads. Rail uniform load.'''
+'''Railway bridge loads. Distributiion of a rail uniform load due to braking.'''
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2024, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import math
 import geom

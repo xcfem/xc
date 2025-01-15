@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
-'''Railway bridge loads. Loads over a track axis.'''
+'''Railway bridge loads. Distribution of railway loads on a track axis.'''
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2024, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import math
 import geom
