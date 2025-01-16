@@ -246,6 +246,8 @@ class CameraParameters(object):
         vtkCamera.SetParallelProjection(1)
         vtkCamera.Zoom(self.zoom)
 
+defaultBackgroundColorRGB= (0.65, 0.65, 0.65)
+
 class DisplaySettings(object):
     ''' Provides the variables to define the output device.
 
@@ -272,11 +274,21 @@ class DisplaySettings(object):
         self.windowWidth= 800
         self.windowHeight= 600
         self.annotation= sa.ScreenAnnotation()
-        self.bgRComp= 0.65
-        self.bgGComp= 0.65
-        self.bgBComp= 0.65
+        self.bgRComp= defaultBackgroundColorRGB[0]
+        self.bgGComp= defaultBackgroundColorRGB[1]
+        self.bgBComp= defaultBackgroundColorRGB[2]
         self.cameraParameters= CameraParameters()
 
+    def setBackgroundColor(self, rgbComponents= defaultBackgroundColorRGB):
+        ''' Sets the background color for the renderer.
+
+        :param rgbComponents: (red, green, blue) components of the background
+                              color.
+        '''
+        self.bgRComp= rgbComponents[0]
+        self.bgGComp= rgbComponents[1]
+        self.bgBComp= rgbComponents[2]
+  
     def setView(self):
         '''Sets the view'''
         self.renderer.ResetCamera()

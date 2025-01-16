@@ -156,8 +156,6 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
             lmsg.warning(className+'.'+methodName+"; error when drawing set: '"+eSet.name+"', it has no nodes so I can't get set geometry (use fillDownwards?)")
             return False
             
-                        
-
     def defineMeshScene(self, field: fields.ScalarField, defFScale= 0.0, eigenMode= None, color= xc.Vector([rd.random(),rd.random(),rd.random()])):
         '''Define the scene for the mesh
 

@@ -49,6 +49,36 @@ class OutputHandler(object):
         loadCaseName= self.modelSpace.getCurrentLoadCaseName()
         return loadCaseName+' '+itemToDisp+' '+setToDisplay.description
 
+    def getDisplaySettingsBlockTopo(self):
+        ''' Return a DisplaySettingsBlockTopo object in order to show
+            the block topology of the model.
+        '''
+        retval= vtk_CAD_graphic.DisplaySettingsBlockTopo()
+        retval.cameraParameters= self.getCameraParameters()
+        retval.setBackgroundColor(self.getBackgroundColor())
+        return retval
+        
+    def getDisplaySettingsFE(self):
+        ''' Return a DisplaySettingsFE object in order to show
+            the finite element mesh.
+        '''
+        retval= vtk_FE_graphic.DisplaySettingsFE()
+        retval.cameraParameters= self.getCameraParameters()
+        retval.setBackgroundColor(self.getBackgroundColor())
+        return retval
+    
+    def setBackgroundColor(self, rgbComponents):
+        ''' Sets the background color for the renderer.
+
+        :param rgbComponents: (red, green, blue) components of the background
+                              color.
+        '''
+        self.outputStyle.setBackgroundColor(rgbComponents)
+
+    def getBackgroundColor(self):
+        ''' Return the background color for the renderer.'''
+        return self.outputStyle.getBackgroundColor()
+
     def getOutputLengthUnitSym(self):
         return self.outputStyle.outputUnits.dynamicUnits.lengthUnit.symbol
 
@@ -95,8 +125,7 @@ class OutputHandler(object):
             setToDisplay= self.modelSpace.getTotalSet()
         if(caption is None):
             caption= setToDisplay.name+' set; blocks'
-        displaySettings= vtk_CAD_graphic.DisplaySettingsBlockTopo()
-        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings= self.getDisplaySettingsBlockTopo()
         displaySettings.displayBlocks(setToDisplay= setToDisplay, displayLocalAxes= displayLocalAxes, caption= caption, fileName= fileName, displayCellTypes= displayCellTypes)
         
     def displayFEMesh(self, setsToDisplay= None, caption= None, fileName= None, defFScale= 0.0):
@@ -123,9 +152,8 @@ class OutputHandler(object):
             else:
                 setNames= setsToDisplay.name    
             caption= setNames+'; mesh'
-        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        displaySettings.cameraParameters= self.getCameraParameters()
-        displaySettings.displayMesh(xcSets=setsToDisplay,caption= caption, scaleConstr= self.outputStyle.constraintsScaleFactor, fileName= fileName, defFScale= defFScale)
+        displaySettings= self.getDisplaySettingsFE()
+        displaySettings.displayMesh(xcSets=setsToDisplay, caption= caption, scaleConstr= self.outputStyle.constraintsScaleFactor, fileName= fileName, defFScale= defFScale)
 
     def displayLocalAxes(self, setToDisplay= None, caption= None, fileName=None, defFScale= 0.0):
         '''Display the local axes of the elements contained in the set.
@@ -144,8 +172,7 @@ class OutputHandler(object):
             setToDisplay= self.modelSpace.getTotalSet()
         if(caption is None):
             caption= setToDisplay.name+' set; local axes'
-        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings= self.getDisplaySettingsFE()
         displaySettings.displayLocalAxes(setToDisplay,caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor, fileName= fileName, defFScale= defFScale)
 
     def displayStrongWeakAxis(self, setToDisplay= None, caption= None, fileName=None, defFScale= 0.0):
@@ -165,9 +192,7 @@ class OutputHandler(object):
             setToDisplay= self.modelSpace.getTotalSet()
         if(caption is None):
             caption= setToDisplay.name+' set; strong [red] and weak [blue] axes'
-        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        displaySettings.cameraParameters= self.getCameraParameters()
-#        displaySettings.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor, fileName= fileName, defFScale= defFScale)
+        displaySettings= self.getDisplaySettingsFE()
         displaySettings.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor)
 
     def displayScalarPropertyAtNodes(self, propToDisp, fUnitConv, unitDescription, captionText, setToDisplay, fileName=None, defFScale=0.0, rgMinMax=None):
@@ -192,8 +217,7 @@ class OutputHandler(object):
 
         '''
         field= fields.ScalarField(name=propToDisp,functionName="getProp",component=None, fUnitConv= fUnitConv, rgMinMax=rgMinMax)
-        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings= self.getDisplaySettingsFE()
         displaySettings.displayMesh(xcSets=setToDisplay, field= field, diagrams= None, caption= captionText, fileName=fileName, defFScale=defFScale)
         
     def displayDispRot(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None,captionText=None):
@@ -406,8 +430,7 @@ class OutputHandler(object):
         vFieldF.populateFromPairList(forcePairs)
         vFieldM.populateFromPairList(momentPairs)
 
-        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings= self.getDisplaySettingsFE()
         displaySettings.setupGrid(setToDisplay)
         meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color= setToDisplay.color)
         if(meshSceneOk):
@@ -466,8 +489,7 @@ class OutputHandler(object):
         LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
         diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDispRes],attributeName= attributeName,component= component, defaultDirection= defaultDirection, lRefModSize= LrefModSize)
         diagram.addDiagram()
-        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings= self.getDisplaySettingsFE()
         displaySettings.setupGrid(setToDisplay)
         meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
         if(meshSceneOk):
@@ -511,8 +533,7 @@ class OutputHandler(object):
             captionText= self.getCaptionText(itemToDisp, setToDisplay)
         diagram= ifd.InternalForceDiagram(scaleFactor= scaleFactor, lRefModSize= LrefModSize,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp, defaultDirection= defaultDirection)
         diagram.addDiagram() # add the diagram to the scene.
-        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings= self.getDisplaySettingsFE()
         displaySettings.setupGrid(setToDisplay)
         meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color= setToDisplay.color)
         if(meshSceneOk):
@@ -559,8 +580,7 @@ class OutputHandler(object):
             unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
             unitDescription= self.outputStyle.getForceUnitsDescription()
             field= fields.ExtrapolatedProperty(propName,"getProp",setToDisplay,fUnitConv= unitConversionFactor,rgMinMax=rgMinMax)
-            displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-            displaySettings.cameraParameters= self.getCameraParameters()
+            displaySettings= self.getDisplaySettingsFE()
             if not captionText:
                 captionText= self.getCaptionText(itemToDisp, setToDisplay)
             field.display(displaySettings=displaySettings,caption= captionText, unitDescription= unitDescription, fileName=fileName, defFScale=defFScale)
@@ -595,8 +615,7 @@ class OutputHandler(object):
         elSet= setToDisplay.elements
         if(len(elSet)>0):
             field= fields.ExtrapolatedProperty(propName,"getProp",setToDisplay,fUnitConv= 1.0, rgMinMax=rgMinMax)
-            displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-            displaySettings.cameraParameters= self.getCameraParameters()
+            displaySettings= self.getDisplaySettingsFE()
             if not captionText:
                 captionText= self.getCaptionText(propName, setToDisplay)
             field.display(displaySettings=displaySettings, caption= captionText, unitDescription= unitDescription, fileName=fileName, defFScale=defFScale)            
@@ -629,8 +648,7 @@ class OutputHandler(object):
         vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.
         vField= lvf.LoadVectorField(loadCaseName,setToDisplay,unitConversionFactor,vectorScale)
         vField.multiplyByElementArea= self.outputStyle.multLoadsByElemArea
-        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings= self.getDisplaySettingsFE()
         displaySettings.setupGrid(setToDisplay)
         vField.dumpVectors(preprocessor,defFScale,showElementalLoads= True, showNodalLoads= True)
         meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
@@ -665,8 +683,7 @@ class OutputHandler(object):
         loadCaseName= preprocessor.getDomain.currentCombinationName
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         unitDescription= self.outputStyle.getForceUnitsDescription()
-        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings= self.getDisplaySettingsFE()
         grid= displaySettings.setupGrid(setToDisplay)
         if __debug__:
             if(not grid):
@@ -752,8 +769,7 @@ class OutputHandler(object):
         LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
         diagram= npd.NodePropertyDiagram(scaleFactor= 1.0, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor,sets=[setToDisplay], attributeName= itemToDisp, defaultDirection= defaultDirection, defaultValue= defaultValue)
         diagram.addDiagram(defFScale= defFScale)
-        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings= self.getDisplaySettingsFE()
         grid= displaySettings.setupGrid(setToDisplay)
         if __debug__:
             if(not grid):
@@ -788,8 +804,7 @@ class OutputHandler(object):
         LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
         diagram= epd.ElementPropertyDiagram(scaleFactor= 1.0, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor,sets=[setToDisplay], propertyName= itemToDisp)
         diagram.addDiagram()
-        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings= self.getDisplaySettingsFE()
         grid= displaySettings.setupGrid(setToDisplay)
         if __debug__:
             if(not grid):
@@ -906,8 +921,7 @@ class OutputHandler(object):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.warning(className+'.'+methodName+'; mode: '+str(mode)+' no rotational components to display.')
-        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings= self.getDisplaySettingsFE()
         displaySettings.setupGrid(setToDisplay)
         meshSceneOk= displaySettings.defineMeshScene(None, defFScale, color= setToDisplay.color)
         if(meshSceneOk):
@@ -947,9 +961,8 @@ class OutputHandler(object):
         if((equLoadVctScale!=0.0) and accelMode is None):
             lmsg.warning("Can't display equivalent static loads. Parameter accelMode should not be null ")
             equLoadVctScale=None
-        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+        displaySettings= self.getDisplaySettingsFE()
         displaySettings.setupGrid(setToDisplay)
-        displaySettings.cameraParameters= self.getCameraParameters()
         meshSceneOk= displaySettings.defineMeshScene(None,defFScale,eigenMode,color=setToDisplay.color)
         if(meshSceneOk):
             unitsScale= 1.0
@@ -1009,8 +1022,7 @@ class OutputHandler(object):
                     caption= attributeName + ', ' + itemToDisp +' '+unitDescription+ '. '+ descrSet
                 diagram= brd.BeamResultDiagram(scaleFactor= 1.0, lRefModSize= lRefModSize, fUnitConv= unitConversionFactor, sets=[beamSetDispRes], attributeName= attributeName, component= itemToDisp, defaultDirection= defaultDirection, rgMinMax= rgMinMax)
                 diagram.addDiagram()
-                displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-                displaySettings.cameraParameters= self.getCameraParameters()
+                displaySettings= self.getDisplaySettingsFE()
                 displaySettings.setupGrid(setToDisplay)
                 meshSceneOk= displaySettings.defineMeshScene(None, defFScale,color= setToDisplay.color)
                 if(meshSceneOk):
@@ -1098,8 +1110,7 @@ class OutputHandler(object):
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         
-        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings= self.getDisplaySettingsFE()
         attributeName= limitStateLabel + sectRef
         fUnitConv, unitDescription= self.outputStyle.getUnitParameters(argument)
 

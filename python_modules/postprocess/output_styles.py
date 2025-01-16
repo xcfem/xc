@@ -11,11 +11,13 @@ __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 import locale
 #from misc_utils import log_messages as lmsg
 from postprocess import output_units
+from postprocess.xcVtk import vtk_graphic_base
 
 class OutputStyle(object):
     ''' Pararameters used in the output routines (graphics, etc.)
 
        :ivar cameraParameters: camera position and orientation.
+       :ivar backgroundColor: color for the graphic background.
        :ivar outputUnits: output units and unit conversion.
        :ivar constraintsScaleFactor: scale factor to display DOF constraints.
        :ivar localAxesVectorScaleFactor: scale factor to display local axes vectors.
@@ -43,7 +45,7 @@ class OutputStyle(object):
        :ivar language: english, spanish, french 
        :ivar directionDescr: text list to identify each direction (as ['vertical reinforcement', 'horizontal reinforcement']).
     '''
-    def __init__(self, cameraParameters= None, outputUnits= output_units.OutputUnits(), constraintsScaleFactor= 0.4, localAxesVectorScaleFactor= 0.25, language= None):
+    def __init__(self, cameraParameters= None, outputUnits= output_units.OutputUnits(), constraintsScaleFactor= 0.4, localAxesVectorScaleFactor= 0.25, language= None, backgroundColor= vtk_graphic_base.defaultBackgroundColorRGB):
         '''Defines the dimension of the space and the number 
          of DOFs for each node.
 
@@ -52,6 +54,8 @@ class OutputStyle(object):
         :param constraintsScaleFactor: scale factor to display DOF constraints.
         :param localAxesVectorScaleFactor: scale factor to display local axes vectors.
         :param language: english, spanish, french 
+        :param backgroundColor: (red, green, blue) components of the background
+                                color.
         '''
         # Graphic stuff.
         self.cameraParameters= cameraParameters
@@ -72,7 +76,20 @@ class OutputStyle(object):
         else:
             self.language= locale.getdefaultlocale()[0][:2]
         self.directionDescription= ['dir. 1', 'dir. 2']
-            
+        self.backgroundColor= backgroundColor
+
+    def setBackgroundColor(self, rgbComponents):
+        ''' Sets the background color for the renderer.
+
+        :param rgbComponents: (red, green, blue) components of the background
+                              color.
+        '''
+        self.backgroundColor= rgbComponents
+
+    def getBackgroundColor(self):
+        ''' Return the background color for the renderer.'''
+        return self.backgroundColor
+    
     def getDisplacementUnitsScaleFactor(self):
         ''' Return the scale factor for the displacement units.'''
         return self.outputUnits.getDisplacementUnitsScaleFactor()
