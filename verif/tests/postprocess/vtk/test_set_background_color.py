@@ -92,7 +92,9 @@ result= analysis.analyze(1)
 # Graphic stuff.
 from postprocess import output_handler
 oh= output_handler.OutputHandler(modelSpace)
-oh.setBackgroundColor((0,0,0))
+# oh.setBackgroundColor((0,0,0))
+oh.setLineWidth(5.0)
+# oh.displayDispRot(itemToDisp= 'uZ')
 
 fname= os.path.basename(__file__)
 outputFileName= '/tmp/'+fname.replace('.py', '.jpeg')

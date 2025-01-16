@@ -10,7 +10,14 @@ __email__= "l.pereztato@gmail.com"
 from postprocess.xcVtk.fields import vtk_lut_field
 
 class FieldBase(vtk_lut_field.LUTField):
-    '''Base classs for fields.'''
+    '''Base classs for fields.
+
+    :ivar name: field name.
+    '''
     def __init__(self,name,fUnitConv):
+        ''' Constructor.
+
+        :param name: field name.
+        '''
         super(FieldBase,self).__init__(fUnitConv)
         self.name= name

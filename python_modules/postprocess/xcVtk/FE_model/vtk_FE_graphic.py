@@ -55,8 +55,12 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
             elemActor.GetProperty().SetRepresentationToPoints()
         elif(reprType=="wireframe"):
             elemActor.GetProperty().SetRepresentationToWireFrame()
+            if(self.lineWidth is not None):
+                elemActor.GetProperty().SetLineWidth(self.lineWidth)
         elif(reprType=="surface"):
             elemActor.GetProperty().SetRepresentationToSurface()
+            if(self.lineWidth is not None):
+                elemActor.GetProperty().SetLineWidth(self.lineWidth)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name

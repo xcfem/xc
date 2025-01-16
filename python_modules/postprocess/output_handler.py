@@ -56,6 +56,7 @@ class OutputHandler(object):
         retval= vtk_CAD_graphic.DisplaySettingsBlockTopo()
         retval.cameraParameters= self.getCameraParameters()
         retval.setBackgroundColor(self.getBackgroundColor())
+        retval.setLineWidth(self.getLineWidth())
         return retval
         
     def getDisplaySettingsFE(self):
@@ -65,6 +66,7 @@ class OutputHandler(object):
         retval= vtk_FE_graphic.DisplaySettingsFE()
         retval.cameraParameters= self.getCameraParameters()
         retval.setBackgroundColor(self.getBackgroundColor())
+        retval.setLineWidth(self.getLineWidth())
         return retval
     
     def setBackgroundColor(self, rgbComponents):
@@ -78,6 +80,17 @@ class OutputHandler(object):
     def getBackgroundColor(self):
         ''' Return the background color for the renderer.'''
         return self.outputStyle.getBackgroundColor()
+
+    def setLineWidth(self, lineWidth):
+        ''' Set the width for the displayed lines.
+
+        :param lineWidth: width of the lines in screen units.
+        '''
+        self.outputStyle.setLineWidth(lineWidth)
+
+    def getLineWidth(self):
+        ''' Return the width value for the displayed lines.'''
+        return self.outputStyle.getLineWidth()
 
     def getOutputLengthUnitSym(self):
         return self.outputStyle.outputUnits.dynamicUnits.lengthUnit.symbol

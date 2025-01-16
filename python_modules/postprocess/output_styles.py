@@ -18,6 +18,7 @@ class OutputStyle(object):
 
        :ivar cameraParameters: camera position and orientation.
        :ivar backgroundColor: color for the graphic background.
+       :ivar lineWidth: width of the displayed lines in screen units.
        :ivar outputUnits: output units and unit conversion.
        :ivar constraintsScaleFactor: scale factor to display DOF constraints.
        :ivar localAxesVectorScaleFactor: scale factor to display local axes vectors.
@@ -45,7 +46,7 @@ class OutputStyle(object):
        :ivar language: english, spanish, french 
        :ivar directionDescr: text list to identify each direction (as ['vertical reinforcement', 'horizontal reinforcement']).
     '''
-    def __init__(self, cameraParameters= None, outputUnits= output_units.OutputUnits(), constraintsScaleFactor= 0.4, localAxesVectorScaleFactor= 0.25, language= None, backgroundColor= vtk_graphic_base.defaultBackgroundColorRGB):
+    def __init__(self, cameraParameters= None, outputUnits= output_units.OutputUnits(), constraintsScaleFactor= 0.4, localAxesVectorScaleFactor= 0.25, language= None, backgroundColor= vtk_graphic_base.defaultBackgroundColorRGB, lineWidth= None):
         '''Defines the dimension of the space and the number 
          of DOFs for each node.
 
@@ -56,6 +57,7 @@ class OutputStyle(object):
         :param language: english, spanish, french 
         :param backgroundColor: (red, green, blue) components of the background
                                 color.
+        :param lineWidth: width of the displayed lines in screen units.
         '''
         # Graphic stuff.
         self.cameraParameters= cameraParameters
@@ -77,6 +79,7 @@ class OutputStyle(object):
             self.language= locale.getdefaultlocale()[0][:2]
         self.directionDescription= ['dir. 1', 'dir. 2']
         self.backgroundColor= backgroundColor
+        self.lineWidth= lineWidth
 
     def setBackgroundColor(self, rgbComponents):
         ''' Sets the background color for the renderer.
@@ -89,6 +92,17 @@ class OutputStyle(object):
     def getBackgroundColor(self):
         ''' Return the background color for the renderer.'''
         return self.backgroundColor
+
+    def setLineWidth(self, lineWidth):
+        ''' Set the width for the displayed lines.
+
+        :param lineWidth: width of the lines in screen units.
+        '''
+        self.lineWidth= lineWidth
+
+    def getLineWidth(self):
+        ''' Return the value of the width for the displayed lines.'''
+        return self.lineWidth
     
     def getDisplacementUnitsScaleFactor(self):
         ''' Return the scale factor for the displacement units.'''

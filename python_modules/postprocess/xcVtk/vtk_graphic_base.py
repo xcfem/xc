@@ -266,6 +266,7 @@ class DisplaySettings(object):
     :ivar bgRComp: background color red component (defaults to 0.65)
     :ivar bgGComp: background color green component (defaults to 0.65)
     :ivar bgBComp: background color blue component (defaults to 0.65)
+    :ivar lineWidth: with of the lines in screen units.
     '''
     def __init__(self):
         '''Constructor.'''
@@ -278,6 +279,7 @@ class DisplaySettings(object):
         self.bgGComp= defaultBackgroundColorRGB[1]
         self.bgBComp= defaultBackgroundColorRGB[2]
         self.cameraParameters= CameraParameters()
+        self.lineWidth= None
 
     def setBackgroundColor(self, rgbComponents= defaultBackgroundColorRGB):
         ''' Sets the background color for the renderer.
@@ -288,6 +290,17 @@ class DisplaySettings(object):
         self.bgRComp= rgbComponents[0]
         self.bgGComp= rgbComponents[1]
         self.bgBComp= rgbComponents[2]
+
+    def setLineWidth(self, lineWidth):
+        ''' Set the width for the displayed lines.
+
+        :param lineWidth: width of the lines in screen units.
+        '''
+        self.lineWidth= lineWidth
+
+    def getLineWidth(self):
+        ''' Return the value of the width for the displayed lines.'''
+        return self.lineWidth
   
     def setView(self):
         '''Sets the view'''
