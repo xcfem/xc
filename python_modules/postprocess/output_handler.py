@@ -218,9 +218,9 @@ class OutputHandler(object):
         '''
         field= fields.ScalarField(name=propToDisp,functionName="getProp",component=None, fUnitConv= fUnitConv, rgMinMax=rgMinMax)
         displaySettings= self.getDisplaySettingsFE()
-        displaySettings.displayMesh(xcSets=setToDisplay, field= field, diagrams= None, caption= captionText, fileName=fileName, defFScale=defFScale)
+        displaySettings.displayMesh(xcSets=setToDisplay, field= field, diagrams= None, caption= captionText, unitDescription= unitDescription, fileName=fileName, defFScale=defFScale)
         
-    def displayDispRot(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None,captionText=None):
+    def displayDispRot(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None, captionText= None):
         '''displays the component of the displacement or rotations in the 
         set of entities.
 
@@ -253,7 +253,7 @@ class OutputHandler(object):
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
         if not captionText:
             captionText= self.getCaptionText(itemToDisp, setToDisplay)
-        self.displayScalarPropertyAtNodes(propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
+        self.displayScalarPropertyAtNodes(propToDisp= propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
 
     def displayStresses(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None, captionText= None, transformToLocalCoord= False):
         '''display the stresses on the elements.
@@ -284,7 +284,7 @@ class OutputHandler(object):
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
         if not captionText:
             captionText= self.getCaptionText(itemToDisp, setToDisplay)
-        self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
+        self.displayScalarPropertyAtNodes(propToDisp= propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setoToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax=rgMinMax)
 
     def displayStrains(self, itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None, captionText= None, transformToLocalCoord= False):
         '''displays the strains on the elements.
@@ -316,7 +316,7 @@ class OutputHandler(object):
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
         if not captionText:
             captionText= self.getCaptionText(itemToDisp, setToDisplay)
-        self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
+        self.displayScalarPropertyAtNodes(proptToDisp= propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax=rgMinMax)
         
     def displayVonMisesStresses(self, vMisesCode= 'von_mises_stress', setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None,captionText=None):
         '''display the stresses on the elements.
@@ -349,7 +349,7 @@ class OutputHandler(object):
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters('stress')
         if not captionText:
             captionText= self.getCaptionText(vMisesCode, setToDisplay)
-        self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
+        self.displayScalarPropertyAtNodes(propToDisp= propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
         
     def displayState(self, itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
         '''displays the strains on the elements.
@@ -377,7 +377,7 @@ class OutputHandler(object):
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
 
         captionText= self.getCaptionText(itemToDisp, setToDisplay)
-        self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
+        self.displayScalarPropertyAtNodes(propToDisp= propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
         
     def displayReactions(self, setToDisplay=None, fileName=None, defFScale=0.0, inclInertia= False, reactionCheckTolerance= 1e-7,captionText=None):
         ''' Display reactions.

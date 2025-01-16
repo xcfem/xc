@@ -344,7 +344,9 @@ class DisplaySettings(object):
 
         #Time stamp and window decorations.
         if(caption==''):
-            lmsg.warning('setupWindow; window caption empty.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; window caption empty.')
         vtkCornerAnno= self.annotation.getVtkCornerAnnotation(caption= caption, unitDescription= unitDescription)
         self.renderer.AddActor(vtkCornerAnno)
         return self.renWin
