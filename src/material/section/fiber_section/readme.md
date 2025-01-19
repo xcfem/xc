@@ -2,6 +2,10 @@
 
 A fiber section object is composed of Fibers, with each fiber containing a UniaxialMaterial, an area and a location: (y) for 2D sections or (y,z) for 3D sections.
 
+### Import section from [sectionproperties](https://sectionproperties.readthedocs.io/en/latest/index.html)
+
+- [One fiber at a time](https://portwooddigital.com/2025/01/19/one-fiber-at-a-time/)
+
 ## References
 - [Implementation of interaction diagrams in the finite element open source software XC](http://www.xcengineering.xyz/blog_doc/2016_interact_diag/interactionDiagram.pdf)
 - [Fiber Section (OpenSees)](https://opensees.berkeley.edu/wiki/index.php/Fiber_Section)
