@@ -14,6 +14,7 @@ l= 1e-7 # Distance between nodes
 F= 1 # Force magnitude
 
 import xc
+from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
 
@@ -21,11 +22,12 @@ from materials import typical_materials
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodeHandler= preprocessor.getNodeHandler
-nodeHandler.dimSpace= 1 # One coordinate for each node.
-nodeHandler.numDOFs= 1 # One degree of freedom for each node.
+modelSpace= predefined_spaces.SolidMechanics1D(nodeHandler)
+# nodeHandler.dimSpace= 1 # One coordinate for each node.
+# nodeHandler.numDOFs= 1 # One degree of freedom for each node.
 
-n1= nodeHandler.newNodeX(1)
-n2= nodeHandler.newNodeX(1.0+l)
+n1= modelSpace.newNodeX(1)
+n2= modelSpace.newNodeX(1.0+l)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor= preprocessor, name= "elast", E= K)
@@ -79,3 +81,8 @@ if (abs(ratio1-1.0)<1e-5) & (ratio2<1e-11) :
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayLocalAxes()
