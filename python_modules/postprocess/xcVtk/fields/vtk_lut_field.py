@@ -34,7 +34,11 @@ class LUTField(object):
     :ivar valMin: minimum value of the diagram.
     :ivar valMax: maximum value of the diagram.
     '''
-    def __init__(self,fUnitConv):
+    def __init__(self, fUnitConv):
+        ''' Constructor.
+
+        :param fUnitConv: unit conversion factor.
+        '''
         self.initializeMinMax()
         self.lookUpTable= None
         self.scalarBar= None

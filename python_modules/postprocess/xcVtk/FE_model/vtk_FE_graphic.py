@@ -55,8 +55,12 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
             elemActor.GetProperty().SetRepresentationToPoints()
         elif(reprType=="wireframe"):
             elemActor.GetProperty().SetRepresentationToWireFrame()
+            if(self.lineWidth is not None):
+                elemActor.GetProperty().SetLineWidth(self.lineWidth)
         elif(reprType=="surface"):
             elemActor.GetProperty().SetRepresentationToSurface()
+            if(self.lineWidth is not None):
+                elemActor.GetProperty().SetLineWidth(self.lineWidth)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -138,8 +142,8 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                 vtx= vtk.vtkIdList()
                 for vIndex in vertices:
                     vtx.InsertNextId(vIndex)
-                if(e.getVtkCellType!= vtk.VTK_VERTEX):
-                    self.gridRecord.uGrid.InsertNextCell(e.getVtkCellType,vtx)
+                #if(e.getVtkCellType!= vtk.VTK_VERTEX): LCPT commented out 20250120
+                self.gridRecord.uGrid.InsertNextCell(e.getVtkCellType,vtx)
             setConstraints= eSet.getConstraints
             for c in setConstraints:
                 if(hasattr(c,'getIdxNodes')):
@@ -156,8 +160,6 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
             lmsg.warning(className+'.'+methodName+"; error when drawing set: '"+eSet.name+"', it has no nodes so I can't get set geometry (use fillDownwards?)")
             return False
             
-                        
-
     def defineMeshScene(self, field: fields.ScalarField, defFScale= 0.0, eigenMode= None, color= xc.Vector([rd.random(),rd.random(),rd.random()])):
         '''Define the scene for the mesh
 
@@ -240,7 +242,13 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self.setupGrid(setToDisplay)
         elementAvgSize= setToDisplay.elements.getAverageSize(False)
         LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus()
-        vScale= vectorScale*min(elementAvgSize, .15*LrefModSize)        
+        tol= 1e-3*LrefModSize
+        if(elementAvgSize>tol):
+            vScale= vectorScale*min(elementAvgSize, .15*LrefModSize)
+        else: # only zero-length elements.
+            vScale= vectorScale*.15*LrefModSize
+        if(vScale==0.0): # single point model.
+            vScale= 1.0
         vField= lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vScale)
         vField.dumpVectors(setToDisplay)
         self.defineMeshScene(field= None) 

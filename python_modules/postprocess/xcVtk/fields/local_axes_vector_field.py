@@ -18,6 +18,7 @@ class LocalAxesVectorField(object):
     xColor= [1.0,0.0,0.0] # red
     yColor= [0.0,1.0,0.0] # green
     zColor= [0.0,0.0,1.0] # blue
+    
     def __init__(self, name, scaleFactor= 1.0):
         '''
           Constructor.
@@ -30,7 +31,7 @@ class LocalAxesVectorField(object):
         self.yAxes= dfd.DirectionFieldData(name+'Y',self.yColor,3,scaleFactor)
         self.zAxes= dfd.DirectionFieldData(name+'Z',self.zColor,3,scaleFactor)
 
-    def dumpPair(self,centroid,axes):
+    def dumpPair(self, centroid, axes):
         ''' Dump the pair into the xAxes, yAxes and zAxes objets.
 
           :param centroid: insertion point the axes.

@@ -246,6 +246,8 @@ class CameraParameters(object):
         vtkCamera.SetParallelProjection(1)
         vtkCamera.Zoom(self.zoom)
 
+defaultBackgroundColorRGB= (0.65, 0.65, 0.65)
+
 class DisplaySettings(object):
     ''' Provides the variables to define the output device.
 
@@ -264,6 +266,7 @@ class DisplaySettings(object):
     :ivar bgRComp: background color red component (defaults to 0.65)
     :ivar bgGComp: background color green component (defaults to 0.65)
     :ivar bgBComp: background color blue component (defaults to 0.65)
+    :ivar lineWidth: with of the lines in screen units.
     '''
     def __init__(self):
         '''Constructor.'''
@@ -272,11 +275,33 @@ class DisplaySettings(object):
         self.windowWidth= 800
         self.windowHeight= 600
         self.annotation= sa.ScreenAnnotation()
-        self.bgRComp= 0.65
-        self.bgGComp= 0.65
-        self.bgBComp= 0.65
+        self.bgRComp= defaultBackgroundColorRGB[0]
+        self.bgGComp= defaultBackgroundColorRGB[1]
+        self.bgBComp= defaultBackgroundColorRGB[2]
         self.cameraParameters= CameraParameters()
+        self.lineWidth= None
 
+    def setBackgroundColor(self, rgbComponents= defaultBackgroundColorRGB):
+        ''' Sets the background color for the renderer.
+
+        :param rgbComponents: (red, green, blue) components of the background
+                              color.
+        '''
+        self.bgRComp= rgbComponents[0]
+        self.bgGComp= rgbComponents[1]
+        self.bgBComp= rgbComponents[2]
+
+    def setLineWidth(self, lineWidth):
+        ''' Set the width for the displayed lines.
+
+        :param lineWidth: width of the lines in screen units.
+        '''
+        self.lineWidth= lineWidth
+
+    def getLineWidth(self):
+        ''' Return the value of the width for the displayed lines.'''
+        return self.lineWidth
+  
     def setView(self):
         '''Sets the view'''
         self.renderer.ResetCamera()
@@ -332,7 +357,9 @@ class DisplaySettings(object):
 
         #Time stamp and window decorations.
         if(caption==''):
-            lmsg.warning('setupWindow; window caption empty.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; window caption empty.')
         vtkCornerAnno= self.annotation.getVtkCornerAnnotation(caption= caption, unitDescription= unitDescription)
         self.renderer.AddActor(vtkCornerAnno)
         return self.renWin

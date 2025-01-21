@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
-'''Railway bridge loads. Centrifugal loads over a track axis.'''
+'''Railway bridge loads. Distribution of the centrifugal loads due to a train 
+   traveling along a track axis.'''
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2024, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import math
 import geom

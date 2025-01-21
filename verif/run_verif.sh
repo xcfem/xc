@@ -377,6 +377,8 @@ echo "$BLEU" "    Forming load combination according to EC0." "$NORMAL"
 python tests/actions/load_combinations/ec0/test_ec0_road_bridge_context.py
 python tests/actions/load_combinations/ec0/test_ec0_traffic_groups.py
 python tests/actions/load_combinations/ec0/test_ec0_seismic_combinations.py
+python tests/actions/load_combinations/ec0/test_ec0_accidental_combinations_01.py
+python tests/actions/load_combinations/ec0/test_ec0_accidental_combinations_02.py
 python tests/actions/load_combinations/ec0/test_ec0_railway_bridge_load_combinations.py
 echo "$BLEU" "  Load combination container tests." "$NORMAL"
 python tests/actions/load_combinations/comb_container/test_comb_container_01.py
@@ -1003,6 +1005,7 @@ python tests/loads/load_distribution/railway_traffic/test_track_axis_load_05.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_06.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_07.py
 python tests/loads/load_distribution/railway_traffic/test_track_axis_load_08.py
+python tests/loads/load_distribution/railway_traffic/test_track_axis_load_09.py
 
 echo "$BLEU" "    Strain loads." "$NORMAL"
 echo "$BLEU" "      Strain loads on trusses." "$NORMAL"
@@ -1848,6 +1851,9 @@ python tests/postprocess/vtk/test_display_blocks.py
 python tests/postprocess/vtk/test_beam3d_bending_moment_belly_01.py
 python tests/postprocess/vtk/test_beam3d_bending_moment_belly_02.py
 python tests/postprocess/vtk/test_display_node_value_diagram.py
+python tests/postprocess/vtk/test_set_background_color.py
+python tests/postprocess/vtk/test_display_zero_length_local_axes_01.py
+python tests/postprocess/vtk/test_display_zero_length_local_axes_02.py
 
 # Report tests.
 echo "$BLEU" "  Report output." "$NORMAL"

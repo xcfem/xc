@@ -18,7 +18,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials.ec5 import EC5_materials
-from postprocess import output_handler
 
 wood= EC5_materials.C24
 sectionWidth= 0.075
@@ -214,6 +213,7 @@ else:
     lmsg.error(fname+' ERROR.')
 #########################################################
 # Graphic stuff.
+# from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
 ## Uncomment to display blocks.

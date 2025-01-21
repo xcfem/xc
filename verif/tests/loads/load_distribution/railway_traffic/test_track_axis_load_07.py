@@ -2,6 +2,12 @@
 '''Railway bridge loads. Wind loads on rolling stock applied on a track axis.
    This time with opposed curvatures along the rail axis.'''
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2024, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 
 import math
 import geom

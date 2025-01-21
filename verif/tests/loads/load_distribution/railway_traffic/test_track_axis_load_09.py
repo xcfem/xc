@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-'''Railway bridge loads. Distribution of railway loads on a track axis.'''
+'''Railway bridge loads. Distribution of railway loads on a track axis in 
+   derailment design  situation I.
+'''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2024, LCPT"
+__copyright__= "Copyright 2025, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
@@ -137,7 +139,7 @@ for p in axisPoints2d:
     axisPoints3d.append(to_3d(p, zDeck+ballastThickness+sleeperThickness))
 axisPolyline3d= geom.Polyline3d(axisPoints3d)
 
-trackAxis= ta.TrackAxis(trackAxis= axisPolyline3d)
+derailedTrackAxis= EC1_rail_load_models.TrackAxis(trackAxis= axisPolyline3d).getAxisForDerailmentSituationI(factor= 1.0)
 
 ## Define train model.
 trainLoadModel= tlm.TrainLoadModel(locomotive= EC1_rail_load_models.locomotiveLM1, uniformLoad= 80e3, dynamicFactor= 1.0, classificationFactor= 1.21)
@@ -149,11 +151,11 @@ err2= 0.0
 loadNames= list()
 numberOfLoadedNodes= list()
 for index, relativePosition in enumerate(relativePositions):
-    name= 'Q1a'+str(index+1)
+    name= 'A1a'+str(index+1)
 
     cLC= modelSpace.newLoadPattern(name= name)
     modelSpace.setCurrentLoadPattern(cLC.name)
-    nodalLoads= trackAxis.defDeckLoadsThroughLayers(trainModel= trainLoadModel, relativePosition= relativePosition, spreadingLayers= spreadingLayers, deckThickness= deckThickness, deckSpreadingRatio= 1/1, originSet= slabSet)
+    nodalLoads= derailedTrackAxis.defDeckLoadsThroughLayers(trainModel= trainLoadModel, relativePosition= relativePosition, spreadingLayers= spreadingLayers, deckThickness= deckThickness, deckSpreadingRatio= 1/1, originSet= slabSet)
     modelSpace.addLoadCaseToDomain(cLC.name)
 
     ## Check total load value.
@@ -162,9 +164,9 @@ for index, relativePosition in enumerate(relativePositions):
         totalLoad-= nl.getLoadVector[2] # z component.
     numberOfLoadedNodes.append(len(nodalLoads))
 
-    testLoad= trackAxis.getTotalLoad(trainLoadModel)
+    testLoad= derailedTrackAxis.getTotalLoad(trainLoadModel)
 
-    refTotalLoad= 10527.945342944799e3
+    refTotalLoad= 10786e3
 
     err1+= abs(totalLoad-refTotalLoad)/refTotalLoad
     err2+= abs(testLoad-refTotalLoad)/refTotalLoad
@@ -175,14 +177,12 @@ for index, relativePosition in enumerate(relativePositions):
 
 err1/= len(relativePositions)
 err2/= len(relativePositions)
-# Check that the number of loaded nodes doesn't "explode" due to an error in
-# the computation of the loaded contour (see getDeckLoadedContourThroughLayers
-# in RailLoadBase class.
-testOK= True
-for n in numberOfLoadedNodes:
-    if((n<900) or (n>1100)):
-        testOK= False
-testOK= testOK and (abs(err1)<.05) and (abs(err2)<1e-4)
+testOK= (abs(err1)<.05) and (abs(err2)<1e-4)
+
+'''
+print('err1= ', err1)
+print('err2= ', err2)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
