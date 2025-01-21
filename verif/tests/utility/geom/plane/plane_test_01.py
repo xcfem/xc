@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+''' Plane object trivial test.'''
+
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
