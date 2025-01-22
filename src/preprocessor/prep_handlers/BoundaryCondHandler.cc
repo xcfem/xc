@@ -128,10 +128,12 @@ XC::Skew_Constraint *XC::BoundaryCondHandler::newSkewPlane(const int &constraine
 //! @brief Defines a skew 3D constraint.
 XC::Skew_Constraint *XC::BoundaryCondHandler::newSkewPlane(const int &constrainedNode, const Plane &p, const double &prescribedDisplacement, const double &prescribedRotation)
   {
-    Skew_Constraint *skewC= new SkewPlane(tag_skew_constraint, constrainedNode, p, prescribedDisplacement, prescribedRotation);
+    SkewPlane *skewC= new SkewPlane(tag_skew_constraint, constrainedNode, p, prescribedDisplacement, prescribedRotation);
     tag_skew_constraint++;
     if(skewC)
       {
+	Domain *dom= this->getDomain();
+	skewC->setup(dom);
         getDomain()->addMFreedom_Constraint(skewC);
         getPreprocessor()->updateSets(skewC);
       }
