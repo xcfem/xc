@@ -41,9 +41,10 @@ modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 n1= nodes.newNodeXY(0,0.0)
 n2= nodes.newNodeXY(L,0.0)
 
+## Coordinate transformation.
 lin= modelSpace.newLinearCrdTransf("lin")
 
-# Define material.
+## Define material.
 sectionProperties= xc.CrossSectionProperties2d()
 sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G
 sectionProperties.I= Iz
