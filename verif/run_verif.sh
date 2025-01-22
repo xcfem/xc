@@ -212,11 +212,12 @@ python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_3d_test
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_3d_test_06.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_3d_test_07.py
 echo "$BLEU" "    Planes." "$NORMAL"
-python tests/utility/geom/plane_test_01.py
-python tests/utility/geom/plane_test_02.py
-python tests/utility/geom/plane_test_03.py
-#python tests/utility/geom/plane_test_04.py
-python tests/utility/geom/plane_test_05.py
+python tests/utility/geom/plane/plane_test_01.py
+python tests/utility/geom/plane/plane_test_02.py
+python tests/utility/geom/plane/plane_test_03.py
+#python tests/utility/geom/plane/plane_test_04.py
+python tests/utility/geom/plane/plane_test_05.py
+python tests/utility/geom/plane/plane_test_06.py
 echo "$BLEU" "    3D polyhedrons." "$NORMAL"
 python tests/utility/geom/polyhedrons/test_hexahedron_01.py
 echo "$BLEU" "    2D half planes." "$NORMAL"
