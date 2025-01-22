@@ -361,6 +361,8 @@
 #include "domain/constraints/MRMFreedom_Constraint.h"
 #include "domain/constraints/MRMFreedom_ConstraintIter.h"
 #include "domain/constraints/GlueNodeToElement.h"
+#include "domain/constraints/Skew_Constraint.h"
+#include "domain/constraints/SkewPlane.h"
 
 #include "domain/constraints/MapActiveLoadPatterns.h"
 #include "domain/constraints/ConstrContainer.h"

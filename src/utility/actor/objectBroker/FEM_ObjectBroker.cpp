@@ -287,15 +287,43 @@ XC::Node *XC::FEM_ObjectBroker::getNewNode(int classTag)
       }
   }
 
+//! @brief Broke a Skew_Constraint object from its class tag.
+XC::Skew_Constraint *XC::FEM_ObjectBroker::getNewSkew(int classTag)
+  {
+    switch(classTag)
+      {
+      case CNSTRNT_TAG_Skew_Constraint:
+        return new Skew_Constraint(0,classTag);
+      default:
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		  << "; no Skew_Constraint type exists for class tag "
+		  << classTag
+		  << Color::def << std::endl;
+        return nullptr;
+      }
+  }
+
 //! @brief Broke a MFreedom_Constraint object from its class tag.
 XC::MFreedom_Constraint *XC::FEM_ObjectBroker::getNewMP(int classTag)
   {
     switch(classTag)
       {
       case CNSTRNT_TAG_MFreedom_Constraint:
-        return new MFreedom_Constraint(0,classTag);
+	return new OneRowMFreedom_Constraint(0, classTag);
+      case CNSTRNT_TAG_RigidBeam_Constraint:
+	return new RigidBeam(0);
+      case CNSTRNT_TAG_RigidRod_Constraint:
+	return new RigidRod(0);
+      case CNSTRNT_TAG_EqualDOF_Constraint:
+	return new EqualDOF(0);
+      case CNSTRNT_TAG_Skew_Constraint:
+	return new Skew_Constraint(0);
+      case CNSTRNT_TAG_SkewPlane_Constraint:
+	return new SkewPlane(0);
       case CNSTRNT_TAG_MFreedom_Joint2D:
         return new MFreedom_Joint2D();
+      case CNSTRNT_TAG_MFreedom_Joint3D:
+        return new MFreedom_Joint3D();
       default:
         std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 		  << "; no MFreedom_Constraint type exists for class tag "
@@ -310,6 +338,8 @@ XC::MRMFreedom_Constraint *XC::FEM_ObjectBroker::getNewMRMP(int classTag)
   {
     switch(classTag)
       {
+      case CNSTRNT_TAG_GlueNodeToElement:
+        return new GlueNodeToElement(0);
       case CNSTRNT_TAG_MRMFreedom_Constraint:
         return new MRMFreedom_Constraint(0,classTag);
       default:
@@ -320,7 +350,6 @@ XC::MRMFreedom_Constraint *XC::FEM_ObjectBroker::getNewMRMP(int classTag)
         return nullptr;
       }
   }
-
 
 //! @brief Broke a SFreedom_Constraint object from its class tag.
 XC::SFreedom_Constraint *XC::FEM_ObjectBroker::getNewSP(int classTag)
