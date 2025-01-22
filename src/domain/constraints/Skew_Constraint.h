@@ -97,8 +97,8 @@ class Skew_Constraint: public MFreedom_Constraint
     virtual inline const int &getNodeRetained(void) const
       { return this->getNodeConstrained(); }
 
-    void setDomain(Domain *);
-
+    int addResistingForceToNodalReaction(bool inclInertia);
+    
     int getVtkCellType(void) const;
 
     virtual void Print(std::ostream &s, int flag =0) const;

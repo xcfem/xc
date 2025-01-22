@@ -310,15 +310,15 @@ int XC::MFreedom_Constraint::addResistingForceToNodalReaction(bool inclInertia)
     Node *cN= dom->getNode(getNodeConstrained());
     const int numNodalDOFConstrained = cN->getNumberDOF();
 
-    //Add reaction to constrained node.
-    //R_m = F_m= K_mm u_m - P_m (see page 3).
+    // Add reaction to constrained node.
+    // R_m = F_m= K_mm u_m - P_m (see page 3).
     const Vector cNReaction= cN->getReaction().getComponents(constrDOF);
     Vector Rm(numConstrainedDOFs);
     for(size_t i= 0;i<numConstrainedDOFs;i++)
       Rm(i)= -cNReaction(i);
 
     Vector tmpConstrained(numNodalDOFConstrained);
-    tmpConstrained.putComponents(Rm,constrDOF);
+    tmpConstrained.putComponents(Rm, constrDOF);
     cN->addReactionForce(tmpConstrained,1.0);
 
     //Add reaction to retained node.
@@ -330,7 +330,7 @@ int XC::MFreedom_Constraint::addResistingForceToNodalReaction(bool inclInertia)
     Node *rN= dom->getNode(getNodeRetained());
     const int numNodalDOFRetained= rN->getNumberDOF();
     Vector tmpRetained(numNodalDOFRetained);
-    tmpRetained.putComponents(RnNod,constrDOF);
+    tmpRetained.putComponents(RnNod, constrDOF);
     rN->addReactionForce(tmpRetained,1.0);
 
     if(inclInertia)

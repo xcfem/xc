@@ -141,15 +141,9 @@ void XC::SkewPlane::compute_retained_dofs(const Node *n)
 //! @brief Computes constraint matrix.
 void XC::SkewPlane::setup_matrix(void)
   {
-    std::cout << "normal= " << normal << std::endl;
-    std::cout << "constrained node tag: " << this->getNodeConstrained() << std::endl;
-    std::cout << "retained node tag: " << this->getNodeRetained() << std::endl;
     // The number of DOF to be coupled
     const int numRetainedDOFs= retainDOF.Size(); //ID of retained DOFs.
     const int numConstrainedDOFs= constrDOF.Size(); //ID of constrained DOFs.
-
-    std::cout << "numRetainedDOFs= " << numRetainedDOFs << std::endl;
-    std::cout << "numConstrainedDOFs= " << numConstrainedDOFs << std::endl;
 
     // The constraint matrix ... U_c = C_cr * U_r
     Matrix Ccr(numConstrainedDOFs, numRetainedDOFs);
@@ -158,25 +152,22 @@ void XC::SkewPlane::setup_matrix(void)
     for(int i=0;i<numConstrainedDOFs;i++)
       {
 	const int constrainedDOFindex= constrDOF[i];
-	std::cout << "constrainedDOFindex= " << constrainedDOFindex << std::endl;
+
 	const double &n_i= normal[constrainedDOFindex];
-	std::cout << "n_i= " << n_i << std::endl;
+
 	for(int j= 0; j<numRetainedDOFs; j++)
 	  {
 	    const int retainedDOFindex= retainDOF[j];
-	    std::cout << "retaineddDOFindex= " << retainedDOFindex << std::endl;
 	    const double &n_j= normal[retainedDOFindex];
 	    Ccr(i, j)= -(n_j/n_i);
 	  }
       }
-    std::cout << "Ccr= " << Ccr << std::endl;
     this->set_constraint(Ccr);
   }
 
 //! @brief Constraint setup.
 void XC::SkewPlane::setup(Domain *theDomain)
   {
-    std::cout << "Enters: " << getClassName() << "::" << __FUNCTION__ << std::endl;
     // Compute the constrained DOF.
     this->compute_constrained_dof();
     const int constrainedNodeTag= this->getNodeConstrained();
@@ -197,6 +188,5 @@ void XC::SkewPlane::setup(Domain *theDomain)
     
 	this->setup_matrix();
       }
-    std::cout << "Exits: " << getClassName() << "::" << __FUNCTION__ << std::endl;
   }
 

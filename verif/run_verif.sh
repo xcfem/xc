@@ -914,6 +914,8 @@ python tests/constraints/test_glue_node_to_element_06.py
 python tests/constraints/test_glue_node_to_element_07.py
 python tests/constraints/test_glue_node_to_element_08.py
 python tests/constraints/test_glue_node_to_element_09.py
+echo "$BLEU" "  Skew constraints tests." "$NORMAL"
+python tests/constraints/test_skew_constraint_01.py
 
 #Load tests
 echo "$BLEU" "Loads tests." "$NORMAL"

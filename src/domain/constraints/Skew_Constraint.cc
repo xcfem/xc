@@ -111,29 +111,27 @@ XC::Skew_Constraint::Skew_Constraint(int tag, int nodeConstr, Matrix &constr,
 			     ID &constrainedDOF, ID &retainedDOF, int classTag)
   : MFreedom_Constraint(tag, nodeConstr, constr, constrainedDOF, retainedDOF, classTag)
   {}
-
-//! @brief Sets the domain for the constraint.
-//! @param model: domain in which the constraint is created.
-void XC::Skew_Constraint::setDomain(Domain *model)
+//! @brief Add to nodes the actions due to this constraint.
+int XC::Skew_Constraint::addResistingForceToNodalReaction(bool inclInertia)
   {
-    // call base class implementation
-    MFreedom_Constraint::setDomain(model);
-    std::cout << "constraintMatrix= " << constraintMatrix << std::endl;
-    std::cout << "Uc0= " << Uc0 << std::endl;
-    std::cout << "Ur0= " << Ur0 << std::endl;
+    // This behave like single freedom constraints, so they don't need
+    // to compute the forces between the nodes like multi-freedom
+    // constraints.
+    return 0;
   }
 
 //! @brief Printing.
 void XC::Skew_Constraint::Print(std::ostream &s, int flag) const
   {     
-    s << "Skew_Constraint: " << this->getTag() << "\n";
-    s << "\tNode Constrained: " << getNodeConstrained();
-    s << " constrained dof: " << constrDOF;    
-    s << " retained dof: " << retainDOF;        
-    s << " constraint matrix: " << constraintMatrix << "\n";
+    s << "Skew_Constraint: " << this->getTag() << std::endl
+      << "\tNode Constrained: " << getNodeConstrained()
+      << " constrained dof: " << constrDOF
+      << " retained dof: " << retainDOF
+      << " constraint matrix: " << constraintMatrix
+      << std::endl;
   }
 
-//! @brief Interfaz con VTK.
+//! @brief VTK interface.
 int XC::Skew_Constraint::getVtkCellType(void) const
   { return VTK_VERTEX; }
 
