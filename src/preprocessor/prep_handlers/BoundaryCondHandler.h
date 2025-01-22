@@ -32,9 +32,13 @@
 
 #include "PrepHandler.h"
 
+class Line2d;
+class Plane;
+
 namespace XC {
 
 class SFreedom_Constraint;
+class Skew_Constraint;
 class MFreedom_Constraint;
 class MRMFreedom_Constraint;
 
@@ -45,6 +49,7 @@ class MRMFreedom_Constraint;
 class BoundaryCondHandler: public PrepHandler
   {
     int tag_sp_constraint; //!< Default value for next single freedom constraint tag.
+    int tag_skew_constraint; //!< Default value for next skew constraint tag.
     int tag_mp_constraint; //!< Default value for next multiple freedom constraint tag.
     int tag_mrmp_constraint; //!< Default value for next multi-row multi-freedom constraint tag.
   protected:
@@ -58,6 +63,8 @@ class BoundaryCondHandler: public PrepHandler
     virtual ~BoundaryCondHandler(void);
     inline const int &getTagNextSPConstraint(void) const
       { return tag_sp_constraint; }
+    inline const int &getTagNextSkewConstraint(void) const
+      { return tag_skew_constraint; }
     inline const int &getTagNextMPConstraint(void) const
       { return tag_mp_constraint; }
     inline const int &getTagNextMRMPConstraint(void) const
@@ -68,6 +75,9 @@ class BoundaryCondHandler: public PrepHandler
     int getNumLPs(void) const;
     SFreedom_Constraint *newSPConstraint(const int &,const int &,const double &);
     void removeSPConstraint(const int &tagC);
+    Skew_Constraint *newSkewConstraint(const int &, const ID &, const ID &);
+    Skew_Constraint *newSkewPlane(const int &, const Line2d &, const double &, const double &);
+    Skew_Constraint *newSkewPlane(const int &, const Plane &, const double &, const double &);
     MFreedom_Constraint *newMPConstraint(const int &, const int &, const ID &, const ID &);
     MFreedom_Constraint *newEqualDOF(const int &, const int &, const ID &);
     MFreedom_Constraint *newRigidBeam(const int &, const int &);

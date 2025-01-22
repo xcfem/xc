@@ -28,7 +28,12 @@
 
 #include "BoundaryCondHandler.h"
 #include "domain/domain/Domain.h"
+#include "preprocessor/Preprocessor.h"
+#include "domain/mesh/node/Node.h"
+#include "domain/mesh/element/Element.h"
 #include "domain/constraints/SFreedom_Constraint.h"
+#include "domain/constraints/Skew_Constraint.h"
+#include "domain/constraints/SkewPlane.h"
 #include "domain/constraints/MFreedom_Constraint.h"
 #include "domain/constraints/MRMFreedom_Constraint.h"
 #include "domain/constraints/EqualDOF.h"
@@ -36,16 +41,14 @@
 #include "domain/constraints/RigidRod.h"
 #include "domain/constraints/RigidDiaphragm.h"
 #include "domain/constraints/GlueNodeToElement.h"
-
-
-#include "preprocessor/Preprocessor.h"
-#include "domain/mesh/node/Node.h"
-#include "domain/mesh/element/Element.h"
+#include "utility/geom/d1/Line2d.h"
+#include "utility/geom/d2/Plane.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 //! @brief Default constructor.
 XC::BoundaryCondHandler::BoundaryCondHandler(Preprocessor *owr)
-  : PrepHandler(owr), tag_sp_constraint(0), tag_mp_constraint(0) {}
+  : PrepHandler(owr), tag_sp_constraint(0), tag_skew_constraint(0), tag_mp_constraint(0) {}
 
 //! @grief Appends a single freedom constraint to the model.
 XC::SFreedom_Constraint *XC::BoundaryCondHandler::addSFreedom_Constraint(const int &tag_nod,const SFreedom_Constraint &seed)
@@ -59,8 +62,9 @@ XC::SFreedom_Constraint *XC::BoundaryCondHandler::addSFreedom_Constraint(const i
         getPreprocessor()->updateSets(sp);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; could not create constraint." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; could not create constraint."
+		<< Color::def << std::endl;
     return sp;    
   }
 
@@ -75,8 +79,9 @@ XC::SFreedom_Constraint *XC::BoundaryCondHandler::addSFreedom_Constraint(const i
         getPreprocessor()->updateSets(sp);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; could not create constraint." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; could not create constraint."
+		<< Color::def << std::endl;
     return sp;    
   }
 
@@ -84,10 +89,63 @@ XC::SFreedom_Constraint *XC::BoundaryCondHandler::addSFreedom_Constraint(const i
 XC::SFreedom_Constraint *XC::BoundaryCondHandler::newSPConstraint(const int &tag_nod,const int &dofId,const double &value)
   { return addSFreedom_Constraint(tag_nod,dofId,value); }
 
+//! @grief Defines a skew constraint.
+XC::Skew_Constraint *XC::BoundaryCondHandler::newSkewConstraint(const int &constrainedNode, const ID &constrainedDOF, const ID &retainedDOF)
+  {
+    Skew_Constraint *skewC= new Skew_Constraint(tag_skew_constraint, constrainedNode,constrainedDOF, retainedDOF);
+    tag_skew_constraint++;
+    if(skewC)
+      {
+        getDomain()->addMFreedom_Constraint(skewC);
+        getPreprocessor()->updateSets(skewC);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; could not create constraint."
+		<< Color::def << std::endl;
+    return skewC;
+  }
+
+//! @brief Defines a skew 2D constraint.
+XC::Skew_Constraint *XC::BoundaryCondHandler::newSkewPlane(const int &constrainedNode, const Line2d &l, const double &prescribedDisplacement, const double &prescribedRotation)
+  {
+    SkewPlane *skewC= new SkewPlane(tag_skew_constraint, constrainedNode, l, prescribedDisplacement, prescribedRotation);
+    tag_skew_constraint++;
+    if(skewC)
+      {
+	Domain *dom= this->getDomain();
+	skewC->setup(dom);
+        dom->addMFreedom_Constraint(skewC);
+        getPreprocessor()->updateSets(skewC);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; could not create constraint."
+		<< Color::def << std::endl;
+    return skewC;
+  }
+
+//! @brief Defines a skew 3D constraint.
+XC::Skew_Constraint *XC::BoundaryCondHandler::newSkewPlane(const int &constrainedNode, const Plane &p, const double &prescribedDisplacement, const double &prescribedRotation)
+  {
+    Skew_Constraint *skewC= new SkewPlane(tag_skew_constraint, constrainedNode, p, prescribedDisplacement, prescribedRotation);
+    tag_skew_constraint++;
+    if(skewC)
+      {
+        getDomain()->addMFreedom_Constraint(skewC);
+        getPreprocessor()->updateSets(skewC);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; could not create constraint."
+		<< Color::def << std::endl;
+    return skewC;
+  }
+
 //! @grief Appends a multi-freedom constraint to the model.
 XC::MFreedom_Constraint *XC::BoundaryCondHandler::newMPConstraint(const int &retainedNode, const int &constrainedNode, const ID &constrainedDOF, const ID &retainedDOF)
   {
-    MFreedom_Constraint *mp= new MFreedom_Constraint(tag_mp_constraint,retainedNode,constrainedNode,constrainedDOF,retainedDOF);
+    MFreedom_Constraint *mp= new OneRowMFreedom_Constraint(tag_mp_constraint,retainedNode,constrainedNode,constrainedDOF,retainedDOF, CNSTRNT_TAG_MFreedom_Constraint);
     tag_mp_constraint++;
     if(mp)
       {
@@ -95,8 +153,9 @@ XC::MFreedom_Constraint *XC::BoundaryCondHandler::newMPConstraint(const int &ret
         getPreprocessor()->updateSets(mp);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; could not create constraint." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; could not create constraint."
+		<< Color::def << std::endl;
     return mp;
   }
 
@@ -116,8 +175,9 @@ XC::MFreedom_Constraint *XC::BoundaryCondHandler::newEqualDOF(const int &retaine
         getPreprocessor()->updateSets(mp);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; could not create constraint." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; could not create constraint."
+		<< Color::def << std::endl;
     return mp;
   }
 
@@ -132,8 +192,9 @@ XC::MFreedom_Constraint *XC::BoundaryCondHandler::newRigidBeam(const int &retain
         getPreprocessor()->updateSets(mp);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; could not create constraint." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; could not create constraint."
+		<< Color::def << std::endl;
     return mp;
   }
 
@@ -148,8 +209,9 @@ XC::MFreedom_Constraint *XC::BoundaryCondHandler::newRigidRod(const int &retaine
         getPreprocessor()->updateSets(mp);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; could not create constraint." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; could not create constraint."
+		<< Color::def << std::endl;
     return mp;
   }
 
@@ -164,8 +226,9 @@ XC::MRMFreedom_Constraint *XC::BoundaryCondHandler::newMRMPConstraint(const ID &
         getPreprocessor()->updateSets(mrmp);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; could not create constraint." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; could not create constraint."
+		<< Color::def << std::endl;
     return mrmp;
   }
 
@@ -179,8 +242,9 @@ XC::MRMFreedom_Constraint *XC::BoundaryCondHandler::newGlueNodeToElement(const N
         getPreprocessor()->updateSets(mrmp);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; could not create constraint." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; could not create constraint."
+		<< Color::def << std::endl;
     return mrmp;
   }
 
@@ -190,8 +254,9 @@ void XC::BoundaryCondHandler::removeSPConstraint(const int &tagC)
   {
     bool sp= getDomain()->removeSFreedom_Constraint(tagC);
     if(!sp)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; could not remove constraint." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; could not remove constraint."
+		<< Color::def << std::endl;
   }
 
 XC::BoundaryCondHandler::~BoundaryCondHandler(void)
@@ -201,7 +266,9 @@ XC::BoundaryCondHandler::~BoundaryCondHandler(void)
 void XC::BoundaryCondHandler::clearAll(void)
   {
     tag_sp_constraint= 0;
+    tag_skew_constraint= 0;
     tag_mp_constraint= 0;
+    tag_mrmp_constraint= 0;
   }
 
 //! @brief returns number of single node constraints.

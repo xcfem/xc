@@ -105,6 +105,8 @@ class_<XC::ElementHandler, bases<XC::ProtoElementHandler>, boost::noncopyable >(
   .add_property("defaultTag", &XC::ElementHandler::getDefaultTag, &XC::ElementHandler::setDefaultTag,"Starting ID number to apply to the next creation of an element.")
    ;
 
+XC::Skew_Constraint *(XC::BoundaryCondHandler::*newSkewPlaneLine)(const int &, const Line2d &, const double &, const double &)= &XC::BoundaryCondHandler::newSkewPlane;
+XC::Skew_Constraint *(XC::BoundaryCondHandler::*newSkewPlanePlane)(const int &, const Plane &, const double &, const double &)= &XC::BoundaryCondHandler::newSkewPlane;
 class_<XC::BoundaryCondHandler, bases<XC::PrepHandler>, boost::noncopyable >("BoundaryCondHandler", no_init)
   .add_property("getTagNextSPConstraint",make_function(&XC::BoundaryCondHandler::getTagNextSPConstraint,return_value_policy<copy_const_reference>()))
   .add_property("getTagNextMPConstraint",make_function(&XC::BoundaryCondHandler::getTagNextMPConstraint,return_value_policy<copy_const_reference>()))
@@ -113,8 +115,11 @@ class_<XC::BoundaryCondHandler, bases<XC::PrepHandler>, boost::noncopyable >("Bo
   .add_property("getNumLPs",&XC::BoundaryCondHandler::getNumMPs,"Number of load patterns.")
   .def("newSPConstraint", &XC::BoundaryCondHandler::newSPConstraint,return_internal_reference<>(),"\n" "newSPConstraint(nodeTag,dofId,value) \n" "Create a single-point boundary constraint by assigning a value to the degree of freedom dofId of node whose ID is nodeTag.")
   .def("removeSPConstraint", &XC::BoundaryCondHandler::removeSPConstraint,return_internal_reference<>(),"Deletes a single freedom constraint.")
-  .def("newMPConstraint", &XC::BoundaryCondHandler::newMPConstraint,return_internal_reference<>(),"New multi-freedom constraint.")
-  .def("newEqualDOF", &XC::BoundaryCondHandler::newEqualDOF,return_internal_reference<>(),"Imposes the same displacements on two nodes for the components specified in the argument.")
+  .def("newSkewConstraint", &XC::BoundaryCondHandler::newSkewConstraint,return_internal_reference<>(),"Creates as skew constraint.")
+  .def("newSkewPlane", newSkewPlaneLine,return_internal_reference<>(),"Creates as skew plane constraint.")
+  .def("newSkewPlane", newSkewPlanePlane,return_internal_reference<>(),"Creates as skew plane constraint.")
+   .def("newMPConstraint", &XC::BoundaryCondHandler::newMPConstraint,return_internal_reference<>(),"New multi-freedom constraint.")
+  .def("newEqualDOF", &XC::BoundaryCondHandler::newEqualDOF,return_internal_reference<>(),"Imposes the same displacements on two nodes for the given components.")
   .def("newRigidBeam", &XC::BoundaryCondHandler::newRigidBeam,return_internal_reference<>())
   .def("newRigidRod", &XC::BoundaryCondHandler::newRigidRod,return_internal_reference<>())
   .def("newMRMPConstraint", &XC::BoundaryCondHandler::newMRMPConstraint,return_internal_reference<>(),"Creates a new multi retained nodes constraint.")

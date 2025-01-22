@@ -381,6 +381,12 @@
 #define CNSTRNT_TAG_MFreedom_Joint3D          7
 #define CNSTRNT_TAG_MRMFreedom_Constraint 	8
 #define CNSTRNT_TAG_GlueNodeToElement 	9
+#define CNSTRNT_TAG_Skew_Constraint 	10
+#define CNSTRNT_TAG_SkewPlane_Constraint 	11
+#define CNSTRNT_TAG_RigidDiaphragm_Constraint 	12
+#define CNSTRNT_TAG_RigidBeam_Constraint 	13
+#define CNSTRNT_TAG_RigidRod_Constraint 	14
+#define CNSTRNT_TAG_EqualDOF_Constraint 	15
 
 #define DOMAIN_TAG_Mesh      	1
 #define DOMAIN_TAG_ConstrContainer	2
