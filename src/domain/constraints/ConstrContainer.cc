@@ -1116,10 +1116,11 @@ int XC::ConstrContainer::calculateNodalReactions(bool inclInertia, const double 
     return 0;
   }
 
+const int db_tag_data_size= 8;
 //! @brief Returns a vector to store the dbTags of class members.
 XC::DbTagData &XC::ConstrContainer::getDbTagData(void) const
   {
-    static DbTagData retval(7);
+    static DbTagData retval(db_tag_data_size);
     return retval;
   }
 
@@ -1338,7 +1339,7 @@ void XC::ConstrContainer::setPyDict(const boost::python::dict &d)
 //! @brief Sends object through the communicator argument.
 int XC::ConstrContainer::sendSelf(Communicator &comm)
   {
-    inicComm(8);
+    inicComm(db_tag_data_size);
     int res= sendData(comm);
 
     const int dataTag= getDbTag(comm);
@@ -1355,7 +1356,7 @@ int XC::ConstrContainer::sendSelf(Communicator &comm)
 int XC::ConstrContainer::recvSelf(const Communicator &comm)
   {
     // first we get the data about the state of the cc for this cTag
-    inicComm(8);
+    inicComm(db_tag_data_size);
     int res= comm.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
