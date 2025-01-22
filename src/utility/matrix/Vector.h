@@ -107,6 +107,7 @@ class Vector: public CommandEntity
     Vector(void);
     explicit Vector(const int &, const double &value= 0.0);
     explicit Vector(const std::vector<double> &v);
+    explicit Vector(const std::initializer_list<double> &); 
     explicit Vector(const Vector2d &v);
     explicit Vector(const Vector3d &v);
     Vector(const double &,const double &,const double &);

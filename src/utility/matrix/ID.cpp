@@ -57,9 +57,8 @@
 // What: "@(#) ID.C, revA"
 
 #include "ID.h"
+#include <initializer_list>
 #include <cstdlib>
-
-
 #include <boost/python/extract.hpp>
 
 int XC::ID::ID_NOT_VALID_ENTRY= 0;
@@ -94,6 +93,11 @@ XC::ID::ID(const boost::python::list &l)
     for(size_t i=0; i<sz; i++)
       (*this)[i]= boost::python::extract<int>(l[i]);
   }
+
+//! @brief Constructor from initializer list.
+XC::ID::ID(const std::initializer_list<int> &l)
+  : CommandEntity(), std::vector<int>(l)
+  {}
 
 XC::ID::ID(const std::set<int> &setInt)
   : CommandEntity(), std::vector<int>(setInt.size())

@@ -141,6 +141,16 @@ XC::Vector::Vector(const std::vector<double> &v)
     for(int i=0; i<sz; i++)
       theData[i]= v[i];
   }
+//! @brief Constructor from initializer list.
+XC::Vector::Vector(const std::initializer_list<double> &l)
+  : sz(0), theData(nullptr), fromFree(0)
+  {
+    alloc(l.size());
+    int ii= 0;
+    // copy the components
+    for(std::initializer_list<double>::const_iterator i= l.begin(); i!=l.end(); i++, ii++)      
+      this->theData[ii]= *i;    
+  }
 
 //! @brief Constructor (Python interface).
 XC::Vector::Vector(const boost::python::list &l)
