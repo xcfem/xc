@@ -117,6 +117,9 @@ int XC::Skew_Constraint::addResistingForceToNodalReaction(bool inclInertia)
     // This behave like single freedom constraints, so they don't need
     // to compute the forces between the nodes like multi-freedom
     // constraints.
+    // Said otherwise, these constraints impose a relation between the
+    // DOFs of the same node, therefore, there must necessarily be a
+    // reaction associated with such coercion. 
     return 0;
   }
 
