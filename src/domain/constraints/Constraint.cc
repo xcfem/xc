@@ -61,7 +61,7 @@ XC::Constraint::~Constraint(void)
 //! @param model: domain in which the constraint is created.
 void XC::Constraint::setDomain(Domain *model)
   {
-    Domain *tmp= getDomain();
+    Domain *tmp= this->getDomain();
     if(tmp!=model)
       {
         if(tmp)

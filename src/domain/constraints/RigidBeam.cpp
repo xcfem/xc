@@ -181,10 +181,10 @@ void XC::RigidBeam::setup(Domain *theDomain)
 
 //! @brief Constructor.
 XC::RigidBeam::RigidBeam(int mPtag)
-  : RigidBase(mPtag) {}
+  : RigidBase(mPtag, CNSTRNT_TAG_RigidBeam_Constraint) {}
 
 //! @brief Constructor.
 XC::RigidBeam::RigidBeam(int mPtag,const int &nm, const int &ns)
-  : RigidBase(mPtag,nm,ns,0) {}
+  : RigidBase(mPtag,nm,ns, CNSTRNT_TAG_RigidBeam_Constraint) {}
 
 

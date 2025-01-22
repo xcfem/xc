@@ -40,7 +40,7 @@
 //! @param tag: tag for the multi-freedom constraint.
 //! @param classTag: tag of the object class.
 XC::MFreedom_Joint::MFreedom_Joint(int tag, int classTag)
- : MFreedom_Constraint(tag, classTag),
+ : OneRowMFreedom_Constraint(tag, classTag),
    RetainedNode(nullptr), ConstrainedNode(nullptr),
    LargeDisplacement(0), Length0(0.0)
   {}
@@ -53,7 +53,7 @@ XC::MFreedom_Joint::MFreedom_Joint(int tag, int classTag)
 //! @param nodeConstr: identifier of the constrained node.
 //! @param LrgDsp: true if large displacement (geometric non-linearity) must be expected: 0 for constant constraint matrix(small deformations), 1 for time varying constraint matrix(large deformations), 2 for large deformations with length correction.
 XC::MFreedom_Joint::MFreedom_Joint(Domain *domain, int tag, int classTag, int nodeRetain, int nodeConstr, int LrgDsp )
-  : MFreedom_Constraint(tag,nodeRetain,nodeConstr, classTag),
+  : OneRowMFreedom_Constraint(tag,nodeRetain,nodeConstr, classTag),
     RetainedNode(nullptr), ConstrainedNode(nullptr),
     LargeDisplacement( LrgDsp ), Length0(0.0)
   {
@@ -105,7 +105,7 @@ void XC::MFreedom_Joint::setDomain(Domain *domain)
         std::cerr << "Domain = 0\n";
         return;
       }
-    MFreedom_Constraint::setDomain(domain);
+    OneRowMFreedom_Constraint::setDomain(domain);
     RetainedNode= getDomain()->getNode(getNodeRetained());
     if(RetainedNode)
       RetainedNode->connect(this);

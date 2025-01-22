@@ -42,7 +42,7 @@ void XC::RigidBase::setDomain(Domain *theDomain)
         std::cerr << "Domain = 0\n";
         return;
       }
-    MFreedom_Constraint::setDomain(theDomain);
+    OneRowMFreedom_Constraint::setDomain(theDomain);
 
     if(theDomain)
       {
@@ -70,14 +70,14 @@ void XC::RigidBase::setDomain(Domain *theDomain)
 
 //! @brief Constructor.
 //! @param tag: tag for the constraint.
-XC::RigidBase::RigidBase(int tag)
-  : MFreedom_Constraint(tag), nodeR(nullptr), nodeC(nullptr) {}
+XC::RigidBase::RigidBase(int tag, int classTag)
+  : OneRowMFreedom_Constraint(tag, classTag), nodeR(nullptr), nodeC(nullptr) {}
 
 //! @brief Constructor.
 //! @param tag: tag for the constraint.
 //! @param classTag: tag of the object class.
 XC::RigidBase::RigidBase(int tag,const int &retainedNode, const int &constrainedNode, int classTag)
-  : MFreedom_Constraint(tag,retainedNode,constrainedNode,classTag), nodeR(nullptr), nodeC(nullptr) {}
+  : OneRowMFreedom_Constraint(tag,retainedNode,constrainedNode,classTag), nodeR(nullptr), nodeC(nullptr) {}
 
 //! @brief Destructor.
 XC::RigidBase::~RigidBase(void)

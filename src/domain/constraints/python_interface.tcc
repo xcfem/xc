@@ -52,6 +52,9 @@ class_<XC::MFreedom_ConstraintBase, bases<XC::Constraint>, boost::noncopyable >(
   .add_property("getIdxNodes",&XC::MFreedom_ConstraintBase::getIdxNodes,"Return the node indices for its use in VTK arrays.")
   ;
 
+class_<XC::Skew_Constraint, bases<XC::MFreedom_ConstraintBase>, boost::noncopyable >("Skew_Constraint", no_init);
+
+class_<XC::SkewPlane, bases<XC::Skew_Constraint>, boost::noncopyable >("SkewPlane", no_init);
 
 class_<XC::MFreedom_Constraint, bases<XC::MFreedom_ConstraintBase>, boost::noncopyable >("MFreedom_Constraint", no_init);
 

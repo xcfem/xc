@@ -45,41 +45,66 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-// $Revision: 1.2 $
+// $Revision: 1.3 $
 // $Date: 2003/02/14 23:00:55 $
-// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/RigidDiaphragm.h,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/Skew_Constraint.h,v $
                                                                         
                                                                         
-// File: ~/model/constraints/RigidDiaphragm.h
-//
-// Written: fmk 1/99
-// Revised:
-//
-// Purpose: This file contains the class definition for RigidDiaphragm.
-// RigidDiaphragm is a class which constructs OneRowMFreedom_Constraint objects
-// for a 3d Frame with a rigid diaphragm .. suitable for small
-// displacement problems only.
+#ifndef Skew_Constraint_h
+#define Skew_Constraint_h
 
-#ifndef RigidDiaphragm_h
-#define RigidDiaphragm_h
+// File: ~/domain/constraints/Skew_Constraint.h
+//
+// Written: fmk 
+// Created: 11/96
+// Revision: A
+//
+// Purpose: This file contains the class definition for Skew_Constraint.
+// This class implements skew type constraints as defined in section 4.2
+// of the book: Finite Element Procedures Klaus-Jurgen Bathe, 2006
+// ISBN	097900490X, 9780979004902
+//
+// What: "@(#) Skew_Constraint, revA"
 
-#include "OneRowMFreedom_Constraint.h"
+#include "MFreedom_Constraint.h"
 
 namespace XC {
-class Domain;
-class ID;
 
-//! @ingroup CContMP
-//
-//! @brief Imposes a rigid body motion to the nodes
-//! on included in the diaphragm.
-class RigidDiaphragm: public OneRowMFreedom_Constraint
+/**
+
+ @brief Skew constraint.
+ 
+ Objects of this class store the information for a skew constraint as defined
+ in section 4.2 of the book: Finite Element Procedures Klaus-Jurgen Bathe, 2006
+  ISBN 097900490X, 9780979004902. Page 190 et seq.
+ @ingroup CContMP
+*/
+class Skew_Constraint: public MFreedom_Constraint
   {
-    //XXX Put NodePtrsWithIDS to make easier to deal with the disconnection.
   public:
-    RigidDiaphragm(Domain &theDomain, int nodeR, ID &nodeC, int perpDirnToPlaneConstrained, int startMPtag);
-    virtual ~RigidDiaphragm();
+    // constructors        
+    Skew_Constraint(int tag, int classTag= CNSTRNT_TAG_Skew_Constraint);
+
+    Skew_Constraint(int tag, int nodeConstr, int classTag);    
+
+    Skew_Constraint(int tag, int nodeConstr, const ID &constrainedDOF, const ID &retainedDOF, int classTag= CNSTRNT_TAG_Skew_Constraint);    
+
+    Skew_Constraint(int tag, int nodeConstr, Matrix &constrnt, ID &constrainedDOF,ID &retainedDOF, int classTag= CNSTRNT_TAG_Skew_Constraint);
+
+    // methods to get information about the constraint
+    //! @brief Returns the tag of the retained (or primary) node
+    //! in this type of constraint is the same as the constrained node.
+    virtual inline const int &getNodeRetained(void) const
+      { return this->getNodeConstrained(); }
+
+    void setDomain(Domain *);
+
+    int getVtkCellType(void) const;
+
+    virtual void Print(std::ostream &s, int flag =0) const;
+
   };
 } // end of XC namespace
 
 #endif
+

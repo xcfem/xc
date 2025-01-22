@@ -30,7 +30,7 @@
 #ifndef EqualDOF_h
 #define EqualDOF_h
 
-#include "MFreedom_Constraint.h"
+#include "domain/constraints/OneRowMFreedom_Constraint.h"
 
 namespace XC {
 class Domain;
@@ -39,7 +39,7 @@ class ID;
 //! @ingroup CContMP
 //
 //! @brief Impose the values of many degrees of freedom to be the same.
-class EqualDOF: public MFreedom_Constraint
+class EqualDOF: public OneRowMFreedom_Constraint
   {
     void setup_matrix(void);
   public:

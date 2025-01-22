@@ -61,7 +61,7 @@
 #include <cstdlib>
 #include <domain/domain/Domain.h>
 #include <domain/mesh/node/Node.h>
-#include <domain/constraints/MFreedom_Constraint.h>
+#include <domain/constraints/OneRowMFreedom_Constraint.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/ID.h>
 
@@ -73,7 +73,7 @@
 //! @param perpPlaneConstrained: direction of perpendicular to constrained plane: 0, 1 or 3.
 //! @param startMPtag: tag for the first multi-freedom constraint (one constraint for each node).
 XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPlaneConstrained, int startMPtag)
-  : MFreedom_Constraint(startMPtag)
+  : OneRowMFreedom_Constraint(startMPtag, CNSTRNT_TAG_RigidDiaphragm_Constraint)
   {
     setDomain(&theDomain);
 
@@ -120,7 +120,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
       }
 
     //
-    // create some objects which will be passed to the MFreedom_Constraint
+    // create some objects which will be passed to the OneRowMFreedom_Constraint
     // constructor, elements of objects are filled in later
     //
 
@@ -214,7 +214,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
 	                        << std::endl;
                   }
               // create the MFreedom_Constraint
-              MFreedom_Constraint *newC = new MFreedom_Constraint(startMPtag+i, nR, ndC,mat, id, id);
+              MFreedom_Constraint *newC= new OneRowMFreedom_Constraint(startMPtag+i, nR, ndC,mat, id, id, CNSTRNT_TAG_RigidDiaphragm_Constraint);
               if(newC == 0)
                 {
                   std::cerr << getClassName() << "::" << __FUNCTION__

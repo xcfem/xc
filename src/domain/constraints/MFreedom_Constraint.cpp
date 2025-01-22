@@ -73,6 +73,8 @@
 #include "utility/actor/actor/CommMetaData.h"
 #include "vtkCellType.h"
 
+const int XC::MFreedom_Constraint::dummyRetainedNodeTag;
+
 //! @brief Sets the retained degrees of freedom.
 void XC::MFreedom_Constraint::set_retained_dofs(const ID &retainedDOF)
   {
@@ -93,65 +95,34 @@ void XC::MFreedom_Constraint::set_constrained_retained_dofs(const ID &constraine
 //! @param tag: constraint identifier.
 //! @param classTag: constraint class identifier.
 XC::MFreedom_Constraint::MFreedom_Constraint(int tag,int classTag)		
- : MFreedom_ConstraintBase(tag,0,classTag),
-   retainedNodeTag(0) {}
-
-//! Constructor. // LCPT
-//!
-//! @param tag: constraint identifier.
-XC::MFreedom_Constraint::MFreedom_Constraint(int tag)		
- : MFreedom_ConstraintBase(tag, 0,CNSTRNT_TAG_MFreedom_Constraint),
-   retainedNodeTag(0) {}
+ : MFreedom_ConstraintBase(tag,0,classTag) {}
 
 //! Constructor to be called from subclasses.
 //!
 //! @param tag: multi-freedom constraint identifier.
-//! @param nodeRetain: identifier of the retained node.
 //! @param nodeConstr: identifier of the constrained node.
 //! @param classTag: constraint class identifier.
-XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeRetain, int nodeConstr, int classTag)
- : MFreedom_ConstraintBase(tag, nodeConstr, classTag), retainedNodeTag(nodeRetain) {}
+XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeConstr, int classTag)
+ : MFreedom_ConstraintBase(tag, nodeConstr, classTag) {}
 
 //! Constructor to be called from subclasses.
 //!
 //! @param tag: identifier for the multi-freedom constraint.
-//! @param nodeRetain: identifier of the retained node.
 //! @param nodeConstr: identifier of the constrained node.
 //! @param constrainedDOF: constrained degrees of freedom.
 //! @param retainedDOF: retained degrees of freedom.
 //! @param classTag: identifief for the class.
-XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeRetain, int nodeConstr,const ID &constrainedDOF,const ID &retainedDOF, int classTag)
- : MFreedom_ConstraintBase(tag, nodeConstr, classTag), retainedNodeTag(nodeRetain)
+XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeConstr,const ID &constrainedDOF,const ID &retainedDOF, int classTag)
+ : MFreedom_ConstraintBase(tag, nodeConstr, classTag)
   { set_constrained_retained_dofs(constrainedDOF,retainedDOF); }
 
-//! Constructor to be called from subclasses.
-//!
-//! @param tag: identifier for the multi-freedom constraint.
-//! @param nodeRetain: identifier of the retained node.
-//! @param nodeConstr: identifier of the constrained node.
-//! @param constrainedDOF: constrained degrees of freedom.
-//! @param retainedDOF: retained degrees of freedom.
-XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeRetain, int nodeConstr,const ID &constrainedDOF,const ID &retainedDOF)
- : MFreedom_ConstraintBase(tag, nodeConstr,CNSTRNT_TAG_MFreedom_Constraint), retainedNodeTag(nodeRetain)
-  { set_constrained_retained_dofs(constrainedDOF,retainedDOF); }
-
-
-//! @brief Constructor.
-//!
-//! @param tag: identifier for the multi-freedom constraint.
-//! @param nodeRetain: identifier of the retained node.
-//! @param nodeConstr: identifier of the constrained node.
-//! @param constr: constraint matrix.
-//! @param constrainedDOF: constrained degrees of freedom.
-//! @param retainedDOF: retained degrees of freedom.
-XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeRetain, int nodeConstr, Matrix &constr,
-			     ID &constrainedDOF, ID &retainedDOF)
- : MFreedom_ConstraintBase(tag, nodeConstr, CNSTRNT_TAG_MFreedom_Constraint),
-  retainedNodeTag(nodeRetain)
+XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeConstr, Matrix &constrnt,ID &constrainedDOF,ID &retainedDOF, int classTag)
+: MFreedom_ConstraintBase(tag, nodeConstr, CNSTRNT_TAG_MFreedom_Constraint)
   {
     set_constrained_retained_dofs(constrainedDOF,retainedDOF);    
-    set_constraint(constr);
+    set_constraint(constrnt);
   }
+
 
 //! @brief Compute the initial displacement at retained DOFs. 
 void XC::MFreedom_Constraint::initializeUr0(const Domain *model)
@@ -240,8 +211,7 @@ std::vector<XC::Node *> XC::MFreedom_Constraint::getPointersToRetainedNodes(void
     std::vector<Node *> retval(1,nullptr);   
 
     Domain *theDomain= getDomain();
-    const int retainedNode= getNodeRetained();
-    retval[0]= theDomain->getNode(retainedNode);   
+    retval[0]= theDomain->getNode(this->getNodeRetained());   
     return retval;
   }
 
@@ -251,8 +221,7 @@ std::vector<const XC::Node *> XC::MFreedom_Constraint::getPointersToRetainedNode
     std::vector<const Node *> retval(1,nullptr);   
 
     Domain *theDomain= getDomain();
-    const int retainedNode= getNodeRetained();
-    retval[0]= theDomain->getNode(retainedNode);   
+    retval[0]= theDomain->getNode(this->getNodeRetained());   
     return retval;
   }
 
@@ -273,8 +242,7 @@ int XC::MFreedom_Constraint::sendData(Communicator &comm)
   {
     int res= MFreedom_ConstraintBase::sendData(comm);
     res+= comm.sendID(retainDOF,getDbTagData(),CommMetaData(7));
-    res+= comm.sendInt(retainedNodeTag,getDbTagData(),CommMetaData(8));
-    res+= comm.sendVector(Ur0, CommMetaData(9));
+    res+= comm.sendVector(Ur0, CommMetaData(8));
     return res;
   }
 
@@ -283,8 +251,7 @@ int XC::MFreedom_Constraint::recvData(const Communicator &comm)
   {
     int res= MFreedom_ConstraintBase::recvData(comm);
     res+= comm.receiveID(retainDOF,getDbTagData(),CommMetaData(7));
-    res+= comm.receiveInt(retainedNodeTag,getDbTagData(),CommMetaData(8));
-    res+= comm.receiveVector(Ur0,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveVector(Ur0,getDbTagData(),CommMetaData(8));
     return res;
   }
 
@@ -293,7 +260,6 @@ boost::python::dict XC::MFreedom_Constraint::getPyDict(void) const
   {
     boost::python::dict retval= MFreedom_ConstraintBase::getPyDict();
     retval["retainDOF"]= this->retainDOF.getPyList();
-    retval["retainedNodeTag"]= this->retainedNodeTag;
     retval["Ur0"]= Ur0;
     return retval;
   }
@@ -302,14 +268,13 @@ void XC::MFreedom_Constraint::setPyDict(const boost::python::dict &d)
   {
     MFreedom_ConstraintBase::setPyDict(d);
     this->retainDOF= ID(boost::python::extract<boost::python::list>(d["retainDOF"]));
-    this->retainedNodeTag= boost::python::extract<int>(d["retainedNodeTag"]);
     this->Ur0= Vector(boost::python::extract<boost::python::list>(d["Ur0"]));
   }
 
 //! @brief Sends object through the communicator argument.
 int XC::MFreedom_Constraint::sendSelf(Communicator &comm)
   {
-    inicComm(10);
+    inicComm(9);
     int result= sendData(comm);
     const int dataTag= getDbTag();
     result = comm.sendIdData(getDbTagData(),dataTag);
@@ -323,7 +288,7 @@ int XC::MFreedom_Constraint::sendSelf(Communicator &comm)
 //! @brief Receives object through the communicator argument.
 int XC::MFreedom_Constraint::recvSelf(const Communicator &comm)
   {
-    inicComm(10);
+    inicComm(9);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)

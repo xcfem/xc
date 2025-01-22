@@ -49,12 +49,12 @@ namespace XC {
 class Matrix;
 class ID;
 
-//! @ingroup CCont
 //! @defgroup CContMP Multi-freedom constraints.
+//! @ingroup CCont
 //
-//! @ingroup CContMP
 //
 //! @brief Base class for mult-freedom constraints.
+//! @ingroup CContMP
 class MFreedom_ConstraintBase: public Constraint
   {
   protected:

@@ -53,12 +53,12 @@
 // Revision: Arash
 
 // Purpose: This file contains the class definition for MFreedom_Joint.
-// It is a sub class for MFreedom_Constraint specialized to be used for simple joint 
+// It is a sub class for OneRowMFreedom_Constraint specialized to be used for simple joint 
 // connection element. MFreedom_Joint defines a nonlinear, time dependent multi 
 // point constraint.
 //
 
-#include <domain/constraints/MFreedom_Constraint.h>
+#include <domain/constraints/OneRowMFreedom_Constraint.h>
 
 namespace XC {
 
@@ -70,7 +70,7 @@ class ID;
 //! @ingroup CContMP
 //
 //! @brief Base class for joint constraints.
-class MFreedom_Joint: public MFreedom_Constraint
+class MFreedom_Joint: public OneRowMFreedom_Constraint
   {
   protected:
     Node *RetainedNode; //!<  to identify the retained node

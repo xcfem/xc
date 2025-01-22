@@ -25,31 +25,37 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//RigidBase.h
+//SkewPlane.h
 
-#ifndef RigidBase_h
-#define RigidBase_h
+#ifndef SkewPlane_h
+#define SkewPlane_h
 
-#include "OneRowMFreedom_Constraint.h"
+#include "domain/constraints/Skew_Constraint.h"
+
+class Line2d;
+class Plane;
 
 namespace XC {
 class Domain;
-class Node;
 
 //! @ingroup CContMP
 //
-//! @brief Base class for the "rigid body motion" conditions.
-class RigidBase: public OneRowMFreedom_Constraint
+//! @brief Impose the node displacements (and rotations) with respect
+//! to a plane (or axis for 2D problems).
+class SkewPlane: public Skew_Constraint
   {
-  protected:
-    Node *nodeR; //!< Pointer to retained node.
-    Node *nodeC; //!< Pointer to constrained node.
+    Vector normal;
+    
+    void compute_constrained_dof(void);
+    void compute_retained_dofs(const Node *);
+    void setup_matrix(void);
   public:
-    RigidBase(int tag, int classTag);
-    RigidBase(int tag,const int &, const int &, int classTag);
-    ~RigidBase(void);
-    void setDomain(Domain *theDomain);
-    int getVtkCellType(void) const;
+    SkewPlane(int tag);
+    SkewPlane(int tag, const int &constrainedNode, const Line2d &, const double &prescribedDisplacement= 0.0, const double &prescribedRotation= 0.0);
+    SkewPlane(int tag, const int &constrainedNode, const Plane &, const double &prescribedDisplacement= 0.0, const double &prescribedRotation= 0.0);
+    
+    void setup(Domain *theDomain);
+    
   };
 } // end of XC namespace
 

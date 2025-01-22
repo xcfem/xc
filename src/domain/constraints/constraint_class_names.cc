@@ -35,7 +35,7 @@ const std::set<std::string> sp_constraint_class_names= {"XC::SFreedom_Constraint
 bool XC::is_sp_constraint(const std::string &className)
   { return (sp_constraint_class_names.find(className)!= sp_constraint_class_names.end()); }
 
-const std::set<std::string> mp_constraint_class_names={"XC::EqualDOF", "XC::MFreedom_Joint2D", "XC::MFreedom_Joint3D", "XC::RigidBeam", "XC::RigidRod", "XC::RigidDiaphragm"};
+const std::set<std::string> mp_constraint_class_names={"XC::EqualDOF", "XC::MFreedom_Joint2D", "XC::MFreedom_Joint3D", "XC::RigidBeam", "XC::RigidRod", "XC::RigidDiaphragm", "XC::Skew_Constraint", "XC::SkewPlane"};
   
 //! @brief Return true if the given class name corresponds to a MP constraint.
 bool XC::is_mp_constraint(const std::string &className)

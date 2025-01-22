@@ -61,22 +61,28 @@
 //@brief Frees memory.
 void XC::ConstrContainer::free_mem(void)
   {
-    //delete the objects in the domain
+    // delete the objects in the domain
     clearAll();
 
     // delete all the storage objects
-    // SEGMENT FAULT WILL OCCUR IF THESE OBJECTS WERE NOT CONSTRUCTED
-    // USING NEW
     if(theSPs) delete theSPs;
     theSPs= nullptr;
     if(theMPs) delete theMPs;
     theMPs= nullptr;
+    if(theMRMPs) delete theMPs;
+    theMRMPs= nullptr;
+
+    // delete the iterators.
+    // Single freedom.
     if(theSFreedom_Iter) delete theSFreedom_Iter;
     theSFreedom_Iter= nullptr;
+    // Multi-freedom.
     if(theMFreedom_Iter) delete theMFreedom_Iter;
     theMFreedom_Iter= nullptr;
+    // Multi-row, multi-freedom.
     if(theMRMFreedom_Iter) delete theMRMFreedom_Iter;
     theMRMFreedom_Iter= nullptr;
+    // All single-freedom.
     if(allSFreedom_Iter) delete allSFreedom_Iter;
     allSFreedom_Iter= nullptr;
   }
@@ -104,8 +110,10 @@ void XC::ConstrContainer::alloc_iters(void)
 bool XC::ConstrContainer::check_containers(void) const
   {
     // check that there was space to create the data structures
-    if((theSPs == nullptr) || (theMPs == nullptr) || (theMRMPs == nullptr) ||
-       (theMFreedom_Iter == nullptr) || (theSFreedom_Iter == nullptr) || (theMRMFreedom_Iter == nullptr))
+    if((theSPs == nullptr) || (theMPs == nullptr) ||
+       (theMRMPs == nullptr) ||
+       (theMFreedom_Iter == nullptr) || (theSFreedom_Iter == nullptr) ||
+       (theMRMFreedom_Iter == nullptr))
       {
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << " - out of memory"
@@ -173,7 +181,6 @@ bool XC::ConstrContainer::addSFreedom_Constraint(SFreedom_Constraint *spConstrai
       retval= theSPs->addComponent(spConstraint);
     return retval;
   }
-
 
 //! @brief Appends a multiple freedom constraint.
 //! @param mfConstraint: pointer to the multi-freedom constraint to append.
@@ -820,19 +827,19 @@ void XC::ConstrContainer::applyLoad(double timeStep)
     //
     // finally loop over the MFreedom_Constraints and SFreedom_Constraints of the domain
     //
-
+    
     MFreedom_ConstraintIter &theMPs= getMPs();
-    MFreedom_Constraint *theMP;
+    MFreedom_Constraint *theMP= nullptr;
     while((theMP= theMPs()) != 0)
         theMP->applyConstraint(timeStep);
 
     MRMFreedom_ConstraintIter &theMRMPs= getMRMPs();
-    MRMFreedom_Constraint *theMRMP;
+    MRMFreedom_Constraint *theMRMP= nullptr;
     while((theMRMP= theMRMPs()) != 0)
         theMRMP->applyConstraint(timeStep);
-
+    
     SFreedom_ConstraintIter &theSPs= getSPs();
-    SFreedom_Constraint *theSP;
+    SFreedom_Constraint *theSP= nullptr;
     while((theSP= theSPs()) != 0)
       theSP->applyConstraint(timeStep);
   }
@@ -1256,8 +1263,8 @@ int XC::ConstrContainer::sendData(Communicator &comm)
     res+= comm.sendMovable(*theMPs,getDbTagData(),CommMetaData(1));
     res+= comm.sendMovable(*theMRMPs,getDbTagData(),CommMetaData(2));
     
-    res+= sendNLockersTags(3,4,comm); //Active node lockers.
-    res+= sendLPatternsTags(5,6,comm); //Active load patterns.
+    res+= sendNLockersTags(3, 4, comm); //Active node lockers.
+    res+= sendLPatternsTags(5, 6, comm); //Active load patterns.
     return res;
   }
 
@@ -1267,8 +1274,8 @@ int XC::ConstrContainer::recvData(const Communicator &comm)
     int res= theSPs->receive<SFreedom_Constraint>(getDbTagDataPos(0),comm,&FEM_ObjectBroker::getNewSP);
     res+= theMPs->receive<MFreedom_Constraint>(getDbTagDataPos(1),comm,&FEM_ObjectBroker::getNewMP);
     res+= theMRMPs->receive<MRMFreedom_Constraint>(getDbTagDataPos(2),comm,&FEM_ObjectBroker::getNewMRMP);
-    res+= recvNLockersTags(3,4,comm);
-    res+= recvLPatternsTags(5,6,comm);
+    res+= recvNLockersTags(3, 4, comm);
+    res+= recvLPatternsTags(5, 6, comm);
     return res;
   }
 
@@ -1331,7 +1338,7 @@ void XC::ConstrContainer::setPyDict(const boost::python::dict &d)
 //! @brief Sends object through the communicator argument.
 int XC::ConstrContainer::sendSelf(Communicator &comm)
   {
-    inicComm(7);
+    inicComm(8);
     int res= sendData(comm);
 
     const int dataTag= getDbTag(comm);
@@ -1348,7 +1355,7 @@ int XC::ConstrContainer::sendSelf(Communicator &comm)
 int XC::ConstrContainer::recvSelf(const Communicator &comm)
   {
     // first we get the data about the state of the cc for this cTag
-    inicComm(7);
+    inicComm(8);
     int res= comm.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__

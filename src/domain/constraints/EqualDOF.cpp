@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //EqualDOF.cpp
 
-#include <domain/constraints/EqualDOF.h>
+#include "domain/constraints/EqualDOF.h"
 #include "utility/matrix/ID.h"
 #include "utility/matrix/Matrix.h"
 #include <domain/mesh/node/Node.h>
@@ -35,11 +35,11 @@
 
 //! @brief Constructor.
 XC::EqualDOF::EqualDOF(int tag)
-  : MFreedom_Constraint(tag) {}
+  : OneRowMFreedom_Constraint(tag, CNSTRNT_TAG_EqualDOF_Constraint) {}
 
 //! @brief Constructor.
 XC::EqualDOF::EqualDOF(int tag,const int &retainedNode,const int &constrainedNode,const ID &dofs)
-  : MFreedom_Constraint(tag,retainedNode,constrainedNode,0)
+  : OneRowMFreedom_Constraint(tag,retainedNode,constrainedNode,CNSTRNT_TAG_EqualDOF_Constraint)
   { setDofs(dofs); }
 
 //! @brief Sets retained degrees of fredom.
@@ -66,7 +66,7 @@ void XC::EqualDOF::setup_matrix(void)
 
 //! @brief Constraint setup.
 void XC::EqualDOF::setup(Domain *theDomain)
-  {  setup_matrix(); }
+  { setup_matrix(); }
 
 //! @brief VTK interface.
 int XC::EqualDOF::getVtkCellType(void) const
