@@ -43,6 +43,7 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 n1= nodes.newNodeXYZ(0,0.0,0.0)
 n2= nodes.newNodeXYZ(L,0.0,0.0)
 
+## Coordinate transformation.
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 
 # Define material.
