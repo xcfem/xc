@@ -126,6 +126,7 @@ fi
 # Install Python extensions.
 echo "Installing Python extensions."
 export XC_VERSION=$(python version.py)
+export XC_PKG_NAME=$(python deb_pkg_data.py)
 export SYS_ARCH=$(dpkg --print-architecture)
 export XC_DEB_PKG_FOLDER="./debian-pkg"
 export USR_LOCAL="/usr/local"
@@ -135,6 +136,7 @@ echo "$SYS_ARCH" >> ./xc_installation_target.txt
 echo "$XC_DEB_PKG_FOLDER" >> ./xc_installation_target.txt
 echo "$XC_INSTALLATION_TARGET" >> ./xc_installation_target.txt
 echo "$USR_LOCAL" >> ./xc_installation_target.txt
+#echo "$XC_PKG_NAME" > ./xc_installation_target.txt
 rm -rf $XC_DEB_PKG_FOLDER
 mkdir $XC_DEB_PKG_FOLDER
 pip3 install . -v --quiet --log ./installation_report.log --upgrade --target=$XC_INSTALLATION_TARGET #--root-user-action=ignore
@@ -146,6 +148,8 @@ XC_DEB_PKG=$(ls -t *.deb | head -1)
 echo "New Debian package: $XC_DEB_PKG"
 echo "Clean temporary files."
 rm -r $XC_DEB_PKG_FOLDER
+echo "Remove previous version."
+sudo apt purge "$XC_PKG_NAME"
 echo "Install package."
 sudo dpkg -i "$XC_DEB_PKG"
 echo "$XC_DEB_PKG" >> ./xc_installation_target.txt

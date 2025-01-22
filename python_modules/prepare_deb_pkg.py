@@ -30,6 +30,7 @@ import os
 import logging
 import platform
 import site
+import deb_pkg_data
 
 xc_deb_pkg_folder= None
 xc_installation_target= None
@@ -76,12 +77,8 @@ else:
 cmd= 'mkdir '+xc_deb_pkg_folder+'/DEBIAN/'
 os.system(cmd)
 ### Create control file.
-control_file_contents= '''Package: xc-python-modules
-Version: xc_version
-Architecture: sys_arch
-Maintainer: Luis C. Pérez Tato <l.pereztato@gmail.com>
-Description: Python modules of the XC finite element analysis program.
-'''
+control_file_contents= deb_pkg_data.control_file_contents
+
 #### Set version.
 control_file_contents= control_file_contents.replace('xc_version', xc_version)
 #### Get architecture.
