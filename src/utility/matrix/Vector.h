@@ -128,6 +128,10 @@ class Vector: public CommandEntity
     double Norm(void) const;
     double pNorm(int p) const;
     double NormInf(void) const;
+    int getIndexMaxValue(void) const;
+    int getIndexMinValue(void) const;
+    int getIndexMaxAbsValue(void) const;
+    int getIndexMinAbsValue(void) const;
     int Size(void) const;
     int getNumBytes(void) const;
     int resize(int newSize);

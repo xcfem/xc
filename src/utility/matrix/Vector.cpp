@@ -800,6 +800,94 @@ double XC::Vector::NormInf(void) const
     return retval;
   }
 
+//! @brief Returns the index of the maximum of the values of
+//! the components.
+int XC::Vector::getIndexMaxValue(void) const
+  {
+    int retval= -1;
+    if(sz>0)
+      {
+	retval= 0;
+	double maxComponentValue= theData[retval];
+	for(int i=1; i<sz; i++)
+	  {
+	    const double &value= theData[i];
+	    if(value>maxComponentValue)
+	      {
+		maxComponentValue= value;
+		retval= i;
+	      }
+	  }
+      }
+    return retval;
+  }
+  
+//! @brief Returns the index of the maximum of the values of
+//! the components.
+int XC::Vector::getIndexMinValue(void) const
+  {
+    int retval= -1;
+    if(sz>0)
+      {
+	retval= 0;
+	double minComponentValue= theData[retval];
+	for(int i=1; i<sz; i++)
+	  {
+	    const double &value= theData[i];
+	    if(value<minComponentValue)
+	      {
+		minComponentValue= value;
+		retval= i;
+	      }
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Returns the index of the maximum of the values of
+//! the components.
+int XC::Vector::getIndexMaxAbsValue(void) const
+  {
+    int retval= -1;
+    if(sz>0)
+      {
+	retval= 0;
+	double maxComponentValue= abs(theData[retval]);
+	for(int i=1; i<sz; i++)
+	  {
+	    const double value= abs(theData[i]);
+	    if(value>maxComponentValue)
+	      {
+		maxComponentValue= value;
+		retval= i;
+	      }
+	  }
+      }
+    return retval;
+  }
+  
+//! @brief Returns the index of the maximum of the values of
+//! the components.
+int XC::Vector::getIndexMinAbsValue(void) const
+  {
+    int retval= -1;
+    if(sz>0)
+      {
+	retval= 0;
+	double minComponentValue= abs(theData[retval]);
+	for(int i=1; i<sz; i++)
+	  {
+	    const double value= abs(theData[i]);
+	    if(value<minComponentValue)
+	      {
+		minComponentValue= value;
+		retval= i;
+	      }
+	  }
+      }
+    return retval;
+  }
+
 double XC::Vector::pNorm(int p) const
   {
     double value= 0.0;
