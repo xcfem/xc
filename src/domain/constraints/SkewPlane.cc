@@ -90,24 +90,11 @@ XC::SkewPlane::SkewPlane(int tag, const int &constrainedNode, const Plane &p, co
   }
 
 //! @brief Compute the constrained DOF.
-void XC::SkewPlane::compute_constrained_dof(const Node *n)
+Vector3d XC::SkewPlane::compute_constrained_dof(const Node *n)
   {
     // Compute the index of the maximum component of the
     // normal vector
-    int constrainedDOFIndex= -1;
-    double maxComponentValue= abs(normal[0]);
-    if(maxComponentValue>0.0)
-      constrainedDOFIndex= 0;
-    const int sz= this->normal.Size();
-    for(int i= 1; i<sz; i++)
-      {
-	const double value= abs(normal[i]);
-	if(value>maxComponentValue)
-	  {
-	    maxComponentValue= value;
-	    constrainedDOFIndex= i;
-	  }
-      }
+    int constrainedDOFIndex= normal.getIndexMaxAbsValue();
     if(constrainedDOFIndex<0)
       {
 	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -118,6 +105,7 @@ void XC::SkewPlane::compute_constrained_dof(const Node *n)
 	exit(-1);
       }
     std::set<int> constrained_dofs_set({constrainedDOFIndex});
+    Vector3d retval;
     if(n)
       {
 	const int n_dof= n->getNumberDOF();
@@ -129,16 +117,23 @@ void XC::SkewPlane::compute_constrained_dof(const Node *n)
 	      constrained_dofs_set.insert(n_dof-1);
 	    else
 	      {
-		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-			  << "; Not implemented yet for more than one "
-			  << " rotational DOF."
-			  << Color::def << std::endl;
-		exit(-1);
+	        const Vector3d tmp(normal[0], normal[1], normal[2]);
+		// Compute first vector perpendicular to the normal vector.
+		const Vector3d perpendicular= tmp.Normal().getNormalized();		
+		const int firstRotationalConstrainedDOFIndex= perpendicular.getIndexMaxAbsValue()+dim;
+		constrained_dofs_set.insert(firstRotationalConstrainedDOFIndex);
+		
+		// Compute second vector perpendicular to the normal vector.
+		const Vector3d binormal= tmp.getCross(perpendicular).getNormalized();
+		const int secondRotationalConstrainedDOFIndex= binormal.getIndexMaxAbsValue()+dim;
+		constrained_dofs_set.insert(secondRotationalConstrainedDOFIndex);
+		retval= (perpendicular+binormal).getNormalized();
 	      }
 	  }
       }
     ID constrained_dofs(constrained_dofs_set.begin(), constrained_dofs_set.end());
     this->set_constrained_dofs(constrained_dofs);
+    return retval;
   }
 
 //! @brief Compute the retained DOFs.
@@ -159,12 +154,12 @@ void XC::SkewPlane::compute_retained_dofs(const Node *n)
   }
 
 //! @brief Computes constraint matrix.
-//! @param rotational_dofs: number of rotational DOFs of the node.
-void XC::SkewPlane::setup_matrix(void)
+//! @param normal2normal: vector to impose rotational constraints (if any).
+void XC::SkewPlane::setup_matrix(const Vector3d &normal2normal)
   {
     // The number of DOF to be coupled
-    const int numRetainedDOFs= retainDOF.Size(); //ID of retained DOFs.
     const int numConstrainedDOFs= constrDOF.Size(); //ID of constrained DOFs.
+    const int numRetainedDOFs= retainDOF.Size(); //ID of retained DOFs.
 
     // The constraint matrix ... U_c = C_cr * U_r
     Matrix Ccr(numConstrainedDOFs, numRetainedDOFs);
@@ -175,16 +170,31 @@ void XC::SkewPlane::setup_matrix(void)
     for(int i=0;i<numConstrainedDOFs;i++)
       {
 	const int constrainedDOFindex= constrDOF[i];
-
-	const double &n_i= normal[constrainedDOFindex];
-
-	for(int j= 0; j<numRetainedDOFs; j++)
+	if(constrainedDOFindex<dim) // tranlational constrained DOF.
 	  {
-	    int retainedDOFindex= retainDOF[j];
-	    if(retainedDOFindex>=dim) // rotational dof.
-	      retainedDOFindex-= dim;
-	    const double &n_j= normal[retainedDOFindex];
-	    Ccr(i, j)= -(n_j/n_i);
+	    const double &n_i= normal[constrainedDOFindex];
+	    for(int j= 0; j<numRetainedDOFs; j++)
+	      {
+		const int retainedDOFindex= retainDOF[j];
+		if(retainedDOFindex<dim) // translational retained DOF.
+		  {
+		    const double &n_j= normal[retainedDOFindex];
+		    Ccr(i, j)= -(n_j/n_i);
+		  }
+	      }
+	  }
+	else // rotational constrained DOF.
+	  {
+	    const double &n_i= normal2normal[constrainedDOFindex];
+	    for(int j= 0; j<numRetainedDOFs; j++)
+	      {
+		const int retainedDOFindex= retainDOF[j];
+		if(retainedDOFindex>=dim) // rotational retained DOF.
+		  {
+		    const double &n_j= normal2normal[retainedDOFindex-dim];
+		    Ccr(i, j)= -(n_j/n_i);
+		  }
+	      }
 	  }
       }
     this->set_constraint(Ccr);
@@ -196,7 +206,7 @@ void XC::SkewPlane::setup(Domain *theDomain)
     // Compute the constrained DOF.
     const int constrainedNodeTag= this->getNodeConstrained();
     const Node* theConstrainedNode = theDomain->getNode(constrainedNodeTag);
-    this->compute_constrained_dof(theConstrainedNode);
+    const Vector3d normal2normal= this->compute_constrained_dof(theConstrainedNode);
     
     if(theConstrainedNode == nullptr)
       {
@@ -212,7 +222,7 @@ void XC::SkewPlane::setup(Domain *theDomain)
 	// Compute the retained DOFs.
 	this->compute_retained_dofs(theConstrainedNode);
     
-	this->setup_matrix();
+	this->setup_matrix(normal2normal);
       }
   }
 

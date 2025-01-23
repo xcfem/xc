@@ -46,9 +46,9 @@ class SkewPlane: public Skew_Constraint
   {
     Vector normal;
     
-    void compute_constrained_dof(const Node *);
+    Vector3d compute_constrained_dof(const Node *);
     void compute_retained_dofs(const Node *);
-    void setup_matrix(void);
+    void setup_matrix(const Vector3d &normal2normal);
   public:
     SkewPlane(int tag);
     SkewPlane(int tag, const int &constrainedNode, const Line2d &, const double &prescribedDisplacement= 0.0, const double &prescribedRotation= 0.0);
