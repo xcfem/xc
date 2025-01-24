@@ -76,7 +76,7 @@ modelSpace.fixNode('000_0FF', n1.tag)
 vertPlane= geom.Plane3d(geom.Pos3d(L,0,0), geom.Pos3d(L,10,0), geom.Pos3d(L,0, 10)) # Vertical plane at beam end.
 # Normally, the skew constraints will not be aligned with the axes, but
 # this case is an exception to make the checking of the results easier.
-skew= modelSpace.constraints.newSkewPlane(n2.tag, vertPlane, 0.0, 0.0)
+skew= modelSpace.newSkewPlane(n2.tag, vertPlane, 0.0, 0.0)
 ## Whole beam constraints.
 modelSpace.fixNode('000_0FF', n11.tag)
 modelSpace.fixNode('000_0FF', n13.tag)
@@ -94,9 +94,9 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 if(result!=0):
-  errMsg= 'Solution algorithm failed.'
-  lmsg.error(errMsg)
-  exit(1)
+    errMsg= 'Solution algorithm failed.'
+    lmsg.error(errMsg)
+    exit(1)
 
 # Check results.
 ## Check displacement results (verify symmetry).
