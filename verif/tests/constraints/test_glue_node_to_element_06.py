@@ -45,6 +45,8 @@ nodesToGlue= [n10,n20]#[n10,n20]
 
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
+
+# Element definition.
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= memb1.name
 elem= elements.newElement("ShellMITC4",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
