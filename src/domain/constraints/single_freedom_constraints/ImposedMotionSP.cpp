@@ -1,4 +1,3 @@
-// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -45,66 +44,87 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-// $Revision: 1.3 $
-// $Date: 2003/02/14 23:00:55 $
-// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/Skew_Constraint.h,v $
+// $Revision: 1.5 $
+// $Date: 2005/11/22 19:41:17 $
+// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/single_freedom_constraints/ImposedMotionSP.cpp,v $
                                                                         
-                                                                        
-#ifndef Skew_Constraint_h
-#define Skew_Constraint_h
-
-// File: ~/domain/constraints/Skew_Constraint.h
-//
 // Written: fmk 
-// Created: 11/96
+// Created: 11/00
 // Revision: A
 //
-// Purpose: This file contains the class definition for Skew_Constraint.
-// This class implements skew type constraints as defined in section 4.2
-// of the book: Finite Element Procedures Klaus-Jurgen Bathe, 2006
-// ISBN	097900490X, 9780979004902
-//
-// What: "@(#) Skew_Constraint, revA"
+// Purpose: This file contains the implementation of class XC::ImposedMotionSP.
 
-#include "MFreedom_Constraint.h"
+#include <domain/constraints/single_freedom_constraints/ImposedMotionSP.h>
+#include <classTags.h>
+#include <utility/matrix/Vector.h>
+#include <utility/actor/objectBroker/FEM_ObjectBroker.h>
+#include <domain/load/groundMotion/GroundMotion.h>
+#include <domain/mesh/node/Node.h>
+#include <domain/domain/Domain.h>
+#include <domain/load/pattern/LoadPattern.h>
+#include <utility/matrix/ID.h>
 
-namespace XC {
+//! @brief Constructor.
+XC::ImposedMotionSP::ImposedMotionSP(void)
+  :ImposedMotionBase(CNSTRNT_TAG_ImposedMotionSP), theNodeResponse(nullptr) {}
 
-/**
+// constructor for a subclass to use
+XC::ImposedMotionSP::ImposedMotionSP(int tag, int node, int ndof, int pattern, int motion)
+  :ImposedMotionBase(CNSTRNT_TAG_ImposedMotionSP,tag, node, ndof,pattern,motion), theNodeResponse(nullptr) {}
 
- @brief Skew constraint.
- 
- Objects of this class store the information for a skew constraint as defined
- in section 4.2 of the book: Finite Element Procedures Klaus-Jurgen Bathe, 2006
-  ISBN 097900490X, 9780979004902. Page 190 et seq.
- @ingroup CContMP
-*/
-class Skew_Constraint: public MFreedom_Constraint
+//! @brief Destructor.
+XC::ImposedMotionSP::~ImposedMotionSP(void)
   {
-  public:
-    // constructors        
-    Skew_Constraint(int tag, int classTag= CNSTRNT_TAG_Skew_Constraint);
+    if(theNodeResponse) delete theNodeResponse;
+  }
 
-    Skew_Constraint(int tag, int nodeConstr, int classTag);    
 
-    Skew_Constraint(int tag, int nodeConstr, const ID &constrainedDOF, const ID &retainedDOF, int classTag= CNSTRNT_TAG_Skew_Constraint);    
+//! @brief Applies the constraint.
+int XC::ImposedMotionSP::applyConstraint(double time)
+  {
+    // on first 
+    if(theGroundMotion == 0 || theNode == 0 || theNodeResponse)
+      {
+        int retval= getMotion();
+        if(retval!=0)
+          { return retval; }
 
-    Skew_Constraint(int tag, int nodeConstr, Matrix &constrnt, ID &constrainedDOF,ID &retainedDOF, int classTag= CNSTRNT_TAG_Skew_Constraint);
+        theNodeResponse = new Vector(theNode->getNumberDOF());
+        if(!theNodeResponse)
+          { return -2; }
+      }
+  
+    // now get the response from the ground motion
+    theGroundMotionResponse = theGroundMotion->getDispVelAccel(time);
+  
+  
+    //
+    // now set the responses at the node
+    //
+  
+    /* ***********************************************************
+     * disp response the responsibility of constraint handler
+   
+     *theNodeResponse = theNode->getTrialDisp();
+     (*theNodeResponse)(dofNumber) = theGroundMotionResponse(0);
+     theNode->setTrialDisp(*theNodeResponse);
+    *************************************************************/
+  
+    *theNodeResponse = theNode->getTrialVel();
+    (*theNodeResponse)(dofNumber) = theGroundMotionResponse(1);
+    theNode->setTrialVel(*theNodeResponse);    
+  
+    *theNodeResponse = theNode->getTrialAccel();
+    (*theNodeResponse)(dofNumber) = theGroundMotionResponse(2);
+    theNode->setTrialAccel(*theNodeResponse);        
+  
+    return 0;
+  }
 
-    // methods to get information about the constraint
-    //! @brief Returns the tag of the retained (or primary) node
-    //! in this type of constraint is the same as the constrained node.
-    virtual inline const int &getNodeRetained(void) const
-      { return this->getNodeConstrained(); }
-
-    int addResistingForceToNodalReaction(bool inclInertia);
-    
-    int getVtkCellType(void) const;
-
-    virtual void Print(std::ostream &s, int flag =0) const;
-
-  };
-} // end of XC namespace
-
-#endif
-
+//! @brief Printing.
+void XC::ImposedMotionSP::Print(std::ostream &s, int flag) const 
+  {
+    s << "ImposedMotionSP: " << this->getTag();
+    s << "\t XC::Node: " << this->getNodeTag();
+    s << " DOF: " << this->getDOF_Number() << std::endl;
+  }

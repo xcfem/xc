@@ -45,55 +45,52 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-#ifndef MFreedom_Joint_h
-#define MFreedom_Joint_h
+// $Revision: 1.3 $
+// $Date: 2005/11/22 19:41:17 $
+// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/single_freedom_constraints/ImposedMotionSP.h,v $
+                                                                        
+#ifndef ImposedMotionSFreedom_h
+#define ImposedMotionSFreedom_h
 
-// Written: Arash Altoontash, Gregory Deierlein
-// Created: 08/01
-// Revision: Arash
-
-// Purpose: This file contains the class definition for MFreedom_Joint.
-// It is a sub class for OneRowMFreedom_Constraint specialized to be used for simple joint 
-// connection element. MFreedom_Joint defines a nonlinear, time dependent multi 
-// point constraint.
+// File: ~/domain/constraints/single_freedom_constraints/ImposedMotionSP.h
 //
+// Written: fmk 
+// Created: 11/00
+// Revision: A
+//
+// Purpose: This file contains the class definition for ImposedMotionSP.
+// ImposedMotionSP is a class which imposes the ground motion response
+// values for a GroundMotion at a particular dof at a node.
+//
+// What: "@(#) ImposedMotionSP, revA"
 
-#include <domain/constraints/OneRowMFreedom_Constraint.h>
+#include <domain/constraints/single_freedom_constraints/ImposedMotionBase.h>
 
 namespace XC {
-
+class GroundMotion;
 class Node;
-class Matrix;
-class ID;
 
-
-//! @ingroup CContMP
+//! @ingroup CContSP
 //
-//! @brief Base class for joint constraints.
-class MFreedom_Joint: public OneRowMFreedom_Constraint
+//! @brief Prescribed value for a single degree of freedom.
+class ImposedMotionSP: public ImposedMotionBase
   {
-  protected:
-    Node *RetainedNode; //!<  to identify the retained node
-    Node *ConstrainedNode; //!<  to identify  the constrained node
-    int LargeDisplacement; //!<  flag for large displacements enabled; LrgDsp=0 means large displacement is not enabled
-    // 0 for constant constraint matrix(small deformations)
-    // 1 for time varying constraint matrix(large deformations)
-    // 2 for large deformations with length correction
-    double Length0;
+  private:
+    Vector *theNodeResponse; //! vector for setting nodal response
   public:
-    // constructors        
-    MFreedom_Joint(int tag, int classTag);
-    MFreedom_Joint(Domain *theDomain, int tag, int classTag, int nodeRetain, int nodeConstr, int LrgDsp);
-    ~MFreedom_Joint(void);
+    // constructors    
+    ImposedMotionSP(void);        
+    ImposedMotionSP(int spTag, int nodeTag, int ndof, int patternTag, int theGroundMotionTag);
 
-    // method to get information about the constraint
-    bool isTimeVarying(void) const;
-    void setDomain(Domain *theDomain);
+    // destructor
+    ~ImposedMotionSP(void);
 
-    // methods for output
+    int applyConstraint(double loadFactor);    
+    
     void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace
 
 #endif
+
 

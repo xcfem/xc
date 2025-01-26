@@ -30,7 +30,7 @@
 #ifndef EqualDOF_h
 #define EqualDOF_h
 
-#include "domain/constraints/OneRowMFreedom_Constraint.h"
+#include "domain/constraints/single_retained_node_constraints/OneRowMFreedom_Constraint.h"
 
 namespace XC {
 class Domain;

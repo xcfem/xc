@@ -47,24 +47,24 @@
                                                                         
 // $Revision: 1.3 $
 // $Date: 2005/11/22 19:41:17 $
-// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/ImposedMotionSP.h,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/single_freedom_constraints/ImposedMotionSP1.h,v $
                                                                         
-#ifndef ImposedMotionSFreedom_h
-#define ImposedMotionSFreedom_h
+#ifndef ImposedMotionSP1_h
+#define ImposedMotionSP1_h
 
-// File: ~/domain/constraints/ImposedMotionSP.h
+// File: ~/domain/constraints/single_freedom_constraints/ImposedMotionSP1.h
 //
 // Written: fmk 
 // Created: 11/00
 // Revision: A
 //
 // Purpose: This file contains the class definition for ImposedMotionSP.
-// ImposedMotionSP is a class which imposes the ground motion response
-// values for a GroundMotion at a particular dof at a node.
+// ImposedMotionSP is a class which returns as the constraint, the DISPLACEMENT 
+// ground motion response for a particular time.
 //
 // What: "@(#) ImposedMotionSP, revA"
 
-#include <domain/constraints/ImposedMotionBase.h>
+#include <domain/constraints/single_freedom_constraints/ImposedMotionBase.h>
 
 namespace XC {
 class GroundMotion;
@@ -72,22 +72,27 @@ class Node;
 
 //! @ingroup CContSP
 //
-//! @brief Prescribed value for a single degree of freedom.
-class ImposedMotionSP: public ImposedMotionBase
+//! @brief Prescribed value over a single degree of freedom.
+class ImposedMotionSP1: public ImposedMotionBase
   {
   private:
-    Vector *theNodeResponse; //! vector for setting nodal response
+    int destroyMotion; //!< flag indicating if destructor to be invoked on GMotion when done    
+  protected:
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     // constructors    
-    ImposedMotionSP(void);        
-    ImposedMotionSP(int spTag, int nodeTag, int ndof, int patternTag, int theGroundMotionTag);
-
-    // destructor
-    ~ImposedMotionSP(void);
+    ImposedMotionSP1(void);        
+    ImposedMotionSP1(int spTag, int nodeTag, int ndof, int patternTag, int groundMotionTag);
 
     int applyConstraint(double loadFactor);    
+    bool isHomogeneous(void) const;
     
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 } // end of XC namespace
 

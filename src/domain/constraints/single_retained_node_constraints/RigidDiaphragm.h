@@ -47,7 +47,7 @@
                                                                         
 // $Revision: 1.2 $
 // $Date: 2003/02/14 23:00:55 $
-// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/RigidDiaphragm.h,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/single_retained_node_constraints/RigidDiaphragm.h,v $
                                                                         
                                                                         
 // File: ~/model/constraints/RigidDiaphragm.h

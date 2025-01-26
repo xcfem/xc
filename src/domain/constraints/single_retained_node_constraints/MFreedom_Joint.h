@@ -1,3 +1,4 @@
+// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -43,90 +44,56 @@
 **   Filip C. Filippou (filippou@ce.berkeley.edu)                     **
 **                                                                    **
 ** ****************************************************************** */
+                                                                        
+#ifndef MFreedom_Joint_h
+#define MFreedom_Joint_h
 
-// $Revision: 1.4 $
-// $Date: 2005/01/08 01:22:41 $
-// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/RigidRod.cpp,v $
+// Written: Arash Altoontash, Gregory Deierlein
+// Created: 08/01
+// Revision: Arash
 
-
-// File: ~/model/constraints/RigidRod.C
+// Purpose: This file contains the class definition for MFreedom_Joint.
+// It is a sub class for OneRowMFreedom_Constraint specialized to be used for simple joint 
+// connection element. MFreedom_Joint defines a nonlinear, time dependent multi 
+// point constraint.
 //
-// Written: fmk 12/99
-// Revised:
+
+#include <domain/constraints/single_retained_node_constraints/OneRowMFreedom_Constraint.h>
+
+namespace XC {
+
+class Node;
+class Matrix;
+class ID;
+
+
+//! @ingroup CContMP
 //
-// Purpose: This file contains the class implementation for XC::RigidRod.
-#include "RigidRod.h"
-
-#include <domain/domain/Domain.h>
-#include <domain/mesh/node/Node.h>
-#include <utility/matrix/Matrix.h>
-#include <utility/matrix/ID.h>
-
-//! @brief Object setup.
-void XC::RigidRod::setup(Domain *theDomain)
+//! @brief Base class for joint constraints.
+class MFreedom_Joint: public OneRowMFreedom_Constraint
   {
-    RigidBase::setDomain(theDomain);
+  protected:
+    Node *RetainedNode; //!<  to identify the retained node
+    Node *ConstrainedNode; //!<  to identify  the constrained node
+    int LargeDisplacement; //!<  flag for large displacements enabled; LrgDsp=0 means large displacement is not enabled
+    // 0 for constant constraint matrix(small deformations)
+    // 1 for time varying constraint matrix(large deformations)
+    // 2 for large deformations with length correction
+    double Length0;
+  public:
+    // constructors        
+    MFreedom_Joint(int tag, int classTag);
+    MFreedom_Joint(Domain *theDomain, int tag, int classTag, int nodeRetain, int nodeConstr, int LrgDsp);
+    ~MFreedom_Joint(void);
 
-    //get the coordinates of the two nodes - check dimensions are the same
-    const Vector &crdR = nodeR->getCrds();
-    const Vector &crdC = nodeC->getCrds();
-    int dimR = crdR.Size();
-    int dimC = crdC.Size();
-    if(dimR != dimC)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; mismatch in dimension "
-		  << "between constrained node " <<  getNodeConstrained()
-		  <<  " and Retained node " << getNodeRetained() << std::endl;
-        return;
-      }
+    // method to get information about the constraint
+    bool isTimeVarying(void) const;
+    void setDomain(Domain *theDomain);
 
-    // check the number of dof at each node is the same
-    const int numDOF = nodeR->getNumberDOF();
-    if(numDOF != nodeC->getNumberDOF())
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; mismatch in numDOF "
-		  << "between constrained node " <<  getNodeConstrained()
-		  <<  " and retained node " << getNodeRetained() << std::endl;
-        return;
-      }
+    // methods for output
+    void Print(std::ostream &s, int flag =0) const;
+  };
+} // end of XC namespace
 
-    // check the number of dof at the nodes >= dimension of problem
-    if(numDOF < dimR)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << ";  - numDOF at nodes " << getNodeRetained()
-		  << " and " << getNodeConstrained()
-		  << "must be >= dimension of problem\n";
-        return;
-      }
-
-
-    // create the ID to identify the constrained dof
-    ID id(dimR);
-
-    // construct the transformation matrix Ccr, where  Uc = Ccr Ur & set the diag
-    Matrix mat(dimR,dimR);
-    mat.Zero();
-
-    // set the values
-    for(int i=0; i<dimR; i++)
-      {
-        mat(i,i) = 1.0;
-        id(i) = i;
-      }
-
-    set_constraint(mat);
-    set_constrained_retained_dofs(id,id);
-  }
-
-//! @brief Constructor.
-XC::RigidRod::RigidRod(int mPtag)
-  : RigidBase(mPtag, CNSTRNT_TAG_RigidRod_Constraint) {}
-
-
-//! @brief Constructor.
-XC::RigidRod::RigidRod(int mPtag,const int &nm, const int &ns)
-  : RigidBase(mPtag,nm,ns, CNSTRNT_TAG_RigidRod_Constraint) {}
+#endif
 

@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //ImposedMotionBase.cc
 
-#include <domain/constraints/ImposedMotionBase.h>
+#include <domain/constraints/single_freedom_constraints/ImposedMotionBase.h>
 #include <utility/matrix/ID.h>
 #include <domain/domain/Domain.h>
 #include <domain/load/pattern/LoadPattern.h>

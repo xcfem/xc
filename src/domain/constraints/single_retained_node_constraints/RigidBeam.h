@@ -1,3 +1,4 @@
+// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -44,87 +45,40 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-// $Revision: 1.5 $
-// $Date: 2005/11/22 19:41:17 $
-// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/ImposedMotionSP.cpp,v $
+// $Revision: 1.1.1.1 $
+// $Date: 2000/09/15 08:23:18 $
+// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/single_retained_node_constraints/RigidBeam.h,v $
                                                                         
-// Written: fmk 
-// Created: 11/00
-// Revision: A
+                                                                        
+// File: ~/model/constraints/RigidBeam.h
 //
-// Purpose: This file contains the implementation of class XC::ImposedMotionSP.
+// Written: fmk 12/99
+// Revised:
+//
+// Purpose: This file contains the class definition for RigidBeam.
+// RigidBeam is a class which constructs an MFreedom_Constraint object
+// between two nodes which is similar to rigid beam
 
-#include <domain/constraints/ImposedMotionSP.h>
-#include <classTags.h>
-#include <utility/matrix/Vector.h>
-#include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include <domain/load/groundMotion/GroundMotion.h>
-#include <domain/mesh/node/Node.h>
-#include <domain/domain/Domain.h>
-#include <domain/load/pattern/LoadPattern.h>
-#include <utility/matrix/ID.h>
+#ifndef RigidBeam_h
+#define RigidBeam_h
 
-//! @brief Constructor.
-XC::ImposedMotionSP::ImposedMotionSP(void)
-  :ImposedMotionBase(CNSTRNT_TAG_ImposedMotionSP), theNodeResponse(nullptr) {}
+#include "RigidBase.h"
 
-// constructor for a subclass to use
-XC::ImposedMotionSP::ImposedMotionSP(int tag, int node, int ndof, int pattern, int motion)
-  :ImposedMotionBase(CNSTRNT_TAG_ImposedMotionSP,tag, node, ndof,pattern,motion), theNodeResponse(nullptr) {}
+namespace XC {
+class ID;
 
-//! @brief Destructor.
-XC::ImposedMotionSP::~ImposedMotionSP(void)
+//! @ingroup CContMP
+//
+//! @brief Imposes a rigid body motion to the
+//! nodes of the rigid beam.
+class RigidBeam: public RigidBase
   {
-    if(theNodeResponse) delete theNodeResponse;
-  }
+    Matrix setup_matrix(int numDOF,const Vector &crdR,const Vector &crdC,ID &id);
+   public:
+    RigidBeam(int tag);
+    RigidBeam(int tag,const int &, const int &);
+    void setup(Domain *theDomain);
+  };
+} // end of XC namespace
 
-
-//! @brief Applies the constraint.
-int XC::ImposedMotionSP::applyConstraint(double time)
-  {
-    // on first 
-    if(theGroundMotion == 0 || theNode == 0 || theNodeResponse)
-      {
-        int retval= getMotion();
-        if(retval!=0)
-          { return retval; }
-
-        theNodeResponse = new Vector(theNode->getNumberDOF());
-        if(!theNodeResponse)
-          { return -2; }
-      }
-  
-    // now get the response from the ground motion
-    theGroundMotionResponse = theGroundMotion->getDispVelAccel(time);
-  
-  
-    //
-    // now set the responses at the node
-    //
-  
-    /* ***********************************************************
-     * disp response the responsibility of constraint handler
-   
-     *theNodeResponse = theNode->getTrialDisp();
-     (*theNodeResponse)(dofNumber) = theGroundMotionResponse(0);
-     theNode->setTrialDisp(*theNodeResponse);
-    *************************************************************/
-  
-    *theNodeResponse = theNode->getTrialVel();
-    (*theNodeResponse)(dofNumber) = theGroundMotionResponse(1);
-    theNode->setTrialVel(*theNodeResponse);    
-  
-    *theNodeResponse = theNode->getTrialAccel();
-    (*theNodeResponse)(dofNumber) = theGroundMotionResponse(2);
-    theNode->setTrialAccel(*theNodeResponse);        
-  
-    return 0;
-  }
-
-//! @brief Printing.
-void XC::ImposedMotionSP::Print(std::ostream &s, int flag) const 
-  {
-    s << "ImposedMotionSP: " << this->getTag();
-    s << "\t XC::Node: " << this->getNodeTag();
-    s << " DOF: " << this->getDOF_Number() << std::endl;
-  }
+#endif

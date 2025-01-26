@@ -1,4 +1,3 @@
-// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -25,38 +24,30 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SkewPlane.h
 
-#ifndef SkewPlane_h
-#define SkewPlane_h
-
-#include "domain/constraints/Skew_Constraint.h"
-
-class Line2d;
-class Plane;
-
-namespace XC {
-class Domain;
-
-//! @ingroup CContMP
 //
-//! @brief Impose the node displacements (and rotations) with respect
-//! to a plane (or axis for 2D problems).
-class SkewPlane: public Skew_Constraint
-  {
-    Vector normal;
-    
-    Vector3d compute_constrained_dof(const Node *);
-    void compute_retained_dofs(const Node *);
-    void setup_matrix(const Vector3d &normal2normal);
-  public:
-    SkewPlane(int tag);
-    SkewPlane(int tag, const int &constrainedNode, const Line2d &, const double &prescribedDisplacement= 0.0, const double &prescribedRotation= 0.0);
-    SkewPlane(int tag, const int &constrainedNode, const Plane &, const double &prescribedDisplacement= 0.0, const double &prescribedRotation= 0.0);
-    
-    void setup(Domain *theDomain);
-    
-  };
-} // end of XC namespace
+// Written: lcpt 
+// Created: 03/2015
+// Revision: A
+//
+// Purpose: This file contains the implementation of class XC::GlueNodeToElement.
 
-#endif
+#include <domain/constraints/multiple_retained_node_constraints/GlueNodeToElement.h>
+#include "vtkCellType.h"
+
+//! @brief Constructor.
+//! @param tag: tag for the constraint.
+XC::GlueNodeToElement::GlueNodeToElement(int tag)		
+ : MRMFreedom_Constraint(tag,CNSTRNT_TAG_GlueNodeToElement) {}
+
+//! @brief Constructor.
+//! @param tag: tag for the constraint.
+//! @param node: node to be glued.
+//! @param elem: element to glue to.
+//! @param constrainedDOF: constrained degrees of freedom.
+XC::GlueNodeToElement::GlueNodeToElement(int tag, const Node &node,const Element &elem, const ID &constrainedDOF)
+  : MRMFreedom_Constraint(tag, elem, node, constrainedDOF) {}
+
+//! @brief VTK interface.
+int XC::GlueNodeToElement::getVtkCellType(void) const
+  { return VTK_VERTEX; }

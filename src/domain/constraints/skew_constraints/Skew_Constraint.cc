@@ -46,7 +46,7 @@
                                                                         
 // $Revision: 1.4 $
 // $Date: 2005/12/22 00:35:08 $
-// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/Skew_Constraint.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/skew_constraints/Skew_Constraint.cpp,v $
                                                                         
                                                                         
 // File: ~/domain/constraints//Skew_Constraint.C
@@ -60,7 +60,7 @@
 // The class XC::Skew_Constraint interface:
 //
 
-#include <domain/constraints/Skew_Constraint.h>
+#include <domain/constraints/skew_constraints/Skew_Constraint.h>
 
 #include <cstdlib>
 #include <utility/matrix/ID.h>

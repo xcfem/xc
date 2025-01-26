@@ -45,40 +45,66 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-// $Revision: 1.1.1.1 $
-// $Date: 2000/09/15 08:23:18 $
-// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/RigidBeam.h,v $
+// $Revision: 1.3 $
+// $Date: 2003/02/14 23:00:55 $
+// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/skew_constraints/Skew_Constraint.h,v $
                                                                         
                                                                         
-// File: ~/model/constraints/RigidBeam.h
-//
-// Written: fmk 12/99
-// Revised:
-//
-// Purpose: This file contains the class definition for RigidBeam.
-// RigidBeam is a class which constructs an MFreedom_Constraint object
-// between two nodes which is similar to rigid beam
+#ifndef Skew_Constraint_h
+#define Skew_Constraint_h
 
-#ifndef RigidBeam_h
-#define RigidBeam_h
+// File: ~/domain/constraints/skew_constraints/Skew_Constraint.h
+//
+// Written: fmk 
+// Created: 11/96
+// Revision: A
+//
+// Purpose: This file contains the class definition for Skew_Constraint.
+// This class implements skew type constraints as defined in section 4.2
+// of the book: Finite Element Procedures Klaus-Jurgen Bathe, 2006
+// ISBN	097900490X, 9780979004902
+//
+// What: "@(#) Skew_Constraint, revA"
 
-#include "RigidBase.h"
+#include "domain/constraints/MFreedom_Constraint.h"
 
 namespace XC {
-class ID;
 
-//! @ingroup CContMP
-//
-//! @brief Imposes a rigid body motion to the
-//! nodes of the rigid beam.
-class RigidBeam: public RigidBase
+/**
+
+ @brief Skew constraint.
+ 
+ Objects of this class store the information for a skew constraint as defined
+ in section 4.2 of the book: Finite Element Procedures Klaus-Jurgen Bathe, 2006
+  ISBN 097900490X, 9780979004902. Page 190 et seq.
+ @ingroup CContMP
+*/
+class Skew_Constraint: public MFreedom_Constraint
   {
-    Matrix setup_matrix(int numDOF,const Vector &crdR,const Vector &crdC,ID &id);
-   public:
-    RigidBeam(int tag);
-    RigidBeam(int tag,const int &, const int &);
-    void setup(Domain *theDomain);
+  public:
+    // constructors        
+    Skew_Constraint(int tag, int classTag= CNSTRNT_TAG_Skew_Constraint);
+
+    Skew_Constraint(int tag, int nodeConstr, int classTag);    
+
+    Skew_Constraint(int tag, int nodeConstr, const ID &constrainedDOF, const ID &retainedDOF, int classTag= CNSTRNT_TAG_Skew_Constraint);    
+
+    Skew_Constraint(int tag, int nodeConstr, Matrix &constrnt, ID &constrainedDOF,ID &retainedDOF, int classTag= CNSTRNT_TAG_Skew_Constraint);
+
+    // methods to get information about the constraint
+    //! @brief Returns the tag of the retained (or primary) node
+    //! in this type of constraint is the same as the constrained node.
+    virtual inline const int &getNodeRetained(void) const
+      { return this->getNodeConstrained(); }
+
+    int addResistingForceToNodalReaction(bool inclInertia);
+    
+    int getVtkCellType(void) const;
+
+    virtual void Print(std::ostream &s, int flag =0) const;
+
   };
 } // end of XC namespace
 
 #endif
+

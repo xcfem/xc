@@ -46,7 +46,7 @@
                                                                         
 // $Revision: 1.3 $
 // $Date: 2005/01/08 01:22:41 $
-// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/RigidBeam.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/single_retained_node_constraints/RigidBeam.cpp,v $
                                                                         
                                                                         
 // File: ~/model/constraints/RigidBeam.C

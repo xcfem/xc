@@ -29,7 +29,7 @@
 #ifndef GlueNodeToElement_h
 #define GlueNodeToElement_h
 
-// File: ~/domain/constraints/GlueNodeToElement.h
+// File: ~/domain/constraints/multiple_retained_node_constraints/GlueNodeToElement.h
 //
 // Written: fmk 
 // Created: 11/96
@@ -45,7 +45,7 @@
 // as pure virtual, which will allow subclasses for time varying constraints.
 //
 
-#include "MRMFreedom_Constraint.h"
+#include "domain/constraints/MRMFreedom_Constraint.h"
 
 
 namespace XC {

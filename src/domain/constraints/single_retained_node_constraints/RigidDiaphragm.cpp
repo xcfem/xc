@@ -46,7 +46,7 @@
 
 // $Revision: 1.2 $
 // $Date: 2003/02/14 23:00:55 $
-// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/RigidDiaphragm.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/single_retained_node_constraints/RigidDiaphragm.cpp,v $
 
 
 // File: ~/model/constraints/RigidDiaphragm.C
@@ -61,7 +61,7 @@
 #include <cstdlib>
 #include <domain/domain/Domain.h>
 #include <domain/mesh/node/Node.h>
-#include <domain/constraints/OneRowMFreedom_Constraint.h>
+#include <domain/constraints/single_retained_node_constraints/OneRowMFreedom_Constraint.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/ID.h>
 

@@ -46,7 +46,7 @@
                                                                         
 // $Revision: 1.4 $
 // $Date: 2005/12/22 00:35:08 $
-// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/OneRowMFreedom_Constraint.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/single_retained_node_constraints/OneRowMFreedom_Constraint.cpp,v $
                                                                         
                                                                         
 // File: ~/domain/constraints//OneRowMFreedom_Constraint.C
@@ -60,7 +60,7 @@
 // The class XC::OneRowMFreedom_Constraint interface:
 //
 
-#include <domain/constraints/OneRowMFreedom_Constraint.h>
+#include <domain/constraints/single_retained_node_constraints/OneRowMFreedom_Constraint.h>
 
 #include <cstdlib>
 #include <utility/matrix/ID.h>

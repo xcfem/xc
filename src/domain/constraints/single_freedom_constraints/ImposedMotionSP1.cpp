@@ -46,7 +46,7 @@
                                                                         
 // $Revision: 1.4 $
 // $Date: 2005/11/22 19:41:17 $
-// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/ImposedMotionSP1.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/single_freedom_constraints/ImposedMotionSP1.cpp,v $
                                                                         
 // Written: fmk 
 // Created: 11/00
@@ -54,7 +54,7 @@
 //
 // Purpose: This file contains the implementation of class XC::ImposedMotionSP1.
 
-#include <domain/constraints/ImposedMotionSP1.h>
+#include <domain/constraints/single_freedom_constraints/ImposedMotionSP1.h>
 #include <classTags.h>
 #include <utility/matrix/Vector.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
