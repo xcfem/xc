@@ -552,6 +552,29 @@ XC::SFreedom_ConstraintIter &XC::ConstrContainer::getSPs(void)
     return *theSFreedom_Iter;
   }
 
+//! @brief Return a std::deque containing the pointers to the single-freedom
+//! constraints in the container.
+std::deque<XC::SFreedom_Constraint *> XC::ConstrContainer::getSPDeque(void)
+  {
+    std::deque<SFreedom_Constraint *> retval;    
+    SFreedom_ConstraintIter &theSPs= this->getSPs();
+    SFreedom_Constraint *theSP= nullptr;
+    while((theSP= theSPs()) != nullptr)
+      { retval.push_back(theSP); }
+    return retval;
+  }
+
+//! @brief Return a Python list containing the pointers to the single-freedom
+//! constraints in the container.
+boost::python::list XC::ConstrContainer::getSPListPy(void)
+  {
+    boost::python::list retval;
+    const std::deque<SFreedom_Constraint *> tmp= this->getSPDeque();
+    for(std::deque<SFreedom_Constraint *>::const_iterator i= tmp.begin(); i!=tmp.end(); i++)
+      {	retval.append(*i); }
+    return retval;    
+  }
+
 //! @brief All (domain and load cases) single freedom constraints iterator.
 XC::SFreedom_ConstraintIter &XC::ConstrContainer::getDomainAndLoadPatternSPs(void)
   {
@@ -566,6 +589,29 @@ XC::MFreedom_ConstraintIter &XC::ConstrContainer::getMPs(void)
     return *theMFreedom_Iter;
   }
 
+//! @brief Return a std::deque containing the pointers to the multi-freedom
+//! constraints in the container.
+std::deque<XC::MFreedom_Constraint *> XC::ConstrContainer::getMPDeque(void)
+  {
+    std::deque<MFreedom_Constraint *> retval;    
+    MFreedom_ConstraintIter &theMPs= this->getMPs();
+    MFreedom_Constraint *theMP= nullptr;
+    while((theMP= theMPs()) != nullptr)
+      { retval.push_back(theMP); }
+    return retval;
+  }
+
+//! @brief Return a Python list containing the pointers to the multi-freedom
+//! constraints in the container.
+boost::python::list XC::ConstrContainer::getMPListPy(void)
+  {
+    boost::python::list retval;
+    const std::deque<MFreedom_Constraint *> tmp= this->getMPDeque();
+    for(std::deque<MFreedom_Constraint *>::const_iterator i= tmp.begin(); i!=tmp.end(); i++)
+      {	retval.append(*i); }
+    return retval;    
+  }
+
 //! @brief Return an iterator to the multi-row multi-freedom constraints.
 XC::MRMFreedom_ConstraintIter &XC::ConstrContainer::getMRMPs(void)
   {
@@ -573,6 +619,28 @@ XC::MRMFreedom_ConstraintIter &XC::ConstrContainer::getMRMPs(void)
     return *theMRMFreedom_Iter;
   }
 
+//! @brief Return a std::deque containing the pointers to the
+//! multi-row-multi-freedom constraints in the container.
+std::deque<XC::MRMFreedom_Constraint *> XC::ConstrContainer::getMRMPDeque(void)
+  {
+    std::deque<MRMFreedom_Constraint *> retval;    
+    MRMFreedom_ConstraintIter &theMRMPs= this->getMRMPs();
+    MRMFreedom_Constraint *theMRMP= nullptr;
+    while((theMRMP= theMRMPs()) != nullptr)
+      { retval.push_back(theMRMP); }
+    return retval;
+  }
+
+//! @brief Return a Python list containing the pointers to the
+//! multi-row-multi-freedom constraints in the container.
+boost::python::list XC::ConstrContainer::getMRMPListPy(void)
+  {
+    boost::python::list retval;
+    const std::deque<MRMFreedom_Constraint *> tmp= this->getMRMPDeque();
+    for(std::deque<MRMFreedom_Constraint *>::const_iterator i= tmp.begin(); i!=tmp.end(); i++)
+      {	retval.append(*i); }
+    return retval;    
+  }
 
 //! @brief Returns the active load patterns container.
 std::map<int,XC::LoadPattern *> &XC::ConstrContainer::getLoadPatterns(void)
@@ -959,7 +1027,7 @@ bool XC::ConstrContainer::nodeAffectedBySPs(int nodeTag) const
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
     SFreedom_ConstraintIter &theSPs= this_no_const->getDomainAndLoadPatternSPs();
     SFreedom_Constraint *theSP= nullptr;
-    while((theSP= theSPs()) != 0)
+    while((theSP= theSPs()) != nullptr)
       if(theSP->getNodeTag() == nodeTag)
         {
           retval= true;

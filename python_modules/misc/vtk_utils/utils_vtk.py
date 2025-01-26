@@ -12,11 +12,12 @@ import vtk
 import math
 from misc_utils import log_messages as lmsg
 
-def draw_vtk_symbols(pointData, renderer, scale):
+def create_actors_for_vtk_symbols(pointData, scale):
     ''' Adds to the renderer the symbols stored in point data.
 
-    :paramData: list of dictionaries containing the symbol type, color, 
+    :pointData: list of dictionaries containing the symbol type, color, 
                 orientation and position of the symbols.
+    :param scale: scale factor for the symbols.
     '''
     symbolDict= dict()
     for pData in pointData:
@@ -41,14 +42,16 @@ def draw_vtk_symbols(pointData, renderer, scale):
                 symbolDict[symbolType][glyphColor]= [(vPos, vDir, color)]
         else:
             symbolDict[symbolType]= {glyphColor:[(vPos, vDir, color)]}
-    # Create VTK points.
+    # Create VTK actors.
+    retval= list()
     for symbolType in symbolDict:
         for glyphColor in symbolDict[symbolType]:
             pointData= symbolDict[symbolType][glyphColor]
             vDir= pointData[0][1]
             color= pointData[0][2]
             glyphActor= point_to_glyph(pointData= pointData, symbType= symbolType, scale= scale)
-            renderer.AddActor(glyphActor)
+            retval.append(glyphActor)
+    return retval
     
 def point_to_glyph(pointData, symbType, scale):
     """ Convert points to glyphs.

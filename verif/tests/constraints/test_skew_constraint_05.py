@@ -35,8 +35,7 @@ def get_whole_slab():
     p1= p0+slabWidth*dirVectorWidth
     p2= p1+2*slabLength*dirVectorLength
     p3= p2-slabWidth*dirVectorWidth
-    return [p0, p1, p2, p3] 
-    
+    return [p0, p1, p2, p3]     
 
 # Problem geometry.
 slabWidth= 2.0
@@ -162,14 +161,14 @@ if (abs(errorDisp)<1e-2):
 else:
     lmsg.error(fname+' ERROR.')
 
-# # Graphic stuff.
-# from postprocess import output_handler
-# oh= output_handler.OutputHandler(modelSpace)
-# # oh.displayBlocks()
-# oh.displayFEMesh()
-# # # oh.displayLocalAxes()
-# oh.displayLoads()
-# oh.displayReactions()
-# oh.displayDispRot(itemToDisp='uX')
-# oh.displayDispRot(itemToDisp='uY')
-# oh.displayDispRot(itemToDisp='uZ')
+# Graphic stuff.
+from postprocess import output_handler
+oh= output_handler.OutputHandler(modelSpace)
+# oh.displayBlocks()
+oh.displayFEMesh()
+# # oh.displayLocalAxes()
+oh.displayLoads()
+oh.displayReactions()
+oh.displayDispRot(itemToDisp='uX')
+oh.displayDispRot(itemToDisp='uY')
+oh.displayDispRot(itemToDisp='uZ')

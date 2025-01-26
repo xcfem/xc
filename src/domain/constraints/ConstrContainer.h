@@ -124,9 +124,15 @@ class ConstrContainer: public MeshComponentContainer
     virtual ~ConstrContainer(void);
 
      // methods to access the components
-    virtual SFreedom_ConstraintIter &getSPs();
-    virtual MFreedom_ConstraintIter &getMPs();
-    virtual MRMFreedom_ConstraintIter &getMRMPs();
+    virtual SFreedom_ConstraintIter &getSPs(void);
+    std::deque<SFreedom_Constraint *> getSPDeque(void);
+    boost::python::list getSPListPy(void);
+    virtual MFreedom_ConstraintIter &getMPs(void);
+    std::deque<MFreedom_Constraint *> getMPDeque(void);
+    boost::python::list getMPListPy(void);
+    virtual MRMFreedom_ConstraintIter &getMRMPs(void);
+    std::deque<MRMFreedom_Constraint *> getMRMPDeque(void);
+    boost::python::list getMRMPListPy(void);
     const std::map<int,LoadPattern *> &getLoadPatterns(void) const;
     const std::map<int,NodeLocker *> &getNodeLockers(void) const;
     std::map<int,LoadPattern *> &getLoadPatterns(void);
