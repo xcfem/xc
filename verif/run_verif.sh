@@ -890,36 +890,39 @@ python tests/preprocessor/import_export/json/test_import_xc_model_01.py
 
 #Tests about constraints.
 echo "$BLEU" "Displacement constraints tests." "$NORMAL"
-python tests/constraints/remove_fix_01.py
-python tests/constraints/remove_fix_02.py
-python tests/constraints/remove_equal_dof_01.py
+echo "$BLEU" "  Single freedom constraints tests." "$NORMAL"
+python tests/constraints/single_freedom_constraints/remove_fix_01.py
+python tests/constraints/single_freedom_constraints/remove_fix_02.py
+python tests/constraints/single_freedom_constraints/test_load_pattern_fix_01.py
+echo "$BLEU" "  Single retained node constraints tests." "$NORMAL"
+python tests/constraints/single_retained_node_constraints/test_rigid_beam_01.py
+python tests/constraints/single_retained_node_constraints/test_rigid_rod_01.py
+python tests/constraints/single_retained_node_constraints/remove_equal_dof_01.py
+echo "$BLEU" "  Multiple retained node constraints tests." "$NORMAL"
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_01.py
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_02.py
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_03.py
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_04.py
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_05.py
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_06.py
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_07.py
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_08.py
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_09.py
+echo "$BLEU" "  Skew constraints tests." "$NORMAL"
+python tests/constraints/skew_constraints/test_skew_constraint_01.py
+python tests/constraints/skew_constraints/test_skew_constraint_02.py
+python tests/constraints/skew_constraints/test_skew_constraint_03.py
+python tests/constraints/skew_constraints/test_skew_constraint_04.py
+python tests/constraints/skew_constraints/test_skew_constraint_05.py
+echo "$BLEU" "  Misc. freedom constraints tests." "$NORMAL"
 python tests/constraints/test_elastic_bearing_01.py
 python tests/constraints/test_elastic_bearing_02.py
 python tests/constraints/test_elastic_bearing_03.py
 python tests/constraints/test_elastic_bearing_04.py
-python tests/constraints/test_rigid_beam_01.py
-python tests/constraints/test_rigid_rod_01.py
 python tests/constraints/test_huge_beam.py
 python tests/constraints/test_huge_truss.py
 python tests/constraints/test_fulcrum_01.py
 python tests/constraints/test_release_beam_node_01.py
-python tests/constraints/test_load_pattern_fix_01.py
-echo "$BLEU" "  Glue node to element constraints tests." "$NORMAL"
-python tests/constraints/test_glue_node_to_element_01.py
-python tests/constraints/test_glue_node_to_element_02.py
-python tests/constraints/test_glue_node_to_element_03.py
-python tests/constraints/test_glue_node_to_element_04.py
-python tests/constraints/test_glue_node_to_element_05.py
-python tests/constraints/test_glue_node_to_element_06.py
-python tests/constraints/test_glue_node_to_element_07.py
-python tests/constraints/test_glue_node_to_element_08.py
-python tests/constraints/test_glue_node_to_element_09.py
-echo "$BLEU" "  Skew constraints tests." "$NORMAL"
-python tests/constraints/test_skew_constraint_01.py
-python tests/constraints/test_skew_constraint_02.py
-python tests/constraints/test_skew_constraint_03.py
-python tests/constraints/test_skew_constraint_04.py
-python tests/constraints/test_skew_constraint_05.py
 
 #Load tests
 echo "$BLEU" "Loads tests." "$NORMAL"

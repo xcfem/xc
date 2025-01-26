@@ -55,7 +55,7 @@ pth= os.path.dirname(__file__)
 # print("pth= ", pth)
 if(not pth):
     pth= "."
-auxModulePath= pth+"/../aux"
+auxModulePath= pth+"/../../aux"
 sys.path.append(auxModulePath)
 import test_quad_region as tqr
 
