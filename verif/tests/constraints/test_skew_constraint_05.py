@@ -161,14 +161,14 @@ if (abs(errorDisp)<1e-2):
 else:
     lmsg.error(fname+' ERROR.')
 
-# Graphic stuff.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(modelSpace)
-# oh.displayBlocks()
-oh.displayFEMesh()
-# # oh.displayLocalAxes()
-oh.displayLoads()
-oh.displayReactions()
-oh.displayDispRot(itemToDisp='uX')
-oh.displayDispRot(itemToDisp='uY')
-oh.displayDispRot(itemToDisp='uZ')
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayBlocks()
+# oh.displayFEMesh()
+# # # oh.displayLocalAxes()
+# oh.displayLoads()
+# oh.displayReactions()
+# oh.displayDispRot(itemToDisp='uX')
+# oh.displayDispRot(itemToDisp='uY')
+# oh.displayDispRot(itemToDisp='uZ')
