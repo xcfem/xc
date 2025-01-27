@@ -44,7 +44,8 @@ class SkewPlane: public Skew_Constraint
   {
   protected:
     Vector normal; //!< Normal to the plane/line defining the symmetry or anti-symmetry.
-
+    
+    void setup_matrix(void);
   public:
     SkewPlane(int tag, int classTag= CNSTRNT_TAG_SkewPlane_Constraint);
     SkewPlane(int tag, const int &constrainedNode, const Line2d &, const double &prescribedDisplacement= 0.0, const double &prescribedRotation= 0.0, int classTag= CNSTRNT_TAG_SkewPlane_Constraint);

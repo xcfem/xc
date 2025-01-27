@@ -40,10 +40,10 @@ namespace XC {
 //! @brief Impose the node displacements (and rotations) with respect
 //! to a plane (or axis for 2D problems).
 class AntiSymmetryConstraint: public SkewPlane
-  { 
-    void compute_constrained_dof(const Node *);
+  {
+  protected:
+    void compute_constrained_dofs(const Node *);
     void compute_retained_dofs(const Node *);
-    void setup_matrix(void);
   public:
     AntiSymmetryConstraint(int tag);
     AntiSymmetryConstraint(int tag, const int &constrainedNode, const Line2d &);

@@ -48,7 +48,7 @@ XC::SymmetryConstraint::SymmetryConstraint(int tag, const int &constrainedNode, 
   : SkewPlane(tag, constrainedNode, p, 0.0, 0.0, CNSTRNT_TAG_Symmetry_Constraint) {}
 
 //! @brief Compute the constrained DOF.
-void XC::SymmetryConstraint::compute_constrained_dof(const Node *n)
+void XC::SymmetryConstraint::compute_constrained_dofs(const Node *n)
   {
     // Compute the index of the maximum component of the
     // normal vector
@@ -113,49 +113,6 @@ void XC::SymmetryConstraint::compute_retained_dofs(const Node *n)
       }
   }
 
-//! @brief Computes constraint matrix.
-void XC::SymmetryConstraint::setup_matrix(void)
-  {
-    // The number of DOF to be coupled
-    const int numConstrainedDOFs= constrDOF.Size(); //ID of constrained DOFs.
-    const int numRetainedDOFs= retainDOF.Size(); //ID of retained DOFs.
-
-    // The constraint matrix ... U_c = C_cr * U_r
-    Matrix Ccr(numConstrainedDOFs, numRetainedDOFs);
-    Ccr.Zero();
-
-    const int dim= normal.Size(); // dimension of the space.
-
-    for(int i=0;i<numConstrainedDOFs;i++)
-      {
-	const int constrainedDOFindex= constrDOF[i];
-	if(constrainedDOFindex<dim) // tranlational constrained DOF.
-	  {
-	    const double &n_i= normal[constrainedDOFindex];
-	    for(int j= 0; j<numRetainedDOFs; j++)
-	      {
-		const int retainedDOFindex= retainDOF[j];
-		if(retainedDOFindex<dim) // translational retained DOF.
-		  {
-		    const double &n_j= normal[retainedDOFindex];
-		    Ccr(i, j)= -(n_j/n_i);
-		  }
-	      }
-	  }
-	else // rotational constrained DOF.
-	  {
-	    const double &n_j= normal[constrainedDOFindex-dim];
-	    for(int j= 0; j<numRetainedDOFs; j++)
-	      {
-		const int retainedDOFindex= retainDOF[j];
-		const double &n_i= normal[retainedDOFindex-dim];
-		if(retainedDOFindex>=dim) // rotational retained DOF.
-		  { Ccr(i, j)= n_j/n_i; }
-	      }
-	  }
-      }
-    this->set_constraint(Ccr);
-  }
 
 //! @brief Constraint setup.
 void XC::SymmetryConstraint::setup(Domain *theDomain)
@@ -163,7 +120,7 @@ void XC::SymmetryConstraint::setup(Domain *theDomain)
     // Compute the constrained DOF.
     const int constrainedNodeTag= this->getNodeConstrained();
     const Node* theConstrainedNode = theDomain->getNode(constrainedNodeTag);
-    this->compute_constrained_dof(theConstrainedNode);
+    this->compute_constrained_dofs(theConstrainedNode);
     
     if(theConstrainedNode == nullptr)
       {
