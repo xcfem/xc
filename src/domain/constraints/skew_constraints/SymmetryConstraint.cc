@@ -113,7 +113,6 @@ void XC::SymmetryConstraint::compute_retained_dofs(const Node *n)
       }
   }
 
-
 //! @brief Constraint setup.
 void XC::SymmetryConstraint::setup(Domain *theDomain)
   {
