@@ -287,22 +287,6 @@ XC::Node *XC::FEM_ObjectBroker::getNewNode(int classTag)
       }
   }
 
-//! @brief Broke a Skew_Constraint object from its class tag.
-XC::Skew_Constraint *XC::FEM_ObjectBroker::getNewSkew(int classTag)
-  {
-    switch(classTag)
-      {
-      case CNSTRNT_TAG_Skew_Constraint:
-        return new Skew_Constraint(0,classTag);
-      default:
-        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
-		  << "; no Skew_Constraint type exists for class tag "
-		  << classTag
-		  << Color::def << std::endl;
-        return nullptr;
-      }
-  }
-
 //! @brief Broke a MFreedom_Constraint object from its class tag.
 XC::MFreedom_Constraint *XC::FEM_ObjectBroker::getNewMP(int classTag)
   {
@@ -320,6 +304,10 @@ XC::MFreedom_Constraint *XC::FEM_ObjectBroker::getNewMP(int classTag)
 	return new Skew_Constraint(0);
       case CNSTRNT_TAG_SkewPlane_Constraint:
 	return new SkewPlane(0);
+      case CNSTRNT_TAG_Symmetry_Constraint:
+	return new SymmetryConstraint(0);
+      case CNSTRNT_TAG_AntiSymmetry_Constraint:
+	return new AntiSymmetryConstraint(0);
       case CNSTRNT_TAG_MFreedom_Joint2D:
         return new MFreedom_Joint2D();
       case CNSTRNT_TAG_MFreedom_Joint3D:

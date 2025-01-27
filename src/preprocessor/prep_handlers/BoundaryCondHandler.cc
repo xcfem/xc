@@ -32,8 +32,8 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/constraints/SFreedom_Constraint.h"
-#include "domain/constraints/skew_constraints/Skew_Constraint.h"
-#include "domain/constraints/skew_constraints/SkewPlane.h"
+#include "domain/constraints/skew_constraints/SymmetryConstraint.h"
+#include "domain/constraints/skew_constraints/AntiSymmetryConstraint.h"
 #include "domain/constraints/MFreedom_Constraint.h"
 #include "domain/constraints/MRMFreedom_Constraint.h"
 #include "domain/constraints/single_retained_node_constraints/EqualDOF.h"
@@ -48,7 +48,7 @@
 
 //! @brief Default constructor.
 XC::BoundaryCondHandler::BoundaryCondHandler(Preprocessor *owr)
-  : PrepHandler(owr), tag_sp_constraint(0), tag_skew_constraint(0), tag_mp_constraint(0) {}
+  : PrepHandler(owr), tag_sp_constraint(0), tag_mp_constraint(0) {}
 
 //! @grief Appends a single freedom constraint to the model.
 XC::SFreedom_Constraint *XC::BoundaryCondHandler::addSFreedom_Constraint(const int &tag_nod,const SFreedom_Constraint &seed)
@@ -92,8 +92,8 @@ XC::SFreedom_Constraint *XC::BoundaryCondHandler::newSPConstraint(const int &tag
 //! @grief Defines a skew constraint.
 XC::Skew_Constraint *XC::BoundaryCondHandler::newSkewConstraint(const int &constrainedNode, const ID &constrainedDOF, const ID &retainedDOF)
   {
-    Skew_Constraint *skewC= new Skew_Constraint(tag_skew_constraint, constrainedNode,constrainedDOF, retainedDOF);
-    tag_skew_constraint++;
+    Skew_Constraint *skewC= new Skew_Constraint(tag_mp_constraint, constrainedNode,constrainedDOF, retainedDOF);
+    tag_mp_constraint++;
     if(skewC)
       {
         getDomain()->addMFreedom_Constraint(skewC);
@@ -106,11 +106,11 @@ XC::Skew_Constraint *XC::BoundaryCondHandler::newSkewConstraint(const int &const
     return skewC;
   }
 
-//! @brief Defines a skew 2D constraint.
-XC::Skew_Constraint *XC::BoundaryCondHandler::newSkewPlane(const int &constrainedNode, const Line2d &l, const double &prescribedDisplacement, const double &prescribedRotation)
+//! @brief Defines a 2D symmetry constraint.
+XC::Skew_Constraint *XC::BoundaryCondHandler::newSymmetryConstraint(const int &constrainedNode, const Line2d &l)
   {
-    SkewPlane *skewC= new SkewPlane(tag_skew_constraint, constrainedNode, l, prescribedDisplacement, prescribedRotation);
-    tag_skew_constraint++;
+    SymmetryConstraint *skewC= new SymmetryConstraint(tag_mp_constraint, constrainedNode, l);
+    tag_mp_constraint++;
     if(skewC)
       {
 	Domain *dom= this->getDomain();
@@ -125,11 +125,49 @@ XC::Skew_Constraint *XC::BoundaryCondHandler::newSkewPlane(const int &constraine
     return skewC;
   }
 
-//! @brief Defines a skew 3D constraint.
-XC::Skew_Constraint *XC::BoundaryCondHandler::newSkewPlane(const int &constrainedNode, const Plane &p, const double &prescribedDisplacement, const double &prescribedRotation)
+//! @brief Defines a 3D symmetry constraint.
+XC::Skew_Constraint *XC::BoundaryCondHandler::newSymmetryConstraint(const int &constrainedNode, const Plane &p)
   {
-    SkewPlane *skewC= new SkewPlane(tag_skew_constraint, constrainedNode, p, prescribedDisplacement, prescribedRotation);
-    tag_skew_constraint++;
+    SymmetryConstraint *skewC= new SymmetryConstraint(tag_mp_constraint, constrainedNode, p);
+    tag_mp_constraint++;
+    if(skewC)
+      {
+	Domain *dom= this->getDomain();
+	skewC->setup(dom);
+        getDomain()->addMFreedom_Constraint(skewC);
+        getPreprocessor()->updateSets(skewC);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; could not create constraint."
+		<< Color::def << std::endl;
+    return skewC;
+  }
+
+//! @brief Defines a 2D anti-symmetry constraint.
+XC::Skew_Constraint *XC::BoundaryCondHandler::newAntiSymmetryConstraint(const int &constrainedNode, const Line2d &l)
+  {
+    AntiSymmetryConstraint *skewC= new AntiSymmetryConstraint(tag_mp_constraint, constrainedNode, l);
+    tag_mp_constraint++;
+    if(skewC)
+      {
+	Domain *dom= this->getDomain();
+	skewC->setup(dom);
+        dom->addMFreedom_Constraint(skewC);
+        getPreprocessor()->updateSets(skewC);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; could not create constraint."
+		<< Color::def << std::endl;
+    return skewC;
+  }
+  
+//! @brief Defines a 3D anti-symmetry constraint.
+XC::Skew_Constraint *XC::BoundaryCondHandler::newAntiSymmetryConstraint(const int &constrainedNode, const Plane &p)
+  {
+    AntiSymmetryConstraint *skewC= new AntiSymmetryConstraint(tag_mp_constraint, constrainedNode, p);
+    tag_mp_constraint++;
     if(skewC)
       {
 	Domain *dom= this->getDomain();
@@ -268,7 +306,6 @@ XC::BoundaryCondHandler::~BoundaryCondHandler(void)
 void XC::BoundaryCondHandler::clearAll(void)
   {
     tag_sp_constraint= 0;
-    tag_skew_constraint= 0;
     tag_mp_constraint= 0;
     tag_mrmp_constraint= 0;
   }

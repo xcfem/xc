@@ -387,6 +387,8 @@
 #define CNSTRNT_TAG_RigidBeam_Constraint 	13
 #define CNSTRNT_TAG_RigidRod_Constraint 	14
 #define CNSTRNT_TAG_EqualDOF_Constraint 	15
+#define CNSTRNT_TAG_Symmetry_Constraint 	16
+#define CNSTRNT_TAG_AntiSymmetry_Constraint 	17
 
 #define DOMAIN_TAG_Mesh      	1
 #define DOMAIN_TAG_ConstrContainer	2

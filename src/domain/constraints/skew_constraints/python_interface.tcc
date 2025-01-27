@@ -23,4 +23,12 @@
 
 class_<XC::Skew_Constraint, bases<XC::MFreedom_ConstraintBase>, boost::noncopyable >("Skew_Constraint", no_init);
 
-class_<XC::SkewPlane, bases<XC::Skew_Constraint>, boost::noncopyable >("SkewPlane", no_init);
+class_<XC::SkewPlane, bases<XC::Skew_Constraint>, boost::noncopyable >("SkewPlane", no_init)
+  .add_property("normal", make_function(&XC::SkewPlane::getNormal, return_internal_reference<>() ),"Returns the vector normal to the plane or line.")
+  ;
+
+class_<XC::SymmetryConstraint, bases<XC::SkewPlane>, boost::noncopyable >("SymmetryConstraint", no_init)
+  ;
+
+class_<XC::AntiSymmetryConstraint, bases<XC::SkewPlane>, boost::noncopyable >("AntiSymmetryConstraint", no_init)
+  ;

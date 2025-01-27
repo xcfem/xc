@@ -79,7 +79,6 @@ class Node;
 class MFreedom_Constraint;
 class MRMFreedom_Constraint;
 class SFreedom_Constraint;
-class Skew_Constraint;
 class NodeLocker;
 class NodalLoad;
 class ElementalLoad;
@@ -170,7 +169,6 @@ class FEM_ObjectBroker: public ObjectBroker
     virtual MFreedom_Constraint *getNewMP(int classTag);
     virtual MRMFreedom_Constraint *getNewMRMP(int classTag);
     virtual SFreedom_Constraint *getNewSP(int classTag);
-    virtual Skew_Constraint *getNewSkew(int classTag);
     virtual NodalLoad *getNewNodalLoad(int classTag);
     virtual ElementalLoad *getNewElementalLoad(int classTag);
 

@@ -363,6 +363,8 @@
 #include "domain/constraints/multiple_retained_node_constraints/GlueNodeToElement.h"
 #include "domain/constraints/skew_constraints/Skew_Constraint.h"
 #include "domain/constraints/skew_constraints/SkewPlane.h"
+#include "domain/constraints/skew_constraints/SymmetryConstraint.h"
+#include "domain/constraints/skew_constraints/AntiSymmetryConstraint.h"
 
 #include "domain/constraints/MapActiveLoadPatterns.h"
 #include "domain/constraints/ConstrContainer.h"

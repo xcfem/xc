@@ -25,32 +25,32 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SkewPlane.h
+//AntiSymmetryConstraint.h
 
-#ifndef SkewPlane_h
-#define SkewPlane_h
+#ifndef AntiSymmetryConstraint_h
+#define AntiSymmetryConstraint_h
 
-#include "domain/constraints/skew_constraints/Skew_Constraint.h"
+#include "domain/constraints/skew_constraints/SkewPlane.h"
 
-class Line2d;
-class Plane;
 
 namespace XC {
 
 //! @ingroup CContMP
 //
-//! @brief Base class for symmetry and anti-symmetry boundary conditions
-class SkewPlane: public Skew_Constraint
-  {
-  protected:
-    Vector normal; //!< Normal to the plane/line defining the symmetry or anti-symmetry.
-
+//! @brief Impose the node displacements (and rotations) with respect
+//! to a plane (or axis for 2D problems).
+class AntiSymmetryConstraint: public SkewPlane
+  { 
+    void compute_constrained_dof(const Node *);
+    void compute_retained_dofs(const Node *);
+    void setup_matrix(void);
   public:
-    SkewPlane(int tag, int classTag= CNSTRNT_TAG_SkewPlane_Constraint);
-    SkewPlane(int tag, const int &constrainedNode, const Line2d &, const double &prescribedDisplacement= 0.0, const double &prescribedRotation= 0.0, int classTag= CNSTRNT_TAG_SkewPlane_Constraint);
-    SkewPlane(int tag, const int &constrainedNode, const Plane &, const double &prescribedDisplacement= 0.0, const double &prescribedRotation= 0.0, int classTag= CNSTRNT_TAG_SkewPlane_Constraint);
+    AntiSymmetryConstraint(int tag);
+    AntiSymmetryConstraint(int tag, const int &constrainedNode, const Line2d &);
+    AntiSymmetryConstraint(int tag, const int &constrainedNode, const Plane &);
 
-    const Vector &getNormal(void) const;    
+    void setup(Domain *theDomain);
+    
   };
 } // end of XC namespace
 
