@@ -73,7 +73,12 @@ def point_to_glyph(pointData, symbType, scale):
     for p in pointData:
         vPos= p[0]
         vDir= p[1]
-        vPosVx=[vPos[i]-scale/2.0*vDir[i] for i in range(3)] #vertex position
+        # Compute vertex position.
+        if(symbType not in ['plane']): # not a 2D object.
+            factor= scale/2.0
+            vPosVx=[vPos[i]-factor*vDir[i] for i in range(3)] # vertex position
+        else: # not a 2D object.
+            vPosVx= vPos # vertex position
         positions.append(vPosVx)
         dirs.append(vDir)
         # colors.append(p[2])
@@ -149,8 +154,7 @@ def get_symbol_source(symbType, center= None, normal= None):
         retval.SetResolution(10)
     elif 'plane' in symTpLow:
         retval= vtk.vtkPlaneSource()
-        retval.SetCenter(center[0], center[1], center[2])
-        retval.SetNormal(normal[0], normal[1], normal[2])
+        retval.SetNormal(1, 0, 0)
     else:
         methodName= sys._getframe(0).f_code.co_name
         lmsg.error(methodName+"; symbol: '"+str(symbType)+"' not supported.")
@@ -174,25 +178,31 @@ def drawVtkSymb(symbType,renderer, RGBcolor, vPos, vDir, scale):
     :param scale: scale to be applied to the symbol representation
     '''
     symbSource= get_symbol_source(symbType)
-    vPosVx=[vPos[i]-scale/2.0*vDir[i] for i in range(3)] #vertex position
-    addSymb(symbSource,renderer, RGBcolor, vPosVx, vDir, scale)
+    if(symbType not in ['plane']): # not a 2D object.
+        factor= scale/2.0
+        vPosVx=[vPos[i]-factor*vDir[i] for i in range(3)] # vertex position
+    else: # not a 2D object.
+        vPosVx= vPos # vertex position
+    actor= addSymb(symbSource,renderer, RGBcolor, vPosVx, vDir, scale)
+    renderer.AddActor(actor)
     if 'double' in symTpLow:
         vPosVx=[vPosVx[i]-scale*vDir[i] for i in range(3)] #vertex position
-        addSymb(symbSource,renderer, RGBcolor, vPosVx, vDir, scale)
-    
-def addSymb(symbSource,renderer, RGBcolor, vPosVx, vDir, scale):
+        actor= addSymb(symbSource,renderer, RGBcolor, vPosVx, vDir, scale)
+        renderer.AddActor(actor)
+
+        
+def addSymb(symbSource, RGBcolor, vPosVx, vDir, scale):
     '''function called by drawVtkSymb that puts the symbol in the renderer
     '''
-    actor= vtk.vtkActor()
-    parallelTo(actor,vDir)
-    actor.SetPosition(vPosVx[0],vPosVx[1],vPosVx[2])
-    actor.SetScale(scale,scale/2,scale/2)
-    actor.GetProperty().SetColor(RGBcolor[0],RGBcolor[1],RGBcolor[2])
+    retval= vtk.vtkActor()
+    parallelTo(retval,vDir)
+    retval.SetPosition(vPosVx[0],vPosVx[1],vPosVx[2])
+    retval.SetScale(scale,scale/2,scale/2)
+    retval.GetProperty().SetColor(RGBcolor[0],RGBcolor[1],RGBcolor[2])
     mapper = vtk.vtkPolyDataMapper()
     mapper.SetInputConnection(symbSource.GetOutputPort())
-    actor.SetMapper(mapper)
-    renderer.AddActor(actor)
-
+    retval.SetMapper(mapper)
+    return retval
 
 def parallelTo(actor,vDir):
     '''function called by drawVtkSymb to orient the symbol parallel to 
