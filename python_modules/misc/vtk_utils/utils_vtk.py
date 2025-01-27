@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
-
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
+import sys
 import vtk
 import math
 from misc_utils import log_messages as lmsg
@@ -31,9 +30,8 @@ def create_actors_for_vtk_symbols(pointData, scale):
         elif(color==[0,0,1]):
             glyphColor= 'blue'
         else:
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(methodName+"; arbitrary colors for symbols not supported yet.")
-            glyphColor= None
+            glyphColor= 'rgb'
+            
         vPos= pData['vPos']
         if symbolType in symbolDict:
             if(glyphColor in symbolDict[symbolType]):
@@ -59,7 +57,7 @@ def point_to_glyph(pointData, symbType, scale):
     :param points: The points to glyph.
     :param symbType: type of symbol (available types: 'arrow', 'doubleArrow',
            'cone', 'doubleCone', 'sphere', 'doubleSphere','cube' ,
-           'doubleCube', 'cylinder', 'doubleCylinder')    
+           'doubleCube', 'cylinder', 'doubleCylinder', 'plane')    
     :param vDir: director vector to orient the symbol
     :param color: list [R,G,B] with the 3 components of color
     :param scale: The scale, used to determine the size of the
@@ -79,7 +77,7 @@ def point_to_glyph(pointData, symbType, scale):
         positions.append(vPosVx)
         dirs.append(vDir)
         # colors.append(p[2])
-    glyphSource= get_symbol_source(symbType)
+    glyphSource= get_symbol_source(symbType, center= vPos, normal= vDir)
     
     vtkPoints= vtk.vtkPoints()
     orientation= vtk.vtkDoubleArray()
@@ -121,12 +119,14 @@ def point_to_glyph(pointData, symbType, scale):
 
     return actor
 
-def get_symbol_source(symbType):
+def get_symbol_source(symbType, center= None, normal= None):
     ''' Return the apropiate VTK source object.
 
     :param symbType: type of symbol (available types: 'arrow', 'doubleArrow',
            'cone', 'doubleCone', 'sphere', 'doubleSphere','cube' ,
-           'doubleCube', 'cylinder', 'doubleCylinder')
+           'doubleCube', 'cylinder', 'doubleCylinder', 'plane')
+    :param center: center position. Used only with 'plane' symbols.
+    :param normal: plane normal. Used only with 'plane' symbols.
     '''
     symTpLow= symbType.lower()
     if 'arrow' in symTpLow:
@@ -147,6 +147,14 @@ def get_symbol_source(symbType):
         retval= vtk.vtkCylinderSource()
         retval.SetHeight(0.25)
         retval.SetResolution(10)
+    elif 'plane' in symTpLow:
+        retval= vtk.vtkPlaneSource()
+        retval.SetCenter(center[0], center[1], center[2])
+        retval.SetNormal(normal[0], normal[1], normal[2])
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+"; symbol: '"+str(symbType)+"' not supported.")
+        retval= None
     retval.Update()
     return retval
 
@@ -192,7 +200,8 @@ def parallelTo(actor,vDir):
     '''
     nc= len(vDir)
     if(nc!=3):
-        print("parallelTo: ", vDir, " wrong dimension (must be 3).")
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+"; parallelTo: "+str(vDir)+" wrong dimension (must be 3).")
     else:
         v= [vDir[0],vDir[1],vDir[2]]
         thetaZ= math.degrees(math.atan2(v[1],v[0]))

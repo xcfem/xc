@@ -720,25 +720,26 @@ class PredefinedSpace(object):
         self.constraints.newSPConstraint(nodeTag,dof,prescribedDisp)
         self.fixedNodesTags.add(nodeTag)
 
-    def newSkewPlane(self, nodeTag:int, plane, prescribedDisp= 0.0, prescribedRotation= 0.0):
-        ''' Prescribe a SkewPlane boundary condition displacement for the given
-            node. For the time being this boundary condition is equivalent to
-            a symmetry boundary condition with respect to the given plane or
-            line.
+    def newSymmetryConstraint(self, nodeTag:int, plane):
+        ''' Prescribe a symmetry boundary condition displacement 
+            for the given node.
 
         :param nodeTag: tag of the node.
         :param plane: plane (in the case of 3D problems) or line (in the case
                       of 2D problems) that defines the symmetry.
-        :param prescribedDisp: prescribed value of the displacement in the 
-                               direction perpendicular to the given plane or
-                               line.The algorithm is not yet implemented for
-                               values different than zero.
-        :param prescribedRotation: prescribed value of the displacement in the 
-                                   direction parallel to the given plane or
-                                   line. The algorithm is not yet implemented
-                                   for values different than zero.
         '''
-        self.constraints.newSkewPlane(nodeTag, plane, prescribedDisp, prescribedRotation)
+        self.constraints.newSymmetryConstraint(nodeTag, plane)
+        self.fixedNodesTags.add(nodeTag)
+
+    def newAntiSymmetryConstraint(self, nodeTag:int, plane):
+        ''' Prescribe a anti-symmetry boundary condition displacement 
+            for the given node.
+
+        :param nodeTag: tag of the node.
+        :param plane: plane (in the case of 3D problems) or line (in the case
+                      of 2D problems) that defines the symmetry.
+        '''
+        self.constraints.newAntiSymmetryConstraint(nodeTag, plane)
         self.fixedNodesTags.add(nodeTag)
 
     def fixNode(self, DOFpattern, nodeTag, restrainedNodeId: str= None):

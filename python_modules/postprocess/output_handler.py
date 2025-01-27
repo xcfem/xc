@@ -750,7 +750,7 @@ class OutputHandler(object):
                 scOrient+=1
             if(not caption):
               caption= 'load case: ' + loadCaseName +' '+elLoadComp + ', set: ' + setToDisplay.name + ', '  + unitDescription
-            displaySettings.displaySPconstraints(setToDisplay= setToDisplay, scale= scaleConstr)
+            displaySettings.displayConstraints(setToDisplay= setToDisplay, scale= scaleConstr)
             displaySettings.displayScene(caption=caption, unitDescription= unitDescription, fileName=fileName)
 
     def displayNodeValueDiagram(self, itemToDisp, setToDisplay=None,caption= None,fileName=None, defFScale=0.0, defaultDirection= 'J', defaultValue= 0.0, rgMinMax= None):
