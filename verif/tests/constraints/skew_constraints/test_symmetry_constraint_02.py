@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Skew constraint trivial test.
+''' Symmetry constraint trivial test.
 
 See section 4.2 of the book: Finite Element Procedures Klaus-Jurgen Bathe, 2006
  ISBN 097900490X, 9780979004902.  Page 190 et seq.
@@ -72,9 +72,9 @@ wholeBeamRight= elements.newElement("ElasticBeam2d",xc.ID([n12.tag,n13.tag]))
 ## Half beam constraints.
 modelSpace.fixNode00F(n1.tag)
 vertLine= geom.Line2d(geom.Pos2d(L,0), geom.Pos2d(L,10.0)) # Vertical line at beam end.
-# Normally, the skew constraints will not be aligned with the axes, but
+# Normally, the symmetry constraints will not be aligned with the axes, but
 # this case is an exception to make the checking of the results easier.
-skew= modelSpace.constraints.newSkewPlane(n2.tag, vertLine, 0.0, 0.0)
+symmetry= modelSpace.constraints.newSymmetryConstraint(n2.tag, vertLine)
 ## Whole beam constraints.
 modelSpace.fixNode00F(n11.tag)
 modelSpace.fixNode00F(n13.tag)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Skew constraint trivial test.
+''' Symmetry constraint trivial test.
 
 See section 4.2 of the book: Finite Element Procedures Klaus-Jurgen Bathe, 2006
  ISBN 097900490X, 9780979004902.  Page 190 et seq.
@@ -61,11 +61,11 @@ quad4n.physicalProperties.thickness= 0.01
 # Constraints
 modelSpace.fixNode00(n1.tag)
 vertLine= geom.Line2d(geom.Pos2d(0,0), geom.Pos2d(0,1)) # Vertical line at origin.
-# Normally, the skew constraints will not be aligned with the axes, but
+# Normally, the symmetry constraints will not be aligned with the axes, but
 # this case is an exception to make the checking of the results easier.
-skew4= modelSpace.constraints.newSkewPlane(n4.tag, vertLine, 0.0, 0.0)
+symmetry4= modelSpace.constraints.newSymmetryConstraint(n4.tag, vertLine)
 horizLine= geom.Line2d(geom.Pos2d(0,0), geom.Pos2d(1,0)) # Horizontal line at origin.
-skew2= modelSpace.constraints.newSkewPlane(n2.tag, horizLine, 0.0, 0.0)
+symmetry2= modelSpace.constraints.newSymmetryConstraint(n2.tag, horizLine)
 
 
 # Loads definition

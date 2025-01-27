@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Skew constraint trivial test.
+''' Symmetry constraint trivial test.
 
 See section 4.2 of the book: Finite Element Procedures Klaus-Jurgen Bathe, 2006
  ISBN 097900490X, 9780979004902.  Page 190 et seq.
@@ -60,13 +60,13 @@ brick= elements.newElement("Brick",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag,n5.tag,n6.
 modelSpace.fixNode('000', n1.tag)
 modelSpace.fixNode('00F', n5.tag)
 vertPlaneXZ= geom.Plane3d(n1.getInitialPos3d, n2.getInitialPos3d, n6.getInitialPos3d) # Vertical plane XZ.
-# Normally, the skew constraints will not be aligned with the axes, but
+# Normally, the symmetry constraints will not be aligned with the axes, but
 # this case is an exception to make the checking of the results easier.
-skew2= modelSpace.constraints.newSkewPlane(n2.tag, vertPlaneXZ, 0.0, 0.0)
-skew6= modelSpace.constraints.newSkewPlane(n6.tag, vertPlaneXZ, 0.0, 0.0)
+symmetry2= modelSpace.constraints.newSymmetryConstraint(n2.tag, vertPlaneXZ)
+symmetry6= modelSpace.constraints.newSymmetryConstraint(n6.tag, vertPlaneXZ)
 vertPlaneYZ= geom.Plane3d(n1.getInitialPos3d, n4.getInitialPos3d, n8.getInitialPos3d) # Vertical plane YZ.
-skew4= modelSpace.constraints.newSkewPlane(n4.tag, vertPlaneYZ, 0.0, 0.0)
-skew8= modelSpace.constraints.newSkewPlane(n8.tag, vertPlaneYZ, 0.0, 0.0)
+symmetry4= modelSpace.constraints.newSymmetryConstraint(n4.tag, vertPlaneYZ)
+symmetry8= modelSpace.constraints.newSymmetryConstraint(n8.tag, vertPlaneYZ)
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')

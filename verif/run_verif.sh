@@ -908,12 +908,12 @@ python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_el
 python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_07.py
 python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_08.py
 python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_09.py
-echo "$BLEU" "  Skew constraints tests." "$NORMAL"
-python tests/constraints/skew_constraints/test_skew_constraint_01.py
-python tests/constraints/skew_constraints/test_skew_constraint_02.py
-python tests/constraints/skew_constraints/test_skew_constraint_03.py
-python tests/constraints/skew_constraints/test_skew_constraint_04.py
-python tests/constraints/skew_constraints/test_skew_constraint_05.py
+echo "$BLEU" "  Symmetry constraints tests." "$NORMAL"
+python tests/constraints/skew_constraints/test_symmetry_constraint_01.py
+python tests/constraints/skew_constraints/test_symmetry_constraint_02.py
+python tests/constraints/skew_constraints/test_symmetry_constraint_03.py
+python tests/constraints/skew_constraints/test_symmetry_constraint_04.py
+python tests/constraints/skew_constraints/test_symmetry_constraint_05.py
 echo "$BLEU" "  Misc. freedom constraints tests." "$NORMAL"
 python tests/constraints/test_elastic_bearing_01.py
 python tests/constraints/test_elastic_bearing_02.py

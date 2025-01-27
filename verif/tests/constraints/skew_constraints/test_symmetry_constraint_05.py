@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Skew constraint trivial test.
+''' Symmetry constraint trivial test.
 
 See section 4.2 of the book: Finite Element Procedures Klaus-Jurgen Bathe, 2006
  ISBN 097900490X, 9780979004902.  Page 190 et seq.
@@ -103,7 +103,7 @@ for l in halfSlabFace.edges:
             if(dist>1e-3):
                 modelSpace.fixNode('000_FFF', n.tag)
             else:
-                skew= modelSpace.newSkewPlane(n.tag, vertPlane, 0.0, 0.0)
+                symmetry= modelSpace.newSymmetryConstraint(n.tag, vertPlane)
                 halfBeamSymmetryNodes.append(n)
 
 ## Define loads.
