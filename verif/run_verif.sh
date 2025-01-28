@@ -62,32 +62,34 @@ echo "$BLEU" "  Config tests." "$NORMAL"
 python tests/utility/config/test_project_dir_tree_01.py
 echo "$BLEU" "  Geometry tests." "$NORMAL"
 echo "$BLEU" "    Vectors." "$NORMAL"
-python tests/utility/geom/vector2d_test_01.py
-python tests/utility/geom/vector2d_test_02.py
-python tests/utility/geom/vector3d_test_01.py
-python tests/utility/geom/vector3d_test_02.py
-python tests/utility/geom/vector3d_test_03.py
-python tests/utility/geom/vector3d_angle_test_01.py
-python tests/utility/geom/vector3d_angle_test_02.py
+python tests/utility/geom/vectors/vector2d_test_01.py
+python tests/utility/geom/vectors/vector2d_test_02.py
+python tests/utility/geom/vectors/vector3d_test_01.py
+python tests/utility/geom/vectors/vector3d_test_02.py
+python tests/utility/geom/vectors/vector3d_test_03.py
+python tests/utility/geom/vectors/vector3d_angle_test_01.py
+python tests/utility/geom/vectors/vector3d_angle_test_02.py
 echo "$BLEU" "    Points." "$NORMAL"
-python tests/utility/geom/pos2d_test_01.py
-python tests/utility/geom/pos2d_test_02.py
-python tests/utility/geom/pos3d_test_01.py
-python tests/utility/geom/pos3d_list_test_01.py
-python tests/utility/geom/closest_pair_of_points.py
+python tests/utility/geom/points/pos2d_test_01.py
+python tests/utility/geom/points/pos2d_test_02.py
+python tests/utility/geom/points/pos3d_test_01.py
+python tests/utility/geom/points/pos3d_list_test_01.py
+python tests/utility/geom/points/pos2d_list_test_01.py
+python tests/utility/geom/points/closest_pair_of_points.py
+python tests/utility/geom/points/point_cloud_2d_test_01.py
+python tests/utility/geom/points/point_cloud_3d_test_01.py
 echo "$BLEU" "    Lines and rays." "$NORMAL"
-python tests/utility/geom/line2d_test_01.py
-python tests/utility/geom/line2d_test_02.py
-python tests/utility/geom/line2d_test_03.py
-python tests/utility/geom/line3d_test_01.py
-python tests/utility/geom/line3d_test_02.py
-python tests/utility/geom/line3d_test_03.py
-python tests/utility/geom/line3d_test_04.py
-python tests/utility/geom/line3d_test_05.py
-python tests/utility/geom/line2d_intersection_test.py
-python tests/utility/geom/line_segment_intersection_test.py
-python tests/utility/geom/ray2d_test.py
-python tests/utility/geom/pos2d_list_test_01.py
+python tests/utility/geom/lines/line2d_test_01.py
+python tests/utility/geom/lines/line2d_test_02.py
+python tests/utility/geom/lines/line2d_test_03.py
+python tests/utility/geom/lines/line3d_test_01.py
+python tests/utility/geom/lines/line3d_test_02.py
+python tests/utility/geom/lines/line3d_test_03.py
+python tests/utility/geom/lines/line3d_test_04.py
+python tests/utility/geom/lines/line3d_test_05.py
+python tests/utility/geom/lines/line2d_intersection_test.py
+python tests/utility/geom/lines/line_segment_intersection_test.py
+python tests/utility/geom/lines/ray2d_test.py
 echo "$BLEU" "    Segments." "$NORMAL"
 python tests/utility/geom/segments/segment2d_test_01.py
 python tests/utility/geom/segments/segment2d_test_02.py
@@ -220,25 +222,26 @@ python tests/utility/geom/plane/plane_test_05.py
 python tests/utility/geom/plane/plane_test_06.py
 echo "$BLEU" "    3D polyhedrons." "$NORMAL"
 python tests/utility/geom/polyhedrons/test_hexahedron_01.py
-echo "$BLEU" "    2D half planes." "$NORMAL"
-python tests/utility/geom/halfplane2d_test_01.py
-python tests/utility/geom/halfplane2d_test_02.py
-python tests/utility/geom/halfplane2d_test_03.py
-python tests/utility/geom/halfplane2d_test_04.py
-python tests/utility/geom/halfplane2d_test_05.py
-python tests/utility/geom/halfplane2d_test_06.py
-python tests/utility/geom/halfplane2d_test_07.py
+echo "$BLEU" "    Half spaces." "$NORMAL"
+echo "$BLEU" "      2D half planes." "$NORMAL"
+python tests/utility/geom/half_spaces/halfplane2d_test_01.py
+python tests/utility/geom/half_spaces/halfplane2d_test_02.py
+python tests/utility/geom/half_spaces/halfplane2d_test_03.py
+python tests/utility/geom/half_spaces/halfplane2d_test_04.py
+python tests/utility/geom/half_spaces/halfplane2d_test_05.py
+python tests/utility/geom/half_spaces/halfplane2d_test_06.py
+python tests/utility/geom/half_spaces/halfplane2d_test_07.py
 
-# echo "$BLEU" "  3D half spaces." "$NORMAL"
-python tests/utility/geom/halfspace3d_test_01.py
-python tests/utility/geom/halfspace3d_test_02.py
-python tests/utility/geom/halfspace3d_test_03.py
-python tests/utility/geom/halfspace3d_test_04.py
-python tests/utility/geom/halfspace3d_test_05.py
-python tests/utility/geom/halfspace3d_test_06.py
-python tests/utility/geom/halfspace3d_test_07.py
-# python tests/utility/geom/halfspace3d_test_08.py
-# python tests/utility/geom/halfspace3d_test_09.py
+# echo "$BLEU" "    3D half spaces." "$NORMAL"
+python tests/utility/geom/half_spaces/halfspace3d_test_01.py
+python tests/utility/geom/half_spaces/halfspace3d_test_02.py
+python tests/utility/geom/half_spaces/halfspace3d_test_03.py
+python tests/utility/geom/half_spaces/halfspace3d_test_04.py
+python tests/utility/geom/half_spaces/halfspace3d_test_05.py
+python tests/utility/geom/half_spaces/halfspace3d_test_06.py
+python tests/utility/geom/half_spaces/halfspace3d_test_07.py
+# python tests/utility/geom/half_spaces/halfspace3d_test_08.py
+# python tests/utility/geom/half_spaces/halfspace3d_test_09.py
 echo "$BLEU" "    Coordinate systems." "$NORMAL"
 python tests/utility/geom/coordinate_systems/coosys_test_01.py
 python tests/utility/geom/coordinate_systems/refsys3d3d_test_01.py

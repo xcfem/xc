@@ -20,13 +20,30 @@
 //----------------------------------------------------------------------------
 //GeomObj2d.cc
 
-#include "PrincipalAxesOfInertia2D.h"
+#include "PrincipalAxes2D.h"
 #include "utility/utils/misc_utils/inertia.h"
 #include "utility/geom/coo_sys/ref_sys/Ref2d2d.h"
 
 
 //! @brief Constructor.
-PrincipalAxesOfInertia2D::PrincipalAxesOfInertia2D(const Pos2d &center_of_mass_,const GEOM_FT &Ix,const GEOM_FT &Iy,const GEOM_FT &Pxy)
+PrincipalAxes2D::PrincipalAxes2D(void)
+  : center_of_mass(), axis1(1,0), i1(0.0), i2(0.0)
+  {}
+
+//! @brief Constructor.
+PrincipalAxes2D::PrincipalAxes2D(const Pos2d &center_of_mass_, const double A[2][2])
+  : center_of_mass(center_of_mass_)
+  {
+    double V[2][2]= {{0.0, 0.0}, {0.0, 0.0}};
+    double d[2]= {0.0, 0.0};
+    eigen_decomposition_2x2(A, V, d);
+    this->i1= d[1]; // bigger eigenvalue;
+    this->i2= d[0];
+    this->axis1= Vector2d(V[1][0], V[1][1]);
+  }
+
+//! @brief Constructor.
+PrincipalAxes2D::PrincipalAxes2D(const Pos2d &center_of_mass_,const GEOM_FT &Ix,const GEOM_FT &Iy,const GEOM_FT &Pxy)
   : center_of_mass(center_of_mass_), axis1(1,0), i1(0.0), i2(0.0)
   {
     double th1= theta_inertia(Ix,Iy,Pxy);
@@ -44,19 +61,19 @@ PrincipalAxesOfInertia2D::PrincipalAxesOfInertia2D(const Pos2d &center_of_mass_,
       }
     axis1= Vector2d(cos(th1),sin(th1));
   }
-Ref2d2d PrincipalAxesOfInertia2D::getAxis(void) const
+Ref2d2d PrincipalAxes2D::getAxis(void) const
   { return Ref2d2d(center_of_mass,axis1); }
-const GEOM_FT &PrincipalAxesOfInertia2D::I1(void) const
+const GEOM_FT &PrincipalAxes2D::I1(void) const
   { return i1; }
-const GEOM_FT &PrincipalAxesOfInertia2D::I2(void) const
+const GEOM_FT &PrincipalAxes2D::I2(void) const
   { return i2; }
 
 //! @brief Return the direction vector of the minor
 //! principal axis of inertia.
-Vector2d PrincipalAxesOfInertia2D::getAxis2VDir(void) const
+Vector2d PrincipalAxes2D::getAxis2VDir(void) const
   { return Vector2d(-axis1.y(),axis1.x()); }
 
-std::ostream &operator<<(std::ostream &os,const PrincipalAxesOfInertia2D &axis)
+std::ostream &operator<<(std::ostream &os,const PrincipalAxes2D &axis)
   {
     os << "Axis: " << axis.getAxis() << std::endl
        << "I1= " << axis.I1() << std::endl

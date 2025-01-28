@@ -23,9 +23,9 @@
 #ifndef GEOMOBJ3D_H
 #define GEOMOBJ3D_H
 
-#include "../GeomObj.h"
-
-#include "../lists/PolyPos.h"
+#include "utility/geom/GeomObj.h"
+#include "utility/geom/lists/PolyPos.h"
+#include "utility/geom/coo_sys/ref_sys/PrincipalAxes3D.h"
 
 class SoGroup;
 class Pos3d;
@@ -110,6 +110,8 @@ class GeomObj3d: public GeomObj
     GEOM_FT IO(const Pos3d &o) const;
     FT_matrix I(void) const;
     FT_matrix I(const Pos3d &o) const;
+    inline PrincipalAxes3D Inertia(void)
+      { return PrincipalAxes3D(getCenterOfMass(), Ix(), Iy(), Iz(), Pxy(), Pxz(), Pyz()); }
     
   };
 

@@ -31,7 +31,7 @@
 #ifndef PrismaticBarCrossSection_h
 #define PrismaticBarCrossSection_h
 
-class PrincipalAxesOfInertia2D;
+class PrincipalAxes2D;
 
 #include "material/section/SectionForceDeformation.h"
 
@@ -86,7 +86,7 @@ class PrismaticBarCrossSection: public SectionForceDeformation
     double getTheta(void) const;
     double getEI1(void) const;
     double getEI2(void) const;
-    PrincipalAxesOfInertia2D getInertiaAxes(void) const;
+    PrincipalAxes2D getInertiaAxes(void) const;
     Vector2d getAxis1VDir(void) const;
     Vector2d getVDirStrongAxis(void) const;
     Vector2d getAxis2VDir(void) const;

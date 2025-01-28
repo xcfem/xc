@@ -1,5 +1,6 @@
 //----------------------------------------------------------------------------
-//  xc utils library; general purpose classes and functions.
+//  xc utils library bilioteca de comandos para el intérprete del lenguaje
+//  de entrada de datos.
 //
 //  Copyright (C)  Luis C. Pérez Tato
 //
@@ -17,27 +18,28 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//inertia.cc
+// PointCloud3d.cc
 
-#include "inertia.h"
-#include <iostream>
+#include "utility/geom/lists/PointCloud3d.h"
+#include "utility/geom/lists/utils_list_pos3d.h"
+#include "utility/geom/coo_sys/ref_sys/PrincipalAxes3D.h"
 
-//! @brief Return the angle that defines a principal axes of inertia.
-double theta_inertia(const double &Ix,const double &Iy,const double &Pxy)
+//! @brief Constructor.
+PointCloud3d::PointCloud3d(void)
+  : PolyPos<Pos3d>() {}
+
+//! @brief Constructor.
+PointCloud3d::PointCloud3d(const std::deque<Pos3d> &dq_pos)
+  : PolyPos<Pos3d>(dq_pos) {}
+
+//! @brief Constructor.
+PointCloud3d::PointCloud3d(const boost::python::list &l)
+  : PolyPos<Pos3d>(python_to_list_pos3d(l)) {}
+
+//! @brief Return the principal axes oriented according
+//! to the distribution of the points in space.
+PrincipalAxes3D PointCloud3d::getPrincipalAxes(void) const
   {
-    const double tol= std::numeric_limits<double>::epsilon();
-    const double eps= abs(Ix-Iy)/std::max(Ix,Iy);
-    if(eps<tol)
-      if(abs(Pxy)<tol)
-	return 0.0;
-      else
-        if(Pxy<0)
-	  return M_PI/4.0;
-        else
-	  return -M_PI/4.0;
-    else
-      return (atan(-2*Pxy/(Ix-Iy)))/2.0;
+    PrincipalAxes3D retval= get_principal_axes_of_inertia(*this);
+    return retval;
   }
-
-
-

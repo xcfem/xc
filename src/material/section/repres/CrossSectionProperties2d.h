@@ -34,7 +34,7 @@
 #include "utility/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableObject.h"
 
-class PrincipalAxesOfInertia2D;
+class PrincipalAxes2D;
 class Vector2d;
 
 namespace XC {
@@ -108,7 +108,7 @@ class CrossSectionProperties2d: public CrossSectionProperties1d
     virtual double getTheta(void) const;
     virtual double getI1(void) const;
     virtual double getI2(void) const;
-    virtual PrincipalAxesOfInertia2D getInertiaAxes(void) const;
+    virtual PrincipalAxes2D getInertiaAxes(void) const;
     virtual Vector2d getAxis1VDir(void) const;
     virtual Vector2d getVDirStrongAxis(void) const;
     virtual Vector2d getAxis2VDir(void) const;

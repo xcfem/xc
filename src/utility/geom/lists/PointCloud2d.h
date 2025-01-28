@@ -1,3 +1,4 @@
+// -*-c++-*-
 //----------------------------------------------------------------------------
 //  xc utils library; general purpose classes and functions.
 //
@@ -11,33 +12,38 @@
 //  This software is distributed in the hope that it will be useful, but 
 //  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details. 
+//  GNU General Public License for more details.  
 //
 // You should have received a copy of the GNU General Public License 
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//inertia.cc
+//PointCloud2d.h
 
-#include "inertia.h"
-#include <iostream>
+#ifndef POINTCLOUD2D_H
+#define POINTCLOUD2D_H
 
-//! @brief Return the angle that defines a principal axes of inertia.
-double theta_inertia(const double &Ix,const double &Iy,const double &Pxy)
+#include "utility/geom/lists/PolyPos.h"
+#include "utility/geom/pos_vec/Pos2d.h"
+
+class PrincipalAxes2D;
+
+//! @ingroup GEOM
+//
+//! @brief Base class for position lists.
+class PointCloud2d : public PolyPos<Pos2d>
   {
-    const double tol= std::numeric_limits<double>::epsilon();
-    const double eps= abs(Ix-Iy)/std::max(Ix,Iy);
-    if(eps<tol)
-      if(abs(Pxy)<tol)
-	return 0.0;
-      else
-        if(Pxy<0)
-	  return M_PI/4.0;
-        else
-	  return -M_PI/4.0;
-    else
-      return (atan(-2*Pxy/(Ix-Iy)))/2.0;
-  }
+  public:
+    PointCloud2d(void);
+    explicit PointCloud2d(const std::deque<Pos2d> &);
+    explicit PointCloud2d(const boost::python::list &);
+    PrincipalAxes2D getPrincipalAxes(void) const;
+  };
+
+#endif
+
+
+
 
 
 

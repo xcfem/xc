@@ -27,6 +27,7 @@
 
 class BND2d;
 class Polygon2d;
+class PrincipalAxes2D;
 
 //Auxiliary functions for manipulation of position lists.
 
@@ -40,5 +41,7 @@ Pos2d getPMin(const GeomObj::list_Pos2d &l);
 BND2d getBnd(const GeomObj::list_Pos2d &l);
 GeomObj::list_Pos2d python_to_list_pos2d(const boost::python::list &);
 std::deque<GEOM_FT> &getCovers(const GeomObj::list_Pos2d &l,const Polygon2d &);
+PrincipalAxes2D get_principal_axes_of_inertia(const GeomObj::list_Pos2d &);
+
 #endif
 

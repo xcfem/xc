@@ -51,6 +51,8 @@
 #include "domain/domain/single/SingleDomNodIter.h"
 
 #include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/coo_sys/ref_sys/PrincipalAxes2D.h"
+#include "utility/geom/coo_sys/ref_sys/PrincipalAxes3D.h"
 
 //Physical properties.
 typedef XC::PhysicalProperties<XC::UniaxialMaterial> PhysicalProperties_UMat;

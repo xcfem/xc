@@ -26,6 +26,9 @@
 #include "utility/geom/trf/Trf2d.h"
 #include "utility/geom/d2/BND2d.h"
 #include "utility/geom/d2/2d_polygons/Polygon2d.h"
+#include "utility/geom/coo_sys/ref_sys/PrincipalAxes2D.h"
+#include <eigen3/Eigen/Dense>
+#include "utility/utils/misc_utils/matem.h"
 
 void plot(Plotter &plt,const GeomObj::list_Pos2d &l)
   {
@@ -76,5 +79,32 @@ GeomObj::list_Pos2d python_to_list_pos2d(const boost::python::list &l)
     // copy the components
     for(int i=0; i<sz; i++)
       retval.push_back(boost::python::extract<Pos2d>(l[i]));
+    return retval;
+  }
+
+//! @brief Return the principal axes of inertia of the point cloud.
+PrincipalAxes2D get_principal_axes_of_inertia(const GeomObj::list_Pos2d &l)
+  {
+    const size_t sz= l.size();
+    PrincipalAxes2D retval;
+    if(sz>0)
+      {
+	Eigen::MatrixXd data(sz, 2);
+	//Compute the covariance matrix of the point cloud.
+	size_t row= 0;
+	for(GeomObj::list_Pos2d::const_iterator i=l.begin(); i!=l.end(); i++, row++)
+	  {
+	    const Pos2d &p= (*i);
+	    data(row,0)= p.x();
+	    data(row,1)= p.y();
+	  }
+	const Pos2d centroid= l.getCenterOfMass();
+	Eigen::MatrixXd covariance_matrix= compute_covariance_matrix(data);
+	double A[2][2];
+	A[0][0]= covariance_matrix(0,0); A[0][1]= covariance_matrix(0,1);
+	A[1][0]= covariance_matrix(0,1); A[1][1]= covariance_matrix(1,1);
+	
+	retval= PrincipalAxes2D(centroid, A);
+      }    
     return retval;
   }

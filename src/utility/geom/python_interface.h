@@ -88,7 +88,8 @@
 #include "utility/geom/pos_vec/SlidingVectorsSystem2d.h"
 #include "utility/geom/pos_vec/SlidingVectorsSystem3d.h"
 #include "utility/geom/coo_sys/FrenetTrihedron.h"
-#include "utility/geom/coo_sys/ref_sys/PrincipalAxesOfInertia2D.h"
+#include "utility/geom/coo_sys/ref_sys/PrincipalAxes2D.h"
+#include "utility/geom/coo_sys/ref_sys/PrincipalAxes3D.h"
 #include "utility/geom/coo_sys/ref_sys/Ref1d3d.h"
 #include "utility/geom/coo_sys/ref_sys/Ref2d3d.h"
 #include "utility/geom/coo_sys/ref_sys/Ref1d2d.h"
@@ -111,6 +112,8 @@ typedef std::deque<Pos2d> dq_pos2d;
 typedef PolyPos<Pos2d> polyPos2d;
 typedef std::deque<Pos3d> dq_pos3d;
 typedef PolyPos<Pos3d> polyPos3d;
+#include "utility/geom/lists/PointCloud2d.h"
+#include "utility/geom/lists/PointCloud3d.h"
 
 std::list<Polygon2d> from_python_list(boost::python::list &);
 boost::python::list to_python_list(const std::list<Polygon2d> &);

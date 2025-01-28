@@ -340,6 +340,7 @@ class_<XC::SetEntities, bases<XC::PreprocessorContainer> >("SetEntities",no_init
   .def("getMaxElementSize",&XC::SetEntities::getMaxElementSize,"Return the maximum size of the elements according to the number of divisions of the lines.")
   .def("getMinElementSize",&XC::SetEntities::getMinElementSize,"Return the minimum size of the elements according to the number of divisions of the lines.")
   .def("getAverageElementSize",&XC::SetEntities::getAverageElementSize,"Return the average size of the elements according to the number of divisions of the lines.")
+  .def("getOrientation", &XC::SetEntities::getOrientation,"Return the orientation of the set point cloud.")
   ;
 
 XC::SetEntities &(XC::Set::*getEntities)(void)= &XC::Set::getEntities;

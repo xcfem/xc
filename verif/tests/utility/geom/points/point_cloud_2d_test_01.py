@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Pos3D trivial test.'''
+''' Point cloud orientation trivial test (2D).'''
 
 from __future__ import print_function
 
@@ -34,7 +34,6 @@ yPrincipalAxes= yPointCloud.getPrincipalAxes()
 
 # Check results.
 refValue= 204+1/6.0
-print(refValue)
 err= (xPrincipalAxes.I1-refValue)**2+xPrincipalAxes.I2**2
 err+= (yPrincipalAxes.I1-refValue)**2+yPrincipalAxes.I2**2
 xV1=  xPrincipalAxes.getAxis1VDir()

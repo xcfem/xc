@@ -34,7 +34,7 @@
 
 class Pos2d;
 class Line2d;
-class PrincipalAxesOfInertia2D;
+class PrincipalAxes2D;
 class Vector2d;
 
 namespace XC {
@@ -65,7 +65,7 @@ class SectionMassProperties: public CommandEntity
     Vector getIAxisDir_bGrossSection(void) const;
     double getI1GrossSection(void) const;
     double getI2GrossSection(void) const;
-    PrincipalAxesOfInertia2D getInertiaAxesGrossSection(void) const;
+    PrincipalAxes2D getInertiaAxesGrossSection(void) const;
     Vector2d getAxis1VDirGrossSection(void) const;
     Vector2d getVDirStrongAxisGrossSection(void) const;
     Vector2d getAxis2VDirGrossSection(void) const;
@@ -90,7 +90,7 @@ class SectionMassProperties: public CommandEntity
     Vector getIAxisDir_bHomogenizedSection(void) const;
     double getI1HomogenizedSection(const double &) const;
     double getI2HomogenizedSection(const double &) const;
-    PrincipalAxesOfInertia2D getInertiaAxesHomogenizedSection(const double &) const;
+    PrincipalAxes2D getInertiaAxesHomogenizedSection(const double &) const;
     Vector2d getAxis1VDirHomogenizedSection(const double &) const;
     Vector2d getVDirStrongAxisHomogenizedSection(const double &) const;
     Vector2d getAxis2VDirHomogenizedSection(const double &) const;

@@ -159,8 +159,8 @@ double XC::ReinfBar::getI1(void) const
 double XC::ReinfBar::getI2(void) const
   { return Iz(); }
 
-//     inline PrincipalAxesOfInertia2D Inertia(void)
-//       { return PrincipalAxesOfInertia2D(getCenterOfMass(),Iy(),Iz(),Pyz()); }
+//     inline PrincipalAxes2D Inertia(void)
+//       { return PrincipalAxes2D(getCenterOfMass(),Iy(),Iz(),Pyz()); }
 
 //! @brief Return the (i,j) components of the inertia tensor computed with respect to the centroid.
 double XC::ReinfBar::getI(const unsigned short int &i,const unsigned short int &j) const

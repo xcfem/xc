@@ -19,6 +19,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //python_interface.cxx
+
 typedef Ref<Rect1d2dCooSys> ref_Rect1d2dCooSys;
 const ref_Rect1d2dCooSys::PGlobal &(ref_Rect1d2dCooSys::*getOrg1d2d)(void) const= &ref_Rect1d2dCooSys::Org;
 const Rect1d2dCooSys &(ref_Rect1d2dCooSys::*getCoordTransformation1d2d)(void) const= &ref_Rect1d2dCooSys::Trf;
@@ -155,8 +156,18 @@ class_<Ref3d3d , bases<ref_Rect3d3dCooSys> >("Ref3d3d")
   .def("getYZPlane", &Ref3d3d::getYZPlane,"Return the YZ plane.")
  ;
 
-class_<PrincipalAxesOfInertia2D>("PrincipalAxesOfInertia2D",init<const Pos2d &,const GEOM_FT &,const GEOM_FT &,const GEOM_FT &>())
-  .add_property("I1",  make_function( &PrincipalAxesOfInertia2D::I1,  return_value_policy<copy_const_reference>() ),"first principal moment of inertia.")
-  .add_property("I2",  make_function( &PrincipalAxesOfInertia2D::I2,  return_value_policy<copy_const_reference>() ),"second principal moment of inertia.")
-  .def("getAxis1VDir", &PrincipalAxesOfInertia2D::getAxis1VDir,"returns the direction vector of the first principal moment of inertia")
+class_<PrincipalAxes2D>("PrincipalAxes2D",init<const Pos2d &,const GEOM_FT &,const GEOM_FT &,const GEOM_FT &>())
+  .add_property("I1",  make_function( &PrincipalAxes2D::I1,  return_value_policy<copy_const_reference>() ),"first principal moment of inertia.")
+  .add_property("I2",  make_function( &PrincipalAxes2D::I2,  return_value_policy<copy_const_reference>() ),"second principal moment of inertia.")
+  .def("getAxis1VDir", &PrincipalAxes2D::getAxis1VDir,"returns the direction vector of the first principal moment of inertia")
+  .def("getAxis2VDir", &PrincipalAxes2D::getAxis2VDir,"returns the direction vector of the second principal moment of inertia")
+ ;
+
+class_<PrincipalAxes3D>("PrincipalAxes3D",init<const Pos3d &, const GEOM_FT &, const GEOM_FT &, const GEOM_FT &, const GEOM_FT &, const GEOM_FT &, const GEOM_FT &>())
+  .add_property("I1",  make_function( &PrincipalAxes3D::I1,  return_value_policy<copy_const_reference>() ),"first principal moment of inertia.")
+  .add_property("I2",  make_function( &PrincipalAxes3D::I2,  return_value_policy<copy_const_reference>() ),"second principal moment of inertia.")
+  .add_property("I3",  make_function( &PrincipalAxes3D::I3,  return_value_policy<copy_const_reference>() ),"third principal moment of inertia.")
+  .def("getAxis1VDir", &PrincipalAxes3D::getAxis1VDir,"returns the direction vector of the first principal moment of inertia")
+  .def("getAxis2VDir", &PrincipalAxes3D::getAxis2VDir,"returns the direction vector of the second principal moment of inertia")
+  .def("getAxis3VDir", &PrincipalAxes3D::getAxis3VDir,"returns the direction vector of the third principal moment of inertia")
  ;
