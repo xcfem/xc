@@ -30,7 +30,8 @@ u= 0.15 # cant.
 
 cs= tcs.TrackCrossSection(s= s, u= u) 
 
-locomotiveCentrifugalLoads= ec1.locomotiveLM1.getCentrifugalWheelLoads(v= v, Lf= Lf, r= r, trackCrossSection= cs, h= h)
+locomotiveLM1= ec1.get_locomotive_LM1()
+locomotiveCentrifugalLoads= locomotiveLM1.getCentrifugalWheelLoads(v= v, Lf= Lf, r= r, trackCrossSection= cs, h= h)
 
 refLeft= geom.Vector2d(19573.94959931504, -37357.10088082801)
 refRight= geom.Vector2d(12176.5038803392, -refLeft.y)

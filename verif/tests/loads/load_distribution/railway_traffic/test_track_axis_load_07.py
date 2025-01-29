@@ -141,7 +141,8 @@ axisPolyline3d= geom.Polyline3d(axisPoints3d)
 
 trackAxis= EC1_rail_load_models.TrackAxis(trackAxis= axisPolyline3d)
 ## Define train model.
-trainLoadModel= EC1_rail_load_models.TrainLoadModel(locomotive= EC1_rail_load_models.locomotiveLM1, uniformLoad= 80e3, dynamicFactor= 1.0, classificationFactor= 1.21)
+locomotiveLM1= EC1_rail_load_models.get_locomotive_LM1()
+trainLoadModel= EC1_rail_load_models.TrainLoadModel(locomotive= locomotiveLM1, uniformLoad= 80e3, dynamicFactor= 1.0, classificationFactor= 1.21)
 
 ## Define wind load.
 

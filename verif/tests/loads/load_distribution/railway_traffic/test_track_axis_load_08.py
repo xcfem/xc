@@ -140,7 +140,8 @@ axisPolyline3d= geom.Polyline3d(axisPoints3d)
 trackAxis= ta.TrackAxis(trackAxis= axisPolyline3d)
 
 ## Define train model.
-trainLoadModel= tlm.TrainLoadModel(locomotive= EC1_rail_load_models.locomotiveLM1, uniformLoad= 80e3, dynamicFactor= 1.0, classificationFactor= 1.21)
+locomotiveLM1= EC1_rail_load_models.get_locomotive_LM1()
+trainLoadModel= tlm.TrainLoadModel(locomotive= locomotiveLM1, uniformLoad= 80e3, dynamicFactor= 1.0, classificationFactor= 1.21)
 
 ## Define load patterns
 relativePositions= [0.15, 0.25, 0.5, 0.75, 0.9]

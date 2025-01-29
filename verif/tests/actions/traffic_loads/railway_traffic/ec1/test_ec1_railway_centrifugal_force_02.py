@@ -19,7 +19,8 @@ r= 2200 # radius of curvature.
 
 Lf=  5.0 # influence length of the loaded part of curved track on the bridge, which is most unfavourable for the design of the structural element under consideration [m].
 
-locomotiveCentrifugalLoads= ec1.locomotiveLM1.getCentrifugalWheelLoads(v= v, Lf= Lf, r= r)
+locomotiveLM1= ec1.get_locomotive_LM1()
+locomotiveCentrifugalLoads= locomotiveLM1.getCentrifugalWheelLoads(v= v, Lf= Lf, r= r)
 
 
 # Check values.

@@ -89,20 +89,21 @@ PrincipalAxes2D get_principal_axes_of_inertia(const GeomObj::list_Pos2d &l)
     PrincipalAxes2D retval;
     if(sz>0)
       {
-	Eigen::MatrixXd data(sz, 2);
+	std::vector< std::vector<double> > data(sz, std::vector<double>(2));
 	//Compute the covariance matrix of the point cloud.
-	size_t row= 0;
-	for(GeomObj::list_Pos2d::const_iterator i=l.begin(); i!=l.end(); i++, row++)
+	size_t irow= 0;
+	for(GeomObj::list_Pos2d::const_iterator i=l.begin(); i!=l.end(); i++, irow++)
 	  {
 	    const Pos2d &p= (*i);
-	    data(row,0)= p.x();
-	    data(row,1)= p.y();
+	    std::vector<double> &row= data[irow];
+	    row[0]= p.x();
+	    row[1]= p.y();
 	  }
 	const Pos2d centroid= l.getCenterOfMass();
-	Eigen::MatrixXd covariance_matrix= compute_covariance_matrix(data);
+	std::vector< std::vector<double> > covariance_matrix= compute_covariance_matrix(data);
 	double A[2][2];
-	A[0][0]= covariance_matrix(0,0); A[0][1]= covariance_matrix(0,1);
-	A[1][0]= covariance_matrix(0,1); A[1][1]= covariance_matrix(1,1);
+	A[0][0]= covariance_matrix[0][0]; A[0][1]= covariance_matrix[0][1];
+	A[1][0]= covariance_matrix[0][1]; A[1][1]= covariance_matrix[1][1];
 	
 	retval= PrincipalAxes2D(centroid, A);
       }    
