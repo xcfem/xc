@@ -33,6 +33,8 @@
 #include "utility/geom/pos_vec/Vector3d.h"
 #include "utility/geom/d3/BND3d.h"
 #include "utility/geom/d2/Plane.h"
+#include "utility/geom/lists/utils_list_pos3d.h"
+#include "utility/geom/coo_sys/ref_sys/PrincipalAxes3D.h"
 
 //! @brief Constructor.
 XC::DqPtrsNode::DqPtrsNode(CommandEntity *owr)
@@ -378,6 +380,21 @@ Plane XC::DqPtrsNode::getRegressionPlane(const double &factor= 1.0) const
 	        << "; at least 3 nodes are needed. This set contains: "
 	        << sz << " nodes." << std::endl;
     return retval;
+  }
+
+//! @brief Return the orientation of the node cloud.
+//! @param factor: scale factor for the current position
+//!                initPos+ factor * nodDisplacement.
+PrincipalAxes3D XC::DqPtrsNode::getOrientation(const double &factor= 1.0) const
+  {
+    GeomObj::list_Pos3d tmp;
+    for(const_iterator i= begin(); i!=end(); i++)
+      {
+	const Node *n= (*i);
+	assert(n);
+	tmp.push_back(n->getCurrentPosition3d(factor));
+      }
+    return get_principal_axes_of_inertia(tmp);
   }
 
 //! @brief Return the union of both containers.

@@ -860,6 +860,8 @@ python tests/preprocessor/sets/geometric_queries/test_pick_node_on_point.py
 python tests/preprocessor/sets/geometric_queries/test_pick_entities.py
 python tests/preprocessor/sets/geometric_queries/test_pick_elements_in_zone.py
 python tests/preprocessor/sets/geometric_queries/test_get_regression_plane.py
+python tests/preprocessor/sets/geometric_queries/test_set_get_orientation_01.py
+python tests/preprocessor/sets/geometric_queries/test_set_get_orientation_02.py
 
 echo "$BLEU" "  Preprocessor grid model tests." "$NORMAL"
 python tests/preprocessor/grid_model/test_grid_model_01.py

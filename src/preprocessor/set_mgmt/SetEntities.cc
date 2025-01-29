@@ -1176,6 +1176,19 @@ BND3d XC::SetEntities::Bnd(void) const
     return retval;
   }
 
+//! @brief Return the orientation of the set point cloud.
+PrincipalAxes3D XC::SetEntities::getOrientation(void) const
+  {
+    GeomObj::list_Pos3d tmp;
+    for(lst_ptr_points::const_iterator i= points.begin();i!=points.end();i++)
+      {
+	const Pnt *pnt= *i;
+	const Pos3d pos= pnt->getPos();
+	tmp.push_back(pos);
+      }
+    return get_principal_axes_of_inertia(tmp);
+  }
+
 //! @brief Return the average size of the geometric entities.
 double XC::SetEntities::getAverageSize(void) const
   {
@@ -1338,19 +1351,6 @@ void XC::SetEntities::selPointsFromListPy(const boost::python::list &tags)
   {
     const ID tmp(tags);
     sel_points_from_list(tmp);
-  }
-
-//! @brief Return the orientation of the set point cloud.
-PrincipalAxes3D XC::SetEntities::getOrientation(void) const
-  {
-    GeomObj::list_Pos3d tmp;
-    for(lst_ptr_points::const_iterator i= points.begin();i!=points.end();i++)
-      {
-	const Pnt *pnt= *i;
-	const Pos3d pos= pnt->getPos();
-	tmp.push_back(pos);
-      }
-    return get_principal_axes_of_inertia(tmp);
   }
 
 //! @brief Select the lines identified by the tags in the parameter.

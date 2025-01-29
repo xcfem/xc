@@ -46,6 +46,7 @@
 #include "utility/geom/d2/Plane.h"
 #include "utility/geom/d3/HalfSpace3d.h"
 #include "utility/geom/d3/BND3d.h"
+#include "utility/geom/coo_sys/ref_sys/PrincipalAxes3D.h"
 #include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
@@ -705,6 +706,12 @@ BND3d XC::SetMeshComp::Bnd(const double &factor) const
     retval+= elements.Bnd(factor);
     return retval;
   }
+
+//! @brief Return the orientation of the node cloud.
+//! @param factor: scale factor for the current position
+//!                initPos+ factor * nodDisplacement.
+PrincipalAxes3D XC::SetMeshComp::getOrientation(const double &factor) const
+  { return nodes.getOrientation(factor); }
 
 //! @brief Selects the elements identified by the tags being passed as parameters.
 void XC::SetMeshComp::sel_elements_from_list(const ID &tags)

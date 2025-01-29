@@ -42,6 +42,7 @@ class GeomObj3d;
 class GeomObj2d;
 class BND3d;
 class Plane;
+class PrincipalAxes3D;
 
 namespace XC {
 class TrfGeom;
@@ -75,6 +76,7 @@ class DqPtrsNode: public DqPtrsKDTree<Node,KDTreeNodes>
     BND3d Bnd(const double &) const;
     Pos3d getCentroid(const double &) const;
     Plane getRegressionPlane(const double &) const;
+    PrincipalAxes3D getOrientation(const double &) const;
 
     Node *findNode(const int &tag);
     const Node *findNode(const int &tag) const;

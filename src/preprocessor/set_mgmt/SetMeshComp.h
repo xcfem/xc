@@ -144,6 +144,7 @@ class SetMeshComp: public SetBase
     SetMeshComp pickNodesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
     SetMeshComp pickNodesInside(const std::string &, const GeomObj2d &, const double &tol= 0.0);
     BND3d Bnd(const double &) const;
+    PrincipalAxes3D getOrientation(const double &) const;
 
     //! @brief Returns the number of elements.
     size_t getNumberOfElements(void) const
