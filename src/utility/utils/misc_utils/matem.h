@@ -28,6 +28,7 @@
 #include <cfloat>
 #include <algorithm>
 #include <boost/math/special_functions/round.hpp>
+#include <eigen3/Eigen/Dense>
 
 //Elementos neutros para la suma y el producto.
 inline double neutro_suma(const double &)
@@ -197,6 +198,32 @@ Copyright: Christopher H. Barker
 License: Apache License 2.0 http://opensource.org/licenses/apache2.0.php
 */
 bool isclose(const double &a, const double &b, const double rel_tol=1e-9, const double abs_tol=0.0);
+
+// @brief Eigen-decomposition for symmetric 2x2 real matrices.
+/// @note Public domain
+
+/// Computes eigenvalues and eigenvectors of a 2x2 matrix M
+/// Assumes symmetric matrix;
+/// contents of matrix "M" are not modified by the routine
+/// Eigenvalues are sorted in increasing order
+/// Returned eigenvectors are unit length
+/// Symmetric matrix A => eigenvectors in columns of V, corresponding
+/// eigenvalues in d.
+void eigen_decomposition_2x2(const double A[2][2], double V[2][2], double d[2]);
+
+// @brief Eigen-decomposition for symmetric 3x3 real matrices.
+/// @note Public domain
+
+/// Computes eigenvalues and eigenvectors of a 3x3 matrix M
+/// Assumes symmetric matrix;
+/// contents of matrix "M" are not modified by the routine
+/// Eigenvalues are sorted in increasing order
+/// Returned eigenvectors are unit length
+/// Symmetric matrix A => eigenvectors in columns of V, corresponding
+/// eigenvalues in d.
+void eigen_decomposition_3x3(const double A[3][3], double V[3][3], double d[3]);
+
+Eigen::MatrixXd compute_covariance_matrix(const Eigen::MatrixXd &);
 
 #endif
 

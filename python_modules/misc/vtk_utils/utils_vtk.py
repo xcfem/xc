@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
-
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
+import sys
 import vtk
 import math
 from misc_utils import log_messages as lmsg
 
-def draw_vtk_symbols(pointData, renderer, scale):
+def create_actors_for_vtk_symbols(pointData, scale):
     ''' Adds to the renderer the symbols stored in point data.
 
-    :paramData: list of dictionaries containing the symbol type, color, 
+    :pointData: list of dictionaries containing the symbol type, color, 
                 orientation and position of the symbols.
+    :param scale: scale factor for the symbols.
     '''
     symbolDict= dict()
     for pData in pointData:
@@ -30,9 +30,8 @@ def draw_vtk_symbols(pointData, renderer, scale):
         elif(color==[0,0,1]):
             glyphColor= 'blue'
         else:
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(methodName+"; arbitrary colors for symbols not supported yet.")
-            glyphColor= None
+            glyphColor= 'rgb'
+            
         vPos= pData['vPos']
         if symbolType in symbolDict:
             if(glyphColor in symbolDict[symbolType]):
@@ -41,14 +40,16 @@ def draw_vtk_symbols(pointData, renderer, scale):
                 symbolDict[symbolType][glyphColor]= [(vPos, vDir, color)]
         else:
             symbolDict[symbolType]= {glyphColor:[(vPos, vDir, color)]}
-    # Create VTK points.
+    # Create VTK actors.
+    retval= list()
     for symbolType in symbolDict:
         for glyphColor in symbolDict[symbolType]:
             pointData= symbolDict[symbolType][glyphColor]
             vDir= pointData[0][1]
             color= pointData[0][2]
             glyphActor= point_to_glyph(pointData= pointData, symbType= symbolType, scale= scale)
-            renderer.AddActor(glyphActor)
+            retval.append(glyphActor)
+    return retval
     
 def point_to_glyph(pointData, symbType, scale):
     """ Convert points to glyphs.
@@ -56,7 +57,7 @@ def point_to_glyph(pointData, symbType, scale):
     :param points: The points to glyph.
     :param symbType: type of symbol (available types: 'arrow', 'doubleArrow',
            'cone', 'doubleCone', 'sphere', 'doubleSphere','cube' ,
-           'doubleCube', 'cylinder', 'doubleCylinder')    
+           'doubleCube', 'cylinder', 'doubleCylinder', 'plane')    
     :param vDir: director vector to orient the symbol
     :param color: list [R,G,B] with the 3 components of color
     :param scale: The scale, used to determine the size of the
@@ -72,11 +73,16 @@ def point_to_glyph(pointData, symbType, scale):
     for p in pointData:
         vPos= p[0]
         vDir= p[1]
-        vPosVx=[vPos[i]-scale/2.0*vDir[i] for i in range(3)] #vertex position
+        # Compute vertex position.
+        if(symbType not in ['plane']): # not a 2D object.
+            factor= scale/2.0
+            vPosVx=[vPos[i]-factor*vDir[i] for i in range(3)] # vertex position
+        else: # not a 2D object.
+            vPosVx= vPos # vertex position
         positions.append(vPosVx)
         dirs.append(vDir)
         # colors.append(p[2])
-    glyphSource= get_symbol_source(symbType)
+    glyphSource= get_symbol_source(symbType, center= vPos, normal= vDir)
     
     vtkPoints= vtk.vtkPoints()
     orientation= vtk.vtkDoubleArray()
@@ -118,12 +124,14 @@ def point_to_glyph(pointData, symbType, scale):
 
     return actor
 
-def get_symbol_source(symbType):
+def get_symbol_source(symbType, center= None, normal= None):
     ''' Return the apropiate VTK source object.
 
     :param symbType: type of symbol (available types: 'arrow', 'doubleArrow',
            'cone', 'doubleCone', 'sphere', 'doubleSphere','cube' ,
-           'doubleCube', 'cylinder', 'doubleCylinder')
+           'doubleCube', 'cylinder', 'doubleCylinder', 'plane')
+    :param center: center position. Used only with 'plane' symbols.
+    :param normal: plane normal. Used only with 'plane' symbols.
     '''
     symTpLow= symbType.lower()
     if 'arrow' in symTpLow:
@@ -144,6 +152,13 @@ def get_symbol_source(symbType):
         retval= vtk.vtkCylinderSource()
         retval.SetHeight(0.25)
         retval.SetResolution(10)
+    elif 'plane' in symTpLow:
+        retval= vtk.vtkPlaneSource()
+        retval.SetNormal(1, 0, 0)
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+"; symbol: '"+str(symbType)+"' not supported.")
+        retval= None
     retval.Update()
     return retval
 
@@ -163,25 +178,31 @@ def drawVtkSymb(symbType,renderer, RGBcolor, vPos, vDir, scale):
     :param scale: scale to be applied to the symbol representation
     '''
     symbSource= get_symbol_source(symbType)
-    vPosVx=[vPos[i]-scale/2.0*vDir[i] for i in range(3)] #vertex position
-    addSymb(symbSource,renderer, RGBcolor, vPosVx, vDir, scale)
+    if(symbType not in ['plane']): # not a 2D object.
+        factor= scale/2.0
+        vPosVx=[vPos[i]-factor*vDir[i] for i in range(3)] # vertex position
+    else: # not a 2D object.
+        vPosVx= vPos # vertex position
+    actor= addSymb(symbSource,renderer, RGBcolor, vPosVx, vDir, scale)
+    renderer.AddActor(actor)
     if 'double' in symTpLow:
         vPosVx=[vPosVx[i]-scale*vDir[i] for i in range(3)] #vertex position
-        addSymb(symbSource,renderer, RGBcolor, vPosVx, vDir, scale)
-    
-def addSymb(symbSource,renderer, RGBcolor, vPosVx, vDir, scale):
+        actor= addSymb(symbSource,renderer, RGBcolor, vPosVx, vDir, scale)
+        renderer.AddActor(actor)
+
+        
+def addSymb(symbSource, RGBcolor, vPosVx, vDir, scale):
     '''function called by drawVtkSymb that puts the symbol in the renderer
     '''
-    actor= vtk.vtkActor()
-    parallelTo(actor,vDir)
-    actor.SetPosition(vPosVx[0],vPosVx[1],vPosVx[2])
-    actor.SetScale(scale,scale/2,scale/2)
-    actor.GetProperty().SetColor(RGBcolor[0],RGBcolor[1],RGBcolor[2])
+    retval= vtk.vtkActor()
+    parallelTo(retval,vDir)
+    retval.SetPosition(vPosVx[0],vPosVx[1],vPosVx[2])
+    retval.SetScale(scale,scale/2,scale/2)
+    retval.GetProperty().SetColor(RGBcolor[0],RGBcolor[1],RGBcolor[2])
     mapper = vtk.vtkPolyDataMapper()
     mapper.SetInputConnection(symbSource.GetOutputPort())
-    actor.SetMapper(mapper)
-    renderer.AddActor(actor)
-
+    retval.SetMapper(mapper)
+    return retval
 
 def parallelTo(actor,vDir):
     '''function called by drawVtkSymb to orient the symbol parallel to 
@@ -189,7 +210,8 @@ def parallelTo(actor,vDir):
     '''
     nc= len(vDir)
     if(nc!=3):
-        print("parallelTo: ", vDir, " wrong dimension (must be 3).")
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+"; parallelTo: "+str(vDir)+" wrong dimension (must be 3).")
     else:
         v= [vDir[0],vDir[1],vDir[2]]
         thetaZ= math.degrees(math.atan2(v[1],v[0]))

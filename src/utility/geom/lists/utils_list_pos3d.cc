@@ -25,6 +25,9 @@
 #include "utility/geom/pos_vec/Vector3d.h"
 #include "utility/geom/trf/Trf3d.h"
 #include "utility/geom/d3/BND3d.h"
+#include "utility/geom/coo_sys/ref_sys/PrincipalAxes3D.h"
+#include <eigen3/Eigen/Dense>
+#include "utility/utils/misc_utils/matem.h"
 
 
 //! @brief Moves the points of the list.
@@ -58,5 +61,34 @@ GeomObj::list_Pos3d python_to_list_pos3d(const boost::python::list &l)
     // copy the components
     for(int i=0; i<sz; i++)
       retval.push_back(boost::python::extract<Pos3d>(l[i]));
+    return retval;
+  }
+
+//! @brief Return the principal axes of inertia of the point cloud.
+PrincipalAxes3D get_principal_axes_of_inertia(const GeomObj::list_Pos3d &l)
+  {
+    const size_t sz= l.size();
+    PrincipalAxes3D retval;
+    if(sz>0)
+      {
+	Eigen::MatrixXd data(sz, 3);
+	//Compute the covariance matrix of the point cloud.
+	size_t row= 0;
+	for(GeomObj::list_Pos3d::const_iterator i=l.begin(); i!=l.end(); i++, row++)
+	  {
+	    const Pos3d &p= (*i);
+	    data(row,0)= p.x();
+	    data(row,1)= p.y();
+	    data(row,2)= p.z();
+	  }
+	const Pos3d centroid= l.getCenterOfMass();
+	Eigen::MatrixXd covariance_matrix= compute_covariance_matrix(data);
+	double A[3][3];
+	A[0][0]= covariance_matrix(0,0); A[0][1]= covariance_matrix(0,1); A[0][2]= covariance_matrix(0,2);
+	A[1][0]= covariance_matrix(0,1); A[1][1]= covariance_matrix(1,1); A[1][2]= covariance_matrix(1,2);
+	A[2][0]= covariance_matrix(0,2); A[2][1]= covariance_matrix(1,2); A[2][2]= covariance_matrix(2,2);
+	
+	retval= PrincipalAxes3D(centroid, A);
+      }    
     return retval;
   }

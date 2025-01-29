@@ -61,22 +61,28 @@
 //@brief Frees memory.
 void XC::ConstrContainer::free_mem(void)
   {
-    //delete the objects in the domain
+    // delete the objects in the domain
     clearAll();
 
     // delete all the storage objects
-    // SEGMENT FAULT WILL OCCUR IF THESE OBJECTS WERE NOT CONSTRUCTED
-    // USING NEW
     if(theSPs) delete theSPs;
     theSPs= nullptr;
     if(theMPs) delete theMPs;
     theMPs= nullptr;
+    if(theMRMPs) delete theMPs;
+    theMRMPs= nullptr;
+
+    // delete the iterators.
+    // Single freedom.
     if(theSFreedom_Iter) delete theSFreedom_Iter;
     theSFreedom_Iter= nullptr;
+    // Multi-freedom.
     if(theMFreedom_Iter) delete theMFreedom_Iter;
     theMFreedom_Iter= nullptr;
+    // Multi-row, multi-freedom.
     if(theMRMFreedom_Iter) delete theMRMFreedom_Iter;
     theMRMFreedom_Iter= nullptr;
+    // All single-freedom.
     if(allSFreedom_Iter) delete allSFreedom_Iter;
     allSFreedom_Iter= nullptr;
   }
@@ -104,8 +110,10 @@ void XC::ConstrContainer::alloc_iters(void)
 bool XC::ConstrContainer::check_containers(void) const
   {
     // check that there was space to create the data structures
-    if((theSPs == nullptr) || (theMPs == nullptr) || (theMRMPs == nullptr) ||
-       (theMFreedom_Iter == nullptr) || (theSFreedom_Iter == nullptr) || (theMRMFreedom_Iter == nullptr))
+    if((theSPs == nullptr) || (theMPs == nullptr) ||
+       (theMRMPs == nullptr) ||
+       (theMFreedom_Iter == nullptr) || (theSFreedom_Iter == nullptr) ||
+       (theMRMFreedom_Iter == nullptr))
       {
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << " - out of memory"
@@ -173,7 +181,6 @@ bool XC::ConstrContainer::addSFreedom_Constraint(SFreedom_Constraint *spConstrai
       retval= theSPs->addComponent(spConstraint);
     return retval;
   }
-
 
 //! @brief Appends a multiple freedom constraint.
 //! @param mfConstraint: pointer to the multi-freedom constraint to append.
@@ -545,6 +552,29 @@ XC::SFreedom_ConstraintIter &XC::ConstrContainer::getSPs(void)
     return *theSFreedom_Iter;
   }
 
+//! @brief Return a std::deque containing the pointers to the single-freedom
+//! constraints in the container.
+std::deque<XC::SFreedom_Constraint *> XC::ConstrContainer::getSPDeque(void)
+  {
+    std::deque<SFreedom_Constraint *> retval;    
+    SFreedom_ConstraintIter &theSPs= this->getSPs();
+    SFreedom_Constraint *theSP= nullptr;
+    while((theSP= theSPs()) != nullptr)
+      { retval.push_back(theSP); }
+    return retval;
+  }
+
+//! @brief Return a Python list containing the pointers to the single-freedom
+//! constraints in the container.
+boost::python::list XC::ConstrContainer::getSPListPy(void)
+  {
+    boost::python::list retval;
+    const std::deque<SFreedom_Constraint *> tmp= this->getSPDeque();
+    for(std::deque<SFreedom_Constraint *>::const_iterator i= tmp.begin(); i!=tmp.end(); i++)
+      {	retval.append(*i); }
+    return retval;    
+  }
+
 //! @brief All (domain and load cases) single freedom constraints iterator.
 XC::SFreedom_ConstraintIter &XC::ConstrContainer::getDomainAndLoadPatternSPs(void)
   {
@@ -559,6 +589,29 @@ XC::MFreedom_ConstraintIter &XC::ConstrContainer::getMPs(void)
     return *theMFreedom_Iter;
   }
 
+//! @brief Return a std::deque containing the pointers to the multi-freedom
+//! constraints in the container.
+std::deque<XC::MFreedom_Constraint *> XC::ConstrContainer::getMPDeque(void)
+  {
+    std::deque<MFreedom_Constraint *> retval;    
+    MFreedom_ConstraintIter &theMPs= this->getMPs();
+    MFreedom_Constraint *theMP= nullptr;
+    while((theMP= theMPs()) != nullptr)
+      { retval.push_back(theMP); }
+    return retval;
+  }
+
+//! @brief Return a Python list containing the pointers to the multi-freedom
+//! constraints in the container.
+boost::python::list XC::ConstrContainer::getMPListPy(void)
+  {
+    boost::python::list retval;
+    const std::deque<MFreedom_Constraint *> tmp= this->getMPDeque();
+    for(std::deque<MFreedom_Constraint *>::const_iterator i= tmp.begin(); i!=tmp.end(); i++)
+      {	retval.append(*i); }
+    return retval;    
+  }
+
 //! @brief Return an iterator to the multi-row multi-freedom constraints.
 XC::MRMFreedom_ConstraintIter &XC::ConstrContainer::getMRMPs(void)
   {
@@ -566,6 +619,28 @@ XC::MRMFreedom_ConstraintIter &XC::ConstrContainer::getMRMPs(void)
     return *theMRMFreedom_Iter;
   }
 
+//! @brief Return a std::deque containing the pointers to the
+//! multi-row-multi-freedom constraints in the container.
+std::deque<XC::MRMFreedom_Constraint *> XC::ConstrContainer::getMRMPDeque(void)
+  {
+    std::deque<MRMFreedom_Constraint *> retval;    
+    MRMFreedom_ConstraintIter &theMRMPs= this->getMRMPs();
+    MRMFreedom_Constraint *theMRMP= nullptr;
+    while((theMRMP= theMRMPs()) != nullptr)
+      { retval.push_back(theMRMP); }
+    return retval;
+  }
+
+//! @brief Return a Python list containing the pointers to the
+//! multi-row-multi-freedom constraints in the container.
+boost::python::list XC::ConstrContainer::getMRMPListPy(void)
+  {
+    boost::python::list retval;
+    const std::deque<MRMFreedom_Constraint *> tmp= this->getMRMPDeque();
+    for(std::deque<MRMFreedom_Constraint *>::const_iterator i= tmp.begin(); i!=tmp.end(); i++)
+      {	retval.append(*i); }
+    return retval;    
+  }
 
 //! @brief Returns the active load patterns container.
 std::map<int,XC::LoadPattern *> &XC::ConstrContainer::getLoadPatterns(void)
@@ -820,19 +895,19 @@ void XC::ConstrContainer::applyLoad(double timeStep)
     //
     // finally loop over the MFreedom_Constraints and SFreedom_Constraints of the domain
     //
-
+    
     MFreedom_ConstraintIter &theMPs= getMPs();
-    MFreedom_Constraint *theMP;
+    MFreedom_Constraint *theMP= nullptr;
     while((theMP= theMPs()) != 0)
         theMP->applyConstraint(timeStep);
 
     MRMFreedom_ConstraintIter &theMRMPs= getMRMPs();
-    MRMFreedom_Constraint *theMRMP;
+    MRMFreedom_Constraint *theMRMP= nullptr;
     while((theMRMP= theMRMPs()) != 0)
         theMRMP->applyConstraint(timeStep);
-
+    
     SFreedom_ConstraintIter &theSPs= getSPs();
-    SFreedom_Constraint *theSP;
+    SFreedom_Constraint *theSP= nullptr;
     while((theSP= theSPs()) != 0)
       theSP->applyConstraint(timeStep);
   }
@@ -952,7 +1027,7 @@ bool XC::ConstrContainer::nodeAffectedBySPs(int nodeTag) const
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
     SFreedom_ConstraintIter &theSPs= this_no_const->getDomainAndLoadPatternSPs();
     SFreedom_Constraint *theSP= nullptr;
-    while((theSP= theSPs()) != 0)
+    while((theSP= theSPs()) != nullptr)
       if(theSP->getNodeTag() == nodeTag)
         {
           retval= true;
@@ -1109,10 +1184,11 @@ int XC::ConstrContainer::calculateNodalReactions(bool inclInertia, const double 
     return 0;
   }
 
+const int db_tag_data_size= 8;
 //! @brief Returns a vector to store the dbTags of class members.
 XC::DbTagData &XC::ConstrContainer::getDbTagData(void) const
   {
-    static DbTagData retval(7);
+    static DbTagData retval(db_tag_data_size);
     return retval;
   }
 
@@ -1256,8 +1332,8 @@ int XC::ConstrContainer::sendData(Communicator &comm)
     res+= comm.sendMovable(*theMPs,getDbTagData(),CommMetaData(1));
     res+= comm.sendMovable(*theMRMPs,getDbTagData(),CommMetaData(2));
     
-    res+= sendNLockersTags(3,4,comm); //Active node lockers.
-    res+= sendLPatternsTags(5,6,comm); //Active load patterns.
+    res+= sendNLockersTags(3, 4, comm); //Active node lockers.
+    res+= sendLPatternsTags(5, 6, comm); //Active load patterns.
     return res;
   }
 
@@ -1267,8 +1343,8 @@ int XC::ConstrContainer::recvData(const Communicator &comm)
     int res= theSPs->receive<SFreedom_Constraint>(getDbTagDataPos(0),comm,&FEM_ObjectBroker::getNewSP);
     res+= theMPs->receive<MFreedom_Constraint>(getDbTagDataPos(1),comm,&FEM_ObjectBroker::getNewMP);
     res+= theMRMPs->receive<MRMFreedom_Constraint>(getDbTagDataPos(2),comm,&FEM_ObjectBroker::getNewMRMP);
-    res+= recvNLockersTags(3,4,comm);
-    res+= recvLPatternsTags(5,6,comm);
+    res+= recvNLockersTags(3, 4, comm);
+    res+= recvLPatternsTags(5, 6, comm);
     return res;
   }
 
@@ -1331,7 +1407,7 @@ void XC::ConstrContainer::setPyDict(const boost::python::dict &d)
 //! @brief Sends object through the communicator argument.
 int XC::ConstrContainer::sendSelf(Communicator &comm)
   {
-    inicComm(7);
+    inicComm(db_tag_data_size);
     int res= sendData(comm);
 
     const int dataTag= getDbTag(comm);
@@ -1348,7 +1424,7 @@ int XC::ConstrContainer::sendSelf(Communicator &comm)
 int XC::ConstrContainer::recvSelf(const Communicator &comm)
   {
     // first we get the data about the state of the cc for this cTag
-    inicComm(7);
+    inicComm(db_tag_data_size);
     int res= comm.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__

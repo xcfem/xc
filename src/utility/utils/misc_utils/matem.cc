@@ -1,5 +1,7 @@
 #include "utility/utils/misc_utils/matem.h"
 #include <iostream>
+#include <cstdio>
+#include "utility/utils/misc_utils/colormod.h"
 
 double dicot_zero(double f(double), double a, double b,double &err)
   {
@@ -28,7 +30,7 @@ double dicot_zero(double f(double), double a, double b,double &err)
     return xx; 
   }
 
-//! @brief eturns True if a is close in value to b. False otherwise
+//! @brief Returns True if a is close in value to b. False otherwise
 //! @param a: one of the values to be tested
 //! @param b: the other value to be tested
 //! @param rel_tol=1e-9: The relative tolerance -- the amount of error
@@ -56,9 +58,9 @@ bool isclose(const double &a, const double &b, const double rel_tol, const doubl
       return true;
 
     if(rel_tol < 0.0 or abs_tol < 0.0)
-      std::cerr << __FUNCTION__
+      std::cerr << Color::red << __FUNCTION__
 		<< "; error tolerances must be non-negative."
-		<< std::endl;
+		<< Color::def << std::endl;
 
     if(std::isinf(std::abs(a)) or std::isinf(std::abs(b)))
         // This includes the case of two infinities of opposite sign, or
@@ -71,3 +73,101 @@ bool isclose(const double &a, const double &b, const double rel_tol, const doubl
 	     (diff <= std::abs(rel_tol * a))) or
             (diff <= abs_tol));
   }
+
+// -----------------------------------------------------------------------------
+// compute the eigenvalue decomposition of a symmetric 2x2
+// matrix in the form A[2][2], so that
+//    A*v1   = v1   *lambda1
+//    A*  v2 =   v2 *       lambda2
+void eigen_decomposition_2x2(const double A[2][2], double V[2][2], double d[2])
+  {
+    Eigen::Matrix2d AA;
+    AA << A[0][0], A[0][1], A[1][0], A[1][1];
+    Eigen::SelfAdjointEigenSolver<Eigen::Matrix2d> eigensolver(AA);
+    if(eigensolver.info() != Eigen::Success)
+      {
+	std::cerr << Color::red << __FUNCTION__
+		  << "; the eigensolver crashed."
+		  << Color::def << std::endl;
+	abort();
+      }
+    else
+      {
+	auto eigenvalues= eigensolver.eigenvalues();
+	auto eigenvectors= eigensolver.eigenvectors();
+	const double lambda1= eigenvalues.col(0)[0];
+	const double lambda2= eigenvalues.col(0)[1];
+	const double v1x= eigenvectors(0,0);
+	const double v1y= eigenvectors(1,0);
+	const double v2x= eigenvectors(0,1);
+	const double v2y= eigenvectors(1,1);
+	
+	d[0]= lambda1;
+	V[0][0]= v1x; // first column of V
+	V[1][0]= v1y;
+	d[1]= lambda2;
+	V[0][1]= v2x; // second column of V
+	V[1][1]= v2y;
+      }
+  }
+
+// -----------------------------------------------------------------------------
+void eigen_decomposition_3x3(const double A[3][3], double V[3][3], double d[3])
+  {
+    Eigen::Matrix3d AA;
+    AA << A[0][0], A[0][1], A[0][2],
+          A[1][0], A[1][1], A[1][2],
+          A[2][0], A[2][1], A[2][2];
+    Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> eigensolver(AA);
+    if(eigensolver.info() != Eigen::Success)
+      abort();
+    else
+      {
+	auto eigenvalues= eigensolver.eigenvalues();
+	auto eigenvectors= eigensolver.eigenvectors();
+	const double lambda1= eigenvalues.col(0)[0];
+	const double lambda2= eigenvalues.col(0)[1];
+	const double lambda3= eigenvalues.col(0)[2];
+	
+	const double v1x= eigenvectors(0,0);
+	const double v1y= eigenvectors(1,0);
+	const double v1z= eigenvectors(2,0);
+	
+	const double v2x= eigenvectors(0,1);
+	const double v2y= eigenvectors(1,1);
+	const double v2z= eigenvectors(2,1);
+	
+	const double v3x= eigenvectors(0,2);
+	const double v3y= eigenvectors(1,2);
+	const double v3z= eigenvectors(2,2);
+	
+	d[0]= lambda1;
+	V[0][0]= v1x; // first column of V
+	V[1][0]= v1y;
+	V[2][0]= v1z;
+	d[1]= lambda2;
+	V[0][1]= v2x; // second column of V
+	V[1][1]= v2y;
+	V[2][1]= v2z;
+	d[2]= lambda3;
+	V[0][2]= v3x; // third column of V
+	V[1][2]= v3y;
+	V[2][2]= v3z;
+      }
+  }
+
+// !@brief Covariance matrix.
+Eigen::MatrixXd compute_covariance_matrix(const Eigen::MatrixXd &data)
+  {
+    // Calculate the mean of each column
+    Eigen::RowVectorXd mean= data.colwise().mean();
+    
+    // Subtract the mean from each column
+    Eigen::MatrixXd centered = data.rowwise() - mean;
+    
+    // Compute the covariance matrix
+    Eigen::MatrixXd retval= (centered.adjoint() * centered) / double(data.rows() - 1);
+    
+    return retval;
+  }
+

@@ -27,6 +27,7 @@
 #include "../cgal_types.h"
 #include "utility/utils/misc_utils/matem.h"
 #include "utility/geom/proximity.h"
+#include <boost/python.hpp>
 
 //! @ingroup GEOM
 //

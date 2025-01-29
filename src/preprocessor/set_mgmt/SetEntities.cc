@@ -45,6 +45,8 @@
 #include "utility/geom/d1/Segment3d.h"
 #include "utility/geom/d2/Plane.h"
 #include "utility/geom/d3/HalfSpace3d.h"
+#include "utility/geom/lists/utils_list_pos3d.h"
+#include "utility/geom/coo_sys/ref_sys/PrincipalAxes3D.h"
 
 #include <gmsh.h>
 
@@ -1172,6 +1174,19 @@ BND3d XC::SetEntities::Bnd(void) const
     retval+= surfaces.Bnd();
     retval+= bodies.Bnd();
     return retval;
+  }
+
+//! @brief Return the orientation of the set point cloud.
+PrincipalAxes3D XC::SetEntities::getOrientation(void) const
+  {
+    GeomObj::list_Pos3d tmp;
+    for(lst_ptr_points::const_iterator i= points.begin();i!=points.end();i++)
+      {
+	const Pnt *pnt= *i;
+	const Pos3d pos= pnt->getPos();
+	tmp.push_back(pos);
+      }
+    return get_principal_axes_of_inertia(tmp);
   }
 
 //! @brief Return the average size of the geometric entities.

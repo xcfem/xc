@@ -42,16 +42,12 @@ class_<XC::SFreedom_ConstraintIter, boost::noncopyable >("SFreedom_ConstraintIte
   .def("next", &XC::SFreedom_ConstraintIter::operator(), return_internal_reference<>(),"Returns next node.")
    ;
 
-class_<XC::ImposedMotionBase , bases<XC::SFreedom_Constraint>, boost::noncopyable >("ImposedMotionBase", no_init);
+#include "domain/constraints/single_freedom_constraints/python_interface.tcc"
 
-class_<XC::ImposedMotionSP , bases<XC::ImposedMotionBase>, boost::noncopyable >("ImposedMotionSP", no_init);
-
-class_<XC::ImposedMotionSP1 , bases<XC::ImposedMotionBase>, boost::noncopyable >("ImposedMotionSP1", no_init);
 
 class_<XC::MFreedom_ConstraintBase, bases<XC::Constraint>, boost::noncopyable >("MFreedom_ConstraintBase", no_init)
   .add_property("getIdxNodes",&XC::MFreedom_ConstraintBase::getIdxNodes,"Return the node indices for its use in VTK arrays.")
   ;
-
 
 class_<XC::MFreedom_Constraint, bases<XC::MFreedom_ConstraintBase>, boost::noncopyable >("MFreedom_Constraint", no_init);
 
@@ -59,28 +55,15 @@ class_<XC::MFreedom_ConstraintIter, boost::noncopyable >("MFreedom_ConstraintIte
   .def("next", &XC::MFreedom_ConstraintIter::operator(), return_internal_reference<>(),"Returns next node.")
    ;
 
-class_<XC::EqualDOF, bases<XC::MFreedom_Constraint>, boost::noncopyable >("EqualDOF", no_init);
-
-class_<XC::MFreedom_Joint2D , bases<XC::MFreedom_Constraint>, boost::noncopyable >("MFreedom_Joint2D", no_init);
-
-class_<XC::MFreedom_Joint3D, bases<XC::MFreedom_Constraint>, boost::noncopyable >("MFreedom_Joint3D", no_init);
-
-class_<XC::RigidDiaphragm, bases<XC::MFreedom_Constraint>, boost::noncopyable >("RigidDiaphragm", no_init);
-
-class_<XC::RigidBase, bases<XC::MFreedom_Constraint>, boost::noncopyable >("RigidBase", no_init);
-
-class_<XC::RigidBeam, bases<XC::RigidBase>, boost::noncopyable >("RigidBeam", no_init);
-
-class_<XC::RigidRod, bases<XC::RigidBase>, boost::noncopyable >("RigidRod", no_init);
-
 class_<XC::MRMFreedom_Constraint, bases<XC::MFreedom_ConstraintBase>, boost::noncopyable >("MRMFreedom_Constraint", no_init);
 
 class_<XC::MRMFreedom_ConstraintIter, boost::noncopyable >("MRMFreedom_ConstraintIter", no_init)
   .def("next", &XC::MRMFreedom_ConstraintIter::operator(), return_internal_reference<>(),"Returns next node.")
    ;
 
-
-class_<XC::GlueNodeToElement, bases<XC::MRMFreedom_Constraint>, boost::noncopyable >("GlueNodeToElement", no_init);
+#include "domain/constraints/skew_constraints/python_interface.tcc"
+#include "domain/constraints/single_retained_node_constraints/python_interface.tcc"
+#include "domain/constraints/multiple_retained_node_constraints/python_interface.tcc"
 
 
 typedef std::map<int,XC::NodeLocker *> map_node_locker;
@@ -104,8 +87,11 @@ class_<XC::ConstrContainer, bases<XC::MeshComponentContainer>, boost::noncopyabl
   .def("getNumMPs", &XC::ConstrContainer::getNumMPs,"Returns the number of multi-point constraints.")
   .def("getNumMRMPs", &XC::ConstrContainer::getNumMRMPs,"Returns the number of multi-row multi-point constraints.")
   .add_property("getSPs", make_function( &XC::ConstrContainer::getSPs, return_internal_reference<>() ),"Returns the single point constraints container.")
+  .def("getSPList", &XC::ConstrContainer::getSPListPy, "Return a Python list containing the pointers to the single-freedom constraints in the domain.")
   .add_property("getMPs", make_function( &XC::ConstrContainer::getMPs, return_internal_reference<>() ),"Returns the multi-point constraints container.")
+  .def("getMPList", &XC::ConstrContainer::getMPListPy, "Return a Python list containing the pointers to the multi-freedom constraints in the domain.")
   .add_property("getMRMPs", make_function( &XC::ConstrContainer::getMRMPs, return_internal_reference<>() ),"Returns the multi-point constraints container.")
+  .def("getMRMPList", &XC::ConstrContainer::getMRMPListPy, "Return a Python list containing the pointers to the multi-row-multi-freedom constraints in the domain.")
   .def("getNumLoadPatterns", &XC::ConstrContainer::getNumLoadPatterns,"Returns the number of load cases.")
   .def("getNumNodeLockers", &XC::ConstrContainer::getNumNodeLockers,"Returns the number of node lockers.")
   .def("getNodeLockers", make_function(getNodeLockersPtr, return_internal_reference<>() ),"Returns the node lockers container.")

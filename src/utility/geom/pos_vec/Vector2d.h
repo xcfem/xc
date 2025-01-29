@@ -99,7 +99,10 @@ class Vector2d: public ProtoGeom
     inline Vector2d getNormalized(void) const
       { return (*this)/GetModulus(); }
     void Normalize(void);
-    Vector2d Normal(void) const;
+    int getIndexMaxValue(void) const;
+    int getIndexMinValue(void) const;
+    int getIndexMaxAbsValue(void) const;
+    int getIndexMinAbsValue(void) const;
     Dir2d getDirection(void) const;
     GEOM_FT getSignedAngle(const Vector2d &v) const;
     GEOM_FT getAngle(const Vector2d &v) const;
@@ -119,6 +122,7 @@ class Vector2d: public ProtoGeom
 
     //void Rotate(const GEOM_FT &ang_rad);
     Vector2d Rotated(const double &ang_rad) const;
+    Vector2d Normal(void) const;
     Vector2d Perpendicular(const Orientacion &o) const;
     Vector2d Perpendicular(const Vector2d &v) const;
     

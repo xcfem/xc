@@ -44,7 +44,7 @@
 #include "utility/geom/d2/HalfPlane2d.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
-#include "utility/geom/coo_sys/ref_sys/PrincipalAxesOfInertia2D.h"
+#include "utility/geom/coo_sys/ref_sys/PrincipalAxes2D.h"
 #include "utility/utils/misc_utils/inertia.h"
 #include "utility/utils/misc_utils/colormod.h"
 
@@ -227,8 +227,8 @@ double XC::PrismaticBarCrossSection::getEI2(void) const
   { return I2_inertia(EIy(),EIz(),EIyz()); }
 
 //! @brief Returns the principal axes of inertia of the cross-section.
-PrincipalAxesOfInertia2D XC::PrismaticBarCrossSection::getInertiaAxes(void) const
-  { return PrincipalAxesOfInertia2D(getCenterOfMass(),EIy(),EIz(),EIyz());  }
+PrincipalAxes2D XC::PrismaticBarCrossSection::getInertiaAxes(void) const
+  { return PrincipalAxes2D(getCenterOfMass(),EIy(),EIz(),EIyz());  }
 //! @brief Returns the vector of the principal axis I.
 Vector2d XC::PrismaticBarCrossSection::getAxis1VDir(void) const
   { return getInertiaAxes().getAxis1VDir(); }

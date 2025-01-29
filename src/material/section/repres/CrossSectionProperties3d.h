@@ -127,7 +127,7 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
     double getTheta(void) const;
     double getI1(void) const;
     double getI2(void) const;
-    PrincipalAxesOfInertia2D getInertiaAxes(void) const;
+    PrincipalAxes2D getInertiaAxes(void) const;
     Vector2d getAxis1VDir(void) const;
     Vector2d getVDirStrongAxis(void) const;
     Vector2d getAxis2VDir(void) const;

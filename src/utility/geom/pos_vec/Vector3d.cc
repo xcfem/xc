@@ -127,6 +127,78 @@ Vector3d Vector3d::getNormalized(void) const
 void Vector3d::Normalize(void)
   { operator=(this->getNormalized()); }
 
+//! @brief Returns the index of the maximum of the values of
+//! the components.
+int Vector3d::getIndexMaxValue(void) const
+  {
+    int retval= 0;
+    GEOM_FT maxComponentValue= this->x();
+    GEOM_FT value= this->y();
+    if(value>maxComponentValue)
+      {
+	maxComponentValue= value;
+	retval= 1;
+      }
+    value= this->z();
+    if(value>maxComponentValue)
+      { retval= 2; }
+    return retval;
+  }
+  
+//! @brief Returns the index of the maximum of the values of
+//! the components.
+int Vector3d::getIndexMinValue(void) const
+  {
+    int retval= 0;
+    GEOM_FT minComponentValue= this->x();
+    GEOM_FT value= this->y();
+    if(value<minComponentValue)
+      {
+	minComponentValue= value;
+	retval= 1;
+      }
+    value= this->z();
+    if(value<minComponentValue)
+      { retval= 2; }
+    return retval;
+  }
+
+//! @brief Returns the index of the maximum of the values of
+//! the components.
+int Vector3d::getIndexMaxAbsValue(void) const
+  {
+    int retval= 0;
+    GEOM_FT maxComponentValue= std::abs(this->x());
+    GEOM_FT value= std::abs(this->y());
+    if(value>maxComponentValue)
+      {
+	maxComponentValue= value;
+	retval= 1;
+      }
+    value= std::abs(this->z());
+    if(value>maxComponentValue)
+      { retval= 2; }
+    return retval;
+  }
+  
+//! @brief Returns the index of the maximum of the values of
+//! the components.
+int Vector3d::getIndexMinAbsValue(void) const
+  {
+    int retval= 0;
+    GEOM_FT minComponentValue= std::abs(this->x());
+    GEOM_FT value= std::abs(this->y());
+    if(value<minComponentValue)
+      {
+	minComponentValue= value;
+	retval= 1;
+      }
+    value= std::abs(this->z());
+    if(value<minComponentValue)
+      {	retval= 2; }
+    return retval;
+  }
+
 void Vector3d::SetX(const GEOM_FT &vx)
   { cgvct= CGVector_3(vx,y(),z()); }
 void Vector3d::SetY(const GEOM_FT &vy)
@@ -205,6 +277,48 @@ Vector3d Vector3d::operator*(const GEOM_FT &d) const
 //! @brief Return el producto del vector por el inverso del escalar.
 Vector3d Vector3d::operator/(const GEOM_FT &d) const
   { return Vector3d(ToCGAL()*(1/d)); }
+
+//! @brief Return a vector perpendicular to this one.
+//See: https://math.stackexchange.com/questions/3077099/how-to-find-orthogonal-vector-to-an-arbitrary-3-dimentional-vector
+Vector3d Vector3d::Normal(void) const
+  {
+    Vector3d retval;
+    const GEOM_FT a= x();
+    const GEOM_FT b= y();
+    const GEOM_FT c= z();
+    const GEOM_FT abs_a= std::abs(a);
+    const GEOM_FT abs_b= std::abs(b);
+    const GEOM_FT abs_c= std::abs(c);
+    const GEOM_FT abs_mx= std::max(abs_a,std::max(abs_b,abs_c));
+    if(abs_mx==0.0)
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; the vector is null : "
+		<< *this << "; it has no perpendicular."
+		<< " Null vector returned."
+		<< Color::def << std::endl;
+    else if(abs_a==abs_mx) // a is maximum.
+      {
+	if(abs_b>abs_c)
+	  retval= Vector3d(-b, a, 0);
+	else
+	  retval= Vector3d(-c, 0, a);
+      }
+    else if(abs_b==abs_mx) // b is maximum.
+      {
+	if(abs_a>abs_c)
+	  retval= Vector3d(-b, a, 0);
+	else
+	  retval= Vector3d(0, -c, b);
+      }
+    else // c is maximum.
+      {
+	if(abs_a>abs_b)
+	  retval= Vector3d(-c, 0, a);
+	else
+	  retval= Vector3d(0, -c, b);
+      }
+    return retval;
+  }
 
 //! @brief Return the vector obtained from projecting v
 //! onto the perpendicular direction to this vector.

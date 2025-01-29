@@ -32,9 +32,13 @@
 
 #include "PrepHandler.h"
 
+class Line2d;
+class Plane;
+
 namespace XC {
 
 class SFreedom_Constraint;
+class Skew_Constraint;
 class MFreedom_Constraint;
 class MRMFreedom_Constraint;
 
@@ -68,6 +72,11 @@ class BoundaryCondHandler: public PrepHandler
     int getNumLPs(void) const;
     SFreedom_Constraint *newSPConstraint(const int &,const int &,const double &);
     void removeSPConstraint(const int &tagC);
+    Skew_Constraint *newSkewConstraint(const int &, const ID &, const ID &);
+    Skew_Constraint *newSymmetryConstraint(const int &, const Line2d &);
+    Skew_Constraint *newSymmetryConstraint(const int &, const Plane &);
+    Skew_Constraint *newAntiSymmetryConstraint(const int &, const Line2d &);
+    Skew_Constraint *newAntiSymmetryConstraint(const int &, const Plane &);
     MFreedom_Constraint *newMPConstraint(const int &, const int &, const ID &, const ID &);
     MFreedom_Constraint *newEqualDOF(const int &, const int &, const ID &);
     MFreedom_Constraint *newRigidBeam(const int &, const int &);

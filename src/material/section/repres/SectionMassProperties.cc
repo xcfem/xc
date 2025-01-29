@@ -32,7 +32,7 @@
 #include "utility/matrix/Matrix.h"
 #include "utility/geom/pos_vec/Pos2d.h"
 #include "utility/geom/coo_sys/ref_sys/Ref2d2d.h"
-#include "utility/geom/coo_sys/ref_sys/PrincipalAxesOfInertia2D.h"
+#include "utility/geom/coo_sys/ref_sys/PrincipalAxes2D.h"
 #include "material/section/repres/CrossSectionProperties3d.h"
 #include "material/section/repres/CrossSectionProperties2d.h"
 #include "material/section/repres/CrossSectionProperties1d.h"
@@ -98,11 +98,11 @@ double XC::SectionMassProperties::getI2HomogenizedSection(const double &E0) cons
   }
 
 //! @brief Principal axis of inertia of the homogenized section.
-PrincipalAxesOfInertia2D XC::SectionMassProperties::getInertiaAxesHomogenizedSection(const double &E0) const
+PrincipalAxes2D XC::SectionMassProperties::getInertiaAxesHomogenizedSection(const double &E0) const
   {
     const Vector v= getCenterOfMassHomogenizedSection(E0);
     const Pos2d center_of_mass(v[0],v[1]);
-    return PrincipalAxesOfInertia2D(center_of_mass,getIyHomogenizedSection(E0),getIzHomogenizedSection(E0),getPyzHomogenizedSection(E0));
+    return PrincipalAxes2D(center_of_mass,getIyHomogenizedSection(E0),getIzHomogenizedSection(E0),getPyzHomogenizedSection(E0));
   }
 //! @brief Direction of the major principal axis of inertia of the homogenized
 //! section.
@@ -277,11 +277,11 @@ double XC::SectionMassProperties::getI2GrossSection(void) const
   }
 
 //! @brief Principal axis of inertia of the gross section.
-PrincipalAxesOfInertia2D XC::SectionMassProperties::getInertiaAxesGrossSection(void) const
+PrincipalAxes2D XC::SectionMassProperties::getInertiaAxesGrossSection(void) const
   {
     const Vector v= getCenterOfMassGrossSection();
     const Pos2d center_of_mass(v[0],v[1]);
-    return PrincipalAxesOfInertia2D(center_of_mass,getIyGrossSection(),getIzGrossSection(),getPyzGrossSection());
+    return PrincipalAxes2D(center_of_mass,getIyGrossSection(),getIzGrossSection(),getPyzGrossSection());
   }
 //! @brief Direction of the major principal axis of inertia of the gross
 //! section.

@@ -11,14 +11,23 @@ A single freedom constraint specifies the response of a particular degree-of-fre
 - Imposed motions (displacement varying with time along one or more degrees of freedom).
 
 
-## Multi-freedom constraints
+## Multifreedom constraints
 
 A multifreedom constraint imposes a relationship between the displacement for certain dof at two nodes in the model, typically called the _retained node_ and the _constrained node_: $U_c = C_{cr} U_r$
 
-Multi-freedom may be used to model:
+Multifreedom may be used to model:
 
 - rigid-body behavior, in which joints translate and rotate together.
 - equal-displacement behavior, in which displacements along certain degrees of freedom are equal
+
+### Single node multifreedom constraints
+A multi-freedom constraint is called singlepoint or singlenode if it involves displacement components at one node onlys.
+
+#### Skew multifreedom constraints
+Multifreedom constraints where both the retained, and the constrained node are the same.
+
+### Multipoint of multinode multifreedom constraints
+A multi-freedom constraint is called multipoint or multinode if it involves displacement components at different nodes.
 
 
 ## References
@@ -30,3 +39,4 @@ Multi-freedom may be used to model:
 - [Handling a Doubt](https://portwooddigital.com/2023/11/09/handling-a-doubt/)
 - [What Is a Good Penalty Number?](https://portwooddigital.com/2023/11/29/what-is-a-good-penalty-number/)
 - [Constraint Matrix Not Identity](https://portwooddigital.com/2023/11/07/constraint-matrix-not-identity/)
+- [Finite Element Procedures, section 4.2](https://books.google.es/books/about/Finite_Element_Procedures.html?id=rWvefGICfO8C&redir_esc=y)

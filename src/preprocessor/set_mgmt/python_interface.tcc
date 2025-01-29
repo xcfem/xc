@@ -48,6 +48,7 @@ class_<XC::DqPtrsNode, bases<dq_ptrs_node> >("DqPtrsNode",no_init)
   .def("getBnd", &XC::DqPtrsNode::Bnd, "Returns nodes boundary.")
   .def("getCentroid", &XC::DqPtrsNode::getCentroid, "Returns nodes centroid.")
   .def("getRegressionPlane", &XC::DqPtrsNode::getRegressionPlane, "Returns nodes regression plane.")
+  .def("getOrientation", &XC::DqPtrsNode::getOrientation, "Return the orientation of the node cloud.")
   .def(self += self)
   .def(self + self)
   .def(self - self)
@@ -191,6 +192,7 @@ class_<XC::SetMeshComp, XC::SetMeshComp *, bases<XC::SetBase> >("SetMeshComp",no
   .def("getElementMaterials",&XC::SetMeshComp::getElementMaterialNamesPy,"getElementMaterials() return a list with the names of the element materials in the container.")
   .def("pickElemsOfMaterial",&XC::SetMeshComp::pickElemsOfMaterial,"pickElemsOfMaterial(materialName) return the elements that have that material.")
   .def("getBnd", &XC::SetMeshComp::Bnd, "Returns set boundary.")
+  .def("getOrientation", &XC::SetMeshComp::getOrientation, "Return the orientation of the mesh (based on the position of its nodes).")
   .def("fillUpwards", &XC::SetMeshComp::fillUpwards,"add entities upwards.")
   .def("fillDownwards", &XC::SetMeshComp::fillDownwards,"add entities downwards.")
   .def(self += self)
@@ -340,6 +342,7 @@ class_<XC::SetEntities, bases<XC::PreprocessorContainer> >("SetEntities",no_init
   .def("getMaxElementSize",&XC::SetEntities::getMaxElementSize,"Return the maximum size of the elements according to the number of divisions of the lines.")
   .def("getMinElementSize",&XC::SetEntities::getMinElementSize,"Return the minimum size of the elements according to the number of divisions of the lines.")
   .def("getAverageElementSize",&XC::SetEntities::getAverageElementSize,"Return the average size of the elements according to the number of divisions of the lines.")
+  .def("getOrientation", &XC::SetEntities::getOrientation,"Return the orientation of the set point cloud.")
   ;
 
 XC::SetEntities &(XC::Set::*getEntities)(void)= &XC::Set::getEntities;

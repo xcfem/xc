@@ -59,7 +59,7 @@
 #include <domain/mesh/element/special/joint/Joint3D.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <domain/mesh/element/utils/Information.h>
-#include <domain/constraints/MFreedom_Joint3D.h>
+#include <domain/constraints/single_retained_node_constraints/MFreedom_Joint3D.h>
 #include <domain/mesh/node/Node.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include <material/uniaxial/UniaxialMaterial.h>

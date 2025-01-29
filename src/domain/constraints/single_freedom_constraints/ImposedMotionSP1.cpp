@@ -1,0 +1,159 @@
+//----------------------------------------------------------------------------
+//  XC program; finite element analysis code
+//  for structural analysis and design.
+//
+//  Copyright (C)  Luis C. Pérez Tato
+//
+//  This program derives from OpenSees <http://opensees.berkeley.edu>
+//  developed by the  «Pacific earthquake engineering research center».
+//
+//  Except for the restrictions that may arise from the copyright
+//  of the original program (see copyright_opensees.txt)
+//  XC is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or 
+//  (at your option) any later version.
+//
+//  This software is distributed in the hope that it will be useful, but 
+//  WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details. 
+//
+//
+// You should have received a copy of the GNU General Public License 
+// along with this program.
+// If not, see <http://www.gnu.org/licenses/>.
+//----------------------------------------------------------------------------
+/* ****************************************************************** **
+**    OpenSees - Open System for Earthquake Engineering Simulation    **
+**          Pacific Earthquake Engineering Research Center            **
+**                                                                    **
+**                                                                    **
+** (C) Copyright 1999, The Regents of the University of California    **
+** All Rights Reserved.                                               **
+**                                                                    **
+** Commercial use of this program without express permission of the   **
+** University of California, Berkeley, is strictly prohibited.  See   **
+** file 'COPYRIGHT'  in main directory for information on usage and   **
+** redistribution,  and for a DISCLAIMER OF ALL WARRANTIES.           **
+**                                                                    **
+** Developed by:                                                      **
+**   Frank McKenna (fmckenna@ce.berkeley.edu)                         **
+**   Gregory L. Fenves (fenves@ce.berkeley.edu)                       **
+**   Filip C. Filippou (filippou@ce.berkeley.edu)                     **
+**                                                                    **
+** ****************************************************************** */
+                                                                        
+// $Revision: 1.4 $
+// $Date: 2005/11/22 19:41:17 $
+// $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/single_freedom_constraints/ImposedMotionSP1.cpp,v $
+                                                                        
+// Written: fmk 
+// Created: 11/00
+// Revision: A
+//
+// Purpose: This file contains the implementation of class XC::ImposedMotionSP1.
+
+#include <domain/constraints/single_freedom_constraints/ImposedMotionSP1.h>
+#include <classTags.h>
+#include <utility/matrix/Vector.h>
+#include <utility/actor/objectBroker/FEM_ObjectBroker.h>
+#include <domain/load/groundMotion/GroundMotion.h>
+#include <domain/mesh/node/Node.h>
+#include <domain/domain/Domain.h>
+#include <domain/load/pattern/LoadPattern.h>
+#include <utility/matrix/ID.h>
+
+//! @brief constructor for FEM_ObjectBroker
+XC::ImposedMotionSP1::ImposedMotionSP1(void)
+  :ImposedMotionBase(CNSTRNT_TAG_ImposedMotionSP1),destroyMotion(0) {}
+
+//! @brief constructor for a subclass to use
+XC::ImposedMotionSP1::ImposedMotionSP1(int tag, int node, int ndof, int pattern, int motion)
+ :ImposedMotionBase(CNSTRNT_TAG_ImposedMotionSP1,tag, node, ndof,pattern,motion) {}
+
+//! @brief Returns true if it's an homogeneous constraint
+//! (prescribed value for the DOF is zero).
+bool XC::ImposedMotionSP1::isHomogeneous(void) const
+  { return false; }
+
+//! @brief Applies constraint at the pseudo-time being passed
+//! as parameter.
+int XC::ImposedMotionSP1::applyConstraint(double time)
+  {
+    // on first 
+    if(theGroundMotion == 0 || theNode == 0)
+      {
+        int retval= getMotion();
+        if(retval!=0)
+          { return retval; }
+      }
+
+    // now get the response from the ground motion
+    theGroundMotionResponse = theGroundMotion->getDispVelAccel(time);
+
+    return 0;
+  }
+
+//! @brief Send object members through the communicator argument.
+int XC::ImposedMotionSP1::sendData(Communicator &comm)
+  {
+    int result= ImposedMotionBase::sendData(comm);
+    result+= comm.sendInt(destroyMotion,getDbTagData(),CommMetaData(8));
+    return result;
+  }
+
+//! @brief Receives object members through the communicator argument.
+int XC::ImposedMotionSP1::recvData(const Communicator &comm)
+  {
+    int res= ImposedMotionBase::recvData(comm);
+    res+= comm.receiveInt(destroyMotion,getDbTagData(),CommMetaData(8));
+    return res;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::ImposedMotionSP1::getPyDict(void) const
+  {
+    boost::python::dict retval= ImposedMotionBase::getPyDict();
+    retval["destroyMotion"]= this->destroyMotion;
+    return retval;
+  }
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::ImposedMotionSP1::setPyDict(const boost::python::dict &d)
+  {
+    ImposedMotionBase::setPyDict(d);
+    this->destroyMotion= boost::python::extract<int>(d["destroyMotion"]);
+  }
+
+//! @brief Sends object through the communicator argument.
+int XC::ImposedMotionSP1::sendSelf(Communicator &comm)
+  {
+    static ID data(9);
+    int result= sendData(comm);
+    const int dbTag = this->getDbTag();
+    result+= comm.sendIdData(getDbTagData(),dbTag);
+    if(result < 0)
+      std::cerr << "ImposedMotionSP1::sendSelf() - failed to send extra data\n";
+    return result;
+  }
+
+//! @brief Receives object through the communicator argument.
+int XC::ImposedMotionSP1::recvSelf(const Communicator &comm)
+  {
+    static ID data(9);
+    const int dataTag= getDbTag();
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
+    if(res<0)
+      std::cerr << "ImposedMotionSP1::recvSelf() - data could not be received\n" ;
+    else
+      res+= recvData(comm);
+    return res;
+  }
+
+//! @brief Printing.
+void XC::ImposedMotionSP1::Print(std::ostream &s, int flag) const
+  {
+    s << "ImposedMotionSP1: " << this->getTag();
+    s << "\t XC::Node: " << this->getNodeTag();
+    s << " DOF: " << this->getDOF_Number() << std::endl;    
+  }

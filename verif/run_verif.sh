@@ -62,32 +62,34 @@ echo "$BLEU" "  Config tests." "$NORMAL"
 python tests/utility/config/test_project_dir_tree_01.py
 echo "$BLEU" "  Geometry tests." "$NORMAL"
 echo "$BLEU" "    Vectors." "$NORMAL"
-python tests/utility/geom/vector2d_test_01.py
-python tests/utility/geom/vector2d_test_02.py
-python tests/utility/geom/vector3d_test_01.py
-python tests/utility/geom/vector3d_test_02.py
-python tests/utility/geom/vector3d_test_03.py
-python tests/utility/geom/vector3d_angle_test_01.py
-python tests/utility/geom/vector3d_angle_test_02.py
+python tests/utility/geom/vectors/vector2d_test_01.py
+python tests/utility/geom/vectors/vector2d_test_02.py
+python tests/utility/geom/vectors/vector3d_test_01.py
+python tests/utility/geom/vectors/vector3d_test_02.py
+python tests/utility/geom/vectors/vector3d_test_03.py
+python tests/utility/geom/vectors/vector3d_angle_test_01.py
+python tests/utility/geom/vectors/vector3d_angle_test_02.py
 echo "$BLEU" "    Points." "$NORMAL"
-python tests/utility/geom/pos2d_test_01.py
-python tests/utility/geom/pos2d_test_02.py
-python tests/utility/geom/pos3d_test_01.py
-python tests/utility/geom/pos3d_list_test_01.py
-python tests/utility/geom/closest_pair_of_points.py
+python tests/utility/geom/points/pos2d_test_01.py
+python tests/utility/geom/points/pos2d_test_02.py
+python tests/utility/geom/points/pos3d_test_01.py
+python tests/utility/geom/points/pos3d_list_test_01.py
+python tests/utility/geom/points/pos2d_list_test_01.py
+python tests/utility/geom/points/closest_pair_of_points.py
+python tests/utility/geom/points/point_cloud_2d_test_01.py
+python tests/utility/geom/points/point_cloud_3d_test_01.py
 echo "$BLEU" "    Lines and rays." "$NORMAL"
-python tests/utility/geom/line2d_test_01.py
-python tests/utility/geom/line2d_test_02.py
-python tests/utility/geom/line2d_test_03.py
-python tests/utility/geom/line3d_test_01.py
-python tests/utility/geom/line3d_test_02.py
-python tests/utility/geom/line3d_test_03.py
-python tests/utility/geom/line3d_test_04.py
-python tests/utility/geom/line3d_test_05.py
-python tests/utility/geom/line2d_intersection_test.py
-python tests/utility/geom/line_segment_intersection_test.py
-python tests/utility/geom/ray2d_test.py
-python tests/utility/geom/pos2d_list_test_01.py
+python tests/utility/geom/lines/line2d_test_01.py
+python tests/utility/geom/lines/line2d_test_02.py
+python tests/utility/geom/lines/line2d_test_03.py
+python tests/utility/geom/lines/line3d_test_01.py
+python tests/utility/geom/lines/line3d_test_02.py
+python tests/utility/geom/lines/line3d_test_03.py
+python tests/utility/geom/lines/line3d_test_04.py
+python tests/utility/geom/lines/line3d_test_05.py
+python tests/utility/geom/lines/line2d_intersection_test.py
+python tests/utility/geom/lines/line_segment_intersection_test.py
+python tests/utility/geom/lines/ray2d_test.py
 echo "$BLEU" "    Segments." "$NORMAL"
 python tests/utility/geom/segments/segment2d_test_01.py
 python tests/utility/geom/segments/segment2d_test_02.py
@@ -212,32 +214,34 @@ python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_3d_test
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_3d_test_06.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_3d_test_07.py
 echo "$BLEU" "    Planes." "$NORMAL"
-python tests/utility/geom/plane_test_01.py
-python tests/utility/geom/plane_test_02.py
-python tests/utility/geom/plane_test_03.py
-#python tests/utility/geom/plane_test_04.py
-python tests/utility/geom/plane_test_05.py
+python tests/utility/geom/plane/plane_test_01.py
+python tests/utility/geom/plane/plane_test_02.py
+python tests/utility/geom/plane/plane_test_03.py
+#python tests/utility/geom/plane/plane_test_04.py
+python tests/utility/geom/plane/plane_test_05.py
+python tests/utility/geom/plane/plane_test_06.py
 echo "$BLEU" "    3D polyhedrons." "$NORMAL"
 python tests/utility/geom/polyhedrons/test_hexahedron_01.py
-echo "$BLEU" "    2D half planes." "$NORMAL"
-python tests/utility/geom/halfplane2d_test_01.py
-python tests/utility/geom/halfplane2d_test_02.py
-python tests/utility/geom/halfplane2d_test_03.py
-python tests/utility/geom/halfplane2d_test_04.py
-python tests/utility/geom/halfplane2d_test_05.py
-python tests/utility/geom/halfplane2d_test_06.py
-python tests/utility/geom/halfplane2d_test_07.py
+echo "$BLEU" "    Half spaces." "$NORMAL"
+echo "$BLEU" "      2D half planes." "$NORMAL"
+python tests/utility/geom/half_spaces/halfplane2d_test_01.py
+python tests/utility/geom/half_spaces/halfplane2d_test_02.py
+python tests/utility/geom/half_spaces/halfplane2d_test_03.py
+python tests/utility/geom/half_spaces/halfplane2d_test_04.py
+python tests/utility/geom/half_spaces/halfplane2d_test_05.py
+python tests/utility/geom/half_spaces/halfplane2d_test_06.py
+python tests/utility/geom/half_spaces/halfplane2d_test_07.py
 
-# echo "$BLEU" "  3D half spaces." "$NORMAL"
-python tests/utility/geom/halfspace3d_test_01.py
-python tests/utility/geom/halfspace3d_test_02.py
-python tests/utility/geom/halfspace3d_test_03.py
-python tests/utility/geom/halfspace3d_test_04.py
-python tests/utility/geom/halfspace3d_test_05.py
-python tests/utility/geom/halfspace3d_test_06.py
-python tests/utility/geom/halfspace3d_test_07.py
-# python tests/utility/geom/halfspace3d_test_08.py
-# python tests/utility/geom/halfspace3d_test_09.py
+# echo "$BLEU" "    3D half spaces." "$NORMAL"
+python tests/utility/geom/half_spaces/halfspace3d_test_01.py
+python tests/utility/geom/half_spaces/halfspace3d_test_02.py
+python tests/utility/geom/half_spaces/halfspace3d_test_03.py
+python tests/utility/geom/half_spaces/halfspace3d_test_04.py
+python tests/utility/geom/half_spaces/halfspace3d_test_05.py
+python tests/utility/geom/half_spaces/halfspace3d_test_06.py
+python tests/utility/geom/half_spaces/halfspace3d_test_07.py
+# python tests/utility/geom/half_spaces/halfspace3d_test_08.py
+# python tests/utility/geom/half_spaces/halfspace3d_test_09.py
 echo "$BLEU" "    Coordinate systems." "$NORMAL"
 python tests/utility/geom/coordinate_systems/coosys_test_01.py
 python tests/utility/geom/coordinate_systems/refsys3d3d_test_01.py
@@ -856,6 +860,8 @@ python tests/preprocessor/sets/geometric_queries/test_pick_node_on_point.py
 python tests/preprocessor/sets/geometric_queries/test_pick_entities.py
 python tests/preprocessor/sets/geometric_queries/test_pick_elements_in_zone.py
 python tests/preprocessor/sets/geometric_queries/test_get_regression_plane.py
+python tests/preprocessor/sets/geometric_queries/test_set_get_orientation_01.py
+python tests/preprocessor/sets/geometric_queries/test_set_get_orientation_02.py
 
 echo "$BLEU" "  Preprocessor grid model tests." "$NORMAL"
 python tests/preprocessor/grid_model/test_grid_model_01.py
@@ -889,30 +895,39 @@ python tests/preprocessor/import_export/json/test_import_xc_model_01.py
 
 #Tests about constraints.
 echo "$BLEU" "Displacement constraints tests." "$NORMAL"
-python tests/constraints/remove_fix_01.py
-python tests/constraints/remove_fix_02.py
-python tests/constraints/remove_equal_dof_01.py
+echo "$BLEU" "  Single freedom constraints tests." "$NORMAL"
+python tests/constraints/single_freedom_constraints/remove_fix_01.py
+python tests/constraints/single_freedom_constraints/remove_fix_02.py
+python tests/constraints/single_freedom_constraints/test_load_pattern_fix_01.py
+echo "$BLEU" "  Single retained node constraints tests." "$NORMAL"
+python tests/constraints/single_retained_node_constraints/test_rigid_beam_01.py
+python tests/constraints/single_retained_node_constraints/test_rigid_rod_01.py
+python tests/constraints/single_retained_node_constraints/remove_equal_dof_01.py
+echo "$BLEU" "  Multiple retained node constraints tests." "$NORMAL"
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_01.py
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_02.py
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_03.py
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_04.py
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_05.py
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_06.py
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_07.py
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_08.py
+python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_09.py
+echo "$BLEU" "  Symmetry constraints tests." "$NORMAL"
+python tests/constraints/skew_constraints/test_symmetry_constraint_01.py
+python tests/constraints/skew_constraints/test_symmetry_constraint_02.py
+python tests/constraints/skew_constraints/test_symmetry_constraint_03.py
+python tests/constraints/skew_constraints/test_symmetry_constraint_04.py
+python tests/constraints/skew_constraints/test_symmetry_constraint_05.py
+echo "$BLEU" "  Misc. freedom constraints tests." "$NORMAL"
 python tests/constraints/test_elastic_bearing_01.py
 python tests/constraints/test_elastic_bearing_02.py
 python tests/constraints/test_elastic_bearing_03.py
 python tests/constraints/test_elastic_bearing_04.py
-python tests/constraints/test_rigid_beam_01.py
-python tests/constraints/test_rigid_rod_01.py
 python tests/constraints/test_huge_beam.py
 python tests/constraints/test_huge_truss.py
 python tests/constraints/test_fulcrum_01.py
 python tests/constraints/test_release_beam_node_01.py
-python tests/constraints/test_load_pattern_fix_01.py
-echo "$BLEU" "  Glue node to element constraints tests." "$NORMAL"
-python tests/constraints/test_glue_node_to_element_01.py
-python tests/constraints/test_glue_node_to_element_02.py
-python tests/constraints/test_glue_node_to_element_03.py
-python tests/constraints/test_glue_node_to_element_04.py
-python tests/constraints/test_glue_node_to_element_05.py
-python tests/constraints/test_glue_node_to_element_06.py
-python tests/constraints/test_glue_node_to_element_07.py
-python tests/constraints/test_glue_node_to_element_08.py
-python tests/constraints/test_glue_node_to_element_09.py
 
 #Load tests
 echo "$BLEU" "Loads tests." "$NORMAL"

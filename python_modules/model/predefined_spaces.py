@@ -720,6 +720,28 @@ class PredefinedSpace(object):
         self.constraints.newSPConstraint(nodeTag,dof,prescribedDisp)
         self.fixedNodesTags.add(nodeTag)
 
+    def newSymmetryConstraint(self, nodeTag:int, plane):
+        ''' Prescribe a symmetry boundary condition displacement 
+            for the given node.
+
+        :param nodeTag: tag of the node.
+        :param plane: plane (in the case of 3D problems) or line (in the case
+                      of 2D problems) that defines the symmetry.
+        '''
+        self.constraints.newSymmetryConstraint(nodeTag, plane)
+        self.fixedNodesTags.add(nodeTag)
+
+    def newAntiSymmetryConstraint(self, nodeTag:int, plane):
+        ''' Prescribe a anti-symmetry boundary condition displacement 
+            for the given node.
+
+        :param nodeTag: tag of the node.
+        :param plane: plane (in the case of 3D problems) or line (in the case
+                      of 2D problems) that defines the symmetry.
+        '''
+        self.constraints.newAntiSymmetryConstraint(nodeTag, plane)
+        self.fixedNodesTags.add(nodeTag)
+
     def fixNode(self, DOFpattern, nodeTag, restrainedNodeId: str= None):
         '''Restrain DOF of a node according to the DOFpattern, which is a given
          string of type '0FF' that matches the DOFs (uX,uY,uZ)
@@ -1515,14 +1537,20 @@ class PredefinedSpace(object):
         :param pointList: list of vertices.
         '''
         numPoints= len(pointList)
-        surfaceHandler= self.preprocessor.getMultiBlockTopology.getSurfaces
-        pntTags= list()
-        for p in pointList:
-            pntTags.append(p.tag)
-        if(numPoints==4):
-            retval= surfaceHandler.newQuadSurfacePts(pntTags[0], pntTags[1], pntTags[2], pntTags[3])
+        retval= None
+        if(numPoints>2):
+            surfaceHandler= self.preprocessor.getMultiBlockTopology.getSurfaces
+            pntTags= list()
+            for p in pointList:
+                pntTags.append(p.tag)
+            if(numPoints==4):
+                retval= surfaceHandler.newQuadSurfacePts(pntTags[0], pntTags[1], pntTags[2], pntTags[3])
+            else:
+                retval= surfaceHandler.newPolygonalFacePts(pntTags)
         else:
-            retval= surfaceHandler.newPolygonalFacePts(pntTags)
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; got '+str(numPoints)+' points, at least 3 were expected.')
         return retval
 
     def meshIFCStructuralSurfaces(self, elementType: str, elemSize: float, materialDict, xcSet= None):

@@ -58,7 +58,7 @@
 
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <domain/mesh/element/utils/Information.h>
-#include <domain/constraints/MFreedom_Joint2D.h>
+#include <domain/constraints/single_retained_node_constraints/MFreedom_Joint2D.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include <material/uniaxial/UniaxialMaterial.h>
 #include <domain/mesh/element/special/joint/Joint2D.h>

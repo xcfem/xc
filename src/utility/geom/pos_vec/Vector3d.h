@@ -89,6 +89,11 @@ class Vector3d: public ProtoGeom
     bool EsUnitario(const double &tol= mchne_eps_dbl) const;
     Vector3d getNormalized(void) const;
     void Normalize(void);
+    int getIndexMaxValue(void) const;
+    int getIndexMinValue(void) const;
+    int getIndexMaxAbsValue(void) const;
+    int getIndexMinAbsValue(void) const;
+    Vector3d Normal(void) const;
     Vector3d Perpendicular(const Vector3d &v) const;
     virtual GEOM_FT GetDot(const Vector3d &v) const;
     virtual GEOM_FT GetDot(const FT_matrix &m) const;

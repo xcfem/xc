@@ -31,6 +31,12 @@ class_<polyPos2d, bases<dq_pos2d> >("PolyPos2d")
   .def("getIthCoordinates", &polyPos2d::getIthCoordinates, "Return the list of values for j-th coordinate.")
   ;
 
+class_<PointCloud2d, bases<polyPos2d> >("PointCloud2d")
+  .def(init<>()) // Default constructor.
+  .def(init<const boost::python::list &>()) // From point list constructor. 
+  .def("getPrincipalAxes", &PointCloud2d::getPrincipalAxes, "Return the principal axes according to the orientation of the points in the space.")
+  ;
+
 class_<dq_pos3d>("dq_pos3d")
   .def(vector_indexing_suite<dq_pos3d>() )
   ;
@@ -40,4 +46,12 @@ class_<polyPos3d, bases<dq_pos3d> >("PolyPos3d")
   .def("close", &polyPos3d::close, "Close the point list (insert the first point as its last one).")
   .def("getIthCoordinates", &polyPos3d::getIthCoordinates, "Return the list of values for j-th coordinate.")
   ;
+
+class_<PointCloud3d, bases<polyPos3d> >("PointCloud3d")
+  .def(init<>()) // Default constructor.
+  .def(init<const boost::python::list &>()) // From point list constructor. 
+  .def("getPrincipalAxes", &PointCloud3d::getPrincipalAxes, "Return the principal axes according to the orientation of the points in the space.")
+  ;
+
+
 

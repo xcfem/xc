@@ -28,7 +28,7 @@
 
 #include <material/section/repres/CrossSectionProperties3d.h>
 #include "utility/utils/misc_utils/inertia.h"
-#include "utility/geom/coo_sys/ref_sys/PrincipalAxesOfInertia2D.h"
+#include "utility/geom/coo_sys/ref_sys/PrincipalAxes2D.h"
 #include <domain/mesh/element/utils/Information.h>
 
 #include <utility/matrix/Vector.h>
@@ -131,10 +131,10 @@ double XC::CrossSectionProperties3d::getRadiusOfGyrationY(void) const
   { return sqrt(this->Iy()/this->A()); }
 
 //! @brief Returns the principal axis of inertia.
-PrincipalAxesOfInertia2D XC::CrossSectionProperties3d::getInertiaAxes(void) const
+PrincipalAxes2D XC::CrossSectionProperties3d::getInertiaAxes(void) const
   {
     const Pos2d center_of_mass(0,0);
-    return PrincipalAxesOfInertia2D(center_of_mass,Iy(),Iz(),Iyz());
+    return PrincipalAxes2D(center_of_mass,Iy(),Iz(),Iyz());
   }
 //! @brief Returns principal axis I (strong).
 Vector2d XC::CrossSectionProperties3d::getAxis1VDir(void) const

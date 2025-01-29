@@ -29,6 +29,7 @@
 class BND3d;
 class Trf3d;
 class Vector3d;
+class PrincipalAxes3D;
 
 //Auxiliary functions for manipulation of position lists.
 
@@ -40,6 +41,8 @@ void transform(GeomObj::list_Pos3d &l,const Trf3d &);
 Pos3d getPMax(const GeomObj::list_Pos3d &);
 Pos3d getPMin(const GeomObj::list_Pos3d &);
 BND3d getBnd(const GeomObj::list_Pos3d &);
+PrincipalAxes3D get_principal_axes_of_inertia(const GeomObj::list_Pos3d &);
+
 GeomObj::list_Pos3d python_to_list_pos3d(const boost::python::list &);
 
 //! @brief Returns the maximum corner angle quality parameter.

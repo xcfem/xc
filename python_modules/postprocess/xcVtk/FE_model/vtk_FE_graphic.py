@@ -192,7 +192,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         # else:
         #   lmsg.error("Entity: "+ self.gridRecord.entToLabel+ " unknown.")
 
-    def FEmeshGraphic(self,setToDisplay,caption= '',cameraParameters= vtk_graphic_base.CameraParameters('XYZPos'),defFScale=0.0):
+    def FEmeshGraphic(self,setToDisplay,caption= '',cameraParameters= vtk_graphic_base.CameraParameters('XYZPos'), defFScale=0.0):
         ''' Graphic of the FE mesh
 
         :param setToDisplay:   XC set of elements to be displayed
@@ -312,10 +312,10 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         if(type(xcSets)==list):
             for s in xcSets:
                 self.defineMeshActorsSet(s, field, defFScale, nodeSize)
-                self.displaySPconstraints(s, scaleConstr, defFScale)
+                self.displayConstraints(s, scaleConstr, defFScale)
         else:
             self.defineMeshActorsSet(xcSets, field, defFScale, nodeSize)
-            self.displaySPconstraints(xcSets, scaleConstr, defFScale)
+            self.displayConstraints(xcSets, scaleConstr, defFScale)
         self.renderer.ResetCamera()
         if(diagrams):
             for d in diagrams:
@@ -348,7 +348,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
     def displayNodalLoads(self, preprocessor, loadPattern, color, fScale):
         '''Display the all nodal loads defined in a load pattern
 
-        :param preprocessor: preprocessor
+        :param preprocessor: preprocessor for the FE problem.
         :param loadPattern: load pattern
         :param color: color of the symbols (arrows)
         :param fScale: factor to apply to current displacement of nodes 
@@ -425,31 +425,23 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         '''
         diagram.addDiagramToScene(self,orientScbar,titleScbar)
 
-    def displaySPconstraints(self, setToDisplay, scale, defFScale=0.0):
-        ''' Display single point constraints.
+    def getSingleFreedomConstraintsData(self, preprocessor, nodsInSet):
+        ''' Return the data to define the symbols of the single-fredom
+            boundary conditions.
 
-        :param setToDisplay: set to be displayed
-        :param scale: scale for SPConstraints symbols.
-        :param defFScale: factor to apply to current displacement of nodes 
-                    so that the display position of each node equals to
-                    the initial position plus its displacement multiplied
-                    by this factor. (Defaults to 0.0, i.e. display of 
-                    initial/undeformed shape)
+        :param preprocessor: preprocessor for the FE problem.
+        :param nodsInSet: set of node tags whose constrains will
+                          be displayed.
         '''
-        prep= setToDisplay.getPreprocessor
-        nodInSet= setToDisplay.nodes.getTags()
-        elementAvgSize= setToDisplay.elements.getAverageSize(False)
-        LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus()
-        cScale= scale*min(elementAvgSize, .15*LrefModSize)
-        #direction vectors for each DOF
-        vx,vy,vz=[1,0,0],[0,1,0],[0,0,1]
-        DOFdirVct=(vx,vy,vz,vx,vy,vz)
+        # direction vectors for each DOF
+        vx,vy,vz= [1,0,0],[0,1,0],[0,0,1]
+        DOFdirVct= (vx,vy,vz,vx,vy,vz)
         pointGraphicData= list()
-        spIter= prep.getDomain.getConstraints.getSPs
+        spIter= preprocessor.getDomain.getConstraints.getSPs
         sp= spIter.next()
         while sp:
             nod= sp.getNode
-            if nod.tag in nodInSet:
+            if nod.tag in nodsInSet:
                 # Extract data.
                 vPos= nod.getInitialPos3d
                 dof= sp.getDOFNumber
@@ -462,10 +454,67 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                     color= [0,1,0]
                 spGraphicData={'vPos':vPos,'vDir':vDir,'symbType':symbType,'color':color}
                 pointGraphicData.append(spGraphicData)
-                #utils_vtk.drawVtkSymb(symbType= symbType, renderer=self.renderer, RGBcolor=color, vPos= vPos, vDir= vDir, scale= cScale)
             sp= spIter.next()
-        utils_vtk.draw_vtk_symbols(pointData= pointGraphicData, renderer=self.renderer, scale= cScale)
-        return
+        return pointGraphicData
+        
+    def getSkewConstraintsData(self, preprocessor, nodsInSet, defFScale):
+        ''' Return the data to define the symbols of the skew
+            boundary conditions.
+
+        :param preprocessor: preprocessor for the FE problem.
+        :param nodsInSet: set of node tags whose constrains will
+                          be displayed.
+        :param defFScale: factor to apply to current displacement of nodes 
+                    so that the display position of each node equals to
+                    the initial position plus its displacement multiplied
+                    by this factor. (Defaults to 0.0, i.e. display of 
+                    initial/undeformed shape)
+        '''
+        # direction vectors for each DOF
+        pointGraphicData= list()
+        mpIter= preprocessor.getDomain.getConstraints.getMPs
+        mp= mpIter.next()
+        while mp:
+            tipo= mp.type()
+            if('ymmetry' in tipo): # is a skew constraint.
+                nod= mp.getNode
+                if nod.tag in nodsInSet:
+                    # Extract data.
+                    vPos= nod.getCurrentPos3d(defFScale)
+                    normal= mp.normal
+                    if(len(normal)==2):
+                        normal= xc.Vector([normal[0], normal[1], 0.0])
+                    color= [normal[0], normal[1], normal[2]]
+                    symbType= 'plane'
+                    mpGraphicData={'vPos':vPos,'vDir':normal,'symbType':symbType,'color':color}
+                    pointGraphicData.append(mpGraphicData)
+            mp= mpIter.next()
+        return pointGraphicData
+    
+    def displayConstraints(self, setToDisplay, scale, defFScale=0.0):
+        ''' Display single point constraints.
+
+        :param setToDisplay: set to be displayed
+        :param scale: scale for SPConstraints symbols.
+        :param defFScale: factor to apply to current displacement of nodes 
+                    so that the display position of each node equals to
+                    the initial position plus its displacement multiplied
+                    by this factor. (Defaults to 0.0, i.e. display of 
+                    initial/undeformed shape)
+        '''
+        prep= setToDisplay.getPreprocessor
+        nodsInSet= set(setToDisplay.nodes.getTags())
+        # Get constraint data.
+        pointGraphicData= self.getSingleFreedomConstraintsData(preprocessor= prep, nodsInSet= nodsInSet)
+        pointGraphicData.extend(self.getSkewConstraintsData(preprocessor= prep, nodsInSet= nodsInSet, defFScale= defFScale))
+        # Create VTK actors.
+        elementAvgSize= setToDisplay.elements.getAverageSize(False)
+        LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus()
+        cScale= scale*min(elementAvgSize, .15*LrefModSize)
+        constraintSymbols= utils_vtk.create_actors_for_vtk_symbols(pointData= pointGraphicData, scale= cScale)
+        # Add actors to renderer.
+        for actor in constraintSymbols:
+            self.renderer.AddActor(actor)
                     
 def VtkLoadIdsNodes(recordGrid):
     '''Load node labels. Not yet implemented.'''

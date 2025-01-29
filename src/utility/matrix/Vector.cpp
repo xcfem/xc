@@ -141,6 +141,16 @@ XC::Vector::Vector(const std::vector<double> &v)
     for(int i=0; i<sz; i++)
       theData[i]= v[i];
   }
+//! @brief Constructor from initializer list.
+XC::Vector::Vector(const std::initializer_list<double> &l)
+  : sz(0), theData(nullptr), fromFree(0)
+  {
+    alloc(l.size());
+    int ii= 0;
+    // copy the components
+    for(std::initializer_list<double>::const_iterator i= l.begin(); i!=l.end(); i++, ii++)      
+      this->theData[ii]= *i;    
+  }
 
 //! @brief Constructor (Python interface).
 XC::Vector::Vector(const boost::python::list &l)
@@ -787,6 +797,94 @@ double XC::Vector::NormInf(void) const
     double retval= 0.0;
     for(int i=0; i<sz; i++)
       retval= std::max(retval,fabs(theData[i]));
+    return retval;
+  }
+
+//! @brief Returns the index of the maximum of the values of
+//! the components.
+int XC::Vector::getIndexMaxValue(void) const
+  {
+    int retval= -1;
+    if(sz>0)
+      {
+	retval= 0;
+	double maxComponentValue= theData[retval];
+	for(int i=1; i<sz; i++)
+	  {
+	    const double &value= theData[i];
+	    if(value>maxComponentValue)
+	      {
+		maxComponentValue= value;
+		retval= i;
+	      }
+	  }
+      }
+    return retval;
+  }
+  
+//! @brief Returns the index of the maximum of the values of
+//! the components.
+int XC::Vector::getIndexMinValue(void) const
+  {
+    int retval= -1;
+    if(sz>0)
+      {
+	retval= 0;
+	double minComponentValue= theData[retval];
+	for(int i=1; i<sz; i++)
+	  {
+	    const double &value= theData[i];
+	    if(value<minComponentValue)
+	      {
+		minComponentValue= value;
+		retval= i;
+	      }
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Returns the index of the maximum of the values of
+//! the components.
+int XC::Vector::getIndexMaxAbsValue(void) const
+  {
+    int retval= -1;
+    if(sz>0)
+      {
+	retval= 0;
+	double maxComponentValue= abs(theData[retval]);
+	for(int i=1; i<sz; i++)
+	  {
+	    const double value= abs(theData[i]);
+	    if(value>maxComponentValue)
+	      {
+		maxComponentValue= value;
+		retval= i;
+	      }
+	  }
+      }
+    return retval;
+  }
+  
+//! @brief Returns the index of the maximum of the values of
+//! the components.
+int XC::Vector::getIndexMinAbsValue(void) const
+  {
+    int retval= -1;
+    if(sz>0)
+      {
+	retval= 0;
+	double minComponentValue= abs(theData[retval]);
+	for(int i=1; i<sz; i++)
+	  {
+	    const double value= abs(theData[i]);
+	    if(value<minComponentValue)
+	      {
+		minComponentValue= value;
+		retval= i;
+	      }
+	  }
+      }
     return retval;
   }
 

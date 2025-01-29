@@ -112,8 +112,8 @@ class ID;
 */
 class MFreedom_Constraint: public MFreedom_ConstraintBase
   {
+    static const int dummyRetainedNodeTag= -1;
   protected:
-    int retainedNodeTag; //!< Tag of the retained node.
     ID retainDOF; //!< ID of retained DOF at retained node
     Vector Ur0; //!< initial displacement at retained node  (same size as retainDOF)
     
@@ -125,23 +125,18 @@ class MFreedom_Constraint: public MFreedom_ConstraintBase
     int recvData(const Communicator &comm);
   public:
     // constructors        
-    MFreedom_Constraint(int tag , int classTag ); // Arash
-    MFreedom_Constraint(int tag); // LCPT
+    MFreedom_Constraint(int tag , int classTag= CNSTRNT_TAG_MFreedom_Constraint); // Arash
 
-    MFreedom_Constraint(int tag,int nodeRetain, int nodeConstr, int classTag);    
+    MFreedom_Constraint(int tag, int nodeConstr, int classTag= CNSTRNT_TAG_MFreedom_Constraint);    
 
-    MFreedom_Constraint(int tag,int nodeRetain, int nodeConstr, const ID &constrainedDOF, const ID &retainedDOF);    
-    MFreedom_Constraint(int tag,int nodeRetain, int nodeConstr, const ID &constrainedDOF, const ID &retainedDOF,int classTag);    
+    MFreedom_Constraint(int tag, int nodeConstr, const ID &constrainedDOF, const ID &retainedDOF,int classTag= CNSTRNT_TAG_MFreedom_Constraint);    
 
-    MFreedom_Constraint(int tag,int nodeRetain, int nodeConstr, Matrix &constrnt,ID &constrainedDOF,ID &retainedDOF);
+    MFreedom_Constraint(int tag, int nodeConstr, Matrix &constrnt,ID &constrainedDOF,ID &retainedDOF, int classTag= CNSTRNT_TAG_MFreedom_Constraint);
 
     // methods to get information about the constraint
     //! @brief Returns the tag of the retained (or primary) node.
     virtual inline const int &getNodeRetained(void) const
-      { return retainedNodeTag; }
-    //! @brief Returns the tag of the retained (or primary) node.
-    virtual inline int &getNodeRetained(void) 
-      { return retainedNodeTag; }
+      { return dummyRetainedNodeTag; }
     //! @brief Returns the number of retained nodes.
     virtual size_t getNumRetainedNodes(void) const
       { return 1; }
@@ -163,7 +158,7 @@ class MFreedom_Constraint: public MFreedom_ConstraintBase
     
     int getVtkCellType(void) const;
 
-    int addResistingForceToNodalReaction(bool inclInertia);
+    virtual int addResistingForceToNodalReaction(bool inclInertia);
 
     virtual void Print(std::ostream &s, int flag =0) const;
 

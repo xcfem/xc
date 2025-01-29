@@ -141,6 +141,7 @@ Vector3d Plane::Normal(void) const
     retval.Normalize();
     return retval;    
   }
+
 //! @brief Return un vector ortogonal al devuelto por Normal().
 Vector3d Plane::Base1(void) const
   {
@@ -148,6 +149,7 @@ Vector3d Plane::Base1(void) const
     retval.Normalize();
     return retval;
   }
+
 //! @brief Return un vector ortogonal al devuelto por Normal() y al devuelto por Base1().
 Vector3d Plane::Base2(void) const
   {

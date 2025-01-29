@@ -149,13 +149,53 @@ boost::python::list Vector2d::getPyList(void) const
     return retval;
   }
 
-//! @brief Return el vector normal a éste.
-Vector2d Vector2d::Normal(void) const
-  { return Vector2d(y(),-x()); }
-
 //! @brief Normalize vector.
 void Vector2d::Normalize(void)
   { operator=(this->getNormalized()); }
+
+//! @brief Returns the index of the maximum of the values of
+//! the components.
+int Vector2d::getIndexMaxValue(void) const
+  {
+    int retval= 0;
+    const GEOM_FT maxComponentValue= this->x();
+    if(this->y()>maxComponentValue)
+      {	retval= 1; }
+    return retval;
+  }
+  
+//! @brief Returns the index of the maximum of the values of
+//! the components.
+int Vector2d::getIndexMinValue(void) const
+  {
+    int retval= 0;
+    const GEOM_FT minComponentValue= this->x();
+    if(this->y()<minComponentValue)
+      { retval= 1; }
+    return retval;
+  }
+
+//! @brief Returns the index of the maximum of the values of
+//! the components.
+int Vector2d::getIndexMaxAbsValue(void) const
+  {
+    int retval= 0;
+    const GEOM_FT maxComponentValue= std::abs(this->x());
+    if(std::abs(this->y())>maxComponentValue)
+      { retval= 1; }
+    return retval;
+  }
+  
+//! @brief Returns the index of the maximum of the values of
+//! the components.
+int Vector2d::getIndexMinAbsValue(void) const
+  {
+    int retval= 0;
+    const GEOM_FT minComponentValue= std::abs(this->x());
+    if(std::abs(this->y())<minComponentValue)
+      { retval= 1; }
+    return retval;
+  }
 
 Dir2d Vector2d::getDirection(void) const
   { return Dir2d(*this); }
@@ -227,12 +267,19 @@ Vector2d Vector2d::Rotated(const double &ang_rad) const
     return retval;
   }
 
+//! @brief Return a vector normal to this one.
+Vector2d Vector2d::Normal(void) const
+  { return Vector2d(y(),-x()); }
+
+//! @brief Return a vector perpendicular to this one with
+//! the given orientation.
 Vector2d Vector2d::Perpendicular(const Orientacion &o) const
   {
     Vector2d retval;
     retval.cgvct = cgvct.perpendicular(o);
     return retval;
   }
+
 //! @brief Return the vector obtained from projecting v
 //! onto the perpendicular direction to this vector.
 //! Used to orthogonalize a base.

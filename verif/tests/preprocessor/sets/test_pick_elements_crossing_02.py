@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-''' Pick the element crossing (i.e. having nodes inside and outside) a polygon. Home made test.'''
+''' Pick the element crossing (i.e. having nodes inside and outside) a
+ polygon. Home made test.
+'''
 
 from __future__ import print_function
 

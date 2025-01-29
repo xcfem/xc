@@ -93,7 +93,7 @@ modelSpace.fixNode000_000(n1.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-modelSpace.setCurrentLoadPattern("0")
+modelSpace.setCurrentLoadPattern(lp0.name)
 el.vector3dUniformLoadGlobal(xc.Vector([f*math.sqrt(2)/2,f*math.sqrt(2)/2,0]))
 
 

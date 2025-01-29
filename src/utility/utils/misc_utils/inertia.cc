@@ -38,3 +38,6 @@ double theta_inertia(const double &Ix,const double &Iy,const double &Pxy)
     else
       return (atan(-2*Pxy/(Ix-Iy)))/2.0;
   }
+
+
+

@@ -24,7 +24,7 @@
 #define GEOMOBJ2D_H
 
 #include "utility/geom/GeomObj.h"
-#include "utility/geom/coo_sys/ref_sys/PrincipalAxesOfInertia2D.h"
+#include "utility/geom/coo_sys/ref_sys/PrincipalAxes2D.h"
 
 class BND2d;
 class Dir2d;
@@ -83,8 +83,8 @@ class GeomObj2d: public GeomObj
     Ref2d2d PrincipalAxesOfInertia(void) const;
     GEOM_FT I1(void) const;
     GEOM_FT I2(void) const;
-    inline PrincipalAxesOfInertia2D Inertia(void)
-      { return PrincipalAxesOfInertia2D(getCenterOfMass(),Ix(),Iy(),Pxy()); }
+    inline PrincipalAxes2D Inertia(void)
+      { return PrincipalAxes2D(getCenterOfMass(),Ix(),Iy(),Pxy()); }
     GEOM_FT I( const unsigned short int &i,
               const unsigned short int &j) const;
     virtual inline GEOM_FT IArea(void) const

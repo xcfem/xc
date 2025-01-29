@@ -105,6 +105,7 @@ class ID: public CommandEntity, public std::vector<int>
     explicit ID(const v_int &);
     ID(const boost::python::list &);
     explicit ID(const std::set<int> &);
+    explicit ID(const std::initializer_list<int> &); 
     template <class InputIterator>
     inline ID(InputIterator first, InputIterator last)
       : CommandEntity(), std::vector<int>(first,last) {}

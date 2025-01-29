@@ -39,6 +39,7 @@
 class Pos3d;
 class GeomObj3d;
 class BND3d;
+class PrincipalAxes3D;
 
 namespace XC {
 class Pnt;
@@ -150,6 +151,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     //! @brief Assigns the points set.
     void setPoints(const lst_ptr_points &pts)
       { points= pts; }
+    PrincipalAxes3D getOrientation(void) const;
     void sel_points_from_list(const ID &);
     void selPointsFromListPy(const boost::python::list &);
     bool In(const Pnt *) const;
