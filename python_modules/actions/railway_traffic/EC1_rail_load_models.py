@@ -163,9 +163,12 @@ class LocomotiveLoad(ll.LocomotiveLoad):
     def getNosingLoad(self):
         ''' Return the value of the nosing load.'''
         return 100e3*self.classificationFactor # No dynamic factor for nosing load.
+    
+def get_locomotive_LM1(nAxes= 4, axleLoad= 250e3, xSpacing= 1.6, ySpacing= 1.435):
+    ''' Returns a locomotive model corresponding to load model 1 of Eurocode 1
 
-
-locomotiveLM1= LocomotiveLoad(nAxes= 4, axleLoad= 250e3, xSpacing= 1.6, ySpacing= 1.435)
+    '''
+    return LocomotiveLoad(nAxes= nAxes, axleLoad= axleLoad, xSpacing= xSpacing, ySpacing= ySpacing)
 
 class TrainLoadModel(tlm.TrainLoadModel):
     ''' Model for the loads of a according to EC-1.'''
