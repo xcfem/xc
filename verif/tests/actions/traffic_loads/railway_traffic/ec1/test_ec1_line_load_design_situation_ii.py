@@ -15,7 +15,8 @@ __email__= "l.pereztato@gmail.com"
 
 from actions.railway_traffic import EC1_rail_load_models
 
-trainLoadModel= EC1_rail_load_models.TrainLoadModel(locomotive= EC1_rail_load_models.locomotiveLM1, uniformLoad= 80e3, dynamicFactor= 1.0, classificationFactor= 1.33)
+locomotiveLM1= EC1_rail_load_models.get_locomotive_LM1()
+trainLoadModel= EC1_rail_load_models.TrainLoadModel(locomotive= locomotiveLM1, uniformLoad= 80e3, dynamicFactor= 1.0, classificationFactor= 1.33)
 
 # Compute some values
 qA2d8m= trainLoadModel.getUniformLineLoadForDesignSituationII(bridgeLength= 8.0)

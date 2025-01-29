@@ -28,7 +28,6 @@
 #include <cfloat>
 #include <algorithm>
 #include <boost/math/special_functions/round.hpp>
-#include <eigen3/Eigen/Dense>
 
 //Elementos neutros para la suma y el producto.
 inline double neutro_suma(const double &)
@@ -223,7 +222,7 @@ void eigen_decomposition_2x2(const double A[2][2], double V[2][2], double d[2]);
 /// eigenvalues in d.
 void eigen_decomposition_3x3(const double A[3][3], double V[3][3], double d[3]);
 
-Eigen::MatrixXd compute_covariance_matrix(const Eigen::MatrixXd &);
+std::vector< std::vector<double> > compute_covariance_matrix(const std::vector< std::vector<double> > &);
 
 #endif
 

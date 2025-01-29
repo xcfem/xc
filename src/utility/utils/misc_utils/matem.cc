@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdio>
 #include "utility/utils/misc_utils/colormod.h"
+#include <eigen3/Eigen/Dense>
 
 double dicot_zero(double f(double), double a, double b,double &err)
   {
@@ -157,17 +158,41 @@ void eigen_decomposition_3x3(const double A[3][3], double V[3][3], double d[3])
   }
 
 // !@brief Covariance matrix.
-Eigen::MatrixXd compute_covariance_matrix(const Eigen::MatrixXd &data)
+std::vector< std::vector<double> > compute_covariance_matrix(const std::vector< std::vector<double> > &data)
   {
-    // Calculate the mean of each column
-    Eigen::RowVectorXd mean= data.colwise().mean();
+    std::vector< std::vector<double> > retval;
+    const size_t data_nrows= data.size();
+    if(data_nrows>0)
+      {
+	// Compute the covariance matrix of the point cloud.
+	const size_t data_ncols= data[0].size();
+	Eigen::MatrixXd eigen_data(data_nrows, data_ncols);
+	// Populate eigen_data;
+	for(size_t i= 0; i<data_nrows; i++)
+	  {
+	    const std::vector<double> &row= data[i];
+	    for(size_t j= 0; j<data_ncols; j++)
+	      { eigen_data(i,j)= row[j]; }
+	  }
+	// Calculate the mean of each column
+	Eigen::RowVectorXd mean= eigen_data.colwise().mean();
+	
+	// Subtract the mean from each column
+	Eigen::MatrixXd centered = eigen_data.rowwise() - mean;
     
-    // Subtract the mean from each column
-    Eigen::MatrixXd centered = data.rowwise() - mean;
-    
-    // Compute the covariance matrix
-    Eigen::MatrixXd retval= (centered.adjoint() * centered) / double(data.rows() - 1);
-    
+	// Compute the covariance matrix
+	Eigen::MatrixXd tmp= (centered.adjoint() * centered) / double(eigen_data.rows() - 1);
+	// Populate retval;
+	const size_t eigen_matrix_nrows= tmp.rows();
+	const size_t eigen_matrix_ncols= tmp.cols();
+	retval= std::vector<std::vector<double> >(eigen_matrix_nrows, std::vector<double>(eigen_matrix_ncols, 0.0));
+	for(size_t i= 0; i<eigen_matrix_nrows; i++)
+	  {
+	    std::vector<double> &row= retval[i];
+	    for(size_t j= 0; j<eigen_matrix_ncols; j++)
+	      { row[j]= tmp(i,j); }
+	  }
+      }
     return retval;
   }
 
