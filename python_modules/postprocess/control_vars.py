@@ -1748,7 +1748,7 @@ def write_control_vars_from_phantom_elements(controlVarsDict, outputCfg):
             with open(jsonFileName) as f:
                dataDict= json.load(f)
         except IOError:
-            lmsg.error("can't read from file: "+str(inputFileName))
+            lmsg.error("can't read from file: "+str(outputFileName))
     else:
         dataDict= dict()
     elementDataDict= get_element_data_dict(controlVarsDict= controlVarsDict, controlVarName= controlVarName)
