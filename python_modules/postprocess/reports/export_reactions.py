@@ -10,7 +10,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# from misc_utils import log_messages as lmsg
+import sys
+from misc_utils import log_messages as lmsg
 from postprocess import output_styles
 import csv
 
@@ -36,6 +37,9 @@ def getReactionsDict(combName, restrainedNodes):
             nReactionForce= n.getReactionForce3d
             nReactionMoment= n.getReactionMoment3d
             nodeDict['reactions']= {'Fx':nReactionForce.x,'Fy':nReactionForce.y,'Fz':nReactionForce.z,'Mx':nReactionMoment.x,'My':nReactionMoment.y,'Mz':nReactionMoment.z}
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(methodName+"; the node container is empty or null. Nothing done.")                
     return combReactionsDict
 
 def exportReactions(reactionsDict, fName, outputStyle= output_styles.defaultOutputStyle):
