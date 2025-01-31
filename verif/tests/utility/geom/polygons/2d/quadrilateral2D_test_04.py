@@ -71,32 +71,3 @@ if abs(errC)<1e-10 and abs(errA)<1e-10:
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')
-    
-# Graphic output
-import matplotlib.pyplot as plt
-def getXYVertices(plg):
-    x= list()
-    y= list()
-    vertices= plg.getVertices()
-    for p in vertices:
-        x.append(p.x)
-        y.append(p.y)
-    x.append(vertices[0].x)
-    y.append(vertices[0].y)
-    return x,y
-    
-fig = plt.figure()
-ax = fig.add_subplot(111)
-x,y= getXYVertices(plg)
-ax.plot(x,y,'tab:gray')
-pA= testSegment.getFromPoint()
-pB= testSegment.getToPoint()
-xi= [pA.x, pB.x]
-yi= [pA.y, pB.y]
-plt.plot(xi, yi, 'tab:blue')
-pa= clippedSegment.getFromPoint()
-pb= clippedSegment.getToPoint()
-xi= [pa.x, pb.x]
-yi= [pa.y, pb.y]
-plt.plot(xi, yi, 'tab:red')
-plt.show()
