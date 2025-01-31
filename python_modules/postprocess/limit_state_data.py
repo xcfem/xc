@@ -248,7 +248,10 @@ class LimitStateData(object):
          :param nmbComb: combination name.
          :param constrainedNodes: constrainedNodes.
         '''
-        return er.getReactionsDict(nmbComb, constrainedNodes)
+        retval= None
+        if(constrainedNodes is not None):
+            retval= er.getReactionsDict(nmbComb, constrainedNodes)
+        return retval
     
     def getDisplacementsFileName(self):
         '''Return the file name to read: combination name, node number and 
@@ -374,7 +377,8 @@ class LimitStateData(object):
         :param constrainedNodes: constrained nodes (defaults to None)
         '''
         self.internalForcesDict.update(self.getInternalForcesDict(combName,calcSet.elements))
-        self.reactionsDict.update(self.getReactionsDict(combName, constrainedNodes= constrainedNodes))
+        if(constrainedNodes is not None):
+            self.reactionsDict.update(self.getReactionsDict(combName, constrainedNodes= constrainedNodes))
         self.displacementsDict.update(self.getDisplacementsDict(combName, calcSet.nodes))
         
     def analyzeLoadCombinations(self, combContainer, setCalc, solutionProcedureType= defaultSolutionProcedureType, constrainedNodeSet= None, bucklingMembers= None):
