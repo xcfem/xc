@@ -25,9 +25,7 @@
 #include "Tetrahedron3d.h"
 #include "utility/geom/pos_vec/Pos3d.h"
 #include "utility/geom/d3/HalfSpace3d.h"
-
-
-
+#include "utility/geom/lists/PointCloud3d.h"
 #include "utility/matrices/m_double.h"
 #include "utility/geom/pos_vec/Pos3dList.h"
 
@@ -124,6 +122,13 @@ bool Hexahedron3d::In(const Pos3d &p,const double &tol) const
     std::cerr << "Hexahedron3d::" << __FUNCTION__
               << "  not implemented yet." << std::endl;
     return false;
+  }
+
+//! @brief Return the oriented bounding box that contains
+//! all the points in the cloud.
+Hexahedron3d get_oriented_bounding_box(const PointCloud3d &pointCloud)
+  {
+    return pointCloud.getOrientedBoundingBox();
   }
 
 

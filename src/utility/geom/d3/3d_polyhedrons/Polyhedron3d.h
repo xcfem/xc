@@ -121,6 +121,7 @@ class Polyhedron3d: public PolyhedronBase
     std::deque<Polygon3d> GetCaras(void) const;
 
     GeomObj::list_Pos3d getVertices(void) const;
+    boost::python::list getVerticesPy(void) const;
 
     virtual GEOM_FT getArea(void) const;
 

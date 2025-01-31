@@ -28,7 +28,18 @@
 
 class HalfSpace3d;
 class Polyhedron3d;
-
+class PointCloud3d;
+//  
+//       4 +---------+ 7     
+//        /|        /|       
+//       / |       / |       
+//    5 +---------+6 |       
+//      |  |      |  |       
+//      |3 +------|--+ 2     
+//      | /       | /
+//      |/        |/
+//    0 +---------+ 1
+//
 //! @ingroup GEOM
 //
 //! @brief Hexahedron.
@@ -44,4 +55,5 @@ class Hexahedron3d: public Polyhedron3d
     bool In(const Pos3d &,const double &) const;
   };
 
+Hexahedron3d get_oriented_bounding_box(const PointCloud3d &);
 #endif

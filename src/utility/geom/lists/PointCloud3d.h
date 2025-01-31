@@ -27,6 +27,7 @@
 #include "utility/geom/pos_vec/Pos3d.h"
 
 class PrincipalAxes3D;
+class Hexahedron3d;
 
 //! @ingroup GEOM
 //
@@ -38,6 +39,7 @@ class PointCloud3d : public PolyPos<Pos3d>
     explicit PointCloud3d(const std::deque<Pos3d> &);
     explicit PointCloud3d(const boost::python::list &);
     PrincipalAxes3D getPrincipalAxes(void) const;
+    Hexahedron3d getOrientedBoundingBox(void) const;
   };
 
 #endif

@@ -24,6 +24,7 @@ class_<PolyhedronBase, bases<GeomObj3d>, boost::noncopyable >("PolyhedronBase", 
   ;
 
 class_<Polyhedron3d, bases<PolyhedronBase> >("Polyhedron3d")
+  .def("getVertices", &Polyhedron3d::getVerticesPy, "Return the vertices of the polyhedron")
   ;
 
 class_<Tetrahedron3d, bases<PolyhedronBase> >("Polyhedron3d")
@@ -36,3 +37,5 @@ class_<Hexahedron3d, bases<Polyhedron3d> >("Hexahedron3d")
   .add_property("volume", &Hexahedron3d::getVolume, "returns object volume.")
   ;
 
+Hexahedron3d (*get_cube_oriented_bounding_box)(const PointCloud3d &)= &get_oriented_bounding_box;
+def("get_oriented_bounding_box", get_cube_oriented_bounding_box, "Return the oriented bounding box that contains the given point cloud.");

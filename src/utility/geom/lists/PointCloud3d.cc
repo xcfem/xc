@@ -23,6 +23,9 @@
 #include "utility/geom/lists/PointCloud3d.h"
 #include "utility/geom/lists/utils_list_pos3d.h"
 #include "utility/geom/coo_sys/ref_sys/PrincipalAxes3D.h"
+#include "utility/geom/coo_sys/ref_sys/Ref3d3d.h"
+#include "utility/utils/misc_utils/colormod.h"
+#include "utility/geom/d3/3d_polyhedrons/Hexahedron3d.h"
 
 //! @brief Constructor.
 PointCloud3d::PointCloud3d(void)
@@ -41,5 +44,64 @@ PointCloud3d::PointCloud3d(const boost::python::list &l)
 PrincipalAxes3D PointCloud3d::getPrincipalAxes(void) const
   {
     PrincipalAxes3D retval= get_principal_axes_of_inertia(*this);
+    return retval;
+  }
+
+//! @brief Return the oriented bounding box that contains
+//! all the points in the cloud.
+Hexahedron3d PointCloud3d::getOrientedBoundingBox(void) const
+  {
+    Hexahedron3d retval;
+    if(!this->empty())
+      {	  
+	// Get principal axes reference system.
+	PrincipalAxes3D p_axis= this->getPrincipalAxes();
+	const Ref3d3d ref= p_axis.getAxis();
+	// Initialize maximum and minimum relative coordinates.
+        Pos3d p= ref.getLocalPosition((*this)[0]);
+	double x_min= p.x();
+	double x_max= x_min;
+	double y_min= p.y();
+	double y_max= y_min;
+	double z_min= p.z();
+	double z_max= z_min;
+	const size_t sz= this->size();
+	for(size_t i= 1; i<sz; i++)
+	  {
+	    p= ref.getLocalPosition((*this)[i]);
+	    x_min= std::min(p.x(), x_min);
+	    x_max= std::max(p.x(), x_max);
+	    y_min= std::min(p.y(), y_min);
+	    y_max= std::max(p.y(), y_max);
+	    z_min= std::min(p.z(), z_min);
+	    z_max= std::max(p.z(), z_max);
+	  }
+	const GEOM_FT length= x_max-x_min;
+	const GEOM_FT width= y_max-y_min;
+	const GEOM_FT height= z_max-z_min;
+	const Vector3d i= Vector3d(1,0,0);
+	const Vector3d j= Vector3d(0,1,0);
+	const Vector3d k= Vector3d(0,0,1);
+	const Pos3d p0_local= Pos3d(x_min, y_min, z_min);
+	const Pos3d p1_local= p1_local+length*i;
+	const Pos3d p2_local= p2_local+width*j;
+	const Pos3d p3_local= p1_local+width*j;
+	const Pos3d p4_local= p3_local+height*k;
+	const Pos3d p5_local= p0_local+height*k;
+	const Pos3d p6_local= p1_local+height*k;
+	const Pos3d p7_local= p2_local+height*k;
+	retval= Hexahedron3d(ref.getGlobalPosition(p0_local),
+			     ref.getGlobalPosition(p1_local),
+			     ref.getGlobalPosition(p2_local),
+			     ref.getGlobalPosition(p3_local),
+			     ref.getGlobalPosition(p4_local),
+			     ref.getGlobalPosition(p5_local),
+			     ref.getGlobalPosition(p6_local),
+			     ref.getGlobalPosition(p7_local));
+      }
+    else
+      std::cerr << Color::red << "PointCloud3d::" << __FUNCTION__
+	        << "; point cloud is empty the returned bounding box has no meaning."
+	        << Color::def << std::endl;
     return retval;
   }

@@ -148,11 +148,25 @@ GeomObj::list_Pos3d Polyhedron3d::GetVerticesCara(const Facet_const_iterator &f)
     return retval;
   }
 
+//! @brief Return the vertices of the polyhedron.
 GeomObj::list_Pos3d Polyhedron3d::getVertices(void) const
   {
     GeomObj::list_Pos3d retval;
     for(CGPolyhedron_3::Vertex_const_iterator vi= cgpolyhedron.vertices_begin();vi!=cgpolyhedron.vertices_end();vi++)
       retval.push_back(Pos3d(vi->point()));
+    return retval;
+  }
+
+//! @brief Return the vertices of the polyhedron in a Python list.
+boost::python::list Polyhedron3d::getVerticesPy(void) const
+  {
+    GeomObj::list_Pos3d tmp= this->getVertices();
+    boost::python::list retval;
+    for(GeomObj::list_Pos3d::const_iterator i= tmp.begin(); i!=tmp.end(); i++)
+      {
+	const Pos3d &p= *i;
+	retval.append(p);
+      }
     return retval;
   }
 

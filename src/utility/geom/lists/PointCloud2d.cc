@@ -26,7 +26,6 @@
 #include "utility/geom/coo_sys/ref_sys/Ref2d2d.h"
 #include "utility/utils/misc_utils/colormod.h"
 #include "utility/geom/d2/2d_polygons/Quadrilateral2d.h"
-#include <CGAL/min_quadrilateral_2.h>
 
 //! @brief Constructor.
 PointCloud2d::PointCloud2d(void)
