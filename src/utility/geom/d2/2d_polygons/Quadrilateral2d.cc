@@ -24,6 +24,7 @@
 #include "Triangle2d.h"
 #include "utility/geom/pos_vec/Pos2dArray.h"
 #include "utility/geom/d1/Segment2d.h"
+#include "utility/geom/lists/PointCloud2d.h"
 #include <vector>
 
 // Vertex order: 1->2->3->4.
@@ -358,4 +359,9 @@ Pos2dArray Quadrilateral2d::genBilinMesh(const size_t &nDiv12,const size_t &nDiv
             }
       }
     return retval;
+  }
+
+Quadrilateral2d get_oriented_bounding_box(const PointCloud2d &pointCloud)
+  {
+    return pointCloud.getOrientedBoundingBox();
   }

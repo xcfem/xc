@@ -28,6 +28,7 @@
 
 class Triangle2d;
 class Pos2dArray;
+class PointCloud2d;
 
 // Vertex order: 1->2->3->4.
 //
@@ -65,4 +66,6 @@ class Quadrilateral2d: public Polygon2d
     Pos2dArray genMesh(int n1,int n2) const;
     Pos2dArray genBilinMesh(const size_t &n1,const size_t &n2) const;
   };
+
+Quadrilateral2d get_oriented_bounding_box(const PointCloud2d &);
 #endif

@@ -27,6 +27,7 @@
 #include "utility/geom/pos_vec/Pos2d.h"
 
 class PrincipalAxes2D;
+class Quadrilateral2d;
 
 //! @ingroup GEOM
 //
@@ -38,6 +39,7 @@ class PointCloud2d : public PolyPos<Pos2d>
     explicit PointCloud2d(const std::deque<Pos2d> &);
     explicit PointCloud2d(const boost::python::list &);
     PrincipalAxes2D getPrincipalAxes(void) const;
+    Quadrilateral2d getOrientedBoundingBox(void) const;
   };
 
 #endif

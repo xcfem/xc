@@ -23,6 +23,10 @@
 #include "utility/geom/lists/PointCloud2d.h"
 #include "utility/geom/lists/utils_list_pos2d.h"
 #include "utility/geom/coo_sys/ref_sys/PrincipalAxes2D.h"
+#include "utility/geom/coo_sys/ref_sys/Ref2d2d.h"
+#include "utility/utils/misc_utils/colormod.h"
+#include "utility/geom/d2/2d_polygons/Quadrilateral2d.h"
+#include <CGAL/min_quadrilateral_2.h>
 
 //! @brief Constructor.
 PointCloud2d::PointCloud2d(void)
@@ -41,5 +45,50 @@ PointCloud2d::PointCloud2d(const boost::python::list &l)
 PrincipalAxes2D PointCloud2d::getPrincipalAxes(void) const
   {
     PrincipalAxes2D retval= get_principal_axes_of_inertia(*this);
+    return retval;
+  }
+
+//! @brief Return the oriented bounding box that contains
+//! all the points in the cloud.
+Quadrilateral2d PointCloud2d::getOrientedBoundingBox(void) const
+  {
+    Quadrilateral2d retval;
+    if(!this->empty())
+      {	  
+	// Get principal axes reference system.
+	PrincipalAxes2D p_axis= this->getPrincipalAxes();
+	const Ref2d2d ref= p_axis.getAxis();
+	// Initialize maximum and minimum relative coordinates.
+        Pos2d p= ref.getLocalPosition((*this)[0]);
+	double x_min= p.x();
+	double x_max= x_min;
+	double y_min= p.y();
+	double y_max= y_min;
+	const size_t sz= this->size();
+	for(size_t i= 1; i<sz; i++)
+	  {
+	    p= ref.getLocalPosition((*this)[i]);
+	    x_min= std::min(p.x(), x_min);
+	    x_max= std::max(p.x(), x_max);
+	    y_min= std::min(p.y(), y_min);
+	    y_max= std::max(p.y(), y_max);
+	  }
+	const GEOM_FT length= x_max-x_min;
+	const GEOM_FT height= y_max-y_min;
+	const Vector2d i= Vector2d(1,0);
+	const Vector2d j= Vector2d(0,1);
+	const Pos2d p1_local= Pos2d(x_min, y_min);
+	const Pos2d p2_local= p1_local+length*i;
+	const Pos2d p3_local= p2_local+height*j;
+	const Pos2d p4_local= p1_local+height*j;
+	retval= Quadrilateral2d(ref.getGlobalPosition(p1_local),
+				ref.getGlobalPosition(p2_local),
+				ref.getGlobalPosition(p3_local),
+				ref.getGlobalPosition(p4_local));
+      }
+    else
+      std::cerr << Color::red << "PointCloud2d::" << __FUNCTION__
+	        << "; point cloud is empty the returned bounding box has no meaning."
+	        << Color::def << std::endl;
     return retval;
   }
