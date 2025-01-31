@@ -38,7 +38,7 @@ for v, vRef in zip(boundingBoxVertices, referenceVertices):
     err+= v.dist2(vRef)
 err= math.sqrt(err)
 
-print(err)
+# print(err)
 
 import os
 from misc_utils import log_messages as lmsg
@@ -48,24 +48,24 @@ if(err<1e-3):
 else:
     lmsg.error('test: '+fname+' ERROR.')
 
-# Graphic output
-import matplotlib.pyplot as plt
-def get_xy_vertices(vertices):
-    x= list()
-    y= list()
-    for p in vertices:
-        x.append(p.x)
-        y.append(p.y)
-    x.append(vertices[0].x)
-    y.append(vertices[0].y)
-    return x,y
+# # Graphic output
+# import matplotlib.pyplot as plt
+# def get_xy_vertices(vertices):
+#     x= list()
+#     y= list()
+#     for p in vertices:
+#         x.append(p.x)
+#         y.append(p.y)
+#     x.append(vertices[0].x)
+#     y.append(vertices[0].y)
+#     return x,y
     
-fig = plt.figure()
-ax = fig.add_subplot(111)
-x, y= get_xy_vertices(vertices= boundingBox.getVertices())
-ax.plot(x,y,'tab:gray')
-x, y= get_xy_vertices(vertices= linePoints)
-ax.plot(x,y,'tab:green')
-x, y= get_xy_vertices(vertices= circumferencePoints)
-ax.plot(x,y,'tab:blue')
-plt.show()
+# fig = plt.figure()
+# ax = fig.add_subplot(111)
+# x, y= get_xy_vertices(vertices= boundingBox.getVertices())
+# ax.plot(x,y,'tab:gray')
+# x, y= get_xy_vertices(vertices= linePoints)
+# ax.plot(x,y,'tab:green')
+# x, y= get_xy_vertices(vertices= circumferencePoints)
+# ax.plot(x,y,'tab:blue')
+# plt.show()
