@@ -105,29 +105,19 @@ def getLastNode(line):
     lw= LineWrapper(line)
     return lw.getLastNode()
 
-#Exact parabola
-def fit_parabola(x, y):
-    '''Fits the equation "y = ax^2 + bx + c" given exactly 3 points as two
-    lists or arrays of x & y coordinates
-    '''
-    A = np.zeros((3,3), dtype=float)
-    A[:,0] = x**2
-    A[:,1] = x
-    A[:,2] = 1
-    a, b, c = np.linalg.solve(A, y)
-    return a, b, c
+def get_regression_plane_from_edge_list(edge_list):
+    ''' Compute the regression plane from the points of the given edges.
 
-def eq_points_parabola(startS,stopS,numPts,a,b,c,angSX):
-    '''Returns equispaced nPts points of the parabola "z=as^2 + bs + c" 
-    in the range [startS,stopS].
-    S is a coordinate by the straight line projection of the parabola on the XY plane.
-    angSX is the angle (in rad) between that line and the X-axis
+    :param edge_list: list of edges.
     '''
-    s_parab=np.linspace(startS,stopS,numPts)
-    x_parab=np.linspace(startS*math.cos(angSX),stopS*math.cos(angSX),numPts)
-    y_parab=np.linspace(startS*math.sin(angSX),stopS*math.sin(angSX),numPts)
-    z_parab=a*s_parab**2+b*s_parab+c
-    return x_parab,y_parab,z_parab
+    retval= None
+    if(len(edge_list)>0):
+        points= [edge_list[0].getP1().getPos]
+        for l in edge_list[1:]:
+            points.append(l.getP1().getPos)
+        points.append(edge_list[-1].getP2().getPos)
+        retval= geom.Plane3d(points)
+    return retval
 
 def rect2DPolygon(xCent,yCent,Lx,Ly):
     '''Rectangular polygon

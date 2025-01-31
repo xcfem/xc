@@ -23,7 +23,7 @@ import geom
 from materials.ec2 import EC2_materials
 from materials.sections import section_properties as sp
 from materials.prestressing import prestressed_concrete
-from model.geometry import geom_utils
+from geom_utils import parabola
 import numpy as np
 from scipy.constants import g
 from scipy.interpolate import interp1d
@@ -57,8 +57,8 @@ k= mu*0.0035 # wobble coefficient per meter length of cable (adjusted to match
 ## Tendon definition, layout and friction losses
 n_points_rough= 5 # number of points provided to the interpolation algorithm
 n_points_fine= 101 # number of points interpolated
-a,b,c=geom_utils.fit_parabola(x=np.array([0,L/2.0,L]), y=np.array([eEnds,eDuctMidspan,eEnds]))
-x_parab_rough,y_parab_rough,z_parab_rough= geom_utils.eq_points_parabola(0,L,n_points_rough,a,b,c,angl_Parab_XZ)
+a,b,c= parabola.fit_parabola(x=np.array([0,L/2.0,L]), y=np.array([eEnds,eDuctMidspan,eEnds]))
+x_parab_rough,y_parab_rough,z_parab_rough= parabola.eq_points_parabola(0,L,n_points_rough,a,b,c,angl_Parab_XZ)
 ### Tendon geometry.
 tendon= prestressed_concrete.PrestressTendon([])
 tendon.roughCoordMtr= np.array([x_parab_rough,y_parab_rough,z_parab_rough])

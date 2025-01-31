@@ -31,7 +31,7 @@ __email__= "ana.ortega@xcengineering.xyz"
 import numpy as np
 import math
 from materials.prestressing import prestressed_concrete as presconc
-from model.geometry import geom_utils
+from geom_utils import parabola
 
 # Geometry 
 lBeam=20 # beam span [m]
@@ -64,8 +64,8 @@ P_re=3214.8 # prestress force at right end [kN]
 
 # XC model
 # Tendon [m] definition, layout and friction losses
-a,b,c=geom_utils.fit_parabola(x=np.array([0,lBeam/2.0,lBeam]), y=np.array([eEnds,eMidspan,eEnds]))
-x_parab_rough,y_parab_rough,z_parab_rough= geom_utils.eq_points_parabola(0,lBeam,n_points_rough,a,b,c,angl_Parab_XZ)
+a,b,c= parabola.fit_parabola(x=np.array([0,lBeam/2.0,lBeam]), y=np.array([eEnds,eMidspan,eEnds]))
+x_parab_rough,y_parab_rough,z_parab_rough= parabola.eq_points_parabola(0,lBeam,n_points_rough,a,b,c,angl_Parab_XZ)
 
 tendon= presconc.PrestressTendon([])
 tendon.roughCoordMtr= np.array([x_parab_rough,y_parab_rough,z_parab_rough])

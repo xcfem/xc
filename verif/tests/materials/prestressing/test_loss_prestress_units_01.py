@@ -48,9 +48,9 @@ deltaL_m=5e-3          #anchorage draw-in (provided by manufacturer) [m]
 
 
 #Exact parabola
-from model.geometry import geom_utils
-a,b,c=geom_utils.fit_parabola(x=np.array([0,lBeam_mm/2.0,lBeam_mm]), y=np.array([eEnds,eMidspan_mm,eEnds]))
-x_parab_rough,y_parab_rough,z_parab_rough=geom_utils.eq_points_parabola(0,lBeam_mm,n_points_rough,a,b,c,angl_Parab_XZ)
+from geom_utils import parabola
+a,b,c= parabola.fit_parabola(x=np.array([0,lBeam_mm/2.0,lBeam_mm]), y=np.array([eEnds,eMidspan_mm,eEnds]))
+x_parab_rough,y_parab_rough,z_parab_rough= parabola.eq_points_parabola(0,lBeam_mm,n_points_rough,a,b,c,angl_Parab_XZ)
 
 #Tendon [mm] definition, layout and friction losses
 tendon_mm=presconc.PrestressTendon([])
@@ -67,8 +67,8 @@ stressAfterLossAnch_mm=tendon_mm.stressAfterLossFriction-lssAnch_mm
 Laffected_mm=tendon_mm.projXYcoordZeroAnchLoss[0] # effective length of tendon affected by
                            #the anchorage slip in extremity 1 [mm]
 #Tendon [m] definition, layout and friction losses
-a,b,c=geom_utils.fit_parabola(x=np.array([0,lBeam_m/2.0,lBeam_m]), y=np.array([eEnds,eMidspan_m,eEnds]))
-x_parab_rough,y_parab_rough,z_parab_rough=geom_utils.eq_points_parabola(0,lBeam_m,n_points_rough,a,b,c,angl_Parab_XZ)
+a,b,c= parabola.fit_parabola(x=np.array([0,lBeam_m/2.0,lBeam_m]), y=np.array([eEnds,eMidspan_m,eEnds]))
+x_parab_rough,y_parab_rough,z_parab_rough= parabola.eq_points_parabola(0,lBeam_m,n_points_rough,a,b,c,angl_Parab_XZ)
 
 tendon_m=presconc.PrestressTendon([])
 tendon_m.roughCoordMtr=np.array([x_parab_rough,y_parab_rough,z_parab_rough])

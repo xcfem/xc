@@ -62,9 +62,9 @@ sigma_right_end=P_right_end*1e3/Aps #stress at right-end [MPa]
 
 #XC calculation
 #Exact parabola
-from model.geometry import geom_utils
-a,b,c=geom_utils.fit_parabola(x=np.array([0,lBeam/2.0,lBeam]), y=np.array([eEnds,eMidspan,eEnds]))
-x_parab_rough,y_parab_rough,z_parab_rough=geom_utils.eq_points_parabola(0,lBeam,n_points_rough,a,b,c,angl_Parab_XZ)
+from geom_utils import parabola
+a,b,c= parabola.fit_parabola(x=np.array([0,lBeam/2.0,lBeam]), y=np.array([eEnds,eMidspan,eEnds]))
+x_parab_rough,y_parab_rough,z_parab_rough= parabola.eq_points_parabola(0,lBeam,n_points_rough,a,b,c,angl_Parab_XZ)
 
 #Tendon definition, layout and friction losses
 tendon=presconc.PrestressTendon([])

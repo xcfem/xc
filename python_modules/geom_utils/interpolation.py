@@ -28,4 +28,5 @@ def interpEquidistPoints(xi,yi,nDiv):
     xInterp=[xi[0]+i*step for i in range(nDiv+1)]
     yInterp=[float(fInterp(x)) for x in xInterp]
     return yInterp
+
     
