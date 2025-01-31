@@ -764,6 +764,7 @@ python tests/preprocessor/geom_entities/test_is_closer_than_method_01.py
 python tests/preprocessor/geom_entities/test_is_closer_than_method_02.py
 python tests/preprocessor/geom_entities/test_is_closer_than_method_03.py
 python tests/preprocessor/geom_entities/test_is_closer_than_method_04.py
+python tests/preprocessor/geom_entities/test_get_regression_plane_from_edge_list.py
 
 echo "$BLEU" "  Meshing routines tests." "$NORMAL"
 python tests/preprocessor/meshing/test_surface_axes_01.py
