@@ -43,3 +43,12 @@ if(ratio1<1e-8):
 else:
     lmsg.error('test: '+fname+' ERROR.')
 
+# # Graphic output
+# from postprocess.xcVtk import vtk_geom
+# from postprocess.xcVtk import vtk_graphic_base
+# from vtk.vtkCommonColor import vtkNamedColors
+
+# colors= vtkNamedColors()
+
+# vtkCubeActor= vtk_geom.get_vtk_cube_actor(h, color= colors.GetColor3d('Tomato'))
+# vtk_graphic_base.setup_render_window(windowName= 'PolyLine', actors= [vtkCubeActor], backgroundColor= colors.GetColor3d('DarkOliveGreen'), xSize= 800, ySize= 600)

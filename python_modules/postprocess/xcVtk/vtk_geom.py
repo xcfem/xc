@@ -14,10 +14,13 @@ from vtk.vtkFiltersCore import vtkGlyph3D
 from vtk.vtkCommonDataModel import (
     vtkCellArray,
     vtkPolyData,
-    vtkPolyLine
+    vtkPolyLine,
+    vtkHexahedron,
+    vtkUnstructuredGrid
 )
 from vtk.vtkRenderingCore import (
     vtkActor,
+    vtkDataSetMapper,
     vtkPolyDataMapper,
 )
 
@@ -136,4 +139,58 @@ def get_vtk_vector_field_actor(positions, vectors, scaleFactor= 1.0):
     mapper.SelectColorArray(coloring_by)
     actor = vtkActor()
     actor.SetMapper(mapper)
+    return actor
+
+def get_vtk_cube_actor(hexahedron, color):
+    ''' Return a VTK actor from the given hexahedron.
+
+    :param pline: hexahedron to build the actor from.
+    :param color: color of the hexahedron.
+    '''
+    # For the hexahedron setup the coordinates of eight points.
+    # The two faces must be in counter clockwise order as viewed from the
+    # outside.
+    vertexPoints= hexahedron.getVertices()
+    vktVertexSequence= [1, 3, 6, 0, 4, 7, 5, 2]
+    #  
+    #       4 +---------+ 7     
+    #        /|        /|       
+    #       / |       / |       
+    #    5 +---------+6 |       
+    #      |  |      |  |       
+    #      |0 +------|--+ 3     
+    #      | /       | /
+    #      |/        |/
+    #    1 +---------+ 2
+    pointCoordinates = list()
+    for i in range(0,8):
+        v= vertexPoints[vktVertexSequence[i]]
+        pointCoordinates.append([v.x, v.y, v.z])
+
+    # Create the points.
+    points = vtkPoints()
+    # Create a hexahedron from the points.
+    hexahedron = vtkHexahedron()
+
+    for i in range(0, len(pointCoordinates)):
+        points.InsertNextPoint(pointCoordinates[i])
+        hexahedron.GetPointIds().SetId(i, i)
+
+    # Add the hexahedron to a cell array.
+    hexs = vtkCellArray()
+    hexs.InsertNextCell(hexahedron)
+    
+    # Add the points and hexahedron to an unstructured grid.
+    uGrid = vtkUnstructuredGrid()
+    uGrid.SetPoints(points)
+    uGrid.InsertNextCell(hexahedron.GetCellType(), hexahedron.GetPointIds())
+
+    # Visualize.
+    mapper = vtkDataSetMapper()
+    mapper.SetInputData(uGrid)
+
+    actor = vtkActor()
+    actor.GetProperty().SetColor(color)
+    actor.SetMapper(mapper)
+
     return actor
