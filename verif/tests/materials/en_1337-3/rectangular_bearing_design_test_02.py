@@ -2,7 +2,7 @@
 ''' Test of reinforced rectangular elastomeric bearing design according
     to EN 1337-3:2005.
 
-    Data obtained from a calcuation sample from Mageba.
+    Data obtained from a calculation sample from Mageba.
 '''
 
 from __future__ import division
