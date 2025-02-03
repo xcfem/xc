@@ -104,6 +104,8 @@ Hexahedron3d::Hexahedron3d(void)
 //! @brief Constructor.
 Hexahedron3d::Hexahedron3d(const Pos3d &p0, const Pos3d &p1,const Pos3d &p2, const Pos3d &p3, const Pos3d &p4, const Pos3d &p5,const Pos3d &p6, const Pos3d &p7)
   {
+    //CGAl->xc indexes: 0->1, 1->4, 2->0, 3->3 
+    //                  4->5, 5->7, 6->2, 7->6
     make_cube_3(cgpolyhedron, p1, p4, p0, p3, p5, p7, p2, p6);
   }
 
