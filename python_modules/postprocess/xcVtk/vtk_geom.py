@@ -8,7 +8,10 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 from vtk.vtkCommonCore import vtkPoints
-from vtk.vtkFiltersSources import vtkArrowSource
+from vtk.vtkFiltersSources import (
+    vtkArrowSource,
+    vtkSphereSource
+    )
 from vtk.vtkFiltersCore import vtkGlyph3D
 
 from vtk.vtkCommonDataModel import (
@@ -22,11 +25,45 @@ from vtk.vtkRenderingCore import (
     vtkActor,
     vtkDataSetMapper,
     vtkPolyDataMapper,
+    vtkGlyph3DMapper,
 )
 
 from vtk.vtkCommonCore import (
     vtkDoubleArray
 )
+
+def get_vtk_points_actor(points, color, pointSize= None):
+    ''' Return a VTK actor from the given points.
+
+    :param points: points to build the actor from.
+    :param color: color of the polyline.
+    :param pointSize: size of the points.
+    '''
+    vtk_points = vtkPoints()
+    for p in points:
+        vtk_points.InsertNextPoint(p.x, p.y, p.z)
+
+    # Glyph the points
+    sphere = vtkSphereSource()
+    sphere.SetPhiResolution(21)
+    sphere.SetThetaResolution(21)
+    sphere.SetRadius(.03)
+
+    # Create a polydata to store everything in
+    polyData = vtkPolyData()
+    polyData.SetPoints(vtk_points)
+
+    pointMapper = vtkGlyph3DMapper()
+    pointMapper.SetInputData(polyData)
+    pointMapper.SetSourceConnection(sphere.GetOutputPort())
+
+    pointActor = vtkActor()
+    pointActor.SetMapper(pointMapper)
+    pointActor.GetProperty().SetColor(color)
+    if(pointSize):
+        actor.GetProperty().SetPointSize(pointSize)
+    return pointActor
+    
 
 def get_vtk_polyline_actor(pline, color):
     ''' Return a VTK actor from the given polyline.
