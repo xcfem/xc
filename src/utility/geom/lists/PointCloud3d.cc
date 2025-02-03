@@ -82,14 +82,16 @@ Hexahedron3d PointCloud3d::getOrientedBoundingBox(void) const
 	const Vector3d i= Vector3d(1,0,0);
 	const Vector3d j= Vector3d(0,1,0);
 	const Vector3d k= Vector3d(0,0,1);
+	
 	const Pos3d p0_local= Pos3d(x_min, y_min, z_min);
-	const Pos3d p1_local= p1_local+length*i;
-	const Pos3d p2_local= p2_local+width*j;
-	const Pos3d p3_local= p1_local+width*j;
-	const Pos3d p4_local= p3_local+height*k;
-	const Pos3d p5_local= p0_local+height*k;
-	const Pos3d p6_local= p1_local+height*k;
-	const Pos3d p7_local= p2_local+height*k;
+	const Pos3d p1_local= Pos3d(p0_local.x()+length, p0_local.y(), p0_local.z()); // p0_local+length*Vector3d(1,0,0);
+	const Pos3d p2_local= Pos3d(p1_local.x(), p1_local.y()+width, p1_local.z()); // p1_local+width*Vector3d(0,1,0);
+	const Pos3d p3_local= Pos3d(p0_local.x(), p0_local.y()+width, p0_local.z()); // p0_local+width*Vector3d(0,1,0);
+	
+	const Pos3d p4_local= Pos3d(p0_local.x(), p0_local.y(), p0_local.z()+height); // p0_local+height*Vector3d(0,0,1);
+	const Pos3d p5_local= Pos3d(p1_local.x(), p1_local.y(), p1_local.z()+height); // p1_local+height*Vector3d(0,0,1);
+	const Pos3d p6_local= Pos3d(p2_local.x(), p2_local.y(), p2_local.z()+height); // p2_local+height*Vector3d(0,0,1);
+	const Pos3d p7_local= Pos3d(p3_local.x(), p3_local.y(), p3_local.z()+height); // p3_local+height*Vector3d(0,0,1);
 	retval= Hexahedron3d(ref.getGlobalPosition(p0_local),
 			     ref.getGlobalPosition(p1_local),
 			     ref.getGlobalPosition(p2_local),
