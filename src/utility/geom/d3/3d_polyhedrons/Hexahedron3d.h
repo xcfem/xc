@@ -57,5 +57,6 @@ class Hexahedron3d: public Polyhedron3d
     GEOM_FT getVolume(void) const;
   };
 
+Hexahedron3d get_oriented_bounding_box(const PointCloud3d &, const Ref3d3d &);
 Hexahedron3d get_oriented_bounding_box(const PointCloud3d &);
 #endif

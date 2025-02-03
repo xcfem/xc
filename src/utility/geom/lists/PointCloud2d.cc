@@ -48,15 +48,13 @@ PrincipalAxes2D PointCloud2d::getPrincipalAxes(void) const
   }
 
 //! @brief Return the oriented bounding box that contains
-//! all the points in the cloud.
-Quadrilateral2d PointCloud2d::getOrientedBoundingBox(void) const
+//! all the points in the cloud and whose edges are parallel
+//! to the given reference.
+Quadrilateral2d PointCloud2d::getOrientedBoundingBox(const Ref2d2d &ref) const
   {
     Quadrilateral2d retval;
     if(!this->empty())
       {	  
-	// Get principal axes reference system.
-	PrincipalAxes2D p_axis= this->getPrincipalAxes();
-	const Ref2d2d ref= p_axis.getAxis();
 	// Initialize maximum and minimum relative coordinates.
         Pos2d p= ref.getLocalPosition((*this)[0]);
 	double x_min= p.x();
@@ -74,16 +72,35 @@ Quadrilateral2d PointCloud2d::getOrientedBoundingBox(void) const
 	  }
 	const GEOM_FT length= x_max-x_min;
 	const GEOM_FT height= y_max-y_min;
-	const Vector2d i= Vector2d(1,0);
-	const Vector2d j= Vector2d(0,1);
+	// const Vector2d i= Vector2d(1,0);
+	// const Vector2d j= Vector2d(0,1);
 	const Pos2d p1_local= Pos2d(x_min, y_min);
-	const Pos2d p2_local= p1_local+length*i;
-	const Pos2d p3_local= p2_local+height*j;
-	const Pos2d p4_local= p1_local+height*j;
+	const Pos2d p2_local= Pos2d(x_min+length, y_min); // p1_local+length* Vector2d(1,0);
+	const Pos2d p3_local= Pos2d(p2_local.x(), p2_local.y()+height); //p2_local+height*Vector2d(0,1);
+	const Pos2d p4_local= Pos2d(x_min, y_min+height); // p1_local+height**Vector2d(0,1);
 	retval= Quadrilateral2d(ref.getGlobalPosition(p1_local),
 				ref.getGlobalPosition(p2_local),
 				ref.getGlobalPosition(p3_local),
 				ref.getGlobalPosition(p4_local));
+      }
+    else
+      std::cerr << Color::red << "PointCloud2d::" << __FUNCTION__
+	        << "; point cloud is empty the returned bounding box has no meaning."
+	        << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Return the oriented bounding box that contains
+//! all the points in the cloud.
+Quadrilateral2d PointCloud2d::getOrientedBoundingBox(void) const
+  {
+    Quadrilateral2d retval;
+    if(!this->empty())
+      {	  
+	// Get principal axes reference system.
+	PrincipalAxes2D p_axis= this->getPrincipalAxes();
+	const Ref2d2d ref= p_axis.getAxis();
+	retval= this->getOrientedBoundingBox(ref);
       }
     else
       std::cerr << Color::red << "PointCloud2d::" << __FUNCTION__

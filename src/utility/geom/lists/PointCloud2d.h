@@ -28,6 +28,7 @@
 
 class PrincipalAxes2D;
 class Quadrilateral2d;
+class Ref2d2d;
 
 //! @ingroup GEOM
 //
@@ -39,6 +40,8 @@ class PointCloud2d : public PolyPos<Pos2d>
     explicit PointCloud2d(const std::deque<Pos2d> &);
     explicit PointCloud2d(const boost::python::list &);
     PrincipalAxes2D getPrincipalAxes(void) const;
+    
+    Quadrilateral2d getOrientedBoundingBox(const Ref2d2d &) const;
     Quadrilateral2d getOrientedBoundingBox(void) const;
   };
 

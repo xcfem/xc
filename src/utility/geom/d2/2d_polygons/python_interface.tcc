@@ -114,7 +114,9 @@ class_<Quadrilateral2d, bases<Polygon2d> >("Quadrilateral2d")
   .def("getBilinearGrid",&Quadrilateral2d::genBilinMesh, "Return a grid of points generated using bililiear coordinate interpolation.")
   ;
 
+Quadrilateral2d (*get_quad_oriented_bounding_box_ref)(const PointCloud2d &, const Ref2d2d &)= &get_oriented_bounding_box;
 Quadrilateral2d (*get_quad_oriented_bounding_box)(const PointCloud2d &)= &get_oriented_bounding_box;
+def("get_oriented_bounding_box", get_quad_oriented_bounding_box_ref, "Return the oriented bounding box that contains the given point cloud and whose edges are parallel to the given reference.");
 def("get_oriented_bounding_box", get_quad_oriented_bounding_box, "Return the oriented bounding box that contains the given point cloud.");
 
 class_<Square2d, bases<Quadrilateral2d> >("Square2d")

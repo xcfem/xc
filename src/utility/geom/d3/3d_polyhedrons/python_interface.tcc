@@ -39,5 +39,7 @@ class_<Hexahedron3d, bases<Polyhedron3d> >("Hexahedron3d")
   .add_property("volume", &Hexahedron3d::getVolume, "returns object volume.")
   ;
 
+Hexahedron3d (*get_cube_oriented_bounding_box_ref)(const PointCloud3d &, const Ref3d3d &)= &get_oriented_bounding_box;
 Hexahedron3d (*get_cube_oriented_bounding_box)(const PointCloud3d &)= &get_oriented_bounding_box;
+def("get_oriented_bounding_box", get_cube_oriented_bounding_box_ref, "Return the oriented bounding box that contains the given point cloud and whose edges are parallel to the given reference.");
 def("get_oriented_bounding_box", get_cube_oriented_bounding_box, "Return the oriented bounding box that contains the given point cloud.");

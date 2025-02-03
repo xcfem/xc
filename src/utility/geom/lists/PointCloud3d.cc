@@ -48,15 +48,13 @@ PrincipalAxes3D PointCloud3d::getPrincipalAxes(void) const
   }
 
 //! @brief Return the oriented bounding box that contains
-//! all the points in the cloud.
-Hexahedron3d PointCloud3d::getOrientedBoundingBox(void) const
+//! all the points in the cloud and whose edges are parallel
+//! to the given reference.
+Hexahedron3d PointCloud3d::getOrientedBoundingBox(const Ref3d3d &ref) const
   {
     Hexahedron3d retval;
     if(!this->empty())
       {	  
-	// Get principal axes reference system.
-	PrincipalAxes3D p_axis= this->getPrincipalAxes();
-	const Ref3d3d ref= p_axis.getAxis();
 	// Initialize maximum and minimum relative coordinates.
         Pos3d p= ref.getLocalPosition((*this)[0]);
 	double x_min= p.x();
@@ -79,9 +77,9 @@ Hexahedron3d PointCloud3d::getOrientedBoundingBox(void) const
 	const GEOM_FT length= x_max-x_min;
 	const GEOM_FT width= y_max-y_min;
 	const GEOM_FT height= z_max-z_min;
-	const Vector3d i= Vector3d(1,0,0);
-	const Vector3d j= Vector3d(0,1,0);
-	const Vector3d k= Vector3d(0,0,1);
+	// const Vector3d i= Vector3d(1,0,0);
+	// const Vector3d j= Vector3d(0,1,0);
+	// const Vector3d k= Vector3d(0,0,1);
 	
 	const Pos3d p0_local= Pos3d(x_min, y_min, z_min);
 	const Pos3d p1_local= Pos3d(p0_local.x()+length, p0_local.y(), p0_local.z()); // p0_local+length*Vector3d(1,0,0);
@@ -100,6 +98,25 @@ Hexahedron3d PointCloud3d::getOrientedBoundingBox(void) const
 			     ref.getGlobalPosition(p5_local),
 			     ref.getGlobalPosition(p6_local),
 			     ref.getGlobalPosition(p7_local));
+      }
+    else
+      std::cerr << Color::red << "PointCloud3d::" << __FUNCTION__
+	        << "; point cloud is empty the returned bounding box has no meaning."
+	        << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Return the oriented bounding box that contains
+//! all the points in the cloud.
+Hexahedron3d PointCloud3d::getOrientedBoundingBox(void) const
+  {
+    Hexahedron3d retval;
+    if(!this->empty())
+      {	  
+	// Get principal axes reference system.
+	PrincipalAxes3D p_axis= this->getPrincipalAxes();
+	const Ref3d3d ref= p_axis.getAxis();
+	retval= this->getOrientedBoundingBox(ref);
       }
     else
       std::cerr << Color::red << "PointCloud3d::" << __FUNCTION__

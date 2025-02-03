@@ -67,5 +67,6 @@ class Quadrilateral2d: public Polygon2d
     Pos2dArray genBilinMesh(const size_t &n1,const size_t &n2) const;
   };
 
+Quadrilateral2d get_oriented_bounding_box(const PointCloud2d &, const Ref2d2d &);
 Quadrilateral2d get_oriented_bounding_box(const PointCloud2d &);
 #endif

@@ -167,6 +167,14 @@ GEOM_FT Hexahedron3d::getVolume(void) const
   }
 
 //! @brief Return the oriented bounding box that contains
+//! all the points in the cloud and whose edges are parallel
+//! to the given reference.
+Hexahedron3d get_oriented_bounding_box(const PointCloud3d &pointCloud, const Ref3d3d &ref)
+  {
+    return pointCloud.getOrientedBoundingBox(ref);
+  }
+
+//! @brief Return the oriented bounding box that contains
 //! all the points in the cloud.
 Hexahedron3d get_oriented_bounding_box(const PointCloud3d &pointCloud)
   {

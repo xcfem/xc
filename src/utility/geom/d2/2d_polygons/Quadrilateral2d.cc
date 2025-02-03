@@ -362,6 +362,14 @@ Pos2dArray Quadrilateral2d::genBilinMesh(const size_t &nDiv12,const size_t &nDiv
   }
 
 //! @brief Return the oriented bounding box that contains
+//! all the points in the cloud and whose edges are parallel
+//! to the given reference.
+Quadrilateral2d get_oriented_bounding_box(const PointCloud2d &pointCloud, const Ref2d2d &ref)
+  {
+    return pointCloud.getOrientedBoundingBox(ref);
+  }
+
+//! @brief Return the oriented bounding box that contains
 //! all the points in the cloud.
 Quadrilateral2d get_oriented_bounding_box(const PointCloud2d &pointCloud)
   {

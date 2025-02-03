@@ -28,6 +28,7 @@
 
 class PrincipalAxes3D;
 class Hexahedron3d;
+class Ref3d3d;
 
 //! @ingroup GEOM
 //
@@ -39,6 +40,8 @@ class PointCloud3d : public PolyPos<Pos3d>
     explicit PointCloud3d(const std::deque<Pos3d> &);
     explicit PointCloud3d(const boost::python::list &);
     PrincipalAxes3D getPrincipalAxes(void) const;
+    
+    Hexahedron3d getOrientedBoundingBox(const Ref3d3d &) const;
     Hexahedron3d getOrientedBoundingBox(void) const;
   };
 

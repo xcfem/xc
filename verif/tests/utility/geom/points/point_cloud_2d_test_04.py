@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-''' Point cloud oriented bounding box trivial test (2D).'''
+''' Point cloud oriented bounding box trivial test (2D). Use the
+    get_oriented_bounding_box version that receives alse the
+    desired reference system.'''
 
 from __future__ import print_function
 
@@ -29,11 +31,19 @@ xPoints= linePoints+circumferencePoints
 
 
 xPointCloud= geom.PointCloud2d(xPoints)
+# Get the reference system corresponding to the principal axes so
+# the data used to verify the results are still valid (those data
+# come from the test: point_cloud_2d_test_03.py).
+ref= xPointCloud.getPrincipalAxes().getAxis()
 
-boundingBox= geom.get_oriented_bounding_box(xPointCloud)
+# Use the get_oriented_bounding_box version that receives alse the
+# desired reference system.
+boundingBox= geom.get_oriented_bounding_box(xPointCloud, ref)
 boundingBoxVertices= boundingBox.getVertices()
+## Same reference data than in the test: point_cloud_2d_test_03.py
 a= 48.3016; b= 49.6984
 referenceVertices= [geom.Pos2d(-a, -b), geom.Pos2d(b, a), geom.Pos2d(a, b), geom.Pos2d(-b, -a)]
+## Compute error.
 err= 0.0
 for v, vRef in zip(boundingBoxVertices, referenceVertices):
     err+= v.dist2(vRef)
