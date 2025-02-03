@@ -21,10 +21,12 @@
 //python_interface.cxx
 
 class_<PolyhedronBase, bases<GeomObj3d>, boost::noncopyable >("PolyhedronBase", no_init)
+  .add_property("area", &PolyhedronBase::getArea, "Return object area.")
   ;
 
 class_<Polyhedron3d, bases<PolyhedronBase> >("Polyhedron3d")
   .def("getVertices", &Polyhedron3d::getVerticesPy, "Return the vertices of the polyhedron")
+  .def("pseudoDist", &Polyhedron3d::PseudoDist, "Return the signed distance from the given point to the this polyhedron")
   ;
 
 class_<Tetrahedron3d, bases<PolyhedronBase> >("Polyhedron3d")

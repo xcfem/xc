@@ -1,41 +1,58 @@
 # -*- coding: utf-8 -*-
-''' Trivial check of quadrilateral surfaces. Check explicit constructor.'''
+''' Trivial check of 3D blocks. Check returned hexahedron.'''
 
 from __future__ import division
 from __future__ import print_function
 
 import math
 import geom
+import xc
+from model import predefined_spaces
+from materials import typical_materials
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2024, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+# Define FE problem.
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
+nodes= preprocessor.getNodeHandler
+## Problem type
+modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 
 #
-#     4 +---------+ 7     
-#      /|        /|       
-#     / |       / |       
-#  5 +---------+6 |       
-#    |  |      |  |       
-#    |0 +------|--+ 3     
+#     5 +---------+ 8     0: Bottom face; vertices 1,4,3,2. (0,3,2,1)
+#      /|        /|       1: Left-side face; vertices 1,2,6,5. (0,1,5,4)
+#     / |       / |       2: Front face; vertices 2,3,7,6. (1,2,6,5)
+#  6 +---------+7 |       3: Right-side face; vertices 3,4,8,7. (2,3,7,6)
+#    |  |      |  |       4: Back face; vertices 1,5,8,4. (0,4,7,3)
+#    |1 +------|--+ 4     5: Top face; vertices 5,6,7,8. (4,5,6,7)
 #    | /       | /
 #    |/        |/
-#  1 +---------+ 2
+#  2 +---------+ 3
 #
 
 # Define k-points.
-p0= geom.Pos3d(0,0,0) # cgalV2
-p1= geom.Pos3d(1,0,0) # cgalV0
-p2= geom.Pos3d(1,1,0) # cgalV6
-p3= geom.Pos3d(0,1,0) # cgalV3
+pt1= modelSpace.newKPoint(0,0,0)
+pt2= modelSpace.newKPoint(1,0,0)
+pt3= modelSpace.newKPoint(1,1,0)
+pt4= modelSpace.newKPoint(0,1,0)
 
-p4= p0+geom.Vector3d(0,0,1) # cgalV1
-p5= p1+geom.Vector3d(0,0,1)
-p6= p2+geom.Vector3d(0,0,1)
-p7= p3+geom.Vector3d(0,0,1)
+pt5= modelSpace.newKPoint(0,0,1)
+pt6= modelSpace.newKPoint(1,0,1)
+pt7= modelSpace.newKPoint(1,1,1)
+pt8= modelSpace.newKPoint(0,1,1)
 
+# Define block.
+bodies= preprocessor.getMultiBlockTopology.getBodies
+b1= bodies.newBlockPts(pt1.tag, pt2.tag, pt3.tag, pt4.tag, pt5.tag, pt6.tag, pt7.tag, pt8.tag)
 
-# Define hexahedron.
-h= geom.Hexahedron3d(p0, p1, p2, p3, p4, p5, p6, p7)
-testPoint= geom.Pos3d(.5, .5, .5)
+# Check returned hexahedron.
+h= b1.getHexahedron()
 
-# Check results.
 ## Check vertices positions. 
 vertices= h.getVertices()
 
@@ -54,13 +71,14 @@ ratio0= (a-6.0)/6.0
 v= h.volume
 ratio1= abs(v-1)
 
+testPoint= geom.Pos3d(.5, .5, .5)
 pseudoDist= h.pseudoDist(testPoint)
 ratio2= abs(pseudoDist+0.5)/0.5
 inside= h.In(testPoint, 1e-3)
 outside= not h.In(testPoint+geom.Vector3d(1,1,1), 1e-3)
 
 '''
-print('XC to CGAL error: ', posError)
+print('vertex position error: ', posError)
 print('area: ', a)
 print('volume: ', v)
 print('pseudo distance: ', pseudoDist)

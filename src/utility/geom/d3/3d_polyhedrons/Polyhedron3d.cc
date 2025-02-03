@@ -117,7 +117,10 @@ GEOM_FT Polyhedron3d::getArea(void) const
   {
     GEOM_FT retval= 0.0;
     for(Polyhedron3d::Facet_const_iterator i= facets_begin();i!=facets_end();i++)
-      retval+= GetCara(i).getArea();
+      {
+	const GEOM_FT a= getFace(i).getArea();
+        retval+= a;
+      }
     return retval;
   }
 
@@ -138,13 +141,23 @@ GEOM_FT Polyhedron3d::GetMin(unsigned short int i) const
     return retval;
   }
 
-GeomObj::list_Pos3d Polyhedron3d::GetVerticesCara(const Facet_const_iterator &f) const
+//! @brief Return the centroid of the polyhedron.
+Pos3d Polyhedron3d::getCenterOfMass(void) const
   {
-    Facet::Halfedge_const_handle h = f->halfedge();
+    return this->getVertices().getCenterOfMass();
+  }
+
+GeomObj::list_Pos3d Polyhedron3d::getFaceVertices(const Facet_const_iterator &f) const
+  {
+    Facet::Halfedge_const_handle start= f->halfedge();
     GeomObj::list_Pos3d retval;
-    retval.push_back(Pos3d(h->vertex()->point()));
-    retval.push_back(Pos3d(h->next()->vertex()->point()));
-    retval.push_back(Pos3d(h->next()->next()->vertex()->point()));
+    Facet::Halfedge_const_handle h= start;
+    do
+      {
+	retval.push_back(Pos3d(h->vertex()->point()));
+	h= h->next();
+      }
+    while(h!=start);
     return retval;
   }
 
@@ -172,25 +185,25 @@ boost::python::list Polyhedron3d::getVerticesPy(void) const
 
 Plane Polyhedron3d::getPlaneFromFace(const Facet_const_iterator &f) const
   {
-    Facet::Halfedge_const_handle h= f->halfedge();
-    Plane retval(Pos3d(h->vertex()->point()),Pos3d(h->next()->vertex()->point()),Pos3d(h->next()->next()->vertex()->point()));
+    const GeomObj::list_Pos3d face_vertices= this->getFaceVertices(f);
+    Plane retval(face_vertices);
     return retval;
   }
 
 //! @brief Return la cara correspondiente al iterador.
-Polygon3d Polyhedron3d::GetCara(const Facet_const_iterator &f) const
+Polygon3d Polyhedron3d::getFace(const Facet_const_iterator &f) const
   {
-    const GeomObj::list_Pos3d vertices= getVertices();
+    const GeomObj::list_Pos3d vertices= this->getFaceVertices(f);
     Polygon3d retval(vertices.begin(),vertices.end());
     return retval;
   }
 
 //! @brief Return the faces of the polyhedron.
-std::deque<Polygon3d> Polyhedron3d::GetCaras(void) const
+std::deque<Polygon3d> Polyhedron3d::getFaces(void) const
   {
     std::deque<Polygon3d> retval;
     for(Polyhedron3d::Facet_const_iterator i= facets_begin();i!=facets_end();i++)
-      retval.push_back(GetCara(i));
+      retval.push_back(this->getFace(i));
     return retval;
   }
 
@@ -268,12 +281,26 @@ GEOM_FT Polyhedron3d::PseudoDist(const Pos3d &p) const
     Polyhedron3d::Facet_const_iterator i= facets_begin();
     const Plane pl(getPlaneFromFace(i));
     GEOM_FT retval= pl.PseudoDist(p);
+    const Pos3d centroid= this->getCenterOfMass();
     for(;i!=facets_end();i++)
       {
         const Plane plane(getPlaneFromFace(i));
-        const GEOM_FT d1= plane.PseudoDist(p);
+        GEOM_FT d1= plane.PseudoDist(p);
+	const GEOM_FT dRef= plane.PseudoDist(centroid);
+	if(dRef>0) //plane oriented inwards.
+	  d1= -d1;
         retval= std::max(retval,d1);
       }
+    return retval;
+  }
+
+//! @brief Returns true if point inside hexahedron.
+bool Polyhedron3d::In(const Pos3d &p,const double &tol) const
+  {
+    bool retval= false;
+    const GEOM_FT pDist= this->PseudoDist(p);
+    if(pDist<tol)
+      retval= true;
     return retval;
   }
 

@@ -111,16 +111,17 @@ class Polyhedron3d: public PolyhedronBase
       { return cgpolyhedron.size_of_halfedges(); }
     size_t GetNumCaras(void) const
       { return cgpolyhedron.size_of_facets(); }
+    virtual Pos3d getCenterOfMass(void) const;
 
     void clear(void)
       { cgpolyhedron.clear(); }
 
-    GeomObj::list_Pos3d GetVerticesCara(const Facet_const_iterator &f) const;
+    GeomObj::list_Pos3d getFaceVertices(const Facet_const_iterator &f) const;
     Plane getPlaneFromFace(const Facet_const_iterator &fi) const;
-    Polygon3d GetCara(const Facet_const_iterator &f) const;
-    std::deque<Polygon3d> GetCaras(void) const;
+    Polygon3d getFace(const Facet_const_iterator &f) const;
+    std::deque<Polygon3d> getFaces(void) const;
 
-    GeomObj::list_Pos3d getVertices(void) const;
+    virtual GeomObj::list_Pos3d getVertices(void) const;
     boost::python::list getVerticesPy(void) const;
 
     virtual GEOM_FT getArea(void) const;
@@ -137,6 +138,7 @@ class Polyhedron3d: public PolyhedronBase
     //! (negative if the point is inside the solid).
     inline virtual GEOM_FT dist(const Pos3d &p) const
       { return PseudoDist(p); }
+    bool In(const Pos3d &,const double &) const;
 
     friend Polyhedron3d Union(const Polyhedron3d &a,const Polyhedron3d &b);
     friend Polyhedron3d intersection(const Polyhedron3d &a,const Polyhedron3d &b);

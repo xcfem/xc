@@ -223,6 +223,7 @@ python tests/utility/geom/plane/plane_test_03.py
 python tests/utility/geom/plane/plane_test_05.py
 python tests/utility/geom/plane/plane_test_06.py
 echo "$BLEU" "    3D polyhedrons." "$NORMAL"
+python tests/utility/geom/polyhedrons/test_hexahedron_00.py
 python tests/utility/geom/polyhedrons/test_hexahedron_01.py
 echo "$BLEU" "    Half spaces." "$NORMAL"
 echo "$BLEU" "      2D half planes." "$NORMAL"
@@ -754,6 +755,7 @@ python tests/preprocessor/geom_entities/test_unif_grid_01.py
 python tests/preprocessor/geom_entities/test_unif_grid_02.py
 python tests/preprocessor/geom_entities/test_unif_grid_03.py
 python tests/preprocessor/geom_entities/test_block_definition.py
+python tests/preprocessor/geom_entities/test_block_00.py
 python tests/preprocessor/geom_entities/test_block_01.py
 python tests/preprocessor/geom_entities/test_block_02.py
 python tests/preprocessor/geom_entities/test_block_03.py

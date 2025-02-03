@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Trivial check of quadrilateral surfaces. Check explicit constructor.'''
+''' Trivial check of quadrilateral surfaces. Check default constructor'''
 
 from __future__ import division
 from __future__ import print_function
@@ -19,20 +19,8 @@ import geom
 #  1 +---------+ 2
 #
 
-# Define k-points.
-p0= geom.Pos3d(0,0,0) # cgalV2
-p1= geom.Pos3d(1,0,0) # cgalV0
-p2= geom.Pos3d(1,1,0) # cgalV6
-p3= geom.Pos3d(0,1,0) # cgalV3
-
-p4= p0+geom.Vector3d(0,0,1) # cgalV1
-p5= p1+geom.Vector3d(0,0,1)
-p6= p2+geom.Vector3d(0,0,1)
-p7= p3+geom.Vector3d(0,0,1)
-
-
-# Define hexahedron.
-h= geom.Hexahedron3d(p0, p1, p2, p3, p4, p5, p6, p7)
+# Define hexahedron with default constructor.
+h= geom.Hexahedron3d()
 testPoint= geom.Pos3d(.5, .5, .5)
 
 # Check results.

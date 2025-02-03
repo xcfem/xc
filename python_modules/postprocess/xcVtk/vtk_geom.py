@@ -151,7 +151,6 @@ def get_vtk_cube_actor(hexahedron, color):
     # The two faces must be in counter clockwise order as viewed from the
     # outside.
     vertexPoints= hexahedron.getVertices()
-    vktVertexSequence= [1, 3, 6, 0, 4, 7, 5, 2]
     #  
     #       4 +---------+ 7     
     #        /|        /|       
@@ -164,7 +163,7 @@ def get_vtk_cube_actor(hexahedron, color):
     #    1 +---------+ 2
     pointCoordinates = list()
     for i in range(0,8):
-        v= vertexPoints[vktVertexSequence[i]]
+        v= vertexPoints[i]
         pointCoordinates.append([v.x, v.y, v.z])
 
     # Create the points.

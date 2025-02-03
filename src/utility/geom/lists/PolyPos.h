@@ -52,7 +52,14 @@ class PolyPos : public std::deque<pos>
     void select_backward_segments(std::set<const_iterator> &selected, const GEOM_FT &tol);
   public:
 
-    PolyPos(void): deque_pos() {}
+    PolyPos(void)
+      : deque_pos() {}
+    
+    explicit PolyPos(size_t n)
+      : std::deque<pos>(n) {}
+    
+    PolyPos(size_t n, const pos &p)
+      : std::deque<pos>(n, p) {}
 
     explicit PolyPos(const std::deque<pos> &dq_pos)
       : std::deque<pos>(dq_pos) {}

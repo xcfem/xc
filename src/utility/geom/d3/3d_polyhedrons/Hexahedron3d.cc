@@ -38,7 +38,38 @@ const Pos3d cgalV5(0.0,1.0,1.0);
 const Pos3d cgalV6(1.0,1.0,0.0);
 const Pos3d cgalV7(1.0,1.0,1.0);
 
-// see: https://doc.cgal.org/latest/Polyhedron/index.html https://doc.cgal.org/latest/Polyhedron/Polyhedron_2polyhedron_prog_cube_8cpp-example.html
+// XC and VTK vertex sequence:
+//  
+//       4 +---------+ 7     
+//        /|        /|       
+//       / |       / |       
+//    5 +---------+6 |       
+//      |  |      |  |       
+//      |0 +------|--+ 3     
+//      | /       | /
+//      |/        |/
+//    1 +---------+ 2
+//
+// see: https://doc.cgal.org/latest/Polyhedron/Polyhedron_2polyhedron_prog_cube_8cpp-example.html
+
+// CGAL vertex sequence:
+//  
+//      V1 +---------+ V5     
+//        /|        /|       
+//       / |    V7 / |       
+//   V4 +---------+  |       
+//      |  |V2    |  |       
+//      |  +------|--+ V3     
+//      | /       | /
+//      |/        |/
+//   V0 +---------+ V6
+//
+const std::vector<int> xc2cgalIndexes({3, 0, 4, 1, 5, 7, 2, 6});
+const std::vector<int> cgal2xcIndexes({1, 3, 6, 0, 2, 4, 7, 5});
+const std::vector<int> &vtk2cgalIndexes= xc2cgalIndexes;
+const std::vector<int> &cgal2vtkIndexes= cgal2xcIndexes;
+
+// see: https://doc.cgal.org/latest/Polyhedron/Polyhedron_2polyhedron_prog_cube_8cpp-example.html
 CGPolyhedron_3::Halfedge_handle make_cube_3(CGPolyhedron_3 & P, const Pos3d &p0, const Pos3d &p1,const Pos3d &p2, const Pos3d &p3, const Pos3d &p4, const Pos3d &p5,const Pos3d &p6, const Pos3d &p7)
   {
     // appends a cube of size [0,1]^3 to the polyhedron P.
@@ -48,10 +79,10 @@ CGPolyhedron_3::Halfedge_handle make_cube_3(CGPolyhedron_3 & P, const Pos3d &p0,
                                             p1.ToCGAL(),
                                             p2.ToCGAL(),
                                             p3.ToCGAL());
-    Halfedge_handle g = h->next()->opposite()->next();             // Fig. (a)
+    Halfedge_handle g = h->next()->opposite()->next(); // Fig. (a)
     P.split_edge( h->next());
     P.split_edge( g->next());
-    P.split_edge( g);                                              // Fig. (b)
+    P.split_edge( g); // Fig. (b)
     h->next()->vertex()->point()     = p4.ToCGAL();
     g->next()->vertex()->point()     = p5.ToCGAL();
     g->opposite()->vertex()->point() = p6.ToCGAL();            // Fig. (c)
@@ -73,9 +104,26 @@ Hexahedron3d::Hexahedron3d(void)
 //! @brief Constructor.
 Hexahedron3d::Hexahedron3d(const Pos3d &p0, const Pos3d &p1,const Pos3d &p2, const Pos3d &p3, const Pos3d &p4, const Pos3d &p5,const Pos3d &p6, const Pos3d &p7)
   {
-    //CGAl->xc indexes: 0->1, 1->4, 2->0, 3->3 
-    //                  4->5, 5->7, 6->2, 7->6
     make_cube_3(cgpolyhedron, p1, p4, p0, p3, p5, p7, p2, p6);
+  }
+
+//! @brief Return the vertices of the hexahedron.
+GeomObj::list_Pos3d Hexahedron3d::getVertices(void) const
+  {
+    GeomObj::list_Pos3d tmp= Polyhedron3d::getVertices();
+    // Reorder vertices according to the XC vertex sequence
+    // for hexahedrons.
+    const std::vector<int> order= cgal2xcIndexes;
+    GeomObj::list_Pos3d retval(tmp.size());
+    retval[0]= tmp[order[0]];
+    retval[1]= tmp[order[1]];
+    retval[2]= tmp[order[2]];
+    retval[3]= tmp[order[3]];
+    retval[4]= tmp[order[4]];
+    retval[5]= tmp[order[5]];
+    retval[6]= tmp[order[6]];
+    retval[7]= tmp[order[7]];
+    return retval;
   }
 
 //! @brief Return the volume of the body with sign.
@@ -114,14 +162,6 @@ GEOM_FT Hexahedron3d::getVolume(void) const
     retval+= t5.getVolume();
     retval+= t6.getVolume();
     return retval;
-  }
-
-//! @brief Returns true if point inside hexahedron.
-bool Hexahedron3d::In(const Pos3d &p,const double &tol) const
-  {
-    std::cerr << "Hexahedron3d::" << __FUNCTION__
-              << "  not implemented yet." << std::endl;
-    return false;
   }
 
 //! @brief Return the oriented bounding box that contains

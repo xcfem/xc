@@ -39,7 +39,6 @@
 #include "utility/geom/pos_vec/Pos3dArray.h"
 #include "utility/geom/pos_vec/Pos3dArray3d.h"
 #include "utility/geom/pos_vec/Pos3dList.h"
-#include "utility/geom/d3/3d_polyhedrons/Hexahedron3d.h"
 #include "vtkCellType.h"
 #include "utility/utils/misc_utils/colormod.h"
 
@@ -792,12 +791,12 @@ void XC::Block::addPoints(const ID &point_indexes)
 	    pntPtrs[i]= p;
 	  }
 	//
-	//     5 +---------+ 8     0: Bottom face; vertices 1,4,3,2. (0,3,2,1)
-	//      /|        /|       1: Left-side face; vertices 1,2,6,5. (0,1,5,4)
-	//     / |       / |       2: Front face; vertices 2,3,7,6. (1,2,6,5)
-	//  6 +---------+7 |       3: Right-side face; vertices 3,4,8,7. (2,3,7,6)
-	//    |  |      |  |       4: Back face; vertices 1,5,8,4. (0,4,7,3)
-	//    |1 +------|--+ 4     5: Top face; vertices 5,6,7,8. (4,5,6,7)
+	//     5 +---------+ 8   0: Bottom face; vertices 1,4,3,2. (0,3,2,1)
+	//      /|        /|     1: Left-side face; vertices 1,2,6,5. (0,1,5,4)
+	//     / |       / |     2: Front face; vertices 2,3,7,6. (1,2,6,5)
+	//  6 +---------+7 |     3: Right-side face; vertices 3,4,8,7. (2,3,7,6)
+	//    |  |      |  |     4: Back face; vertices 1,5,8,4. (0,4,7,3)
+	//    |1 +------|--+ 4   5: Top face; vertices 5,6,7,8. (4,5,6,7)
 	//    | /       | /
 	//    |/        |/
 	//  2 +---------+ 3
@@ -839,10 +838,10 @@ void XC::Block::setPoints(const ID &point_indexes)
       }
   }
 
-double XC::Block::getVolume(void) const
+Hexahedron3d XC::Block::getHexahedron(void) const
   {
     const std::deque<const Pnt *> vertices= this->getVertices();
-    std::vector<int> order({0, 3, 2, 1, 4, 5, 6, 7});
+    const std::vector<int> order({0, 3, 2, 1, 4, 5, 6, 7});
     const Pos3d p0= vertices[order[0]]->getPos();
     const Pos3d p1= vertices[order[1]]->getPos();
     const Pos3d p2= vertices[order[2]]->getPos();
@@ -851,7 +850,13 @@ double XC::Block::getVolume(void) const
     const Pos3d p5= vertices[order[5]]->getPos();
     const Pos3d p6= vertices[order[6]]->getPos();
     const Pos3d p7= vertices[order[7]]->getPos();
-    const Hexahedron3d h(p0, p1, p2, p3, p4, p5, p6, p7);
+    const Hexahedron3d retval(p0, p1, p2, p3, p4, p5, p6, p7);
+    return retval;
+  }
+
+double XC::Block::getVolume(void) const
+  {
+    const Hexahedron3d h= this->getHexahedron();
     const double retval= h.getVolume();
     return retval;
   }

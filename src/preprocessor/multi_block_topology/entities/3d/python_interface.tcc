@@ -42,6 +42,7 @@ class_<XC::Block, XC::Block *, bases<XC::Body>, boost::noncopyable >("Block", "S
   .add_property("nDivJ", &XC::Block::NDivJ, &XC::Block::setNDivJ, "Number or divisions in J direction.")
   .add_property("nDivK", &XC::Block::NDivK, &XC::Block::setNDivK, "Number or divisions in K direction.")
   .def("getPositions", &XC::Block::getPositionsPy, "Return the positions that will be used for the nodes when meshing.")
+  .def("getHexahedron",  &XC::Block::getHexahedron, "Return an hexahedron with the same vertices than this block.")
   ;
 
 class_<XC::UniformGrid, XC::UniformGrid *, bases<XC::EntMdlr>, boost::noncopyable >("UniformGrid", no_init)

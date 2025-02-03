@@ -31,6 +31,7 @@
 #define BLOCK_H
 
 #include "Body.h"
+#include "utility/geom/d3/3d_polyhedrons/Hexahedron3d.h"
 
 namespace XC {
 
@@ -71,7 +72,8 @@ class Block: public Body
     const Pnt *getVertex(const size_t &i) const;
     boost::python::list getPositionsPy(void) const;
     virtual Pos3d getCentroid(void) const;
-    
+
+    Hexahedron3d getHexahedron(void) const;
     int getVtkCellType(void) const;
 
     void addPoints(const ID &);
