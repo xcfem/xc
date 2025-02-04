@@ -49,7 +49,7 @@ class VectorFieldData(object):
       retval+= 'Lengths'
       return retval
 
-  def calculateLengths(self,fUnitConv= 1.0):
+  def calculateLengths(self, fUnitConv= 1.0):
       '''
       Lengths of the vectors.
 
@@ -86,7 +86,7 @@ class VectorFieldData(object):
       else:
         self.points.InsertNextPoint(px,py,pz)
 
-  def getPolydata(self,fUnitConv= 1.0):
+  def getPolydata(self, fUnitConv= 1.0):
       retval= vtk.vtkPolyData()
       retval.SetPoints(self.points)
       sz= self.getNumberOfTuples()
@@ -98,10 +98,10 @@ class VectorFieldData(object):
         lmsg.warning('VectorFieldData.getPolydata: no vectors.')
       return retval
 
-  def setupGlyph(self,fUnitConv= 1.0,symType=vtk.vtkArrowSource()):
+  def setupGlyph(self, fUnitConv= 1.0, symType= vtk.vtkArrowSource()):
       self.polydata= self.getPolydata(fUnitConv)
       # Generate the arrow for the glyphs
-      self.glyph = vtk.vtkGlyph3D()
+      self.glyph= vtk.vtkGlyph3D()
       self.glyph.SetInputData(self.polydata)
       self.glyph.SetSourceConnection(symType.GetOutputPort())
       self.glyph.ScalingOn()
@@ -125,7 +125,7 @@ class VectorFieldData(object):
       self.glyph.SetInputArrayToProcess(0,0,0,0,self.lengthsName)	# scalars
       self.glyph.SetInputArrayToProcess(1,0,0,0,self.vectorsName) # vectors
       # self.glyph.SetInputArrayToProcess(2,0,0,0,'nothing')	# normals
-      #self.glyph.SetInputArrayToProcess(3,0,0,0,self.lengthsName) # colors
+      # self.glyph.SetInputArrayToProcess(3,0,0,0,self.lengthsName) # colors
 
       # Calling update because I'm going to use the scalar range to set the color map range
       self.glyph.Update()

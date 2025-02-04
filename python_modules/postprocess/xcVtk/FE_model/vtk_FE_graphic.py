@@ -178,7 +178,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         '''
         retval= self.VtkLoadElemMesh(field, defFScale, eigenMode)
         self.renderer= vtk.vtkRenderer()
-        self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
+        self.renderer.SetBackground(self.bgRComp, self.bgGComp, self.bgBComp)
         self.VtkDefineNodesActor(0.002)
         self.VtkDefineElementsActor("surface", field, color)
         self.renderer.ResetCamera()
@@ -322,13 +322,13 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                 self.appendDiagram(d)
         self.displayScene(caption= caption, unitDescription= unitDescription, fileName= fileName)
 
-    def displayLoadOnNode(self, nod, color, force, moment, fScale,defFScale=0.0):
+    def displayLoadOnNode(self, nod, color, force, moment, fScale, defFScale= 0.0):
         '''Display loads on one node
 
          :param nod: node instance
          :param color: color
          :param force: force (displayed as a single arrow)
-         :param moment: moment (displayed as a double arrow)
+         :param moment: moment (displayed as a torque arrow)
          :param fScale: scaling factor (forces and moments)
          :param defFScale: factor to apply to current displacement of nodes 
                     so that the display position of each node equals to
@@ -339,11 +339,14 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         #actorName= baseName+"%04d".format(nod.tag) # Node tag.
         pos= nod.getCurrentPos3d(defFScale)
         absForce= force.Norm()
+        actors= list()
         if(absForce>1e-6):
-            utils_vtk.drawVtkSymb('arrow',self.renderer,color,pos,force,fScale*absForce)
+            actors.extend(utils_vtk.draw_vtk_symbol(symbType= 'arrow', renderer= self.renderer, RGBcolor= color, vPos= pos, vDir= force, scale= fScale*absForce))
         absMoment= moment.Norm()
         if(absMoment>1e-6):
-            utils_vtk.drawVtkSymb('doubleArrow',self.renderer,color,pos,moment,fScale*absMoment)
+            actors.extend(utils_vtk.draw_vtk_symbol(symbType= 'doubleArrow', renderer= self.renderer, RGBcolor= color, vPos= pos, vDir= moment, scale= fScale*absMoment))
+        for actor in actors:
+            self.renderer.AddActor(actor)
 
     def displayNodalLoads(self, preprocessor, loadPattern, color, fScale):
         '''Display the all nodal loads defined in a load pattern
@@ -371,32 +374,32 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
             load= lIter.next()
         loadPattern.removeFromDomain()
 
-
-    def displayElementPunctualLoad(self, preprocessor, pLoad,loadPattern, renderer, color, force, fScale):
+    def displayElementPunctualLoad(self, preprocessor, loadedElements, renderer, color, force, fScale):
         '''Display punctual loads on elements
+
+         :param preprocessor: pre-processor of the finite element problem.
+         :param loadedElements: punctual load to display (as a single arrow).
+         :param renderer: vtk renderer.
+         :param color: color
+         :param force: force to displaay (as a single arrow)
+         :param fScale: scaling factor (applied to displayed arrows)
         '''
-        xForce= pLoad.getElems()
-        eleTags= pLoad.elementTags
-        loadPatternName= loadPattern.getProp("dispName")
-        actorName= "flechaP"+loadPatternName+'{:04d}'.format(pLoad.tag) # Tag force.
+        xForce= loadedElements.getElems()
+        eleTags= loadedElements.elementTags
         for tag in eleTags:
             ele= preprocessor.getElementHandler.getElement(tag)
-            actorName+= '{:04d}'.format(tag) # element identifier.
             pos= ele.point(xForce)
-            utils_vtk.drawVtkSymb('arrow',self.renderer,color,pos,force,fScale)
+            utils_vtk.draw_vtk_symbol(symbType= 'arrow', RGBcolor= self.renderer, color= color, vPos= pos, vDir= force, scale= fScale)
 
-    def displayElementUniformLoad(self, preprocessor, unifLoad,loadPattern, color, force, fScale):
-        loadPatternName= loadPattern.getProp("dispName")
-        actorName= "flechaU"+loadPatternName+'{:04d}'.format(unifLoad.tag)
+    def displayElementUniformLoad(self, preprocessor, unifLoad, color, force, fScale):
         eleTags= unifLoad.elementTags
         for tag in eleTags:
             # ele= preprocessor.getElementHandler.getElement(tag)
-            actorName+= '{:04d}'.format(tag) # element identifier.
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; displayElementUniformLoad not implemented.')
 
-    def displayElementalLoads(self, preprocessor,loadPattern, color, fScale):
+    def displayElementalLoads(self, preprocessor, loadPattern, color, fScale):
         # loadPattern.addToDomain()
         # eleLoadIter= loadPattern.loads.getElementalLoadIter
         # eleLoad= eleLoadIter.next()
@@ -407,16 +410,16 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         #   force= eleLoad.getGlobalForces()
         #   category= eleLoad.category
         #   if(category=="uniform"):
-        #     self.displayElementUniformLoad(preprocessor, eleLoad,loadPattern,color,force,fScale)
+        #     self.displayElementUniformLoad(preprocessor, eleLoad, color, force,fScale)
         #   else:
-        #     self.displayElementPunctualLoad(preprocessor, eleLoad,loadPattern,color,force,fScale)
+        #     self.displayElementPunctualLoad(preprocessor, eleLoad, color, force,fScale)
         # loadPattern.removeFromDomain()
 
     def displayLoads(self, preprocessor, loadPattern):
         clrVectores= loadPattern.getProp("color")
         fScaleVectores= loadPattern.getProp("scale")
         self.displayElementalLoads(preprocessor, loadPattern, clrVectores, fScaleVectores)
-        self.displayNodalLoads(preprocessor, loadPattern,clrVectores,fScaleVectores)
+        self.displayNodalLoads(preprocessor, loadPattern, clrVectores,fScaleVectores)
 
     def appendDiagram(self, diagram, orientScbar=1, titleScbar=None):
         '''

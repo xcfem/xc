@@ -392,7 +392,7 @@ class OutputHandler(object):
         captionText= self.getCaptionText(itemToDisp, setToDisplay)
         self.displayScalarPropertyAtNodes(propToDisp= propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
         
-    def displayReactions(self, setToDisplay=None, fileName=None, defFScale=0.0, inclInertia= False, reactionCheckTolerance= 1e-7,captionText=None):
+    def displayReactions(self, setToDisplay=None, fileName=None, defFScale=0.0, inclInertia= False, reactionCheckTolerance= 1e-7, captionText=None):
         ''' Display reactions.
 
         :param setToDisplay: set of entities to be represented.
@@ -438,10 +438,9 @@ class OutputHandler(object):
             scaleFactor*=0.15*LrefModSize/(maxAbs*unitConversionFactor)
         if not captionText:
             captionText= self.getCaptionText('Reactions', setToDisplay)
-        vFieldF= vf.VectorField(name='Freact', fUnitConv=unitConversionFactor,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Force
-        vFieldM= vf.VectorField(name='Mreact', fUnitConv=unitConversionFactor,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Moment
-        vFieldF.populateFromPairList(forcePairs)
-        vFieldM.populateFromPairList(momentPairs)
+
+        # Create VTK vector fields.
+        vFieldF, vFieldM= vf.get_force_and_torque_vector_fields(forceFieldName= 'Freact', forcePairs= forcePairs, torqueFieldName= 'Mreact', torquePairs= momentPairs, fUnitConv=unitConversionFactor,scaleFactor=scaleFactor, showPushing= True)
 
         displaySettings= self.getDisplaySettingsFE()
         displaySettings.setupGrid(setToDisplay)
@@ -919,32 +918,33 @@ class OutputHandler(object):
         if(not caption):
             caption= 'Mode '+ str(mode) + ' eigenvectors' + ' '+setToDisplay.description
         if(showDispComponents):
-            if(len(dispPairs)>0):
-                vFieldD= vf.VectorField(name='Deigenvectors', fUnitConv=1.0, scaleFactor=scaleFactor, showPushing= False, symType=vtk.vtkArrowSource()) #Force
-                vFieldD.populateFromPairList(dispPairs)
-            else:
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                lmsg.warning(className+'.'+methodName+'; mode: '+str(mode)+' no displacement components to display.')
+            displacementFieldName= 'Deigenvectors'
+        else:
+            displacementFieldName= None
         if(showRotComponents):
-            if(len(rotPairs)>0):
-                vFieldR= vf.VectorField(name='Reigenvectors', fUnitConv=1.0, scaleFactor=scaleFactor,showPushing= False, symType=vtk.vtkArrowSource())
-                vFieldR.populateFromPairList(rotPairs)
-            else:
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                lmsg.warning(className+'.'+methodName+'; mode: '+str(mode)+' no rotational components to display.')
+            rotationFieldName= 'Deigenvectors'
+        else:
+            rotationFieldName= None
+        vFieldD, vFieldR= vf.get_disp_and_rotation_vector_fields(dispFieldName= displacementFieldName, dispPairs= dispPairs, rotationFieldName= rotationFieldName, rotationPairs= rotPairs, fUnitConv= 1.0, scaleFactor= scaleFactor, showPushing= False)
+        if(vFieldD is None):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; mode: '+str(mode)+' no displacement components to display.')
+        if(vFieldR is None):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; mode: '+str(mode)+' no rotational components to display.')
         displaySettings= self.getDisplaySettingsFE()
         displaySettings.setupGrid(setToDisplay)
         meshSceneOk= displaySettings.defineMeshScene(None, defFScale, color= setToDisplay.color)
         if(meshSceneOk):
             scOrient= 1 # scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
-            if(len(dispPairs)>0):
+            if(vFieldD):
                 vFieldD.addToDisplay(displaySettings, orientation= scOrient, title= 'Displacement')
                 scOrient+=1
-            if(len(rotPairs)>0):
+            if(vFieldR):
                 vFieldR.addToDisplay(displaySettings, orientation= scOrient, title= 'Rotation')
-            displaySettings.displayScene(caption= caption, unitDescription= unitDescription, fileName= fileName)
+            displaySettings.displayScene(caption= caption, unitDescription= '', fileName= fileName)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name

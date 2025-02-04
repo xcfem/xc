@@ -12,7 +12,7 @@ import math
 from misc_utils import log_messages as lmsg
 
 def create_actors_for_vtk_symbols(pointData, scale):
-    ''' Adds to the renderer the symbols stored in point data.
+    ''' Create the symbols stored in point data.
 
     :pointData: list of dictionaries containing the symbol type, color, 
                 orientation and position of the symbols.
@@ -162,15 +162,14 @@ def get_symbol_source(symbType, center= None, normal= None):
     retval.Update()
     return retval
 
-def drawVtkSymb(symbType,renderer, RGBcolor, vPos, vDir, scale):
-    '''Adds to the renderer a symbol of type 'arrow', 'doubleArrow',
+def draw_vtk_symb(symbType, RGBcolor, vPos, vDir, scale):
+    '''Create a symbol of type 'arrow', 'doubleArrow',
     'cone', 'doubleCone', 'sphere', 'doubleSphere','cube' , 'doubleCube',
     'cylinder', 'doubleCylinder'
 
     :param symbType: type of symbol (available types: 'arrow', 'doubleArrow',
            'cone', 'doubleCone', 'sphere', 'doubleSphere','cube' ,
            'doubleCube', 'cylinder', 'doubleCylinder')
-    :param renderer: vtk renderer
     :param RGBcolor: list [R,G,B] with the 3 components of color
     :param vPos: list [x,y,z] with the 3 coordinates of the point where
            to place the symbol.
@@ -183,19 +182,28 @@ def drawVtkSymb(symbType,renderer, RGBcolor, vPos, vDir, scale):
         vPosVx=[vPos[i]-factor*vDir[i] for i in range(3)] # vertex position
     else: # not a 2D object.
         vPosVx= vPos # vertex position
-    actor= addSymb(symbSource,renderer, RGBcolor, vPosVx, vDir, scale)
-    renderer.AddActor(actor)
+    actor= add_symbol(symbSource, RGBcolor, vPosVx, vDir, scale)
+    retval= [actor]
     if 'double' in symTpLow:
         vPosVx=[vPosVx[i]-scale*vDir[i] for i in range(3)] #vertex position
-        actor= addSymb(symbSource,renderer, RGBcolor, vPosVx, vDir, scale)
-        renderer.AddActor(actor)
-
+        actor= add_symbol(symbSource, RGBcolor, vPosVx, vDir, scale)
+        retval.append(actor)
+    return retval
         
-def addSymb(symbSource, RGBcolor, vPosVx, vDir, scale):
-    '''function called by drawVtkSymb that puts the symbol in the renderer
+def add_symbol(symbSource, RGBcolor, vPosVx, vDir, scale):
+    ''' Function called by draw_vtk_symbol that scales and orients the symbol
+        shape.
+
+    :param symbSource: shape of the symbol.
+    
+    :param RGBcolor: list [R,G,B] with the 3 components of color
+    :param vPosVx: list [x,y,z] with the 3 coordinates of the point where
+           to place the symbol.
+    :param vDir: director vector to orient the symbol.
+    :param scale: scale to be applied to the symbol representation
     '''
     retval= vtk.vtkActor()
-    parallelTo(retval,vDir)
+    parallel_to(retval,vDir)
     retval.SetPosition(vPosVx[0],vPosVx[1],vPosVx[2])
     retval.SetScale(scale,scale/2,scale/2)
     retval.GetProperty().SetColor(RGBcolor[0],RGBcolor[1],RGBcolor[2])
@@ -204,14 +212,17 @@ def addSymb(symbSource, RGBcolor, vPosVx, vDir, scale):
     retval.SetMapper(mapper)
     return retval
 
-def parallelTo(actor,vDir):
-    '''function called by drawVtkSymb to orient the symbol parallel to 
-    the director vector
+def parallel_to(actor, vDir):
+    '''function called by draw_vtk_symbol to orient the symbol parallel to 
+    the given vector.
+
+    :param actor: vtk actor to orient.
+    :param vDir: director vector to orient the actor.
     '''
     nc= len(vDir)
     if(nc!=3):
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(methodName+"; parallelTo: "+str(vDir)+" wrong dimension (must be 3).")
+        lmsg.error(methodName+"; parallel_to: "+str(vDir)+" wrong dimension (must be 3).")
     else:
         v= [vDir[0],vDir[1],vDir[2]]
         thetaZ= math.degrees(math.atan2(v[1],v[0]))

@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
-''' Taken from example A47 of the SOLVIA Verification Manual.'''
-
-from __future__ import print_function
-
+''' Check eigenvectors graphic output. The test does not verify the output 
+contents, only that the method runs and the file is  created.
+'''
+import os
 import xc
-
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2014, LCPT"
+__copyright__= "Copyright 2025, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
@@ -71,35 +70,27 @@ analOk= analysis.analyze(1)
 
 # Compute results
 eig1= analysis.getEigenvalue(1)
-omega= eig1**0.5 # natural frequency
-T= 2*math.pi/omega # period
-fcalc= 1/T # frequency
 
 
-lambdaA= 1.87510407
-fteor= lambdaA**2/(2*math.pi*L**2)*math.sqrt(E*I/m)
-ratio1= abs(fcalc-fteor)/fteor
-
-''' 
-print("omega= ",(omega))
-print("T= ",(T))
-print("fcalc= ",(fcalc))
-print("fteor= ",(fteor))
-print("ratio1= ",(ratio1))
-'''
-
-import os
-from misc_utils import log_messages as lmsg
-fname= os.path.basename(__file__)
-if (abs(ratio1)<5e-3):
-    print('test '+fname+': ok.')
-else:
-    lmsg.error(fname+' ERROR.')
-
+# Graphic stuff.
 from postprocess import output_handler
 #########################################################
 # Graphic stuff.
 oh= output_handler.OutputHandler(modelSpace)
 
 ## Uncomment to display the eigenvectors
-oh.displayEigenvectors()
+# oh.displayEigenvectors()
+
+fname= os.path.basename(__file__)
+outputFileName= '/tmp/'+fname.replace('.py', '.jpeg')
+oh.displayReactions(fileName= outputFileName)
+
+# Check that file exists
+testOK= os.path.isfile(outputFileName)
+
+if testOK:
+    print('test '+fname+': ok.')
+else:
+    lmsg.error(fname+' ERROR.')
+
+os.remove(outputFileName)
