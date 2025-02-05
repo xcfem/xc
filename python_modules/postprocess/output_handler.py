@@ -720,10 +720,7 @@ class OutputHandler(object):
 
             # surface loads
             forceComponents= self.modelSpace.getForceComponents()
-            vFieldEl= lvf.LoadVectorField(loadPatternName= loadCaseName, setToDisp=setToDisplay,
-                                          fUnitConv= unitConversionFactor, scaleFactor= vectorScale,
-                                          showPushing= self.outputStyle.showLoadsPushing,
-                                          multiplyByElementArea= self.outputStyle.multLoadsByElemArea, components= forceComponents)
+            vFieldEl= lvf.LoadVectorField(loadPatternName= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing,multiplyByElementArea= self.outputStyle.multLoadsByElemArea, components= forceComponents)
             count= vFieldEl.dumpElementalLoads(preprocessor, defFScale=defFScale)
             if(count >0):
                 vFieldElTitle= 'Surface loads ('+self.getOutputForceUnitSym()+'/'+self.getOutputLengthUnitSym()+'2)'
@@ -733,19 +730,18 @@ class OutputHandler(object):
             ## forces on nodes.
             forceComponents= self.modelSpace.getForceComponents()
             vFieldFNod= lvf.LoadVectorField(loadPatternName= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing, components= forceComponents)
-            count= vFieldFNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
-            if(count >0):
+            numNodalForces= vFieldFNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
+            if(numNodalForces>0):
                 vFieldFNodTitle= 'Nodal loads ('+self.getOutputForceUnitSym()+')'
                 vFieldFNod.addToDisplay(displaySettings,orientation= scOrient, title= vFieldFNodTitle)
                 scOrient+=1
             momentComponents= self.modelSpace.getMomentComponents()
             ## moments on nodes.
+            numNodalMoments= 0
             if(momentComponents):
                 vFieldMNod= lvf.TorqueVectorField(loadPatternName= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing, components= momentComponents)
-                count= vFieldMNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
-            else:
-                count= 0
-            if(count >0):
+                numNodalMoments= vFieldMNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
+            if(numNodalMoments>0):
                 vFieldMNodTitle= 'Nodal moments ('+self.getOutputForceUnitSym()+')'
                 vFieldMNod.addToDisplay(displaySettings,orientation= scOrient, title= vFieldMNodTitle)
                 scOrient+=1

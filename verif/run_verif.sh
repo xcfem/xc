@@ -1878,6 +1878,8 @@ python tests/postprocess/vtk/test_set_background_color.py
 python tests/postprocess/vtk/test_display_zero_length_local_axes_01.py
 python tests/postprocess/vtk/test_display_zero_length_local_axes_02.py
 python tests/postprocess/vtk/test_display_reactions_01.py
+python tests/postprocess/vtk/test_display_loads_01.py
+python tests/postprocess/vtk/test_display_loads_02.py
 python tests/postprocess/vtk/test_display_eigenvectors_01.py
 
 # Report tests.
