@@ -63,7 +63,7 @@ class LoadVectorField(LoadOnPoints):
         :param multiplyByElementArea: for loads over elements (default= True).
         :param symType: shape of the symbol (defaults to an arrow).
         '''
-        super(LoadVectorField,self).__init__(name= loadPatternName, fUnitConv= fUnitConv,scaleFactor= scaleFactor, showPushing= showPushing, symType= symType)
+        super(LoadVectorField,self).__init__(loadPatternName= loadPatternName, fUnitConv= fUnitConv,scaleFactor= scaleFactor, showPushing= showPushing, symType= symType)
         self.multiplyByElementArea= multiplyByElementArea
         self.setToDisp= setToDisp
 
