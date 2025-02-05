@@ -12,6 +12,7 @@ __email__= "l.pereztato@gmail.com"
 
 import sys
 from pathlib import Path
+import shutil
 import subprocess
 from misc_utils import log_messages as lmsg
 
@@ -74,7 +75,8 @@ def latex_string_to_pdf(texString:str, outputFileName, showPDF= False, targetDir
     # Move PDF file to target directory.
     pdf_pth= Path(output_directory_path+'/'+outputBaseName+'.pdf')
     target_pth= Path(targetDir+'/'+outputBaseName+'.pdf')
-    pdf_pth.rename(target_pth)
+    shutil.move(pdf_pth, target_pth)
+    # pdf_pth.rename(target_pth)
     filepath= str(target_pth)
     if(showPDF):
         subprocess.run(('xdg-open', filepath))
