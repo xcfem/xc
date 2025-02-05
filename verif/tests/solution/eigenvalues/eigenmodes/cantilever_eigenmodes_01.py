@@ -96,10 +96,10 @@ if (abs(ratio1)<5e-3):
 else:
     lmsg.error(fname+' ERROR.')
 
-from postprocess import output_handler
-#########################################################
-# Graphic stuff.
-oh= output_handler.OutputHandler(modelSpace)
+# from postprocess import output_handler
+# #########################################################
+# # Graphic stuff.
+# oh= output_handler.OutputHandler(modelSpace)
 
-## Uncomment to display the eigenvectors
-oh.displayEigenvectors()
+# ## Uncomment to display the eigenvectors
+# oh.displayEigenvectors()
