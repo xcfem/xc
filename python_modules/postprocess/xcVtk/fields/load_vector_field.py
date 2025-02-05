@@ -63,7 +63,7 @@ class LoadVectorField(LoadOnPoints):
         :param multiplyByElementArea: for loads over elements (default= True).
         :param symType: shape of the symbol (defaults to an arrow).
         '''
-        super(LoadVectorField,self).__init__(loadPatternName= loadPatternName, fUnitConv= fUnitConv,scaleFactor= scaleFactor, showPushing= showPushing, symType= symType)
+        super(LoadVectorField,self).__init__(loadPatternName= loadPatternName, fUnitConv= fUnitConv, scaleFactor= scaleFactor, showPushing= showPushing, components= components, symType= symType)
         self.multiplyByElementArea= multiplyByElementArea
         self.setToDisp= setToDisp
 
@@ -311,4 +311,4 @@ class TorqueVectorField(LoadVectorField):
         :param multiplyByElementArea: for loads over elements (default= True).
         :param symType: shape of the symbol (defaults to a double-headed arrow).
         '''
-        super(TorqueVectorField,self).__init__(loadPatternName= loadPatternName, setToDisp= setToDisp, fUnitConv= fUnitConv,scaleFactor= scaleFactor, showPushing= showPushing, multiplyByElementArea= multiplyByElementArea, symType= symType)
+        super(TorqueVectorField,self).__init__(loadPatternName= loadPatternName, setToDisp= setToDisp, fUnitConv= fUnitConv,scaleFactor= scaleFactor, showPushing= showPushing, components= components, multiplyByElementArea= multiplyByElementArea, symType= symType)
