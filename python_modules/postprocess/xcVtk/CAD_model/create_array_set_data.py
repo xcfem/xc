@@ -7,8 +7,9 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 
 import sys
-import vtk
+
 from misc_utils import log_messages as lmsg
+from vtk.vtkCommonCore import vtkStringArray
 
 def VtkCreaStrArraySetData(setToDraw, entTypeName, attr):
     '''Creates an array of strings with information associated 
@@ -20,7 +21,7 @@ def VtkCreaStrArraySetData(setToDraw, entTypeName, attr):
     :param attr: attribute to be stored in the array
     '''
     # Define matrix
-    arr= vtk.vtkStringArray()
+    arr= vtkStringArray()
     arr.SetName(attr)
     # Select container.
     container= None

@@ -12,7 +12,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import sys
-import vtk
 from misc_utils import log_messages as lmsg
 import xc_base
 from misc.vtk_utils import utils_vtk
@@ -22,6 +21,32 @@ from postprocess.xcVtk.fields import local_axes_vector_field as lavf
 from postprocess.xcVtk.CAD_model import create_array_set_data
 import random as rd 
 import xc
+from vtk.vtkCommonCore import (
+    vtkIdList,
+    vtkPoints
+    )
+from vtk.vtkCommonDataModel import (
+    vtkUnstructuredGrid
+  )
+from vtk.vtkFiltersCore import (
+    vtkGlyph3D,
+    vtkIdFilter
+)
+from vtk.vtkFiltersGeneral import vtkCellCenters
+from vtk.vtkRenderingCore import (
+    vtkActor,
+    vtkActor2D,
+    vtkPolyDataMapper,
+    vtkDataSetMapper,
+    vtkRenderer,
+    vtkSelectVisiblePoints
+)
+from vtk.vtkCommonDataModel import (
+    VTK_VERTEX,
+    vtkCellTypes
+)
+from vtk.vtkFiltersSources import vtkSphereSource
+from vtk.vtkRenderingLabel import vtkLabeledDataMapper
 
 class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
     ''' Define the parameters to configure the output for
@@ -43,11 +68,11 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         '''
         if(field):
             field.setupOnGrid(self.gridRecord.uGrid)
-        self.gridMapper= vtk.vtkDataSetMapper()
+        self.gridMapper= vtkDataSetMapper()
         self.gridMapper.SetInputData(self.gridRecord.uGrid)
         if(field):
             field.setupOnMapper(self.gridMapper)
-        elemActor= vtk.vtkActor()
+        elemActor= vtkActor()
         elemActor.SetMapper(self.gridMapper)
         elemActor.GetProperty().SetColor(color[0],color[1],color[2])
 
@@ -75,20 +100,20 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
 
         :param radius: radius of the sphere used as symbol to represent nodes.
         '''
-        sphereSource= vtk.vtkSphereSource()
+        sphereSource= vtkSphereSource()
         sphereSource.SetRadius(radius)
         sphereSource.SetThetaResolution(5)
         sphereSource.SetPhiResolution(5)
 
-        markNodes= vtk.vtkGlyph3D()
+        markNodes= vtkGlyph3D()
         markNodes.SetInputData(self.gridRecord.uGrid)
         markNodes.SetSourceData(sphereSource.GetOutput())
         markNodes.ScalingOff()
         markNodes.OrientOff()
 
-        mappNodes= vtk.vtkPolyDataMapper()
+        mappNodes= vtkPolyDataMapper()
         mappNodes.SetInputData(markNodes.GetOutput())
-        visNodes= vtk.vtkActor()
+        visNodes= vtkActor()
         visNodes.SetMapper(mappNodes)
         visNodes.GetProperty().SetColor(rd.random(),rd.random(),rd.random())
         self.renderer.AddActor(visNodes)
@@ -110,8 +135,8 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                           Defaults to None: no modal analysis.
         '''
         # Define grid
-        self.nodes= vtk.vtkPoints()
-        self.gridRecord.uGrid= vtk.vtkUnstructuredGrid()
+        self.nodes= vtkPoints()
+        self.gridRecord.uGrid= vtkUnstructuredGrid()
         self.gridRecord.uGrid.SetPoints(self.nodes)
         eSet= self.gridRecord.xcSet
         eSet.numerate()
@@ -139,19 +164,19 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
             setElems= eSet.elements
             for e in setElems:
                 vertices= xc_base.vector_int_to_py_list(e.getIdxNodes)
-                vtx= vtk.vtkIdList()
+                vtx= vtkIdList()
                 for vIndex in vertices:
                     vtx.InsertNextId(vIndex)
-                #if(e.getVtkCellType!= vtk.VTK_VERTEX): LCPT commented out 20250120
+                #if(e.getVtkCellType!= VTK_VERTEX): LCPT commented out 20250120
                 self.gridRecord.uGrid.InsertNextCell(e.getVtkCellType,vtx)
             setConstraints= eSet.getConstraints
             for c in setConstraints:
                 if(hasattr(c,'getIdxNodes')):
                     vertices= xc_base.vector_int_to_py_list(c.getIdxNodes)
-                    vtx= vtk.vtkIdList()
+                    vtx= vtkIdList()
                     for vIndex in vertices:
                         vtx.InsertNextId(vIndex)
-                    if(c.getVtkCellType!= vtk.VTK_VERTEX):
+                    if(c.getVtkCellType!= VTK_VERTEX):
                         self.gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)
             return True
         else:
@@ -177,7 +202,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                       color)
         '''
         retval= self.VtkLoadElemMesh(field, defFScale, eigenMode)
-        self.renderer= vtk.vtkRenderer()
+        self.renderer= vtkRenderer()
         self.renderer.SetBackground(self.bgRComp, self.bgGComp, self.bgBComp)
         self.VtkDefineNodesActor(0.002)
         self.VtkDefineElementsActor("surface", field, color)
@@ -307,7 +332,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                     0.01)
         :param scaleConstr: scale of SPConstraints symbols (defaults to 0.2)
         '''
-        self.renderer= vtk.vtkRenderer()
+        self.renderer= vtkRenderer()
         self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
         if(type(xcSets)==list):
             for s in xcSets:
@@ -529,32 +554,32 @@ def VtkLoadIdsNodes(recordGrid):
 
 def VtkDisplayIdsNodes(recordGrid, renderer):
     '''Display node labels (not implemented yet)'''
-    ids= vtk.vtkIdFilter()
+    ids= vtkIdFilter()
     ids.SetInput(recordGrid.uGrid)
     ids.CellIdsOff()
     ids.PointIdsOff()
 
     VtkLoadIdsNodes(recordGrid)
 
-    visPts= vtk.vtkSelectVisiblePoints()
+    visPts= vtkSelectVisiblePoints()
     visPts.SetInput("ids")
     visPts.SetRenderer(renderer)
     visPts.SelectionWindowOff()
 
     #Create the mapper to display the point ids.  Specify the format to
     #   use for the labels.  Also create the associated actor.
-    ldm= vtk.vtkLabeledShStrMapper()
+    ldm= vtkLabeledDataMapper()
     ldm.SetInput("visPts")
     ldm.LabelTextProperty().SetColor(0.1,0.1,0.1)
-    nodeLabels= vtk.vtkActor2D().SetMapper(ldm)
+    nodeLabels= vtkActor2D().SetMapper(ldm)
     renderer.AddActor2D(nodeLabels)
 
 def VtkDisplayIdsElements(ids):
     '''Display element labels. Not implemented yet.'''
-    cc= vtk.vtkCellCenters()
-    vtk.SetInput(ids) # Cell centroids. 
+    cc= vtkCellCenters()
+    cc.SetInput(ids) # Cell centroids. 
 
-    visCells= vtk.vtkSelectVisiblePoints()
+    visCells= vtkSelectVisiblePoints()
     visCells.SetInput(cc)
     visCells.SetRenderer("renderer")
     visCells.SelectionWindowOff()
@@ -562,9 +587,9 @@ def VtkDisplayIdsElements(ids):
     #Create the mapper to display the cell ids.  Specify the format to
     # use for the labels.  Also create the associated actor.
 
-    cellMapper= vtk.vtkLabeledShStrMapper
+    cellMapper= vtkLabeledDataMapper
     cellMapper.SetInput(visCells)
     cellMapper.LabelTextProperty().SetColor(0,0,0.9)
 
-    cellLabels= vtk.vtkActor2D()
+    cellLabels= vtkActor2D()
     cellLabels.SetMapper(cellMapper)

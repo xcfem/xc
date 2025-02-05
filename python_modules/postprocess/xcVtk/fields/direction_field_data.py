@@ -10,10 +10,15 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
-import vtk
 # from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import vector_field_data as vfd
-
+from vtk.vtkRenderingCore import (
+    vtkActor,
+    vtkPolyDataMapper
+)
+from vtk.vtkCommonCore import (
+    vtkLookupTable
+  )
 class DirectionFieldData(vfd.VectorFieldData):
   '''Directions (modulus doesn't matters) Vectors defined at points.'''
   def __init__(self, name, color, numberOfComponents= 3, scaleFactor= 1.0):
@@ -24,7 +29,7 @@ class DirectionFieldData(vfd.VectorFieldData):
       scaleFactor: scale factor for the size of the vectors.
     '''
     super(DirectionFieldData,self).__init__(name,numberOfComponents,scaleFactor)
-    self.lookupTable= vtk.vtkLookupTable()
+    self.lookupTable= vtkLookupTable()
     self.lookupTable.SetNumberOfTableValues(2)
     lutColor= [color[0],color[1],color[2],1.0]
     self.lookupTable.SetTableValue(0,lutColor)
@@ -32,7 +37,7 @@ class DirectionFieldData(vfd.VectorFieldData):
 
   def setupMapper(self):
     self.setupGlyph()
-    self.mapper = vtk.vtkPolyDataMapper()
+    self.mapper = vtkPolyDataMapper()
     self.mapper.SetInputConnection(self.glyph.GetOutputPort())
     self.mapper.SetScalarModeToUsePointFieldData()
     self.mapper.SetColorModeToMapScalars()
@@ -44,7 +49,7 @@ class DirectionFieldData(vfd.VectorFieldData):
 
   def setupActor(self):
     self.setupMapper()
-    self.actor = vtk.vtkActor()
+    self.actor = vtkActor()
     self.actor.SetMapper(self.mapper)
     return self.actor
 

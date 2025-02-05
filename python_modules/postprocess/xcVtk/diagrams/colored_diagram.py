@@ -10,6 +10,18 @@ __email__= "l.pereztato@gmail.com"
 import vtk
 from postprocess.xcVtk.fields import vtk_lut_field
 from operator import itemgetter
+from vtk.vtkCommonCore import (
+    vtkDoubleArray,
+    vtkPoints
+    )
+from vtk.vtkCommonDataModel import (
+    vtkPolyData,
+    vtkCellArray
+  )
+from vtk.vtkRenderingCore import (
+    vtkActor,
+    vtkPolyDataMapper
+)
 
 class ColoredDiagram(vtk_lut_field.LUTField):
     ''' Colored diagram of a function over a linear domain (set of 1D 
@@ -48,9 +60,9 @@ class ColoredDiagram(vtk_lut_field.LUTField):
     def createDiagramDataStructure(self):
         # Crea las estructuras de datos necesarias para crear el diagrama.
         self.initializeMinMax()
-        self.points= vtk.vtkPoints()
-        self.scalars= vtk.vtkDoubleArray()
-        self.cells= vtk.vtkCellArray()
+        self.points= vtkPoints()
+        self.scalars= vtkDoubleArray()
+        self.cells= vtkCellArray()
 
     def resetEstrucDatosDiagrama(self):
         #«Resetea» las estructuras de datos necesarias para crear el diagrama.
@@ -171,17 +183,17 @@ class ColoredDiagram(vtk_lut_field.LUTField):
 
     def createDiagramActor(self):
       # Crea el actor para el diagrama.
-      self.diagram= vtk.vtkPolyData()
+      self.diagram= vtkPolyData()
       self.diagram.SetPoints(self.points)
       point_data= self.diagram.GetPointData()
       point_data.SetScalars(self.scalars)
       self.diagram.SetPolys(self.cells)
 
-      self.mapper= vtk.vtkPolyDataMapper()
+      self.mapper= vtkPolyDataMapper()
       self.mapper.SetInputData(self.diagram)
       self.mapper.SetScalarRange(self.valMin, self.valMax)
       self.mapper.SetLookupTable(self.lookUpTable)
-      self.actor= vtk.vtkActor() 
+      self.actor= vtkActor() 
       self.actor.SetMapper(self.mapper)
 
     def addDiagramToScene(self, recordDisplay, orientation=1, title=None):

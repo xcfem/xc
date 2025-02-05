@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-import vtk
+from vtk.vtkRenderingAnnotation import vtkCornerAnnotation
 from misc_utils import data_struct_utils as su
 import xc
 
@@ -20,7 +20,7 @@ class ScreenAnnotation(object):
 
         :param caption: caption of the image.
         '''
-        self.annotation = vtk.vtkCornerAnnotation()
+        self.annotation = vtkCornerAnnotation()
         self.date= datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.annotation.SetText(self.upperRight, self.date) 
         self.annotation.SetText(self.upperLeft, self.version)

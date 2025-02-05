@@ -16,6 +16,7 @@ from postprocess.xcVtk.fields import field_base as fb
 from postprocess import extrapolate_elem_attr
 from postprocess import control_vars as cv
 from misc_utils import log_messages as lmsg
+from vtk.vtkCommonCore import vtkDoubleArray
 
 class ScalarField(fb.FieldBase):
     '''Scalar field defined at nodes.
@@ -55,7 +56,7 @@ class ScalarField(fb.FieldBase):
 
         '''
         # Scalar values.
-        self.arr= vtk.vtkDoubleArray()
+        self.arr= vtkDoubleArray()
         self.arr.SetName(self.name)
         self.arr.SetNumberOfTuples(len(nodeSet))
         self.arr.SetNumberOfComponents(1)

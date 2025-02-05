@@ -13,7 +13,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 
-import vtk
+from vtk.vtkCommonCore import vtkLookupTable
+from vtk.vtkRenderingAnnotation import vtkScalarBarActor
 
 class LUTField(object):
     '''Provides de variables involved in the drawing of a
@@ -81,7 +82,7 @@ class LUTField(object):
         to map scalar values into rga (red-green-blue-alpha transparency) color 
         specification or rga into scalar values. 
         '''
-        self.lookUpTable= vtk.vtkLookupTable()
+        self.lookUpTable= vtkLookupTable()
         self.lookUpTable.SetNumberOfTableValues(1024)
         self.lookUpTable.SetHueRange(0.667,0)
         if(self.rangeIsValid()): # Range is valid.
@@ -109,7 +110,7 @@ class LUTField(object):
                              3 for right-vertical bar(defaults to horizontal)
         '''
 
-        self.scalarBar= vtk.vtkScalarBarActor()
+        self.scalarBar= vtkScalarBarActor()
         
         pos= self.scalarBar.GetPositionCoordinate()
         pos.SetCoordinateSystemToNormalizedViewport()
@@ -141,7 +142,7 @@ class LUTField(object):
         between color values and data values
         '''
 
-        self.scalarBar= vtk.vtkScalarBarActor()
+        self.scalarBar= vtkScalarBarActor()
 
         pos= self.scalarBar.GetPositionCoordinate()
         pos.SetCoordinateSystemToNormalizedViewport()

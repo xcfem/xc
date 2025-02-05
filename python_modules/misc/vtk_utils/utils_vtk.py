@@ -7,9 +7,28 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import sys
-import vtk
 import math
 from misc_utils import log_messages as lmsg
+from vtk.vtkCommonCore import (
+    vtkDoubleArray,
+    vtkPoints
+    )
+from vtk.vtkCommonDataModel import (
+    vtkPolyData
+  )
+from vtk.vtkRenderingCore import (
+    vtkActor,
+    vtkPolyDataMapper,
+    vtkGlyph3DMapper
+)
+from vtk.vtkFiltersSources import (
+    vtkArrowSource,
+    vtkSphereSource,
+    vtkConeSource,
+    vtkCubeSource,
+    vtkCylinderSource,
+    vtkPlaneSource
+)
 
 def create_actors_for_vtk_symbols(pointData, scale):
     ''' Create the symbols stored in point data.
@@ -84,29 +103,29 @@ def point_to_glyph(pointData, symbType, scale):
         # colors.append(p[2])
     glyphSource= get_symbol_source(symbType, center= vPos, normal= vDir)
     
-    vtkPoints= vtk.vtkPoints()
-    orientation= vtk.vtkDoubleArray()
+    vtk_points= vtkPoints()
+    orientation= vtkDoubleArray()
     orientation.SetName('Orientation')
     orientation.SetNumberOfComponents(3)
-    scaleArray= vtk.vtkDoubleArray()
+    scaleArray= vtkDoubleArray()
     scaleArray.SetName('Scale')
     scaleArray.SetNumberOfComponents(3)
-    # colorArray= vtk.vtkFloatArray()
+    # colorArray= vtkFloatArray()
     # colorArray.SetName('Color')
     # colorArray.SetNumberOfComponents(3)
     for p, vDir in zip(positions, dirs):
-        vtkPoints.InsertNextPoint(p[0], p[1], p[2])
+        vtk_points.InsertNextPoint(p[0], p[1], p[2])
         orientation.InsertNextTuple3(vDir[0],vDir[1],vDir[2])
         scaleArray.InsertNextTuple3(scale,scale/2.0,scale/2.0)
         # colorArray.InsertNextTuple3(color[0],color[1],color[2])
 
-    polyData= vtk.vtkPolyData()
-    polyData.SetPoints(vtkPoints)
+    polyData= vtkPolyData()
+    polyData.SetPoints(vtk_points)
     polyData.GetPointData().AddArray(orientation)
     polyData.GetPointData().AddArray(scaleArray)
     # polyData.GetPointData().AddArray(colorArray)
 
-    mapper = vtk.vtkGlyph3DMapper()
+    mapper = vtkGlyph3DMapper()
     mapper.SetInputData(polyData)
     mapper.SetSourceConnection(glyphSource.GetOutputPort())
     mapper.SetOrientationModeToDirection()
@@ -118,7 +137,7 @@ def point_to_glyph(pointData, symbType, scale):
     # mapper.SelectColorArray('Color')
     mapper.ScalingOn()
 
-    actor = vtk.vtkActor()
+    actor = vtkActor()
     actor.SetMapper(mapper)
     actor.GetProperty().SetColor(color[0],color[1],color[2])
 
@@ -135,25 +154,25 @@ def get_symbol_source(symbType, center= None, normal= None):
     '''
     symTpLow= symbType.lower()
     if 'arrow' in symTpLow:
-        retval= vtk.vtkArrowSource()
+        retval= vtkArrowSource()
     elif 'cone' in symTpLow:
-        retval= vtk.vtkConeSource()
+        retval= vtkConeSource()
     elif 'sphere' in symTpLow:
-        retval= vtk.vtkSphereSource()
+        retval= vtkSphereSource()
     elif 'cube' in symTpLow:
-        retval= vtk.vtkCubeSource()
+        retval= vtkCubeSource()
     elif 'shaftkey' in symTpLow:
-        retval= vtk.vtkCubeSource()
+        retval= vtkCubeSource()
         retval.SetZLength(0.25)
         retval.SetXLength(0.75)
     elif 'cylinder' in symTpLow:
-        retval= vtk.vtkCylinderSource()
+        retval= vtkCylinderSource()
     elif 'disk' in symTpLow:
-        retval= vtk.vtkCylinderSource()
+        retval= vtkCylinderSource()
         retval.SetHeight(0.25)
         retval.SetResolution(10)
     elif 'plane' in symTpLow:
-        retval= vtk.vtkPlaneSource()
+        retval= vtkPlaneSource()
         retval.SetNormal(1, 0, 0)
     else:
         methodName= sys._getframe(0).f_code.co_name
@@ -202,12 +221,12 @@ def add_symbol(symbSource, RGBcolor, vPosVx, vDir, scale):
     :param vDir: director vector to orient the symbol.
     :param scale: scale to be applied to the symbol representation
     '''
-    retval= vtk.vtkActor()
+    retval= vtkActor()
     parallel_to(retval,vDir)
     retval.SetPosition(vPosVx[0],vPosVx[1],vPosVx[2])
     retval.SetScale(scale,scale/2,scale/2)
     retval.GetProperty().SetColor(RGBcolor[0],RGBcolor[1],RGBcolor[2])
-    mapper = vtk.vtkPolyDataMapper()
+    mapper = vtkPolyDataMapper()
     mapper.SetInputConnection(symbSource.GetOutputPort())
     retval.SetMapper(mapper)
     return retval

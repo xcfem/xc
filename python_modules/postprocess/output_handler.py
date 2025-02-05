@@ -8,7 +8,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
 import sys
-import vtk
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.CAD_model import vtk_CAD_graphic
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
@@ -448,12 +447,12 @@ class OutputHandler(object):
         if(meshSceneOk):
             scOrient=1 # scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
             if(len(forcePairs)>0):
-                vFieldF.addToDisplay(displaySettings,orientation=scOrient,
-                                     title='Forces ('+ self.getOutputForceUnitSym() +')')
+                vFieldFTitle= 'Forces ('+ self.getOutputForceUnitSym() +')'
+                vFieldF.addToDisplay(displaySettings, orientation=scOrient, title=vFieldFTitle)
                 scOrient+=1
             if(len(momentPairs)>0):
-                vFieldM.addToDisplay(displaySettings,orientation=scOrient,
-                                     title='Moments (' + self.getOutputForceUnitSym() + self.getOutputLengthUnitSym() +')')
+                vFieldMTitle= 'Moments (' + self.getOutputForceUnitSym() + self.getOutputLengthUnitSym() +')'
+                vFieldM.addToDisplay(displaySettings, orientation= scOrient, title= vFieldMTitle)
             displaySettings.displayScene(caption= captionText, unitDescription= unitDescription, fileName= fileName)
         
     def displayReactionsOnSets(self, setsToDisplayReactions, fileName=None, defFScale=0.0, inclInertia= False, reactionCheckTolerance= 1e-7):
@@ -656,9 +655,9 @@ class OutputHandler(object):
         unitDescription= self.outputStyle.getForceUnitsDescription()
         if(not caption):
             caption= 'load case: ' + loadCaseName + ', set: ' + setToDisplay.name
-        LrefModSize=setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to auto-scale)
+        LrefModSize=setToDisplay.getBnd(defFScale).diagonal.getModulus() # representative length of set size (to auto-scale)
         vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.
-        vField= lvf.LoadVectorField(loadCaseName,setToDisplay,unitConversionFactor,vectorScale)
+        vField= lvf.LoadVectorField(loadCaseName, setToDisplay, unitConversionFactor, vectorScale)
         vField.multiplyByElementArea= self.outputStyle.multLoadsByElemArea
         displaySettings= self.getDisplaySettingsFE()
         displaySettings.setupGrid(setToDisplay)
@@ -727,7 +726,8 @@ class OutputHandler(object):
                                           multiplyByElementArea= self.outputStyle.multLoadsByElemArea, components= forceComponents)
             count= vFieldEl.dumpElementalLoads(preprocessor, defFScale=defFScale)
             if(count >0):
-                vFieldEl.addToDisplay(displaySettings,orientation= scOrient, title='Surface loads ('+self.getOutputForceUnitSym()+'/'+self.getOutputLengthUnitSym()+'2)' )
+                vFieldElTitle= 'Surface loads ('+self.getOutputForceUnitSym()+'/'+self.getOutputLengthUnitSym()+'2)'
+                vFieldEl.addToDisplay(displaySettings,orientation= scOrient, title= vFieldElTitle)
                 scOrient+=1
             # nodal loads
             ## forces on nodes.
@@ -735,17 +735,19 @@ class OutputHandler(object):
             vFieldFNod= lvf.LoadVectorField(loadPatternName= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing, components= forceComponents)
             count= vFieldFNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
             if(count >0):
-                vFieldFNod.addToDisplay(displaySettings,orientation= scOrient, title='Nodal loads ('+self.getOutputForceUnitSym()+')')
+                vFieldFNodTitle= 'Nodal loads ('+self.getOutputForceUnitSym()+')'
+                vFieldFNod.addToDisplay(displaySettings,orientation= scOrient, title= vFieldFNodTitle)
                 scOrient+=1
             momentComponents= self.modelSpace.getMomentComponents()
             ## moments on nodes.
             if(momentComponents):
-                vFieldMNod= lvf.LoadVectorField(loadPatternName= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing, components= momentComponents)
+                vFieldMNod= lvf.TorqueVectorField(loadPatternName= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing, components= momentComponents)
                 count= vFieldMNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
             else:
                 count= 0
             if(count >0):
-                vFieldMNod.addToDisplay(displaySettings,orientation= scOrient, title='Nodal moments ('+self.getOutputForceUnitSym()+')')
+                vFieldMNodTitle= 'Nodal moments ('+self.getOutputForceUnitSym()+')'
+                vFieldMNod.addToDisplay(displaySettings,orientation= scOrient, title= vFieldMNodTitle)
                 scOrient+=1
             if(not caption):
               caption= 'load case: ' + loadCaseName +' '+elLoadComp + ', set: ' + setToDisplay.name + ', '  + unitDescription
@@ -980,7 +982,8 @@ class OutputHandler(object):
         if(meshSceneOk):
             unitsScale= 1.0
             if equLoadVctScale not in [None,0]:
-                vField=vf.VectorField(name='mode'+str(eigenMode),fUnitConv=unitsScale,scaleFactor=equLoadVctScale,showPushing= False)
+                vfName= 'mode'+str(eigenMode)
+                vField= vf.VectorField(name= vfName, fUnitConv=unitsScale, scaleFactor=equLoadVctScale, showPushing= False)
                 setNodes= setToDisplay.nodes
                 for n in setNodes:
                     pos= n.getEigenPos3d(defFScale,eigenMode)

@@ -10,39 +10,53 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 
-import vtk
 from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import field_base as fb
 from postprocess.xcVtk.fields import vector_field_data as vfd
+from vtk.vtkCommonCore import vtkDoubleArray
+from vtk.vtkFiltersSources import (
+    vtkArrowSource,
+    vtkConeSource
+    )
+from vtk.vtkFiltersCore import (
+    vtkGlyph3D,
+    vtkAppendPolyData,
+    vtkCleanPolyData
+    )
+from vtk.vtkCommonDataModel import vtkPolyData
+from vtk.vtkRenderingCore import (
+    vtkActor,
+    vtkPolyDataMapper
+    )
 
 
 def get_double_headed_arrow():
     ''' Create a double headed arrow that can be set as source connection
         for a glyph.
     '''
-    arrow= vtk.vtkArrowSource()
+    arrow= vtkArrowSource()
     arrow.Update()
-    arrow_input= vtk.vtkPolyData()
+    arrow_input= vtkPolyData()
     arrow_input.ShallowCopy(arrow.GetOutput())
 
-    second_head= vtk.vtkConeSource()
+    second_head= vtkConeSource()
     tip_length= arrow.GetTipLength()
     second_head.SetHeight(tip_length)
     second_head.SetRadius(arrow.GetTipRadius())
     second_head.SetResolution(arrow.GetTipResolution())
     second_head.SetCenter([1.0-1.1*tip_length,0,0])
     second_head.Update()
-    second_head_input= vtk.vtkPolyData()
+    second_head_input= vtkPolyData()
     second_head_input.ShallowCopy(second_head.GetOutput())
 
     # Append the two meshes
-    appendFilter= vtk.vtkAppendPolyData()
+    appendFilter= vtkAppendPolyData()
     appendFilter.AddInputData(arrow_input)
     appendFilter.AddInputData(second_head_input)
     appendFilter.Update()
   
     #  Remove any duplicate points.
-    retval= vtk.vtkCleanPolyData()
+    retval= vtkCleanPolyData()
     retval.SetInputConnection(appendFilter.GetOutputPort())
     retval.Update()
     return retval
@@ -55,7 +69,7 @@ class VectorField(fb.FieldBase):
                             point (as oppssed to pull). Default: True.
     :ivar symType: shape of the symbol (defaults to an arrow).
     '''
-    def __init__(self, name, fUnitConv, scaleFactor, showPushing= True, symType=vtk.vtkArrowSource()):
+    def __init__(self, name, fUnitConv, scaleFactor, showPushing= True, symType= vtkArrowSource()):
         ''' Constructor.
         
         :param name: name of the vector field.
@@ -72,7 +86,7 @@ class VectorField(fb.FieldBase):
 
     def setupMapper(self):
         self.data.setupGlyph(self.fUnitConv, self.symType)
-        self.mapper = vtk.vtkPolyDataMapper()
+        self.mapper = vtkPolyDataMapper()
         self.mapper.SetInputConnection(self.data.glyph.GetOutputPort())
         self.mapper.SetScalarModeToUsePointFieldData()
         self.mapper.SetColorModeToMapScalars()
@@ -85,7 +99,7 @@ class VectorField(fb.FieldBase):
 
     def setupActor(self):
         self.setupMapper()
-        self.actor = vtk.vtkActor()
+        self.actor = vtkActor()
         self.actor.SetMapper(self.mapper)
         return self.actor
 
@@ -136,7 +150,7 @@ def get_force_and_torque_vector_fields(forceFieldName, forcePairs, torqueFieldNa
                         point (as oppssed to pull). Default: True.
     '''
     # Arrow representing forces.
-    forceArrow= vtk.vtkArrowSource()
+    forceArrow= vtkArrowSource()
     vFieldF= VectorField(name= forceFieldName, fUnitConv= fUnitConv,scaleFactor= scaleFactor, showPushing= True,symType= forceArrow) # Force
     vFieldF.populateFromPairList(forcePairs)
     # Double-headed arrow representing moments.
@@ -162,7 +176,7 @@ def get_disp_and_rotation_vector_fields(dispFieldName, dispPairs, rotationFieldN
     vFieldD= None
     if(dispFieldName is not None):
         if(len(dispPairs)>0):
-            dispArrow= vtk.vtkArrowSource()
+            dispArrow= vtkArrowSource()
             vFieldD= VectorField(name= dispFieldName, fUnitConv= fUnitConv, scaleFactor= scaleFactor, showPushing= showPushing, symType= dispArrow) # Displacement
             vFieldD.populateFromPairList(dispPairs)
     vFieldR= None

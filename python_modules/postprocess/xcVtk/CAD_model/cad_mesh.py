@@ -4,7 +4,25 @@
 from __future__ import print_function
 
 import sys
-import vtk
+from vtk.vtkCommonCore import (
+    vtkIdList,
+    vtkPoints
+    )
+from vtk.vtkFiltersSources import vtkSphereSource
+from vtk.vtkFiltersCore import (
+    vtkGlyph3D,
+    vtkIdFilter
+)
+from vtk.vtkFiltersCore import vtkGlyph3D
+from vtk.vtkRenderingCore import (
+    vtkActor,
+    vtkActor2D,
+    vtkPolyDataMapper,
+    vtkDataSetMapper,
+    vtkSelectVisiblePoints
+    )
+from vtk.vtkRenderingLabel import vtkLabeledDataMapper
+from vtk.vtkFiltersGeneral import vtkCellCenters
 import xc_base
 from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.CAD_model import create_array_set_data
@@ -28,21 +46,21 @@ def vtk_define_kpoint_actor(recordGrid, renderer, radius):
     :ivar radius:     radius of the spheres to be employed in the KPoints 
                       representation
     '''
-    sphereSource= vtk.vtkSphereSource()
+    sphereSource= vtkSphereSource()
     sphereSource.SetRadius(radius)
     sphereSource.SetThetaResolution(5)
     sphereSource.SetPhiResolution(5)
 
-    markKPts= vtk.vtkGlyph3D()
+    markKPts= vtkGlyph3D()
     markKPts.SetInputData(recordGrid.uGrid) 
     markKPts.SetSourceData(sphereSource.GetOutput())
     markKPts.ScalingOff()
     markKPts.OrientOff()
 
-    mappKPts= vtk.vtkPolyDataMapper()
+    mappKPts= vtkPolyDataMapper()
     mappKPts.SetInputData(markKPts.GetOutput())
 
-    visKPts= vtk.vtkActor()
+    visKPts= vtkActor()
     visKPts.SetMapper(mappKPts)
     visKPts.GetProperty().SetColor(.7, .5, .5)
 
@@ -55,9 +73,9 @@ def vtk_define_cells_actor(gridRecord, renderer, reprType, color= [rd.random(),r
     :param rendered: VTK renderer.
     :param reprType: representation type (points, wireframe or surface).
     '''
-    uGridMapper= vtk.vtkDataSetMapper()
+    uGridMapper= vtkDataSetMapper()
     uGridMapper.SetInputData(gridRecord.uGrid)
-    cellActor= vtk.vtkActor()
+    cellActor= vtkActor()
     cellActor.SetMapper(uGridMapper)
     cellActor.GetProperty().SetColor(color[0],color[1],color[2])
     if(reprType=="points"):
@@ -83,25 +101,25 @@ def VtkDibujaIdsKPts(uGrid, setToDraw, renderer):
     '''Draw the point labels.'''
     numKPtsDI= setToDraw.getPoints.size
     if(numKPtsDI>0):
-        ids= vtk.vtkIdFilter()
+        ids= vtkIdFilter()
         ids.SetInput(uGrid)
         ids.CellIdsOff()
         ids.PointIdsOff()
 
         VtkCargaIdsKPts(uGrid,setToDraw)
 
-        visPts= vtk.vtkSelectVisiblePoints()
+        visPts= vtkSelectVisiblePoints()
         visPts.SetInputConnection(ids.GetOutputPort())
         visPts.SetRenderer(renderer)
         visPts.SelectionWindowOff()
 
         #Create the mapper to display the point ids.  Specify the format to
         #  use for the labels.  Also create the associated actor.
-        ldm= vtk.vtkLabeledDataMapper()
+        ldm= vtkLabeledDataMapper()
         ldm.SetInputConnection(visPts.GetOutputPort())
         ldm.GetLabelTextProperty().SetColor(0.1,0.1,0.1)
 
-        pointLabels= vtk.vtkActor2D()
+        pointLabels= vtkActor2D()
         pointLabels.SetMapper(ldm)
 
         renderer.AddActor2D(pointLabels)
@@ -111,7 +129,7 @@ def VtkDibujaIdsKPts(uGrid, setToDraw, renderer):
 
 def VtkDibujaIdsCells(uGrid, setToDraw, entTypeName, renderer):
     ''' Create cell labels.'''
-    ids= vtk.vtkIdFilter()
+    ids= vtkIdFilter()
     ids.SetInput(uGrid)
     ids.CellIdsOff()
     ids.PointIdsOff()
@@ -119,21 +137,21 @@ def VtkDibujaIdsCells(uGrid, setToDraw, entTypeName, renderer):
     VtkCargaIdsCells(uGrid,setToDraw,entTypeName)
 
     # Dibuja las etiquetas de las líneas.
-    cc= vtk.vtkCellCenters()
+    cc= vtkCellCenters()
     cc.SetInputConnection(ids.GetOutputPort()) #  Centroides de las celdas. 
 
-    visCells= vtk.vtkSelectVisiblePoints()
+    visCells= vtkSelectVisiblePoints()
     visCells.SetInputConnection(cc.GetOutputPort())
     visCells.SetRenderer(renderer)
     visCells.SelectionWindowOff()
 
     #Create the mapper to display the cell ids.  Specify the format to
     # use for the labels.  Also create the associated actor.
-    cellMapper= vtk.vtkLabeledDataMapper()
+    cellMapper= vtkLabeledDataMapper()
     cellMapper.SetInputConnection(visCells.GetOutputPort())
     cellMapper.GetLabelTextProperty().SetColor(0,0,0.9)
 
-    cellLabels= vtk.vtkActor2D()
+    cellLabels= vtkActor2D()
     cellLabels.SetMapper(cellMapper)
 
     renderer.AddActor2D(cellLabels)
@@ -150,11 +168,11 @@ def vtk_load_mesh_data(gridRecord):
         '''
         for c in cellSet:
             vertices= xc_base.vector_int_to_py_list(c.getIdxVertices)
-            vtx= vtk.vtkIdList()
+            vtx= vtkIdList()
             for vIndex in vertices:
                 vtx.InsertNextId(vIndex)
             gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)        
-    kpoints= vtk.vtkPoints()
+    kpoints= vtkPoints()
     # Grid definition
     gridRecord.uGrid.SetPoints(kpoints)
     setToDraw= gridRecord.xcSet

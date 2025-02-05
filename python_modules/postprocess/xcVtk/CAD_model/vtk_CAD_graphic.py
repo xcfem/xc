@@ -12,7 +12,8 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import sys
-import vtk
+from vtk.vtkCommonDataModel import vtkUnstructuredGrid
+from vtk.vtkRenderingCore import vtkRenderer
 from postprocess.xcVtk.CAD_model import cad_mesh
 from postprocess.xcVtk import vtk_graphic_base
 from misc_utils import log_messages as lmsg
@@ -49,14 +50,14 @@ class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
 
         :param displayCellTypes: types of cell to be displayed.
         '''
-        self.gridRecord.uGrid= vtk.vtkUnstructuredGrid()
+        self.gridRecord.uGrid= vtkUnstructuredGrid()
         self.gridRecord.cellTypes= displayCellTypes
         setToDraw= self.gridRecord.xcSet
         self.gridRecord.uGrid.name= setToDraw.name+'_grid'
         numKPts= setToDraw.getPoints.size
         if(numKPts>0):
             cad_mesh.vtk_load_mesh_data(self.gridRecord)
-            self.renderer= vtk.vtkRenderer()
+            self.renderer= vtkRenderer()
             self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
             cad_mesh.vtk_define_kpoint_actor(self.gridRecord,self.renderer,0.02)
             cad_mesh.vtk_define_cells_actor(gridRecord= self.gridRecord, renderer= self.renderer, reprType= "surface")
