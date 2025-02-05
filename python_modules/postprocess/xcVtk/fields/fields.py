@@ -11,7 +11,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 
-import vtk
 from postprocess.xcVtk.fields import field_base as fb
 from postprocess import extrapolate_elem_attr
 from postprocess import control_vars as cv

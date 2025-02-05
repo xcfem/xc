@@ -7,7 +7,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import vtk
 from postprocess.xcVtk.fields import vtk_lut_field
 from operator import itemgetter
 from vtk.vtkCommonCore import (
