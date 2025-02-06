@@ -876,6 +876,8 @@ python tests/preprocessor/grid_model/test_grid_model_01.py
 python tests/preprocessor/grid_model/test_grid_model_02.py
 python tests/preprocessor/grid_model/test_elliptical_coord_01.py
 echo "$BLEU" "  Import/export tests." "$NORMAL"
+echo "$BLEU" "    Internal forces tests." "$NORMAL"
+python tests/preprocessor/import_export/test_convert_internal_forces.py
 echo "$BLEU" "    DXF tests." "$NORMAL"
 python tests/preprocessor/import_export/dxf/test_split_lines.py
 python tests/preprocessor/import_export/dxf/test_dxf_import_01.py
