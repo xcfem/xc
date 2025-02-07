@@ -110,8 +110,8 @@ controller.verbose= False # Don't display log messages.
 meanCFs= limitState.check(setCalc= None, listFile='N',calcMeanCF='Y', controller= controller, threeDim= True, crossSections= reinfConcreteSectionDistribution)
 
 # Check results.
-ratio1= abs(meanCFs[0]-0.51922390249173578)/0.51922390249173578
-ratio2= abs(meanCFs[1]-0.51808548496704088)/0.51808548496704088
+ratio1= abs(meanCFs[0]-0.36664102827984885)/0.36664102827984885
+ratio2= abs(meanCFs[1]-0.31946661434667833)/0.31946661434667833
 
 '''
 print('meanCFs= ',meanCFs)

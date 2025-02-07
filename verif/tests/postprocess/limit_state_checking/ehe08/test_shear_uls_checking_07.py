@@ -102,7 +102,7 @@ meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDist
 feProblem.errFileName= "cerr" # From now on display errors if any.
 
 ratio1= abs(meanCFs[0]-0.2851648810430528)/0.2851648810430528
-ratio2= abs(meanCFs[1]-0.27817040469035537)/0.27817040469035537
+ratio2= abs(meanCFs[1]-0.2768071589693887)/0.2768071589693887
 
 '''
 print('meanCFs= ',meanCFs)

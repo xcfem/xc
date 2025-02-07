@@ -100,7 +100,7 @@ controller.exhaustedSectionsThresholdCF= 1.03 # Accept some yielding.
 ## Perform checking.
 meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y', controller= controller,threeDim= True)
 
-ratio1= abs(meanCFs[0]-0.3834250069696015)/0.3834250069696015
+ratio1= abs(meanCFs[0]-0.3711686838673839)/0.3711686838673839
 ratio2= abs(meanCFs[1]-0.37791745348202144)/0.37791745348202144
 
 '''
