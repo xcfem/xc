@@ -687,7 +687,7 @@ def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
         retval=getVu2EHE08NoAtSiFis(fck,fcdTmp,1.5,Ncd,Ac,b0,d,AsPas,AsAct)
     return retval
 
-def getVsuEHE08(z,alpha,theta,AsTrsv,fyd, circular):
+def getVsuEHE08(z, alpha, theta, AsTrsv, fyd, circular):
     '''getVsuEHE08(z,alpha,theta,AsTrsv,fyd)  [units: N, m, rad]
     Return the value of Vsu (contribution of the web’s transverse 
     reinforcement to shear strength) for members WITH shear reinforcement,
@@ -696,7 +696,7 @@ def getVsuEHE08(z,alpha,theta,AsTrsv,fyd, circular):
     :param z: mechanic lever arm.
     :param alpha: angle of the transverse reinforcement with the member axis.
     :param theta: angle between the concrete compressed struts and the 
-     member axis (figure 44.2.3.1.a EHE).
+                  member axis (figure 44.2.3.1.a EHE).
     :param AsTrsv: transverse reinforcement area which contribution will 
                    be computed.
     :param fyd: design yield strength of the transverse reinforcement.
@@ -821,7 +821,13 @@ def getVcuEHE08CrackAngle(fcv, fcd, gammaC, Ncd, Ac, b0, d, AsPas, AsAct, theta,
     sgpcd=max(max(Ncd/Ac,-0.3*fcd),-12e6)
     FcvVcu=getFcvEHE08(0.15,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct)
     betaVcu= getBetaVcuEHE08(theta,thetaEVcu)
-    return FcvVcu*betaVcu*b0*d
+    fcv= FcvVcu*betaVcu
+    # Compute also the minimum value of the virtual shear strength
+    # according to clause 44.2.3.2.2 (see definition of Vcu).
+    fcvMin= getFcvMinEHE08(fcv, gammaC, d, chi, sgpcd)
+    retval= max(fcv, fcvMin)*b0*d
+    return retval
+
 
  
 def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue):
@@ -1612,6 +1618,10 @@ class ShearController(lscb.ShearControllerBase):
         self.Vu2= 0.0 # Shear strength at failure due to tensile force in the web
         self.Vu= 0.0 # Shear strength at failure.
 
+    def isCracked(self):
+        ''' Return true if the concrete stress is greater than its tensile strength.'''
+        return ((self.E0*self.eps1)>=self.fctdH)
+
     def calcVuEHE08NoAt(self, scc, rcSets):
         ''' Compute the shear strength at failure without shear reinforcement
          according to clause 44.2.3.2.1 of EHE-08.
@@ -1637,7 +1647,8 @@ class ShearController(lscb.ShearControllerBase):
                 self.eps1= rcSets.getMaxConcreteStrain()
                 self.concreteAxialForce= rcSets.getConcreteCompression()
                 self.strutWidth= scc.getCompressedStrutWidth() # b0
-                if((self.E0*self.eps1)<self.fctdH): # Non cracked section
+                crackedSection= self.isCracked()
+                if(not crackedSection): # Non cracked section
                     self.I= scc.getHomogenizedI(self.E0)
                     self.S= scc.getSPosHomogenized(self.E0)
                     self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
