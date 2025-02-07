@@ -74,7 +74,7 @@ modelSpace.fixNode000_000(nodA.tag)
 Nd= -6000e3 # Axial force when checking shear.
 Myd= 0.0 # Y bending moment value when checking shear.
 Mzd= 0.0 # Z bending moment value when checking shear.
-Vd= 1460e3 # Shear value.
+Vd= 1800e3 # Shear value.
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -115,12 +115,12 @@ zRef= 0.683 # No documentary support (check that all runs as usual).
 ratio0= abs(z-zRef)/zRef
 Vu1= shearController.Vu1
 Vcu= shearController.Vcu
-VcuRef= 713.75e3 # No documentary support (check that all runs as usual). 
+VcuRef= 749.11e3 # No documentary support (check that all runs as usual). 
 ratio1= abs(Vcu-VcuRef)/VcuRef
 Vsu= shearController.Vsu
-VsuRef= 1682.01e3 # No documentary support (check that all runs as usual).
+VsuRef= 1843.96e3 # No documentary support (check that all runs as usual).
 ratio2= abs(Vsu-VsuRef)/VsuRef
-VuRef= 2395.76e3 # No documentary support (check that all runs as usual).
+VuRef= 2593.07e3 # No documentary support (check that all runs as usual).
 Vu2= shearController.Vu2
 ratio3= abs(Vu2-VuRef)/VuRef
 Vu= shearController.Vu
