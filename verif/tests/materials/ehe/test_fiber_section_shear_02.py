@@ -6,6 +6,12 @@
 from __future__ import division
 from __future__ import print_function
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+
 import math
 import xc
 from misc import scc3d_testing_bench
@@ -17,15 +23,7 @@ from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking
 from postprocess import limit_state_data as lsd
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
-__copyright__= "Copyright 2015, LCPT and AO_O"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
-
-
 # Data
-
 width= 0.4  # Cross-section width [m]
 depth= 0.6  # Cross-section depth [m]
 cover= 0.05 # Cover [m]
