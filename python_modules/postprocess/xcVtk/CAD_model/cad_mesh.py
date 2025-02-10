@@ -4,6 +4,7 @@
 from __future__ import print_function
 
 import sys
+
 from vtk.vtkCommonCore import (
     vtkIdList,
     vtkPoints
@@ -22,7 +23,11 @@ from vtk.vtkRenderingCore import (
     vtkSelectVisiblePoints
     )
 from vtk.vtkRenderingLabel import vtkLabeledDataMapper
-from vtk.vtkFiltersGeneral import vtkCellCenters
+from postprocess.xcVtk import vtk_version
+if(vtk_version.vtk_major>=9):
+    from vtk.vtkFiltersCore import vtkCellCenters
+else:
+    from vtk.vtkFiltersGeneral import vtkCellCenters
 import xc_base
 from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.CAD_model import create_array_set_data

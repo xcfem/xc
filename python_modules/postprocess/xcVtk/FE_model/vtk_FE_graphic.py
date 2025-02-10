@@ -32,7 +32,11 @@ from vtk.vtkFiltersCore import (
     vtkGlyph3D,
     vtkIdFilter
 )
-from vtk.vtkFiltersGeneral import vtkCellCenters
+from postprocess.xcVtk import vtk_version
+if(vtk_version.vtk_major>=9):
+    from vtk.vtkFiltersCore import vtkCellCenters
+else:
+    from vtk.vtkFiltersGeneral import vtkCellCenters
 from vtk.vtkRenderingCore import (
     vtkActor,
     vtkActor2D,
