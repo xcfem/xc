@@ -93,7 +93,7 @@ void XC::ElementHandler::SeedElemHandler::setDefaultMaterial(const std::string &
 	if(seed) // If we have a seed element already
 	  {
 	    // The seed could be no longer valid with the new material so
-	    // we remove it and it will be create in getSeeElement if needed.
+	    // we remove it and it will be create in getSeedElement if needed.
 	    free();
 	  }
 	ProtoElementHandler::setDefaultMaterial(name); //update the material name-
