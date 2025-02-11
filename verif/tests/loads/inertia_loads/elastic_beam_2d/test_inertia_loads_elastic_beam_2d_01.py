@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Home made test.
+''' Check inertia loads on ElasticBeam2d elements.'''
 
 from __future__ import division
 from __future__ import print_function
