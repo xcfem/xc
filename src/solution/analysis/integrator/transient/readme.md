@@ -25,3 +25,4 @@ Determing the next time step for an analysis including inertial effects can be d
 - [Spreader Beam Analysis](https://portwooddigital.com/2024/02/21/spreader-beam-analysis/)
 - [All About Making that ZPA](https://portwooddigital.com/2024/10/06/all-about-making-that-zpa/)
 - [A Simple Base-Isolated Model](https://portwooddigital.com/2024/11/26/a-simple-base-isolated-model/)
+- [Damping Is a Sensitive Subject](https://portwooddigital.com/2025/02/09/damping-is-a-sensitive-subject/)
