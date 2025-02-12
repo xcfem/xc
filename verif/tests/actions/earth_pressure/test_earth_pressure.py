@@ -11,63 +11,65 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es"
 
+import math
 from actions.earth_pressure import earth_pressure as ep
 
+soil01= ep.EarthPressureModel(zGround=50, zBottomSoils=[40,30,20,10,-10], KSoils=[1.1,1.2,1.3,1.4,1.5], gammaSoils=[2,2.1,2.2,2.3,2.4], zWater=25, gammaWater=1)
 
-soil01=ep.EarthPressureModel(zGround=50, zBottomSoils=[40,30,20,10,-10],KSoils=[1.1,1.2,1.3,1.4,1.5],gammaSoils=[2,2.1,2.2,2.3,2.4], zWater=25, gammaWater=1)
+zi= list(range(0,50,5))
+zi.reverse() # Top down.
 
-pres01_45=soil01.getPressure(45)
-pres01_40=soil01.getPressure(40)
-pres01_35=soil01.getPressure(35)
-pres01_30=soil01.getPressure(30)
-pres01_25=soil01.getPressure(25)
-pres01_20=soil01.getPressure(20)
-pres01_15=soil01.getPressure(15)
-pres01_10=soil01.getPressure(10)
-pres01_5=soil01.getPressure(5)
-pres01_0=soil01.getPressure(0)
+pres01= dict()
+for z in zi:
+    pres01[z]= soil01.getPressure(z)
 
-pres01_45_tg=1.1*2*5
-pres01_40_tg=1.1*2*10
-pres01_35_tg=pres01_40_tg+1.2*2.1*5
-pres01_30_tg=pres01_40_tg+1.2*2.1*10
-pres01_25_tg=pres01_30_tg+1.3*2.2*5
-pres01_20_tg=pres01_25_tg+1.3*1.2*5+5
-pres01_15_tg=pres01_20_tg+1.4*1.3*5+5
-pres01_10_tg=pres01_20_tg+1.4*1.3*10+10
-pres01_5_tg=pres01_10_tg+1.5*1.4*5+5
-pres01_0_tg=pres01_10_tg+1.5*1.4*10+10
+pres01_tg= dict()
+pres01_tg[45]=1.1*2*5
+pres01_tg[40]=1.1*2*10
+pres01_tg[35]=pres01_tg[40]+1.2*2.1*5
+pres01_tg[30]=pres01_tg[40]+1.2*2.1*10
+pres01_tg[25]=pres01_tg[30]+1.3*2.2*5
+pres01_tg[20]=pres01_tg[25]+1.3*1.2*5+5
+pres01_tg[15]=pres01_tg[20]+1.4*1.3*5+5
+pres01_tg[10]=pres01_tg[20]+1.4*1.3*10+10
+pres01_tg[5]=pres01_tg[10]+1.5*1.4*5+5
+pres01_tg[0]=pres01_tg[10]+1.5*1.4*10+10
 
-OK01= abs(pres01_45-pres01_45_tg)<1e-6 and abs(pres01_40-pres01_40_tg<1e-6)  and abs(pres01_35-pres01_35_tg)<1e-6 and abs(pres01_30-pres01_30_tg)<1e-6 and abs(pres01_25-pres01_25_tg)<1e-6 and abs(pres01_20-pres01_20_tg)<1e-6 and abs(pres01_15-pres01_15_tg)<1e-6 and abs(pres01_10-pres01_10_tg)<1e-6 and abs(pres01_5-pres01_5_tg)<1e-6 and abs(pres01_0-pres01_0_tg)<1e-6
+err01= 0.0
+for z in zi:
+    err01+= (pres01[z]-pres01_tg[z])**2
+err01= math.sqrt(err01)
+
+OK01= (err01<1e-6)
 
 soil02=ep.EarthPressureModel(zGround=50, zBottomSoils=[40,30,20,10,-10],KSoils=[1.1,1.2,1.3,1.4,1.5],gammaSoils=[2,2.1,2.2,2.3,2.4], zWater=-1e3, gammaWater=1)
 
-pres02_45=soil02.getPressure(45)
-pres02_40=soil02.getPressure(40)
-pres02_35=soil02.getPressure(35)
-pres02_30=soil02.getPressure(30)
-pres02_25=soil02.getPressure(25)
-pres02_20=soil02.getPressure(20)
-pres02_15=soil02.getPressure(15)
-pres02_10=soil02.getPressure(10)
-pres02_5=soil02.getPressure(5)
-pres02_0=soil02.getPressure(0)
+pres02= dict()
+for z in zi:
+    pres02[z]= soil02.getPressure(z)
 
-pres02_45_tg= 1.1*2*5
-pres02_40_tg= 1.1*2*10
-pres02_35_tg=pres02_40_tg+1.2*2.1*5
-pres02_30_tg=pres02_40_tg+1.2*2.1*10
-pres02_25_tg=pres02_30_tg+1.3*2.2*5
-pres02_20_tg=pres02_25_tg+1.3*2.2*5
-pres02_15_tg=pres02_20_tg+1.4*2.3*5
-pres02_10_tg=pres02_20_tg+1.4*2.3*10
-pres02_5_tg=pres02_10_tg+1.5*2.4*5
-pres02_0_tg=pres02_10_tg+1.5*2.4*10
+pres02_tg= dict()
+pres02_tg[45]= 1.1*2*5
+pres02_tg[40]= 1.1*2*10
+pres02_tg[35]= pres02_tg[40]+1.2*2.1*5
+pres02_tg[30]= pres02_tg[40]+1.2*2.1*10
+pres02_tg[25]= pres02_tg[30]+1.3*2.2*5
+pres02_tg[20]= pres02_tg[25]+1.3*2.2*5
+pres02_tg[15]= pres02_tg[20]+1.4*2.3*5
+pres02_tg[10]= pres02_tg[20]+1.4*2.3*10
+pres02_tg[5]= pres02_tg[10]+1.5*2.4*5
+pres02_tg[0]= pres02_tg[10]+1.5*2.4*10
 
-OK02= abs(pres02_45-pres02_45_tg)<1e-6 and abs(pres02_40-pres02_40_tg<1e-6)  and abs(pres02_35-pres02_35_tg)<1e-6 and abs(pres02_30-pres02_30_tg)<1e-6 and abs(pres02_25-pres02_25_tg)<1e-6 and abs(pres02_20-pres02_20_tg)<1e-6 and abs(pres02_15-pres02_15_tg)<1e-6 and abs(pres02_10-pres02_10_tg)<1e-6 and abs(pres02_5-pres02_5_tg)<1e-6 and abs(pres02_0-pres02_0_tg)<1e-6
+err02= 0.0
+for z in zi:
+    err02+= (pres02[z]-pres02_tg[z])**2
+err02= math.sqrt(err02)
+
+OK02= (err02<1e-6)
 
 '''
-print(OK02)
+print(err01, OK01)
+print(err02, OK02)
 '''
 
 import os
@@ -77,3 +79,18 @@ if (OK01 and OK02):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+
+# # Graphic output
+# import matplotlib.pyplot as plt
+# xi= list()
+# y01i= list()
+# y02i= list()
+# for z in zi:
+#     xi.append(z)
+#     y01i.append(pres01[z])
+#     y02i.append(pres02[z])
+    
+# plt.plot(y01i, xi, '-')
+# plt.plot(y02i, xi, '.')
+
+# plt.show()
