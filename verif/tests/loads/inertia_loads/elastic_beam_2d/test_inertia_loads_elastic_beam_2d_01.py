@@ -113,3 +113,8 @@ if abs(ratio0)<1e-12 and abs(ratio1)<1e-12 and abs(ratio2)<1e-12 and abs(ratio3)
 else:
     lmsg.error(fname+' ERROR.')
 
+# # Graphic output
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayLoads()
+# oh.displayReactions()
