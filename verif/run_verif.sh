@@ -1093,6 +1093,7 @@ python tests/loads/inertia_loads/trusses/test_inertia_loads_truss_05.py
 python tests/loads/inertia_loads/trusses/test_inertia_loads_truss_06.py
 echo "$BLEU" "      Inertia loads on 2D elastic beams." "$NORMAL"
 python tests/loads/inertia_loads/elastic_beam_2d/test_inertia_loads_elastic_beam_2d_01.py
+python tests/loads/inertia_loads/elastic_beam_2d/test_inertia_loads_elastic_beam_2d_02.py
 echo "$BLEU" "      Inertia loads on 3D elastic beams." "$NORMAL"
 python tests/loads/inertia_loads/elastic_beam_3d/test_inertia_loads_elastic_beam_3d_01.py
 python tests/loads/inertia_loads/elastic_beam_3d/test_inertia_loads_elastic_beam_3d_02.py
