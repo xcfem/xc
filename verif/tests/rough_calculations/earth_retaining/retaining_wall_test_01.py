@@ -230,13 +230,13 @@ wall.setULSInternalForcesEnvelope(uls_results.internalForces)
 err= ratioStemPositions**2+math.sqrt((sr.Foverturning-7.126392782772217)**2+(sr.Fsliding-1.5388825671842905)**2+(sr.Fbearing-1.1391242090325084)**2+(sr.FadmPressure-0.9478396196024435)**2)
 err= math.sqrt(err)
 
+'''
 print('ratioStemPositions= ', ratioStemPositions)
 print("Overturning: ",sr.Foverturning)
 print("Sliding: ",sr.Fsliding)
 print("Bearing: ",sr.Fbearing)
 print("Allow. press. ratio: ",sr.FadmPressure)
 print("error.: ",err)
-'''
 '''
 
 pth= "/tmp/tmp_results/"
