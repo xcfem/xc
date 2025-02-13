@@ -33,10 +33,22 @@ class PressureModelBase(object):
     def getPressure(self,z):
         '''Return the earth pressure acting on the points at global 
            coordinate z.
+
+        :param z: global z coordinate.
         '''
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(className+'.'+methodName+'; error: getPressure must be overloaded in derived classes.')
+        lmsg.error(className+'.'+methodName+'; error: this method must be overloaded in derived classes.')
+        return 0.0
+
+    def getVerticalPressure(self, z):
+        ''' Return the weight of the earth at the given z.
+
+        :param z: global z coordinate.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+'; error: this method must be overloaded in derived classes.')
         return 0.0
 
     def getForces2D(self, segment2d, numDiv= 10, beta= 0.0):
@@ -181,25 +193,42 @@ class UniformPressureOnBackfill(PressureModelBase):
 
         :param z: global z coordinate.
         '''
-        self.zTopLev.reverse()
-        retval=len(self.zTopLev)-bisect.bisect_left(self.zTopLev,z)-1
-        self.zTopLev.reverse()
+        retval= None
+        if z <= self.zGround:
+            for i, zBottom in enumerate(self.zTopLev[1:]): # slice because the first one is self.zGround.
+                if(z>=zBottom):
+                    retval= i
+                    break;
         return retval
-        
-    def getPressure(self,z):
-        '''Return the earth pressure acting on the points at global coordinate z.
+
+    def getKSoil(self, z):
+        ''' Return the earth pressure coefficient at the given z.
+
         :param z: global z coordinate.
         '''
-        ret_press= 0.0
+        retval= 0.0
         if z <= self.zGround:
             ind= self.getLayerIndex(z) # index of the soil layer that correspond to z.
-            ret_press= self.KSoils[ind]*self.qUnif # Compute pressure.
-        # else:
-        #     className= type(self).__name__
-        #     methodName= sys._getframe(0).f_code.co_name
-        #     lmsg.warning(className+'.'+methodName+'; asking for pressure of point above zGround (z= '+str(z)+', zGround= '+str(self.zGround)+')')
-        return ret_press
-            
+            retval= self.KSoils[ind]
+        return retval
+        
+    def getPressure(self, z):
+        '''Return the earth pressure acting on the points at global coordinate z.
+
+        :param z: global z coordinate.
+        '''
+        return self.getKSoil(z)*self.getVerticalPressure(z)
+
+    def getVerticalPressure(self, z):
+        ''' Return the weight of the earth at the given z.
+
+        :param z: global z coordinate.
+        '''
+        retval= 0.0
+        if z <= self.zGround:
+            retval= self.qUnif # Compute pressure.
+        return retval
+    
     def appendVerticalLoadToCurrentLoadPattern(self, xcSet, vDir, iXCoo= 0,iZCoo= 2, alph= math.radians(30)):
         '''Append to the current load pattern the vertical pressures on 
            a set of elements due to the uniform load. According to
@@ -258,6 +287,11 @@ class EarthPressureModel(UniformPressureOnBackfill):
         super(EarthPressureModel,self).__init__(zGround= zGround, zBottomSoils= zBottomSoils, KSoils= KSoils, qUnif= qUnif)
         self.gammaSoils= gammaSoils
         self.zWater= zWater # global Z coordinate of groundwater level 
+        # Check if zWater is already found in self.zTopLev
+        tol= 1e-4
+        for z in self.zTopLev:
+            if(abs(z-zWater)<tol):
+                zWater-= tol*10.0
         # Insert zWater level at the proper position.
         self.zTopLev.reverse()
         bisect.insort_left(self.zTopLev,zWater)
@@ -268,27 +302,68 @@ class EarthPressureModel(UniformPressureOnBackfill):
             self.gammaSoils.insert(indWat-1,self.gammaSoils[indWat-1])
             for i in range(indWat,len(self.gammaSoils)):
                 self.gammaSoils[i]-=gammaWater
-            self.gammaWater=[0]*indWat+[gammaWater]*(len(self.gammaSoils)-indWat)                
+            self.gammaWater=[0]*indWat+[gammaWater]*(len(self.gammaSoils)-indWat)
+    
+    def getWaterWeight(self, z):
+        ''' Return the weight of the water at the given z.
 
-    def getPressure(self,z):
-        '''Return the earth pressure acting on the points at global coordinate z.
         :param z: global z coordinate.
         '''
-        ret_press= super(EarthPressureModel,self).getPressure(z)
-        if z <= self.zGround:
+        retval= 0.0
+        if z <= self.zWater:
             ind= self.getLayerIndex(z) # soil layer that correspond to z.
-            # Compute pressure.
-            ## Pressure of the upper soil layers.
-            for i in range(ind):
-                ret_press+= self.KSoils[i]*self.gammaSoils[i]*(self.zTopLev[i]-self.zTopLev[i+1])
-            ## Pressure of the layer that correspond to z.
-            ret_press+=self.KSoils[ind]*self.gammaSoils[ind]*(self.zTopLev[ind]-z)
-            ## Water pressure.
+            ## Buoyancy.
             if(self.zWater>self.zBottomSoils[-1]):
                 for i in range(ind):
-                    ret_press+= self.gammaWater[i]*(self.zTopLev[i]-self.zTopLev[i+1])
-                ret_press+= self.gammaWater[ind]*(self.zTopLev[ind]-z)
-        return ret_press
+                    retval+= self.gammaWater[i]*(self.zTopLev[i]-self.zTopLev[i+1])
+                retval+= self.gammaWater[ind]*(self.zTopLev[ind]-z)
+        return retval
+
+    def getWaterPressure(self, z):
+        '''Return the water pressure acting on the points at global coordinate z.
+
+        :param z: global z coordinate.
+        '''
+        return self.getWaterWeight(z)
+    
+    def getEffectivePressure(self, z):
+        '''Return the effective pressure acting on the points at global coordinate z.
+
+        :param z: global z coordinate.
+        '''
+        return self.getKSoil(z)*self.getEffectiveWeight(z)
+
+    def getPressure(self, z):
+        '''Return the earth pressure acting on the points at global coordinate z.
+
+        :param z: global z coordinate.
+        '''
+        return self.getEffectivePressure(z)+self.getWaterPressure(z)
+
+    def getVerticalPressure(self, z):
+        ''' Return the weight of the earth at the given z.
+
+        :param z: global z coordinate.
+        '''
+        retval= super(EarthPressureModel,self).getVerticalPressure(z)
+        if z <= self.zGround:
+            retval= self.getEffectiveWeight()+getWaterWeight()
+    
+    def getEffectiveWeight(self, z):
+        ''' Return the weight of the earth at the given z.
+
+        :param z: global z coordinate.
+        '''
+        retval= super(EarthPressureModel,self).getVerticalPressure(z)
+        if z <= self.zGround:
+            ind= self.getLayerIndex(z) # soil layer that correspond to z.
+            # Compute weight.
+            ## Weight of the upper soil layers.
+            for i in range(ind):
+                retval+= self.gammaSoils[i]*(self.zTopLev[i]-self.zTopLev[i+1])
+            ## Pressure of the layer that correspond to z.
+            retval+= self.gammaSoils[ind]*(self.zTopLev[ind]-z)
+        return retval
 
 class EarthPressureBase(PressureModelBase):
     '''Parameters to define a load of type earth pressure
@@ -329,12 +404,26 @@ class PeckPressureEnvelope(EarthPressureBase):
         self.gammaWater=gammaWater
         super(PeckPressureEnvelope,self).__init__( zGround, gammaSoil)
         self.H= H
-        
+
+    def getVerticalPressure(self, z):
+        ''' Return the weight of the earth at the given z.
+
+        :param z: global z coordinate.
+        '''
+        retval= 0.0
+        if(z<self.zGround):
+            retval= self.gammaSoil*self.H
+            if(z<self.zWater):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; weights under water table not implemented.')
+        return retval
+
     def getPressure(self,z):
         '''Return the earth pressure acting on the points at global coordinate z.'''
         ret_press= 0.0
         if(z<self.zGround):
-            ret_press=0.65*self.K*self.gammaSoil*self.H
+            ret_press=0.65*self.K*self.getVerticalPressure(z)
             if(z<self.zWater):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
@@ -371,7 +460,7 @@ class StripLoadOnBackfill(UniformLoadOnStem):
     :ivar coef: is a coefficient = 1.5 (default) for the usual case of non-rigid
                 walls. It can be redefined =2 for rigid walls
     '''
-    def __init__(self,qLoad, zLoad,distWall, stripWidth):
+    def __init__(self ,qLoad, zLoad,distWall, stripWidth):
         ''' Constructor.
 
         :param qLoad: surcharge load (force per unit area).

@@ -42,7 +42,7 @@ momentRefValue= topSoilForceMoment+bottomSoilForceMoment
 
 # Check values.
 err= 0.0
-refPressures= [1250]*2+[2500]*4
+refPressures= [1250]*3+[2500]*3
 for pressure, refPressure in zip(pressures, refPressures):
     err+= (pressure-refPressure)**2
 err= math.sqrt(err)
