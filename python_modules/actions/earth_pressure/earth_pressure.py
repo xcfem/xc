@@ -261,7 +261,6 @@ class UniformLoadOnBackfill(UniformPressureOnBackfill): # Probably to DEPRECATE 
 class EarthPressureModel(UniformPressureOnBackfill):
     '''Parameters to define a load of type earth pressure
 
-      :ivar zGround: global Z coordinate of ground level
       :ivar gammaSoils: list of weight density for each soil (from top to
             bottom)
       :ivar zWater: global Z coordinate of groundwater level 
