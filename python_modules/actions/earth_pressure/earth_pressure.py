@@ -340,7 +340,8 @@ class EarthPressureModel(UniformPressureOnBackfill):
         '''
         retval= super(EarthPressureModel,self).getVerticalPressure(z)
         if z <= self.zGround:
-            retval= self.getEffectiveVerticalPressure()+getWaterPressure()
+            retval= self.getEffectiveVerticalPressure(z)+self.getWaterPressure(z)
+        return retval
     
     def getEffectiveVerticalPressure(self, z):
         ''' Return the effective vertical pressure at the given z.
