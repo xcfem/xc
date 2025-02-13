@@ -42,7 +42,7 @@ class PressureModelBase(object):
         return 0.0
 
     def getVerticalPressure(self, z):
-        ''' Return the weight of the earth at the given z.
+        ''' Return the vertival pressure at the given z.
 
         :param z: global z coordinate.
         '''
@@ -220,7 +220,7 @@ class UniformPressureOnBackfill(PressureModelBase):
         return self.getKSoil(z)*self.getVerticalPressure(z)
 
     def getVerticalPressure(self, z):
-        ''' Return the weight of the earth at the given z.
+        ''' Return the vertical pressure of the earth at the given z.
 
         :param z: global z coordinate.
         '''
@@ -281,7 +281,7 @@ class EarthPressureModel(UniformPressureOnBackfill):
               bottom)
         :param zWater: global Z coordinate of groundwater level 
               (if zGroundwater<minimum z of model => there is no groundwater)
-        :param gammaWater: weight density of water
+        :param gammaWater: weight density of water.
         :param qUnif: uniform load over the backfill surface (defaults to 0)
         '''
         super(EarthPressureModel,self).__init__(zGround= zGround, zBottomSoils= zBottomSoils, KSoils= KSoils, qUnif= qUnif)
@@ -304,8 +304,8 @@ class EarthPressureModel(UniformPressureOnBackfill):
                 self.gammaSoils[i]-=gammaWater
             self.gammaWater=[0]*indWat+[gammaWater]*(len(self.gammaSoils)-indWat)
     
-    def getWaterWeight(self, z):
-        ''' Return the weight of the water at the given z.
+    def getWaterPressure(self, z):
+        ''' Return the pressure of the water at the given z.
 
         :param z: global z coordinate.
         '''
@@ -319,19 +319,12 @@ class EarthPressureModel(UniformPressureOnBackfill):
                 retval+= self.gammaWater[ind]*(self.zTopLev[ind]-z)
         return retval
 
-    def getWaterPressure(self, z):
-        '''Return the water pressure acting on the points at global coordinate z.
-
-        :param z: global z coordinate.
-        '''
-        return self.getWaterWeight(z)
-    
     def getEffectivePressure(self, z):
         '''Return the effective pressure acting on the points at global coordinate z.
 
         :param z: global z coordinate.
         '''
-        return self.getKSoil(z)*self.getEffectiveWeight(z)
+        return self.getKSoil(z)*self.getEffectiveVerticalPressure(z)
 
     def getPressure(self, z):
         '''Return the earth pressure acting on the points at global coordinate z.
@@ -341,16 +334,16 @@ class EarthPressureModel(UniformPressureOnBackfill):
         return self.getEffectivePressure(z)+self.getWaterPressure(z)
 
     def getVerticalPressure(self, z):
-        ''' Return the weight of the earth at the given z.
+        ''' Return the vertical pressure at the given z.
 
         :param z: global z coordinate.
         '''
         retval= super(EarthPressureModel,self).getVerticalPressure(z)
         if z <= self.zGround:
-            retval= self.getEffectiveWeight()+getWaterWeight()
+            retval= self.getEffectiveVerticalPressure()+getWaterPressure()
     
-    def getEffectiveWeight(self, z):
-        ''' Return the weight of the earth at the given z.
+    def getEffectiveVerticalPressure(self, z):
+        ''' Return the effective vertical pressure at the given z.
 
         :param z: global z coordinate.
         '''
@@ -369,13 +362,13 @@ class EarthPressureBase(PressureModelBase):
     '''Parameters to define a load of type earth pressure
 
       :ivar zGround:   global Z coordinate of ground level
-      :ivar gammaSoil: weight density of soil .
+      :ivar gammaSoil: weight density of soil.
     '''
     def __init__(self, zGround, gammaSoil):
         ''' Constructor.
 
-        :param zGround:   global Z coordinate of ground level
-        :param gammaSoil: weight density of soil 
+        :param zGround: global Z coordinate of ground level.
+        :param gammaSoil: weight density of soil. 
         '''
         super(EarthPressureBase,self).__init__()
         self.zGround= zGround
@@ -396,7 +389,7 @@ class PeckPressureEnvelope(EarthPressureBase):
         :param zGround: global Z coordinate of ground level.
         :param gammaSoil: weight density of soil.
         :param zWater: global Z coordinate of groundwater level.
-        :param gammaWater: weight density of water
+        :param gammaWater: weight density of water.
         :param H: height of the cut.
         '''
         self.K= math.tan(math.pi/4.0-phi/2.0)**2 # Rankine active pressure coefficient.
@@ -406,7 +399,7 @@ class PeckPressureEnvelope(EarthPressureBase):
         self.H= H
 
     def getVerticalPressure(self, z):
-        ''' Return the weight of the earth at the given z.
+        ''' Return the vertical pressure at the given z.
 
         :param z: global z coordinate.
         '''
@@ -416,7 +409,7 @@ class PeckPressureEnvelope(EarthPressureBase):
             if(z<self.zWater):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
-                lmsg.error(className+'.'+methodName+'; weights under water table not implemented.')
+                lmsg.error(className+'.'+methodName+'; pressures under water table not implemented.')
         return retval
 
     def getPressure(self,z):
