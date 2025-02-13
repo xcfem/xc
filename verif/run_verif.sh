@@ -275,7 +275,8 @@ echo "$BLEU" "  Earth pressure tests." "$NORMAL"
 python tests/actions/earth_pressure/test_peck_pressure_envelope.py
 python tests/actions/earth_pressure/test_uniform_pressure_on_ground_01.py
 python tests/actions/earth_pressure/test_uniform_pressure_on_ground_02.py
-python tests/actions/earth_pressure/test_earth_pressure.py
+python tests/actions/earth_pressure/test_earth_pressure_01.py
+python tests/actions/earth_pressure/test_earth_pressure_02.py
 python tests/actions/earth_pressure/test_earth_pressure_sloped_backfill.py
 python tests/actions/earth_pressure/culmann_method_test_01.py
 python tests/actions/earth_pressure/culmann_method_test_02.py
