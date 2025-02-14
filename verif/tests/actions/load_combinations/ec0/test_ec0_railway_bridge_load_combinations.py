@@ -12,21 +12,22 @@ import filecmp
 import loadCombinations
 from actions.load_combination_utils import ec0_es # Eurocode 0 Spanish annex.
 
-lcg= ec0_es.combGenerator
+lcg= ec0_es.bridgeCombGenerator
+safetyFactorSet= 'B' # Table A2.4(B)
 # Permanent load.
-G1= lcg.newPermanentAction(actionName=  'G1', actionDescription= 'Peso propio.')
-G2= lcg.newPermanentAction(actionName=  'G2', actionDescription= 'Carga muerta.')
-G3= lcg.newPermanentAction(actionName=  'G3', actionDescription= 'Retracción.')
+G1= lcg.newSelfWeightAction(actionName=  'G1', actionDescription= 'Peso propio.', safetyFactorSet= safetyFactorSet)
+G2= lcg.newDeadLoadAction(actionName=  'G2', actionDescription= 'Carga muerta.', safetyFactorSet= safetyFactorSet)
+G3= lcg.newRheologicalAction(actionName=  'G3', actionDescription= 'Retracción.', safetyFactorSet= safetyFactorSet)
 
 # Traffic load.
-Q1= lcg.newRailwayTrafficAction(actionName= 'Q1', actionDescription= 'LM1', combinationFactorsName= 'LM71_alone_uls', incompatibleActions= ['Q1.*'])
+Q1= lcg.newRailwayTrafficAction(actionName= 'Q1', actionDescription= 'LM1', combinationFactorsName= 'LM71_alone_uls', incompatibleActions= ['Q1.*'], safetyFactorSet= safetyFactorSet)
 
 # Wind load.
-Q2= lcg.newWindAction(actionName= 'Q2', actionDescription= 'Viento transversal.', dependsOn= None, incompatibleActions= None, context= 'railway_bridge')
+Q2= lcg.newWindAction(actionName= 'Q2', actionDescription= 'Viento transversal.', dependsOn= None, incompatibleActions= None, context= 'railway_bridge', safetyFactorSet= safetyFactorSet)
 
 # Thermal load.
-Q3A1= lcg.newThermalAction(actionName= 'Q3A1', actionDescription= 'Incremento de temperatura.', dependsOn= None, incompatibleActions= ['Q3A.*'], context= 'railway_bridge', notDeterminant= True) # Not determinant load.
-Q3A2= lcg.newThermalAction(actionName= 'Q3A2', actionDescription= 'Decremento de temperatura.', dependsOn= None, incompatibleActions= ['Q3A.*'], context= 'railway_bridge')
+Q3A1= lcg.newThermalAction(actionName= 'Q3A1', actionDescription= 'Incremento de temperatura.', dependsOn= None, incompatibleActions= ['Q3A.*'], context= 'railway_bridge', notDeterminant= True, safetyFactorSet= safetyFactorSet) # Not determinant load.
+Q3A2= lcg.newThermalAction(actionName= 'Q3A2', actionDescription= 'Decremento de temperatura.', dependsOn= None, incompatibleActions= ['Q3A.*'], context= 'railway_bridge', safetyFactorSet= safetyFactorSet)
 
 # Derailment. Design situation II
 A2= lcg.newAccidentalAction(actionName= 'A2', actionDescription= 'Descarrilamiento situación II', dependsOn= None, incompatibleActions= None, context= None)

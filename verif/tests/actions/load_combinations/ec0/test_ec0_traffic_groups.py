@@ -11,16 +11,17 @@ import os
 import filecmp
 from actions.load_combination_utils import ec0_es # Eurocode 0 Spanish annex.
 
-lcg= ec0_es.combGenerator
+lcg= ec0_es.bridgeCombGenerator
+safetyFactorSet= 'B' # Table A2.4(B)
 # Permanent load.
-G= lcg.newPermanentAction(actionName=  'G', actionDescription= 'Self weight.')
+G= lcg.newSelfWeightAction(actionName=  'G', actionDescription= 'Self weight.', safetyFactorSet= safetyFactorSet)
 # Settlement load.
-S= lcg.newSettlementAction(actionName= 'S', actionDescription= 'Settlement.')
+S= lcg.newSettlementAction(actionName= 'S', actionDescription= 'Settlement.', safetyFactorSet= safetyFactorSet)
 # Thermal load.
-T= lcg.newThermalAction(actionName=  'T', actionDescription= 'Thermal action.', context= 'road_bridge')
+T= lcg.newThermalAction(actionName=  'T', actionDescription= 'Thermal action.', context= 'road_bridge', safetyFactorSet= safetyFactorSet)
 # Traffic load.
 actionTuples= [('TS','Tandem system','road_traffic_loads_gr1a_trucks'), ('UDL','Uniformly distributed load.','road_traffic_loads_gr1a_udl')]
-actionGroup= lcg.newActionGroup(family= 'variables', actionTuples= actionTuples, partialSafetyFactorsName= 'road_traffic')
+actionGroup= lcg.newActionGroup(family= 'variables', actionTuples= actionTuples, partialSafetyFactorsName= 'road_traffic', safetyFactorSet= safetyFactorSet)
 
 lcg.computeCombinations()
 

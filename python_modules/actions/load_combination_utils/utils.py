@@ -66,11 +66,8 @@ class CombGenerator(object):
     def newActionGroup(self, family: str, actionTuples, partialSafetyFactorsName:str, dependsOn= None, incompatibleActions= None):
         ''' Creates an action and appends it to the combinations generator.
 
-        :param weighting: name of the weighting factors repository.
         :param family: family to which the action belongs ("permanent", "variable", "seismic",...)
         :param actionTuples: tuples of (name, description, combinationFactorsName) defining the actions of the group.
-        :param actionDescription: description of the action.
-        :param combinationFactorsName: name of the combination factors container.
         :param partialSafetyFactorsName: name of the partial safety factor container.
         :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
