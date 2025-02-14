@@ -391,7 +391,8 @@ python tests/actions/load_combinations/ec0/test_ec0_traffic_groups.py
 python tests/actions/load_combinations/ec0/test_ec0_seismic_combinations.py
 python tests/actions/load_combinations/ec0/test_ec0_accidental_combinations_01.py
 python tests/actions/load_combinations/ec0/test_ec0_accidental_combinations_02.py
-python tests/actions/load_combinations/ec0/test_ec0_railway_bridge_load_combinations.py
+python tests/actions/load_combinations/ec0/test_ec0_railway_bridge_load_combinations_01.py
+python tests/actions/load_combinations/ec0/test_ec0_railway_bridge_load_combinations_02.py
 echo "$BLEU" "  Load combination container tests." "$NORMAL"
 python tests/actions/load_combinations/comb_container/test_comb_container_01.py
 python tests/actions/load_combinations/comb_container/test_comb_container_02.py

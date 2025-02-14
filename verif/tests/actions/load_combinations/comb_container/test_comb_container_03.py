@@ -14,7 +14,7 @@ combContainer= combinations.CombContainer()
 pth= os.path.dirname(__file__)
 if(not pth):
     pth= '.'
-csvFileName= pth+'/../../../aux/reference_files/ref_railway_load_combinations_ec0.csv'
+csvFileName= pth+'/../../../aux/reference_files/ref_railway_load_combinations_ec0_01.csv'
 
 combContainer.readFromCSV(inputFileName= csvFileName)
 combContainer.renumber(start= 1000)

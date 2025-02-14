@@ -22,7 +22,7 @@ combContainer= combinations.CombContainer()
 pth= os.path.dirname(__file__)
 if(not pth):
     pth= '.'
-jsonFileName= pth+'/../../../aux/reference_files/ref_railway_load_combinations_ec0.json'
+jsonFileName= pth+'/../../../aux/reference_files/ref_railway_load_combinations_ec0_01.json'
 
 combContainer.readFromJSON(inputFileName= jsonFileName)
 

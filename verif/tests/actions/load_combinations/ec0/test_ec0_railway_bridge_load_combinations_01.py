@@ -34,7 +34,7 @@ A2= lcg.newAccidentalAction(actionName= 'A2', actionDescription= 'Descarrilamien
 
 lcg.computeCombinations()
 combContainer= lcg.getCombContainer()
-outputFileName= 'railway_load_combinations_ec0.json'
+outputFileName= 'railway_load_combinations_ec0_01.json'
 outputPath= '/tmp/'+outputFileName
     
 combContainer.writeJSON(outputFileName= outputPath)
@@ -48,6 +48,9 @@ refFile= pth+'/../../../aux/reference_files/ref_'+outputFileName
 
 # Check results.
 comparisonOK= filecmp.cmp(refFile, outputPath, shallow=False)
+
+## Generate PDF.
+# combContainer.exportToPDF(fileName= outputFileName.replace('.json', '.pdf'))
 
 # Ouput result test.
 from misc_utils import log_messages as lmsg
