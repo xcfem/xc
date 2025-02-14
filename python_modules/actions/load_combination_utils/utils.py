@@ -59,6 +59,11 @@ class CombGenerator(object):
         if(dependsOn is not None):
             retval.relationships.appendMain(dependsOn)
         if(incompatibleActions is not None):
+            if(family=='permanent'):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                warningMsg= className+'.'+methodName+"; permanent load '"+str(actionName)+"' with incompatible actions: "+str(incompatibleActions)
+                lmsg.warning(warningMsg)
             for actionNameRegex in incompatibleActions:
                 retval.relationships.appendIncompatible(actionNameRegex)
         return retval

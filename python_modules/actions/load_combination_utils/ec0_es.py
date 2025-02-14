@@ -43,7 +43,6 @@ bridges_partial_safety_factors= bridge_factors.getPartialSafetyFactors()
 bridges_partial_safety_factors['self_weight_set_a']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0.9,1.1,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
 bridges_partial_safety_factors['dead_load_set_a']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0.9,1.1,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
 bridges_partial_safety_factors['earth_pressure_set_a']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0,1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['hydrostatic_pressure_set_a']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0,1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
 ### Eurocode 0. Table AN.9 [table A2.4(B)]. Design values of actions (STR/GEO) (Set B)
 bridges_partial_safety_factors['permanent_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1,1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
 bridges_partial_safety_factors['self_weight_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0,1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
@@ -51,7 +50,7 @@ bridges_partial_safety_factors['dead_load_set_b']= loadCombinations.PartialSafet
 bridges_partial_safety_factors['rheological_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
 bridges_partial_safety_factors['friction_in_sliding_supports_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
 bridges_partial_safety_factors['earth_pressure_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['water_pressure_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
+bridges_partial_safety_factors['pore_water_pressure_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
 bridges_partial_safety_factors['settlement_linear_analysis_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.20,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
 bridges_partial_safety_factors['settlement_non_linear_analysis_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
 # Partial safety factors for variable actions.
@@ -67,7 +66,7 @@ bridges_partial_safety_factors['thermal_set_b']= loadCombinations.PartialSafetyF
 bridges_partial_safety_factors['hydrostatic_pressure_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
 #### Eurocode 7 variable load. Table AN.9 [table A2.4(B)]. Live load on backfill surfaces.
 bridges_partial_safety_factors['load_on_backfill_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.5,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-bridges_partial_safety_factors['construction_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
+bridges_partial_safety_factors['construction_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1), loadCombinations.SLSPartialSafetyFactors(0,0))
 
 ### Eurocode 0. Table AN.8 [table A2.4(A)]. Design values of actions (EQU) (Set A)
 bridges_partial_safety_factors['variable_set_a']= bridges_partial_safety_factors['variable_set_b']
@@ -77,6 +76,7 @@ bridges_partial_safety_factors['railway_traffic_set_a']= bridges_partial_safety_
 #### Thermal actions.
 bridges_partial_safety_factors['thermal_set_a']= bridges_partial_safety_factors['thermal_set_b']
 #### Hydrostatic pressure
+bridges_partial_safety_factors['pore_water_pressure_set_a']= bridges_partial_safety_factors['pore_water_pressure_set_b']
 bridges_partial_safety_factors['hydrostatic_pressure_set_a']= bridges_partial_safety_factors['hydrostatic_pressure_set_b']
 #### Eurocode 7 variable load. Table AN.9 [table A2.4(B)]. Live load on backfill surfaces.
 bridges_partial_safety_factors['load_on_backfill_set_a']= bridges_partial_safety_factors['load_on_backfill_set_b']
@@ -241,9 +241,9 @@ class BridgeCombGenerator(utils.CombGenerator):
             lmsg.error(errorMsg)
         return self.newAction(family= 'permanent',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
                
-    def newWaterPressureAction(self, actionName: str, actionDescription: str, safetyFactorSet:str, dependsOn= None, incompatibleActions= None, context= None):
-        ''' Creates a water pressure action and appends it to the combinations 
-            generator.
+    def newPoreWaterPressureAction(self, actionName: str, actionDescription: str, safetyFactorSet:str, dependsOn= None, incompatibleActions= None, context= None):
+        ''' Creates a pore water pressure action and appends it to the 
+            combinations generator.
 
         :param actionName: name of the action.
         :param actionDescription: description of the action.
@@ -253,13 +253,13 @@ class BridgeCombGenerator(utils.CombGenerator):
         :param context: context for the action (building, railway bridge, footbridge,...)
         '''
         if(safetyFactorSet=='A'):
-            partialSafetyFactorsName= 'water_pressure_set_a'
+            partialSafetyFactorsName= 'pore_water_pressure_set_a'
         elif(safetyFactorSet=='B'):
-            partialSafetyFactorsName= 'water_pressure_set_b'
+            partialSafetyFactorsName= 'pore_water_pressure_set_b'
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            errorMsg= className+'.'+methodName+'; safety factor set: '+str(safetyFactorSet)+' not implemented'
+            errorMsg= className+'.'+methodName+'; safety factor set: '+str(safetyFactorSet)+' not implemented for pore water pressure.'
             lmsg.error(errorMsg)
         return self.newAction(family= 'permanent',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
         
@@ -327,6 +327,28 @@ class BridgeCombGenerator(utils.CombGenerator):
             errorMsg= className+'.'+methodName+'; safety factor set: '+str(safetyFactorSet)+' not implemented for rheological actions.'
             lmsg.error(errorMsg)        
         return self.newAction(family= 'variable',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
+    
+    def newFreeWaterPressureAction(self, actionName: str, actionDescription: str, safetyFactorSet:str, dependsOn= None, incompatibleActions= None, context= None):
+        ''' Creates a free water pressure action and appends it to the 
+            combinations generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param safetyFactorSet: identifier of the safety factor set 'A', 'B' or 'C' corresponding to tables Table A2.4(A), Table A2.4(B) or A2.4(C)
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        :param context: context for the action (building, railway bridge, footbridge,...)
+        '''
+        if(safetyFactorSet=='A'):
+            partialSafetyFactorsName= 'free_water_pressure_set_a'
+        elif(safetyFactorSet=='B'):
+            partialSafetyFactorsName= 'free_water_pressure_set_b'
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= className+'.'+methodName+'; safety factor set: '+str(safetyFactorSet)+' not implemented for free water pressure.'
+            lmsg.error(errorMsg)
+        return self.newAction(family= 'permanent',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
     
     def newHeavyVehicleAction(self, actionName: str, actionDescription: str, group:str, safetyFactorSet:str, dependsOn= None, incompatibleActions= None, context= 'road_bridge', notDeterminant= False):
         ''' Creates a heavy vehicle action and appends it to the combinations 
@@ -467,6 +489,7 @@ class BridgeCombGenerator(utils.CombGenerator):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; not implemented for context: '+str(context) + ' return None.')
+            exit(1)
         return retval
     
     def newWindAction(self, actionName: str, actionDescription: str, safetyFactorSet:str, dependsOn= None, incompatibleActions= None, context= None, notDeterminant= False):
