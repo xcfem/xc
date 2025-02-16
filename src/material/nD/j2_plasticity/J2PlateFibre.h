@@ -121,6 +121,8 @@ class J2PlateFibre: public NDMaterial
     void setnu(const double &);
     double getYieldStress(void) const;
     void setYieldStress(const double &);
+    double getNegativeYieldStress(void) const;
+    void setNegativeYieldStress(const double &);
     double getHiso(void) const;
     void setHiso(const double &);
     double getHkin(void) const;

@@ -110,6 +110,14 @@ double XC::J2PlateFibre::getYieldStress(void) const
 void XC::J2PlateFibre::setYieldStress(const double &sgY)
   { sigmaY= sgY; }
 
+//! @brief Return the material negative yield stress.
+double XC::J2PlateFibre::getNegativeYieldStress(void) const
+  { return sigmaYn; }
+
+//! @brief Set the material negative yield stress.
+void XC::J2PlateFibre::setNegativeYieldStress(const double &sgYn)
+  { sigmaYn= sgYn; }
+
 //! @brief Return the material isotropic hardening parameter.
 double XC::J2PlateFibre::getHiso(void) const
   { return Hiso; }
