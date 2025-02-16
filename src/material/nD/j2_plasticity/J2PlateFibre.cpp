@@ -60,14 +60,14 @@ void XC::J2PlateFibre::init(void)
 //! @brief Default constructor.
 XC::J2PlateFibre::J2PlateFibre(int tag):
   NDMaterial(tag, ND_TAG_J2PlateFibre),
-  E(0.0), nu(0.0), sigmaY(0.0), Hiso(0.0), Hkin(0.0), rho(0.0),
+  E(0.0), nu(0.0), sigmaY(0.0), Hiso(0.0), Hkin(0.0), rho(0.0), sigmaYn(0.0),
   parameterID(0), SHVs(), Tepsilon(order), Tepsilon0(order), dg_n1(0.0)
   { init(); }
 
-XC::J2PlateFibre::J2PlateFibre(int tag, double e, double g, double sy, double hi, double hk)
+XC::J2PlateFibre::J2PlateFibre(int tag, double e, double g, double sy, double hi, double hk, double r, double syn)
   : NDMaterial(tag, ND_TAG_J2PlateFibre), E(e), nu(g), sigmaY(sy),
-    Hiso(hi), Hkin(hk), rho(0.0), parameterID(0), SHVs(),
-    Tepsilon(order), Tepsilon0(order), dg_n1(0.0)
+    Hiso(hi), Hkin(hk), rho(r), sigmaYn(syn),
+    parameterID(0), SHVs(), Tepsilon(order), Tepsilon0(order), dg_n1(0.0)
   { init(); }
 
 
@@ -187,6 +187,11 @@ const XC::Matrix &XC::J2PlateFibre::getTangent(void) const
     sig[3]= G*(Cepsilon(3)-epsPn[3]);
     sig[4]= G*(Cepsilon(4)-epsPn[4]);
 
+    const double p = (sig[0]+sig[1])/3.0;
+    double Fy = sigmaY;
+    if (p < 0)
+      Fy= std::abs(sigmaYn); 
+    
     const double two3Hkin= two3*Hkin;
 
     double xsi[order];
@@ -197,154 +202,155 @@ const XC::Matrix &XC::J2PlateFibre::getTangent(void) const
     xsi[4]= sig[4] - one3*Hkin*epsPn[4];
 
     double q= sqrt(two3*(xsi[0]*xsi[0] + xsi[1]*xsi[1] - xsi[0]*xsi[1]) +
-		    2.0*(xsi[2]*xsi[2] + xsi[3]*xsi[3] + xsi[4]*xsi[4]));
-    const double F= q - root23*(sigmaY + Hiso*alphan);
+		   2.0*(xsi[2]*xsi[2] + xsi[3]*xsi[3] + xsi[4]*xsi[4]));
+    const double F= q - root23*(Fy + Hiso*alphan);
 
-    if(F < -100*DBL_EPSILON) {
-      D.Zero();
-      D(0,0)= C00; D(0,1)= C01;
-      D(1,0)= C01; D(1,1)= C00;
-      D(2,2)= G;
-      D(3,3)= G;
-      D(4,4)= G;
+    if(F < -100*DBL_EPSILON)
+      {
+	D.Zero();
+	D(0,0)= C00; D(0,1)= C01;
+	D(1,0)= C01; D(1,1)= C00;
+	D(2,2)= G;
+	D(3,3)= G;
+	D(4,4)= G;
 
-      epsPn1[0]= epsPn[0];
-      epsPn1[1]= epsPn[1];
-      epsPn1[2]= epsPn[2];
-      epsPn1[3]= epsPn[3];
-      epsPn1[4]= epsPn[4];
-    }
-    else {
-
-      // Solve for dg
-      double dg= 0.0;
-
-      static Vector R(6);
-      static Vector x(6);
-      x(0)= xsi[0]; R(0)= 0.0;
-      x(1)= xsi[1]; R(1)= 0.0;
-      x(2)= xsi[2]; R(2)= 0.0;
-      x(3)= xsi[3]; R(3)= 0.0;
-      x(4)= xsi[4]; R(4)= 0.0;
-      x(5)= dg;     R(5)= F;
-
-      static Matrix J(6,6);
-      static Vector dx(6);
-
-      int iter= 0; int maxIter= 25;
-      while(iter < maxIter && R.Norm() > 1.0e-14)
-	{
-	iter++;
-
-	J(0,0)= 1.0 + dg*(two3*C00-one3*C01+two3Hkin); J(0,1)= dg*(two3*C01-one3*C00);
-	J(1,0)= dg*(two3*C10-one3*C11); J(1,1)= 1.0 + dg*(two3*C11-one3*C10+two3Hkin);
-	J(2,2)= 1.0 + dg*(twoG+two3Hkin);
-	J(3,3)= 1.0 + dg*(twoG+two3Hkin);
-	J(4,4)= 1.0 + dg*(twoG+two3Hkin);
-
-	J(0,5)= (two3*C00-one3*C01+two3Hkin)*x(0) + (two3*C01-one3*C00)*x(1);
-	J(1,5)= (two3*C10-one3*C11)*x(0) + (two3*C11-one3*C10+two3Hkin)*x(1);
-	J(2,5)= (twoG+two3Hkin)*x(2);
-	J(3,5)= (twoG+two3Hkin)*x(3);
-	J(4,5)= (twoG+two3Hkin)*x(4);
-
-	J(5,0)= (1.0-two3*Hiso*dg)*(two3*x(0)-one3*x(1))/q;
-	J(5,1)= (1.0-two3*Hiso*dg)*(two3*x(1)-one3*x(0))/q;
-	J(5,2)= (1.0-two3*Hiso*dg)*2.0*x(2)/q;
-	J(5,3)= (1.0-two3*Hiso*dg)*2.0*x(3)/q;
-	J(5,4)= (1.0-two3*Hiso*dg)*2.0*x(4)/q;
-
-	J(5,5)= -two3*Hiso*q;
-
-	J.Solve(R, dx);
-	x.addVector(1.0, dx, -1.0);
-
-	dg= x(5);
-	dg_n1= dg;
-
-	q= sqrt(two3*(x(0)*x(0) + x(1)*x(1) - x(0)*x(1)) + 2.0*(x(2)*x(2) + x(3)*x(3) + x(4)*x(4)));
-
-	R(0)= x(0) - xsi[0] + dg*((two3*C00-one3*C01+two3Hkin)*x(0) + (two3*C01-one3*C00)*x(1));
-	R(1)= x(1) - xsi[1] + dg*((two3*C10-one3*C11)*x(0) + (two3*C11-one3*C10+two3Hkin)*x(1));
-	R(2)= x(2) - xsi[2] + dg*(twoG+two3Hkin)*x(2);
-	R(3)= x(3) - xsi[3] + dg*(twoG+two3Hkin)*x(3);
-	R(4)= x(4) - xsi[4] + dg*(twoG+two3Hkin)*x(4);
-	R(5)= q - root23*(sigmaY + Hiso*(alphan+dg*root23*q));
+	epsPn1[0]= epsPn[0];
+	epsPn1[1]= epsPn[1];
+	epsPn1[2]= epsPn[2];
+	epsPn1[3]= epsPn[3];
+	epsPn1[4]= epsPn[4];
       }
+    else
+      {
+	// Solve for dg
+	double dg= 0.0;
 
-      if(iter == maxIter) {
-	//std::cerr << getClassName() << "::" << __FUNCTION__ << "; maxIter reached " << R.Norm() << std::endl;
+	static Vector R(6);
+	static Vector x(6);
+	x(0)= xsi[0]; R(0)= 0.0;
+	x(1)= xsi[1]; R(1)= 0.0;
+	x(2)= xsi[2]; R(2)= 0.0;
+	x(3)= xsi[3]; R(3)= 0.0;
+	x(4)= xsi[4]; R(4)= 0.0;
+	x(5)= dg;     R(5)= F;
+
+	static Matrix J(6,6);
+	static Vector dx(6);
+
+	int iter= 0; int maxIter= 25;
+	while(iter < maxIter && R.Norm() > 1.0e-14)
+	  {
+	    iter++;
+
+	    J(0,0)= 1.0 + dg*(two3*C00-one3*C01+two3Hkin); J(0,1)= dg*(two3*C01-one3*C00);
+	    J(1,0)= dg*(two3*C10-one3*C11); J(1,1)= 1.0 + dg*(two3*C11-one3*C10+two3Hkin);
+	    J(2,2)= 1.0 + dg*(twoG+two3Hkin);
+	    J(3,3)= 1.0 + dg*(twoG+two3Hkin);
+	    J(4,4)= 1.0 + dg*(twoG+two3Hkin);
+
+	    J(0,5)= (two3*C00-one3*C01+two3Hkin)*x(0) + (two3*C01-one3*C00)*x(1);
+	    J(1,5)= (two3*C10-one3*C11)*x(0) + (two3*C11-one3*C10+two3Hkin)*x(1);
+	    J(2,5)= (twoG+two3Hkin)*x(2);
+	    J(3,5)= (twoG+two3Hkin)*x(3);
+	    J(4,5)= (twoG+two3Hkin)*x(4);
+
+	    J(5,0)= (1.0-two3*Hiso*dg)*(two3*x(0)-one3*x(1))/q;
+	    J(5,1)= (1.0-two3*Hiso*dg)*(two3*x(1)-one3*x(0))/q;
+	    J(5,2)= (1.0-two3*Hiso*dg)*2.0*x(2)/q;
+	    J(5,3)= (1.0-two3*Hiso*dg)*2.0*x(3)/q;
+	    J(5,4)= (1.0-two3*Hiso*dg)*2.0*x(4)/q;
+
+	    J(5,5)= -two3*Hiso*q;
+
+	    J.Solve(R, dx);
+	    x.addVector(1.0, dx, -1.0);
+
+	    dg= x(5);
+	    dg_n1= dg;
+
+	    q= sqrt(two3*(x(0)*x(0) + x(1)*x(1) - x(0)*x(1)) + 2.0*(x(2)*x(2) + x(3)*x(3) + x(4)*x(4)));
+
+	    R(0)= x(0) - xsi[0] + dg*((two3*C00-one3*C01+two3Hkin)*x(0) + (two3*C01-one3*C00)*x(1));
+	    R(1)= x(1) - xsi[1] + dg*((two3*C10-one3*C11)*x(0) + (two3*C11-one3*C10+two3Hkin)*x(1));
+	    R(2)= x(2) - xsi[2] + dg*(twoG+two3Hkin)*x(2);
+	    R(3)= x(3) - xsi[3] + dg*(twoG+two3Hkin)*x(3);
+	    R(4)= x(4) - xsi[4] + dg*(twoG+two3Hkin)*x(4);
+	    R(5)= q - root23*(Fy + Hiso*(alphan+dg*root23*q));
+	  }
+
+	if(iter == maxIter)
+	  {
+	    //std::cerr << getClassName() << "::" << __FUNCTION__ << "; maxIter reached " << R.Norm() << std::endl;
+	  }
+
+	alphan1= alphan + dg*root23*q;
+
+	epsPn1[0]= epsPn[0] + dg*(two3*x(0)-one3*x(1));
+	epsPn1[1]= epsPn[1] + dg*(two3*x(1)-one3*x(0));
+	epsPn1[2]= epsPn[2] + dg*2.0*x(2);
+	epsPn1[3]= epsPn[3] + dg*2.0*x(3);
+	epsPn1[4]= epsPn[4] + dg*2.0*x(4);
+
+	const double beta= 1.0+dg*two3Hkin;
+
+	//J.Zero();
+	J(0,0)= 1.0 + dg*(two3*C00-one3*C01)/beta; J(0,1)= dg*(two3*C01-one3*C00)/beta;
+	J(1,0)= dg*(two3*C10-one3*C11)/beta; J(1,1)= 1.0 + dg*(two3*C11-one3*C10)/beta;
+	J(2,2)= 1.0 + dg*twoG/beta;
+	J(3,3)= 1.0 + dg*twoG/beta;
+	J(4,4)= 1.0 + dg*twoG/beta;
+
+	//J(0,5)= ((two3*C00-one3*C01) - dg*(two3*C00-one3*C01)/beta*two3Hkin)*x(0) + 
+	//  ((two3*C01-one3*C00) - dg*(two3*C01-one3*C00)/beta*two3Hkin)*x(1);
+	//J(1,5)= ((two3*C10-one3*C11) - dg*(two3*C10-one3*C11)/beta*two3Hkin)*x(0) + 
+	//  ((two3*C11-one3*C10) - dg*(two3*C11-one3*C10)/beta*two3Hkin)*x(1);
+	J(0,5)= (two3*C00-one3*C01)*(1.0-dg/beta*two3Hkin)*x(0) + (two3*C01-one3*C00)*(1.0-dg/beta*two3Hkin)*x(1);
+	J(1,5)= (two3*C10-one3*C11)*(1.0-dg/beta*two3Hkin)*x(0) + (two3*C11-one3*C10)*(1.0-dg/beta*two3Hkin)*x(1);
+	J(2,5)= (twoG - dg*twoG/beta*two3Hkin)*x(2);
+	J(3,5)= (twoG - dg*twoG/beta*two3Hkin)*x(3);
+	J(4,5)= (twoG - dg*twoG/beta*two3Hkin)*x(4);
+
+	J(5,0)= (1.0-two3*Hiso*dg)*(two3*x(0)-one3*x(1))/q/beta;
+	J(5,1)= (1.0-two3*Hiso*dg)*(two3*x(1)-one3*x(0))/q/beta;
+	J(5,2)= (1.0-two3*Hiso*dg)*x(2)/q*2.0/beta;
+	J(5,3)= (1.0-two3*Hiso*dg)*x(3)/q*2.0/beta;
+	J(5,4)= (1.0-two3*Hiso*dg)*x(4)/q*2.0/beta;
+
+	J(5,5)= -q*two3Hkin/beta - two3*Hiso*q;
+
+	static Matrix invJ(6,6);
+	J.Invert(invJ);
+
+	D(0,0)= invJ(0,0)*C00 + invJ(0,1)*C10;
+	D(1,0)= invJ(1,0)*C00 + invJ(1,1)*C10;
+	D(2,0)= invJ(2,0)*C00 + invJ(2,1)*C10;
+	D(3,0)= invJ(3,0)*C00 + invJ(3,1)*C10;
+	D(4,0)= invJ(4,0)*C00 + invJ(4,1)*C10;
+
+	D(0,1)= invJ(0,0)*C01 + invJ(0,1)*C11;
+	D(1,1)= invJ(1,0)*C01 + invJ(1,1)*C11;
+	D(2,1)= invJ(2,0)*C01 + invJ(2,1)*C11;
+	D(3,1)= invJ(3,0)*C01 + invJ(3,1)*C11;
+	D(4,1)= invJ(4,0)*C01 + invJ(4,1)*C11;
+
+	D(0,2)= invJ(0,2)*G;
+	D(1,2)= invJ(1,2)*G;
+	D(2,2)= invJ(2,2)*G;
+	D(3,2)= invJ(3,2)*G;
+	D(4,2)= invJ(4,2)*G;
+
+	D(0,3)= invJ(0,3)*G;
+	D(1,3)= invJ(1,3)*G;
+	D(2,3)= invJ(2,3)*G;
+	D(3,3)= invJ(3,3)*G;
+	D(4,3)= invJ(4,3)*G;
+
+	D(0,4)= invJ(0,4)*G;
+	D(1,4)= invJ(1,4)*G;
+	D(2,4)= invJ(2,4)*G;
+	D(3,4)= invJ(3,4)*G;
+	D(4,4)= invJ(4,4)*G;
       }
-
-      alphan1= alphan + dg*root23*q;
-
-      epsPn1[0]= epsPn[0] + dg*(two3*x(0)-one3*x(1));
-      epsPn1[1]= epsPn[1] + dg*(two3*x(1)-one3*x(0));
-      epsPn1[2]= epsPn[2] + dg*2.0*x(2);
-      epsPn1[3]= epsPn[3] + dg*2.0*x(3);
-      epsPn1[4]= epsPn[4] + dg*2.0*x(4);
-
-      double beta= 1.0+dg*two3Hkin;
-
-      //J.Zero();
-      J(0,0)= 1.0 + dg*(two3*C00-one3*C01)/beta; J(0,1)= dg*(two3*C01-one3*C00)/beta;
-      J(1,0)= dg*(two3*C10-one3*C11)/beta; J(1,1)= 1.0 + dg*(two3*C11-one3*C10)/beta;
-      J(2,2)= 1.0 + dg*twoG/beta;
-      J(3,3)= 1.0 + dg*twoG/beta;
-      J(4,4)= 1.0 + dg*twoG/beta;
-
-      //J(0,5)= ((two3*C00-one3*C01) - dg*(two3*C00-one3*C01)/beta*two3Hkin)*x(0) + 
-      //  ((two3*C01-one3*C00) - dg*(two3*C01-one3*C00)/beta*two3Hkin)*x(1);
-      //J(1,5)= ((two3*C10-one3*C11) - dg*(two3*C10-one3*C11)/beta*two3Hkin)*x(0) + 
-      //  ((two3*C11-one3*C10) - dg*(two3*C11-one3*C10)/beta*two3Hkin)*x(1);
-      J(0,5)= (two3*C00-one3*C01)*(1.0-dg/beta*two3Hkin)*x(0) + (two3*C01-one3*C00)*(1.0-dg/beta*two3Hkin)*x(1);
-      J(1,5)= (two3*C10-one3*C11)*(1.0-dg/beta*two3Hkin)*x(0) + (two3*C11-one3*C10)*(1.0-dg/beta*two3Hkin)*x(1);
-      J(2,5)= (twoG - dg*twoG/beta*two3Hkin)*x(2);
-      J(3,5)= (twoG - dg*twoG/beta*two3Hkin)*x(3);
-      J(4,5)= (twoG - dg*twoG/beta*two3Hkin)*x(4);
-
-      J(5,0)= (1.0-two3*Hiso*dg)*(two3*x(0)-one3*x(1))/q/beta;
-      J(5,1)= (1.0-two3*Hiso*dg)*(two3*x(1)-one3*x(0))/q/beta;
-      J(5,2)= (1.0-two3*Hiso*dg)*x(2)/q*2.0/beta;
-      J(5,3)= (1.0-two3*Hiso*dg)*x(3)/q*2.0/beta;
-      J(5,4)= (1.0-two3*Hiso*dg)*x(4)/q*2.0/beta;
-
-      J(5,5)= -q*two3Hkin/beta - two3*Hiso*q;
-
-      static Matrix invJ(6,6);
-      J.Invert(invJ);
-
-      D(0,0)= invJ(0,0)*C00 + invJ(0,1)*C10;
-      D(1,0)= invJ(1,0)*C00 + invJ(1,1)*C10;
-      D(2,0)= invJ(2,0)*C00 + invJ(2,1)*C10;
-      D(3,0)= invJ(3,0)*C00 + invJ(3,1)*C10;
-      D(4,0)= invJ(4,0)*C00 + invJ(4,1)*C10;
-
-      D(0,1)= invJ(0,0)*C01 + invJ(0,1)*C11;
-      D(1,1)= invJ(1,0)*C01 + invJ(1,1)*C11;
-      D(2,1)= invJ(2,0)*C01 + invJ(2,1)*C11;
-      D(3,1)= invJ(3,0)*C01 + invJ(3,1)*C11;
-      D(4,1)= invJ(4,0)*C01 + invJ(4,1)*C11;
-
-      D(0,2)= invJ(0,2)*G;
-      D(1,2)= invJ(1,2)*G;
-      D(2,2)= invJ(2,2)*G;
-      D(3,2)= invJ(3,2)*G;
-      D(4,2)= invJ(4,2)*G;
-
-      D(0,3)= invJ(0,3)*G;
-      D(1,3)= invJ(1,3)*G;
-      D(2,3)= invJ(2,3)*G;
-      D(3,3)= invJ(3,3)*G;
-      D(4,3)= invJ(4,3)*G;
-
-      D(0,4)= invJ(0,4)*G;
-      D(1,4)= invJ(1,4)*G;
-      D(2,4)= invJ(2,4)*G;
-      D(3,4)= invJ(3,4)*G;
-      D(4,4)= invJ(4,4)*G;
-    }
-
     return D;
   }
 
@@ -379,6 +385,11 @@ const XC::Vector &XC::J2PlateFibre::getStress(void) const
     sigma(3)= G*(Cepsilon(3)-epsPn[3]);
     sigma(4)= G*(Cepsilon(4)-epsPn[4]);
 
+    const double p= (sigma(0)+sigma(1))/3.0;
+    double Fy = sigmaY;
+    if (p < 0)
+      Fy= std::abs(sigmaYn);
+    
     const double two3Hkin= two3*Hkin;
 
     double xsi[order];
@@ -390,7 +401,7 @@ const XC::Vector &XC::J2PlateFibre::getStress(void) const
 
     double q= sqrt(two3*(xsi[0]*xsi[0] + xsi[1]*xsi[1] - xsi[0]*xsi[1]) +
 		    2.0*(xsi[2]*xsi[2] + xsi[3]*xsi[3] + xsi[4]*xsi[4]));
-    const double F= q - root23*(sigmaY + Hiso*alphan);
+    const double F= q - root23*(Fy + Hiso*alphan);
 
     if(F < -100*DBL_EPSILON)
       {
@@ -402,81 +413,80 @@ const XC::Vector &XC::J2PlateFibre::getStress(void) const
       }
     else
       {
-      // Solve for dg
-      double dg= 0.0;
+	// Solve for dg
+	double dg= 0.0;
 
-      static Vector R(6);
-      static Vector x(6);
-      x(0)= xsi[0]; R(0)= 0.0;
-      x(1)= xsi[1]; R(1)= 0.0;
-      x(2)= xsi[2]; R(2)= 0.0;
-      x(3)= xsi[3]; R(3)= 0.0;
-      x(4)= xsi[4]; R(4)= 0.0;
-      x(5)= dg;     R(5)= F;
+	static Vector R(6);
+	static Vector x(6);
+	x(0)= xsi[0]; R(0)= 0.0;
+	x(1)= xsi[1]; R(1)= 0.0;
+	x(2)= xsi[2]; R(2)= 0.0;
+	x(3)= xsi[3]; R(3)= 0.0;
+	x(4)= xsi[4]; R(4)= 0.0;
+	x(5)= dg;     R(5)= F;
 
-      static Matrix J(6,6);
-      static Vector dx(6);
+	static Matrix J(6,6);
+	static Vector dx(6);
 
-      int iter= 0; int maxIter= 25;
-      while(iter < maxIter && R.Norm() > 1.0e-14)
-	{
-	  iter++;
+	int iter= 0; int maxIter= 25;
+	while(iter < maxIter && R.Norm() > 1.0e-14)
+	  {
+	    iter++;
 
-	  J(0,0)= 1.0 + dg*(two3*C00-one3*C01+two3Hkin); J(0,1)= dg*(two3*C01-one3*C00);
-	  J(1,0)= dg*(two3*C10-one3*C11); J(1,1)= 1.0 + dg*(two3*C11-one3*C10+two3Hkin);
-	  J(2,2)= 1.0 + dg*(twoG+two3Hkin);
-	  J(3,3)= 1.0 + dg*(twoG+two3Hkin);
-	  J(4,4)= 1.0 + dg*(twoG+two3Hkin);
+	    J(0,0)= 1.0 + dg*(two3*C00-one3*C01+two3Hkin); J(0,1)= dg*(two3*C01-one3*C00);
+	    J(1,0)= dg*(two3*C10-one3*C11); J(1,1)= 1.0 + dg*(two3*C11-one3*C10+two3Hkin);
+	    J(2,2)= 1.0 + dg*(twoG+two3Hkin);
+	    J(3,3)= 1.0 + dg*(twoG+two3Hkin);
+	    J(4,4)= 1.0 + dg*(twoG+two3Hkin);
 
-	  J(0,5)= (two3*C00-one3*C01+two3Hkin)*x(0) + (two3*C01-one3*C00)*x(1);
-	  J(1,5)= (two3*C10-one3*C11)*x(0) + (two3*C11-one3*C10+two3Hkin)*x(1);
-	  J(2,5)= (twoG+two3Hkin)*x(2);
-	  J(3,5)= (twoG+two3Hkin)*x(3);
-	  J(4,5)= (twoG+two3Hkin)*x(4);
+	    J(0,5)= (two3*C00-one3*C01+two3Hkin)*x(0) + (two3*C01-one3*C00)*x(1);
+	    J(1,5)= (two3*C10-one3*C11)*x(0) + (two3*C11-one3*C10+two3Hkin)*x(1);
+	    J(2,5)= (twoG+two3Hkin)*x(2);
+	    J(3,5)= (twoG+two3Hkin)*x(3);
+	    J(4,5)= (twoG+two3Hkin)*x(4);
 
-	  J(5,0)= (1.0-two3*Hiso*dg)*(two3*x(0)-one3*x(1))/q;
-	  J(5,1)= (1.0-two3*Hiso*dg)*(two3*x(1)-one3*x(0))/q;
-	  J(5,2)= (1.0-two3*Hiso*dg)*2.0*x(2)/q;
-	  J(5,3)= (1.0-two3*Hiso*dg)*2.0*x(3)/q;
-	  J(5,4)= (1.0-two3*Hiso*dg)*2.0*x(4)/q;
+	    J(5,0)= (1.0-two3*Hiso*dg)*(two3*x(0)-one3*x(1))/q;
+	    J(5,1)= (1.0-two3*Hiso*dg)*(two3*x(1)-one3*x(0))/q;
+	    J(5,2)= (1.0-two3*Hiso*dg)*2.0*x(2)/q;
+	    J(5,3)= (1.0-two3*Hiso*dg)*2.0*x(3)/q;
+	    J(5,4)= (1.0-two3*Hiso*dg)*2.0*x(4)/q;
 
-	  J(5,5)= -two3*Hiso*q;
+	    J(5,5)= -two3*Hiso*q;
 
-	  J.Solve(R, dx);
-	  x.addVector(1.0, dx, -1.0);
+	    J.Solve(R, dx);
+	    x.addVector(1.0, dx, -1.0);
 
-	  dg= x(5);
-	  dg_n1= dg;
+	    dg= x(5);
+	    dg_n1= dg;
 
-	  q= sqrt(two3*(x(0)*x(0) + x(1)*x(1) - x(0)*x(1)) + 2.0*(x(2)*x(2) + x(3)*x(3) + x(4)*x(4)));
+	    q= sqrt(two3*(x(0)*x(0) + x(1)*x(1) - x(0)*x(1)) + 2.0*(x(2)*x(2) + x(3)*x(3) + x(4)*x(4)));
 
-	  R(0)= x(0) - xsi[0] + dg*((two3*C00-one3*C01+two3Hkin)*x(0) + (two3*C01-one3*C00)*x(1));
-	  R(1)= x(1) - xsi[1] + dg*((two3*C10-one3*C11)*x(0) + (two3*C11-one3*C10+two3Hkin)*x(1));
-	  R(2)= x(2) - xsi[2] + dg*(twoG+two3Hkin)*x(2);
-	  R(3)= x(3) - xsi[3] + dg*(twoG+two3Hkin)*x(3);
-	  R(4)= x(4) - xsi[4] + dg*(twoG+two3Hkin)*x(4);
-	  R(5)= q - root23*(sigmaY + Hiso*(alphan+dg*root23*q));
-	}
-      if(iter == maxIter)
-	{
-	  //std::cerr << getClassName() << "::" << __FUNCTION__ << ";maxIter reached " << R.Norm() << std::endl;
-        }
+	    R(0)= x(0) - xsi[0] + dg*((two3*C00-one3*C01+two3Hkin)*x(0) + (two3*C01-one3*C00)*x(1));
+	    R(1)= x(1) - xsi[1] + dg*((two3*C10-one3*C11)*x(0) + (two3*C11-one3*C10+two3Hkin)*x(1));
+	    R(2)= x(2) - xsi[2] + dg*(twoG+two3Hkin)*x(2);
+	    R(3)= x(3) - xsi[3] + dg*(twoG+two3Hkin)*x(3);
+	    R(4)= x(4) - xsi[4] + dg*(twoG+two3Hkin)*x(4);
+	    R(5)= q - root23*(Fy + Hiso*(alphan+dg*root23*q));
+	  }
+	if(iter == maxIter)
+	  {
+	    //std::cerr << getClassName() << "::" << __FUNCTION__ << ";maxIter reached " << R.Norm() << std::endl;
+	  }
 
-      alphan1= alphan + dg*root23*q;
+	alphan1= alphan + dg*root23*q;
 
-      epsPn1[0]= epsPn[0] + dg*(two3*x(0)-one3*x(1));
-      epsPn1[1]= epsPn[1] + dg*(two3*x(1)-one3*x(0));
-      epsPn1[2]= epsPn[2] + dg*2.0*x(2);
-      epsPn1[3]= epsPn[3] + dg*2.0*x(3);
-      epsPn1[4]= epsPn[4] + dg*2.0*x(4);
+	epsPn1[0]= epsPn[0] + dg*(two3*x(0)-one3*x(1));
+	epsPn1[1]= epsPn[1] + dg*(two3*x(1)-one3*x(0));
+	epsPn1[2]= epsPn[2] + dg*2.0*x(2);
+	epsPn1[3]= epsPn[3] + dg*2.0*x(3);
+	epsPn1[4]= epsPn[4] + dg*2.0*x(4);
 
-      sigma(0)= x(0) + two3Hkin*(2.0*epsPn1[0]+epsPn1[1]);
-      sigma(1)= x(1) + two3Hkin*(2.0*epsPn1[1]+epsPn1[0]);
-      sigma(2)= x(2) + one3*Hkin*epsPn1[2];
-      sigma(3)= x(3) + one3*Hkin*epsPn1[3];
-      sigma(4)= x(4) + one3*Hkin*epsPn1[4];
-    }
-
+	sigma(0)= x(0) + two3Hkin*(2.0*epsPn1[0]+epsPn1[1]);
+	sigma(1)= x(1) + two3Hkin*(2.0*epsPn1[1]+epsPn1[0]);
+	sigma(2)= x(2) + one3*Hkin*epsPn1[2];
+	sigma(3)= x(3) + one3*Hkin*epsPn1[3];
+	sigma(4)= x(4) + one3*Hkin*epsPn1[4];
+      }
     return sigma;
   }
 
@@ -588,31 +598,36 @@ const XC::Vector &XC::J2PlateFibre::getStressSensitivity(int gradIndex, bool con
     double dC00dh= 0.0;
     double dC01dh= 0.0;
 
-    if(parameterID == 1) { // E
-      dEdh= 1.0;
-      dGdh= 0.5/(1+nu);
-      //double C00= E/(1-nu*nu);
-      //double C01= nu*C00;
-      dC00dh= 1.0/(1-nu*nu);
-      dC01dh= nu*dC00dh;
-    }
-    if(parameterID == 2) { // G(nu)
-      dGdh= 1.0;
-      dGdh= -0.5*E/(1.0 + 2*nu + nu*nu);
-      //double C00= E/(1-nu*nu);
-      //double C01= nu*C00;
-      dC00dh= -E/((1-nu*nu)*(1-nu*nu))*(-2*nu);
-      dC01dh= nu*dC00dh + C00;
-    }
-    if(parameterID == 5) {
-      dsigmaYdh= 1.0;
-    }
-    if(parameterID == 6) {
-      dHkindh= 1.0;
-    }
-    if(parameterID == 7) {
-      dHisodh= 1.0;
-    }
+    if(parameterID == 1)
+      { // E
+	dEdh= 1.0;
+	dGdh= 0.5/(1+nu);
+	//double C00= E/(1-nu*nu);
+	//double C01= nu*C00;
+	dC00dh= 1.0/(1-nu*nu);
+	dC01dh= nu*dC00dh;
+      }
+    if(parameterID == 2)
+      { // G(nu)
+	dGdh= 1.0;
+	dGdh= -0.5*E/(1.0 + 2*nu + nu*nu);
+	//double C00= E/(1-nu*nu);
+	//double C01= nu*C00;
+	dC00dh= -E/((1-nu*nu)*(1-nu*nu))*(-2*nu);
+	dC01dh= nu*dC00dh + C00;
+      }
+    if(parameterID == 5)
+      {
+	dsigmaYdh= 1.0;
+      }
+    if(parameterID == 6)
+      {
+	dHkindh= 1.0;
+      }
+    if(parameterID == 7)
+      {
+	dHisodh= 1.0;
+      }
 
     double depsPdh[order]; 
     depsPdh[0]= 0.0; 
@@ -665,43 +680,44 @@ const XC::Vector &XC::J2PlateFibre::getStressSensitivity(int gradIndex, bool con
       2.0*(xsi[2]*xsi[2] + xsi[3]*xsi[3] + xsi[4]*xsi[4]);
     double F= q - root23*(sigmaY + Hiso*alphan1);
 
-    if(F <= -100*DBL_EPSILON) {
-      sigma(0)= dC00dh*(Cepsilon(0)-epsPn[0]) + dC01dh*(Cepsilon(1)-epsPn[1]) - C00*depsPdh[0] - C01*depsPdh[1];
-      sigma(1)= dC01dh*(Cepsilon(0)-epsPn[0]) + dC00dh*(Cepsilon(1)-epsPn[1]) - C01*depsPdh[0] - C00*depsPdh[1];
-      sigma(2)= dGdh*(Cepsilon(2)-epsPn1[2]) - G*depsPdh[2];
-      sigma(3)= dGdh*(Cepsilon(3)-epsPn1[3]) - G*depsPdh[3];
-      sigma(4)= dGdh*(Cepsilon(4)-epsPn1[4]) - G*depsPdh[4];
-    }
-    else {
-      static Matrix J(6,6);
-      static Vector b(6);
-      static Vector dx(6);
+    if(F <= -100*DBL_EPSILON)
+      {
+	sigma(0)= dC00dh*(Cepsilon(0)-epsPn[0]) + dC01dh*(Cepsilon(1)-epsPn[1]) - C00*depsPdh[0] - C01*depsPdh[1];
+	sigma(1)= dC01dh*(Cepsilon(0)-epsPn[0]) + dC00dh*(Cepsilon(1)-epsPn[1]) - C01*depsPdh[0] - C00*depsPdh[1];
+	sigma(2)= dGdh*(Cepsilon(2)-epsPn1[2]) - G*depsPdh[2];
+	sigma(3)= dGdh*(Cepsilon(3)-epsPn1[3]) - G*depsPdh[3];
+	sigma(4)= dGdh*(Cepsilon(4)-epsPn1[4]) - G*depsPdh[4];
+      }
+    else
+      {
+	static Matrix J(6,6);
+	static Vector b(6);
+	static Vector dx(6);
 
-      double dg= dg_n1;
+	double dg= dg_n1;
 
-      J(0,0)= 1.0 + dg*(two3*C00-one3*C01+two3Hkin); J(0,1)= dg*(two3*C01-one3*C00);
-      J(1,0)= dg*(two3*C10-one3*C11); J(1,1)= 1.0 + dg*(two3*C11-one3*C10+two3Hkin);
-      J(2,2)= 1.0 + dg*(twoG+two3Hkin);
-      J(3,3)= 1.0 + dg*(twoG+two3Hkin);
-      J(4,4)= 1.0 + dg*(twoG+two3Hkin);
+	J(0,0)= 1.0 + dg*(two3*C00-one3*C01+two3Hkin); J(0,1)= dg*(two3*C01-one3*C00);
+	J(1,0)= dg*(two3*C10-one3*C11); J(1,1)= 1.0 + dg*(two3*C11-one3*C10+two3Hkin);
+	J(2,2)= 1.0 + dg*(twoG+two3Hkin);
+	J(3,3)= 1.0 + dg*(twoG+two3Hkin);
+	J(4,4)= 1.0 + dg*(twoG+two3Hkin);
 
-      J(0,5)= (two3*C00-one3*C01+two3Hkin)*xsi[0] + (two3*C01-one3*C00)*xsi[1];
-      J(1,5)= (two3*C10-one3*C11)*xsi[0] + (two3*C11-one3*C10+two3Hkin)*xsi[1];
-      J(2,5)= (twoG+two3Hkin)*xsi[2];
-      J(3,5)= (twoG+two3Hkin)*xsi[3];
-      J(4,5)= (twoG+two3Hkin)*xsi[4];
+	J(0,5)= (two3*C00-one3*C01+two3Hkin)*xsi[0] + (two3*C01-one3*C00)*xsi[1];
+	J(1,5)= (two3*C10-one3*C11)*xsi[0] + (two3*C11-one3*C10+two3Hkin)*xsi[1];
+	J(2,5)= (twoG+two3Hkin)*xsi[2];
+	J(3,5)= (twoG+two3Hkin)*xsi[3];
+	J(4,5)= (twoG+two3Hkin)*xsi[4];
 
-      J(5,0)= (1.0-two3*Hiso*dg)*(two3*xsi[0]-one3*xsi[1])/q;
-      J(5,1)= (1.0-two3*Hiso*dg)*(two3*xsi[1]-one3*xsi[0])/q;
-      J(5,2)= (1.0-two3*Hiso*dg)*2.0*xsi[2]/q;
-      J(5,3)= (1.0-two3*Hiso*dg)*2.0*xsi[3]/q;
-      J(5,4)= (1.0-two3*Hiso*dg)*2.0*xsi[4]/q;
+	J(5,0)= (1.0-two3*Hiso*dg)*(two3*xsi[0]-one3*xsi[1])/q;
+	J(5,1)= (1.0-two3*Hiso*dg)*(two3*xsi[1]-one3*xsi[0])/q;
+	J(5,2)= (1.0-two3*Hiso*dg)*2.0*xsi[2]/q;
+	J(5,3)= (1.0-two3*Hiso*dg)*2.0*xsi[3]/q;
+	J(5,4)= (1.0-two3*Hiso*dg)*2.0*xsi[4]/q;
+	
+	J(5,5)= -two3*Hiso*q;
 
-      J(5,5)= -two3*Hiso*q;
-
-      J.Solve(b, dx);
-    }
-
+	J.Solve(b, dx);
+      }
     return sigma;
   }
 
@@ -729,31 +745,36 @@ int XC::J2PlateFibre::commitSensitivity(const Vector &depsdh, int gradIndex, int
     double dC00dh= 0.0;
     double dC01dh= 0.0;
 
-    if(parameterID == 1) { // E
-      dEdh= 1.0;
-      dGdh= 0.5/(1+nu);
-      //double C00= E/(1-nu*nu);
-      //double C01= nu*C00;
-      dC00dh= 1.0/(1-nu*nu);
-      dC01dh= nu*dC00dh;
-    }
-    if(parameterID == 2) { // G(nu)
-      dGdh= 1.0;
-      dGdh= -0.5*E/(1.0 + 2*nu + nu*nu);
-      //double C00= E/(1-nu*nu);
-      //double C01= nu*C00;
-      dC00dh= -E/((1-nu*nu)*(1-nu*nu))*(-2*nu);
-      dC01dh= nu*dC00dh + C00;
-    }
-    if(parameterID == 5) {
-      dsigmaYdh= 1.0;
-    }
-    if(parameterID == 6) {
-      dHkindh= 1.0;
-    }
-    if(parameterID == 7) {
-      dHisodh= 1.0;
-    }
+    if(parameterID == 1)
+      { // E
+	dEdh= 1.0;
+	dGdh= 0.5/(1+nu);
+	//double C00= E/(1-nu*nu);
+	//double C01= nu*C00;
+	dC00dh= 1.0/(1-nu*nu);
+	dC01dh= nu*dC00dh;
+      }
+    if(parameterID == 2)
+      { // G(nu)
+	dGdh= 1.0;
+	dGdh= -0.5*E/(1.0 + 2*nu + nu*nu);
+	//double C00= E/(1-nu*nu);
+	//double C01= nu*C00;
+	dC00dh= -E/((1-nu*nu)*(1-nu*nu))*(-2*nu);
+	dC01dh= nu*dC00dh + C00;
+      }
+    if(parameterID == 5)
+      {
+	dsigmaYdh= 1.0;
+      }
+    if(parameterID == 6)
+      {
+	dHkindh= 1.0;
+      }
+    if(parameterID == 7)
+      {
+	dHisodh= 1.0;
+      }
 
     double depsPdh[order];
     depsPdh[0]= 0.0;
@@ -792,39 +813,40 @@ int XC::J2PlateFibre::commitSensitivity(const Vector &depsdh, int gradIndex, int
       2.0*(xsi[2]*xsi[2] + xsi[3]*xsi[3] + xsi[4]*xsi[4]); 
     double F= q - root23*(sigmaY + Hiso*alphan1);
 
-    if(F <= -100*DBL_EPSILON) {
-      // Do nothing
-    }
-    else {
-      static Matrix J(6,6);
-      static Vector b(6);
-      static Vector dx(6);
+    if(F <= -100*DBL_EPSILON)
+      {
+	// Do nothing
+      }
+    else
+      {
+	static Matrix J(6,6);
+	static Vector b(6);
+	static Vector dx(6);
 
-      double dg= dg_n1;
+	double dg= dg_n1;
 
-      J(0,0)= 1.0 + dg*(two3*C00-one3*C01+two3Hkin); J(0,1)= dg*(two3*C01-one3*C00);
-      J(1,0)= dg*(two3*C10-one3*C11); J(1,1)= 1.0 + dg*(two3*C11-one3*C10+two3Hkin);
-      J(2,2)= 1.0 + dg*(twoG+two3Hkin);
-      J(3,3)= 1.0 + dg*(twoG+two3Hkin);
-      J(4,4)= 1.0 + dg*(twoG+two3Hkin);
+	J(0,0)= 1.0 + dg*(two3*C00-one3*C01+two3Hkin); J(0,1)= dg*(two3*C01-one3*C00);
+	J(1,0)= dg*(two3*C10-one3*C11); J(1,1)= 1.0 + dg*(two3*C11-one3*C10+two3Hkin);
+	J(2,2)= 1.0 + dg*(twoG+two3Hkin);
+	J(3,3)= 1.0 + dg*(twoG+two3Hkin);
+	J(4,4)= 1.0 + dg*(twoG+two3Hkin);
 
-      J(0,5)= (two3*C00-one3*C01+two3Hkin)*xsi[0] + (two3*C01-one3*C00)*xsi[1];
-      J(1,5)= (two3*C10-one3*C11)*xsi[0] + (two3*C11-one3*C10+two3Hkin)*xsi[1];
-      J(2,5)= (twoG+two3Hkin)*xsi[2];
-      J(3,5)= (twoG+two3Hkin)*xsi[3];
-      J(4,5)= (twoG+two3Hkin)*xsi[4];
+	J(0,5)= (two3*C00-one3*C01+two3Hkin)*xsi[0] + (two3*C01-one3*C00)*xsi[1];
+	J(1,5)= (two3*C10-one3*C11)*xsi[0] + (two3*C11-one3*C10+two3Hkin)*xsi[1];
+	J(2,5)= (twoG+two3Hkin)*xsi[2];
+	J(3,5)= (twoG+two3Hkin)*xsi[3];
+	J(4,5)= (twoG+two3Hkin)*xsi[4];
 
-      J(5,0)= (1.0-two3*Hiso*dg)*(two3*xsi[0]-one3*xsi[1])/q;
-      J(5,1)= (1.0-two3*Hiso*dg)*(two3*xsi[1]-one3*xsi[0])/q;
-      J(5,2)= (1.0-two3*Hiso*dg)*2.0*xsi[2]/q;
-      J(5,3)= (1.0-two3*Hiso*dg)*2.0*xsi[3]/q;
-      J(5,4)= (1.0-two3*Hiso*dg)*2.0*xsi[4]/q;
+	J(5,0)= (1.0-two3*Hiso*dg)*(two3*xsi[0]-one3*xsi[1])/q;
+	J(5,1)= (1.0-two3*Hiso*dg)*(two3*xsi[1]-one3*xsi[0])/q;
+	J(5,2)= (1.0-two3*Hiso*dg)*2.0*xsi[2]/q;
+	J(5,3)= (1.0-two3*Hiso*dg)*2.0*xsi[3]/q;
+	J(5,4)= (1.0-two3*Hiso*dg)*2.0*xsi[4]/q;
 
-      J(5,5)= -two3*Hiso*q;
-
-      J.Solve(b, dx);
-    }
-
+	J(5,5)= -two3*Hiso*q;
+	
+	J.Solve(b, dx);
+      }
     return 0;
   }
 
@@ -832,13 +854,14 @@ int XC::J2PlateFibre::commitSensitivity(const Vector &depsdh, int gradIndex, int
 int XC::J2PlateFibre::sendData(Communicator &comm)
   {
     int res= NDMaterial::sendData(comm);
-    res+= comm.sendDoubles(E,nu,sigmaY,Hiso,Hkin,getDbTagData(),CommMetaData(1));
+    res+= comm.sendDoubles(E,nu,sigmaY,Hiso,Hkin, getDbTagData(),CommMetaData(1));
     res+= comm.sendInt(parameterID,getDbTagData(),CommMetaData(2));
     res+= comm.sendMatrix(SHVs,getDbTagData(),CommMetaData(3));
     res+= comm.sendVector(Tepsilon,getDbTagData(),CommMetaData(4));
     res+= comm.sendVector(Tepsilon0,getDbTagData(),CommMetaData(5));
-    res+= comm.sendDoubles(alphan, alphan1, dg_n1,getDbTagData(),CommMetaData(6));
-    size_t conta= 7;
+    res+= comm.sendDoubles(alphan, alphan1, dg_n1, getDbTagData(),CommMetaData(6));
+    res+= comm.sendDoubles(rho, sigmaYn, getDbTagData(),CommMetaData(7));
+    size_t conta= 8;
     for(size_t i=0;i<order;i++)
       res+= comm.sendDoubles(epsPn[i],epsPn1[i],getDbTagData(),CommMetaData(conta++));
     return res;
@@ -848,13 +871,14 @@ int XC::J2PlateFibre::sendData(Communicator &comm)
 int XC::J2PlateFibre::recvData(const Communicator &comm)
   {
     int res= NDMaterial::recvData(comm);
-    res+= comm.receiveDoubles(E,nu,sigmaY,Hiso,Hkin,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveDoubles(E,nu,sigmaY,Hiso,Hkin, getDbTagData(),CommMetaData(1));
     res+= comm.receiveInt(parameterID,getDbTagData(),CommMetaData(2));
     res+= comm.receiveMatrix(SHVs,getDbTagData(),CommMetaData(3));
     res+= comm.receiveVector(Tepsilon,getDbTagData(),CommMetaData(4));
     res+= comm.receiveVector(Tepsilon0,getDbTagData(),CommMetaData(5));
     res+= comm.receiveDoubles(alphan, alphan1, getDbTagData(),CommMetaData(6));
-    size_t conta= 7;
+    res+= comm.receiveDoubles(rho, sigmaYn, getDbTagData(),CommMetaData(7));
+    size_t conta= 8;
     for(size_t i=0;i<order;i++)
       res+= comm.receiveDoubles(epsPn[i],epsPn1[i],getDbTagData(),CommMetaData(conta++));
     return res;
@@ -865,7 +889,7 @@ int XC::J2PlateFibre::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(7+order);
+    inicComm(8+order);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -878,7 +902,7 @@ int XC::J2PlateFibre::sendSelf(Communicator &comm)
 //! @brief Receives object through the communicator argument.
 int XC::J2PlateFibre::recvSelf(const Communicator &comm)
   {
-    inicComm(7+order);
+    inicComm(8+order);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
@@ -898,12 +922,14 @@ int XC::J2PlateFibre::recvSelf(const Communicator &comm)
 
 void XC::J2PlateFibre::Print(std::ostream &s, int flag)
   {
-    s << "J2 Plate Fibre Material Model" << std::endl;
-    s << "\tE:  " << E << std::endl;
-    s << "\tnu:  " << nu << std::endl;
-    s << "\tsigmaY:  " << sigmaY << std::endl;
-    s << "\tHiso:  " << Hiso << std::endl;
-    s << "\tHkin:  " << Hkin << std::endl;
+    s << "J2 Plate Fibre Material Model" << std::endl
+      << "\tE:  " << E << std::endl
+      << "\tnu:  " << nu << std::endl
+      << "\trho:  " << rho << std::endl
+      << "\tsigmaY:  " << sigmaY << std::endl
+      << "\tsigmaYn:  " << sigmaYn << std::endl
+      << "\tHiso:  " << Hiso << std::endl
+      << "\tHkin:  " << Hkin << std::endl;
 
     return;
   }
@@ -915,12 +941,16 @@ int XC::J2PlateFibre::setParameter(const std::vector<std::string> &argv, Paramet
       retval= param.addObject(1, this);
     else if(argv[0]=="nu")
       retval= param.addObject(2, this);  
-    else if((argv[0]=="sigmaY") == 0 || (argv[0]=="fy"))
+    else if(argv[0]=="rho")
+      retval= param.addObject(3, this);  
+    else if((argv[0]=="sigmaY") == 0 || (argv[0]=="fy") || (argv[0]=="Fy"))
       retval= param.addObject(5, this);
     else if(argv[0]=="Hkin")
       retval= param.addObject(6, this);
     else if(argv[0]=="Hiso")
       retval= param.addObject(7, this);
+    else if((argv[0]=="sigmaYn") == 0 || (argv[0]=="fyn") || (argv[0]=="Fyn"))
+      retval= param.addObject(8, this);
     return retval;
   }
 
@@ -934,6 +964,9 @@ int XC::J2PlateFibre::updateParameter(int parameterID, Information &info)
       case 2:
 	nu= info.theDouble;
 	return 0;
+      case 3:
+	rho= info.theDouble;
+	return 0;
       case 5:
 	sigmaY= info.theDouble;
 	return 0;
@@ -942,6 +975,9 @@ int XC::J2PlateFibre::updateParameter(int parameterID, Information &info)
 	return 0;
       case 7:
 	Hiso= info.theDouble;
+	return 0;
+      case 8:
+	sigmaYn= info.theDouble;
 	return 0;
       default:
 	return -1;
