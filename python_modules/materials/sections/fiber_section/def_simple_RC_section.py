@@ -160,10 +160,10 @@ class ShearReinforcement(object):
         areaShReinfBranchs= self.getAs()
         diamRamas= self.getDiameter()
         os.write(' & '+str(round(diamRamas*1e3)))
-        os.write(' & '+cf.fmt5_2f.format(areaShReinfBranchs*1e4))
+        os.write(' & '+cf.fmt5_2f.format(self.areaShReinfBranch*1e4))
         os.write(' & '+cf.fmt4_1f.format(self.shReinfSpacing*1e2))
         if(abs(width)>0):
-            os.write(' & '+cf.fmt5_2f.format(areaShReinfBranchs/self.shReinfSpacing*1e4))
+            os.write(' & '+cf.fmt5_2f.format(areaShReinfBranchs*1e4))
         else:
             os.write(' & -')
         os.write(' & '+cf.fmt3_1f.format(math.degrees(self.angAlphaShReinf)))
@@ -1488,7 +1488,7 @@ class RCSectionBase(object):
             os.write('\\hline\n')
             os.write('\\begin{tabular}{cccccccc}\n')
             os.write('Id & N$^o$ branch & $\\phi$ & area & spac. & area/m & $\\alpha$ & $\\beta$\\\\\n')
-            os.write(' &  & $(mm)$ & $(cm^2)$ & $(cm)$ & $(cm^2/m)$ & $( \\degree)$ & $( \\degree)$\\\\\n')
+            os.write(' &  & $(mm)$ & $(cm^2)$ & $(cm)$ & $(cm^2/m^2)$ & $( \\degree)$ & $( \\degree)$\\\\\n')
             self.latexReportShearReinforcement(os)
             os.write('\\end{tabular} \\\\\n')
             os.write('\\hline\n')
