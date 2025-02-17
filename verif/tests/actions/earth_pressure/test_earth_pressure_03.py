@@ -114,8 +114,8 @@ loadCaseNames= ['E']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames) 
     
 ### Define earth pressure load.
-overburden= 16.48
-zGround= topSlabZ+overburden
+earthCover= 16.48
+zGround= topSlabZ+earthCover
 rhoSoil= 2e3
 gammaSoil= rhoSoil*g
 gammaWater= 1e3*g
@@ -126,7 +126,7 @@ embankmentSoil= ep.EarthPressureModel(zGround= zGround, zBottomSoils=[bottomSlab
 ## Vertical pressure on top slab.
 pressureOnTopSlab= embankmentSoil.getVerticalPressure(topSlabZ)
 ### Vertical pressure increment due to marston effect.
-D= overburden
+D= earthCover
 H= boxHeight+2*slabThickness
 B= boxWidth+2*wallThickness
 marstonPressureOnTopSlab= me.marston_vertical_pressure_increment(gammaSoil= gammaSoil, D= D, H=H, B= B, Er=1.0, Et= 10.0)
@@ -165,7 +165,7 @@ for n in xcTotalSet.nodes:
     R+= n.getReactionForce3d
 marstonIncrement= 6.3047759356376645e3
 verticalFriction= 2*250.96247716896972e3
-earthPressureRefValue= 2.0e3*g*(overburden)+marstonIncrement
+earthPressureRefValue= 2.0e3*g*(earthCover)+marstonIncrement
 earthWeight= earthPressureRefValue*slabLength+verticalFriction
 ratio0= abs(R[1]-earthWeight)/earthWeight
 ratio1= abs(R[0])
