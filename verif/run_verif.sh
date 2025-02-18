@@ -398,6 +398,9 @@ python tests/actions/load_combinations/comb_container/test_comb_container_01.py
 python tests/actions/load_combinations/comb_container/test_comb_container_02.py
 python tests/actions/load_combinations/comb_container/test_comb_container_03.py
 
+echo "$BLEU" "Nodes tests." "$NORMAL"
+echo "$BLEU" "  Mixed DOFs tests." "$NORMAL"
+python tests/nodes/mixed_dofs/test_brick_and_shell_01.py
 echo "$BLEU" "Elements tests." "$NORMAL"
 echo "$BLEU" "  Truss element tests." "$NORMAL"
 python tests/elements/trusses/truss_test_00.py
@@ -607,9 +610,6 @@ python tests/elements/birth_and_death/test_awakening_in_hot_model_force_beam_col
 python tests/elements/birth_and_death/test_awakening_in_hot_model_shell_mitc4_01.py
 python tests/elements/birth_and_death/test_awakening_in_hot_model_four_node_quad.py
 python tests/elements/birth_and_death/test_awakening_in_hot_model_zero_length.py
-
-echo "$BLEU" "  Mixed DOFs tests." "$NORMAL"
-python tests/elements//mixed_dofs/test_brick_and_shell_01.py
 
 echo "$BLEU" "Solution tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py
