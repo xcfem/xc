@@ -400,10 +400,10 @@ python tests/actions/load_combinations/comb_container/test_comb_container_03.py
 
 echo "$BLEU" "Elements tests." "$NORMAL"
 echo "$BLEU" "  Truss element tests." "$NORMAL"
-python tests/elements/trusses/truss_test0.py
-python tests/elements/trusses/truss_test1.py
-python tests/elements/trusses/truss_test2.py
-python tests/elements/trusses/truss_test3.py
+python tests/elements/trusses/truss_test_00.py
+python tests/elements/trusses/truss_test_01.py
+python tests/elements/trusses/truss_test_02.py
+python tests/elements/trusses/truss_test_03.py
 echo "$BLEU" "  Coordinate transformations tests." "$NORMAL"
 python tests/elements/crd_transf/test_linear_crd_transf_2d_01.py
 python tests/elements/crd_transf/test_pdelta_crd_transf_2d_01.py
