@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+''' Test from Ansys manual.
+
+ Reference:  Strength of Material, Part I, Elementary Theory and Problems, pg. 10, problem 2
+'''
+
 from __future__ import print_function
 
-# Test from Ansys manual
-# Reference:  Strength of Material, Part I, Elementary Theory and Problems, pg. 10, problem 2
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -64,6 +67,9 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= False)
+if(result!=0):
+    lmsg.error("Can't solve.")
+    exit(1)
 
 
 delta= n2.getDisp[1]
@@ -84,4 +90,12 @@ if abs(ratio1-1)<1e-5 and abs(ratio2-1)<1e-5:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayBlocks()
+# oh.displayFEMesh()
+# oh.displayLoads()
+# oh.displayDispRot(itemToDisp='uY')
 

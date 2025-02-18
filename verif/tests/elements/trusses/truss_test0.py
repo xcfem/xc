@@ -56,4 +56,12 @@ if abs(ratio)<1e-15:
 else:
     lmsg.error(fname+' ERROR.')
 
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayBlocks()
+# oh.displayFEMesh()
+# oh.displayLoads()
+# oh.displayDispRot(itemToDisp='uY')
+
 
