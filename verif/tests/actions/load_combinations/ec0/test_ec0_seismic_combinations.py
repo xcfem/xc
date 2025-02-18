@@ -11,13 +11,14 @@ import os
 import filecmp
 from actions.load_combination_utils import ec0_es # Eurocode 0 Spanish annex.
 
-lcg= ec0_es.combGenerator
+lcg= ec0_es.bridgeCombGenerator
+safetyFactorSet= 'B' # Table A2.4(B)
 # Permanent load.
-G= lcg.newPermanentAction(actionName=  'G', actionDescription= 'Self weight.', context= 'road_bridge')
+G= lcg.newSelfWeightAction(actionName=  'G', actionDescription= 'Self weight.', context= 'road_bridge', safetyFactorSet= safetyFactorSet)
 # Railway traffic load.
-S= lcg.newRailwayTrafficAction(actionName= 'Q', actionDescription= 'Traffic.', context= 'railway_bridge', combinationFactorsName= 'LM71_alone_uls')
+S= lcg.newRailwayTrafficAction(actionName= 'Q', actionDescription= 'Traffic.', context= 'railway_bridge', combinationFactorsName= 'LM71_alone_uls', safetyFactorSet= safetyFactorSet)
 # Thermal load.
-T= lcg.newThermalAction(actionName=  'T', actionDescription= 'Thermal action.', context= 'road_bridge')
+T= lcg.newThermalAction(actionName=  'T', actionDescription= 'Thermal action.', context= 'road_bridge', safetyFactorSet= safetyFactorSet)
 # Seismic action.
 A2= lcg.newSeismicAction(actionName= 'A2', actionDescription= 'Earthquake.', ulsImportanceFactor= 1.3)
 

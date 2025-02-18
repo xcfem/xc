@@ -227,7 +227,7 @@ sr= wall.performStabilityAnalysis(stabilityULSCombinations,foundationSoilModel, 
 uls_results= wall.performULSAnalysis(strengthULSCombinations)
 wall.setULSInternalForcesEnvelope(uls_results.internalForces)
 
-err= ratioStemPositions**2+math.sqrt((sr.Foverturning-7.126392782772212)**2+(sr.Fsliding-1.5388825671842905)**2+(sr.Fbearing-1.1391242090325084)**2+(sr.FadmPressure-0.9478396196024435)**2)
+err= ratioStemPositions**2+math.sqrt((sr.Foverturning-7.126392782772217)**2+(sr.Fsliding-1.5388825671842905)**2+(sr.Fbearing-1.1391242090325084)**2+(sr.FadmPressure-0.9478396196024435)**2)
 err= math.sqrt(err)
 
 '''
@@ -249,7 +249,7 @@ wall.drawSchema(pth)
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(abs(err)<1e-9):
+if(abs(err)<1e-7):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

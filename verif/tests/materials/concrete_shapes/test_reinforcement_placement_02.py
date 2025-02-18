@@ -117,7 +117,7 @@ reinforcementUpVector= geom.Vector3d(0,1,0) # Y+. This vector defines the
 # - topReinforcement: LongReinfLayers objects defining the 
 #                     reinforcement at the top of the section.
 # - shearReinforcement: ShearReinforcement objects defining the 
-#                       reinforcement at the bottom of the section.
+#                       shear reinforcement of the section.
 for e in beamElements:
     e.setProp("baseSection", rcSection)
     e.setProp("reinforcementUpVector", reinforcementUpVector) # Y+

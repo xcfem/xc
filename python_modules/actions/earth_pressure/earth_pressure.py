@@ -42,7 +42,7 @@ class PressureModelBase(object):
         return 0.0
 
     def getVerticalPressure(self, z):
-        ''' Return the weight of the earth at the given z.
+        ''' Return the vertival pressure at the given z.
 
         :param z: global z coordinate.
         '''
@@ -220,7 +220,7 @@ class UniformPressureOnBackfill(PressureModelBase):
         return self.getKSoil(z)*self.getVerticalPressure(z)
 
     def getVerticalPressure(self, z):
-        ''' Return the weight of the earth at the given z.
+        ''' Return the vertical pressure of the earth at the given z.
 
         :param z: global z coordinate.
         '''
@@ -261,7 +261,6 @@ class UniformLoadOnBackfill(UniformPressureOnBackfill): # Probably to DEPRECATE 
 class EarthPressureModel(UniformPressureOnBackfill):
     '''Parameters to define a load of type earth pressure
 
-      :ivar zGround: global Z coordinate of ground level
       :ivar gammaSoils: list of weight density for each soil (from top to
             bottom)
       :ivar zWater: global Z coordinate of groundwater level 
@@ -281,7 +280,7 @@ class EarthPressureModel(UniformPressureOnBackfill):
               bottom)
         :param zWater: global Z coordinate of groundwater level 
               (if zGroundwater<minimum z of model => there is no groundwater)
-        :param gammaWater: weight density of water
+        :param gammaWater: weight density of water.
         :param qUnif: uniform load over the backfill surface (defaults to 0)
         '''
         super(EarthPressureModel,self).__init__(zGround= zGround, zBottomSoils= zBottomSoils, KSoils= KSoils, qUnif= qUnif)
@@ -304,8 +303,8 @@ class EarthPressureModel(UniformPressureOnBackfill):
                 self.gammaSoils[i]-=gammaWater
             self.gammaWater=[0]*indWat+[gammaWater]*(len(self.gammaSoils)-indWat)
     
-    def getWaterWeight(self, z):
-        ''' Return the weight of the water at the given z.
+    def getWaterPressure(self, z):
+        ''' Return the pressure of the water at the given z.
 
         :param z: global z coordinate.
         '''
@@ -319,19 +318,12 @@ class EarthPressureModel(UniformPressureOnBackfill):
                 retval+= self.gammaWater[ind]*(self.zTopLev[ind]-z)
         return retval
 
-    def getWaterPressure(self, z):
-        '''Return the water pressure acting on the points at global coordinate z.
-
-        :param z: global z coordinate.
-        '''
-        return self.getWaterWeight(z)
-    
     def getEffectivePressure(self, z):
         '''Return the effective pressure acting on the points at global coordinate z.
 
         :param z: global z coordinate.
         '''
-        return self.getKSoil(z)*self.getEffectiveWeight(z)
+        return self.getKSoil(z)*self.getEffectiveVerticalPressure(z)
 
     def getPressure(self, z):
         '''Return the earth pressure acting on the points at global coordinate z.
@@ -341,16 +333,17 @@ class EarthPressureModel(UniformPressureOnBackfill):
         return self.getEffectivePressure(z)+self.getWaterPressure(z)
 
     def getVerticalPressure(self, z):
-        ''' Return the weight of the earth at the given z.
+        ''' Return the vertical pressure at the given z.
 
         :param z: global z coordinate.
         '''
         retval= super(EarthPressureModel,self).getVerticalPressure(z)
         if z <= self.zGround:
-            retval= self.getEffectiveWeight()+getWaterWeight()
+            retval= self.getEffectiveVerticalPressure(z)+self.getWaterPressure(z)
+        return retval
     
-    def getEffectiveWeight(self, z):
-        ''' Return the weight of the earth at the given z.
+    def getEffectiveVerticalPressure(self, z):
+        ''' Return the effective vertical pressure at the given z.
 
         :param z: global z coordinate.
         '''
@@ -369,13 +362,13 @@ class EarthPressureBase(PressureModelBase):
     '''Parameters to define a load of type earth pressure
 
       :ivar zGround:   global Z coordinate of ground level
-      :ivar gammaSoil: weight density of soil .
+      :ivar gammaSoil: weight density of soil.
     '''
     def __init__(self, zGround, gammaSoil):
         ''' Constructor.
 
-        :param zGround:   global Z coordinate of ground level
-        :param gammaSoil: weight density of soil 
+        :param zGround: global Z coordinate of ground level.
+        :param gammaSoil: weight density of soil. 
         '''
         super(EarthPressureBase,self).__init__()
         self.zGround= zGround
@@ -396,7 +389,7 @@ class PeckPressureEnvelope(EarthPressureBase):
         :param zGround: global Z coordinate of ground level.
         :param gammaSoil: weight density of soil.
         :param zWater: global Z coordinate of groundwater level.
-        :param gammaWater: weight density of water
+        :param gammaWater: weight density of water.
         :param H: height of the cut.
         '''
         self.K= math.tan(math.pi/4.0-phi/2.0)**2 # Rankine active pressure coefficient.
@@ -406,7 +399,7 @@ class PeckPressureEnvelope(EarthPressureBase):
         self.H= H
 
     def getVerticalPressure(self, z):
-        ''' Return the weight of the earth at the given z.
+        ''' Return the vertical pressure at the given z.
 
         :param z: global z coordinate.
         '''
@@ -416,7 +409,7 @@ class PeckPressureEnvelope(EarthPressureBase):
             if(z<self.zWater):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
-                lmsg.error(className+'.'+methodName+'; weights under water table not implemented.')
+                lmsg.error(className+'.'+methodName+'; pressures under water table not implemented.')
         return retval
 
     def getPressure(self,z):
@@ -753,8 +746,9 @@ class SeismicPressureDistribution(EarthPressureBase):
       :ivar psi: back face inclination of the structure (<= PI/2) [radians]
       :ivar phi: angle of internal friction of soil [radians]
       :ivar beta: slope inclination of backfill.
+      :ivar earthCover: earth cover over the structure.
     '''
-    def __init__(self, zGround, gammaSoil, H, kv, kh, psi, phi, beta):
+    def __init__(self, zGround, gammaSoil, H, kv, kh, psi, phi, beta, earthCover= 0.0):
         ''' Constructor.
 
         :param zGround: global Z coordinate of ground level.
@@ -765,6 +759,7 @@ class SeismicPressureDistribution(EarthPressureBase):
         :param psi: back face inclination of the structure (<= PI/2) [radians]
         :param phi: angle of internal friction of soil  [radians].
         :param beta: slope inclination of backfill.
+        :param earthCover: earth cover over the structure.
         '''
         
         super(SeismicPressureDistribution,self).__init__(zGround, gammaSoil)
@@ -774,6 +769,7 @@ class SeismicPressureDistribution(EarthPressureBase):
         self.psi= psi
         self.phi= phi
         self.beta= beta
+        self.earthCover= earthCover
 
     def setPhi(self, phi):
         ''' Assigns the value of the angle of internal friction of soil.
@@ -807,9 +803,10 @@ class MononobeOkabePressureDistribution(SeismicPressureDistribution):
     '''Overpressure due to seismic action according to Mononobe-Okabe
 
       :ivar delta_ad: angle of friction soil - structure.
-      :ivar Kas: static earth pressure coefficient 
+      :ivar Kas: static earth pressure coefficient.
+      :ivar 
     '''
-    def __init__(self, zGround, gammaSoil, H, kv, kh, psi, phi, delta_ad, beta, Kas):
+    def __init__(self, zGround, gammaSoil, H, kv, kh, psi, phi, delta_ad, beta, Kas, earthCover= 0.0):
         ''' Constructor.
 
         :param zGround: global Z coordinate of ground level.
@@ -822,15 +819,16 @@ class MononobeOkabePressureDistribution(SeismicPressureDistribution):
         :param delta_ad: angle of friction soil - structure.
         :param beta: slope inclination of backfill.
         :param Kas: static earth pressure coefficient.
+        :param earthCover: earth cover over the structure.
         '''
         
-        super(MononobeOkabePressureDistribution,self).__init__(zGround= zGround, gammaSoil= gammaSoil, H= H, kv= kv, kh= kh, psi= psi, phi= phi, beta= beta)
+        super(MononobeOkabePressureDistribution,self).__init__(zGround= zGround, gammaSoil= gammaSoil, H= H, kv= kv, kh= kh, psi= psi, phi= phi, beta= beta, earthCover= earthCover)
         self.delta_ad= delta_ad
         self.Kas= Kas
         self.update()
         
     def update(self):
-        self.overpressure_dry= mononobe_okabe.overpressure_dry(self.H, self.gammaSoil, self.kv, self.kh, self.psi, self.phi, self.delta_ad, self.beta, self.Kas)
+        self.overpressure_dry= mononobe_okabe.overpressure_dry(self.H+self.earthCover, self.gammaSoil, self.kv, self.kh, self.psi, self.phi, self.delta_ad, self.beta, self.Kas)
         self.max_stress= 2*self.overpressure_dry/self.H
         
     def getPressure(self,z):
@@ -838,7 +836,7 @@ class MononobeOkabePressureDistribution(SeismicPressureDistribution):
         :param z: global z coordinate.
         '''
         zSup= self.zGround
-        zInf= self.zGround-self.H
+        zInf= self.zGround-self.earthCover-self.H
         retval= 0.0
         if((z>=zInf) and (z<=zSup)):
             retval= (z-zInf)/(zSup-zInf)*self.max_stress

@@ -11,9 +11,10 @@ import os
 import filecmp
 from actions.load_combination_utils import ec0_es # Eurocode 0 Spanish annex.
 
-lcg= ec0_es.combGenerator
+lcg= ec0_es.bridgeCombGenerator
+safetyFactorSet= 'B' # Table A2.4(B)
 # Permanent load.
-G= lcg.newPermanentAction(actionName=  'G', actionDescription= 'Self weight.', context= 'road_bridge')
+G= lcg.newSelfWeightAction(actionName=  'G', actionDescription= 'Self weight.', context= 'road_bridge', safetyFactorSet= safetyFactorSet)
 # Accidental actions.
 A1= lcg.newAccidentalAction(actionName= 'A1', actionDescription= 'Impact')
 A2= lcg.newAccidentalAction(actionName= 'A2', actionDescription= 'Derailment',  incompatibleActions=['A1'])

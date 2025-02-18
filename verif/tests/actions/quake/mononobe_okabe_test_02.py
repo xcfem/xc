@@ -88,18 +88,18 @@ loadCaseNames= ['earthquake']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 cLC= loadCaseManager.setCurrentLoadCase('earthquake')
 
-zGround= 0.0 #m z coordinate of the ground surface.
-gammaSoil= 21e3 #N/m3 unit weight of soil (backfill)
-H= wallHeight #m height of the structure.
-kh= 0.086 #seismic coefficient of horizontal acceleration.
-kv= kh/2.0 #seismic coefficient of vertical acceleration.
-psi= math.radians(90) #back face inclination of the structure (<= PI/2)
-phi= math.radians(30.0) #angle of internal friction of soil.
-delta_ad= 0.0 #angle of friction soil - structure.
-beta= 0.0 #slope inclination of backfill.
-Kas= 1/3.0 #static earth pressure coefficient 
+zGround= wallHeight # m z coordinate of the ground surface.
+gammaSoil= 21e3 # N/m3 unit weight of soil (backfill)
+H= wallHeight # m height of the structure.
+kh= 0.086 # seismic coefficient of horizontal acceleration.
+kv= kh/2.0 # seismic coefficient of vertical acceleration.
+psi= math.radians(90) # back face inclination of the structure (<= PI/2)
+phi= math.radians(30.0) # angle of internal friction of soil.
+delta_ad= 0.0 # angle of friction soil - structure.
+beta= 0.0 # slope inclination of backfill.
+Kas= 1/3.0 # static earth pressure coefficient 
 
-mononobeOkabe= earth_pressure.MononobeOkabePressureDistribution(zGround= wallHeight, gammaSoil= gammaSoil, H= H, kv= kv, kh= kh, psi= psi, phi= phi, delta_ad= delta_ad, beta= 0.0, Kas= Kas)
+mononobeOkabe= earth_pressure.MononobeOkabePressureDistribution(zGround= zGround, gammaSoil= gammaSoil, H= H, kv= kv, kh= kh, psi= psi, phi= phi, delta_ad= delta_ad, beta= 0.0, Kas= Kas)
 
 mononobeOkabe.appendLoadToCurrentLoadPattern(xcSet= s, vDir= xc.Vector([0,-1,0]), iCoo= 2)
 modelSpace.addLoadCaseToDomain(cLC.name)

@@ -59,6 +59,11 @@ class CombGenerator(object):
         if(dependsOn is not None):
             retval.relationships.appendMain(dependsOn)
         if(incompatibleActions is not None):
+            if(family=='permanent'):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                warningMsg= className+'.'+methodName+"; permanent load '"+str(actionName)+"' with incompatible actions: "+str(incompatibleActions)
+                lmsg.warning(warningMsg)
             for actionNameRegex in incompatibleActions:
                 retval.relationships.appendIncompatible(actionNameRegex)
         return retval
@@ -66,11 +71,8 @@ class CombGenerator(object):
     def newActionGroup(self, family: str, actionTuples, partialSafetyFactorsName:str, dependsOn= None, incompatibleActions= None):
         ''' Creates an action and appends it to the combinations generator.
 
-        :param weighting: name of the weighting factors repository.
         :param family: family to which the action belongs ("permanent", "variable", "seismic",...)
         :param actionTuples: tuples of (name, description, combinationFactorsName) defining the actions of the group.
-        :param actionDescription: description of the action.
-        :param combinationFactorsName: name of the combination factors container.
         :param partialSafetyFactorsName: name of the partial safety factor container.
         :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.

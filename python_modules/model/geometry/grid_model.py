@@ -1725,7 +1725,7 @@ class GridModel(object):
         return setLin
     
     def getSetLinFromMultiLstGridPnt(self,multiLstGridPnt,setName):
-        '''retur the set of lines that joint the successive points defined 
+        '''return the set of lines that joint the successive points defined 
         in 'multiLstGridPnt' by their indexes in the grid.
 
         :param multiLstGridPnt: list of lists of successive points 

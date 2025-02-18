@@ -832,18 +832,19 @@ def defElasticPlateSection(preprocessor,name,E,nu,rho,h):
     return retval
 
 #Elastic plate section.
-def defJ2PlateFibre(preprocessor, name, E, nu, fy, alpha= .01, rho= 0.0):
+def defJ2PlateFibre(preprocessor, name, E, nu, fy, alpha= .01, rho= 0.0, fyn= None):
     '''Constructs a J2 (Von Mises) material with a linear-strain
        hardening rule appropriate for plate analysis.
 
     :param  preprocessor: preprocessor of the finite element problem.
     :param  name: name identifying the material (if None compute a suitable name).
-    :param  E: Young’s modulus of the material.
-    :param  nu: Poisson’s ratio.
-    :param  fy: material yield stress.
-    :param  alpha: strain hardening ratio (default: (0.01), 
+    :param E: Young’s modulus of the material.
+    :param nu: Poisson’s ratio.
+    :param fy: material yield stress.
+    :param alpha: strain hardening ratio (default: (0.01), 
                           range: 0 to 1).
-    :param  rho: mass density (defaults to 0.0).
+    :param rho: mass density (defaults to 0.0).
+    :param fyn: negative yiedl stress (defaults to -fy).
     '''
     materialHandler= preprocessor.getMaterialHandler
     matName= name
@@ -857,6 +858,9 @@ def defJ2PlateFibre(preprocessor, name, E, nu, fy, alpha= .01, rho= 0.0):
         lmsg.error('alpha value: '+str(alpha)+' out of range (0,1)')
     retval.Hiso= alpha*E/(1.0-alpha)
     retval.rho= rho
+    if(fyn is None):
+        fyn= -fy
+    retval.fyn= fyn
     return retval
 
 #Elastic membrane plate section.

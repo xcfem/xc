@@ -11,17 +11,18 @@ import os
 import filecmp
 from actions.load_combination_utils import ec0_es # Eurocode 0 Spanish annex.
 
-lcg= ec0_es.combGenerator
+lcg= ec0_es.bridgeCombGenerator
+safetyFactorSet= 'B' # Table A2.4(B)
 # Permanent load.
-G= lcg.newPermanentAction(actionName=  'G', actionDescription= 'Self weight.', context= 'road_bridge')
+G= lcg.newSelfWeightAction(actionName=  'G', actionDescription= 'Self weight.', context= 'road_bridge', safetyFactorSet= safetyFactorSet)
 # Settlement load.
-S= lcg.newSettlementAction(actionName= 'S', actionDescription= 'Settlement.', context= 'road_bridge')
+S= lcg.newSettlementAction(actionName= 'S', actionDescription= 'Settlement.', context= 'road_bridge', safetyFactorSet= safetyFactorSet)
 # Hidrostatic pressure.
-W= lcg.newHydrostaticPressureAction(actionName= 'W', actionDescription= 'Hydrostatic pressure', context= 'road_bridge')
+W= lcg.newHydrostaticPressureAction(actionName= 'W', actionDescription= 'Hydrostatic pressure', context= 'road_bridge', safetyFactorSet= safetyFactorSet)
 # Thermal load.
-T= lcg.newThermalAction(actionName=  'T', actionDescription= 'Thermal action.', context= 'road_bridge')
+T= lcg.newThermalAction(actionName=  'T', actionDescription= 'Thermal action.', context= 'road_bridge', safetyFactorSet= safetyFactorSet)
 # Uniform traffic load.
-TL= lcg.newUniformLoadAction(actionName= 'TL', actionDescription= 'Traffic load.')
+TL= lcg.newUniformLoadAction(actionName= 'TL', actionDescription= 'Traffic load.', safetyFactorSet= safetyFactorSet)
 
 lcg.computeCombinations()
 

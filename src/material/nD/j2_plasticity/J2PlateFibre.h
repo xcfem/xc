@@ -86,6 +86,7 @@ class J2PlateFibre: public NDMaterial
     double Hiso; //!< Isotropic hardening parameter.
     double Hkin; //!< Kinematic hardening parameter.
     double rho; //!< Density.
+    double sigmaYn; //!< Negative yield stress.
 
     int parameterID;
     Matrix SHVs;
@@ -107,7 +108,7 @@ class J2PlateFibre: public NDMaterial
     int recvData(const Communicator &);
   public:
     J2PlateFibre(int tag= 0);
-    J2PlateFibre(int tag, double E, double G, double sigY, double Hi, double Hk);
+    J2PlateFibre(int tag, double E, double G, double sigY, double Hi, double Hk, double rho, double sigYn);
     ~J2PlateFibre(void);
     NDMaterial *getCopy(void) const;
     NDMaterial *getCopy(const std::string &type) const;
@@ -120,6 +121,8 @@ class J2PlateFibre: public NDMaterial
     void setnu(const double &);
     double getYieldStress(void) const;
     void setYieldStress(const double &);
+    double getNegativeYieldStress(void) const;
+    void setNegativeYieldStress(const double &);
     double getHiso(void) const;
     void setHiso(const double &);
     double getHkin(void) const;
