@@ -1,3 +1,4 @@
+// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -44,63 +45,63 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-// $Revision: 1.3 $
+// $Revision: 1.4 $
 // $Date: 2003/02/25 23:33:38 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/ENTMaterial.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/ENTNCBaseMaterial.h,v $
                                                                         
                                                                         
-// File: ~/material/ENTMaterial.C
+#ifndef ENTNCBaseMaterial_h
+#define ENTNCBaseMaterial_h
+
+// File: ~/material/ENTNCBaseMaterial.h
 //
 // Written: fmk 
 // Created: 07/98
 // Revision: A
 //
-// Description: This file contains the class implementation for 
-// ENTMaterial. 
+// What: "@(#) ENTNCBaseMaterial.h, revA"
+
+#include <material/uniaxial/ElasticBaseMaterial.h>
+
+namespace XC {
 //
-// What: "@(#) ENTMaterial.C, revA"
-
-#include <material/uniaxial/ENTMaterial.h>
-#include "domain/component/Parameter.h"
-#include <domain/mesh/element/utils/Information.h>
-
-
-XC::ENTMaterial::ENTMaterial(int tag, const double &e,const double &A,const double &B)
-  : ENTNCBaseMaterial(tag,MAT_TAG_ENTMaterial, e, A, B) {}
-
-//! @brief Return stress.
-double XC::ENTMaterial::getStress(void) const
+//! @brief Base class for elastic no traction and no compression materials.
+//! @ingroup MatUnx
+class ENTNCBaseMaterial: public ElasticBaseMaterial
   {
-    if(trialStrain<0.0)
-      return E*trialStrain;
-    else if (a == 0.0)
-      return 0.0;
-    else
-      return a*E*tanh(trialStrain*b);
-  }
+  protected:
+    double a;
+    double b;
+    int parameterID;
 
-//! @brief Returns elastic modulus.
-double XC::ENTMaterial::getTangent(void) const
-  {
-    if(trialStrain<=0.0)
-      return E;
-    else if(a == 0.0)
-      return 0.0;
-    else
-      {
-        const double tanhB = tanh(trialStrain*b);
-        return a*E*(1.0-tanhB*tanhB);
-      }
-  }
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
+  public:
+    ENTNCBaseMaterial(int tag, int classTag, const double &E=0.0,const double &a=0.0,const double &b=1.0);    
 
-XC::UniaxialMaterial *XC::ENTMaterial::getCopy(void) const
-  { return new ENTMaterial(*this); }
+    int setTrialStrain(double strain, double strainRate = 0.0); 
 
-double XC::ENTMaterial::getStressSensitivity(int gradIndex, bool conditional)
-  {
-    if(parameterID == 1 && trialStrain < 0.0)
-      return trialStrain;
-    else
-      return 0.0;
-  }
+    double getA(void) const;
+    void setA(const double &);
+    double getB(void) const;
+    void setB(const double &);
+
+    int setParameter(const std::vector<std::string> &argv, Parameter &param);
+    int updateParameter(int parameterID, Information &info);
+    // AddingSensitivity:BEGIN //////////////////////////////////////////
+    int activateParameter(int parameterID);
+    double getInitialTangentSensitivity(int gradIndex);
+    int commitSensitivity(double strainGradient, int gradIndex, int numGrads);
+    // AddingSensitivity:END ///////////////////////////////////////////
+
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
+
+
+    void Print(std::ostream &s, int flag =0) const;
+  };
+} // end of XC namespace
+
+
+#endif
 

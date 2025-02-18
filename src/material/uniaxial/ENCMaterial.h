@@ -1,3 +1,4 @@
+// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -44,63 +45,49 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-// $Revision: 1.3 $
+// $Revision: 1.4 $
 // $Date: 2003/02/25 23:33:38 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/ENTMaterial.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/ENCMaterial.h,v $
                                                                         
                                                                         
-// File: ~/material/ENTMaterial.C
+#ifndef ENCMaterial_h
+#define ENCMaterial_h
+
+// File: ~/material/ENCMaterial.h
 //
 // Written: fmk 
 // Created: 07/98
 // Revision: A
 //
-// Description: This file contains the class implementation for 
-// ENTMaterial. 
+// What: "@(#) ENCMaterial.h, revA"
+
+#include <material/uniaxial/ENTNCBaseMaterial.h>
+
+namespace XC {
+//! @ingroup MatUnx
 //
-// What: "@(#) ENTMaterial.C, revA"
-
-#include <material/uniaxial/ENTMaterial.h>
-#include "domain/component/Parameter.h"
-#include <domain/mesh/element/utils/Information.h>
-
-
-XC::ENTMaterial::ENTMaterial(int tag, const double &e,const double &A,const double &B)
-  : ENTNCBaseMaterial(tag,MAT_TAG_ENTMaterial, e, A, B) {}
-
-//! @brief Return stress.
-double XC::ENTMaterial::getStress(void) const
+//! @brief Elastic no compression material. ENCMaterial
+//! provides the abstraction of an elastic uniaxial
+//! material under tension i.e. stress = E*strain
+//! under compression however it exhbits the following
+//!     stress = a*(tanh(strain*b))
+//!     tangent = a*(1-tanh(strain*b)*tanh(strain*b));
+class ENCMaterial: public ENTNCBaseMaterial
   {
-    if(trialStrain<0.0)
-      return E*trialStrain;
-    else if (a == 0.0)
-      return 0.0;
-    else
-      return a*E*tanh(trialStrain*b);
-  }
+  public:
+    ENCMaterial(int tag= 0, const double &E=0.0,const double &a=0.0,const double &b=1.0);    
 
-//! @brief Returns elastic modulus.
-double XC::ENTMaterial::getTangent(void) const
-  {
-    if(trialStrain<=0.0)
-      return E;
-    else if(a == 0.0)
-      return 0.0;
-    else
-      {
-        const double tanhB = tanh(trialStrain*b);
-        return a*E*(1.0-tanhB*tanhB);
-      }
-  }
+    double getStress(void) const;
+    double getTangent(void) const;
 
-XC::UniaxialMaterial *XC::ENTMaterial::getCopy(void) const
-  { return new ENTMaterial(*this); }
+    UniaxialMaterial *getCopy(void) const;
+        
+    // AddingSensitivity:BEGIN //////////////////////////////////////////
+    double getStressSensitivity(int gradIndex, bool conditional);
+    // AddingSensitivity:END ///////////////////////////////////////////
+  };
+} // end of XC namespace
 
-double XC::ENTMaterial::getStressSensitivity(int gradIndex, bool conditional)
-  {
-    if(parameterID == 1 && trialStrain < 0.0)
-      return trialStrain;
-    else
-      return 0.0;
-  }
+
+#endif
 

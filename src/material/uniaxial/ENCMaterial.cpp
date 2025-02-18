@@ -46,32 +46,32 @@
                                                                         
 // $Revision: 1.3 $
 // $Date: 2003/02/25 23:33:38 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/ENTMaterial.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/ENCMaterial.cpp,v $
                                                                         
                                                                         
-// File: ~/material/ENTMaterial.C
+// File: ~/material/ENCMaterial.C
 //
 // Written: fmk 
 // Created: 07/98
 // Revision: A
 //
 // Description: This file contains the class implementation for 
-// ENTMaterial. 
+// ENCMaterial. 
 //
-// What: "@(#) ENTMaterial.C, revA"
+// What: "@(#) ENCMaterial.C, revA"
 
-#include <material/uniaxial/ENTMaterial.h>
+#include <material/uniaxial/ENCMaterial.h>
 #include "domain/component/Parameter.h"
 #include <domain/mesh/element/utils/Information.h>
 
 
-XC::ENTMaterial::ENTMaterial(int tag, const double &e,const double &A,const double &B)
-  : ENTNCBaseMaterial(tag,MAT_TAG_ENTMaterial, e, A, B) {}
+XC::ENCMaterial::ENCMaterial(int tag, const double &e,const double &A,const double &B)
+  : ENTNCBaseMaterial(tag,MAT_TAG_ENCMaterial, e, A, B) {}
 
 //! @brief Return stress.
-double XC::ENTMaterial::getStress(void) const
+double XC::ENCMaterial::getStress(void) const
   {
-    if(trialStrain<0.0)
+    if(trialStrain>0.0)
       return E*trialStrain;
     else if (a == 0.0)
       return 0.0;
@@ -80,9 +80,9 @@ double XC::ENTMaterial::getStress(void) const
   }
 
 //! @brief Returns elastic modulus.
-double XC::ENTMaterial::getTangent(void) const
+double XC::ENCMaterial::getTangent(void) const
   {
-    if(trialStrain<=0.0)
+    if(trialStrain>=0.0)
       return E;
     else if(a == 0.0)
       return 0.0;
@@ -93,12 +93,12 @@ double XC::ENTMaterial::getTangent(void) const
       }
   }
 
-XC::UniaxialMaterial *XC::ENTMaterial::getCopy(void) const
-  { return new ENTMaterial(*this); }
+XC::UniaxialMaterial *XC::ENCMaterial::getCopy(void) const
+  { return new ENCMaterial(*this); }
 
-double XC::ENTMaterial::getStressSensitivity(int gradIndex, bool conditional)
+double XC::ENCMaterial::getStressSensitivity(int gradIndex, bool conditional)
   {
-    if(parameterID == 1 && trialStrain < 0.0)
+    if(parameterID == 1 && trialStrain > 0.0)
       return trialStrain;
     else
       return 0.0;

@@ -50,9 +50,15 @@ class_<XC::ElasticBaseMaterial, bases<XC::UniaxialMaterial>, boost::noncopyable 
 class_<XC::ElasticMaterial, bases<XC::ElasticBaseMaterial> >("ElasticMaterial")
   ;
 
-class_<XC::ENTMaterial , bases<XC::ElasticBaseMaterial>, boost::noncopyable >("ENTMaterial", no_init)
-  .add_property("a", &XC::ENTMaterial::getA, &XC::ENTMaterial::setA,"Get/set the a parameter of the material.")
-  .add_property("b", &XC::ENTMaterial::getB, &XC::ENTMaterial::setB,"Get/set the a parameter of the material.")
+class_<XC::ENTNCBaseMaterial , bases<XC::ElasticBaseMaterial>, boost::noncopyable >("ENTNCBaseMaterial", no_init)
+  .add_property("a", &XC::ENTNCBaseMaterial::getA, &XC::ENTNCBaseMaterial::setA,"Get/set the a parameter of the material.")
+  .add_property("b", &XC::ENTNCBaseMaterial::getB, &XC::ENTNCBaseMaterial::setB,"Get/set the a parameter of the material.")
+  ;
+
+class_<XC::ENTMaterial , bases<XC::ENTNCBaseMaterial>, boost::noncopyable >("ENTMaterial", no_init)
+  ;
+
+class_<XC::ENCMaterial , bases<XC::ENTNCBaseMaterial>, boost::noncopyable >("ENCMaterial", no_init)
   ;
 
 class_<XC::EPPBaseMaterial , bases<XC::ElasticBaseMaterial>, boost::noncopyable >("EPPBaseMaterial", no_init);

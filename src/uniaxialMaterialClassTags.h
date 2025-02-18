@@ -43,7 +43,8 @@
 #define MAT_TAG_PathIndependent			11
 #define MAT_TAG_SeriesMaterial			12
 #define MAT_TAG_CableMaterial                   13
-#define MAT_TAG_ENTMaterial			14
+#define MAT_TAG_ENTMaterial		       104
+#define MAT_TAG_ENCMaterial			14
 #define MAT_TAG_Penalty				15
 #define MAT_TAG_MinMax				16
 #define MAT_TAG_BoucWen				17

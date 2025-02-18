@@ -61,7 +61,7 @@
 //
 // What: "@(#) ENTMaterial.h, revA"
 
-#include <material/uniaxial/ElasticBaseMaterial.h>
+#include <material/uniaxial/ENTNCBaseMaterial.h>
 
 namespace XC {
 //! @ingroup MatUnx
@@ -72,42 +72,19 @@ namespace XC {
 //! under tension however it exhbits the following
 //!     stress = a*(tanh(strain*b))
 //!     tangent = a*(1-tanh(strain*b)*tanh(strain*b));
-class ENTMaterial: public ElasticBaseMaterial
+class ENTMaterial: public ENTNCBaseMaterial
   {
-    double a;
-    double b;
-    int parameterID;
-  protected:
-    int sendData(Communicator &);
-    int recvData(const Communicator &);
   public:
     ENTMaterial(int tag= 0, const double &E=0.0,const double &a=0.0,const double &b=1.0);    
 
-    int setTrialStrain(double strain, double strainRate = 0.0); 
     double getStress(void) const;
     double getTangent(void) const;
 
-    double getA(void) const;
-    void setA(const double &);
-    double getB(void) const;
-    void setB(const double &);
-
     UniaxialMaterial *getCopy(void) const;
         
-    int setParameter(const std::vector<std::string> &argv, Parameter &param);
-    int updateParameter(int parameterID, Information &info);
     // AddingSensitivity:BEGIN //////////////////////////////////////////
-    int activateParameter(int parameterID);
     double getStressSensitivity(int gradIndex, bool conditional);
-    double getInitialTangentSensitivity(int gradIndex);
-    int commitSensitivity(double strainGradient, int gradIndex, int numGrads);
     // AddingSensitivity:END ///////////////////////////////////////////
-
-    int sendSelf(Communicator &);  
-    int recvSelf(const Communicator &);
-
-
-    void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace
 
