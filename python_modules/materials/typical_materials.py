@@ -217,12 +217,14 @@ def defElasticPPMaterial(preprocessor, name, E, fyp, fyn, rho= 0.0, nu= 0.3, ini
     tmp= ElasticPerfectlyPlasticMaterial(E= E, fyp= fyp, fyn= fyn, nu= nu, rho= rho)
     return tmp.defElasticPPMaterial(preprocessor, name= name, initStrain= initStrain)
 
-def defElastNoTensMaterial(preprocessor,name,E):
+def defElastNoTensMaterial(preprocessor,name, E, overrideRho= None):
     '''Constructs a uniaxial elastic - no tension material.
 
     :param preprocessor: preprocessor of the finite element problem.
     :param name: name identifying the material (if None compute a suitable name)
     :param E: tangent in the elastic zone of the stress-strain diagram
+    :param overrideRho: if defined (not None), override the value of the 
+                        material density.
     '''
     materialHandler= preprocessor.getMaterialHandler
     matName= name
@@ -230,6 +232,27 @@ def defElastNoTensMaterial(preprocessor,name,E):
         matName= uuid.uuid1().hex
     retval= materialHandler.newMaterial("elastic_no_traction_material", matName)
     retval.E= E
+    if(overrideRho):
+        retval.rho= overrideRho
+    return retval
+
+def defElastNoCompressionMaterial(preprocessor,name, E, overrideRho= None):
+    '''Constructs a uniaxial elastic - no compression material.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param name: name identifying the material (if None compute a suitable name)
+    :param E: tangent in the elastic zone of the stress-strain diagram
+    :param overrideRho: if defined (not None), override the value of the 
+                        material density.
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("elastic_no_compression_material", matName)
+    retval.E= E
+    if(overrideRho):
+        retval.rho= overrideRho
     return retval
 
 #Cable material.

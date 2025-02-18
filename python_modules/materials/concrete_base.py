@@ -949,6 +949,22 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         if(overrideRho):
             rho= overrideRho
         return typical_materials.defElasticMaterial(preprocessor, name, E= self.getEcm(), rho= rho)
+
+    def defElasticNoTensMaterial(self, preprocessor, name:str= None, overrideRho= None):
+        '''Constructs a no tension elastic uniaxial material appropriate 
+         for analysis of trusses.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param name: name for the new material.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        if(name is None):
+            name= self.materialName+'_uniaxial'
+        rho= self.density()
+        if(overrideRho):
+            rho= overrideRho
+        return typical_materials.defElastNoTensMaterial(preprocessor= preprocessor, name= name, E= self.getEcm(), overrideRho= rho)
             
     def defElasticSection2d(self, preprocessor, sectionProperties, overrideRho= None):
         '''Constructs an elastic section material appropriate 
@@ -1329,7 +1345,7 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
     Es= 2e11 # Elastic modulus of the material.
     k=1.05   # fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05 B , class B k>=1,08)
     rho= 7850 # kg/m3
-    def __init__(self,steelName= None, fyk= 0.0, emax= 0.0, gammaS= 1.15, k=1.05):
+    def __init__(self, steelName= None, fyk= 0.0, emax= 0.0, gammaS= 1.15, k=1.05):
         ''' Constructor.
 
         :param steelName: identifier for the steel material.
@@ -1358,7 +1374,6 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         self.gammaS= dct['gamma_s']
         self.emax= dct['e_max']
         self.k= dct['k']
-        
 
     def __eq__(self, other):
         '''Overrides the default implementation'''
@@ -1517,6 +1532,41 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         retval.savefig(plt,fileName+'.png')
         retval.savefig(plt,fileName+'.eps')
         return retval
+    
+    def defElasticMaterial(self, preprocessor, name= None, overrideRho= None, initStrain= 0.0):
+        ''' Return an elastic uniaxial material appropriate for example for
+            truss elements
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param name: name for the new material (if None compute a suitable name).
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        :param initStrain: initial strain.
+        '''        
+        materialHandler= preprocessor.getMaterialHandler
+        matName= name
+        if(not matName):
+            matName= self.materialName+'_xc_material'
+        retval= materialHandler.newMaterial("elastic_material", matName)
+        retval.E= self.Es
+        matRho= self.rho
+        if(overrideRho):
+            matRho= overrideRho
+        retval.rho= matRho
+        if(initStrain!=0.0):
+            retval.initialStrain= initStrain
+        return retval
+    
+    def defElasticNoCompressionMaterial(self, preprocessor, name:str= None):
+        '''Constructs a no tension elastic uniaxial material appropriate 
+         for analysis of trusses.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param name: name for the new material.
+        '''
+        if(name is None):
+            name= self.materialName+'_uniaxial'
+        return typical_materials.defElastNoCompressionMaterial(preprocessor= preprocessor, name= name, E= self.Es)
 
 def defReinfSteelCharacteristicDiagram(preprocessor, steelRecord):
     '''Characteristic stress-strain diagram.'''
