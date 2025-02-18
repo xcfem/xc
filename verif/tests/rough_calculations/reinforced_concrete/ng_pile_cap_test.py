@@ -4,6 +4,15 @@
 from materials.ehe import EHE_materials
 from rough_calculations import ng_pile_cap
 
+# pileDiameter: Diameter of the pile.
+# mainReinfDiameter: diameter of the main reinforcement.
+# h: depth of the pile cap.
+# l: length of the pile cap.
+# b: width of the pile cap.
+# d: distance between piles.
+# a: width of the supported column.
+# corbelLength: length of the corbel (minimum distance from the 
+#               pile contour to the pile cap contour).
 pileCap= ng_pile_cap.TwoPileCap(pileDiameter=150e-3, mainReinfDiameter=16e-3, reinfSteel= EHE_materials.B400S, h= 0.6, b= 0.6, l= 1.6, d= 1.0, a= 0.25, corbelLength= 0.3-150e-3/2.0)
 
 # Loads.
