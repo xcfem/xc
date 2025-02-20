@@ -38,7 +38,7 @@ n6= modelSpace.newNodeXYZ(1,0,1)
 n7= modelSpace.newNodeXYZ(1,1,1)
 n8= modelSpace.newNodeXYZ(0,1,1)
 
-nodeHandler.numDOFs= 6
+modelSpace.setNumberOfDOFs(6)
 n15= modelSpace.newNodeXYZ(0,0,1)
 n16= modelSpace.newNodeXYZ(1,0,1)
 n17= modelSpace.newNodeXYZ(1,1,1)
