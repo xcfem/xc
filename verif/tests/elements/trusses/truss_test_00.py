@@ -14,23 +14,27 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 
-E= 30e6 #Young modulus
-l= 10 #Bar length
 
+# Define FE problem.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodeHandler= preprocessor.getNodeHandler
-
 modelSpace= predefined_spaces.SolidMechanics2D(nodeHandler)
+
+## Define mesh.
+### Define nodes.
+l= 10 #Bar length
 n1= nodeHandler.newNodeXY(0,0)
 n2= nodeHandler.newNodeXY(0,l)
 
+### Define material.
+E= 30e6 #Young modulus
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 
+### Define elements.
 ''' We define nodes at the points where loads will be applied.
-    We will not compute stresses so we can use an arbitrary
+    We will not compute stresses, so we can use an arbitrary
     cross section of unit area.'''
-
 modelSpace.setDefaultMaterial(elast) # Set the material for the new element.
 modelSpace.setElementDimension(2) # Truss defined in a two-dimensional space.
 truss= modelSpace.newElement("Truss",nodeTags= [n1.tag,n2.tag])
