@@ -401,6 +401,7 @@ python tests/actions/load_combinations/comb_container/test_comb_container_03.py
 echo "$BLEU" "Nodes tests." "$NORMAL"
 echo "$BLEU" "  Mixed DOFs tests." "$NORMAL"
 python tests/nodes/mixed_dofs/test_brick_and_shell_01.py
+python tests/nodes/mixed_dofs/test_truss_and_beam2d_01.py
 echo "$BLEU" "Elements tests." "$NORMAL"
 echo "$BLEU" "  Truss element tests." "$NORMAL"
 python tests/elements/trusses/truss_test_00.py

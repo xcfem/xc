@@ -288,6 +288,10 @@ class PredefinedSpace(object):
         ''' Return the point handler for this model.'''
         return self.preprocessor.getMultiBlockTopology.getPoints
 
+    def getTransfCooHandler(self):
+        ''' Return the coordinate transformation handler.'''
+        return self.preprocessor.getTransfCooHandler
+    
     def getElementHandler(self):
         ''' Return the element handler for this model.'''
         return self.preprocessor.getElementHandler
@@ -296,6 +300,13 @@ class PredefinedSpace(object):
         ''' Return the seed element handler for this model.'''
         return self.getElementHandler().seedElemHandler
 
+    def setNumberOfDOFs(self, nDOFs):
+        ''' Set the number of degrees of freedom for the new nodes.
+
+        :param nDOFs: number of degrees of freedom for each new node.
+        '''
+        self.preprocessor.getNodeHandler.numDOFs= nDOFs
+        
     def setDefaultMaterial(self, material):
         ''' Assigns the material to be used when creating new elements.
 
