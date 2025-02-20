@@ -14,6 +14,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
+from misc_utils import log_messages as lmsg
 
 # Material properties
 E= 2.1e6*9.81/1e-4 # Elastic modulus (Pa)
@@ -67,6 +68,8 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
+if(result!=0):
+    lmsg.error("Can't solve.")
 
 delta= n2.getDisp[0] # x displacement of node 2.
 beam2d.getResistingForce()
@@ -88,7 +91,6 @@ ratio2= math.sqrt((F-N1)**2+(F-N2)**2)
 
 
 import os
-from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-5 and abs(ratio2)<1e-5:
     print('test '+fname+': ok.')
