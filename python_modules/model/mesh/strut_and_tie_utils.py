@@ -14,6 +14,7 @@ import uuid
 import geom
 import xc
 from materials import typical_materials
+from materials.sections.fiber_section import def_simple_RC_section
 
 dummy_spring_material= None
 dummy_spring_material_name= 'strut-and-tie_dummy_spring_material'
@@ -132,17 +133,17 @@ class Pilecap2Piles(object):
         :param xcPierSectionMaterial: XC section material for the pier.
         '''
         pierBottomNodePos= self.pierBottomNode.getInitialPos3d
-        leftPileTopNode= self.leftPileTopNode.getInitialPos3d
-        rightPileTopNode= self.rightPileTopNode.getInitialPos3d
-        bottomLine= geom.Segment3d(leftPileTopNode, rightPileTopNode)
-        plane= geom.Plane3d(leftPileTopNode, rightPileTopNode, pierBottomNodePos)
-        iVector= (rightPileTopNode-leftPileTopNode).normalized()
+        leftPileTopNodePos= self.leftPileTopNode.getInitialPos3d
+        rightPileTopNodePos= self.rightPileTopNode.getInitialPos3d
+        bottomLine= geom.Segment3d(leftPileTopNodePos, rightPileTopNodePos)
+        plane= geom.Plane3d(leftPileTopNodePos, rightPileTopNodePos, pierBottomNodePos)
+        iVector= (rightPileTopNodePos-leftPileTopNodePos).normalized()
         kVector= plane.getNormal()
         jVector= kVector.cross(iVector).normalized()
         localReference= geom.Ref2d3d(geom.Pos3d(0,0,0), iVector, jVector)
 
         # Compute top chord node positions.
-        v= leftPileTopNode.dist(rightPileTopNode)/2.0
+        v= leftPileTopNodePos.dist(rightPileTopNodePos)/2.0
         a= self.pierEffectiveWidth/2.0
         d= bottomLine.dist(pierBottomNodePos) # effective depth.
         x_i= [-v, -a, a, v]
@@ -278,8 +279,58 @@ class Pilecap2Piles(object):
         elif(dim==3):
             xzVector= xc.Vector([kVector.x, kVector.y, kVector.z])
             crdTransf= modelSpace.newLinearCrdTransf(crdTransfName, xzVector= xzVector)
+            modelSpace.setDefaultCoordTransf(crdTransf)
             modelSpace.newElement('ElasticBeam3d', [n1Tag, n2Tag])
             modelSpace.newElement('ElasticBeam3d', [n3Tag, n2Tag])
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMessage= className+'.'+methodName+"; not implemented for dimension: "+str(dim)
+            lmsg.error(errMsg)
+            
+    def createDummyElasticModel(self, modelSpace, concrete):
+        ''' Creates a simple linear elastic model that transfer the loads from
+            the pier to the piles. This model can be used when calculating 
+            other parts of the model and the internal forces in the pilecap
+            are irrelevant for the purpose of the performed analysis.
+
+        :param modelSpace: PredefinedSpace object used to create the FE model.
+        '''
+        
+        pierBottomNodePos= self.pierBottomNode.getInitialPos3d
+        leftPileTopNodePos= self.leftPileTopNode.getInitialPos3d
+        rightPileTopNodePos= self.rightPileTopNode.getInitialPos3d
+        bottomLine= geom.Segment3d(leftPileTopNodePos, rightPileTopNodePos)
+        d= bottomLine.dist(pierBottomNodePos) # effective depth.
+        
+        dim= self.pierBottomNode.dim
+        crdTransfName= str(uuid.uuid4().hex)
+        n0Tag= self.pierBottomNode.tag
+        n1Tag= self.leftPileTopNode.tag
+        n2Tag= self.rightPileTopNode.tag
+        # Define material.
+        dummyRCSectionName= str(uuid.uuid4().hex)
+        dummyRCSection= def_simple_RC_section.RCRectangularSection(name= dummyRCSectionName, sectionDescr= 'dummy RC section', concrType= concrete, reinfSteelType= None, width= d, depth= d)
+        if(dim==2):
+            crdTransf= modelSpace.newLinearCrdTransf(crdTransfName)
+            modelSpace.setDefaultCoordTransf(crdTransf)
+            xcDummySectionMaterial= dummyRCSection.defElasticShearSection2d(preprocessor= modelSpace.preprocessor)
+            modelSpace.setDefaultMaterial(xcDummySectionMaterial)
+            modelSpace.newElement('ElasticBeam2d', [n0Tag, n1Tag])
+            modelSpace.newElement('ElasticBeam2d', [n0Tag, n2Tag])
+            modelSpace.newElement('ElasticBeam2d', [n1Tag, n2Tag])
+        elif(dim==3):
+            plane= geom.Plane3d(leftPileTopNodePos, rightPileTopNodePos, pierBottomNodePos)
+            kVector= plane.getNormal()
+            xzVector= xc.Vector([kVector.x, kVector.y, kVector.z])
+            crdTransf= modelSpace.newLinearCrdTransf(crdTransfName, xzVector= xzVector)
+            modelSpace.setDefaultCoordTransf(crdTransf)
+            xcDummySectionMaterial= dummyRCSection.defElasticShearSection3d(preprocessor= modelSpace.preprocessor)
+            modelSpace.setDefaultMaterial(xcDummySectionMaterial)
+            
+            modelSpace.newElement('ElasticBeam3d', [n0Tag, n1Tag])
+            modelSpace.newElement('ElasticBeam3d', [n0Tag, n2Tag])
+            modelSpace.newElement('ElasticBeam3d', [n1Tag, n2Tag])
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
