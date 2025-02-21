@@ -217,12 +217,19 @@ def defElasticPPMaterial(preprocessor, name, E, fyp, fyn, rho= 0.0, nu= 0.3, ini
     tmp= ElasticPerfectlyPlasticMaterial(E= E, fyp= fyp, fyn= fyn, nu= nu, rho= rho)
     return tmp.defElasticPPMaterial(preprocessor, name= name, initStrain= initStrain)
 
-def defElastNoTensMaterial(preprocessor,name, E, overrideRho= None):
-    '''Constructs a uniaxial elastic - no tension material.
+def defElastNoTensMaterial(preprocessor,name, E, a= 0.0, b= 1.0, overrideRho= None):
+    '''Constructs a uniaxial elastic - no tension material. This material
+       provides the abstraction of an elastic uniaxial material under 
+       compression i.e. stress = E*strain, under tension however it exhbits 
+       the following:
+         stress = a*(tanh(strain*b))
+         tangent = a*(1-tanh(strain*b)*tanh(strain*b));
 
     :param preprocessor: preprocessor of the finite element problem.
     :param name: name identifying the material (if None compute a suitable name)
     :param E: tangent in the elastic zone of the stress-strain diagram
+    :param a: parameter to define the tension behaviour.
+    :param b: parameter to define the tension behaviour.
     :param overrideRho: if defined (not None), override the value of the 
                         material density.
     '''
@@ -232,16 +239,25 @@ def defElastNoTensMaterial(preprocessor,name, E, overrideRho= None):
         matName= uuid.uuid1().hex
     retval= materialHandler.newMaterial("elastic_no_traction_material", matName)
     retval.E= E
+    retval.a= a
+    retval.b= b
     if(overrideRho):
         retval.rho= overrideRho
     return retval
 
-def defElastNoCompressionMaterial(preprocessor,name, E, overrideRho= None):
-    '''Constructs a uniaxial elastic - no compression material.
+def defElastNoCompressionMaterial(preprocessor, name, E, a= 0.0, b= 1.0, overrideRho= None):
+    '''Constructs a uniaxial elastic - no compression material.This material
+       provides the abstraction of an elastic uniaxial material under 
+       tension i.e. stress = E*strain, under compression however it exhbits 
+       the following:
+         stress = a*(tanh(strain*b))
+         tangent = a*(1-tanh(strain*b)*tanh(strain*b));
 
     :param preprocessor: preprocessor of the finite element problem.
     :param name: name identifying the material (if None compute a suitable name)
     :param E: tangent in the elastic zone of the stress-strain diagram
+    :param a: parameter to define the compresion behaviour.
+    :param b: parameter to define the compresion behaviour.
     :param overrideRho: if defined (not None), override the value of the 
                         material density.
     '''
@@ -251,6 +267,8 @@ def defElastNoCompressionMaterial(preprocessor,name, E, overrideRho= None):
         matName= uuid.uuid1().hex
     retval= materialHandler.newMaterial("elastic_no_compression_material", matName)
     retval.E= E
+    retval.a= a
+    retval.b= b
     if(overrideRho):
         retval.rho= overrideRho
     return retval
