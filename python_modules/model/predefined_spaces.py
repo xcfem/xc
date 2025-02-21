@@ -318,6 +318,15 @@ class PredefinedSpace(object):
     def getDefaultMaterials(self):
         ''' Return the default materials for the element handler and the seed element handler.'''
         return [self.preprocessor.getElementHandler.defaultMaterial, self.preprocessor.getElementHandler.seedElemHandler.defaultMaterial]
+    
+    def setDefaultMaterials(self, materials):
+        ''' Assigns the materials to be used when creating new elements.
+
+        :param material: default materials (materials[0]-> regular element 
+                         handler, materials[1]-> seed element handler).
+        '''
+        self.preprocessor.getElementHandler.defaultMaterial= materials[0]
+        self.preprocessor.getElementHandler.seedElemHandler.defaultMaterial= materials[1]
 
     def setDefaultCoordTransf(self, coordinateTransformation):
         ''' Assigns the coordinate transformation to be used when creating 
@@ -958,8 +967,8 @@ class PredefinedSpace(object):
         zl.setupVectors(xc.Vector([direction[0],direction[1],0]),xc.Vector([-direction[1],direction[0],0]))
         zl.clearMaterials()
         zl.setMaterial(0,bearingMaterialName)
-        # Boundary conditions
-        numDOFs= self.preprocessor.getNodeHandler.numDOFs
+        # Boundary conditions: fix new node.
+        numDOFs= newNode.getNumberDOF
         for i in range(0,numDOFs):
             spc= self.newSPConstraint(newNode.tag,i,0.0)
             if(__debug__):
