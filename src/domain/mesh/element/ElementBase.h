@@ -35,6 +35,7 @@
 #include "material/Material.h"
 #include "domain/domain/Domain.h"
 #include "utility/geom/pos_vec/Pos3d.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 namespace XC {
 class Node;
@@ -116,26 +117,37 @@ template <int NNODES> template <class TIPOMAT>
 TIPOMAT *ElementBase<NNODES>::cast_material(const Material *ptr_mat)
   {
     TIPOMAT *retval= nullptr;
-    const TIPOMAT *tmp = dynamic_cast<const TIPOMAT *>(ptr_mat);
-    if(tmp)
-      retval= tmp->getCopy();
+    if(ptr_mat)
+      {
+	const TIPOMAT *tmp = dynamic_cast<const TIPOMAT *>(ptr_mat);
+	if(tmp)
+	  retval= tmp->getCopy();
+	else
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; on element: " << getTag() 
+		      << " the material " << ptr_mat->getTag()
+		      << " with name: " << ptr_mat->getName()
+		      << " and type: " << ptr_mat->getClassName()
+		      << Color::def << " has not a suitable type." << std::endl;
+	    abort();
+	  }
+	if(!retval)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; on element: " << getTag()
+		      << " can't get a copy of the material with tag: "
+		      << Color::def << ptr_mat->getTag() << std::endl;
+	    abort();
+	  }
+      }
     else
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; on element: " << getTag() 
-                  << " the material " << ptr_mat->getTag()
-	          << " with name: " << ptr_mat->getName()
-	          << " and type: " << ptr_mat->getClassName()
-                  << " has not a suitable type." << std::endl;
-        abort();
-      }
-    if(!retval)
-      {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; on element: " << getTag()
-		  << "can't get a copy of the material with tag: "
-		  << ptr_mat->getTag() << std::endl;
-        abort();
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; on element: " << getTag()
+		  << " pointer to material is null. "
+		  << Color::def << std::endl;
+	abort();
       }
     return retval;
   }
