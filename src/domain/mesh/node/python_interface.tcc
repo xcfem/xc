@@ -46,7 +46,7 @@ double (XC::Node::*getDist2Pos3dNode)(const Pos3d &,bool initialGeometry) const=
 class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Node", no_init)
   .add_property("getCoo", make_function( getCooRef, return_internal_reference<>() ),"Return node coordinates.")
   .add_property("getNumberDOF", &XC::Node::getNumberDOF,"Return the number of DOFs of the node.")
-  .add_property("DOFs", make_function(&XC::Node::getDOFs, return_internal_reference<>()) ,"Return the number of DOFs of the node.")
+  .add_property("DOFs", make_function(&XC::Node::getDOFs, return_internal_reference<>()) ,"Return the DOFs of the node.")
   .add_property("dim", &XC::Node::getDim,"Return the dimension of the node coordinates vector.")
   .add_property("mass", make_function(&XC::Node::getMass, return_internal_reference<>()) ,&XC::Node::setMass,"Node mass matrix.")
   .def("getMassComponent", &XC::Node::getMassComponent,"Return the mass matrix component for the DOF argument.")
