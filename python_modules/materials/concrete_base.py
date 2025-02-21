@@ -950,12 +950,14 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             rho= overrideRho
         return typical_materials.defElasticMaterial(preprocessor, name, E= self.getEcm(), rho= rho)
 
-    def defElasticNoTensMaterial(self, preprocessor, name:str= None, overrideRho= None):
+    def defElasticNoTensMaterial(self, preprocessor, name:str= None, a= 0.0, b= 1.0, overrideRho= None):
         '''Constructs a no tension elastic uniaxial material appropriate 
          for analysis of trusses.
 
         :param preprocessor: preprocessor of the finite element problem.
         :param name: name for the new material.
+        :param a: parameter to define the compresion behaviour.
+        :param b: parameter to define the compresion behaviour.
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
@@ -964,7 +966,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         rho= self.density()
         if(overrideRho):
             rho= overrideRho
-        return typical_materials.defElastNoTensMaterial(preprocessor= preprocessor, name= name, E= self.getEcm(), overrideRho= rho)
+        return typical_materials.defElastNoTensMaterial(preprocessor= preprocessor, name= name, E= self.getEcm(), a= a, b= b, overrideRho= rho)
             
     def defElasticSection2d(self, preprocessor, sectionProperties, overrideRho= None):
         '''Constructs an elastic section material appropriate 
@@ -1557,16 +1559,18 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
             retval.initialStrain= initStrain
         return retval
     
-    def defElasticNoCompressionMaterial(self, preprocessor, name:str= None):
+    def defElasticNoCompressionMaterial(self, preprocessor, name:str= None, a= 0.0, b= 1.0):
         '''Constructs a no tension elastic uniaxial material appropriate 
          for analysis of trusses.
 
         :param preprocessor: preprocessor of the finite element problem.
+        :param a: parameter to define the compresion behaviour.
+        :param b: parameter to define the compresion behaviour.
         :param name: name for the new material.
         '''
         if(name is None):
             name= self.materialName+'_uniaxial'
-        return typical_materials.defElastNoCompressionMaterial(preprocessor= preprocessor, name= name, E= self.Es)
+        return typical_materials.defElastNoCompressionMaterial(preprocessor= preprocessor, name= name, E= self.Es, a= a, b= b)
 
 def defReinfSteelCharacteristicDiagram(preprocessor, steelRecord):
     '''Characteristic stress-strain diagram.'''
