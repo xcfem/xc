@@ -66,7 +66,7 @@ a= pierSide/2.0
 ### Top of the pier.
 n0= modelSpace.newNode(0.0, d+pierHeight) # pier top.
 n3= modelSpace.newNode(0.0, d) # pier bottom.
-### Bottom of the abutment.
+### Bottom of the pile cap.
 n6= modelSpace.newNode(-v, 0.0) # left pile top.
 n9= modelSpace.newNode(v, 0.0) # right pile top.
 ### Bottom of the piles.
