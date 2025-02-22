@@ -404,6 +404,13 @@ class PredefinedSpace(object):
         '''
         return self.getNodeHandler().newNodeXY(x,y)
     
+    def newNodePos2d(self, pos2d):
+        ''' Create a new node.
+
+        :param pos3d: geom.Pos2d object.
+        '''
+        return self.newNodeXY(pos2d.x, pos2d.y)
+    
     def newNodeXYZ(self, x, y, z):
         ''' Create a new node.
 
@@ -412,6 +419,13 @@ class PredefinedSpace(object):
         :param z: z coordinate for the new node.
         '''
         return self.getNodeHandler().newNodeXYZ(x,y,z)
+    
+    def newNodePos3d(self, pos3d):
+        ''' Create a new node.
+
+        :param pos3d: geom.Pos3d object.
+        '''
+        return self.newNodeXYZ(pos3d.x, pos3d.y, pos3d.z)
     
     def newNodeFromVector(self, v):
         ''' Create a new node from vector
