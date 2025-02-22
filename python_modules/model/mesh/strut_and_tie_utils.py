@@ -106,7 +106,7 @@ class Pilecap2Piles(object):
     :ivar pierBottomNode: bottom node of the pier.
     :ivar leftPileTopNode: top node of the left pile.
     :ivar rightPileTopNode: top node of the right pile.
-    :ivar pierWidth: width of the pier.
+    :ivar pierEffectiveWidth: effective width of the pier.
     '''
     def __init__(self, pierBottomNode, leftPileTopNode, rightPileTopNode, pierEffectiveWidth):
         ''' Constructor.
@@ -114,7 +114,7 @@ class Pilecap2Piles(object):
         :param pierBottomNode: bottom node of the pier.
         :param leftPileTopNode: top node of the left pile.
         :param rightPileTopNode: top node of the right pile.
-        :param pierWidth: effective width of the pier.
+        :param pierEffectiveWidth: effective width of the pier.
         '''
         self.pierBottomNode= pierBottomNode
         self.leftPileTopNode= leftPileTopNode
