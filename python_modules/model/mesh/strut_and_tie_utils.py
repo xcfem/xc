@@ -131,6 +131,10 @@ class Pilecap2Piles(object):
         :param topDownTiesArea: area of the ties.
         :param reinfSteel: reinforcing steel material.
         :param xcPierSectionMaterial: XC section material for the pier.
+        :param linearElastic: if True, assign a linear elastic material to
+                              struts and ties (insteaa of an no-tension or
+                              no-compression material). Used with debugging
+                              purposes.
         '''
         pierBottomNodePos= self.pierBottomNode.getInitialPos3d
         leftPileTopNodePos= self.leftPileTopNode.getInitialPos3d
