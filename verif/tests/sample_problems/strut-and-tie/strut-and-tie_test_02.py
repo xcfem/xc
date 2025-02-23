@@ -65,7 +65,7 @@ n9= modelSpace.newNode(v, 0.0) # right pile top.
 n10= modelSpace.newNode(-v, -pileLength)
 n11= modelSpace.newNode(v, -pileLength)
 
-pilecap= strut_and_tie_utils.Pilecap2Piles(pierBottomNode= n3, leftPileTopNode= n6, rightPileTopNode= n9, pierEffectiveWidth= pierSide)
+pileCap= strut_and_tie_utils.PileCap2Piles(pierBottomNode= n3, leftPileTopNode= n6, rightPileTopNode= n9, pierEffectiveWidth= pierSide)
 
 # Define materials. 
 concrete= EC2_materials.C30
@@ -77,7 +77,7 @@ pierRCSection= def_simple_RC_section.RCRectangularSection(name= 'pierRCSection',
 xcPierSectionMaterial= pierRCSection.defElasticShearSection2d(preprocessor)
 
 # Define pile cap.
-pilecap.createStrutAndTieModel(modelSpace, strutArea= strutArea, concrete= concrete, topDownTiesArea= tieArea, bottomChordTiesArea= tieArea, topChordTiesArea= tieArea, reinfSteel= reinfSteel, xcPierSectionMaterial= xcPierSectionMaterial, linearElastic= False)
+pileCap.createStrutAndTieModel(modelSpace, strutArea= strutArea, concrete= concrete, topDownTiesArea= tieArea, bottomChordTiesArea= tieArea, topChordTiesArea= tieArea, reinfSteel= reinfSteel, xcPierSectionMaterial= xcPierSectionMaterial, linearElastic= False)
 
 ### Define pier.
 #### Define pier elements.
@@ -121,13 +121,14 @@ if(result!=0):
 
 # Check results.
 T0= 0.0
-bottomChordTies= pilecap.getBottomChordTies()
+bottomChordTies= pileCap.getBottomChordTies()
 for tie in bottomChordTies:
     T0+= tie.getN()
 T0/= len(bottomChordTies)
 T0ref= F*(v-a)/2.0/d
 ratio1= abs(T0-T0ref)/T0ref
 
+# New load case.
 modelSpace.removeLoadCaseFromDomain(lp0.name)
 modelSpace.revertToStart()
 lp1= modelSpace.newLoadPattern(name= '1')
@@ -147,7 +148,8 @@ R1b= n11.getReaction
 ratio2= abs(R1a[0]+R1b[0]+F)/F
 ratio3= abs(R1a[1]+R1b[1])
 R1= R1a+R1b
-    
+
+# New load case.
 modelSpace.removeLoadCaseFromDomain(lp1.name)
 modelSpace.revertToStart()
 lp2= modelSpace.newLoadPattern(name= '2')
@@ -167,7 +169,8 @@ R2b= n11.getReaction
 ratio4= math.sqrt((R2a[1]+F/2.0)**2+(R2b[1]+F/2.0)**2)
 ratio5= abs(R2a[0]+R2b[0])
 R2= R2a+R2b
-    
+
+# New load case.
 modelSpace.removeLoadCaseFromDomain(lp2.name)
 modelSpace.revertToStart()
 lp3= modelSpace.newLoadPattern(name= '3')

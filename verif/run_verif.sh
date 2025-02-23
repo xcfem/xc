@@ -617,6 +617,7 @@ echo "$BLEU" "  Strut-and-tie tests." "$NORMAL"
 python tests/sample_problems/strut-and-tie/strut-and-tie_test_01.py
 python tests/sample_problems/strut-and-tie/strut-and-tie_test_02.py
 python tests/sample_problems/strut-and-tie/strut-and-tie_test_03.py
+python tests/sample_problems/strut-and-tie/strut-and-tie_test_04.py
 
 echo "$BLEU" "Solution tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py

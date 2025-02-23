@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-''' Generation of a simple linear elastic pilecap model that transfer the
+''' Generation of a simple linear elastic pile cap model that transfer the
     loads from the piles to the piles. This example tries to show how the
-    Pilecap2Piles object can be used inside a biggen model.
+    PileCap2Piles object can be used inside a biggen model.
 
-    When analyzing the pilecap itself we create the strut-and-tie model by
+    When analyzing the pile cap itself we create the strut-and-tie model by
     means of the createStrutAndTieModel method. When analyzing other parts
     of the model we use the createDummyElasticModel as a set of rigid bars
-    to simulate the pilecap without the complexities of the 
+    to simulate the pile cap without the complexities of the 
     strut-and-tie model.
 '''
 
@@ -73,7 +73,7 @@ n9= modelSpace.newNode(v, 0.0) # right pile top.
 n10= modelSpace.newNode(-v, -pileLength)
 n11= modelSpace.newNode(v, -pileLength)
 
-pilecap= strut_and_tie_utils.Pilecap2Piles(pierBottomNode= n3, leftPileTopNode= n6, rightPileTopNode= n9, pierEffectiveWidth= pierSide)
+pileCap= strut_and_tie_utils.PileCap2Piles(pierBottomNode= n3, leftPileTopNode= n6, rightPileTopNode= n9, pierEffectiveWidth= pierSide)
 
 # Define materials. 
 concrete= EC2_materials.C30
@@ -85,7 +85,7 @@ pierRCSection= def_simple_RC_section.RCRectangularSection(name= 'pierRCSection',
 xcPierSectionMaterial= pierRCSection.defElasticShearSection2d(preprocessor)
 
 # Define pile cap.
-pilecap.createDummyElasticModel(modelSpace, concrete= concrete)
+pileCap.createDummyElasticModel(modelSpace, concrete= concrete)
 
 ### Define pier.
 #### Define pier elements.
