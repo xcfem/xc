@@ -894,6 +894,7 @@ python tests/preprocessor/import_export/dxf/test_dxf_import_01.py
 python tests/preprocessor/import_export/dxf/test_dxf_groups.py
 python tests/preprocessor/import_export/dxf/test_dxf_surfaces.py
 python tests/preprocessor/import_export/dxf/test_dxf_export_01.py
+python tests/preprocessor/import_export/dxf/test_dxf_export_02.py
 echo "$BLEU" "    FreeCAD tests." "$NORMAL"
 python tests/preprocessor/import_export/freecad/test_freecad_groups.py
 python tests/preprocessor/import_export/freecad/test_ifc_points.py
