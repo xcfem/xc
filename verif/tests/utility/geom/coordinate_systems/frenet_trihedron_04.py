@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test the computation of the frenet trihedron along a helix.'''
+''' Test the computation of the Frenet trihedron along a helix.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2024, LCPT and AO_O"
