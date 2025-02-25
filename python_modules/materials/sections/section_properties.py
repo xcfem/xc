@@ -888,11 +888,11 @@ class RectangularHollowSection(RectangularSection):
 
     def Ay(self):
         '''Return the corrected area for shear along y axis.'''
-        return 5.0/3.0*self.thickness*(self.h-self.thickness)
+        return self.alphaY()*self.A()
 
     def Az(self):
         '''Return the corrected area for shear along z axis.'''
-        return 5.0/3.0*G*self.thickness*(self.b-self.thickness)
+        return self.alphaZ()*self.A()
 
     def yMax(self):
         ''' Return the maximum distance from the section contour
@@ -944,11 +944,11 @@ class RectangularHollowSection(RectangularSection):
   
     def alphaY(self):
         '''Return shear shape factor with respect to local y-axis'''
-        return self.Ay()/self.A()
+        return self.h/(self.b+self.h) # SCIA cross-section theory manual.
   
     def alphaZ(self):
         '''Return shear shape factor with respect to local z-axis'''
-        return self.Az()/self.A()
+        return self.b/(self.b+self.h) # SCIA cross-section theory manual.
   
     def getYieldMomentY(self, fy):
         '''Return section yield moment.
@@ -1021,6 +1021,12 @@ class RectangularHollowSection(RectangularSection):
         t= self.thickness
         return (self.b-t)*(self.h-t)
 
+    def getThicknessRatio(self):
+        ''' Return the wall thickness divided by the minimum dimension of the
+            section.
+        '''
+        return self.thickness/min(self.b, self.h)
+
     def checkThinWalledSection(self, silent= False):
         ''' Check if the wall thickness is small so we get an accurate enough
             result from some approximate formulas.
@@ -1033,7 +1039,7 @@ class RectangularHollowSection(RectangularSection):
             methodName= sys._getframe(0).f_code.co_name
             warningMsg= className+'.'+methodName+'; the wall thickness: '+\
                         str(self.thickness)+ ' is not thin enough.'+\
-                        'The result of this calculation will be inaccurate.'
+                        'The torsion related results will be inaccurate.'
             lmsg.warning(warningMsg)
         return retval    
   
@@ -1042,19 +1048,24 @@ class RectangularHollowSection(RectangularSection):
 
         http://dir.cisc-icca.ca/files/technical/techdocs/updates/torsionprop.pdf
         '''
-        thick= self.checkThinWalledSection(silent= True)
-        if(thick): # thick wall
+        Ap= self.getMidContourEnclosedArea()
+        p= self.getMidContourLength()
+        retval= 4.0*Ap**2*self.thickness/p # Salmon and Johnson 1980
+        # Check if the wall is thin enough
+        thin= self.checkThinWalledSection(silent= True)
+        if(not thin): # thick wall
             bs= self.b # bs: Upper deck width (without the overhangs)
             bi= self.b # bi: Lower deck width.
-            h= selfh.h-self.thickness # h: Box depth (between mid-planes).
+            h= self.h-self.thickness # h: Box depth (between mid-planes).
             ts= self.thickness # ts: Upper deck thickness.
             ti= self.thickness # ti: Lower deck thickness.
             td= self.thickness # td: Thickness of the webs.
-            retval= getInerciaTorsionCajonMonocelular(bs,bi,h,ts,ti,td)
-        else:
-            Ap= self.getMidContourEnclosedArea()
-            p= self.getMidContourLength()
-            retval= 4.0*Ap**2*self.thickness/p # Salmon and Johnson 1980
+            # The average of the previous result and the one computed
+            # with the formula for bridges gives better results
+            # see est_rectangular_hollow_section_03.py verification
+            # test.
+            retval+= getInerciaTorsionCajonMonocelular(bs,bi,h,ts,ti,td)
+            retval/= 2.0
         return retval
   
     def getTorsionalStiffness(self, G):
@@ -1066,15 +1077,15 @@ class RectangularHollowSection(RectangularSection):
 
     def getWarpingConstant(self):
         ''' Return the value of the section warping constant according to
-        expression found here:
-
-        https://www.eng-tips.com/threads/formula-for-warping-constant-of-box-section.455965/
+        expression in the SCIA Cross-section theory manual.
         '''
-        self.checkThinWalledSection()
+        # self.checkThinWalledSection()
         b= self.b
         h= self.h
         t= self.thickness
-        retval= b**2*h**2/24*(b*t-h*t)**2/(b*t+h*t)**2*(b*t-h*t)
+        # retval= b**2*h**2/24*(b*t-h*t)**2/(b*t+h*t)**2*(b*t-h*t)
+        retval= (b**2*h**2*(b*t+h*t))/24.0 # SCIA Cross-section theory.
+        return retval
     
     def getShearStiffnessY(self, G):
         '''Return an approximated value of the shear stiffness of the 
