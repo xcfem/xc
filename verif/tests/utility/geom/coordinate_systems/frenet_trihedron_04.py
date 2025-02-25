@@ -67,6 +67,6 @@ else:
 # vtkPlineActor= vtk_geom.get_vtk_polyline_actor(helix, color= colors.GetColor3d('Tomato'))
 # vtkRefSysActors= vtk_geom.get_ref_sys_actor(refSystems[2])
 # actors= [vtkPlineActor]+ vtkRefSysActors
-# vtk_graphic_base.setup_render_window(windowName= 'PolyLine', actors= actors, backgroundColor= colors.GetColor3d('DarkOliveGreen'), xSize= 800, ySize= 600)
+# vtk_graphic_base.setup_render_window(windowName= 'Frenet trihedron', actors= actors, backgroundColor= colors.GetColor3d('DarkOliveGreen'), xSize= 800, ySize= 600)
 
 
