@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-''' Generation of a simple linear elastic pilecap model that transfer the
+''' Generation of a strut-and-tie model for a threee-pile pile cap.
     loads from the piles to the piles. This example tries to show how the
-    Pilecap2Piles object can be used inside a biggen model.
-
-    When analyzing the pilecap itself we create the strut-and-tie model by
-    means of the createStrutAndTieModel method. When analyzing other parts
-    of the model we use the createDummyElasticModel as a set of rigid bars
-    to simulate the pilecap without the complexities of the 
-    strut-and-tie model.
+    Pilecap3Piles object can be used to obtain the struts and ties internal
+    forces under o variety of loads comming from the pile (not only the
+    pure vertical load seen in simple examples).
 '''
 
 from __future__ import division
