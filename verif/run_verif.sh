@@ -1275,17 +1275,18 @@ python tests/materials/xc_materials/sections/section_geom/test_mass_properties_0
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_04.py
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_05.py
 python tests/materials/xc_materials/sections/section_geom/test_geom_params_torsion_ehe_01.py
-python tests/materials/xc_materials/sections/section_geom/test_box_girder_torsional_stiffness.py
 python tests/materials/xc_materials/sections/section_geom/test_modify_section_properties.py
 echo "$BLEU" "      Cross-sections region tests." "$NORMAL"
 python tests/materials/xc_materials/sections/section_geom/regions/quad_sect_region_test_01.py
 python tests/materials/xc_materials/sections/section_geom/regions/quad_sect_region_test_02.py
 
 # Compound sections.
-echo "$BLEU" "      Compound sections." "$NORMAL"
-python tests/materials/xc_materials/sections/test_compound_section_01.py
-python tests/materials/xc_materials/sections/test_compound_section_02.py
-python tests/materials/xc_materials/sections/test_compound_section_03.py
+echo "$BLEU" "      Section properties." "$NORMAL"
+python tests/materials/section_properties/test_compound_section_01.py
+python tests/materials/section_properties/test_compound_section_02.py
+python tests/materials/section_properties/test_compound_section_03.py
+python tests/materials/section_properties/test_box_girder_torsional_stiffness.py
+
 echo "$BLEU" "      Section stiffness." "$NORMAL"
 python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_01.py
 python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_02.py
