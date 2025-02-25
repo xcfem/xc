@@ -584,6 +584,55 @@ class PileCap3Piles(object):
         modelSpace.newElement('ElasticBeam3d', [n0Tag, n2Tag])
         modelSpace.newElement('ElasticBeam3d', [n0Tag, n3Tag])
         
+    def createDummyElasticModel(self, modelSpace, concrete):
+        ''' Creates a simple linear elastic model that transfer the loads from
+            the pier to the piles. This model can be used when calculating 
+            other parts of the model and the internal forces in the pile cap
+            are irrelevant for the purpose of the performed analysis.
+
+        :param modelSpace: PredefinedSpace object used to create the FE model.
+        '''
+        pierBottomNodePos= self.pierBottomNode.getInitialPos3d
+        pileBottomNodePosA= self.pileTopNodeA.getInitialPos3d
+        pileBottomNodePosB= self.pileTopNodeB.getInitialPos3d
+        pileBottomNodePosC= self.pileTopNodeC.getInitialPos3d
+        bottomTriangle= geom.Triangle3d(pileBottomNodePosA, pileBottomNodePosB, pileBottomNodePosC)
+        bottomCentroid= bottomTriangle.getCenterOfMass()
+        auxLineA= geom.Segment3d(bottomCentroid, pileBottomNodePosA)
+        auxLineB= geom.Segment3d(bottomCentroid, pileBottomNodePosB)
+        auxLineC= geom.Segment3d(bottomCentroid, pileBottomNodePosC)
+        bottomPlane= bottomTriangle.getPlane()
+        kVector= bottomPlane.getNormal().normalized()
+        d= bottomPlane.dist(pierBottomNodePos) # effective depth.
+        
+        n0Tag= self.pierBottomNode.tag
+        nATag= self.pileTopNodeA.tag
+        nBTag= self.pileTopNodeB.tag
+        nCTag= self.pileTopNodeC.tag
+        # Define material.
+        dummyRCSectionName= str(uuid.uuid4().hex)
+        dummyRCSection= def_simple_RC_section.RCRectangularSection(name= dummyRCSectionName, sectionDescr= 'dummy RC section', concrType= concrete, reinfSteelType= None, width= d, depth= d)
+        xcDummySectionMaterial= dummyRCSection.defElasticShearSection3d(preprocessor= modelSpace.preprocessor)
+
+        # Compute date for the coordinate transformations.
+        auxPoint= pierBottomNodePos-d*kVector # Point in the vertical of the
+                                              # pile.
+        planeA= geom.Plane3d(pierBottomNodePos, auxPoint, pileBottomNodePosA)
+        kVectorA= planeA.getNormal()
+        planeB= geom.Plane3d(pierBottomNodePos, auxPoint, pileBottomNodePosB)
+        kVectorB= planeB.getNormal()
+        planeC= geom.Plane3d(pierBottomNodePos, auxPoint, pileBottomNodePosC)
+        kVectorC= planeC.getNormal()
+        # Set element material.
+        modelSpace.setDefaultMaterial(xcDummySectionMaterial)
+        for nTag, kVector in zip([nATag, nBTag, nCTag], [kVectorA, kVectorB, kVectorC]):
+            # Set coordinate transformation.
+            xzVector= xc.Vector([kVector.x, kVector.y, kVector.z])
+            crdTransfName= str(uuid.uuid4().hex)
+            crdTransf= modelSpace.newLinearCrdTransf(crdTransfName, xzVector= xzVector)
+            modelSpace.setDefaultCoordTransf(crdTransf)
+            # Create dummy element.
+            modelSpace.newElement('ElasticBeam3d', [n0Tag, nTag])
         
         
         
