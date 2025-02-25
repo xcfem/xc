@@ -77,9 +77,7 @@ pileCap= strut_and_tie_utils.PileCap2Piles(pierBottomNode= n3, leftPileTopNode= 
 
 # Define materials. 
 concrete= EC2_materials.C30
-strutArea= 0.25
 reinfSteel= EC2_materials.S500B
-tieArea= 5.8e-4
 ## Define pier material.
 pierRCSection= def_simple_RC_section.RCRectangularSection(name= 'pierRCSection', sectionDescr= 'pier section', concrType= concrete, reinfSteelType= reinfSteel, width= pierSide, depth= pierSide)
 xcPierSectionMaterial= pierRCSection.defElasticShearSection2d(preprocessor)
