@@ -13,6 +13,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import os
+import sys
 import math
 import geom
 import xc
@@ -24,6 +25,7 @@ from materials.sections.fiber_section import def_column_RC_section
 from misc_utils import log_messages as lmsg
 from solution import predefined_solutions
 from model.mesh import strut_and_tie_utils
+from postprocess import def_vars_control as vc
 
 # Problem type.
 feProblem= xc.FEProblem()
@@ -32,6 +34,7 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 pierHeight= 10.949
+lintelHeight= 2.0
 supportsDistY= 1.5
 halfSupportsDistY= supportsDistY/2.0
 supportsDistX= 2.5
@@ -43,7 +46,7 @@ pileCapHeight= 2.3-2*insertionDepth
 
 ## Define mesh.
 ### Top of the pier.
-n0= modelSpace.newNode(0.0, 0.0, pierHeight) # pier top.
+n0= modelSpace.newNode(0.0, 0.0, pierHeight) # lintel top.
 #### Lower left support.
 n0LL= modelSpace.newNode(-halfSupportsDistX, -halfSupportsDistY, pierHeight)
 #### Lower right support.
@@ -52,6 +55,7 @@ n0LR= modelSpace.newNode(halfSupportsDistX, -halfSupportsDistY, pierHeight)
 n0UR= modelSpace.newNode(halfSupportsDistX, halfSupportsDistY, pierHeight)
 #### Upper left support.
 n0UL= modelSpace.newNode(-halfSupportsDistX, halfSupportsDistY, pierHeight)
+n0b= modelSpace.newNode(0.0, 0.0, pierHeight-lintelHeight) # lintel bottom.
 n1= modelSpace.newNode(0.0, 0.0, -insertionDepth) # pier bottom.
 
 ### Bottom of the pile cap.
@@ -88,9 +92,10 @@ modelSpace.newElement('ElasticBeam3d', [n0.tag, n0LL.tag])
 modelSpace.newElement('ElasticBeam3d', [n0.tag, n0LR.tag])
 modelSpace.newElement('ElasticBeam3d', [n0.tag, n0UL.tag])
 modelSpace.newElement('ElasticBeam3d', [n0.tag, n0UR.tag])
-linX= modelSpace.newLinearCrdTransf("linX", xzVector= xc.Vector([1,0,0]))
-modelSpace.setDefaultCoordTransf(linX)
-pierElement= modelSpace.newElement('ElasticBeam3d', [n0.tag, n1.tag])
+linY= modelSpace.newLinearCrdTransf("linY", xzVector= xc.Vector([0,-1,0]))
+modelSpace.setDefaultCoordTransf(linY)
+lintelElement= modelSpace.newElement('ElasticBeam3d', [n0.tag, n0b.tag])
+pierElement= modelSpace.newElement('ElasticBeam3d', [n0b.tag, n1.tag])
 
 ### Define piles.
 #### Define pile material.
@@ -110,7 +115,9 @@ pileCap= strut_and_tie_utils.PileCap3Piles(pierBottomNode= n1, pileTopNodeA= pil
 
 
 # Define pile cap.
-pileCap.createDummyElasticModel(modelSpace, concrete= concrete)
+# releaseExtremities: if true, release the bending moments at the nodes
+#                     connecting with the piles.
+pileCap.createDummyElasticModel(modelSpace, concrete= concrete, releaseExtremities= True)
 
 ## Define constraints
 for n in pileBottomNodes:
@@ -129,7 +136,7 @@ selfWeight.newNodalLoad(n1.tag,xc.Vector([0, 0, -2118e3, 0, 0, 0]))
 # modelSpace.addLoadCaseToDomain(selfWeight.name)
 
 ## H1ELU
-h1ELU= modelSpace.newLoadPattern(name= 'h1ELU')
+h1ELU= modelSpace.newLoadPattern(name= 'H1ELU')
 modelSpace.setCurrentLoadPattern(h1ELU.name)
 p1= h1ELU.newNodalLoad(n0UL.tag, xc.Vector([0, 826e3, 0, 0, 0, 0]))
 p2= h1ELU.newNodalLoad(n0UR.tag, xc.Vector([0, 826e3, 0, 0, 0, 0]))
@@ -143,7 +150,7 @@ p8= h1ELU.newNodalLoad(n0LL.tag, xc.Vector([354e3, 0, 0, 0, 0, 0]))
 # modelSpace.addLoadCaseToDomain(h1ELU.name)
 
 ## H2ELU
-h2ELU= modelSpace.newLoadPattern(name= 'h2ELU')
+h2ELU= modelSpace.newLoadPattern(name= 'H2ELU')
 modelSpace.setCurrentLoadPattern(h2ELU.name)
 p1= h2ELU.newNodalLoad(n0LL.tag, xc.Vector([0, 0, -3062e3, 0, 0, 0]))
 p2= h2ELU.newNodalLoad(n0UL.tag, xc.Vector([0, 0, -3296e3, 0, 0, 0]))
@@ -157,7 +164,7 @@ p8= h2ELU.newNodalLoad(n0UR.tag, xc.Vector([0, 1007e3, 0, 0, 0, 0]))
 # modelSpace.addLoadCaseToDomain(h2ELU.name)
 
 ## H3ELU
-h3ELU= modelSpace.newLoadPattern(name= 'h3ELU')
+h3ELU= modelSpace.newLoadPattern(name= 'H3ELU')
 modelSpace.setCurrentLoadPattern(h3ELU.name)
 p1= h3ELU.newNodalLoad(n0UL.tag, xc.Vector([0, 72e3, 0, 0, 0, 0]))
 p2= h3ELU.newNodalLoad(n0UR.tag, xc.Vector([0, 72e3, 0, 0, 0, 0]))
@@ -168,39 +175,79 @@ p6= h3ELU.newNodalLoad(n0LR.tag, xc.Vector([0, 0, -5952e3, 0, 0, 0]))
 p7= h3ELU.newNodalLoad(n0LL.tag, xc.Vector([0, 0, -1417e3, 0, 0, 0]))
 p8= h3ELU.newNodalLoad(n0LL.tag, xc.Vector([744e3, 0, 0, 0, 0, 0]))
 ### Add the load case to domain.
-modelSpace.addLoadCaseToDomain(h3ELU.name)
+# modelSpace.addLoadCaseToDomain(h3ELU.name)
 
+# Define load combinations.
+combs= modelSpace.getLoadCombinationsHandler()
+comb1= combs.newLoadCombination("ELU001","1.00*G")
+comb2= combs.newLoadCombination("ELU002","1.35*G")
+comb3= combs.newLoadCombination("ELU003","1.00*G + 1.00*H1ELU")
+comb4= combs.newLoadCombination("ELU004","1.00*G + 1.00*H2ELU")
+comb5= combs.newLoadCombination("ELU005","1.00*G + 1.00*H3ELU")
+comb6= combs.newLoadCombination("ELU006","1.35*G + 1.00*H1ELU")
+comb7= combs.newLoadCombination("ELU007","1.35*G + 1.00*H2ELU")
+comb8= combs.newLoadCombination("ELU008","1.35*G + 1.00*H3ELU")
 
-# Solution
-result= modelSpace.analyze(calculateNodalReactions= False)
-if(result!=0):
-    lmsg.error("Can't solve.")
-    info= None
-    solver= analysis.linearSOE.solver
-    if(solver.hasProp("info")):
-        info= solver.getProp("info")
-    unconstrainedNode= modelSpace.locateEquationNumber(eqNumber= info-1)
-    print('unconstrained node id: ', unconstrainedNode.tag)
-    print('unconstrained node position: ', unconstrainedNode.getInitialPos3d)
-    exit(1)
+vc.def_reactions_envelope_vars(nodes= pileBottomNodes)
+vc.def_vars_envelope_internal_forces_beam_elems(elems= [lintelElement])
+for combName in combs.getKeys():
+    comb= combs[combName]
+    modelSpace.removeAllLoadsAndCombinationsFromDomain()
+    modelSpace.revertToStart()
+    modelSpace.addLoadCaseToDomain(combName)
+    result= modelSpace.analyze(calculateNodalReactions= True)
+    if(result!=0):
+        lmsg.error("Can't solve.")
+        info= None
+        solver= analysis.linearSOE.solver
+        if(solver.hasProp("info")):
+            info= solver.getProp("info")
+        unconstrainedNode= modelSpace.locateEquationNumber(eqNumber= info-1)
+        print('unconstrained node id: ', unconstrainedNode.tag)
+        print('unconstrained node position: ', unconstrainedNode.getInitialPos3d)
+        exit(1)
+    varNames= vc.update_reactions_envelope(nodes= pileBottomNodes)
+    vc.update_envelope_internal_forces_beam_elem_3d(lintelElement)
+    print(comb.name)
 
-# Check results.
-modelSpace.calculateNodalReactions()
-R0a= pileBottomNodes[0].getReaction
-R0b= pileBottomNodes[1].getReaction
-R0c= pileBottomNodes[2].getReaction
+pileSet= modelSpace.defSet('pileSet', elements= pileElements)
+pileSet.fillDownwards()
 
-'''
-# Report results.
-print('\nR0a= ', R0a*1/1e3, 'kN')
-print('R0b= ', R0b*1/1e3, 'kN')
-print('R0c= ', R0c*1/1e3, 'kN')
-print('R0= ', R0*1/1e3, 'kN')
-print('ratio01= ', ratio01)
-print('ratio02= ', ratio02)
-print('ratio02= ', ratio03)
-print('ratio04= ', ratio04)
-'''
+lintelMaxVy= lintelElement.getProp('Vy+')
+lintelMinVy= lintelElement.getProp('Vy-')
+lintelMaxVz= lintelElement.getProp('Vz+')
+lintelMinVz= lintelElement.getProp('Vz-')
+print('lintelVyMax= ', sum(lintelMaxVy)/len(lintelMaxVy)/1e3)
+print('lintelVyMin= ', sum(lintelMinVy)/len(lintelMinVy)/1e3)
+print('lintelVzMax= ', sum(lintelMaxVz)/len(lintelMaxVz)/1e3)
+print('lintelVzMin= ', sum(lintelMinVz)/len(lintelMinVz)/1e3)
+quit()
+print('\nRz')        
+for n in pileBottomNodes:
+    RzMin= n.getProp('Rz-')
+    RzMax= n.getProp('Rz+')
+    print(n.tag, RzMin/1e3, RzMax/1e3)
+print('\nRx')        
+for n in pileBottomNodes:
+    RxMin= n.getProp('Rx-')
+    RxMax= n.getProp('Rx+')
+    print(n.tag, RxMin/1e3, RxMax/1e3)
+print('\nRy')    
+for n in pileBottomNodes:
+    RyMin= n.getProp('Ry-')
+    RyMax= n.getProp('Ry+')
+    print(n.tag, RyMin/1e3, RyMax/1e3)
+print('\nRRx')        
+for n in pileBottomNodes:
+    RRxMin= n.getProp('RRx-')
+    RRxMax= n.getProp('RRx+')
+    print(n.tag, RRxMin/1e3, RRxMax/1e3)
+print('\nRRy')        
+for n in pileBottomNodes:
+    RRyMin= n.getProp('RRy-')
+    RRyMax= n.getProp('RRy+')
+    print(n.tag, RRyMin/1e3, RRyMax/1e3)
+
 
 fname= os.path.basename(__file__)
 
@@ -211,15 +258,17 @@ oh= output_handler.OutputHandler(modelSpace)
 # oh.displayFEMesh()
 oh.displayLoads()
 oh.displayReactions()
-# oh.displayIntForcDiag('N')
-# oh.displayIntForcDiag('My')
-# oh.displayIntForcDiag('Mz')
+oh.displayIntForcDiag('N')
+oh.displayIntForcDiag('My', setToDisplay= pileSet)
+oh.displayIntForcDiag('Mz', setToDisplay= pileSet)
+oh.displayIntForcDiag('Vy', setToDisplay= pileSet)
+oh.displayIntForcDiag('Vz', setToDisplay= pileSet)
 # oh.displayDispRot(itemToDisp='uZ')
 
-# DXF output
-from import_export import mesh_entities
-xcTotalSet= modelSpace.getTotalSet()
-me= mesh_entities.MeshData()
-me.readFromXCSet(xcSet= xcTotalSet)
-outputFileName= fname.replace('.py', '.dxf')
-me.writeDxfFile(outputFileName)
+# # DXF output
+# from import_export import mesh_entities
+# xcTotalSet= modelSpace.getTotalSet()
+# me= mesh_entities.MeshData()
+# me.readFromXCSet(xcSet= xcTotalSet)
+# outputFileName= fname.replace('.py', '.dxf')
+# me.writeDxfFile(outputFileName)

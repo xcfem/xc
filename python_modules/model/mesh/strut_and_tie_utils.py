@@ -584,13 +584,15 @@ class PileCap3Piles(object):
         modelSpace.newElement('ElasticBeam3d', [n0Tag, n2Tag])
         modelSpace.newElement('ElasticBeam3d', [n0Tag, n3Tag])
         
-    def createDummyElasticModel(self, modelSpace, concrete):
+    def createDummyElasticModel(self, modelSpace, concrete, releaseExtremities= False):
         ''' Creates a simple linear elastic model that transfer the loads from
             the pier to the piles. This model can be used when calculating 
             other parts of the model and the internal forces in the pile cap
             are irrelevant for the purpose of the performed analysis.
 
         :param modelSpace: PredefinedSpace object used to create the FE model.
+        :param releaseExtremities: if true, release the bending moments at
+                                   the nodes connecting with the piles.
         '''
         pierBottomNodePos= self.pierBottomNode.getInitialPos3d
         pileBottomNodePosA= self.pileTopNodeA.getInitialPos3d
@@ -632,7 +634,11 @@ class PileCap3Piles(object):
             crdTransf= modelSpace.newLinearCrdTransf(crdTransfName, xzVector= xzVector)
             modelSpace.setDefaultCoordTransf(crdTransf)
             # Create dummy element.
-            modelSpace.newElement('ElasticBeam3d', [n0Tag, nTag])
+            newElement= modelSpace.newElement('ElasticBeam3d', [n0Tag, nTag])
+            if(releaseExtremities):
+                # Release code; 0: no release, 1: node I, 2: node J, 2: both nodes.
+                # newElement.releaseY= 2
+                newElement.releaseZ= 2
         
         
         
