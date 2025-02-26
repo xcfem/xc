@@ -109,7 +109,7 @@ result= modelSpace.analyze(calculateNodalReactions= False)
 if(result!=0):
     lmsg.error("Can't solve.")
     info= None
-    solver= analysis.linearSOE.solver
+    solver= modelSpace.analysis.linearSOE.solver
     if(solver.hasProp("info")):
         info= solver.getProp("info")
     unconstrainedNode= modelSpace.locateEquationNumber(eqNumber= info-1)
