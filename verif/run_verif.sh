@@ -450,6 +450,7 @@ python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_deformation_pla
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_deformation_plane_02.py
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_frequency_01.py
 python tests/elements/beam_column/elastic_beam_2d/test_beam2d_tributary_lengths_01.py
+python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_release_node_01.py
 echo "$BLEU" "    Elastic beam-column 3D tests." "$NORMAL"
 python tests/elements/beam_column/elastic_beam_3d/cantilever3d_01.py
 python tests/elements/beam_column/elastic_beam_3d/cantilever3d_02.py
