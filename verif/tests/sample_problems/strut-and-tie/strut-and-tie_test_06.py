@@ -139,9 +139,22 @@ p5= h1ELU.newNodalLoad(n0UL.tag, xc.Vector([354e3, 0, 0, 0, 0, 0]))
 p6= h1ELU.newNodalLoad(n0LR.tag, xc.Vector([0, 0, -5902e3, 0, 0, 0]))
 p7= h1ELU.newNodalLoad(n0LL.tag, xc.Vector([0, 0, -3062e3, 0, 0, 0]))
 p8= h1ELU.newNodalLoad(n0LL.tag, xc.Vector([354e3, 0, 0, 0, 0, 0]))
-
 ### Add the load case to domain.
-modelSpace.addLoadCaseToDomain(h1ELU.name)
+# modelSpace.addLoadCaseToDomain(h1ELU.name)
+
+## H2ELU
+h2ELU= modelSpace.newLoadPattern(name= 'h2ELU')
+modelSpace.setCurrentLoadPattern(h2ELU.name)
+p1= h2ELU.newNodalLoad(n0LL.tag, xc.Vector([0, 0, -3062e3, 0, 0, 0]))
+p2= h2ELU.newNodalLoad(n0UL.tag, xc.Vector([0, 0, -3296e3, 0, 0, 0]))
+p3= h2ELU.newNodalLoad(n0UR.tag, xc.Vector([0, 0, -5642e3, 0, 0, 0]))
+p4= h2ELU.newNodalLoad(n0LR.tag, xc.Vector([0, 0, -5902e3, 0, 0, 0]))
+p5= h2ELU.newNodalLoad(n0LL.tag, xc.Vector([354e3, 0, 0, 0, 0, 0]))
+p6= h2ELU.newNodalLoad(n0UL.tag, xc.Vector([209e3, 0, 0, 0, 0, 0]))
+p7= h2ELU.newNodalLoad(n0UL.tag, xc.Vector([0, 1007e3, 0, 0, 0, 0]))
+p8= h2ELU.newNodalLoad(n0UR.tag, xc.Vector([0, 1007e3, 0, 0, 0, 0]))
+### Add the load case to domain.
+modelSpace.addLoadCaseToDomain(h2ELU.name)
 
 
 # Solution
