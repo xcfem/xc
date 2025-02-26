@@ -18,6 +18,15 @@ from misc_utils import log_messages as lmsg
 from model import model_inquiry
 from typing import Iterable
 
+
+
+#       ___  _         _                           _      
+#      |   \(_)____ __| |__ _ __ ___ _ __  ___ _ _| |_ ___
+#      | |) | (_-< '_ \ / _` / _/ -_) '  \/ -_) ' \  _(_-<
+#      |___/|_/__/ .__/_\__,_\__\___|_|_|_\___|_||_\__/__/
+#                |_|                                      
+# Displacements.
+
 def def_var_control_mov(obj, code):
     ''' Define variables for movement control.
 
@@ -58,38 +67,124 @@ def def_vars_control_mov_modulus(nodes: Iterable):
         n.setProp("CombDispMax","")
     return tags
 
-def def_vars_generalized_stress_control(elems, varDef: Iterable):
+def def_envelope_vars(elems: Iterable, varNames: Iterable, initV= 6.023e23, nNodes= 2):
     ''' Define variables for generalizez stress control.
 
-    :param elems: elements whose generalized stresses will be controlled.
-    :param varDef: list of pairs of variable names and initial values to
-                   define as property on each element. 
-    '''
-    for e in elems:
-        for vd in varDef:
-            e.setProp(vd[0],vd[1])
-
-def def_vars_control_tens_elastic_range_2d(elems):
-    ''' Define variables for stress control in 2D elasticity problems.'''
-    varNames= [("Sg",0.0), ("SgMax", 0.0), ("SgMin", 0.0), ("NCP", 0.0), ("MzCP", 0.0), ("FCTN", 0.0), ("FCTNCP", 0.0), ("HIPCPTN", ""), ("Tau", 0.0), ("TauMax", 0.0), ("VyCP", 0.0), ("FCV", 0.0), ("FCVCP", 0.0), ("HIPCPV", "")]
-    def_vars_generalized_stress_control(elems,varNames) 
-
-def def_vars_control_tens_elastic_range_3d(elems):
-    varNames= [("Sg", 0.0), ("SgMax", 0.0), ("SgMin", 0.0), ("NCP", 0.0), ("MyCP", 0.0), ("MzCP", 0.0), ("FCTN", 0.0), ("FCTNCP", 0.0), ("HIPCPTN", ""), ("Tau", 0.0), ("TauMax", 0.0), ("VyCP", 0.0), ("VzCP", 0.0), ("FCV", 0.0), ("FCVCP", 0.0), ("HIPCPV","")]
-    def_vars_generalized_stress_control(elems,varNames) 
-
-def def_envelope_vars(elems: Iterable, varNames: Iterable, initV= 6.023e23):
-    ''' Define variables for generalizez stress control.
-
-    :param elems: nodes whose generalized stresses will be controlled.
+    :param elems: elements to define the envelope variables for.
     :param varNames: variable names.
     :param initV: initial value.
+    :param nNodes: number of nodes for each element in elems.
     '''
     for e in elems:
         for vn in varNames:
-            # [back node value, front node value]
-            e.setProp(vn+'+',[-initV,-initV]) #Positive value of envelope
-            e.setProp(vn+'-',[initV,initV]) # Negative value of envelope
+            if(nNodes>1):
+                # [back node value, front node value, etc.]
+                e.setProp(vn+'+',[-initV]*nNodes) #Positive value of envelope
+                e.setProp(vn+'-',[initV]*nNodes) # Negative value of envelope
+            else:
+                e.setProp(vn+'+',-initV) #Positive value of envelope
+                e.setProp(vn+'-',initV) # Negative value of envelope
+
+
+#       ___             _   _             
+#      | _ \___ __ _ __| |_(_)___ _ _  ___
+#      |   / -_) _` / _|  _| / _ \ ' \(_-<
+#      |_|_\___\__,_\__|\__|_\___/_||_/__/
+# Reactions.                                                       
+def get_reaction_var_names(dim, numDOFs):
+    ''' Return the variable names for the components of the reaction vectors.
+
+    :param dim: dimension of the space (1, 2 or 3).
+    :param numDOFs: number of degrees of freedom.
+    '''
+    if(numDOFs==1):
+        retval= ['Rx']
+    elif(numDOFs==2):
+        retval= ['Rx', 'Ry']
+    elif(numDOFs==3):
+        if(dim==2):
+            retval= ['Rx', 'Ry', 'RRz']
+        elif(dim==3):
+            retval= ['Rx', 'Ry', 'Rz']
+        else:
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= methodName+'; not implemented for '+str(numDOFs)
+            errMsg+= ' degrees of freedom in a '+str(dim)
+            errMsg+= '-dimensional space.'
+            lmsg.error(errMsg)
+    elif(numDOFs):
+        retval= ['Rx', 'Ry', 'Rz', 'RRx', 'RRy', 'RRz']
+    else:
+        retval= list()
+    return retval
+
+
+def def_reactions_envelope_vars(nodes):
+    ''' Define variables to store the maximum and minimum on each DOF for the
+        given nodes.
+
+    :param nodes: nodes to add the reactions envelope variables into.
+    '''
+    if(len(nodes)>0):
+        numDOFs= nodes[0].getNumberDOF
+        dim= nodes[0].dim
+        varNames= get_reaction_var_names(dim= dim, numDOFs= numDOFs)
+        if(varNames):
+            def_envelope_vars(nodes, varNames= varNames, nNodes= 1)
+        else:
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= methodName+'; not implemented for '+str(numDOFs)
+            errMsg+= ' degrees of freedom in a '+str(dim)
+            errMsg+= '-dimensional space.'
+            lmsg.error(errMsg)
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(methodName+'; no nodes to process.')
+    return varNames
+
+def update_reactions_envelope(nodes):
+    ''' Update the the maximum and minimum reactino on each DOF for the
+        given nodes.
+
+    :param nodes: nodes to update the reactions for.
+    '''
+    if(len(nodes)>0):
+        numDOFs= nodes[0].getNumberDOF
+        dim= nodes[0].dim
+        varNames= get_reaction_var_names(dim= dim, numDOFs= numDOFs)
+        if(varNames):
+            for i, compName in enumerate(varNames):
+                for n in nodes:
+                    currentValue= n.getReaction[i]
+                    maxValueLabel= compName+'+'
+                    maxValue= n.getProp(maxValueLabel)
+                    if(currentValue>maxValue):
+                        maxValue= currentValue
+                        n.setProp(maxValueLabel, maxValue)
+                    minValueLabel= compName+'-'
+                    minValue= n.getProp(minValueLabel)
+                    if(currentValue<minValue):
+                        minValue= currentValue
+                        n.setProp(minValueLabel, minValue)
+        else:
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= methodName+'; not implemented for '+str(numDOFs)
+            errMsg+= ' degrees of freedom in a '+str(dim)
+            errMsg+= '-dimensional space.'
+            lmsg.error(errMsg)
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(methodName+'; no nodes to process.')
+    return varNames
+
+#       ___     _                     _ 
+#      |_ _|_ _| |_ ___ _ _ _ _  __ _| |
+#       | || ' \  _/ -_) '_| ' \/ _` | |
+#      |___|_||_\__\___|_| |_||_\__,_|_|
+#       / _|___ _ _ __ ___ ___          
+#      |  _/ _ \ '_/ _/ -_|_-<          
+#      |_| \___/_| \__\___/__/          
+# Internal forces.                                      
     
 def def_vars_envelope_internal_forces_truss_elems(elems):
     '''Defines properties to store extreme values of internal forces.
@@ -273,3 +368,31 @@ def def_steel_shape_elastic_range_element_parameters(e,shape):
 def def_steel_shape_elastic_range_parameters_for_set(elems,shape):
     for e in elems:
         def_steel_shape_elastic_range_element_parameters(e,shape)
+
+
+
+#       ___ _                         
+#      / __| |_ _ _ ___ ______ ___ ___
+#      \__ \  _| '_/ -_|_-<_-</ -_|_-<
+#      |___/\__|_| \___/__/__/\___/__/
+# Stresses                                    
+
+def def_vars_generalized_stress_control(elems, varDef: Iterable):
+    ''' Define variables for generalizez stress control.
+
+    :param elems: elements whose generalized stresses will be controlled.
+    :param varDef: list of pairs of variable names and initial values to
+                   define as property on each element. 
+    '''
+    for e in elems:
+        for vd in varDef:
+            e.setProp(vd[0],vd[1])
+
+def def_vars_control_tens_elastic_range_2d(elems):
+    ''' Define variables for stress control in 2D elasticity problems.'''
+    varNames= [("Sg",0.0), ("SgMax", 0.0), ("SgMin", 0.0), ("NCP", 0.0), ("MzCP", 0.0), ("FCTN", 0.0), ("FCTNCP", 0.0), ("HIPCPTN", ""), ("Tau", 0.0), ("TauMax", 0.0), ("VyCP", 0.0), ("FCV", 0.0), ("FCVCP", 0.0), ("HIPCPV", "")]
+    def_vars_generalized_stress_control(elems,varNames) 
+
+def def_vars_control_tens_elastic_range_3d(elems):
+    varNames= [("Sg", 0.0), ("SgMax", 0.0), ("SgMin", 0.0), ("NCP", 0.0), ("MyCP", 0.0), ("MzCP", 0.0), ("FCTN", 0.0), ("FCTNCP", 0.0), ("HIPCPTN", ""), ("Tau", 0.0), ("TauMax", 0.0), ("VyCP", 0.0), ("VzCP", 0.0), ("FCV", 0.0), ("FCVCP", 0.0), ("HIPCPV","")]
+    def_vars_generalized_stress_control(elems,varNames) 

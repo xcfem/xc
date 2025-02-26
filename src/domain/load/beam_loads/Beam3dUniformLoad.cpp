@@ -146,10 +146,6 @@ void XC::Beam3dUniformLoad::addReactionsInBasicSystem(const std::vector<double> 
 //! @param release Moment release: 0=none, 1=I, 2=J, 3=I,J
 void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &Li,const double &loadFactor,FVector &q0, int releasey, int releasez) const
   {
-    if((releasey!=0) or (releasez!=0))
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; release effect not implemented yet."
-		  << std::endl;
     
     const double wy = Wy()*loadFactor;  // Transverse
     const double wz = Wz()*loadFactor;  // Transverse

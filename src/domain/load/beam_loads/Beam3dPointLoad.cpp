@@ -231,11 +231,6 @@ void XC::Beam3dPointLoad::addReactionsInBasicSystem(const std::vector<double> &,
 //! @param release Moment release: 0=none, 1=I, 2=J, 3=I,J
 void XC::Beam3dPointLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &Li,const double &loadFactor,FVector &q0, int releasey, int releasez) const
   {
-    if((releasey!=0) or (releasez!=0))
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; release effect not implemented yet."
-		  << std::endl;
-      
     const double aOverL= X();
 
     if(aOverL < 0.0 || aOverL > 1.0)
@@ -261,12 +256,44 @@ void XC::Beam3dPointLoad::addFixedEndForcesInBasicSystem(const std::vector<doubl
         q0[0]+= -N*aOverL;
         double M1= -a * b2 * Py * L2;
         double M2= a2 * b * Py * L2;
-        q0[1]+= M1;
-        q0[2]+= M2;
+	if(releasez == 0)
+	  {
+  	    q0[1]+= M1;
+	    q0[2]+= M2;
+          }
+	else if(releasez == 1)
+	  { q0[2]+= 0.5*Py*a*b*L2*(a+L); }
+        else if(releasez == 2)
+	  { q0[1]-= 0.5*Py*a*b*L2*(b+L); }
+        else if(releasez == 3)
+	  {
+	   // Nothing to do
+          }
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << " z-axis release value (" << releasez
+		    << ") not valid. Must be between 0 and 3."
+		    << std::endl;	
         M1= -a * b2 * Pz * L2;
         M2= a2 * b * Pz * L2;
-        q0[3]+= -M1;
-        q0[4]+= -M2;
+	if(releasey == 0)
+	  {
+  	    q0[3]+= -M1;
+	    q0[4]+= -M2;
+          }
+	else if(releasey == 1)
+	  { q0[4]+= 0.5*Pz*a*b*L2*(a+L); }
+        else if(releasey == 2)
+	  { q0[3]-= 0.5*Pz*a*b*L2*(b+L); }
+        else if(releasey == 3)
+	  {
+	   // Nothing to do
+          }
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << " y-axis release value (" << releasey
+		    << ") not valid. Must be between 0 and 3."
+		    << std::endl;	
       }
   }
 void XC::Beam3dPointLoad::addElasticDeformations(const double &L,const CrossSectionProperties3d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)
