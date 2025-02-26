@@ -199,7 +199,7 @@ for combName in combs.getKeys():
     if(result!=0):
         lmsg.error("Can't solve.")
         info= None
-        solver= analysis.linearSOE.solver
+        solver= modelSpace.analysis.linearSOE.solver
         if(solver.hasProp("info")):
             info= solver.getProp("info")
         unconstrainedNode= modelSpace.locateEquationNumber(eqNumber= info-1)
@@ -208,62 +208,55 @@ for combName in combs.getKeys():
         exit(1)
     varNames= vc.update_reactions_envelope(nodes= pileBottomNodes)
     vc.update_envelope_internal_forces_beam_elem_3d(lintelElement)
-    print(comb.name)
 
 pileSet= modelSpace.defSet('pileSet', elements= pileElements)
 pileSet.fillDownwards()
 
-lintelMaxVy= lintelElement.getProp('Vy+')
 lintelMinVy= lintelElement.getProp('Vy-')
+lintelMinVy= sum(lintelMinVy)/len(lintelMinVy)
+ratio1= abs(lintelMinVy+1488e3)/1488e3
 lintelMaxVz= lintelElement.getProp('Vz+')
-lintelMinVz= lintelElement.getProp('Vz-')
-print('lintelVyMax= ', sum(lintelMaxVy)/len(lintelMaxVy)/1e3)
-print('lintelVyMin= ', sum(lintelMinVy)/len(lintelMinVy)/1e3)
-print('lintelVzMax= ', sum(lintelMaxVz)/len(lintelMaxVz)/1e3)
-print('lintelVzMin= ', sum(lintelMinVz)/len(lintelMinVz)/1e3)
-quit()
-print('\nRz')        
-for n in pileBottomNodes:
-    RzMin= n.getProp('Rz-')
-    RzMax= n.getProp('Rz+')
-    print(n.tag, RzMin/1e3, RzMax/1e3)
-print('\nRx')        
-for n in pileBottomNodes:
-    RxMin= n.getProp('Rx-')
-    RxMax= n.getProp('Rx+')
-    print(n.tag, RxMin/1e3, RxMax/1e3)
-print('\nRy')    
-for n in pileBottomNodes:
-    RyMin= n.getProp('Ry-')
-    RyMax= n.getProp('Ry+')
-    print(n.tag, RyMin/1e3, RyMax/1e3)
-print('\nRRx')        
-for n in pileBottomNodes:
-    RRxMin= n.getProp('RRx-')
-    RRxMax= n.getProp('RRx+')
-    print(n.tag, RRxMin/1e3, RRxMax/1e3)
-print('\nRRy')        
-for n in pileBottomNodes:
-    RRyMin= n.getProp('RRy-')
-    RRyMax= n.getProp('RRy+')
-    print(n.tag, RRyMin/1e3, RRyMax/1e3)
+lintelMaxVz= sum(lintelMaxVz)/len(lintelMaxVz)
+ratio2= abs(lintelMaxVz-2014e3)/2014e3
 
+RzMax= 0.0
+RzMin= 0.0
+for n in pileBottomNodes:
+    RzMax= max(RzMax, n.getProp('Rz+'))
+    RzMin= min(RzMin, n.getProp('Rz-'))
+ratio3= abs(RzMax-14176.22576663143e3)/14176.22576663143e3
+ratio4= abs(RzMin+933.1167556855067e3)/933.1167556855067e3
 
+testOK= (abs(ratio1)<1e-10) and (abs(ratio2)<1e-10) and (abs(ratio3)<1e-10) and (abs(ratio4)<1e-10)
+
+'''
+print('lintelVyMin= ', lintelMinVy/1e3, ratio1)
+print('lintelVzMax= ', lintelMaxVz/1e3, ratio2)
+print('RzMax= ', RzMax/1e3, ratio3)
+print('RzMin= ', RzMin/1e3, ratio4)
+'''
+
+import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
+if testOK:
+    print('test '+fname+': ok.')
+else:
+    lmsg.error(fname+' ERROR.')
 
-# Graphic stuff.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(modelSpace)
-# oh.displayBlocks()
-# oh.displayFEMesh()
-oh.displayLoads()
-oh.displayReactions()
-oh.displayIntForcDiag('N')
-oh.displayIntForcDiag('My', setToDisplay= pileSet)
-oh.displayIntForcDiag('Mz', setToDisplay= pileSet)
-oh.displayIntForcDiag('Vy', setToDisplay= pileSet)
-oh.displayIntForcDiag('Vz', setToDisplay= pileSet)
-# oh.displayDispRot(itemToDisp='uZ')
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayBlocks()
+# # oh.displayFEMesh()
+# oh.displayLoads()
+# oh.displayReactions()
+# oh.displayIntForcDiag('N')
+# oh.displayIntForcDiag('My', setToDisplay= pileSet)
+# oh.displayIntForcDiag('Mz', setToDisplay= pileSet)
+# oh.displayIntForcDiag('Vy', setToDisplay= pileSet)
+# oh.displayIntForcDiag('Vz', setToDisplay= pileSet)
+# # oh.displayDispRot(itemToDisp='uZ')
 
 # # DXF output
 # from import_export import mesh_entities
