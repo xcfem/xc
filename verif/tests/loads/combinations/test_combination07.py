@@ -199,7 +199,6 @@ dXMin=1e9
 dXMax=-1e9
 
 def process_results_verif(comb):
-    nodes= preprocessor.getNodeHandler
     deltaX= nod8.getDisp[0] # x displacement of node 8
     global dXMin
     dXMin=min(dXMin,deltaX)
