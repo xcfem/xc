@@ -10,7 +10,7 @@ from postprocess import callback_controls
 from postprocess import def_vars_control
 
 def installNodeDisplacementRecorder(recorderName, nodeSet):
-    def_vars_control.defVarsControlMovModulus(nodeSet)
+    def_vars_control.def_vars_control_mov_modulus(nodeSet)
 
     preprocessor= nodeSet.owner.getPreprocessor
     nodes= preprocessor.getNodeHandler

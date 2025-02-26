@@ -256,7 +256,7 @@ class SteelShape(sp.SectionProperties):
 
         :param elems: elements to define properties on.
         '''
-        vc.defVarsEnvelopeInternalForcesBeamElems(elems)
+        vc.def_vars_envelope_internal_forces_beam_elems(elems)
         for e in elems:
             e.setProp('FCTNCP',[-1.0,-1.0]) #Normal stresses efficiency.
             e.setProp('FCVCP',[-1.0,-1.0]) #Shear stresses efficiency.
@@ -282,7 +282,7 @@ class SteelShape(sp.SectionProperties):
             fctn[1]= FCTN2
             elem.setProp("HIPCPTN2",nmbComb)
         elem.setProp("FCTNCP",fctn)
-        vc.updateEnvelopeInternalForcesBeamElem2D(elem)
+        vc.update_envelope_internal_forces_beam_elem_2d(elem)
 
     def checkBiaxialBendingForElement(self, elem, nmbComb):
         '''Called in every commit to check biaxial bending criterion 
@@ -305,7 +305,7 @@ class SteelShape(sp.SectionProperties):
             fctn[1]= FCTN2
             elem.setProp("HIPCPTN2",nmbComb)
         elem.setProp("FCTNCP",fctn)
-        vc.updateEnvelopeInternalForcesBeamElem(elem)
+        vc.update_envelope_internal_forces_beam_elem_3d(elem)
 
     def checkYShearForElement(self,elem,nmbComb):
         '''Called in every commit to y shear criterion.

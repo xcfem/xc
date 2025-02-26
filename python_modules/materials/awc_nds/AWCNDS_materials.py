@@ -510,7 +510,7 @@ class WoodSection(object):
         :param FcE: Critical buckling design values for compression.
         :param FbE: Critical buckling design value for bending.
         '''
-        vc.defVarsEnvelopeInternalForcesBeamElems(elems)
+        vc.def_vars_envelope_internal_forces_beam_elems(elems)
         for e in elems:
             e.setProp('chiLT',chiLT) # Lateral torsional buckling reduction factor.
             e.setProp('chiN',chiN) # Axial strength reduction factor.
@@ -690,7 +690,7 @@ class WoodSection(object):
             fctn[1]= FCTN2
             elem.setProp("HIPCPTN2",nmbComb)
         elem.setProp("FCTNCP",fctn)
-        vc.updateEnvelopeInternalForcesBeamElem2D(elem)
+        vc.update_envelope_internal_forces_beam_elem_2d(elem)
         
     def checkBiaxialBendingForElement(self, elem, nmbComb):
         '''Called in every commit to check biaxial bending criterion 
@@ -715,7 +715,7 @@ class WoodSection(object):
             fctn[1]= FCTN2
             elem.setProp("HIPCPTN2",nmbComb)
         elem.setProp("FCTNCP",fctn)
-        vc.updateEnvelopeInternalForcesBeamElem(elem)
+        vc.update_envelope_internal_forces_beam_elem_3d(elem)
         
     def checkYShearForElement(self,elem,nmbComb):
         '''Called in every commit to y shear criterion.
@@ -867,7 +867,7 @@ class WoodPanelSection(WoodRectangularSection):
         return spanRating
 
 
-        # def_vars_control.defVarsControlTensRegElastico3d(elems)
+        # def_vars_control.def_vars_control_tens_elastic_range_3d(elems)
         # Wz= self.Wzel()
         # Wy= self.Wyel()
         # for e in elems:
