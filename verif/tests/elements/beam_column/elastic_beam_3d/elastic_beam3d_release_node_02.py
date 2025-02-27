@@ -117,13 +117,13 @@ if testOK:
 else:
     lmsg.error(fname+' ERROR.')
 
-# Graphic stuff.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(modelSpace)
-# oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
-# oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
-# oh.displayLocalAxes()
-oh.displayLoads()
-oh.displayIntForcDiag('My')
-# oh.displayIntForcDiag('M')
-# oh.displayLocalAxes()
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# # oh.displayLocalAxes()
+# oh.displayLoads()
+# oh.displayIntForcDiag('My')
+# # oh.displayIntForcDiag('M')
+# # oh.displayLocalAxes()
