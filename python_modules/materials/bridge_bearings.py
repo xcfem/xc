@@ -64,6 +64,27 @@ class Bearing(object):
         self.id= next(self._ids) # Object identifier.
         self.bearing_type= bearing_type
         
+    def getDict(self):
+        ''' Return a dictionary with the values of the object members.'''
+        retval= dict()
+        if(self.materials):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; materials serialization not implemented yet.')
+        if(self.materialHandler):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; material handler serialization not implemented yet.')
+        retval.update({'bearing_type':self.bearing_type, 'id':self.id})
+        return retval
+
+    def setFromDict(self, dct):
+        ''' Set the member values from those in the given dictionary.'''
+        self.id= dct['id']
+        self.bearing_type= dct['bearing_type']
+        self.materialHandler= None # Deserialization not implemented yet.
+        self.materials= list() # Deserialization not implemented yet.
+
 
     def getTypeId(self):
         ''' Return the string that identifies the bearing type.'''
@@ -161,6 +182,31 @@ class ElastomericBearing(Bearing):
         self.b= b
         self.e= e
 
+    def getDict(self):
+        ''' Return a dictionary with the values of the object members.'''
+        retval= super().getDict()
+        retval.update({'G':self.G, 'a':self.a, 'b':self.b, 'e':self.e})
+        return retval
+
+    def setFromDict(self, dct):
+        ''' Set the member values from those in the given dictionary.'''
+        self.e= dct['e']
+        self.b= dct['b']
+        self.a= dct['a']
+        self.G= dct['G']
+        super().setFromDict(dct)
+
+    @staticmethod
+    def getDescriptions():
+        ''' Return the descriptions of the object members.'''
+        retval= dict()
+        retval['G']= 'Elastomer shear modulus.'
+        retval['a']= 'Width of the bearing (parallel to bridge longitudinal axis).'
+        retval['b']= 'Length of the bearing (parallel to the bridge transverse axis)'
+        retval['e']= 'Net thickness of the bearing (without steel plates).'
+        return retval
+        
+        
     def getKhoriz(self):
         '''Return horizontal stiffness of the bearing.'''
         return self.G*self.a*self.b/self.e
