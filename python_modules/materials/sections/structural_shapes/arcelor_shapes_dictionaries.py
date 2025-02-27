@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+''' ARCELOR's structural steel shapes (metric units).'''
+
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
@@ -11,7 +13,6 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 import importlib.resources
 import json
 
-''' ARCELOR's structural steel shapes (metric units).'''
 
 # European I beams
 
