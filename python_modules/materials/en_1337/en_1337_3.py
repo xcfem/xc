@@ -33,8 +33,6 @@ def get_shape_factor(bearing, effectiveThickness):
 class RectangularLaminatedBearing(bridge_bearings.ElastomericBearing):
     ''' Reinforced rectangular elastomeric bearing according to EN 1337-3:2005.
 
-    :ivar a: bearing length (see figure 2 of EN 1337-3:2005).
-    :ivar b: bearing width (see figure 2 of EN 1337-3:2005).
     :ivar tb: total height (see figure 2 of EN 1337-3:2005).
     :ivar ti: thickness of individual elastomer layer (see figure 2 of EN 1337-3:2005).
     :ivar ts: thickness of steel reinforcing plate (see figure 2 of EN 1337-3:2005).
@@ -79,8 +77,44 @@ class RectangularLaminatedBearing(bridge_bearings.ElastomericBearing):
         self.n= n # number of elastomer layers.
         self.C= C # side cover
         self.ted= ted # edge cover.
-        self.gammaM= gammaM
-        self.fy= fy
+        self.gammaM= gammaM # partial safety factor.
+        self.fy= fy # yield stress of the reinforcing steel.
+
+    def getDict(self):
+        ''' Return a dictionary with the values of the object members.'''
+        retval= super().getDict()
+        retval.update({'tb':self.tb, 'ti':self.ti, 'ts':self.ts, 'tso':self.tso, 'Tb':self.Tb, 'n':self.n, 'C':self.C, 'ted':self.ted, 'gammaM':self.gammaM, 'fy':self.fy})
+        return retval
+
+    def setFromDict(self, dct):
+        ''' Set the member values from those in the given dictionary.'''
+        self.tb= dct['tb']
+        self.ti= dct['ti']
+        self.ts= dct['ts']
+        self.tso= dct['tso']
+        self.Tb= dct['Tb']
+        self.n= dct['n']
+        self.C= dct['C']
+        self.ted= dct['ted']
+        self.gammaM= dct['gammaM']
+        self.fy= dct['fy']
+        super().setFromDict(dct)
+        
+    @staticmethod
+    def getDescriptions():
+        ''' Return the descriptions of the object members.'''
+        retval= super(RectangularLaminatedBearing, RectangularLaminatedBearing).getDescriptions()
+        retval['tb']= 'total height.'
+        retval['ti']= 'thickness of individual elastomer layer.'
+        retval['ts']= 'thickness of steel reinforcing plate.'
+        retval['tso']= 'thickness of outer steel reinforcing plate.'
+        retval['Tb']= 'total nominal thickness of bearing.'
+        retval['n']= 'number of elastomer layers.'
+        retval['C']= 'side cover.'
+        retval['ted']= 'edge cover.'
+        retval['gammaM']= 'partial safety factor.'
+        retval['fy']= 'yield stress of the reinforcing steel.'
+        return retval
 
     def Te(self):
         ''' Return the total elastomer thickness.'''
