@@ -56,7 +56,7 @@ xcSection= shape.defElasticShearSection3d(preprocessor)
 # gammaM: (optional) partial safety factor which value may be chosen in the
 #         National Annex. The recommended value is γm = 1.00.
 # fy: (optional) yield stress of the reinforcing steel.
-# bearing_type: string that identifies the type of the bearing in the problem.
+# bearing_type: (optional) string that identifies the type of the bearing in the#               problem.
 bearing= en.RectangularLaminatedBearing(a= 0.25, b= 0.30, tb= 0.03, ti= 0.008, ts= 3e-3, Te= 0.021, tso= 0.0, Tb= 0.03, n= 2, C= 6e-3, ted= 8e-3, bearing_type= 'T0')
 
 # Problem geometry
