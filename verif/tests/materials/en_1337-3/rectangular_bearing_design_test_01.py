@@ -2,7 +2,7 @@
 ''' Test of reinforced rectangular elastomeric bearing design according
     to EN 1337-3:2005.
 
-    Data obtained from a calculation sample from Mageba.
+    Test bearing definition from the en_1337_bearings module.
 '''
 
 from __future__ import division
@@ -33,7 +33,7 @@ Fxd= 166.8e3 # design horizontal load along x.
 Fyd= 49.1e3 # design horizontal load along y.
 
 ## Elastomeric bearing.
-# a: bearing length (see figure 2 of EN 1337-3:2005).
+# bearingCode: code of the bearing in the data dictionary.
 # b: bearing width (see figure 2 of EN 1337-3:2005).
 # tb: total height (see figure 2 of EN 1337-3:2005).
 # ti: thickness of individual elastomer layer (see figure 2 of EN 1337-3:2005).
