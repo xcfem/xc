@@ -1302,7 +1302,7 @@ class PredefinedSpace(object):
                                       e.g. '1.0*GselfWeight+1.0*GearthPress'
         '''
         # Get load pattern names and partial safety factors.
-        combDict= utils.getCombinationDict(loadCaseExpression)
+        combDict= utils.get_combination_dict(loadCaseExpression)
         for lpName in combDict:
             factor= combDict[lpName] # partial safety factor.
             lp= self.addLoadCaseToDomain(lpName)
