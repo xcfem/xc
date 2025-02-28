@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-''' EN 1337-3:2005 (E) Table 3 — Standard sizes for bearings type B.'''
+''' EN 1337-3:2005 (E) Table 3 — Standard sizes for bearings type B.
+
+The function get_rectangular_bearings_table in the en_1337_bearings
+module can be used to obtain a table with all the available bearings.
+'''
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2025, LCPT, AO_O"

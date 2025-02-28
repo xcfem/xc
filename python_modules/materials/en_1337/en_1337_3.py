@@ -407,7 +407,7 @@ class RectangularLaminatedBearing(bridge_bearings.ElastomericBearing):
         :param alpha_bd: angle of rotation (if any) across the length, b, of the bearing.
         '''
         Krd= 3
-        return (self.getEffectiveWidth()*alpha_ad+self.getEffectiveLength()*alpha_bd)/Krd
+        return (self.getEffectiveWidth()*abs(alpha_ad)+self.getEffectiveLength()*abs(alpha_bd))/Krd
 
     def getRotationalLimitEfficiency(self, vxd, vyd, Fzd, alpha_ad, alpha_bd):
         ''' Return the efficiency with respect the rotational deflection limit
@@ -479,6 +479,12 @@ class RectangularLaminatedBearing(bridge_bearings.ElastomericBearing):
     def getSlidingConditionEfficiency(self, vxd, vyd, Fxd, Fyd, Fzd_min, concreteBedding= True):
         ''' Return the friction coefficient according to clause 5.3.3.6 of EN 1337-3:2005.
 
+        :param vxd: maximum horizontal relative displacement of parts of the
+                    bearing in the direction of dimension "a" (length) of 
+                    the bearing due to all design load effects.
+        :param vyd: maximum horizontal relative displacement of parts of the
+                    bearing in the direction of dimension "b" (width) of the 
+                    bearing due to all design load effects.
         :param Fxd, Fyd: resultant of all the horizontal forces.
         :param Fzd_min: minimum vertical design force coexisting with Fxyd.
         :param concreteBedding: true if the bedding material is concrete, false otherwise.
