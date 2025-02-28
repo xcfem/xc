@@ -54,7 +54,7 @@ comparisonOK= True
 values= [('ELSF', lcg.getSLSFrequentCombinations(), "load_combs_els_freq.py"), ("ELSQP", lcg.getSLSQuasiPermanentCombinations(),"load_combs_els_qp.py"), ('ELU', lcg.getULSTransientCombinations(), "load_combs_elu.py"), ("ELUA", lcg.getULSAccidentalCombinations(), "load_combs_acc.py")]
 
 for (prefix, loadCombinations, outputFileName) in values:
-    ec.writeXCLoadCombinations(prefix= prefix, loadCombinations= loadCombinations, outputFileName= outputFileName)
+    ec.write_xc_load_combinations(prefix= prefix, loadCombinations= loadCombinations, outputFileName= outputFileName)
     # Compare with reference file.
     refFile= pth+'/../../../aux/reference_files/ref_'+outputFileName
     comparisonOK= comparisonOK and filecmp.cmp(refFile, outputFileName, shallow=False)

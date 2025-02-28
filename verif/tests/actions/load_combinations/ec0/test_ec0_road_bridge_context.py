@@ -28,7 +28,7 @@ lcg.computeCombinations()
 
 # Write results.
 outputFileName= 'ec0_road_bridge_context.py'
-lcg.writeXCLoadCombinations(outputFileName= outputFileName)
+lcg.write_xc_load_combinations(outputFileName= outputFileName)
 
 # Get current path.
 pth= os.path.dirname(__file__)

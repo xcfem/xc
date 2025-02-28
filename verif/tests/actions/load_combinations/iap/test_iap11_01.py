@@ -66,7 +66,7 @@ error= math.sqrt(error)
 '''
 print(coeficientes_elu_persistentes)
 print("error= ", error)
-utils.listActionWeighting(lcg.actionWeighting)
+utils.list_action_weighting(lcg.actionWeighting)
 lc=lcg.getLoadCombinations
 ULS=lc.getULSTransientCombinations
 comb=[c for c in ULS]
