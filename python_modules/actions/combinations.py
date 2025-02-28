@@ -111,7 +111,7 @@ class CombinationRecord(object):
 
         :param actions: names of the actions to be extracted to the first part.
         '''
-        part1, part2= utils.splitCombination(self.expr, actions)
+        part1, part2= utils.split_combination(self.expr, actions)
         return part1, part2
 
 
