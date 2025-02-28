@@ -97,7 +97,7 @@ def compute_results_on_bearings(modelSpace, bearingElements, permLoadCombination
     retval= {'perm_results':perm_results, 'var_results':var_results}
     return retval
 
-def check_permanent_compressive_stress(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fzd_min_perm, sigma_perm_results):
+def check_permanent_compressive_stress(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fzd_min_perm, combName:str, sigma_perm_results):
     ''' Check the efficiency with respect to the limit compressive stress
         according to expression (16) of clause 5.3.3.6 of EN 1337-3:2005.
 
@@ -114,6 +114,8 @@ def check_permanent_compressive_stress(bearingMat, bearingType, eTag, centroid, 
                 bearing in the direction of dimension "b" (width) of the 
                 bearing due to all design load effects.
     :param Fzd_min_perm: minimum vertical design force under permanent loads.
+    :param combName: name of the combinations to with correspond the given
+                     actions.
     :param sigma_perm_results: dictionary containing the results for this
                                limit state.
     '''
@@ -123,13 +125,13 @@ def check_permanent_compressive_stress(bearingMat, bearingType, eTag, centroid, 
         cf= results['sigma_perm_cf']
         if(sigma_perm_cf>cf): # Update worst-case for the element.
             sigma_perm= bearingMat.getCompressiveStress(vxd= vxd, vyd= vyd, Fzd= Fzd_min_perm)
-            sigma_perm_results[eTag]= {'sigma_perm_cf':sigma_perm_cf, 'sigma_perm':sigma_perm, 'Fzd':Fzd_min_perm, 'vxd':vxd, 'vyd':vyd, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+            sigma_perm_results[eTag]= {'sigma_perm_cf':sigma_perm_cf, 'sigma_perm':sigma_perm, 'Fzd':Fzd_min_perm, 'vxd':vxd, 'vyd':vyd, 'load_comb_name':combName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
     else: # no data for this element yet.
         sigma_perm= bearingMat.getCompressiveStress(vxd= vxd, vyd= vyd, Fzd= Fzd_min_perm)
-        sigma_perm_results[eTag]= {'sigma_perm_cf':sigma_perm_cf, 'sigma_perm':sigma_perm, 'Fzd':Fzd_min_perm, 'vxd':vxd, 'vyd':vyd, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+        sigma_perm_results[eTag]= {'sigma_perm_cf':sigma_perm_cf, 'sigma_perm':sigma_perm, 'Fzd':Fzd_min_perm, 'vxd':vxd, 'vyd':vyd, 'load_comb_name':combName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
     return sigma_perm_cf
 
-def check_sliding_condition(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fxd, Fyd, Fzd_min, sliding_perm_results, concreteBedding= True):
+def check_sliding_condition(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fxd, Fyd, Fzd_min, combName:str, sliding_perm_results, concreteBedding= True):
     ''' Check the friction coefficient according to clause 5.3.3.6 of EN 1337-3:2005.
 
     :param bearingMat: elastomeric bearing to check.
@@ -140,6 +142,8 @@ def check_sliding_condition(bearingMat, bearingType, eTag, centroid, vxd, vyd, F
                      elastomeric bearing in the FE model.
     :param Fxd, Fyd: resultant of all the horizontal forces.
     :param Fzd_min: minimum vertical design force coexisting with Fxyd.
+    :param combName: name of the combinations to with correspond the given
+                     actions.
     :param sliding_perm_results: dictionary containing the results for this
                                  limit state.
     :param concreteBedding: true if the bedding material is concrete, false otherwise.
@@ -151,14 +155,14 @@ def check_sliding_condition(bearingMat, bearingType, eTag, centroid, vxd, vyd, F
         if(sliding_perm_cf>cf):
             friction_coef= bearingMat.getFrictionCoefficient(vxd= vxd, vyd= vyd, Fzd_min= Fzd_min,  concreteBedding= True)
             friction_force= bearingMat.getFrictionForce(vxd= vxd, vyd= vyd, Fzd_min= Fzd_min,  concreteBedding= True)
-            sliding_perm_results[eTag]= {'sliding_perm_cf':sliding_perm_cf, 'friction_coef':friction_coef, 'friction_force':friction_force, 'Fxd':Fxd, 'Fyd':Fyd, 'Fzd':Fzd_min,  'vxd':vxd, 'vyd':vyd, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+            sliding_perm_results[eTag]= {'sliding_perm_cf':sliding_perm_cf, 'friction_coef':friction_coef, 'friction_force':friction_force, 'Fxd':Fxd, 'Fyd':Fyd, 'Fzd':Fzd_min,  'vxd':vxd, 'vyd':vyd, 'load_comb_name':combName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
     else: # no data for this element yet.
         friction_coef= bearingMat.getFrictionCoefficient(vxd= vxd, vyd= vyd, Fzd_min= Fzd_min,  concreteBedding= True)
         friction_force= bearingMat.getFrictionForce(vxd= vxd, vyd= vyd, Fzd_min= Fzd_min,  concreteBedding= True)
-        sliding_perm_results[eTag]= {'sliding_perm_cf':sliding_perm_cf, 'friction_coef':friction_coef, 'friction_force':friction_force, 'Fxd':Fxd, 'Fyd':Fyd, 'Fzd':Fzd_min,  'vxd':vxd, 'vyd':vyd, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+        sliding_perm_results[eTag]= {'sliding_perm_cf':sliding_perm_cf, 'friction_coef':friction_coef, 'friction_force':friction_force, 'Fxd':Fxd, 'Fyd':Fyd, 'Fzd':Fzd_min,  'vxd':vxd, 'vyd':vyd, 'load_comb_name':combName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
     return sliding_perm_cf
 
-def check_bearing_under_permanent_load(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fxd, Fyd, Fzd, sigma_perm_results, sliding_perm_results, concreteBedding= True):
+def check_bearing_under_permanent_load(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fxd, Fyd, Fzd, combName, sigma_perm_results, sliding_perm_results, concreteBedding= True):
     ''' Check the friction coefficient according to clause 5.3.3.6 of EN 1337-3:2005.
 
     :param bearingMat: elastomeric bearing to check.
@@ -169,6 +173,8 @@ def check_bearing_under_permanent_load(bearingMat, bearingType, eTag, centroid, 
                      elastomeric bearing in the FE model.
     :param Fxd, Fyd: resultant of all the horizontal forces.
     :param Fzd: vertical design force.
+    :param combName: name of the combinations to with correspond the given
+                     actions.
     :param sigma_perm_results: dictionary containing the results for this
                                limit state.
     :param sliding_perm_results: dictionary containing the results for this
@@ -176,13 +182,13 @@ def check_bearing_under_permanent_load(bearingMat, bearingType, eTag, centroid, 
     :param concreteBedding: true if the bedding material is concrete, false otherwise.
     '''
     # Check minimum stress
-    sigma_perm_cf= check_permanent_compressive_stress(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fzd_min_perm= Fzd, sigma_perm_results= sigma_perm_results)
+    sigma_perm_cf= check_permanent_compressive_stress(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fzd_min_perm= Fzd, combName= combName, sigma_perm_results= sigma_perm_results)
     # Check friction
-    sliding_perm_cf= check_sliding_condition(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fxd= Fxd, Fyd= Fyd, Fzd_min= Fzd, sliding_perm_results= sliding_perm_results, concreteBedding= True)
+    sliding_perm_cf= check_sliding_condition(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fxd= Fxd, Fyd= Fyd, Fzd_min= Fzd, combName= combName, sliding_perm_results= sliding_perm_results, concreteBedding= True)
     return sigma_perm_cf, sliding_perm_cf
     
         
-def check_total_strain(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fzd, alpha_ad, alpha_bd, total_strain_results):
+def check_total_strain(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fzd, alpha_ad, alpha_bd, combName, total_strain_results):
     ''' Return the value of the total strain according to expression (1)
         of clause 5.3.3 of EN 1337-3:2005.
 
@@ -199,6 +205,8 @@ def check_total_strain(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fzd, a
                 bearing in the direction of dimension "b" (width) of the 
                 bearing due to all design load effects.
     :param Fzd: vertical design force.
+    :param combName: name of the combinations to with correspond the given
+                     actions.
     :param alpha_ad: angle of rotation across the width, a, of the bearing.
     :param alpha_bd: angle of rotation (if any) across the length, b, of the bearing.
     :param total_strain_results: dictionary containing the results for this
@@ -214,17 +222,17 @@ def check_total_strain(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fzd, a
             compressive_strain_outer= bearingMat.getCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd, innerLayer= False)
             shear_strain= bearingMat.getShearStrain(vxd= vxd, vyd= vyd)
             rotation_strain= bearingMat.getAngularRotationStrain(alpha_ad= alpha_ad, alpha_bd= alpha_bd)
-            total_strain_results[eTag]= {'total_strain_cf':total_strain_cf, 'total_strain':total_strain, 'compressive_strain_inner':compressive_strain_inner, 'compressive_strain_outer':compressive_strain_outer, 'shear_strain':shear_strain, 'rotation_strain':rotation_strain, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'alpha_ad':alpha_ad, 'alpha_bd':alpha_bd, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+            total_strain_results[eTag]= {'total_strain_cf':total_strain_cf, 'total_strain':total_strain, 'compressive_strain_inner':compressive_strain_inner, 'compressive_strain_outer':compressive_strain_outer, 'shear_strain':shear_strain, 'rotation_strain':rotation_strain, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'alpha_ad':alpha_ad, 'alpha_bd':alpha_bd, 'load_comb_name':combName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
     else: # no data for this element yet.
         total_strain= bearingMat.getCompressiveStress(vxd= vxd, vyd= vyd, Fzd= Fzd)
         compressive_strain_inner= bearingMat.getCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd, innerLayer= True)
         compressive_strain_outer= bearingMat.getCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd, innerLayer= False)
         shear_strain= bearingMat.getShearStrain(vxd= vxd, vyd= vyd)
         rotation_strain= bearingMat.getAngularRotationStrain(alpha_ad= alpha_ad, alpha_bd= alpha_bd)
-        total_strain_results[eTag]= {'total_strain_cf':total_strain_cf, 'total_strain':total_strain, 'compressive_strain_inner':compressive_strain_inner, 'compressive_strain_outer':compressive_strain_outer, 'shear_strain':shear_strain, 'rotation_strain':rotation_strain, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'alpha_ad':alpha_ad, 'alpha_bd':alpha_bd, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+        total_strain_results[eTag]= {'total_strain_cf':total_strain_cf, 'total_strain':total_strain, 'compressive_strain_inner':compressive_strain_inner, 'compressive_strain_outer':compressive_strain_outer, 'shear_strain':shear_strain, 'rotation_strain':rotation_strain, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'alpha_ad':alpha_ad, 'alpha_bd':alpha_bd, 'load_comb_name':combName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
     return total_strain_cf
 
-def check_plate_thickness(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fzd, laminate_thickness_results, withHoles= False):
+def check_plate_thickness(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fzd, combName, laminate_thickness_results, withHoles= False):
     ''' Check the plate thickness according to expression (12) of clause 
         5.3.3.5 of EN 1337-3:2005.
 
@@ -241,6 +249,8 @@ def check_plate_thickness(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fzd
                 bearing in the direction of dimension "b" (width) of the 
                 bearing due to all design load effects.
     :param Fzd: vertical design force.
+    :param combName: name of the combinations to with correspond the given
+                     actions.
     :param laminate_thickness_results: dictionary containing the results for
                                        this limit state.
     :param withHoles: true if the reinforcing plate has holes in it.
@@ -254,10 +264,10 @@ def check_plate_thickness(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fzd
             laminate_thickness_results[eTag]= {'laminate_thickness_cf':laminate_thickness_cf, 'req_laminate_thickness':req_laminate_thickness, 'laminate_thickness':bearingMat.ts, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'with_holes':False,  'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
     else: # no data for this element yet.
         req_laminate_thickness= bearingMat.getRequiredReinforcedPlateThickness(vxd= vxd, vyd= vyd, Fzd= Fzd, withHoles= False)
-        laminate_thickness_results[eTag]= {'laminate_thickness_cf':laminate_thickness_cf, 'req_laminate_thickness':req_laminate_thickness, 'laminate_thickness':bearingMat.ts, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'with_holes':False, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+        laminate_thickness_results[eTag]= {'laminate_thickness_cf':laminate_thickness_cf, 'req_laminate_thickness':req_laminate_thickness, 'laminate_thickness':bearingMat.ts, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'with_holes':False, 'load_comb_name':combName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
     return laminate_thickness_cf
 
-def check_plate_buckling_stability(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fzd, buckling_stability_results):
+def check_plate_buckling_stability(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fzd, combName, buckling_stability_results):
     ''' Check value of the stability of the plate against buckling.
 
     :param bearingMat: elastomeric bearing to check.
@@ -273,6 +283,8 @@ def check_plate_buckling_stability(bearingMat, bearingType, eTag, centroid, vxd,
                 bearing in the direction of dimension "b" (width) of the 
                 bearing due to all design load effects.
     :param Fzd: vertical design force.
+    :param combName: name of the combinations to with correspond the given
+                     actions.
     :param buckling_stability_results: dictionary containing the results for 
                                        this limit state.
     '''
@@ -281,12 +293,12 @@ def check_plate_buckling_stability(bearingMat, bearingType, eTag, centroid, vxd,
         results= buckling_stability_results[eTag]
         cf= results['buckling_stability_cf']
         if(buckling_stability_cf>cf): # Update worst-case for the element.
-            buckling_stability_results[eTag]= {'buckling_stability_cf':buckling_stability_cf, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+            buckling_stability_results[eTag]= {'buckling_stability_cf':buckling_stability_cf, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'load_comb_name':combName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
     else: # no data for this element yet.
-        buckling_stability_results[eTag]= {'buckling_stability_cf':buckling_stability_cf, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+        buckling_stability_results[eTag]= {'buckling_stability_cf':buckling_stability_cf, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'load_comb_name':combName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
     return buckling_stability_cf
 
-def check_rotational_limit(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fzd, alpha_ad, alpha_bd, rotational_deflection_results):
+def check_rotational_limit(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fzd, alpha_ad, alpha_bd, combName, rotational_deflection_results):
     ''' Check the rotational deflection limit according to  expression (13) of
         clause 5.3.3.6 of EN 1337-3:2005.
 
@@ -303,6 +315,8 @@ def check_rotational_limit(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fz
                 bearing in the direction of dimension "b" (width) of the 
                 bearing due to all design load effects.
     :param Fzd: vertical design force.
+    :param combName: name of the combinations to with correspond the given
+                     actions.
     :param alpha_ad: angle of rotation across the width, a, of the bearing.
     :param alpha_bd: angle of rotation (if any) across the length, b, of the bearing.
     :param rotational_deflection_results: dictionary containing the results for this
@@ -315,14 +329,14 @@ def check_rotational_limit(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fz
         if(rotational_deflection_cf>cf): # Update worst-case for the element.
             vertical_deflection= bearingMat.getTotalVerticalDeflection(vxd= vxd, vyd= vyd, Fzd= Fzd)
             rotational_deflection= bearingMat.getRotationalDeflection(alpha_ad= alpha_ad, alpha_bd= alpha_bd)
-            rotational_deflection_results[eTag]= {'rotational_deflection_cf':rotational_deflection_cf, 'rotational_deflection':rotational_deflection, 'vertical_deflection':vertical_deflection, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'alpha_ad':alpha_ad, 'alpha_bd':alpha_bd, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+            rotational_deflection_results[eTag]= {'rotational_deflection_cf':rotational_deflection_cf, 'rotational_deflection':rotational_deflection, 'vertical_deflection':vertical_deflection, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'alpha_ad':alpha_ad, 'alpha_bd':alpha_bd, 'load_comb_name':combName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
     else: # no data for this element yet.
         vertical_deflection= bearingMat.getTotalVerticalDeflection(vxd= vxd, vyd= vyd, Fzd= Fzd)
         rotational_deflection= bearingMat.getRotationalDeflection(alpha_ad= alpha_ad, alpha_bd= alpha_bd)
-        rotational_deflection_results[eTag]= {'rotational_deflection_cf':rotational_deflection_cf, 'rotational_deflection':rotational_deflection, 'vertical_deflection':vertical_deflection, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'alpha_ad':alpha_ad, 'alpha_bd':alpha_bd, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+        rotational_deflection_results[eTag]= {'rotational_deflection_cf':rotational_deflection_cf, 'rotational_deflection':rotational_deflection, 'vertical_deflection':vertical_deflection, 'Fzd':Fzd, 'vxd':vxd, 'vyd':vyd, 'alpha_ad':alpha_ad, 'alpha_bd':alpha_bd, 'load_comb_name':combName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
     return rotational_deflection_cf
 
-def check_sliding_cf(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fxd, Fyd, Fzd_min,sliding_var_results, concreteBedding= True):
+def check_sliding_cf(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fxd, Fyd, Fzd_min, combName, sliding_var_results, concreteBedding= True):
     ''' Return the friction coefficient according to clause 5.3.3.6 of EN 1337-3:2005.
 
     :param bearingMat: elastomeric bearing to check.
@@ -339,6 +353,8 @@ def check_sliding_cf(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fxd, Fyd
                 bearing due to all design load effects.
     :param Fxd, Fyd: resultant of all the horizontal forces.
     :param Fzd_min: minimum vertical design force coexisting with Fxyd.
+    :param combName: name of the combinations to with correspond the given
+                     actions.
     :param sliding_var_results: dictionary containing the results for this
                                 limit state.
     :param concreteBedding: true if the bedding material is concrete, false otherwise.
@@ -350,14 +366,14 @@ def check_sliding_cf(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fxd, Fyd
         if(sliding_cf>cf): # Update worst-case for the element.
             friction_coef= bearingMat.getFrictionCoefficient(vxd= vxd, vyd= vyd, Fzd_min= Fzd_min,  concreteBedding= True)
             friction_force= bearingMat.getFrictionForce(vxd= vxd, vyd= vyd, Fzd_min= Fzd_min,  concreteBedding= True)
-            sliding_var_results[eTag]= {'sliding_cf':sliding_cf, 'friction_coef':friction_coef, 'friction_force':friction_force, 'Fxd':Fxd, 'Fyd':Fyd, 'Fzd':Fzd_min,  'vxd':vxd, 'vyd':vyd, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+            sliding_var_results[eTag]= {'sliding_cf':sliding_cf, 'friction_coef':friction_coef, 'friction_force':friction_force, 'Fxd':Fxd, 'Fyd':Fyd, 'Fzd':Fzd_min,  'vxd':vxd, 'vyd':vyd, 'load_comb_name':combName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
     else: # no data for this element yet.
         friction_coef= bearingMat.getFrictionCoefficient(vxd= vxd, vyd= vyd, Fzd_min= Fzd_min, concreteBedding= True)
         friction_force= bearingMat.getFrictionForce(vxd= vxd, vyd= vyd, Fzd_min= Fzd_min, concreteBedding= True)
-        sliding_var_results[eTag]= {'sliding_cf':sliding_cf, 'friction_coef':friction_coef, 'friction_force':friction_force, 'Fxd':Fxd, 'Fyd':Fyd, 'Fzd':Fzd_min,  'vxd':vxd, 'vyd':vyd, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
+        sliding_var_results[eTag]= {'sliding_cf':sliding_cf, 'friction_coef':friction_coef, 'friction_force':friction_force, 'Fxd':Fxd, 'Fyd':Fyd, 'Fzd':Fzd_min,  'vxd':vxd, 'vyd':vyd, 'load_comb_name':combName, 'bearing_type':bearingType, 'x': centroid.x, 'y':centroid.y, 'z':centroid.z}
     return sliding_cf
 
-def check_bearing_under_variable_load(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fxd, Fyd, Fzd, alpha_ad, alpha_bd, total_strain_results, laminate_thickness_results, buckling_stability_results, rotational_deflection_results, sliding_var_results, withHoles= False, concreteBedding= True):
+def check_bearing_under_variable_load(bearingMat, bearingType, eTag, centroid, vxd, vyd, Fxd, Fyd, Fzd, alpha_ad, alpha_bd, combName, total_strain_results, laminate_thickness_results, buckling_stability_results, rotational_deflection_results, sliding_var_results, withHoles= False, concreteBedding= True):
     ''' Check the friction coefficient according to clause 5.3.3.6 of EN 1337-3:2005.
 
     :param bearingMat: elastomeric bearing to check.
@@ -370,6 +386,8 @@ def check_bearing_under_variable_load(bearingMat, bearingType, eTag, centroid, v
     :param Fzd: vertical design force.
     :param alpha_ad: angle of rotation across the width, a, of the bearing.
     :param alpha_bd: angle of rotation (if any) across the length, b, of the bearing.
+    :param combName: name of the combinations to with correspond the given
+                     actions.
     :param total_strain_results: dictionary containing the results for this
                                  limit state.
     :param laminate_thickness_results: dictionary containing the results for
@@ -382,16 +400,16 @@ def check_bearing_under_variable_load(bearingMat, bearingType, eTag, centroid, v
                                 limit state.
     :param concreteBedding: true if the bedding material is concrete, false otherwise.
     '''
-    total_strain_cf= check_total_strain(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fzd= Fzd, alpha_ad= alpha_ad, alpha_bd= alpha_bd, total_strain_results= total_strain_results)
+    total_strain_cf= check_total_strain(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fzd= Fzd, alpha_ad= alpha_ad, alpha_bd= alpha_bd, combName= combName, total_strain_results= total_strain_results)
 
     # Check minimum thickness of steel laminate.
-    laminate_thickness_cf= check_plate_thickness(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fzd= Fzd,  laminate_thickness_results= laminate_thickness_results, withHoles= False)
+    laminate_thickness_cf= check_plate_thickness(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fzd= Fzd, combName= combName,  laminate_thickness_results= laminate_thickness_results, withHoles= False)
     # Check buckling stability of steel laminate.
-    buckling_stability_cf= check_plate_buckling_stability(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fzd= Fzd, buckling_stability_results= buckling_stability_results)
+    buckling_stability_cf= check_plate_buckling_stability(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fzd= Fzd, combName= combName, buckling_stability_results= buckling_stability_results)
     # Check rotational deflection.
-    rotational_deflection_cf= check_rotational_limit(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fzd= Fzd, alpha_ad= alpha_ad, alpha_bd= alpha_bd, rotational_deflection_results= rotational_deflection_results)
+    rotational_deflection_cf= check_rotational_limit(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fzd= Fzd, alpha_ad= alpha_ad, alpha_bd= alpha_bd, combName= combName, rotational_deflection_results= rotational_deflection_results)
     # Check friction.
-    sliding_cf= check_sliding_cf(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fxd= Fxd, Fyd= Fyd, Fzd_min= Fzd, sliding_var_results= sliding_var_results, concreteBedding= True)
+    sliding_cf= check_sliding_cf(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fxd= Fxd, Fyd= Fyd, Fzd_min= Fzd, combName= combName, sliding_var_results= sliding_var_results, concreteBedding= True)
     return total_strain_cf, laminate_thickness_cf, buckling_stability_cf, rotational_deflection_cf, sliding_cf
 
 def check_results_en_1337_3(analysisResults, bearingElements, bearingMatDict):
@@ -426,7 +444,7 @@ def check_results_en_1337_3(analysisResults, bearingElements, bearingMatDict):
             vxd= elem_results['vxd']
             vyd= elem_results['vyd']
             # Check minimum stress and friction
-            sigma_perm_cf, sliding_perm_cf= check_bearing_under_permanent_load(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fxd= Fxd, Fyd= Fyd, Fzd= Fzd, sigma_perm_results= sigma_perm_results, sliding_perm_results= sliding_perm_results, concreteBedding= True)
+            sigma_perm_cf, sliding_perm_cf= check_bearing_under_permanent_load(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fxd= Fxd, Fyd= Fyd, Fzd= Fzd, combName= lcName, sigma_perm_results= sigma_perm_results, sliding_perm_results= sliding_perm_results, concreteBedding= True)
 
     # Store results in retval variable.
     perm_check_results= {'sigma_perm_results':sigma_perm_results, 'sliding_perm_results':sliding_perm_results}
@@ -462,7 +480,7 @@ def check_results_en_1337_3(analysisResults, bearingElements, bearingMatDict):
             vyd= elem_results['vyd']
             alpha_ad= elem_results['alpha_ad']
             alpha_bd= elem_results['alpha_bd']
-            total_strain_cf, laminate_thickness_cf, buckling_stability_cf, rotational_deflection_cf, sliding_cf= check_bearing_under_variable_load(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fxd= Fxd, Fyd= Fyd, Fzd= Fzd, alpha_ad= alpha_ad, alpha_bd= alpha_bd, total_strain_results= total_strain_results, laminate_thickness_results= laminate_thickness_results, buckling_stability_results= buckling_stability_results, rotational_deflection_results= rotational_deflection_results, sliding_var_results= sliding_var_results, withHoles= False, concreteBedding= True)
+            total_strain_cf, laminate_thickness_cf, buckling_stability_cf, rotational_deflection_cf, sliding_cf= check_bearing_under_variable_load(bearingMat= bearingMat, bearingType= bearingType, eTag= eTag, centroid= centroid, vxd= vxd, vyd= vyd, Fxd= Fxd, Fyd= Fyd, Fzd= Fzd, alpha_ad= alpha_ad, alpha_bd= alpha_bd, combName= lcName, total_strain_results= total_strain_results, laminate_thickness_results= laminate_thickness_results, buckling_stability_results= buckling_stability_results, rotational_deflection_results= rotational_deflection_results, sliding_var_results= sliding_var_results, withHoles= False, concreteBedding= True)
 
     # Store results in retval variable.
     var_check_results= {'total_strain_results': total_strain_results, 'laminate_thickness_results': laminate_thickness_results, 'buckling_stability_results': buckling_stability_results, 'rotational_deflection_results': rotational_deflection_results, 'sliding_var_results': sliding_var_results} 
