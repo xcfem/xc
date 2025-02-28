@@ -87,8 +87,8 @@ cmb_acc::Action::map_descomp cmb_acc::Action::getComponents(void) const
 		dq_string str_prod= separa_cadena(str_sum_i,"*");
 		const size_t sz2= str_prod.size();
 		if(sz2!=2)
-		  std::cerr << "El sumando: " << str_sum_i
-			    << " está mal expresado." << std::endl;
+		  std::cerr << "The " << str_sum_i
+			    << " term of the sum is wrong." << std::endl;
 		else
 		  {
 		    const float factor= boost::lexical_cast<float>(q_blancos(str_prod[0]));
