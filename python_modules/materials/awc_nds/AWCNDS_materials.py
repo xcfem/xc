@@ -679,7 +679,7 @@ class WoodSection(object):
         chiN= elem.getProp('chiN') # column stability factor.
         FcE= elem.getProp('FcE') # critical buckling design value for compression
         FbE= elem.getProp('FbE') # critical buckling design value for bending
-        [[N1, M1, V1], [N2, M2, M2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'M', 'V'], silent= False)
+        [[N1, M1, V1], [N2, M2, M2]]= model_inquiry.get_values_at_nodes(elem, ['N', 'M', 'V'], silent= False)
         FCTN1= self.getBiaxialBendingEfficiency(Nd= N1, Myd= 0.0, Mzd= M1, FcE= FcE, FbE= FbE, chiN= chiN, chiLT= chiLT)[0]
         FCTN2= self.getBiaxialBendingEfficiency(Nd= N2, Myd= 0.0, Mzd= M2, FcE= FcE, FbE= FbE, chiN= chiN, chiLT= chiLT)[0]
         fctn= elem.getProp("FCTNCP")
@@ -704,7 +704,7 @@ class WoodSection(object):
         chiN= elem.getProp('chiN') # column stability factor.
         FcE= elem.getProp('FcE') # critical buckling design value for compression
         FbE= elem.getProp('FbE') # critical buckling design value for bending
-        [[N1, My1, Mz1, Vy1], [N2, My2, Mz2, Vy2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'My', 'Mz', 'Vy'], silent= False)
+        [[N1, My1, Mz1, Vy1], [N2, My2, Mz2, Vy2]]= model_inquiry.get_values_at_nodes(elem, ['N', 'My', 'Mz', 'Vy'], silent= False)
         FCTN1= self.getBiaxialBendingEfficiency(Nd= N1, Myd= My1, Mzd= Mz1, FcE= FcE, FbE= FbE, chiN= chiN, chiLT= chiLT)[0]
         FCTN2= self.getBiaxialBendingEfficiency(Nd= N2, Myd= My2, Mzd= Mz2, FcE= FcE, FbE= FbE, chiN= chiN, chiLT= chiLT)[0]
         fctn= elem.getProp("FCTNCP")
@@ -724,7 +724,7 @@ class WoodSection(object):
         :param nmbComb: name of the load combination.
         '''
         elem.getResistingForce()
-        [[Vy1], [Vy2]]= model_inquiry.getValuesAtNodes(elem,['Vy'], False)
+        [[Vy1], [Vy2]]= model_inquiry.get_values_at_nodes(elem,['Vy'], False)
         FCV1= self.getYShearEfficiency(Vy1)
         FCV2= self.getYShearEfficiency(Vy2)
         fcv= elem.getProp("FCVCP")
@@ -743,7 +743,7 @@ class WoodSection(object):
         :param nmbComb: name of the load combination.
         '''
         elem.getResistingForce()
-        [[Vz1], [Vz2]]= model_inquiry.getValuesAtNodes(elem,['Vz'], False)
+        [[Vz1], [Vz2]]= model_inquiry.get_values_at_nodes(elem,['Vz'], False)
         FCV1= self.getZShearEfficiency(Vz1)
         FCV2= self.getZShearEfficiency(Vz2)
         fcv= elem.getProp("FCVCP")

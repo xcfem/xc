@@ -6,8 +6,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es"
 
-def getValuesAtNodes(element, components= ['N', 'M', 'V'], silent= False):
-    ''' Return the values at the element nodes.
+def get_values_at_nodes(element, components= ['N', 'M', 'V'], silent= False):
+    ''' Return the values of the given components at the element nodes.
 
     :param element: element which the components at its nodes will be retrieved.
     :param component: components to retrieve.

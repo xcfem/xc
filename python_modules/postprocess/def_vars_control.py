@@ -206,7 +206,7 @@ def update_envelope_internal_forces_truss(trussElem):
     :param trussElem: finite element to update internal forces.
     '''
     trussElem.getResistingForce()
-    [[N1], [N2]]= model_inquiry.getValuesAtNodes(trussElem, ['N'], False)
+    [[N1], [N2]]= model_inquiry.get_values_at_nodes(trussElem, ['N'], False)
     maxN= trussElem.getProp('N+') # [back node value, front node value]
     minN= trussElem.getProp('N-')
     if(N1>maxN[0]):
@@ -226,7 +226,7 @@ def update_envelope_internal_forces_beam_elem_2d(beamElem2D):
     :param beamElem2D: finite element to update internal forces.
     '''
     beamElem2D.getResistingForce()
-    [[N1, M1, V1], [N2, M2, V2]]= model_inquiry.getValuesAtNodes(beamElem2D, ['N', 'M', 'V'], False)
+    [[N1, M1, V1], [N2, M2, V2]]= model_inquiry.get_values_at_nodes(beamElem2D, ['N', 'M', 'V'], False)
     maxN= beamElem2D.getProp('N+') # [back node value, front node value]
     maxM= beamElem2D.getProp('Mz+')
     maxV= beamElem2D.getProp('Vy+')
@@ -277,7 +277,7 @@ def update_envelope_internal_forces_beam_elem_3d(beamElem):
     :param beamElem: finite element to update internal forces.
      '''
     beamElem.getResistingForce()
-    [[N1, My1, Mz1, Vy1, Vz1, T1], [N2, My2, Mz2, Vy2, Vz2, T2]]= model_inquiry.getValuesAtNodes(beamElem,['N', 'My', 'Mz', 'Vy', 'Vz', 'T'], False)
+    [[N1, My1, Mz1, Vy1, Vz1, T1], [N2, My2, Mz2, Vy2, Vz2, T2]]= model_inquiry.get_values_at_nodes(beamElem,['N', 'My', 'Mz', 'Vy', 'Vz', 'T'], False)
     maxN= beamElem.getProp('N+') # [back node value, front node value]
     maxMy= beamElem.getProp('My+')
     maxMz= beamElem.getProp('Mz+')

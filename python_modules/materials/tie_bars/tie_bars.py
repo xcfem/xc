@@ -196,7 +196,7 @@ class TieBar(object):
         :param nmbComb: name of the load combination.
         '''
         elem.getResistingForce()
-        [[N1], [N2]]= model_inquiry.getValuesAtNodes(elem,['N'], False)
+        [[N1], [N2]]= model_inquiry.get_values_at_nodes(elem,['N'], False)
         FCTN1= self.getBiaxialBendingEfficiency(Nd= N1)
         FCTN2= self.getBiaxialBendingEfficiency(Nd= N2)
         fctn= elem.getProp("FCTNCP")

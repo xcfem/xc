@@ -93,7 +93,7 @@ def get_internal_forces_dict(nmbComb, elems, vonMisesStressId= 'max_von_mises_st
             e.getResistingForce()
             internalForcesDict= dict()
             # Internal forces of the bar. 
-            [[N1, M1, V1], [N2, M2, V2]]= model_inquiry.getValuesAtNodes(e, ['N', 'M', 'V'], False)
+            [[N1, M1, V1], [N2, M2, V2]]= model_inquiry.get_values_at_nodes(e, ['N', 'M', 'V'], False)
             internalForces= internal_forces.CrossSectionInternalForces(N1,V1,0.0,0.0,0.0,M1) 
             internalForcesDict[0]= internalForces.getDict()
             internalForces= internal_forces.CrossSectionInternalForces(N2,V2,0.0,0.0,0.0,M2) # Internal forces at the end of the bar.
@@ -115,7 +115,7 @@ def get_internal_forces_dict(nmbComb, elems, vonMisesStressId= 'max_von_mises_st
         elif('Beam' in elementType):
             e.getResistingForce()
             internalForcesDict= dict()
-            [[N1, My1, Mz1, Vy1, Vz1, T1], [N2, My2, Mz2, Vy2, Vz2, T2]]= model_inquiry.getValuesAtNodes(e, ['N', 'My', 'Mz', 'Vy', 'Vz', 'T'], False)
+            [[N1, My1, Mz1, Vy1, Vz1, T1], [N2, My2, Mz2, Vy2, Vz2, T2]]= model_inquiry.get_values_at_nodes(e, ['N', 'My', 'Mz', 'Vy', 'Vz', 'T'], False)
             internalForces= internal_forces.CrossSectionInternalForces(N1,Vy1,Vz1,T1,My1,Mz1) # Internal forces at the origin of the bar.
             internalForcesDict[0]= internalForces.getDict()
             internalForces= internal_forces.CrossSectionInternalForces(N2,Vy2,Vz2,T2,My2,Mz2) # Internal forces at the end of the bar.
@@ -137,7 +137,7 @@ def get_internal_forces_dict(nmbComb, elems, vonMisesStressId= 'max_von_mises_st
         elif('Truss' in elementType):
             e.getResistingForce()
             internalForcesDict= dict()
-            [[N1], [N2]]= model_inquiry.getValuesAtNodes(e,['N'], False)
+            [[N1], [N2]]= model_inquiry.get_values_at_nodes(e,['N'], False)
             internalForces= internal_forces.CrossSectionInternalForces(N1) # Internal forces at the origin of the bar.
             internalForcesDict[0]= internalForces.getDict()
             for extProp in ['chiLT', 'chiN', 'FcE', 'FbE']: # Origin extended properties.
@@ -196,7 +196,7 @@ def export_internal_forces(nmbComb, elems, fDesc, woodArmerAlsoForAxialForces= F
             fDesc.write(outStr)
         elif('Beam2d' in elementType):
             e.getResistingForce()
-            [[N1, M1, V1], [N2, M2, V2]]= model_inquiry.getValuesAtNodes(e,['N', 'M', 'V'], False)
+            [[N1, M1, V1], [N2, M2, V2]]= model_inquiry.get_values_at_nodes(e,['N', 'M', 'V'], False)
             # Internal forces at the origin of the bar. 
             internalForces= internal_forces.CrossSectionInternalForces(N1,V1,0.0,0.0,0.0,M1) 
             fDesc.write(nmbComb+", "+str(e.tag)+", 0, "+internalForces.getCSVString()+'\n')
@@ -204,7 +204,7 @@ def export_internal_forces(nmbComb, elems, fDesc, woodArmerAlsoForAxialForces= F
             fDesc.write(nmbComb+", "+str(e.tag)+", 1, "+internalForces.getCSVString()+'\n')
         elif('Beam' in elementType):
             e.getResistingForce()
-            [[N1, My1, Mz1, Vy1, Vz1, T1], [N2, My2, Mz2, Vy2, Vz2, T2]]= model_inquiry.getValuesAtNodes(e, ['N', 'My', 'Mz', 'Vy', 'Vz', 'T'], False)
+            [[N1, My1, Mz1, Vy1, Vz1, T1], [N2, My2, Mz2, Vy2, Vz2, T2]]= model_inquiry.get_values_at_nodes(e, ['N', 'My', 'Mz', 'Vy', 'Vz', 'T'], False)
             internalForces= internal_forces.CrossSectionInternalForces(N1,Vy1,Vz1,T1,My1,Mz1) # Internal forces at the origin of the bar.
             originStr= nmbComb+", "+str(e.tag)+", 0, "+internalForces.getCSVString()
             for extProp in ['chiLT', 'chiN', 'FcE', 'FbE']: # Origin extended properties.
@@ -219,7 +219,7 @@ def export_internal_forces(nmbComb, elems, fDesc, woodArmerAlsoForAxialForces= F
             fDesc.write(endStr+'\n')
         elif('Truss' in elementType):
             e.getResistingForce()
-            [[N1], [N2]]= model_inquiry.getValuesAtNodes(e,['N'], False)
+            [[N1], [N2]]= model_inquiry.get_values_at_nodes(e,['N'], False)
             internalForces= internal_forces.CrossSectionInternalForces(N1) # Internal forces at the origin of the bar.
             originStr= nmbComb+", "+str(e.tag)+", 0, "+internalForces.getCSVString()
             for extProp in ['chiLT', 'chiN', 'FcE', 'FbE']: # Origin extended properties.
@@ -290,7 +290,7 @@ def export_beam_internal_forces(nmbComb, elems, fName):
     '''
     for e in elems:
         e.getResistingForce()
-        [[N1, My1, Mz1, Vy1, Vz1, T1], [N2, My2, Mz2, Vy2, Vz2, T2]]= model_inquiry.getValuesAtNodes(e, ['N', 'My', 'Mz', 'Vy', 'Vz', 'T'], False)
+        [[N1, My1, Mz1, Vy1, Vz1, T1], [N2, My2, Mz2, Vy2, Vz2, T2]]= model_inquiry.get_values_at_nodes(e, ['N', 'My', 'Mz', 'Vy', 'Vz', 'T'], False)
         internalForces= internal_forces.CrossSectionInternalForces(N1,Vy1,Vz1,T1,My1,Mz1) # Internal forces at the origin of the bar.
         fName.write(nmbComb+", "+str(e.tag*10+1)+","+internalForces.getCSVString())
         internalForces= internal_forces.CrossSectionInternalForces(N2,Vy2,Vz2,T2,My2,Mz2) # Internal forces at the end of the bar.
