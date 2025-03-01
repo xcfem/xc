@@ -347,6 +347,14 @@ class PileCap2Piles(object):
         return self.pileCapBottomChordTies
                     
 class PileCap3Piles(object):
+    ''' Creates a strut-and-tie model for a pile cap for three piles.
+
+    :ivar pierBottomNode: bottom node of the pier.
+    :ivar pileTopNodeA: top node of the first pile.
+    :ivar pileTopNodeB: top node of the second pile.
+    :ivar pileTopNodeC: top node of the third pile.
+    :ivar pierEffectiveDiameter: effective diameter of the pier.
+    '''
     def __init__(self, pierBottomNode, pileTopNodeA, pileTopNodeB, pileTopNodeC, pierEffectiveDiameter):
         ''' Constructor.
 
