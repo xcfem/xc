@@ -15,6 +15,7 @@ import geom
 import xc
 from materials import typical_materials
 from materials.sections.fiber_section import def_simple_RC_section
+from model import model_inquiry
 
 dummy_spring_material= None
 dummy_spring_material_name= 'strut-and-tie_dummy_spring_material'
@@ -33,34 +34,30 @@ def create_dummy_spring(modelSpace, node):
     if(dummy_spring_material is None):
         preprocessor= modelSpace.preprocessor
         dummy_spring_material= typical_materials.defElasticMaterial(preprocessor, "dummy_spring_stiffness", dummy_spring_stiffness)
-    nDOFs= node.getNumberDOF
-    dim= node.dim
-    if((nDOFs==3) and (dim==2)): # 2D structural.
-        dimElem= 3
-        constrainedDOFs= [2]
-    elif((nDOFs==6) and (dim==3)): # 3D structural.
-        dimElem= 3
-        constrainedDOFs= [3, 4, 5]
-    else:
+    constrainedDOFs= model_inquiry.get_node_rotational_dofs(node)
+    if(not constrainedDOFs):
         methodName= sys._getframe(0).f_code.co_name
         errorMessage= methodName+'; unknown rotational DOFs.'
         lmsg.error(errMsg)
-    newNode= modelSpace.duplicateNode(node) # new node.
-    # Create the spring.
-    modelSpace.setDefaultMaterial(dummy_spring_material)
-    modelSpace.setElementDimension(dimElem)
-    zl= modelSpace.newElement("ZeroLength",[newNode.tag, node.tag])
-    zl.clearMaterials()
-    for dof in constrainedDOFs:
-        zl.setMaterial(dof, dummy_spring_material.name)
-    # Boundary conditions: fix the newly created node.
-    numDOFs= newNode.getNumberDOF
-    newNodeTag= newNode.tag
-    for dof in range(0,numDOFs):
-        spc= modelSpace.newSPConstraint(newNodeTag, dof, 0.0)
-        if(__debug__):
-            if(not spc):
-                AssertionError('Can\'t create the constraint.')
+        zl= None
+        newNode= None
+    else:
+        newNode= modelSpace.duplicateNode(node) # new node.
+        # Create the spring.
+        modelSpace.setDefaultMaterial(dummy_spring_material)
+        modelSpace.setElementDimension(3)
+        zl= modelSpace.newElement("ZeroLength",[newNode.tag, node.tag])
+        zl.clearMaterials()
+        for dof in constrainedDOFs:
+            zl.setMaterial(dof, dummy_spring_material.name)
+        # Boundary conditions: fix the newly created node.
+        numDOFs= newNode.getNumberDOF
+        newNodeTag= newNode.tag
+        for dof in range(0,numDOFs):
+            spc= modelSpace.newSPConstraint(newNodeTag, dof, 0.0)
+            if(__debug__):
+                if(not spc):
+                    AssertionError('Can\'t create the constraint.')
     return zl, newNode
 
 def define_dummy_springs(modelSpace, nodes):
@@ -404,6 +401,10 @@ class PileCap3Piles(object):
         auxLineC= geom.Segment3d(bottomCentroid, pileBottomNodePosC)
         bottomPlane= bottomTriangle.getPlane()
         kVector= bottomPlane.getNormal().normalized()
+        # Make sure kVectors points to the bottom of the pier
+        pierBottomSide= bottomPlane.getSide(pierBottomNodePos)
+        if(pierBottomSide<0):
+            kVector*=-1
         d= bottomPlane.dist(pierBottomNodePos) # effective depth.
         # Compute the position of the pile top nodes.
         pileTopNodePosA= pileBottomNodePosA+d*kVector
@@ -464,7 +465,18 @@ class PileCap3Piles(object):
             newStrut= modelSpace.newElement("Truss", [n1.tag, n2.tag])
             newStrut.sectionArea= strutArea
             self.radialStruts.append(newStrut)
-
+            
+        ### Define struts from the pile to the center of the pile cap sides
+        ### (needed to stabilize the top and bottom chords)
+        stabilizingStrutsNodes= [(pierTopNodeA, pierBottomNodeA, midBottomNodeAB, midTopNodeAB), (pierTopNodeB, pierBottomNodeB, midBottomNodeAB, midTopNodeAB), (pierTopNodeB, pierBottomNodeB, midBottomNodeBC, midTopNodeBC), (pierTopNodeC, pierBottomNodeC, midBottomNodeBC, midTopNodeBC), (pierTopNodeC, pierBottomNodeC, midBottomNodeCA, midTopNodeCA), (pierTopNodeA, pierBottomNodeA, midBottomNodeCA, midTopNodeCA)]
+        for (nTop1, nBottom1, nBottom2, nTop2) in stabilizingStrutsNodes:
+            newStrut= modelSpace.newElement("Truss", [nTop1.tag, nBottom2.tag])
+            newStrut.sectionArea= 0.25*strutArea
+            self.radialStruts.append(newStrut)
+            newStrut= modelSpace.newElement("Truss", [nBottom1.tag, nTop2.tag])
+            newStrut.sectionArea= 0.25*strutArea
+            self.radialStruts.append(newStrut)
+        
         ### Struts on the perimeter.
         pilesContourBottomNodes= [pileBottomNodeA, pileBottomNodeB, pileBottomNodeC] 
         pilesContourTopNodes= [pileTopNodeA, pileTopNodeB, pileTopNodeC]
@@ -524,6 +536,17 @@ class PileCap3Piles(object):
         self.radialTies= list()
         for (n1, n2) in radialTiesNodes:
             newTie= modelSpace.newElement("Truss", [n1.tag, n2.tag])
+            newTie.sectionArea= radialTiesArea
+            self.radialTies.append(newTie)
+
+        ### Define ties from the pile to the center of the pile cap sides
+        ### (needed to stabilize the top and bottom chords)
+        stabilizingTiesNodes= [(pierTopNodeA, pierTopNodeB, midTopNodeAB), (pierBottomNodeA, pierBottomNodeB, midBottomNodeAB), (pierTopNodeB, pierTopNodeC, midTopNodeBC), (pierBottomNodeB, pierBottomNodeC, midBottomNodeBC), (pierTopNodeC, pierTopNodeA, midTopNodeCA), (pierBottomNodeC, pierBottomNodeA, midBottomNodeCA)]
+        for (n1, n2, n3) in stabilizingTiesNodes:
+            newTie= modelSpace.newElement("Truss", [n1.tag, n3.tag])
+            newTie.sectionArea= radialTiesArea
+            self.radialTies.append(newTie)
+            newTie= modelSpace.newElement("Truss", [n2.tag, n3.tag])
             newTie.sectionArea= radialTiesArea
             self.radialTies.append(newTie)
 
