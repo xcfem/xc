@@ -1341,6 +1341,14 @@ class PredefinedSpace(object):
         '''
         result= self.preprocessor.getNodeHandler.calculateNodalReactions(includeInertia, reactionCheckTolerance)
         return result
+
+    def setupAnalysis(self):
+        ''' Create the analysis object if needed.'''
+        if(not self.analysis):
+            problem= self.getProblem()
+            solProc= self.solutionProcedureType(problem)
+            solProc.setup()
+            self.analysis= solProc.analysis
         
     def analyze(self, numSteps= 1, calculateNodalReactions= False, includeInertia= False, reactionCheckTolerance= 1e-7):
         ''' Triggers the analysis of the model with a simple static linear
@@ -1359,11 +1367,8 @@ class PredefinedSpace(object):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; number of steps must be greater than zero. Setting numSteps= '+str(numSteps))
         result= 0
-        problem= self.getProblem()
         if(not self.analysis):
-            solProc= self.solutionProcedureType(problem)
-            solProc.setup()
-            self.analysis= solProc.analysis
+            self.setupAnalysis()
         result= self.analysis.analyze(numSteps)
         if(result!=0):
             className= type(self).__name__
