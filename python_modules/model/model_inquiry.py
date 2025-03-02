@@ -85,14 +85,14 @@ def getNodesInCoordinateRegion(xmin,xmax,ymin,ymax,zmin,zmax,xcSet):
     for n in setNodes:
         vCoord=n.getCoo
         xNod=vCoord[0]
-        if xNod >= xmin:
-            if xNod <= xmax:
+        if(xNod >= xmin):
+            if(xNod <= xmax):
                 yNod=vCoord[1]
-                if yNod >= ymin:
-                    if yNod <= ymax:
+                if(yNod >= ymin):
+                    if(yNod <= ymax):
                         zNod=vCoord[2]
-                        if zNod >= zmin:
-                            if zNod <= zmax:
+                        if(zNod >= zmin):
+                            if(zNod <= zmax):
                                 retval.append(n)
     return retval
 
