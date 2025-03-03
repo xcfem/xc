@@ -65,17 +65,34 @@ ratio3= abs(S1-11.676963812886143)/11.676963812886143 # 11.68 in the Mageba repo
 S2= bearing.getShapeFactorS2()
 ratio4= abs(S2-13.106796116504853)/13.106796116504853 # 13.11 in the Mageba report (page 1).
 # Compute compressive strain
-eps_cd= bearing.getCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd)
-ratio5= abs(eps_cd-2.2146438317891426)/2.2146438317891426 # 2.21 in the Mageba report (page 1).
+## Inner layer.
+eps_cd_inner= bearing.getCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd, innerLayer= True)
+eps_cd_inner_ref= 2.2146438317891426 # 2.21 in the Mageba report (page 1).
+ratio5a= abs(eps_cd_inner-eps_cd_inner_ref)/eps_cd_inner_ref
+## Outer layer.
+eps_cd_outer= bearing.getCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd, innerLayer= False)
+eps_cd_outer_ref= 1.9730463228666906 # 1.97 in the Mageba report (page 1).
+ratio5b= abs(eps_cd_outer-eps_cd_outer_ref)/eps_cd_outer_ref
+
 # Compute shear strain.
 eps_qd= bearing.getShearStrain(vxd= vxd, vyd= vyd)
-ratio6= abs(eps_qd-0.997968710058754)/0.997968710058754 # 0.998 in the Mageba report (page 1).
+eps_qd_ref= 0.997968710058754 # 0.998 in the Mageba report (page 1).
+ratio6= abs(eps_qd-eps_qd_ref)/eps_qd_ref 
 # Compute strain due to angular rotation.
 eps_alphad= bearing.getAngularRotationStrain(alpha_ad= alpha_ad, alpha_bd= alpha_bd)
-ratio7= abs(eps_alphad-0.24803719008264463)/0.24803719008264463 # 0.25 in the Mageba report (page 1).
+eps_alphad_ref= 0.24803719008264463 # 0.25 in the Mageba report (page 1).
+ratio7= abs(eps_alphad-eps_alphad_ref)/eps_alphad_ref 
 # Compute total strain.
 eps_td= bearing.getTotalStrain(vxd= vxd, vyd= vyd, Fzd= Fzd, alpha_ad= alpha_ad, alpha_bd= alpha_bd)
-ratio8= abs(eps_td-5.433696054797232)/5.433696054797232 # 5.43 in the Mageba report (page 1).
+# ***************************************************************************
+# 03/03/2025 LP
+eps_td_ref_mageba= 5.43 # 5.43 in the Mageba report (page 1) but they ADD the
+                        # the strains on the inner and the outer layers of
+                        # the bearing: this has no sense. We take the maximum
+                        # of them, instead.
+eps_td_ref= max(eps_cd_inner_ref, eps_cd_outer_ref)+eps_alphad_ref+eps_qd_ref
+ratio8= abs(eps_td-eps_td_ref)/eps_td_ref
+# ***************************************************************************
 
 # Compute minimum thickness of steel laminate.
 thk= bearing.getStrictReinforcedPlateThickness(vxd= vxd, vyd= vyd, Fzd= Fzd, withHoles= False)
@@ -121,8 +138,10 @@ print('Shape factor considering inner layer: S1= '+'{:.2f}'.format(S1))
 print('ratio3= '+str(ratio3))
 print('Shape factor considering outer layer: S2= '+'{:.2f}'.format(S2))
 print('ratio4= '+str(ratio4))
-print('Compressive strain (cl. no. 5.3.3.1 & 5.3.3.2): eps_cd= '+'{:.3f}'.format(eps_cd))
-print('ratio5= '+str(ratio5))
+print('Inner layer compressive strain (cl. no. 5.3.3.1 & 5.3.3.2): eps_cd= '+'{:.3f}'.format(eps_cd_inner))
+print('ratio5a= '+str(ratio5a))
+print('Outer layer compressive strain (cl. no. 5.3.3.1 & 5.3.3.2): eps_cd= '+'{:.3f}'.format(eps_cd_outer))
+print('ratio5a= '+str(ratio5b))
 print('Shear strain (cl. no. 5.3.3.3): eps_qd= '+'{:.3f}'.format(eps_qd))
 print('ratio6= '+str(ratio6))
 print('Strain due to angular rotation(cl. no. 5.3.3.4): eps_alphad= '+'{:.3f}'.format(eps_alphad))
@@ -148,7 +167,7 @@ print('ratio14= '+str(ratio14))
 '''
 
 fname= os.path.basename(__file__)
-if ((abs(ratio1)<1e-6) & (abs(ratio2)<1e-4) & (abs(ratio3)<1e-6) & (abs(ratio4)<1e-6) & (abs(ratio5)<1e-6) & (abs(ratio6)<1e-6) & (abs(ratio7)<1e-6) & (abs(ratio8)<1e-6) & (abs(ratio9)<1e-6) & (abs(ratio10)<1e-2)& (abs(ratio11)<1e-6) & (abs(ratio12)<1e-2) & (abs(ratio13)<1e-3) & (abs(ratio14)<1e-4)):
+if ((abs(ratio1)<1e-6) & (abs(ratio2)<1e-4) & (abs(ratio3)<1e-6) & (abs(ratio4)<1e-6) & (abs(ratio5a)<1e-6) & (abs(ratio5b)<1e-6) & (abs(ratio6)<1e-6) & (abs(ratio7)<1e-6) & (abs(ratio8)<1e-6) & (abs(ratio9)<1e-6) & (abs(ratio10)<1e-2)& (abs(ratio11)<1e-6) & (abs(ratio12)<1e-2) & (abs(ratio13)<1e-3) & (abs(ratio14)<1e-4)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
