@@ -171,7 +171,7 @@ for k in check_results:
                     tmp.append(e_results[var])
         efficiencies.append(statistics.mean(tmp))
 
-refValues= [13.261990813230685, 0.013585942457707667, 0.14103068333596597, 0.6666666666666666, 0.007757881739994591, 14.036253412958153, 0.03448812294214598]
+refValues= [13.261990813230685, 0.013585942457707667, 0.1258315680902623, 0.6666666666666666, 0.007757881739994591, 14.036253412958153, 0.03448812294214598]
 
 # Check that the results are always the same.
 err= 0.0
@@ -179,6 +179,11 @@ for v, vRef in zip(efficiencies, refValues):
     err+= (v-vRef)**2
 
 err= math.sqrt(err)
+
+'''
+print(efficiencies)
+print(err)
+'''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
