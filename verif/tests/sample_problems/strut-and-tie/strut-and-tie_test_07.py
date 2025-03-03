@@ -249,11 +249,11 @@ ratio4= abs(RzMin-RzMinRef)/abs(RzMinRef)
 
 testOK= (abs(ratio1)<1e-10) and (abs(ratio2)<1e-10) and (abs(ratio3)<1e-10) and (abs(ratio4)<1e-10)
 
+'''
 print('lintelVyMin= ', lintelMinVy/1e3, ratio1)
 print('lintelVzMax= ', lintelMaxVz/1e3, ratio2)
 print('RzMax= ', RzMax/1e3, ratio3)
 print('RzMin= ', RzMin/1e3, ratio4)
-'''
 '''
 
 import os
@@ -280,10 +280,10 @@ else:
 # oh.displayDispRot(itemToDisp='uY', defFScale= 10)
 # oh.displayDispRot(itemToDisp='uZ', defFScale= 10)
 
-# DXF output
-from import_export import mesh_entities
-xcTotalSet= modelSpace.getTotalSet()
-me= mesh_entities.MeshData()
-me.readFromXCSet(xcSet= xcTotalSet)
-outputFileName= fname.replace('.py', '.dxf')
-me.writeDxfFile(outputFileName)
+# # DXF output
+# from import_export import mesh_entities
+# xcTotalSet= modelSpace.getTotalSet()
+# me= mesh_entities.MeshData()
+# me.readFromXCSet(xcSet= xcTotalSet)
+# outputFileName= fname.replace('.py', '.dxf')
+# me.writeDxfFile(outputFileName)

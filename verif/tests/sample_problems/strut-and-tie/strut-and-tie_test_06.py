@@ -203,8 +203,8 @@ for combName in combs.getKeys():
         if(solver.hasProp("info")):
             info= solver.getProp("info")
         unconstrainedNode= modelSpace.locateEquationNumber(eqNumber= info-1)
-        print('unconstrained node id: ', unconstrainedNode.tag)
-        print('unconstrained node position: ', unconstrainedNode.getInitialPos3d)
+        lmsg.error('unconstrained node id: ', unconstrainedNode.tag)
+        lmsg.error('unconstrained node position: ', unconstrainedNode.getInitialPos3d)
         exit(1)
     varNames= vc.update_reactions_envelope(nodes= pileBottomNodes)
     vc.update_envelope_internal_forces_beam_elem_3d(lintelElement)
