@@ -158,7 +158,7 @@ class RectangularLaminatedBearing(bridge_bearings.ElastomericBearing):
                     bearing due to all design load effects.
         '''
         retval= self.getEffectiveArea()
-        retval*= (1-vxd/self.getEffectiveLength()-vyd/self.getEffectiveWidth())
+        retval*= (1-abs(vxd)/self.getEffectiveLength()-abs(vyd)/self.getEffectiveWidth())
         return retval
 
     def getShapeFactorS1(self):
@@ -204,6 +204,25 @@ class RectangularLaminatedBearing(bridge_bearings.ElastomericBearing):
         Ar= self.getReducedEffectiveArea(vxd= vxd, vyd= vyd)
         retval/= (self.G*Ar*self.getShapeFactor(innerLayer= innerLayer))
         return retval
+
+    def getMaxCompressiveStrain(self, vxd, vyd, Fzd):
+        ''' Return the value of the compressive strain due to the given vertical
+            design force according to expression (8) of clause 5.3.3.2 of 
+            EN 1337-3:2005.
+
+        :param vxd: maximum horizontal relative displacement of parts of the
+                    bearing in the direction of dimension "a" (length) of 
+                    the bearing due to all design load effects.
+        :param vyd: maximum horizontal relative displacement of parts of the
+                    bearing in the direction of dimension "b" (width) of the 
+                    bearing due to all design load effects.
+        :param Fzd: vertical design force.
+        :param innerLayer: if true compute the shape factor considering inner 
+                           layer otherwise consider outer layer.
+        '''
+        inner_layer_strain= self.getCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd, innerLayer= True)
+        outer_layer_strain= self.getCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd, innerLayer= False)
+        return max(inner_layer_strain, outer_layer_strain)
     
     def getCompressiveStress(self, vxd, vyd, Fzd):
         ''' Return the value of the compressive stress due to the given vertical
@@ -249,7 +268,7 @@ class RectangularLaminatedBearing(bridge_bearings.ElastomericBearing):
         :param alpha_ad: angle of rotation across the width, a, of the bearing.
         :param alpha_bd: angle of rotation (if any) across the length, b, of the bearing.
         '''
-        retval= self.getEffectiveWidth()**2*alpha_ad+self.getEffectiveLength()**2*alpha_bd
+        retval= self.getEffectiveWidth()**2*abs(alpha_ad)+self.getEffectiveLength()**2*abs(alpha_bd)
         retval*= self.ti # thickness of individual elastomer layer
         retval/= self.n*2*self.ti**3
         return retval
@@ -269,8 +288,9 @@ class RectangularLaminatedBearing(bridge_bearings.ElastomericBearing):
         :param alpha_bd: angle of rotation (if any) across the length, b, of the bearing.
         '''
         # Compute compressive strain.
-        retval= self.getCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd, innerLayer= True)
-        retval+= self.getCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd, innerLayer= False)
+        # retval= self.getCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd, innerLayer= True)
+        # retval+= self.getCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd, innerLayer= False)
+        retval= self.getMaxCompressiveStrain(vxd= vxd, vyd= vyd, Fzd= Fzd)
         # Compute shear strain.
         retval+= self.getShearStrain(vxd= vxd, vyd= vyd)
         # Compute strain due to angular rotation.
