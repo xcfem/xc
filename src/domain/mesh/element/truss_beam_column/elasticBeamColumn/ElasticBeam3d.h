@@ -103,6 +103,16 @@ class ElasticBeam3d: public ElasticBeam3dBase
     Element *getCopy(void) const;
 
     const Vector &computeCurrentStrain(void) const;
+    
+    inline int getReleaseCodeZ(void) const
+      { return releasez; }
+    inline void setReleaseCodeZ(const int &rc)
+      { releasez= rc; }
+    
+    inline int getReleaseCodeY(void) const
+      { return releasey; }
+    inline void setReleaseCodeY(const int &rc)
+      { releasey= rc; }
 
     virtual int update(void);
     int commitState(void);

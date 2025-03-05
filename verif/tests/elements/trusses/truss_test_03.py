@@ -85,3 +85,11 @@ if abs(ratio1-1)<1e-5 and abs(ratio2-1)<1e-5:
 else:
     lmsg.error(fname+' ERROR.')
 
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayBlocks()
+# oh.displayFEMesh()
+# oh.displayLoads()
+# oh.displayDispRot(itemToDisp='uY')
+

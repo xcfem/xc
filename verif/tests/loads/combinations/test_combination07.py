@@ -127,7 +127,7 @@ lpNV.newNodalLoad(nod8.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 lpNV.newNodalLoad(nod12.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
 
-# Combinaciones
+# Load combinations
 combs= loadHandler.getLoadCombinations
 comb= combs.newLoadCombination("ELU001","1.00*G")
 comb= combs.newLoadCombination("ELU002","1.35*G")
@@ -186,33 +186,30 @@ solver= soe.newSolver("band_gen_lin_lapack_solver")
 analysis= solu.newAnalysis("static_analysis","solutionStrategy","")
 
 
-def solveStaticLinearComb(comb,tagSaveFase0,hlp):
-  preprocessor.resetLoadCase()
-  db.restore(tagSaveFase0)
-  hlp.helpSolve(comb)
-  comb.addToDomain()
-  analOk= analysis.analyze(1)
-  comb.removeFromDomain()
-  hlp.db.save(comb.tag*100)
-
-
+def solve_static_linear_comb(comb,tagSaveFase0,hlp):
+    preprocessor.resetLoadCase()
+    db.restore(tagSaveFase0)
+    hlp.helpSolve(comb)
+    comb.addToDomain()
+    analOk= analysis.analyze(1)
+    comb.removeFromDomain()
+    hlp.db.save(comb.tag*100)
 
 dXMin=1e9
 dXMax=-1e9
 
-def procesResultVerif(comb):
-  nodes= preprocessor.getNodeHandler
-  deltaX= nod8.getDisp[0] # x displacement of node 8
-  global dXMin
-  dXMin=min(dXMin,deltaX)
-  global dXMax
-  dXMax=max(dXMax,deltaX)
-  ''' 
-    print("tagComb= ",comb.tag)
-    print("nmbComb= ",comb.getName)
-    print("dXMin= ",(dXMin*1e3)," mm\n")
-    print("dXMax= ",(dXMax*1e3)," mm\n")
-   '''
+def process_results_verif(comb):
+    deltaX= nod8.getDisp[0] # x displacement of node 8
+    global dXMin
+    dXMin=min(dXMin,deltaX)
+    global dXMax
+    dXMax=max(dXMax,deltaX)
+    ''' 
+      print("tagComb= ",comb.tag)
+      print("nmbComb= ",comb.getName)
+      print("dXMin= ",(dXMin*1e3)," mm\n")
+      print("dXMax= ",(dXMax*1e3)," mm\n")
+     '''
 
 import os
 os.system("rm -r -f /tmp/test_combinacion_07.db")
@@ -240,8 +237,8 @@ tagPrevia= 0
 tagSave= 0
 for key in combs.getKeys():
   c= combs[key]
-  solveStaticLinearComb(c,tagSaveFase0,helper)
-  procesResultVerif(comb)
+  solve_static_linear_comb(c,tagSaveFase0,helper)
+  process_results_verif(comb)
 
 # 2019.12.22 Values changed when initial displacements were accounted
 # dXMax changed from 0.115734e-3 to 0.0252486379903e-3

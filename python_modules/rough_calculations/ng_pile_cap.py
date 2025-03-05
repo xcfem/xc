@@ -33,7 +33,7 @@ class TwoPileCap(object):
     :ivar b: width of the pile cap.
     :ivar d: distance between piles.
     :ivar a: width of the supported column.
-    :ivar corbelLength: lenght of the corbel (minimum distance from the 
+    :ivar corbelLength: length of the corbel (minimum distance from the 
                         pile contour to the pile cap contour).
     '''
 

@@ -288,6 +288,10 @@ class PredefinedSpace(object):
         ''' Return the point handler for this model.'''
         return self.preprocessor.getMultiBlockTopology.getPoints
 
+    def getTransfCooHandler(self):
+        ''' Return the coordinate transformation handler.'''
+        return self.preprocessor.getTransfCooHandler
+    
     def getElementHandler(self):
         ''' Return the element handler for this model.'''
         return self.preprocessor.getElementHandler
@@ -296,6 +300,13 @@ class PredefinedSpace(object):
         ''' Return the seed element handler for this model.'''
         return self.getElementHandler().seedElemHandler
 
+    def setNumberOfDOFs(self, nDOFs):
+        ''' Set the number of degrees of freedom for the new nodes.
+
+        :param nDOFs: number of degrees of freedom for each new node.
+        '''
+        self.preprocessor.getNodeHandler.numDOFs= nDOFs
+        
     def setDefaultMaterial(self, material):
         ''' Assigns the material to be used when creating new elements.
 
@@ -307,6 +318,15 @@ class PredefinedSpace(object):
     def getDefaultMaterials(self):
         ''' Return the default materials for the element handler and the seed element handler.'''
         return [self.preprocessor.getElementHandler.defaultMaterial, self.preprocessor.getElementHandler.seedElemHandler.defaultMaterial]
+    
+    def setDefaultMaterials(self, materials):
+        ''' Assigns the materials to be used when creating new elements.
+
+        :param material: default materials (materials[0]-> regular element 
+                         handler, materials[1]-> seed element handler).
+        '''
+        self.preprocessor.getElementHandler.defaultMaterial= materials[0]
+        self.preprocessor.getElementHandler.seedElemHandler.defaultMaterial= materials[1]
 
     def setDefaultCoordTransf(self, coordinateTransformation):
         ''' Assigns the coordinate transformation to be used when creating 
@@ -384,6 +404,13 @@ class PredefinedSpace(object):
         '''
         return self.getNodeHandler().newNodeXY(x,y)
     
+    def newNodePos2d(self, pos2d):
+        ''' Create a new node.
+
+        :param pos3d: geom.Pos2d object.
+        '''
+        return self.newNodeXY(pos2d.x, pos2d.y)
+    
     def newNodeXYZ(self, x, y, z):
         ''' Create a new node.
 
@@ -392,6 +419,13 @@ class PredefinedSpace(object):
         :param z: z coordinate for the new node.
         '''
         return self.getNodeHandler().newNodeXYZ(x,y,z)
+    
+    def newNodePos3d(self, pos3d):
+        ''' Create a new node.
+
+        :param pos3d: geom.Pos3d object.
+        '''
+        return self.newNodeXYZ(pos3d.x, pos3d.y, pos3d.z)
     
     def newNodeFromVector(self, v):
         ''' Create a new node from vector
@@ -947,8 +981,8 @@ class PredefinedSpace(object):
         zl.setupVectors(xc.Vector([direction[0],direction[1],0]),xc.Vector([-direction[1],direction[0],0]))
         zl.clearMaterials()
         zl.setMaterial(0,bearingMaterialName)
-        # Boundary conditions
-        numDOFs= self.preprocessor.getNodeHandler.numDOFs
+        # Boundary conditions: fix new node.
+        numDOFs= newNode.getNumberDOF
         for i in range(0,numDOFs):
             spc= self.newSPConstraint(newNode.tag,i,0.0)
             if(__debug__):
@@ -1268,7 +1302,7 @@ class PredefinedSpace(object):
                                       e.g. '1.0*GselfWeight+1.0*GearthPress'
         '''
         # Get load pattern names and partial safety factors.
-        combDict= utils.getCombinationDict(loadCaseExpression)
+        combDict= utils.get_combination_dict(loadCaseExpression)
         for lpName in combDict:
             factor= combDict[lpName] # partial safety factor.
             lp= self.addLoadCaseToDomain(lpName)
@@ -1307,6 +1341,14 @@ class PredefinedSpace(object):
         '''
         result= self.preprocessor.getNodeHandler.calculateNodalReactions(includeInertia, reactionCheckTolerance)
         return result
+
+    def setupAnalysis(self):
+        ''' Create the analysis object if needed.'''
+        if(not self.analysis):
+            problem= self.getProblem()
+            solProc= self.solutionProcedureType(problem)
+            solProc.setup()
+            self.analysis= solProc.analysis
         
     def analyze(self, numSteps= 1, calculateNodalReactions= False, includeInertia= False, reactionCheckTolerance= 1e-7):
         ''' Triggers the analysis of the model with a simple static linear
@@ -1325,11 +1367,8 @@ class PredefinedSpace(object):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; number of steps must be greater than zero. Setting numSteps= '+str(numSteps))
         result= 0
-        problem= self.getProblem()
         if(not self.analysis):
-            solProc= self.solutionProcedureType(problem)
-            solProc.setup()
-            self.analysis= solProc.analysis
+            self.setupAnalysis()
         result= self.analysis.analyze(numSteps)
         if(result!=0):
             className= type(self).__name__

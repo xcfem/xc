@@ -41,6 +41,7 @@
 #include "material/uniaxial/concrete/TDConcreteMC10.h"
 #include "material/uniaxial/concrete/TDConcreteMC10NL.h"
 #include "material/uniaxial/ENTMaterial.h"
+#include "material/uniaxial/ENCMaterial.h"
 #include "material/uniaxial/TensionOnlyMaterial.h"
 #include "material/uniaxial/CompressionOnlyMaterial.h"
 #include "material/uniaxial/InvertMaterial.h"
@@ -307,6 +308,8 @@ XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
       retval= new XC::TDConcreteMC10NL(tag_mat);
     else if((cmd == "elastic_no_traction_material") or (cmd == "elastic_no_tension_material"))
       retval= new XC::ENTMaterial(tag_mat);
+    else if(cmd == "elastic_no_compression_material")
+      retval= new XC::ENCMaterial(tag_mat);
     else if(cmd == "tension_only_material")
       retval= new XC::TensionOnlyMaterial(tag_mat);
     else if(cmd == "compression_only_material")

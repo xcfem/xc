@@ -157,7 +157,7 @@ class TieBar(object):
 
         :param elems: elements to define properties on.
         '''
-        vc.defVarsEnvelopeInternalForcesTrussElems(elems)
+        vc.def_vars_envelope_internal_forces_truss_elems(elems)
         for e in elems:
             e.setProp('crossSection',self)
             e.setProp('FCTNCP',[-1.0,-1.0]) #Normal stresses efficiency.
@@ -186,7 +186,7 @@ class TieBar(object):
             fctn[1]= FCTN2
             elem.setProp("HIPCPTN2",nmbComb)
         elem.setProp("FCTNCP",fctn)
-        vc.updateEnvelopeInternalForcesTruss(elem)
+        vc.update_envelope_internal_forces_truss(elem)
 
     def checkBiaxialBendingForElement(self, elem, nmbComb):
         '''Called in every commit to check biaxial bending criterion 
@@ -196,7 +196,7 @@ class TieBar(object):
         :param nmbComb: name of the load combination.
         '''
         elem.getResistingForce()
-        [[N1], [N2]]= model_inquiry.getValuesAtNodes(elem,['N'], False)
+        [[N1], [N2]]= model_inquiry.get_values_at_nodes(elem,['N'], False)
         FCTN1= self.getBiaxialBendingEfficiency(Nd= N1)
         FCTN2= self.getBiaxialBendingEfficiency(Nd= N2)
         fctn= elem.getProp("FCTNCP")
@@ -207,7 +207,7 @@ class TieBar(object):
             fctn[1]= FCTN2
             elem.setProp("HIPCPTN2",nmbComb)
         elem.setProp("FCTNCP",fctn)
-        vc.updateEnvelopeInternalForcesTruss(elem)
+        vc.update_envelope_internal_forces_truss(elem)
 
 M12= TieBar(12e-3, stressArea= 84e-6, steelType= SBS355)
 M16= TieBar(16e-3, stressArea= 157e-6, steelType= SBS520)

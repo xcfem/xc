@@ -257,6 +257,7 @@ python tests/utility/geom/coordinate_systems/tensor_transformation_test_02.py
 python tests/utility/geom/coordinate_systems/frenet_trihedron_01.py
 python tests/utility/geom/coordinate_systems/frenet_trihedron_02.py
 python tests/utility/geom/coordinate_systems/frenet_trihedron_03.py
+python tests/utility/geom/coordinate_systems/frenet_trihedron_04.py
 echo "$BLEU" "    Transformations." "$NORMAL"
 python tests/utility/geom/trf/rotation2d_test_01.py
 python tests/utility/geom/trf/rotation2d_test_02.py
@@ -398,12 +399,16 @@ python tests/actions/load_combinations/comb_container/test_comb_container_01.py
 python tests/actions/load_combinations/comb_container/test_comb_container_02.py
 python tests/actions/load_combinations/comb_container/test_comb_container_03.py
 
+echo "$BLEU" "Nodes tests." "$NORMAL"
+echo "$BLEU" "  Mixed DOFs tests." "$NORMAL"
+python tests/nodes/mixed_dofs/test_brick_and_shell_01.py
+python tests/nodes/mixed_dofs/test_truss_and_beam2d_01.py
 echo "$BLEU" "Elements tests." "$NORMAL"
 echo "$BLEU" "  Truss element tests." "$NORMAL"
-python tests/elements/trusses/truss_test0.py
-python tests/elements/trusses/truss_test1.py
-python tests/elements/trusses/truss_test2.py
-python tests/elements/trusses/truss_test3.py
+python tests/elements/trusses/truss_test_00.py
+python tests/elements/trusses/truss_test_01.py
+python tests/elements/trusses/truss_test_02.py
+python tests/elements/trusses/truss_test_03.py
 echo "$BLEU" "  Coordinate transformations tests." "$NORMAL"
 python tests/elements/crd_transf/test_linear_crd_transf_2d_01.py
 python tests/elements/crd_transf/test_pdelta_crd_transf_2d_01.py
@@ -445,6 +450,7 @@ python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_deformation_pla
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_deformation_plane_02.py
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_frequency_01.py
 python tests/elements/beam_column/elastic_beam_2d/test_beam2d_tributary_lengths_01.py
+python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_release_node_01.py
 echo "$BLEU" "    Elastic beam-column 3D tests." "$NORMAL"
 python tests/elements/beam_column/elastic_beam_3d/cantilever3d_01.py
 python tests/elements/beam_column/elastic_beam_3d/cantilever3d_02.py
@@ -471,6 +477,8 @@ python tests/elements/beam_column/elastic_beam_3d/test_torsion_02.py
 python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_deformation_plane_01.py
 python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_deformation_plane_02.py
 python tests/elements/beam_column/elastic_beam_3d/test_beam3d_tributary_lengths_01.py
+python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_release_node_01.py
+python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_release_node_02.py
 echo "$BLEU" "    Timoshenko beam 2D tests." "$NORMAL"
 python tests/elements/beam_column/timoshenko_beam2d_test1.py
 python tests/elements/beam_column/timoshenko_beam2d_sign_criteria_01.py
@@ -608,8 +616,15 @@ python tests/elements/birth_and_death/test_awakening_in_hot_model_shell_mitc4_01
 python tests/elements/birth_and_death/test_awakening_in_hot_model_four_node_quad.py
 python tests/elements/birth_and_death/test_awakening_in_hot_model_zero_length.py
 
-echo "$BLEU" "  Mixed DOFs tests." "$NORMAL"
-python tests/elements//mixed_dofs/test_brick_and_shell_01.py
+echo "$BLEU" "Sample problem tests." "$NORMAL"
+echo "$BLEU" "  Strut-and-tie tests." "$NORMAL"
+python tests/sample_problems/strut-and-tie/strut-and-tie_test_01.py
+python tests/sample_problems/strut-and-tie/strut-and-tie_test_02.py
+python tests/sample_problems/strut-and-tie/strut-and-tie_test_03.py
+python tests/sample_problems/strut-and-tie/strut-and-tie_test_04.py
+python tests/sample_problems/strut-and-tie/strut-and-tie_test_05.py
+python tests/sample_problems/strut-and-tie/strut-and-tie_test_06.py
+python tests/sample_problems/strut-and-tie/strut-and-tie_test_07.py
 
 echo "$BLEU" "Solution tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py
@@ -887,6 +902,7 @@ python tests/preprocessor/import_export/dxf/test_dxf_import_01.py
 python tests/preprocessor/import_export/dxf/test_dxf_groups.py
 python tests/preprocessor/import_export/dxf/test_dxf_surfaces.py
 python tests/preprocessor/import_export/dxf/test_dxf_export_01.py
+python tests/preprocessor/import_export/dxf/test_dxf_export_02.py
 echo "$BLEU" "    FreeCAD tests." "$NORMAL"
 python tests/preprocessor/import_export/freecad/test_freecad_groups.py
 python tests/preprocessor/import_export/freecad/test_ifc_points.py
@@ -1264,17 +1280,21 @@ python tests/materials/xc_materials/sections/section_geom/test_mass_properties_0
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_04.py
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_05.py
 python tests/materials/xc_materials/sections/section_geom/test_geom_params_torsion_ehe_01.py
-python tests/materials/xc_materials/sections/section_geom/test_box_girder_torsional_stiffness.py
 python tests/materials/xc_materials/sections/section_geom/test_modify_section_properties.py
 echo "$BLEU" "      Cross-sections region tests." "$NORMAL"
 python tests/materials/xc_materials/sections/section_geom/regions/quad_sect_region_test_01.py
 python tests/materials/xc_materials/sections/section_geom/regions/quad_sect_region_test_02.py
 
 # Compound sections.
-echo "$BLEU" "      Compound sections." "$NORMAL"
-python tests/materials/xc_materials/sections/test_compound_section_01.py
-python tests/materials/xc_materials/sections/test_compound_section_02.py
-python tests/materials/xc_materials/sections/test_compound_section_03.py
+echo "$BLEU" "      Section properties." "$NORMAL"
+python tests/materials/section_properties/test_compound_section_01.py
+python tests/materials/section_properties/test_compound_section_02.py
+python tests/materials/section_properties/test_compound_section_03.py
+python tests/materials/section_properties/test_box_girder_torsional_stiffness.py
+python tests/materials/section_properties/test_rectangular_hollow_section_01.py
+python tests/materials/section_properties/test_rectangular_hollow_section_02.py
+python tests/materials/section_properties/test_rectangular_hollow_section_03.py
+
 echo "$BLEU" "      Section stiffness." "$NORMAL"
 python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_01.py
 python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_02.py
@@ -1510,6 +1530,7 @@ python tests/materials/tm5_809_3/tm_5_809_3_test01.py
 echo "$BLEU" "    EN 1337 tests." "$NORMAL"
 python tests/materials/en_1337-3/rectangular_bearing_design_test_01.py
 python tests/materials/en_1337-3/rectangular_bearing_design_test_02.py
+python tests/materials/en_1337-3/rectangular_bearing_design_test_03.py
 
 echo "$BLEU" "  Steel sections test." "$NORMAL"
 echo "$BLEU" "    steel shapes tests." "$NORMAL"

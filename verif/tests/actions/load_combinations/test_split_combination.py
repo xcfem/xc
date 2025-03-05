@@ -13,7 +13,7 @@ from actions.load_combination_utils import utils
 
 combTest= "1.35*G1 + 1.35*G2 + 1.00*G3 + 1.00*P1 + 1.35*Q1a1 + 0.90*Q32"
 combTerms= ['G1', 'P1', 'Q32']
-part1, part2= utils.splitCombination(combTest, combTerms)
+part1, part2= utils.split_combination(combTest, combTerms)
 
 testOk= (part1=='1.35*G1+1.0*P1+0.9*Q32') and (part2=='1.35*G2+1.0*G3+1.35*Q1a1')
 

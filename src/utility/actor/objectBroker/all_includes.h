@@ -36,6 +36,7 @@
 #include "material/uniaxial/PathIndependentMaterial.h"
 #include "material/uniaxial/CableMaterial.h"
 #include "material/uniaxial/ENTMaterial.h"
+#include "material/uniaxial/ENCMaterial.h"
 #include "material/uniaxial/TensionOnlyMaterial.h"
 #include "material/uniaxial/CompressionOnlyMaterial.h"
 #include "material/uniaxial/InvertMaterial.h"

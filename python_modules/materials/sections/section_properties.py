@@ -786,10 +786,12 @@ class RectangularSection(SectionProperties):
     def getContourPoints(self):
         ''' Return the vertices of the rectangle.'''
         retval= list()
-        retval.append(geom.Pos2d(-self.b/2.0, -self.h/2.0))
-        retval.append(geom.Pos2d(self.b/2.0, -self.h/2.0))
-        retval.append(geom.Pos2d(self.b/2.0, self.h/2.0))
-        retval.append(geom.Pos2d(-self.b/2.0, self.h/2.0))
+        half_b= self.b/2.0
+        half_h= self.h/2.0
+        retval.append(geom.Pos2d(-half_b, -half_h))
+        retval.append(geom.Pos2d(half_b, -half_h))
+        retval.append(geom.Pos2d(half_b, half_h))
+        retval.append(geom.Pos2d(-half_b, half_h))
         return retval
     
     def defElasticMembranePlateSection(self, preprocessor, material, overrideRho= None, reductionFactor= 1.0):
@@ -834,6 +836,359 @@ class RectangularSection(SectionProperties):
         os.write(indentation+'width: '+str(self.b)+'\n')
         os.write(indentation+'depth: '+str(self.h)+'\n')
         
+class RectangularHollowSection(RectangularSection):
+    ''' Geometric parameter of a rectangular hollow section with constant
+        thickness of its walls.
+
+    :ivar thickeness: thickness of the section walls.
+    '''
+    def __init__(self, name:str, b:float, h:float, t:float):
+        ''' Constructor.
+
+        :param name: section name.
+        :param b: cross-section width (parallel to local z-axis)
+        :param h: cross-section depth (parallel to local y-axis)
+        :param t: wall thickness.
+        ''' 
+        super().__init__(name, b= b, h= h)
+        self.thickness= t
+    
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= super().getDict()
+        retval['thickness']= self.thickness
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.
+
+        :param dct: Python dictionary containing the member values.
+        '''
+        super().setFromDict(dct)
+        self.thickness= dct['thickness']
+        
+    def __eq__(self, other):
+        '''Overrides the default implementation'''
+        if(other is not None):
+            if(self is not other):
+                retval= super().__eq__(other)
+                if(retval):
+                    retval= (self.thickness == other.thickness)
+            else:
+                retval= True
+        else:
+            retval= False
+        return retval
+      
+    def A(self):
+        '''Return cross-sectional area of the section'''
+        retval= super().A()
+        retval-= (self.b-2*self.thickness)*(self.h-2*self.thickness)
+        return retval
+
+    def Ay(self):
+        '''Return the corrected area for shear along y axis.'''
+        return self.alphaY()*self.A()
+
+    def Az(self):
+        '''Return the corrected area for shear along z axis.'''
+        return self.alphaZ()*self.A()
+
+    def yMax(self):
+        ''' Return the maximum distance from the section contour
+            to the local Z axis.'''
+        return self.h/2.0
+        
+    def zMax(self):
+        ''' Return the maximum distance from the section contour
+            to the local Y axis.'''
+        return self.b/2.0
+  
+    def hCOG(self):
+        '''Return distance from the bottom fiber to the 
+        center of gravity of the section.
+        '''
+        return self.h/2.0
+  
+    def bCOG(self):
+        '''Return distance from the leftmost fiber to the 
+        center of gravity of the section.
+        '''
+        return self.b/2.0
+  
+    def Iy(self):
+        '''Return second moment of area about the local y-axis'''
+        retval= super().Iy()
+        t= self.thickness
+        hi= self.h-2*t
+        bi= self.b-2*t
+        retval-= 1/12.0*hi*bi**3
+        return retval
+    
+    def Iz(self):
+        '''Return second moment of area about the local z-axis'''
+        retval= super().Iz()
+        t= self.thickness
+        hi= self.h-2*t
+        bi= self.b-2*t
+        retval-= 1/12.0*bi*hi**3
+        return retval
+
+    def Iyz(self):
+        '''Return the product of inertia about the local axes.'''
+        return 0.0
+  
+    def J(self):
+        '''Return torsional constant of the section'''
+        return self.getJTorsion()
+  
+    def alphaY(self):
+        '''Return shear shape factor with respect to local y-axis'''
+        return self.h/(self.b+self.h) # SCIA cross-section theory manual.
+  
+    def alphaZ(self):
+        '''Return shear shape factor with respect to local z-axis'''
+        return self.b/(self.b+self.h) # SCIA cross-section theory manual.
+  
+    def getYieldMomentY(self, fy):
+        '''Return section yield moment.
+
+           :param fy: material yield stress.
+        '''
+        return 2*fy/self.b*self.Iy()
+  
+    def getElasticSectionModulusY(self):
+        '''Returns the elastic section modulus with respect to the y axis.
+
+           Reference: https://structx.com/Shape_Formulas_025.html
+        '''
+        return 2*self.b*self.h*self.thickness/3.0
+  
+    def getPlasticSectionModulusY(self):
+        '''Returns the plastic section modulus.
+
+           Computes the plastic section modulus assuming that plastic neutral 
+           axis passes through section centroid (which is true whenever the 
+           rectangular section is homogeneous).
+
+           Reference: https://structx.com/Shape_Formulas_025.html
+        '''
+        b= self.b
+        half_b= b/2.0
+        half_a= self.h/2.0
+        t= self.thickness
+        half_t= t/2.0
+        return 2*t*(half_a-t)(half_b-t)+2*b*t(half_b-half_t)
+  
+    def getYieldMomentZ(self,fy):
+        '''Return section yield moment.
+
+           :param fy: material yield stress.
+        '''
+        return 2*fy/self.h*self.Iz()
+  
+    def getElasticSectionModulusZ(self):
+        '''Returns the elasticc section modulus with respect to the z axis.
+
+
+        Reference: https://structx.com/Shape_Formulas_025.html
+        '''
+        return self.getElasticSectionModulusY()
+  
+    def getPlasticSectionModulusZ(self):
+        '''Returns the plastic section modulus.
+
+           Computes the plastic section modulus assuming that plastic neutral 
+           axis passes through section centroid (which is true whenever the 
+           rectangular section is homogeneous).
+
+        Reference: https://structx.com/Shape_Formulas_025.html
+        '''
+        b= self.b
+        half_b= b/2.0
+        half_a= self.h/2.0
+        t= self.thickness
+        half_t= t/2.0
+        return 2*(b*t(half_a-half_t)+t*(half_a-t)**2)
+
+    def getMidContourLength(self):
+        ''' Return the length of the mid-contour of the section.'''
+        t= self.thickness
+        return 2*((self.b-t)+(self.h-t))
+
+    def getMidContourEnclosedArea(self):
+        ''' Return the area enclosed by the mid-contour.'''
+        t= self.thickness
+        return (self.b-t)*(self.h-t)
+
+    def getThicknessRatio(self):
+        ''' Return the wall thickness divided by the minimum dimension of the
+            section.
+        '''
+        return self.thickness/min(self.b, self.h)
+
+    def checkThinWalledSection(self, silent= False):
+        ''' Check if the wall thickness is small so we get an accurate enough
+            result from some approximate formulas.
+
+        :param silent: if True don't issue any message.
+        '''
+        retval= (self.thickness <= min(self.b, self.h)/10.0)
+        if((not retval) and (not silent)):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            warningMsg= className+'.'+methodName+'; the wall thickness: '+\
+                        str(self.thickness)+ ' is not thin enough.'+\
+                        'The torsion related results will be inaccurate.'
+            lmsg.warning(warningMsg)
+        return retval    
+  
+    def getJTorsion(self):
+        '''Return torsional constant of the section.
+
+        http://dir.cisc-icca.ca/files/technical/techdocs/updates/torsionprop.pdf
+        '''
+        Ap= self.getMidContourEnclosedArea()
+        p= self.getMidContourLength()
+        retval= 4.0*Ap**2*self.thickness/p # Salmon and Johnson 1980
+        # Check if the wall is thin enough
+        thin= self.checkThinWalledSection(silent= True)
+        if(not thin): # thick wall
+            bs= self.b # bs: Upper deck width (without the overhangs)
+            bi= self.b # bi: Lower deck width.
+            h= self.h-self.thickness # h: Box depth (between mid-planes).
+            ts= self.thickness # ts: Upper deck thickness.
+            ti= self.thickness # ti: Lower deck thickness.
+            td= self.thickness # td: Thickness of the webs.
+            # The average of the previous result and the one computed
+            # with the formula for bridges gives better results
+            # see est_rectangular_hollow_section_03.py verification
+            # test.
+            retval+= getInerciaTorsionCajonMonocelular(bs,bi,h,ts,ti,td)
+            retval/= 2.0
+        return retval
+  
+    def getTorsionalStiffness(self, G):
+        '''Return the torsional stiffness of the section.
+
+        :param G: material shear modulus.
+        '''
+        return G*self.J()
+
+    def getWarpingConstant(self):
+        ''' Return the value of the section warping constant according to
+        expression in the SCIA Cross-section theory manual.
+        '''
+        # self.checkThinWalledSection()
+        b= self.b
+        h= self.h
+        t= self.thickness
+        # retval= b**2*h**2/24*(b*t-h*t)**2/(b*t+h*t)**2*(b*t-h*t)
+        retval= (b**2*h**2*(b*t+h*t))/24.0 # SCIA Cross-section theory.
+        return retval
+    
+    def getShearStiffnessY(self, G):
+        '''Return an approximated value of the shear stiffness of the 
+           section.
+
+        :param G: material shear modulus.
+        '''
+        return G*self.Ay()
+    
+    def getShearStiffnessZ(self, G):
+        '''Return an approximated value of the shear stiffness of the 
+           section.
+
+        :param G: material shear modulus.
+        '''
+        return G*self.Az()
+ 
+    def getRegions(self, gm, nmbMat, twoDimensionalMember= False):
+        '''generation of four quadrilateral regions from the section 
+        geometry (sizes and number of divisions for the cells)
+        made of the specified material
+
+        :param gm: object of type section_geometry
+        :param nmbMat: name of the material (string)
+        :param twoDimensionalMember: true if the region corresponds to a 
+                                     two-dimensional member.
+        '''
+        # Compute positions.
+        halfB= self.b/2.0
+        halfH= self.h/2.0
+        halfBhole= halfB-self.thickness
+        halfHhole= halfH-self.thickness
+        lowerLeftCorner= geom.Pos2d(-halfH, -halfB) # lower left corner.
+        lowerRightCorner= geom.Pos2d(-halfH, halfB) # lower right corner.
+        holeLowerLeftCorner= geom.Pos2d(-halfHhole, -halfBhole) # lower left corner of the hole.
+        holeLowerRightCorner= geom.Pos2d(-halfHhole, halfBhole) # lower right corner of the hole.
+        upperLeftCorner= geom.Pos2d(halfH, -halfB) # upper left corner.
+        upperRightCorner= geom.Pos2d(halfH, halfB) # upper right corner.
+        holeUpperLeftCorner= geom.Pos2d(halfHhole, -halfBhole) # upper left corner of the hole.
+        holeUpperRightCorner= geom.Pos2d(halfHhole, halfBhole) # upper right corner of the hole.
+        # Create regions.
+        regions= gm.getRegions
+        if(twoDimensionalMember):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= className+'.'+methodName+'; not implemented for tubes yet.'
+            lmsg.error(errMsg)
+            exit(1)
+        ## Bottom region.
+        bottomRegion= regions.newQuadRegion(nmbMat) # create region.
+        bottomRegion.nDivIJ= self.nDivIJ # number of divisions I->J direction.
+        bottomRegion.nDivJK= self.nDivJK # number of divisions J->K direction.
+        vI= lowerLeftCorner # region lower left corner.
+        vJ= lowerRightCorner # region lower right corner.
+        vK= holeLowerRightCorner # region upper right corner.
+        vL= holeLowerLeftCorner # region upper left corner.
+        bottomRegion.setVertices(vI, vJ, vK, vL)
+        ## Left region.
+        leftRegion= regions.newQuadRegion(nmbMat) # create region.
+        bottomRegion.nDivIJ= self.nDivIJ # number of divisions I->J direction.
+        bottomRegion.nDivJK= self.nDivJK # number of divisions J->K direction.
+        vI= holeLowerLeftCorner
+        vJ= holeUpperLeftCorner
+        vK= upperLeftCorner
+        vL= lowerLeftCorner
+        leftRegion.setVertices(vI, vJ, vK, vL)        
+        ## Right region.
+        rightRegion= regions.newQuadRegion(nmbMat) # create region.
+        bottomRegion.nDivIJ= self.nDivIJ # number of divisions I->J direction.
+        bottomRegion.nDivJK= self.nDivJK # number of divisions J->K direction.
+        vI= holeUpperRightCorner
+        vJ= holeLowerRightCorner
+        vK= lowerRightCorner
+        vL= upperRightCorner
+        rightRegion.setVertices(vI, vJ, vK, vL)        
+        ## Top region.
+        topRegion= regions.newQuadRegion(nmbMat) # create region.
+        topRegion.nDivIJ= self.nDivIJ # number of divisions I->J direction.
+        topRegion.nDivJK= self.nDivJK # number of divisions J->K direction.
+        vI= lowerLeftCorner # region lower left corner.
+        vJ= lowerRightCorner # region lower right corner.
+        vK= holeLowerRightCorner # region upper right corner.
+        vL= holeLowerLeftCorner # region upper left corner.
+        topRegion.setVertices(vI, vJ, vK, vL)
+        return [bottomRegion, leftRegion, rightRegion, topRegion]
+    
+    def getContourPoints(self):
+        ''' Return the vertices of the section contour.'''
+        exterior_contour= super().getContourPoints()
+        half_b_int= self.b/2.0-thickness
+        half_h_int= self.h/2.0-thickness
+        interior_contour= list()
+        interior_contour.append(geom.Pos2d(-half_b_int, -half_h_int))
+        interior_contour.append(geom.Pos2d(half_b_int, -half_h_int))
+        interior_contour.append(geom.Pos2d(half_b_int, half_h_int))
+        interior_contour.append(geom.Pos2d(-half_b_int, half_h_int))
+        return exterior_contour, interior_contour
+    
+    def report(self, os= sys.stdout, indentation= ''):
+        ''' Get a report of the object contents.'''
+        super().report(os, indentation)
+        os.write(indentation+'thickness: '+str(self.thickness)+'\n')
+    
     
 class CircularSection(SectionProperties):
     '''Geometric parameters of a circular or circular hollow section

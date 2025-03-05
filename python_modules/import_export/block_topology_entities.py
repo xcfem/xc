@@ -644,7 +644,10 @@ class PointSupportDict(dict):
         return ps.nodeId
 
     def readFromXCSet(self,xcSet,points):
-        '''Read supports from an XC set.'''
+        '''Read supports from the given XC set.
+
+        :param xcSet: XC set to read from.
+        '''
         nodeSupports= me.NodeSupportDict()
         preprocessor= xcSet.getPreprocessor
         nodeSupports.readFromXCDomain(preprocessor.getDomain)

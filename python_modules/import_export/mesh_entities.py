@@ -155,16 +155,21 @@ class NodeDict(dict):
             self.append(ident,pos.x,pos.y,pos.z)
             ident+= 1
             
-    def readFromXCSet(self,xcSet):
+    def readFromXCSet(self, xcSet):
+        '''Read nodes from the given XC set.
+
+        :param xcSet: XC set to read from.
+        '''
         nodeSet= xcSet.nodes
         for n in nodeSet:
-          pos= n.getInitialPos3d
-          self.append(n.tag, pos.x, pos.y, pos.z)
+            pos= n.getInitialPos3d
+            self.append(n.tag, pos.x, pos.y, pos.z)
+        return len(self)
           
     def writeDxf(self,drawing):
         '''Write the node positions in dxf file.'''
         layerName= self.getName()
-        drawing.add_layer(layerName)
+        drawing.layers.new(name= layerName)
         for key in self:
             self[key].writeDxf(drawing,layerName)
 
@@ -351,30 +356,39 @@ class CellDict(dict):
           type= int(lst[1])
           nodeIds= list()
           for j in range(2,sz):
-            nodeIds.append(int(lst[j]))
+              nodeIds.append(int(lst[j]))
           self[ident]= CellRecord(ident= ident, typ= type, nodes= nodeIds)
           
     def readFromUMesh(self,umesh):
         for i in range(0,umesh.getNumberOfCells()):
           self.append(CellRecord(ident= -1, typ= umesh.getTypeOfCell(i), nodes= umesh.getNodeIdsOfCell(i)))
+          
     def readFromXCSet(self,xcSet):
+        '''Read cells from the given XC set.
+
+        :param xcSet: XC set to read from.
+        '''
         elemSet= xcSet.elements
         for e in elemSet:
-          nodes= e.getNodes.getExternalNodes
-          numNodes= len(nodes)
-          if(numNodes==4):
-            tagNodes= [nodes[0],nodes[1],nodes[2],nodes[3]]
-            thickness= e.physicalProperties.getVectorMaterials[0].h
-            cell= CellRecord(ident= e.tag, typ= str(e.tag), nodes= tagNodes, thk= thickness)
-          elif(numNodes==2):
-            tagNodes= [nodes[0],nodes[1]]
-            cell= CellRecord(ident= e.tag, typ= str(e.tag), nodes= tagNodes, thk= 0.0)
-          self.append(cell)
+            nodes= e.getNodes.getExternalNodes
+            numNodes= len(nodes)
+            if(numNodes==4):
+                tagNodes= [nodes[0],nodes[1],nodes[2],nodes[3]]
+                thickness= 1.0
+                mat0= e.physicalProperties.getVectorMaterials[0]
+                if(hasattr(mat0, 'h')):
+                    thickness= mat0.h
+                cell= CellRecord(ident= e.tag, typ= str(e.tag), nodes= tagNodes, thk= thickness)
+            elif(numNodes==2):
+                tagNodes= [nodes[0],nodes[1]]
+                cell= CellRecord(ident= e.tag, typ= str(e.tag), nodes= tagNodes, thk= 0.0)
+            self.append(cell)
+        return len(self)
           
     def writeDxf(self,nodeDict,drawing):
         '''Write the cells in dxf file.'''
         layerName= 'cells'
-        drawing.add_layer(layerName)
+        drawing.layers.new(name= layerName)
         for key in self:
           self[key].writeDxf(nodeDict,drawing,layerName)
           
@@ -490,7 +504,10 @@ class NodeSupportDict(dict):
         self[ns.nodeId]= ns
         
     def readFromXCDomain(self,domain):
-        '''Read SP constraints from an XC domain.'''
+        '''Read SP constraints from an XC domain.
+
+        :param domain: domain to read SP constraints from.
+        '''
         spConstraintsByNode= getConstraintsByNode(domain)
         supportId= 1
         for tagNode in spConstraintsByNode:
@@ -507,6 +524,7 @@ class NodeSupportDict(dict):
             nsr.setupFromComponentLabels(gdlLabels)
             self.append(nsr)
             supportId+= 1
+        return len(self)
 
     def getNodeTags(self):
         '''Return dictionary keys in a list.'''
@@ -568,11 +586,15 @@ class MeshData(object):
         endCells= beginCells+self.numberOfCells
         self.cells.readFromDATFile(lines,beginCells,endCells)
 
-    def readFromXCSet(self,xcSet):
-        '''Read nodes and elements from an XC set.'''
-        self.nodes.readFromXCSet(xcSet)
-        self.cells.readFromXCSet(xcSet)
-        self.nodeSupports.readFromXCDomain(xcSet.getPreprocessor.getDomain)
+    def readFromXCSet(self, xcSet):
+        '''Read nodes and elements from the given XC set.
+
+        :param xcSet: set to read the mesh from.
+        '''
+        retval= self.nodes.readFromXCSet(xcSet)
+        retval+= self.cells.readFromXCSet(xcSet)
+        retval+= self.nodeSupports.readFromXCDomain(xcSet.getPreprocessor.getDomain)
+        return retval
         
     def writeDxf(self,drawing):
         '''Write mesh in a DXF file.'''

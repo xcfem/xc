@@ -62,18 +62,11 @@
 
 #include <material/uniaxial/ENTMaterial.h>
 #include "domain/component/Parameter.h"
-#include <utility/matrix/Vector.h>
 #include <domain/mesh/element/utils/Information.h>
 
 
 XC::ENTMaterial::ENTMaterial(int tag, const double &e,const double &A,const double &B)
-  :ElasticBaseMaterial(tag,MAT_TAG_ENTMaterial,e), a(A), b(B), parameterID(0) {}
-
-int XC::ENTMaterial::setTrialStrain(double strain, double strainRate)
-  {
-    trialStrain = strain;
-    return 0;
-  }
+  : ENTNCBaseMaterial(tag,MAT_TAG_ENTMaterial, e, A, B) {}
 
 //! @brief Return stress.
 double XC::ENTMaterial::getStress(void) const
@@ -103,102 +96,6 @@ double XC::ENTMaterial::getTangent(void) const
 XC::UniaxialMaterial *XC::ENTMaterial::getCopy(void) const
   { return new ENTMaterial(*this); }
 
-double XC::ENTMaterial::getA(void) const
-  { return a; }
-void XC::ENTMaterial::setA(const double &aa)
-  { a= aa; }
-double XC::ENTMaterial::getB(void) const
-  { return b; }
-void XC::ENTMaterial::setB(const double &bb)
-  { b= bb; }
-
-//! @brief Send object members through the communicator argument.
-int XC::ENTMaterial::sendData(Communicator &comm)
-  {
-    int res= ElasticBaseMaterial::sendData(comm);
-    res+= comm.sendDoubles(a,b,getDbTagData(),CommMetaData(3));
-    res+= comm.sendInt(parameterID,getDbTagData(),CommMetaData(4));
-    return res;
-  }
-
-//! @brief Receives object members through the communicator argument.
-int XC::ENTMaterial::recvData(const Communicator &comm)
-  {
-    int res= ElasticBaseMaterial::recvData(comm);
-    res+= comm.receiveDoubles(a,b,getDbTagData(),CommMetaData(3));
-    res+= comm.receiveInt(parameterID,getDbTagData(),CommMetaData(4));
-    return res;
-  }
-
-//! @brief Sends object through the communicator argument.
-int XC::ENTMaterial::sendSelf(Communicator &comm)
-  {
-    setDbTag(comm);
-    const int dataTag= getDbTag();
-    inicComm(5); 
-    int res= sendData(comm);
-
-    res+= comm.sendIdData(getDbTagData(),dataTag);
-    if(res < 0)
-      std::cerr << "ENTMaterial::sendSelf - failed to send data.\n";
-    return res;
-  }
-
-//! @brief Receives object through the communicator argument.
-int XC::ENTMaterial::recvSelf(const Communicator &comm)
-  {
-    inicComm(5);
-    const int dataTag= getDbTag();
-    int res= comm.receiveIdData(getDbTagData(),dataTag);
-    if(res<0)
-      std::cerr << "ENTMaterial::recvSelf - failed to receive ids.\n";
-    else
-      {
-        //setTag(getDbTagDataPos(0));
-        res+= recvData(comm);
-        if(res<0)
-           std::cerr << "ENTMaterial::recvSelf - failed to receive data.\n";
-      }
-    return res;
-  }
-
-void XC::ENTMaterial::Print(std::ostream &os, int flag) const
-  {
-    os << getClassName() << ", tag: " << this->getTag() << std::endl
-       << "  E: " << E << std::endl;
-  }
-
-int XC::ENTMaterial::setParameter(const std::vector<std::string > &argv, Parameter &param)
-  {
-    int retval= -1;
-    if(argv[0] == "E")
-      {
-        param.setValue(E);
-        retval= param.addObject(1, this);
-      }
-    return retval;
-  }
-
-int XC::ENTMaterial::updateParameter(int parameterID, Information &info)
-  {
-    switch(parameterID)
-      {
-	case -1:
-	  return -1;
-	case 1:
-	  E = info.theDouble;
-	  return 0;
-	default:
-	  return -1;
-      }
-  }
-
-int XC::ENTMaterial::activateParameter(int paramID)
-  {
-    parameterID = paramID;
-    return 0;
-  }
-
 double XC::ENTMaterial::getStressSensitivity(int gradIndex, bool conditional)
   {
     if(parameterID == 1 && trialStrain < 0.0)
@@ -207,11 +104,3 @@ double XC::ENTMaterial::getStressSensitivity(int gradIndex, bool conditional)
       return 0.0;
   }
 
-double XC::ENTMaterial::getInitialTangentSensitivity(int gradIndex)
-  { return 0.0; }
-
-int XC::ENTMaterial::commitSensitivity(double strainGradient,int gradIndex, int numGrads)
-  {
-    // Nothing to commit ... path independent
-    return 0.0;
-  }

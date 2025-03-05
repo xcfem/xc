@@ -7,7 +7,14 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
-from vtk.vtkCommonCore import vtkPoints
+from vtk.vtkCommonCore import (
+    vtkPoints,
+    vtkMath,
+    vtkMinimalStandardRandomSequence
+    )
+from vtk.vtkCommonMath import vtkMatrix4x4
+from vtk.vtkCommonTransforms import vtkTransform
+from vtk.vtkFiltersGeneral import vtkTransformPolyDataFilter
 from vtk.vtkFiltersSources import (
     vtkArrowSource,
     vtkSphereSource
@@ -31,6 +38,7 @@ from vtk.vtkRenderingCore import (
 from vtk.vtkCommonCore import (
     vtkDoubleArray
 )
+from vtk.vtkCommonColor import vtkNamedColors
 
 def get_vtk_points_actor(points, color, pointSize= None):
     ''' Return a VTK actor from the given points.
@@ -225,8 +233,89 @@ def get_vtk_cube_actor(hexahedron, color):
     mapper = vtkDataSetMapper()
     mapper.SetInputData(uGrid)
 
-    actor = vtkActor()
-    actor.GetProperty().SetColor(color)
-    actor.SetMapper(mapper)
+    retval = vtkActor()
+    retval.GetProperty().SetColor(color)
+    retval.SetMapper(mapper)
 
-    return actor
+    return retval
+
+def get_vtk_oriented_arrow_actor(startPoint, endPoint, color):
+    ''' Return an actor to represent the oriented arrow.
+
+    :param startPoint: arrow start point.
+    :param endPoint: arrow end point.
+    :param color: color of the arrow.
+    '''
+    arrowSource = vtkArrowSource()
+    
+    #Compute a basis
+    normalizedX= [0.0,0.0,0.0]
+    vtkMath.Subtract(endPoint,startPoint,normalizedX)
+    length= vtkMath.Norm(normalizedX)
+    vtkMath.Normalize(normalizedX)
+
+    #The Z axis is an arbitrary vector cross X
+    arbitrary = [0] * 3
+    rng = vtkMinimalStandardRandomSequence()
+    rng.SetSeed(8775070)  # For testing.
+    for i in range(0, 3):
+        rng.Next()
+        arbitrary[i]= rng.GetRangeValue(-10, 10)
+    normalizedZ= [0.0,0.0,0.0]
+    vtkMath.Cross(normalizedX, arbitrary, normalizedZ);
+    vtkMath.Normalize(normalizedZ);
+
+    #The Y axis is Z cross X
+    normalizedY= [0.0,0.0,0.0]
+    vtkMath.Cross(normalizedZ, normalizedX, normalizedY);
+
+    #Create the direction cosine matrix
+    matrix= vtkMatrix4x4()
+    matrix.Identity()
+    for i in range(0,3):
+        matrix.SetElement(i, 0, normalizedX[i])
+        matrix.SetElement(i, 1, normalizedY[i])
+        matrix.SetElement(i, 2, normalizedZ[i])
+
+    #Create the transform
+    transform= vtkTransform()
+    transform.Translate(startPoint)
+    transform.Concatenate(matrix)
+    transform.Scale(length,length,length)
+
+    #Transform the polydata
+    transformPD= vtkTransformPolyDataFilter()
+    transformPD.SetTransform(transform);
+    transformPD.SetInputConnection(arrowSource.GetOutputPort());
+
+    # Create a mapper and actor
+    mapper= vtkPolyDataMapper()
+    mapper.SetInputConnection(transformPD.GetOutputPort())
+    retval= vtkActor()
+    retval.SetMapper(mapper)
+    retval.GetProperty().SetColor(color)
+    return retval
+
+def get_ref_sys_actor(refSys, colors= None):
+    ''' Return an actor to represent the unary vectors of the given reference
+        system.
+
+    :param refSys: reference system to represent.
+    '''
+    org= refSys.Org
+    iDest= org+refSys.getIVector()
+    jDest= org+refSys.getJVector()
+    kDest= org+refSys.getKVector()
+
+    startPoint= [org.x, org.y, org.z]
+    if(colors is None):
+        namedColors= vtkNamedColors()
+        red= namedColors.GetColor3d('Red')
+        green= namedColors.GetColor3d('Green')
+        blue= namedColors.GetColor3d('Blue')
+        colors= [red, green, blue]
+    retval= list()
+    for dest, color in zip([iDest, jDest, kDest], colors):
+        actor= get_vtk_oriented_arrow_actor(startPoint, [dest.x, dest.y, dest.z], color)
+        retval.append(actor)
+    return retval

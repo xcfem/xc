@@ -44,11 +44,11 @@ surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 s= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
 
 xcTotalSet= modelSpace.getTotalSet()
-import ezdxf
 bdTotal= bte.BlockData(verbosity= 0)
 numEntitiesRead= bdTotal.readFromXCSet(xcTotalSet)
 ok1= (abs(numEntitiesRead-8)==0)
 # Avoid info messages
+import ezdxf
 logging.getLogger(ezdxf.__name__).setLevel(logging.ERROR)
 bdTotal.writeDxfFile(outputFileName)
 import os

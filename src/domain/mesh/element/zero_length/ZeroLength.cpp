@@ -179,13 +179,15 @@ const XC::Material *XC::ZeroLength::get_material_ptr(const std::string &matName)
       }
     else
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to preprocessor." << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to preprocessor."
+		  << Color::def << std::endl;
       }
     if(!retval)
-      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << "; "
 		<< "material identified by: '" << matName
-		<< "' not found.\n";      
+		<< "' not found."
+	        << Color::def << std::endl;      
     return retval;
   }
 
@@ -194,6 +196,16 @@ const XC::Material *XC::ZeroLength::get_material_ptr(const std::string &matName)
 //! @param dir: direction 
 void XC::ZeroLength::setMaterial(const int &dir,const std::string &matName)
   {
+    if(dir>=this->numDOF)
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << "; "
+		  << "the element has : " << dimension
+		  << " degrees of freedom, but the DOF specified for the material identified by: '"
+	          <<  matName
+	          << "' is: " << dir
+	          << ". The command has no effect."
+	          << Color::def << std::endl;
+      }
     const Material *ptr_mat= get_material_ptr(matName);
     if(ptr_mat)
       {
@@ -201,9 +213,10 @@ void XC::ZeroLength::setMaterial(const int &dir,const std::string &matName)
 	if(tmp)
 	  theMaterial1d.push_back(dir,tmp);
 	else
-	  std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << "; "
 		    << "material identified by: '" << matName
-		    << "' is not an uniaxial material.\n";
+		    << "' is not an uniaxial material."
+		    << Color::def << std::endl;
       }
     if(theMaterial1d.size() > 0 )
       setTran1d(elemType, theMaterial1d.size());
@@ -213,10 +226,11 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
   {
     const size_t n= matNames.size();
     if(n!= dirs.size())
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	      << "; error in number of materials; number of directions: "
 	      << dirs.size()
-              << " number of materials: " << n << std::endl;
+              << " number of materials: " << n
+	      << Color::def << std::endl;
     Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
@@ -230,22 +244,25 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
                 if(tmp)
                   theMaterial1d.push_back(dirs[i],tmp);
                 else
-	      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-                            << "el material de code: '" << matNames[i]
-                            << "' no corresponde a un material uniaxial.\n";
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << "; "
+			<< "el material de code: '" << matNames[i]
+			<< "' no corresponde a un material uniaxial."
+			<< Color::def << std::endl;
               }
             else
-              std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
+              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << "; "
                         << "material identified by : '" << matNames[i]
-                        << "' not found.\n";
+                        << "' not found."
+		        << Color::def << std::endl;
           }
         if(theMaterial1d.size() > 0 )
           setTran1d(elemType, theMaterial1d.size());
       }
     else
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to preprocessor." << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to preprocessor."
+		  << Color::def << std::endl;
       }
   }
 
@@ -306,9 +323,11 @@ void XC::ZeroLength::setUpType(const size_t &numDOFsNodes)
       }
     else
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING cannot handle " << dimension
-                  << " dofs at nodes in " << numDOFsNodes << " d problem\n";
+                  << " dofs at nodes in " << numDOFsNodes
+		  << " d problem"
+	          << Color::def << std::endl;
         return;
       }
   }
@@ -348,9 +367,9 @@ void XC::ZeroLength::setUpType(void)
       }
     else
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING cannot handle element type:" << this->elemType
-		  << std::endl;
+		  << Color::def << std::endl;
         return;
       }
   }
@@ -396,11 +415,12 @@ void XC::ZeroLength::setDomain(Domain *theDomain)
     // if differing dof at the ends - print a warning message
     if(dofNd1 != dofNd2)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING nodes " << theNodes[0]->getTag() << " and "
                   << theNodes[1]->getTag()
 		  << "have differing dof at ends for ZeroLength "
-                  << this->getTag() << std::endl;
+                  << this->getTag()
+		  << Color::def << std::endl;
         return;
       }
 
@@ -416,11 +436,12 @@ void XC::ZeroLength::setDomain(Domain *theDomain)
 
 
     if(L > lentol_vm)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING element " 
                 << this->getTag() << " has L= " << L
                 << ", which is greater than the tolerance: "
-		<< lentol_vm << std::endl;
+		<< lentol_vm
+		<< Color::def << std::endl;
 
 
     // set the number of dof for element and set matrix and vector pointer
@@ -442,8 +463,9 @@ int XC::ZeroLength::commitState(void)
 
     // call element commitState to do any base class stuff
     if((code = Element0D::commitState()) != 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed in base class";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed in base class."
+	        << Color::def << std::endl;
     // commit 1d materials
     theMaterial1d.commitState();
     return code;
@@ -501,13 +523,15 @@ int XC::ZeroLength::update(void)
   {
     // get trial displacements and take difference
     if(!theNodes[0])
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; node 0 of element: " << getTag()
-		<< " is not set." << std::endl;
+		<< " is not set."
+		<< Color::def << std::endl;
     if(!theNodes[1])
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; node 1 of element: "
-		<< getTag() << " is not set." << std::endl;
+		<< getTag() << " is not set."
+		<< Color::def << std::endl;
 
     int ret = 0;
     if(theNodes[0] && theNodes[1])
@@ -529,8 +553,9 @@ int XC::ZeroLength::update(void)
           }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; cannot update element: " << getTag() << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; cannot update element: " << getTag()
+		<< Color::def << std::endl;
     return ret;
   }
 
@@ -668,10 +693,11 @@ void XC::ZeroLength::alive(void)
 //! and returns 0.
 int XC::ZeroLength::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	      << "; load type: " << theLoad->getClassName()
               << " unknown for ZeroLength with tag: "
-	      << this->getTag() << std::endl;
+	      << this->getTag()
+	      << Color::def << std::endl;
     return -1;
   }
 
@@ -880,8 +906,9 @@ int XC::ZeroLength::sendSelf(Communicator &comm)
     const int dataTag= getDbTag();
     res += comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send ID data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send ID data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -893,8 +920,9 @@ int XC::ZeroLength::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to receive ID data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ID data."
+	        << Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;
@@ -1014,9 +1042,10 @@ void XC::ZeroLength::checkDirection( ID &dir ) const
     for(int i=0; i<dir.Size(); i++)
       if(dir(i) < 0 || dir(i) > 5 )
         {
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << ";  incorrect direction "
-		    << dir(i) << " is set to 0\n";
+		    << dir(i) << " is set to 0"
+	            << Color::def << std::endl;
           dir(i) = 0;
         }
   }

@@ -45,7 +45,7 @@ class_<XC::ElasticBeam2d, bases<XC::ElasticBeam2dBase>, boost::noncopyable >("El
   .add_property("rho", &XC::ElasticBeam2d::getRho,&XC::ElasticBeam2d::setRho, "element density.")
   .add_property("h", &XC::ElasticBeam2d::getDepth,&XC::ElasticBeam2d::setDepth, "element section depth.")
   .add_property("initialStrain", make_function(&XC::ElasticBeam2d::getInitialStrain, return_value_policy<copy_const_reference>()),&XC::ElasticBeam2d::setInitialStrain, "initial strain")
-  .add_property("release", &XC::ElasticBeam2d::getReleaseCode,&XC::ElasticBeam2d::setReleaseCode, "element moment release code 0: no release, 1: node I, 2: node J, 2: both nodes.")
+  .add_property("release", &XC::ElasticBeam2d::getReleaseCode,&XC::ElasticBeam2d::setReleaseCode, "element moment release code 0: no release, 1: node I, 2: node J, 3: both nodes.")
   .def("getVDirStrongAxisGlobalCoord",make_function(&XC::ElasticBeam2d::getVDirStrongAxisGlobalCoord, return_value_policy<copy_const_reference>()),"Returns the direction vector of element strong axis expressed in the global coordinate system.")
   .def("getVDirWeakAxisGlobalCoord",make_function(&XC::ElasticBeam2d::getVDirWeakAxisGlobalCoord, return_value_policy<copy_const_reference>()),"Returns the direction vector of element weak axis expressed in the global coordinate system.")
    ;
@@ -83,6 +83,8 @@ class_<XC::ElasticBeam3dBase, bases<XC::ProtoBeam3d>, boost::noncopyable >("Elas
 class_<XC::ElasticBeam3d, bases<XC::ElasticBeam3dBase>, boost::noncopyable >("ElasticBeam3d", no_init)
   .add_property("rho", &XC::ElasticBeam3d::getRho,&XC::ElasticBeam3d::setRho, "element material density")
   .add_property("initialStrain", make_function(&XC::ElasticBeam3d::getInitialStrain, return_value_policy<copy_const_reference>()),&XC::ElasticBeam3d::setInitialStrain,"initial strain")
+  .add_property("releaseZ", &XC::ElasticBeam3d::getReleaseCodeZ,&XC::ElasticBeam3d::setReleaseCodeZ, "element Z bending moment release code 0: no release, 1: node I, 2: node J, 3: both nodes.")
+  .add_property("releaseY", &XC::ElasticBeam3d::getReleaseCodeY,&XC::ElasticBeam3d::setReleaseCodeY, "element Y bending moment release code 0: no release, 1: node I, 2: node J, 3: both nodes.")
   .add_property("getAN2", &XC::ElasticBeam3d::getAN2,"Axial force which acts over the front end of the element (call 'calc_resisting_force' before).")
   .add_property("getAMz1", &XC::ElasticBeam3d::getAMz1,"Z bending moment which acts over the back end of the element (call 'calc_resisting_force' before).")
   .add_property("getAMz2", &XC::ElasticBeam3d::getAMz2,"Z bending moment which acts over the front end of the element (call 'calc_resisting_force' before).")

@@ -256,7 +256,7 @@ class SteelShape(sp.SectionProperties):
 
         :param elems: elements to define properties on.
         '''
-        vc.defVarsEnvelopeInternalForcesBeamElems(elems)
+        vc.def_vars_envelope_internal_forces_beam_elems(elems)
         for e in elems:
             e.setProp('FCTNCP',[-1.0,-1.0]) #Normal stresses efficiency.
             e.setProp('FCVCP',[-1.0,-1.0]) #Shear stresses efficiency.
@@ -271,7 +271,7 @@ class SteelShape(sp.SectionProperties):
         elem.getResistingForce()
         chiLT= elem.getProp('chiLT') # Lateral torsional buckling reduction factor.
         chiN= elem.getProp('chiN') # Axial strength reduction factor.
-        [[N1, M1, V1], [N2, M2, V2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'M', 'V'], silent= False)
+        [[N1, M1, V1], [N2, M2, V2]]= model_inquiry.get_values_at_nodes(elem, ['N', 'M', 'V'], silent= False)
         FCTN1= self.getZBendingEfficiency(Nd= N1, Mzd= M1, Vyd= V1, chiN= chiN, chiLT= chiLT)[0]
         FCTN2= self.getZBendingEfficiency(Nd= N2, Mzd= M2, Vyd= V2, chiN= chiN, chiLT= chiLT)[0]
         fctn= elem.getProp("FCTNCP")
@@ -282,7 +282,7 @@ class SteelShape(sp.SectionProperties):
             fctn[1]= FCTN2
             elem.setProp("HIPCPTN2",nmbComb)
         elem.setProp("FCTNCP",fctn)
-        vc.updateEnvelopeInternalForcesBeamElem2D(elem)
+        vc.update_envelope_internal_forces_beam_elem_2d(elem)
 
     def checkBiaxialBendingForElement(self, elem, nmbComb):
         '''Called in every commit to check biaxial bending criterion 
@@ -294,7 +294,7 @@ class SteelShape(sp.SectionProperties):
         elem.getResistingForce()
         chiLT= elem.getProp('chiLT') # Lateral torsional buckling reduction factor.
         chiN= elem.getProp('chiN') # Axial strength reduction factor.
-        [[N1, My1, Mz1, Vy1], [N2, My2, Mz2, Vy2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'My', 'Mz', 'Vy'], silent= False)
+        [[N1, My1, Mz1, Vy1], [N2, My2, Mz2, Vy2]]= model_inquiry.get_values_at_nodes(elem, ['N', 'My', 'Mz', 'Vy'], silent= False)
         FCTN1= self.getBiaxialBendingEfficiency(Nd= N1, Myd= My1, Mzd= Mz1, Vyd= Vy1, chiN= chiN, chiLT= chiLT)[0]
         FCTN2= self.getBiaxialBendingEfficiency(Nd= N2, Myd= My2, Mzd= Mz2, Vyd= Vy2, chiN= chiN, chiLT= chiLT)[0]
         fctn= elem.getProp("FCTNCP")
@@ -305,7 +305,7 @@ class SteelShape(sp.SectionProperties):
             fctn[1]= FCTN2
             elem.setProp("HIPCPTN2",nmbComb)
         elem.setProp("FCTNCP",fctn)
-        vc.updateEnvelopeInternalForcesBeamElem(elem)
+        vc.update_envelope_internal_forces_beam_elem_3d(elem)
 
     def checkYShearForElement(self,elem,nmbComb):
         '''Called in every commit to y shear criterion.
@@ -314,7 +314,7 @@ class SteelShape(sp.SectionProperties):
         :param nmbComb: name of the load combination.
         '''
         elem.getResistingForce()
-        [[Vy1], [Vy2]]= model_inquiry.getValuesAtNodes(elem,['Vy'], False)
+        [[Vy1], [Vy2]]= model_inquiry.get_values_at_nodes(elem,['Vy'], False)
         FCV1= self.getYShearEfficiency(Vyd= Vy1)
         FCV2= self.getYShearEfficiency(Vyd= Vy2)
         fcv= elem.getProp("FCVCP")
@@ -333,7 +333,7 @@ class SteelShape(sp.SectionProperties):
         :param nmbComb: name of the load combination.
         '''
         elem.getResistingForce()
-        [[Vz1], [Vz2]]= model_inquiry.getValuesAtNodes(elem,['Vz'], False)
+        [[Vz1], [Vz2]]= model_inquiry.get_values_at_nodes(elem,['Vz'], False)
         FCV1= self.getZShearEfficiency(Vzd= Vz1)
         FCV2= self.getZShearEfficiency(Vzd= Vz2)
         fcv= elem.getProp("FCVCP")

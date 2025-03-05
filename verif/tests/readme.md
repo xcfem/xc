@@ -13,7 +13,8 @@ Verification tests determine if the solution that has been calculated is accurat
 - materials: verification of the material models.
 - postprocess: verification of the post-processing routines.
 - preprocessor: verification of the pre-processing routines.
-- rough_calculations:
+- rough_calculations: verification of the approximate formulas included in the libraries.
+- sample problems: verification of the solution of some "typical" problems. 
 - solution: verification of the solution methods.
 - utility: verification of the utility classes and functions.
 

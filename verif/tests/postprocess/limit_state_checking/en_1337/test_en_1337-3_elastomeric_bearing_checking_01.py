@@ -40,6 +40,23 @@ steel.setGammaM0(1.0)
 shape= EC3_materials.IPEShape(steel= steel, name= 'IPE_600')
 xcSection= shape.defElasticShearSection3d(preprocessor)
 ## Elastomeric bearing.
+# a: bearing length (see figure 2 of EN 1337-3:2005).
+# b: bearing width (see figure 2 of EN 1337-3:2005).
+# tb: total height (see figure 2 of EN 1337-3:2005).
+# ti: thickness of individual elastomer layer (see figure 2 of EN 1337-3:2005).
+# ts: thickness of steel reinforcing plate (see figure 2 of EN 1337-3:2005).
+# tso: thickness of outer steel reinforcing plate.
+# Te: total elastomer thickness.
+# Tb: total nominal thickness of bearing.
+# n: number of elastomer layers.
+# C: side cover.
+# ted: edge cover.
+# G: (optional) nominal value of conventional shear modulus of elastomeric
+#    bearing (see table 1 of EN 1337-3:2005).
+# gammaM: (optional) partial safety factor which value may be chosen in the
+#         National Annex. The recommended value is γm = 1.00.
+# fy: (optional) yield stress of the reinforcing steel.
+# bearing_type: (optional) string that identifies the type of the bearing in the#               problem.
 bearing= en.RectangularLaminatedBearing(a= 0.25, b= 0.30, tb= 0.03, ti= 0.008, ts= 3e-3, Te= 0.021, tso= 0.0, Tb= 0.03, n= 2, C= 6e-3, ted= 8e-3, bearing_type= 'T0')
 
 # Problem geometry
@@ -154,7 +171,7 @@ for k in check_results:
                     tmp.append(e_results[var])
         efficiencies.append(statistics.mean(tmp))
 
-refValues= [13.261990813230685, 0.013585942457707667, 0.14103068333596597, 0.6666666666666666, 0.007757881739994591, 14.036253412958153, 0.03448812294214598]
+refValues= [13.261990813230685, 0.013585942457707667, 0.1258315680902623, 0.6666666666666666, 0.007757881739994591, 14.036253412958153, 0.03448812294214598]
 
 # Check that the results are always the same.
 err= 0.0
@@ -162,6 +179,11 @@ for v, vRef in zip(efficiencies, refValues):
     err+= (v-vRef)**2
 
 err= math.sqrt(err)
+
+'''
+print(efficiencies)
+print(err)
+'''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)

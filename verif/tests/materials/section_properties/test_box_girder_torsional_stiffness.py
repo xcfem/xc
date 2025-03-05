@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Home made test from the example at page C-17 of the
 "Bridge Strudl Manual" november 1973 '''
+
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
@@ -9,12 +10,27 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
-bs= 26.51
-bi= 21.05
-h= 5.48
-ts= .56
-ti= .48
-td= 1
+##
+##                        bs
+##             |----------------------|
+##
+##                        ts
+##    -    ---------------------------------
+##    |         \                    /
+##    |h         \td                /
+##    |           \       ti       /
+##    -            ----------------
+##
+##                        bi
+##                 |--------------|
+##
+
+bs= 26.51 # bs: Upper deck width (without the overhangs)
+bi= 21.05 # bi: Lower deck width.
+h= 5.48 # h: Box depth (between mid-planes).
+ts= .56 # ts: Upper deck thickness.
+ti= .48 # ti: Lower deck thickness.
+td= 1 # td: Thickness of the webs.
 
 from materials.sections import section_properties
 

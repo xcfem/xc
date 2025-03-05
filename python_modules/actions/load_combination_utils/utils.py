@@ -165,7 +165,7 @@ class CombGenerator(object):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; situation: '+str(situation) + ' unknown.')   
         # Assign a name to each combination.
-        return getNamedCombinations(loadCombinations, prefix)
+        return get_named_combinations(loadCombinations, prefix)
 
     def getLoadCombinationsDict(self, situations= ['SLSRare', 'SLSFrequent', 'SLSQuasiPermanent', 'ULSTransient', 'ULSAccidental', 'ULSSeismic']):
         ''' Return a dictionary containing the load combinations corresponding
@@ -212,7 +212,7 @@ class CombGenerator(object):
         # SLS seismic not implemented yet.
         return retval
             
-    def writeXCLoadCombinations(self, situations= ['SLSRare', 'SLSFrequent', 'SLSQuasiPermanent', 'ULSTransient', 'ULSAccidental', 'ULSSeismic'], outputFileName= None):
+    def write_xc_load_combinations(self, situations= ['SLSRare', 'SLSFrequent', 'SLSQuasiPermanent', 'ULSTransient', 'ULSAccidental', 'ULSSeismic'], outputFileName= None):
         ''' Write the load combinations in a format readable by XC.
 
         :param situations: project situations of interest.
@@ -267,13 +267,12 @@ class CombGenerator(object):
         json.dump(outputDict, f)
         f.close()
 
+def get_combination_dict(loadCombination:str):
+    ''' Given a combination expression of the form '1.0*G1+1.35*G2+1.5*Q+...'
+        returns its components in a dictionary with the form:
+        {'G1':1.0, 'G2':1.35, 'Q':1.5, ...}
 
-def getCombinationDict(loadCombination:str):
-    ''' Return a Python dictionary whose keys are the names of the actions
-        in the combination and whose values are the factor that multiply the
-        action.
-
-    :param loadCombination: string of the form "1.00*G1 + 1.00*G2 + 1.35*Qwind"
+    :param loadCombination: string of the form "1.0*G1+1.35*G2+1.5*Q+..."
     '''
     retval= dict()
     if(len(loadCombination)>0):
@@ -284,11 +283,26 @@ def getCombinationDict(loadCombination:str):
             retval[action]= float(factor)
     return retval
 
-def getCombinationExpr(combDict:dict):
-    ''' Return the expression corresponding to the load combination argument
-        in dictionary form (i. e.: {'G1':1.0, 'G2':1.00, 'Qwind':1.35}).
+def get_combination_components(loadCombination:str):
+    ''' Given a combination expression of the form '1.0*G1+1.35*G2+1.5*Q+...'
+        returns its components in a list of lists with the form:
+        [[1.0,'G1'], [1.35, 'G2'], [1.5, 'Q'], ...}
 
-    :param combDict: combination expressed in the form of a dictionary.
+    :param loadCombination: string of the form "1.0*G1+1.35*G2+1.5*Q+..."
+    '''
+    retval= loadCombination.split('+')
+    for i in range(len(retval)):
+        retval[i]=retval[i].split('*')
+        retval[i][0]=eval(retval[i][0])
+    return retval
+
+def get_combination_expr(combDict:dict):
+    ''' Given a dictionary like {'G1':1.0, 'G2':1.35, 'Q':1.5, ...} that
+        corresponds to a load combination, this function return the string
+        corresponding to the algebraic expression of the load combination,
+        i.e. 1.0*G1+1.35*G2+1.5*Q+...'
+
+    :param combDict: dictionary containing the components of the combination.
     '''
     tmp= list()
     for key in combDict:
@@ -301,13 +315,13 @@ def getCombinationExpr(combDict:dict):
             retval+='+'+s
     return retval
     
-def splitCombination(loadCombination:str, loads):
+def split_combination(loadCombination:str, loads):
     ''' Return the part of a combination that concerns the actions passed as
         argument and then the rest of the original combination.
 
     :param loads: names of the desired loads.
     '''
-    combDict= getCombinationDict(loadCombination)
+    combDict= get_combination_dict(loadCombination)
     tmp1= list(); tmp2= list()
     for key in combDict:
         factor= combDict[key]
@@ -319,11 +333,11 @@ def splitCombination(loadCombination:str, loads):
     retval= '+'.join(tmp1), '+'.join(tmp2)
     return retval
 
-def getFileNameFromCombinationExpresion(loadCombination:str):
+def get_file_name_from_combination_expresion(loadCombination:str):
     ''' Return a valid filename from the combination expression.'''
     return ''.join(x for x in loadCombination if x.isalnum())
 
-def listActionGroup(actionGroup):
+def list_action_group(actionGroup):
     '''List the defined actions in a group (permanent, variable, accidental).'''
     for familyName in actionGroup.getKeys():
         print('    actions family: ', familyName)
@@ -332,7 +346,7 @@ def listActionGroup(actionGroup):
         for a in actionFamily.actions:
           print('     ', a)
 
-def listActionFamily(actionFamily):
+def list_action_family(actionFamily):
     '''List the defined actions in a family.
 
     :param actionFamily: family of actions. 
@@ -342,7 +356,7 @@ def listActionFamily(actionFamily):
     for a in actions:
         print('     ', a)
 
-def listActionWeighting(actionWeighting):
+def list_action_weighting(actionWeighting):
     '''List the defined actions and the weighting for each one.'''
     for awKey in actionWeighting.getKeys():
         print(awKey)
@@ -358,7 +372,7 @@ def listActionWeighting(actionWeighting):
         print('  Seismic actions: ')
         listActionFamily(aw.seismicActions)
 
-def getNamedCombinations(loadCombinations, prefix):
+def get_named_combinations(loadCombinations, prefix):
     '''Return a dictionary containing the load combinations in the argument
        with an arbitrary name as key. The name is formed by concatenation of
        a prefix (such as ULS, SLS or somethink like that) and a number.
@@ -375,7 +389,7 @@ def getNamedCombinations(loadCombinations, prefix):
             retval[key]= comb
     return retval
 
-def writeXCLoadCombinations(prefix, loadCombinations, outputFileName= None):
+def write_xc_load_combinations(prefix, loadCombinations, outputFileName= None):
     ''' Write the load combinations in a format readably by XC.
 
     :param loadCombinations: load combinations to be named.
@@ -388,7 +402,7 @@ def writeXCLoadCombinations(prefix, loadCombinations, outputFileName= None):
         f= open(outputFileName,'w')
     f.write("combs= loadLoader.getLoadCombinations\n")
     # Assign a name to each combination.
-    namedCombinations= getNamedCombinations(loadCombinations, prefix)
+    namedCombinations= get_named_combinations(loadCombinations, prefix)
     for key in namedCombinations:
         comb= namedCombinations[key]
         output= 'comb= combs.newLoadCombination('
@@ -399,7 +413,7 @@ def writeXCLoadCombinations(prefix, loadCombinations, outputFileName= None):
     else:
         f.close()
 
-def jsonToXC(inputFileName, preprocessor, situations= ['SLSRare', 'SLSFrequent', 'SLSQuasiPermanent', 'ULSTransient', 'ULSAccidental', 'ULSSeismic']):
+def json_to_xc(inputFileName, preprocessor, situations= ['SLSRare', 'SLSFrequent', 'SLSQuasiPermanent', 'ULSTransient', 'ULSAccidental', 'ULSSeismic']):
     ''' Read the combinations stored in the input file (JSON format)
         and stores them in the FE problem whose pre-processor is passed as
         parameter.

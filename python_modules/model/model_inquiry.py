@@ -6,8 +6,22 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es"
 
-def getValuesAtNodes(element, components= ['N', 'M', 'V'], silent= False):
-    ''' Return the values at the element nodes.
+def get_node_rotational_dofs(node):
+    ''' Return the indexes of the rotational DOFs of the given node (if any).
+
+    :param node: node whose rotational DOFs will be returned.
+    '''
+    retval= list()
+    nDOFs= node.getNumberDOF
+    dim= node.dim
+    if((nDOFs==3) and (dim==2)): # 2D structural.
+        retval= [2]
+    elif((nDOFs==6) and (dim==3)): # 3D structural.
+        retval= [3, 4, 5]
+    return retval
+
+def get_values_at_nodes(element, components= ['N', 'M', 'V'], silent= False):
+    ''' Return the values of the given components at the element nodes.
 
     :param element: element which the components at its nodes will be retrieved.
     :param component: components to retrieve.
@@ -36,7 +50,7 @@ def getIdsLineasSet(preprocessor, setName):
     st= preprocessor.getSets.getSet(setName)
     lineas= st.getLines()
     for l in lineas:
-      retvalIdsLineasSet.append(l.code)
+        retvalIdsLineasSet.append(l.code)
     return retvalIdsLineasSet
 
 def getTagsNodesFromSet(preprocessor, setName):
@@ -45,7 +59,7 @@ def getTagsNodesFromSet(preprocessor, setName):
     st= preprocessor.getSets.getSet(setName)
     nodes= st.nodes
     for n in nodes:
-      retvalSetNodeTags.append(n.tag)
+        retvalSetNodeTags.append(n.tag)
     return retvalSetNodeTags
 
 
@@ -55,7 +69,7 @@ def getTagsElementosSet(preprocessor,setName):
     st= preprocessor.getSets.getSet(setName)
     elems= st.elements
     for n in elems:
-      retvalTagsElementosSet.append(n.tag)
+        retvalTagsElementosSet.append(n.tag)
     return retvalTagsElementosSet
 
 def getNodesInCoordinateRegion(xmin,xmax,ymin,ymax,zmin,zmax,xcSet):
@@ -69,17 +83,17 @@ def getNodesInCoordinateRegion(xmin,xmax,ymin,ymax,zmin,zmax,xcSet):
     retval=list()
     setNodes=xcSet.nodes
     for n in setNodes:
-      vCoord=n.getCoo
-      xNod=vCoord[0]
-      if xNod >= xmin:
-        if xNod <= xmax:
-          yNod=vCoord[1]
-          if yNod >= ymin:
-            if yNod <= ymax:
-              zNod=vCoord[2]
-              if zNod >= zmin:
-                if zNod <= zmax:
-                  retval.append(n)
+        vCoord=n.getCoo
+        xNod=vCoord[0]
+        if(xNod >= xmin):
+            if(xNod <= xmax):
+                yNod=vCoord[1]
+                if(yNod >= ymin):
+                    if(yNod <= ymax):
+                        zNod=vCoord[2]
+                        if(zNod >= zmin):
+                            if(zNod <= zmax):
+                                retval.append(n)
     return retval
 
 def get_attached_PhModElems(elemTag,setElPhMod):
@@ -96,10 +110,10 @@ def get_attached_PhModElems(elemTag,setElPhMod):
     retval=list()
     tmpSectList=list()
     for e in setElPhMod:
-      tgElass=e.getProp("idElem") #tag of the AM element associated 
-      if tgElass==elemTag:
-        tmpSectList.append(e.getProp("dir")) #number of section
-        retval.append(e)
+        tgElass=e.getProp("idElem") #tag of the AM element associated 
+        if tgElass==elemTag:
+            tmpSectList.append(e.getProp("dir")) #number of section
+            retval.append(e)
     #sorting list of elements by number of section
     tmpSectList,retval=zip(*sorted(zip(tmpSectList,retval)))
     return retval

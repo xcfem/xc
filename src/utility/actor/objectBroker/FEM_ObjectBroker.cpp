@@ -627,6 +627,8 @@ XC::UniaxialMaterial *XC::FEM_ObjectBroker::getNewUniaxialMaterial(int classTag)
         return new CableMaterial();
       case MAT_TAG_ENTMaterial:
         return new ENTMaterial();
+      case MAT_TAG_ENCMaterial:
+        return new ENCMaterial();
 
       case MAT_TAG_FedeasBond1:
         return new FedeasBond1Material();

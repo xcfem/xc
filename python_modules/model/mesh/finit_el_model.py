@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+''' Utilities to make FE model creation easier.'''
 
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2017, AO_O"

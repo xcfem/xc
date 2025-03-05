@@ -48,8 +48,8 @@ elements.defaultTransformation= lin.name
 elements.defaultMaterial= HE400B.name
 elem= elements.newElement("ElasticBeam3d",xc.ID([n1.tag, n2.tag]))
 elem.rho= HE400B.get('P')
-vc.defSteelShapeElasticRangeElementParameters(elem,HE400B)
-vc.defVarsControlTensRegElastico3d([elem])
+vc.def_steel_shape_elastic_range_element_parameters(elem,HE400B)
+vc.def_vars_control_tens_elastic_range_3d([elem])
 
 recorder= feProblem.getDomain.newRecorder("element_prop_recorder",None)
 recorder.setElements(xc.ID([0]))
