@@ -1078,12 +1078,12 @@ class PredefinedSpace(object):
         ''' Defines a set with the name argument.
 
         :param setName: name of the set to define.
-        :param nodes: node container to initizalize the nodes of the set.
-        :param element: element container to initizalize the elements of the set.
-        :param points: point container to initizalize the points of the set.
-        :param lines: line container to initizalize the lines of the set.
-        :param surfaces: surface container to initizalize the surfaces of the set.
-        :param bodies: body container to initizalize the bodies of the set.
+        :param nodes: node iterable to initizalize the nodes of the set.
+        :param element: element iterable to initizalize the elements of the set.
+        :param points: point iterable to initizalize the points of the set.
+        :param lines: line iterable to initizalize the lines of the set.
+        :param surfaces: surface iterable to initizalize the surfaces of the set.
+        :param bodies: body iterable to initizalize the bodies of the set.
         '''
         if(setName is None):
             setName= uuid.uuid4().hex

@@ -289,9 +289,32 @@ def append_quadSurfaces_on_points(setPoints,setSurf,onlyIncluded=True):
     for s in lstSurf:
         if s not in Dqsurf:
             Dqsurf.append(s)
+
+def get_lstLines_from_lstPoints(lstPoints,fromSet,onlyIncluded=True):
+    ''' return a list of lines from a given set of points that are included
+    in a given set
+
+    :param lstPoints: list of points
+    :param fromSet: set of entities for the search
+    :param onlyIncluded: True to select only lines whose both ends are in the 
+                         set of points
+                         False to select all lines that 'touch' the set of 
+                         points
+                         (defaults to True)
+    '''
+    if len(fromSet.lines)==0:
+        fromSet.fillDownwards()
+    allLines=fromSet.getLines
+    lstTagsPnt=[p.tag for p in lstPoints]
+    if onlyIncluded==True:
+        lstLin=[l for l in allLines if (l.getKPoints()[0] in lstTagsPnt and l.getKPoints()[1] in lstTagsPnt)]
+    else:
+        lstLin=[l for l in allLines if (l.getKPoints()[0]   in lstTagsPnt or l.getKPoints()[1] in lstTagsPnt)]
+    return lstLin
+    
     
         
-def get_lines_on_points(setPoints,setLinName,onlyIncluded=True):
+def get_setLines_on_setPoints(setPoints,setLinName,onlyIncluded=True):
     '''return a set of lines (and all the entities of lower rank associated) 
     from a given set of points.
 
@@ -305,12 +328,9 @@ def get_lines_on_points(setPoints,setLinName,onlyIncluded=True):
                          
     '''
     prep=setPoints.getPreprocessor
-    allLines=prep.getSets.getSet('total').getLines
-    lstTagsPnt=[p.tag for p in setPoints.getPoints]
-    if onlyIncluded==True:
-        lstLin=[l for l in allLines if (l.getKPoints()[0] in lstTagsPnt and l.getKPoints()[1] in lstTagsPnt)]
-    else:
-        lstLin=[l for l in allLines if (l.getKPoints()[0]   in lstTagsPnt or l.getKPoints()[1] in lstTagsPnt)]
+    totalSet=prep.getSets.getSet('total').getLines
+    lstPoints=[p for p in setPoints.getPoints]
+    lstLin=get_lstLines_from_lstPoints(lstPoints,totalSet,onlyIncluded)
     s=lstLin_to_set(prep,lstLin,setLinName)
     s.fillDownwards()
     return s
@@ -352,6 +372,22 @@ def get_nodes_pos3D_wire(setBusq,lstPos3DWire,tol=0.01):
                     nodTags.add(n.tag)
                     retval.append(n)
     return retval
+
+def get_lstNodes_from_lstLines(lstLines,fromSet,tol=0.01):
+    '''return the list of nodes from the set fromSet
+    that touch a list of lines
+    '''
+    if len(fromSet.nodes)==0:
+        fromSet.fillDownwards()
+    lstNodTags=list()
+    for l in lstLines:
+        lstNodLine=get_nodes_wire(fromSet,l.getVertices,tol)
+        lstNodTags+=[n.tag for n in lstNodLine]
+    lstNodTags=list(set(lstNodTags))
+    prep=fromSet.getPreprocessor
+    nodH=prep.getNodeHandler
+    lstNod=[nodH.getNode(tag) for tag in lstNodTags]
+    return lstNod
 
 
 def get_set_nodes_plane_XY(setName,setBusq,zCoord,tol=1e-4):
@@ -410,7 +446,8 @@ def get_lstNod_on_points_fromSet(setFrom):
     '''return the list of nearest nodes to all the points included in  
     the set of entities 'setFrom'
     '''
-    setFrom.fillDownwards()
+    if len(setFrom.nodes)==0:
+        setFrom.fillDownwards()
     pts=setFrom.getPoints
     return [p.getNode() for p in pts]
 
