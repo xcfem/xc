@@ -116,6 +116,9 @@ if(result!=0):
     print('unconstrained node id: ', unconstrainedNode.tag)
     print('unconstrained node position: ', unconstrainedNode.getInitialPos3d)
     exit(1)
+stressesOK= pileCap.checkStressesSign()
+if(not stressesOK):
+    exit(1)
 
 # Check results.
 modelSpace.calculateNodalReactions()
@@ -130,7 +133,7 @@ ratio04= math.sqrt((R0a[2]-F_3)**2+(R0b[2]-F_3)**2+(R0c[2]-F_3)**2)/F
 R0= R0a+R0b+R0c
 
 tol= 1e-10
-testOK= ((abs(ratio01)<tol) and (abs(ratio02)<tol) and (abs(ratio03)<tol) and (abs(ratio04)<tol))
+testOK= stressesOK & ((abs(ratio01)<tol) and (abs(ratio02)<tol) and (abs(ratio03)<tol) and (abs(ratio04)<tol))
 
 '''
 # Report results.

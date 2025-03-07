@@ -195,7 +195,7 @@ comb7= combs.newLoadCombination("ELU007","1.35*G + 1.00*H2ELU")
 comb8= combs.newLoadCombination("ELU008","1.35*G + 1.00*H3ELU")
 
 if(strutAndTieModel):
-    analysis= predefined_solutions.penalty_newton_raphson(feProblem, maxNumIter= 20, printFlag= 0)
+    analysis= predefined_solutions.penalty_newton_raphson(feProblem, maxNumIter= 50, convergenceTestTol= 1e-2, printFlag= 0)
 else:
     modelSpace.setupAnalysis()
     analysis= modelSpace.analysis
@@ -217,7 +217,10 @@ for combName in combs.getKeys():
         unconstrainedNode= modelSpace.locateEquationNumber(eqNumber= info-1)
         lmsg.error('unconstrained node id: '+str(unconstrainedNode.tag))
         lmsg.error('unconstrained node position: '+str(unconstrainedNode.getInitialPos3d)+'\n')
-        # exit(1)
+        exit(1)
+    stressesOK= pileCap.checkStressesSign()
+    if(not stressesOK):
+        exit(1)
     modelSpace.calculateNodalReactions()
     varNames= vc.update_reactions_envelope(nodes= pileBottomNodes)
     vc.update_envelope_internal_forces_beam_elem_3d(lintelElement)
@@ -247,7 +250,7 @@ ratio3= abs(RzMax-RzMaxRef)/RzMaxRef
 
 ratio4= abs(RzMin-RzMinRef)/abs(RzMinRef)
 
-testOK= (abs(ratio1)<1e-10) and (abs(ratio2)<1e-10) and (abs(ratio3)<1e-10) and (abs(ratio4)<1e-10)
+testOK= stressesOK and (abs(ratio1)<1e-10) and (abs(ratio2)<1e-10) and (abs(ratio3)<1e-10) and (abs(ratio4)<1e-10)
 
 '''
 print('lintelVyMin= ', lintelMinVy/1e3, ratio1)

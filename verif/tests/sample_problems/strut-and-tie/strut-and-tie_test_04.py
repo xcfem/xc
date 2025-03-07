@@ -104,7 +104,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.penalty_newton_raphson(feProblem, maxNumIter= 20, printFlag= 0)
 result= analysis.analyze(1)
 if(result!=0):
-    lmsg.error("Can't solve.")
+    lmsg.error("Can't solve for load case: "+str(lp0.name))
     info= None
     solver= analysis.linearSOE.solver
     if(solver.hasProp("info")):
@@ -112,6 +112,9 @@ if(result!=0):
     unconstrainedNode= modelSpace.locateEquationNumber(eqNumber= info-1)
     print('unconstrained node id: ', unconstrainedNode.tag)
     print('unconstrained node position: ', unconstrainedNode.getInitialPos3d)
+    exit(1)
+stressesOK= pileCap.checkStressesSign()
+if(not stressesOK):
     exit(1)
 
 # Check results.
@@ -139,7 +142,10 @@ modelSpace.addLoadCaseToDomain(lp1.name)
 
 result= analysis.analyze(1)
 if(result!=0):
-    lmsg.error("Can't solve.")
+    lmsg.error("Can't solve for load case: "+str(lp1.name))
+    # exit(1)
+stressesOK= pileCap.checkStressesSign()
+if(not stressesOK):
     exit(1)
     
 # Check results.
@@ -164,7 +170,10 @@ modelSpace.addLoadCaseToDomain(lp2.name)
 
 result= analysis.analyze(1)
 if(result!=0):
-    lmsg.error("Can't solve.")
+    lmsg.error("Can't solve for load case: "+str(lp2.name))
+    exit(1)
+stressesOK= pileCap.checkStressesSign()
+if(not stressesOK):
     exit(1)
     
 # Check results.
@@ -189,7 +198,10 @@ modelSpace.addLoadCaseToDomain(lp3.name)
 
 result= analysis.analyze(1)
 if(result!=0):
-    lmsg.error("Can't solve.")
+    lmsg.error("Can't solve for load case: "+str(lp3.name))
+    exit(1)
+stressesOK= pileCap.checkStressesSign()
+if(not stressesOK):
     exit(1)
     
 # Check results.
@@ -202,7 +214,7 @@ ratio32= abs(R3a[1]+R3b[1]+R3c[1])/F
 ratio33= abs(R3a[2]+R3b[2]+R3c[2]+F)/F
 R3= R3a+R3b+R3c
 
-testOK= testOK and ((abs(ratio31)<tol) and (abs(ratio32)<tol) and (abs(ratio33)<tol))
+testOK= testOK and stressesOK and ((abs(ratio31)<tol) and (abs(ratio32)<tol) and (abs(ratio33)<tol))
 
 '''
 # Report results.
@@ -261,6 +273,7 @@ else:
 # oh.displayDispRot(itemToDisp='uY')
 
 # # DXF output
+# fname= os.path.basename(__file__)
 # from import_export import mesh_entities
 # xcTotalSet= modelSpace.getTotalSet()
 # me= mesh_entities.MeshData()

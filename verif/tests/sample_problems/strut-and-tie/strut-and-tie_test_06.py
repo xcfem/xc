@@ -206,6 +206,9 @@ for combName in combs.getKeys():
         lmsg.error('unconstrained node id: ', unconstrainedNode.tag)
         lmsg.error('unconstrained node position: ', unconstrainedNode.getInitialPos3d)
         exit(1)
+    stressesOK= pileCap.checkStressesSign()
+    if(not stressesOK):
+        exit(1)
     varNames= vc.update_reactions_envelope(nodes= pileBottomNodes)
     vc.update_envelope_internal_forces_beam_elem_3d(lintelElement)
 
@@ -227,7 +230,7 @@ for n in pileBottomNodes:
 ratio3= abs(RzMax-14176.22576663143e3)/14176.22576663143e3
 ratio4= abs(RzMin+933.1167556855067e3)/933.1167556855067e3
 
-testOK= (abs(ratio1)<1e-10) and (abs(ratio2)<1e-10) and (abs(ratio3)<1e-10) and (abs(ratio4)<1e-10)
+testOK= stressesOK and (abs(ratio1)<1e-10) and (abs(ratio2)<1e-10) and (abs(ratio3)<1e-10) and (abs(ratio4)<1e-10)
 
 '''
 print('lintelVyMin= ', lintelMinVy/1e3, ratio1)
