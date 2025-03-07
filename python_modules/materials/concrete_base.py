@@ -956,8 +956,8 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
         :param preprocessor: preprocessor of the finite element problem.
         :param name: name for the new material.
-        :param a: parameter to define the compresion behaviour.
-        :param b: parameter to define the compresion behaviour.
+        :param a: parameter to define the tension behaviour.
+        :param b: parameter to define the tension behaviour.
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
