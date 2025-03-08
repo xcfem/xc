@@ -81,6 +81,98 @@ def define_dummy_springs(modelSpace, nodes):
     modelSpace.setDefaultMaterials(previousDefaultMaterials)
     return retval
 
+class StrutAndTieModel(object):
+    ''' Base class for strut-and-tie models.
+
+    '''
+    def getStrutMaterial(self, modelSpace, concrete, linearElastic):
+        ''' Get the material for the strut elements.
+
+        :param modelSpace: PredefinedSpace object used to create the FE model.
+        :param concrete: concrete material.
+        :param linearElastic: if True, assign a linear elastic material to
+                              struts and ties (insteaa of an no-tension or
+                              no-compression material). Used with debugging
+                              purposes.
+        '''
+        self.concrete= concrete
+        if(linearElastic):
+            retval= self.concrete.defElasticMaterial(preprocessor= modelSpace.preprocessor)
+        else:
+            retval= self.concrete.defElasticNoTensMaterial(preprocessor= modelSpace.preprocessor, a= self.concrete_a)
+        return retval
+
+    def getTieMaterial(self, modelSpace, reinfSteel, linearElastic):
+        ''' Get the material for the tie elements.
+
+        :param modelSpace: PredefinedSpace object used to create the FE model.
+        :param reinfSteel: reinforcing steel material.
+        :param linearElastic: if True, assign a linear elastic material to
+                              struts and ties (insteaa of an no-tension or
+                              no-compression material). Used with debugging
+                              purposes.
+        '''
+        self.reinfSteel= reinfSteel
+        if(linearElastic):
+            retval= self.reinfSteel.defElasticMaterial(preprocessor= modelSpace.preprocessor)
+        else:
+            retval= self.reinfSteel.defElasticNoCompressionMaterial(preprocessor= modelSpace.preprocessor, a= self.steel_a)
+        return retval
+    
+    def getStrutList(self):
+        ''' Return a list of all the struts.'''
+        retval= list()
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        errorMessage= className+'.'+methodName+'; error: this method must be overloaded in derived classes.'
+        lmsg.error(errorMessage)
+        return retval
+
+    def getTieList(self):
+        ''' Return a list of all the ties.'''
+        retval= list()
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        errorMessage= className+'.'+methodName+'; error: this method must be overloaded in derived classes.'
+        lmsg.error(errorMessage)
+        return retval
+
+    def checkStressesSign(self):
+        ''' Check the struts are compressed and the ties tensioned.'''
+        retval= True
+        
+        # Check struts.
+        struts= self.getStrutList()
+        if(struts):
+            fctm= self.concrete.fctk() # mean concrete characteristic tensile strength
+            for s in struts:
+                N= s.getN()
+                stress= N/s.sectionArea
+                if(stress>fctm):
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    errorMessage= className+'.'+methodName+"; strut :"+str(s.tag)
+                    errorMessage+= ' has a positive stress: '+str(stress/1e6)
+                    errorMessage+= ' MPa. Something is wrong with this model.'
+                    lmsg.error(errorMessage)
+                    retval= False
+        # Check ties.
+        ties= self.getTieList()
+        if(ties):
+            steelCompressionLimit= -self.reinfSteel.fyd()/1e2
+            for t in ties:
+                N= t.getN()
+                stress= N/t.sectionArea
+                if(stress<steelCompressionLimit):
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    errorMessage= className+'.'+methodName+"; tie :"+str(s.tag)
+                    errorMessage+= ' has a negative stress: '+str(stress/1e6)
+                    errorMessage+= ' MPa. Something is wrong with this model.'
+                    lmsg.error(errorMessage)
+                    retval= False
+        return retval
+    
     
 # 2 pile cap geometry.
 #    
@@ -99,7 +191,7 @@ def define_dummy_springs(modelSpace, nodes):
 #         |               | 
 #    left | pile    right | pile
 #    
-class PileCap2Piles(object):
+class PileCap2Piles(StrutAndTieModel):
     ''' Creates a strut-and-tie model for a pile cap for two piles.
 
     :ivar pierBottomNode: bottom node of the pier.
@@ -107,8 +199,8 @@ class PileCap2Piles(object):
     :ivar rightPileTopNode: top node of the right pile.
     :ivar pierEffectiveWidth: effective width of the pier.
     '''
-    concrete_a= .001 # parameter to define the tension behaviour of concrete.
-    steel_a= .001 # parameter to define the compression behaviour of steel.
+    concrete_a= .0001 # parameter to define the tension behaviour of concrete.
+    steel_a= .0001 # parameter to define the compression behaviour of steel.
     def __init__(self, pierBottomNode, leftPileTopNode, rightPileTopNode, pierEffectiveWidth):
         ''' Constructor.
 
@@ -117,6 +209,7 @@ class PileCap2Piles(object):
         :param rightPileTopNode: top node of the right pile.
         :param pierEffectiveWidth: effective width of the pier.
         '''
+        super().__init__()
         self.pierBottomNode= pierBottomNode
         self.leftPileTopNode= leftPileTopNode
         self.rightPileTopNode= rightPileTopNode
@@ -192,10 +285,7 @@ class PileCap2Piles(object):
         # Define elements.
         ## Define struts.
         ### Define material.
-        if(linearElastic):
-            concreteNoTension= concrete.defElasticMaterial(preprocessor= modelSpace.preprocessor)
-        else:
-            concreteNoTension= concrete.defElasticNoTensMaterial(preprocessor= modelSpace.preprocessor, a= self.concrete_a)
+        concreteNoTension= self.getStrutMaterial(modelSpace= modelSpace, concrete= concrete, linearElastic= linearElastic)
         modelSpace.setElementDimension(dim)
         modelSpace.setDefaultMaterial(concreteNoTension)
         self.pileCapStruts= list() # Struts in the pile cap.
@@ -219,10 +309,7 @@ class PileCap2Piles(object):
 
         ## Define ties.
         ### Define material.
-        if(linearElastic):
-            steelNoCompression= reinfSteel.defElasticMaterial(preprocessor= modelSpace.preprocessor)
-        else:
-            steelNoCompression= reinfSteel.defElasticNoCompressionMaterial(preprocessor= modelSpace.preprocessor, a= self.steel_a)
+        steelNoCompression= self.getTieMaterial(modelSpace= modelSpace, reinfSteel= reinfSteel, linearElastic= linearElastic)
         modelSpace.setDefaultMaterial(steelNoCompression)
         modelSpace.setElementDimension(dim)
         ### Define top-down ties.
@@ -346,8 +433,22 @@ class PileCap2Piles(object):
         ''' Return a list containing the elements that model the bottom chord
             tie.'''
         return self.pileCapBottomChordTies
-                    
-class PileCap3Piles(object):
+
+    def getStrutList(self):
+        ''' Return a list of all the struts.'''
+        retval= list()
+        if(hasattr(self,'pileCapStruts')): # if strut-and-tie model is defined
+            retval= self.pileCapStruts+self.pierStruts
+        return retval
+
+    def getTieList(self):
+        ''' Return a list of all the ties.'''
+        retval= list()
+        if(hasattr(self,'pileCapTopDownTies')): # if strut-and-tie model is defined
+            retval= self.pileCapTopDownTies+self.pierTopDownTies+self.pileCapTopChordTies+self.pileCapBottomChordTies
+        return retval
+
+class PileCap3Piles(StrutAndTieModel):
     ''' Creates a strut-and-tie model for a pile cap for three piles.
 
     :ivar pierBottomNode: bottom node of the pier.
@@ -368,13 +469,13 @@ class PileCap3Piles(object):
         :param pileTopNodeC: top node of the third pile.
         :param pierEffectiveDiameter: effective diameter of the pier.
         '''
+        super().__init__()
         self.pierBottomNode= pierBottomNode
         self.pileTopNodeA= pileTopNodeA
         self.pileTopNodeB= pileTopNodeB
         self.pileTopNodeC= pileTopNodeC
         self.pierEffectiveDiameter= pierEffectiveDiameter
         
-
     def createStrutAndTieModel(self, modelSpace, strutArea, concrete, pileTiesArea, radialTiesArea, bottomChordsTiesArea, topChordsTiesArea, shearTiesArea, reinfSteel, xcPierSectionMaterial, linearElastic= False):
         ''' Creates an strut-and-tie model and attach it to the nodes of the 
             pier and the piles.
@@ -458,11 +559,7 @@ class PileCap3Piles(object):
         # Define elements.
         ## Define struts.
         ### Define material.
-        self.concrete= concrete
-        if(linearElastic):
-            concreteNoTension= self.concrete.defElasticMaterial(preprocessor= modelSpace.preprocessor)
-        else:
-            concreteNoTension= self.concrete.defElasticNoTensMaterial(preprocessor= modelSpace.preprocessor, a= self.concrete_a)
+        concreteNoTension= self.getStrutMaterial(modelSpace= modelSpace, concrete= concrete, linearElastic= linearElastic)
         modelSpace.setElementDimension(3)
         modelSpace.setDefaultMaterial(concreteNoTension)
         
@@ -533,11 +630,7 @@ class PileCap3Piles(object):
         
         ## Define ties.
         ### Define material.
-        self.reinfSteel= reinfSteel
-        if(linearElastic):
-            steelNoCompression= self.reinfSteel.defElasticMaterial(preprocessor= modelSpace.preprocessor)
-        else:
-            steelNoCompression= self.reinfSteel.defElasticNoCompressionMaterial(preprocessor= modelSpace.preprocessor, a= self.steel_a)
+        steelNoCompression= self.getTieMaterial(modelSpace= modelSpace, reinfSteel= reinfSteel, linearElastic= linearElastic)
         modelSpace.setDefaultMaterial(steelNoCompression)
         modelSpace.setElementDimension(3)
 
@@ -610,14 +703,16 @@ class PileCap3Piles(object):
             n0Bottom= n1Bottom
 
         #### Top to bottom bars (they can take tensions and compressions).
-        pierBarsMaterial= self.reinfSteel.defElasticMaterial(preprocessor= modelSpace.preprocessor)
-        modelSpace.setDefaultMaterial(pierBarsMaterial)
-        pierBarsArea= pileTiesArea # XXX 
-        self.pierBars= list()
+        # Top-down ties in the pier(dummy bars to make the forces reach the
+        # bottom of the pile cap).
+        pierTopDownBarsMaterial= self.reinfSteel.defElasticMaterial(preprocessor= modelSpace.preprocessor)
+        modelSpace.setDefaultMaterial(pierTopDownBarsMaterial)
+        pierTopDownBarsArea= pileTiesArea # XXX 
+        self.pierTopDownBars= list()
         for (nBottom, nTop) in zip(pierContourBottomNodes[:-1], pierContourTopNodes[:-1]):
             newTie= modelSpace.newElement("Truss", [nBottom.tag, nTop.tag])
-            newTie.sectionArea= pierBarsArea
-            self.pierBars.append(newStrut)
+            newTie.sectionArea= pierTopDownBarsArea
+            self.pierTopDownBars.append(newStrut)
         
         ### Define dummy springs (to fix rotational DOFs only).
         nodesToConstrain= contourTopNodes+midContourBottomNodes+pierContourBottomNodes
@@ -706,42 +801,6 @@ class PileCap3Piles(object):
         retval= list()
         if(hasattr(self,'radialTies')): # if strut-and-tie model is defined
             retval= self.radialTies+self.stabilizingTies+self.topChordTies+self.bottomChordTies+self.pileTies+self.shearTies+self.pierTopChordTies+self.pierBottomChordTies
-        return retval
-
-    def checkStressesSign(self):
-        ''' Check the struts are compressed and the ties tensioned.'''
-        retval= True
-        
-        # Check struts.
-        struts= self.getStrutList()
-        if(struts):
-            fctm= self.concrete.fctk() # mean concrete characteristic tensile strength
-            for s in struts:
-                N= s.getN()
-                stress= N/s.sectionArea
-                if(stress>fctm):
-                    className= type(self).__name__
-                    methodName= sys._getframe(0).f_code.co_name
-                    errorMessage= className+'.'+methodName+"; strut :"+str(s.tag)
-                    errorMessage+= ' has a positive stress: '+str(stress/1e6)
-                    errorMessage+= ' MPa. Something is wrong with this model.'
-                    lmsg.error(errorMessage)
-                    retval= False
-        # Check ties.
-        ties= self.getTieList()
-        if(ties):
-            steelCompressionLimit= -self.reinfSteel.fyd()/1e2
-            for t in ties:
-                N= t.getN()
-                stress= N/t.sectionArea
-                if(stress<steelCompressionLimit):
-                    className= type(self).__name__
-                    methodName= sys._getframe(0).f_code.co_name
-                    errorMessage= className+'.'+methodName+"; tie :"+str(s.tag)
-                    errorMessage+= ' has a negative stress: '+str(stress/1e6)
-                    errorMessage+= ' MPa. Something is wrong with this model.'
-                    lmsg.error(errorMessage)
-                    retval= False
         return retval
 
         
