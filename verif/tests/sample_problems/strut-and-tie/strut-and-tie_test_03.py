@@ -123,6 +123,9 @@ if(result!=0):
     print('unconstrained node id: ', unconstrainedNode.tag)
     print('unconstrained node position: ', unconstrainedNode.getInitialPos2d)
     exit(1)
+stressesOK= pileCap.checkStressesSign()
+if(not stressesOK):
+    exit(1)
 
 # Check results.
 modelSpace.calculateNodalReactions()
@@ -139,7 +142,7 @@ print('R0= ', R0*1/1e3, 'kN')
 print('ratio1= ', ratio1)
 print('ratio2= ', ratio2)
 '''
-testOK= (abs(ratio1)<1e-8) and (abs(ratio2)<1e-8)
+testOK= stressesOK and (abs(ratio1)<1e-8) and (abs(ratio2)<1e-8)
 
 import os
 from misc_utils import log_messages as lmsg
