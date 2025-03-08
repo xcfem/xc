@@ -9,6 +9,12 @@ Concerning the values of the results see the section 6 "Human error" in the same
 document.
 '''
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2024, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import math
 import geom
 import xc
