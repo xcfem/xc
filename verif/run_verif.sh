@@ -1733,6 +1733,8 @@ python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_coulomb
 python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_coulomb_soil_test_02.py
 python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_coulomb_soil_test_03.py
 python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_bell_soil_test_01.py
+python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_test_04.py
+python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_test_05.py
 
 #Database tests
 echo "$BLEU" "Database tests (MySQL, Berkeley db, sqlite,...)." "$NORMAL"
