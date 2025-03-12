@@ -2,6 +2,13 @@
 ''' Nonlinear soil spring model inspired in the example 2 of the publication "User's Guide: Computer Program for Winkler Soil-Structure Interaction Analysis of Sheet-Pile Walls (CWALSSI)" by William P. Dawkins, Oklahoma State University U.S. Army Corps of Engineers.
 '''
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2024, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+import os
 import math
 import geom
 import xc
@@ -15,7 +22,6 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from materials.sections.fiber_section import def_column_RC_section
 from misc_utils import log_messages as lmsg
-# from tabulate import tabulate
 
 # Units
 lbf= 4.44822 # Pound force to N
@@ -126,17 +132,12 @@ MMaxRef= 6.171e4*lbf*ft
 ratio4= abs(MMax-MMaxRef)/MMaxRef
 MMinRef= -4.824e3*lbf*ft 
 ratio5= abs(MMin-MMinRef)/MMinRef
+# The results are quite different from those of the reference document, this
+# difference is probably due to the differences between the analysis models
+# and the different assumptions in both codes. Anyway, it is interesting
+# to keep the test for future reference. 
 
-
-import os
-fname= os.path.basename(__file__)
-csvFileName= fname.replace(".py", ".csv")
-from tabulate import tabulate
-outputTable= pw.get_results_table(resultsDict= results)
-content= tabulate(outputTable, headers= 'firstrow', tablefmt="tsv")
-with open(csvFileName, "w") as csvFile:
-    csvFile.write(content)
-
+'''
 print('anchor node displacement: ', anchorNode.getDisp[0]*1e3, 'mm')
 print('anchor axial force N= ', N/1e3, 'kN')
 print('ratio1= ', ratio1)
@@ -153,17 +154,35 @@ print('ratio4= ', ratio4)
 print('MMin= ', MMin/1e3, 'kN.m')
 print('MMinRef= ', MMinRef/1e3, 'kN.m')
 print('ratio5= ', ratio5)
+'''
 
+import os
+from misc_utils import log_messages as lmsg
+fname= os.path.basename(__file__)
+if abs(ratio1)<0.1:
+    print('test: '+fname+': ok.')
+else:
+    lmsg.error('test: '+fname+' ERROR.')
+
+# # Write results on CSV file.
+# fname= os.path.basename(__file__)
+# csvFileName= fname.replace(".py", ".csv")
+# from tabulate import tabulate
+# outputTable= pw.get_results_table(resultsDict= results)
+# content= tabulate(outputTable, headers= 'firstrow', tablefmt="tsv")
+# with open(csvFileName, "w") as csvFile:
+#     csvFile.write(content)
+    
 # Matplotlib output.
-pw.plot_results(resultsDict= results, title= 'Test based on the example 2 of the CWALSSI program manual.')
+# pw.plot_results(resultsDict= results, title= 'Test based on the example 2 of the CWALSSI program manual.')
 
-# VTK Graphic output.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(pileWall.modelSpace)
-oh.displayFEMesh()
-# oh.displayLocalAxes()
-oh.displayLoads()
-oh.displayReactions(reactionCheckTolerance= reactionCheckTolerance)
-oh.displayDispRot('uX', defFScale= 10.0)
-oh.displayIntForcDiag('M')
-# oh.displayIntForcDiag('V')
+# # VTK Graphic output.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(pileWall.modelSpace)
+# oh.displayFEMesh()
+# # oh.displayLocalAxes()
+# oh.displayLoads()
+# oh.displayReactions(reactionCheckTolerance= reactionCheckTolerance)
+# oh.displayDispRot('uX', defFScale= 10.0)
+# oh.displayIntForcDiag('M')
+# # oh.displayIntForcDiag('V')

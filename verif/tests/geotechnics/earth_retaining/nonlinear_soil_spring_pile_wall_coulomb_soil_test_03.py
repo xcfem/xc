@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
-''' Nonlinear soil spring model inspired in the example 14.1 of the book "Principles of Foundation Engineering" of Braja M. Das. Eight Edition. CENGAGE Learning. 2016.'''
+''' Nonlinear soil spring model inspired in the example 14.1 of the book "Principles of Foundation Engineering" of Braja M. Das. Eight Edition. CENGAGE Learning. 2016.
+'''
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2024, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import math
 import geom

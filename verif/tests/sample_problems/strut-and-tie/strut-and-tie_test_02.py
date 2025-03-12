@@ -118,6 +118,9 @@ if(result!=0):
     print('unconstrained node id: ', unconstrainedNode.tag)
     print('unconstrained node position: ', unconstrainedNode.getInitialPos2d)
     exit(1)
+stressesOK= pileCap.checkStressesSign()
+if(not stressesOK):
+    exit(1)
 
 # Check results.
 T0= 0.0
@@ -140,6 +143,9 @@ result= analysis.analyze(1)
 if(result!=0):
     lmsg.error("Can't solve.")
     exit(1)
+stressesOK= pileCap.checkStressesSign()
+if(not stressesOK):
+    exit(1)
 
 # Check results.
 modelSpace.calculateNodalReactions()
@@ -161,6 +167,9 @@ result= analysis.analyze(1)
 if(result!=0):
     lmsg.error("Can't solve.")
     exit(1)
+stressesOK= pileCap.checkStressesSign()
+if(not stressesOK):
+    exit(1)
     
 # Check results.
 modelSpace.calculateNodalReactions()
@@ -181,6 +190,9 @@ modelSpace.addLoadCaseToDomain(lp3.name)
 result= analysis.analyze(1)
 if(result!=0):
     lmsg.error("Can't solve.")
+    exit(1)
+stressesOK= pileCap.checkStressesSign()
+if(not stressesOK):
     exit(1)
     
 # Check results.
@@ -215,7 +227,7 @@ print('ratio6= ', ratio6)
 print('ratio7= ', ratio7)
 '''
 
-testOK= (abs(ratio1)<1e-3) and max(abs(ratio2), abs(ratio3), abs(ratio4), abs(ratio5), abs(ratio6), abs(ratio7))<1e-8
+testOK= stressesOK and (abs(ratio1)<1e-3) and max(abs(ratio2), abs(ratio3), abs(ratio4), abs(ratio5), abs(ratio6), abs(ratio7))<1e-8
 
 import os
 from misc_utils import log_messages as lmsg

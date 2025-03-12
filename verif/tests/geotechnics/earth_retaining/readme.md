@@ -17,3 +17,5 @@ Verification tests concerning earth retaining structures.
 - [Eurocode 7: Geotechnical design](https://eurocodes.jrc.ec.europa.eu/EN-Eurocodes/eurocode-7-geotechnical-design)
 - [Eurocode 7: Geotechnical Design. Worked examples](https://publications.jrc.ec.europa.eu/repository/handle/JRC85029)
 - [Eurocode 7: Design approachs and partial factors](https://www.midasgeotech.com/blog/design-approach-partial-factor)
+### Benchmark tests
+- [Proceedings of the International Workshop on the evaluation of Eurocode 7](https://www.is-argebau.de/Dokumente/42310413.pdf)
