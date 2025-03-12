@@ -999,7 +999,8 @@ double XC::FiberSectionBase::getArea(void) const
 double XC::FiberSectionBase::getHomogenizedI(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= " << E0
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; homogenization reference modulus too small; E0= " << E0
 		<< Color::def << std::endl; 
     const Line2d axis= getInternalForcesAxis();
     return fibers.getIHomogenizedSection(E0,axis);
@@ -1009,7 +1010,8 @@ double XC::FiberSectionBase::getHomogenizedI(const double &E0) const
 double XC::FiberSectionBase::getSPosHomogenized(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= " << E0
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; homogenization reference modulus too small; E0= " << E0
 		<< Color::def << std::endl; 
     const Line2d axis= getInternalForcesAxis();
     return fibers.getSPosHomogenizedSection(E0,HalfPlane2d(axis));
