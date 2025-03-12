@@ -72,8 +72,13 @@ class_<polygon_2D_list >("polygon_2D_list")
   .def("append", static_cast<void (polygon_2D_list::*)(const Polygon2d&)>(&polygon_2D_list::push_back))
   ;
 
+Segment2d (Polygon2d::*Plg2dIntersLine2d)(const Line2d &) const= &Polygon2d::getIntersection;
+Segment2d (Polygon2d::*Plg2dIntersRay2d)(const Ray2d &) const= &Polygon2d::getIntersection;
+Segment2d (Polygon2d::*Plg2dIntersSegment2d)(const Segment2d &) const= &Polygon2d::getIntersection;
 void (Polygon2d::*unePolygon2d)(const Polygon2d &) =&Polygon2d::une;
-boost::python::list (Polygon2d::*clipPolygon)(const Polygon2d &) const=&Polygon2d::ClipPy;
+boost::python::list (Polygon2d::*clipPolygon)(const Polygon2d &) const= &Polygon2d::ClipPy;
+boost::python::list (Polygon2d::*Plg2dIntersHalfPlane2d)(const HalfPlane2d &) const= &Polygon2d::getIntersectionPy;
+boost::python::list (Polygon2d::*Plg2dIntersPlg2d)(const Polygon2d &) const= &Polygon2d::getIntersectionPy;
 class_<Polygon2d, Polygon2d *, bases<PolygonalSurface2d> >("Polygon2d")
   .def(init<>())
 //.def(init<GeomObj::list_Pos2d>()) # Apparently this doesn't works.
@@ -92,6 +97,11 @@ class_<Polygon2d, Polygon2d *, bases<PolygonalSurface2d> >("Polygon2d")
   .def("clipUsingPolygon",&Polygon2d::clipBy)
   .def("getBayazitDecomposition",&Polygon2d::getBayazitDecomposition)
   .def("getVertexList",&Polygon2d::getVertexListPy,"Return a Python list containing the positions of the polygon vertices.")
+  .def("getIntersection",Plg2dIntersLine2d, "return the intersection with the given line.")
+  .def("getIntersection",Plg2dIntersRay2d, "return the intersection with the given ray.")
+  .def("getIntersection",Plg2dIntersSegment2d, "return the intersection with the given segment.")
+  .def("getIntersection",Plg2dIntersHalfPlane2d, "return the intersection with the given half plane.")
+  .def("getIntersection",Plg2dIntersPlg2d, "return the intersection with the given polygon.")
   .def("clip",clipLine, "Clips the line.")
   .def("clip",clipRay, "Clips the ray.")
   .def("clip",clipSegment, "Clips the segment.")
