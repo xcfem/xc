@@ -62,9 +62,9 @@ class DeformationPlane;
 enum ClaseEsfuerzo {SIMPLE_TENSION,COMPOSED_TENSION,FLEXION_SIMPLE,FLEXION_COMPUESTA,SIMPLE_COMPRESSION,COMPOSED_COMPRESSION,ERROR};
 
 
-//! @ingroup MATSCCFibers
-//
+
 //! @brief Fiber pointers container.
+//! @ingroup MATSCCFibers
 class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>, public MovableObject
   {
   public:
