@@ -68,7 +68,7 @@ quadsSet.fillDownwards()
 ## Compute peripheral lines.
 peripheralLines= list()
 for l in quadsSet.lines:
-    nSurfaces= l.getNumConnectedSurfaces
+    nSurfaces= l.numConnectedSurfaces
     if(nSurfaces<2):
         peripheralLines.append(l)
 ## Compute peripheral surfaces.
