@@ -127,7 +127,7 @@ nodeTagsOK= True
 constrainedNodeTagsB= list()
 xcTotalSet= modelSpace.getTotalSet()
 for n in xcTotalSet.nodes:
-    constraints= n.connectedConstraints()
+    constraints= n.connectedConstraints
     if(len(constraints)>0):
         constrainedNodeTagsB.append(n.tag)
         for c in constraints:
