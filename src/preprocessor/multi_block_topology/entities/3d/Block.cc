@@ -242,13 +242,13 @@ XC::Pnt *XC::Block::getVertex(const size_t &i)
       {
         std::set<const Pnt *> intersection;
         if(i==5)
-	  intersection= getCommonVertex(*sups[1].Surface(),*sups[4].Surface(),*sups[5].Surface());
+	  intersection= get_common_vertex(*sups[1].Surface(),*sups[4].Surface(),*sups[5].Surface());
 	else if(i==6)
-	  intersection= getCommonVertex(*sups[1].Surface(),*sups[2].Surface(),*sups[5].Surface());
+	  intersection= get_common_vertex(*sups[1].Surface(),*sups[2].Surface(),*sups[5].Surface());
 	else if(i==7)
-	  intersection= getCommonVertex(*sups[2].Surface(),*sups[3].Surface(),*sups[5].Surface());
+	  intersection= get_common_vertex(*sups[2].Surface(),*sups[3].Surface(),*sups[5].Surface());
 	else if(i==8)
-	  intersection= getCommonVertex(*sups[3].Surface(),*sups[4].Surface(),*sups[5].Surface());
+	  intersection= get_common_vertex(*sups[3].Surface(),*sups[4].Surface(),*sups[5].Surface());
 	assert(intersection.size()==1);
 	return retval= const_cast<Pnt *>(*intersection.begin()); 
       }

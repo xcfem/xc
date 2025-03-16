@@ -144,7 +144,7 @@ class Body: public EntMdlr
     void add_to_sets(std::set<SetBase *> &);
   };
 
-std::set<const Body *> getConnectedBodies(const Face &s);
+std::set<const Body *> get_connected_bodies(const Face &s);
 
 } //end of XC namespace
 

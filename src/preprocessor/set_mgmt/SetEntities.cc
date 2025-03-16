@@ -335,13 +335,13 @@ void XC::SetEntities::fillUpwards(const SetMeshComp &mc)
   {
     for(pnt_iterator i=points.begin();i!=points.end();i++)
       {
-        std::set<const Edge *> ll= getConnectedLines(**i);
+        std::set<const Edge *> ll= get_connected_lines(**i);
         for(std::set<const Edge *>::const_iterator j= ll.begin();j!=ll.end();j++)
           lines.push_back(const_cast<Edge *>(*j));
       }
     for(lin_iterator i=lines.begin();i!=lines.end();i++)
       {
-        lst_surface_ptrs ss(getConnectedSurfaces(**i));
+        lst_surface_ptrs ss(get_connected_surfaces(**i));
         surfaces.insert_unique(surfaces.end(),ss.begin(),ss.end());
       }
     for(lst_surface_ptrs::const_iterator i= surfaces.begin();i!=surfaces.end();i++)
@@ -1023,7 +1023,7 @@ void XC::SetEntities::splitLinesAtIntersections(const double &tol)
 	Pnt *pnt= *i;
 	const Pos3d pos= pnt->getPos();
 	std::set<Edge *> neighbors= line_shadows.getNeighbors(pos-offset,pos+offset);
-        std::set<const Edge *> conn= getConnectedLines(*pnt);
+        std::set<const Edge *> conn= get_connected_lines(*pnt);
 	// candidates= neighbours not already connected.
         std::set<Edge *> candidates;
         std::set_difference(neighbors.begin(), neighbors.end(), conn.begin(), conn.end(), std::inserter(candidates, candidates.end()));

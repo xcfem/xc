@@ -43,6 +43,18 @@ double (XC::Node::*getDistPos2dNode)(const Pos2d &,bool initialGeometry) const= 
 double (XC::Node::*getDistPos3dNode)(const Pos3d &,bool initialGeometry) const= &XC::Node::getDist;
 double (XC::Node::*getDist2Pos2dNode)(const Pos2d &,bool initialGeometry) const= &XC::Node::getDist2;
 double (XC::Node::*getDist2Pos3dNode)(const Pos3d &,bool initialGeometry) const= &XC::Node::getDist2;
+size_t (XC::Node::*get_number_of_connected_constraints_node)(void) const= &XC::Node::getNumberOfConnectedConstraints;
+size_t (XC::Node::*get_number_of_connected_constraints_node_set)(const XC::SetBase *) const= &XC::Node::getNumberOfConnectedConstraints;
+boost::python::list (XC::Node::*get_connected_constraints_node_py)(void)= &XC::Node::getConnectedConstraintsPy;    
+boost::python::list (XC::Node::*get_connected_constraints_node_set_py)(const XC::SetBase *)= &XC::Node::getConnectedConstraintsPy; 
+boost::python::list (XC::Node::*get_connected_constraints_tags_node_py)(void) const= &XC::Node::getConnectedConstraintTags;    
+boost::python::list (XC::Node::*get_connected_constraints_tags_node_set_py)(const XC::SetBase *) const= &XC::Node::getConnectedConstraintTags; 
+size_t (XC::Node::*get_number_of_connected_elements_node)(void) const= &XC::Node::getNumberOfConnectedElements;
+size_t (XC::Node::*get_number_of_connected_elements_node_set)(const XC::SetBase *) const= &XC::Node::getNumberOfConnectedElements;
+boost::python::list (XC::Node::*get_connected_elements_node_py)(void)= &XC::Node::getConnectedElementsPy;    
+boost::python::list (XC::Node::*get_connected_elements_node_set_py)(const XC::SetBase *)= &XC::Node::getConnectedElementsPy; 
+boost::python::list (XC::Node::*get_connected_elements_tags_node_py)(void) const= &XC::Node::getConnectedElementTags;    
+boost::python::list (XC::Node::*get_connected_elements_tags_node_set_py)(const XC::SetBase *) const= &XC::Node::getConnectedElementTags; 
 class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Node", no_init)
   .add_property("getCoo", make_function( getCooRef, return_internal_reference<>() ),"Return node coordinates.")
   .add_property("getNumberDOF", &XC::Node::getNumberDOF,"Return the number of DOFs of the node.")
@@ -141,12 +153,19 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
 
   .def("newLoad",make_function(&XC::Node::newLoad, return_internal_reference<>() ),"Create a new load on the node and put it on the current load pattern.")
 
-  .def("getNumberOfConnectedConstraints",&XC::Node::getNumberOfConnectedConstraints,"Returns the number of constraints that affect the node.")
-  .def("getConnectedConstraints",&XC::Node::getConnectedConstraintsPy,"Returns the constraints connected to the node.")
-  .def("getConnectedConstraintTags",&XC::Node::getConnectedConstraintTags,"Returns the tags of the constraints connected to the node.")
-  .def("getNumberOfConnectedElements",&XC::Node::getNumberOfConnectedElements,"Returns the number of elements connected to the node.")
-  .def("getConnectedElements",&XC::Node::getConnectedElementsPy,"Returns the elements connected to the node.")
-  .def("getConnectedElementTags",&XC::Node::getConnectedElementTags,"Returns the tags of the elements connected to the node.")
+  .add_property("numberOfConnectedConstraints", get_number_of_connected_constraints_node, "Returns the number of constraints that affect this node.")
+  .def("getNumberOfConnectedConstraints", get_number_of_connected_constraints_node_set, "Returns the number of constraints of the given set that affect this node.")
+  .add_property("connectedConstraints",get_connected_constraints_node_py,"Returns the constraints connected to this node.")
+  .def("getConnectedConstraints",get_connected_constraints_node_set_py,"Returns the constraints of the set that are connected to this node.")
+  .add_property("connectedConstraintTags",get_connected_constraints_tags_node_py,"Returns the tags of the constraints connected to the node.")
+  .def("getConnectedConstraintTags",get_connected_constraints_tags_node_set_py, "Returns the tags of the constraints connected to the node.")
+
+  .add_property("numberOfConnectedElements",get_number_of_connected_elements_node, "Returns the number of elements connected to this node.")
+  .def("getNumberOfConnectedElements",get_number_of_connected_elements_node_set, "Returns the number of elements from ght given set that are connected to this node.")
+  .add_property("connectedElements", get_connected_elements_node_py, "Returns the elements connected to this node.")
+  .def("getConnectedElements", get_connected_elements_node_set_py, "Returns the elements from the given set that are connected to this node.")
+  .add_property("connectedElementTags", get_connected_elements_tags_node_py, "Returns the tags of the elements connected to the node.")
+  .def("getConnectedElementTags", get_connected_elements_tags_node_set_py, "Returns the tags of the elements from the given set that are connected to this node.")
 
   .def("getMaxModalDisplacement",getMaxModalDisplacement)
   .def("getMaxModalVelocity",getMaxModalVelocity)

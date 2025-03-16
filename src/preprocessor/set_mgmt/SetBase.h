@@ -74,6 +74,7 @@ class SetBase: public EntMdlrBase
     virtual bool remove(Node *);
     virtual bool In(const Element *) const= 0;
     virtual bool remove(Element *);
+    virtual bool In(const Constraint *) const= 0;
     virtual bool remove(Constraint *);
     virtual bool In(const Pnt *) const;
     virtual bool In(const Edge *) const;

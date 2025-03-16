@@ -130,10 +130,21 @@ class Edge: public EntMdlr
     // Topology.
     std::set<const XC::Edge *> getHomologousSides(void) const;
     void update_topology(void);
-    const size_t getNumConnectedSurfaces(void) const;
+    size_t getNumConnectedEdges(void) const;
+    std::set<const Edge *> getConnectedEdges(void) const;
+    boost::python::list getConnectedEdgesPy(void) const;
+    size_t getNumConnectedEdges(const SetBase *) const;
+    std::set<const Edge *> getConnectedEdges(const SetBase *) const;
+    boost::python::list getConnectedEdgesPy(const SetBase *) const;
+    
+    size_t getNumConnectedSurfaces(void) const;
     const std::set<const Face *> &getConnectedSurfaces(void) const;
     boost::python::list getConnectedSurfacesPy(void) const;
     const std::string &getConnectedSurfacesNames(void) const;
+    size_t getNumConnectedSurfaces(const SetBase *) const;
+    std::set<const Face *> getConnectedSurfaces(const SetBase *) const;
+    boost::python::list getConnectedSurfacesPy(const SetBase *) const;
+    
     bool isConnectedTo(const Face &s) const;
     bool isConnectedTo(const Body &b) const;
     bool isEndPoint(const Pnt &) const;
@@ -149,7 +160,7 @@ class Edge: public EntMdlr
     void setPyDict(const boost::python::dict &);
   };
 
-std::set<const Edge *> getConnectedLines(const Pnt &p);
+std::set<const Edge *> get_connected_lines(const Pnt &p);
 size_t calcula_ndiv_lados(const std::set<const XC::Edge *> &);
 
 } //end of XC namespace

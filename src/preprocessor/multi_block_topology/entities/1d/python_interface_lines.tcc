@@ -26,13 +26,30 @@ XC::Pnt *(XC::Edge::*getP2)(void)= &XC::Edge::P2;
 XC::Node *(XC::Edge::*getFirstNodePtr)(void)= &XC::Edge::getFirstNode;
 XC::Node *(XC::Edge::*getLastNodePtr)(void)= &XC::Edge::getLastNode;
 XC::Pnt *(XC::Edge::*getEdgeVertexPtr)(const size_t &)= &XC::Edge::getVertex;
+size_t (XC::Edge::*get_num_connected_surfaces_edge)(void) const= &XC::Edge::getNumConnectedSurfaces;
+size_t (XC::Edge::*get_num_connected_surfaces_edge_set)(const XC::SetBase *) const= &XC::Edge::getNumConnectedSurfaces;
+size_t (XC::Edge::*get_num_connected_edges_edge)(void) const= &XC::Edge::getNumConnectedEdges;
+size_t (XC::Edge::*get_num_connected_edges_edge_set)(const XC::SetBase *) const= &XC::Edge::getNumConnectedEdges;
+boost::python::list (XC::Edge::*get_connected_edges_edge_py)(void) const= &XC::Edge::getConnectedEdgesPy;
+boost::python::list (XC::Edge::*get_connected_edges_edge_set_py)(const XC::SetBase *) const= &XC::Edge::getConnectedEdgesPy;
+boost::python::list (XC::Edge::*get_connected_surfaces_edge_py)(void) const= &XC::Edge::getConnectedSurfacesPy;
+boost::python::list (XC::Edge::*get_connected_surfaces_edge_set_py)(const XC::SetBase *) const= &XC::Edge::getConnectedSurfacesPy;
 class_<XC::Edge, XC::Edge*, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Base class for one-dimensional geometry objects." ,no_init)
   .add_property("nDiv", &XC::Edge::NDiv, &XC::Edge::setNDiv,"Number of divisions.")
   .def("setNDiv", &XC::Edge::setNDiv,"Set the number of divisions.")
   .def("setElemSize",&XC::Edge::SetElemSize,"Set the element size")
   .add_property("getNumVertices", &XC::Edge::getNumberOfVertices,"Return the number of vertices.")
-  .add_property("getNumConnectedSurfaces", &XC::Edge::getNumConnectedSurfaces,"Return the number of connected surfaces.")
+
+  .add_property("numConnectedSurfaces", get_num_connected_surfaces_edge, "Return the number of connected surfaces.")
+  .def("getNumConnectedSurfaces", get_num_connected_surfaces_edge_set, "Return the number of surfaces of the given set connected to this edge.")
+  .add_property("numConnectedEdges", get_num_connected_edges_edge, "Returns number of edges connected to this one.")
+  .def("getNumConnectedEdges", get_num_connected_edges_edge_set, "Return the number of edges of the given set connected to this edge.")
+  .add_property("connectedEdges", get_connected_edges_edge_py,"Returns the edges connected to this one.")
+  .def("getConnectedEdges", get_connected_edges_edge_set_py,"Returns the edges of the given set connected to this one.")
+  .add_property("connectedSuraces", get_connected_surfaces_edge_py,"Returns the surfaces connected to this edge.")
+  .def("getConnectedSurfaces", get_connected_surfaces_edge_set_py,"Returns the surfaces of the given set connected to this edge.")
   .add_property("getIdxVertices",&XC::Edge::getIndicesVertices,"Return the IDs of the vertices")
+
   .add_property("getVertices",&XC::Edge::getVerticesPy,"Return the vertices (or points) defining the line.")
   .add_property("points",&XC::Edge::getVerticesPy,"Return the points (or vertices) defining the line.")
   .add_property("segments",&XC::Edge::getSegmentsPy,"Return the segments")

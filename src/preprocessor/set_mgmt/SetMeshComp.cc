@@ -305,6 +305,10 @@ bool XC::SetMeshComp::remove(Element *e)
 bool XC::SetMeshComp::remove(Constraint *c)
   { return constraints.remove(c); }
 
+//! @brief Returns true if the constraint belongs to the set.
+bool XC::SetMeshComp::In(const Constraint *c) const
+  { return constraints.in(c); }
+
 //! @brief Assigns index to each object in the set (nodes,elements,points...)
 //! to be able to use them in VTK.
 void XC::SetMeshComp::numerate(void)

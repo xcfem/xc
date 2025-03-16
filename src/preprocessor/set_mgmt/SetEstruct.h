@@ -39,6 +39,7 @@ namespace XC {
 class ElemPtrArray3d;
 class Node;
 class Element;
+class Constraint;
 
 //!  @ingroup Set
 //! 
@@ -66,6 +67,7 @@ class SetEstruct: public SetBase
     size_t getNumberOfElements(void) const;
     bool In(const Node *) const;
     bool In(const Element *) const;
+    bool In(const Constraint *) const;
 
     bool isIRow(void) const;
     bool isJRow(void) const;

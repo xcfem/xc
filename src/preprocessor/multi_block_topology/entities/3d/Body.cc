@@ -365,7 +365,7 @@ bool XC::Body::Out(const GeomObj3d &geomObj, const double &tol) const
 
 //! @brief Return the bodies that touch the surface
 //! passed as parameter (neighbors).
-std::set<const XC::Body *> XC::getConnectedBodies(const Face &s)
+std::set<const XC::Body *> XC::get_connected_bodies(const Face &s)
   { return s.getConnectedBodies(); }
 
 //! @brief Return the sets to which the body belongs.

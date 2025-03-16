@@ -93,13 +93,16 @@ class Pnt: public EntMdlr
     void erase_line(Edge *l) const;
 
     //! @brief Return the number of connected edges.
-    const size_t getNumConnectedEdges(void) const
+    size_t getNumConnectedEdges(void) const
       { return lines_pt.size(); }
     //! @brief Return the list of the lines that begin or end at the point.
     const std::set<const Edge *> &getConnectedEdges(void) const
       { return lines_pt; }
     boost::python::list getConnectedEdgesTags(void) const;
-    boost::python::list getConnectedEdgesPy(void);
+    boost::python::list getConnectedEdgesPy(void) const;
+    size_t getNumConnectedEdges(const SetBase *) const;
+    std::set<const Edge *> getConnectedEdges(const SetBase *) const;
+    boost::python::list getConnectedEdgesPy(const SetBase *) const;
 
     std::set<const Edge *> getEdgesThatEndOnThisPoint(void) const;
 
@@ -110,8 +113,10 @@ class Pnt: public EntMdlr
     bool isConnectedTo(const Body &b) const;
     double getSquaredDistanceTo(const Pos3d &pt) const;
 
-    const std::set<const Face *> getConnectedSurfaces(void) const;
+    std::set<const Face *> getConnectedSurfaces(void) const;
     boost::python::list getConnectedSurfacesPy(void) const;
+    std::set<const Face *> getConnectedSurfaces(const SetBase *) const;
+    boost::python::list getConnectedSurfacesPy(const SetBase *) const;
     
     void Move(const Vector3d &);
     void Transform(const TrfGeom &trf);

@@ -2255,6 +2255,20 @@ size_t XC::Node::getNumberOfConnectedConstraints(void) const
     return retval;    
   }
 
+//! @brief Return the nunber of connected constraints.
+size_t XC::Node::getNumberOfConnectedConstraints(const SetBase *s) const
+  {
+    size_t retval= 0;
+    for(std::set<ContinuaReprComponent *>::const_iterator i= connected.begin();i!=connected.end();i++)
+      {
+        const Constraint *ptr= dynamic_cast<const Constraint *>(*i);
+        if(ptr)
+	  if(s->In(ptr))
+	    retval++;
+      }
+    return retval;    
+  }
+
 //! @brief Return a set of const pointers the constraints connected to the node.
 std::set<const XC::Constraint *> XC::Node::getConnectedConstraints(void) const
   {
@@ -2268,6 +2282,26 @@ std::set<const XC::Constraint *> XC::Node::getConnectedConstraints(void) const
     return retval;    
   }
 
+//! @brief Return a set of const pointers the constraints of the set that are
+//! connected to the node.
+std::set<const XC::Constraint *> XC::Node::getConnectedConstraints(const SetBase *s) const
+  {
+    std::set<const Constraint *> retval;
+    const std::set<const Constraint *> tmp= this->getConnectedConstraints();
+    if(s)
+      {
+	for(std::set<const Constraint *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+	  {
+	    const Constraint *pC= *i;
+	    if(s->In(pC))
+	      retval.insert(pC);
+	  }
+      }
+    else
+      retval= tmp;
+    return retval;    
+  }
+
 //! @brief Return a set of pointers the constraints connected to the node.
 std::set<XC::Constraint *> XC::Node::getConnectedConstraints(void)
   {
@@ -2278,6 +2312,26 @@ std::set<XC::Constraint *> XC::Node::getConnectedConstraints(void)
         if(ptr)
           retval.insert(ptr);
       }
+    return retval;    
+  }
+
+//! @brief Return a set of pointers the constraints of the given set connected
+//! to this node.
+std::set<XC::Constraint *> XC::Node::getConnectedConstraints(const SetBase *s)
+  {
+    std::set<Constraint *> retval;
+    const std::set<Constraint *> tmp= this->getConnectedConstraints();
+    if(s)
+      {
+	for(std::set<Constraint *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+	  {
+	    Constraint *pC= *i;
+	    if(s->In(pC))
+	      retval.insert(pC);
+	  }
+      }
+    else
+      retval= tmp;
     return retval;    
   }
 
@@ -2298,6 +2352,29 @@ boost::python::list XC::Node::getConnectedConstraintsPy(void)
     return retval;
   }
 
+//! @brief Return a Python list of pointers to the constraints connected to the node.
+boost::python::list XC::Node::getConnectedConstraintsPy(const SetBase *s)
+  {
+    boost::python::list retval;
+    if(s)
+      {
+	std::set<Constraint *> constraints= getConnectedConstraints();
+	for(std::set<ContinuaReprComponent *>::iterator i= connected.begin();i!=connected.end();i++)
+	  {
+	    Constraint *ptrConstraint= dynamic_cast<Constraint *>(*i);
+	    if(ptrConstraint)
+	      if(s->In(ptrConstraint))
+		{
+		  boost::python::object pyObj(boost::ref(*ptrConstraint));
+		  retval.append(pyObj);
+		}
+	  }
+      }
+    else
+      retval= this->getConnectedConstraintsPy();
+    return retval;
+  }
+
 //! @brief Return a Python list with the tags of the constraints connected to the node.
 boost::python::list XC::Node::getConnectedConstraintTags(void) const
   {
@@ -2315,7 +2392,31 @@ boost::python::list XC::Node::getConnectedConstraintTags(void) const
     return retval;
   }
 
-//! @brief Return the number of elements that are connected with this node.
+//! @brief Return a Python list with the tags of the constraints of the
+//! given set that are connected to this node.
+boost::python::list XC::Node::getConnectedConstraintTags(const SetBase *s) const
+  {
+    boost::python::list retval;
+    if(s)
+      {
+	std::set<const Constraint *> constraints= getConnectedConstraints();
+	for(std::set<ContinuaReprComponent *>::const_iterator i= connected.begin();i!=connected.end();i++)
+	  {
+	    const Constraint *ptrConstraint= dynamic_cast<const Constraint *>(*i);
+	    if(ptrConstraint)
+	      if(s->In(ptrConstraint))
+		{
+		  const int tag= ptrConstraint->getTag();
+		  retval.append(tag);
+		}
+	  }
+      }
+    else
+      retval= this->getConnectedConstraintTags();
+    return retval;
+  }
+
+//! @brief Return the number of elements that are connected to this node.
 size_t XC::Node::getNumberOfConnectedElements(void) const
   {
     size_t retval= 0;
@@ -2324,6 +2425,21 @@ size_t XC::Node::getNumberOfConnectedElements(void) const
         const Element *ptrElem= dynamic_cast<const Element *>(*i);
         if(ptrElem)
           retval++;
+      }
+    return retval;
+  }
+
+//! @brief Return the number of elements from the given set that are connected
+// to this node.
+size_t XC::Node::getNumberOfConnectedElements(const SetBase *s) const
+  {
+    size_t retval= 0;
+    for(std::set<ContinuaReprComponent *>::const_iterator i= connected.begin();i!=connected.end();i++)
+      {
+        const Element *ptrElem= dynamic_cast<const Element *>(*i);
+        if(ptrElem)
+	  if(s->In(ptrElem))
+	    retval++;
       }
     return retval;
   }
@@ -2341,6 +2457,27 @@ std::set<const XC::Element *> XC::Node::getConnectedElements(void) const
     return retval;
   }
 
+//! @brief Return a list of pointers to the elements of the given set that are
+//! connected with this node.
+std::set<const XC::Element *> XC::Node::getConnectedElements(const SetBase *s) const
+  {
+    std::set<const Element *> retval;
+    const std::set<const Element *> tmp= this->getConnectedElements();
+    if(s)
+      {
+	for(std::set<const Element *>::const_iterator i= tmp.begin();i!=tmp.end();i++)
+	  {
+	    const Element *ptrElem= *i;
+	    if(ptrElem)
+	      if(s->In(ptrElem))
+		retval.insert(ptrElem);
+	  }
+      }
+    else
+      retval= tmp;
+    return retval;
+  }
+
 //! @brief Return a list of pointers to the elements that are connected with this node.
 std::set<XC::Element *> XC::Node::getConnectedElements(void)
   {
@@ -2354,6 +2491,26 @@ std::set<XC::Element *> XC::Node::getConnectedElements(void)
     return retval;
   }
 
+//! @brief Return a list of pointers to the elements of the given set that are
+//! connected with this node.
+std::set<XC::Element *> XC::Node::getConnectedElements(const SetBase *s)
+  {
+    std::set<Element *> retval;
+    const std::set<Element *> tmp= this->getConnectedElements();
+    if(s)
+      {
+	for(std::set<Element *>::const_iterator i= tmp.begin();i!=tmp.end();i++)
+	  {
+	    Element *ptrElem= *i;
+	    if(ptrElem)
+	      if(s->In(ptrElem))
+		retval.insert(ptrElem);
+	  }
+      }
+    else
+      retval= tmp;
+    return retval;
+  }
 
 //! @brief Return a python list of pointers to the elements that
 //! are connected with this node.
@@ -2370,12 +2527,44 @@ boost::python::list XC::Node::getConnectedElementsPy(void)
     return retval;
   }
 
+//! @brief Return a python list of pointers to the elements from the give set
+//! that are connected with this node.
+boost::python::list XC::Node::getConnectedElementsPy(const SetBase *s)
+  {
+    boost::python::list retval;
+    std::set<Element *> elements= getConnectedElements();
+    for(std::set<Element *>::iterator i= elements.begin(); i!= elements.end(); i++)
+      {
+        Element *ptrElem= *i;
+	if(s->In(ptrElem))
+	  {
+	    boost::python::object pyObj(boost::ref(*ptrElem));
+	    retval.append(pyObj);
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Return a python list containing the tags of the elements that
 //! are connected with this node.
 boost::python::list XC::Node::getConnectedElementTags(void) const
   {
     boost::python::list retval;
-    std::set<const Element *> elements= getConnectedElements();
+    std::set<const Element *> elements= this->getConnectedElements();
+    for(std::set<const Element *>::iterator i= elements.begin(); i!= elements.end(); i++)
+      {
+        const Element *ptrElem= *i;
+        retval.append(ptrElem->getTag());
+      }
+    return retval;
+  }
+
+//! @brief Return a python list containing the tags of the elements from the
+//! given set that are connected with this node.
+boost::python::list XC::Node::getConnectedElementTags(const SetBase *s) const
+  {
+    boost::python::list retval;
+    std::set<const Element *> elements= this->getConnectedElements(s);
     for(std::set<const Element *>::iterator i= elements.begin(); i!= elements.end(); i++)
       {
         const Element *ptrElem= *i;
