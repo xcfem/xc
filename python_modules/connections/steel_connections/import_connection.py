@@ -547,7 +547,7 @@ def matchHoleCenters(xcSet, blockDict):
         p= holeCentersDict[key]
         if(not (key in visited)):
             visited.append(key)
-            connectedLines= p.getConnectedEdges
+            connectedLines= p.connectedEdges
             if(len(connectedLines)>0): # Only one connected line here
                 points= connectedLines[0].getKPoints()
                 otherPoint= points[0]
