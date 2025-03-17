@@ -67,10 +67,10 @@ for i in range(1,NumDiv+2):
 
 modelSpace.fixNodesLine(line= l1)
 
-# Load patterns
 # Load definition.
+## Define load pattern
 lp0= modelSpace.newLoadPattern(name= '0')
-
+## Load values.
 nNodes= l2.getNumNodes
 for i in range(1,nNodes+1):
     n= l2.getNodeI(i)
@@ -89,10 +89,10 @@ analOk= analysis.analyze(1)
 nNodes= l2.getNumNodes
 errDisp= 0.0
 for i in range(1,nNodes+1):
-  n= l2.getNodeI(i)
-  F= (100*n.getCoo[0]+10)
-  vTeor= (F*L/E/A)
-  errDisp= errDisp + (vTeor-n.getDisp[1])**2
+    n= l2.getNodeI(i)
+    F= (100*n.getCoo[0]+10)
+    vTeor= (F*L/E/A)
+    errDisp= errDisp + (vTeor-n.getDisp[1])**2
 
 errDisp= math.sqrt(errDisp)
 
@@ -103,15 +103,12 @@ numSPs= constraints.getNumSPs
 nNodes= xcTotalSet.getNumNodes
 elements= xcTotalSet.getElements
 nElem= elements.size
-cumple= 1
+cumple= True
 vteor2= (CooMax/NumDiv)**2
 lteor= math.sqrt(3*vteor2)
 for e in elements:
-  # print("  elem: ",tag," nod. I: ",nod(0).tag," nod. J: ",nod(1).tag," L= ",length)
-  # print("lteor: ",(lteor))
-  ratio1= (lteor/e.getCoordTransf.getInitialLength)
-  cumple= (abs(ratio1-1.0)<1e-5) & (cumple) 
-  # print("cumple: ",(cumple))
+    ratio1= (lteor/e.getCoordTransf.getInitialLength)
+    cumple= (abs(ratio1-1.0)<1e-5) & cumple 
 
 nNodTeor= 2*(NumDiv+1)
 ratio1= (nNodes-nNodTeor)
