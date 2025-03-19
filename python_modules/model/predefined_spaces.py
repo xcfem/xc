@@ -148,7 +148,7 @@ def setImperfectionsXY(nodeSet, slopeX= 1.0/500.0, slopeY= 1.0/500.0):
             newPos= pos+geom.Vector3d(deltaX,deltaY,0.0)
             n.setPos(newPos)
             # Collect connected elements.
-            connectedElements.extend(n.getConnectedElements())
+            connectedElements.extend(n.connectedElements)
     # Initialize coordinate transformation of the connected elements.
     for e in connectedElements:
         e.initializeCoordTransf()
@@ -1000,9 +1000,9 @@ class PredefinedSpace(object):
             xcSet= self.getTotalSet()
         floatingNodes= list()
         for n in xcSet.nodes:
-            nElem= n.getNumberOfConnectedElements()
+            nElem= n.numberOfConnectedElements
             if(nElem==0):
-                nConstraints= n.getNumberOfConnectedConstraints()
+                nConstraints= n.numberOfConnectedConstraints
                 if(nConstraints==0):
                     floatingNodes.append(n)
         return floatingNodes

@@ -1072,12 +1072,66 @@ double XC::Face::getArea(void) const
     return retval;
   }
 
-//! @brief Return the surfaces that touch the line.
-std::set<const XC::Face *> XC::getConnectedSurfaces(const Edge &p)
+//! @brief Return the surfaces that touch the given line.
+std::set<const XC::Face *> XC::get_connected_surfaces(const Edge &p)
   { return p.getConnectedSurfaces(); }
 
+//! @brief Return the bodies that touch this surface (neighbors).
+const std::set<const XC::Body *> &XC::Face::getConnectedBodies(void) const
+  { return this->bodies_surf; }
+
+//! @brief Return the bodies of the given set that touch this surface.
+std::set<const XC::Body *> XC::Face::getConnectedBodies(const SetBase *s) const
+  {
+    std::set<const Body *> retval;
+    if(s)
+      {
+	if(!this->bodies_surf.empty())
+	  {
+	    std::set<const Body *>::const_iterator i= this->bodies_surf.begin();
+	    for(;i!=this->bodies_surf.end();i++)
+	      {
+		const Body *b= *i;
+		if(s->In(b))
+		  retval.insert(b);
+	      }
+	  }
+      }
+    else
+      retval= this->getConnectedBodies();
+    return retval;
+  }
+
+//! @brief Return the bodies that touch this surface (neighbors).
+boost::python::list XC::Face::getConnectedBodiesPy(void) const
+  {
+    const std::set<const Body *> tmp= this->getConnectedBodies();
+    boost::python::list retval;
+    for(std::set<const Body *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      {
+	const Body *pBody= *i;	
+        boost::python::object pyObj(boost::ref(*pBody));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
+//! @brief Return the bodies of the given set that touch this surface.
+boost::python::list XC::Face::getConnectedBodiesPy(const SetBase *s) const
+  {
+    const std::set<const Body *> tmp= this->getConnectedBodies(s);
+    boost::python::list retval;
+    for(std::set<const Body *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      {
+	const Body *pBody= *i;	
+        boost::python::object pyObj(boost::ref(*pBody));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
 //! @brief Return the surfaces that touch this surface (neighbors).
-const std::set<const XC::Face *> XC::Face::getConnectedSurfaces(void) const
+std::set<const XC::Face *> XC::Face::getConnectedSurfaces(void) const
   {
     std::set<const Face *> retval;
     const std::deque<const Pnt *> vertices= this->getVertices();
@@ -1095,10 +1149,46 @@ const std::set<const XC::Face *> XC::Face::getConnectedSurfaces(void) const
     return retval;
   }
 
+//! @brief Return the surfaces of the given set that touch this one.
+std::set<const XC::Face *> XC::Face::getConnectedSurfaces(const SetBase *s) const
+  {
+    std::set<const Face *> retval;
+    const std::set<const Face *> tmp= this->getConnectedSurfaces();
+    if(s)
+      {
+	if(!tmp.empty())
+	  {
+	    for(std::set<const Face *>::const_iterator i= tmp.begin(); i!=tmp.end(); i++)
+	      {
+		const Face *f= *i;
+		if(s->In(f))
+		  retval.insert(f);
+	      }
+	  }
+      }
+    else
+      retval= tmp;
+    return retval;
+  }
+
 //! @brief Return the surfaces that touch this surface (neighbors).
 boost::python::list XC::Face::getConnectedSurfacesPy(void) const
   {
     const std::set<const Face *> tmp= this->getConnectedSurfaces();
+    boost::python::list retval;
+    for(std::set<const Face *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      {
+	const Face *pFace= *i;	
+        boost::python::object pyObj(boost::ref(*pFace));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
+//! @brief Return the surfaces of the given set that touch this one.
+boost::python::list XC::Face::getConnectedSurfacesPy(const SetBase *s) const
+  {
+    const std::set<const Face *> tmp= this->getConnectedSurfaces(s);
     boost::python::list retval;
     for(std::set<const Face *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
       {
@@ -1214,7 +1304,7 @@ int XC::Face::getVtkCellType(void) const
     return retval;
   }
 
-std::set<const XC::Pnt *> XC::getCommonVertex(const Face &f1,const Face &f2, const Face &f3)
+std::set<const XC::Pnt *> XC::get_common_vertex(const Face &f1,const Face &f2, const Face &f3)
   {
     std::set<const XC::Pnt *> f1v= f1.getVertexSet();
     std::set<const XC::Pnt *> f2v= f2.getVertexSet();

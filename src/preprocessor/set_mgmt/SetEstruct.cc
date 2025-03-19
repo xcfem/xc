@@ -326,6 +326,9 @@ bool XC::SetEstruct::In(const Element *e) const
     return retval;
   }
 
+//! @brief Returns true if the constraint belongs to the set.
+bool XC::SetEstruct::In(const Constraint *) const
+  { return false; }
 
 XC::Node *XC::SetEstruct::getNodeI(const size_t &i)
   {

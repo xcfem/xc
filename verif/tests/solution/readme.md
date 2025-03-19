@@ -23,6 +23,9 @@
 - [Transient Analysis of a Cantilever Beam](https://sites.ualberta.ca/~wmoussa/AnsysTutorial/IT/Transient/Transient.html)
 - [The time-domain transient method in structural finite element analysis](https://getwelsim.medium.com/the-time-domain-transient-method-in-structural-finite-element-analysis-3666dd066d81)
 
+### Influence lines
+ - [OpenSees Coming and Going](https://portwooddigital.com/2025/03/10/opensees-coming-and-going/)
+
 ### Eigenvalue analysis
  - [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)
  - [Eigenvalues During an Analysis](https://portwooddigital.com/2021/11/09/eigenvalues-during-an-analysis/)
@@ -40,6 +43,7 @@
 - [Better than Ideal Conditions](https://portwooddigital.com/2020/02/08/better-than-ideal-conditions/)
 - [Off the Hooke](https://portwooddigital.com/2021/07/15/off-the-hooke/)
 - [The Stiffness Matrix Isn’t Everything](https://portwooddigital.com/2022/01/09/the-stiffness-matrix-isnt-everything/)
+
 #### Krylov space methods
 - [Krylov subspace](https://en.wikipedia.org/wiki/Krylov_subspace)
 - [A Brief Introduction to Krylov Space Methods for Solving Linear Systems](https://people.math.ethz.ch/~mhg/pub/biksm.pdf)

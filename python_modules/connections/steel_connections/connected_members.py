@@ -717,7 +717,7 @@ class ConnectionMetaData(object):
             retval[d.eTag]= d.getLoadData(internalForces, self.originNode)
         return retval
 
-def getConnectedMembers(xcSet, ConnectedMemberType= ConnectedMemberMetaData):
+def get_connected_members(xcSet, ConnectedMemberType= ConnectedMemberMetaData):
     '''Return the node, and the data of the members
        connected to the nodes of the argument set.
 
@@ -725,7 +725,7 @@ def getConnectedMembers(xcSet, ConnectedMemberType= ConnectedMemberMetaData):
     '''
     retval= dict()
     for n in xcSet.getNodes:
-        elements= n.getConnectedElements()
+        elements= n.connectedElements
         diagonals= list()
         beams= list()
         column= None

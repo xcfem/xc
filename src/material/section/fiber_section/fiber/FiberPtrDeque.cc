@@ -51,6 +51,7 @@
 #include "utility/geom/lists/utils_list_pos2d.h"
 #include "material/section/interaction_diagram/DeformationPlane.h"
 #include "utility/actor/actor/MovableDeque.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 //! @brief Constructor.
@@ -127,8 +128,9 @@ size_t XC::FiberPtrDeque::nearest_fiber(const double &y,const double &z) const
     const size_t nf= getNumFibers();
     if(nf<1)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; fiber container empty." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; fiber container empty."
+		  << Color::def << std::endl;
         return retval;
       }
     size_t i= 0;
@@ -138,8 +140,9 @@ size_t XC::FiberPtrDeque::nearest_fiber(const double &y,const double &z) const
     if(f)
       f->getFiberLocation(yf,zf);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; null pointer to fiber." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; null pointer to fiber."
+		<< Color::def << std::endl;
     double d2= sqr(yf-y)+sqr(zf-z);
     i++;
     for(;i<nf;i++)
@@ -154,8 +157,9 @@ size_t XC::FiberPtrDeque::nearest_fiber(const double &y,const double &z) const
             }
         }
       else
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to fiber." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber."
+		  << Color::def << std::endl;
     return retval;
   }
 
@@ -215,12 +219,14 @@ double XC::FiberPtrDeque::GetYMin(void) const
           if(*i)
             retval= std::min(retval,(*i)->getLocY());
           else
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; null pointer to fiber." << std::endl;
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; null pointer to fiber."
+		      << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; fiber set is empty." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; fiber set is empty."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -236,12 +242,14 @@ double XC::FiberPtrDeque::GetZMin(void) const
           if(*i)
             retval= std::min(retval,(*i)->getLocZ());
           else
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; null pointer to fiber." << std::endl;
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; null pointer to fiber."
+		      << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; fiber set is empty." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; fiber set is empty."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -257,12 +265,14 @@ double XC::FiberPtrDeque::GetYMax(void) const
           if(*i)
             retval= std::max(retval,(*i)->getLocY());
           else
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; null pointer to fiber." << std::endl;
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; null pointer to fiber."
+		      << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; fiber set is empty." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; fiber set is empty."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -278,12 +288,14 @@ double XC::FiberPtrDeque::GetZMax(void) const
           if(*i)
             retval= std::max(retval,(*i)->getLocZ());
           else
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; null pointer to fiber." << std::endl;
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; null pointer to fiber."
+		      << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; fiber set is empty." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; fiber set is empty."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -297,8 +309,9 @@ GeomObj::list_Pos2d XC::FiberPtrDeque::getPositions(void) const
           if(*i)
             retval.push_back(Pos2d((*i)->getLocY(),(*i)->getLocZ()));
           else
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; null pointer to fiber." << std::endl;
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; null pointer to fiber."
+		      << Color::def << std::endl;
       }
     return retval;
   }
@@ -346,8 +359,9 @@ double XC::FiberPtrDeque::getIz(const double &factor,const double &y0) const
       if(*i)
         retval+= (*i)->getArea()*sqr((*i)->getLocY()-y0);
       else
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to fiber." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber."
+		  << Color::def << std::endl;
     retval*= factor;
     return retval;
   }
@@ -362,8 +376,9 @@ double XC::FiberPtrDeque::getIy(const double &factor,const double &z0) const
       if(*i)
         retval+= (*i)->getArea()*sqr((*i)->getLocZ()-z0);
       else
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to fiber." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber."
+		  << Color::def << std::endl;
     retval*= factor;
     return retval;
   }
@@ -378,8 +393,9 @@ double XC::FiberPtrDeque::getPyz(const double &factor,const double &y0,const dou
       if(*i)
         retval+= (*i)->getArea()*((*i)->getLocZ()-z0)*((*i)->getLocY()-y0);
       else
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to fiber." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber."
+		  << Color::def << std::endl;
     retval*= factor;
     return retval;
   }
@@ -388,9 +404,10 @@ double XC::FiberPtrDeque::getPyz(const double &factor,const double &y0,const dou
 double XC::FiberPtrDeque::getAreaHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; homogenization reference modulus too small; E0= "
-		<< E0 << std::endl; 
+		<< E0
+		<< Color::def << std::endl; 
     double retval= 0.0;
 
     for(std::deque<Fiber *>::const_iterator i= begin();i!= end();i++)
@@ -399,8 +416,9 @@ double XC::FiberPtrDeque::getAreaHomogenizedSection(const double &E0) const
         if(mat)
           retval+= (*i)->getArea()*(mat->getTangent()/E0);
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; pointer to material nulo." << std::endl;
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; null pointer to material."
+		    << Color::def << std::endl;
       }
     return retval;
   }
@@ -409,9 +427,9 @@ double XC::FiberPtrDeque::getAreaHomogenizedSection(const double &E0) const
 const XC::Vector &XC::FiberPtrDeque::getCenterOfMassHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	        << ";homogenization reference modulus too small; E0= "
-		<< E0 << std::endl; 
+		<< E0 << Color::def << std::endl; 
     double Qy= 0.0,Qz= 0.0;
     double Atot= 0.0;
     double weightedFiberArea= 0.0;
@@ -430,8 +448,9 @@ const XC::Vector &XC::FiberPtrDeque::getCenterOfMassHomogenizedSection(const dou
             Qy+= zLoc*weightedFiberArea;
           }
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; null pointer to material." << std::endl;
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; null pointer to material."
+		    << Color::def << std::endl;
       }
     static Vector retval(2);
     retval[0]= -Qz; //center of mass y coordinate  XXX ¿Signo menos?
@@ -449,9 +468,10 @@ const XC::Vector &XC::FiberPtrDeque::getCenterOfMassHomogenizedSection(const dou
 double XC::FiberPtrDeque::getIyHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << getClassName() << "::" << __FUNCTION__
-		<< "homogenization reference modulus too small; E0= "
-		<< E0 << std::endl; 
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; homogenization reference modulus too small; E0= "
+		<< E0
+		<< Color::def << std::endl; 
     double retval= 0.0;
     const Vector &center_of_mass= getCenterOfMassHomogenizedSection(E0);
     std::deque<Fiber *>::const_iterator i= begin();
@@ -462,12 +482,14 @@ double XC::FiberPtrDeque::getIyHomogenizedSection(const double &E0) const
           if(mat)
             retval+= (*i)->getArea()*sqr((*i)->getLocZ()-center_of_mass[1])*(mat->getTangent()/E0);
           else
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; null pointer to material." << std::endl;
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; null pointer to material."
+		      << Color::def << std::endl;
         }
       else
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to fiber." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber."
+		  << Color::def << std::endl;
     return retval;
   }
 
@@ -476,9 +498,10 @@ double XC::FiberPtrDeque::getIyHomogenizedSection(const double &E0) const
 double XC::FiberPtrDeque::getIzHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << getClassName() << "::" << __FUNCTION__
-		<< "homogenization reference modulus too small; E0= "
-		<< E0 << std::endl; 
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; homogenization reference modulus too small; E0= "
+		<< E0
+		<< Color::def << std::endl; 
     double retval= 0.0;
     const Vector &center_of_mass= getCenterOfMassHomogenizedSection(E0);
     std::deque<Fiber *>::const_iterator i= begin();
@@ -489,12 +512,14 @@ double XC::FiberPtrDeque::getIzHomogenizedSection(const double &E0) const
           if(mat)
             retval+= (*i)->getArea()*sqr((*i)->getLocY()-center_of_mass[0])*(mat->getTangent()/E0);
           else
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; null pointer to material." << std::endl;
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; null pointer to material."
+		      << Color::def << std::endl;
         }
       else
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to fiber." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber."
+		  << Color::def << std::endl;
     return retval;
   }
 
@@ -503,7 +528,10 @@ double XC::FiberPtrDeque::getIzHomogenizedSection(const double &E0) const
 double XC::FiberPtrDeque::getPyzHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; homogenization reference modulus too small; E0= "
+		<< E0
+		<< Color::def << std::endl; 
     double retval= 0.0;
     const Vector &center_of_mass= getCenterOfMassHomogenizedSection(E0);
     std::deque<Fiber *>::const_iterator i= begin();
@@ -514,12 +542,14 @@ double XC::FiberPtrDeque::getPyzHomogenizedSection(const double &E0) const
           if(mat)
             retval+= (*i)->getArea()*((*i)->getLocZ()-center_of_mass[1])*((*i)->getLocY()-center_of_mass[0])*(mat->getTangent()/E0);
           else
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "null pointer to material." << std::endl;
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; null pointer to material."
+		      << Color::def << std::endl;
         }
       else
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to fiber." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber."
+		  << Color::def << std::endl;
     return retval;
   }
 
@@ -599,8 +629,9 @@ double XC::FiberPtrDeque::getSzPos(const double &yf,const double &y0,const doubl
             }
         }
       else
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to fiber." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber."
+		  << Color::def << std::endl;
     retval*= factor;
     return retval;
   }
@@ -623,8 +654,9 @@ double XC::FiberPtrDeque::getSzNeg(const double &yf,const double &y0,const doubl
             }
         }
       else
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to fiber." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber."
+		  << Color::def << std::endl;
     retval*= factor;
     return retval;
   }
@@ -644,8 +676,9 @@ double XC::FiberPtrDeque::getSyPos(const double &zf,const double &z0,const doubl
             retval+= (*i)->getArea()*(z_fiber-z0);
         }
       else
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to fiber." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber."
+		  << Color::def << std::endl;
     retval*= factor;
     return retval;
   }
@@ -665,8 +698,9 @@ double XC::FiberPtrDeque::getSyNeg(const double &zf,const double &z0,const doubl
             retval+= (*i)->getArea()*(z_fiber-z0);
         }
       else
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to fiber." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber."
+		  << Color::def << std::endl;
     retval*= factor;
     return retval;
   }
@@ -676,9 +710,10 @@ double XC::FiberPtrDeque::getSyNeg(const double &zf,const double &z0,const doubl
 double XC::FiberPtrDeque::getSPosHomogenizedSection(const double &E0,const HalfPlane2d &sp) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; homogenization reference modulus too small; E0= "
-		<< E0 << std::endl; 
+		<< E0
+		<< Color::def << std::endl; 
     double retval= 0.0;
     double d= 0.0;
     for(std::deque<Fiber *>::const_iterator i= begin();i!= end();i++)
@@ -691,8 +726,9 @@ double XC::FiberPtrDeque::getSPosHomogenizedSection(const double &E0,const HalfP
 	      { retval+= (*i)->getArea()*(mat->getInitialTangent())*d; }
           }
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; null pointer to material." << std::endl;
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; null pointer to material."
+		    << Color::def << std::endl;
       }
     retval/=E0;
     return retval;
@@ -704,9 +740,10 @@ double XC::FiberPtrDeque::getSPosHomogenizedSection(const double &E0,const HalfP
 double XC::FiberPtrDeque::getSNegHomogenizedSection(const double &E0,const HalfPlane2d &sp) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << getClassName() << "::" << __FUNCTION__
-		<< "homogenization reference modulus too small; E0= "
-		<< E0 << std::endl; 
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; homogenization reference modulus too small; E0= "
+		<< E0
+		<< Color::def << std::endl; 
     double retval= 0.0;
     double d= 0.0;
     for(std::deque<Fiber *>::const_iterator i= begin();i!= end();i++)
@@ -719,9 +756,9 @@ double XC::FiberPtrDeque::getSNegHomogenizedSection(const double &E0,const HalfP
               retval+= (*i)->getArea()*(mat->getInitialTangent())*d;
           }
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; null pointer to material!."
-		    << std::endl;
+		    << Color::def << std::endl;
       }
     retval/=E0;
     return retval;
@@ -888,8 +925,9 @@ double XC::FiberPtrDeque::getCompressionResultant(void) const
           if(f<0.0) retval+= f;
         }
       else
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; null pointer to fiber." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; null pointer to fiber."
+		  << Color::def << std::endl;
     return retval;
   }
 
@@ -992,8 +1030,9 @@ double XC::FiberPtrDeque::getTensionResultant(void) const
           if(f>0.0) retval+= f;
         }
       else
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to fiber." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber."
+		  << Color::def << std::endl;
     return retval;
   }
 
@@ -1100,8 +1139,9 @@ void XC::FiberPtrDeque::SelMatTag(const int &matTag,FiberPtrDeque &retval,bool c
             }
         }
       else
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to fiber." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber."
+		  << Color::def << std::endl;
   }
 
 //! @brief Return the material tags of the fibers.
@@ -1120,8 +1160,9 @@ std::set<int> XC::FiberPtrDeque::getMatTags(void)
             }
         }
       else
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to fiber." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber."
+		  << Color::def << std::endl;
     return retval;
   }
 
@@ -1192,8 +1233,9 @@ XC::DeformationPlane XC::FiberPtrDeque::getDeformationPlane(void) const
           if(*i)
             points.push_back(Pos3d((*i)->getMaterial()->getStrain(),(*i)->getLocY(),(*i)->getLocZ()));
           else
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; null pointer to fiber." << std::endl;
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; null pointer to fiber."
+		      << Color::def << std::endl;
       }
     DeformationPlane retval;
     retval.linearLeastSquaresFitting(points);
@@ -1492,7 +1534,7 @@ double XC::FiberPtrDeque::computeFibersEffectiveConcreteArea(const std::list<Pol
     dq_ac_effective.clear();
     dq_ac_effective.resize(sz);
     Polygon2d tmp;
-    //Clip the rebars areas with the effective area contour.
+    // Clip the rebars areas with the effective area contour.
     for(size_t i= 0;i<sz;i++) //For each rebar in the family.
       {
         dm= (*this)[i]->getEquivalentDiameter();
@@ -1513,19 +1555,37 @@ double XC::FiberPtrDeque::computeFibersEffectiveConcreteArea(const std::list<Pol
                 }
             }
       }
-
     //Clip computed intersections.
     for(size_t i= 0;i<sz;i++)
       {
-	std::list<Polygon2d> &p1= dq_ac_effective[i];
+        const Fiber *iFiber= (*this)[i];
+        const double rmi2= pow(iFiber->getEquivalentDiameter(),2)/4.0;
+	std::list<Polygon2d> &pi= dq_ac_effective[i];
         for(size_t j= i+1;j<sz;j++)
           {
-	    std::list<Polygon2d> &p2= dq_ac_effective[j];
-            if(overlap(p1,p2))
+	    const Fiber *jFiber= (*this)[j];
+	    std::list<Polygon2d> &pj= dq_ac_effective[j];
+            if(overlap(pi,pj))
               {
-                const Pos2d c1= (*this)[i]->getPos();
-                const Pos2d c2= (*this)[j]->getPos();
-                particiona(c1,p1,c2,p2);
+                const Pos2d ci= iFiber->getPos();
+                const Pos2d cj= jFiber->getPos();
+		const double d2cicj= ci.dist2(cj);
+		const double tol2= rmi2/100.0;
+		if(d2cicj>tol2)
+		  particiona(ci,pi,cj,pj);
+		else
+		  {
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			      << "; fibers : " << i << " at position: " << ci 
+			      << " and " << j << " at position: " << cj 
+		              << ", overlap (distance between them: "
+		              << sqrt(d2cicj)
+		              << " is smaller than: " << sqrt(tol2)
+			      << "). Can't compute crack effective areas."
+		              << " Check the reinforcement definition."
+			      << Color::def << std::endl;
+		    exit(-1);
+		  }
               }
           }
       }
@@ -1537,9 +1597,11 @@ double XC::FiberPtrDeque::computeFibersEffectiveConcreteArea(const std::list<Pol
       }
     const double area_contour= area(grossEffectiveConcreteAreaContour.begin(),grossEffectiveConcreteAreaContour.end());
     if(retval>1.01*area_contour)
-      std::cerr << "Effective area: " << retval
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; Effective area: " << retval
                 << " is greater than the theoretical maximum: "
-		<< area_contour << std::endl;
+		<< area_contour
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -1553,9 +1615,9 @@ const std::list<Polygon2d> &XC::FiberPtrDeque::getFiberEffectiveConcretAreaConto
 double XC::FiberPtrDeque::getFiberEffectiveConcreteArea(const size_t &i) const
   {
     if(dq_ac_effective.size()!=size())
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; effective areas are not computed yet."
-                << std::endl;
+                << Color::def << std::endl;
     return area(dq_ac_effective[i].begin(),dq_ac_effective[i].end());
   }
 
@@ -1564,9 +1626,9 @@ double XC::FiberPtrDeque::getFibersEffectiveConcreteArea(void) const
   {
     const size_t sz= dq_ac_effective.size();
     if(sz!=size())
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; effective areas are not computed yet."
-                << std::endl;
+                << Color::def << std::endl;
     double retval= 0.0;
     for(size_t i= 0;i<sz;i++)
       retval+= area(dq_ac_effective[i].begin(),dq_ac_effective[i].end());
@@ -1582,8 +1644,10 @@ void XC::FiberPtrDeque::computeCovers(const SectionGeometry &g) const
     const size_t sz= recubs.size();
     for(size_t i= 0;i<sz;i++)
       if(recubs[i]<0)
-        std::clog << "Warning! position: " << positions[i]
-                  << " is outside the section." << std::endl;
+        std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		  << "; Warning! position: " << positions[i]
+		  << " is outside the section."
+		  << Color::def << std::endl;
   }
 
 //! @brief Computes the distance from each fiber to the nearest one.
@@ -1594,9 +1658,9 @@ void XC::FiberPtrDeque::computeSpacement(void) const
 const double &XC::FiberPtrDeque::getFiberCover(const size_t &i) const
   {
     if(recubs.size()!=size())
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; cover not computed."
-                << std::endl;
+                << Color::def << std::endl;
     return recubs[i];
   }
 
@@ -1604,9 +1668,9 @@ const double &XC::FiberPtrDeque::getFiberCover(const size_t &i) const
 const double &XC::FiberPtrDeque::getFiberSpacing(const size_t &i) const
   {
     if(seps.size()!=size())
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; spacing not computed."
-                << std::endl;
+                << Color::def << std::endl;
     return seps[i];
   }
 
@@ -2198,10 +2262,11 @@ XC::Response *XC::FiberPtrDeque::setResponse(const std::vector<std::string> &arg
             // Find first fiber with specified material tag
             for(j= 0;j<numFibers;j++)
               {
-                if(matTag == (*this)[j]->getMaterial()->getTag())
+		const Fiber *jFiber= (*this)[j];
+                if(matTag == jFiber->getMaterial()->getTag())
                   {
-                    ySearch= -(*this)[j]->getLocY();
-                    zSearch=  (*this)[j]->getLocZ();
+                    ySearch= -jFiber->getLocY();
+                    zSearch=  jFiber->getLocZ();
                     dy= ySearch-yCoord;
                     dz= zSearch-zCoord;
                     closestDist2= dy*dy + dz*dz;
@@ -2212,10 +2277,11 @@ XC::Response *XC::FiberPtrDeque::setResponse(const std::vector<std::string> &arg
             // Search the remaining fibers
             for(;j<numFibers;j++)
               {
-                if(matTag == (*this)[j]->getMaterial()->getTag())
+		const Fiber *jFiber= (*this)[j];
+                if(matTag == jFiber->getMaterial()->getTag())
                   {
-                    ySearch= -(*this)[j]->getLocY();
-                    zSearch=  (*this)[j]->getLocZ();
+                    ySearch= -jFiber->getLocY();
+                    zSearch=  jFiber->getLocZ();
                     dy= ySearch-yCoord;
                     dz= zSearch-zCoord;
                     distance2= dy*dy + dz*dz;
@@ -2241,8 +2307,9 @@ XC::Response *XC::FiberPtrDeque::setResponse(const std::vector<std::string> &arg
             key= 0;
             for(size_t j= 1; j < numFibers; j++)
               {
-                ySearch= -(*this)[j]->getLocY();
-                zSearch=  (*this)[j]->getLocZ();
+		const Fiber *jFiber= (*this)[j];
+                ySearch= -jFiber->getLocY();
+                zSearch=  jFiber->getLocZ();
                 dy= ySearch-yCoord;
                 dz= zSearch-zCoord;
                 distance2= dy*dy + dz*dz;
@@ -2277,8 +2344,9 @@ XC::Response *XC::FiberPtrDeque::setResponse(const std::vector<std::string> &arg
 //     const size_t nf= getNumFibers();
 //     if(nf<1)
 //       {
-//         std::cerr << getClassName() << "::" << __FUNCTION__
-//                   << "; no fibers." << std::endl;
+//         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+//                   << "; no fibers."
+//                   << Color::def << std::endl;
 //         return retval;
 //       }
 //     size_t i= 0;
@@ -2307,8 +2375,9 @@ XC::Response *XC::FiberPtrDeque::setResponse(const std::vector<std::string> &arg
 //             }
 //         }
 //       else
-//         std::cerr << getClassName() << "::" << __FUNCTION__
-//                   << "; null pointer to fiber." << std::endl;
+//         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+//                   << "; null pointer to fiber."
+//                   << Color::def << std::endl;
 //     return retval;
 //   }
 
@@ -2321,8 +2390,9 @@ XC::Response *XC::FiberPtrDeque::setResponse(const std::vector<std::string> &arg
 //     const size_t nf= getNumFibers();
 //     if(nf<1)
 //       {
-//         std::cerr << getClassName() << "::" << __FUNCTION__
-//                   << "; no fibers." << std::endl;
+//         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+//                   << "; no fibers."
+//                   << Color::def << std::endl;
 //         return retval;
 //       }
 //     size_t i= 0;
@@ -2351,8 +2421,9 @@ XC::Response *XC::FiberPtrDeque::setResponse(const std::vector<std::string> &arg
 //             }
 //         }
 //       else
-//         std::cerr << getClassName() << "::" << __FUNCTION__
-//                   << "; null pointer to fiber." << std::endl;
+//         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+//                   << "; null pointer to fiber."
+//                   << Color::def << std::endl;
 //     return retval;
 //   }
 
@@ -2364,8 +2435,9 @@ size_t XC::FiberPtrDeque::getFiberWithMaxCoord(const Ref3d3d &r,const size_t &iC
     const size_t nf= getNumFibers();
     if(nf<1)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; there is no fibers." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; there is no fibers."
+		  << Color::def << std::endl;
         return retval;
       }
     size_t i= 0;
@@ -2395,8 +2467,9 @@ size_t XC::FiberPtrDeque::getFiberWithMinCoord(const Ref3d3d &r,const size_t &iC
     const size_t nf= getNumFibers();
     if(nf<1)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; container is empty." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; container is empty."
+		  << Color::def << std::endl;
         return retval;
       }
     size_t i= 0;
@@ -2501,8 +2574,9 @@ int XC::FiberPtrDeque::sendData(Communicator &comm)
   {
     int res= comm.sendDoubles(yCenterOfMass,zCenterOfMass,getDbTagData(),CommMetaData(0));
     res+= sendDeque(*this,comm,getDbTagData(),CommMetaData(1));
-    std::clog << getClassName() << "::" << __FUNCTION__
-	      << "; not fully implemented yet." << std::endl;
+    std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+	      << "; not fully implemented yet."
+	      << Color::def << std::endl;
     return res;
   }
 
@@ -2511,8 +2585,9 @@ int XC::FiberPtrDeque::recvData(const Communicator &comm)
   {
     int res= comm.receiveDoubles(yCenterOfMass,zCenterOfMass,getDbTagData(),CommMetaData(0));
     res+= receiveDeque(*this,comm,getDbTagData(),CommMetaData(1),&FEM_ObjectBroker::getNewFiber);
-    std::clog << getClassName() << "::" << __FUNCTION__
-	      << "; not fully implemented yet." << std::endl;
+    std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+	      << "; not fully implemented yet."
+	      << Color::def << std::endl;
     return res;
   }
 
@@ -2524,9 +2599,9 @@ int XC::FiberPtrDeque::sendSelf(Communicator &comm)
     const int dataTag=getDbTag();
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << dataTag << " failed to send ID"
-	        << std::endl;
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -2537,8 +2612,9 @@ int XC::FiberPtrDeque::recvSelf(const Communicator &comm)
     inicComm(2);
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << dataTag << " failed to receive ID\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << dataTag << " failed to receive ID"
+	        << Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;

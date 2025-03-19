@@ -247,15 +247,15 @@ const XC::Element *XC::EntMdlr::getNearestElement(const Pos3d &p) const
   }
 
 
-//! @brief Return the elements connected to the node being passed as parameter.
+//! @brief Return the elements connected to the given node..
 std::set<const XC::Element *> XC::EntMdlr::getConnectedElements(const Node *n) const
   { return ttzElements.getConnectedElements(n); }
 
-//! @brief Return the elements connected to the node being passed as parameter.
+//! @brief Return the elements connected to the given node..
 std::set<XC::Element *> XC::EntMdlr::getConnectedElements(const Node *n)
   { return ttzElements.getConnectedElements(n); }
 
-//! @brief Return the elements connected to the node being passed as parameter.
+//! @brief Return the elements connected to the given node..
 boost::python::list XC::EntMdlr::getConnectedElementsPy(const Node *n)
   { return ttzElements.getConnectedElementsPy(n); }
 

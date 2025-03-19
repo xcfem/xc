@@ -494,18 +494,174 @@ Pos3dArray XC::Edge::getNodePosReverse(void) const
     return retval;
   }
 
+//! @brief Return the number of edges connected to this one.
+size_t XC::Edge::getNumConnectedEdges(void) const
+  {
+    size_t retval= 0;
+    const Pnt *p1= P1();
+    if(p1)
+      retval+= p1->getNumConnectedEdges();
+    const Pnt *p2= P2();
+    if(p2)
+      retval+= p2->getNumConnectedEdges();
+    return retval;
+  }
+
+//! @brief Return the number of edges connected to this one that
+//! belong to the given set.
+size_t XC::Edge::getNumConnectedEdges(const SetBase *s) const
+  {
+    size_t retval= 0;
+    const Pnt *p1= P1();
+    if(p1)
+      retval+= p1->getNumConnectedEdges(s);
+    const Pnt *p2= P2();
+    if(p2)
+      retval+= p2->getNumConnectedEdges(s);
+    return retval;
+  }
+
+//! @brief Return the edges connected to this one.
+std::set<const XC::Edge *> XC::Edge::getConnectedEdges(void) const
+  {
+    std::set<const Edge *> retval;
+    const Pnt *p1= P1();
+    if(p1)
+      {
+	const std::set<const Edge *> &edges_p1= p1->getConnectedEdges();
+	retval.insert(edges_p1.begin(), edges_p1.end());
+      }
+    const Pnt *p2= P2();
+    if(p2)
+      {
+	const std::set<const Edge *> &edges_p2= p2->getConnectedEdges();
+	retval.insert(edges_p2.begin(), edges_p2.end());
+      }
+    return retval;
+  }
+
+//! @brief Return the edges connected to this one that belong to the given
+//! set.
+std::set<const XC::Edge *> XC::Edge::getConnectedEdges(const SetBase *s) const
+  {
+    std::set<const Edge *> retval;
+    const Pnt *p1= P1();
+    if(p1)
+      {
+	const std::set<const Edge *> &edges_p1= p1->getConnectedEdges(s);
+	retval.insert(edges_p1.begin(), edges_p1.end());
+      }
+    const Pnt *p2= P2();
+    if(p2)
+      {
+	const std::set<const Edge *> &edges_p2= p2->getConnectedEdges(s);
+	retval.insert(edges_p2.begin(), edges_p2.end());
+      }
+    return retval;
+  }
+
+//! @brief Return the edges connected to this in a Python list.
+boost::python::list XC::Edge::getConnectedEdgesPy(void) const
+  {
+    const std::set<const Edge *> tmp= this->getConnectedEdges();
+    boost::python::list retval;
+    for(std::set<const Edge *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      {
+	const Edge *pEdge= *i;	
+        boost::python::object pyObj(boost::ref(*pEdge));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
+//! @brief Return the edges connected to this one that belong to
+//! the given set.
+boost::python::list XC::Edge::getConnectedEdgesPy(const SetBase *s) const
+  {
+    const std::set<const Edge *> tmp= this->getConnectedEdges(s);
+    boost::python::list retval;
+    for(std::set<const Edge *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      {
+	const Edge *pEdge= *i;	
+        boost::python::object pyObj(boost::ref(*pEdge));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
 //! @brief Return the number of surfaces that touch the line.
-const size_t XC::Edge::getNumConnectedSurfaces(void) const
+size_t XC::Edge::getNumConnectedSurfaces(void) const
   { return surfaces_line.size(); }
+
+//! @brief Return the number of surfaces that touch the line and
+//! belong to the given set.
+size_t XC::Edge::getNumConnectedSurfaces(const SetBase *s) const
+  {
+    size_t retval= 0;
+    if(s)
+      {
+	if(!this->surfaces_line.empty())
+	  {
+	    std::set<const Face *>::const_iterator i= this->surfaces_line.begin();
+	    for(;i!=this->surfaces_line.end();i++)
+	      {
+		const Face *f= *i;
+		if(s->In(f))
+		  retval++;
+	      }
+	  }
+      }
+    else
+      retval= this->getNumConnectedSurfaces();
+    return retval;
+  }
 
 //! @brief Return the surfaces that touch the line.
 const std::set<const XC::Face *> &XC::Edge::getConnectedSurfaces(void) const
   { return surfaces_line; }
 
+//! @brief Get the surfaces connected to this one that belong to the
+//! given set.
+std::set<const XC::Face *> XC::Edge::getConnectedSurfaces(const SetBase *s) const
+  {
+    std::set<const Face *> retval;
+    if(s)
+      {
+	if(!this->surfaces_line.empty())
+	  {
+	    std::set<const Face *>::const_iterator i= this->surfaces_line.begin();
+	    for(;i!=this->surfaces_line.end();i++)
+	      {
+		const Face *f= *i;
+		if(s->In(f))
+		  retval.insert(f);
+	      }
+	  }
+      }
+    else
+      retval= this->getConnectedSurfaces();
+    return retval;
+  }
+
 //! @brief Return the surfaces that touch this point (neighbors).
 boost::python::list XC::Edge::getConnectedSurfacesPy(void) const
   {
     const std::set<const Face *> tmp= this->getConnectedSurfaces();
+    boost::python::list retval;
+    for(std::set<const Face *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      {
+	const Face *pFace= *i;	
+        boost::python::object pyObj(boost::ref(*pFace));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
+//! @brief Return the surfaces that touch this point and belong to
+//! the given set.
+boost::python::list XC::Edge::getConnectedSurfacesPy(const SetBase *s) const
+  {
+    const std::set<const Face *> tmp= this->getConnectedSurfaces(s);
     boost::python::list retval;
     for(std::set<const Face *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
       {
@@ -578,7 +734,7 @@ bool XC::Edge::isEndPoint(const Pnt &p) const
   { return ((&p == P1()) || (&p == P2()));  }
 
 //! @brief Return the list of edges that have this point as starting or ending point.
-std::set<const XC::Edge *> XC::getConnectedLines(const Pnt &p)
+std::set<const XC::Edge *> XC::get_connected_lines(const Pnt &p)
   { return p.getConnectedEdges(); }
 
 //! @brief Return a matrix of positions along the line.

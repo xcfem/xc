@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
+''' Create nodes along two lines without creating elements on them.'''
 
-import geom
-import xc
-import math
-import os
-from solution import predefined_solutions
-from model import predefined_spaces
-from materials import typical_materials
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import xc
+import math
+import os
+from solution import predefined_solutions
+from model import predefined_spaces
+from materials import typical_materials
 
 NumDiv= 10
 CooMax= 10
@@ -32,104 +33,81 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-# Geometric transformation(s)
-lin= modelSpace.newLinearCrdTransf("lin")
-elements= preprocessor.getElementHandler
-elements.defaultTransformation= lin.name
- 
+pt1= modelSpace.newKPoint(0.0,0.0,0.0)
+pt2= modelSpace.newKPoint(CooMax,0.0,0.0)
+pt3= modelSpace.newKPoint(0.0,L,0.0)
+pt4= modelSpace.newKPoint(CooMax,L,0.0)
 
-points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
-pt2= points.newPoint(geom.Pos3d(CooMax,0.0,0.0))
-pt3= points.newPoint(geom.Pos3d(0.0,L,0.0))
-pt4= points.newPoint(geom.Pos3d(CooMax,L,0.0))
-lines= preprocessor.getMultiBlockTopology.getLines
-l1= lines.newLine(pt1.tag,pt2.tag)
+l1= modelSpace.newLine(pt1, pt2)
 l1.nDiv= NumDiv
-l2= lines.newLine(pt3.tag,pt4.tag)
+l2= modelSpace.newLine(pt3, pt4)
 l2.nDiv= NumDiv
 
+# Create only nodes on lines (seedElement not set).
+feProblem.setVerbosityLevel(0) # Don't print warning messages about element see.
+l1.genMesh(xc.meshDir.I)
+l2.genMesh(xc.meshDir.I)
+feProblem.setVerbosityLevel(1) # print warnings again-
 
-# Materials definition
+# Create elements.
+## Geometric transformation(s)
+lin= modelSpace.newLinearCrdTransf("lin")
+modelSpace.setDefaultCoordTransf(lin)
+
+## Material definition
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
-
-setTotal= preprocessor.getSets.getSet("total")
-
-feProblem.setVerbosityLevel(0) # Don't print(warning messages about element seed.)
-setL1= preprocessor.getSets.getSet(l1.name)
-setL1.genMesh(xc.meshDir.I)
-
-
-setL2= preprocessor.getSets.getSet(l2.name)
-setL2.genMesh(xc.meshDir.I)
-feProblem.setVerbosityLevel(1) # print(warnings again )
-
-# totalSetNodes= setTotal.getNodes
-# for n in totalSetNodes:
-#   print("node tag: ", n.tag)
-
-elements.defaultMaterial= scc.name
+modelSpace.setDefaultMaterial(scc)
+## Create elements.
 for i in range(1,NumDiv+2):
-  n1= l1.getNodeI(i)
-  n2= l2.getNodeI(i)
-  # print("i= ", i, "n1= ", n1.tag, "n2= ", n2.tag)
-  beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
-  beam2d.h= h
+    n1= l1.getNodeI(i)
+    n2= l2.getNodeI(i)
+    beam2d= modelSpace.newElement("ElasticBeam2d", [n1.tag, n2.tag])
+    beam2d.h= h
 
 modelSpace.fixNodesLine(line= l1)
 
-# Load patterns
 # Load definition.
+## Define load pattern
 lp0= modelSpace.newLoadPattern(name= '0')
-
-
+## Load values.
 nNodes= l2.getNumNodes
 for i in range(1,nNodes+1):
-  n= l2.getNodeI(i)
-  nodeTag= n.tag
-  xNod= n.getCoo[0]
-  F= (100*xNod+10)
-  lp0.newNodalLoad(nodeTag,xc.Vector([0,F,0]))
+    n= l2.getNodeI(i)
+    nodeTag= n.tag
+    xNod= n.getCoo[0]
+    F= (100*xNod+10)
+    lp0.newNodalLoad(nodeTag,xc.Vector([0,F,0]))
 
 modelSpace.addLoadCaseToDomain(lp0.name)
 nCargasNod= lp0.getNumNodalLoads
-
-''' 
-nodalLoads= lp0.getNodalLoads
-for nl in nodalLoads:
-    print("node: ",numNod)
-'''
-
 
 # Solution procedure
 analysis= predefined_solutions.simple_static_linear(feProblem)
 analOk= analysis.analyze(1)
 
 nNodes= l2.getNumNodes
-# print("size= ",size)
 errDisp= 0.0
 for i in range(1,nNodes+1):
-  n= l2.getNodeI(i)
-  F= (100*n.getCoo[0]+10)
-  vTeor= (F*L/E/A)
-  errDisp= errDisp + (vTeor-n.getDisp[1])**2
+    n= l2.getNodeI(i)
+    F= (100*n.getCoo[0]+10)
+    vTeor= (F*L/E/A)
+    errDisp= errDisp + (vTeor-n.getDisp[1])**2
 
 errDisp= math.sqrt(errDisp)
 
+xcTotalSet= modelSpace.getTotalSet()
+
 constraints= preprocessor.getBoundaryCondHandler
 numSPs= constraints.getNumSPs
-nNodes= setTotal.getNumNodes
-elements= setTotal.getElements
+nNodes= xcTotalSet.getNumNodes
+elements= xcTotalSet.getElements
 nElem= elements.size
-cumple= 1
+cumple= True
 vteor2= (CooMax/NumDiv)**2
 lteor= math.sqrt(3*vteor2)
 for e in elements:
-  # print("  elem: ",tag," nod. I: ",nod(0).tag," nod. J: ",nod(1).tag," L= ",length)
-  # print("lteor: ",(lteor))
-  ratio1= (lteor/e.getCoordTransf.getInitialLength)
-  cumple= (abs(ratio1-1.0)<1e-5) & (cumple) 
-  # print("cumple: ",(cumple))
+    ratio1= (lteor/e.getCoordTransf.getInitialLength)
+    cumple= (abs(ratio1-1.0)<1e-5) & cumple 
 
 nNodTeor= 2*(NumDiv+1)
 ratio1= (nNodes-nNodTeor)
@@ -160,3 +138,11 @@ if (abs(ratio1) < 1e-15) & (abs(ratio2) < 1e-15) & (abs(ratio3) < 1e-15) & (abs(
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayBlocks()
+# oh.displayFEMesh()
+# oh.displayLoads()
+

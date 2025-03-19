@@ -187,14 +187,26 @@ class Node: public MeshComponent
     std::set<Constraint *>getConnectedConstraints(void);
     boost::python::list getConnectedConstraintsPy(void);    
     boost::python::list getConnectedConstraintTags(void) const;
+    size_t getNumberOfConnectedConstraints(const SetBase *) const;
+    std::set<const Constraint *>getConnectedConstraints(const SetBase *) const;
+    std::set<Constraint *> getConnectedConstraints(const SetBase *);
+    boost::python::list getConnectedConstraintsPy(const SetBase *);    
+    boost::python::list getConnectedConstraintTags(const SetBase *) const;
 
     void connect(ContinuaReprComponent *el) const;
     void disconnect(ContinuaReprComponent *el) const;
+    
     size_t getNumberOfConnectedElements(void) const;
     ElementConstPtrSet getConnectedElements(void) const;
     ElementPtrSet getConnectedElements(void);
     boost::python::list getConnectedElementsPy(void);    
     boost::python::list getConnectedElementTags(void) const;
+    size_t getNumberOfConnectedElements(const SetBase *) const;
+    ElementConstPtrSet getConnectedElements(const SetBase *) const;
+    ElementPtrSet getConnectedElements(const SetBase *);
+    boost::python::list getConnectedElementsPy(const SetBase *);    
+    boost::python::list getConnectedElementTags(const SetBase *) const;
+    
     const MeshEdge *next(const std::deque<MeshEdge> &, const std::set<const MeshEdge *> &) const;
 
     const bool isDead(void) const;

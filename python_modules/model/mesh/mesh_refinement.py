@@ -489,7 +489,7 @@ def compute_node_subdivision_level(xcSet):
     ## Compute node subdivision level according with expression (3) of the article.
     maxSubdivisionLevel= 0
     for n in xcSet.nodes:
-        connectedElements= n.getConnectedElements()
+        connectedElements= n.connectedElements
         nodeSubdivisionLevel= 0
         for e in connectedElements:
             elementSubdivisionLevel= 0

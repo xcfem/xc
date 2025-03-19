@@ -59,11 +59,11 @@ s2= surfaces.newQuadSurfacePts(p1.tag, p4.tag, p5.tag, p2.tag)
 xcTotalSet= preprocessor.getSets.getSet('total')
 pointConnectivity= list()
 for p in xcTotalSet.points:
-    pointConnectivity.append(p.getNumConnectedEdges)
+    pointConnectivity.append(p.numConnectedEdges)
     
 lineConnectivity= list()
 for l in xcTotalSet.lines:
-    lineConnectivity.append(l.getNumConnectedSurfaces)
+    lineConnectivity.append(l.numConnectedSurfaces)
 
 # Check result.
 err= 0
@@ -91,10 +91,10 @@ xcTotalSetB= prepB.getSets.getSet('total')
 
 pointConnectivityB= list()
 for p in xcTotalSetB.points:
-    pointConnectivityB.append(p.getNumConnectedEdges)
+    pointConnectivityB.append(p.numConnectedEdges)
 lineConnectivityB= list()
 for l in xcTotalSetB.lines:
-    lineConnectivityB.append(l.getNumConnectedSurfaces)
+    lineConnectivityB.append(l.numConnectedSurfaces)
 
 # Check values.
 errB= 0

@@ -41,7 +41,7 @@ class_<XC::EntMdlr, bases<XC::SetEstruct>, boost::noncopyable >("EntMdlr", no_in
   .def("In", &XC::EntMdlr::In,"\n""In(geomObject,tolerance) \n""Return true if this object lies inside the geometric object.")
   .def("Out", &XC::EntMdlr::Out,"\n""Out(geomObject,tolerance) \n""Return true if this object lies outside the geometric object.")
   .def("getPosCentroid", &XC::EntMdlr::getCentroid,"Returns the centroid of the object.")
-  .def("getConnectedElements",&XC::EntMdlr::getConnectedElementsPy,"Returns the elements connected to the node argument.")
+  .def("getConnectedElements",&XC::EntMdlr::getConnectedElementsPy,"Returns the elements of this object connected to the given node.")
   .def("dist2", &XC::EntMdlr::getSquaredDistanceTo, "Return the square of the distance to the point argument.")
   .def("dist", &XC::EntMdlr::getDistanceTo, "Return the distance to the point argument.")
    ;

@@ -1102,7 +1102,7 @@ class DiagonalConnectionGroup(ConnectionGroup):
         # Get members connected to the joint
         # from the model of the whole structure.
         materialModule= getmodule(diagonalBoltedPlate.__class__)
-        jointMembers= connected_members.getConnectedMembers(xcSet, ConnectedMemberType= materialModule.ConnectedMember)
+        jointMembers= connected_members.get_connected_members(xcSet, ConnectedMemberType= materialModule.ConnectedMember)
 
         super(DiagonalConnectionGroup, self).__init__(name= name, connectionData= jointMembers, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, boltedPlateTemplate= diagonalBoltedPlate, beamsShearEfficiency= beamsShearEfficiency, intermediateJoint= intermediateJoint, ConnectionType= ConnectionType)
         

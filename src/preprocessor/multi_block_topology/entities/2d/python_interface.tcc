@@ -23,6 +23,10 @@
 
 
 XC::Edge *(XC::Face::*getFaceOppositeEdge)(const XC::Edge &)= &XC::Face::getOppositeEdge;
+boost::python::list (XC::Face::*get_connected_surfaces_face_py)(void) const= &XC::Face::getConnectedSurfacesPy;
+boost::python::list (XC::Face::*get_connected_surfaces_face_set_py)(const XC::SetBase *) const= &XC::Face::getConnectedSurfacesPy;
+boost::python::list (XC::Face::*get_connected_bodies_face_py)(void) const= &XC::Face::getConnectedBodiesPy;
+boost::python::list (XC::Face::*get_connected_bodies_face_set_py)(const XC::SetBase *) const= &XC::Face::getConnectedBodiesPy;
 class_<XC::Face, XC::Face *,bases<XC::CmbEdge>, boost::noncopyable >("Face", no_init)
   .add_property("nDivI", &XC::Face::NDivI, &XC::Face::setNDivI,"get/set the number of divisions of the even sides of the surface.")
   .add_property("nDivJ", &XC::Face::NDivJ, &XC::Face::setNDivJ,"get/set the number of divisions of the odd sides of the surface.")
@@ -44,7 +48,11 @@ class_<XC::Face, XC::Face *,bases<XC::CmbEdge>, boost::noncopyable >("Face", no_
   .def("getHoles", &XC::Face::getPyHoles, "Return a list with the face holes in it.")
   .def("getOppositeEdge", make_function(getFaceOppositeEdge, return_internal_reference<>()), "Return the opposite side with respect to the one being passed as parameter.")
   .def("getCommonEdges", &XC::Face::getCommonEdgesPy, "Return a list with the edges that are common with the given surface.")
-  .add_property("getConnectedSurfaces", &XC::Face::getConnectedSurfacesPy,"Returns the surfaces connected to this surface.")
+
+  .add_property("connectedSurfaces", get_connected_surfaces_face_py, "Returns the surfaces connected to this surface.")
+  .def("getConnectedSurfaces", get_connected_surfaces_face_set_py, "Returns the surfaces of the given set that are connected to this one.")
+  .add_property("connectedBodies", get_connected_bodies_face_py, "Returns the bodies connected to this surface.")
+  .def("getConnectedBodies", get_connected_bodies_face_set_py, "Returns the bodies of the given set that are connected to this surface.")
 
    ;
 

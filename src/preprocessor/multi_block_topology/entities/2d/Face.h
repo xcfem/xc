@@ -134,11 +134,17 @@ class Face: public CmbEdge
     Polygon3d getPolygon(void) const;
     double getSquaredDistanceTo(const Pos3d &pt) const;    
     double getArea(void) const;
-    //! @brief Return the bodies that touch this surface (neighbors).
-    const std::set<const Body *> &getConnectedBodies(void) const
-      { return bodies_surf; }
-    const std::set<const Face *> getConnectedSurfaces(void) const;
+    
+    const std::set<const Body *> &getConnectedBodies(void) const;
+    boost::python::list getConnectedBodiesPy(void) const;
+    std::set<const Face *> getConnectedSurfaces(void) const;
     boost::python::list getConnectedSurfacesPy(void) const;
+    
+    std::set<const Body *> getConnectedBodies(const SetBase *) const;
+    boost::python::list getConnectedBodiesPy(const SetBase *) const;
+    std::set<const Face *> getConnectedSurfaces(const SetBase *) const;
+    boost::python::list getConnectedSurfacesPy(const SetBase *) const;
+    
     size_t CommonEdge(const Face &) const;
     std::set<const Edge *> getCommonEdges(const Face &);
     boost::python::list getCommonEdgesPy(const Face &);
@@ -172,8 +178,8 @@ class Face: public CmbEdge
     void setPyDict(const boost::python::dict &);
   };
 
-std::set<const Face *> getConnectedSurfaces(const Edge &l);
-std::set<const Pnt *> getCommonVertex(const Face &,const Face &, const Face &);
+std::set<const Face *> get_connected_surfaces(const Edge &);
+std::set<const Pnt *> get_common_vertex(const Face &,const Face &, const Face &);
 
 } //end of XC namespace.
 
