@@ -328,8 +328,8 @@ def get_setLines_on_setPoints(setPoints,setLinName,onlyIncluded=True):
                          
     '''
     prep=setPoints.getPreprocessor
-    totalSet=prep.getSets.getSet('total').getLines
-    lstPoints=[p for p in setPoints.getPoints]
+    totalSet=prep.getSets.getSet('total')
+    lstPoints=[p for p in setPoints.points]
     lstLin=get_lstLines_from_lstPoints(lstPoints,totalSet,onlyIncluded)
     s=lstLin_to_set(prep,lstLin,setLinName)
     s.fillDownwards()
