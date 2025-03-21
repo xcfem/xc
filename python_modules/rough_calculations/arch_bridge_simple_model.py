@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-''' Simple analysis model for arch bridges.'''
+''' Simple analysis model for arch bridges.
+
+  based on Maria Garlock's papers:
+  file: L4_-_Arches_Jan_11_-_final.pdf 
+  file: L8-_Tied_Arches_Jan_10.pdf
+'''
 
 from __future__ import division
 
@@ -8,13 +13,6 @@ __copyright__= "Copyright 2017, AOO and LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
-
-''' Arch bridge rough calculations.
-
-  based on Maria Garlock's papers:
-  file: L4_-_Arches_Jan_11_-_final.pdf 
-  file: L8-_Tied_Arches_Jan_10.pdf
-'''
 
 
 from rough_calculations import arch_bridge_rough_base as base

@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+''' Check simple analysis model for arch bridges.
+
+  based on Maria Garlock's papers:
+  file: L4_-_Arches_Jan_11_-_final.pdf 
+  file: L8-_Tied_Arches_Jan_10.pdf
+'''
+
 from __future__ import print_function
 from __future__ import division
 
