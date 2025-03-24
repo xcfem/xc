@@ -260,7 +260,7 @@ boost::python::dict XC::MFreedom_Constraint::getPyDict(void) const
   {
     boost::python::dict retval= MFreedom_ConstraintBase::getPyDict();
     retval["retainDOF"]= this->retainDOF.getPyList();
-    retval["Ur0"]= Ur0;
+    retval["Ur0"]= Ur0.getPyList();
     return retval;
   }
 //! @brief Set the values of the object members from a Python dictionary.
