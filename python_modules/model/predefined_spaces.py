@@ -231,6 +231,10 @@ class PredefinedSpace(object):
         '''
         return self.preprocessor.getProblem
 
+    def getBnd(self):
+        ''' Return the boundary of the model.'''
+        return self.getTotalSet().getBnd()
+    
     def clearAll(self):
         ''' Clear the finite element model.'''
         prb= self.getProblem()
