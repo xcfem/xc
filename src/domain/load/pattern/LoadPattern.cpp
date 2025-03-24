@@ -74,6 +74,7 @@
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 #include "preprocessor/prep_handlers/LoadHandler.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 void XC::LoadPattern::free(void)
   {
@@ -103,8 +104,9 @@ XC::LoadPattern::LoadPattern(int tag)
 //! @brief Virtual constructor.
 XC::LoadPattern *XC::LoadPattern::getCopy(void)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented."
+	      << Color::def << std::endl;
     return nullptr;
   }
 
@@ -117,8 +119,9 @@ const XC::MapLoadPatterns *XC::LoadPattern::getMapLoadPatterns(void) const
   {
     const MapLoadPatterns *retval= dynamic_cast<const MapLoadPatterns *>(Owner());
     if(!retval)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; load pattern container not defined." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; load pattern container not defined."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -127,8 +130,9 @@ XC::MapLoadPatterns *XC::LoadPattern::getMapLoadPatterns(void)
   {
     MapLoadPatterns *retval= dynamic_cast<MapLoadPatterns *>(Owner());
     if(!retval)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; load pattern container not defined." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; load pattern container not defined."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -193,8 +197,9 @@ bool XC::LoadPattern::addToDomain(void)
     if(theDomain)
       retval= theDomain->addLoadPattern(this);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; WARNING: null pointer to the domain\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; WARNING: null pointer to the domain."
+	        << Color::def << std::endl;
     return retval;
   }
 
@@ -205,8 +210,9 @@ void XC::LoadPattern::removeFromDomain(void)
     if(theDomain)
       theDomain->removeLoadPattern(this);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; WARNING: null pointer to the domain\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; WARNING: null pointer to the domain."
+	        << Color::def << std::endl;
   }
 
 //! @brief Return true if the load pattern is already added
@@ -235,8 +241,9 @@ bool XC::LoadPattern::addNodalLoad(NodalLoad *load)
         currentGeoTag++;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; WARNING: load could not be added\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; WARNING: load could not be added."
+	        << Color::def << std::endl;
     return result;
   }
 
@@ -247,10 +254,11 @@ bool XC::LoadPattern::addNodalLoad(NodalLoad *load)
 XC::NodalLoad *XC::LoadPattern::newNodalLoad(const int &nodeTag,const Vector &f)
   {
     if(isActive())
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	        << "; this load pattern is already active,"
 	        << " loads must be defined previously."
-	        << " Results are undefined." << std::endl;
+	        << " Results are undefined."
+		<< Color::def << std::endl;
     MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(Owner());
     assert(map);
     int nextTag= map->getCurrentNodeLoadTag();
@@ -266,10 +274,11 @@ XC::NodalLoad *XC::LoadPattern::newNodalLoad(const int &nodeTag,const Vector &f)
 XC::ElementalLoad *XC::LoadPattern::newElementalLoad(const std::string &loadType)
   {
     if(isActive())
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	        << "; this load pattern is already active,"
 	        << " loads must be defined previously."
-	        << " Results are undefined." << std::endl;
+	        << " Results are undefined."
+		<< Color::def << std::endl;
     MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(Owner());
     assert(map);
     int nextTag= map->getCurrentElementLoadTag();
@@ -294,8 +303,9 @@ bool XC::LoadPattern::addElementalLoad(ElementalLoad *load)
         currentGeoTag++;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; WARNING - load could not be added.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; WARNING - load could not be added."
+	        << Color::def << std::endl;
     return result;
   }
 
@@ -303,10 +313,11 @@ bool XC::LoadPattern::addElementalLoad(ElementalLoad *load)
 bool XC::LoadPattern::newElementalLoad(ElementalLoad *load)
   {
     if(isActive())
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	        << "; this load pattern is already active,"
 	        << " loads must be defined previously."
-	        << " results are undefined." << std::endl;
+	        << " results are undefined."
+		<< Color::def << std::endl;
     MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(Owner());
     int nextTag= map->getCurrentElementLoadTag();
     bool result= false;
@@ -317,8 +328,9 @@ bool XC::LoadPattern::newElementalLoad(ElementalLoad *load)
           map->setCurrentElementLoadTag(++nextTag); //increments by one the corresponding tag
       }
     else
-      std::cerr  << getClassName() << "::" << __FUNCTION__
-		 << "; the pointer to the load es nulo." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; the pointer to the load es nulo."
+		<< Color::def << std::endl;
     return result;
   }
 
@@ -417,9 +429,10 @@ void XC::LoadPattern::applyLoad(double pseudoTime)
           loadFactor= theSeries->getFactor(pseudoTime);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; ERROR: time series not defined. Using load factor: "
-	        << loadFactor << std::endl;
+	        << loadFactor
+		<< Color::def << std::endl;
     const double factor= loadFactor*gamma_f; //Weighting of the case.
 
     theLoads.applyLoad(factor);
@@ -470,6 +483,41 @@ XC::DbTagData &XC::LoadPattern::getDbTagData(void) const
     return retval;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::LoadPattern::getPyDict(void) const
+  {
+    boost::python::dict retval= NodeLocker::getPyDict();
+    retval["description"]= this->description;
+    retval["load_factor"]= this->loadFactor;
+    retval["gamma_f"]= this->gamma_f;
+    retval["ts_class_tag"]= this->theSeries->getClassTag();
+    retval["ts_class_name"]= this->theSeries->getClassName();
+    retval["loads"]= this->theLoads.getPyDict();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::LoadPattern::setPyDict(const boost::python::dict &d)
+  {
+    NodeLocker::setPyDict(d);
+    this->description= boost::python::extract<std::string>(d["description"]);
+    this->loadFactor= boost::python::extract<double>(d["load_factor"]);
+    this->gamma_f= boost::python::extract<double>(d["gamma_f"]);
+    const int ts_class_tag= boost::python::extract<int>(d["ts_class_tag"]);
+    const std::string ts_class_name= boost::python::extract<std::string>(d["ts_class_name"]);
+    TimeSeries *newTimeSeries= dynamic_cast<TimeSeries *>(get_new_movable_object(ts_class_name, ts_class_tag));
+    if(newTimeSeries)
+      this->setTimeSeries(newTimeSeries);
+    else
+      {
+	this->setTimeSeries(nullptr);
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; failed to read time series."
+		  << Color::def << std::endl;
+      }      
+    this->theLoads.setPyDict(boost::python::extract<boost::python::dict>(d["loads"]));
+  }
+
 //! @brief Send members through the communicator argument.
 int XC::LoadPattern::sendData(Communicator &comm)
   {
@@ -503,8 +551,9 @@ int XC::LoadPattern::sendSelf(Communicator &comm)
     const int dataTag= getDbTag(comm);
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; failed to send data.\n";    
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send data."
+	        << Color::def << std::endl;    
     return res;
   }
 
@@ -516,8 +565,9 @@ int XC::LoadPattern::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << ";  data could not be received.\n" ;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << ";  data could not be received."
+	        << Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;
@@ -531,16 +581,17 @@ void XC::LoadPattern::Print(std::ostream &s, int flag) const
     s << "  partial safety factor gamma_f: " << gamma_f << "\n";
     if(theSeries)
       theSeries->Print(s,flag);
-    std::cerr << "  Loads: \n";
+    s << "  Loads: \n";
     theLoads.Print(s,flag);
     NodeLocker::Print(s,flag);
   }
 
 int XC::LoadPattern::addMotion(GroundMotion &theMotion, int tag)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	      << "; cannot add GroundMotion"
-              << "- use MultiSupport Pattern instead.\n";
+              << "- use MultiSupport Pattern instead."
+              << Color::def << std::endl;
     return -1;
   }
 
@@ -569,9 +620,9 @@ int XC::LoadPattern::setParameter(const std::vector<std::string> &argv, Paramete
   {
     if(!theSeries)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; set/update/activate parameter is illegaly called."
-		  << std::endl;
+		  << Color::def << std::endl;
       }
 
     //const int argc= argv.size();
@@ -602,9 +653,9 @@ int XC::LoadPattern::updateParameter(int parameterID, Information &info)
   {
     if(!theSeries)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "set/update/activate parameter is illegaly called."
-		  << std::endl;
+		  << Color::def << std::endl;
       }
     if(RVisRandomProcessDiscretizer)
       { return theSeries->updateParameter(parameterID,info); }
@@ -617,9 +668,9 @@ int XC::LoadPattern::activateParameter(int parameterID)
   {
     if(!theSeries)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "set/update/activate parameter is illegaly called."
-		  << std::endl;
+		  << Color::def << std::endl;
       }
 
     if(RVisRandomProcessDiscretizer)

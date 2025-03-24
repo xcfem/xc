@@ -80,12 +80,12 @@ class LoadContainer: public CommandEntity, public MovableObject
     friend class LoadPattern;
   private:
     // storage objects for the loads.
-    TaggedObjectStorage  *theNodalLoads; //!< Nodal load container.
-    TaggedObjectStorage  *theElementalLoads; //!< Elemental load container.
+    TaggedObjectStorage *theNodalLoads; //!< Nodal load container.
+    TaggedObjectStorage *theElementalLoads; //!< Elemental load container.
 
     // iterator objects for the objects added to the storage objects
-    NodalLoadIter       *theNodIter; //!< Iterator over nodal loads.
-    ElementalLoadIter   *theEleIter; //!< Iterator over elemental loads.
+    NodalLoadIter *theNodIter; //!< Iterator over nodal loads.
+    ElementalLoadIter *theEleIter; //!< Iterator over elemental loads.
 
     void free_containers(void);
     void free_iterators(void);
@@ -132,6 +132,9 @@ class LoadContainer: public CommandEntity, public MovableObject
     virtual void applyLoad(const double &);
     
     // methods for o/p
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
 
