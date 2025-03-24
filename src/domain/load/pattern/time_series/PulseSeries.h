@@ -90,7 +90,10 @@ class PulseSeries: public PeriodSeries
     // method to get load factor
     double getFactor(double pseudoTime) const;
     
-    // methods for output    
+    // methods for output.
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
 

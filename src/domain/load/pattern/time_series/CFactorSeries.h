@@ -48,15 +48,18 @@ class CFactorSeries: public TimeSeries
   public:
     CFactorSeries(int classTag,double cf= 1.0);
 
-    int sendSelf(Communicator &);
-    int recvSelf(const Communicator &);
-
     //! @brief Return load factor at specified time.
     inline double getFactor(double pseudoTime) const
       { return cFactor; }
     //! @brief Sets factor value.
     void setFactor(const double &d)
       { cFactor= d; }
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

@@ -59,6 +59,9 @@ class PeriodSeries: public PulseBaseSeries
     inline void setShift(const double &d)
       { shift= d; }
     
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     void Print(std::ostream &s, int flag =0) const;
 
   };

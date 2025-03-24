@@ -330,6 +330,24 @@ double XC::PathTimeSeries::getDuration(void) const
     return retval;
   }
 
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::PathTimeSeries::getPyDict(void) const
+  {
+    boost::python::dict retval= PathSeriesBase::getPyDict();
+    retval["time"]= this->time.getPyList();
+    retval["current_time_loc"]= this->currentTimeLoc;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::PathTimeSeries::setPyDict(const boost::python::dict &d)
+  {
+    PathSeriesBase::setPyDict(d);
+    this->time= Vector(boost::python::extract<boost::python::list>(d["time"]));
+    this->currentTimeLoc= boost::python::extract<int>(d["current_time_loc"]);
+  }
+
 //! @brief Send members through the communicator argument.
 int XC::PathTimeSeries::sendData(Communicator &comm)
   {

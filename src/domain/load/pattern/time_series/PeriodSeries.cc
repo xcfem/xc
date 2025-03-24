@@ -80,6 +80,23 @@ XC::PeriodSeries::PeriodSeries(int classTag,double startTime, double finishTime,
 XC::PeriodSeries::PeriodSeries(int classTag)
   : PulseBaseSeries(classTag,1.0), period(1.0),shift(0.0) {}
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::PeriodSeries::getPyDict(void) const
+  {
+    boost::python::dict retval= PulseBaseSeries::getPyDict();
+    retval["period"]= this->period;
+    retval["shift"]= this->shift;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::PeriodSeries::setPyDict(const boost::python::dict &d)
+  {
+    PulseBaseSeries::setPyDict(d);
+    this->period= boost::python::extract<double>(d["period"]);
+    this->shift= boost::python::extract<double>(d["shift"]);
+  }
+
 //! @brief Send object members through the communicator argument.
 int XC::PeriodSeries::sendData(Communicator &comm)
   {

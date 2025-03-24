@@ -184,6 +184,26 @@ double XC::PathSeries::getFactor(double pseudoTime) const
 double XC::PathSeries::getDuration(void) const
   { return thePath.Size() * pathTimeIncr; }
 
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::PathSeries::getPyDict(void) const
+  {
+    boost::python::dict retval= PathSeriesBase::getPyDict();
+    retval["path_time_increment"]= this->pathTimeIncr; // Time step.
+    retval["start_time"]= this->startTime; // provide a start time for provided load factors.
+    retval["prepend_zero"]= this->prependZero; // if true prepend a zero value to the series of load factors.
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::PathSeries::setPyDict(const boost::python::dict &d)
+  {
+    PathSeriesBase::setPyDict(d);
+    this->pathTimeIncr= boost::python::extract<double>(d["path_time_increment"]);
+    this->startTime= boost::python::extract<double>(d["start_time"]);
+    this->prependZero= boost::python::extract<bool>(d["prepend_zero"]);
+  }
+
 //! @brief Sends object data.
 int XC::PathSeries::sendData(Communicator &comm)
   {

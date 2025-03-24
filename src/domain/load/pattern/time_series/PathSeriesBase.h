@@ -67,6 +67,9 @@ class PathSeriesBase: public CFactorSeries
       { this->useLast= b; }
     inline bool getUseLast(void) const
       {return this->useLast;}
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
 
     void Print(std::ostream &s, int flag =0) const;
   };

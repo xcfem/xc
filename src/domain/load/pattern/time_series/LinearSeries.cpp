@@ -92,6 +92,21 @@ XC::DbTagData &XC::LinearSeries::getDbTagData(void) const
     return retval;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::LinearSeries::getPyDict(void) const
+  {
+    boost::python::dict retval= CFactorSeries::getPyDict();
+    retval["t_start"]= this->tStart;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::LinearSeries::setPyDict(const boost::python::dict &d)
+  {
+    CFactorSeries::setPyDict(d);
+    this->tStart= boost::python::extract<double>(d["t_start"]);
+  }
+
 //! @brief Send object members through the communicator argument.
 int XC::LinearSeries::sendData(Communicator &comm)
   {

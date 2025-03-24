@@ -62,7 +62,10 @@ class PulseBaseSeries: public CFactorSeries
     inline void setFinish(const double &d)
       { tFinish= d; }
     
-    // methods for output    
+    // methods for output.
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
 
