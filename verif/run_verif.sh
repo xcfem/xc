@@ -966,6 +966,7 @@ echo "$BLEU" "  Load patterns tests." "$NORMAL"
 python tests/loads/load_patterns/test_remove_load_pattern.py
 python tests/loads/load_patterns/load_case_test_01.py
 python tests/loads/load_patterns/load_case_manager_test_01.py
+python tests/loads/load_patterns/load_case_manager_test_02.py
 echo "$BLEU" "  Load time series tests." "$NORMAL"
 python tests/loads/time_series/test_linear_01.py
 python tests/loads/time_series/test_linear_02.py

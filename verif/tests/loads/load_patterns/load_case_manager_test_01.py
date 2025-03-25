@@ -31,7 +31,7 @@ lcDict['Q3A1']= 'Temperature increment'
 lcDict['Q3A2']= 'Temperatur decrement'
 lcDict['A1']= 'Derailment situation I'
 lcDict['A2']= 'Derailment situation II'
-lcDict['A3']= 'Impacto vehículo carretero'
+lcDict['A3']= 'Impact'
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -52,6 +52,7 @@ dctB= lcManagerB.getDict()
 
 testOK= (dctA==dctB)
 
+
 '''
 print(dctA)
 print(dctB)
@@ -65,3 +66,10 @@ if testOK:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+
+# # Write dictionary in a JSON file to
+# # feed the following test.
+# import json
+# jsonFName= fname.replace('01.py', '02.json')
+# with open(jsonFName, 'w') as f:
+#     json.dump(dctA, f)
