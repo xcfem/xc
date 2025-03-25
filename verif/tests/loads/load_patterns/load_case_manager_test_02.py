@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-'''Check LoadCaseManager class getDict/setFromDict methods.'''
+'''Check LoadCaseManager class getDict/setFromDict methods. Read data from
+   JSON file.'''
 
 __author__= "Ana Ortega (AO_O)  Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2025, AO_O  LCPT"
