@@ -1826,6 +1826,10 @@ python tests/rough_calculations/reinforced_concrete/ng_rc_section_test_ec2_02.py
 python tests/rough_calculations/reinforced_concrete/ng_pile_cap_test.py
 python tests/rough_calculations/reinforced_concrete/ng_rc_section_bending_with_compression_test_01.py
 python tests/rough_calculations/reinforced_concrete/ng_rc_section_bending_with_compression_test_02.py
+echo "$BLEU" "    Reinforced concrete hinge design,..." "$NORMAL"
+python tests/rough_calculations/reinforced_concrete/test_hinge_design_01.py
+python tests/rough_calculations/reinforced_concrete/test_hinge_design_02.py
+
 
 #Postprocess tests
 echo "$BLEU" "Verifiying routines for post processing." "$NORMAL"

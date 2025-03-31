@@ -12,3 +12,4 @@ Reinforced concrete related tests.
  
 ### Concrete hinges
  - [Modeling and design of concrete hinges under general loading](https://doi.org/10.1002/suco.202201110)
+ - [Issue related to shear resistance according to equation](https://github.com/xcfem/xc_studies/blob/main/20250327_concrete_hinge_design/note_about_results_on_figure_11.pdf)

@@ -16,10 +16,20 @@ __email__= "l.pereztato@gmail.com"
 
 from materials import concrete_hinge
 
-ch2= concrete_hinge.ConcreteHinge(d1= 38e-3, d= 0.38, b1= 1.05, b= 1.2, ht= 8e-3)
+ch2= concrete_hinge.ConcreteHinge(concrete= None, reinfSteel= None, d1= 38e-3, d= 0.38, b1= 1.05, b= 1.2, ht= 8e-3)
 
 # Compute geometry capacity factor.
 geom_cf= ch2.getGeometryEfficiency(threshold= 1.06)
+ratio= abs(geom_cf-1.05)/1.05
 
 
-print(geom_cf)
+# print(geom_cf, ratio)
+
+import os
+from misc_utils import log_messages as lmsg
+fname= os.path.basename(__file__)
+if (abs(ratio)<.01):
+    print('test '+fname+': ok.')
+else:
+    lmsg.error(fname+' ERROR.')
+
