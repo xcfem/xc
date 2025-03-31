@@ -39,3 +39,7 @@ A fiber section object is composed of Fibers, with each fiber containing a Uniax
 ### Interaction diagrams
 - [Implementation of interaction diagrams in the finite element open source software XC](http://www.xcengineering.xyz/blog_doc/2016_interact_diag/interactionDiagram.pdf)
 - [P-M Interaction by the Book](https://portwooddigital.com/2022/06/12/p-m-interaction-by-the-book)
+
+### Section integration
+- [Section Integration](https://portwooddigital.com/2023/11/17/section-integration/)
+- [Section Warping Analysis](https://portwooddigital.com/2025/03/29/section-warping-analysis/)

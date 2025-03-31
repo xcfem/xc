@@ -54,3 +54,7 @@ Python modules that make easier to define materials as defined in structural cod
 - [IAPF](https://cpage.mpr.gob.es/producto/instruccion-de-acciones-a-considerar-en-puentes-de-ferrocarril/)
 - [What is Rail Structure Interaction?](https://www.midasoft.com/bridge-library/bridging-the-gap-the-indispensable-role-of-rail-structure-interaction)
 - [Rail structure interaction](https://www.midasbridge.com/en/solutions/rail-structure-interaction)
+
+### Concrete hinges
+ - [Modeling and design of concrete hinges under general loading](https://doi.org/10.1002/suco.202201110)
+ - [Issue related to shear resistance according to equation](https://github.com/xcfem/xc_studies/blob/main/20250327_concrete_hinge_design/note_about_results_on_figure_11.pdf)

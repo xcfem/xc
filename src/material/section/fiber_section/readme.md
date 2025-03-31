@@ -18,3 +18,6 @@ A fiber section object is composed of Fibers, with each fiber containing a Uniax
 - [Rectangular Patches](https://portwooddigital.com/2022/06/05/rectangular-patches/)
 - [Full Fiber Circle](https://portwooddigital.com/2022/06/15/full-fiber-circle/)
 - [How to Find the Neutral Axis](http://portwooddigital.com/2022/11/09/how-to-find-the-neutral-axis/)
+### Section integration
+- [Section Integration](https://portwooddigital.com/2023/11/17/section-integration/)
+- [Section Warping Analysis](https://portwooddigital.com/2025/03/29/section-warping-analysis/)
