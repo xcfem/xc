@@ -40,7 +40,7 @@ class Matrix;
 
 //! @ingroup ElemLoads
 //
-//! @brief Mechanical load (forces) over threedimensional elements.
+//! @brief Mechanical load (forces) over three-dimensional elements.
 class ThreedimMecLoad: public ThreedimLoad
   {
   public:
