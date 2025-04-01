@@ -70,6 +70,7 @@
 #include "domain/mesh/element/utils/coordTransformation/coordinate_transformation_class_names.h"
 #include "domain/constraints/constraint_class_names.h"
 #include "domain/mesh/element/element_class_names.h"
+#include "domain/load/load_class_names.h"
 #include "domain/load/groundMotion/ground_motion_class_names.h"
 #include "domain/load/pattern/time_series/time_series_class_names.h"
 #include "domain/load/pattern/load_patterns/load_pattern_class_names.h"
@@ -349,16 +350,16 @@ XC::SFreedom_Constraint *XC::FEM_ObjectBroker::getNewSP(int classTag)
       case CNSTRNT_TAG_ImposedMotionSP:
         return new ImposedMotionSP();
 
-        case CNSTRNT_TAG_ImposedMotionSP1:
-             return new ImposedMotionSP1();
-        default:
-             std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
-		       << "; no SFreedom_Constraint type exists for class tag "
-		       << classTag
-		       << Color::def << std::endl;
-             return nullptr;
-
-         }
+      case CNSTRNT_TAG_ImposedMotionSP1:
+	return new ImposedMotionSP1();
+      default:
+	std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		  << "; no SFreedom_Constraint type exists for class tag "
+		  << classTag
+		  << Color::def << std::endl;
+	return nullptr;
+	
+      }
   }
 
 //! @brief Broke a nodal load from its class identifier.
@@ -407,13 +408,15 @@ XC::ElementalLoad *XC::FEM_ObjectBroker::getNewElementalLoad(int classTag)
         return new ShellRawLoad();
       case LOAD_TAG_ShellUniformLoad:
         return new ShellUniformLoad();
+      case LOAD_TAG_ShellStrainLoad:
+        return new ShellStrainLoad();
       case LOAD_TAG_BrickSelfWeight:
         return new BrickSelfWeight();
       case LOAD_TAG_SurfaceLoad:
 	return new SurfaceLoad();
       default:
         std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
-		  << "; no NodalLoad type exists for class tag "
+		  << "; no ElementalLoad type exists for class tag "
 		  << classTag
 		  << Color::def << std::endl;
         return 0;
@@ -1852,6 +1855,10 @@ XC::TaggedObject *XC::get_new_tagged_object(const std::string &className, const 
       retval= broker.getNewMRMP(classTag);
     else if(XC::is_load_pattern(className))
       retval= broker.getNewLoadPattern(classTag);
+    else if(XC::is_nodal_load(className))
+      retval= broker.getNewNodalLoad(classTag);
+    else if(XC::is_elemental_load(className))
+      retval= broker.getNewElementalLoad(classTag);
     if(!retval)
       std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 	        << "; no " << className
