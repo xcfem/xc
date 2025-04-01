@@ -53,6 +53,8 @@ class ThreedimStrainLoad: public ThreedimLoad
     ThreedimStrainLoad(int tag, const std::vector<Vector> &, const ID &theElementTags);
     ThreedimStrainLoad(int tag, const size_t &, const Vector &, const ID &theElementTags);
   
+    std::string Category(void) const;
+    
     inline const std::vector<Vector> &getStrains(void) const
       { return strains; }
     inline std::vector<Vector> &Strains(void)

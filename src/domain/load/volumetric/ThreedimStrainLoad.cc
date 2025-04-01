@@ -53,6 +53,10 @@ XC::ThreedimStrainLoad::ThreedimStrainLoad(int tag,const size_t &sz)
 XC::ThreedimStrainLoad::ThreedimStrainLoad(const size_t &sz)
   : ThreedimLoad(0,LOAD_TAG_ThreedimStrainLoad), strains(sz) {}
 
+//! @brief Return the category of this kind of loads.
+std::string XC::ThreedimStrainLoad::Category(void) const
+  { return "threedim_strain"; }
+
 //! @brief Return the values of the strains in a Python list.
 boost::python::list XC::ThreedimStrainLoad::getStrainsPy(void) const
   {
