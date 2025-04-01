@@ -303,26 +303,30 @@ class LoadCaseManager(object):
             self.loadCases[lp.name]= lp
         
     def setCurrentLoadCase(self, name, newLoadCase= False):
-       '''Sets current load case.
+        '''Sets current load case.
 
-       :param name: name for the load case to set as current.
-       :param newLoadCase: if true, create the load case if doesn't exists.
-       '''
-       self.getLoadPatterns().currentLoadPattern= name
-       if(name not in self.loadCases):
-           if(newLoadCase):
-               self.defineSimpleLoadCases([name])
-           else: 
-               lmsg.warning('Load case: \''+ name+ '\' doesn\'t exists.')
-       return self.getLoadCase(name)
+        :param name: name for the load case to set as current.
+        :param newLoadCase: if true, create the load case if doesn't exists.
+        '''
+        self.getLoadPatterns().currentLoadPattern= name
+        if(name not in self.loadCases):
+            if(newLoadCase):
+                self.defineSimpleLoadCases([name])
+            else: 
+                lmsg.warning('Load case: \''+ name+ '\' doesn\'t exists.')
+        return self.getLoadCase(name)
     
     def getCurrentLoadCase(self):
-       '''Returns current load case.'''
-       name= self.getLoadPatterns().currentLoadPattern
-       return self.getLoadCase(name)
+        '''Returns current load case.'''
+        name= self.getLoadPatterns().currentLoadPattern
+        return self.getLoadCase(name)
 
-    def getLoadCase(self,name):
-       return self.loadCases[name]
+    def getLoadCase(self, name):
+        ''' Return the load case with the give name.
+
+        :param name: name of the load case to retrieve.
+        '''
+        return self.loadCases[name]
 
     def getLoadCasesNames(self):
         ''' Return the names of the load cases in the container.'''
