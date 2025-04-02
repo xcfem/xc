@@ -67,7 +67,8 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <domain/load/groundMotion/GroundMotion.h>
 
-#include <domain/load/NodalLoad.h>
+#include "domain/load/NodalLoad.h"
+#include "domain/load/ElementalLoad.h"
 #include "domain/load/elem_load.h"
 
 
