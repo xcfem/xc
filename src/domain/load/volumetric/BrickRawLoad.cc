@@ -55,11 +55,11 @@ std::string XC::BrickRawLoad::Category(void) const
 //! @brief Returns force expressed in local coordinates.
 XC::Vector XC::BrickRawLoad::getLocalForce(void) const
   {
-    Vector retval(2);
+    Vector retval(3);
     for(std::vector<Vector>::const_iterator i= nodalLoads.begin(); i!= nodalLoads.end();i++)
       {
 	const Vector &nLoad= *i;
-	retval(0)+= nLoad[0]; retval(1)+= nLoad[1];
+	retval(0)+= nLoad[0]; retval(1)+= nLoad[1];; retval(2)+= nLoad[2];
       }
     return retval;
   }

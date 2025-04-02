@@ -36,10 +36,9 @@
 namespace XC {
 class FVectorQuad;
 
-//! @ingroup ElemLoads
-//
 //! @brief Mechanical load (forces) over quad elements.
-class QuadMecLoad: public BidimMecLoad
+//! @ingroup ElemLoads
+class QuadMecLoad: public BidimMecLoad<2>
   {
   public:
     QuadMecLoad(int tag, int classTag, const ID &theElementTags);
@@ -48,12 +47,7 @@ class QuadMecLoad: public BidimMecLoad
     virtual void addReactionsInBasicSystem(const std::vector<double> &,const double &,FVectorQuad &) const;
     virtual void addFixedEndForcesInBasicSystem(const std::vector<double> &,const double &,FVectorQuad &) const;
 
-    virtual size_t getForceVectorDimension(void) const;
-    virtual Vector getLocalForce(void) const;
-    virtual const Matrix &getLocalForces(void) const;
-    virtual const Matrix &getGlobalForces(void) const;
     virtual const Matrix &getGlobalVectors(const Matrix &) const;
-    virtual Vector3d getVector3dLocalForce(void) const;
     SlidingVectorsSystem3d getResultant(const Pos3d &centro, bool initialGeometry) const;
   };
 } // end of XC namespace

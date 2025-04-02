@@ -63,36 +63,6 @@ void XC::QuadMecLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &
 	      << "; not implemented." << std::endl;
   }
 
-//! @brief Return the dimension of the force vector.
-size_t XC::QuadMecLoad::getForceVectorDimension(void) const
-  { return 2; }
-
-//! @brief Returns force expressed in local coordinates.
-XC::Vector XC::QuadMecLoad::getLocalForce(void) const
-  {
-    Vector retval(2);
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented." << std::endl;
-    return retval;
-  }
-
-//! @brief Return the local components of the
-//! force in a Vector3d. 
-Vector3d XC::QuadMecLoad::getVector3dLocalForce(void) const
-  {
-    Vector f= getLocalForce();
-    return Vector3d(f[0],f[1],0.0);
-  }
-
-//! @brief Returns the components of the force vectors.
-const XC::Matrix &XC::QuadMecLoad::getLocalForces(void) const
-  {
-    static Matrix retval;
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented." << std::endl;
-    return retval;
-  }
-
 //! @brief Returns the vectors expressed in global coordinates.
 const XC::Matrix &XC::QuadMecLoad::getGlobalVectors(const Matrix &localVectors) const
   {
@@ -121,10 +91,6 @@ const XC::Matrix &XC::QuadMecLoad::getGlobalVectors(const Matrix &localVectors) 
 		<< ": pointer to domain is NULL." << std::endl;
     return retval;
   }
-
-//! @brief Return the force expressed in global coordinates.
-const XC::Matrix &XC::QuadMecLoad::getGlobalForces(void) const
-  { return getGlobalVectors(getLocalForces()); }
 
 //! brief Returns load resultant (force and moment integration over the elements).
 SlidingVectorsSystem3d XC::QuadMecLoad::getResultant(const Pos3d &centro, bool initialGeometry) const

@@ -27,29 +27,17 @@
 //BidimMecLoad.cpp
 
 #include "BidimMecLoad.h"
-#include <utility/matrix/Matrix.h>
-#include <utility/matrix/Vector.h>
-#include "utility/matrix/ID.h"
+// #include "utility/geom/pos_vec/SlidingVectorsSystem3d.h"
 
-#include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
-#include "utility/actor/actor/MovableVector.h"
-#include "domain/mesh/node/Node.h"
-#include "utility/geom/pos_vec/SlidingVectorsSystem3d.h"
 
-XC::BidimMecLoad::BidimMecLoad(int tag, int classTag, const ID &theElementTags)
-  :BidimLoad(tag, classTag, theElementTags) {}
-
-XC::BidimMecLoad::BidimMecLoad(int tag,int classTag)
-  :BidimLoad(tag, classTag) {}
-
-//! brief Returns load resultant (force and moment integration over the elements).
-//!
-//! @param center: origin for the sliding vector system.
-//! @param initialGeometry: if true don't use deformed geometry.
-SlidingVectorsSystem3d XC::BidimMecLoad::getResultant(const Pos3d &center, bool initialGeometry) const
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not yet implemented." << std::endl;
-    return SlidingVectorsSystem3d(center);
-  }
+// //! brief Returns load resultant (force and moment integration over the elements).
+// //!
+// //! @param center: origin for the sliding vector system.
+// //! @param initialGeometry: if true don't use deformed geometry.
+// SlidingVectorsSystem3d XC::BidimMecLoad::getResultant(const Pos3d &center, bool initialGeometry) const
+//   {
+//     std::cerr << getClassName() << "::" << __FUNCTION__
+//               << "; not yet implemented." << std::endl;
+//     return SlidingVectorsSystem3d(center);
+//   }
 

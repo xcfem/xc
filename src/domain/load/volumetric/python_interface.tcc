@@ -25,11 +25,23 @@ class_<XC::ThreedimLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("Three
   .add_property("category", &XC::ThreedimLoad::Category)
   ;
 
-class_<XC::ThreedimMecLoad, bases<XC::ThreedimLoad>, boost::noncopyable >("ThreedimMecLoad", no_init)
-  .def("getResultant", &XC::ThreedimMecLoad::getResultant,"Returns load resultant (force and moment integration over the elements).")
+class_<XC::BrickSelfWeight, bases<XC::ThreedimLoad>, boost::noncopyable >("BrickSelfWeight", no_init)
   ;
 
-class_<XC::BrickSelfWeight, bases<XC::ThreedimLoad>, boost::noncopyable >("BrickSelfWeight", no_init)
+class_<XC::ThreedimMecLoad, bases<XC::ThreedimLoad>, boost::noncopyable >("ThreedimMecLoad", no_init)
+  .def("getResultant", &XC::ThreedimMecLoad::getResultant,"Returns load resultant (force and moment integration over the elements).")
+  .add_property("getForceVectorDimension", &XC::ThreedimMecLoad::getForceVectorDimension)
+  .def("getLocalForce",&XC::ThreedimMecLoad::getLocalForce,"Returns local coordinates or force vector.")
+  .def("getVector3dLocalForce",&XC::ThreedimMecLoad::getVector3dLocalForce,"Returns a Vector3d with the local coordinates of the force vector.")
+  .def("getLocalForces",make_function(&XC::ThreedimMecLoad::getLocalForces, return_internal_reference<>() ))
+  .def("getGlobalVectors",make_function(&XC::ThreedimMecLoad::getGlobalVectors, return_internal_reference<>() ))
+  .def("getGlobalForces",make_function(&XC::ThreedimMecLoad::getGlobalForces, return_internal_reference<>() ),"Returns force vector(s) in global coordinates.")
+  ;
+
+class_<XC::BrickMecLoad, bases<XC::ThreedimMecLoad>, boost::noncopyable >("BrickMecLoad", no_init)
+  ;
+
+class_<XC::BrickRawLoad, bases<XC::BrickMecLoad>, boost::noncopyable >("BrickRawLoad", no_init)
   ;
 
 class_<XC::ThreedimStrainLoad, bases<XC::ThreedimLoad>, boost::noncopyable >("ThreedimStrainLoad", no_init)
@@ -38,5 +50,5 @@ class_<XC::ThreedimStrainLoad, bases<XC::ThreedimLoad>, boost::noncopyable >("Th
   .def("setStrainComp",&XC::ThreedimStrainLoad::setStrainComp)
   ;
 
-class_<XC::BrickStrainLoad, bases<XC::ThreedimStrainLoad>, boost::noncopyable >("QuadStrainLoad", no_init)
+class_<XC::BrickStrainLoad, bases<XC::ThreedimStrainLoad>, boost::noncopyable >("BrickStrainLoad", no_init)
   ;
