@@ -30,21 +30,6 @@
 #ifndef ELEM_LOAD_H
 #define ELEM_LOAD_H
 
-#include "domain/load/beam_loads/Beam2dPointLoad.h"
-#include "domain/load/beam_loads/Beam2dUniformLoad.h"
-#include "domain/load/beam_loads/Beam2dPartialUniformLoad.h"
-#include "domain/load/beam_loads/BeamStrainLoad.h"
-#include "domain/load/beam_loads/Beam3dPointLoad.h"
-#include "domain/load/beam_loads/Beam3dUniformLoad.h"
-#include "domain/load/beam_loads/TrussStrainLoad.h"
-#include "domain/load/volumetric/BrickSelfWeight.h"
-#include "domain/load/volumetric/BrickStrainLoad.h"
-#include "domain/load/plane/ShellRawLoad.h"
-#include "domain/load/plane/ShellUniformLoad.h"
-#include "domain/load/plane/BidimStrainLoad.h"
-#include "domain/load/plane/QuadStrainLoad.h"
-#include "domain/load/plane/ShellStrainLoad.h"
-#include "domain/load/SurfaceLoad.h"
 #include "domain/load/pattern/LoadPattern.h"
 
 namespace XC {

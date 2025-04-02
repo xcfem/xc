@@ -28,6 +28,23 @@
 
 #include "elem_load.h"
 #include "utility/matrix/Vector.h"
+#include "domain/load/beam_loads/Beam2dPointLoad.h"
+#include "domain/load/beam_loads/Beam2dUniformLoad.h"
+#include "domain/load/beam_loads/Beam2dPartialUniformLoad.h"
+#include "domain/load/beam_loads/BeamStrainLoad.h"
+#include "domain/load/beam_loads/Beam3dPointLoad.h"
+#include "domain/load/beam_loads/Beam3dUniformLoad.h"
+#include "domain/load/beam_loads/TrussStrainLoad.h"
+#include "domain/load/volumetric/BrickRawLoad.h"
+#include "domain/load/volumetric/BrickSelfWeight.h"
+#include "domain/load/volumetric/BrickStrainLoad.h"
+#include "domain/load/plane/ShellRawLoad.h"
+#include "domain/load/plane/ShellUniformLoad.h"
+#include "domain/load/plane/BidimStrainLoad.h"
+#include "domain/load/plane/QuadStrainLoad.h"
+#include "domain/load/plane/QuadRawLoad.h"
+#include "domain/load/plane/ShellStrainLoad.h"
+#include "domain/load/SurfaceLoad.h"
 
 //! @brief Creates a new load over elements.
 //! 
@@ -53,6 +70,10 @@ XC::ElementalLoad *XC::process_element_load(XC::LoadPattern *lp,int &tag_el,cons
       retval= new_elem_load<BrickSelfWeight>(lp,tag_el);
     else if(loadType == "shell_raw_load")
       retval= new_elem_load<ShellRawLoad>(lp,tag_el);
+    else if(loadType == "quad_raw_load")
+      retval= new_elem_load<QuadRawLoad>(lp,tag_el);
+    else if(loadType == "brick_raw_load")
+      retval= new_elem_load<BrickRawLoad>(lp,tag_el);
     else if(loadType == "shell_uniform_load")
       retval= new_elem_load<ShellUniformLoad>(lp,tag_el);
     else if(loadType == "bidim_strain_load")
