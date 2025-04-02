@@ -1919,11 +1919,11 @@ python tests/postprocess/vtk/test_display_zero_length_local_axes_02.py
 python tests/postprocess/vtk/test_display_reactions_01.py
 python tests/postprocess/vtk/test_display_eigenvectors_01.py
 echo "$BLEU" "    Graphic output. Loads." "$NORMAL"
-python tests/postprocess/vtk/test_display_loads_01.py
-python tests/postprocess/vtk/test_display_loads_02.py
-python tests/postprocess/vtk/test_display_inertia_load_on_brick_01.py
-python tests/postprocess/vtk/test_display_inertia_load_on_quad_01.py
-python tests/postprocess/vtk/test_display_inertia_load_on_shell_01.py
+python tests/postprocess/vtk/display_loads/test_display_loads_01.py
+python tests/postprocess/vtk/display_loads/test_display_loads_02.py
+python tests/postprocess/vtk/display_loads/test_display_inertia_load_on_brick_01.py
+python tests/postprocess/vtk/display_loads/test_display_inertia_load_on_quad_01.py
+python tests/postprocess/vtk/display_loads/test_display_inertia_load_on_shell_01.py
 
 # Report tests.
 echo "$BLEU" "  Report output." "$NORMAL"
