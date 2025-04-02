@@ -46,11 +46,11 @@ class LoadOnPoints(vf.VectorField):
 class LoadVectorField(LoadOnPoints):
     '''Draws an arrow representing a punctual load on nodes and on elements.
 
-    :ivar multiplyByElementArea: if true multiply the load value by the element
-                                 area.
+    :ivar multiplyByElementSize: if true multiply the load value by the element
+                                 size (length or area or volume).
     :ivar setToDisp: set to display the loads on.
     '''
-    def __init__(self,loadPatternName,setToDisp,fUnitConv= 1e-3,scaleFactor= 1.0, showPushing= True, components= [0,1,2], multiplyByElementArea= True, symType= vtkArrowSource()):
+    def __init__(self,loadPatternName,setToDisp,fUnitConv= 1e-3,scaleFactor= 1.0, showPushing= True, components= [0,1,2], multiplyByElementSize= True, symType= vtkArrowSource()):
         '''
         Constructor.
 
@@ -60,11 +60,11 @@ class LoadVectorField(LoadOnPoints):
         :param scaleFactor: scale factor for the size of the vectors.
         :param showPushing: true if the loads push the loaded point (as oppssed to pull). Default: True
         :param components: index of the components of the load. Default: [0,1,2] 
-        :param multiplyByElementArea: for loads over elements (default= True).
+        :param multiplyByElementSize: for loads over elements (default= True).
         :param symType: shape of the symbol (defaults to an arrow).
         '''
         super(LoadVectorField,self).__init__(loadPatternName= loadPatternName, fUnitConv= fUnitConv, scaleFactor= scaleFactor, showPushing= showPushing, components= components, symType= symType)
-        self.multiplyByElementArea= multiplyByElementArea
+        self.multiplyByElementSize= multiplyByElementSize
         self.setToDisp= setToDisp
 
     def sumElementalUniformLoads(self, actLP):
@@ -87,17 +87,18 @@ class LoadVectorField(LoadOnPoints):
             while(elementLoad):
                 category= elementLoad.category
                 if(category=='uniform' or category=='raw'):
-                    if hasattr(elementLoad,'getLocalForce'):
+                    if hasattr(elementLoad,'getGlobalForces'):
                         tags= elementLoad.elementTags
-                        for i in range(0,len(tags)):
-                          eTag= tags[i]
+                        globalForces= elementLoad.getGlobalForces()
+                        for i, eTag in enumerate(tags):
                           if eTag in eTagsSet:
                               elem= preprocessor.getElementHandler.getElement(eTag)
-                              if(elem.getDimension==2):
-                                  vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(elementLoad.getLocalForce())
-                                  if(category=='raw'): # Those loads return the total load over the element.
+                              elemDimension= elem.getDimension
+                              vLoad= globalForces.getRow(i)
+                              if(elemDimension==2):
+                                  if((category=='raw') and (not self.multiplyByElementSize)): # Those loads return the total load over the element.
                                       vLoad*= (1.0/elem.getArea(True))
-                                  if(self.multiplyByElementArea):
+                                  if(self.multiplyByElementSize and (category!='raw')):
                                       vLoad*= elem.getArea(True)
                                   if(dim>2):
                                       v= xc.Vector([vLoad[comp_i],vLoad[comp_j],vLoad[comp_k]])
@@ -107,11 +108,37 @@ class LoadVectorField(LoadOnPoints):
                                       retval[eTag]+= v
                                   else:
                                       retval[eTag]= v
+                              elif(elemDimension==3):
+                                  if((category=='raw') and (not self.multiplyByElementSize)): # Those loads return the total load over the element.
+                                      vLoad*= (1.0/elem.getVolume(True))
+                                  if(self.multiplyByElementSize and (category!='raw')):
+                                      vLoad*= elem.getVolume(True)
+                                  v= xc.Vector([vLoad[comp_i],vLoad[comp_j],vLoad[comp_k]])
+                                  if eTag in retval:
+                                      retval[eTag]+= v
+                                  else:
+                                      retval[eTag]= v
+                              else:
+                                  className= type(self).__name__
+                                  methodName= sys._getframe(0).f_code.co_name
+                                  warningMsg= '; display of uniform loads over '+str(elemDimension)+'-dimensional'
+                                  warningMsg+= ' elements not implemented yet.'
+                                  lmsg.warning(className+'.'+methodName+warningMsg)
+                    else:
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        warningMsg= '; display of loads of type '+str(type(elementLoad))
+                        warningMsg+= ' not implemented yet.'
+                        lmsg.warning(className+'.'+methodName+warningMsg)
                 elif(category=='punctual'):
                     # Concentrated load must be treated elsewhere
                     className= type(self).__name__
                     methodName= sys._getframe(0).f_code.co_name
                     lmsg.warning(className+'.'+methodName+'; display of concentrated loads not implemented yet.')
+                elif('strain' in category):
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    lmsg.warning(className+'.'+methodName+'; display of strain loads not implemented yet.')
                 else:
                     className= type(self).__name__
                     methodName= sys._getframe(0).f_code.co_name
@@ -129,11 +156,13 @@ class LoadVectorField(LoadOnPoints):
         preprocessor= actLP[0].getDomain.getPreprocessor
         for eTag in self.elementalLoadVectors.keys():
             elem= preprocessor.getElementHandler.getElement(eTag)
-            if(elem.getDimension==2):
+            if(elem.getDimension>=2):
                 vLoad= self.elementalLoadVectors[eTag]
                 self.data.insertNextVector(vLoad[0],vLoad[1],vLoad[2])
             else:
-                lmsg.warning('displaying of loads over 1D elements not yet implemented')
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; displaying of loads over 1D elements not yet implemented')
         return len(self.elementalLoadVectors)
 
     def dumpElementalPositions(self,preprocessor):
@@ -142,12 +171,14 @@ class LoadVectorField(LoadOnPoints):
         '''
         for eTag in self.elementalLoadVectors.keys():
             elem= preprocessor.getElementHandler.getElement(eTag)
-            if(elem.getDimension==2):
+            if(elem.getDimension>=2):
                 vLoad= self.elementalLoadVectors[eTag]
                 p= elem.getPosCentroid(True)
                 self.data.insertNextPair(p.x,p.y,p.z,vLoad[0],vLoad[1],vLoad[2],self.fUnitConv,self.showPushing)
             else:
-                lmsg.warning('displaying of loads over 1D elements not yet implemented')
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; displaying of loads over 1D elements not yet implemented')
         return len(self.elementalLoadVectors)
 
     def sumNodalLoads(self,actLP):
@@ -298,7 +329,7 @@ class TorqueVectorField(LoadVectorField):
     '''Draws an torque-arrow representing a torque moment on nodes.
 
     '''
-    def __init__(self, loadPatternName, setToDisp, fUnitConv= 1e-3, scaleFactor= 1.0, showPushing= True, components= [3,4,5], multiplyByElementArea= False, symType= vf.get_double_headed_arrow()):
+    def __init__(self, loadPatternName, setToDisp, fUnitConv= 1e-3, scaleFactor= 1.0, showPushing= True, components= [3,4,5], multiplyByElementSize= False, symType= vf.get_double_headed_arrow()):
         '''
         Constructor.
 
@@ -308,7 +339,7 @@ class TorqueVectorField(LoadVectorField):
         :param scaleFactor: scale factor for the size of the vectors.
         :param showPushing: true if the loads push the loaded point (as oppssed to pull). Default: True
         :param components: index of the components of the load. Default: [0,1,2] 
-        :param multiplyByElementArea: for loads over elements (default= True).
+        :param multiplyByElementSize: for loads over elements (default= False).
         :param symType: shape of the symbol (defaults to a double-headed arrow).
         '''
-        super(TorqueVectorField,self).__init__(loadPatternName= loadPatternName, setToDisp= setToDisp, fUnitConv= fUnitConv,scaleFactor= scaleFactor, showPushing= showPushing, components= components, multiplyByElementArea= multiplyByElementArea, symType= symType)
+        super(TorqueVectorField,self).__init__(loadPatternName= loadPatternName, setToDisp= setToDisp, fUnitConv= fUnitConv,scaleFactor= scaleFactor, showPushing= showPushing, components= components, multiplyByElementSize= multiplyByElementSize, symType= symType)

@@ -9,7 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
-
+import sys
 from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import field_base as fb
 from postprocess.xcVtk.fields import vector_field_data as vfd
