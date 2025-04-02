@@ -658,7 +658,7 @@ class OutputHandler(object):
         LrefModSize=setToDisplay.getBnd(defFScale).diagonal.getModulus() # representative length of set size (to auto-scale)
         vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.
         vField= lvf.LoadVectorField(loadCaseName, setToDisplay, unitConversionFactor, vectorScale)
-        vField.multiplyByElementArea= self.outputStyle.multLoadsByElemArea
+        vField.multiplyByElementSize= self.outputStyle.multLoadsByElemSize
         displaySettings= self.getDisplaySettingsFE()
         displaySettings.setupGrid(setToDisplay)
         vField.dumpVectors(preprocessor,defFScale,showElementalLoads= True, showNodalLoads= True)
@@ -705,7 +705,7 @@ class OutputHandler(object):
             # auto-scaling parameters
             LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to auto-scale)
             elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
-            diagram= lld.LinearLoadDiagram(setToDisp=setToDisplay, scale=elLoadScaleF, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor, component=elLoadComp)
+            diagram= lld.LinearLoadDiagram(setToDisp= setToDisplay, scale=elLoadScaleF, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor, component=elLoadComp)
             maxAbs= diagram.autoScale(preprocessor)
             if(maxAbs>0.0):
                 # Linear loads
@@ -720,7 +720,8 @@ class OutputHandler(object):
 
             # surface loads
             forceComponents= self.modelSpace.getForceComponents()
-            vFieldEl= lvf.LoadVectorField(loadPatternName= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing,multiplyByElementArea= self.outputStyle.multLoadsByElemArea, components= forceComponents)
+            print('load vector field')
+            vFieldEl= lvf.LoadVectorField(loadPatternName= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing, multiplyByElementSize= self.outputStyle.multLoadsByElemSize, components= forceComponents)
             count= vFieldEl.dumpElementalLoads(preprocessor, defFScale=defFScale)
             if(count >0):
                 vFieldElTitle= 'Surface loads ('+self.getOutputForceUnitSym()+'/'+self.getOutputLengthUnitSym()+'2)'
@@ -746,7 +747,7 @@ class OutputHandler(object):
                 vFieldMNod.addToDisplay(displaySettings,orientation= scOrient, title= vFieldMNodTitle)
                 scOrient+=1
             if(not caption):
-              caption= 'load case: ' + loadCaseName +' '+elLoadComp + ', set: ' + setToDisplay.name + ', '  + unitDescription
+                caption= 'load case: ' + loadCaseName +' '+elLoadComp + ', set: ' + setToDisplay.name + ', '  + unitDescription
             displaySettings.displayConstraints(setToDisplay= setToDisplay, scale= scaleConstr)
             displaySettings.displayScene(caption=caption, unitDescription= unitDescription, fileName=fileName)
 

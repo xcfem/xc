@@ -16,35 +16,37 @@ from postprocess.xcVtk import vtk_graphic_base
 class OutputStyle(object):
     ''' Pararameters used in the output routines (graphics, etc.)
 
-       :ivar cameraParameters: camera position and orientation.
-       :ivar backgroundColor: color for the graphic background.
-       :ivar lineWidth: width of the displayed lines in screen units.
-       :ivar outputUnits: output units and unit conversion.
-       :ivar constraintsScaleFactor: scale factor to display DOF constraints.
-       :ivar localAxesVectorScaleFactor: scale factor to display local axes vectors.
-       :ivar reactionVectorScaleFactor: scale factor to display reactions.
-       :ivar eigenvectorScaleFactor: scale factor to display eigenvectors.
-       :ivar equivalentLoadVectorsScaleFactor: factor to apply to the vectors 
-                length in the representation of equivalent loads on nodes. If 
-                vectorEqLoadScale equals 0, equivalent static loads are not 
-                represented.
-                (defaults to 0.0 in which case only deformed shape is depicted)
-       :ivar loadVectorsScaleFactor: factor to apply to the vectors length in the 
-                                    representation of element loads (defaults to 1).
-       :ivar loadDiagramsScaleFactor:  scale factor to apply to the diagram display 
-                                       of element loads (defaults to 1).
-       :ivar showLoadsPushing: true if the vector ends in the loaded node (push
-                               the node).
-       :iver nodalLoadBarOrientation: orientation of scale bar for nodal loads
-                                      'H' -> horizontal, 'RV' -> right-vertical
-                                      'LV' left-vertical
-       :ivar multByElemAreaLoads: boolean value that must be True if we want to 
-                        represent the total load on each element 
-                        (=load multiplied by element area) and False if we 
-                        are going to depict the value of the uniform load 
-                        per unit area (defaults to False)
-       :ivar language: english, spanish, french 
-       :ivar directionDescr: text list to identify each direction (as ['vertical reinforcement', 'horizontal reinforcement']).
+    :ivar cameraParameters: camera position and orientation.
+    :ivar backgroundColor: color for the graphic background.
+    :ivar lineWidth: width of the displayed lines in screen units.
+    :ivar outputUnits: output units and unit conversion.
+    :ivar constraintsScaleFactor: scale factor to display DOF constraints.
+    :ivar localAxesVectorScaleFactor: scale factor to display local axes vectors.
+    :ivar reactionVectorScaleFactor: scale factor to display reactions.
+    :ivar eigenvectorScaleFactor: scale factor to display eigenvectors.
+    :ivar equivalentLoadVectorsScaleFactor: factor to apply to the vectors 
+             length in the representation of equivalent loads on nodes. If 
+             vectorEqLoadScale equals 0, equivalent static loads are not 
+             represented.
+             (defaults to 0.0 in which case only deformed shape is depicted)
+    :ivar loadVectorsScaleFactor: factor to apply to the vectors length in the 
+                                 representation of element loads (defaults to 1).
+    :ivar loadDiagramsScaleFactor:  scale factor to apply to the diagram display 
+                                    of element loads (defaults to 1).
+    :ivar showLoadsPushing: true if the vector ends in the loaded node (push
+                            the node).
+    :iver nodalLoadBarOrientation: orientation of scale bar for nodal loads
+                                   'H' -> horizontal, 'RV' -> right-vertical
+                                   'LV' left-vertical
+    :ivar multByElemSizeLoads: boolean value that must be True if we want to 
+                               represent the total load on each element 
+                               (=load multiplied by element size -length, 
+                               area or volume-) and False if we are going 
+                               to depict the value of the uniform load 
+                               per unit area (defaults to False)
+    :ivar language: english, spanish, french 
+    :ivar directionDescr: text list to identify each direction (as ['vertical 
+                          reinforcement', 'horizontal reinforcement']).
     '''
     def __init__(self, cameraParameters= None, outputUnits= output_units.OutputUnits(), constraintsScaleFactor= 0.4, localAxesVectorScaleFactor= 0.25, language= None, backgroundColor= vtk_graphic_base.defaultBackgroundColorRGB, lineWidth= None):
         '''Defines the dimension of the space and the number 
@@ -72,7 +74,7 @@ class OutputStyle(object):
         self.loadDiagramsScaleFactor= 1.0
         self.nodalLoadBarOrientation= 2 #right-vertical
         self.showLoadsPushing= True
-        self.multLoadsByElemArea=False
+        self.multLoadsByElemSize=False
         if(language):
             self.language= language
         else:

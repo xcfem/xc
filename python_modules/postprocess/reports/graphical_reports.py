@@ -77,11 +77,12 @@ class RecordDisp(OuputUnits):
     :ivar compElLoad: component of load on beam elements to be represented
                      available components: 'axialComponent', 'transComponent', 
                      'transYComponent','transZComponent' (defaults to 'transComponent')
-    :ivar multByElemAreaLoads: boolean value that must be True if we want to 
-                     represent the total load on each element 
-                     (=load multiplied by element area) and False if we 
-                     are going to depict the value of the uniform load 
-                     per unit area (defaults to False)
+    :ivar multByElemSizeLoads: boolean value that must be True if we want to 
+                               represent the total load on each element 
+                               (=load multiplied by element size -length, 
+                               area or volume-) and False if we are going 
+                               to depict the value of the uniform load 
+                               per unit area (defaults to False)
     :ivar listDspRot: ordered list of displacement or rotations to be displayed
                      available components: 'uX', 'uY', 'uZ', 'rotX', rotY', 'rotZ'
                      (defaults to ['uX', 'uY', 'uZ'])
@@ -123,7 +124,7 @@ class RecordDisp(OuputUnits):
             self.setsToDispIntForc= list()
         self.setsToDispBeamLoads= list()
         self.compElLoad='transComponent'
-        self.multByElemAreaLoads=False
+        self.multByElemSizeLoads=False
         self.listDspRot=['uX', 'uY', 'uZ']
         self.setsToDispDspRot=setsToDispDspRot
         self.listIntForc=['N1', 'N2', 'M1', 'M2', 'Q1', 'Q2']
