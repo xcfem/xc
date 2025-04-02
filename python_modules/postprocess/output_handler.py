@@ -720,7 +720,6 @@ class OutputHandler(object):
 
             # surface loads
             forceComponents= self.modelSpace.getForceComponents()
-            print('load vector field')
             vFieldEl= lvf.LoadVectorField(loadPatternName= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing, multiplyByElementSize= self.outputStyle.multLoadsByElemSize, components= forceComponents)
             count= vFieldEl.dumpElementalLoads(preprocessor, defFScale=defFScale)
             if(count >0):
