@@ -51,7 +51,7 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         '''
         retval= dict()
         if(len(actLP)>0):
-            preprocessor=actLP[0].getDomain.getPreprocessor     
+            preprocessor= actLP[0].getDomain.getPreprocessor     
             for lp in actLP:
                 lIter= lp.loads.getElementalLoadIter
                 eLoad= lIter.next()
@@ -72,11 +72,21 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                                             retval[eTag]+= localForce3d
                                         else:
                                             retval[eTag]= localForce3d
+                        else:
+                            className= type(self).__name__
+                            methodName= sys._getframe(0).f_code.co_name
+                            warningMsg= '; load of type: '+str(type(eLoad))
+                            warningMsg+= " has no getVector3dLocalForce method. Can't display the load over this element."
+                            lmsg.warning(className+'.'+methodName+warningMsg)
                     elif(category=='punctual'):
                         # Concentrated load must be treated elsewhere
                         className= type(self).__name__
                         methodName= sys._getframe(0).f_code.co_name
                         lmsg.warning(className+'.'+methodName+'; display of concentrated loads not implemented yet.')
+                    elif('strain' in category):
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        lmsg.warning(className+'.'+methodName+'; display of strain loads not implemented yet.')
                     else:
                         className= type(self).__name__
                         methodName= sys._getframe(0).f_code.co_name
@@ -100,9 +110,9 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                    by this factor. (Defaults to 0.0, i.e. display of 
                    initial/undeformed shape).
         '''
-        preprocessor=actLP[0].getDomain.getPreprocessor
+        preprocessor= actLP[0].getDomain.getPreprocessor
         if not self.dictActLoadVectors:
-            self.dictActLoadVectors=self.sumElementalUniformLoads(actLP)
+            self.dictActLoadVectors= self.sumElementalUniformLoads(actLP)
         valueCouples= list()
         elements= list()
         directions= list()
