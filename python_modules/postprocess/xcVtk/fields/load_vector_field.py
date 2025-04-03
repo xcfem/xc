@@ -118,10 +118,17 @@ class LoadVectorField(LoadOnPoints):
                                       retval[eTag]+= v
                                   else:
                                       retval[eTag]= v
+                              elif(elemDimension==1):
+                                  if(category!='uniform'): # Uniform loads are represented with diagrams.
+                                      className= type(self).__name__
+                                      methodName= sys._getframe(0).f_code.co_name
+                                      warningMsg= '; display of '+str(category)+' loads over '+str(elemDimension)+'-dimensional'
+                                      warningMsg+= ' elements not implemented yet.'
+                                      lmsg.warning(className+'.'+methodName+warningMsg)
                               else:
                                   className= type(self).__name__
                                   methodName= sys._getframe(0).f_code.co_name
-                                  warningMsg= '; display of uniform loads over '+str(elemDimension)+'-dimensional'
+                                  warningMsg= '; display of '+str(category)+' loads over '+str(elemDimension)+'-dimensional'
                                   warningMsg+= ' elements not implemented yet.'
                                   lmsg.warning(className+'.'+methodName+warningMsg)
                     else:
