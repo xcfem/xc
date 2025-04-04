@@ -45,9 +45,10 @@ class_<XC::BrickRawLoad, bases<XC::BrickMecLoad>, boost::noncopyable >("BrickRaw
   ;
 
 class_<XC::ThreedimStrainLoad, bases<XC::ThreedimLoad>, boost::noncopyable >("ThreedimStrainLoad", no_init)
-  .def("getStrain",make_function(&XC::ThreedimStrainLoad::getStrain, return_internal_reference<>() ))
-  .def("getStrains",&XC::ThreedimStrainLoad::getStrainsPy, "Return the values of the strains for each gauss point.")
-  .def("setStrainComp",&XC::ThreedimStrainLoad::setStrainComp)
+  .def("getStrain", make_function(&XC::ThreedimStrainLoad::getStrain, return_internal_reference<>() ),"getStrain(gaussPointIndex) return the strain at the given gauss point.")
+  .def("getStrains", &XC::ThreedimStrainLoad::getStrainsPy, "Return the values of the strains for each gauss point.")
+  .def("setStrainComp",&XC::ThreedimStrainLoad::setStrainComp, "setStrainComp(gaussPointIndex, j, strainValue), set the j-th component of the strain at the given gauss point")
+  .def("getStrainsMatrix", &XC::ThreedimStrainLoad::getStrainsMatrix, "Return a matrix containing the gauss points strain tensors as rows.") 
   ;
 
 class_<XC::BrickStrainLoad, bases<XC::ThreedimStrainLoad>, boost::noncopyable >("BrickStrainLoad", no_init)

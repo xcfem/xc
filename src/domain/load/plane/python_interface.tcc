@@ -80,9 +80,10 @@ class_<XC::QuadRawLoad, bases<XC::QuadMecLoad>, boost::noncopyable >("QuadRawLoa
   ;
 
 class_<XC::BidimStrainLoad, bases<XC::BidimLoad>, boost::noncopyable >("BidimStrainLoad", no_init)
-  .def("getStrain",make_function(&XC::BidimStrainLoad::getStrain, return_internal_reference<>() ))
-  .def("getStrains",make_function(&XC::BidimStrainLoad::getStrains, return_internal_reference<>() ))
-  .def("setStrainComp",&XC::BidimStrainLoad::setStrainComp)
+  .def("getStrain",make_function(&XC::BidimStrainLoad::getStrain, return_internal_reference<>() ), "getStrain(gaussPointIndex) return the strain at the given gauss point.")
+  .def("getStrains", &XC::BidimStrainLoad::getStrainsPy, "Return the values of the strains for each gauss point.")
+  .def("setStrainComp",&XC::BidimStrainLoad::setStrainComp, "setStrainComp(gaussPointIndex, j, strainValue), set the j-th component of the strain at the given gauss point")
+  .def("getStrainsMatrix", &XC::BidimStrainLoad::getStrainsMatrix, "Return a matrix containing the gauss points strain tensors as rows.") 
   ;
 
 class_<XC::QuadStrainLoad, bases<XC::BidimStrainLoad>, boost::noncopyable >("QuadStrainLoad", no_init)

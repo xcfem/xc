@@ -53,6 +53,35 @@ XC::BidimStrainLoad::BidimStrainLoad(int tag,const size_t &sz)
 XC::BidimStrainLoad::BidimStrainLoad(const size_t &sz)
   :BidimLoad(0,LOAD_TAG_BidimStrainLoad), strains(sz) {}
 
+//! @brief Return the strain tensors as rows of a matrix (one
+//! row for each gauss point).
+XC::Matrix XC::BidimStrainLoad::getStrainsMatrix(void) const
+  {
+    const size_t nGaussPoints= strains.size();
+    const size_t dim= strains[0].Size();
+    Matrix retval(nGaussPoints, dim);
+    for(size_t i= 0; i<nGaussPoints; i++)
+      for(size_t j= 0; j<dim; j++)
+	retval(i,j)= strains[i][j];
+    return retval;
+  }
+
+//! @brief Return the values of the strains in a Python list.
+boost::python::list XC::BidimStrainLoad::getStrainsPy(void) const
+  {
+    boost::python::list retval;
+    for(std::vector<Vector>::const_iterator i= strains.begin(); i!=strains.end(); i++)
+      {
+	const Vector &v= *i;
+	const size_t sz= v.Size();
+	boost::python::list row;
+	for(size_t j= 0; j<sz; j++)
+	  row.append(v[j]);
+        retval.append(row);
+      }
+    return retval;
+  }
+
 //! @brief Sets the strains for a Gauss point.
 //! @param i: Gauss point index.
 //! @param j: Strain component.
@@ -89,6 +118,45 @@ void XC::BidimStrainLoad::setStrains(const Matrix &def)
         tmp[i]= ri;
       }
     strains= tmp;
+  }
+
+//! @brief Set the values of the strains from a Python list.
+void XC::BidimStrainLoad::setStrainsPy(const boost::python::list &values)
+  {
+    size_t nRows= len(values);
+    const size_t sz= strains.size();
+    if(nRows!=sz)
+      {
+	std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING, input list has " << nRows
+	          << " rows "
+	          << " which is different from the number of rows in the strain vector: "
+	          << sz
+		  << std::endl;
+	nRows= std::min(nRows, sz);
+      }
+    for(size_t i= 0; i<nRows; i++)
+      {
+	boost::python::list row= boost::python::extract<boost::python::list>(values[i]);
+	size_t rsz= len(row);
+	const size_t srsz= strains[0].Size();
+	if(rsz!=srsz)
+	  {
+	    std::clog << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING, input list has " << rsz
+		      << " componenets "
+		      << " which is different from the number of components of the strain vector: "
+		      << srsz
+		      << std::endl;
+	    rsz= std::min(rsz, srsz);
+	  }
+        for(size_t j= 0; j<rsz; j++)
+	  {
+	    const double strain= boost::python::extract<double>(row[j]);
+	    this->setStrainComp(i, j, strain);
+	  }
+      }
+    
   }
 
 const XC::Vector &XC::BidimStrainLoad::getData(int &type, const double &loadFactor) const

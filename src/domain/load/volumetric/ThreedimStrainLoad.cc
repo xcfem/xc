@@ -57,6 +57,19 @@ XC::ThreedimStrainLoad::ThreedimStrainLoad(const size_t &sz)
 std::string XC::ThreedimStrainLoad::Category(void) const
   { return "threedim_strain"; }
 
+//! @brief Return the strain tensors as rows of a matrix (one
+//! row for each gauss point).
+XC::Matrix XC::ThreedimStrainLoad::getStrainsMatrix(void) const
+  {
+    const size_t nGaussPoints= strains.size();
+    const size_t dim= strains[0].Size();
+    Matrix retval(nGaussPoints, dim);
+    for(size_t i= 0; i<nGaussPoints; i++)
+      for(size_t j= 0; j<dim; j++)
+	retval(i,j)= strains[i][j];
+    return retval;
+  }
+
 //! @brief Return the values of the strains in a Python list.
 boost::python::list XC::ThreedimStrainLoad::getStrainsPy(void) const
   {

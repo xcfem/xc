@@ -55,6 +55,7 @@ class BidimStrainLoad: public BidimLoad
   
     inline const std::vector<Vector> &getStrains(void) const
       { return strains; }
+    Matrix getStrainsMatrix(void) const;
     inline std::vector<Vector> &Strains(void)
       { return strains; }
     inline const Vector &getStrain(const size_t &i) const
@@ -63,6 +64,8 @@ class BidimStrainLoad: public BidimLoad
       { return strains[i]; }
     void setStrains(const Matrix &);
     void setStrainComp(const size_t &,const size_t &,const double &);
+    boost::python::list getStrainsPy(void) const;
+    void setStrainsPy(const boost::python::list &);
     const Vector &getData(int &type, const double &loadFactor) const;
 
   
