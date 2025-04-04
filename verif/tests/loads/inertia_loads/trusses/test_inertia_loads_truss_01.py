@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Home made test.
+''' Test inertia load on a truss element. Home made test.'''
 
 from __future__ import division
 from __future__ import print_function
