@@ -16,7 +16,7 @@ import geom
 import xc
 from misc_utils import log_messages as lmsg
 
-def flatten_attribute(elemSet,attributeName, treshold, limit):
+def flatten_attribute(elemSet, attributeName, treshold, limit):
     '''Reduce higher values which hide attribute variation over the model.
 
     :param elemSet: set of elements to deal with.
@@ -142,7 +142,7 @@ def extrapolate_elem_data_to_nodes(elemSet, attributeName, function, argument= N
 
     :param elemSet: set of elements.
     :param attributeName: name of the property which will be defined
-     at the nodes.
+                          at the nodes.
     :param function: name of the method to call for each element.
     :param argument: name of the argument for the function call function (optional).
     :param initialValue: initial value for the attribute defined at the nodes.
