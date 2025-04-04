@@ -1498,7 +1498,8 @@ class PredefinedSpace(object):
         extrapolate_elem_attr.extrapolate_elem_data_to_nodes(elemSet= setToCompute.getElements, attributeName= propToDefine, function= self.getValuesAtNodes, argument= propToDefine, initialValue= xc.Vector([0.0,0.0,0.0,0.0,0.0,0.0]), transformToLocalCoord= transformToLocalCoord)
 
     def setNodePropertyFromElements(self, compName: str, xcSet: xc.Set, function, propToDefine: str, transformToLocalCoord= False):
-        '''display the stresses on the elements.
+        ''' define a property in the nodes from its value at the neighbour
+            elements.
 
         :param compName: name of the component of the magnitude ('sigma_11', 'strain_xx', ...)
         :param xcSet: set of nodes to define the propery at.
