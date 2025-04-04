@@ -257,7 +257,7 @@ class OutputHandler(object):
               (defaults to None)
 
         '''
-        self.PropertyComponentAtNodes(propToDisp= propToDisp, component= None, fUnitConv= fUnitConv, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
+        self.displayPropertyComponentAtNodes(propToDisp= propToDisp, component= None, fUnitConv= fUnitConv, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
         
     def displayDispRot(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None, captionText= None):
         '''displays the component of the displacement or rotations in the 

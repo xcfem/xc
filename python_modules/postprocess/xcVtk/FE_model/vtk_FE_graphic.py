@@ -236,7 +236,6 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         :param field: scalar field to be represented
         '''
         if(field):
-            print('set field: ', field.name)
             if(self.field is None):
                 self.field= field
             else:
@@ -371,10 +370,17 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self._vtk_define_nodes_actor(nodeSize)
         self._vtk_define_elements_actor("surface", elemSet.color)
 
-    def _define_field_actors(self, xcSets):
+    def _define_field_actors(self, xcSets, defFScale, nodeSize, scaleConstr):
         ''' Define the fields actors in the given sets.
 
         :param xcSets: set or list of sets to be displayed
+        :param defFScale: factor to apply to current displacement of nodes 
+                   so that the display position of each node equals to
+                   the initial position plus its displacement multiplied
+                   by this factor. (Defaults to 0.0, i.e. display of 
+                   initial/undeformed shape)
+        :param nodeSize: size of the spheres that represent nodes.
+        :param scaleConstr: scale of SPConstraints symbols (defaults to 0.2)
         '''
         if(type(xcSets)==list):
             for s in xcSets:
@@ -406,7 +412,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
             self.setField(field)
         self.renderer= vtkRenderer()
         self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
-        self._define_field_actors(xcSets= xcSets)
+        self._define_field_actors(xcSets= xcSets, defFScale= defFScale, nodeSize= nodeSize, scaleConstr= scaleConstr)
         self.renderer.ResetCamera()
         if(diagrams):
             for d in diagrams:
