@@ -14,6 +14,7 @@ from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.fields import fields
 from postprocess.xcVtk.fields import vector_field as vf
 from postprocess.xcVtk.fields import load_vector_field as lvf
+from postprocess.xcVtk.fields import strain_loads_field
 from postprocess.xcVtk.diagrams import control_var_diagram as cvd
 from postprocess.xcVtk.diagrams import beam_result_diagram as brd
 from postprocess.xcVtk.diagrams import internal_force_diagram as ifd
@@ -207,12 +208,14 @@ class OutputHandler(object):
         displaySettings= self.getDisplaySettingsFE()
         displaySettings.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor)
 
-    def displayScalarPropertyAtNodes(self, propToDisp, fUnitConv, unitDescription, captionText, setToDisplay, fileName=None, defFScale=0.0, rgMinMax=None):
+    def displayPropertyComponentAtNodes(self, propToDisp, component, fUnitConv, unitDescription, captionText, setToDisplay, fileName=None, defFScale=0.0, rgMinMax=None):
         '''displays the scalar property defined at the nodes of the set.
 
         :param propeToDisp: scalar property defined at nodes. 
+        :param component: component of the control var to represent.
         :param fUnitConv: conversion factor for units
         :param unitDescription: unit(s) symbol(s)
+        :param captionText: caption text.
         :param setToDisplay: set of entities to be represented.
         :param fileName: name of the file to plot the graphic. Defaults to 
                     None, in that case an screen display is generated
@@ -228,9 +231,33 @@ class OutputHandler(object):
               (defaults to None)
 
         '''
-        field= fields.ScalarField(name=propToDisp,functionName="getProp",component=None, fUnitConv= fUnitConv, rgMinMax=rgMinMax)
+        field= fields.ScalarField(name=propToDisp, functionName="getProp", component= component, fUnitConv= fUnitConv, rgMinMax=rgMinMax)
         displaySettings= self.getDisplaySettingsFE()
-        displaySettings.displayMesh(xcSets=setToDisplay, field= field, diagrams= None, caption= captionText, unitDescription= unitDescription, fileName=fileName, defFScale=defFScale)
+        displaySettings.displayMesh(xcSets= setToDisplay, field= field, diagrams= None, caption= captionText, unitDescription= unitDescription, fileName=fileName, defFScale= defFScale)
+        
+    def displayScalarPropertyAtNodes(self, propToDisp, fUnitConv, unitDescription, captionText, setToDisplay, fileName=None, defFScale=0.0, rgMinMax=None):
+        '''displays the scalar property defined at the nodes of the set.
+
+        :param propeToDisp: scalar property defined at nodes. 
+        :param fUnitConv: conversion factor for units
+        :param unitDescription: unit(s) symbol(s)
+        :param captionText: caption text.
+        :param setToDisplay: set of entities to be represented.
+        :param fileName: name of the file to plot the graphic. Defaults to 
+                    None, in that case an screen display is generated
+        :param defFScale: factor to apply to current displacement of nodes 
+                so that the display position of each node equals to
+                the initial position plus its displacement multiplied
+                by this factor. (Defaults to 0.0, i.e. display of 
+                initial/undeformed shape)
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+              of the field to be represented (in units of calculation, 
+              not units of display). All the values less than vmin are 
+              displayed in blue and those greater than vmax in red
+              (defaults to None)
+
+        '''
+        self.PropertyComponentAtNodes(propToDisp= propToDisp, component= None, fUnitConv= fUnitConv, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
         
     def displayDispRot(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None, captionText= None):
         '''displays the component of the displacement or rotations in the 
@@ -443,7 +470,7 @@ class OutputHandler(object):
 
         displaySettings= self.getDisplaySettingsFE()
         displaySettings.setupGrid(setToDisplay)
-        meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color= setToDisplay.color)
+        meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale,color= setToDisplay.color)
         if(meshSceneOk):
             scOrient=1 # scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
             if(len(forcePairs)>0):
@@ -502,7 +529,7 @@ class OutputHandler(object):
         diagram.addDiagram()
         displaySettings= self.getDisplaySettingsFE()
         displaySettings.setupGrid(setToDisplay)
-        meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
+        meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale,color=setToDisplay.color)
         if(meshSceneOk):
             displaySettings.appendDiagram(diagram,orientScbar,titleScbar) #Append diagram to the scene.
             displaySettings.displayScene(caption= caption, unitDescription= unitDescription, fileName=fileName)
@@ -546,7 +573,7 @@ class OutputHandler(object):
         diagram.addDiagram() # add the diagram to the scene.
         displaySettings= self.getDisplaySettingsFE()
         displaySettings.setupGrid(setToDisplay)
-        meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color= setToDisplay.color)
+        meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale,color= setToDisplay.color)
         if(meshSceneOk):
             displaySettings.appendDiagram(diagram,orientScbar,titleScbar) #Append diagram to the scene.
             displaySettings.displayScene(caption= captionText, unitDescription= unitDescription, fileName= fileName)
@@ -662,20 +689,221 @@ class OutputHandler(object):
         displaySettings= self.getDisplaySettingsFE()
         displaySettings.setupGrid(setToDisplay)
         vField.dumpVectors(preprocessor,defFScale,showElementalLoads= True, showNodalLoads= True)
-        meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
+        meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale,color=setToDisplay.color)
         if(meshSceneOk):
             vField.addToDisplay(displaySettings)
             displaySettings.displayScene(caption= caption, unitDescription= unitDescription, fileName= fileName)
         return displaySettings
+
+    def getActiveLoadPatterns(self):
+        ''' Return the load patterns currently active in the domain.'''
+        preprocessor= self.modelSpace.preprocessor
+        return lvf.get_active_load_patterns(preprocessor)
+
+    def getActiveLoadPatternCategories(self):
+        ''' Return the categories of the load patterns currently active in the 
+            domain.
+        '''
+        retval= set()
+        activeLoadPatterns= self.getActiveLoadPatterns()
+        for lp in activeLoadPatterns:
+            lIter= lp.loads.getElementalLoadIter
+            elementLoad= lIter.next()
+            while(elementLoad):
+                category= elementLoad.category
+                retval.add(category)
+                elementLoad= lIter.next()
+        return retval
+
+    def getLoadRepresentationType(self):
+        ''' Return the load representation type according to the categories
+            of the elemental loads of the active load patterns.'''
+        categories= self.getActiveLoadPatternCategories()
+        retval= None
+        if(len(categories)>0):
+            strainType= False        
+            for c in categories:
+                if('strain' in c):
+                    strainType= True
+                    break;
+            forceType= False
+            for c in categories:
+                if(not 'strain' in c):
+                    forceType= True
+                    break;
+            if(forceType and strainType):
+                retval= 'mixed'
+            elif(forceType):
+                retval= 'force'
+            elif(strainType):
+                retval= 'strain'
+            else:
+                retval= None
+        return retval
+
+    def _display_elemental_force_loads(self, displaySettings, setToDisplay, elLoadComp, forceComponents, vectorScale, scalarBarOrientation, lRefModSize, defFScale):
+        '''Display the force loads currently applied on elements.
+
+        :param displaySettings: DisplaySettingsFE object that will show
+                                the finite element mesh.
+        :param setToDisplay: set of beam elements to be represented (defaults 
+                             to TotalSet)
+        :param elLoadComp: component of the linear loads on elements to be 
+                           depicted [available components: 
+                           'xyzComponents' (default), 'axialComponent', 
+                           'transComponent', 'transYComponent', 
+                           'transZComponent']
+        :param forceComponents: indexes of the components to be considered 
+                                when displaying force vectors.
+        :param vectorScale: scale for the displayed vectors.
+        :param scalarBarOrientation: scalar bar orientation (1 horiz., 
+                                     2 left-vert, 3 right-vert)
+        :param lRefModSize: representative length of set size (to auto-scale).
+        :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor. (Defaults to 0.0, i.e. display of 
+                  initial/undeformed shape)
+        '''
+        elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
+        unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
+        diagram= lld.LinearLoadDiagram(setToDisp= setToDisplay, scale= elLoadScaleF, lRefModSize= lRefModSize, fUnitConv= unitConversionFactor, component=elLoadComp)
+        preprocessor= self.modelSpace.preprocessor
+        maxAbs= diagram.autoScale(preprocessor)
+        if(maxAbs>0.0):
+            # Linear loads
+            diagram.addDiagram(preprocessor)
+            if(diagram.rangeIsValid()):
+                titleScBar= 'Linear loads ('+self.getOutputForceUnitSym()+'/'+ self.getOutputLengthUnitSym()+')'
+                displaySettings.appendDiagram(diagram, orientScbar= scalarBarOrientation, titleScbar= titleScBar)
+                retval= scalarBarOrientation+1
+        # Display vectors on 2D and 3D elements.
+        loadCaseName= preprocessor.getDomain.currentCombinationName
+        vFieldEl= lvf.LoadVectorField(name= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing, multiplyByElementSize= self.outputStyle.multLoadsByElemSize, components= forceComponents)
+        count= vFieldEl.dumpElementalLoads(preprocessor, defFScale= defFScale)
+        if(count >0):
+            vFieldElTitle= 'Body/Surface loads ('+self.getOutputForceUnitSym()+'/'+self.getOutputLengthUnitSym()+'2)'
+            vFieldEl.addToDisplay(displaySettings, orientation= scalarBarOrientation, title= vFieldElTitle)
+            retval= scalarBarOrientation+1
+
+    def _display_elemental_strain_loads(self, displaySettings, setToDisplay, strainLoadsField, strainComponent, defFScale):
+        ''' Display the strain loads currently applied on elements.
+
+        :param displaySettings: DisplaySettingsFE object that will show
+                                the finite element mesh.
+        :param setToDisplay: set of beam elements to be represented (defaults 
+                             to TotalSet)
+        :param strainLoadsField: strain load field which will compute the
+                                values of the strain loads in the model.
+        :param strainComponent: strain component to display.
+        :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor. (Defaults to 0.0, i.e. display of 
+                  initial/undeformed shape)
+        '''
+        preprocessor= self.modelSpace.preprocessor
+        loadCaseName= preprocessor.getDomain.currentCombinationName
+        unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
+        strainLoadsField.dumpElementalStrainLoads(preprocessor, strainComponent)
+    
+    def _display_elemental_loads(self, displaySettings, setToDisplay, elLoadComp, forceComponents, vectorScale, loadRepresentationType, strainLoadsField, strainLoadComponent, scalarBarOrientation, lRefModSize, defFScale):
+        '''Display the loads currently applied on elements.
+
+        :param displaySettings: DisplaySettingsFE object that will show
+                                the finite element mesh.
+        :param setToDisplay: set of beam elements to be represented (defaults 
+                             to TotalSet)
+        :param elLoadComp: component of the linear loads on elements to be 
+                           depicted [available components: 
+                           'xyzComponents' (default), 'axialComponent', 
+                           'transComponent', 'transYComponent', 
+                           'transZComponent']
+        :param forceComponents: indexes of the components to be considered 
+                                when displaying force vectors.
+        :param vectorScale: scale for the displayed vectors.
+        :param loadRepresentationType: type of the load representation 
+                                       according to the categories of the 
+                                       elemental loads of the active load 
+                                       patterns.
+        :param strainLoadsField: strain load field which will compute the
+                                 values of the strain loads in the model.
+        :param strainLoadComponent: component of the strain load to display.
+        :param scalarBarOrientation: scalar bar orientation (1 horiz., 
+                                     2 left-vert, 3 right-vert)
+        :param lRefModSize: representative length of set size (to auto-scale).
+        :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor. (Defaults to 0.0, i.e. display of 
+                  initial/undeformed shape)
+        '''
+        # Display diagrams on linear elements.
+        retval= scalarBarOrientation
+        loadRepresentationType= self.getLoadRepresentationType()
+        if(loadRepresentationType=='force'):
+            self._display_elemental_force_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, elLoadComp= elLoadComp, forceComponents= forceComponents, vectorScale=vectorScale, scalarBarOrientation= scalarBarOrientation, lRefModSize= lRefModSize, defFScale= defFScale)
+        elif(loadRepresentationType=='strain'):
+            self._display_elemental_strain_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, strainLoadsField= strainLoadsField, strainComponent= strainLoadComponent, defFScale= defFScale)
+        elif(loadRepresentationType is not None): # mixed of anyone else.
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            preprocessor= self.modelSpace.preprocessor
+            loadCaseName= preprocessor.getDomain.currentCombinationName
+            errorMsg= '; load case: '+str(loadCaseName)+' requires '+str(loadRepresentationType)+' which is not implemented yet.'
+            lmsg.error(className+'.'+methodName+errorMsg)
+        return retval
         
-    def displayLoads(self,  setToDisplay=None, elLoadComp='xyzComponents',fUnitConv=1,caption= None,fileName=None, defFScale=0.0, scaleConstr= 0.2):
-        '''Display the loads applied on beam elements and nodes for a given load case
+    def _display_nodal_loads(self, displaySettings, setToDisplay, forceComponents, vectorScale, scalarBarOrientation, defFScale):
+        ''' Display the loads applied on nodes.
+
+        :param displaySettings: DisplaySettingsFE object that will show
+                                the finite element mesh.
+        :param setToDisplay: set of beam elements to be represented (defaults 
+                             to TotalSet)
+        :param forceComponents: indexes of the components to be considered 
+                                when displaying force vectors.
+        :param vectorScale: scale for the displayed vectors.
+        :param scalarBarOrientation: scalar bar orientation (1 horiz., 
+                                     2 left-vert, 3 right-vert)
+        :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor. (Defaults to 0.0, i.e. display of 
+                  initial/undeformed shape)
+        '''
+        retval= scalarBarOrientation
+        preprocessor= self.modelSpace.preprocessor
+        loadCaseName= preprocessor.getDomain.currentCombinationName
+        unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
+        vFieldFNod= lvf.LoadVectorField(name= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing, components= forceComponents)
+        numNodalForces= vFieldFNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
+        if(numNodalForces>0):
+            vFieldFNodTitle= 'Nodal loads ('+self.getOutputForceUnitSym()+')'
+            vFieldFNod.addToDisplay(displaySettings,orientation= scalarBarOrientation, title= vFieldFNodTitle)
+            retval= scalarBarOrientation+1
+        momentComponents= self.modelSpace.getMomentComponents()
+        ## moments on nodes.
+        numNodalMoments= 0
+        if(momentComponents):
+            vFieldMNod= lvf.TorqueVectorField(name= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing, components= momentComponents)
+            numNodalMoments= vFieldMNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
+        if(numNodalMoments>0):
+            vFieldMNodTitle= 'Nodal moments ('+self.getOutputForceUnitSym()+')'
+            vFieldMNod.addToDisplay(displaySettings,orientation= scalarBarOrientation, title= vFieldMNodTitle)
+            retval= scalarBarOrientation+1
+        return retval
+        
+    def displayLoads(self, setToDisplay=None, elLoadComp='xyzComponents', strainLoadComponent= None, fUnitConv=1,caption= None, fileName=None, defFScale=0.0, scaleConstr= 0.2):
+        '''Display the loads applied on beam elements and nodes for the domain
+           current load case
 
         :param setToDisplay: set of beam elements to be represented (defaults to TotalSet)
         :param elLoadComp:component of the linear loads on elements to be 
                depicted [available components: 'xyzComponents' (default),
                'axialComponent', 'transComponent', 'transYComponent', 
                'transZComponent']
+        :param strainLoadComponent: component of the strain load to display.
         :param fUnitConv:  factor of conversion to be applied to the results
                         (defaults to 1)
         :param caption:   caption for the graphic
@@ -694,62 +922,36 @@ class OutputHandler(object):
         loadCaseName= preprocessor.getDomain.currentCombinationName
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         unitDescription= self.outputStyle.getForceUnitsDescription()
+        loadRepresentationType= self.getLoadRepresentationType()
         displaySettings= self.getDisplaySettingsFE()
+        # Check if strainLoadField is needed.
+        strainLoadsField= None
+        if(loadRepresentationType=='strain'): # display strain loads.
+            strainLoadsField= strain_loads_field.StrainLoadsField(name= loadCaseName, setToDisplay= setToDisplay, fUnitConv= unitConversionFactor)
+            displaySettings.setField(strainLoadsField)
         grid= displaySettings.setupGrid(setToDisplay)
         if __debug__:
             if(not grid):
                 AssertionError('Can\'t setup grid.')
-        meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
+        meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale,color=setToDisplay.color)
         if(meshSceneOk):
-            scOrient=1 # scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
+            scalarBarOrientation= 1 # scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
             # auto-scaling parameters
-            LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to auto-scale)
-            elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
-            diagram= lld.LinearLoadDiagram(setToDisp= setToDisplay, scale=elLoadScaleF, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor, component=elLoadComp)
-            maxAbs= diagram.autoScale(preprocessor)
-            if(maxAbs>0.0):
-                # Linear loads
-                diagram.addDiagram(preprocessor)
-                if(diagram.rangeIsValid()):
-                    titleScBar= 'Linear loads ('+self.getOutputForceUnitSym()+'/'+ self.getOutputLengthUnitSym()+')'
-                    displaySettings.appendDiagram(diagram, orientScbar=scOrient, titleScbar= titleScBar)
-                    scOrient+=1
+            LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() # representative length of set size (to auto-scale)
 
             vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.
-            # concentrated loads (on elements).
-
-            # surface loads
+            # elemental loads
             forceComponents= self.modelSpace.getForceComponents()
-            vFieldEl= lvf.LoadVectorField(loadPatternName= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing, multiplyByElementSize= self.outputStyle.multLoadsByElemSize, components= forceComponents)
-            count= vFieldEl.dumpElementalLoads(preprocessor, defFScale=defFScale)
-            if(count >0):
-                vFieldElTitle= 'Surface loads ('+self.getOutputForceUnitSym()+'/'+self.getOutputLengthUnitSym()+'2)'
-                vFieldEl.addToDisplay(displaySettings,orientation= scOrient, title= vFieldElTitle)
-                scOrient+=1
+            scalarBarOrientation= self._display_elemental_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, elLoadComp= elLoadComp, loadRepresentationType= loadRepresentationType, strainLoadsField= strainLoadsField, strainLoadComponent= strainLoadComponent, vectorScale= vectorScale, scalarBarOrientation= scalarBarOrientation, lRefModSize= LrefModSize, defFScale= defFScale, forceComponents= forceComponents)
             # nodal loads
             ## forces on nodes.
-            forceComponents= self.modelSpace.getForceComponents()
-            vFieldFNod= lvf.LoadVectorField(loadPatternName= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing, components= forceComponents)
-            numNodalForces= vFieldFNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
-            if(numNodalForces>0):
-                vFieldFNodTitle= 'Nodal loads ('+self.getOutputForceUnitSym()+')'
-                vFieldFNod.addToDisplay(displaySettings,orientation= scOrient, title= vFieldFNodTitle)
-                scOrient+=1
-            momentComponents= self.modelSpace.getMomentComponents()
-            ## moments on nodes.
-            numNodalMoments= 0
-            if(momentComponents):
-                vFieldMNod= lvf.TorqueVectorField(loadPatternName= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing, components= momentComponents)
-                numNodalMoments= vFieldMNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
-            if(numNodalMoments>0):
-                vFieldMNodTitle= 'Nodal moments ('+self.getOutputForceUnitSym()+')'
-                vFieldMNod.addToDisplay(displaySettings,orientation= scOrient, title= vFieldMNodTitle)
-                scOrient+=1
+            scalarBarOrientation= self._display_nodal_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, forceComponents= forceComponents, vectorScale= vectorScale, scalarBarOrientation= scalarBarOrientation, defFScale= defFScale)
+            ## Display scene.
             if(not caption):
                 caption= 'load case: ' + loadCaseName +' '+elLoadComp + ', set: ' + setToDisplay.name + ', '  + unitDescription
             displaySettings.displayConstraints(setToDisplay= setToDisplay, scale= scaleConstr)
             displaySettings.displayScene(caption=caption, unitDescription= unitDescription, fileName=fileName)
-
+    
     def displayNodeValueDiagram(self, itemToDisp, setToDisplay=None,caption= None,fileName=None, defFScale=0.0, defaultDirection= 'J', defaultValue= 0.0, rgMinMax= None):
         '''displays the a displacement (uX,uY,...) or a property defined in 
            nodes as a diagram over lines.
@@ -784,7 +986,7 @@ class OutputHandler(object):
         if __debug__:
             if(not grid):
                 AssertionError('Can\'t setup grid.')
-        meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
+        meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale,color=setToDisplay.color)
         if(meshSceneOk):
             displaySettings.appendDiagram(diagram) #Append diagram to the scene.
 
@@ -819,7 +1021,7 @@ class OutputHandler(object):
         if __debug__:
             if(not grid):
                 AssertionError('Can\'t setup grid.')
-        meshSceneOk= displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
+        meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale,color=setToDisplay.color)
         if(meshSceneOk):
             displaySettings.appendDiagram(diagram) #Append diagram to the scene.
 
@@ -934,7 +1136,7 @@ class OutputHandler(object):
             lmsg.warning(className+'.'+methodName+'; mode: '+str(mode)+' no rotational components to display.')
         displaySettings= self.getDisplaySettingsFE()
         displaySettings.setupGrid(setToDisplay)
-        meshSceneOk= displaySettings.defineMeshScene(None, defFScale, color= setToDisplay.color)
+        meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale, color= setToDisplay.color)
         if(meshSceneOk):
             scOrient= 1 # scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
             if(vFieldD):
@@ -974,7 +1176,7 @@ class OutputHandler(object):
             equLoadVctScale=None
         displaySettings= self.getDisplaySettingsFE()
         displaySettings.setupGrid(setToDisplay)
-        meshSceneOk= displaySettings.defineMeshScene(None,defFScale,eigenMode,color=setToDisplay.color)
+        meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale, eigenMode= eigenMode, color=setToDisplay.color)
         if(meshSceneOk):
             unitsScale= 1.0
             if equLoadVctScale not in [None,0]:
@@ -1036,7 +1238,7 @@ class OutputHandler(object):
                 diagram.addDiagram()
                 displaySettings= self.getDisplaySettingsFE()
                 displaySettings.setupGrid(setToDisplay)
-                meshSceneOk= displaySettings.defineMeshScene(None, defFScale,color= setToDisplay.color)
+                meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale, color= setToDisplay.color)
                 if(meshSceneOk):
                     displaySettings.appendDiagram(diagram) #Append diagram to the scene.
                     displaySettings.displayScene(caption= caption, unitDescription= unitDescription, fileName= fileName)

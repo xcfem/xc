@@ -16,23 +16,34 @@ from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import vector_field as vf
 from vtk.vtkFiltersSources import vtkArrowSource
 
+def get_active_load_patterns(preprocessor):
+    ''' Return the load patterns currently active in the domain.
+
+    :param preprocessor: preprocessor of the FE problem.
+    '''
+    activeLoadPatterns= preprocessor.getDomain.getConstraints.getLoadPatterns
+    if(len(activeLoadPatterns)>0):
+        retval=[lp.data() for lp in activeLoadPatterns]
+    return retval
+    
+
 class LoadOnPoints(vf.VectorField):
     '''Draws punctual loads.
 
     :ivar components: index of the components of the load. Default: [0,1,2]
     '''
-    def __init__(self,loadPatternName,fUnitConv= 1e-3,scaleFactor= 1.0,showPushing= True, components= [0,1,2], symType= vtkArrowSource()):
+    def __init__(self, name, fUnitConv= 1e-3,scaleFactor= 1.0,showPushing= True, components= [0,1,2], symType= vtkArrowSource()):
         '''
         Constructor.
         
-        :param loadPatternName: name of the load pattern to display.
+        :param name: name of the vector field.
         :param fUnitConv: unit conversion factor.
         :param scaleFactor: scale factor for the size of the vectors.
         :param showPushing: if true the loads ares showed pushing the loaded point (as oppssed to pull). Default: True
         :param components: index of the components of the load. Default: [0,1,2]
         :param symType: shape of the symbol (defaults to an arrow).
         '''
-        super(LoadOnPoints,self).__init__(name= loadPatternName, fUnitConv= fUnitConv,scaleFactor= scaleFactor, showPushing= showPushing, symType= symType)
+        super(LoadOnPoints,self).__init__(name= name, fUnitConv= fUnitConv,scaleFactor= scaleFactor, showPushing= showPushing, symType= symType)
         self.components= components
 
     def getMaxLoad(self):
@@ -50,11 +61,11 @@ class LoadVectorField(LoadOnPoints):
                                  size (length or area or volume).
     :ivar setToDisp: set to display the loads on.
     '''
-    def __init__(self,loadPatternName,setToDisp,fUnitConv= 1e-3,scaleFactor= 1.0, showPushing= True, components= [0,1,2], multiplyByElementSize= True, symType= vtkArrowSource()):
+    def __init__(self, name, setToDisp, fUnitConv= 1e-3, scaleFactor= 1.0, showPushing= True, components= [0,1,2], multiplyByElementSize= True, symType= vtkArrowSource()):
         '''
         Constructor.
 
-        :param loadPatternName: name of the load pattern to display.
+        :param name: name of the vector field.
         :param setToDisp: set over which to display the loads.
         :param fUnitConv: unit conversion factor.
         :param scaleFactor: scale factor for the size of the vectors.
@@ -63,7 +74,7 @@ class LoadVectorField(LoadOnPoints):
         :param multiplyByElementSize: for loads over elements (default= True).
         :param symType: shape of the symbol (defaults to an arrow).
         '''
-        super(LoadVectorField,self).__init__(loadPatternName= loadPatternName, fUnitConv= fUnitConv, scaleFactor= scaleFactor, showPushing= showPushing, components= components, symType= symType)
+        super(LoadVectorField,self).__init__(name= name, fUnitConv= fUnitConv, scaleFactor= scaleFactor, showPushing= showPushing, components= components, symType= symType)
         self.multiplyByElementSize= multiplyByElementSize
         self.setToDisp= setToDisp
 
@@ -172,9 +183,10 @@ class LoadVectorField(LoadOnPoints):
                 lmsg.warning(className+'.'+methodName+'; displaying of loads over 1D elements not yet implemented')
         return len(self.elementalLoadVectors)
 
-    def dumpElementalPositions(self,preprocessor):
+    def dumpElementalPositions(self, preprocessor):
         ''' Iterate over cumulated loads dumping them into the graphic.
 
+        :param preprocessor: preprocessor of the FE problem.
         '''
         for eTag in self.elementalLoadVectors.keys():
             elem= preprocessor.getElementHandler.getElement(eTag)
@@ -283,15 +295,14 @@ class LoadVectorField(LoadOnPoints):
         :param showNodalLoads: if true show loads over nodes.
         '''
         count= 0
-        activeLoadPatterns= preprocessor.getDomain.getConstraints.getLoadPatterns
+        activeLoadPatterns= get_active_load_patterns(preprocessor)
         if(len(activeLoadPatterns)<1):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             message= className+'.'+methodName+'; no active load patterns.'
             lmsg.warning(message)
         else:
-            actLP=[lp.data() for lp in activeLoadPatterns]
-            numberOfLoads= self.populateLoads(actLP, showElementalLoads, showNodalLoads)
+            numberOfLoads= self.populateLoads(activeLoadPatterns, showElementalLoads, showNodalLoads)
             if(numberOfLoads>0):
                 maxLoad= self.getMaxLoad()
                 if(maxLoad!= 0):
@@ -321,7 +332,7 @@ class LoadVectorField(LoadOnPoints):
         return self.dumpVectors(preprocessor, defFScale,showElementalLoads=False,showNodalLoads=True)
     
     def dumpElementalLoads(self, preprocessor, defFScale):
-        ''' Iterate over nodal loads dumping them into the graphic.
+        ''' Iterate over elemental loads dumping them into the graphic.
 
         :param preprocessor: preprocessor of the FE problem.
         :param defFScale: factor to apply to current displacement of nodes 
@@ -336,11 +347,11 @@ class TorqueVectorField(LoadVectorField):
     '''Draws an torque-arrow representing a torque moment on nodes.
 
     '''
-    def __init__(self, loadPatternName, setToDisp, fUnitConv= 1e-3, scaleFactor= 1.0, showPushing= True, components= [3,4,5], multiplyByElementSize= False, symType= vf.get_double_headed_arrow()):
+    def __init__(self, name, setToDisp, fUnitConv= 1e-3, scaleFactor= 1.0, showPushing= True, components= [3,4,5], multiplyByElementSize= False, symType= vf.get_double_headed_arrow()):
         '''
         Constructor.
 
-        :param loadPatternName: name of the load pattern to display.
+        :param name: name of the vector field.
         :param setToDisp: set over which to display the loads.
         :param fUnitConv: unit conversion factor.
         :param scaleFactor: scale factor for the size of the vectors.
@@ -349,4 +360,4 @@ class TorqueVectorField(LoadVectorField):
         :param multiplyByElementSize: for loads over elements (default= False).
         :param symType: shape of the symbol (defaults to a double-headed arrow).
         '''
-        super(TorqueVectorField,self).__init__(loadPatternName= loadPatternName, setToDisp= setToDisp, fUnitConv= fUnitConv,scaleFactor= scaleFactor, showPushing= showPushing, components= components, multiplyByElementSize= multiplyByElementSize, symType= symType)
+        super(TorqueVectorField,self).__init__(name= name, setToDisp= setToDisp, fUnitConv= fUnitConv,scaleFactor= scaleFactor, showPushing= showPushing, components= components, multiplyByElementSize= multiplyByElementSize, symType= symType)

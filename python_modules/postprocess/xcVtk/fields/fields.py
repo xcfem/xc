@@ -34,9 +34,9 @@ class ScalarField(fb.FieldBase):
         :param component: component of the control var to represent.
         :param fUnitConv: unit conversion factor.
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
-                         of the scalar field (if any) to be represented. All the values 
-                         less than vmin are displayed in blue and those greater than vmax 
-                         in red (defaults to None)
+                         of the scalar field (if any) to be represented. All 
+                         the values less than vmin are displayed in blue and 
+                         those greater than vmax in red (defaults to None)
         '''
         super(ScalarField,self).__init__(name,fUnitConv)
         self.attrName= functionName
@@ -116,7 +116,7 @@ class ExtrapolatedScalarField(ScalarField):
         super(ExtrapolatedScalarField,self).__init__(name,functionName,component,fUnitConv,rgMinMax)
         self.xcSet= xcSet
 
-    def display(self,displaySettings, caption= '', unitDescription= '', fileName= None, defFScale=0.0):
+    def display(self, displaySettings, caption= '', unitDescription= '', fileName= None, defFScale=0.0):
         '''Display the scalar field graphic.
 
         :param fileName: name of the graphic file to create 
