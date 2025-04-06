@@ -74,10 +74,8 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 from postprocess import output_handler
 oh= output_handler.OutputHandler(modelSpace)
 
-## Uncomment to display the mesh
-oh.displayFEMesh()
-for strainLabel in ['epsilon_xx', 'epsilon_yy', 'epsilon_xy']:
-    oh.displayLoads(elLoadComp= strainLabel)
+# for strainLabel in ['epsilon_xx', 'epsilon_yy', 'epsilon_xy']:
+#     oh.displayLoads(elLoadComp= strainLabel)
 
 fname= os.path.basename(__file__)
 outputFileName= '/tmp/'+fname.replace('.py', '.jpeg')
