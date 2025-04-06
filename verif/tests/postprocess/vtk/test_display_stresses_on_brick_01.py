@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import os
 import xc
 from model import predefined_spaces
 from materials import typical_materials
@@ -53,13 +54,6 @@ lp0.newNodalLoad(nod16.tag, xc.Vector([0,0,-1]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
-# # Graphic stuff.
-# oh= output_handler.OutputHandler(modelSpace)
-
-# ## Uncomment to display the mesh
-# oh.displayFEMesh()
-# oh.displayLoads()
-
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 
@@ -81,14 +75,6 @@ print("R= ",R)
 print("ratio1= ",ratio1)
    '''
 
-import os
-from misc_utils import log_messages as lmsg
-fname= os.path.basename(__file__)
-if(ratio1<1e-12):
-    print('test '+fname+': ok.')
-else:
-    lmsg.error(fname+' ERROR.')
-    
 # # Output stuff.
 from postprocess import output_handler
 oh= output_handler.OutputHandler(modelSpace)
@@ -101,7 +87,7 @@ outputFileName= '/tmp/'+fname.replace('.py', '.jpeg')
 oh.displayStresses(itemToDisp= 'sigma_33',fileName= outputFileName)
 
 # Check that file exists
-testOK= os.path.isfile(outputFileName)
+testOK= os.path.isfile(outputFileName) and (ratio1<1e-12)
 
 if testOK:
     print('test '+fname+': ok.')
