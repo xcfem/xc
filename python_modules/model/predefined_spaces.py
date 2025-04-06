@@ -1704,10 +1704,13 @@ class PredefinedSpace(object):
         :param oh: output handler to use as display engine.
         :param loadCasesToDisplay: load cases that will be displayed.
         :param setsToDisplay: element sets to display the loads on.
-        :param elLoadComp:component of the linear loads on elements to be 
-               depicted [available components: 'xyzComponents' (default),
-               'axialComponent', 'transComponent', 'transYComponent', 
-               'transZComponent']
+        :param elLoadComp: component of the elemental loads to be 
+                           depicted [available components: 
+                           'xyzComponents' (default), 'axialComponent', 
+                           'transComponent', 'transYComponent', 
+                           'transZComponent', 'epsilon_xx', 'epsilon_yy', 
+                           'epsilon_zz', 'epsilon_xy', 'epsilon_xz', 
+                           'epsilon_yz']
         :param fUnitConv:  factor of conversion to be applied to the results
                         (defaults to 1)
         :param caption:   caption for the graphic
