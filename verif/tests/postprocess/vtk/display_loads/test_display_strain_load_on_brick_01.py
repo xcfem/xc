@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Check strain load on brick elements.'''
+'''Check strain load representation on brick elements.'''
 
 from __future__ import print_function
 
