@@ -90,8 +90,10 @@ else:
     lmsg.error(fname+' ERROR.')
     
 # # Graphic stuff.
+# from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
 # ## Uncomment to display the mesh
 # oh.displayFEMesh()
-# oh.displayLoads()
+# for strainLabel in ['epsilon_xx', 'epsilon_yy', 'epsilon_zz', 'epsilon_xy', 'epsilon_xz', 'epsilon_yz']:
+#     oh.displayLoads(elLoadComp= strainLabel)

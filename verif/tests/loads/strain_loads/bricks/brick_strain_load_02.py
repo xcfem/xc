@@ -188,6 +188,8 @@ else:
 # oh= output_handler.OutputHandler(modelSpace)
 # ## Uncomment to display the mesh
 # oh.displayFEMesh()
+# for strainLabel in ['epsilon_xx', 'epsilon_yy', 'epsilon_zz', 'epsilon_xy', 'epsilon_xz', 'epsilon_yz']:
+#     oh.displayLoads(elLoadComp= strainLabel)
 # oh.displayReactions()
 # # oh.displayLoads()
 # oh.displayDispRot(itemToDisp='uX', defFScale= 1000.0)
