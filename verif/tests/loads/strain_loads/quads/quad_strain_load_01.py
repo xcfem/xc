@@ -119,3 +119,11 @@ if((ratio0<1e-12) & (ratio1<1e-5) & (ratio2<0.15) & (ratio3<1e-8) & (abs(initial
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# modelSpace.addLoadCaseToDomain(lp0.name)
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+
+# for strainLabel in ['epsilon_xx', 'epsilon_yy', 'epsilon_xy']:
+#     oh.displayLoads(elLoadComp= strainLabel)
