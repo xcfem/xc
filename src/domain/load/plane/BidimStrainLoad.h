@@ -52,7 +52,9 @@ class BidimStrainLoad: public BidimLoad
     BidimStrainLoad(int tag, const size_t &, const Vector &);
     BidimStrainLoad(int tag, const size_t &);
     BidimStrainLoad(const size_t &s= 4);
-  
+ 
+    std::string Category(void) const;
+    
     inline const std::vector<Vector> &getStrains(void) const
       { return strains; }
     Matrix getStrainsMatrix(void) const;

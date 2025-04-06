@@ -21,6 +21,7 @@ def get_active_load_patterns(preprocessor):
 
     :param preprocessor: preprocessor of the FE problem.
     '''
+    retval= list()
     activeLoadPatterns= preprocessor.getDomain.getConstraints.getLoadPatterns
     if(len(activeLoadPatterns)>0):
         retval=[lp.data() for lp in activeLoadPatterns]

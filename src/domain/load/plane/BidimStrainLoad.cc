@@ -53,6 +53,10 @@ XC::BidimStrainLoad::BidimStrainLoad(int tag,const size_t &sz)
 XC::BidimStrainLoad::BidimStrainLoad(const size_t &sz)
   :BidimLoad(0,LOAD_TAG_BidimStrainLoad), strains(sz) {}
 
+//! @brief Return the category of this kind of loads.
+std::string XC::BidimStrainLoad::Category(void) const
+  { return "bidim_strain"; }
+
 //! @brief Return the strain tensors as rows of a matrix (one
 //! row for each gauss point).
 XC::Matrix XC::BidimStrainLoad::getStrainsMatrix(void) const
