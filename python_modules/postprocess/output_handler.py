@@ -323,7 +323,7 @@ class OutputHandler(object):
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
         if not captionText:
             captionText= self.getCaptionText(itemToDisp, setToDisplay)
-        self.displayScalarPropertyAtNodes(propToDisp= propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setoToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax=rgMinMax)
+        self.displayScalarPropertyAtNodes(propToDisp= propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax=rgMinMax)
 
     def displayStrains(self, itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None, captionText= None, transformToLocalCoord= False):
         '''displays the strains on the elements.
@@ -765,6 +765,7 @@ class OutputHandler(object):
                   by this factor. (Defaults to 0.0, i.e. display of 
                   initial/undeformed shape)
         '''
+        retval= scalarBarOrientation
         elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         diagram= lld.LinearLoadDiagram(setToDisp= setToDisplay, scale= elLoadScaleF, lRefModSize= lRefModSize, fUnitConv= unitConversionFactor, component=elLoadComp)
@@ -785,8 +786,9 @@ class OutputHandler(object):
             vFieldElTitle= 'Body/Surface loads ('+self.getOutputForceUnitSym()+'/'+self.getOutputLengthUnitSym()+'2)'
             vFieldEl.addToDisplay(displaySettings, orientation= scalarBarOrientation, title= vFieldElTitle)
             retval= scalarBarOrientation+1
+        return retval
 
-    def _display_elemental_strain_loads(self, displaySettings, setToDisplay, strainLoadsField, strainComponent, defFScale):
+    def _display_elemental_strain_loads(self, displaySettings, setToDisplay, strainLoadsField, strainComponent, scalarBarOrientation, defFScale):
         ''' Display the strain loads currently applied on elements.
 
         :param displaySettings: DisplaySettingsFE object that will show
@@ -796,6 +798,8 @@ class OutputHandler(object):
         :param strainLoadsField: strain load field which will compute the
                                 values of the strain loads in the model.
         :param strainComponent: strain component to display.
+        :param scalarBarOrientation: scalar bar orientation (1 horiz., 
+                                     2 left-vert, 3 right-vert)
         :param defFScale: factor to apply to current displacement of nodes 
                   so that the display position of each node equals to
                   the initial position plus its displacement multiplied
@@ -805,9 +809,10 @@ class OutputHandler(object):
         preprocessor= self.modelSpace.preprocessor
         loadCaseName= preprocessor.getDomain.currentCombinationName
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
-        strainLoadsField.dumpElementalStrainLoads(preprocessor, strainComponent)
+        # strainLoadsField.dumpElementalStrainLoads(preprocessor, strainComponent)
+        return scalarBarOrientation+1
     
-    def _display_elemental_loads(self, displaySettings, setToDisplay, elLoadComp, forceComponents, vectorScale, loadRepresentationType, strainLoadsField, strainLoadComponent, scalarBarOrientation, lRefModSize, defFScale):
+    def _display_elemental_loads(self, displaySettings, setToDisplay, elLoadComp, forceComponents, vectorScale, loadRepresentationType, strainLoadsField, scalarBarOrientation, lRefModSize, defFScale):
         '''Display the loads currently applied on elements.
 
         :param displaySettings: DisplaySettingsFE object that will show
@@ -828,7 +833,6 @@ class OutputHandler(object):
                                        patterns.
         :param strainLoadsField: strain load field which will compute the
                                  values of the strain loads in the model.
-        :param strainLoadComponent: component of the strain load to display.
         :param scalarBarOrientation: scalar bar orientation (1 horiz., 
                                      2 left-vert, 3 right-vert)
         :param lRefModSize: representative length of set size (to auto-scale).
@@ -842,9 +846,10 @@ class OutputHandler(object):
         retval= scalarBarOrientation
         loadRepresentationType= self.getLoadRepresentationType()
         if(loadRepresentationType=='force'):
-            self._display_elemental_force_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, elLoadComp= elLoadComp, forceComponents= forceComponents, vectorScale=vectorScale, scalarBarOrientation= scalarBarOrientation, lRefModSize= lRefModSize, defFScale= defFScale)
+            scalarBarOrientation= self._display_elemental_force_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, elLoadComp= elLoadComp, forceComponents= forceComponents, vectorScale=vectorScale, scalarBarOrientation= scalarBarOrientation, lRefModSize= lRefModSize, defFScale= defFScale)
         elif(loadRepresentationType=='strain'):
-            self._display_elemental_strain_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, strainLoadsField= strainLoadsField, strainComponent= strainLoadComponent, defFScale= defFScale)
+            strainLoadComponent= self.modelSpace.getStrainComponentFromName(elLoadComp)
+            scalarBarOrientation= self._display_elemental_strain_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, strainLoadsField= strainLoadsField, strainComponent= strainLoadComponent, scalarBarOrientation= scalarBarOrientation, defFScale= defFScale)
         elif(loadRepresentationType is not None): # mixed of anyone else.
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -894,16 +899,15 @@ class OutputHandler(object):
             retval= scalarBarOrientation+1
         return retval
         
-    def displayLoads(self, setToDisplay=None, elLoadComp='xyzComponents', strainLoadComponent= None, fUnitConv=1,caption= None, fileName=None, defFScale=0.0, scaleConstr= 0.2):
+    def displayLoads(self, setToDisplay=None, elLoadComp='xyzComponents', fUnitConv=1, caption= None, fileName=None, defFScale=0.0, scaleConstr= 0.2):
         '''Display the loads applied on beam elements and nodes for the domain
            current load case
 
         :param setToDisplay: set of beam elements to be represented (defaults to TotalSet)
-        :param elLoadComp:component of the linear loads on elements to be 
+        :param elLoadComp: component of the linear loads on elements to be 
                depicted [available components: 'xyzComponents' (default),
                'axialComponent', 'transComponent', 'transYComponent', 
                'transZComponent']
-        :param strainLoadComponent: component of the strain load to display.
         :param fUnitConv:  factor of conversion to be applied to the results
                         (defaults to 1)
         :param caption:   caption for the graphic
@@ -928,6 +932,8 @@ class OutputHandler(object):
         strainLoadsField= None
         if(loadRepresentationType=='strain'): # display strain loads.
             strainLoadsField= strain_loads_field.StrainLoadsField(name= loadCaseName, setToDisplay= setToDisplay, fUnitConv= unitConversionFactor)
+            strainLoadComponent= self.modelSpace.getStrainComponentFromName(elLoadComp)
+            strainLoadsField.dumpElementalStrainLoads(preprocessor= preprocessor, strainComponent= strainLoadComponent)
             displaySettings.setField(strainLoadsField)
         grid= displaySettings.setupGrid(setToDisplay)
         if __debug__:
@@ -942,7 +948,7 @@ class OutputHandler(object):
             vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.
             # elemental loads
             forceComponents= self.modelSpace.getForceComponents()
-            scalarBarOrientation= self._display_elemental_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, elLoadComp= elLoadComp, loadRepresentationType= loadRepresentationType, strainLoadsField= strainLoadsField, strainLoadComponent= strainLoadComponent, vectorScale= vectorScale, scalarBarOrientation= scalarBarOrientation, lRefModSize= LrefModSize, defFScale= defFScale, forceComponents= forceComponents)
+            scalarBarOrientation= self._display_elemental_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, elLoadComp= elLoadComp, loadRepresentationType= loadRepresentationType, strainLoadsField= strainLoadsField, vectorScale= vectorScale, scalarBarOrientation= scalarBarOrientation, lRefModSize= LrefModSize, defFScale= defFScale, forceComponents= forceComponents)
             # nodal loads
             ## forces on nodes.
             scalarBarOrientation= self._display_nodal_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, forceComponents= forceComponents, vectorScale= vectorScale, scalarBarOrientation= scalarBarOrientation, defFScale= defFScale)

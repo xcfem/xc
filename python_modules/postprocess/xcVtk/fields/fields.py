@@ -50,15 +50,23 @@ class ScalarField(fb.FieldBase):
             self.rgMinMax= None
         self.arr= None
 
+    def getPropertyName(self):
+        ''' Return the name of the property that will store the
+            field values.'''
+        return self.name
+
     def fillArray(self, nodeSet):
         '''Creates an vtkDoubleArray filled with the proper values.
 
+        :param nodeSet: set of nodes that will provide the values
+                        to populate the array.
         '''
         # Scalar values.
         self.arr= vtkDoubleArray()
         self.arr.SetName(self.name)
         self.arr.SetNumberOfTuples(len(nodeSet))
         self.arr.SetNumberOfComponents(1)
+        propertyName= self.getPropertyName()
         for n in nodeSet:
             attr= getattr(n,self.attrName)
             tmp= None
@@ -66,9 +74,9 @@ class ScalarField(fb.FieldBase):
                 tmp= attr[self.attrComponent]
             elif callable(attr):
                 if(attr.__name__!='getProp'):
-                    tmp= attr(self.name)
-                elif(n.hasProp(self.name)):
-                    tmp= attr(self.name)
+                    tmp= attr(propertyName)
+                elif(n.hasProp(propertyName)):
+                    tmp= attr(propertyName)
                 else:
                     tmp= 0.0
             else:
@@ -137,7 +145,7 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
         super(ExtrapolatedProperty,self).__init__(name,functionName, xcSet, component, fUnitConv,rgMinMax)
 
     def extrapolate(self):
-        extrapolate_elem_attr.extrapolate_elem_function_attr(self.xcSet.elements,self.name,"getProp", self.name)
+        extrapolate_elem_attr.extrapolate_elem_function_attr(self.xcSet.elements, self.name, "getProp", self.name)
 
     def display(self,displaySettings, caption= '', unitDescription= '', fileName= None, defFScale=0.0):
         ''' Display the field.

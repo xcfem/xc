@@ -23,7 +23,7 @@ class StrainLoadsField(fields.ScalarField):
     :ivar name: name of the strain loads field.
     :ivar setToDisplay: set over which to display the loads.
     '''
-    def __init__(self, name, setToDisplay, fUnitConv= 1e-6, rgMinMax= None):
+    def __init__(self, name, setToDisplay, fUnitConv= 1e3, rgMinMax= None):
         '''
         Constructor.
 
@@ -38,8 +38,8 @@ class StrainLoadsField(fields.ScalarField):
         super().__init__(name= name, functionName= 'getProp', component= None, fUnitConv= fUnitConv)
         self.setToDisplay= setToDisplay
 
-    def getAttributeName(self):
-        ''' Return the name of the attribute that will be used to store
+    def getPropertyName(self):
+        ''' Return the name of the property that will be used to store
             the values of the strain loads in the nodes.'''
         return self.name+'_strain_load_values'
         
@@ -89,7 +89,7 @@ class StrainLoadsField(fields.ScalarField):
         elemSet= self.setToDisplay.elements
         firstValue= next(iter(elementalStrainLoads.values()), None)
         if(firstValue is not None):
-            attributeName= self.getAttributeName()
+            attributeName= self.getPropertyName()
             initialValue= xc.Vector(firstValue.noCols, 0.0)
             touchedNodes= extrapolate_elem_attr.create_attribute_at_nodes(elemSet, attributeName, initialValue)
             #Calculate totals.
@@ -119,13 +119,11 @@ class StrainLoadsField(fields.ScalarField):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; no strain loads in elements (dictionary empty).')
 
-    
-    def populateWithElementalStrainLoads(self, activeLoadPatterns, strainComponent):
+    def populateWithElementalStrainLoads(self, activeLoadPatterns):
         ''' Populate the strain load container with elemental loads 
             from the load pattern argument.
 
         :param activeLoadPatterns: list of active load patterns.
-        :param strainComponent: strain component to display.
         '''
         elementalStrainLoads= self.sumElementalStrainLoads(activeLoadPatterns)
         self.extrapolateStrainLoadsToNodes(elementalStrainLoads)
@@ -136,6 +134,7 @@ class StrainLoadsField(fields.ScalarField):
         :param preprocessor: preprocessor of the FE problem.
         :param strainComponent: strain component to display.
         '''
+        self.attrComponent= strainComponent
         activeLoadPatterns= lvf.get_active_load_patterns(preprocessor)
         if(len(activeLoadPatterns)<1):
             className= type(self).__name__
@@ -143,9 +142,5 @@ class StrainLoadsField(fields.ScalarField):
             message= className+'.'+methodName+'; no active load patterns.'
             lmsg.warning(message)
         else:
-            numberOfLoads= self.populateWithElementalStrainLoads(activeLoadPatterns, strainComponent= strainComponent)
-        attributeName= self.getAttributeName()
-        print(attributeName)
-        for n in self.setToDisplay.nodes:
-            print(n.tag, n.getProp(attributeName))
+            numberOfLoads= self.populateWithElementalStrainLoads(activeLoadPatterns)
 
