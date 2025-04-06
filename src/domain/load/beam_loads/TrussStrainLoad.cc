@@ -46,6 +46,10 @@ XC::TrussStrainLoad::TrussStrainLoad(int tag)
 XC::TrussStrainLoad::TrussStrainLoad(void)
   :ElementBodyLoad(LOAD_TAG_TrussStrainLoad), e1(0.0), e2(0.0) {}
 
+//! @brief Return the category of this kind of loads.
+std::string XC::TrussStrainLoad::Category(void) const
+  { return "truss_strain"; }
+
 std::vector<XC::Vector> XC::TrussStrainLoad::getStrains(void) const
   {
     std::vector<Vector> retval(2);

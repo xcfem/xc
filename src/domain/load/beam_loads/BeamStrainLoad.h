@@ -53,6 +53,8 @@ class BeamStrainLoad: public BeamLoad
   public:
     BeamStrainLoad(int tag, const ID &theElementTags);
     BeamStrainLoad(int tag= 0);
+  
+    std::string Category(void) const;
 
     inline const DeformationPlane &getDeformationPlane1(void) const
       { return backEndDeformationsPlane; }

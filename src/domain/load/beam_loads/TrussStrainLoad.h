@@ -54,6 +54,8 @@ class TrussStrainLoad: public ElementBodyLoad
     TrussStrainLoad(int tag);
     TrussStrainLoad(void);    
   
+    std::string Category(void) const;
+  
     inline const double &E1(void) const
       { return e1; }
     inline void setE1(const double &d)

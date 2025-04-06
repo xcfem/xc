@@ -39,6 +39,10 @@ XC::BeamStrainLoad::BeamStrainLoad(int tag, const ID &theElementTags)
 XC::BeamStrainLoad::BeamStrainLoad(int tag)
   :BeamLoad(tag, LOAD_TAG_BeamStrainLoad) {}
 
+//! @brief Return the category of this kind of loads.
+std::string XC::BeamStrainLoad::Category(void) const
+  { return "beam_strain"; }
+
 const XC::Vector &XC::BeamStrainLoad::getData(int &type, const double &loadFactor) const
   {
     type = getClassTag();
