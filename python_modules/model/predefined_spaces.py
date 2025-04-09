@@ -780,12 +780,15 @@ class PredefinedSpace(object):
         self.constraints.newAntiSymmetryConstraint(nodeTag, plane)
         self.fixedNodesTags.add(nodeTag)
 
-    def fixNode(self, DOFpattern, nodeTag, restrainedNodeId: str= None):
+    def fixNode(self, DOFpattern, nodeTag, restrainedNodeId:str= None):
         '''Restrain DOF of a node according to the DOFpattern, which is a given
          string of type '0FF' that matches the DOFs (uX,uY,uZ)
          where 'F' means FREE and '0' means constrained with value=0
          Note: DOFpaterns '0FF','0_FF', ... are equivalent
 
+         :param DOFpattern: sequence of '0' (fixed) and 'F' (free)
+                            characters expressing the constraint for
+                            the corresponding DOF.
          :param nodeTag: node identifier.
          :param restrainedNodeId: identifier of the node to display with
                                   the reaction values.
