@@ -59,11 +59,6 @@ truss3.sectionArea= A
 # Constraints
 for n in [nod01, nod02, nod11, nod12, nod21, nod22]:
     modelSpace.fixNode('00', n.tag)
-# constraints= preprocessor.getBoundaryCondHandler
-# spc1= constraints.newSPConstraint(nod1.tag,0,0.0)
-# spc2= constraints.newSPConstraint(nod1.tag,1,0.0)
-# spc3= constraints.newSPConstraint(nod2.tag,0,0.0)
-# spc4= constraints.newSPConstraint(nod2.tag,1,0.0)
     
 # Load case definition.
 lp0= modelSpace.newLoadPattern(name= '0')
