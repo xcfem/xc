@@ -34,6 +34,10 @@
 #include "material/section/repres/CrossSectionProperties2d.h"
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
 
+double proto_beam_2d_extrapolation_data[4]= {1.0,0.0, 0.0,1.0};
+
+XC::Matrix XC::ProtoBeam2d::extrapolation_matrix(proto_beam_2d_extrapolation_data,2,2); // identity matrix.
+
 //! @brief Set values to section mass properties.
 void XC::ProtoBeam2d::set_material(const Material *m)
   {

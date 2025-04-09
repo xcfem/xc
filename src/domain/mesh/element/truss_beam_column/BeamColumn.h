@@ -48,8 +48,10 @@ class BeamColumn: public Element1D
     BeamColumn(int tag, int classTag);
     BeamColumn(int tag, int classTag, int Nd1, int Nd2);
 
-    const PrismaticBarCrossSection *getSectionPtr(const size_t &) const;
+    virtual const PrismaticBarCrossSection *getSectionPtr(const size_t &) const;
 
+    virtual const Matrix &getExtrapolationMatrix(void) const;
+    Matrix getExtrapolatedValues(const Matrix &) const;
   };
 
 } //end of XC namespace

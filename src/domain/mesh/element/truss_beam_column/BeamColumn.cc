@@ -27,9 +27,11 @@
 //BeamColumn.cc
 
 #include "BeamColumn.h"
-
-
 #include <material/section/PrismaticBarCrossSection.h>
+#include <utility/matrix/Matrix.h>
+
+double beam_column_extrapolation_data[4]= {1.0,0.0, 0.0,1.0};
+XC::Matrix beam_column_extrapolation_matrix(beam_column_extrapolation_data,2,2); // identity matrix.
 
 
 //! @brief Constructor.
@@ -50,3 +52,13 @@ const XC::PrismaticBarCrossSection *XC::BeamColumn::getSectionPtr(const size_t &
     return nullptr;
   }
 
+const XC::Matrix &XC::BeamColumn::getExtrapolationMatrix(void) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; not implemented yet.\n";
+    return beam_column_extrapolation_matrix;
+  }
+
+//! @brief Extrapolate from Gauss points to nodes.
+XC::Matrix XC::BeamColumn::getExtrapolatedValues(const Matrix &values) const
+  { return this->getExtrapolationMatrix()*values; }
