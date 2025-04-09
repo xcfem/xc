@@ -45,6 +45,9 @@ millimeter= UnitDefinitionPair('mm',1e3, 'length')
 milliradian= UnitDefinitionPair('x1E3 rad',1e3, 'plane angle')
 megapascal= UnitDefinitionPair('MPa',1e-6,'pressure')
 
+# Unitless quantities.
+perThousandStrain= UnitDefinitionPair(u'‰',1e3, 'strain')
+
 class LengthUnits(object):
     ''' Units to use for the output of length magnitudes
 
@@ -119,20 +122,40 @@ class DisplacementUnits(object):
     
     def getDecoratedDisplSymbol(self):
         return self.lengthUnit.getDecoratedSymbol()
-
+    
 defaultDisplacementUnits= DisplacementUnits(millimeter,milliradian)
+    
+class StrainUnitless(object):
+    ''' Unit(less) to use for the output of strain magnitudes
+
+        :ivar strainUnit: unit(less) to express strains.
+    '''
+    def __init__(self, strainUnitless= perThousandStrain):
+        ''' Constructor.
+
+            :param strainUnit: unit to express lengths.
+        '''
+        self.strainUnitless= strainUnitless
+        
+    def getDecoratedSymbol(self):
+        return self.strainUnitless.getDecoratedSymbol()
+
+defaultStrainUnits= StrainUnitless(strainUnitless= perThousandStrain)
 
 class OutputUnits(object):
     ''' Units to use in output stuff (graphics, etc.)
 
-        :ivar displacementUnits: units for the displacements
-        :ivar dynamicUnits: units for the forces and moments
+        :ivar displacementUnits: units for the displacements.
+        :ivar dynamicUnits: units for the forces and moments.
+        :ivar lengthUnits: units for lengths.
+        :ivar strainUnits: unit(less) for strain.
     '''
-    def __init__(self,displacementUnits= defaultDisplacementUnits, dynamicUnits= defaultDynamicUnits, lengthUnits= defaultLengthUnits):
+    def __init__(self,displacementUnits= defaultDisplacementUnits, dynamicUnits= defaultDynamicUnits, lengthUnits= defaultLengthUnits, strainUnits= defaultStrainUnits):
 
         self.displacementUnits= displacementUnits
         self.dynamicUnits= dynamicUnits
         self.lengthUnits= lengthUnits
+        self.strainUnits= strainUnits
         #self.textUnitsRot='['+textUnitsRot+']'
         #self.textUnitsDispl='['+textUnitsDispl+']'
         #self.textUnitsLoadsIntForces='units:['+textUnitsLengthMoment+','+textUnitsForce+']'
@@ -188,3 +211,11 @@ class OutputUnits(object):
     def getPressureUnitsDescription(self):
         ''' Return the description for the displacement units.'''
         return self.dynamicUnits.getDecoratedPressureUnitsText()
+
+    def getStrainUnitsScaleFactor(self):
+        ''' Return the scale factor for the strain units.'''
+        return self.strainUnits.strainUnitless.scaleFactor
+    
+    def getStrainUnitsDescription(self):
+        ''' Return the description for the strain units.'''
+        return self.strainUnits.strainUnitless.getDecoratedSymbol()

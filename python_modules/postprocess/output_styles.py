@@ -106,6 +106,14 @@ class OutputStyle(object):
         ''' Return the value of the width for the displayed lines.'''
         return self.lineWidth
     
+    def getStrainUnitsScaleFactor(self):
+        ''' Return the scale factor for the strain units.'''
+        return self.outputUnits.getStrainUnitsScaleFactor()
+    
+    def getStrainUnitsDescription(self):
+        ''' Return the description for the strain units.'''
+        return self.outputUnits.getStrainUnitsDescription()
+    
     def getDisplacementUnitsScaleFactor(self):
         ''' Return the scale factor for the displacement units.'''
         return self.outputUnits.getDisplacementUnitsScaleFactor()

@@ -938,6 +938,8 @@ class OutputHandler(object):
         # Check if strainLoadField is needed.
         strainLoadsField= None
         if(loadRepresentationType=='strain'): # display strain loads.
+            unitConversionFactor= self.outputStyle.getStrainUnitsScaleFactor()
+            unitDescription= self.outputStyle.getStrainUnitsDescription()
             strainLoadsField= strain_loads_field.StrainLoadsField(name= loadCaseName, setToDisplay= setToDisplay, fUnitConv= unitConversionFactor)
             strainLoadComponent= self.modelSpace.getStrainComponentFromName(elLoadComp)
             strainLoadsField.dumpElementalStrainLoads(preprocessor= preprocessor, strainComponent= strainLoadComponent)
