@@ -14,7 +14,7 @@ import sys
 from postprocess.xcVtk.diagrams import load_diagram as ld
 from misc_utils import log_messages as lmsg
 
-class LinearLoadDiagram(ld.LoadDiagram):
+class StrainLoadDiagram(ld.LoadDiagram):
     '''Draw a load over a set of linear elements (qx,qy,qz,...)
 
     '''
@@ -31,9 +31,9 @@ class LinearLoadDiagram(ld.LoadDiagram):
                          the values less than vmin are displayed in blue and 
                          those greater than vmax in red (defaults to None)
         '''
-        super(LinearLoadDiagram,self).__init__(setToDisp= setToDisp, scale= scale, lRefModSize= lRefModSize, fUnitConv= fUnitConv, component= component, rgMinMax= rgMinMax)
+        super(StrainLoadDiagram,self).__init__(setToDisp= setToDisp, scale= scale, lRefModSize= lRefModSize, fUnitConv= fUnitConv, component= component, rgMinMax= rgMinMax)
 
-    def sumElementalUniformLoads(self, actLP):
+    def sumElementalStrainLoads(self, actLP):
         ''' Iterate over active load patterns and cumulate on elements their 
         elemental unifirm loads. Returns a dictionary that stores for each 
         linear loaded element the sum of active loads on it
@@ -43,43 +43,44 @@ class LinearLoadDiagram(ld.LoadDiagram):
         retval= dict()
         if(len(actLP)>0):
             preprocessor= actLP[0].getDomain.getPreprocessor     
+            spaceDimension= preprocessor.getNodeHandler.dimSpace
             for lp in actLP:
                 lIter= lp.loads.getElementalLoadIter
                 eLoad= lIter.next()
                 eTagsSet= self.setToDisp.getElements.getTags()
                 while(eLoad):
                     category= eLoad.category
-                    if(category=='uniform' or category=='raw'):
-                        if(hasattr(eLoad,'getVector3dLocalForce')):
-                            localForce3d= eLoad.getVector3dLocalForce()
+                    if('strain' in category):
+                        if(hasattr(eLoad,'getStrainsMatrix')):
+                            strainMatrix= eLoad.getStrainsMatrix()
                             tags= eLoad.elementTags
                             for i, eTag in enumerate(tags):
                                 if eTag in eTagsSet:
                                     elem= preprocessor.getElementHandler.getElement(eTag)
                                     dim= elem.getDimension
-                                    if(dim==1):
+                                    nDOFperNode= elem.getNumDOF()/elem.numNodes
+                                    # Strain loads on elements other than beams
+                                    # elements are displayed as fields on the
+                                    # element itself (not as diagrams).
+                                    beamElement= (dim==1) and (nDOFperNode>spaceDimension)
+                                    if(beamElement):
                                         if eTag in retval:
-                                            retval[eTag]+= localForce3d
+                                            retval[eTag]+= strainMatrix
                                         else:
-                                            retval[eTag]= localForce3d
+                                            retval[eTag]= strainMatrix
                         else:
                             className= type(self).__name__
                             methodName= sys._getframe(0).f_code.co_name
-                            warningMsg= '; load of type: '+str(type(eLoad))
-                            warningMsg+= " has no getVector3dLocalForce method. Can't display the load over this element."
+                            warningMsg= '; display of loads of type '+str(type(eLoad))
+                            warningMsg+= ' not implemented yet.'
                             lmsg.warning(className+'.'+methodName+warningMsg)
-                    elif('strain' in category):
+                    elif(category in ['uniform', 'raw', 'punctual']):
                         className= type(self).__name__
                         methodName= sys._getframe(0).f_code.co_name
                         errorMsg= "; component:'"+str(self.component)+"' unknown."
-                        errorMsg= "; use StrainLoadDiagram to draw loads of type: '"
+                        errorMsg= "; use LinearLoadDiagram to draw loads of type: '"
                         errorMsg+= str(type(eLoad))+ "'."
                         lmsg.error(className+'.'+methodName+errorMsg)
-                    elif(category=='punctual'):
-                        # Concentrated load must be treated elsewhere
-                        className= type(self).__name__
-                        methodName= sys._getframe(0).f_code.co_name
-                        lmsg.warning(className+'.'+methodName+'; display of concentrated loads not implemented yet.')
                     else:
                         className= type(self).__name__
                         methodName= sys._getframe(0).f_code.co_name
@@ -90,7 +91,7 @@ class LinearLoadDiagram(ld.LoadDiagram):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+': no active load patterns; doing nothing.')
         return retval
-       
+                                                  
     def dumpElementalLoads(self, actLP, diagramIndex, defFScale= 0.0):
         ''' Iterate over loaded elements dumping its loads into the graphic.
 
@@ -104,54 +105,44 @@ class LinearLoadDiagram(ld.LoadDiagram):
         '''
         preprocessor= actLP[0].getDomain.getPreprocessor
         if not self.dictActLoadVectors:
-            self.dictActLoadVectors= self.sumElementalUniformLoads(actLP)
+            self.dictActLoadVectors= self.sumElementalStrainLoads(actLP)
         valueCouples= list()
         elements= list()
         directions= list()
-        if(self.component=='axialComponent'):
-            for eTag in self.dictActLoadVectors.keys():
-                elem= preprocessor.getElementHandler.getElement(eTag)
-                directions.append(elem.getJVector3d(True))
-                axialLoad=self.dictActLoadVectors[eTag].x
+        for eTag in self.dictActLoadVectors.keys():
+            elem= preprocessor.getElementHandler.getElement(eTag)
+            dim= elem.getDimension
+            strainMatrix= self.dictActLoadVectors[eTag]
+            if(self.component==0):
+                directions.append(elem.getJVector3d(True)) # diagram direction.
                 elements.append(elem)
-                valueCouples.append((axialLoad, axialLoad))      
-        elif(self.component in ['transComponent','transYComponent']):  # transComponent only for 2D models
-            for eTag in self.dictActLoadVectors.keys():
-                elem= preprocessor.getElementHandler.getElement(eTag)
+                valueCouples.append((strainMatrix(0, self.component), strainMatrix(1, self.component)))      
+            elif(self.component==1):
                 directions.append(elem.getJVector3d(True))
-                transLoad=self.dictActLoadVectors[eTag].y
                 elements.append(elem)
-                valueCouples.append((transLoad,transLoad))
-        elif(self.component=='transZComponent'):  
-            for eTag in self.dictActLoadVectors.keys():
-                elem= preprocessor.getElementHandler.getElement(eTag)
+                valueCouples.append((strainMatrix(0, self.component), strainMatrix(1, self.component)))      
+            elif(self.component==2):  
                 directions.append(elem.getKVector3d(True))
-                transZLoad=self.dictActLoadVectors[eTag].z
                 elements.append(elem)
-                valueCouples.append((transZLoad,transZLoad))
-        elif(self.component=='xyzComponents'):
-            for eTag in self.dictActLoadVectors.keys():
-                elem= preprocessor.getElementHandler.getElement(eTag)
-                vI= elem.getIVector3d(True)
-                vJ= elem.getJVector3d(True)
-                vK= elem.getKVector3d(True)
-                localForce= self.dictActLoadVectors[eTag]
-                v= localForce.x*vI+localForce.y*vJ+localForce.z*vK
-                directions.append(v.normalized())
-                totLoad= v.getModulus()
+                valueCouples.append((strainMatrix(0, self.component), strainMatrix(1, self.component)))      
+            elif(self.component==3):
+                directions.append(elem.getJVector3d(True)) # diagram direction.
                 elements.append(elem)
-                valueCouples.append((totLoad, totLoad))
-        elif(self.component in self.strainComponentLabels):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            errorMsg= "; component:'"+str(self.component)+"' unknown."
-            errorMsg+= " Use StrainLoadDiagram to draw that kind of load."
-            lmsg.error(className+'.'+methodName+errorMsg)
-        else:
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            errorMsg= "; component:'"+self.component+"' unknown."
-            lmsg.error(className+'.'+methodName+errorMsg)
+                valueCouples.append((strainMatrix(0, self.component), strainMatrix(1, self.component)))      
+            elif(self.component==4):
+                directions.append(elem.getJVector3d(True))
+                elements.append(elem)
+                valueCouples.append((strainMatrix(0, self.component), strainMatrix(1, self.component)))      
+            elif(self.component==5):  
+                directions.append(elem.getKVector3d(True))
+                elements.append(elem)
+                valueCouples.append((strainMatrix(0, self.component), strainMatrix(1, self.component)))      
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errorMsg= "; component:'"+str(self.component)+"' unknown."
+                lmsg.error(className+'.'+methodName+errorMsg)
+
         if(valueCouples):
             diagramIndex= self.appendDataToDiagram(elements= elements, diagramIndex= diagramIndex, valueCouples= valueCouples, directions= directions, defFScale= defFScale)      
         return diagramIndex
@@ -167,28 +158,13 @@ class LinearLoadDiagram(ld.LoadDiagram):
             lmsg.warning('No active load patterns.')
         actLP=[lp.data() for lp in activeLoadPatterns]
         if not self.dictActLoadVectors:
-            self.dictActLoadVectors= self.sumElementalUniformLoads(actLP)
+            self.dictActLoadVectors= self.sumElementalStrainLoads(actLP)
         eTags=[tag for tag in self.dictActLoadVectors.keys()]
         retval= 0.0
         if(len(eTags)>0):
-            if(self.component=='axialComponent'):
-                retval=max([abs(self.dictActLoadVectors[tag].x) for tag in eTags])
-            elif(self.component in ['transComponent','transYComponent']):  # transComponent only for 2D models
-                retval=max([abs(self.dictActLoadVectors[tag].y) for tag in eTags])
-            elif(self.component=='transZComponent'):  
-                retval=max([abs(self.dictActLoadVectors[tag].z) for tag in eTags])
-            elif(self.component=='xyzComponents'):
-                retval=max([abs(self.dictActLoadVectors[tag].getModulus()) for tag in eTags])
-            elif(self.component in self.strainComponentLabels):
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                errorMsg= "; component:'"+str(self.component)+"' unknown."
-                errorMsg+= " Use StrainLoadDiagram to draw that kind of load."
-                lmsg.error(className+'.'+methodName+errorMsg)
-            else:
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                errorMsg= "; component:'"+str(self.component)+"' unknown."
-                lmsg.error(className+'.'+methodName+errorMsg)
+            retval= 0.0
+            for eTag in eTags:
+                strainMatrix= self.dictActLoadVectors[eTag]
+                retval= max(retval, strainMatrix(0, self.component), strainMatrix(1, self.component))
         return retval
 

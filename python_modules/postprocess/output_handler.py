@@ -19,6 +19,7 @@ from postprocess.xcVtk.diagrams import control_var_diagram as cvd
 from postprocess.xcVtk.diagrams import beam_result_diagram as brd
 from postprocess.xcVtk.diagrams import internal_force_diagram as ifd
 from postprocess.xcVtk.diagrams import linear_load_diagram as lld
+from postprocess.xcVtk.diagrams import strain_load_diagram as sld
 from postprocess.xcVtk.diagrams import node_property_diagram as npd
 from postprocess.xcVtk.diagrams import element_property_diagram as epd
 from postprocess import output_styles
@@ -97,6 +98,9 @@ class OutputHandler(object):
 
     def getOutputForceUnitSym(self):
         return self.outputStyle.outputUnits.dynamicUnits.forceUnit.symbol
+    
+    def getOutputStrainUnitSym(self):
+        return self.outputStyle.outputUnits.strainUnits.strainUnitless.symbol
 
     def getDefaultCameraParameters(self):
         '''Return the default camera parameters.'''
@@ -770,6 +774,7 @@ class OutputHandler(object):
         retval= scalarBarOrientation
         elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
+        # Display diagrams on 1D elements.
         diagram= lld.LinearLoadDiagram(setToDisp= setToDisplay, scale= elLoadScaleF, lRefModSize= lRefModSize, fUnitConv= unitConversionFactor, component=elLoadComp)
         preprocessor= self.modelSpace.preprocessor
         maxAbs= diagram.autoScale(preprocessor)
@@ -790,29 +795,51 @@ class OutputHandler(object):
             retval= scalarBarOrientation+1
         return retval
 
-    def _display_elemental_strain_loads(self, displaySettings, setToDisplay, strainLoadsField, strainComponent, scalarBarOrientation, defFScale):
+    def _display_elemental_strain_loads(self, displaySettings, setToDisplay, elLoadComp, strainLoadsField, scalarBarOrientation, lRefModSize, defFScale):
         ''' Display the strain loads currently applied on elements.
 
         :param displaySettings: DisplaySettingsFE object that will show
                                 the finite element mesh.
         :param setToDisplay: set of beam elements to be represented (defaults 
                              to TotalSet)
+        :param elLoadComp: component of the elemental loads to be 
+                           depicted [available components: 
+                           'xyzComponents' (default), 'axialComponent', 
+                           'transComponent', 'transYComponent', 
+                           'transZComponent', 'epsilon_xx', 'epsilon_yy', 
+                           'epsilon_zz', 'epsilon_xy', 'epsilon_xz', 
+                           'epsilon_yz']
         :param strainLoadsField: strain load field which will compute the
                                 values of the strain loads in the model.
-        :param strainComponent: strain component to display.
         :param scalarBarOrientation: scalar bar orientation (1 horiz., 
                                      2 left-vert, 3 right-vert)
+        :param lRefModSize: representative length of set size (to auto-scale).
         :param defFScale: factor to apply to current displacement of nodes 
                   so that the display position of each node equals to
                   the initial position plus its displacement multiplied
                   by this factor. (Defaults to 0.0, i.e. display of 
                   initial/undeformed shape)
         '''
+        retval= scalarBarOrientation
         preprocessor= self.modelSpace.preprocessor
         loadCaseName= preprocessor.getDomain.currentCombinationName
-        unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
-        # strainLoadsField.dumpElementalStrainLoads(preprocessor, strainComponent)
-        return scalarBarOrientation+1
+        unitConversionFactor= self.outputStyle.getStrainUnitsScaleFactor()
+        elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
+        strainLoadComponent= self.modelSpace.getStrainComponentFromName(elLoadComp)
+        # Display diagrams on 1D elements.
+        diagram= sld.StrainLoadDiagram(setToDisp= setToDisplay, scale= elLoadScaleF, lRefModSize= lRefModSize, fUnitConv= unitConversionFactor, component= strainLoadComponent)
+        preprocessor= self.modelSpace.preprocessor
+        maxAbs= diagram.autoScale(preprocessor)
+        if(maxAbs>0.0):
+            # Linear loads
+            diagram.addDiagram(preprocessor)
+            if(diagram.rangeIsValid()):
+                titleScBar= 'Strain loads ('+self.getOutputStrainUnitSym()+')'
+                displaySettings.appendDiagram(diagram, orientScbar= scalarBarOrientation, titleScbar= titleScBar)
+                retval= scalarBarOrientation+1
+        # Strain loads 2D and 3D elements displayed as fields over the elements
+        # nothing to add here.
+        return retval
     
     def _display_elemental_loads(self, displaySettings, setToDisplay, elLoadComp, forceComponents, vectorScale, loadRepresentationType, strainLoadsField, scalarBarOrientation, lRefModSize, defFScale):
         '''Display the loads currently applied on elements.
@@ -852,8 +879,7 @@ class OutputHandler(object):
         if(loadRepresentationType=='force'):
             scalarBarOrientation= self._display_elemental_force_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, elLoadComp= elLoadComp, forceComponents= forceComponents, vectorScale=vectorScale, scalarBarOrientation= scalarBarOrientation, lRefModSize= lRefModSize, defFScale= defFScale)
         elif(loadRepresentationType=='strain'):
-            strainLoadComponent= self.modelSpace.getStrainComponentFromName(elLoadComp)
-            scalarBarOrientation= self._display_elemental_strain_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, strainLoadsField= strainLoadsField, strainComponent= strainLoadComponent, scalarBarOrientation= scalarBarOrientation, defFScale= defFScale)
+            scalarBarOrientation= self._display_elemental_strain_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, strainLoadsField= strainLoadsField, elLoadComp= elLoadComp, scalarBarOrientation= scalarBarOrientation, lRefModSize= lRefModSize, defFScale= defFScale)
         elif(loadRepresentationType is not None): # mixed of anyone else.
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name

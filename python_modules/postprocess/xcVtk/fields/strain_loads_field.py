@@ -53,6 +53,7 @@ class StrainLoadsField(fields.ScalarField):
         for lp in activeLoadPatterns:
             lIter= lp.loads.getElementalLoadIter
             preprocessor= lp.getDomain.getPreprocessor
+            spaceDimension= preprocessor.getNodeHandler.dimSpace
             elementLoad= lIter.next()
             eTagsSet= self.setToDisplay.getElements.getTags()
             while(elementLoad):
@@ -63,10 +64,17 @@ class StrainLoadsField(fields.ScalarField):
                         strainMatrix= elementLoad.getStrainsMatrix()
                         for i, eTag in enumerate(tags):
                             if eTag in eTagsSet:
-                                if eTag in retval:
-                                    retval[eTag]+= strainMatrix
-                                else:
-                                    retval[eTag]= strainMatrix
+                                element= self.setToDisplay.getElements.findTag(eTag)
+                                dim= element.getDimension
+                                nDOFperNode= element.getNumDOF()/element.numNodes
+                                # Strain loads on beam elements are displayed
+                                # as diagrams.
+                                beamElement= (dim==1) and (nDOFperNode>spaceDimension)
+                                if(not beamElement):
+                                    if eTag in retval:
+                                        retval[eTag]+= strainMatrix
+                                    else:
+                                        retval[eTag]= strainMatrix
                     else:
                         className= type(self).__name__
                         methodName= sys._getframe(0).f_code.co_name
