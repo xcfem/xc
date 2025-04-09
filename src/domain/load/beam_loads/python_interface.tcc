@@ -35,6 +35,7 @@ class_<XC::BeamLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("BeamLoad"
 class_<XC::BeamStrainLoad, bases<XC::BeamLoad>, boost::noncopyable >("BeamStrainLoad", no_init)
   .add_property("backEndDeformationPlane", make_function( &XC::BeamStrainLoad::getDeformationPlane1, return_internal_reference<>() ),&XC::BeamStrainLoad::setDeformationPlane1,"Back end deformation plane.")
   .add_property("frontEndDeformationPlane", make_function( &XC::BeamStrainLoad::getDeformationPlane2, return_internal_reference<>() ),&XC::BeamStrainLoad::setDeformationPlane2,"Front end deformation plane.")
+  .def("getStrainsMatrix", &XC::BeamStrainLoad::getStrainsMatrix, "Return a matrix containing the axial strains at both ends as rows.") 
   ;
 
 class_<XC::BeamMecLoad, bases<XC::BeamLoad>, boost::noncopyable >("BeamMecLoad", no_init)
