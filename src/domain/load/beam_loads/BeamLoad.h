@@ -43,7 +43,7 @@ class CrossSectionProperties3d;
 class BeamLoad: public ElementBodyLoad
   {
   public:
-    BeamLoad(int tag, int classTag,const ID &theElementTags);
+    BeamLoad(int tag, int classTag, const ID &theElementTags);
     BeamLoad(int tag, int classTag);
 
     virtual std::string Category(void) const;

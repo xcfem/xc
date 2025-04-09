@@ -28,6 +28,7 @@
 
 #include "TrussStrainLoad.h"
 #include <utility/matrix/Vector.h>
+#include <utility/matrix/Matrix.h>
 #include "utility/matrix/ID.h"
 
 #include "utility/actor/actor/MovableVector.h"
@@ -50,6 +51,7 @@ XC::TrussStrainLoad::TrussStrainLoad(void)
 std::string XC::TrussStrainLoad::Category(void) const
   { return "truss_strain"; }
 
+//! @brief Return the axial strains at both ends of the truss element.
 std::vector<XC::Vector> XC::TrussStrainLoad::getStrains(void) const
   {
     std::vector<Vector> retval(2);
@@ -58,6 +60,15 @@ std::vector<XC::Vector> XC::TrussStrainLoad::getStrains(void) const
     retval[0]= tmp;
     tmp[1]= e2;
     retval[1]= tmp;
+    return retval;
+  }
+
+//! @brief Return the axial strains at both ends of the truss element.
+XC::Matrix XC::TrussStrainLoad::getStrainsMatrix(void) const
+  {
+    Matrix retval(2, 1);
+    retval(0,0)= e1;
+    retval(1,0)= e2;
     return retval;
   }
 

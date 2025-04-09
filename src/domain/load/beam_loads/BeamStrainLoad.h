@@ -66,6 +66,7 @@ class BeamStrainLoad: public BeamLoad
       { frontEndDeformationPlane= p; }
     const Vector &getSection1Deformation(const size_t &order,const ResponseId &code) const;
     const Vector &getSection2Deformation(const size_t &order,const ResponseId &code) const;
+    Matrix getStrainsMatrix(void) const;
     const Vector &getData(int &type, const double &loadFactor) const;
 
     int sendSelf(Communicator &);  

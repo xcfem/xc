@@ -32,12 +32,14 @@
 #include "utility/matrix/ID.h"
 
 #include "material/section/ResponseId.h"
+#include "domain/mesh/element/truss_beam_column/BeamColumn.h"
+#include "material/section/PrismaticBarCrossSection.h"
 
 XC::BeamStrainLoad::BeamStrainLoad(int tag, const ID &theElementTags)
-  :BeamLoad(tag, LOAD_TAG_BeamStrainLoad, theElementTags) {}
+  : BeamLoad(tag, LOAD_TAG_BeamStrainLoad, theElementTags) {}
 
 XC::BeamStrainLoad::BeamStrainLoad(int tag)
-  :BeamLoad(tag, LOAD_TAG_BeamStrainLoad) {}
+  : BeamLoad(tag, LOAD_TAG_BeamStrainLoad) {}
 
 //! @brief Return the category of this kind of loads.
 std::string XC::BeamStrainLoad::Category(void) const
@@ -98,3 +100,64 @@ const XC::Vector &XC::BeamStrainLoad::getSection1Deformation(const size_t &order
 
 const XC::Vector &XC::BeamStrainLoad::getSection2Deformation(const size_t &order,const ResponseId &code) const
   { return frontEndDeformationPlane.getDeformation(order,code); }
+
+//! @brief Return the strains at both ends of the truss element.
+XC::Matrix XC::BeamStrainLoad::getStrainsMatrix(void) const
+  {
+    Matrix retval;
+    const Domain *ptrDom= getDomain();
+    if(ptrDom)
+      {
+	const ID &elemTags= this->getElementTags();
+	if(elemTags.Size()>0)
+	  {
+	    const size_t elemTag= elemTags(0);
+            const Element *ptrElem= ptrDom->getElement(elemTag);
+	    if(ptrElem)
+	      {
+		const BeamColumn *ptrBeam= dynamic_cast<const BeamColumn *>(ptrElem);
+		if(ptrBeam)
+		  {
+		    const PrismaticBarCrossSection *section= ptrBeam->getSectionPtr(0);
+		    const size_t order= section->getOrder();
+		    const ResponseId &code= section->getResponseType();
+		    const Vector &e1= this->getSection1Deformation(order,code);
+		    const Vector &e2= this->getSection2Deformation(order,code);
+		    const int nRows= e1.Size();
+		    retval.resize(2, nRows);
+		    for(int j= 0; j<nRows;j++)
+		      {
+			retval(0,j)= e1(j);
+			retval(1,j)= e2(j);
+		      }
+		  }
+		else
+		  {
+		    std::cerr << getClassName() << "::" << __FUNCTION__
+			      << ": element: " << elemTag
+			      << " with type: "
+			      << ptrElem->getClassName()
+		              << " is incompatible with this type of load."
+			      << std::endl;
+		  }
+	      }
+	    else
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << ": element with tag: " << elemTag
+			  << " not found."
+			  << std::endl;
+	      }
+
+	  }
+	else
+	  std::clog << getClassName() << "::" << __FUNCTION__
+		    << ": no loaded elements." << std::endl;
+	  
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< ": pointer to domain is NULL." << std::endl;
+    return retval;
+  }
+    
