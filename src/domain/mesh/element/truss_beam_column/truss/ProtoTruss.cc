@@ -31,6 +31,10 @@
 #include <domain/mesh/node/Node.h>
 #include "utility/actor/actor/MatrixCommMetaData.h"
 
+double proto_truss_extrapolation_data[4]= {1.0,0.0, 0.0,1.0};
+
+XC::Matrix XC::ProtoTruss::extrapolation_matrix(proto_truss_extrapolation_data,2,2); // identity matrix.
+
 // initialise the class wide variables
  XC::Matrix XC::ProtoTruss::trussM2(2,2);
  XC::Matrix XC::ProtoTruss::trussM3(3,3);
@@ -248,3 +252,7 @@ boost::python::list XC::ProtoTruss::getValuesAtNodes(const std::string &code, bo
       retval= Element1D::getValuesAtNodes(code, silent); 
     return retval;
   }
+
+//! @brief Extrapolate from Gauss points to nodes.
+XC::Matrix XC::ProtoTruss::getExtrapolatedValues(const Matrix &values) const
+  { return this->getExtrapolationMatrix()*values; }

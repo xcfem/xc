@@ -30,7 +30,7 @@
 #ifndef ProtoBeam2d_h
 #define ProtoBeam2d_h
 
-#include "domain/mesh/element/Element1D.h"
+#include "domain/mesh/element/truss_beam_column/BeamColumn.h"
 #include "domain/mesh/element/utils/physical_properties/ElasticSection2dPhysicalProperties.h"
 
 namespace XC {
@@ -40,10 +40,10 @@ class CrdTransf2d;
 //!
 //! @defgroup BeamColumnElemGrp Beam-column elements.
 //
-//! @ingroup BeamColumnElemGrp
 //!
 //! @brief Base class for 2D beam elements.
-class ProtoBeam2d: public Element1D
+//! @ingroup BeamColumnElemGrp
+class ProtoBeam2d: public BeamColumn
   {
   public:
     typedef ElasticSection2dPhysicalProperties PhysProp;
@@ -67,6 +67,7 @@ class ProtoBeam2d: public Element1D
     const CrossSectionProperties2d &getSectionProperties(void) const;
     CrossSectionProperties2d &getSectionProperties(void);
     void setSectionProperties(const CrossSectionProperties2d &);
+    const PrismaticBarCrossSection *getSectionPtr(const size_t &) const;
     void setMaterial(const std::string &);    
     
     double getRho(void) const;
@@ -80,6 +81,7 @@ class ProtoBeam2d: public Element1D
     void setPhysicalProperties(const PhysProp &);
     inline virtual std::set<std::string> getMaterialNames(void) const
       { return physicalProperties.getMaterialNames(); }
+    
     
     int setInitialSectionDeformation(const Vector &);
     inline const Vector &getInitialSectionDeformation(void) const

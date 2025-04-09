@@ -65,7 +65,7 @@
 #include <domain/mesh/node/Node.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
-#include <domain/mesh/element/Element1D.h>
+#include "domain/mesh/element/truss_beam_column/BeamColumn.h"
 
 namespace XC {
 class Response;
@@ -80,7 +80,7 @@ class Response;
 //! required by the base class "Element", for 2D beam-column elements.
 //! Geometric nonlinearity is incorporated at this level using updated
 //! lagrangian formulation
-class UpdatedLagrangianBeam2D: public Element1D
+class UpdatedLagrangianBeam2D: public BeamColumn
   {
   protected:
     bool    isLinear;

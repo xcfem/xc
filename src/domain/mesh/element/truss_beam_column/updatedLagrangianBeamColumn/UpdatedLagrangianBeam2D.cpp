@@ -77,7 +77,7 @@
 //////////////////////////////////////////////////////////////////////
 
 XC::UpdatedLagrangianBeam2D::UpdatedLagrangianBeam2D(int classTag)
-  :Element1D(0, classTag,0,0), isLinear(true), L(0.0), sn(0.0), cs(0),
+  :BeamColumn(0, classTag,0,0), isLinear(true), L(0.0), sn(0.0), cs(0),
    eleForce(6), eleForce_hist(6), nodeRecord(0), dofRecord(0), m_Iter(-1), Ki(0)
   {
     load.reset(6);
@@ -87,7 +87,7 @@ XC::UpdatedLagrangianBeam2D::UpdatedLagrangianBeam2D(int classTag)
   }
 
 XC::UpdatedLagrangianBeam2D::UpdatedLagrangianBeam2D(int tag, int classTag, int nd1, int nd2, bool islinear)
-  :Element1D(tag, classTag,nd1,nd2), isLinear(islinear), L(0.0), sn(0.0), cs(0),
+  :BeamColumn(tag, classTag,nd1,nd2), isLinear(islinear), L(0.0), sn(0.0), cs(0),
    eleForce(6), eleForce_hist(6), nodeRecord(0), dofRecord(0), m_Iter(-1), Ki(0)
   {
     load.reset(6);
@@ -118,7 +118,7 @@ const XC::Node *XC::UpdatedLagrangianBeam2D::end2Ptr(void) const
 void XC::UpdatedLagrangianBeam2D::setDomain(Domain *theDomain)
   {
     // first set the node pointers
-    Element1D::setDomain(theDomain);
+    BeamColumn::setDomain(theDomain);
     // check theDomain is not null - invoked when object removed from a domain
     if(theDomain == 0)
       {

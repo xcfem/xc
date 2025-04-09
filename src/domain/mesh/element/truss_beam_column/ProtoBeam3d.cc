@@ -61,7 +61,7 @@ void XC::ProtoBeam3d::set_material(const Material *m)
 //! @param class_tag: element class identifier.
 //! @param m: element material.
 XC::ProtoBeam3d::ProtoBeam3d(int tag,int class_tag,const Material *m)
-  : Element1D(tag,class_tag,0,0), physicalProperties(1)
+  : BeamColumn(tag,class_tag,0,0), physicalProperties(1)
   {
     if(m)
       set_material(m);
@@ -73,7 +73,7 @@ XC::ProtoBeam3d::ProtoBeam3d(int tag,int class_tag,const Material *m)
 //! @param Nd1: identifier of the first node.
 //! @parma Nd2: idenfifier of the second node.
 XC::ProtoBeam3d::ProtoBeam3d(int tag, int class_tag, int Nd1, int Nd2)
-  :Element1D(tag,class_tag,Nd1,Nd2), physicalProperties(1)
+  :BeamColumn(tag,class_tag,Nd1,Nd2), physicalProperties(1)
   {
     setSectionProperties(CrossSectionProperties3d());
   }
@@ -90,7 +90,7 @@ XC::ProtoBeam3d::ProtoBeam3d(int tag, int class_tag, int Nd1, int Nd2)
 //! @param Nd1: tag of the element I node.
 //! @param Nd2: tag of the element J node.
 XC::ProtoBeam3d::ProtoBeam3d(int tag, int class_tag, double a, double e, double g, double jx, double iy, double iz,int Nd1, int Nd2)
-  :Element1D(tag,class_tag,Nd1,Nd2), physicalProperties(1)
+  :BeamColumn(tag,class_tag,Nd1,Nd2), physicalProperties(1)
   { setSectionProperties(CrossSectionProperties3d(e,a,iz,iy,g,jx)); }
 
 //! @brief Constructor.
@@ -107,7 +107,7 @@ XC::ProtoBeam3d::ProtoBeam3d(int tag, int class_tag, double a, double e, double 
 //! @param Nd1: tag of the element I node.
 //! @param Nd2: tag of the element J node.
 XC::ProtoBeam3d::ProtoBeam3d(int tag, int class_tag, double a, double alpha_y, double alpha_z, double e, double g, double jx, double iy, double iz,int Nd1, int Nd2)
-  :Element1D(tag,class_tag,Nd1,Nd2), physicalProperties(1)
+  :BeamColumn(tag,class_tag,Nd1,Nd2), physicalProperties(1)
   { setSectionProperties(CrossSectionProperties3d(e,a,iz,iy,g,jx, alpha_y, alpha_z)); }
 
 int XC::ProtoBeam3d::getNumDOF(void) const
@@ -145,6 +145,15 @@ void XC::ProtoBeam3d::setSectionProperties(const CrossSectionProperties3d &csp)
     physicalProperties.set(0,csp);
   }
 
+//! @brief Returns a pointer to the i-th section of the element.
+const XC::PrismaticBarCrossSection *XC::ProtoBeam3d::getSectionPtr(const size_t &i) const
+  {
+    const PrismaticBarCrossSection *retval(nullptr);
+    if(physicalProperties.size()>0)
+      retval= physicalProperties[i];
+    return retval;
+  }
+
 //! @brief Set the element material.
 void XC::ProtoBeam3d::setMaterial(const std::string &matName)
   {
@@ -169,7 +178,7 @@ double XC::ProtoBeam3d::getLinearRho(void) const
 int XC::ProtoBeam3d::sendData(Communicator &comm)
   {
     DbTagData &dt= getDbTagData();
-    int res= Element1D::sendData(comm);
+    int res= BeamColumn::sendData(comm);
     res+= comm.sendMovable(physicalProperties,dt,CommMetaData(7));
     return res;
   }
@@ -177,7 +186,7 @@ int XC::ProtoBeam3d::sendData(Communicator &comm)
 //! @brief Receives members through the communicator argument.
 int XC::ProtoBeam3d::recvData(const Communicator &comm)
   {
-    int res= Element1D::recvData(comm);
+    int res= BeamColumn::recvData(comm);
     res+= comm.receiveMovable(physicalProperties,getDbTagData(),CommMetaData(7));
     return res;
   }
@@ -256,7 +265,7 @@ const XC::Vector &XC::ProtoBeam3d::getSectionDeformation(void) const
 //! @brief Update element state.
 int XC::ProtoBeam3d::update(void)
   {
-    int retval= Element1D::update();
+    int retval= BeamColumn::update();
     // determine the current strain given trial displacements at nodes
     const Vector strain= this->computeCurrentStrain();
     const XC::CrdTransf *crdTransf= this->getCoordTransf();
@@ -299,7 +308,7 @@ int XC::ProtoBeam3d::update(void)
 //! @brief Commit the element state.
 int XC::ProtoBeam3d::commitState(void)
   {
-    int retVal = Element1D::commitState();
+    int retVal = BeamColumn::commitState();
     // call element commitState to do any base class stuff
     if(retVal != 0)
       { std::cerr << getClassName() << "::" << __FUNCTION__
@@ -313,7 +322,7 @@ int XC::ProtoBeam3d::revertToLastCommit()
   {
     // DON'T call Element::revertToLastCommit() because
     // is a pure virtual method.
-    //int retval= Element1D::revertToLastCommit(); // pure virtual.
+    //int retval= BeamColumn::revertToLastCommit(); // pure virtual.
     int retval= physicalProperties.revertToLastCommit();
     return retval;
   }
@@ -321,7 +330,7 @@ int XC::ProtoBeam3d::revertToLastCommit()
 //! @brief Revert the the element to the its start state.
 int XC::ProtoBeam3d::revertToStart()
   {
-    int retval= Element1D::revertToStart();
+    int retval= BeamColumn::revertToStart();
     retval+= physicalProperties.revertToStart();
     return retval;
   }
@@ -341,14 +350,14 @@ void XC::ProtoBeam3d::alive(void)
       {
 	// Store the current deformation.
         this->incrementPersistentInitialDeformationWithCurrentDeformation();
-	Element1D::alive(); // Not dead anymore.
+	BeamColumn::alive(); // Not dead anymore.
       }
   }
 
 //! @brief Removes the element loads.
 void XC::ProtoBeam3d::zeroLoad(void)
   {
-    Element1D::zeroLoad();
+    BeamColumn::zeroLoad();
     (*physicalProperties[0]).zeroInitialSectionDeformation(); //Removes also initial strains.
   }
 
@@ -423,6 +432,6 @@ boost::python::list XC::ProtoBeam3d::getValuesAtNodes(const std::string &code, b
 	    retval.append(value);
       }
     else
-      retval= Element1D::getValuesAtNodes(code, silent); 
+      retval= BeamColumn::getValuesAtNodes(code, silent); 
     return retval;
   }
