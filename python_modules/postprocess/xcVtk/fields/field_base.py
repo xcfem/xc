@@ -14,10 +14,10 @@ class FieldBase(vtk_lut_field.LUTField):
 
     :ivar name: field name.
     '''
-    def __init__(self,name,fUnitConv):
+    def __init__(self, name, fUnitConv):
         ''' Constructor.
 
         :param name: field name.
         '''
-        super(FieldBase,self).__init__(fUnitConv)
+        super(FieldBase,self).__init__(fUnitConv= fUnitConv)
         self.name= name

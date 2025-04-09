@@ -38,7 +38,7 @@ class ScalarField(fb.FieldBase):
                          the values less than vmin are displayed in blue and 
                          those greater than vmax in red (defaults to None)
         '''
-        super(ScalarField,self).__init__(name,fUnitConv)
+        super(ScalarField,self).__init__(name= name, fUnitConv= fUnitConv)
         self.attrName= functionName
         self.attrComponent= component
         if(rgMinMax):
