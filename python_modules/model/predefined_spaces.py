@@ -2525,8 +2525,8 @@ class StructuralMechanics3D(StructuralMechanics):
         self.ThetaZ= 5
         self.epsilon= 0 # generalized strains; axial strain,
         self.kappa_z= 1 # curvature about z-axis,
-        self.gamma_y= 2 # shear along y-axis.
-        self.kappa_y= 3 # curvature about y-axis,
+        self.gamma_y= 3 # shear along y-axis.
+        self.kappa_y= 2 # curvature about y-axis,
         self.gamma_z= 4 # shear along z-axis.
         self.theta= 5 # torsion along x-axis.
         self.N= 0 # generalized strains; axial strain,
@@ -2586,7 +2586,6 @@ class StructuralMechanics3D(StructuralMechanics):
     def getStrainComponentFromName(self, compName):
         '''Return the component index from the
            generalized strain name.'''
-        lmsg.warning('getStrainComponentFromName not tested yet.')
         retval= 0        
         if(compName == 'epsilon'): # axial
             retval= self.epsilon
