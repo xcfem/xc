@@ -62,22 +62,23 @@ class StrainLoadDiagram(ld.LoadDiagram):
                     category= eLoad.category
                     if('strain' in category):
                         if(hasattr(eLoad,'getStrainsMatrix')):
-                            strainMatrix= eLoad.getStrainsMatrix()
-                            tags= eLoad.elementTags
-                            for i, eTag in enumerate(tags):
-                                if eTag in eTagsSet:
-                                    elem= preprocessor.getElementHandler.getElement(eTag)
-                                    dim= elem.getDimension
-                                    nDOFperNode= elem.getNumDOF()/elem.numNodes
-                                    # Strain loads on elements other than beams
-                                    # elements are displayed as fields on the
-                                    # element itself (not as diagrams).
-                                    beamElement= (dim==1) and (nDOFperNode>spaceDimension)
-                                    if(beamElement):
-                                        if eTag in retval:
-                                            retval[eTag]+= strainMatrix
-                                        else:
-                                            retval[eTag]= strainMatrix
+                            tags= (set(eLoad.elementTags) & set(eTagsSet))
+                            for eTag in tags:
+                                elem= preprocessor.getElementHandler.getElement(eTag)
+                                dim= elem.getDimension
+                                nDOFperNode= elem.getNumDOF()/elem.numNodes
+                                # Strain loads on elements other than beams
+                                # elements are displayed as fields on the
+                                # element itself (not as diagrams).
+                                beamElement= (dim==1) and (nDOFperNode>spaceDimension)
+                                if(beamElement):
+                                    if eTag in retval:
+                                        retval[eTag]+= eLoad.getStrainsMatrix()
+                                    else:
+                                        retval[eTag]= eLoad.getStrainsMatrix() # use eLoad method to make sure that
+                                                                               # retval[eTag] stores a copy of the
+                                                                               # strains matrix (instead of a pointer
+                                                                               # to a local variable).
                         else:
                             className= type(self).__name__
                             methodName= sys._getframe(0).f_code.co_name
@@ -175,6 +176,6 @@ class StrainLoadDiagram(ld.LoadDiagram):
             retval= 0.0
             for eTag in eTags:
                 strainMatrix= self.dictActLoadVectors[eTag]
-                retval= max(retval, strainMatrix(0, self.component), strainMatrix(1, self.component))
+                retval= max(retval, abs(strainMatrix(0, self.component)), abs(strainMatrix(1, self.component)))
         return retval
 

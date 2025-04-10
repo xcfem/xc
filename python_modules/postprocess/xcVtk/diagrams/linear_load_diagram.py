@@ -61,17 +61,19 @@ class LinearLoadDiagram(ld.LoadDiagram):
                     category= eLoad.category
                     if(category=='uniform' or category=='raw'):
                         if(hasattr(eLoad,'getVector3dLocalForce')):
-                            localForce3d= eLoad.getVector3dLocalForce()
-                            tags= eLoad.elementTags
-                            for i, eTag in enumerate(tags):
-                                if eTag in eTagsSet:
-                                    elem= preprocessor.getElementHandler.getElement(eTag)
-                                    dim= elem.getDimension
-                                    if(dim==1):
-                                        if eTag in retval:
-                                            retval[eTag]+= localForce3d
-                                        else:
-                                            retval[eTag]= localForce3d
+                            tags= (set(eLoad.elementTags) & set(eTagsSet))
+                            for eTag in tags:
+                                elem= preprocessor.getElementHandler.getElement(eTag)
+                                dim= elem.getDimension
+                                if(dim==1):
+                                    if eTag in retval:
+                                        retval[eTag]+= eLoad.getVector3dLocalForce()
+                                    else:
+                                        retval[eTag]= eLoad.getVector3dLocalForce() # use eLoad method to make sure
+                                                                                    # that retval[eTag] stores a 
+                                                                                    # copy of the strains matrix
+                                                                                    # (instead of a pointer to a local
+                                                                                    # variable).
                         else:
                             className= type(self).__name__
                             methodName= sys._getframe(0).f_code.co_name
