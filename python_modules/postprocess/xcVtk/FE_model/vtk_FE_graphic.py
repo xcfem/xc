@@ -519,11 +519,13 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self.displayNodalLoads(preprocessor, loadPattern, clrVectores,fScaleVectores)
 
     def appendDiagram(self, diagram, orientScbar=1, titleScbar=None):
-        '''
+        ''' Add the diagrams to the actors to display.
+
+        :param diagram: diagram to append.
         :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
         :param titleScbar: title for the scalar bar (defaults to None)
         '''
-        diagram.addDiagramToScene(self,orientScbar,titleScbar)
+        diagram.addDiagramToScene(self, orientScbar, titleScbar)
 
     def getSingleFreedomConstraintsData(self, preprocessor, nodsInSet):
         ''' Return the data to define the symbols of the single-fredom

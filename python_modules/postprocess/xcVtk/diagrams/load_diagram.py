@@ -46,16 +46,6 @@ class LoadDiagram(cd.ColoredDiagram):
         self.dictActLoadVectors= None
         self.lRefModSize= lRefModSize        
 
-    def autoScale(self, preprocessor):
-        ''' Autoscale the diagram.
-
-        :param preprocessor: pre-processor of the finite element problem.
-        '''
-        maxAbsComp= self.getMaxAbsComp(preprocessor= preprocessor)
-        if(maxAbsComp>0):
-            self.scaleFactor*= self.lRefModSize/maxAbsComp*100.0
-        return maxAbsComp
-
     def dumpLoads(self, preprocessor, diagramIndex, defFScale= 0.0):
         ''' Dump loads over elements.
 

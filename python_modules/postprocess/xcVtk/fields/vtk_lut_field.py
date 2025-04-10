@@ -43,6 +43,7 @@ class LUTField(object):
         self.initializeMinMax()
         self.lookUpTable= None
         self.scalarBar= None
+        self.scalarBarTitle= None
         self.fUnitConv= fUnitConv
         self.mapper= None
         self.actor= None
@@ -102,14 +103,28 @@ class LUTField(object):
         '''Updates the diagram actor scalar range.'''
         self.mapper.SetScalarRange(self.valMin,self.valMax)
 
-    def creaColorScaleBar(self,orientation=1,title=None):
+    def setScalarBarTitle(self, scalarBarTitle):
+        '''Set the title of the scale bar.
+
+        :param scalarBarTitle: title for the field scale bar.
+        '''
+        self.scalarBarTitle= scalarBarTitle
+
+    def getScalarBarTitle(self):
+        ''' Return the title of the field scale bar.'''
+        return self.scalarBarTitle
+
+    def creaColorScaleBar(self, orientation=1, title=None):
         '''Creates the scalar bar that indicates to the viewer the correspondence
         between color values and data values
 
         :param orientation: 1 for horizontal bar, 2 for left-vertical bar 
                              3 for right-vertical bar(defaults to horizontal)
+        :param title: title of the new scale bar.
         '''
-
+        if(title is not None):
+            self.setScalarBarTitle(scalarBarTitle= title)
+        scalarBarTitle= self.getScalarBarTitle()
         self.scalarBar= vtkScalarBarActor()
         
         pos= self.scalarBar.GetPositionCoordinate()
@@ -118,18 +133,18 @@ class LUTField(object):
             self.scalarBar.SetOrientationToVertical()
             self.scalarBar.SetWidth(0.075)
             self.scalarBar.SetHeight(0.7)
-            pos.SetValue(0.04,0.20) if orientation==2 else pos.SetValue(0.87,0.20) 
-            if title:
-                title=title.replace(' ',' \n ')
-                self.scalarBar.SetTitle(title)
+            pos.SetValue(0.04,0.20) if orientation==2 else pos.SetValue(0.87,0.20)
+            if scalarBarTitle:
+                scalarBarTitle= scalarBarTitle.replace(' ',' \n ')
+                self.scalarBar.SetTitle(scalarBarTitle)
         else: #horizontal
             self.scalarBar.SetOrientationToHorizontal()
             self.scalarBar.SetWidth(0.8)
             self.scalarBar.SetHeight(0.055)
             pos.SetValue(0.1,0.07)
-            if title:
+            if scalarBarTitle:
                 self.scalarBar.SetHeight(0.09)
-                self.scalarBar.SetTitle(title)
+                self.scalarBar.SetTitle(scalarBarTitle)
         self.scalarBar.SetLookupTable(self.lookUpTable)
         self.scalarBar.Modified()
         #self.scalarBar.SetLabelFormat("%.2f")

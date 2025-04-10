@@ -33,6 +33,16 @@ class StrainLoadDiagram(ld.LoadDiagram):
         '''
         super(StrainLoadDiagram,self).__init__(setToDisp= setToDisp, scale= scale, lRefModSize= lRefModSize, fUnitConv= fUnitConv, component= component, rgMinMax= rgMinMax)
 
+    def autoScale(self, preprocessor):
+        ''' Autoscale the diagram.
+
+        :param preprocessor: pre-processor of the finite element problem.
+        '''
+        maxAbsComp= self.getMaxAbsComp(preprocessor= preprocessor)
+        if(maxAbsComp>0):
+            self.scaleFactor*= self.lRefModSize/maxAbsComp/5e3
+        return maxAbsComp
+    
     def sumElementalStrainLoads(self, actLP):
         ''' Iterate over active load patterns and cumulate on elements their 
         elemental unifirm loads. Returns a dictionary that stores for each 

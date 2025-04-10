@@ -23,6 +23,7 @@ from postprocess.xcVtk.diagrams import strain_load_diagram as sld
 from postprocess.xcVtk.diagrams import node_property_diagram as npd
 from postprocess.xcVtk.diagrams import element_property_diagram as epd
 from postprocess import output_styles
+from misc.latex import latex_utils
 from misc_utils import log_messages as lmsg # Error messages.
 
 class OutputHandler(object):
@@ -826,6 +827,9 @@ class OutputHandler(object):
         unitConversionFactor= self.outputStyle.getStrainUnitsScaleFactor()
         elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
         strainLoadComponent= self.modelSpace.getStrainComponentFromName(elLoadComp)
+        # Strain loads 2D and 3D elements displayed as fields over the elements
+        # nothing to add here.
+        
         # Display diagrams on 1D elements.
         diagram= sld.StrainLoadDiagram(setToDisp= setToDisplay, scale= elLoadScaleF, lRefModSize= lRefModSize, fUnitConv= unitConversionFactor, component= strainLoadComponent)
         preprocessor= self.modelSpace.preprocessor
@@ -834,11 +838,10 @@ class OutputHandler(object):
             # Linear loads
             diagram.addDiagram(preprocessor)
             if(diagram.rangeIsValid()):
-                titleScBar= 'Strain loads ('+self.getOutputStrainUnitSym()+')'
+                unicodeSymbol= latex_utils.get_unicode_symbol_from_name(elLoadComp)
+                titleScBar= 'Strain loads '+' ('+unicodeSymbol+' '+self.getOutputStrainUnitSym()+')'
                 displaySettings.appendDiagram(diagram, orientScbar= scalarBarOrientation, titleScbar= titleScBar)
                 retval= scalarBarOrientation+1
-        # Strain loads 2D and 3D elements displayed as fields over the elements
-        # nothing to add here.
         return retval
     
     def _display_elemental_loads(self, displaySettings, setToDisplay, elLoadComp, forceComponents, vectorScale, loadRepresentationType, strainLoadsField, scalarBarOrientation, lRefModSize, defFScale):
@@ -968,8 +971,11 @@ class OutputHandler(object):
             unitDescription= self.outputStyle.getStrainUnitsDescription()
             strainLoadsField= strain_loads_field.StrainLoadsField(name= loadCaseName, setToDisplay= setToDisplay, fUnitConv= unitConversionFactor)
             strainLoadComponent= self.modelSpace.getStrainComponentFromName(elLoadComp)
-            strainLoadsField.dumpElementalStrainLoads(preprocessor= preprocessor, strainComponent= strainLoadComponent)
-            displaySettings.setField(strainLoadsField)
+            numLoads= strainLoadsField.dumpElementalStrainLoads(preprocessor= preprocessor, strainComponent= strainLoadComponent)
+            if(numLoads>0):
+                unicodeSymbol= latex_utils.get_unicode_symbol_from_name(elLoadComp)
+                strainLoadsField.setScalarBarTitle('Strain loads '+' ('+unicodeSymbol+' '+self.getOutputStrainUnitSym()+')')
+                displaySettings.setField(strainLoadsField)
         grid= displaySettings.setupGrid(setToDisplay)
         if __debug__:
             if(not grid):
