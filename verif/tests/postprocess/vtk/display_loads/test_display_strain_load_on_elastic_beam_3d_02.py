@@ -67,13 +67,13 @@ for n in [n1, n2, n11, n12, n21, n22]:
     
 # Load case definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-#\set_current_load_pattern{"0"}
+## Elongation
 eleLoadA= lp0.newElementalLoad("beam_strain_load")
 eleLoadA.elementTags= xc.ID([beam3dA.tag, beam3dC.tag])
 thermalDeformation= xc.DeformationPlane(alpha*AT)
 eleLoadA.backEndDeformationPlane= thermalDeformation
 eleLoadA.frontEndDeformationPlane= thermalDeformation
-
+## Curvature
 eleLoadB= lp0.newElementalLoad("beam_strain_load")
 eleLoadB.elementTags= xc.ID([beam3dB.tag, beam3dC.tag])
 zCurvature= 1e3/(E*Iz)
