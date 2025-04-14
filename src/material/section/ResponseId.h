@@ -55,9 +55,9 @@ const int PLATE_RESPONSE_m12= 16; // Torque per unit length.
 const int PLATE_RESPONSE_q13= 17; // Shear force per unit length, perpendicular to axis 1 and parallel to axis 3.
 const int PLATE_RESPONSE_q23= 18; // Shear force per unit length, perpendicular to axis 2 and parallel to axis 3.
 
-//! @ingroup MATSCC
 //
 //! @brief Stiffness material contribution response identifiers.
+//! @ingroup MATSCC
 class ResponseId: public ID
   {
   public:
@@ -71,6 +71,8 @@ class ResponseId: public ID
     static int StringToRespId(const std::string &str);
     static std::string RespIdToString(const int &ri);
     std::string getString(void) const;
+    boost::python::list getStringIdentifiers(void) const;
+    boost::python::list getIdentifiers(void) const;
   };
 
 class RespP: public ResponseId
@@ -164,6 +166,11 @@ const RespPVyMz RespIsolator2spring;
 const RespMembraneMaterial RespMembraneMat;
 const RespPlateMaterial RespPlateMat;
 const RespShellMaterial RespShellMat;
+
+inline int string_to_response_id(const std::string &str)
+  { return ResponseId::StringToRespId(str); }
+inline std::string response_id_to_string(const int &ri)
+  { return ResponseId::RespIdToString(ri); }
 
 } // end of XC namespace
 

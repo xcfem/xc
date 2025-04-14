@@ -62,17 +62,12 @@ XC::ResponseId::ResponseId(const boost::python::list &l)
 XC::ResponseId::ResponseId(const ID &other)
   : ID(other) {}
 
+//! @brief Return true if the given response identifier is found in this
+//! object.
 bool XC::ResponseId::hasResponse(const int &ri) const
   {
-    bool retval= false;
-    const size_t sz= Size();
-    for(size_t i= 0;i<sz;i++)
-      if((*this)(i)==ri)
-        {
-          retval= true;
-          break;
-        }
-    return retval;
+    const int i= this->getLocation(ri);
+    return (i>0);
   }
 
 //! @brief Return the identifier corresponding to the string argument.
@@ -171,6 +166,8 @@ std::string XC::ResponseId::RespIdToString(const int &code)
       }
   }
 
+//! @brief Return the response identifiers in text form as comma separated
+//! values in a string.
 std::string XC::ResponseId::getString(void) const
   {
     std::string retval= "";
@@ -180,6 +177,32 @@ std::string XC::ResponseId::getString(void) const
         retval+= RespIdToString((*this)(0));
         for(int i= 1;i<sz;i++)
           retval+= "," + RespIdToString((*this)(i));
+      }
+    return retval;
+  }
+
+//! @brief Return the response identifiers in text form in a Python list.
+boost::python::list XC::ResponseId::getStringIdentifiers(void) const
+  {
+    boost::python::list retval;
+    const int sz= Size();
+    if(sz>0)
+      {
+        for(int i= 0;i<sz;i++)
+          retval.append(RespIdToString((*this)(i)));
+      }
+    return retval;
+  }
+
+//! @brief Return the response identifiers in a Python list.
+boost::python::list XC::ResponseId::getIdentifiers(void) const
+  {
+    boost::python::list retval;
+    const int sz= Size();
+    if(sz>0)
+      {
+        for(int i= 0;i<sz;i++)
+          retval.append((*this)(i));
       }
     return retval;
   }
