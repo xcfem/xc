@@ -79,7 +79,9 @@ class_<ElemWithMaterial4N_SFD, bases<ElementBase4N >, boost::noncopyable >("Elem
   .add_property("getPhysicalProperties", make_function(getSectionFDPhysicalProp, return_internal_reference<>() ),"TO DEPRECATE: use physicalProperties. Returns materials at integration points (gauss points).")
   .def("setMaterial", &ElemWithMaterial4N_SFD::setMaterial,"Set the element material.")
   .def("copyMaterialFrom", &ElemWithMaterial4N_SFD::copyMaterialFrom, "Copy the material from the given element.")
-   ;
+  .add_property("extrapolationMatrix",make_function(&ElemWithMaterial4N_SFD::getExtrapolationMatrix,return_internal_reference<>() ),"Returns the element extrapolation matrix.")
+  .def("getExtrapolatedValues", &ElemWithMaterial4N_SFD::getExtrapolatedValues,"Return the values at nodes from the values at the Gauss points.")
+  ;
 
 class_<PlaneElement4N_SFD, bases<ElemWithMaterial4N_SFD>, boost::noncopyable >("PlaneElement4N_SFD", no_init)
   .def("getPerimeter", &PlaneElement4N_SFD::getPerimeter, "Returns element's perimeter.")
