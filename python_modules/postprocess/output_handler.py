@@ -826,12 +826,11 @@ class OutputHandler(object):
         loadCaseName= preprocessor.getDomain.currentCombinationName
         unitConversionFactor= self.outputStyle.getStrainUnitsScaleFactor()
         elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
-        strainLoadComponent= self.modelSpace.getStrainComponentFromName(elLoadComp)
         # Strain loads 2D and 3D elements displayed as fields over the elements
         # nothing to add here.
         
         # Display diagrams on 1D elements.
-        diagram= sld.StrainLoadDiagram(setToDisp= setToDisplay, scale= elLoadScaleF, lRefModSize= lRefModSize, fUnitConv= unitConversionFactor, component= strainLoadComponent)
+        diagram= sld.StrainLoadDiagram(setToDisp= setToDisplay, scale= elLoadScaleF, lRefModSize= lRefModSize, fUnitConv= unitConversionFactor, component= elLoadComp, get_strain_component_from_name= self.modelSpace.getStrainComponentFromName)
         preprocessor= self.modelSpace.preprocessor
         maxAbs= diagram.autoScale(preprocessor)
         if(maxAbs>0.0):
@@ -969,9 +968,8 @@ class OutputHandler(object):
         if(loadRepresentationType=='strain'): # display strain loads.
             unitConversionFactor= self.outputStyle.getStrainUnitsScaleFactor()
             unitDescription= self.outputStyle.getStrainUnitsDescription()
-            strainLoadsField= strain_loads_field.StrainLoadsField(name= loadCaseName, setToDisplay= setToDisplay, fUnitConv= unitConversionFactor)
-            strainLoadComponent= self.modelSpace.getStrainComponentFromName(elLoadComp)
-            numLoads= strainLoadsField.dumpElementalStrainLoads(preprocessor= preprocessor, strainComponent= strainLoadComponent)
+            strainLoadsField= strain_loads_field.StrainLoadsField(name= loadCaseName, setToDisplay= setToDisplay, get_strain_component_from_name= self.modelSpace.getStrainComponentFromName, fUnitConv= unitConversionFactor)
+            numLoads= strainLoadsField.dumpElementalStrainLoads(preprocessor= preprocessor, strainComponentName= elLoadComp)
             if(numLoads>0):
                 unicodeSymbol= latex_utils.get_unicode_symbol_from_name(elLoadComp)
                 strainLoadsField.setScalarBarTitle('Strain loads '+' ('+unicodeSymbol+' '+self.getOutputStrainUnitSym()+')')

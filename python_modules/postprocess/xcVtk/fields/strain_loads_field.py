@@ -23,12 +23,15 @@ class StrainLoadsField(fields.ScalarField):
     :ivar name: name of the strain loads field.
     :ivar setToDisplay: set over which to display the loads.
     '''
-    def __init__(self, name, setToDisplay, fUnitConv= 1e3, rgMinMax= None):
+    def __init__(self, name, setToDisplay, get_strain_component_from_name, fUnitConv= 1e3, rgMinMax= None):
         '''
         Constructor.
 
         :param name: name of the vector field.
         :param setToDisplay: set over which to display the loads.
+        :param get_strain_component_from_name: function that returns the
+                                               component index from the
+                                               generalized strain name.
         :param fUnitConv: unit conversion factor.
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
                          of the scalar field (if any) to be represented. All 
@@ -37,6 +40,7 @@ class StrainLoadsField(fields.ScalarField):
         '''
         super().__init__(name= name, functionName= 'getProp', component= None, fUnitConv= fUnitConv)
         self.setToDisplay= setToDisplay
+        self.get_strain_component_from_name= get_strain_component_from_name
 
     def getPropertyName(self):
         ''' Return the name of the property that will be used to store
@@ -59,9 +63,8 @@ class StrainLoadsField(fields.ScalarField):
             while(elementLoad):
                 category= elementLoad.category
                 if('strain' in category):
-                    if hasattr(elementLoad,'getStrainsMatrix'):
+                    if hasattr(elementLoad,'getElementStrainsMatrix'):
                         tags= elementLoad.elementTags
-                        strainMatrix= elementLoad.getStrainsMatrix()
                         for i, eTag in enumerate(tags):
                             if eTag in eTagsSet:
                                 element= self.setToDisplay.getElements.findTag(eTag)
@@ -72,9 +75,9 @@ class StrainLoadsField(fields.ScalarField):
                                 beamElement= (dim==1) and (nDOFperNode>spaceDimension)
                                 if(not beamElement):
                                     if eTag in retval:
-                                        retval[eTag]+= strainMatrix
+                                        retval[eTag]+= elementLoad.getElementStrainsMatrix(element)
                                     else:
-                                        retval[eTag]= strainMatrix
+                                        retval[eTag]= elementLoad.getElementStrainsMatrix(element)
                     else:
                         className= type(self).__name__
                         methodName= sys._getframe(0).f_code.co_name
@@ -141,15 +144,42 @@ class StrainLoadsField(fields.ScalarField):
         if(len(elementalStrainLoads)>0):
             retval= self.extrapolateStrainLoadsToNodes(elementalStrainLoads)
         return retval
+
+    def getStrainComponentFromName(self, strainComponentName):
+        ''' Return the index of the strain component corresponding to the given
+            name in the strain matrices of the elements gauss points.
+
+        :param strainComponentName: strain component to display.
+        '''
+        retval= None
+        elemSet= self.setToDisplay.elements
+        for e in elemSet:
+            responseId= None
+            if(hasattr(e,'getSection')): # is a beam element.
+                responseId= e.getSection(0).getResponseType
+            tmp= self.get_strain_component_from_name(compName= strainComponentName, responseId= responseId)
+            if(retval is None):
+                retval= tmp
+            else: # retval has already a value.
+                if(tmp!=retval):
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    errorMsg= "; elements of the set: '"+str(self.setToDisplay.name)
+                    errorMsg+= "' return different indexes for the strain"
+                    errorMsg+= " component named: '"+str(strainComponentName)
+                    errorMsg+= "' returning None." 
+                    lmsg.warning(className+'.'+methodName+errorMsg)
+                    retval= None
+        return retval
     
-    def dumpElementalStrainLoads(self, preprocessor, strainComponent):
+    def dumpElementalStrainLoads(self, preprocessor, strainComponentName):
         ''' Iterate over elemental strain loads dumping them into the graphic.
 
         :param preprocessor: preprocessor of the FE problem.
-        :param strainComponent: strain component to display.
+        :param strainComponentName: strain component to display.
         '''
         retval= 0
-        self.attrComponent= strainComponent
+        self.attrComponent= self.getStrainComponentFromName(strainComponentName)
         activeLoadPatterns= lvf.get_active_load_patterns(preprocessor)
         if(len(activeLoadPatterns)<1):
             className= type(self).__name__

@@ -18,7 +18,7 @@ class StrainLoadDiagram(ld.LoadDiagram):
     '''Draw a load over a set of linear elements (qx,qy,qz,...)
 
     '''
-    def __init__(self, setToDisp, scale, lRefModSize, fUnitConv, component, rgMinMax= None):
+    def __init__(self, setToDisp, scale, lRefModSize, fUnitConv, component, get_strain_component_from_name, rgMinMax= None):
         ''' Constructor.
 
         :param setToDisp: set to display.
@@ -26,12 +26,16 @@ class StrainLoadDiagram(ld.LoadDiagram):
         :param lRefModSize: reference length of the model (how big the model is).
         :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
         :param component: component to display.
+        :param get_strain_component_from_name: function that returns the
+                                               component index from the
+                                               generalized strain name.
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
                          of the scalar field (if any) to be represented. All 
                          the values less than vmin are displayed in blue and 
                          those greater than vmax in red (defaults to None)
         '''
         super(StrainLoadDiagram,self).__init__(setToDisp= setToDisp, scale= scale, lRefModSize= lRefModSize, fUnitConv= fUnitConv, component= component, rgMinMax= rgMinMax)
+        self.get_strain_component_from_name= get_strain_component_from_name
 
     def autoScale(self, preprocessor):
         ''' Autoscale the diagram.
@@ -61,7 +65,7 @@ class StrainLoadDiagram(ld.LoadDiagram):
                 while(eLoad):
                     category= eLoad.category
                     if('strain' in category):
-                        if(hasattr(eLoad,'getStrainsMatrix')):
+                        if(hasattr(eLoad,'getElementStrainsMatrix')):
                             tags= (set(eLoad.elementTags) & set(eTagsSet))
                             for eTag in tags:
                                 elem= preprocessor.getElementHandler.getElement(eTag)
@@ -73,12 +77,12 @@ class StrainLoadDiagram(ld.LoadDiagram):
                                 beamElement= (dim==1) and (nDOFperNode>spaceDimension)
                                 if(beamElement):
                                     if eTag in retval:
-                                        retval[eTag]+= eLoad.getStrainsMatrix()
+                                        retval[eTag]+= eLoad.getElementStrainsMatrix(elem)
                                     else:
-                                        retval[eTag]= eLoad.getStrainsMatrix() # use eLoad method to make sure that
-                                                                               # retval[eTag] stores a copy of the
-                                                                               # strains matrix (instead of a pointer
-                                                                               # to a local variable).
+                                        retval[eTag]= eLoad.getElementStrainsMatrix(elem) # use eLoad method to make sure that
+                                                                                   # retval[eTag] stores a copy of the
+                                                                                   # strains matrix (instead of a pointer
+                                                                                   # to a local variable).
                         else:
                             className= type(self).__name__
                             methodName= sys._getframe(0).f_code.co_name
@@ -124,30 +128,35 @@ class StrainLoadDiagram(ld.LoadDiagram):
             elem= preprocessor.getElementHandler.getElement(eTag)
             dim= elem.getDimension
             strainMatrix= self.dictActLoadVectors[eTag]
-            if(self.component==0):
+            componentDir= self.get_strain_component_from_name(compName= self.component, responseId= None) # Here responseId *must* be None.
+            responseId= None
+            if(hasattr(elem,'getSection')): # is a beam element.
+                responseId= elem.getSection(0).getResponseType
+            componentIndex= self.get_strain_component_from_name(compName= self.component, responseId= responseId)
+            if(componentDir==0):
                 directions.append(elem.getJVector3d(True)) # diagram direction.
                 elements.append(elem)
-                valueCouples.append((strainMatrix(0, self.component), strainMatrix(1, self.component)))      
-            elif(self.component==1):
+                valueCouples.append((strainMatrix(0, componentIndex), strainMatrix(1, componentIndex)))      
+            elif(componentDir==1):
                 directions.append(elem.getJVector3d(True))
                 elements.append(elem)
-                valueCouples.append((strainMatrix(0, self.component), strainMatrix(1, self.component)))      
-            elif(self.component==2):  
+                valueCouples.append((strainMatrix(0, componentIndex), strainMatrix(1, componentIndex)))      
+            elif(componentDir==2):  
                 directions.append(elem.getKVector3d(True))
                 elements.append(elem)
-                valueCouples.append((strainMatrix(0, self.component), strainMatrix(1, self.component)))      
-            elif(self.component==3):
+                valueCouples.append((strainMatrix(0, componentIndex), strainMatrix(1, componentIndex)))      
+            elif(componentDir==3):
                 directions.append(elem.getJVector3d(True)) # diagram direction.
                 elements.append(elem)
-                valueCouples.append((strainMatrix(0, self.component), strainMatrix(1, self.component)))      
-            elif(self.component==4):
+                valueCouples.append((strainMatrix(0, componentIndex), strainMatrix(1, componentIndex)))      
+            elif(componentDir==4):
                 directions.append(elem.getJVector3d(True))
                 elements.append(elem)
-                valueCouples.append((strainMatrix(0, self.component), strainMatrix(1, self.component)))      
-            elif(self.component==5):  
+                valueCouples.append((strainMatrix(0, componentIndex), strainMatrix(1, componentIndex)))      
+            elif(componentDir==5):  
                 directions.append(elem.getKVector3d(True))
                 elements.append(elem)
-                valueCouples.append((strainMatrix(0, self.component), strainMatrix(1, self.component)))      
+                valueCouples.append((strainMatrix(0, componentIndex), strainMatrix(1, componentIndex)))      
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
@@ -175,7 +184,12 @@ class StrainLoadDiagram(ld.LoadDiagram):
         if(len(eTags)>0):
             retval= 0.0
             for eTag in eTags:
+                elem= preprocessor.getElementHandler.getElement(eTag)
+                responseId= None
+                if(hasattr(elem,'getSection')): # is a beam element.
+                    responseId= elem.getSection(0).getResponseType
+                componentIndex= self.get_strain_component_from_name(compName= self.component, responseId= responseId)
                 strainMatrix= self.dictActLoadVectors[eTag]
-                retval= max(retval, abs(strainMatrix(0, self.component)), abs(strainMatrix(1, self.component)))
+                retval= max(retval, abs(strainMatrix(0, componentIndex)), abs(strainMatrix(1, componentIndex)))
         return retval
 
