@@ -114,7 +114,6 @@ XC::Matrix XC::BeamStrainLoad::getElementStrainsMatrix(const Element &e) const
 	    const PrismaticBarCrossSection *section= ptrBeam->getSectionPtr(0);
 	    const size_t order= section->getOrder();
 	    const ResponseId &code= section->getResponseType();
-	    std::cout << "code= " << code.getString() << std::endl;
 	    const Vector &e1= this->getSection1Deformation(order,code);
 	    const Vector &e2= this->getSection2Deformation(order,code);
 	    const int nCols= e1.Size();
