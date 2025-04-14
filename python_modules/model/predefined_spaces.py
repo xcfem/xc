@@ -2551,6 +2551,19 @@ def gdls_elasticidad3D(nodes):
 
 
 class StructuralMechanics3D(StructuralMechanics):
+    ''' 3D structural mechanics
+
+    :ivar beamStrainComponents: component names of beam generalized strains.
+    :ivar shellStrainComponents: component names of shell generalized strains.
+    :ivar beamStressComponents: component names of beam generalized stresses.
+    :ivar shellStressComponents: component names of shell generalized stresses.
+    ''' 
+    
+    beamStrainComponents= ['epsilon', 'kappa_z', 'kappa_y', 'gamma_y', 'gamma_z', 'theta']
+    shellStrainComponents= ['epsilon_1', 'epsilon_2', 'epsilon_12', 'kappa_1', 'kappa_2', 'kappa_12', 'gamma_13', 'gamma_23']
+    beamStressComponents= ['N', 'P', 'My', 'Mz', 'Qy', 'Qz', 'Vy', 'Vz', 'T']
+    shellStressComponents= ['n1', 'n2', 'n12', 'm1', 'm2', 'm12', 'q13', 'q23']
+    
     def __init__(self,nodes, solProcType: predefined_solutions.SolutionProcedure = defaultSolutionProcedureType):
         '''Define the dimension of the space: nodes by three coordinates (x,y,z) 
         and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
@@ -2635,9 +2648,11 @@ class StructuralMechanics3D(StructuralMechanics):
         :param compName: strain component name.
         :param responseId: response identifiers of the material.
         '''
-        retval= 0
-        if(compName in ['epsilon', 'kappa_z', 'kappa_y', 'gamma_y', 'gamma_z', 'theta']):
+        retval= None
+        availableStrainComponents= self.beamStrainComponents+self.shellStrainComponents
+        if(compName in availableStrainComponents):
             if(responseId is None):
+                # Beam generalized strains.
                 if(compName == 'epsilon'): # axial
                     retval= self.epsilon
                 elif(compName == 'kappa_z'): # bending about local z axis
@@ -2651,6 +2666,7 @@ class StructuralMechanics3D(StructuralMechanics):
                 elif(compName == 'theta'): # torsion along x-axis.
                     retval= self.theta
             else:
+                # Beam generalized strains.
                 if(compName == 'epsilon'): # axial
                     rId= xc.string_to_response_id('N')
                 elif(compName == 'kappa_z'): # bending about local z axis
@@ -2663,11 +2679,34 @@ class StructuralMechanics3D(StructuralMechanics):
                     rId= xc.string_to_response_id('Vz')
                 elif(compName == 'theta'): # torsion along x-axis.
                     rId= xc.string_to_response_id('T')
+                # Shell generalized strains.
+                ## Membrane strains.
+                elif(compName == 'epsilon_1'): # x direct strain
+                    rId= xc.string_to_response_id('n1')
+                elif(compName == 'epsilon_2'): # y direct strain
+                    rId= xc.string_to_response_id('n2')
+                elif(compName == 'epsilon_12'): # xy shear strain
+                    rId= xc.string_to_response_id('n12')
+                ## Bending generalized strains
+                elif(compName == 'kappa_1'):
+                    rId= xc.string_to_response_id('m1')
+                elif(compName == 'kappa_2'):
+                    rId= xc.string_to_response_id('m2')
+                elif(compName == 'kappa_12'):
+                    rId= xc.string_to_response_id('m12')
+                ## Shear strains.
+                elif(compName == 'gamma_13'):
+                    rId= xc.string_to_response_id('q13')
+                elif(compName == 'gamma_23'):
+                    rId= xc.string_to_response_id('q23')
                 retval= responseId.index(rId)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: epsilon, kappa, gamma')
+            errMsg= '; item '+str(compName)
+            errMsg+= ' is not a valid component. Available components are: '
+            errMsg+= str(availableStrainComponents)
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + errMsg)
         return retval
     
     def getStressComponentFromName(self, compName, responseId= None):
@@ -2679,8 +2718,10 @@ class StructuralMechanics3D(StructuralMechanics):
         '''
         lmsg.warning('getStressComponentFromName not tested yet.')
         retval= 0
-        if(compName in ['N', 'P', 'Mz', 'My', 'Vy', 'Vz', 'Qy', 'Qz', 'T']):
+        availableStressComponents= self.beamStressComponents+self.shellStressComponents
+        if(compName in availableStressComponents):
             if(responseId is None):
+                # Beam generalized stresses.
                 if((compName == 'N') or (compName == 'P')): # axial
                     retval= self.N
                 elif(compName == 'Mz'): # bending about local z axis
@@ -2694,6 +2735,7 @@ class StructuralMechanics3D(StructuralMechanics):
                 elif(compName == 'T'): # torsion along x-axis.
                     retval= self.Qz
             else:
+                # Beam generalized stresses.
                 if((compName == 'N') or (compName == 'P')): # axial
                     rId= xc.string_to_response_id('N')
                 elif(compName == 'Mz'): # bending about local z axis
@@ -2706,6 +2748,26 @@ class StructuralMechanics3D(StructuralMechanics):
                     rId= xc.string_to_response_id('Vz')
                 elif(compName == 'T'): # torsion along x-axis.
                     rId= xc.string_to_response_id('T')
+                # Shell generalized strains.
+                ## Membrane axial loads per unit length.
+                elif(compName == 'n1'): # x direct strain
+                    rId= xc.string_to_response_id('n1')
+                elif(compName == 'n2'): # y direct strain
+                    rId= xc.string_to_response_id('n2')
+                elif(compName == 'n12'): # xy shear strain
+                    rId= xc.string_to_response_id('n12')
+                ## Bending moments per unit length.
+                elif(compName == 'm1'):
+                    rId= xc.string_to_response_id('m1')
+                elif(compName == 'm2'):
+                    rId= xc.string_to_response_id('m2')
+                elif(compName == 'm12'):
+                    rId= xc.string_to_response_id('m12')
+                ## Shear strains.
+                elif(compName == 'q13'):
+                    rId= xc.string_to_response_id('q13')
+                elif(compName == 'q23'):
+                    rId= xc.string_to_response_id('q23')
                 retval= responseId.index(rId)
         else:
             className= type(self).__name__

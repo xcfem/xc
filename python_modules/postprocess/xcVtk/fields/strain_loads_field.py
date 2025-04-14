@@ -155,9 +155,16 @@ class StrainLoadsField(fields.ScalarField):
         elemSet= self.setToDisplay.elements
         for e in elemSet:
             responseId= None
-            if(hasattr(e,'getSection')): # is a beam element.
+            if(hasattr(e,'getSection')): # is a beam or shell element.
                 responseId= e.getSection(0).getResponseType
             tmp= self.get_strain_component_from_name(compName= strainComponentName, responseId= responseId)
+            if(tmp is None):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errorMsg= "; no component found for label: '"+str(strainComponentName)
+                errorMsg+= "' exiting." 
+                lmsg.error(className+'.'+methodName+errorMsg)
+                exit(1)
             if(retval is None):
                 retval= tmp
             else: # retval has already a value.
@@ -168,7 +175,7 @@ class StrainLoadsField(fields.ScalarField):
                     errorMsg+= "' return different indexes for the strain"
                     errorMsg+= " component named: '"+str(strainComponentName)
                     errorMsg+= "' returning None." 
-                    lmsg.warning(className+'.'+methodName+errorMsg)
+                    lmsg.error(className+'.'+methodName+errorMsg)
                     retval= None
         return retval
     
