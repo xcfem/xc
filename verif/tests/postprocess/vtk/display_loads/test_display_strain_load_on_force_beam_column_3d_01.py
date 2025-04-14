@@ -69,7 +69,6 @@ eleLoadA.frontEndDeformationPlane= thermalDeformation
 eleLoadB= lp0.newElementalLoad("beam_strain_load")
 eleLoadB.elementTags= xc.ID([beam3dB.tag, beam3dC.tag])
 yCurvature= 1e3/(E*Iy)
-print(yCurvature)
 gradientDeformation= xc.DeformationPlane(xc.Vector([0.0, 0.0, -yCurvature/2.0])) # deformation for point (0,1)= curvature/2.0
 eleLoadB.backEndDeformationPlane= gradientDeformation
 eleLoadB.frontEndDeformationPlane= gradientDeformation
