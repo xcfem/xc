@@ -36,6 +36,7 @@
 namespace XC {
 class Matrix;
 class CrossSectionProperties3d;
+class ResponseId;
 
 //! @ingroup ElemLoads
 //
@@ -47,6 +48,7 @@ class BeamLoad: public ElementBodyLoad
     BeamLoad(int tag, int classTag);
 
     virtual std::string Category(void) const;
+    ResponseId getElementResponseId(const Element &) const;
 
     void Print(std::ostream &s, int flag =0) const;
 

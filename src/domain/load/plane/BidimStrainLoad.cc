@@ -29,11 +29,10 @@
 #include "BidimStrainLoad.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/ID.h"
-
-
 #include "utility/actor/actor/MovableVectors.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/Matrix.h"
+#include "domain/mesh/element/Element.h"
 
 
 XC::BidimStrainLoad::BidimStrainLoad(int tag, const std::vector<Vector> &t,const ID &theElementTags)
@@ -57,16 +56,30 @@ XC::BidimStrainLoad::BidimStrainLoad(const size_t &sz)
 std::string XC::BidimStrainLoad::Category(void) const
   { return "bidim_strain"; }
 
-//! @brief Return the strain tensors as rows of a matrix (one
-//! row for each gauss point).
-XC::Matrix XC::BidimStrainLoad::getStrainsMatrix(void) const
+//! @brief Return the strain tensors for the given element as rows of a matrix
+//! (one row for each gauss point).
+XC::Matrix XC::BidimStrainLoad::getElementStrainsMatrix(const Element &e) const
   {
-    const size_t nGaussPoints= strains.size();
-    const size_t dim= strains[0].Size();
-    Matrix retval(nGaussPoints, dim);
-    for(size_t i= 0; i<nGaussPoints; i++)
-      for(size_t j= 0; j<dim; j++)
-	retval(i,j)= strains[i][j];
+    Matrix retval;
+    const int elemTag= e.getTag();
+    if(this->actsOnElement(elemTag))
+      {
+	// For now, we assume all loaded elements have the
+	// same number of gauss points.
+	const size_t nGaussPoints= strains.size();
+	const size_t dim= strains[0].Size();
+	retval.resize(nGaussPoints, dim);
+	for(size_t i= 0; i<nGaussPoints; i++)
+	  for(size_t j= 0; j<dim; j++)
+	    retval(i,j)= strains[i][j];
+      }
+    else
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ": element with tag: " << elemTag
+		  << " not loaded."
+		  << std::endl;
+      }
     return retval;
   }
 

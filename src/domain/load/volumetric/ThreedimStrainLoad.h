@@ -57,7 +57,7 @@ class ThreedimStrainLoad: public ThreedimLoad
     
     inline const std::vector<Vector> &getStrains(void) const
       { return strains; }
-    Matrix getStrainsMatrix(void) const;
+    Matrix getElementStrainsMatrix(const Element &) const;
     inline std::vector<Vector> &Strains(void)
       { return strains; }
     inline const Vector &getStrain(const size_t &i) const

@@ -26,11 +26,14 @@
 //----------------------------------------------------------------------------
 //BeamLoad.cpp
 
-#include <domain/load/beam_loads/BeamLoad.h>
-#include <utility/matrix/Matrix.h>
-#include <utility/matrix/Vector.h>
+#include "domain/load/beam_loads/BeamLoad.h"
+#include "utility/matrix/Matrix.h"
+#include "utility/matrix/Vector.h"
 #include "utility/matrix/ID.h"
-
+#include "material/section/ResponseId.h"
+#include "domain/mesh/element/Element.h"
+#include "material/section/PrismaticBarCrossSection.h"
+#include "domain/mesh/element/truss_beam_column/BeamColumn.h"
 
 XC::BeamLoad::BeamLoad(int tag,int classTag,const XC::ID &theElementTags)
   :ElementBodyLoad(tag, classTag, theElementTags) {}
@@ -46,3 +49,36 @@ void XC::BeamLoad::Print(std::ostream &s, int flag) const
 
 std::string XC::BeamLoad::Category(void) const
   { return "undefined"; }
+
+//! @brief Return the strains at both ends of the beam element.
+XC::ResponseId XC::BeamLoad::getElementResponseId(const Element &e) const
+  {
+    ResponseId retval;
+    const int elemTag= e.getTag();
+    if(this->actsOnElement(elemTag))
+      {
+	const BeamColumn *ptrBeam= dynamic_cast<const BeamColumn *>(&e);
+	if(ptrBeam)
+	  {
+	    const PrismaticBarCrossSection *section= ptrBeam->getSectionPtr(0);
+	    retval= section->getResponseType();
+	  }
+	else
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << ": element: " << elemTag
+		      << " with type: "
+		      << e.getClassName()
+		      << " is incompatible with this type of load."
+		      << std::endl;
+	  }
+      }
+    else
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ": element with tag: " << elemTag
+		  << " not loaded."
+		  << std::endl;
+      }
+    return retval;
+  }
