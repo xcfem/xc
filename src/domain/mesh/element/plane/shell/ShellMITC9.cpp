@@ -66,6 +66,15 @@ XC::ShellMITC9::ShellMITC9(void)
 const XC::GaussModel &XC::ShellMITC9::getGaussModel(void) const
   { return gauss_model_quad9; }
 
+//! @brie Return a pointer to the i-th section of the element.
+const XC::SectionForceDeformation *XC::ShellMITC9::getSectionPtr(const size_t &i) const
+  {
+    const SectionForceDeformation *retval= nullptr;
+    const size_t sz= this->physicalProperties.size();
+    if(sz>i)
+      retval= this->physicalProperties[i];
+    return retval;
+  }
 //! @brief full constructor
 XC::ShellMITC9::ShellMITC9(int tag,const SectionForceDeformation *ptr_mat)
   :QuadBase9N<SectionFDPhysicalProperties>(tag, ELE_TAG_ShellMITC9, SectionFDPhysicalProperties(9,ptr_mat)), Ktt(0.0),theCoordTransf() {}

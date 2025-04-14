@@ -777,6 +777,17 @@ void XC::ASDShellQ4::Print(std::ostream &s, int flag)
 int XC::ASDShellQ4::getNumDOF(void) const
   { return 24; }
 
+
+//! @brie Return a pointer to the i-th section of the element.
+const XC::SectionForceDeformation *XC::ASDShellQ4::getSectionPtr(const size_t &i) const
+  {
+    const SectionForceDeformation *retval= nullptr;
+    const size_t sz= this->physicalProperties.size();
+    if(sz>i)
+      retval= this->physicalProperties[i];
+    return retval;
+  }
+
 int XC::ASDShellQ4::commitState(void)
   {
     // transformation

@@ -376,6 +376,16 @@ const XC::GaussModel &XC::Shell4NBase::getGaussModel(void) const
   { return gauss_model_quad4; }
 
 
+//! @brie Return a pointer to the i-th section of the element.
+const XC::SectionForceDeformation *XC::Shell4NBase::getSectionPtr(const size_t &i) const
+  {
+    const SectionForceDeformation *retval= nullptr;
+    const size_t sz= this->physicalProperties.size();
+    if(sz>i)
+      retval= this->physicalProperties[i];
+    return retval;
+  }
+
 //! @brief Sets loads to zero.
 void XC::Shell4NBase::zeroLoad(void)
   {
@@ -423,7 +433,7 @@ int XC::Shell4NBase::addLoad(ElementalLoad *theLoad, double loadFactor)
 //! @param accel: acceleration vector.
 void XC::Shell4NBase::createInertiaLoad(const Vector &accel)
   {
-    const bool haveRho= physicalProperties.haveRho();
+    const bool haveRho= this->physicalProperties.haveRho();
     if(haveRho)
       {
 	const int dim= std::min(accel.Size(),6);
