@@ -1934,6 +1934,9 @@ python tests/postprocess/vtk/display_loads/test_display_strain_load_on_truss_01.
 python tests/postprocess/vtk/display_loads/test_display_strain_load_on_elastic_beam_2d_01.py
 python tests/postprocess/vtk/display_loads/test_display_strain_load_on_elastic_beam_3d_01.py
 python tests/postprocess/vtk/display_loads/test_display_strain_load_on_elastic_beam_3d_02.py
+python tests/postprocess/vtk/display_loads/test_display_strain_load_on_force_beam_column_2d_01.py
+python tests/postprocess/vtk/display_loads/test_display_strain_load_on_force_beam_column_3d_01.py
+python tests/postprocess/vtk/display_loads/test_display_strain_load_on_force_beam_column_3d_02.py
 
 # Report tests.
 echo "$BLEU" "  Report output." "$NORMAL"
