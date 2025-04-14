@@ -113,9 +113,9 @@ XC::ID::ID(const std::set<int> &setInt)
 void XC::ID::Zero(void)
   { std::fill(begin(),end(),0); }
 
-//! @brief Returns the position of 'value' in the vector.
+//! @brief Returns the position of the given value in the vector.
 //!
-//! Will return the location the first location in the ID of the integer
+//! Will return the the first location in the ID of the integer
 //! \p x. If \p x is not in the ID a \f$-1\f$ is returned.
 int XC::ID::getLocation(const int &value) const
   {
@@ -128,7 +128,11 @@ int XC::ID::getLocation(const int &value) const
     return -1;
   }
 
-
+//! @brief Returns the position of the given vvalue in the vector assuming
+//! its values are ordered.
+//!
+//! Will return the the first location in the ID of the integer
+//! \p x. If \p x is not in the ID a \f$-1\f$ is returned.
 int XC::ID::getLocationOrdered(const int &value) const
   {
     const size_t sz= size();    
