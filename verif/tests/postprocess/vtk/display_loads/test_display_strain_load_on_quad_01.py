@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Check strain load representation on brick elements.
+''' Check strain load representation on quad elements.
 
     Reference:  Cálculo de estructuras por el método de los elemen-
     tos finitos. 1991. E. Oñate, page 165, example 5.3
