@@ -30,7 +30,7 @@
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/ID.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "domain/mesh/element/Element.h"
 #include "material/section/PrismaticBarCrossSection.h"
 #include "domain/mesh/element/truss_beam_column/BeamColumn.h"

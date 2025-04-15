@@ -31,7 +31,7 @@
 #include <utility/matrix/Vector.h>
 #include "utility/matrix/ID.h"
 
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "domain/mesh/element/truss_beam_column/BeamColumn.h"
 #include "material/section/PrismaticBarCrossSection.h"
 
