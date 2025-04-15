@@ -172,7 +172,8 @@ class StrainLoadsField(fields.ScalarField):
                     className= type(self).__name__
                     methodName= sys._getframe(0).f_code.co_name
                     errorMsg= "; elements of the set: '"+str(self.setToDisplay.name)
-                    errorMsg+= "' return different indexes for the strain"
+                    errorMsg+= "' return different indexes ("
+                    errorMsg+= str(retval)+', '+str(tmp)+") for the strain"
                     errorMsg+= " component named: '"+str(strainComponentName)
                     errorMsg+= "' returning None." 
                     lmsg.error(className+'.'+methodName+errorMsg)

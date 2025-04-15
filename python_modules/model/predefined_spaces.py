@@ -2186,11 +2186,11 @@ class StructuralMechanics2D(StructuralMechanics):
                     retval= self.gamma
             else:
                 if(compName == 'epsilon'): # axial
-                    rId= xc.string_to_response_id('N')
+                    rId= responseId.getComponentIdFromString('N')
                 elif(compName == 'kappa'): # bending
-                    rId= xc.string_to_response_id('Mz')
+                    rId= responseId.getComponentIdFromString('Mz')
                 elif(compName == 'gamma'): # shear
-                    rId= xc.string_to_response_id('Vy')
+                    rId= responseId.getComponentIdFromString('Vy')
                 retval= responseId.index(rId)
         else:
             className= type(self).__name__
@@ -2216,11 +2216,11 @@ class StructuralMechanics2D(StructuralMechanics):
                     retval= self.Q
             else:
                 if((compName == 'N') or (compName == 'P')): # axial
-                    rId= xc.string_to_response_id('N')
+                    rId= responseId.getComponentIdFromString('N')
                 elif(compName == 'M'): # bending
-                    rId= xc.string_to_response_id('Mz')
+                    rId= responseId.getComponentIdFromString('Mz')
                 elif((compName == 'Q') or (compName == 'V')): # shear
-                    rId= xc.string_to_response_id('Vy')
+                    rId= responseId.getComponentIdFromString('Vy')
                 retval= responseId.index(rId)
         else:
             className= type(self).__name__
@@ -2668,37 +2668,37 @@ class StructuralMechanics3D(StructuralMechanics):
             else:
                 # Beam generalized strains.
                 if(compName == 'epsilon'): # axial
-                    rId= xc.string_to_response_id('N')
+                    rId= responseId.getComponentIdFromString('N')
                 elif(compName == 'kappa_z'): # bending about local z axis
-                    rId= xc.string_to_response_id('Mz')
+                    rId= responseId.getComponentIdFromString('Mz')
                 elif(compName == 'kappa_y'): # bending about local y axis
-                    rId= xc.string_to_response_id('My')
+                    rId= responseId.getComponentIdFromString('My')
                 elif(compName == 'gamma_y'): # shear along y-axis.
-                    rId= xc.string_to_response_id('Vy')
+                    rId= responseId.getComponentIdFromString('Vy')
                 elif(compName == 'gamma_z'): # shear along z-axis.
-                    rId= xc.string_to_response_id('Vz')
+                    rId= responseId.getComponentIdFromString('Vz')
                 elif(compName == 'theta'): # torsion along x-axis.
-                    rId= xc.string_to_response_id('T')
+                    rId= responseId.getComponentIdFromString('T')
                 # Shell generalized strains.
                 ## Membrane strains.
                 elif(compName == 'epsilon_1'): # x direct strain
-                    rId= xc.string_to_response_id('n1')
+                    rId= responseId.getComponentIdFromString('n1')
                 elif(compName == 'epsilon_2'): # y direct strain
-                    rId= xc.string_to_response_id('n2')
+                    rId= responseId.getComponentIdFromString('n2')
                 elif(compName == 'epsilon_12'): # xy shear strain
-                    rId= xc.string_to_response_id('n12')
+                    rId= responseId.getComponentIdFromString('n12')
                 ## Bending generalized strains
                 elif(compName == 'kappa_1'):
-                    rId= xc.string_to_response_id('m1')
+                    rId= responseId.getComponentIdFromString('m1')
                 elif(compName == 'kappa_2'):
-                    rId= xc.string_to_response_id('m2')
+                    rId= responseId.getComponentIdFromString('m2')
                 elif(compName == 'kappa_12'):
-                    rId= xc.string_to_response_id('m12')
+                    rId= responseId.getComponentIdFromString('m12')
                 ## Shear strains.
                 elif(compName == 'gamma_13'):
-                    rId= xc.string_to_response_id('q13')
+                    rId= responseId.getComponentIdFromString('q13')
                 elif(compName == 'gamma_23'):
-                    rId= xc.string_to_response_id('q23')
+                    rId= responseId.getComponentIdFromString('q23')
                 retval= responseId.index(rId)
         else:
             className= type(self).__name__
@@ -2737,37 +2737,37 @@ class StructuralMechanics3D(StructuralMechanics):
             else:
                 # Beam generalized stresses.
                 if((compName == 'N') or (compName == 'P')): # axial
-                    rId= xc.string_to_response_id('N')
+                    rId= responseId.getComponentIdFromString('N')
                 elif(compName == 'Mz'): # bending about local z axis
-                    rId= xc.string_to_response_id('Mz')
+                    rId= responseId.getComponentIdFromString('Mz')
                 elif(compName == 'My'): # bending about local y axis
-                    rId= xc.string_to_response_id('My')
+                    rId= responseId.getComponentIdFromString('My')
                 elif((compName == 'Qy') or (compName == 'Vy')): # shear along y-axis.
-                    rId= xc.string_to_response_id('Vy')
+                    rId= responseId.getComponentIdFromString('Vy')
                 elif((compName == 'Qz') or (compName == 'Vz')): # shear along z-axis.
-                    rId= xc.string_to_response_id('Vz')
+                    rId= responseId.getComponentIdFromString('Vz')
                 elif(compName == 'T'): # torsion along x-axis.
-                    rId= xc.string_to_response_id('T')
+                    rId= responseId.getComponentIdFromString('T')
                 # Shell generalized strains.
                 ## Membrane axial loads per unit length.
                 elif(compName == 'n1'): # x direct strain
-                    rId= xc.string_to_response_id('n1')
+                    rId= responseId.getComponentIdFromString('n1')
                 elif(compName == 'n2'): # y direct strain
-                    rId= xc.string_to_response_id('n2')
+                    rId= responseId.getComponentIdFromString('n2')
                 elif(compName == 'n12'): # xy shear strain
-                    rId= xc.string_to_response_id('n12')
+                    rId= responseId.getComponentIdFromString('n12')
                 ## Bending moments per unit length.
                 elif(compName == 'm1'):
-                    rId= xc.string_to_response_id('m1')
+                    rId= responseId.getComponentIdFromString('m1')
                 elif(compName == 'm2'):
-                    rId= xc.string_to_response_id('m2')
+                    rId= responseId.getComponentIdFromString('m2')
                 elif(compName == 'm12'):
-                    rId= xc.string_to_response_id('m12')
+                    rId= responseId.getComponentIdFromString('m12')
                 ## Shear strains.
                 elif(compName == 'q13'):
-                    rId= xc.string_to_response_id('q13')
+                    rId= responseId.getComponentIdFromString('q13')
                 elif(compName == 'q23'):
-                    rId= xc.string_to_response_id('q23')
+                    rId= responseId.getComponentIdFromString('q23')
                 retval= responseId.index(rId)
         else:
             className= type(self).__name__
