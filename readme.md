@@ -32,9 +32,14 @@ The main capabilities of the program:
 ![CBFEM: connection capacity factor](./doc/screenshots/connection_capacity_factor.png)
 
 ## Installation
-See <a href="https://github.com/xcfem/xc/blob/master/install/install.md" target="_new">install</a>
+See <a href="https://github.com/xcfem/xc/blob/master/install/install.md" target="_new">install</a>.
 
-You can also find <a href="https://hub.docker.com/repository/docker/antonsurv/xcfem" target="_new">Docker images</a> created by Anton Surviyanto. The source code of the Dockerfile is <a href="https://github.com/antonsurv/docker-antonsurv-xcfem" target="_new">here</a>
+### Docker Installation
+The easiest way to use XC is to run it through a Docker container. The container mounts a local folder on your host computer, so you can still source control your files without the need to include any XC source code or its dependencies. You can find the Docker installation instructions [here](./install/docker_install.md).
+
+
+### For Previous version of Docker
+You can also find <a href="https://hub.docker.com/repository/docker/antonsurv/xcfem" target="_new">Docker images</a> created by Anton Surviyanto. The source code of the Dockerfile is <a href="https://github.com/antonsurv/docker-antonsurv-xcfem" target="_new">here</a>.
 
 ### Dependencies
 Don't worry, if you have a decent *nix system the installation is straightforward. You can take a look to the list of dependencies [here](https://github.com/xcfem/xc/blob/master/install/dependencies_list.md).
