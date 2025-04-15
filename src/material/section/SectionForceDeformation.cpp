@@ -62,7 +62,7 @@
 #include <deque>
 #include <regex>
 #include <material/section/SectionForceDeformation.h>
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include <domain/mesh/element/utils/Information.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/matrixutil/MatrixUtil.h>
 #include <utility/matrix/Vector.h>

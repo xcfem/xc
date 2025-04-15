@@ -29,7 +29,7 @@
 #include <material/section/repres/CrossSectionProperties1d.h>
 #include "utility/utils/misc_utils/inertia.h"
 #include "domain/mesh/element/utils/Information.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>

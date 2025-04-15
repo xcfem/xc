@@ -60,7 +60,7 @@
 
 #include <material/section/Isolator2spring.h>
 #include <cmath>
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 
 XC::Vector XC::Isolator2spring::s(2);
 XC::Vector XC::Isolator2spring::s3(3);

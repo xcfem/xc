@@ -52,7 +52,7 @@
 #include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "utility/matrix/Matrix.h"
 #include <cstdlib>
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "utility/utils/misc_utils/colormod.h"
 
 XC::Vector XC::ElasticShearSection3d::s(6);

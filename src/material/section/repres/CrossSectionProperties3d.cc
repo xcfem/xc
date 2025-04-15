@@ -36,7 +36,7 @@
 #include "utility/matrix/ID.h"
 #include "domain/component/Parameter.h"
 #include "material/section/SectionForceDeformation.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 
 XC::Matrix XC::CrossSectionProperties3d::ks4(4,4);
 XC::Matrix XC::CrossSectionProperties3d::ks6(6,6);

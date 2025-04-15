@@ -50,7 +50,7 @@
 
 #include "ElasticShearSection2d.h"
 #include "material/section/repres/section_geometry/SectionGeometry.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "preprocessor/prep_handlers/MaterialHandler.h"
 #include <utility/matrix/Matrix.h>
 

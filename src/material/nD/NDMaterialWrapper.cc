@@ -57,16 +57,18 @@ int XC::NDMaterialWrapper::setTrialStrain(const Vector &strain_from_element)
     return theMaterial->setTrialStrain(strain_from_element);
   }
 
-//! brief this function sends the tangent back to the element
+//! brief Sends the tangent back to the element.
 const XC::Matrix &XC::NDMaterialWrapper::getTangent(void) const
   { return theMaterial->getTangent(); }
 
+//! @brief Sends the initial tangent back to the element.
 const XC::Matrix &XC::NDMaterialWrapper::getInitialTangent(void) const
-// this function sends the initial tangent back to the element
   { return theMaterial->getInitialTangent(); }
 
+//! @brief Return the material type.
 const std::string &XC::NDMaterialWrapper::getType(void) const
   { return theMaterial->getType(); }
+
 int XC::NDMaterialWrapper::getOrder(void) const
   { return theMaterial->getOrder(); }
 

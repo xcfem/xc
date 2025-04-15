@@ -69,7 +69,7 @@
 
 #include "utility/kernel/python_utils.h"
 #include "classTags.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 

@@ -65,7 +65,7 @@
 #include <material/uniaxial/UniaxialMaterial.h>
 #include <material/section/repres/section/FiberSectionRepr.h>
 
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "utility/geom/d1/Line2d.h"
 #include "utility/geom/d2/2d_polygons/Polygon2d.h"
 

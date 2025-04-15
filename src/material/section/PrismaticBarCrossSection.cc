@@ -36,7 +36,7 @@
 #include <deque>
 
 
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "material/section/interaction_diagram/InteractionDiagram.h"
 #include "utility/geom/d1/Line3d.h"

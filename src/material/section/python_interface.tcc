@@ -27,7 +27,6 @@ class_<XC::SectionForceDeformation, XC::SectionForceDeformation *, bases<XC::Mat
   .add_property("rho",&XC::SectionForceDeformation::getRho,"Return the material density.")
   .add_property("linearRho",&XC::SectionForceDeformation::getLinearRho,"Return the material linear density (mass/length).")
   .add_property("arealRho",&XC::SectionForceDeformation::getArealRho,"Return the material areal density (mass/surf. area).")
-  .add_property("getResponseType",make_function(&XC::SectionForceDeformation::getResponseType, return_internal_reference<>()),"Returns the type of response of the section.")
   .def("getStressResultantComponent",&XC::SectionForceDeformation::getStressResultantByName)
   .def("getStressResultant",make_function(getStressResultantVector, return_internal_reference<>()))
   .def("getSectionDeformationByName",&XC::SectionForceDeformation::getSectionDeformationByName)
@@ -112,40 +111,6 @@ class_<XC::PrismaticBarCrossSectionsVector, bases<CommandEntity,v_sections>, boo
 class_<XC::CrossSectionKR, bases<CommandEntity>, boost::noncopyable >("CrossSectionKR", no_init);
 
 
-class_<XC::ResponseId, bases<XC::ID> >("ResponseId")
-  .def(init<boost::python::list &>())
-  .def("hasResponse", &XC::ResponseId::hasResponse, "Return true if the given response identifier is found in this object.")
-  .def("getString", &XC::ResponseId::getString, "Return the response identifiers in text form as comma separated values in a string.")
-  .def("getStringIdentifiers", &XC::ResponseId::getStringIdentifiers, "Return a Python list with the response identifiers in text form.")
-  .def("getIdentifiers", &XC::ResponseId::getIdentifiers, "Return a Python list with the response identifiers.")
-  ;
-
-class_<XC::RespPMz, bases<XC::ResponseId>, boost::noncopyable >("RespPMz", no_init);
-
-class_<XC::RespPMzV, bases<XC::ResponseId>, boost::noncopyable >("RespPMzV", no_init);
-
-class_<XC::RespVyP, bases<XC::ResponseId>, boost::noncopyable >("RespVyP", no_init);
-
-class_<XC::RespPMzMy, bases<XC::ResponseId>, boost::noncopyable >("RespPMzMy", no_init);
-
-class_<XC::RespPMzMyT, bases<XC::ResponseId>, boost::noncopyable >("RespPMzMyT", no_init);
-
-class_<XC::RespPMzVyMyVzT, bases<XC::ResponseId>, boost::noncopyable >("RespPMzVyMyVzT", no_init);
-
-class_<XC::RespFiberSectionShear2d, bases<XC::ResponseId>, boost::noncopyable >("RespFiberSectionShear2d", no_init);
-
-class_<XC::RespFiberSectionShear3d, bases<XC::ResponseId>, boost::noncopyable >("RespFiberSectionShear3d", no_init);
-
-class_<XC::RespPVyMz, bases<XC::ResponseId>, boost::noncopyable >("RespPVyMz", no_init);
-
-class_<XC::RespMembraneMaterial, bases<XC::ResponseId>, boost::noncopyable >("RespMembraneMaterial", no_init);
-
-class_<XC::RespPlateMaterial, bases<XC::ResponseId>, boost::noncopyable >("RespPlateMaterial", no_init);
-
-class_<XC::RespShellMaterial, bases<XC::ResponseId>, boost::noncopyable >("RespShellMaterial", no_init);
-
-def("string_to_response_id", &XC::string_to_response_id, "Return the response identifier that corresponds to the given string");
-def("response_id_to_string", &XC::response_id_to_string, "Return the string label that corresponds to the given response identifier");
 
 #include "repres/python_interface.tcc"
 #include "elastic_section/python_interface.tcc"

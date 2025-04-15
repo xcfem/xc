@@ -32,10 +32,11 @@
 
 #include <vector>
 #include "utility/kernel/CommandEntity.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "utility/actor/actor/MovableID.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 namespace XC {
@@ -92,6 +93,10 @@ class MaterialVector: public std::vector<MAT *>, public CommandEntity, public Mo
     const Vector &getMeanGeneralizedStrain(void) const;
     double getMeanGeneralizedStrain(const int &defID) const;
     double getMeanGeneralizedStress(const int &defID) const;
+    double getMeanGeneralizedStrain(const std::string &cod) const;
+    double getMeanGeneralizedStress(const std::string &cod) const;
+
+    std::deque<int> getComponentIndexesFromCode(const std::string &code) const;
     
     Vector getGeneralizedStrainAtGaussPoints(const int &) const;
     Vector getGeneralizedStressAtGaussPoints(const int &) const;
@@ -121,8 +126,9 @@ MaterialVector<MAT>::MaterialVector(const size_t &nMat,const MAT *matModel)
           {
             (*i)= dynamic_cast<MAT *>(matModel->getCopy());
             if(!(*i))
-              std::cerr << getClassName() << "::" << __FUNCTION__
-		        << "; failed allocate material model pointer\n";
+              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		        << "; failed allocate material model pointer"
+			<< Color::def << std::endl;
           }
       }
   }
@@ -140,8 +146,9 @@ void MaterialVector<MAT>::alloc(const std::vector<MAT *> &mats)
           {
             (*this)[i]= dynamic_cast<MAT *>(mats[i]->getCopy());
             if(!(*this)[i])
-              std::cerr << getClassName() << "::" << __FUNCTION__
-		        << "; failed allocate material model pointer\n";
+              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		        << "; failed allocate material model pointer"
+			<< Color::def << std::endl;
           }
       }
   }
@@ -170,8 +177,9 @@ void MaterialVector<MAT>::setMaterial(const MAT *new_mat)
           {
             (*i)= new_mat->getCopy();
             if(!(*i))
-              std::cerr << getClassName() << "::" << __FUNCTION__
-		        << "; failed allocate material model pointer\n";
+              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		        << "; failed allocate material model pointer"
+			<< Color::def << std::endl;
           }
       }
   }
@@ -186,8 +194,9 @@ void MaterialVector<MAT>::setMaterial(const MAT *new_mat, const std::string &typ
           {
             (*i)= new_mat->getCopy(type.c_str());
             if(!(*i))
-              std::cerr << getClassName() << "::" << __FUNCTION__
-		        << "; failed allocate material model pointer\n";
+              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		        << "; failed allocate material model pointer"
+			<< Color::def << std::endl;
           }
       }
   }
@@ -363,7 +372,7 @@ Matrix MaterialVector<MAT>::getGeneralizedStrains(void) const
       }
     return retval;
   }
-
+  
 //! @brief Returns average generalized stress values on element. In a future we can enhance this by providing an extrapolation of results in gauss points as described in 28.4 <a href="http://www.colorado.edu/engineering/cas/courses.d/IFEM.d/IFEM.Ch28.d/IFEM.Ch28.pdf">IFEM chapter 28.</a> 
 template <class MAT>
 const Vector &MaterialVector<MAT>::getMeanGeneralizedStress(void) const
@@ -389,6 +398,15 @@ const Vector &MaterialVector<MAT>::getMeanGeneralizedStrain(void) const
     retval/=nMat;
     return retval;
   }
+  
+//! @brief Return the strain or stress vector index corresponding to the given
+//! code.
+template <class MAT>
+std::deque<int> MaterialVector<MAT>::getComponentIndexesFromCode(const std::string &code) const
+  {
+    const ResponseId &rId= (*this)[0]->getResponseType();
+    return rId.getComponentIndexesFromCode(code);
+  }
 
 //! @brief Returns the defID component of the average strain vector.
 //! @param defID component index.
@@ -403,6 +421,16 @@ double MaterialVector<MAT>::getMeanGeneralizedStrain(const int &defID) const
       if(code(i) == defID)
         retval+= e(i);
     return retval;
+  }
+  
+//! @brief Returns the defID component of the average strain vector.
+//! @param cod string label identifying the component index.
+template <class MAT>
+double MaterialVector<MAT>::getMeanGeneralizedStrain(const std::string &cod) const
+  {
+    const ResponseId &rId= (*this)[0]->getResponseType();
+    const int defId= rId.getComponentIdFromString(cod);
+    return this->getMeanGeneralizedStrain(defId);
   }
 
 //! @brief Returns the defID component of the strain vector at Gauss points.
@@ -439,7 +467,17 @@ double MaterialVector<MAT>::getMeanGeneralizedStress(const int &defID) const
         retval+= f(i);
     return retval;
   }
- 
+  
+//! @brief Returns the defID component of the average stress vector.
+//! @param cod string label identifying the component index.
+template <class MAT>
+double MaterialVector<MAT>::getMeanGeneralizedStress(const std::string &cod) const
+  {
+    const ResponseId &rId= (*this)[0]->getResponseType();
+    const int defId= rId.getComponentIdFromString(cod);
+    return this->getMeanGeneralizedStress(defId);
+  }
+   
 //! @brief Returns the defID component of the stress vector at Gauss points.
 //! @param defID component index.
 template <class MAT>
@@ -504,10 +542,11 @@ void MaterialVector<MAT>::setInitialGeneralizedStrains(const std::vector<Vector>
     const size_t nMat= this->size();
     const size_t sz= std::min(nMat,iS.size());
     if(iS.size()<nMat)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; received: "
                 << iS.size() << " generalized strain vectors, expected: "
-                << nMat << ".\n";
+                << nMat << "."
+	        << Color::def << std::endl;
     for(size_t i= 0;i<sz;i++)
       (*this)[i]->setInitialGeneralizedStrain(iS[i]);
   }
@@ -519,10 +558,11 @@ void MaterialVector<MAT>::incrementInitialGeneralizedStrains(const std::vector<V
     const size_t nMat= this->size();
     const size_t sz= std::min(nMat,iS.size());
     if(iS.size()<nMat)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; received: "
                 << iS.size() << " generalized strain vectors, expected: "
-                << nMat << ".\n";
+                << nMat << "."
+	        << Color::def << std::endl;
     for(size_t i= 0;i<sz;i++)
       (*this)[i]->incrementInitialGeneralizedStrain(iS[i]);
   }
@@ -638,8 +678,9 @@ int MaterialVector<MAT>::sendSelf(Communicator &comm)
     const int dataTag=getDbTag();
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << dataTag << " failed to send ID";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << dataTag << " failed to send ID"
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -651,8 +692,9 @@ int MaterialVector<MAT>::recvSelf(const Communicator &comm)
     inicComm(2);
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << dataTag << " failed to receive ID\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << dataTag << " failed to receive ID"
+	        << Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;

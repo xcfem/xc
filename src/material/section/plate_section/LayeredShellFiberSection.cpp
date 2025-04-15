@@ -59,7 +59,7 @@ Earthquake Engineering & Structural Dynamics, 2013, 42(5): 705-723*/
 
 #include "LayeredShellFiberSection.h"
 #include <material/nD/NDMaterial.h>
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "domain/mesh/element/utils/Information.h"
 
 //static vector and matrices

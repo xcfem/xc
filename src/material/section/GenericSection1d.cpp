@@ -67,7 +67,7 @@
 #include <utility/matrix/Vector.h>
 #include <classTags.h>
 #include <cstring>
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 
 XC::Vector XC::GenericSection1d::s(1);
 XC::Matrix XC::GenericSection1d::ks(1,1);
