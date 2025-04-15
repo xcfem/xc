@@ -183,7 +183,7 @@ XC::RespP::RespP(void)
 int XC::RespP::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
-    if((str=="P") or (str=="N") or (str=="epsilon"))
+    if((str=="P") or (str=="N") or (str=="epsilon") or (str=="epsilon_1") or (str=="epsilon_11"))
       retval= SECTION_RESPONSE_P;
     else
       retval= -1;
@@ -222,7 +222,7 @@ int XC::RespPMz::getComponentIdFromString(const std::string &str) const
     int retval= -1;
     if((str == "Mz") or (str == "kappa_z") or (str == "M") or (str == "kappa"))
       retval= SECTION_RESPONSE_MZ;
-    else if((str=="P") or (str=="N") or (str=="epsilon"))
+    else if((str=="P") or (str=="N") or (str=="epsilon") or (str=="epsilon_1") or (str=="epsilon_11"))
       retval= SECTION_RESPONSE_P;
     else
       retval= -1;
@@ -265,7 +265,7 @@ int XC::RespPMzV::getComponentIdFromString(const std::string &str) const
     int retval= -1;
     if((str == "Mz") or (str == "kappa_z") or (str == "M") or (str == "kappa"))
       retval= SECTION_RESPONSE_MZ;
-    else if((str=="P") or (str=="N") or (str=="epsilon"))
+    else if((str=="P") or (str=="N") or (str=="epsilon") or (str=="epsilon_1") or (str=="epsilon_11"))
       retval= SECTION_RESPONSE_P;
     else if((str == "Vy") or (str == "gamma_y") or (str == "V") or (str == "gamma"))
       retval= SECTION_RESPONSE_VY;
@@ -310,7 +310,7 @@ XC::RespVyP::RespVyP(void)
 int XC::RespVyP::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
-    if((str=="P") or (str=="N") or (str=="epsilon"))
+    if((str=="P") or (str=="N") or (str=="epsilon") or (str=="epsilon_1") or (str=="epsilon_11"))
       retval= SECTION_RESPONSE_P;
     else if((str == "Vy") or (str == "gamma_y") or (str == "V") or (str == "gamma"))
       retval= SECTION_RESPONSE_VY;
@@ -355,7 +355,7 @@ int XC::RespPMzMy::getComponentIdFromString(const std::string &str) const
     int retval= -1;
     if((str == "Mz") or (str == "kappa_z") or (str == "M") or (str == "kappa"))
       retval= SECTION_RESPONSE_MZ;
-    else if((str=="P") or (str=="N") or (str=="epsilon"))
+    else if((str=="P") or (str=="N") or (str=="epsilon") or (str=="epsilon_1") or (str=="epsilon_11"))
       retval= SECTION_RESPONSE_P;
     else if((str =="My") or (str == "kappa_y"))
       retval= SECTION_RESPONSE_MY;
@@ -404,7 +404,7 @@ int XC::RespPMzMyT::getComponentIdFromString(const std::string &str) const
     int retval= -1;
     if((str == "Mz") or (str == "kappa_z") or (str == "M") or (str == "kappa"))
       retval= SECTION_RESPONSE_MZ;
-    else if((str=="P") or (str=="N") or (str=="epsilon"))
+    else if((str=="P") or (str=="N") or (str=="epsilon") or (str=="epsilon_1") or (str=="epsilon_11"))
       retval= SECTION_RESPONSE_P;
     else if((str =="My") or (str == "kappa_y"))
       retval= SECTION_RESPONSE_MY;
@@ -460,7 +460,7 @@ int XC::RespPMzVyMyVzT::getComponentIdFromString(const std::string &str) const
     int retval= -1;
     if((str == "Mz") or (str == "kappa_z") or (str == "M") or (str == "kappa"))
       retval= SECTION_RESPONSE_MZ;
-    else if((str=="P") or (str=="N") or (str=="epsilon"))
+    else if((str=="P") or (str=="N") or (str=="epsilon") or (str=="epsilon_1") or (str=="epsilon_11"))
       retval= SECTION_RESPONSE_P;
     else if((str == "Vy") or (str == "gamma_y") or (str == "V") or (str == "gamma"))
       retval= SECTION_RESPONSE_VY;
@@ -557,11 +557,11 @@ XC::RespMembraneMaterial::RespMembraneMaterial(void)
 int XC::RespMembraneMaterial::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
-    if(str =="n1")
+    if((str =="n1") or (str == "epsilon") or (str == "epsilon_1") or (str == "epsilon_x") or (str == "epsilon_11") or (str == "epsilon_xx"))
       retval= MEMBRANE_RESPONSE_n1;
-    else if(str =="n2")
+    else if((str =="n2") or (str == "epsilon_2") or (str == "epsilon_y") or (str == "epsilon_22") or (str == "epsilon_yy"))
       retval= MEMBRANE_RESPONSE_n2;
-    else if(str =="n12")
+    else if((str =="n12") or (str == "epsilon_12") or (str == "epsilon_xy"))
       retval= MEMBRANE_RESPONSE_n12;
     else
       retval= -1;
@@ -607,15 +607,15 @@ XC::RespPlateMaterial::RespPlateMaterial(void)
 int XC::RespPlateMaterial::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
-    if(str =="m1")
+    if((str =="m1") or ("kappa_1"))
       retval= PLATE_RESPONSE_m1;
-    else if(str =="m2")
+    else if((str =="m2") or ("kappa_2"))
       retval= PLATE_RESPONSE_m2;
-    else if(str =="m12")
+    else if((str =="m12") or ("kappa_12"))
       retval= PLATE_RESPONSE_m12;
-    else if(str =="q13")
+    else if((str =="q13") or ("gamma_13"))
       retval= PLATE_RESPONSE_q13;
-    else if(str =="q23")
+    else if((str =="q23") or ("gamma_23"))
       retval= PLATE_RESPONSE_q23;
     else
       retval= -1;
@@ -670,21 +670,21 @@ XC::RespShellMaterial::RespShellMaterial(void)
 int XC::RespShellMaterial::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
-    if(str =="n1")
+    if((str =="n1") or (str == "epsilon") or (str == "epsilon_1") or (str == "epsilon_x") or (str == "epsilon_11") or (str == "epsilon_xx"))
       retval= MEMBRANE_RESPONSE_n1;
-    else if(str =="n2")
+    else if((str =="n2") or (str == "epsilon_2") or (str == "epsilon_y") or (str == "epsilon_22") or (str == "epsilon_yy"))
       retval= MEMBRANE_RESPONSE_n2;
-    else if(str =="n12")
+    else if((str =="n12") or (str == "epsilon_12") or (str == "epsilon_xy"))
       retval= MEMBRANE_RESPONSE_n12;
-    else if(str =="m1")
+    else if((str =="m1") or ("kappa_1"))
       retval= PLATE_RESPONSE_m1;
-    else if(str =="m2")
+    else if((str =="m2") or ("kappa_2"))
       retval= PLATE_RESPONSE_m2;
-    else if(str =="m12")
+    else if((str =="m12") or ("kappa_12"))
       retval= PLATE_RESPONSE_m12;
-    else if(str =="q13")
+    else if((str =="q13") or ("gamma_13"))
       retval= PLATE_RESPONSE_q13;
-    else if(str =="q23")
+    else if((str =="q23") or ("gamma_23"))
       retval= PLATE_RESPONSE_q23;
     else
       retval= -1;
@@ -740,11 +740,9 @@ XC::RespSolidMecanics1DMaterial::RespSolidMecanics1DMaterial(void)
 int XC::RespSolidMecanics1DMaterial::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
-    if((str =="sigma_11") or (str=="epsilon_11"))
+    if((str =="sigma_11") or (str=="sigma") or (str=="epsilon_11") or (str=="epsilon") or (str=="epsilon_1"))
       retval= SOLID_MECHANICS_RESPONSE_sigma_11;
     else if((str =="sigma_xx") or (str=="epsilon_xx"))
-      retval= SOLID_MECHANICS_RESPONSE_sigma_11;
-    else if((str =="sigma") or (str=="epsilon"))
       retval= SOLID_MECHANICS_RESPONSE_sigma_11;
     else
       retval= -1;
@@ -781,7 +779,7 @@ XC::RespSolidMecanics2DMaterial::RespSolidMecanics2DMaterial(void)
 int XC::RespSolidMecanics2DMaterial::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
-    if((str =="sigma_11") or (str=="epsilon_11"))
+    if((str =="sigma_11") or (str=="sigma") or (str=="epsilon_11") or (str=="epsilon") or (str=="epsilon_1"))
       retval= SOLID_MECHANICS_RESPONSE_sigma_11;
     else if((str =="sigma_22") or (str=="epsilon_22"))
       retval= SOLID_MECHANICS_RESPONSE_sigma_22;
@@ -793,8 +791,6 @@ int XC::RespSolidMecanics2DMaterial::getComponentIdFromString(const std::string 
       retval= SOLID_MECHANICS_RESPONSE_sigma_22;
     else if((str =="sigma_xy") or (str=="epsilon_xy"))
       retval= SOLID_MECHANICS_RESPONSE_sigma_12;
-    else if((str =="sigma") or (str=="epsilon"))
-      retval= SOLID_MECHANICS_RESPONSE_sigma_11;
     else
       retval= -1;
     return retval;
@@ -839,7 +835,7 @@ XC::RespSolidMecanics3DMaterial::RespSolidMecanics3DMaterial(void)
 int XC::RespSolidMecanics3DMaterial::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
-    if((str =="sigma_11") or (str=="epsilon_11"))
+    if((str =="sigma_11") or (str=="sigma") or (str=="epsilon_11") or (str=="epsilon") or (str=="epsilon_1"))
       retval= SOLID_MECHANICS_RESPONSE_sigma_11;
     else if((str =="sigma_22") or (str=="epsilon_22"))
       retval= SOLID_MECHANICS_RESPONSE_sigma_22;
@@ -863,8 +859,6 @@ int XC::RespSolidMecanics3DMaterial::getComponentIdFromString(const std::string 
       retval= SOLID_MECHANICS_RESPONSE_sigma_13;
     else if((str =="sigma_yz") or (str=="epsilon_yz"))
       retval= SOLID_MECHANICS_RESPONSE_sigma_23;
-    else if((str =="sigma") or (str=="epsilon"))
-      retval= SOLID_MECHANICS_RESPONSE_sigma_11;
     return retval;
   }
 
