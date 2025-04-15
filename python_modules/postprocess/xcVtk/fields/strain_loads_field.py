@@ -46,6 +46,34 @@ class StrainLoadsField(fields.ScalarField):
         ''' Return the name of the property that will be used to store
             the values of the strain loads in the nodes.'''
         return self.name+'_strain_load_values'
+
+    def _compute_loaded_elements_tags(self, activeLoadPatterns):
+        ''' Compute the tags of the loaded elements.
+
+        :param activeLoadPatterns: list of active load patterns.
+        '''
+        self.elementsToDisplayTags= set()
+        eTagsSet= self.setToDisplay.getElements.getTags()
+        for lp in activeLoadPatterns:
+            lIter= lp.loads.getElementalLoadIter
+            elementLoad= lIter.next()
+            while(elementLoad):
+                tags= elementLoad.elementTags
+                for i, eTag in enumerate(tags):
+                    if eTag in eTagsSet:
+                        self.elementsToDisplayTags.add(eTag)
+                elementLoad= lIter.next()
+
+    def _get_elements_to_display(self):
+        ''' Return the elements that are loaded and belong to the set of
+            elements to be displayed (self.setToDisplay).
+        '''
+        retval= list()
+        elemSet= self.setToDisplay.elements
+        for e in elemSet:
+            if(e.tag in self.elementsToDisplayTags):
+                retval.append(e)
+        return retval
         
     def sumElementalStrainLoads(self, activeLoadPatterns):
         ''' Iterate over active load patterns and cumulate on elements 
@@ -54,19 +82,19 @@ class StrainLoadsField(fields.ScalarField):
         :param activeLoadPatterns: list of active load patterns.
         '''
         retval= dict()
+        self._compute_loaded_elements_tags(activeLoadPatterns)
         for lp in activeLoadPatterns:
             lIter= lp.loads.getElementalLoadIter
             preprocessor= lp.getDomain.getPreprocessor
             spaceDimension= preprocessor.getNodeHandler.dimSpace
             elementLoad= lIter.next()
-            eTagsSet= self.setToDisplay.getElements.getTags()
             while(elementLoad):
                 category= elementLoad.category
                 if('strain' in category):
                     if hasattr(elementLoad,'getElementStrainsMatrix'):
                         tags= elementLoad.elementTags
                         for i, eTag in enumerate(tags):
-                            if eTag in eTagsSet:
+                            if eTag in self.elementsToDisplayTags:
                                 element= self.setToDisplay.getElements.findTag(eTag)
                                 dim= element.getDimension
                                 nDOFperNode= element.getNumDOF()/element.numNodes
@@ -97,7 +125,7 @@ class StrainLoadsField(fields.ScalarField):
 
         :param elementalStrainLoads: values of the strain load at the elements.
         '''
-        elemSet= self.setToDisplay.elements
+        elemSet= self._get_elements_to_display()
         firstValue= next(iter(elementalStrainLoads.values()), None)
         retval= 0
         if(firstValue is not None):
@@ -106,26 +134,27 @@ class StrainLoadsField(fields.ScalarField):
             touchedNodes= extrapolate_elem_attr.create_attribute_at_nodes(elemSet, attributeName, initialValue)
             #Calculate totals.
             for e in elemSet:
-                retval+= 1
-                elemNodes= e.getNodes
-                values= elementalStrainLoads[e.tag]
-                extrapolatedValues= e.getExtrapolatedValues(values)
-                szV= extrapolatedValues.noRows
-                sz= len(elemNodes)
-                if(szV==0): # no values returned
-                    className= type(self).__name__
-                    methodName= sys._getframe(0).f_code.co_name
-                    lmsg.error(className+'.'+methodName+'; no values returned for element: '+str(e.tag))
-                    extrapolatedValues= sz*[None]
-                for i in range(0,sz):
-                    n= elemNodes[i]
-                    valueAtNode= extrapolatedValues.getRow(i)
-                    if(valueAtNode):
-                        oldValue= n.getProp(attributeName)
-                        newValue= oldValue+valueAtNode
-                        n.setProp(attributeName, newValue)
+                if(e.tag in elementalStrainLoads):
+                    retval+= 1
+                    values= elementalStrainLoads[e.tag]
+                    extrapolatedValues= e.getExtrapolatedValues(values)
+                    szV= extrapolatedValues.noRows
+                    elemNodes= e.getNodes
+                    sz= len(elemNodes)
+                    if(szV==0): # no values returned
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        lmsg.error(className+'.'+methodName+'; no values returned for element: '+str(e.tag))
+                        extrapolatedValues= sz*[None]
+                    for i in range(0,sz):
+                        n= elemNodes[i]
+                        valueAtNode= extrapolatedValues.getRow(i)
+                        if(valueAtNode):
+                            oldValue= n.getProp(attributeName)
+                            newValue= oldValue+valueAtNode
+                            n.setProp(attributeName, newValue)
             #Divide by number of elements in the set that touch the node.
-            preprocessor= elemSet.owner.getPreprocessor
+            preprocessor= self.setToDisplay.getPreprocessor
             extrapolate_elem_attr.average_on_nodes(preprocessor= preprocessor, touchedNodes= touchedNodes, attributeName= attributeName)
         else:
             className= type(self).__name__
@@ -158,26 +187,20 @@ class StrainLoadsField(fields.ScalarField):
             if(hasattr(e,'getSection')): # is a beam or shell element.
                 responseId= e.getSection(0).getResponseType
             tmp= self.get_strain_component_from_name(compName= strainComponentName, responseId= responseId)
-            if(tmp is None):
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                errorMsg= "; no component found for label: '"+str(strainComponentName)
-                errorMsg+= "' exiting." 
-                lmsg.error(className+'.'+methodName+errorMsg)
-                exit(1)
-            if(retval is None):
-                retval= tmp
-            else: # retval has already a value.
-                if(tmp!=retval):
-                    className= type(self).__name__
-                    methodName= sys._getframe(0).f_code.co_name
-                    errorMsg= "; elements of the set: '"+str(self.setToDisplay.name)
-                    errorMsg+= "' return different indexes ("
-                    errorMsg+= str(retval)+', '+str(tmp)+") for the strain"
-                    errorMsg+= " component named: '"+str(strainComponentName)
-                    errorMsg+= "' returning None." 
-                    lmsg.error(className+'.'+methodName+errorMsg)
-                    retval= None
+            if(tmp is not None):
+                if(retval is None):
+                    retval= tmp
+                else: # retval has already a value.
+                    if(tmp!=retval):
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        errorMsg= "; elements of the set: '"+str(self.setToDisplay.name)
+                        errorMsg+= "' return different indexes ("
+                        errorMsg+= str(retval)+', '+str(tmp)+") for the strain"
+                        errorMsg+= " component named: '"+str(strainComponentName)
+                        errorMsg+= "' returning None." 
+                        lmsg.error(className+'.'+methodName+errorMsg)
+                        retval= None
         return retval
     
     def dumpElementalStrainLoads(self, preprocessor, strainComponentName):

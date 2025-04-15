@@ -1920,15 +1920,21 @@ class SolidMechanics2D(PredefinedSpace):
         :param compName: strain component name.
         :param responseId: response identifiers of the material.
         '''
-        retval= 0
-        if((compName == 'epsilon_xx') or (compName == 'epsilon_11')):
-            retval= self.epsilon_11
-        elif((compName == 'epsilon_yy') or (compName == 'epsilon_22')):
-            retval= self.epsilon_22
-        elif((compName == 'epsilon_xy') or (compName == 'epsilon_12')
-             or (compName == 'epsilon_yx') or (compName == 'epsilon_21')):
-            retval= self.epsilon_12
+        retval= None
+        if(responseId is None):
+            if((compName == 'epsilon_xx') or (compName == 'epsilon_11')):
+                retval= self.epsilon_11
+            elif((compName == 'epsilon_yy') or (compName == 'epsilon_22')):
+                retval= self.epsilon_22
+            elif((compName == 'epsilon_xy') or (compName == 'epsilon_12')
+                 or (compName == 'epsilon_yx') or (compName == 'epsilon_21')):
+                retval= self.epsilon_12
         else:
+            rId= responseId.getComponentIdFromString(compName)
+            retval= responseId.index(rId)
+            if(retval==-1):
+                retval= None
+        if(retval is None):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: epsilon_11, epsilon_22, epsilon_12')
@@ -1941,15 +1947,21 @@ class SolidMechanics2D(PredefinedSpace):
         :param compName: strain component name.
         :param responseId: response identifiers of the material.
         '''
-        retval= 0
-        if((compName == 'sigma_xx') or (compName == 'sigma_11')):
-            retval= self.sigma_11
-        elif((compName == 'sigma_yy') or (compName == 'sigma_22')):
-            retval= self.sigma_22
-        elif((compName == 'sigma_xy') or (compName == 'sigma_12')
-             or (compName == 'sigma_yx') or (compName == 'sigma_21')):
-            retval= self.sigma_12
+        retval= None
+        if(responseId is None):
+            if((compName == 'sigma_xx') or (compName == 'sigma_11')):
+                retval= self.sigma_11
+            elif((compName == 'sigma_yy') or (compName == 'sigma_22')):
+                retval= self.sigma_22
+            elif((compName == 'sigma_xy') or (compName == 'sigma_12')
+                 or (compName == 'sigma_yx') or (compName == 'sigma_21')):
+                retval= self.sigma_12
         else:
+            rId= responseId.getComponentIdFromString(compName)
+            retval= responseId.index(rId)
+            if(retval==-1):
+                retval= None
+        if(retval is None):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: sigma_11, sigma_22, sigma_12')
@@ -2175,7 +2187,7 @@ class StructuralMechanics2D(StructuralMechanics):
         :param compName: strain component name.
         :param responseId: response identifiers of the material.
         '''
-        retval= 0
+        retval= None
         if(compName in ['epsilon', 'kappa', 'gamma']):
             if(responseId is None):
                 if(compName == 'epsilon'): # axial
@@ -2185,13 +2197,10 @@ class StructuralMechanics2D(StructuralMechanics):
                 elif(compName == 'gamma'): # shear
                     retval= self.gamma
             else:
-                if(compName == 'epsilon'): # axial
-                    rId= responseId.getComponentIdFromString('N')
-                elif(compName == 'kappa'): # bending
-                    rId= responseId.getComponentIdFromString('Mz')
-                elif(compName == 'gamma'): # shear
-                    rId= responseId.getComponentIdFromString('Vy')
+                rId= responseId.getComponentIdFromString(compName)
                 retval= responseId.index(rId)
+                if(retval==-1):
+                    retval= None
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -2215,13 +2224,10 @@ class StructuralMechanics2D(StructuralMechanics):
                 elif((compName == 'Q') or (compName == 'V')): # shear
                     retval= self.Q
             else:
-                if((compName == 'N') or (compName == 'P')): # axial
-                    rId= responseId.getComponentIdFromString('N')
-                elif(compName == 'M'): # bending
-                    rId= responseId.getComponentIdFromString('Mz')
-                elif((compName == 'Q') or (compName == 'V')): # shear
-                    rId= responseId.getComponentIdFromString('Vy')
+                rId= responseId.getComponentIdFromString(compName)
                 retval= responseId.index(rId)
+                if(retval==-1):
+                    retval= None
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -2462,23 +2468,29 @@ class SolidMechanics3D(PredefinedSpace):
         :param compName: strain component name.
         :param responseId: response identifiers of the material.
         '''
-        retval= 0
-        if((compName == 'epsilon_xx') or (compName == 'epsilon_11')):
-            retval= self.epsilon_11
-        elif((compName == 'epsilon_yy') or (compName == 'epsilon_22')):
-            retval= self.epsilon_22
-        elif((compName == 'epsilon_zz') or (compName == 'epsilon_33')):
-            retval= self.epsilon_33
-        elif((compName == 'epsilon_xy') or (compName == 'epsilon_12')
-             or (compName == 'epsilon_yx') or (compName == 'epsilon_21')):
-            retval= self.epsilon_12
-        elif((compName == 'epsilon_xz') or (compName == 'epsilon_13')
-             or (compName == 'epsilon_zx') or (compName == 'epsilon_31')):
-            retval= self.epsilon_13
-        elif((compName == 'epsilon_yz') or (compName == 'epsilon_23')
-             or (compName == 'epsilon_zy') or (compName == 'epsilon_32')):
-            retval= self.epsilon_23
+        retval= None
+        if(responseId is None):
+            if((compName == 'epsilon_xx') or (compName == 'epsilon_11')):
+                retval= self.epsilon_11
+            elif((compName == 'epsilon_yy') or (compName == 'epsilon_22')):
+                retval= self.epsilon_22
+            elif((compName == 'epsilon_zz') or (compName == 'epsilon_33')):
+                retval= self.epsilon_33
+            elif((compName == 'epsilon_xy') or (compName == 'epsilon_12')
+                 or (compName == 'epsilon_yx') or (compName == 'epsilon_21')):
+                retval= self.epsilon_12
+            elif((compName == 'epsilon_xz') or (compName == 'epsilon_13')
+                 or (compName == 'epsilon_zx') or (compName == 'epsilon_31')):
+                retval= self.epsilon_13
+            elif((compName == 'epsilon_yz') or (compName == 'epsilon_23')
+                 or (compName == 'epsilon_zy') or (compName == 'epsilon_32')):
+                retval= self.epsilon_23
         else:
+            rId= responseId.getComponentIdFromString(compName)
+            retval= responseId.index(rId)
+            if(retval==-1):
+                retval= None
+        if(retval is None):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: epsilon_11, epsilon_22, epsilon_33, epsilon_12, epsilon_13, epsilon_23')
@@ -2492,22 +2504,28 @@ class SolidMechanics3D(PredefinedSpace):
         :param responseId: response identifiers of the material.
         '''
         retval= 0
-        if((compName == 'sigma_xx') or (compName == 'sigma_11')):
-            retval= self.sigma_11
-        elif((compName == 'sigma_yy') or (compName == 'sigma_22')):
-            retval= self.sigma_22
-        elif((compName == 'sigma_zz') or (compName == 'sigma_33')):
-            retval= self.sigma_33
-        elif((compName == 'sigma_xy') or (compName == 'sigma_12')
-             or (compName == 'sigma_yx') or (compName == 'sigma_21')):
-            retval= self.sigma_12
-        elif((compName == 'sigma_xz') or (compName == 'sigma_13')
-             or (compName == 'sigma_zx') or (compName == 'sigma_31')):
-            retval= self.sigma_13
-        elif((compName == 'sigma_yz') or (compName == 'sigma_23')
-             or (compName == 'sigma_zy') or (compName == 'sigma_32')):
-            retval= self.sigma_23
-        else:
+        if(responseId is None):
+            if((compName == 'sigma_xx') or (compName == 'sigma_11')):
+                retval= self.sigma_11
+            elif((compName == 'sigma_yy') or (compName == 'sigma_22')):
+                retval= self.sigma_22
+            elif((compName == 'sigma_zz') or (compName == 'sigma_33')):
+                retval= self.sigma_33
+            elif((compName == 'sigma_xy') or (compName == 'sigma_12')
+                 or (compName == 'sigma_yx') or (compName == 'sigma_21')):
+                retval= self.sigma_12
+            elif((compName == 'sigma_xz') or (compName == 'sigma_13')
+                 or (compName == 'sigma_zx') or (compName == 'sigma_31')):
+                retval= self.sigma_13
+            elif((compName == 'sigma_yz') or (compName == 'sigma_23')
+                 or (compName == 'sigma_zy') or (compName == 'sigma_32')):
+                retval= self.sigma_23
+            else:
+                rId= responseId.getComponentIdFromString(compName)
+                retval= responseId.index(rId)
+                if(retval==-1):
+                    retval= None                
+        if(retval is None):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: sigma_11, sigma_22, sigma_33, sigma_12, sigma_13, sigma_23')
@@ -2653,7 +2671,7 @@ class StructuralMechanics3D(StructuralMechanics):
         if(compName in availableStrainComponents):
             if(responseId is None):
                 # Beam generalized strains.
-                if(compName == 'epsilon'): # axial
+                if((compName == 'epsilon') or (compName == 'epsilon_1')): # axial
                     retval= self.epsilon
                 elif(compName == 'kappa_z'): # bending about local z axis
                     retval= self.kappa_z
@@ -2666,40 +2684,10 @@ class StructuralMechanics3D(StructuralMechanics):
                 elif(compName == 'theta'): # torsion along x-axis.
                     retval= self.theta
             else:
-                # Beam generalized strains.
-                if(compName == 'epsilon'): # axial
-                    rId= responseId.getComponentIdFromString('N')
-                elif(compName == 'kappa_z'): # bending about local z axis
-                    rId= responseId.getComponentIdFromString('Mz')
-                elif(compName == 'kappa_y'): # bending about local y axis
-                    rId= responseId.getComponentIdFromString('My')
-                elif(compName == 'gamma_y'): # shear along y-axis.
-                    rId= responseId.getComponentIdFromString('Vy')
-                elif(compName == 'gamma_z'): # shear along z-axis.
-                    rId= responseId.getComponentIdFromString('Vz')
-                elif(compName == 'theta'): # torsion along x-axis.
-                    rId= responseId.getComponentIdFromString('T')
-                # Shell generalized strains.
-                ## Membrane strains.
-                elif(compName == 'epsilon_1'): # x direct strain
-                    rId= responseId.getComponentIdFromString('n1')
-                elif(compName == 'epsilon_2'): # y direct strain
-                    rId= responseId.getComponentIdFromString('n2')
-                elif(compName == 'epsilon_12'): # xy shear strain
-                    rId= responseId.getComponentIdFromString('n12')
-                ## Bending generalized strains
-                elif(compName == 'kappa_1'):
-                    rId= responseId.getComponentIdFromString('m1')
-                elif(compName == 'kappa_2'):
-                    rId= responseId.getComponentIdFromString('m2')
-                elif(compName == 'kappa_12'):
-                    rId= responseId.getComponentIdFromString('m12')
-                ## Shear strains.
-                elif(compName == 'gamma_13'):
-                    rId= responseId.getComponentIdFromString('q13')
-                elif(compName == 'gamma_23'):
-                    rId= responseId.getComponentIdFromString('q23')
+                rId= responseId.getComponentIdFromString(compName)
                 retval= responseId.index(rId)
+                if(retval==-1):
+                    retval= None
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -2735,40 +2723,10 @@ class StructuralMechanics3D(StructuralMechanics):
                 elif(compName == 'T'): # torsion along x-axis.
                     retval= self.Qz
             else:
-                # Beam generalized stresses.
-                if((compName == 'N') or (compName == 'P')): # axial
-                    rId= responseId.getComponentIdFromString('N')
-                elif(compName == 'Mz'): # bending about local z axis
-                    rId= responseId.getComponentIdFromString('Mz')
-                elif(compName == 'My'): # bending about local y axis
-                    rId= responseId.getComponentIdFromString('My')
-                elif((compName == 'Qy') or (compName == 'Vy')): # shear along y-axis.
-                    rId= responseId.getComponentIdFromString('Vy')
-                elif((compName == 'Qz') or (compName == 'Vz')): # shear along z-axis.
-                    rId= responseId.getComponentIdFromString('Vz')
-                elif(compName == 'T'): # torsion along x-axis.
-                    rId= responseId.getComponentIdFromString('T')
-                # Shell generalized strains.
-                ## Membrane axial loads per unit length.
-                elif(compName == 'n1'): # x direct strain
-                    rId= responseId.getComponentIdFromString('n1')
-                elif(compName == 'n2'): # y direct strain
-                    rId= responseId.getComponentIdFromString('n2')
-                elif(compName == 'n12'): # xy shear strain
-                    rId= responseId.getComponentIdFromString('n12')
-                ## Bending moments per unit length.
-                elif(compName == 'm1'):
-                    rId= responseId.getComponentIdFromString('m1')
-                elif(compName == 'm2'):
-                    rId= responseId.getComponentIdFromString('m2')
-                elif(compName == 'm12'):
-                    rId= responseId.getComponentIdFromString('m12')
-                ## Shear strains.
-                elif(compName == 'q13'):
-                    rId= responseId.getComponentIdFromString('q13')
-                elif(compName == 'q23'):
-                    rId= responseId.getComponentIdFromString('q23')
+                rId= responseId.getComponentIdFromString(compName)
                 retval= responseId.index(rId)
+                if(retval==-1):
+                    retval= None
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
