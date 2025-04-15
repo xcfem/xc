@@ -84,7 +84,7 @@
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/quadrule/GaussLobattoQuadRule1d01.h>
 #include "domain/load/beam_loads/BeamMecLoad.h"
 #include "domain/component/Parameter.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"
 
 XC::GaussLobattoQuadRule1d01 XC::NLBeamColumn3d::quadRule;

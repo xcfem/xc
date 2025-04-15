@@ -66,7 +66,7 @@
 #include "domain/load/beam_loads/BeamStrainLoad.h"
 
 
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 
 
 void XC::ForceBeamColumn3d::free_mem(void)

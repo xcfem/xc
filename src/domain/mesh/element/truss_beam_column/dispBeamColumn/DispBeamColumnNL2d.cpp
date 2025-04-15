@@ -56,7 +56,7 @@
 #include "DispBeamColumnNL2d.h"
 #include <domain/mesh/node/Node.h>
 #include <domain/mesh/element/utils/Information.h>
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include <material/section/PrismaticBarCrossSection.h>
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf2d.h"
 #include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.h>

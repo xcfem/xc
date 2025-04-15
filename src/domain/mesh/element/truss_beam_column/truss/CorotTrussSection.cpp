@@ -65,7 +65,7 @@
 #include <cstring>
 
 #include <utility/recorder/response/ElementResponse.h>
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "domain/load/beam_loads/TrussStrainLoad.h"
 
 

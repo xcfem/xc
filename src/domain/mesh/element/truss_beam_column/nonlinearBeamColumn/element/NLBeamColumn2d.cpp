@@ -83,7 +83,7 @@
 #include <domain/mesh/element/utils/coordTransformation/CrdTransf2d.h>
 #include <domain/mesh/node/Node.h>
 #include "domain/component/Parameter.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"
 
 XC::GaussLobattoQuadRule1d01 XC::NLBeamColumn2d::quadRule;

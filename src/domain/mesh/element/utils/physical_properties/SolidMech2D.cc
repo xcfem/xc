@@ -27,6 +27,7 @@
 //NDMaterialPhysicalProperties.cc
 
 #include "SolidMech2D.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 XC::SolidMech2D::SolidMech2D(const size_t &nMat,const NDMaterial *ptr_mat, const double &t)
@@ -41,34 +42,33 @@ XC::SolidMech2D::SolidMech2D(const size_t &nMat, NDMaterial &theMat,const std::s
       theMaterial.setMaterial(&theMat,type);
   }
 
-size_t  XC::SolidMech2D::getComponentIndexFromCode(const std::string &code) const
+//! @brief Return the strain or stress vector index corresponding to the given
+//! code.
+int XC::SolidMech2D::getComponentIndexFromCode(const std::string &code) const
   {
-    if(code=="sigma_11")
-      return 0;
-    else if(code=="sigma_22")
-      return 1;
-    else if(code=="sigma_12")
-      return 2;
+    int retval= -1;
+    const std::deque<int> tmp= theMaterial.getComponentIndexesFromCode(code);
+    const size_t sz= tmp.size();
+    if(sz>0)
+      {
+        retval= tmp[0];
+	if(sz>1)
+	  std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
+		    << "; code: '" << code << "' returns "
+		    << sz << " indexes, instead of one."
+		    << Color::def << std::endl;
+      }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; code: '" << code << "' unknown."
-	        << std::endl;
-    return 0;
+	        << Color::def << std::endl;
+    return retval;
   }
+
 //! Returns mean value of internal force.
 double XC::SolidMech2D::getMeanInternalForce(const std::string &cod) const
   {
-    double retval= 0.0;
-    if(cod == "n1") //Average axial force per unit length, parallel to the axis 1.
-      retval= theMaterial.getMeanGeneralizedStress(MEMBRANE_RESPONSE_n1);
-    else if(cod == "n2") //Average axial force per unit length, parallel to the axis 2.
-      retval= theMaterial.getMeanGeneralizedStress(MEMBRANE_RESPONSE_n2);
-    else if(cod == "n12")
-      retval= theMaterial.getMeanGeneralizedStress(MEMBRANE_RESPONSE_n12);
-    else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; unknown internal force: '"
-                << cod << "'\n";
+    double retval= theMaterial.getMeanGeneralizedStress(cod);
     retval*= this->thickness;
     return retval;
   }
@@ -84,7 +84,7 @@ double XC::SolidMech2D::getMeanInternalDeformation(const std::string &cod) const
     else if(cod == "n12")
       retval= theMaterial.getMeanGeneralizedStrain(MEMBRANE_RESPONSE_n12);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< " unknown internal deformation: '"
                 << cod << "'\n";
     return retval;
@@ -125,7 +125,9 @@ int XC::SolidMech2D::sendSelf(Communicator &comm)
     const int dataTag= getDbTag();
     res += comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "SolidMech2D::sendSelf -- failed to send ID data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< ";failed to send ID data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -137,7 +139,9 @@ int XC::SolidMech2D::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "SolidMech2D::recvSelf -- failed to receive ID data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< ";failed to send ID data."
+	        << Color::def << std::endl;
     else
       res+= this->recvData(comm);
     return res;

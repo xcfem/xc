@@ -71,7 +71,7 @@
 #include <material/section/SectionForceDeformation.h>
 #include <utility/matrix/ID.h>
 
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"
 
 XC::Matrix XC::ElasticBeam3d::K(12,12);

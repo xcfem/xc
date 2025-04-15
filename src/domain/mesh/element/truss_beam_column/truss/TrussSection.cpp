@@ -67,7 +67,7 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <material/section/SectionForceDeformation.h>
 #include <utility/recorder/response/ElementResponse.h>
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "domain/load/beam_loads/TrussStrainLoad.h"
 
