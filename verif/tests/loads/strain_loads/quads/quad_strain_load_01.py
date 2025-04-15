@@ -80,13 +80,13 @@ strain= mat.getStrain()[0]
 ratio1= abs(strain+initialStrain)/refInitialStrain
 
 elem1.getResistingForce()
-avgN1= elem1.getMeanInternalForce("n1")
-avgN2= elem1.getMeanInternalForce("n2")
-N1= avgN1
-N2= avgN2
+avg_sigma_11= elem1.getMeanInternalForce("sigma_11")
+avg_sigma_22= elem1.getMeanInternalForce("sigma_22")
+N1= avg_sigma_11
+N2= avg_sigma_22
 
 N= L*(-E*refInitialStrain)
-ratio2= abs((N1-N)/N) # Mesh is too coarse so this result is quite poor.
+ratio2= abs((avg_sigma_11-N)/N) # Mesh is too coarse so this result is quite poor.
 ratio3= abs(N2)
 
 # Remove the load case from domain.
@@ -94,7 +94,7 @@ modelSpace.removeLoadCaseFromDomain(lp0.name)
 result= analysis.analyze(1)
 initialStrain2= mat.initialStrain[0]
 elem1.getResistingForce()
-ratio4= abs(elem1.getMeanInternalForce("n1"))
+ratio4= abs(elem1.getMeanInternalForce("sigma_11"))
 
 ''' 
 print('initial strain: ', initialStrain)
