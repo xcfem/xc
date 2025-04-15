@@ -189,7 +189,8 @@ class StrainLoadDiagram(ld.LoadDiagram):
                 if(hasattr(elem,'getSection')): # is a beam element.
                     responseId= elem.getSection(0).getResponseType
                 componentIndex= self.get_strain_component_from_name(compName= self.component, responseId= responseId)
-                strainMatrix= self.dictActLoadVectors[eTag]
-                retval= max(retval, abs(strainMatrix(0, componentIndex)), abs(strainMatrix(1, componentIndex)))
+                if(componentIndex is not None):
+                    strainMatrix= self.dictActLoadVectors[eTag]
+                    retval= max(retval, abs(strainMatrix(0, componentIndex)), abs(strainMatrix(1, componentIndex)))
         return retval
 

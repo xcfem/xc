@@ -838,7 +838,7 @@ class OutputHandler(object):
             diagram.addDiagram(preprocessor)
             if(diagram.rangeIsValid()):
                 unicodeSymbol= latex_utils.get_unicode_symbol_from_name(elLoadComp)
-                titleScBar= 'Strain loads '+' ('+unicodeSymbol+' '+self.getOutputStrainUnitSym()+')'
+                titleScBar= 'Strain loads ('+unicodeSymbol+' '+self.getOutputStrainUnitSym()+')'
                 displaySettings.appendDiagram(diagram, orientScbar= scalarBarOrientation, titleScbar= titleScBar)
                 retval= scalarBarOrientation+1
         return retval
@@ -963,6 +963,7 @@ class OutputHandler(object):
         unitDescription= self.outputStyle.getForceUnitsDescription()
         loadRepresentationType= self.getLoadRepresentationType()
         displaySettings= self.getDisplaySettingsFE()
+        scalarBarOrientation= 1 # scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
         # Check if strainLoadField is needed.
         strainLoadsField= None
         if(loadRepresentationType=='strain'): # display strain loads.
@@ -972,15 +973,15 @@ class OutputHandler(object):
             numLoads= strainLoadsField.dumpElementalStrainLoads(preprocessor= preprocessor, strainComponentName= elLoadComp)
             if(numLoads>0):
                 unicodeSymbol= latex_utils.get_unicode_symbol_from_name(elLoadComp)
-                strainLoadsField.setScalarBarTitle('Strain loads '+' ('+unicodeSymbol+' '+self.getOutputStrainUnitSym()+')')
+                strainLoadsField.setScalarBarTitle('Strain loads ('+unicodeSymbol+' '+self.getOutputStrainUnitSym()+')')
                 displaySettings.setField(strainLoadsField)
+                scalarBarOrientation+= 1
         grid= displaySettings.setupGrid(setToDisplay)
         if __debug__:
             if(not grid):
                 AssertionError('Can\'t setup grid.')
         meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale,color=setToDisplay.color)
         if(meshSceneOk):
-            scalarBarOrientation= 1 # scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
             # auto-scaling parameters
             LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() # representative length of set size (to auto-scale)
 
