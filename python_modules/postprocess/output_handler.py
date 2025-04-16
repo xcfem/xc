@@ -290,7 +290,7 @@ class OutputHandler(object):
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
         propertyName= 'disp'+itemToDisp
-        vCompDisp= self.modelSpace.getDispComponentFromName(itemToDisp)
+        vCompDisp= self.modelSpace.getDispComponentIndexFromName(itemToDisp)
         nodSet= setToDisplay.nodes
         for n in nodSet:
             n.setProp(propertyName,n.getDisp[vCompDisp])
@@ -324,7 +324,7 @@ class OutputHandler(object):
         # Define the property at nodes.
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
-        propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStressComponentFromName, propToDefine= 'stress', transformToLocalCoord= transformToLocalCoord)
+        propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStressComponentIndexFromName, propToDefine= 'stress', transformToLocalCoord= transformToLocalCoord)
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
         if not captionText:
             captionText= self.getCaptionText(itemToDisp, setToDisplay)
@@ -356,7 +356,7 @@ class OutputHandler(object):
         # Define the property at nodes.
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
-        propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStrainComponentFromName, propToDefine= 'strain', transformToLocalCoord= transformToLocalCoord)
+        propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStrainComponentIndexFromName, propToDefine= 'strain', transformToLocalCoord= transformToLocalCoord)
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
         if not captionText:
             captionText= self.getCaptionText(itemToDisp, setToDisplay)
@@ -389,7 +389,7 @@ class OutputHandler(object):
         # Define the property at nodes.
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
-        propertyName= self.modelSpace.setNodePropertyFromElements(compName= None, xcSet= setToDisplay, function= self.modelSpace.getStressComponentFromName, propToDefine= vMisesCode, transformToLocalCoord= False)
+        propertyName= self.modelSpace.setNodePropertyFromElements(compName= None, xcSet= setToDisplay, function= self.modelSpace.getStressComponentIndexFromName, propToDefine= vMisesCode, transformToLocalCoord= False)
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters('stress')
         if not captionText:
             captionText= self.getCaptionText(vMisesCode, setToDisplay)
@@ -417,7 +417,7 @@ class OutputHandler(object):
         # Define the property at nodes.
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
-        propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStateComponentFromName, propToDefine= 'state', transformToLocalCoord= False)
+        propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStateComponentIndexFromName, propToDefine= 'state', transformToLocalCoord= False)
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
 
         captionText= self.getCaptionText(itemToDisp, setToDisplay)
@@ -609,7 +609,7 @@ class OutputHandler(object):
            '''
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
-        vCompDisp= self.modelSpace.getIntForceComponentFromName(itemToDisp)
+        vCompDisp= self.modelSpace.getShellIntForceComponentLabelFromName(itemToDisp)
         elSet= setToDisplay.elements.pickElemsOfDimension(2)
         if(len(elSet)>0):
             propName= 'propToDisp_'+str(itemToDisp)
@@ -830,7 +830,7 @@ class OutputHandler(object):
         # nothing to add here.
         
         # Display diagrams on 1D elements.
-        diagram= sld.StrainLoadDiagram(setToDisp= setToDisplay, scale= elLoadScaleF, lRefModSize= lRefModSize, fUnitConv= unitConversionFactor, component= elLoadComp, get_strain_component_from_name= self.modelSpace.getStrainComponentFromName)
+        diagram= sld.StrainLoadDiagram(setToDisp= setToDisplay, scale= elLoadScaleF, lRefModSize= lRefModSize, fUnitConv= unitConversionFactor, component= elLoadComp, get_strain_component_index_from_name= self.modelSpace.getStrainComponentIndexFromName)
         preprocessor= self.modelSpace.preprocessor
         maxAbs= diagram.autoScale(preprocessor)
         if(maxAbs>0.0):
@@ -969,7 +969,7 @@ class OutputHandler(object):
         if(loadRepresentationType=='strain'): # display strain loads.
             unitConversionFactor= self.outputStyle.getStrainUnitsScaleFactor()
             unitDescription= self.outputStyle.getStrainUnitsDescription()
-            strainLoadsField= strain_loads_field.StrainLoadsField(name= loadCaseName, setToDisplay= setToDisplay, get_strain_component_from_name= self.modelSpace.getStrainComponentFromName, fUnitConv= unitConversionFactor)
+            strainLoadsField= strain_loads_field.StrainLoadsField(name= loadCaseName, setToDisplay= setToDisplay, get_strain_component_index_from_name= self.modelSpace.getStrainComponentIndexFromName, fUnitConv= unitConversionFactor)
             numLoads= strainLoadsField.dumpElementalStrainLoads(preprocessor= preprocessor, strainComponentName= elLoadComp)
             if(numLoads>0):
                 unicodeSymbol= latex_utils.get_unicode_symbol_from_name(elLoadComp)
