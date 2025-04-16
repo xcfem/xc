@@ -93,7 +93,7 @@ class_<XC::PrismaticBarCrossSection, XC::PrismaticBarCrossSection *, bases<XC::S
 class_<XC::SectionAggregator , bases<XC::PrismaticBarCrossSection>, boost::noncopyable >("SectionAggregator", no_init)
   .def("getSection", make_function(&XC::SectionAggregator::getSection, return_internal_reference<>()))
   .def("setSection",&XC::SectionAggregator::setSection)
-  .def("setAdditions",&XC::SectionAggregator::setAddtionsPyList)
+  .def("setAdditions",&XC::SectionAggregator::setAdditionsPyList)
   .def("getAdditions", make_function(&XC::SectionAggregator::getAdditions, return_internal_reference<>()))
   ;
 

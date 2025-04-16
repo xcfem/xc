@@ -113,8 +113,8 @@ class SectionAggregator: public PrismaticBarCrossSection
    void setSection(const std::string &sectionName);
    inline AggregatorAdditions &getAdditions(void)
      { return theAdditions; }
-   void setAddtions(const std::vector<std::string> &,const std::vector<std::string> &);
-   void setAddtionsPyList(const boost::python::list &,const boost::python::list &);
+   void setAdditions(const std::vector<std::string> &,const std::vector<std::string> &);
+   void setAdditionsPyList(const boost::python::list &,const boost::python::list &);
 
 
     int setInitialSectionDeformation(const Vector &deforms); 

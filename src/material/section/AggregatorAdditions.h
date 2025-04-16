@@ -37,8 +37,6 @@
 
 namespace XC {
 
-class ResponseId;
-
 //! @ingroup MATSCC
 //
 //! @brief pointers to UniaxialMaterial with the degree
