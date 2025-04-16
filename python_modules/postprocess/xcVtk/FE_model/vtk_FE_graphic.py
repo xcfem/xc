@@ -132,7 +132,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         :param nodeSet: set of nodes to represent the field on.
         '''
         if(self.field):
-            arr= self.field.fillArray(nodeSet)
+            arr= self.field._fill_vtk_double_array(nodeSet)
             if(__debug__):
                 if(not arr):
                     AssertionError('Can\'t create the array.')

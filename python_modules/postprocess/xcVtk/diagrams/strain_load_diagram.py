@@ -18,7 +18,7 @@ class StrainLoadDiagram(ld.LoadDiagram):
     '''Draw a load over a set of linear elements (qx,qy,qz,...)
 
     '''
-    def __init__(self, setToDisp, scale, lRefModSize, fUnitConv, component, get_strain_component_from_name, rgMinMax= None):
+    def __init__(self, setToDisp, scale, lRefModSize, fUnitConv, component, get_strain_component_index_from_name, rgMinMax= None):
         ''' Constructor.
 
         :param setToDisp: set to display.
@@ -26,16 +26,16 @@ class StrainLoadDiagram(ld.LoadDiagram):
         :param lRefModSize: reference length of the model (how big the model is).
         :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
         :param component: component to display.
-        :param get_strain_component_from_name: function that returns the
-                                               component index from the
-                                               generalized strain name.
+        :param get_strain_component_index_from_name: function that returns the
+                                                     component index from the
+                                                     generalized strain name.
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
                          of the scalar field (if any) to be represented. All 
                          the values less than vmin are displayed in blue and 
                          those greater than vmax in red (defaults to None)
         '''
         super(StrainLoadDiagram,self).__init__(setToDisp= setToDisp, scale= scale, lRefModSize= lRefModSize, fUnitConv= fUnitConv, component= component, rgMinMax= rgMinMax)
-        self.get_strain_component_from_name= get_strain_component_from_name
+        self.get_strain_component_index_from_name= get_strain_component_index_from_name
 
     def autoScale(self, preprocessor):
         ''' Autoscale the diagram.
@@ -128,11 +128,11 @@ class StrainLoadDiagram(ld.LoadDiagram):
             elem= preprocessor.getElementHandler.getElement(eTag)
             dim= elem.getDimension
             strainMatrix= self.dictActLoadVectors[eTag]
-            componentDir= self.get_strain_component_from_name(compName= self.component, responseId= None) # Here responseId *must* be None.
+            componentDir= self.get_strain_component_index_from_name(compName= self.component, responseId= None) # Here responseId *must* be None.
             responseId= None
             if(hasattr(elem,'getSection')): # is a beam element.
                 responseId= elem.getSection(0).getResponseType
-            componentIndex= self.get_strain_component_from_name(compName= self.component, responseId= responseId)
+            componentIndex= self.get_strain_component_index_from_name(compName= self.component, responseId= responseId)
             if(componentDir==0):
                 directions.append(elem.getJVector3d(True)) # diagram direction.
                 elements.append(elem)
@@ -188,7 +188,7 @@ class StrainLoadDiagram(ld.LoadDiagram):
                 responseId= None
                 if(hasattr(elem,'getSection')): # is a beam element.
                     responseId= elem.getSection(0).getResponseType
-                componentIndex= self.get_strain_component_from_name(compName= self.component, responseId= responseId)
+                componentIndex= self.get_strain_component_index_from_name(compName= self.component, responseId= responseId)
                 if(componentIndex is not None):
                     strainMatrix= self.dictActLoadVectors[eTag]
                     retval= max(retval, abs(strainMatrix(0, componentIndex)), abs(strainMatrix(1, componentIndex)))

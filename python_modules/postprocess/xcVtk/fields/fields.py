@@ -55,7 +55,7 @@ class ScalarField(fb.FieldBase):
             field values.'''
         return self.name
 
-    def fillArray(self, nodeSet):
+    def _fill_vtk_double_array(self, nodeSet):
         '''Creates an vtkDoubleArray filled with the proper values.
 
         :param nodeSet: set of nodes that will provide the values

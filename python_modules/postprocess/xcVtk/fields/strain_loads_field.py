@@ -16,6 +16,7 @@ from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import fields
 from postprocess.xcVtk.fields import load_vector_field as lvf
 from postprocess import extrapolate_elem_attr
+from vtk.vtkCommonCore import vtkDoubleArray
 
 class StrainLoadsField(fields.ScalarField):
     ''' Represent strain loads components as scalar fields.
@@ -23,15 +24,15 @@ class StrainLoadsField(fields.ScalarField):
     :ivar name: name of the strain loads field.
     :ivar setToDisplay: set over which to display the loads.
     '''
-    def __init__(self, name, setToDisplay, get_strain_component_from_name, fUnitConv= 1e3, rgMinMax= None):
+    def __init__(self, name, setToDisplay, get_strain_component_index_from_name, fUnitConv= 1e3, rgMinMax= None):
         '''
         Constructor.
 
         :param name: name of the vector field.
         :param setToDisplay: set over which to display the loads.
-        :param get_strain_component_from_name: function that returns the
-                                               component index from the
-                                               generalized strain name.
+        :param get_strain_component_index_from_name: function that returns the
+                                                     component index from the
+                                                     generalized strain name.
         :param fUnitConv: unit conversion factor.
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
                          of the scalar field (if any) to be represented. All 
@@ -40,7 +41,7 @@ class StrainLoadsField(fields.ScalarField):
         '''
         super().__init__(name= name, functionName= 'getProp', component= None, fUnitConv= fUnitConv)
         self.setToDisplay= setToDisplay
-        self.get_strain_component_from_name= get_strain_component_from_name
+        self.get_strain_component_index_from_name= get_strain_component_index_from_name
 
     def getPropertyName(self):
         ''' Return the name of the property that will be used to store
@@ -75,6 +76,77 @@ class StrainLoadsField(fields.ScalarField):
                 retval.append(e)
         return retval
         
+    def _compute_nodes_strain_component_indexes(self, strainComponentName):
+        ''' Compute the indexes of the strain component corresponding to the 
+            given name in the strain matrices of each element gauss points
+            and store them in a dictionary whose key is the element node tags.
+            This dictionary will be used later to populate the VTK arrays
+            used to represent the field values.
+
+        :param strainComponentName: strain component to display.
+        '''
+        self.nodes_strain_component_indexes= dict()
+        elemSet= self.setToDisplay.elements
+        for e in elemSet:
+            responseId= None
+            if(hasattr(e,'getSection')): # is a beam or shell element.
+                responseId= e.getSection(0).getResponseType
+            tmp= self.get_strain_component_index_from_name(compName= strainComponentName, responseId= responseId)
+            elemNodes= e.getNodes
+            for n in elemNodes:
+                nTag= n.tag
+                if(nTag in self.nodes_strain_component_indexes):
+                    previous= self.nodes_strain_component_indexes[nTag]
+                    if(tmp!=previous):
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        warningMsg= '; the node '+str(nTag)
+                        warningMsg+= ' belongs to two or more elements of different'
+                        warningMsg+= ' type. The results in this node will'
+                        warningMsg+= ' correspond to the last element only.'
+                        lmsg.warning(className+'.'+methodName+warningMsg)
+                self.nodes_strain_component_indexes[nTag]= tmp
+    
+    def _fill_vtk_double_array(self, nodeSet):
+        '''Creates an vtkDoubleArray filled with the proper values.
+
+        :param nodeSet: set of nodes that will provide the values
+                        to populate the array.
+        '''
+        # Scalar values.
+        self.arr= vtkDoubleArray()
+        self.arr.SetName(self.name)
+        self.arr.SetNumberOfTuples(len(nodeSet))
+        self.arr.SetNumberOfComponents(1)
+        propertyName= self.getPropertyName()
+        for n in nodeSet:
+            attr= getattr(n,self.attrName)
+            nTag= n.tag
+            self.attrComponent= self.nodes_strain_component_indexes[nTag]
+            tmp= None
+            if(self.attrComponent is not None):
+                if(callable(attr)):
+                    if(attr.__name__!='getProp'):
+                        tmp= attr(propertyName)
+                    elif(n.hasProp(propertyName)):
+                        tmp= attr(propertyName)
+                    else:
+                        tmp= 0.0
+                else:
+                    tmp= attr
+                if(hasattr(tmp,"__getitem__")):
+                    tmp= tmp[self.attrComponent]
+                tmp*= self.fUnitConv
+                if not(self.rgMinMax):
+                    self.updateMinMax(tmp)
+                else:
+                    self.updateMinMaxWithinRange(tmp,self.rgMinMax)
+                    lmsg.warning('Displayed values have been clipped whitin the range: ('+str(self.rgMinMax[0])+', '+str(self.rgMinMax[1])+"), so they don't correspond to the computed ones.")
+            else: # No component index found.
+                tmp= 0.0
+            self.arr.SetTuple1(n.getIdx,tmp)
+        return self.arr
+    
     def sumElementalStrainLoads(self, activeLoadPatterns):
         ''' Iterate over active load patterns and cumulate on elements 
             their elemental uniform loads.
@@ -174,34 +246,6 @@ class StrainLoadsField(fields.ScalarField):
             retval= self.extrapolateStrainLoadsToNodes(elementalStrainLoads)
         return retval
 
-    def getStrainComponentFromName(self, strainComponentName):
-        ''' Return the index of the strain component corresponding to the given
-            name in the strain matrices of the elements gauss points.
-
-        :param strainComponentName: strain component to display.
-        '''
-        retval= None
-        elemSet= self.setToDisplay.elements
-        for e in elemSet:
-            responseId= None
-            if(hasattr(e,'getSection')): # is a beam or shell element.
-                responseId= e.getSection(0).getResponseType
-            tmp= self.get_strain_component_from_name(compName= strainComponentName, responseId= responseId)
-            if(tmp is not None):
-                if(retval is None):
-                    retval= tmp
-                else: # retval has already a value.
-                    if(tmp!=retval):
-                        className= type(self).__name__
-                        methodName= sys._getframe(0).f_code.co_name
-                        errorMsg= "; elements of the set: '"+str(self.setToDisplay.name)
-                        errorMsg+= "' return different indexes ("
-                        errorMsg+= str(retval)+', '+str(tmp)+") for the strain"
-                        errorMsg+= " component named: '"+str(strainComponentName)
-                        errorMsg+= "' returning None." 
-                        lmsg.error(className+'.'+methodName+errorMsg)
-                        retval= None
-        return retval
     
     def dumpElementalStrainLoads(self, preprocessor, strainComponentName):
         ''' Iterate over elemental strain loads dumping them into the graphic.
@@ -210,7 +254,8 @@ class StrainLoadsField(fields.ScalarField):
         :param strainComponentName: strain component to display.
         '''
         retval= 0
-        self.attrComponent= self.getStrainComponentFromName(strainComponentName)
+        self._compute_nodes_strain_component_indexes(strainComponentName= strainComponentName)
+        #self.attrComponent= self.getStrainComponentIndexFromName(strainComponentName)
         activeLoadPatterns= lvf.get_active_load_patterns(preprocessor)
         if(len(activeLoadPatterns)<1):
             className= type(self).__name__
