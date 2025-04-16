@@ -80,12 +80,12 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 from postprocess import output_handler
 oh= output_handler.OutputHandler(modelSpace)
 
-# for strainLabel in ['epsilon', 'kappa_z']:
+# for strainLabel in ['epsilon', 'kappa_y', 'kappa_z']:
 #     oh.displayLoads(elLoadComp= strainLabel)
 
 fname= os.path.basename(__file__)
 outputFileName= '/tmp/'+fname.replace('.py', '.jpeg')
-oh.displayLoads(elLoadComp= 'kappa_y', fileName= outputFileName)
+oh.displayLoads(elLoadComp= 'kappa_z', fileName= outputFileName)
 
 # Check that file exists
 testOK= os.path.isfile(outputFileName)
