@@ -155,21 +155,103 @@ boost::python::list XC::ResponseId::getComponentIndexesFromCodePy(const std::str
     return this->getComponentIndexesFromCodePy(defID);
   }
 
+//! @brief Return the identifier of the response component from the given
+//! label (something like 'Mz' or 'N', etc.)
 int XC::ResponseId::getComponentIdFromString(const std::string &str) const
   {
+    // Generic ResponseId behaviour. This is needed to make
+    // SectionAggregation mechanism to work.
     int retval= -1;
-    std::cerr << Color::red << "ResponseId::" << __FUNCTION__
-	      << "; subclass responsability."
-	      << Color::def << std::endl;
+    if(str == "Mz")
+      retval= SECTION_RESPONSE_MZ;
+    else if((str=="P") or (str=="N"))
+      retval= SECTION_RESPONSE_P;
+    else if(str =="Vy")
+      retval= SECTION_RESPONSE_VY;
+    else if(str =="My")
+      retval= SECTION_RESPONSE_MY;
+    else if(str =="Vz")
+      retval= SECTION_RESPONSE_VZ;
+    else if(str =="T")
+      retval= SECTION_RESPONSE_T;
+    else if(str =="n1")
+      return MEMBRANE_RESPONSE_n1;
+    else if(str =="n2")
+      return MEMBRANE_RESPONSE_n2;
+    else if(str =="n12")
+      return MEMBRANE_RESPONSE_n12;
+    else if(str =="m1")
+      return PLATE_RESPONSE_m1;
+    else if(str =="m2")
+      return PLATE_RESPONSE_m2;
+    else if(str =="m12")
+      return PLATE_RESPONSE_m12;
+    else if(str =="q13")
+      return PLATE_RESPONSE_q13;
+    else if(str =="q23")
+      return PLATE_RESPONSE_q23;
     return retval;
   }
 
+//! @brief Return the label corresponding to the response component identified
+//! by the given code.
 std::string XC::ResponseId::getStringFromComponentId(const int &code) const
   {
+    // Generic ResponseId behaviour. This is needed to make
+    // SectionAggregation mechanism to work.
     std::string retval= "nil";
-    std::cerr << Color::red << "ResponseId::" << __FUNCTION__
-	      << "; subclass responsability."
-	      << Color::def << std::endl;
+    switch(code)
+      {
+      case SECTION_RESPONSE_P:
+        retval= "P";
+        break;
+      case SECTION_RESPONSE_MZ:
+        retval= "Mz";
+        break;
+      case SECTION_RESPONSE_VY:
+        retval= "Vy";
+        break;
+      case SECTION_RESPONSE_MY:
+        retval= "My";
+        break;
+      case SECTION_RESPONSE_VZ:
+        retval= "Vz";
+        break;
+      case SECTION_RESPONSE_T:
+        retval= "T";
+        break;
+      case MEMBRANE_RESPONSE_n1:
+        retval= "n1";
+        break;
+      case MEMBRANE_RESPONSE_n2:
+        retval= "n2";
+        break;
+      case MEMBRANE_RESPONSE_n12:
+        retval= "n12";
+        break;
+      case PLATE_RESPONSE_m1:
+        retval= "m1";
+        break;
+      case PLATE_RESPONSE_m2:
+        retval= "m2";
+        break;
+      case PLATE_RESPONSE_m12:
+        retval= "m12";
+        break;
+      case PLATE_RESPONSE_q13:
+        retval= "q13";
+        break;
+      case PLATE_RESPONSE_q23:
+        retval= "q23";
+        break;
+      default:
+        std::cerr << Color::red << "ResponseId::" << __FUNCTION__
+		  << "; unknown code: '" << code
+                  << "'."
+                  << Color::def << std::endl;
+        retval= "nil";
+        break;
+      }
     return retval;
    }
 
@@ -180,6 +262,8 @@ XC::RespP::RespP(void)
     (*this)(0)= SECTION_RESPONSE_P; // P is the first and only quantity
   }
 
+//! @brief Return the identifier of the response component from the given
+//! label (something like 'Mz' or 'N', etc.)
 int XC::RespP::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
@@ -190,6 +274,8 @@ int XC::RespP::getComponentIdFromString(const std::string &str) const
     return retval;
   }
 
+//! @brief Return the label corresponding to the response component identified
+//! by the given code.
 std::string XC::RespP::getStringFromComponentId(const int &code) const
   {
     std::string retval= "nil";
@@ -217,10 +303,12 @@ XC::RespPMz::RespPMz(void)
     (*this)(1)= SECTION_RESPONSE_MZ; // Mz is the second
   }
 
+//! @brief Return the identifier of the response component from the given
+//! label (something like 'Mz' or 'N', etc.)
 int XC::RespPMz::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
-    if((str == "Mz") or (str == "kappa_z") or (str == "M") or (str == "kappa"))
+    if((str == "Mz") or (str == "kappa_z") or (str == "kappa_1") or (str == "M") or (str == "kappa"))
       retval= SECTION_RESPONSE_MZ;
     else if((str=="P") or (str=="N") or (str=="epsilon") or (str=="epsilon_1") or (str=="epsilon_11"))
       retval= SECTION_RESPONSE_P;
@@ -229,6 +317,8 @@ int XC::RespPMz::getComponentIdFromString(const std::string &str) const
     return retval;
   }
 
+//! @brief Return the label corresponding to the response component identified
+//! by the given code.
 std::string XC::RespPMz::getStringFromComponentId(const int &code) const
   {
     std::string retval= "nil";
@@ -260,10 +350,12 @@ XC::RespPMzV::RespPMzV(void)
     (*this)(2)= SECTION_RESPONSE_VY; // Vy is the third
   }
 
+//! @brief Return the identifier of the response component from the given
+//! label (something like 'Mz' or 'N', etc.)
 int XC::RespPMzV::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
-    if((str == "Mz") or (str == "kappa_z") or (str == "M") or (str == "kappa"))
+    if((str == "Mz") or (str == "kappa_z") or (str == "kappa_1") or (str == "M") or (str == "kappa"))
       retval= SECTION_RESPONSE_MZ;
     else if((str=="P") or (str=="N") or (str=="epsilon") or (str=="epsilon_1") or (str=="epsilon_11"))
       retval= SECTION_RESPONSE_P;
@@ -274,6 +366,8 @@ int XC::RespPMzV::getComponentIdFromString(const std::string &str) const
     return retval;
   }
 
+//! @brief Return the label corresponding to the response component identified
+//! by the given code.
 std::string XC::RespPMzV::getStringFromComponentId(const int &code) const
   {
     std::string retval= "nil";
@@ -307,6 +401,8 @@ XC::RespVyP::RespVyP(void)
     (*this)(1)= SECTION_RESPONSE_P; // P is the second
   }
 
+//! @brief Return the identifier of the response component from the given
+//! label (something like 'Mz' or 'N', etc.)
 int XC::RespVyP::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
@@ -319,6 +415,8 @@ int XC::RespVyP::getComponentIdFromString(const std::string &str) const
     return retval;
   }
 
+//! @brief Return the label corresponding to the response component identified
+//! by the given code.
 std::string XC::RespVyP::getStringFromComponentId(const int &code) const
   {
     std::string retval= "nil";
@@ -350,10 +448,12 @@ XC::RespPMzMy::RespPMzMy(void)
     (*this)(2)= SECTION_RESPONSE_MY; // My is the third 
   }
 
+//! @brief Return the identifier of the response component from the given
+//! label (something like 'Mz' or 'N', etc.)
 int XC::RespPMzMy::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
-    if((str == "Mz") or (str == "kappa_z") or (str == "M") or (str == "kappa"))
+    if((str == "Mz") or (str == "kappa_z") or (str == "kappa_1") or (str == "M") or (str == "kappa"))
       retval= SECTION_RESPONSE_MZ;
     else if((str=="P") or (str=="N") or (str=="epsilon") or (str=="epsilon_1") or (str=="epsilon_11"))
       retval= SECTION_RESPONSE_P;
@@ -364,6 +464,8 @@ int XC::RespPMzMy::getComponentIdFromString(const std::string &str) const
     return retval;
   }
 
+//! @brief Return the label corresponding to the response component identified
+//! by the given code.
 std::string XC::RespPMzMy::getStringFromComponentId(const int &code) const
   {
     std::string retval= "nil";
@@ -399,10 +501,12 @@ XC::RespPMzMyT::RespPMzMyT(void)
     (*this)(3)= SECTION_RESPONSE_T; // T is the fourth
   }
 
+//! @brief Return the identifier of the response component from the given
+//! label (something like 'Mz' or 'N', etc.)
 int XC::RespPMzMyT::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
-    if((str == "Mz") or (str == "kappa_z") or (str == "M") or (str == "kappa"))
+    if((str == "Mz") or (str == "kappa_z") or (str == "kappa_1")  or (str == "M") or (str == "kappa"))
       retval= SECTION_RESPONSE_MZ;
     else if((str=="P") or (str=="N") or (str=="epsilon") or (str=="epsilon_1") or (str=="epsilon_11"))
       retval= SECTION_RESPONSE_P;
@@ -415,6 +519,8 @@ int XC::RespPMzMyT::getComponentIdFromString(const std::string &str) const
     return retval;
   }
 
+//! @brief Return the label corresponding to the response component identified
+//! by the given code.
 std::string XC::RespPMzMyT::getStringFromComponentId(const int &code) const
   {
     std::string retval= "nil";
@@ -455,10 +561,12 @@ XC::RespPMzVyMyVzT::RespPMzVyMyVzT(void)
     (*this)(5)= SECTION_RESPONSE_T;        // T is the sixth
   }
 
+//! @brief Return the identifier of the response component from the given
+//! label (something like 'Mz' or 'N', etc.)
 int XC::RespPMzVyMyVzT::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
-    if((str == "Mz") or (str == "kappa_z") or (str == "M") or (str == "kappa"))
+    if((str == "Mz") or (str == "kappa_z") or (str == "kappa_1") or (str == "M") or (str == "kappa"))
       retval= SECTION_RESPONSE_MZ;
     else if((str=="P") or (str=="N") or (str=="epsilon") or (str=="epsilon_1") or (str=="epsilon_11"))
       retval= SECTION_RESPONSE_P;
@@ -475,6 +583,8 @@ int XC::RespPMzVyMyVzT::getComponentIdFromString(const std::string &str) const
     return retval;
   }
 
+//! @brief Return the label corresponding to the response component identified
+//! by the given code.
 std::string XC::RespPMzVyMyVzT::getStringFromComponentId(const int &code) const
   {
     std::string retval= "nil";
@@ -554,6 +664,8 @@ XC::RespMembraneMaterial::RespMembraneMaterial(void)
     (*this)(2)= MEMBRANE_RESPONSE_n12;
   }
 
+//! @brief Return the identifier of the response component from the given
+//! label (something like 'Mz' or 'N', etc.)
 int XC::RespMembraneMaterial::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
@@ -568,6 +680,8 @@ int XC::RespMembraneMaterial::getComponentIdFromString(const std::string &str) c
     return retval;
   }
 
+//! @brief Return the label corresponding to the response component identified
+//! by the given code.
 std::string XC::RespMembraneMaterial::getStringFromComponentId(const int &code) const
   {
     std::string retval= "nil";
@@ -604,10 +718,12 @@ XC::RespPlateMaterial::RespPlateMaterial(void)
     (*this)(4)= PLATE_RESPONSE_q23;
   }
 
+//! @brief Return the identifier of the response component from the given
+//! label (something like 'Mz' or 'N', etc.)
 int XC::RespPlateMaterial::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
-    if((str == "m1") or (str == "kappa_1"))
+    if((str == "m1") or (str == "kappa_1") or (str == "kappa_z"))
       retval= PLATE_RESPONSE_m1;
     else if((str == "m2") or (str == "kappa_2"))
       retval= PLATE_RESPONSE_m2;
@@ -622,6 +738,8 @@ int XC::RespPlateMaterial::getComponentIdFromString(const std::string &str) cons
     return retval;
   }
 
+//! @brief Return the label corresponding to the response component identified
+//! by the given code.
 std::string XC::RespPlateMaterial::getStringFromComponentId(const int &code) const
   {
     std::string retval= "nil";
@@ -676,7 +794,7 @@ int XC::RespShellMaterial::getComponentIdFromString(const std::string &str) cons
       retval= MEMBRANE_RESPONSE_n2;
     else if((str =="n12") or (str == "epsilon_12") or (str == "epsilon_xy"))
       retval= MEMBRANE_RESPONSE_n12;
-    else if((str == "m1") or (str == "kappa_1"))
+    else if((str == "m1") or (str == "kappa_1") or (str == "kappa_z"))
       retval= PLATE_RESPONSE_m1;
     else if((str == "m2") or (str == "kappa_2"))
       retval= PLATE_RESPONSE_m2;
@@ -691,6 +809,8 @@ int XC::RespShellMaterial::getComponentIdFromString(const std::string &str) cons
     return retval;
   }
 
+//! @brief Return the label corresponding to the response component identified
+//! by the given code.
 std::string XC::RespShellMaterial::getStringFromComponentId(const int &code) const
   {
     std::string retval= "nil";
@@ -749,6 +869,8 @@ int XC::RespSolidMecanics1DMaterial::getComponentIdFromString(const std::string 
     return retval;
   }
 
+//! @brief Return the label corresponding to the response component identified
+//! by the given code.
 std::string XC::RespSolidMecanics1DMaterial::getStringFromComponentId(const int &code) const
   {
     std::string retval= "nil";
@@ -796,6 +918,8 @@ int XC::RespSolidMecanics2DMaterial::getComponentIdFromString(const std::string 
     return retval;
   }
 
+//! @brief Return the label corresponding to the response component identified
+//! by the given code.
 std::string XC::RespSolidMecanics2DMaterial::getStringFromComponentId(const int &code) const
   {
     std::string retval= "nil";
@@ -862,6 +986,8 @@ int XC::RespSolidMecanics3DMaterial::getComponentIdFromString(const std::string 
     return retval;
   }
 
+//! @brief Return the label corresponding to the response component identified
+//! by the given code.
 std::string XC::RespSolidMecanics3DMaterial::getStringFromComponentId(const int &code) const
   {
     std::string retval= "nil";
@@ -895,3 +1021,4 @@ std::string XC::RespSolidMecanics3DMaterial::getStringFromComponentId(const int 
       }
     return retval;
   }
+

@@ -208,7 +208,7 @@ class RespSolidMecanics3DMaterial: public ResponseId
     int getComponentIdFromString(const std::string &str) const;
     std::string getStringFromComponentId(const int &ri) const;    
   };
-
+  
 const RespP RespElasticSection1d;
 const RespPMz RespElasticSection2d;
 const RespPMzV RespElasticShSection2d;
