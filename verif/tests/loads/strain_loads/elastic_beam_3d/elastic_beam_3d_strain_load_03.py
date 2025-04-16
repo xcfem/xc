@@ -79,10 +79,10 @@ nodalLoad= lp0.newNodalLoad(n6.tag, xc.Vector([0.0,0.0,0.0, 0.0, M, 0.0]) )
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
-# Check getStrainComponentFromName
+# Check getStrainComponentIndexFromName
 strainsMatrix= eleLoad.getElementStrainsMatrix(beam1)
 responseId= beam1.getSection(0).getResponseType
-componentIndex= modelSpace.getStrainComponentFromName('kappa_y', responseId= responseId)
+componentIndex= modelSpace.getStrainComponentIndexFromName('kappa_y', responseId= responseId)
 componentRefValue= -yCurvature/2.0
 ratio0= math.sqrt((strainsMatrix(0,componentIndex)-componentRefValue)**2+(strainsMatrix(1,componentIndex)-componentRefValue)**2)
 

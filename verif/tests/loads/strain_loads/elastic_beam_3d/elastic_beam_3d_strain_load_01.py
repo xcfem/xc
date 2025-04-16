@@ -71,10 +71,10 @@ eleLoad.frontEndDeformationPlane= thermalDeformation
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
-# Check getStrainComponentFromName
+# Check getStrainComponentIndexFromName
 strainsMatrix= eleLoad.getElementStrainsMatrix(beam3d)
 responseId= beam3d.getSection(0).getResponseType
-componentIndex= modelSpace.getStrainComponentFromName('epsilon', responseId= responseId)
+componentIndex= modelSpace.getStrainComponentIndexFromName('epsilon', responseId= responseId)
 componentRefValue= alpha*AT
 ratio0= math.sqrt((strainsMatrix(0,componentIndex)-componentRefValue)**2+(strainsMatrix(1,componentIndex)-componentRefValue)**2)
 
