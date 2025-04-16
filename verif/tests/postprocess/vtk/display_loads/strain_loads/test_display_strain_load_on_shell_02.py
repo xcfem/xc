@@ -90,7 +90,7 @@ oh= output_handler.OutputHandler(modelSpace)
 
 fname= os.path.basename(__file__)
 outputFileName= '/tmp/'+fname.replace('.py', '.jpeg')
-oh.displayLoads(elLoadComp= 'epsilon_1', fileName= outputFileName)
+oh.displayLoads(elLoadComp= 'kappa_1', fileName= outputFileName)
 
 # Check that file exists
 testOK= os.path.isfile(outputFileName)
