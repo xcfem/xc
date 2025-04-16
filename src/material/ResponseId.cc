@@ -607,15 +607,15 @@ XC::RespPlateMaterial::RespPlateMaterial(void)
 int XC::RespPlateMaterial::getComponentIdFromString(const std::string &str) const
   {
     int retval= -1;
-    if((str =="m1") or ("kappa_1"))
+    if((str == "m1") or (str == "kappa_1"))
       retval= PLATE_RESPONSE_m1;
-    else if((str =="m2") or ("kappa_2"))
+    else if((str == "m2") or (str == "kappa_2"))
       retval= PLATE_RESPONSE_m2;
-    else if((str =="m12") or ("kappa_12"))
+    else if((str == "m12") or (str == "kappa_12"))
       retval= PLATE_RESPONSE_m12;
-    else if((str =="q13") or ("gamma_13"))
+    else if((str == "q13") or (str == "gamma_13"))
       retval= PLATE_RESPONSE_q13;
-    else if((str =="q23") or ("gamma_23"))
+    else if((str == "q23") or (str == "gamma_23"))
       retval= PLATE_RESPONSE_q23;
     else
       retval= -1;
@@ -676,15 +676,15 @@ int XC::RespShellMaterial::getComponentIdFromString(const std::string &str) cons
       retval= MEMBRANE_RESPONSE_n2;
     else if((str =="n12") or (str == "epsilon_12") or (str == "epsilon_xy"))
       retval= MEMBRANE_RESPONSE_n12;
-    else if((str =="m1") or ("kappa_1"))
+    else if((str == "m1") or (str == "kappa_1"))
       retval= PLATE_RESPONSE_m1;
-    else if((str =="m2") or ("kappa_2"))
+    else if((str == "m2") or (str == "kappa_2"))
       retval= PLATE_RESPONSE_m2;
-    else if((str =="m12") or ("kappa_12"))
+    else if((str == "m12") or (str == "kappa_12"))
       retval= PLATE_RESPONSE_m12;
-    else if((str =="q13") or ("gamma_13"))
+    else if((str == "q13") or (str == "gamma_13"))
       retval= PLATE_RESPONSE_q13;
-    else if((str =="q23") or ("gamma_23"))
+    else if((str == "q23") or (str == "gamma_23"))
       retval= PLATE_RESPONSE_q23;
     else
       retval= -1;
