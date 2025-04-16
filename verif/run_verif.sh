@@ -1943,6 +1943,7 @@ python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load
 python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load_on_shell_03.py
 python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_loads_01.py
 python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_loads_02.py
+python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_loads_03.py
 
 # Report tests.
 echo "$BLEU" "  Report output." "$NORMAL"
