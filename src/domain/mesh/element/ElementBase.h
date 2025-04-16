@@ -129,7 +129,8 @@ TIPOMAT *ElementBase<NNODES>::cast_material(const Material *ptr_mat)
 		      << " the material " << ptr_mat->getTag()
 		      << " with name: " << ptr_mat->getName()
 		      << " and type: " << ptr_mat->getClassName()
-		      << Color::def << " has not a suitable type." << std::endl;
+		      << " has not a suitable type."
+		      << Color::def << std::endl;
 	    abort();
 	  }
 	if(!retval)
@@ -137,7 +138,8 @@ TIPOMAT *ElementBase<NNODES>::cast_material(const Material *ptr_mat)
 	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; on element: " << getTag()
 		      << " can't get a copy of the material with tag: "
-		      << Color::def << ptr_mat->getTag() << std::endl;
+		      << ptr_mat->getTag()
+		      << Color::def << std::endl;
 	    abort();
 	  }
       }

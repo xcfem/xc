@@ -52,6 +52,7 @@
 #include "utility/geom/d1/Segment3d.h"
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "vtkCellType.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 XC::Element1D::Element1D(int tag, int classTag)
@@ -74,9 +75,10 @@ void XC::Element1D::vector2dUniformLoadGlobal(const Vector &v)
 	vector2dUniformLoadLocal(vTrf);
       }
     else
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING element has no coordinate transformation"
-		<< " load ignored." << std::endl;
+		<< " load ignored."
+		<< Color::def << std::endl;
   }
 
 void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
@@ -91,9 +93,10 @@ void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
     if(sz>1)
       {
         if(sz>2)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; WARNING a vector of dimension 2"
-	            << " was expected instead of: " << v << std::endl;
+	            << " was expected instead of: " << v
+		    << Color::def << std::endl;
         Beam2dUniformLoad *tmp= new Beam2dUniformLoad(loadTag,v[1],v[0],eTags);
         LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
         if(lp)
@@ -102,14 +105,15 @@ void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
             lPatterns.setCurrentElementLoadTag(loadTag+1);
           }
         else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; there is no current load pattern. Load ignored."
-                    << std::endl; 
+                    << Color::def << std::endl; 
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; ERROR a vector of dimension 2"
-	        << " was expected instead of: " << v << std::endl;
+	        << " was expected instead of: " << v
+		<< Color::def << std::endl;
   }
 
 void XC::Element1D::vector2dPartialUniformLoadGlobal(const double &aOverL, const double &bOverL, const Vector &v)
@@ -123,9 +127,10 @@ void XC::Element1D::vector2dPartialUniformLoadGlobal(const double &aOverL, const
         vector2dPartialUniformLoadLocal(aOverL, bOverL, vTrf);
       }
     else
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING element has no coordinate transformation"
-		<< " load ignored." << std::endl;
+		<< " load ignored."
+		<< Color::def << std::endl;
   }
 
 void XC::Element1D::vector2dPartialUniformLoadLocal(const double &aOverL, const double &bOverL, const Vector &v)
@@ -140,9 +145,10 @@ void XC::Element1D::vector2dPartialUniformLoadLocal(const double &aOverL, const 
     if(sz>1)
       {
         if(sz>2)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; WARNING a vector of dimension 2"
-	            << " was expected instead of: " << v << std::endl;
+	            << " was expected instead of: " << v
+		    << Color::def << std::endl;
         Beam2dPartialUniformLoad *tmp= new Beam2dPartialUniformLoad(loadTag,v[1],v[0],aOverL,bOverL,eTags);
         LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
         if(lp)
@@ -151,14 +157,15 @@ void XC::Element1D::vector2dPartialUniformLoadLocal(const double &aOverL, const 
             lPatterns.setCurrentElementLoadTag(loadTag+1);
           }
         else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; there is no current load pattern. Load ignored."
-                    << std::endl; 
+                    << Color::def << std::endl; 
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; ERROR a vector of dimension 2"
-	        << " was expected instead of: " << v << std::endl;
+	        << " was expected instead of: " << v
+		<< Color::def << std::endl;
   }
 
 void XC::Element1D::vector2dPointByRelDistLoadGlobal(const double &x,const Vector &v)
@@ -175,14 +182,16 @@ void XC::Element1D::vector2dPointByRelDistLoadGlobal(const double &x,const Vecto
 	    vector2dPointByRelDistLoadLocal(x,vTrf);
 	  }
 	else
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		    << "; WARNING element has no coordinate transformation"
-		    << " load ignored." << std::endl;	
+		    << " load ignored."
+		    << Color::def << std::endl;	
       }
     else
-      std::cerr << getClassName() << __FUNCTION__
+      std::cerr << Color::red << getClassName() << __FUNCTION__
                 << "; ERROR a vector of dimension 2"
-	        << " was expected instead of: " << v << std::endl;
+	        << " was expected instead of: " << v
+		<< Color::def << std::endl;
   }
 
 void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector &v)
@@ -197,9 +206,10 @@ void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector
         const int &loadTag= lPatterns.getCurrentElementLoadTag(); //Load identifier.
 
 	if(sz>2)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                     << "; ERROR a vector of dimension 2"
-	            << " was expected instead of: " << v << std::endl;
+	            << " was expected instead of: " << v
+		    << Color::def << std::endl;
         Beam2dPointLoad *tmp= new Beam2dPointLoad(loadTag,v[1],x,eTags,v[0]);
         LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
         if(lp)
@@ -208,14 +218,15 @@ void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector
             lPatterns.setCurrentElementLoadTag(loadTag+1);
           }
         else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; there is no current load pattern. Load ignored."
-                    << std::endl; 
+                    << Color::def << std::endl; 
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; ERROR a vector of dimension 2"
-                << " was expected instead of: " << v << std::endl;
+                << " was expected instead of: " << v
+		<< Color::def << std::endl;
   }
 
 //! @brief Define an elemental concentrated load at position p with value v
@@ -231,16 +242,18 @@ void XC::Element1D::vector2dPointLoadGlobal(const Vector &p,const Vector &v)
       {    
 	const double x= crd_trf->getPointBasicCoordFromGlobal(p);
 	if(x<0.0 || x>1.0)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; the relative distance x= "
 		    << x << " obtained from point: " << p
-		    << " must be between 0 and 1." << std::endl;
+		    << " must be between 0 and 1."
+		    << Color::def << std::endl;
 	vector2dPointByRelDistLoadGlobal(x,v);
       }
     else
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING element has no coordinate transformation"
-		<< " load ignored." << std::endl;    
+		<< " load ignored."
+		<< Color::def << std::endl;    
   }
 
 void XC::Element1D::vector2dPointLoadLocal(const Vector &p,const Vector &v)
@@ -252,16 +265,18 @@ void XC::Element1D::vector2dPointLoadLocal(const Vector &p,const Vector &v)
       {        
 	const double x= crd_trf->getPointBasicCoordFromGlobal(p);
 	if(x<0.0 || x>1.0)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; the relative distance x= "
 		    << x << " obtained from point: " << p
-		    << " must be between 0 and 1." << std::endl;
+		    << " must be between 0 and 1."
+		    << Color::def << std::endl;
 	vector2dPointByRelDistLoadLocal(x,v);
       }
     else
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING element has no coordinate transformation"
-		<< " load ignored." << std::endl;    
+		<< " load ignored."
+		<< Color::def << std::endl;    
   }
 
 //! @bried Defines a uniform load on the vector from a
@@ -280,14 +295,16 @@ void XC::Element1D::vector3dUniformLoadGlobal(const Vector &v)
             vector3dUniformLoadLocal(vTrf);
 	  }
 	else
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
                     << "; WARNING element has no coordinate transformation"
-	            << " load ignored." << std::endl;
+	            << " load ignored."
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; ERROR a vector of dimension 3"
-	        << " was expected instead of: " << v << std::endl;
+	        << " was expected instead of: " << v
+		<< Color::def << std::endl;
   }
 
 void XC::Element1D::vector3dUniformLoadLocal(const Vector &v)
@@ -309,14 +326,15 @@ void XC::Element1D::vector3dUniformLoadLocal(const Vector &v)
             lPatterns.setCurrentElementLoadTag(loadTag+1);
           }
         else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; there is no current load pattern. Load ignored."
-                    << std::endl; 
+                    << Color::def << std::endl; 
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; ERROR a vector of dimension 3"
-	        << " was expected instead of: " << v << std::endl;
+	        << " was expected instead of: " << v
+		<< Color::def << std::endl;
   }
 
 void XC::Element1D::vector3dPointByRelDistLoadGlobal(const double &x,const Vector &v)
@@ -333,14 +351,16 @@ void XC::Element1D::vector3dPointByRelDistLoadGlobal(const double &x,const Vecto
             vector3dPointByRelDistLoadLocal(x,vTrf);
 	  }
 	else
-	  std::clog << getClassName() << "::" << __FUNCTION__
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
                     << "; WARNING element has no coordinate transformation"
-	            << " load ignored." << std::endl;
+	            << " load ignored."
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; ERROR a vector of dimension 3"
-	        << " was expected instead of: " << v << std::endl;
+	        << " was expected instead of: " << v
+		<< Color::def << std::endl;
   }
 
 void XC::Element1D::vector3dPointByRelDistLoadLocal(const double &x,const Vector &v)
@@ -362,15 +382,16 @@ void XC::Element1D::vector3dPointByRelDistLoadLocal(const double &x,const Vector
             lPatterns.setCurrentElementLoadTag(loadTag+1);
           }
         else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; there is no current load pattern. Load ignored."
-                    << std::endl; 
+                    << Color::def << std::endl; 
 
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; ERROR a vector of dimension 3"
-	        << " was expected instead of: " << v << std::endl;
+	        << " was expected instead of: " << v
+		<< Color::def << std::endl;
   }
 
 void XC::Element1D::vector3dPointLoadGlobal(const Vector &p,const Vector &v)
@@ -382,16 +403,18 @@ void XC::Element1D::vector3dPointLoadGlobal(const Vector &p,const Vector &v)
       {
 	const double x= crd_trf->getPointBasicCoordFromGlobal(p);
 	if(x<0.0 || x>1.0)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; the relative distance x= "
 		    << x << " obtained from point: " << p
-		    << " must be between 0 and 1." << std::endl;
+		    << " must be between 0 and 1."
+		    << Color::def << std::endl;
 	vector3dPointByRelDistLoadGlobal(x,v);
       }
     else
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING element has no coordinate transformation"
-		<< " load ignored." << std::endl;
+		<< " load ignored."
+		<< Color::def << std::endl;
   }
 
 void XC::Element1D::vector3dPointLoadLocal(const Vector &p,const Vector &v)
@@ -403,16 +426,18 @@ void XC::Element1D::vector3dPointLoadLocal(const Vector &p,const Vector &v)
       {
 	const double x= crd_trf->getPointBasicCoordFromGlobal(p);
 	if(x<0.0 || x>1.0)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; the relative distance x= "
 		    << x << " obtained from point: " << p
-		    << " must be between 0 and 1." << std::endl;
+		    << " must be between 0 and 1."
+		    << Color::def << std::endl;
 	vector3dPointByRelDistLoadLocal(x,v);
       }
     else
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING element has no coordinate transformation"
-		<< " load ignored." << std::endl;
+		<< " load ignored."
+		<< Color::def << std::endl;
   }
 
 void XC::Element1D::strainLoad(const DeformationPlane &p1,const DeformationPlane &p2)
@@ -433,9 +458,9 @@ void XC::Element1D::strainLoad(const DeformationPlane &p1,const DeformationPlane
         lPatterns.setCurrentElementLoadTag(loadTag+1);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; there is no current load pattern. Load ignored."
-                << std::endl; 
+                << Color::def << std::endl; 
   }
 
 //! @brief Return the element dimension (0, 1, 2 or 3).
@@ -455,7 +480,7 @@ void meshing_on_i(const XC::Element1D &e,const XC::NodePtrArray3d::const_ref_i_r
 	if(changed)
 	  std::cerr << __FUNCTION__
 	            << "; nodes were already assigned."
-	            << std::endl;
+	            << Color::def << std::endl;
         elements(i)= tmp;
       }
   }
@@ -473,7 +498,7 @@ void meshing_on_j(const XC::Element1D &e,const XC::NodePtrArray3d::const_ref_j_r
 	if(changed)
 	  std::cerr << __FUNCTION__
 	            << "; nodes were already assigned."
-	            << std::endl;
+	            << Color::def << std::endl;
         elements(j)= tmp;
       }
   }
@@ -491,7 +516,7 @@ void meshing_on_k(const XC::Element1D &e,const XC::NodePtrArray3d::const_ref_k_r
 	if(changed)
 	  std::cerr << __FUNCTION__
 	            << "; nodes were already assigned."
-	            << std::endl;
+	            << Color::def << std::endl;
         elements(k)= tmp;
       }
   }
@@ -548,9 +573,9 @@ XC::ElemPtrArray3d XC::Element1D::put_on_mesh(const NodePtrArray3d &nodes,meshin
     const size_t mesh_dim= nodes.GetDim();
     ElemPtrArray3d retval;
     if(mesh_dim<1)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "There is only one node, can't create elements."
-		<< std::endl;
+		<< Color::def << std::endl;
     else
       {
         if(mesh_dim<2) //Bidimensional mesh
@@ -561,9 +586,10 @@ XC::ElemPtrArray3d XC::Element1D::put_on_mesh(const NodePtrArray3d &nodes,meshin
               {
               case dirm_i:
                 if(numberOfLayers<2)
-		  std::cerr << getClassName() << "::" << __FUNCTION__
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		            << " insufficient number of nodes on i direction."
-		            << " Can't create elements." << std::endl;
+		            << " Can't create elements."
+			    << Color::def << std::endl;
                 else
                   {
                     retval= ElemPtrArray3d(numberOfLayers-1,ElemPtrArray(numberOfRows,numberOfColumns));
@@ -577,9 +603,10 @@ XC::ElemPtrArray3d XC::Element1D::put_on_mesh(const NodePtrArray3d &nodes,meshin
                 break;
               case dirm_j:
                 if(numberOfRows<2)
-		  std::cerr << getClassName() << "::" << __FUNCTION__
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		            << " insufficient number of nodes on j direction."
-		            << " Can't create elements." << std::endl;
+		            << " Can't create elements."
+			    << Color::def << std::endl;
                 else
                   {
                     retval= ElemPtrArray3d(numberOfLayers,ElemPtrArray(numberOfRows-1,numberOfColumns));
@@ -593,9 +620,10 @@ XC::ElemPtrArray3d XC::Element1D::put_on_mesh(const NodePtrArray3d &nodes,meshin
                 break;
               case dirm_k:
                 if(numberOfColumns<2)
-		  std::cerr << getClassName() << "::" << __FUNCTION__
+		  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		            << " insufficient number of nodes on k direction."
-		            << " Can't create elements." << std::endl;
+		            << " Can't create elements."
+			    << Color::def << std::endl;
                 else
                   {
                     retval= ElemPtrArray3d(numberOfLayers,ElemPtrArray(numberOfRows,numberOfColumns-1));
@@ -633,7 +661,7 @@ XC::ElemPtrArray3d XC::Element1D::sew(const SetEstruct &f1,const SetEstruct &f2)
   	    if(changed)
 	      std::cerr << __FUNCTION__
 	                << "; nodes were already assigned."
-	                << std::endl;
+	                << Color::def << std::endl;
             retval(i,1,1)= tmp;
           }
     return retval;
@@ -663,8 +691,9 @@ int XC::Element1D::initializeCoordTransf(void)
 	retval= theCoordTransf->initialize(theNodes[0], theNodes[1]);
 	if(retval != 0)
 	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; error initializing coordinate transformation\n";
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; error initializing coordinate transformation"
+	              << Color::def << std::endl;
 	    exit(-1);
 	  }
 
@@ -672,15 +701,16 @@ int XC::Element1D::initializeCoordTransf(void)
 
 	if(L == 0.0)
 	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; element has zero length\n";
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; element has zero length"
+	              << Color::def << std::endl;
 	    exit(-1);
 	  }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; the element has not coordinate transformation."
-		<< std::endl;
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -689,9 +719,9 @@ XC::CrdTransf *XC::Element1D::checkCoordTransf(void)
   {
     CrdTransf *ct= getCoordTransf();
     if(!ct)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; coordinate transformation not defined."
-                << std::endl;
+                << Color::def << std::endl;
     return ct;
   }
 
@@ -700,9 +730,9 @@ const XC::CrdTransf *XC::Element1D::checkCoordTransf(void) const
   {
     const CrdTransf *ct= getCoordTransf();
     if(!ct)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; coordinate transformation not defined."
-                << std::endl;
+                << Color::def << std::endl;
     return ct;
   }
 
@@ -871,16 +901,18 @@ XC::CrdTransf *XC::Element1D::recvCoordTransf(int posFlag,const int &posClassTag
           {
             ptr= comm.getNewCrdTransf(getDbTagDataPos(posClassTag));
             if(!ptr)
-              std::cerr << getClassName() << "::" << __FUNCTION__
-			<< "; ran out of memory\n";
+              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			<< "; ran out of memory."
+		        << Color::def << std::endl;
           }
         if(ptr)
           {
             int res= comm.receiveMovable(*ptr,dt,CommMetaData(posDbTag));
             ptr->revertToLastCommit();// Revert the crdtrasf to its last committed state
             if(res<0)
-              std::cerr << getClassName() << "::" << __FUNCTION__
-			<< "; failed to receive vector data\n";
+              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			<< "; failed to receive vector data."
+		        << Color::def << std::endl;
           }
       }
     return ptr;
@@ -896,9 +928,9 @@ XC::CrdTransf2d *XC::Element1D::recvCoordTransf2d(int posFlag,const int &posClas
         retval= dynamic_cast<CrdTransf2d *>(tmp);
         if(!retval)
           {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "Incompatible transformation type."
-                      << std::endl;
+                      << Color::def << std::endl;
             delete tmp;
           }
       }
@@ -915,9 +947,9 @@ XC::CrdTransf3d *XC::Element1D::recvCoordTransf3d(int posFlag,const int &posClas
         retval= dynamic_cast<CrdTransf3d *>(tmp);
         if(!retval)
           {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "Incompatible transformation type."
-                      << std::endl;
+                      << Color::def << std::endl;
             delete tmp;
           }
       }

@@ -32,6 +32,7 @@
 #include "utility/geom/pos_vec/Vector2d.h"
 #include "material/section/repres/CrossSectionProperties3d.h"
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 double proto_beam_3d_extrapolation_data[4]= {1.0,0.0, 0.0,1.0};
 
@@ -50,14 +51,16 @@ void XC::ProtoBeam3d::set_material(const Material *m)
 	    physicalProperties.copyPropsFrom(scc);
 	  }
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                     << "; material type: '" << m->getClassName()
-	            << "' is not valid.\n";
+	            << "' is not valid."
+	            << Color::def << std::endl;
       }
     else
       if(verbosity>0)
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; pointer to material is null." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; pointer to material is null."
+		  << Color::def << std::endl;
   }
 
 //! @brief Default constructor.
@@ -233,8 +236,9 @@ double XC::ProtoBeam3d::getWeakAxisAngle(void) const
 const XC::Vector &XC::ProtoBeam3d::computeCurrentStrain(void) const
   {
     static Vector retval;
-    std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; not implemented yet.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+              << Color::def << std::endl;
     return retval;
   }
 
@@ -315,8 +319,11 @@ int XC::ProtoBeam3d::commitState(void)
     int retVal = BeamColumn::commitState();
     // call element commitState to do any base class stuff
     if(retVal != 0)
-      { std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; failed in base class."; }
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; failed in base class."
+	          << Color::def << std::endl;
+      }
     retVal+= physicalProperties.commitState();
     return retVal;
   }
@@ -392,9 +399,10 @@ boost::python::list XC::ProtoBeam3d::getValuesAtNodes(const std::string &code, b
       }
     else if(code=="strain")
       {
-	std::clog << getClassName() << "::" << __FUNCTION__
+	std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	          << "; the strain value correspond to the"
-	          << " average on the element." << std::endl;
+	          << " average on the element."
+		  << Color::def << std::endl;
 	const Vector strain= getSectionDeformation();
 	for(int i= 0;i<nNodes;i++)
 	  retval.append(strain);

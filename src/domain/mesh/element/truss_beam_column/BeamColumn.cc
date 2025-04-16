@@ -29,6 +29,7 @@
 #include "BeamColumn.h"
 #include <material/section/PrismaticBarCrossSection.h>
 #include <utility/matrix/Matrix.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 double beam_column_extrapolation_data[4]= {1.0,0.0, 0.0,1.0};
 XC::Matrix beam_column_extrapolation_matrix(beam_column_extrapolation_data,2,2); // identity matrix.
@@ -47,15 +48,17 @@ XC::BeamColumn::BeamColumn(int tag, int classTag, int Nd1, int Nd2)
 //! @brief Returns a pointer to the i-th section of the element.
 const XC::PrismaticBarCrossSection *XC::BeamColumn::getSectionPtr(const size_t &i) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; not implemented yet.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+              << Color::def << std::endl;
     return nullptr;
   }
 
 const XC::Matrix &XC::BeamColumn::getExtrapolationMatrix(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; not implemented yet.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+              << Color::def << std::endl;
     return beam_column_extrapolation_matrix;
   }
 
