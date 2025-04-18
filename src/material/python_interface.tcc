@@ -45,33 +45,33 @@ class_<XC::ResponseId, bases<XC::ID> >("ResponseId")
   .def("getComponentIndexesFromCode", getComponentIndexesFromCodePy_int, "Return the indexes of the response components corresponding to the the given integer.")
   ;
 
-class_<XC::RespPMz, bases<XC::ResponseId>, boost::noncopyable >("RespPMz", no_init);
+class_<XC::RespPMz, bases<XC::ResponseId> >("RespPMz");
 
-class_<XC::RespPMzV, bases<XC::ResponseId>, boost::noncopyable >("RespPMzV", no_init);
+class_<XC::RespPMzV, bases<XC::ResponseId> >("RespPMzV");
 
-class_<XC::RespVyP, bases<XC::ResponseId>, boost::noncopyable >("RespVyP", no_init);
+class_<XC::RespVyP, bases<XC::ResponseId> >("RespVyP");
 
-class_<XC::RespPMzMy, bases<XC::ResponseId>, boost::noncopyable >("RespPMzMy", no_init);
+class_<XC::RespPMzMy, bases<XC::ResponseId> >("RespPMzMy");
 
-class_<XC::RespPMzMyT, bases<XC::ResponseId>, boost::noncopyable >("RespPMzMyT", no_init);
+class_<XC::RespPMzMyT, bases<XC::ResponseId> >("RespPMzMyT");
 
-class_<XC::RespPMzVyMyVzT, bases<XC::ResponseId>, boost::noncopyable >("RespPMzVyMyVzT", no_init);
+class_<XC::RespPMzVyMyVzT, bases<XC::ResponseId> >("RespPMzVyMyVzT");
 
-class_<XC::RespFiberSectionShear2d, bases<XC::ResponseId>, boost::noncopyable >("RespFiberSectionShear2d", no_init);
+class_<XC::RespFiberSectionShear2d, bases<XC::ResponseId> >("RespFiberSectionShear2d");
 
-class_<XC::RespFiberSectionShear3d, bases<XC::ResponseId>, boost::noncopyable >("RespFiberSectionShear3d", no_init);
+class_<XC::RespFiberSectionShear3d, bases<XC::ResponseId> >("RespFiberSectionShear3d");
 
-class_<XC::RespPVyMz, bases<XC::ResponseId>, boost::noncopyable >("RespPVyMz", no_init);
+class_<XC::RespPVyMz, bases<XC::ResponseId> >("RespPVyMz");
 
-class_<XC::RespMembraneMaterial, bases<XC::ResponseId>, boost::noncopyable >("RespMembraneMaterial", no_init);
+class_<XC::RespMembraneMaterial, bases<XC::ResponseId> >("RespMembraneMaterial");
 
-class_<XC::RespPlateMaterial, bases<XC::ResponseId>, boost::noncopyable >("RespPlateMaterial", no_init);
+class_<XC::RespPlateMaterial, bases<XC::ResponseId> >("RespPlateMaterial");
 
-class_<XC::RespShellMaterial, bases<XC::ResponseId>, boost::noncopyable >("RespShellMaterial", no_init);
+class_<XC::RespShellMaterial, bases<XC::ResponseId> >("RespShellMaterial");
 
-class_<XC::RespSolidMecanics1DMaterial, bases<XC::ResponseId>, boost::noncopyable >("RespSolidMecanics1DMaterial", no_init);
+class_<XC::RespSolidMecanics1DMaterial, bases<XC::ResponseId> >("RespSolidMecanics1DMaterial");
 
-class_<XC::RespSolidMecanics2DMaterial, bases<XC::ResponseId>, boost::noncopyable >("RespSolidMecanics2DMaterial", no_init);
+class_<XC::RespSolidMecanics2DMaterial, bases<XC::ResponseId> >("RespSolidMecanics2DMaterial");
 
-class_<XC::RespSolidMecanics3DMaterial, bases<XC::ResponseId>, boost::noncopyable >("RespSolidMecanics3DMaterial", no_init);
+class_<XC::RespSolidMecanics3DMaterial, bases<XC::ResponseId> >("RespSolidMecanics3DMaterial");
 
