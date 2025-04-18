@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-''' home made test
-    SlidingVectorLoad class verification (3D structural mechanics).
+''' SlidingVectorLoad class verification (3D structural mechanics).
 
     This example illustrates how, in certain cases, the algorithm gives a
     result that is statically correct but mechanically unsatisfactory due to 
@@ -42,7 +41,7 @@ for n in [n1, n2, n3, n4]:
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-modelSpace.setCurrentLoadPattern("0")
+modelSpace.setCurrentLoadPattern(lp0.name)
 ## Load nodes n1 and n2
 lVectorA= xc.Vector([0,0,-f, 0,0,0])
 slidingVectorLoadAa= loads.SlidingVectorLoad(name= 'test', nodes= [n1,n2], pntCoord= [0.0,0.0,0.0], loadVector= lVectorA)
