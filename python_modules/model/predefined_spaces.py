@@ -1520,7 +1520,7 @@ class PredefinedSpace(object):
         vComp= 0
         if(compName): # Defined property has components.
             propertyName+= compName
-            vComp= function(compName)
+            vComp= function(compName, responseId= None)
         for n in nodSet:
             n.setProp(propertyName, n.getProp(propToDefine)[vComp])
         return propertyName
@@ -2684,6 +2684,11 @@ class StructuralMechanics3D(StructuralMechanics):
                     retval= self.gamma_z
                 elif(compName == 'theta'): # torsion along x-axis.
                     retval= self.theta
+                # Shell generalized strains.
+                if(retval is None):
+                    shellResp= xc.RespShellMaterial()
+                    rId= shellResp.getComponentIdFromString(compName)
+                    retval= shellResp.index(rId)
             else:
                 rId= responseId.getComponentIdFromString(compName)
                 retval= responseId.index(rId)
