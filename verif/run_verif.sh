@@ -1099,6 +1099,7 @@ python tests/loads/strain_loads/shell/shell_strain_load_02.py
 python tests/loads/strain_loads/shell/shell_strain_load_03.py
 python tests/loads/strain_loads/shell/shell_strain_load_04.py
 python tests/loads/strain_loads/shell/shell_strain_load_05.py
+python tests/loads/strain_loads/shell/shell_strain_load_06.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_01.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_02.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_03.py
@@ -1911,15 +1912,12 @@ python tests/postprocess/limit_state_checking/generic/test_select_critical_combs
 ##python tests/postprocess/vtk/dibuja_edges.py
 echo "$BLEU" "  Graphic output." "$NORMAL"
 python tests/postprocess/vtk/test_display_blocks.py
-python tests/postprocess/vtk/test_beam3d_bending_moment_belly_01.py
-python tests/postprocess/vtk/test_beam3d_bending_moment_belly_02.py
 python tests/postprocess/vtk/test_display_node_value_diagram.py
 python tests/postprocess/vtk/test_set_background_color.py
 python tests/postprocess/vtk/test_display_zero_length_local_axes_01.py
 python tests/postprocess/vtk/test_display_zero_length_local_axes_02.py
 python tests/postprocess/vtk/test_display_reactions_01.py
 python tests/postprocess/vtk/test_display_eigenvectors_01.py
-python tests/postprocess/vtk/test_display_stresses_on_brick_01.py
 echo "$BLEU" "    Graphic output. Loads." "$NORMAL"
 python tests/postprocess/vtk/display_loads/test_display_loads_01.py
 python tests/postprocess/vtk/display_loads/test_display_loads_02.py
@@ -1945,6 +1943,11 @@ python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load
 python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_loads_01.py
 python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_loads_02.py
 python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_loads_03.py
+echo "$BLEU" "    Graphic output. Material response." "$NORMAL"
+python tests/postprocess/vtk/display_mat_response/test_beam3d_bending_moment_belly_01.py
+python tests/postprocess/vtk/display_mat_response/test_beam3d_bending_moment_belly_02.py
+python tests/postprocess/vtk/display_mat_response/test_display_stresses_on_brick_01.py
+python tests/postprocess/vtk/display_mat_response/test_display_strains_on_shell_01.py
 
 # Report tests.
 echo "$BLEU" "  Report output." "$NORMAL"
