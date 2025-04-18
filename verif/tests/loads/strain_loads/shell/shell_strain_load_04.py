@@ -119,12 +119,13 @@ if(error<1e-5):
 else:
     lmsg.error(fname+' ERROR.')
 
+
 # # Graphic stuff.
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
-# oh.displayFEMesh()
-# oh.displayLoads()
-# # oh.displayEigenvectors(1)
-# # oh.displayEigenResult(1)
-# oh.displayLocalAxes()
-# oh.displayReactions()
+# # oh.displayFEMesh()
+# # oh.displayLocalAxes()
+# for strainLabel in modelSpace.shellStrainComponents:
+#     oh.displayLoads(elLoadComp= strainLabel)
+# # # oh.displayDispRot(itemToDisp='uZ', defFScale= 100.0)
+# # # oh.displayReactions()

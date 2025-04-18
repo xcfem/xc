@@ -111,6 +111,8 @@ else:
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 # # oh.displayFEMesh()
-# oh.displayLocalAxes()
-# oh.displayDispRot(itemToDisp='uZ', defFScale= 100.0)
-# # oh.displayReactions()
+# # oh.displayLocalAxes()
+# for strainLabel in modelSpace.shellStrainComponents:
+#     oh.displayLoads(elLoadComp= strainLabel)
+# # # oh.displayDispRot(itemToDisp='uZ', defFScale= 100.0)
+# # # oh.displayReactions()
