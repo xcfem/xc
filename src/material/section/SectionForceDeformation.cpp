@@ -70,6 +70,7 @@
 #include "utility/actor/actor/MovableMatrix.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "preprocessor/prep_handlers/MaterialHandler.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 const XC::Matrix *ptr_section_tangent= nullptr;
@@ -177,24 +178,27 @@ double XC::SectionForceDeformation::getRho(void) const
 //! @brief Returns the mass per unit length of the section.
 double XC::SectionForceDeformation::getLinearRho(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not defined yet" << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; not defined yet"
+	      << Color::def << std::endl;
     return 0.0;
   }
 
 //! @brief Returns the mass per unit area of the section.
 double XC::SectionForceDeformation::getArealRho(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not defined yet" << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; not defined yet"
+	      << Color::def << std::endl;
     return 0.0;
   }
 
 //! @brief Returns the mass per unit volume of the section.
 double XC::SectionForceDeformation::getVolumetricRho(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not defined yet" << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; not defined yet"
+	      << Color::def << std::endl;
     return 0.0;
   }
 
@@ -208,7 +212,8 @@ XC::SectionForceDeformation::setResponse(const std::vector<std::string> &argv, I
 
         XC::Vector *theVector= new Vector(this->getOrder());
         if (theVector == 0) {
-            std::cerr << "WARNING XC::SectionForceDeformation::setResponse() - out of memory\n";
+            std::cerr << "WARNING XC::SectionForceDeformation::setResponse() - out of memory."
+                      << Color::def << std::endl;
             return -1;
         } 
         sectInfo.theVector= theVector;
@@ -222,7 +227,8 @@ XC::SectionForceDeformation::setResponse(const std::vector<std::string> &argv, I
 
         XC::Vector *theVector= new Vector(this->getOrder());
         if (theVector == 0) {
-            std::cerr << "WARNING XC::SectionForceDeformation::setResponse() - out of memory\n";
+            std::cerr << "WARNING SectionForceDeformation::setResponse() - out of memory."
+                      << Color::def << std::endl;
             return -1;
         } 
         sectInfo.theVector= theVector;
@@ -236,7 +242,8 @@ XC::SectionForceDeformation::setResponse(const std::vector<std::string> &argv, I
                 const int order= this->getOrder();
                 XC::Matrix *newMatrix= new Matrix(order,order);
                 if (newMatrix == 0) {
-                        std::cerr << "WARNING XC::SectionForceDeformation::setResponse() - out of memory\n";
+                        std::cerr << "WARNING XC::SectionForceDeformation::setResponse() - out of memory."
+                                  << Color::def << std::endl;
                         return -1;
                 } 
                 sectInfo.theMatrix= newMatrix;
@@ -312,10 +319,11 @@ XC::Matrix XC::SectionForceDeformation::getValues(const std::string &cod, bool s
       { retval= Matrix(getStressResultant()); }
     else if((cod == "stress") || (cod == "stresses"))
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; stresses are not constant in the section."
-	          << " Returning internal forces.";
-	retval= Matrix(this->getSectionDeformation());
+	          << " Returning internal forces."
+	          << Color::def << std::endl;
+	retval= Matrix(this->getStressResultant());
       }
     else if(std::regex_match(cod, internal_forces_regexp)) // internal force.
       {
@@ -432,7 +440,8 @@ double XC::SectionForceDeformation::getSectionDeformationByName(const std::strin
       retval= getSectionDeformation(SECTION_RESPONSE_T);
     else
       std::cerr << "Deformation code: '" << cod 
-                << "' unknown." << std::endl;
+                << "' unknown."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -532,8 +541,9 @@ double XC::SectionForceDeformation::getRhoSensitivity(int gradNumber)
 //! @brief Return the energy stored in the material.
 double XC::SectionForceDeformation::getEnergy(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented yet." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << Color::def << std::endl;
     return 0;
   }  
 
