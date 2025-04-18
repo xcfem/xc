@@ -1106,6 +1106,7 @@ python tests/loads/strain_loads/shell/shell_grad_strain_load_03.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_04.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_05.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_06.py
+python tests/loads/strain_loads/shell/shell_grad_strain_load_07.py
 echo "$BLEU" "      Strain loads on bricks." "$NORMAL"
 python tests/loads/strain_loads/bricks/brick_strain_load_01.py
 python tests/loads/strain_loads/bricks/brick_strain_load_02.py
