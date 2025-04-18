@@ -2728,6 +2728,11 @@ class StructuralMechanics3D(StructuralMechanics):
                     retval= self.Qz
                 elif(compName == 'T'): # torsion along x-axis.
                     retval= self.Qz
+                # Shell generalized stresses.
+                if(retval is None):
+                    shellResp= xc.RespShellMaterial()
+                    rId= shellResp.getComponentIdFromString(compName)
+                    retval= shellResp.index(rId)
             else:
                 rId= responseId.getComponentIdFromString(compName)
                 retval= responseId.index(rId)
