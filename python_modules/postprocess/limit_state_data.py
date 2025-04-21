@@ -1291,6 +1291,14 @@ def read_int_forces_dict(intForcCombFileName, setCalc=None, vonMisesStressId= 'm
                     elementTags.add(tagElem)
                     crossSectionInternalForces= get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, key= k, vonMisesStressId= vonMisesStressId)
                     internalForcesValues[tagElem].append(crossSectionInternalForces)
+    if(len(elementTags)==0):
+        methodName= sys._getframe(0).f_code.co_name
+        if(setElTags):
+            errMsg= "; no internal forces for elements in set: '"+setCalc.name+"'."
+        else:
+            errMsg= "; no internal forces for any element."
+        lmsg.error(methodName+errMsg)
+        
     return (elementTags, idCombs, internalForcesValues)
 
 class GaussPointStresses(stresses.Stresses3D):
