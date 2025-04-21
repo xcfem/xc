@@ -243,7 +243,7 @@ class RCMaterialDistribution(object):
              for s in self.sectionDefinition.sections:
                  s.getConcreteType().initTensStiff= True
         # Create the fiber sections ((RCsimpleSections) associated whith each element in the container.
-        self.sectionDefinition.createRCsections(preprocessor= preprocessor, matDiagType= matDiagType) #creates
+        numFiberSections= self.sectionDefinition.createRCsections(preprocessor= preprocessor, matDiagType= matDiagType)
         if(threeDim):
             self.sectionDefinition.calcInteractionDiagrams(preprocessor)
         else:
