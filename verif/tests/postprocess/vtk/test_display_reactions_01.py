@@ -112,4 +112,4 @@ if testOK:
 else:
     lmsg.error(fname+' ERROR.')
 
-os.remove(outputFileName)
+os.remove(outputFileName) # Clean after yourself.
