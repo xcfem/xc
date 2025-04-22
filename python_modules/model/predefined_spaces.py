@@ -482,7 +482,8 @@ class PredefinedSpace(object):
         else: #LCPT I don't like this too much, I prefer let the user make the program to crass. Maybe a Warning? 
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; item '+str(componentName) + ' is not a valid component. Available components are: N1, N2, N12, M1, M2, M12, Q1, Q2')
+            errMsg= '; item '+str(componentName) + ' is not a valid component. Available components are: N1, N2, N12, M1, M2, M12, Q1, Q2'
+            lmsg.error(className+'.'+methodName+errMsg)
             return 'N1'
         
     def setPreprocessor(self, preprocessor: xc.Preprocessor):
@@ -1783,8 +1784,9 @@ class PredefinedSpace(object):
             of the model elements.
 
         :param inputFileName: name of the input file containing the data.
+        :returns: number of properties read.
         '''
-        control_vars.readControlVars(preprocessor= self.preprocessor, inputFileName= inputFileName)
+        return control_vars.read_control_vars(preprocessor= self.preprocessor, inputFileName= inputFileName)
 
     def newRecorder(self, recorderType, outputHandler= None):
         ''' Creates a new recorder on the problem domain.
