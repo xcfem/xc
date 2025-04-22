@@ -133,9 +133,9 @@ oh.displayStrains(itemToDisp= 'epsilon_1',fileName= outputFileName)
 testOK= os.path.isfile(outputFileName) and (err<.03)
 
 from misc_utils import log_messages as lmsg
-fname= os.path.basename(__file__)
 if(testOK):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
 
+os.remove(outputFileName) # Clean after yourself.
