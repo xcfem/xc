@@ -1949,6 +1949,8 @@ python tests/postprocess/vtk/display_mat_response/test_beam3d_bending_moment_bel
 python tests/postprocess/vtk/display_mat_response/test_beam3d_bending_moment_belly_02.py
 python tests/postprocess/vtk/display_mat_response/test_display_stresses_on_brick_01.py
 python tests/postprocess/vtk/display_mat_response/test_display_strains_on_shell_01.py
+echo "$BLEU" "    Graphic output. Material response." "$NORMAL"
+python tests/postprocess/vtk/isplay_limit_state_results/test_display_shear_uls_on_shells_01.py
 
 # Report tests.
 echo "$BLEU" "  Report output." "$NORMAL"
