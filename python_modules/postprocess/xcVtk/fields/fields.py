@@ -162,7 +162,7 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
         self.extrapolate()
         displaySettings.displayMesh(self.xcSet, field= self, diagrams= None, caption= caption, unitDescription= unitDescription, fileName= fileName, defFScale= defFScale)
 
-def getScalarFieldFromControlVar(attributeName, argument, xcSet, component, fUnitConv, rgMinMax):
+def get_scalar_field_from_control_var(attributeName, argument, xcSet, component, fUnitConv, rgMinMax):
     '''return an scalar field that represents the control var over the 
                  elements in the set.
 
