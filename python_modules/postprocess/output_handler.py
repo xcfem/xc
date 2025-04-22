@@ -1374,7 +1374,7 @@ class OutputHandler(object):
         attributeName= limitStateLabel + sectRef
         fUnitConv, unitDescription= self.outputStyle.getUnitParameters(argument)
 
-        field= fields.getScalarFieldFromControlVar(attributeName= attributeName,argument= argument, xcSet= setToDisplay, component= component, fUnitConv= fUnitConv, rgMinMax= rgMinMax)
+        field= fields.get_scalar_field_from_control_var(attributeName= attributeName,argument= argument, xcSet= setToDisplay, component= component, fUnitConv= fUnitConv, rgMinMax= rgMinMax)
         captionTexts= self.outputStyle.getCaptionTextsDict()
         limitStateLabelCaption= captionTexts[limitStateLabel]
         if(argument in captionTexts):

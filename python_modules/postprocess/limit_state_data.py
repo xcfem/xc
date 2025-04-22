@@ -471,10 +471,12 @@ class LimitStateData(object):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
         lmsg.error(className+'.'+methodName+"; not implemented yet.")
+        return 0
 
     def getController(self, code_limit_state_checking):
         ''' Return a controller corresponding to this limit state.
@@ -684,8 +686,9 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifBucklingFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifBucklingFile())
         
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' Perform buckling limit state checking.
@@ -752,8 +755,9 @@ class NormalStressesRCLimitStateData(ULS_LimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifNormStrFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifNormStrFile())
             
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' Perform limit state checking.
@@ -791,8 +795,9 @@ class NormalStressesSteelLimitStateData(ULS_LimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifNormStrFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifNormStrFile())
     
     def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
         ''' Perform limit state checking.
@@ -826,8 +831,9 @@ class ShearResistanceRCLimitStateData(ULS_LimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifShearFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifShearFile())
     
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' Perform limit state checking.
@@ -864,8 +870,9 @@ class ShearResistanceSteelLimitStateData(ULS_LimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifShearFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifShearFile())
     
     def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
         ''' Perform limit state checking.
@@ -900,8 +907,9 @@ class TorsionResistanceRCLimitStateData(ULS_LimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifTorsionFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifTorsionFile())
             
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' Perform limit state checking.
@@ -1005,8 +1013,9 @@ class RareLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackRareFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackRareFile())
 
 class FreqLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under frequent loads limit state data.'''
@@ -1024,8 +1033,9 @@ class FreqLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackFreqFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackFreqFile())
             
 class QPLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
@@ -1043,8 +1053,9 @@ class QPLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackQpermFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackQpermFile())
                 
 class FreqLoadsDisplacementControlLimitStateData(SLS_LimitStateData):
     ''' Displacement control under frequent loads limit state data.'''
