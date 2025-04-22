@@ -2342,8 +2342,9 @@ class RareLoadsCrackControlLimitStateData(CrackControlLimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackRareFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackRareFile())
 
 class FreqLoadsCrackControlLimitStateData(CrackControlLimitStateData):
     ''' Reinforced concrete crack control under frequent loads limit state data.'''
@@ -2361,8 +2362,9 @@ class FreqLoadsCrackControlLimitStateData(CrackControlLimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackFreqFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackFreqFile())
             
 class QPLoadsCrackControlLimitStateData(CrackControlLimitStateData):
     ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
@@ -2380,8 +2382,9 @@ class QPLoadsCrackControlLimitStateData(CrackControlLimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackQpermFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackQpermFile())
 
 rareLoadsCrackControl= RareLoadsCrackControlLimitStateData()
 freqLoadsCrackControl= FreqLoadsCrackControlLimitStateData()
