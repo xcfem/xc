@@ -1619,19 +1619,21 @@ class SteelBucklingControlVars(BucklingControlVarsBase):
         self.strengthReductionFactors= dct['strengthReductionFactors']
         self.bucklingResistance= dct['bucklingResistance']
 
-def readControlVars(preprocessor, inputFileName):
+def read_control_vars(preprocessor, inputFileName):
     ''' Read control var data from the input file an put them as properties
         of the model elements and/or nodes.
 
     :param preprocessor: pre-processor for the finite element model.
     :param inputFileName: name of the input file containing the data.
+    :returns: number of properties read.
     '''
+    retval= 0
     try:
         with open(inputFileName) as f:
             dataDict= json.load(f)
     except IOError:
         lmsg.error("can't read from file: "+str(inputFileName))
-        return
+        return retval
     if 'elementData' in dataDict: # Control variables on elements.
         elementData= dataDict['elementData']
         elementHandler= preprocessor.getElementHandler
@@ -1642,6 +1644,7 @@ def readControlVars(preprocessor, inputFileName):
             for propKey in elementControlVars: # iterate on element control vars.
                 propValue= eval(elementControlVars[propKey])
                 element.setProp(propKey, propValue)
+                retval+= 1
     if 'nodeData' in dataDict: # Control variables on nodes.
         nodeData= dataDict['nodeData']
         nodeHandler= preprocessor.getNodeHandler
@@ -1652,6 +1655,8 @@ def readControlVars(preprocessor, inputFileName):
             for propKey in nodeControlVars: # iterate on node control vars.
                 propValue= eval(nodeControlVars[propKey])
                 node.setProp(propKey, propValue)
+                retval+= 1
+    return retval
 
 def get_control_vars_dict(elements, controlVarName, sections):
     '''Return a dictionary with the values of the control variables for each
@@ -1948,7 +1953,7 @@ def extrapolate_control_var(elemSet, propName, argument, initialValue= 0.0):
                 n.setProp(nodePropName,oldValue+value)
     #Divide by number of elements in the set that touch the node.
     preprocessor= elemSet.getPreprocessor
-    for tag in touchedNodes: # Nodes touched by the elements inthe set.
+    for tag in touchedNodes: # Nodes touched by the elements in the set.
         n= preprocessor.getNodeHandler.getNode(tag)
         denom= float(touchedNodes[tag])
         newValue= n.getProp(nodePropName)/denom
