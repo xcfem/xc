@@ -237,5 +237,7 @@ bool Polygon2d::Overlap(inputIterator begin, inputIterator end) const
     return retval;
   }
 
+Polygon2d remove_duplicated_vertices(const Polygon2d &p,const GEOM_FT &tol= -1.0);
+
 #endif
 

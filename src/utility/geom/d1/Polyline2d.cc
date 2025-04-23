@@ -32,6 +32,7 @@
 #include "utility/kernel/python_utils.h"
 #include "utility/geom/d2/2d_polygons/Polygon2d.h"
 #include "utility/geom/d2/HalfPlane2d.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Default constructor.
 Polyline2d::Polyline2d(void)
@@ -82,9 +83,9 @@ size_t Polyline2d::getNumSegments(void) const
 //! @brief Return the list of the vertices.
 const GeomObj::list_Pos2d &Polyline2d::getVertices(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << " is deprecated. Use getVertexList."
-              << std::endl;
+              << Color::def << std::endl;
     return *this;
   }
 
@@ -227,14 +228,14 @@ Segment2d Polyline2d::getNearestSegment(const Pos2d &p) const
       retval= Segment2d(*i,*j);
     else
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; nearest segment to:" << p
-	          << " not found. ";
+	          << " not found.";
         if(this->size()>2)
 	  std::cerr << " Unknown error.";
 	else
 	  std::cerr << " Polyline is empty.";
-	std::cerr << std::endl;
+	std::cerr << Color::def << std::endl;
       }
     return retval;
   }
@@ -355,9 +356,10 @@ Segment2d Polyline2d::getSegment(const const_iterator &i) const
     const_iterator j= i; j++;
     if(j==end())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << ": the vertex is the last one "
-		  << " of the polyline." << std::endl;
+		  << " of the polyline."
+		  << Color::red << std::endl;
         return Segment2d();
       }
     return Segment2d(*i,*j);
@@ -368,10 +370,11 @@ Segment2d Polyline2d::getSegment(const size_t &i) const
   {
     const size_t ns= getNumSegments();
     if(i>ns)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; you asked for the " << i
 	        << "-th and " << ns
-                << "-th is the last one." << std::endl;
+                << "-th is the last one."
+		<< Color::def << std::endl;
     Segment2d s(Vertice(i),Vertice(i+1));
     return s;
   }
@@ -381,10 +384,11 @@ Segment2d Polyline2d::getSegment0(const size_t &i) const
   {
     const size_t ns= getNumSegments();
     if(i>ns)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; you asked for the " << i
 	        << "-th and " << ns
-                << "-th is the last one." << std::endl;
+                << "-th is the last one."
+		<< Color::def << std::endl;
     Segment2d s(Vertice0(i),Vertice0(i+1));
     return s;
   }
@@ -488,8 +492,9 @@ Vector2d Polyline2d::getCurvatureVectorAtVertex(const_iterator nth) const
     const size_t sz= this->size();
     if(sz<2) // No segments.
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-	      << ";ERROR: no segments, so no curvature vector." << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << ";ERROR: no segments, so no curvature vector."
+		  << Color::def << std::endl;
       }
     else if(sz==2) // One segment only.
       {
@@ -529,9 +534,9 @@ std::vector<Vector2d> Polyline2d::getCurvatureVectorAtVertices(void) const
     std::vector<Vector2d> retval(sz);
     if(sz<2) // No segments.
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << ";ERROR: no segments, so no curvature vectors."
-		  << std::endl;
+		  << Color::def << std::endl;
       }
     else if(sz==2) // One segment only.
       {
@@ -579,8 +584,9 @@ Vector2d Polyline2d::getCurvatureVectorAtLength(const GEOM_FT &s) const
     const size_t sz= this->size();
     if(sz<2) // No segments.
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-	      << ";ERROR: no segments, so no curvature vector." << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << ";ERROR: no segments, so no curvature vector."
+		  << Color::def << std::endl;
       }
     else if(sz==2) // One segment only.
       {
@@ -652,9 +658,9 @@ std::vector<Vector2d> Polyline2d::getNormalVectorAtVertices(void) const
     std::vector<Vector2d> retval(sz);
     if(sz<2) // No segments.
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << ";ERROR: no segments, so no normal vectors."
-		  << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; ERROR: no segments, so no normal vectors."
+		  << Color::def << std::endl;
       }
     else if(sz==2) // One segment only.
       {
@@ -816,8 +822,9 @@ VectorPos2d Polyline2d::Divide(const std::vector<double> &proportions) const
 	  }  
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << " argument must not be empty." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << " argument must not be empty."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -837,20 +844,23 @@ boost::python::list Polyline2d::DividePy(const boost::python::list &proportions)
 
 GEOM_FT Polyline2d::Ix(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented" << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented"
+	      << Color::def << std::endl;
     return 0.0;
   }
 GEOM_FT Polyline2d::Iy(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented" << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented"
+	      << Color::def << std::endl;
     return 0.0;
   }
 GEOM_FT Polyline2d::Iz(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented" << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented"
+	      << Color::def << std::endl;
     return 0.0;
   }
 
@@ -1196,3 +1206,23 @@ GeomObj::list_Pos2d intersection(const Ray2d &sr,const Polyline2d &p)
   { return p.getIntersection(sr); }
 GeomObj::list_Pos2d intersection(const Segment2d &sg,const Polyline2d &p)
   { return p.getIntersection(sg); }
+
+//! @brief Remove the consecutive vertices that are at distance less than than tol.
+Polyline2d remove_duplicated_vertices(const Polyline2d &p,const GEOM_FT &tol)
+  {
+    Polyline2d retval(p);
+    // Compute tolerance.
+    GEOM_FT local_tol= tol;
+    if(local_tol<0.0)
+      {
+	const size_t sz= retval.size();
+	if(sz>1)
+	  {
+	    // Compute average segment length.
+	    const GEOM_FT avgLength= retval.getLength()/GEOM_FT(sz-1);
+	    local_tol= avgLength/1e4;
+	  }
+      }
+    retval.removeRepeated(local_tol);
+    return retval;
+  }

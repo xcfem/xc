@@ -75,6 +75,14 @@ class HalfPlane2d : public Surface2d
     virtual bool In(const Ray2d &, const double &tol= 0.0) const;
     virtual bool In(const Segment2d &, const double &tol= 0.0) const;
     virtual bool In(const Polyline2d &, const double &tol= 0.0) const;
+    virtual bool In(const Polygon2d &, const double &tol= 0.0) const;
+    
+    bool Out(const Pos2d &p, const double &tol= 0.0) const;
+    bool Out(const Line2d &, const double &tol= 0.0) const;
+    bool Out(const Ray2d &, const double &tol= 0.0) const;
+    bool Out(const Segment2d &, const double &tol= 0.0) const;
+    bool Out(const Polyline2d &, const double &tol= 0.0) const;
+    bool Out(const Polygon2d &, const double &tol= 0.0) const;
 
     //! @brief Return the signed distance from the point to the half-plane.
     GEOM_FT DistSigno(const Pos2d &p) const

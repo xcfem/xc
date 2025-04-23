@@ -24,6 +24,20 @@ class_<Surface2d, bases<GeomObj2d>, boost::noncopyable  >("Surface2d", no_init)
   .def("getDimension", &Surface2d::Dimension, "Return the dimension of the object.")
   ;
 
+bool (HalfPlane2d::*HalfPlaneInPos2d)(const Pos2d &, const double &) const= &HalfPlane2d::In;
+bool (HalfPlane2d::*HalfPlaneInLine2d)(const Line2d &, const double &) const= &HalfPlane2d::In;
+bool (HalfPlane2d::*HalfPlaneInRay2d)(const Ray2d &, const double &) const= &HalfPlane2d::In;
+bool (HalfPlane2d::*HalfPlaneInSegment2d)(const Segment2d &, const double &) const= &HalfPlane2d::In;
+bool (HalfPlane2d::*HalfPlaneInPolyline2d)(const Polyline2d &, const double &) const= &HalfPlane2d::In;
+bool (HalfPlane2d::*HalfPlaneInPolygon2d)(const Polygon2d &, const double &) const= &HalfPlane2d::In;
+
+bool (HalfPlane2d::*HalfPlaneOutPos2d)(const Pos2d &, const double &) const= &HalfPlane2d::In;
+bool (HalfPlane2d::*HalfPlaneOutLine2d)(const Line2d &, const double &) const= &HalfPlane2d::In;
+bool (HalfPlane2d::*HalfPlaneOutRay2d)(const Ray2d &, const double &) const= &HalfPlane2d::In;
+bool (HalfPlane2d::*HalfPlaneOutSegment2d)(const Segment2d &, const double &) const= &HalfPlane2d::In;
+bool (HalfPlane2d::*HalfPlaneOutPolyline2d)(const Polyline2d &, const double &) const= &HalfPlane2d::In;
+bool (HalfPlane2d::*HalfPlaneOutPolygon2d)(const Polygon2d &, const double &) const= &HalfPlane2d::In;
+
 bool (HalfPlane2d::*HalfPlaneExistIntersHalfPlane)(const HalfPlane2d &) const= &HalfPlane2d::intersects;
 bool (HalfPlane2d::*HalfPlaneExistIntersLine)(const Line2d &) const= &HalfPlane2d::intersects;
 bool (HalfPlane2d::*HalfPlaneExistIntersRay)(const Ray2d &) const= &HalfPlane2d::intersects;
@@ -33,6 +47,18 @@ class_<HalfPlane2d, bases<Surface2d> >("HalfPlane2d")
   .def(init<>())
   .def(init<Line2d>())
   .def(init<Line2d, Pos2d>())
+  .def("In",HalfPlaneInPos2d, "Return true if the argument lies inside this object.")
+  .def("In",HalfPlaneInLine2d, "Return true if the argument lies inside this object.")
+  .def("In",HalfPlaneInRay2d, "Return true if the argument lies inside this object.")
+  .def("In",HalfPlaneInSegment2d, "Return true if the argument lies inside this object.")
+  .def("In",HalfPlaneInPolyline2d, "Return true if the argument lies inside this object.")
+  .def("In",HalfPlaneInPolygon2d, "Return true if the argument lies inside this object.")
+  .def("Out",HalfPlaneOutPos2d, "Return true if the argument lies outinside this object.")
+  .def("Out",HalfPlaneOutLine2d, "Return true if the argument lies outinside this object.")
+  .def("Out",HalfPlaneOutRay2d, "Return true if the argument lies outinside this object.")
+  .def("Out",HalfPlaneOutSegment2d, "Return true if the argument lies outinside this object.")
+  .def("Out",HalfPlaneOutPolyline2d, "Return true if the argument lies outinside this object.")
+  .def("Out",HalfPlaneOutPolygon2d, "Return true if the argument lies outinside this object.")
   .def("intersects", HalfPlaneExistIntersHalfPlane, "return true if the intersection with the given half-plane exists.")
   .def("intersects", HalfPlaneExistIntersLine, "return true if the intersection with the given line exists.")
   .def("intersects", HalfPlaneExistIntersRay, "return true if the intersection with the given ray exists.")

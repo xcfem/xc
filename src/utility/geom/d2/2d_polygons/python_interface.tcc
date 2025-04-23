@@ -109,6 +109,9 @@ class_<Polygon2d, Polygon2d *, bases<PolygonalSurface2d> >("Polygon2d")
   .def("swap", &Polygon2d::swap,"Reverse the orientation of the polygon.")
   ;
 
+Polygon2d (*remove_duplicated_vertices_polygon_2d)(const Polygon2d &, const GEOM_FT &)= &remove_duplicated_vertices;
+def("remove_duplicated_vertices",remove_duplicated_vertices_polygon_2d, "Remove the consecutive vertices that are at distance less than than tol.");
+
 std::vector<double> (Quadrilateral2d::*get2DPointNaturalCoordinates)(const Pos2d &) const= &Quadrilateral2d::getNaturalCoordinates;
 boost::python::list (Quadrilateral2d::*get2dPointNi)(const Pos2d &) const= &Quadrilateral2d::NiPy;
 boost::python::list (Quadrilateral2d::*get2dPointsNi)(const boost::python::list &) const= &Quadrilateral2d::NiPy;

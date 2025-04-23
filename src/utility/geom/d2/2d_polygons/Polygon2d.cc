@@ -42,6 +42,8 @@
 #include <boost/geometry/geometries/polygon.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
 
+#include "utility/utils/misc_utils/colormod.h"
+
 Pos2d at(const Polygon2d &p, int i)
   {
     const int s= int(p.getNumVertices());
@@ -87,12 +89,14 @@ Polygon2d::Polygon2d(const std::list<Polygon2d> &lp)
       {
         (*this)= *lp.begin();
         if(lp.size()>1)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; list contains more than a polygon." << std::endl;
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; list contains more than a polygon."
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; empty list argument." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; empty list argument."
+		<< Color::def << std::endl;
   }
 
 //! @brief Constructor virtual.
@@ -118,8 +122,9 @@ Polygon2d Polygon2d::offset(const GEOM_FT &d) const
 	    // Try using a 2D polyline.	    
 	    Polyline2d tmp(*this);
 	    retval= Polygon2d(tmp.offset(d));
-            // std::cerr << getClassName() << "::" << __FUNCTION__
-	    // 	    << "; we get more than a polygon." << std::endl;
+            // std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	    // 	    << "; we get more than a polygon."
+	    //      << Color::def << std::endl;
             // retval.cgpol= *offset_polygons[0];
 	  }
 	else
@@ -175,9 +180,9 @@ Polygon2d Polygon2d::buffer(const GEOM_FT &buffer_distance) const
     if(numPolygons>0)
       {
 	if(numPolygons>1)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; we get more than a polygon. Only the first one will be returned."
-		    << std::endl;
+		    << Color::def << std::endl;
 	const polygon_type &polygon_result= result[0];
     
 	//getting the vertices back (except the last one because it's repeated).
@@ -189,9 +194,9 @@ Polygon2d Polygon2d::buffer(const GEOM_FT &buffer_distance) const
 	  }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; no buffer were computed. Something went wrong."
-		<< std::endl;
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -555,11 +560,13 @@ Polygon2d Polygon2d::getUnion(const Polygon2d &other) const
     if(!polUnion.empty())
       retval= Polygon2d(polUnion);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; unknown error." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; unknown error."
+		<< Color::def << std::endl;
     return retval;
   }
 
+//! @brief Join the given polygon to this one.
 void Polygon2d::une(const Polygon2d &other)
   { (*this)= getUnion(other); }
 
@@ -570,8 +577,9 @@ void Polygon2d::une(const std::list<Polygon2d> &l)
       {
         const std::list<Polygon2d> tmp= join(l,*this);
         if(tmp.empty())
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << str_error << " Union is empty." << std::endl;
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << str_error << " Union is empty."
+		    << Color::def << std::endl;
         else
           (*this)= Polygon2d(tmp);
       }
@@ -593,3 +601,42 @@ Pos2d center_of_mass(const std::list<Polygon2d> &l)
   { return center_of_mass(l.begin(),l.end()); }
 
 
+//! @brief Remove the consecutive vertices that are at distance less than than tol.
+Polygon2d remove_duplicated_vertices(const Polygon2d &p, const GEOM_FT &tol)
+  {
+    Polygon2d retval;
+    Polyline2d tmp(p.getVertexList());
+    tmp= remove_duplicated_vertices(tmp, tol);
+    // Compute tolerance.
+    GEOM_FT local_tol= tol;
+    const size_t sz= tmp.getNumVertices();
+    if(local_tol<0.0)
+      {
+	if(sz>1)
+	  {
+	    // Compute average segment length.
+	    const GEOM_FT avgLength= p.getLength()/GEOM_FT(sz-1);
+	    local_tol= avgLength/1e4;
+	  }
+      }
+    if(sz>1)
+      {
+	// Check endpoints.
+	const Pos2d &first= tmp.Vertice0(0);
+	const Pos2d &last= tmp.Vertice0(sz-1);
+	const GEOM_FT d= first.dist(last);
+	if(d<local_tol)
+	  {
+	    const Segment2d s(first, last);
+	    const Pos2d newP= s.getMidPoint();
+	    retval.push_back(newP);
+	    for(size_t i= 1;i<(sz-1);i++)
+	      retval.push_back(tmp.Vertice0(i));
+	  }
+	else
+	  retval= Polygon2d(tmp);
+      }
+    else
+      retval= Polygon2d(tmp);
+    return retval;
+  }
