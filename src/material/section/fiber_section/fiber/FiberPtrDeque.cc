@@ -1529,7 +1529,6 @@ double XC::FiberPtrDeque::computeFibersEffectiveConcreteArea(const std::list<Pol
   {
     double retval= 0.0;
     const size_t n= 12;
-    double dm,L,R;
     const size_t sz= size();
     dq_ac_effective.clear();
     dq_ac_effective.resize(sz);
@@ -1537,9 +1536,9 @@ double XC::FiberPtrDeque::computeFibersEffectiveConcreteArea(const std::list<Pol
     // Clip the rebars areas with the effective area contour.
     for(size_t i= 0;i<sz;i++) //For each rebar in the family.
       {
-        dm= (*this)[i]->getEquivalentDiameter();
-        L= factor*dm; //Side of the square prescribed by the standard.
-        R= L*sqrt(2/(n*sin(2*M_PI/n)));
+        const double dm= (*this)[i]->getEquivalentDiameter();
+        const double L= factor*dm; //Side of the square prescribed by the standard.
+        const double R= L*sqrt(2/(n*sin(2*M_PI/n)));
         const Pos2d pos= (*this)[i]->getPos();
         tmp= Circle2d(pos,R).getInscribedPolygon(n);
         if(tmp.Overlap(grossEffectiveConcreteAreaContour))
