@@ -168,6 +168,8 @@ python tests/utility/geom/polygons/2d/polygon2D_test_17.py
 python tests/utility/geom/polygons/2d/polygon2D_test_18.py
 python tests/utility/geom/polygons/2d/polygon2D_test_19.py
 python tests/utility/geom/polygons/2d/polygon2D_test_20.py
+python tests/utility/geom/polygons/2d/polygon2D_test_21.py
+python tests/utility/geom/polygons/2d/polygon2D_test_22.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_01.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_02.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_03.py
