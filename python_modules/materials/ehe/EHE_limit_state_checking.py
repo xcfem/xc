@@ -2069,22 +2069,20 @@ class CrackController(lscb.LimitStateControllerBase):
         for e in elements:
             Aceff=0  #init. value
             R= e.getResistingForce()
-            sct=e.getSection()
+            sct= e.getSection()
             sctCrkProp= lscb.FibSectLSProperties(sct)
             sctCrkProp.setupStrghCrackDist()
+            s_rmax= 0.0
             if(sctCrkProp.eps1<=0): # No tensile strains.
-                s_rmax= 0.0
                 sigma_s= sctCrkProp.getMaxReinforcementTensileStress()
                 wk= 0.0
             elif(sctCrkProp.eps1<=concreteMaxTensileStrain): # Very small tensile strain => no cracking.
-                s_rmax= 0.0
                 sigma_s= sctCrkProp.getMaxReinforcementTensileStress()
                 wk= 0.0
             else: # Not so small tensile strain => cracking.
                 hceff= self.EHE_hceff(sct.getAnchoMecanico(),sctCrkProp.h,sctCrkProp.x)
                 Aceff= sct.getNetEffectiveConcreteArea(hceff,"tensSetFb",15.0)
                 if(Aceff<=0):
-                    s_rmax= 0.0
                     sigma_s= sctCrkProp.getMaxReinforcementTensileStress()
                     wk= 0.0
                 else:
