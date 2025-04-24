@@ -80,7 +80,9 @@ class Vector3d: public ProtoGeom
     Vector3d operator+(const Vector3d &) const;
     Vector3d operator-(const Vector3d &) const;
     Vector3d operator*(const GEOM_FT &) const;
+    Vector3d &operator*=(const GEOM_FT &);
     Vector3d operator/(const GEOM_FT &) const;
+    Vector3d &operator/=(const GEOM_FT &);
 
     //! @brief Return the squared modulus.
     inline virtual GEOM_FT GetModulus2(void) const

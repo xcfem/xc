@@ -88,7 +88,9 @@ class Vector2d: public ProtoGeom
     Vector2d operator+(const Vector2d &) const;
     Vector2d operator-(const Vector2d &) const;
     Vector2d operator*(const GEOM_FT &) const;
+    Vector2d &operator*=(const GEOM_FT &);
     Vector2d operator/(const GEOM_FT &) const;
+    Vector2d &operator/=(const GEOM_FT &);
 
     inline virtual GEOM_FT GetModulus2(void) const
       { return (x()*x()+y()*y()); }

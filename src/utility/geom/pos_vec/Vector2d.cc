@@ -124,13 +124,25 @@ Vector2d Vector2d::operator+(const Vector2d &v) const
 Vector2d Vector2d::operator-(const Vector2d &v) const
   { return Vector2d(ToCGAL()-v.ToCGAL()); }
 
-//! @brief Return el producto del vector por el escalar.
+//! @brief Return the product of the vector and the given scalar.
 Vector2d Vector2d::operator*(const GEOM_FT &d) const
   { return Vector2d(ToCGAL()*d); }
 
-//! @brief Return el producto del vector por el inverso del escalar.
+Vector2d &Vector2d::operator*=(const GEOM_FT &d)
+  {
+    (*this)= (*this)*d;
+    return *this;
+  }
+
+//! @brief Return the product of the vector and the inverse of the given scalar.
 Vector2d Vector2d::operator/(const GEOM_FT &d) const
   { return Vector2d(ToCGAL()*(1/d)); }
+
+Vector2d &Vector2d::operator/=(const GEOM_FT &d)
+  {
+    (*this)= (*this)/d;
+    return *this;
+  }
 
 //! @brief Return the point coordinates in a matrix.
 FT_matrix Vector2d::getMatrix(void) const
