@@ -48,6 +48,45 @@ void XC::DqPtrsFaces::reverse(void)
       }
   }
 
+//! @brief Return the average of the I vectors of the surfaces.
+Vector3d XC::DqPtrsFaces::getIVectorAverage(void) const
+  {
+    Vector3d retval;
+    for(const_iterator i= this->begin();i!= this->end();i++)
+      {
+        Face *t= (*i);
+	retval+= t->getIVector();
+      }
+    retval*= 1.0/this->size();
+    return retval;
+  }
+
+//! @brief Return the average of the J vectors of the surfaces.
+Vector3d XC::DqPtrsFaces::getJVectorAverage(void) const
+  {
+    Vector3d retval;
+    for(const_iterator i= this->begin();i!= this->end();i++)
+      {
+        Face *t= (*i);
+	retval+= t->getJVector();
+      }
+    retval*= 1.0/this->size();
+    return retval;
+  }
+
+//! @brief Return the average of the K vectors of the surfaces.
+Vector3d XC::DqPtrsFaces::getKVectorAverage(void) const
+  {
+    Vector3d retval;
+    for(const_iterator i= this->begin();i!= this->end();i++)
+      {
+        Face *t= (*i);
+	retval+= t->getKVector();
+      }
+    retval*= 1.0/this->size();
+    return retval;
+  }
+
 //! @brief Set the orientation of the face normals according to the vector
 //! argument. If the dot product of the vector and the surface normal vector
 //! is negative the method flips the surface.

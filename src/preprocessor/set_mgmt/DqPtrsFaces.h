@@ -55,6 +55,9 @@ class DqPtrsFaces: public DqPtrsEntities<Face>
     
 
     // Surface orientation.
+    Vector3d getIVectorAverage(void) const;
+    Vector3d getJVectorAverage(void) const;
+    Vector3d getKVectorAverage(void) const;
     void reverse(void);
     void setKOrientation(const Vector3d &);
   };
