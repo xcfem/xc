@@ -1335,7 +1335,7 @@ class OutputHandler(object):
         self.displayField(limitStateLabel, section= 1, argument= argument, component= component, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
         self.displayField(limitStateLabel, section=2, argument= argument, component= component, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
         
-    def displayField(self, limitStateLabel, section,argument, component, setToDisplay, fileName, defFScale=0.0, rgMinMax=None,):
+    def displayField(self, limitStateLabel, section, argument, component, setToDisplay, fileName, defFScale=0.0, rgMinMax=None):
         '''Display a field defined over bi-dimensional elements in its two 
            directions.
 
