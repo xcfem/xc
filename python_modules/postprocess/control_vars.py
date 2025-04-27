@@ -24,9 +24,9 @@ from postprocess.reports import common_formats as fmt
 from postprocess import extrapolate_elem_attr as ext
 from materials import stresses
 
-__all__= ['AxialForceControlVars', 'BiaxialBendingControlVars', 'BiaxialBendingStrengthControlVars', 'CFN', 'CFNMy', 'CFNMyMz', 'CFVy', 'ControlVarsBase', 'CrackControlBaseVars', 'CrackControlVars', 'FatigueControlBaseVars', 'FatigueControlVars', 'N', 'NMy', 'NMyMz', 'RCCrackControlVars', 'RCCrackStraightControlVars', 'RCShearControlVars', 'SIATypeRCShearControlVars', 'ShVy', 'ShearYControlVars', 'SteelShapeBiaxialBendingControlVars', 'UniaxialBendingControlVars', 'VonMisesControlVars', 'RCBucklingControlVars', 'SteelBucklingControlVars', 'extrapolate_control_var', 'getControlVarImportModuleStr', 'getDiagramDirection', 'get_element_internal_force_component_data', 'write_control_vars_from_elements', 'write_control_vars_from_elements_for_ansys', 'write_control_vars_from_phantom_elements']
+__all__= ['AxialForceControlVars', 'BiaxialBendingControlVars', 'BiaxialBendingStrengthControlVars', 'CFN', 'CFNMy', 'CFNMyMz', 'CFVy', 'ControlVarsBase', 'CrackControlBaseVars', 'CrackControlVars', 'FatigueControlBaseVars', 'FatigueControlVars', 'N', 'NMy', 'NMyMz', 'RCCrackControlVars', 'RCCrackStraightControlVars', 'RCShearControlVars', 'SIATypeRCShearControlVars', 'ShVy', 'ShearYControlVars', 'SteelShapeBiaxialBendingControlVars', 'UniaxialBendingControlVars', 'VonMisesControlVars', 'RCBucklingControlVars', 'SteelBucklingControlVars', 'extrapolate_control_var', 'getControlVarImportModuleStr', 'get_diagram_direction', 'get_element_internal_force_component_data', 'write_control_vars_from_elements', 'write_control_vars_from_elements_for_ansys', 'write_control_vars_from_phantom_elements']
 
-def getDiagramDirection(elem, component, defaultDirection):
+def get_diagram_direction(elem, component, defaultDirection):
     '''Return the direction vector to represent the diagram over the element
 
     :param elem: element to deal with.
@@ -65,7 +65,7 @@ def get_element_internal_force_component_data(elem, component, defaultDirection)
     # default values
     elemVDir= None
     if(defaultDirection):
-        elemVDir= getDiagramDirection(elem, component, defaultDirection)
+        elemVDir= get_diagram_direction(elem, component, defaultDirection)
     value1= 0.0
     value2= 0.0
     values= elem.getValuesAtNodes(component, False)
@@ -1926,21 +1926,63 @@ def write_control_vars_from_elements_for_ansys(preprocessor, outputCfg, sectionN
     retval= [scipy.mean(fcs1),scipy.mean(fcs2)]
     return retval
 
-def extrapolate_control_var(elemSet, propName, argument, initialValue= 0.0):
-    '''Extrapolates element's function values to the nodes.
+def get_control_var_values_from_elements(elements, propName, argument):
+    ''' Return a dictionary containing the values of the given control var
+        in the given element set. The dictiorary key is the element tag.
 
-     :param elemSet: set of elements.
+     :param element: sequence of elements to retrieve the values for.
      :param propName: name of the property that contains the control variables.
-     :param function: name of the function to call for each element.
+     :param argument: name of the control variable to extrapolate.
+    '''
+    retval= dict()
+    for e in elements:
+        if(e.hasProp(propName)):
+            controlVar= e.getProp(propName)
+            value= controlVar(argument)
+        else:
+            value= None
+        retval[e.tag]= value
+    return retval
+
+def get_maximum_control_var_value_on_surfaces(xcSet, propName, argument):
+    ''' Compute the maximum of a control var value for each surface of the
+        given set.
+
+     :param xcSet: set of surfaces
+     :param propName: name of the property that contains the control variables.
+     :param argument: name of the control variable to extrapolate.
+    '''
+    retval= dict()
+    sect1CV= propName+'Sect1'
+    sect2CV= propName+'Sect2'
+    for s in xcSet.surfaces:
+        cvDict1= get_control_var_values_from_elements(elements= s.elements, propName= sect1CV, argument= argument)
+        cvDict2= get_control_var_values_from_elements(elements= s.elements, propName= sect2CV, argument= argument)
+        listCV1= list()
+        listCV2= list()
+        for key in cvDict1:
+            cv1= cvDict1[key]
+            if(cv1 is not None):
+                listCV1.append(cv1)
+            cv2= cvDict2[key]
+            if(cv2 is not None):
+                listCV2.append(cv2)
+        retval[s.tag]= [max(listCV1), max(listCV2)]
+    return retval
+
+def extrapolate_control_var_from_elements(preprocessor, elements, propName, argument, initialValue= 0.0):
+    '''Extrapolates element's control var values to the nodes.
+
+     :param preprocessor: preprocessor of the FE problem.
+     :param elements: sequence of elements to retrieve the control variables for.
+     :param propName: name of the property that contains the control variables.
      :param argument: name of the control variable to extrapolate.
      :param initialValue: initial value for the prop defined at the nodes.
     '''
-    elemSet.fillDownwards()
-    eSet= elemSet.elements
     nodePropName= propName+'_'+argument
-    touchedNodes= ext.create_attribute_at_nodes(eSet,nodePropName,initialValue)
+    touchedNodes= ext.create_attribute_at_nodes(elements,nodePropName,initialValue)
     #Calculate totals.
-    for e in eSet:
+    for e in elements:
         elemNodes= e.getNodes
         if(e.hasProp(propName)):
             controlVar= e.getProp(propName)
@@ -1952,11 +1994,23 @@ def extrapolate_control_var(elemSet, propName, argument, initialValue= 0.0):
                 oldValue= n.getProp(nodePropName)
                 n.setProp(nodePropName,oldValue+value)
     #Divide by number of elements in the set that touch the node.
-    preprocessor= elemSet.getPreprocessor
     for tag in touchedNodes: # Nodes touched by the elements in the set.
         n= preprocessor.getNodeHandler.getNode(tag)
         denom= float(touchedNodes[tag])
         newValue= n.getProp(nodePropName)/denom
         n.setProp(nodePropName,newValue)
     return nodePropName
+
+def extrapolate_control_var(elemSet, propName, argument, initialValue= 0.0):
+    '''Extrapolates element's control var values to the nodes.
+
+     :param elemSet: set of elements.
+     :param propName: name of the property that contains the control variables.
+     :param argument: name of the control variable to extrapolate.
+     :param initialValue: initial value for the prop defined at the nodes.
+    '''
+    elemSet.fillDownwards()
+    eSet= elemSet.elements
+    return extrapolate_control_var_from_elements(preprocessor= elemSet.getPreprocessor, elements= eSet, propName= propName, argument= argument, initialValue= initialValue)
+
 
