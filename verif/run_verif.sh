@@ -881,8 +881,9 @@ python tests/preprocessor/sets/test_get_sets_containing_01.py
 python tests/preprocessor/sets/test_pick_elements_crossing_01.py
 python tests/preprocessor/sets/test_pick_elements_crossing_02.py
 echo "$BLEU" "    Sets geometry queries." "$NORMAL"
-python tests/preprocessor/sets/geometric_queries/test_get_contours_01.py
-python tests/preprocessor/sets/geometric_queries/test_get_contours_02.py
+python tests/preprocessor/sets/geometric_queries/test_get_element_set_contour_01.py
+python tests/preprocessor/sets/geometric_queries/test_get_element_set_contour_02.py
+python tests/preprocessor/sets/geometric_queries/test_get_surface_set_contour_01.py
 python tests/preprocessor/sets/geometric_queries/test_get_bnd_01.py
 python tests/preprocessor/sets/geometric_queries/test_set_transformation_01.py
 python tests/preprocessor/sets/geometric_queries/test_set_transformation_02.py
