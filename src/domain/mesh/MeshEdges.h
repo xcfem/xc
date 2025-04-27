@@ -37,6 +37,7 @@ class Polyline3d;
 
 
 namespace XC {
+class Node;
 class Element;
 class Domain;
 class ID;
@@ -48,15 +49,19 @@ class ID;
 class MeshEdges: public CommandEntity, public std::deque<MeshEdge>
   {
   public:
+    typedef std::deque<const Node *> node_sequence;
     MeshEdges(void);
 
     std::deque<const MeshEdge *> getLoop(const MeshEdge *) const;
     MeshEdges getEdgesNotInLoop(const std::deque<const MeshEdge *> &) const;
+    std::deque<node_sequence> getContoursNodeSequences(void) const;
+    boost::python::list getContoursNodeSequencesPy(void) const;
     std::deque<Polyline3d> getContours(const double &factor) const;
     void print(std::ostream &) const;
   };
 
-std::deque<Polyline3d> getContours(MeshEdges edges,const double &factor);
+std::deque<MeshEdges::node_sequence> getContoursNodeSequences(MeshEdges);
+std::deque<Polyline3d> getContours(MeshEdges, const double &);
 
 //! @brief Printing stuff.
 inline std::ostream &operator<<(std::ostream &os, const MeshEdges &me)

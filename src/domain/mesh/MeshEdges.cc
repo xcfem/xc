@@ -74,13 +74,26 @@ std::deque<const XC::MeshEdge *> XC::MeshEdges::getLoop(const MeshEdge *first) c
     return retval;
   }
 
+XC::MeshEdges::node_sequence getNodeSequenceFromLoop(const std::deque<const XC::MeshEdge *> &loop)
+  {
+    XC::MeshEdges::node_sequence retval;
+    for(std::deque<const XC::MeshEdge *>::const_iterator i= loop.begin();i!=loop.end();i++)
+      {
+        const XC::Node *n= (*i)->getFirstNode();
+        retval.push_back(n);
+      }
+    return retval;
+  }
+
 Polyline3d getPolylineFromLoop(const std::deque<const XC::MeshEdge *> &loop, const double &factor)
   {
     Polyline3d retval;
     Pos3d pt;
-    for(std::deque<const XC::MeshEdge *>::const_iterator i= loop.begin();i!=loop.end();i++)
+    XC::MeshEdges::node_sequence tmp= getNodeSequenceFromLoop(loop);
+    for(XC::MeshEdges::node_sequence::const_iterator i= tmp.begin();i!=tmp.end();i++)
       {
-        pt= (*i)->getFirstNode()->getCurrentPosition3d(factor);
+	const XC::Node *n= *i;
+        pt= n->getCurrentPosition3d(factor);
         retval.appendVertex(pt);
       }
     pt= retval.front(); //First point.
@@ -89,11 +102,61 @@ Polyline3d getPolylineFromLoop(const std::deque<const XC::MeshEdge *> &loop, con
   } 
 
 
-//! @brief returns closed contours from de edge set.
+//! @brief Returns closed contours from the edge set.
 std::deque<Polyline3d> XC::MeshEdges::getContours(const double &factor) const
   { return XC::getContours(*this,factor); }
 
-//! @brief returns closed contours from de edge set.
+//! @brief Returns node sequences corresponding to closed contours from the edge set.
+std::deque<XC::MeshEdges::node_sequence> XC::MeshEdges::getContoursNodeSequences(void) const
+  { return XC::getContoursNodeSequences(*this); }
+
+//! @brief Returns node sequences corresponding to closed contours from the edge set.
+boost::python::list XC::MeshEdges::getContoursNodeSequencesPy(void) const
+  {
+    boost::python::list retval;
+    const std::deque<MeshEdges::node_sequence> tmp= this->getContoursNodeSequences();
+    for(std::deque<MeshEdges::node_sequence >::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      {
+	boost::python::list retval_i;
+	const MeshEdges::node_sequence &p_seq= *i;
+	for(MeshEdges::node_sequence::const_iterator j= p_seq.begin(); j!= p_seq.end(); j++)
+	  {
+	    const Node *n= *j;
+	    retval_i.append(boost::ref(n));
+	  }
+	retval.append(retval_i);
+      }
+    return retval;
+  }
+
+//! @brief returns node sequences corresponding to closed contours from the edge set.
+std::deque<XC::MeshEdges::node_sequence> XC::getContoursNodeSequences(MeshEdges edges)
+  {
+    const size_t max_iter= 100;
+    size_t iter= 0;
+    std::deque<XC::MeshEdges::node_sequence> retval;
+    if(!edges.empty())      
+	do
+	  {
+	    MeshEdges::const_iterator i= edges.begin();
+	    const MeshEdge *first= &(*i);
+	    std::deque<const MeshEdge *> loop= edges.getLoop(first);
+	    retval.push_back(getNodeSequenceFromLoop(loop));
+	    edges= edges.getEdgesNotInLoop(loop);
+	    iter++;
+	    if(iter>max_iter)
+	      {
+		std::cerr << "getContours error; " << edges.size()
+			  << " left, after " << iter
+			  << " iterations." << std::endl;
+		break;
+	      }
+	  }
+	while(!edges.empty());
+    return retval;
+  }
+
+//! @brief returns closed contours from the edge set.
 std::deque<Polyline3d> XC::getContours(MeshEdges edges, const double &factor)
   {
     const size_t max_iter= 100;
