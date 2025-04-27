@@ -75,6 +75,7 @@ class DqPtrsEntities: public DqPtrs<T>
 
     T *searchName(const std::string &nmb);
     T *findTag(const size_t &);
+    const T *findTag(const size_t &) const;
     T *getNearest(const Pos3d &p);
     Pos3d getCentroid(void) const;
     const T *getNearest(const Pos3d &p) const;
@@ -99,6 +100,15 @@ T *DqPtrsEntities<T>::searchName(const std::string &nmb)
 //! @brief Returns a pointer to the object identified by the tag argument.
 template <class T>
 T *DqPtrsEntities<T>::findTag(const size_t &tag)
+  {
+    for(const_iterator i= this->begin();i!=this->end();i++)
+      if((*i)->getTag()==tag) return *i;
+    return nullptr;
+  }
+  
+//! @brief Returns a const pointer to the object identified by the tag argument.
+template <class T>
+const T *DqPtrsEntities<T>::findTag(const size_t &tag) const
   {
     for(const_iterator i= this->begin();i!=this->end();i++)
       if((*i)->getTag()==tag) return *i;

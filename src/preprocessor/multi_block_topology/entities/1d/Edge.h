@@ -40,6 +40,7 @@ class Pos3dArray;
 namespace XC {
 class Pnt;
 class Face;
+class DqPtrsFaces;
 class Body;
 
 //! @ingroup MultiBlockTopologyEnt
@@ -144,6 +145,7 @@ class Edge: public EntMdlr
     size_t getNumConnectedSurfaces(const SetBase *) const;
     std::set<const Face *> getConnectedSurfaces(const SetBase *) const;
     boost::python::list getConnectedSurfacesPy(const SetBase *) const;
+    std::set<const Face *> getConnectedSurfaces(const DqPtrsFaces &) const;
     
     bool isConnectedTo(const Face &s) const;
     bool isConnectedTo(const Body &b) const;

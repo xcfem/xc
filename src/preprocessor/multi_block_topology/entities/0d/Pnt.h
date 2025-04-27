@@ -39,6 +39,7 @@ class Edge;
 class Face;
 class Body;
 class TrfGeom;
+class EdgeContainer;
 
 //! @ingroup MultiBlockTopology
 //!
@@ -117,6 +118,8 @@ class Pnt: public EntMdlr
     boost::python::list getConnectedSurfacesPy(void) const;
     std::set<const Face *> getConnectedSurfaces(const SetBase *) const;
     boost::python::list getConnectedSurfacesPy(const SetBase *) const;
+    
+    const Edge *next(const EdgeContainer &, const std::set<const Edge *> &) const;
     
     void Move(const Vector3d &);
     void Transform(const TrfGeom &trf);

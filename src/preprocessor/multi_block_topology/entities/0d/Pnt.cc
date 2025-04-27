@@ -28,6 +28,7 @@
 
 #include "Pnt.h"
 #include "preprocessor/multi_block_topology/entities/1d/Edge.h"
+#include "preprocessor/multi_block_topology/entities/1d/EdgeContainer.h"
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/set_mgmt/Set.h"
@@ -336,6 +337,24 @@ boost::python::list XC::Pnt::getConnectedSurfacesPy(const SetBase *s) const
       }
     return retval;
   }
+
+//! @brief Returns an edge that has its origin in this point (and is not in visited).
+const XC::Edge *XC::Pnt::next(const EdgeContainer &edges, const std::set<const Edge *> &visited) const
+  {
+    const Edge *retval= nullptr;
+    for(std::deque<const Edge *>::const_iterator i= edges.begin();i!=edges.end();i++)
+      {
+        const Edge *edge= *i;
+        if(visited.find(edge)==visited.end()) //Not already visited.
+          if(edge->P1()==this) //Edge starts in this node.
+            {
+              retval= edge;
+              break;
+            }
+      }
+    return retval;
+  }
+
 
 //! @brief Return the squared distance to the position
 //! being passed as parameter.

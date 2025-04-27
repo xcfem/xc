@@ -27,6 +27,8 @@
 //DqPtrsFaces.cc
 
 #include "DqPtrsFaces.h"
+#include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
+#include "utility/geom/d1/Polyline3d.h"
 
 XC::DqPtrsFaces::DqPtrsFaces(CommandEntity *owr)
   : DqPtrsEntities<Face>(owr) {}
@@ -133,3 +135,62 @@ XC::Face *XC::DqPtrsFaces::getNearest(const Pos3d &p)
 //! @brief Return the edge closest to the given point.
 const XC::Face *XC::DqPtrsFaces::getNearest(const Pos3d &p) const
   { return DqPtrsEntities<Face>::getNearest(p); }
+
+//! @brief Returns the element set contour.
+std::deque< XC::EdgeContainer::point_sequence > XC::DqPtrsFaces::getContoursPointSequences(void) const
+  {
+    EdgeContainer edgesContour;
+    for(const_iterator i= this->begin();i!=this->end();i++)
+      {
+        Face *t= (*i);
+	std::deque<Edge *> edges= t->getEdges();
+        const int numEdges= edges.size();
+        for(int j= 0;j<numEdges;j++)
+          {
+	    const Edge *edge= edges[j];
+            const std::set<const Face *> &facesShared= edge->getConnectedSurfaces(*this);
+            if(facesShared.size()==1) //border element.
+              if(find(edgesContour.begin(), edgesContour.end(), edge) == edgesContour.end())
+                { edgesContour.push_back(edge); }
+          }
+      }
+    return edgesContour.getContoursPointSequences();
+  }
+
+//! @brief Returns the element set contour.
+boost::python::list XC::DqPtrsFaces::getContoursPointSequencesPy(void) const
+  {
+    boost::python::list retval;
+    std::deque< EdgeContainer::point_sequence > tmp= this->getContoursPointSequences();
+    for(std::deque< EdgeContainer::point_sequence >::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      {
+	boost::python::list retval_i;
+	const EdgeContainer::point_sequence &p_seq= *i;
+	for(EdgeContainer::point_sequence::const_iterator j= p_seq.begin(); j!= p_seq.end(); j++)
+	  {
+	    const Pnt *pt= *j;
+	    retval_i.append(boost::ref(pt));
+	  }
+	retval.append(retval_i);
+      }
+    return retval;
+  }
+
+std::deque<Polyline3d> XC::DqPtrsFaces::getContours(void) const
+  {
+    std::deque<Polyline3d> retval;
+    std::deque< EdgeContainer::point_sequence > tmp= this->getContoursPointSequences();
+    for(std::deque< EdgeContainer::point_sequence >::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      {
+	Polyline3d retval_i;
+	const EdgeContainer::point_sequence &p_seq= *i;
+	for(EdgeContainer::point_sequence::const_iterator j= p_seq.begin(); j!= p_seq.end(); j++)
+	  {
+	    const Pnt *pt= *j;
+	    retval_i.appendVertex(pt->getPos());
+	  }
+	retval_i.appendVertex(retval_i.front());
+	retval.push_back(retval_i);
+      }
+    return retval;
+  }
