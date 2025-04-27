@@ -155,18 +155,26 @@ class LimitStateData(object):
         '''
         LimitStateData.envConfig= cfg
         
+    def getInternalForcesResultsPath(self):
+        '''Return the directory where internal forces are stored.'''
+        return self.envConfig.projectDirTree.getInternalForcesResultsPath()
+    
     def getInternalForcesFileName(self):
         '''Return the name of the file where internal forces are stored.'''
-        return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'intForce_'+ self.label +'.json'
+        return self.getInternalForcesResultsPath()+'intForce_'+ self.label +'.json'
     
+    def getReactionsResultsPath(self):
+        '''Return the directory where reactions are stored.'''
+        return self.envConfig.projectDirTree.getReactionsResultsPath()
+        
     def getReactionsFileName(self):
         '''Return the name of the file where reactions are stored.'''
-        return self.envConfig.projectDirTree.getReactionsResultsPath()+'reactions_'+ self.label +'.json'
+        return self.getReactionsResultsPath()+'reactions_'+ self.label +'.json'
         
     def getBucklingAnalysisResultsFileName(self):
         '''Return the name of the file where results of the buckling analysis
            are stored.'''
-        return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'buckling_analysis_results_'+ self.label +'.json'
+        return self.getInternalForcesResultsPath()+'buckling_analysis_results_'+ self.label +'.json'
     
     def readInternalForces(self, setCalc):
         ''' Read the internal forces for the elements in the set argument.
@@ -252,15 +260,24 @@ class LimitStateData(object):
         if(constrainedNodes is not None):
             retval= er.getReactionsDict(nmbComb, constrainedNodes)
         return retval
+
+    def getDisplacementsResultsPath(self):
+        '''Return the file name to read: combination name, node number and 
+        displacements (ux,uy,uz,rotX,rotY,rotZ).'''
+        return self.getInternalForcesResultsPath()
     
     def getDisplacementsFileName(self):
         '''Return the file name to read: combination name, node number and 
         displacements (ux,uy,uz,rotX,rotY,rotZ).'''
-        return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'displ_'+ self.label +'.csv'
+        return self.getDisplacementsResultsPath()+'displ_'+ self.label +'.csv'
+
+    def getFullVerifPath(self):
+        ''' Return the full path for the limit state checking files.'''
+        return self.envConfig.projectDirTree.getFullVerifPath()
     
     def getOutputDataBaseFileName(self):
         '''Return the output file name without extension.'''
-        return self.envConfig.projectDirTree.getFullVerifPath()+self.outputDataBaseFileName
+        return self.getFullVerifPath()+self.outputDataBaseFileName
     
     def getOutputDataFileName(self):
         '''Return the Python executable file name.'''
