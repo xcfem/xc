@@ -463,7 +463,7 @@ SET(preprocessor_mbt_trf preprocessor/multi_block_topology/trf/TrfGeom.cc prepro
 
 SET(preprocessor_mbt_0d_entities preprocessor/multi_block_topology/entities/0d/Pnt.cc)
 
-SET(preprocessor_mbt_1d_entities preprocessor/multi_block_topology/entities/1d/Edge.cc preprocessor/multi_block_topology/entities/1d/LineBase.cc preprocessor/multi_block_topology/entities/1d/Line.cc preprocessor/multi_block_topology/entities/1d/DividedLine.cc preprocessor/multi_block_topology/entities/1d/CircularArc.cc preprocessor/multi_block_topology/entities/1d/CmbEdge.cc)
+SET(preprocessor_mbt_1d_entities preprocessor/multi_block_topology/entities/1d/Edge.cc preprocessor/multi_block_topology/entities/1d/LineBase.cc preprocessor/multi_block_topology/entities/1d/Line.cc preprocessor/multi_block_topology/entities/1d/DividedLine.cc preprocessor/multi_block_topology/entities/1d/CircularArc.cc preprocessor/multi_block_topology/entities/1d/CmbEdge.cc preprocessor/multi_block_topology/entities/1d/EdgeContainer.cc)
 
 SET(preprocessor_mbt_2d_entities preprocessor/multi_block_topology/entities/2d/Face.cc preprocessor/multi_block_topology/entities/2d/QuadSurface.cc preprocessor/multi_block_topology/entities/2d/PolygonalFace.cc)
 
