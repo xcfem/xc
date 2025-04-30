@@ -67,14 +67,19 @@ Polygon2d return_polygon(const Polygon2d &p)
 
 Nef_polyhedron Polygon2d_to_Nef_2(const Polygon2d &poly)
   {
-    Polygon2d::vertex_iterator it = poly.vertices_begin();
+    // Remove duplicated vertices, otherwise the Nef_polyhedron
+    // constructor triggers a segmentation fault.
+    const Polygon2d tmp= remove_duplicated_vertices(poly, -1.0);
+    Polygon2d::vertex_iterator it = tmp.vertices_begin();
     std::list<Point> l_of_p;        
-    while(it != poly.vertices_end())
+    while(it != tmp.vertices_end())
       {
-        l_of_p.push_back(convert_point(*it));
+	auto cp= convert_point(*it);
+        l_of_p.push_back(cp);
         it++;
       }
-    return Nef_polyhedron(l_of_p.begin(),l_of_p.end(),Nef_polyhedron::INCLUDED);
+    auto retval= Nef_polyhedron(l_of_p.begin(),l_of_p.end(), Nef_polyhedron::INCLUDED);
+    return retval;
   }
 
 Nef_polyhedron HalfPlane2d_to_Nef_2(const HalfPlane2d &sp)
@@ -239,8 +244,7 @@ std::list<Polygon2d> join(const std::list<Polygon2d> &l,const Polygon2d &p)
 bool overlap(const Polygon2d &p1,const Polygon2d &p2)
   { return p1.Overlap(p2); }
 
-//! @brief Return verdadero si alguno de los polígonos de l1 se superpone
-//! con alguno de los de l2.
+//! @brief Return true si any polygon from l1 overlaps any polygon from l2.
 bool overlap(const std::list<Polygon2d> &l1,const std::list<Polygon2d> &l2)
   {
     bool retval= false;

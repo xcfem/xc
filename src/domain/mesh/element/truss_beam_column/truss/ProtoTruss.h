@@ -45,6 +45,8 @@ class Material;
 class ProtoTruss: public Element1D
   {
   protected:
+    static Matrix extrapolation_matrix; //!< Extrapolation matrix.
+    
     int numDOF; //!< number of dof for truss
     int dimSpace; //!< truss in 2 or 3d domain
     Matrix *theMatrix; //!< pointer to objects matrix (a class wide Matrix)
@@ -83,6 +85,10 @@ class ProtoTruss: public Element1D
     // public methods to obtain information about dof & connectivity    
     int getNumDIM(void) const;	
     int getNumDOF(void) const;
+    
+    virtual const Matrix &getExtrapolationMatrix(void) const
+      { return extrapolation_matrix; }
+    Matrix getExtrapolatedValues(const Matrix &) const;
     
     boost::python::list getValuesAtNodes(const std::string &, bool silent= false) const;
   };

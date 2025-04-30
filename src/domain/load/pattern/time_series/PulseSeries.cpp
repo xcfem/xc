@@ -92,6 +92,21 @@ double XC::PulseSeries::getFactor(double pseudoTime) const
       return 0;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::PulseSeries::getPyDict(void) const
+  {
+    boost::python::dict retval= PeriodSeries::getPyDict();
+    retval["pulse_width"]= this->pWidth;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::PulseSeries::setPyDict(const boost::python::dict &d)
+  {
+    PeriodSeries::setPyDict(d);
+    this->pWidth= boost::python::extract<double>(d["pulse_width"]);
+  }
+
 //! @brief Send object members through the communicator argument.
 int XC::PulseSeries::sendData(Communicator &comm)
   {

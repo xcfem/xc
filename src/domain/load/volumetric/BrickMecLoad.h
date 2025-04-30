@@ -48,12 +48,7 @@ class BrickMecLoad: public ThreedimMecLoad
     virtual void addReactionsInBasicSystem(const std::vector<double> &,const double &,FVectorBrick &) const;
     virtual void addFixedEndForcesInBasicSystem(const std::vector<double> &,const double &,FVectorBrick &) const;
 
-    virtual size_t getForceVectorDimension(void) const;
-    virtual Vector getLocalForce(void) const;
-    virtual const Matrix &getLocalForces(void) const;
-    virtual const Matrix &getGlobalForces(void) const;
     virtual const Matrix &getGlobalVectors(const Matrix &) const;
-    virtual Vector3d getVector3dLocalForce(void) const;
     SlidingVectorsSystem3d getResultant(const Pos3d &centro, bool initialGeometry) const;
   };
 } // end of XC namespace

@@ -181,25 +181,30 @@ class ColoredDiagram(vtk_lut_field.LUTField):
             return self.createChangedSignDiagramInterval(offset, org, vOrg, dest, vDest, dirVector= dirVector)
 
     def createDiagramActor(self):
-      # Crea el actor para el diagrama.
-      self.diagram= vtkPolyData()
-      self.diagram.SetPoints(self.points)
-      point_data= self.diagram.GetPointData()
-      point_data.SetScalars(self.scalars)
-      self.diagram.SetPolys(self.cells)
+        # Crea el actor para el diagrama.
+        self.diagram= vtkPolyData()
+        self.diagram.SetPoints(self.points)
+        point_data= self.diagram.GetPointData()
+        point_data.SetScalars(self.scalars)
+        self.diagram.SetPolys(self.cells)
 
-      self.mapper= vtkPolyDataMapper()
-      self.mapper.SetInputData(self.diagram)
-      self.mapper.SetScalarRange(self.valMin, self.valMax)
-      self.mapper.SetLookupTable(self.lookUpTable)
-      self.actor= vtkActor() 
-      self.actor.SetMapper(self.mapper)
+        self.mapper= vtkPolyDataMapper()
+        self.mapper.SetInputData(self.diagram)
+        self.mapper.SetScalarRange(self.valMin, self.valMax)
+        self.mapper.SetLookupTable(self.lookUpTable)
+        self.actor= vtkActor() 
+        self.actor.SetMapper(self.mapper)
 
-    def addDiagramToScene(self, recordDisplay, orientation=1, title=None):
-      ''' Adds the diagram to de scene'''
-      recordDisplay.renderer.AddActor(self.actor)
-      self.creaColorScaleBar(orientation, title)
-      recordDisplay.renderer.AddActor2D(self.scalarBar)
+    def addDiagramToScene(self, recordDisplay, orientation= 1, title= None):
+        ''' Adds the diagram to de scene
+
+        :param recordDisplay: DisplaySettings object.
+        :param orientation: orientation of the scalar bar (defaults to 1-horiz)
+        :param title: title for the scalar bar (defaults to None)
+        '''
+        recordDisplay.renderer.AddActor(self.actor)
+        self.creaColorScaleBar(orientation, title)
+        recordDisplay.renderer.AddActor2D(self.scalarBar)
 
     def appendDataToDiagram(self, elements, diagramIndex, valueCouples, directions, defFScale=0.0):
         ''' Appends to the diagram the values being passed as parameter.

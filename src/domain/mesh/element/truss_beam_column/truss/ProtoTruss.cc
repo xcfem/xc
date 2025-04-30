@@ -30,6 +30,11 @@
 #include <utility/matrix/Matrix.h>
 #include <domain/mesh/node/Node.h>
 #include "utility/actor/actor/MatrixCommMetaData.h"
+#include "utility/utils/misc_utils/colormod.h"
+
+double proto_truss_extrapolation_data[4]= {1.0,0.0, 0.0,1.0};
+
+XC::Matrix XC::ProtoTruss::extrapolation_matrix(proto_truss_extrapolation_data,2,2); // identity matrix.
 
 // initialise the class wide variables
  XC::Matrix XC::ProtoTruss::trussM2(2,2);
@@ -103,14 +108,18 @@ void XC::ProtoTruss::setup_matrix_vector_ptrs(int dofNd1)
     else
       {
 	if(numDim==0)
-           std::cerr << getClassName() << "::" << __FUNCTION__
-                     << "; WARNING dimension of the element space is " << numDim
-	             << ". Have you set the dimElem property of the element?\n";
+           std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                     << "; WARNING dimension of the space for this element ("
+	             << this->getTag() << ") is " << numDim
+	             << ". Have you set the dimElem property of it?"
+	             << Color::def << std::endl;
 	else
-	   std::cerr << getClassName() << "::" << __FUNCTION__
-	             << "; WARNING dimension of the element space is " << numDim
+	   std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                     << "; WARNING dimension of the space for this element ("
+	             << this->getTag() << ") is " << numDim
 	             << " which is not compatible with a "
-		     << dofNd1  << " DOFs problem.\n";
+		     << dofNd1  << " DOFs problem."
+	             << Color::def << std::endl;
 
         // fill this in so don't segment fault later
         numDOF = 6;
@@ -143,8 +152,9 @@ int XC::ProtoTruss::recvData(const Communicator &comm)
 //! @brief Returns the element mass per unit length.
 double XC::ProtoTruss::getLinearRho(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented yet." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << Color::def << std::endl;
     return 0.0;
   }
 
@@ -160,10 +170,10 @@ void XC::ProtoTruss::createInertiaLoad(const Vector &accel)
     const int nDOF= theNodes[0]->getNumberDOF();
     Vector nLoad(nDOF);
     if(accelSize>nDOF)
-         std::cerr << getClassName() << "::" << __FUNCTION__
+         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		   << "; acceleration of incorrect size "
 		   << accelSize << " should be less than " <<  nDOF
-		   << std::endl;
+		   << Color::def << std::endl;
     const int sz= std::min(nDOF,accelSize);
     for(int i= 0;i<sz;i++)
       nLoad[i]= load[i];
@@ -174,8 +184,9 @@ void XC::ProtoTruss::createInertiaLoad(const Vector &accel)
 //! @brief Return the element initial strain.
 double XC::ProtoTruss::getInitialStrain(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented."
+	      << Color::def << std::endl;
     return 0.0;
   }
 
@@ -248,3 +259,7 @@ boost::python::list XC::ProtoTruss::getValuesAtNodes(const std::string &code, bo
       retval= Element1D::getValuesAtNodes(code, silent); 
     return retval;
   }
+
+//! @brief Extrapolate from Gauss points to nodes.
+XC::Matrix XC::ProtoTruss::getExtrapolatedValues(const Matrix &values) const
+  { return this->getExtrapolationMatrix()*values; }

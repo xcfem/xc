@@ -75,6 +75,7 @@ packages_python="\
     python3-matplotlib   \
     python3-pandas       \
     python3-sklearn      \
+    python3-flatlatex    \
     python3-pip"
 sudo apt-get install -y $packages_python
 

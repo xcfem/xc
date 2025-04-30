@@ -71,7 +71,7 @@
 #include <material/section/SectionForceDeformation.h>
 #include <domain/mesh/element/utils/Information.h>
 #include <utility/recorder/response/FiberResponse.h>
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"
 
 XC::Matrix XC::UniaxialFiber3d::ks(3,3); 

@@ -109,5 +109,7 @@ else:
 # # Graphic stuff.
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
-# #oh.displayFEMesh()
-# oh.displayLocalAxes()
+# # oh.displayFEMesh()
+# # oh.displayLocalAxes()
+# for strainLabel in modelSpace.shellStrainComponents:
+#     oh.displayLoads(elLoadComp= strainLabel)

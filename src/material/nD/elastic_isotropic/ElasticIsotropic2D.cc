@@ -53,7 +53,7 @@
 
 #include <utility/matrix/Matrix.h>
 #include "material/nD/NDMaterialType.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 
 XC::Matrix XC::ElasticIsotropic2D::D(3,3);
 
@@ -79,5 +79,5 @@ int XC::ElasticIsotropic2D::getOrder(void) const
 //! (e.g. an Element) know how to interpret the quantites returned by this
 //! object.
 const XC::ResponseId &XC::ElasticIsotropic2D::getResponseType(void) const
-  { return RespMembraneMat; }
+  { return RespSolidMechanics2D; }
 

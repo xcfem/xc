@@ -48,18 +48,18 @@ XC::BrickRawLoad::BrickRawLoad(int tag, const std::vector<Vector> &nLoads, const
   : BrickMecLoad(tag, LOAD_TAG_BrickRawLoad, theElementTags),
     nodalLoads(nLoads) {}
 
-
+//! @brief Return the category of this kind of loads.
 std::string XC::BrickRawLoad::Category(void) const
   { return "raw"; }
 
 //! @brief Returns force expressed in local coordinates.
 XC::Vector XC::BrickRawLoad::getLocalForce(void) const
   {
-    Vector retval(2);
+    Vector retval(3);
     for(std::vector<Vector>::const_iterator i= nodalLoads.begin(); i!= nodalLoads.end();i++)
       {
 	const Vector &nLoad= *i;
-	retval(0)+= nLoad[0]; retval(1)+= nLoad[1];
+	retval(0)+= nLoad[0]; retval(1)+= nLoad[1];; retval(2)+= nLoad[2];
       }
     return retval;
   }

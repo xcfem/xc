@@ -55,27 +55,31 @@ from vtk.vtkRenderingLabel import vtkLabeledDataMapper
 class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
     ''' Define the parameters to configure the output for
         displaying the finite element mesh.
+
+    :ivar nodes: 3D representation of points in VTK.
+    :ivar gridMapper: VTK unstructured grid used to represent the FE mesh.
+    :ivar field: scalar field to be represented.
     '''
     def __init__(self):
         super(DisplaySettingsFE,self).__init__()
         self.nodes= None
         self.gridMapper= None
+        self.field= None
         
-    def VtkDefineElementsActor(self, reprType, field: fields.ScalarField,color=xc.Vector([rd.random(),rd.random(),rd.random()])):
+    def _vtk_define_elements_actor(self, reprType, color=xc.Vector([rd.random(),rd.random(),rd.random()])):
         ''' Define the actor to display elements
 
         :param reprType: type of representation ("points", "wireframe" or
                "surface")
-        :param field: scalar field to be represented.
         :param color: RGB color to represent the elements (defaults to random
                       color)
         '''
-        if(field):
-            field.setupOnGrid(self.gridRecord.uGrid)
+        if(self.field):
+            self.field.setupOnGrid(self.gridRecord.uGrid)
         self.gridMapper= vtkDataSetMapper()
         self.gridMapper.SetInputData(self.gridRecord.uGrid)
-        if(field):
-            field.setupOnMapper(self.gridMapper)
+        if(self.field):
+            self.field.setupOnMapper(self.gridMapper)
         elemActor= vtkActor()
         elemActor.SetMapper(self.gridMapper)
         elemActor.GetProperty().SetColor(color[0],color[1],color[2])
@@ -95,11 +99,11 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+"; Representation type: '"+ reprType+ "' unknown.")
         self.renderer.AddActor(elemActor)
-        if(field):
-            field.creaColorScaleBar()
-            self.renderer.AddActor2D(field.scalarBar)
+        if(self.field):
+            self.field.creaColorScaleBar()
+            self.renderer.AddActor2D(self.field.scalarBar)
 
-    def VtkDefineNodesActor(self, radius):
+    def _vtk_define_nodes_actor(self, radius):
         '''Define the actor to display nodes.
 
         :param radius: radius of the sphere used as symbol to represent nodes.
@@ -122,10 +126,73 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         visNodes.GetProperty().SetColor(rd.random(),rd.random(),rd.random())
         self.renderer.AddActor(visNodes)
 
-    def VtkLoadElemMesh(self, field: fields.ScalarField, defFScale=0.0,eigenMode=None):
+    def _vtk_define_field(self, nodeSet):
+        ''' Define the field to be represented on the FE mesh.
+
+        :param nodeSet: set of nodes to represent the field on.
+        '''
+        if(self.field):
+            arr= self.field._fill_vtk_double_array(nodeSet)
+            if(__debug__):
+                if(not arr):
+                    AssertionError('Can\'t create the array.')
+            self.field.createLookUpTable()
+
+    def _vtk_load_nodes(self, nodeSet, defFScale, eigenMode):
+        ''' Load nodes in VTK.
+
+        :param nodeSet: set of nodes to load into VTK.
+        :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor. In case of modal analysis, the displayed 
+                  position of each node equals to the initial position plus
+                  its eigenVector multiplied by this factor.
+                  (Defaults to 0.0, i.e. display of initial/undeformed shape)
+        :param eigenMode: eigenvibration mode if we want to display the 
+                          deformed shape associated with it when a modal 
+                          analysis has been carried out. 
+                          Defaults to None: no modal analysis.
+        '''
+        if eigenMode is None:
+            for n in nodeSet:
+                pos= n.getCurrentPos3d(defFScale)
+                self.nodes.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
+        else:
+            for n in nodeSet:
+                pos= n.getEigenPos3d(defFScale,eigenMode)
+                self.nodes.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
+                
+    def _vtk_load_elements(self, elemSet):
+        ''' Load elements into VTK.
+
+        :param elemSet: finite element set to load into VTK.
+        '''
+        for e in elemSet:
+            vertices= xc_base.vector_int_to_py_list(e.getIdxNodes)
+            vtx= vtkIdList()
+            for vIndex in vertices:
+                vtx.InsertNextId(vIndex)
+            #if(e.getVtkCellType!= VTK_VERTEX): LCPT commented out 20250120
+            self.gridRecord.uGrid.InsertNextCell(e.getVtkCellType,vtx)
+        
+    def _vtk_load_constraints(self, constraintSet):
+        ''' Load constraints into VTK.
+
+        :param constraintSet: finite element set to load into VTK.
+        '''
+        for c in constraintSet:
+            if(hasattr(c,'getIdxNodes')):
+                vertices= xc_base.vector_int_to_py_list(c.getIdxNodes)
+                vtx= vtkIdList()
+                for vIndex in vertices:
+                    vtx.InsertNextId(vIndex)
+                if(c.getVtkCellType!= VTK_VERTEX):
+                    self.gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)
+
+    def _vtk_load_elem_mesh(self, defFScale=0.0, eigenMode=None):
         '''Load the element mesh
 
-        :param field: scalar field to be represented
         :param defFScale: factor to apply to current displacement of nodes 
                   so that the display position of each node equals to
                   the initial position plus its displacement multiplied
@@ -149,50 +216,36 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         nodeSet= eSet.nodes
         numNodes= len(nodeSet)
         if(numNodes>0):
-            if(field):
-                arr= field.fillArray(nodeSet)
-                if(__debug__):
-                    if(not arr):
-                        AssertionError('Can\'t create the array.')
-                field.createLookUpTable()      
-            # Load nodes in vtk
-            if eigenMode is None:
-                for n in nodeSet:
-                    pos= n.getCurrentPos3d(defFScale)
-                    self.nodes.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
-            else:
-                for n in nodeSet:
-                    pos= n.getEigenPos3d(defFScale,eigenMode)
-                    self.nodes.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
-             # Load elements in vtk
-            setElems= eSet.elements
-            for e in setElems:
-                vertices= xc_base.vector_int_to_py_list(e.getIdxNodes)
-                vtx= vtkIdList()
-                for vIndex in vertices:
-                    vtx.InsertNextId(vIndex)
-                #if(e.getVtkCellType!= VTK_VERTEX): LCPT commented out 20250120
-                self.gridRecord.uGrid.InsertNextCell(e.getVtkCellType,vtx)
-            setConstraints= eSet.getConstraints
-            for c in setConstraints:
-                if(hasattr(c,'getIdxNodes')):
-                    vertices= xc_base.vector_int_to_py_list(c.getIdxNodes)
-                    vtx= vtkIdList()
-                    for vIndex in vertices:
-                        vtx.InsertNextId(vIndex)
-                    if(c.getVtkCellType!= VTK_VERTEX):
-                        self.gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)
+            self._vtk_define_field(nodeSet= nodeSet)
+            # Load nodes into VTK.
+            self._vtk_load_nodes(nodeSet= nodeSet, defFScale= defFScale, eigenMode= eigenMode)
+            # Load elements into VTK.
+            self._vtk_load_elements(elemSet= eSet.elements)
+            # Load constraints into VTK.
+            self._vtk_load_constraints(constraintSet= eSet.getConstraints)
             return True
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+"; error when drawing set: '"+eSet.name+"', it has no nodes so I can't get set geometry (use fillDownwards?)")
             return False
-            
-    def defineMeshScene(self, field: fields.ScalarField, defFScale= 0.0, eigenMode= None, color= xc.Vector([rd.random(),rd.random(),rd.random()])):
-        '''Define the scene for the mesh
+        
+    def setField(self, field):
+        ''' Assigns the field to be represented.
 
         :param field: scalar field to be represented
+        '''
+        if(field):
+            if(self.field is None):
+                self.field= field
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+"; field already assigned. Command ignored.")
+
+    def defineMeshScene(self, defFScale= 0.0, eigenMode= None, color= xc.Vector([rd.random(),rd.random(),rd.random()])):
+        '''Define the scene for the mesh
+
         :param defFScale: factor to apply to current displacement of nodes 
                     so that the display position of each node equals to
                     the initial position plus its displacement multiplied
@@ -205,11 +258,11 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         :param color: RGB color to represent the elements (defaults to random
                       color)
         '''
-        retval= self.VtkLoadElemMesh(field, defFScale, eigenMode)
+        retval= self._vtk_load_elem_mesh(defFScale, eigenMode)
         self.renderer= vtkRenderer()
         self.renderer.SetBackground(self.bgRComp, self.bgGComp, self.bgBComp)
-        self.VtkDefineNodesActor(0.002)
-        self.VtkDefineElementsActor("surface", field, color)
+        self._vtk_define_nodes_actor(0.002)
+        self._vtk_define_elements_actor("surface", color)
         self.renderer.ResetCamera()
         return retval
 
@@ -252,7 +305,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                    initial/undeformed shape)
         '''
         self.setupGrid(setToDisplay)
-        self.defineMeshScene(field= None)
+        self.defineMeshScene()
         self.displayScene(caption= caption, unitDescription= '', fileName= fileName)
         
     def displayLocalAxes(self, setToDisplay, caption= 'local axis', vectorScale=1.0, fileName= None, defFScale= 0.0):
@@ -280,7 +333,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
             vScale= 1.0
         vField= lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vScale)
         vField.dumpVectors(setToDisplay)
-        self.defineMeshScene(field= None) 
+        self.defineMeshScene() 
         vField.addToDisplay(self)
         self.displayScene(caption= caption, unitDescription= '', fileName= fileName)
 
@@ -295,15 +348,14 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self.setupGrid(setToDisplay)
         vField= lavf.StrongWeakAxisVectorField(setToDisplay.name+'_strongWeakAxis',vectorScale)
         vField.dumpVectors(setToDisplay)
-        self.defineMeshScene(field= None) 
+        self.defineMeshScene() 
         vField.addToDisplay(self)
         self.displayScene(caption= caption, unitDescription= '', fileName= fileName)
 
-    def defineMeshActorsSet(self, elemSet, field: fields.ScalarField, defFScale, nodeSize):
-        ''' Define mesh
+    def _define_mesh_actors_for_set(self, elemSet, defFScale, nodeSize):
+        ''' Define the mesh corresponding to the given set.
 
         :param elemSet: set of elements that form the mesh to display.
-        :param field: scalar field to be represented
         :param defFScale: factor to apply to current displacement of nodes 
                    so that the display position of each node equals to
                    the initial position plus its displacement multiplied
@@ -314,9 +366,29 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self.setupGrid(elemSet)
         if elemSet.color.Norm()==0:
             elemSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
-        self.VtkLoadElemMesh(field,defFScale,eigenMode=None)
-        self.VtkDefineNodesActor(nodeSize)
-        self.VtkDefineElementsActor("surface", field, elemSet.color)
+        self._vtk_load_elem_mesh(defFScale= defFScale, eigenMode=None)
+        self._vtk_define_nodes_actor(nodeSize)
+        self._vtk_define_elements_actor("surface", elemSet.color)
+
+    def _define_field_actors(self, xcSets, defFScale, nodeSize, scaleConstr):
+        ''' Define the fields actors in the given sets.
+
+        :param xcSets: set or list of sets to be displayed
+        :param defFScale: factor to apply to current displacement of nodes 
+                   so that the display position of each node equals to
+                   the initial position plus its displacement multiplied
+                   by this factor. (Defaults to 0.0, i.e. display of 
+                   initial/undeformed shape)
+        :param nodeSize: size of the spheres that represent nodes.
+        :param scaleConstr: scale of SPConstraints symbols (defaults to 0.2)
+        '''
+        if(type(xcSets)==list):
+            for s in xcSets:
+                self._define_mesh_actors_for_set(s, defFScale, nodeSize)
+                self.displayConstraints(s, scaleConstr, defFScale)
+        else:
+            self._define_mesh_actors_for_set(xcSets, defFScale, nodeSize)
+            self.displayConstraints(xcSets, scaleConstr, defFScale)
 
     def displayMesh(self, xcSets, field: fields.ScalarField = None, diagrams= None, caption= '', unitDescription= '', fileName= None, defFScale=0.0, nodeSize=0.01, scaleConstr= 0.2):
         '''Display the finite element mesh 
@@ -336,15 +408,11 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                     0.01)
         :param scaleConstr: scale of SPConstraints symbols (defaults to 0.2)
         '''
+        if(field):
+            self.setField(field)
         self.renderer= vtkRenderer()
         self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
-        if(type(xcSets)==list):
-            for s in xcSets:
-                self.defineMeshActorsSet(s, field, defFScale, nodeSize)
-                self.displayConstraints(s, scaleConstr, defFScale)
-        else:
-            self.defineMeshActorsSet(xcSets, field, defFScale, nodeSize)
-            self.displayConstraints(xcSets, scaleConstr, defFScale)
+        self._define_field_actors(xcSets= xcSets, defFScale= defFScale, nodeSize= nodeSize, scaleConstr= scaleConstr)
         self.renderer.ResetCamera()
         if(diagrams):
             for d in diagrams:
@@ -451,11 +519,13 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self.displayNodalLoads(preprocessor, loadPattern, clrVectores,fScaleVectores)
 
     def appendDiagram(self, diagram, orientScbar=1, titleScbar=None):
-        '''
+        ''' Add the diagrams to the actors to display.
+
+        :param diagram: diagram to append.
         :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
         :param titleScbar: title for the scalar bar (defaults to None)
         '''
-        diagram.addDiagramToScene(self,orientScbar,titleScbar)
+        diagram.addDiagramToScene(self, orientScbar, titleScbar)
 
     def getSingleFreedomConstraintsData(self, preprocessor, nodsInSet):
         ''' Return the data to define the symbols of the single-fredom

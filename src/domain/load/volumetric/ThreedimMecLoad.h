@@ -40,13 +40,21 @@ class Matrix;
 
 //! @ingroup ElemLoads
 //
-//! @brief Mechanical load (forces) over threedimensional elements.
+//! @brief Mechanical load (forces) over three-dimensional elements.
 class ThreedimMecLoad: public ThreedimLoad
   {
   public:
     ThreedimMecLoad(int tag, int classTag, const ID &theElementTags);
     ThreedimMecLoad(int tag, int classTag);
 
+    static size_t getForceVectorDimension(void);
+    
+    virtual Vector getLocalForce(void) const;
+    virtual Vector3d getVector3dLocalForce(void) const;
+    virtual const Matrix &getLocalForces(void) const;
+    virtual const Matrix &getGlobalVectors(const Matrix &) const= 0;
+    virtual const Matrix &getGlobalForces(void) const;
+    
     virtual SlidingVectorsSystem3d getResultant(const Pos3d &p= Pos3d(), bool initialGeometry= true) const;
   };
 } // end of XC namespace

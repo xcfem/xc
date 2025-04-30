@@ -65,22 +65,9 @@ void XC::ShellMecLoad::addFixedEndForcesInBasicSystem(const std::vector<double> 
 	      << "; not implemented." << std::endl;
   }
 
-//! @brief Return the dimension of the force vector.
-size_t XC::ShellMecLoad::getForceVectorDimension(void) const
-  { return 3; }
-
 //! @brief Return the dimension of the bending moment vector.
-size_t XC::ShellMecLoad::getMomentVectorDimension(void) const
+size_t XC::ShellMecLoad::getMomentVectorDimension(void)
   { return 3; }
-
-//! @brief Returns force expressed in local coordinates.
-XC::Vector XC::ShellMecLoad::getLocalForce(void) const
-  {
-    Vector retval(3);
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented." << std::endl;
-    return retval;
-  }
 
 //! @brief Returns moment expressed in local coordinates.
 XC::Vector XC::ShellMecLoad::getLocalMoment(void) const
@@ -91,13 +78,6 @@ XC::Vector XC::ShellMecLoad::getLocalMoment(void) const
     return retval;
   }
 
-//! @brief Return the local components of the
-//! force in a Vector3d. 
-Vector3d XC::ShellMecLoad::getVector3dLocalForce(void) const
-  {
-    Vector f= getLocalForce();
-    return Vector3d(f[0],f[1],f[2]);
-  }
 
 //! @brief Return the local components of the
 //! moment in a Vector3d. 
@@ -105,15 +85,6 @@ Vector3d XC::ShellMecLoad::getVector3dLocalMoment(void) const
   {
     Vector m= getLocalMoment();
     return Vector3d(m[0],m[1],m[2]);
-  }
-
-//! @brief Returns the components of the force vectors.
-const XC::Matrix &XC::ShellMecLoad::getLocalForces(void) const
-  {
-    static Matrix retval;
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented." << std::endl;
-    return retval;
   }
 
 //! @brief Returns the components of the vector moments.
@@ -178,10 +149,6 @@ const XC::Matrix &XC::ShellMecLoad::getGlobalVectors(const Matrix &localVectors)
 		<< ": pointer to domain is NULL." << std::endl;
     return retval;
   }
-
-//! @brief Return the force expressed in global coordinates.
-const XC::Matrix &XC::ShellMecLoad::getGlobalForces(void) const
-  { return getGlobalVectors(getLocalForces()); }
 
 //! @brief Returns the bending moment expressed in global coordinates.
 const XC::Matrix &XC::ShellMecLoad::getGlobalMoments(void) const

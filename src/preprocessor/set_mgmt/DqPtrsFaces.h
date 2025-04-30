@@ -34,6 +34,7 @@
 
 #include "DqPtrsEntities.h"
 #include "preprocessor/multi_block_topology/entities/2d/Face.h"
+#include "preprocessor/multi_block_topology/entities/1d/EdgeContainer.h"
 
 namespace XC {
 
@@ -55,8 +56,14 @@ class DqPtrsFaces: public DqPtrsEntities<Face>
     
 
     // Surface orientation.
+    Vector3d getIVectorAverage(void) const;
+    Vector3d getJVectorAverage(void) const;
+    Vector3d getKVectorAverage(void) const;
     void reverse(void);
     void setKOrientation(const Vector3d &);
+    std::deque< EdgeContainer::point_sequence > getContoursPointSequences(void) const;
+    boost::python::list getContoursPointSequencesPy(void) const;
+    std::deque<Polyline3d> getContours(void) const;
   };
  
 } //end of XC namespace

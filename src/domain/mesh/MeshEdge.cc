@@ -65,7 +65,7 @@ bool XC::MeshEdge::isConnected(const Node &n) const
     return retval;
   }
 
-//! @brief Returns true if the edge is connected to the edge being passed as parameter.
+//! @brief Returns true if the edge is connected to the given one.
 bool XC::MeshEdge::isConnected(const MeshEdge &edge) const
   {
     bool retval= false;

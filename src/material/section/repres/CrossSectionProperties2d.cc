@@ -30,7 +30,7 @@
 #include "utility/utils/misc_utils/inertia.h"
 #include "utility/geom/coo_sys/ref_sys/PrincipalAxes2D.h"
 #include "domain/mesh/element/utils/Information.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>

@@ -22,7 +22,7 @@
 //          February 2011
 
 #include "DruckerPragerPlaneStrain.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 
 //static vectors and matrices
 XC::Vector XC::DruckerPragerPlaneStrain::strain(3);
@@ -69,7 +69,7 @@ int XC::DruckerPragerPlaneStrain::getOrder() const
 //! (e.g. an Element) know how to interpret the quantites returned by this
 //! object.
 const XC::ResponseId &XC::DruckerPragerPlaneStrain::getResponseType(void) const
-  { return RespMembraneMat; }
+  { return RespSolidMechanics2D; }
 
 //get the strain and integrate plasticity equations
 int XC::DruckerPragerPlaneStrain::setTrialStrain(const Vector &strain_from_element) 

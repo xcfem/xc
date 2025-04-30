@@ -124,6 +124,9 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getGaussModel",make_function(&XC::Element::getGaussModel, return_internal_reference<>() ),"Return the element Gauss quadrature.")
   .def("getCoordinateSystem",&XC::Element::getCooSys,"Return the element coordinate system.")
   .def("get2DCoordinateSystem",&XC::Element::getCooSys2d,"Return the element coordinate system in a two-dimensional space.")
+  .def("getLength",&XC::Element::getLength, "getLength(initialGeometry): return element's length. If initialGeometry is True the returned length corresponds to its undeformed geometry.")
+  .def("getArea", &XC::Element::getArea, "getArea(initialGeometry): return element's area. If initialGeometry is True the returned area corresponds to its undeformed geometry.")
+  .def("getVolume", &XC::Element::getVolume, "getVolume(initialGeometry): return element's volume. If initialGeometry is True the returned volume corresponds to its undeformed geometry.")
   .def("getValuesAtNodes",&XC::Element::getValuesAtNodes,"getValuesAtNodes(string, silent): return the value of the argument at the element nodes. If silent==True don't complain about non-existent property.")
   .def("createInertiaLoad", &XC::Element::createInertiaLoad,"Create the inertia load for the given acceleration vector.")
   .def("copySetsFrom", &XC::Element::copySetsFrom,"Add this element to all the sets containing the given element.")
@@ -181,8 +184,7 @@ class_<XC::Element1D, bases<ElementBase2N >, boost::noncopyable >("Element1D", n
     .def("vector3dPointLoadLocal", &XC::Element1D::vector3dPointLoadLocal,"Element's load.")
     .def("strainLoad", &XC::Element1D::strainLoad,"Element's load.")
     .def("getCooPoints",make_function(&XC::Element1D::getCooPoints, return_internal_reference<>()) ,"Returns points over element length.")
-    .def("getLength",&XC::Element1D::getLength, "Returns element length.")
-       ;
+  ;
 
 
 #include "truss_beam_column/python_interface.tcc"

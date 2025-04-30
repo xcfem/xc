@@ -23,3 +23,4 @@ The path to do this is as follows:
 ## References
 
 - [Do It Your Self-Weight](https://portwooddigital.com/2023/11/05/do-it-your-self-weight/)
+- [Statically Equivalent Loads](https://portwooddigital.com/2025/04/14/statically-equivalent-loads/)

@@ -158,6 +158,7 @@ GeomObj::list_Pos2d intersection(const Polyline2d &p,const Segment2d &);
 GeomObj::list_Pos2d intersection(const Line2d &,const Polyline2d &);
 GeomObj::list_Pos2d intersection(const Ray2d &,const Polyline2d &p);
 GeomObj::list_Pos2d intersection(const Segment2d &,const Polyline2d &p);
+Polyline2d remove_duplicated_vertices(const Polyline2d &p,const GEOM_FT &tol= -1.0);
 
 #endif
 

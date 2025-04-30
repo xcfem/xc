@@ -121,6 +121,9 @@ class PathSeries: public PathSeriesBase
       {return this->prependZero;}
 
     void readFromFile(const std::string &fileName);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

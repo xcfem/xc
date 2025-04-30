@@ -39,7 +39,7 @@ class FVectorShell;
 //! @ingroup ElemLoads
 //
 //! @brief Mechanical load (forces) over shell elements.
-class ShellMecLoad: public BidimMecLoad
+class ShellMecLoad: public BidimMecLoad<3>
   {
   public:
     ShellMecLoad(int tag, int classTag, const ID &theElementTags);
@@ -48,16 +48,11 @@ class ShellMecLoad: public BidimMecLoad
     virtual void addReactionsInBasicSystem(const std::vector<double> &,const double &,FVectorShell &) const;
     virtual void addFixedEndForcesInBasicSystem(const std::vector<double> &,const double &,FVectorShell &) const;
 
-    virtual size_t getForceVectorDimension(void) const;
-    virtual size_t getMomentVectorDimension(void) const;
-    virtual Vector getLocalForce(void) const;
+    static size_t getMomentVectorDimension(void);
     virtual Vector getLocalMoment(void) const;
-    virtual const Matrix &getLocalForces(void) const;
     virtual const Matrix &getLocalMoments(void) const;
-    virtual const Matrix &getGlobalForces(void) const;
     virtual const Matrix &getGlobalMoments(void) const;
     virtual const Matrix &getGlobalVectors(const Matrix &) const;
-    virtual Vector3d getVector3dLocalForce(void) const;
     virtual Vector3d getVector3dLocalMoment(void) const;
     SlidingVectorsSystem3d getResultant(const Pos3d &centro, bool initialGeometry) const;
   };

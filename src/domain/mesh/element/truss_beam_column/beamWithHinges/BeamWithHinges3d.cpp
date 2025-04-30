@@ -64,7 +64,7 @@
 #include <domain/mesh/element/utils/Information.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include "domain/load/beam_loads/BeamMecLoad.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 
 XC::Matrix XC::BeamWithHinges3d::theMatrix(12,12);

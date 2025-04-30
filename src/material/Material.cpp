@@ -65,6 +65,7 @@
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/ID.h"
 #include "domain/domain/Domain.h"
+#include "material/ResponseId.h"
 #include "utility/utils/misc_utils/colormod.h"
 
 //! @param matName: name of the material.
@@ -178,6 +179,25 @@ int XC::Material::setVariable(const std::string &argv)
 
 int XC::Material::getVariable(int variableID, double &info)
   { return -1; }
+
+
+//! @brief Return the ordering and type of response quantities
+//! returned by this material.
+//!
+//! Return the section ResponseId code that indicates
+//! the ordering and type of response quantities returned
+//! by the material. Lets the calling object
+//! (e.g. an Element) know how to interpret the quantites returned by this
+//! object.
+const XC::ResponseId &XC::Material::getResponseType(void) const
+  {
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; not implemented."
+	      << Color::def << std::endl;
+    static ResponseId err;    
+    return err;    
+  }
+
 
 int XC::Material::setParameter(const std::vector<std::string> &argv, Parameter &param)
   { return -1; }

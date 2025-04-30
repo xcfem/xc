@@ -190,7 +190,10 @@ class LoadPattern: public NodeLocker
     void setGammaF(const double &);
     LoadPattern &operator*=(const double &fact);
     LoadPattern &operator/=(const double &fact); 
-    // methods for o/p
+    // methods for o/p    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
 

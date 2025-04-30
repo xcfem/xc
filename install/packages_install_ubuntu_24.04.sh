@@ -22,6 +22,25 @@ if [ "$1" != "DoNotAsk" ]; then
     fi
 fi
 
+sudo apt-get update -y
+
+# add universe repository so packages like gtk3 can be found
+sudo install software-properties-common
+sudo add-apt-repository universe
+sudo apt-get update -y
+
+build_essential="\
+    build-essential  \
+    zlib1g-dev       \
+    libncurses5-dev  \
+    libgdbm-dev      \
+    libnss3-dev      \
+    libssl-dev       \
+    libreadline-dev  \
+    libffi-dev       \
+    wget"
+sudo apt-get install -y $build_essential
+
 # packages installed by package manager apt-get
 # tested on Ubuntu 18.04 Bionic Beaver
 packages_build="\
@@ -42,11 +61,8 @@ packages_lib="\
     libf2c2-dev                 \
     libglib2.0-dev              \
     libgmp3-dev                 \
-    libgtk2.0-dev               \
-    libgtkgl2.0-dev             \
-    libgtkglextmm-x11-1.2-dev   \
-    libgtkglext1-dev            \
-    libgtkmm-2.4-dev            \
+    libgtk-3-dev                \
+    libgtkmm-3.0-dev            \
     libgts-bin                  \
     libgts-dev                  \
     liblapack-dev               \
@@ -65,9 +81,9 @@ packages_lib="\
 sudo apt-get install -y $packages_lib
 
 packages_dev="\
-    python3-dev          \
-    cimg-dev  \
-    petsc-dev \
+    python3-dev \
+    cimg-dev    \
+    petsc-dev   \
     tcl-dev"
 sudo apt-get install -y $packages_dev
 
@@ -79,6 +95,7 @@ packages_python="\
     python3-matplotlib   \
     python3-pandas       \
     python3-sklearn      \
+    python3-flatlatex    \
     python3-pip"
 sudo apt-get install -y $packages_python
 

@@ -28,9 +28,10 @@
 
 #include "TrussStrainLoad.h"
 #include <utility/matrix/Vector.h>
+#include <utility/matrix/Matrix.h>
 #include "utility/matrix/ID.h"
-
 #include "utility/actor/actor/MovableVector.h"
+#include "domain/mesh/element/Element.h"
 
 XC::TrussStrainLoad::TrussStrainLoad(int tag,const double &t1, const double &t2,const ID &theElementTags)
   :ElementBodyLoad(tag, LOAD_TAG_TrussStrainLoad, theElementTags), e1(t1),  e2(t2) {}
@@ -46,6 +47,11 @@ XC::TrussStrainLoad::TrussStrainLoad(int tag)
 XC::TrussStrainLoad::TrussStrainLoad(void)
   :ElementBodyLoad(LOAD_TAG_TrussStrainLoad), e1(0.0), e2(0.0) {}
 
+//! @brief Return the category of this kind of loads.
+std::string XC::TrussStrainLoad::Category(void) const
+  { return "truss_strain"; }
+
+//! @brief Return the axial strains at both ends of the truss element.
 std::vector<XC::Vector> XC::TrussStrainLoad::getStrains(void) const
   {
     std::vector<Vector> retval(2);
@@ -54,6 +60,28 @@ std::vector<XC::Vector> XC::TrussStrainLoad::getStrains(void) const
     retval[0]= tmp;
     tmp[1]= e2;
     retval[1]= tmp;
+    return retval;
+  }
+
+//! @brief Return the axial strains at both ends of the given truss element.
+XC::Matrix XC::TrussStrainLoad::getElementStrainsMatrix(const Element &e) const
+  {
+    Matrix retval(2, 1);
+    const int elemTag= e.getTag();
+    if(this->actsOnElement(elemTag))
+      {
+	// For now, we assume all loaded elements have the
+	// same number of gauss points.
+	retval(0,0)= e1;
+	retval(1,0)= e2;
+      }
+    else
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ": element with tag: " << elemTag
+		  << " not loaded."
+		  << std::endl;
+      }
     return retval;
   }
 

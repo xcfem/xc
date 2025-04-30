@@ -68,7 +68,7 @@
 #include "utility/geom/pos_vec/Vector3d.h"
 #include "utility/geom/coo_sys/Rect3d3dCooSys.h"
 
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "utility/matrix/Matrix.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/load/ElementalLoad.h"

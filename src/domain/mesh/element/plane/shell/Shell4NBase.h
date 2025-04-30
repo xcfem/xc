@@ -106,6 +106,7 @@ class Shell4NBase: public QuadBase4N<SectionFDPhysicalProperties>
     const Matrix &getMass(void) const;
 
     const GaussModel &getGaussModel(void) const;
+    virtual const SectionForceDeformation *getSectionPtr(const size_t &) const;
 
     Vector getInterpolationFactors(const ParticlePos3d &) const;
     Vector getInterpolationFactors(const Pos3d &) const;

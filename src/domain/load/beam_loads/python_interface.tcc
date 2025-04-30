@@ -25,15 +25,18 @@ class_<XC::TrussStrainLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("Tr
   .add_property("eps1", make_function( &XC::TrussStrainLoad::E1, return_value_policy<return_by_value>() ),&XC::TrussStrainLoad::setE1, "return the strain load at back end.")
   .add_property("eps2", make_function( &XC::TrussStrainLoad::E2, return_value_policy<return_by_value>() ),&XC::TrussStrainLoad::setE2, "return the strain load at front end.")
   .def("getStrains",&XC::TrussStrainLoad::getStrains, "return the strain loads at both ends.")
+  .def("getElementStrainsMatrix", &XC::TrussStrainLoad::getElementStrainsMatrix, "Return a matrix containing the axial strains at both ends as rows.") 
   ;
 
 class_<XC::BeamLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("BeamLoad", no_init)
   .add_property("category", &XC::BeamLoad::Category)
+  .def("getElementResponseId", &XC::BeamLoad::getElementResponseId, "Return the response id of the given element.") 
   ;
 
 class_<XC::BeamStrainLoad, bases<XC::BeamLoad>, boost::noncopyable >("BeamStrainLoad", no_init)
   .add_property("backEndDeformationPlane", make_function( &XC::BeamStrainLoad::getDeformationPlane1, return_internal_reference<>() ),&XC::BeamStrainLoad::setDeformationPlane1,"Back end deformation plane.")
   .add_property("frontEndDeformationPlane", make_function( &XC::BeamStrainLoad::getDeformationPlane2, return_internal_reference<>() ),&XC::BeamStrainLoad::setDeformationPlane2,"Front end deformation plane.")
+  .def("getElementStrainsMatrix", &XC::BeamStrainLoad::getElementStrainsMatrix, "Return a matrix containing the axial strains at element both ends as rows.") 
   ;
 
 class_<XC::BeamMecLoad, bases<XC::BeamLoad>, boost::noncopyable >("BeamMecLoad", no_init)

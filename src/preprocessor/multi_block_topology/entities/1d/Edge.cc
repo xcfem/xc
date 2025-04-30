@@ -643,6 +643,20 @@ std::set<const XC::Face *> XC::Edge::getConnectedSurfaces(const SetBase *s) cons
     return retval;
   }
 
+//! @brief Returns the faces from the given set that share this edge.
+std::set<const XC::Face *> XC::Edge::getConnectedSurfaces(const DqPtrsFaces &faceSet) const
+  {
+    std::set<const XC::Face *> retval;
+    std::set<const XC::Face *> tmp= this->getConnectedSurfaces();
+    for(std::set<const XC::Face *>::const_iterator i= tmp.begin();i!=tmp.end();i++)
+      {
+	const Face *facePtr= faceSet.findTag((*i)->getTag());
+	if(facePtr)
+	  retval.insert(facePtr);
+      }
+    return retval;
+  }
+
 //! @brief Return the surfaces that touch this point (neighbors).
 boost::python::list XC::Edge::getConnectedSurfacesPy(void) const
   {

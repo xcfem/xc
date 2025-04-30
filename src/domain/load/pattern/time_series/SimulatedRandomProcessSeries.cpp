@@ -118,17 +118,62 @@ double XC::SimulatedRandomProcessSeries::getFactor(double time) const
       }
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::SimulatedRandomProcessSeries::getPyDict(void) const
+  {
+    boost::python::dict retval= TimeSeries::getPyDict();
+    if(this->theRandomNumberGenerator)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; serialization of random number generator not"
+	          << " implemented yet."
+		  << std::endl;
+	exit(-1);
+      }
+    if(this->theSpectrum)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; serialization of spectrum not implemented yet."
+	          << std::endl;
+	exit(-1);
+      }
+    retval["num_freq_intervals"]= this->numFreqIntervals;
+    retval["mean"]= this->mean;
+    retval["delta_w"]= this->deltaW;
+    retval["theta"]= this->theta.getPyList();
+    retval["A"]= this->A.getPyList();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::SimulatedRandomProcessSeries::setPyDict(const boost::python::dict &d)
+  {
+    TimeSeries::setPyDict(d);
+    this->numFreqIntervals= boost::python::extract<int>(d["numfreq_intervals"]);
+    this->mean= boost::python::extract<double>(d["mean"]);
+    this->deltaW= boost::python::extract<double>(d["delta_w"]);
+    this->theta= Vector(boost::python::extract<boost::python::list>(d["theta"]));
+    this->A= Vector(boost::python::extract<boost::python::list>(d["A"]));
+  }
 
 
 
 int XC::SimulatedRandomProcessSeries::sendSelf(Communicator &comm)
-{
-	return 0;
-}
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << std::endl;
+    return 0;
+  }
 
 
 int XC::SimulatedRandomProcessSeries::recvSelf(const Communicator &comm)
-  { return 0; }
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << std::endl;
+    return 0;
+  }
 
 
 void XC::SimulatedRandomProcessSeries::Print(std::ostream &s, int flag) const

@@ -65,7 +65,7 @@
 #include <utility/matrix/Vector.h>
 
 
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 
 XC::Vector XC::ElasticSection3d::s(4);
 

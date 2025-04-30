@@ -93,11 +93,11 @@ result= solProc.solve(calculateNodalReactions= True, reactionCheckTolerance= 1e-
 
 Ra= n1.getReaction[0] # Horizontal reaction.
 ratio0= abs(Ra+F/2)/(F/2)
-N1Aa= quadA.getMeanInternalForce("n1")
-N2Aa= quadA.getMeanInternalForce("n2")
+N1Aa= quadA.getMeanInternalForce("sigma_11")
+N2Aa= quadA.getMeanInternalForce("sigma_22")
 ratio1= abs(N1Aa-F)/F+abs(N2Aa-F)/F
-N1Ba= quadB.getMeanInternalForce("n1")
-N2Ba= quadB.getMeanInternalForce("n2")
+N1Ba= quadB.getMeanInternalForce("sigma_11")
+N2Ba= quadB.getMeanInternalForce("sigma_22")
 ratio2= abs(N1Ba-F)/F+abs(N2Ba-F)/F
 Ux1a= (n2.getDisp[0]+n3.getDisp[0])/2.0
 # Ux1aRef= F/E MESH TOO COARSE TO GET A CORRECT VALUE OF DISPLACEMENT.
@@ -111,11 +111,11 @@ result= solProc.solve(calculateNodalReactions= True)
 
 Rb= n1.getReaction[0] # Horizontal reaction.
 ratio3= abs(Rb+F/2)/(F/2)
-N1Ab= quadA.getMeanInternalForce("n1")
-N2Ab= quadA.getMeanInternalForce("n2")
+N1Ab= quadA.getMeanInternalForce("sigma_11")
+N2Ab= quadA.getMeanInternalForce("sigma_22")
 ratio4= abs(N1Ab-F)/F+abs(N2Ab-F)/F
-N1Bb= quadB.getMeanInternalForce("n1")
-N2Bb= quadB.getMeanInternalForce("n2")
+N1Bb= quadB.getMeanInternalForce("sigma_11")
+N2Bb= quadB.getMeanInternalForce("sigma_22")
 ratio5= abs(N1Bb)/F+abs(N2Bb)/F # No axial force in the awakened element.
 Ux1b= (n2.getDisp[0]+n3.getDisp[0])/2.0 # Horizontal displacement.
 Ux1bRef= Ux1a # No additional displacement.
@@ -135,11 +135,11 @@ result= solProc.solve(calculateNodalReactions= True)
 # Check results.
 Rc= n1.getReaction[0] # Horizontal reaction.
 ratio7= abs(Rc+F)/F
-N1Ac= quadA.getMeanInternalForce("n1")
-N2Ac= quadA.getMeanInternalForce("n2")
+N1Ac= quadA.getMeanInternalForce("sigma_11")
+N2Ac= quadA.getMeanInternalForce("sigma_22")
 ratio8= abs(N1Ac-1.5*F)/(1.5*F)+abs(N2Ac-1.5*F)/(1.5*F)
-N1Bc= quadB.getMeanInternalForce("n1")
-N2Bc= quadB.getMeanInternalForce("n2")
+N1Bc= quadB.getMeanInternalForce("sigma_11")
+N2Bc= quadB.getMeanInternalForce("sigma_22")
 ratio9= abs(N1Bc-0.5*F)/(0.5*F)+abs(N2Bc-0.5*F)/(0.5*F) # No axial force in the awakened element.
 Ux1c= (n2.getDisp[0]+n3.getDisp[0])/2.0 # Horizontal displacement.
 Ux1cRef= 1.5*Ux1bRef # 1.5 times the previous displacement.

@@ -688,3 +688,23 @@ void PlanePolyline3d::removeRepeated(const GEOM_FT &tol)
 //! @param tol: minimum accepted value for the dot product (<0) of consecutive direction vectors.
 void PlanePolyline3d::removeBackwardSegments(const GEOM_FT &tol)
   { this->pline2d.removeBackwardSegments(tol); }
+
+//! @brief Remove the consecutive vertices that are at distance less than than tol.
+PlanePolyline3d remove_duplicated_vertices(const PlanePolyline3d &p,const GEOM_FT &tol)
+  {
+    PlanePolyline3d retval;
+    // Compute tolerance.
+    GEOM_FT local_tol= tol;
+    if(local_tol<0.0)
+      {
+	const size_t sz= p.getNumVertices();
+	if(sz>1)
+	  {
+	    // Compute average segment length.
+	    const GEOM_FT avgLength= p.getLength()/GEOM_FT(sz-1);
+	    local_tol= avgLength/1e4;
+	  }
+      }
+    retval.removeRepeated(local_tol);
+    return retval;
+  }

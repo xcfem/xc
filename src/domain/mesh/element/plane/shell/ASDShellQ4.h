@@ -185,6 +185,8 @@ class ASDShellQ4: public QuadBase4N<SectionFDPhysicalProperties>
 
     int getNumDOF(void) const;
 
+    virtual const SectionForceDeformation *getSectionPtr(const size_t &) const;
+    
     // methods dealing with committed state and update
     int commitState(void);
     int revertToLastCommit(void);

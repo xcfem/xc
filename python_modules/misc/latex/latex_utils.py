@@ -9,6 +9,7 @@ __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 import sympy
 import tempfile
 import os
+import flatlatex
 
 def toLaTeX(inputStr):
     ''' Add escape characters as needed to display the input string in LaTeX
@@ -69,3 +70,51 @@ def latex_to_pdf(latexCode:str, pdfFileName):
         fName= outputFileName.replace('.tex', extension)
         os.unlink(fName)
     os.unlink(outputFileName)
+
+def get_latex_symbol_from_name(compName: str):
+    '''Return the LaTeX symbol corresponding to the given field component 
+       name.
+
+    :param compName: field component name.
+    '''
+    retval= compName
+    if(compName.startswith('epsilon_')):
+        tokens= compName.split('_')
+        retval= '\\'+tokens[0]+'_{'+tokens[1]+'}'
+    elif(compName=='epsilon'):
+        retval= '\\epsilon'
+    elif(compName.startswith('sigma_')):
+        tokens= compName.split('_')
+        retval= '\\'+tokens[0]+'_{'+tokens[1]+'}'
+    elif(compName[0]== 'u'):
+        retval= '\\'+compName[0]+'_{'+compName[1]+'}'
+    elif(compName.startswith('rot')):
+        retval= '\\theta'+'_{'+compName[3:]+'}'
+    elif(compName.startswith('kappa_')):
+        tokens= compName.split('_')
+        retval= '\\'+tokens[0]+'_{'+tokens[1]+'}'
+    elif(compName=='kappa'):
+        retval= '\\kappa'
+    elif(compName.startswith('gamma_')):
+        tokens= compName.split('_')
+    elif(compName=='gamma'):
+        retval= '\\kappa'
+    elif(compName.startswith('theta_')):
+        tokens= compName.split('_')
+    elif(compName in ['My', 'Mz', 'Qy', 'Qz', 'Vy', 'Vz']):
+        retval= '\\'+compName[0]+'_{'+compName[1]+'}'
+    elif(compName in ['N1', 'N2', 'N12', 'M1', 'M2', 'M12', 'Q1', 'Q2', 'Q12', 'V1', 'V2', 'V12']):
+        retval= '\\'+compName[0]+'_{'+compName[1:]+'}'
+    elif(compName in ['n1', 'n2', 'n12', 'm1', 'm2', 'm12', 'q1', 'q2', 'q12', 'v1', 'v2', 'v12']):
+        retval= '\\'+compName[0]+'_{'+compName[1:]+'}'
+    return retval
+
+def get_unicode_symbol_from_name(compName: str):
+    '''Return the unicode symbol corresponding to the given field component 
+       name.
+
+    :param compName: field component name.
+    '''
+    c= flatlatex.converter()
+    latexExpr= get_latex_symbol_from_name(compName)
+    return c.convert(latexExpr)

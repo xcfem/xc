@@ -30,7 +30,7 @@
 #ifndef BeamColumnWithSectionFD_h
 #define BeamColumnWithSectionFD_h
 
-#include <domain/mesh/element/Element1D.h>
+#include "domain/mesh/element/truss_beam_column/BeamColumn.h"
 #include "material/section/PrismaticBarCrossSectionsVector.h"
 #include "SectionMatrices.h"
 
@@ -40,7 +40,7 @@ namespace XC {
 //! @ingroup BeamColumnElemGrp
 //
 //! @brief Beam-column element with PrismaticBarCrossSection material
-class BeamColumnWithSectionFD: public Element1D
+class BeamColumnWithSectionFD: public BeamColumn
   {
   protected:
     PrismaticBarCrossSectionsVector theSections; //!< pointers to the PrismaticBarCrossSection objects

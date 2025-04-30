@@ -96,6 +96,7 @@ class ShellMITC9: public QuadBase9N<SectionFDPhysicalProperties>
     const Matrix &getMass() const;
 
     const GaussModel &getGaussModel(void) const;
+    virtual const SectionForceDeformation *getSectionPtr(const size_t &) const;
 
     void alive(void);
     void zeroLoad(void);

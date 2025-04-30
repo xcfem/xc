@@ -69,7 +69,7 @@
 
 #include "utility/kernel/python_utils.h"
 #include "classTags.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 
@@ -226,7 +226,7 @@ void XC::SectionAggregator::setSection(const std::string &sectionName)
                 << "' not found.\n";
   }
 
-void XC::SectionAggregator::setAddtions(const std::vector<std::string> &responseCodes,const std::vector<std::string> &nmbMats)
+void XC::SectionAggregator::setAdditions(const std::vector<std::string> &responseCodes,const std::vector<std::string> &nmbMats)
   {
     ResponseId codes(responseCodes);
     theAdditions.putMatCodes(codes);
@@ -257,8 +257,8 @@ void XC::SectionAggregator::setAddtions(const std::vector<std::string> &response
     resize();
   }
 
-void XC::SectionAggregator::setAddtionsPyList(const boost::python::list &responseCodes,const boost::python::list &nmbMats)
-  { setAddtions(vector_string_from_py_list(responseCodes),vector_string_from_py_list(nmbMats)); }
+void XC::SectionAggregator::setAdditionsPyList(const boost::python::list &responseCodes,const boost::python::list &nmbMats)
+  { setAdditions(vector_string_from_py_list(responseCodes),vector_string_from_py_list(nmbMats)); }
 
 
 //! @brief destructor:

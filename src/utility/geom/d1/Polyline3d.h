@@ -129,6 +129,8 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     void Print(std::ostream &stream) const;
   };
 
+Polyline3d remove_duplicated_vertices(const Polyline3d &,const GEOM_FT &);
+
 #endif
 
 

@@ -53,6 +53,8 @@ class BeamStrainLoad: public BeamLoad
   public:
     BeamStrainLoad(int tag, const ID &theElementTags);
     BeamStrainLoad(int tag= 0);
+  
+    std::string Category(void) const;
 
     inline const DeformationPlane &getDeformationPlane1(void) const
       { return backEndDeformationsPlane; }
@@ -64,6 +66,7 @@ class BeamStrainLoad: public BeamLoad
       { frontEndDeformationPlane= p; }
     const Vector &getSection1Deformation(const size_t &order,const ResponseId &code) const;
     const Vector &getSection2Deformation(const size_t &order,const ResponseId &code) const;
+    Matrix getElementStrainsMatrix(const Element &) const;
     const Vector &getData(int &type, const double &loadFactor) const;
 
     int sendSelf(Communicator &);  

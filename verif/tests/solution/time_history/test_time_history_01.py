@@ -188,8 +188,9 @@ ratio0= (eig1-25.02037)/25.02037
 ratio1= (freq-5.002)/5.002
 
 # Read test data from JSON file.
-resultsData= open(openSeesResultsPath, 'r')
-openSeesRBase= json.load(resultsData)
+with open(openSeesResultsPath, 'r') as resultsData:
+  openSeesRBase= json.load(resultsData)
+
 
 t= list()
 Rx= list()

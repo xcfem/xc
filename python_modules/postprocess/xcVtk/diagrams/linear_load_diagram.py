@@ -11,17 +11,12 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import sys
-from postprocess.xcVtk.diagrams import colored_diagram as cd
+from postprocess.xcVtk.diagrams import load_diagram as ld
 from misc_utils import log_messages as lmsg
 
-class LinearLoadDiagram(cd.ColoredDiagram):
-    '''Draw a load over a set of linear element (qx,qy,qz,...)
+class LinearLoadDiagram(ld.LoadDiagram):
+    '''Draw a load over a set of linear elements (qx,qy,qz,...)
 
-    :ivar setToDisp: set to display.
-    :ivar component: component to display.
-    :ivar dictActLoadVectors: dictionary that stores for each 
-          linear loaded element the sum of active loads on it
-          (defaults to None)
     '''
     def __init__(self, setToDisp, scale, lRefModSize, fUnitConv, component, rgMinMax= None):
         ''' Constructor.
@@ -36,12 +31,18 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                          the values less than vmin are displayed in blue and 
                          those greater than vmax in red (defaults to None)
         '''
-        super(LinearLoadDiagram,self).__init__(scaleFactor= scale, fUnitConv= fUnitConv, rgMinMax= rgMinMax)
-        self.setToDisp= setToDisp
-        self.component= component
-        self.dictActLoadVectors= None
-        self.lRefModSize= lRefModSize        
+        super(LinearLoadDiagram,self).__init__(setToDisp= setToDisp, scale= scale, lRefModSize= lRefModSize, fUnitConv= fUnitConv, component= component, rgMinMax= rgMinMax)
 
+    def autoScale(self, preprocessor):
+        ''' Autoscale the diagram.
+
+        :param preprocessor: pre-processor of the finite element problem.
+        '''
+        maxAbsComp= self.getMaxAbsComp(preprocessor= preprocessor)
+        if(maxAbsComp>0):
+            self.scaleFactor*= self.lRefModSize/maxAbsComp*100.0
+        return maxAbsComp
+    
     def sumElementalUniformLoads(self, actLP):
         ''' Iterate over active load patterns and cumulate on elements their 
         elemental unifirm loads. Returns a dictionary that stores for each 
@@ -51,7 +52,7 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         '''
         retval= dict()
         if(len(actLP)>0):
-            preprocessor=actLP[0].getDomain.getPreprocessor     
+            preprocessor= actLP[0].getDomain.getPreprocessor     
             for lp in actLP:
                 lIter= lp.loads.getElementalLoadIter
                 eLoad= lIter.next()
@@ -60,18 +61,32 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                     category= eLoad.category
                     if(category=='uniform' or category=='raw'):
                         if(hasattr(eLoad,'getVector3dLocalForce')):
-                            localForce3d= eLoad.getVector3dLocalForce()
-                            tags= eLoad.elementTags
-                            for i in range(0,len(tags)):
-                                eTag= tags[i]
-                                if eTag in eTagsSet:
-                                    elem= preprocessor.getElementHandler.getElement(eTag)
-                                    dim= elem.getDimension
-                                    if(dim==1):
-                                        if eTag in retval:
-                                            retval[eTag]+= localForce3d
-                                        else:
-                                            retval[eTag]= localForce3d
+                            tags= (set(eLoad.elementTags) & set(eTagsSet))
+                            for eTag in tags:
+                                elem= preprocessor.getElementHandler.getElement(eTag)
+                                dim= elem.getDimension
+                                if(dim==1):
+                                    if eTag in retval:
+                                        retval[eTag]+= eLoad.getVector3dLocalForce()
+                                    else:
+                                        retval[eTag]= eLoad.getVector3dLocalForce() # use eLoad method to make sure
+                                                                                    # that retval[eTag] stores a 
+                                                                                    # copy of the strains matrix
+                                                                                    # (instead of a pointer to a local
+                                                                                    # variable).
+                        else:
+                            className= type(self).__name__
+                            methodName= sys._getframe(0).f_code.co_name
+                            warningMsg= '; load of type: '+str(type(eLoad))
+                            warningMsg+= " has no getVector3dLocalForce method. Can't display the load over this element."
+                            lmsg.warning(className+'.'+methodName+warningMsg)
+                    elif('strain' in category):
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        errorMsg= "; component:'"+str(self.component)+"' unknown."
+                        errorMsg= "; use StrainLoadDiagram to draw loads of type: '"
+                        errorMsg+= str(type(eLoad))+ "'."
+                        lmsg.error(className+'.'+methodName+errorMsg)
                     elif(category=='punctual'):
                         # Concentrated load must be treated elsewhere
                         className= type(self).__name__
@@ -88,7 +103,6 @@ class LinearLoadDiagram(cd.ColoredDiagram):
             lmsg.warning(className+'.'+methodName+': no active load patterns; doing nothing.')
         return retval
        
-
     def dumpElementalLoads(self, actLP, diagramIndex, defFScale= 0.0):
         ''' Iterate over loaded elements dumping its loads into the graphic.
 
@@ -100,9 +114,9 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                    by this factor. (Defaults to 0.0, i.e. display of 
                    initial/undeformed shape).
         '''
-        preprocessor=actLP[0].getDomain.getPreprocessor
+        preprocessor= actLP[0].getDomain.getPreprocessor
         if not self.dictActLoadVectors:
-            self.dictActLoadVectors=self.sumElementalUniformLoads(actLP)
+            self.dictActLoadVectors= self.sumElementalUniformLoads(actLP)
         valueCouples= list()
         elements= list()
         directions= list()
@@ -139,8 +153,17 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                 totLoad= v.getModulus()
                 elements.append(elem)
                 valueCouples.append((totLoad, totLoad))
+        elif(self.component in self.strainComponentLabels):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= "; component:'"+str(self.component)+"' unknown."
+            errorMsg+= " Use StrainLoadDiagram to draw that kind of load."
+            lmsg.error(className+'.'+methodName+errorMsg)
         else:
-            lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= "; component:'"+self.component+"' unknown."
+            lmsg.error(className+'.'+methodName+errorMsg)
         if(valueCouples):
             diagramIndex= self.appendDataToDiagram(elements= elements, diagramIndex= diagramIndex, valueCouples= valueCouples, directions= directions, defFScale= defFScale)      
         return diagramIndex
@@ -168,56 +191,16 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                 retval=max([abs(self.dictActLoadVectors[tag].z) for tag in eTags])
             elif(self.component=='xyzComponents'):
                 retval=max([abs(self.dictActLoadVectors[tag].getModulus()) for tag in eTags])
+            elif(self.component in self.strainComponentLabels):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errorMsg= "; component:'"+str(self.component)+"' unknown."
+                errorMsg+= " Use StrainLoadDiagram to draw that kind of load."
+                lmsg.error(className+'.'+methodName+errorMsg)
             else:
-                lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errorMsg= "; component:'"+str(self.component)+"' unknown."
+                lmsg.error(className+'.'+methodName+errorMsg)
         return retval
 
-    def autoScale(self, preprocessor):
-        ''' Autoscale the diagram.
-
-        :param preprocessor: pre-processor of the finite element problem.
-        '''
-        maxAbsComp= self.getMaxAbsComp(preprocessor= preprocessor)
-        if(maxAbsComp>0):
-            self.scaleFactor*= self.lRefModSize/maxAbsComp*100.0
-        return maxAbsComp
-
-    def dumpLoads(self, preprocessor, diagramIndex, defFScale= 0.0):
-        ''' Dump loads over elements.
-
-        :param preprocessor: pre-processor of the finite element problem.
-        :param diagramIndex: index-counter for the values to insert.
-        :param defFScale: factor to apply to current displacement of nodes 
-                   so that the display position of each node equals to
-                   the initial position plus its displacement multiplied
-                   by this factor. (Defaults to 0.0, i.e. display of 
-                   initial/undeformed shape).
-        '''
-        activeLoadPatterns= preprocessor.getDomain.getConstraints.getLoadPatterns
-        if(len(activeLoadPatterns)<1):
-            lmsg.warning('No active load patterns.')
-        retval= 0
-        actLP=[lp.data() for lp in activeLoadPatterns]
-        retval= self.dumpElementalLoads(actLP, diagramIndex, defFScale= defFScale)
-        return retval
-
-    def addDiagram(self,preprocessor, defFScale= 0.0):
-        ''' Create the diagram actor.
-       
-        :param preprocessor: pre-processor of the finite element problem.
-        :param defFScale: factor to apply to current displacement of nodes 
-                   so that the display position of each node equals to
-                   the initial position plus its displacement multiplied
-                   by this factor. (Defaults to 0.0, i.e. display of 
-                   initial/undeformed shape).
-        '''
-        self.createDiagramDataStructure()
-
-        diagramIndex= 0
-        diagramIndex= self.dumpLoads(preprocessor= preprocessor, diagramIndex= diagramIndex, defFScale= defFScale)
-
-        if(diagramIndex>0):
-            self.createLookUpTable()
-            self.createDiagramActor()
-            # self.updateLookUpTable()
-            # self.updateDiagramActor()

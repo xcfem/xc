@@ -102,3 +102,12 @@ if((ratio0<1e-12) & (ratio1<1e-4) & (ratio2<1e-4) & (ratio3<1e-4)):
 else:
     lmsg.error(fname+' ERROR.')
 
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()
+# # oh.displayLocalAxes()
+# for strainLabel in modelSpace.shellStrainComponents:
+#     oh.displayLoads(elLoadComp= strainLabel)
+# # # oh.displayDispRot(itemToDisp='uZ', defFScale= 100.0)
+# # # oh.displayReactions()

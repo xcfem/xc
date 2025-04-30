@@ -184,6 +184,44 @@ double XC::DiscretizedRandomProcessSeries::getFactorSensitivity(double time)
     }
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::DiscretizedRandomProcessSeries::getPyDict(void) const
+  {
+    boost::python::dict retval= TimeSeries::getPyDict();
+    retval["num_mod_funcs"]= this->numModFuncs;
+    retval["c"]= this->c;
+    retval["mean"]= this->mean;
+    retval["max_std_v"]= this->maxStdv;
+    retval["max_std_v_time"]= this->maxStdvTime;
+    if(!this->theModulatingFunctions.empty())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; serialization of modulating functions not implemented"
+	          << " yet." << std::endl;
+	exit(-1);
+      }
+    //retval["the_modulating_functions"]= this->theModulatingFunctions;
+    retval["random_variables"]= this->randomVariables.getPyList();
+    retval["kick_in_times"]= this->kickInTimes.getPyList();
+    retval["parameter_id"]= this->parameterID;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::DiscretizedRandomProcessSeries::setPyDict(const boost::python::dict &d)
+  {
+    TimeSeries::setPyDict(d);
+    this->numModFuncs= boost::python::extract<int>(d["num_mod_funcs"]);
+    this->c= boost::python::extract<double>(d["c"]);
+    this->mean= boost::python::extract<double>(d["mean"]);
+    this->maxStdv= boost::python::extract<double>(d["max_std_v"]);
+    this->maxStdvTime= boost::python::extract<double>(d["max_std_v_time"]);
+    //this->theModulatingFunctions= d["the_modulating_functions"];
+    this->randomVariables= Vector(boost::python::extract<boost::python::list>(d["random_variables"]));
+    this->kickInTimes= Vector(boost::python::extract<boost::python::list>(d["kick_in_times"]));
+    this->parameterID= boost::python::extract<int>(d["parameter_id"]);
+  }
+
 
 int XC::DiscretizedRandomProcessSeries::sendSelf(Communicator &comm)
   { return 0; }
@@ -289,7 +327,8 @@ int XC::DiscretizedRandomProcessSeries::setParameter(const std::vector<std::stri
 
 //         // The random variable number is returned as a parameter XC::ID
 //        return rvNumber;
-    std::cerr << "XC::DiscretizedRandomProcessSeries::setParameter not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented." << std::endl;
     return -1;
   }
 

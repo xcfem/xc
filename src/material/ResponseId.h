@@ -54,10 +54,17 @@ const int PLATE_RESPONSE_m2= 15; // Bending moment per unit length, parallel to 
 const int PLATE_RESPONSE_m12= 16; // Torque per unit length.
 const int PLATE_RESPONSE_q13= 17; // Shear force per unit length, perpendicular to axis 1 and parallel to axis 3.
 const int PLATE_RESPONSE_q23= 18; // Shear force per unit length, perpendicular to axis 2 and parallel to axis 3.
+  
+const int SOLID_MECHANICS_RESPONSE_sigma_11= 19; // Solid mechanics.
+const int SOLID_MECHANICS_RESPONSE_sigma_22= 20;
+const int SOLID_MECHANICS_RESPONSE_sigma_33= 21;
+const int SOLID_MECHANICS_RESPONSE_sigma_12= 22;
+const int SOLID_MECHANICS_RESPONSE_sigma_23= 23;
+const int SOLID_MECHANICS_RESPONSE_sigma_13= 24;
 
-//! @ingroup MATSCC
 //
 //! @brief Stiffness material contribution response identifiers.
+//! @ingroup MATSCC
 class ResponseId: public ID
   {
   public:
@@ -68,66 +75,87 @@ class ResponseId: public ID
     //ResponseId(int *, int size, bool cleanIt = false);
     explicit ResponseId(const ID &);
     bool hasResponse(const int &ri) const;
-    static int StringToRespId(const std::string &str);
-    static std::string RespIdToString(const int &ri);
+    virtual int getComponentIdFromString(const std::string &str) const;
+    virtual std::string getStringFromComponentId(const int &ri) const;
     std::string getString(void) const;
+    boost::python::list getStringIdentifiers(void) const;
+    boost::python::list getIdentifiers(void) const;
+
+    std::deque<int> getComponentIndexesFromCode(const int &) const;
+    std::deque<int> getComponentIndexesFromCode(const std::string &) const;
+    boost::python::list getComponentIndexesFromCodePy(const int &code) const;
+    boost::python::list getComponentIndexesFromCodePy(const std::string &code) const;
   };
 
 class RespP: public ResponseId
   {
   public:
     RespP(void);
+    int getComponentIdFromString(const std::string &str) const;
+    std::string getStringFromComponentId(const int &ri) const;    
   };
   
 class RespPMz: public ResponseId
   {
   public:
     RespPMz(void);
+    int getComponentIdFromString(const std::string &str) const;
+    std::string getStringFromComponentId(const int &ri) const;    
   };
 
 class RespPMzV: public ResponseId
   {
   public:
     RespPMzV(void);
+    int getComponentIdFromString(const std::string &str) const;
+    std::string getStringFromComponentId(const int &ri) const;    
   };
 
 class RespVyP: public ResponseId
   {
   public:
     RespVyP(void);
+    int getComponentIdFromString(const std::string &str) const;
+    std::string getStringFromComponentId(const int &ri) const;    
   };
 
 class RespPMzMy: public ResponseId
   {
   public:
     RespPMzMy(void);
+    int getComponentIdFromString(const std::string &str) const;
+    std::string getStringFromComponentId(const int &ri) const;    
   };
 
 class RespPMzMyT: public ResponseId
   {
   public:
     RespPMzMyT(void);
+    int getComponentIdFromString(const std::string &str) const;
+    std::string getStringFromComponentId(const int &ri) const;    
   };
 
 class RespPMzVyMyVzT: public ResponseId
   {
   public:
     RespPMzVyMyVzT(void);
+    int getComponentIdFromString(const std::string &str) const;
+    std::string getStringFromComponentId(const int &ri) const;    
   };
 
-class RespFiberSectionShear2d: public ResponseId
+class RespFiberSectionShear2d: public RespPMzV
   {
   public:
     RespFiberSectionShear2d(void);
   };
   
-class RespFiberSectionShear3d: public ResponseId
+class RespFiberSectionShear3d: public RespPMzVyMyVzT
   {
   public:
     RespFiberSectionShear3d(void);
   };
 
-class RespPVyMz: public ResponseId
+class RespPVyMz: public RespPMzV
   {
   public:
     RespPVyMz(void);
@@ -137,20 +165,50 @@ class RespMembraneMaterial: public ResponseId
   {
   public:
     RespMembraneMaterial(void);
+    int getComponentIdFromString(const std::string &str) const;
+    std::string getStringFromComponentId(const int &ri) const;    
   };
 
 class RespPlateMaterial: public ResponseId
   {
   public:
     RespPlateMaterial(void);
+    int getComponentIdFromString(const std::string &str) const;
+    std::string getStringFromComponentId(const int &ri) const;    
   };
 
 class RespShellMaterial: public ResponseId
   {
   public:
     RespShellMaterial(void);
+    int getComponentIdFromString(const std::string &str) const;
+    std::string getStringFromComponentId(const int &ri) const;    
   };
-
+  
+class RespSolidMecanics1DMaterial: public ResponseId
+  {
+  public:
+    RespSolidMecanics1DMaterial(void);
+    int getComponentIdFromString(const std::string &str) const;
+    std::string getStringFromComponentId(const int &ri) const;    
+  };
+  
+class RespSolidMecanics2DMaterial: public ResponseId
+  {
+  public:
+    RespSolidMecanics2DMaterial(void);
+    int getComponentIdFromString(const std::string &str) const;
+    std::string getStringFromComponentId(const int &ri) const;    
+  };
+  
+class RespSolidMecanics3DMaterial: public ResponseId
+  {
+  public:
+    RespSolidMecanics3DMaterial(void);
+    int getComponentIdFromString(const std::string &str) const;
+    std::string getStringFromComponentId(const int &ri) const;    
+  };
+  
 const RespP RespElasticSection1d;
 const RespPMz RespElasticSection2d;
 const RespPMzV RespElasticShSection2d;
@@ -164,6 +222,9 @@ const RespPVyMz RespIsolator2spring;
 const RespMembraneMaterial RespMembraneMat;
 const RespPlateMaterial RespPlateMat;
 const RespShellMaterial RespShellMat;
+const RespSolidMecanics1DMaterial RespSolidMechanics1D;
+const RespSolidMecanics2DMaterial RespSolidMechanics2D;
+const RespSolidMecanics3DMaterial RespSolidMechanics3D;
 
 } // end of XC namespace
 

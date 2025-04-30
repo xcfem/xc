@@ -42,6 +42,40 @@ XC::ThreedimMecLoad::ThreedimMecLoad(int tag, int classTag, const ID &theElement
 XC::ThreedimMecLoad::ThreedimMecLoad(int tag,int classTag)
   :ThreedimLoad(tag, classTag) {}
 
+//! @brief Return the dimension of the force vector.
+size_t XC::ThreedimMecLoad::getForceVectorDimension(void)
+  { return 3; }
+
+//! @brief Returns force expressed in local coordinates.
+XC::Vector XC::ThreedimMecLoad::getLocalForce(void) const
+  {
+    Vector retval(3);
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
+    return retval;
+  }
+
+//! @brief Return the local components of the
+//! force in a Vector3d. 
+Vector3d XC::ThreedimMecLoad::getVector3dLocalForce(void) const
+  {
+    Vector f= this->getLocalForce();
+    return Vector3d(f[0], f[1], f[2]);
+  }
+
+//! @brief Returns the components of the force vectors.
+const XC::Matrix &XC::ThreedimMecLoad::getLocalForces(void) const
+  {
+    static Matrix retval;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
+    return retval;
+  }
+
+//! @brief Return the force expressed in global coordinates.
+const XC::Matrix &XC::ThreedimMecLoad::getGlobalForces(void) const
+  { return getGlobalVectors(getLocalForces()); }
+
 //! brief Returns load resultant (force and moment integration over the elements).
 //!
 //! @param center: origin for the sliding vector system.

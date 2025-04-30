@@ -71,7 +71,7 @@
 #include <classTags.h>
 
 #include <cstring>
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 
 //! @brief Frees memory.
 void XC::GenericSectionNd::free(void)

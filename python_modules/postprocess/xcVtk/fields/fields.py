@@ -34,11 +34,11 @@ class ScalarField(fb.FieldBase):
         :param component: component of the control var to represent.
         :param fUnitConv: unit conversion factor.
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
-                         of the scalar field (if any) to be represented. All the values 
-                         less than vmin are displayed in blue and those greater than vmax 
-                         in red (defaults to None)
+                         of the scalar field (if any) to be represented. All 
+                         the values less than vmin are displayed in blue and 
+                         those greater than vmax in red (defaults to None)
         '''
-        super(ScalarField,self).__init__(name,fUnitConv)
+        super(ScalarField,self).__init__(name= name, fUnitConv= fUnitConv)
         self.attrName= functionName
         self.attrComponent= component
         if(rgMinMax):
@@ -50,15 +50,23 @@ class ScalarField(fb.FieldBase):
             self.rgMinMax= None
         self.arr= None
 
-    def fillArray(self, nodeSet):
+    def getPropertyName(self):
+        ''' Return the name of the property that will store the
+            field values.'''
+        return self.name
+
+    def _fill_vtk_double_array(self, nodeSet):
         '''Creates an vtkDoubleArray filled with the proper values.
 
+        :param nodeSet: set of nodes that will provide the values
+                        to populate the array.
         '''
         # Scalar values.
         self.arr= vtkDoubleArray()
         self.arr.SetName(self.name)
         self.arr.SetNumberOfTuples(len(nodeSet))
         self.arr.SetNumberOfComponents(1)
+        propertyName= self.getPropertyName()
         for n in nodeSet:
             attr= getattr(n,self.attrName)
             tmp= None
@@ -66,9 +74,9 @@ class ScalarField(fb.FieldBase):
                 tmp= attr[self.attrComponent]
             elif callable(attr):
                 if(attr.__name__!='getProp'):
-                    tmp= attr(self.name)
-                elif(n.hasProp(self.name)):
-                    tmp= attr(self.name)
+                    tmp= attr(propertyName)
+                elif(n.hasProp(propertyName)):
+                    tmp= attr(propertyName)
                 else:
                     tmp= 0.0
             else:
@@ -116,7 +124,7 @@ class ExtrapolatedScalarField(ScalarField):
         super(ExtrapolatedScalarField,self).__init__(name,functionName,component,fUnitConv,rgMinMax)
         self.xcSet= xcSet
 
-    def display(self,displaySettings, caption= '', unitDescription= '', fileName= None, defFScale=0.0):
+    def display(self, displaySettings, caption= '', unitDescription= '', fileName= None, defFScale=0.0):
         '''Display the scalar field graphic.
 
         :param fileName: name of the graphic file to create 
@@ -137,7 +145,7 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
         super(ExtrapolatedProperty,self).__init__(name,functionName, xcSet, component, fUnitConv,rgMinMax)
 
     def extrapolate(self):
-        extrapolate_elem_attr.extrapolate_elem_function_attr(self.xcSet.elements,self.name,"getProp", self.name)
+        extrapolate_elem_attr.extrapolate_elem_function_attr(self.xcSet.elements, self.name, "getProp", self.name)
 
     def display(self,displaySettings, caption= '', unitDescription= '', fileName= None, defFScale=0.0):
         ''' Display the field.
@@ -154,7 +162,7 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
         self.extrapolate()
         displaySettings.displayMesh(self.xcSet, field= self, diagrams= None, caption= caption, unitDescription= unitDescription, fileName= fileName, defFScale= defFScale)
 
-def getScalarFieldFromControlVar(attributeName, argument, xcSet, component, fUnitConv, rgMinMax):
+def get_scalar_field_from_control_var(attributeName, argument, xcSet, component, fUnitConv, rgMinMax):
     '''return an scalar field that represents the control var over the 
                  elements in the set.
 

@@ -115,6 +115,22 @@ void XC::PathSeriesBase::Print(std::ostream &s, int flag) const
       s << " specified path: " << thePath;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::PathSeriesBase::getPyDict(void) const
+  {
+    boost::python::dict retval= CFactorSeries::getPyDict();
+    retval["path"]= this->thePath.getPyList();
+    retval["use_last"]= this->useLast;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::PathSeriesBase::setPyDict(const boost::python::dict &d)
+  {
+    CFactorSeries::setPyDict(d);
+    this->thePath= Vector(boost::python::extract<boost::python::list>(d["path"]));
+    this->useLast= boost::python::extract<bool>(d["use_last"]);
+  }
 
 //! @brief Send members through the communicator argument.
 int XC::PathSeriesBase::sendData(Communicator &comm)

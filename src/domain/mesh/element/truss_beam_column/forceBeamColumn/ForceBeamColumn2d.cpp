@@ -101,7 +101,7 @@ Journal of Structural Engineering, Approved for publication, February 2007.
 #include <material/section/PrismaticBarCrossSection.h>
 
 
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"
 
 

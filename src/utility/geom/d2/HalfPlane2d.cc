@@ -25,6 +25,7 @@
 #include "utility/geom/d1/Ray2d.h"
 #include "utility/geom/d1/Segment2d.h"
 #include "utility/geom/d1/Polyline2d.h"
+#include "utility/geom/d2/2d_polygons/Polygon2d.h"
 
 #include "../pos_vec/Dir2d.h"
 #include "../pos_vec/Vector2d.h"
@@ -107,7 +108,7 @@ HalfPlane2d HalfPlane2d::getSwap(void) const
     return retval;
   }
 
-//! @brief Return true if the point is inside the half-space.
+//! @brief Return true if the given point is inside the half-space.
 //! The points of the edge plane belong to the half-plane.
 bool HalfPlane2d::In(const Pos2d &p, const double &tol) const
   {
@@ -119,7 +120,7 @@ bool HalfPlane2d::In(const Pos2d &p, const double &tol) const
     return retval;
   }
 
-//! @brief Return true if the line is inside the half-space.
+//! @brief Return true if the given line is inside the half-space.
 bool HalfPlane2d::In(const Line2d &l, const double &tol) const
   {
     bool retval= false;
@@ -128,7 +129,7 @@ bool HalfPlane2d::In(const Line2d &l, const double &tol) const
     return retval;
   }
 
-//! @brief Return true if the ray is inside the half-space.
+//! @brief Return true if the given ray is inside the half-space.
 bool HalfPlane2d::In(const Ray2d &r, const double &tol) const
   {
     bool retval= false;
@@ -137,7 +138,7 @@ bool HalfPlane2d::In(const Ray2d &r, const double &tol) const
     return retval;
   }
 
-//! @brief Return true if the segment is inside the half-space.
+//! @brief Return true if the given segment is inside the half-space.
 bool HalfPlane2d::In(const Segment2d &sg, const double &tol) const
   {
     bool retval= false;
@@ -146,7 +147,7 @@ bool HalfPlane2d::In(const Segment2d &sg, const double &tol) const
     return retval;
   }
 
-//! @brief Return true if the polyline is inside the half-space.
+//! @brief Return true if the given polyline is inside the half-space.
 bool HalfPlane2d::In(const Polyline2d &pline, const double &tol) const
   {
     bool retval= true;
@@ -160,6 +161,55 @@ bool HalfPlane2d::In(const Polyline2d &pline, const double &tol) const
 	  }
       }
     return retval;
+  }
+
+//! @brief Return true if the given polygon is inside the half-space.
+bool HalfPlane2d::In(const Polygon2d &plg, const double &tol) const
+  {
+    return this->In(plg.getPolyline(), tol);
+  }
+
+//! @brief Return true if the given point is inside the half-space.
+//! The points of the edge plane belong to the half-plane.
+bool HalfPlane2d::Out(const Pos2d &p, const double &tol) const
+  {
+    const HalfPlane2d opposite= this->getSwap();
+    return opposite.In(p, tol);
+  }
+
+//! @brief Return true if the given line is inside the half-space.
+bool HalfPlane2d::Out(const Line2d &l, const double &tol) const
+  {
+    const HalfPlane2d opposite= this->getSwap();
+    return opposite.In(l, tol);
+  }
+
+//! @brief Return true if the given ray is inside the half-space.
+bool HalfPlane2d::Out(const Ray2d &r, const double &tol) const
+  {
+    const HalfPlane2d opposite= this->getSwap();
+    return opposite.In(r, tol);
+  }
+
+//! @brief Return true if the given segment is inside the half-space.
+bool HalfPlane2d::Out(const Segment2d &sg, const double &tol) const
+  {
+    const HalfPlane2d opposite= this->getSwap();
+    return opposite.In(sg, tol);
+  }
+
+//! @brief Return true if the given polyline is inside the half-space.
+bool HalfPlane2d::Out(const Polyline2d &pline, const double &tol) const
+  {
+    const HalfPlane2d opposite= this->getSwap();
+    return opposite.In(pline, tol);
+  }
+
+//! @brief Return true if the given polygon is inside the half-space.
+bool HalfPlane2d::Out(const Polygon2d &plg, const double &tol) const
+  {
+    const HalfPlane2d opposite= this->getSwap();
+    return opposite.In(plg, tol);
   }
 
 GeomGroup2d HalfPlane2d::getIntersection(const Line2d &r) const

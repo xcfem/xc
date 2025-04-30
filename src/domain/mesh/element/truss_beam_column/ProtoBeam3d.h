@@ -30,18 +30,20 @@
 #ifndef ProtoBeam3d_h
 #define ProtoBeam3d_h
 
-#include "domain/mesh/element/Element1D.h"
+#include "domain/mesh/element/truss_beam_column/BeamColumn.h"
 #include "domain/mesh/element/utils/physical_properties/ElasticSection3dPhysicalProperties.h"
 
 namespace XC {
 //! @ingroup BeamColumnElemGrp
 //
 //! @brief Base class for 3D beams.
-class ProtoBeam3d: public Element1D
+class ProtoBeam3d: public BeamColumn
   {
   public:
     typedef ElasticSection3dPhysicalProperties PhysProp;
   protected:
+    static Matrix extrapolation_matrix; //!< Extrapolation matrix.
+    
     PhysProp physicalProperties; //!< pointers to the material objects and physical properties.
     Vector persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store the deformation during the inactive phase of the element (if any).
     int sendData(Communicator &);
@@ -62,6 +64,7 @@ class ProtoBeam3d: public Element1D
     const CrossSectionProperties3d &getSectionProperties(void) const;
     CrossSectionProperties3d &getSectionProperties(void);
     void setSectionProperties(const CrossSectionProperties3d &);  
+    const PrismaticBarCrossSection *getSectionPtr(const size_t &) const;
     void setMaterial(const std::string &);
     
     double getRho(void) const;
@@ -100,6 +103,9 @@ class ProtoBeam3d: public Element1D
     Vector getVDirWeakAxisLocalCoord(void) const;
     double getStrongAxisAngle(void) const;
     double getWeakAxisAngle(void) const;
+
+    virtual const Matrix &getExtrapolationMatrix(void) const
+      { return extrapolation_matrix; }
     
     boost::python::list getValuesAtNodes(const std::string &, bool silent= false) const;
   };

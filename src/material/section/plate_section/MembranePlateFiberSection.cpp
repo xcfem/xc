@@ -56,7 +56,7 @@
 
 #include <material/section/plate_section/MembranePlateFiberSection.h>
 #include <material/nD/NDMaterial.h>
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "domain/mesh/element/utils/Information.h"
 
 const double XC::MembranePlateFiberSection::root56= sqrt(5.0/6.0); //shear correction

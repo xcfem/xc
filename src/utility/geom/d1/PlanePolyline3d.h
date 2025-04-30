@@ -183,4 +183,6 @@ PlanePolyline3d::PlanePolyline3d(InputIterator begin,InputIterator end)
 
   }
 
+PlanePolyline3d remove_duplicated_vertices(const PlanePolyline3d &p,const GEOM_FT &tol= -1.0);
+
 #endif

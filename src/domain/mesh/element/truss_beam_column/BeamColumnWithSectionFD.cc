@@ -36,25 +36,25 @@
 
 
 XC::BeamColumnWithSectionFD::BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc)
-  : Element1D(tag,classTag), theSections(numSecc), rho(0.0)
+  : BeamColumn(tag,classTag), theSections(numSecc), rho(0.0)
   {}
 
 XC::BeamColumnWithSectionFD::BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc= 1,const Material *m= nullptr)
-  : Element1D(tag,classTag), theSections(numSecc,m), rho(0.0)
+  : BeamColumn(tag,classTag), theSections(numSecc,m), rho(0.0)
   {}
 
 XC::BeamColumnWithSectionFD::BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc,const PrismaticBarCrossSection *matModel)
-  : Element1D(tag,classTag), theSections(numSecc,matModel), rho(0.0)
+  : BeamColumn(tag,classTag), theSections(numSecc,matModel), rho(0.0)
   {}
 
 XC::BeamColumnWithSectionFD::BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc,const PrismaticBarCrossSection *sccModel,int Nd1,int Nd2)
-  : Element1D(tag,classTag,Nd1,Nd2), theSections(numSecc,sccModel), rho(0.0)
+  : BeamColumn(tag,classTag,Nd1,Nd2), theSections(numSecc,sccModel), rho(0.0)
   {}
 
 //! @brief Zeroes loads on element.
 void XC::BeamColumnWithSectionFD::zeroLoad(void)
   {
-    Element1D::zeroLoad();
+    BeamColumn::zeroLoad();
     theSections.zeroInitialSectionDeformations(); //Removes initial strains.
   }
 
@@ -62,7 +62,7 @@ int XC::BeamColumnWithSectionFD::commitState(void)
   {
     int retVal = 0;
 
-    if((retVal= Element1D::commitState()) != 0)
+    if((retVal= BeamColumn::commitState()) != 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; failed in base class." << std::endl;
@@ -77,7 +77,7 @@ int XC::BeamColumnWithSectionFD::revertToLastCommit(void)
   {
     // DON'T call Element::revertToLastCommit() because
     // is a pure virtual method.
-    // int retval= Element1D::revertToLastCommit();
+    // int retval= BeamColumn::revertToLastCommit();
     int retval= theSections.revertToLastCommit();
     return retval;
   }
@@ -85,7 +85,7 @@ int XC::BeamColumnWithSectionFD::revertToLastCommit(void)
 //! @brief Revert the state of element to initial.
 int XC::BeamColumnWithSectionFD::revertToStart(void)
   {
-    int retval= Element1D::revertToStart();
+    int retval= BeamColumn::revertToStart();
     retval+= theSections.revertToStart();
     return retval;
   }
@@ -158,7 +158,7 @@ int XC::BeamColumnWithSectionFD::setSectionParameter(PrismaticBarCrossSection *t
 //! @brief Send members through the communicator argument.
 int XC::BeamColumnWithSectionFD::sendData(Communicator &comm)
   {
-    int res= Element1D::sendData(comm);
+    int res= BeamColumn::sendData(comm);
     res+= comm.sendMovable(theSections,getDbTagData(),CommMetaData(7));
     res+= comm.sendMovable(section_matrices,getDbTagData(),CommMetaData(8));
     res+= comm.sendDouble(rho,getDbTagData(),CommMetaData(9));
@@ -168,7 +168,7 @@ int XC::BeamColumnWithSectionFD::sendData(Communicator &comm)
 //! @brief Receives members through the communicator argument.
 int XC::BeamColumnWithSectionFD::recvData(const Communicator &comm)
   {
-    int res= Element1D::recvData(comm);
+    int res= BeamColumn::recvData(comm);
     res+= comm.receiveMovable(theSections,getDbTagData(),CommMetaData(7));
     res+= comm.receiveMovable(section_matrices,getDbTagData(),CommMetaData(8));
     res+= comm.receiveDouble(rho,getDbTagData(),CommMetaData(9));

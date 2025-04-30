@@ -52,6 +52,7 @@
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/load/plane/ShellMecLoad.h"
 #include "domain/mesh/element/utils/coordTransformation/R3vectors.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //static data
 XC::Matrix  XC::ShellMITC9::stiff(54,54);
@@ -66,6 +67,20 @@ XC::ShellMITC9::ShellMITC9(void)
 const XC::GaussModel &XC::ShellMITC9::getGaussModel(void) const
   { return gauss_model_quad9; }
 
+//! @brie Return a pointer to the i-th section of the element.
+const XC::SectionForceDeformation *XC::ShellMITC9::getSectionPtr(const size_t &i) const
+  {
+    const SectionForceDeformation *retval= nullptr;
+    const size_t sz= this->physicalProperties.size();
+    if(sz>i)
+      retval= this->physicalProperties[i];
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; index " << i << " out of range: (0,"
+	        << sz << ")."
+		<< Color::def << std::endl;
+    return retval;
+  }
 //! @brief full constructor
 XC::ShellMITC9::ShellMITC9(int tag,const SectionForceDeformation *ptr_mat)
   :QuadBase9N<SectionFDPhysicalProperties>(tag, ELE_TAG_ShellMITC9, SectionFDPhysicalProperties(9,ptr_mat)), Ktt(0.0),theCoordTransf() {}
@@ -298,9 +313,9 @@ void XC::ShellMITC9::alive(void)
   {
     if(isDead())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
   		  << "; not implemented yet."
-                  << std::endl;
+                  << Color::def << std::endl;
         QuadBase9N<SectionFDPhysicalProperties>::alive();
       }
   }
@@ -315,9 +330,10 @@ void XC::ShellMITC9::zeroLoad(void)
 int XC::ShellMITC9::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << getClassName() 
+      std::cerr << Color::red << getClassName() 
                 << "; load over inactive element: "
-                << getTag() << std::endl;
+                << getTag()
+		<< Color::def << std::endl;
     else
       {
 	computeTributaryAreas();
@@ -1090,8 +1106,9 @@ int XC::ShellMITC9::sendSelf(Communicator &comm)
     const int dataTag= getDbTag();
     res= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "getClassName()" << "::" << __FUNCTION__
-	        << "; failed to send ID data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send ID data."
+		<< Color::def << std::endl;
     return res;
   }
     
@@ -1102,8 +1119,9 @@ int  XC::ShellMITC9::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res = comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "getClassName()" << "::" << __FUNCTION__
-		<< "; failed to receive ID data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ID data."
+		<< Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;

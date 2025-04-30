@@ -107,6 +107,8 @@ class Material: public TaggedObject, public MovableObject
     virtual int setVariable(const std::string &argv);
     virtual int getVariable(int variableID, double &info);
 
+    virtual const ResponseId &getResponseType(void) const;
+    
     // methods for sensitivity studies
     virtual int setParameter(const std::vector<std::string> &argv, Parameter &param);
     virtual int updateParameter(int responseID, Information &eleInformation);	

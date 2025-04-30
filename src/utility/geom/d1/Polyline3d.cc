@@ -1147,3 +1147,23 @@ void Polyline3d::Print(std::ostream &stream) const
     for(; i!=end(); i++)
       stream << ", " << *i;
   }
+
+//! @brief Remove the consecutive vertices that are at distance less than than tol.
+Polyline3d remove_duplicated_vertices(const Polyline3d &p,const GEOM_FT &tol)
+  {
+    Polyline3d retval;
+    // Compute tolerance.
+    GEOM_FT local_tol= tol;
+    if(local_tol<0.0)
+      {
+	const size_t sz= p.size();
+	if(sz>1)
+	  {
+	    // Compute average segment length.
+	    const GEOM_FT avgLength= p.getLength()/GEOM_FT(sz-1);
+	    local_tol= avgLength/1e4;
+	  }
+      }
+    retval.removeRepeated(local_tol);
+    return retval;
+  }

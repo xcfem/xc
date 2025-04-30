@@ -19,11 +19,12 @@ pol1=geom.Polyline2d([geom.Pos2d(0,0), geom.Pos2d(1,0), geom.Pos2d(1,1)])
 contour= pol1.getBufferPolygon(0.25, 8)
 
 # Check result.
-refContour= [geom.Pos2d(-0.25, 0), geom.Pos2d(-0.17677, -0.17677), geom.Pos2d(0, -0.24999), geom.Pos2d(0, -0.25), geom.Pos2d(1.25, -0.25), geom.Pos2d(1.25, 1), geom.Pos2d(1.17677, 1.17677), geom.Pos2d(1, 1.25), geom.Pos2d(0.82322, 1.17677), geom.Pos2d(0.75, 1), geom.Pos2d(0.75, 0.25), geom.Pos2d(0, 0.25), geom.Pos2d(-0.17677, 0.17677)]
+refContour= [geom.Pos2d(-0.25, 0), geom.Pos2d(-0.17677, -0.17677), geom.Pos2d(0, -0.24999), geom.Pos2d(1.25, -0.25), geom.Pos2d(1.25, 1), geom.Pos2d(1.17677, 1.17677), geom.Pos2d(1, 1.25), geom.Pos2d(0.82322, 1.17677), geom.Pos2d(0.75, 1), geom.Pos2d(0.75, 0.25), geom.Pos2d(0, 0.25), geom.Pos2d(-0.17677, 0.17677)]
 
 err= 0
 for p, refP in zip(contour.getVertexList(), refContour):
-    err+= p.dist2(refP)
+    d2= p.dist2(refP)
+    err+= d2
 err= math.sqrt(err)
 
 '''

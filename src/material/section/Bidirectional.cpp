@@ -51,7 +51,7 @@
 #include <material/section/Bidirectional.h>           
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 
 XC::Vector XC::Bidirectional::s(2);
 XC::Matrix XC::Bidirectional::ks(2,2);

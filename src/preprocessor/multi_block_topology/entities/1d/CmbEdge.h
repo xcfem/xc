@@ -40,9 +40,8 @@ namespace XC {
 
 class LineMap;
   
-//! @ingroup MultiBlockTopologyEnt
-//!
 //! @brief Compound line.
+//! @ingroup MultiBlockTopologyEnt
 class CmbEdge: public Edge
   {
   public:
@@ -195,9 +194,14 @@ class CmbEdge: public Edge
     virtual ID getKPoints(void) const;
     Pnt *findVertex(const Pos3d &);
 
-    
-    
     Polyline3d getPolyline(void) const;
+
+    bool isConnectedTo(const Pnt &) const;
+    bool isConnectedTo(const CmbEdge &) const;
+    std::set<const Face *> getConnectedSurfaces(void) const;
+    boost::python::list getConnectedSurfacesPy(void) const;
+    std::set<const Face *> getConnectedSurfaces(const SetBase *) const;
+    boost::python::list getConnectedSurfacesPy(const SetBase *) const;    
 
     BND3d Bnd(void) const;
     void genMesh(meshing_dir dm);

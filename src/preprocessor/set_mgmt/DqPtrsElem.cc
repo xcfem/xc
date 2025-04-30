@@ -375,12 +375,12 @@ BND3d XC::DqPtrsElem::Bnd(const double &factor) const
     return retval;
   }
 
-//! @brief Returns the element set contour.
-std::deque<Polyline3d> XC::DqPtrsElem::getContours(const double &factor) const
+//! @brief Returns edges that form  the element set contour.
+XC::MeshEdges XC::DqPtrsElem::getEdgesContour(void) const
   {
     typedef std::set<const Element *> ElementConstPtrSet;
     const Element *elem= nullptr;
-    MeshEdges edgesContour;
+    MeshEdges retval;
     for(const_iterator i= begin();i!=end();i++)
       {
         elem= *i;
@@ -390,12 +390,37 @@ std::deque<Polyline3d> XC::DqPtrsElem::getContours(const double &factor) const
 	    MeshEdge meshEdge(elem->getNodesEdge(j));
             ElementConstPtrSet elementsShared= meshEdge.getConnectedElements(*this);
             if(elementsShared.size()==1) //border element.
-              if(find(edgesContour.begin(), edgesContour.end(), meshEdge) == edgesContour.end())
-                { edgesContour.push_back(meshEdge); }
+              if(find(retval.begin(), retval.end(), meshEdge) == retval.end())
+                { retval.push_back(meshEdge); }
           }
       }
-    return edgesContour.getContours(factor);
+    return retval;
   }
+
+//! @brief Returns the element set contour.
+std::deque<Polyline3d> XC::DqPtrsElem::getContours(const double &factor) const
+  {
+    std::deque<Polyline3d> retval;
+    if(!empty())
+      {
+	const MeshEdges edgesContour= this->getEdgesContour();
+	retval= edgesContour.getContours(factor);
+      }
+    return retval;
+  }
+
+//! @brief Returns the node sequences of the element set contour.
+boost::python::list XC::DqPtrsElem::getContoursNodeSequences(void) const
+  {
+    boost::python::list retval;
+    if(!empty())
+      {
+	const MeshEdges edgesContour= this->getEdgesContour();
+	retval= edgesContour.getContoursNodeSequencesPy();
+      }
+    return retval;
+  }
+
 
 //! @brief Return a container with the elements that lie inside the
 //! geometric object.

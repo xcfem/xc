@@ -168,6 +168,8 @@ python tests/utility/geom/polygons/2d/polygon2D_test_17.py
 python tests/utility/geom/polygons/2d/polygon2D_test_18.py
 python tests/utility/geom/polygons/2d/polygon2D_test_19.py
 python tests/utility/geom/polygons/2d/polygon2D_test_20.py
+python tests/utility/geom/polygons/2d/polygon2D_test_21.py
+python tests/utility/geom/polygons/2d/polygon2D_test_22.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_01.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_02.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_03.py
@@ -879,8 +881,9 @@ python tests/preprocessor/sets/test_get_sets_containing_01.py
 python tests/preprocessor/sets/test_pick_elements_crossing_01.py
 python tests/preprocessor/sets/test_pick_elements_crossing_02.py
 echo "$BLEU" "    Sets geometry queries." "$NORMAL"
-python tests/preprocessor/sets/geometric_queries/test_get_contours_01.py
-python tests/preprocessor/sets/geometric_queries/test_get_contours_02.py
+python tests/preprocessor/sets/geometric_queries/test_get_element_set_contour_01.py
+python tests/preprocessor/sets/geometric_queries/test_get_element_set_contour_02.py
+python tests/preprocessor/sets/geometric_queries/test_get_surface_set_contour_01.py
 python tests/preprocessor/sets/geometric_queries/test_get_bnd_01.py
 python tests/preprocessor/sets/geometric_queries/test_set_transformation_01.py
 python tests/preprocessor/sets/geometric_queries/test_set_transformation_02.py
@@ -964,6 +967,9 @@ python tests/constraints/test_release_beam_node_01.py
 echo "$BLEU" "Loads tests." "$NORMAL"
 echo "$BLEU" "  Load patterns tests." "$NORMAL"
 python tests/loads/load_patterns/test_remove_load_pattern.py
+python tests/loads/load_patterns/load_case_test_01.py
+python tests/loads/load_patterns/load_case_manager_test_01.py
+python tests/loads/load_patterns/load_case_manager_test_02.py
 echo "$BLEU" "  Load time series tests." "$NORMAL"
 python tests/loads/time_series/test_linear_01.py
 python tests/loads/time_series/test_linear_02.py
@@ -1030,6 +1036,7 @@ python tests/loads/load_distribution/test_sliding_vector_load_03.py
 python tests/loads/load_distribution/test_sliding_vector_load_04.py
 python tests/loads/load_distribution/test_sliding_vector_load_05.py
 python tests/loads/load_distribution/test_sliding_vector_load_06.py
+python tests/loads/load_distribution/test_sliding_vector_load_07.py
 python tests/loads/load_distribution/test_surf_unif_load_distributed.py
 python tests/loads/load_distribution/test_wheel_load_distribution_01.py
 python tests/loads/load_distribution/test_notional_lane_load_distribution.py
@@ -1095,12 +1102,14 @@ python tests/loads/strain_loads/shell/shell_strain_load_02.py
 python tests/loads/strain_loads/shell/shell_strain_load_03.py
 python tests/loads/strain_loads/shell/shell_strain_load_04.py
 python tests/loads/strain_loads/shell/shell_strain_load_05.py
+python tests/loads/strain_loads/shell/shell_strain_load_06.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_01.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_02.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_03.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_04.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_05.py
 python tests/loads/strain_loads/shell/shell_grad_strain_load_06.py
+python tests/loads/strain_loads/shell/shell_grad_strain_load_07.py
 echo "$BLEU" "      Strain loads on bricks." "$NORMAL"
 python tests/loads/strain_loads/bricks/brick_strain_load_01.py
 python tests/loads/strain_loads/bricks/brick_strain_load_02.py
@@ -1823,6 +1832,10 @@ python tests/rough_calculations/reinforced_concrete/ng_rc_section_test_ec2_02.py
 python tests/rough_calculations/reinforced_concrete/ng_pile_cap_test.py
 python tests/rough_calculations/reinforced_concrete/ng_rc_section_bending_with_compression_test_01.py
 python tests/rough_calculations/reinforced_concrete/ng_rc_section_bending_with_compression_test_02.py
+echo "$BLEU" "    Reinforced concrete hinge design,..." "$NORMAL"
+python tests/rough_calculations/reinforced_concrete/test_hinge_design_01.py
+python tests/rough_calculations/reinforced_concrete/test_hinge_design_02.py
+
 
 #Postprocess tests
 echo "$BLEU" "Verifiying routines for post processing." "$NORMAL"
@@ -1903,16 +1916,44 @@ python tests/postprocess/limit_state_checking/generic/test_select_critical_combs
 ##python tests/postprocess/vtk/dibuja_edges.py
 echo "$BLEU" "  Graphic output." "$NORMAL"
 python tests/postprocess/vtk/test_display_blocks.py
-python tests/postprocess/vtk/test_beam3d_bending_moment_belly_01.py
-python tests/postprocess/vtk/test_beam3d_bending_moment_belly_02.py
 python tests/postprocess/vtk/test_display_node_value_diagram.py
 python tests/postprocess/vtk/test_set_background_color.py
 python tests/postprocess/vtk/test_display_zero_length_local_axes_01.py
 python tests/postprocess/vtk/test_display_zero_length_local_axes_02.py
 python tests/postprocess/vtk/test_display_reactions_01.py
-python tests/postprocess/vtk/test_display_loads_01.py
-python tests/postprocess/vtk/test_display_loads_02.py
 python tests/postprocess/vtk/test_display_eigenvectors_01.py
+echo "$BLEU" "    Graphic output. Loads." "$NORMAL"
+python tests/postprocess/vtk/display_loads/test_display_loads_01.py
+python tests/postprocess/vtk/display_loads/test_display_loads_02.py
+python tests/postprocess/vtk/display_loads/test_display_inertia_load_on_brick_01.py
+python tests/postprocess/vtk/display_loads/test_display_inertia_load_on_quad_01.py
+python tests/postprocess/vtk/display_loads/test_display_inertia_load_on_shell_01.py
+python tests/postprocess/vtk/display_loads/test_display_inertia_load_on_elastic_beam_2d_01.py
+python tests/postprocess/vtk/display_loads/test_display_inertia_load_on_elastic_beam_3d_01.py
+python tests/postprocess/vtk/display_loads/test_display_inertia_load_on_truss_01.py
+echo "$BLEU" "      Graphic output. Strain loads." "$NORMAL"
+python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load_on_brick_01.py
+python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load_on_quad_01.py
+python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load_on_truss_01.py
+python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load_on_elastic_beam_2d_01.py
+python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load_on_elastic_beam_3d_01.py
+python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load_on_elastic_beam_3d_02.py
+python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load_on_force_beam_column_2d_01.py
+python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load_on_force_beam_column_3d_01.py
+python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load_on_force_beam_column_3d_02.py
+python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load_on_shell_01.py
+python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load_on_shell_02.py
+python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load_on_shell_03.py
+python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_loads_01.py
+python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_loads_02.py
+python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_loads_03.py
+echo "$BLEU" "    Graphic output. Material response." "$NORMAL"
+python tests/postprocess/vtk/display_mat_response/test_beam3d_bending_moment_belly_01.py
+python tests/postprocess/vtk/display_mat_response/test_beam3d_bending_moment_belly_02.py
+python tests/postprocess/vtk/display_mat_response/test_display_stresses_on_brick_01.py
+python tests/postprocess/vtk/display_mat_response/test_display_strains_on_shell_01.py
+echo "$BLEU" "    Graphic output. Limit state results." "$NORMAL"
+python tests/postprocess/vtk/display_limit_state_results/test_display_shear_uls_on_shells_01.py
 
 # Report tests.
 echo "$BLEU" "  Report output." "$NORMAL"

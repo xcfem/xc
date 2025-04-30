@@ -14,11 +14,11 @@ referencePerimeter=6+math.sqrt(2)
 
 pol1=geom.Polygon2d([geom.Pos2d(-1.,-1.), geom.Pos2d(1.,-1.), geom.Pos2d(1.,1.), geom.Pos2d(-1.,1.)])
 
-pol2=geom.Polygon2d(pol1)
+pol2= geom.Polygon2d(pol1)
 pol2.move(geom.Vector2d(1,1))
 
-list1=[pol1,pol2]
-list1=geom.particiona(list1)
+list1= [pol1,pol2]
+list1= geom.particiona(list1)
 
 p1=list1[0]
 ratio1=(p1.getPerimeter()-referencePerimeter)/referencePerimeter

@@ -43,6 +43,7 @@ class BND3d;
 namespace XC {
 class TrfGeom;
 class Element1D;
+class MeshEdges;
 
 //!  @ingroup Set
 //! 
@@ -71,7 +72,9 @@ class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
     Element *findElement(const int &);
     const Element *findElement(const int &) const;
     BND3d Bnd(const double &) const;    
+    MeshEdges getEdgesContour(void) const;
     std::deque<Polyline3d> getContours(const double &factor= 0.0) const;
+    boost::python::list getContoursNodeSequences(void) const;
     DqPtrsElem pickElemsInside(const GeomObj3d &, const double &tol= 0.0);
     DqPtrsElem pickElemsInside(const GeomObj2d &, const double &tol= 0.0);
     DqPtrsElem pickElemsCrossing(const GeomObj3d &, const double &tol= 0.0);    

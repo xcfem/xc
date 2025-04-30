@@ -101,11 +101,14 @@ class DiscretizedRandomProcessSeries: public TimeSeries
     double getDuration(void) const {return 0.0;} // dummy function
     double getPeakFactor(void) const {return 0.0;} // dummy function
     double getTimeIncr(double pseudoTime) const {return 1.0;} // dummy function
+        
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
     
-    // methods for output    
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
 
+    // methods for output    
     void Print(std::ostream &s, int flag =0) const;
     
 // AddingSensitivity:BEGIN //////////////////////////////////////////

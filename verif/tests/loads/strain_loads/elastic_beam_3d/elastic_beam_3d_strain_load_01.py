@@ -16,6 +16,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
@@ -70,6 +71,13 @@ eleLoad.frontEndDeformationPlane= thermalDeformation
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
+# Check getStrainComponentIndexFromName
+strainsMatrix= eleLoad.getElementStrainsMatrix(beam3d)
+responseId= beam3d.getSection(0).getResponseType
+componentIndex= modelSpace.getStrainComponentIndexFromName('epsilon', responseId= responseId)
+componentRefValue= alpha*AT
+ratio0= math.sqrt((strainsMatrix(0,componentIndex)-componentRefValue)**2+(strainsMatrix(1,componentIndex)-componentRefValue)**2)
+
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
@@ -90,7 +98,7 @@ ratio= ((axil2-N)/N)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio)<1e-5:
+if ((abs(ratio0)<1e-8) and (abs(ratio)<1e-5)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

@@ -32,7 +32,7 @@
 #include <utility/matrix/Vector.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/matrixutil/MatrixUtil.h>
 #include <cstdlib>
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "material/yieldSurface/yieldSurfaceBC/YieldSurface_BC.h"
 
 #define SEC_TAG_YS2d -1
@@ -229,6 +229,14 @@ const XC::Matrix &XC::YieldSurfaceSection2d::getSectionFlexibility(void) const
     return fs;
   }
 
+//! @brief Return the ordering and type of response quantities
+//! returned by this material.
+//!
+//! Return the section ResponseId code that indicates
+//! the ordering and type of response quantities returned
+//! by the material. Lets the calling object
+//! (e.g. an Element) know how to interpret the quantites returned by this
+//! object.
 const XC::ResponseId &XC::YieldSurfaceSection2d::getResponseType(void) const
   { return RespElasticSection2d; }
 

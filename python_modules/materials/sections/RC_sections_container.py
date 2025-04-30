@@ -134,12 +134,16 @@ class SectionContainer(object):
         uses a concrete02 model, that initializes the material in order to
         check the cracking limit state (tension stiffening models).
 
-        :param preprocessor: XC preprocessor for the finite element model.
+        :param preprocessor: XC preprocessor of the finite element model.
         :param matDiagType: type of stress-strain diagram (="k" for characteristic diagram, ="d" for design diagram)
         '''
-        for s in self.sections:
-            for rcs in s.lstRCSects:
+        retval= 0
+        for s in self.sections: # for each section definition.
+            for rcs in s.lstRCSects: # for each list of reinforced concrete
+                                     # fiber-sections defined in s.
                 rcs.defRCSection(preprocessor= preprocessor, matDiagType= matDiagType)
+                retval+= 1
+        return retval
 
     def clearRCsections(self):
         '''Clear previously defined RC sections.'''

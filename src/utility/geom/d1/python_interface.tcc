@@ -285,6 +285,9 @@ class_<Polyline2d, bases<Linear2d, polyPos2d> >("Polyline2d")
   .def("removeBackwardSegments",  &Polyline2d::removeBackwardSegments,"remove the vertices that generate backwards segments (the tolerance is the minimum accepted value for the dot product (<0) of consecutive direction vectors).")
   ;
 
+Polyline2d (*remove_duplicated_vertices_polyline_2d)(const Polyline2d &, const GEOM_FT &)= &remove_duplicated_vertices;
+def("remove_duplicated_vertices",remove_duplicated_vertices_polyline_2d, "Remove the consecutive vertices that are at distance less than than tol.");
+
 void (PlanePolyline3d::*simplifyPP3DPoly)(GEOM_FT epsilon)= &PlanePolyline3d::simplify;
 Segment3d (PlanePolyline3d::*getPP3DSegment)(const unsigned int ) const= &PlanePolyline3d::getSegment;
 bool (PlanePolyline3d::*getPPPlaneIntersects)(const Plane &) const= &PlanePolyline3d::intersects;
@@ -365,6 +368,8 @@ class_<PlanePolyline3d, bases<Linear3d> >("PlanePolyline3d")
   .def("removeBackwardSegments",  &PlanePolyline3d::removeBackwardSegments,"remove the vertices that generate backward segments (the tolerance is the minimum accepted value for the dot product (<0) of consecutive direction vectors).")
   ;
 
+PlanePolyline3d (*remove_duplicated_vertices_plane_polyline_3d)(const PlanePolyline3d &, const GEOM_FT &)= &remove_duplicated_vertices;
+def("remove_duplicated_vertices",remove_duplicated_vertices_plane_polyline_3d, "Remove the consecutive vertices that are at distance less than than tol.");
 
 void (Polyline3d::*simplify3DPoly)(GEOM_FT epsilon)= &Polyline3d::simplify;
 Segment3d (Polyline3d::*get3DSegment)(const size_t &) const= &Polyline3d::getSegment;
@@ -415,6 +420,9 @@ class_<Polyline3d, bases<Linear3d, polyPos3d> >("Polyline3d")
   .def("removeRepeatedVertexes", &Polyline3d::removeRepeated,"remove the vertices that are closer than the specified tolerance.")
   .def("removeBackwardSegments",  &Polyline3d::removeBackwardSegments,"remove the vertices that generate backwards segments (the tolerance is the minimum accepted value for the dot product (<0) of consecutive direction vectors).")
   ;
+
+Polyline3d (*remove_duplicated_vertices_polyline_3d)(const Polyline3d &, const GEOM_FT &)= &remove_duplicated_vertices;
+def("remove_duplicated_vertices",remove_duplicated_vertices_polyline_3d, "Remove the consecutive vertices that are at distance less than than tol.");
 
 typedef std::deque<Polyline3d> dq_polyline3D;
 class_<dq_polyline3D>("dq_polyline3D")

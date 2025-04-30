@@ -70,7 +70,8 @@
 #include "utility/matrix/nDarray/straint.h"
 #include "utility/matrix/nDarray/Tensor.h"
 #include "utility/recorder/response/MaterialResponse.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::Matrix XC::NDMaterial::errMatrix(1,1);
 XC::Vector XC::NDMaterial::errVector(1);
@@ -99,8 +100,9 @@ double XC::NDMaterial::getRho(void) const
 //! @brief Set material density.
 void XC::NDMaterial::setRho(const double &)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " not implemented yet." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " not implemented yet."
+	      << Color::def << std::endl;
   }
 
 // BJ added 19June2002
@@ -133,64 +135,72 @@ const XC::Vector &XC::NDMaterial::getCommittedStrain(void)
 //! if successful and a negative number if not.
 int XC::NDMaterial::setTrialStrain(const Vector &v)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility."
+              << Color::def << std::endl;
     return -1;    
   }
 
 //! @brief Sets trial strain value.
 int XC::NDMaterial::setTrialStrain(const Vector &v, const Vector &r)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility."
+              << Color::def << std::endl;
     return -1;    
   }
 
 //! @brief Set trial strain increment.
 int XC::NDMaterial::setTrialStrainIncr(const Vector &v)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility."
+              << Color::def << std::endl;
     return -1;    
   }
 
 //! @brief Set trial strain increment.
 int XC::NDMaterial::setTrialStrainIncr(const Vector &v, const Vector &r)
   {
-     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility.\n";
-     return -1;    
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility."
+              << Color::def << std::endl;
+    return -1;    
   }
 
 //! @brief Sets the initial strain value.
 void XC::NDMaterial::setInitialGeneralizedStrain(const Vector &)
   {
-     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility."
+              << Color::def << std::endl;
   }
 
 //! @brief Return the tangent stiffness matrix at the current trial
 //! strain.
 const XC::Matrix &XC::NDMaterial::getTangent(void) const
   {
-     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility.\n";
-     return errMatrix;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility."
+              << Color::def << std::endl;
+    return errMatrix;
   }
 
 //! @brief Returns the material stress vector at the current trial strain.
 const XC::Vector &XC::NDMaterial::getStress(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility."
+              << Color::def << std::endl;
     return errVector;    
   }
 
 //! @brief Returns strain.
 const XC::Vector &XC::NDMaterial::getStrain(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility."
+              << Color::def << std::endl;
     return errVector;    
   }
 
@@ -225,8 +235,9 @@ double XC::NDMaterial::getVonMisesStress(void) const
 //! @brief Return the initial strain.
 const XC::Vector &XC::NDMaterial::getInitialGeneralizedStrain(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility."
+              << Color::def << std::endl;
     return errVector;    
   }
 
@@ -234,8 +245,9 @@ const XC::Vector &XC::NDMaterial::getInitialGeneralizedStrain(void) const
 //! @param strain: strain value.
 int XC::NDMaterial::setInitialStrain(const Vector &v)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility."
+              << Color::def << std::endl;
     return -1;    
   }
 
@@ -243,8 +255,9 @@ int XC::NDMaterial::setInitialStrain(const Vector &v)
 //! @param strainIncrement: value of the strain increment.
 int XC::NDMaterial::incrementInitialStrain(const Vector &)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility."
+              << Color::def << std::endl;
     return -1;
   }
 
@@ -256,40 +269,45 @@ void XC::NDMaterial::zeroInitialStrain(void)
 const XC::Vector &XC::NDMaterial::getInitialStrain(void) const
   {
     static Vector retval;
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility."
+              << Color::def << std::endl;
     return retval;
   }
 
 //! @brief Set trial strain value.
 int XC::NDMaterial::setTrialStrain(const Tensor &v)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility."
+              << Color::def << std::endl;
     return -1;    
   }
 
 //! @brief Set trial strain value.
 int XC::NDMaterial::setTrialStrain(const Tensor &v, const Tensor &r)    
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility."
+              << Color::def << std::endl;
     return -1;    
   }
 
 //! @brief Set trial strain increment.
 int XC::NDMaterial::setTrialStrainIncr(const Tensor &v)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility."
+              << Color::def << std::endl;
     return -1;    
   }
 
 //! @brief Set trial strain increment.
 int XC::NDMaterial::setTrialStrainIncr(const Tensor &v, const Tensor &r)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility.\n";
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility."
+              << Color::def << std::endl;
     return -1;    
   }
 const XC::straintensor &XC::NDMaterial::getPlasticStrainTensor(void) const
@@ -316,26 +334,11 @@ const XC::straintensor &XC::NDMaterial::getStrainTensor(void) const
 
 const XC::Tensor &XC::NDMaterial::getTangentTensor(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; not implemented."
+              << Color::def << std::endl;
     static Tensor errTensor;    
     return errTensor;    
-  }
-
-//! @brief Return the ordering and type of response quantities
-//! returned by this material.
-//!
-//! Return the section ResponseId code that indicates
-//! the ordering and type of response quantities returned
-//! by the material. Lets the calling object
-//! (e.g. an Element) know how to interpret the quantites returned by this
-//! object.
-const XC::ResponseId &XC::NDMaterial::getResponseType(void) const
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not implemented." << std::endl;
-    static ResponseId err;    
-    return err;    
   }
 
 XC::Response* XC::NDMaterial::setResponse(const std::vector<std::string> &argv, Information &matInfo)
@@ -462,8 +465,9 @@ XC::NDMaterial *XC::receiveNDMaterialPtr(NDMaterial *ptr,DbTagData &dt,const Com
         retval= dynamic_cast<NDMaterial *>(tmp);
         if(!retval)
           {
-            std::cerr <<"WARNING receiveNDMaterialPtr - "
-                      << " failed to get material." << std::endl;
+            std::cerr << Color::red << __FUNCTION__
+		      <<"; WARNING - failed to get material."
+		      << Color::def << std::endl;
             delete tmp;
           }
       }

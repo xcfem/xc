@@ -28,6 +28,7 @@
 #include "utility/utils/misc_utils/matem.h"
 #include "utility/geom/proximity.h"
 #include <boost/python.hpp>
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @ingroup GEOM
 //
@@ -242,8 +243,9 @@ typename PolyPos<pos>::const_iterator PolyPos<pos>::getSegmentAtLength(const GEO
     const size_t sz= this->size();
     if(sz<2)
       {
-	std::cerr << "PolyPos<>::" << __FUNCTION__
-	      << ";ERROR: no segments, so no length." << std::endl;
+	std::cerr << Color::red << "PolyPos<>::" << __FUNCTION__
+		  << ";ERROR: no segments, so no length."
+		  << Color::def << std::endl;
       }
     else
       {
@@ -251,10 +253,10 @@ typename PolyPos<pos>::const_iterator PolyPos<pos>::getSegmentAtLength(const GEO
 	  {
 	    retval= this->begin();
 	    if(s<0.0)
-	      std::clog << "PolyPos<>::" << __FUNCTION__
-			  << ";WARNING: length argument: " << s
-			  << " negative. First segment returned."
-			  << std::endl;
+	      std::clog << Color::yellow << "PolyPos<>::" << __FUNCTION__
+			<< ";WARNING: length argument: " << s
+			<< " negative. First segment returned."
+			<< Color::def << std::endl;
 	  }
 	else
 	  {
@@ -280,10 +282,10 @@ typename PolyPos<pos>::const_iterator PolyPos<pos>::getSegmentAtLength(const GEO
 	      }
 	    else
 	      {
-		std::clog << "PolyPos<>::" << __FUNCTION__
+		std::clog << Color::yellow << "PolyPos<>::" << __FUNCTION__
 			  << ";WARNING: length argument: " << s
 			  << " greater than total length: " << totalLength
-			  << std::endl;
+			  << Color::def << std::endl;
 		retval= this->end()-2; // return last segment.
 	      }
 	  }
@@ -529,8 +531,9 @@ typename PolyPos<pos>::const_iterator PolyPos<pos>::getFarthestPoint(const pos &
 template <class pos>
 typename PolyPos<pos>::iterator PolyPos<pos>::getFarthestPointFromSegment(iterator , iterator , GEOM_FT &)
   {
-    std::cerr << "PolyPos<>::" << __FUNCTION__
-	      << ";must be redefined in derived classes." << std::endl;
+    std::cerr << Color::red << "PolyPos<>::" << __FUNCTION__
+	      << ";must be redefined in derived classes."
+	      << Color::def << std::endl;
     return this->begin();
   }
 
@@ -591,10 +594,10 @@ void PolyPos<pos>::select_backward_segments(std::set<const_iterator> &selected, 
 	  }
       }
     if(10*selected.size()>2*sz)
-      std::clog << "PolyPos<>::" << __FUNCTION__
+      std::clog << Color::yellow << "PolyPos<>::" << __FUNCTION__
 	        << ";WARNING: many backwards segments (" << selected.size()
 	        << "/" << sz << "), check input data."
-		<< std::endl; 
+		<< Color::def << std::endl; 
   }
 
 /**

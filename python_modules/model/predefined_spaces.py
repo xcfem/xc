@@ -231,6 +231,10 @@ class PredefinedSpace(object):
         '''
         return self.preprocessor.getProblem
 
+    def getBnd(self):
+        ''' Return the boundary of the model.'''
+        return self.getTotalSet().getBnd()
+    
     def clearAll(self):
         ''' Clear the finite element model.'''
         prb= self.getProblem()
@@ -462,10 +466,12 @@ class PredefinedSpace(object):
         ''' Return the number of elements.'''
         return self.preprocessor.getDomain.getMesh.getNumNodes()
 
-    def getIntForceComponentFromName(self, componentName: str):
-        ''' Return the internal force component from the name argument.
+    def getShellIntForceComponentLabelFromName(self, componentName: str, responseId= None):
+        ''' Return the shell internal force component label from the given 
+            beam internal force compoenent label.
 
         :param componentName: name of the component.
+        :param responseId: response identifiers of the material.
         '''
         if componentName[0] in ['N','M']:
             return componentName.lower()
@@ -476,7 +482,8 @@ class PredefinedSpace(object):
         else: #LCPT I don't like this too much, I prefer let the user make the program to crass. Maybe a Warning? 
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; item '+str(componentName) + ' is not a valid component. Available components are: N1, N2, N12, M1, M2, M12, Q1, Q2')
+            errMsg= '; item '+str(componentName) + ' is not a valid component. Available components are: N1, N2, N12, M1, M2, M12, Q1, Q2'
+            lmsg.error(className+'.'+methodName+errMsg)
             return 'N1'
         
     def setPreprocessor(self, preprocessor: xc.Preprocessor):
@@ -776,12 +783,15 @@ class PredefinedSpace(object):
         self.constraints.newAntiSymmetryConstraint(nodeTag, plane)
         self.fixedNodesTags.add(nodeTag)
 
-    def fixNode(self, DOFpattern, nodeTag, restrainedNodeId: str= None):
+    def fixNode(self, DOFpattern, nodeTag, restrainedNodeId:str= None):
         '''Restrain DOF of a node according to the DOFpattern, which is a given
          string of type '0FF' that matches the DOFs (uX,uY,uZ)
          where 'F' means FREE and '0' means constrained with value=0
          Note: DOFpaterns '0FF','0_FF', ... are equivalent
 
+         :param DOFpattern: sequence of '0' (fixed) and 'F' (free)
+                            characters expressing the constraint for
+                            the corresponding DOF.
          :param nodeTag: node identifier.
          :param restrainedNodeId: identifier of the node to display with
                                   the reaction values.
@@ -1494,7 +1504,8 @@ class PredefinedSpace(object):
         extrapolate_elem_attr.extrapolate_elem_data_to_nodes(elemSet= setToCompute.getElements, attributeName= propToDefine, function= self.getValuesAtNodes, argument= propToDefine, initialValue= xc.Vector([0.0,0.0,0.0,0.0,0.0,0.0]), transformToLocalCoord= transformToLocalCoord)
 
     def setNodePropertyFromElements(self, compName: str, xcSet: xc.Set, function, propToDefine: str, transformToLocalCoord= False):
-        '''display the stresses on the elements.
+        ''' define a property in the nodes from its value at the neighbour
+            elements.
 
         :param compName: name of the component of the magnitude ('sigma_11', 'strain_xx', ...)
         :param xcSet: set of nodes to define the propery at.
@@ -1510,7 +1521,7 @@ class PredefinedSpace(object):
         vComp= 0
         if(compName): # Defined property has components.
             propertyName+= compName
-            vComp= function(compName)
+            vComp= function(compName, responseId= None)
         for n in nodSet:
             n.setProp(propertyName, n.getProp(propToDefine)[vComp])
         return propertyName
@@ -1699,10 +1710,13 @@ class PredefinedSpace(object):
         :param oh: output handler to use as display engine.
         :param loadCasesToDisplay: load cases that will be displayed.
         :param setsToDisplay: element sets to display the loads on.
-        :param elLoadComp:component of the linear loads on elements to be 
-               depicted [available components: 'xyzComponents' (default),
-               'axialComponent', 'transComponent', 'transYComponent', 
-               'transZComponent']
+        :param elLoadComp: component of the elemental loads to be 
+                           depicted [available components: 
+                           'xyzComponents' (default), 'axialComponent', 
+                           'transComponent', 'transYComponent', 
+                           'transZComponent', 'epsilon_xx', 'epsilon_yy', 
+                           'epsilon_zz', 'epsilon_xy', 'epsilon_xz', 
+                           'epsilon_yz']
         :param fUnitConv:  factor of conversion to be applied to the results
                         (defaults to 1)
         :param caption:   caption for the graphic
@@ -1770,8 +1784,9 @@ class PredefinedSpace(object):
             of the model elements.
 
         :param inputFileName: name of the input file containing the data.
+        :returns: number of properties read.
         '''
-        control_vars.readControlVars(preprocessor= self.preprocessor, inputFileName= inputFileName)
+        return control_vars.read_control_vars(preprocessor= self.preprocessor, inputFileName= inputFileName)
 
     def newRecorder(self, recorderType, outputHandler= None):
         ''' Creates a new recorder on the problem domain.
@@ -1781,7 +1796,7 @@ class PredefinedSpace(object):
         '''
         return self.preprocessor.getDomain.newRecorder(recorderType,None)
         
-    def getStateComponentFromName(self, compName: str):
+    def getStateComponentIndexFromName(self, compName: str):
         '''Return the component index from the state component name (defined in DruckerPrager.cpp).
 
         :param compName: state component name.
@@ -1884,7 +1899,7 @@ class SolidMechanics2D(PredefinedSpace):
             displacement components.'''
         return ['uX', 'uY']
         
-    def getDispComponentFromName(self,compName: str):
+    def getDispComponentIndexFromName(self,compName: str):
         '''Return the component index from the
            displacement component name.
 
@@ -1901,41 +1916,55 @@ class SolidMechanics2D(PredefinedSpace):
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: uX, uY')
         return retval
 
-    def getStrainComponentFromName(self, compName: str):
+    def getStrainComponentIndexFromName(self, compName: str, responseId= None):
         '''Return the component index from the
            strain component name.
 
         :param compName: strain component name.
+        :param responseId: response identifiers of the material.
         '''
-        retval= 0
-        if((compName == 'epsilon_xx') or (compName == 'epsilon_11')):
-            retval= self.epsilon_11
-        elif((compName == 'epsilon_yy') or (compName == 'epsilon_22')):
-            retval= self.epsilon_22
-        elif((compName == 'epsilon_xy') or (compName == 'epsilon_12')
-             or (compName == 'epsilon_yx') or (compName == 'epsilon_21')):
-            retval= self.epsilon_12
+        retval= None
+        if(responseId is None):
+            if((compName == 'epsilon_xx') or (compName == 'epsilon_11')):
+                retval= self.epsilon_11
+            elif((compName == 'epsilon_yy') or (compName == 'epsilon_22')):
+                retval= self.epsilon_22
+            elif((compName == 'epsilon_xy') or (compName == 'epsilon_12')
+                 or (compName == 'epsilon_yx') or (compName == 'epsilon_21')):
+                retval= self.epsilon_12
         else:
+            rId= responseId.getComponentIdFromString(compName)
+            retval= responseId.index(rId)
+            if(retval==-1):
+                retval= None
+        if(retval is None):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: epsilon_11, epsilon_22, epsilon_12')
         return retval
 
-    def getStressComponentFromName(self, compName: str):
+    def getStressComponentIndexFromName(self, compName: str, responseId= None):
         '''Return the component index from the
            stress component name.
 
         :param compName: strain component name.
+        :param responseId: response identifiers of the material.
         '''
-        retval= 0
-        if((compName == 'sigma_xx') or (compName == 'sigma_11')):
-            retval= self.sigma_11
-        elif((compName == 'sigma_yy') or (compName == 'sigma_22')):
-            retval= self.sigma_22
-        elif((compName == 'sigma_xy') or (compName == 'sigma_12')
-             or (compName == 'sigma_yx') or (compName == 'sigma_21')):
-            retval= self.sigma_12
+        retval= None
+        if(responseId is None):
+            if((compName == 'sigma_xx') or (compName == 'sigma_11')):
+                retval= self.sigma_11
+            elif((compName == 'sigma_yy') or (compName == 'sigma_22')):
+                retval= self.sigma_22
+            elif((compName == 'sigma_xy') or (compName == 'sigma_12')
+                 or (compName == 'sigma_yx') or (compName == 'sigma_21')):
+                retval= self.sigma_12
         else:
+            rId= responseId.getComponentIdFromString(compName)
+            retval= responseId.index(rId)
+            if(retval==-1):
+                retval= None
+        if(retval is None):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: sigma_11, sigma_22, sigma_12')
@@ -2135,9 +2164,12 @@ class StructuralMechanics2D(StructuralMechanics):
             displacement components.'''
         return ['uX', 'uY', 'rotZ']
         
-    def getDispComponentFromName(self,compName):
+    def getDispComponentIndexFromName(self,compName):
         '''Return the component index from the
-           displacement name.'''
+           displacement name.
+
+        :param compName: name of the displacement component.
+        '''
         retval= 0
         if compName == 'uX':
             retval= self.Ux
@@ -2151,32 +2183,54 @@ class StructuralMechanics2D(StructuralMechanics):
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: uX, uY, rotZ')
         return retval
 
-    def getStrainComponentFromName(self, compName):
+    def getStrainComponentIndexFromName(self, compName, responseId= None):
         '''Return the component index from the
-           generalized strain name.'''
-        retval= 0
-        if(compName == 'epsilon'): # axial
-            retval= self.epsilon
-        elif(compName == 'kappa'): # bending
-            retval= self.kappa
-        elif(compName == 'gamma'): # shear
-            retval= self.gamma
+           generalized strain name.
+
+        :param compName: strain component name.
+        :param responseId: response identifiers of the material.
+        '''
+        retval= None
+        if(compName in ['epsilon', 'kappa', 'gamma']):
+            if(responseId is None):
+                if(compName == 'epsilon'): # axial
+                    retval= self.epsilon
+                elif(compName == 'kappa'): # bending
+                    retval= self.kappa
+                elif(compName == 'gamma'): # shear
+                    retval= self.gamma
+            else:
+                rId= responseId.getComponentIdFromString(compName)
+                retval= responseId.index(rId)
+                if(retval==-1):
+                    retval= None
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: epsilon, kappa, gamma')
         return retval
 
-    def getStressComponentFromName(self, compName):
+    def getStressComponentIndexFromName(self, compName, responseId= None):
         '''Return the component index from the
-           stress name.'''
+           stress name.
+
+        :param compName: strain component name.
+        :param responseId: response identifiers of the material.
+        '''
         retval= 0
-        if((compName == 'N') or (compName == 'P')):
-            retval= self.N
-        elif(compName == 'M'):
-            retval= self.M
-        elif((compName == 'Q') or (compName == 'V')):
-            retval= self.Q
+        if(compName in ['N', 'P', 'M', 'Q', 'V']):
+            if(responseId is None):
+                if((compName == 'N') or (compName == 'P')): # axial
+                    retval= self.N
+                elif(compName == 'M'): # bending
+                    retval= self.M
+                elif((compName == 'Q') or (compName == 'V')): # shear
+                    retval= self.Q
+            else:
+                rId= responseId.getComponentIdFromString(compName)
+                retval= responseId.index(rId)
+                if(retval==-1):
+                    retval= None
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -2394,7 +2448,7 @@ class SolidMechanics3D(PredefinedSpace):
             displacement components.'''
         return ['uX', 'uY', 'uZ']
         
-    def getDispComponentFromName(self,compName):
+    def getDispComponentIndexFromName(self,compName):
         '''Return the component index from the
            displacement name.'''
         retval= 0
@@ -2410,51 +2464,71 @@ class SolidMechanics3D(PredefinedSpace):
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: uX, uY, uZ')
         return retval
     
-    def getStrainComponentFromName(self, compName):
+    def getStrainComponentIndexFromName(self, compName, responseId= None):
         '''Return the component index from the
-           strain name.'''
-        retval= 0
-        if((compName == 'epsilon_xx') or (compName == 'epsilon_11')):
-            retval= self.epsilon_11
-        elif((compName == 'epsilon_yy') or (compName == 'epsilon_22')):
-            retval= self.epsilon_22
-        elif((compName == 'epsilon_zz') or (compName == 'epsilon_33')):
-            retval= self.epsilon_33
-        elif((compName == 'epsilon_xy') or (compName == 'epsilon_12')
-             or (compName == 'epsilon_yx') or (compName == 'epsilon_21')):
-            retval= self.epsilon_12
-        elif((compName == 'epsilon_xz') or (compName == 'epsilon_13')
-             or (compName == 'epsilon_zx') or (compName == 'epsilon_31')):
-            retval= self.epsilon_13
-        elif((compName == 'epsilon_yz') or (compName == 'epsilon_23')
-             or (compName == 'epsilon_zy') or (compName == 'epsilon_32')):
-            retval= self.epsilon_23
+           strain name.
+
+        :param compName: strain component name.
+        :param responseId: response identifiers of the material.
+        '''
+        retval= None
+        if(responseId is None):
+            if((compName == 'epsilon_xx') or (compName == 'epsilon_11')):
+                retval= self.epsilon_11
+            elif((compName == 'epsilon_yy') or (compName == 'epsilon_22')):
+                retval= self.epsilon_22
+            elif((compName == 'epsilon_zz') or (compName == 'epsilon_33')):
+                retval= self.epsilon_33
+            elif((compName == 'epsilon_xy') or (compName == 'epsilon_12')
+                 or (compName == 'epsilon_yx') or (compName == 'epsilon_21')):
+                retval= self.epsilon_12
+            elif((compName == 'epsilon_xz') or (compName == 'epsilon_13')
+                 or (compName == 'epsilon_zx') or (compName == 'epsilon_31')):
+                retval= self.epsilon_13
+            elif((compName == 'epsilon_yz') or (compName == 'epsilon_23')
+                 or (compName == 'epsilon_zy') or (compName == 'epsilon_32')):
+                retval= self.epsilon_23
         else:
+            rId= responseId.getComponentIdFromString(compName)
+            retval= responseId.index(rId)
+            if(retval==-1):
+                retval= None
+        if(retval is None):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: epsilon_11, epsilon_22, epsilon_33, epsilon_12, epsilon_13, epsilon_23')
         return retval
 
-    def getStressComponentFromName(self, compName):
+    def getStressComponentIndexFromName(self, compName, responseId= None):
         '''Return the component index from the
-           stress name.'''
+           stress name.
+
+        :param compName: strain component name.
+        :param responseId: response identifiers of the material.
+        '''
         retval= 0
-        if((compName == 'sigma_xx') or (compName == 'sigma_11')):
-            retval= self.sigma_11
-        elif((compName == 'sigma_yy') or (compName == 'sigma_22')):
-            retval= self.sigma_22
-        elif((compName == 'sigma_zz') or (compName == 'sigma_33')):
-            retval= self.sigma_33
-        elif((compName == 'sigma_xy') or (compName == 'sigma_12')
-             or (compName == 'sigma_yx') or (compName == 'sigma_21')):
-            retval= self.sigma_12
-        elif((compName == 'sigma_xz') or (compName == 'sigma_13')
-             or (compName == 'sigma_zx') or (compName == 'sigma_31')):
-            retval= self.sigma_13
-        elif((compName == 'sigma_yz') or (compName == 'sigma_23')
-             or (compName == 'sigma_zy') or (compName == 'sigma_32')):
-            retval= self.sigma_23
-        else:
+        if(responseId is None):
+            if((compName == 'sigma_xx') or (compName == 'sigma_11')):
+                retval= self.sigma_11
+            elif((compName == 'sigma_yy') or (compName == 'sigma_22')):
+                retval= self.sigma_22
+            elif((compName == 'sigma_zz') or (compName == 'sigma_33')):
+                retval= self.sigma_33
+            elif((compName == 'sigma_xy') or (compName == 'sigma_12')
+                 or (compName == 'sigma_yx') or (compName == 'sigma_21')):
+                retval= self.sigma_12
+            elif((compName == 'sigma_xz') or (compName == 'sigma_13')
+                 or (compName == 'sigma_zx') or (compName == 'sigma_31')):
+                retval= self.sigma_13
+            elif((compName == 'sigma_yz') or (compName == 'sigma_23')
+                 or (compName == 'sigma_zy') or (compName == 'sigma_32')):
+                retval= self.sigma_23
+            else:
+                rId= responseId.getComponentIdFromString(compName)
+                retval= responseId.index(rId)
+                if(retval==-1):
+                    retval= None                
+        if(retval is None):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: sigma_11, sigma_22, sigma_33, sigma_12, sigma_13, sigma_23')
@@ -2498,6 +2572,19 @@ def gdls_elasticidad3D(nodes):
 
 
 class StructuralMechanics3D(StructuralMechanics):
+    ''' 3D structural mechanics
+
+    :ivar beamStrainComponents: component names of beam generalized strains.
+    :ivar shellStrainComponents: component names of shell generalized strains.
+    :ivar beamStressComponents: component names of beam generalized stresses.
+    :ivar shellStressComponents: component names of shell generalized stresses.
+    ''' 
+    
+    beamStrainComponents= ['epsilon', 'kappa_z', 'kappa_y', 'gamma_y', 'gamma_z', 'theta']
+    shellStrainComponents= ['epsilon_1', 'epsilon_2', 'epsilon_12', 'kappa_1', 'kappa_2', 'kappa_12', 'gamma_13', 'gamma_23']
+    beamStressComponents= ['N', 'P', 'My', 'Mz', 'Qy', 'Qz', 'Vy', 'Vz', 'T']
+    shellStressComponents= ['n1', 'n2', 'n12', 'm1', 'm2', 'm12', 'q13', 'q23']
+    
     def __init__(self,nodes, solProcType: predefined_solutions.SolutionProcedure = defaultSolutionProcedureType):
         '''Define the dimension of the space: nodes by three coordinates (x,y,z) 
         and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
@@ -2514,8 +2601,8 @@ class StructuralMechanics3D(StructuralMechanics):
         self.ThetaZ= 5
         self.epsilon= 0 # generalized strains; axial strain,
         self.kappa_z= 1 # curvature about z-axis,
-        self.gamma_y= 2 # shear along y-axis.
-        self.kappa_y= 3 # curvature about y-axis,
+        self.gamma_y= 3 # shear along y-axis.
+        self.kappa_y= 2 # curvature about y-axis,
         self.gamma_z= 4 # shear along z-axis.
         self.theta= 5 # torsion along x-axis.
         self.N= 0 # generalized strains; axial strain,
@@ -2550,9 +2637,12 @@ class StructuralMechanics3D(StructuralMechanics):
             displacement components.'''
         return ['uX', 'uY', 'uZ', 'rotX', 'rotY', 'rotZ']
     
-    def getDispComponentFromName(self,compName):
+    def getDispComponentIndexFromName(self,compName):
         '''Return the component index from the
-           displacement name.'''
+           displacement name.
+
+        :param compName: strain component name.
+        '''
         retval= 0
         if compName == 'uX':
             retval= self.Ux
@@ -2572,52 +2662,84 @@ class StructuralMechanics3D(StructuralMechanics):
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: uX, uY, uZ, rotX, rotY, rotZ')
         return retval
     
-    def getStrainComponentFromName(self, compName):
+    def getStrainComponentIndexFromName(self, compName, responseId):
         '''Return the component index from the
-           generalized strain name.'''
-        lmsg.warning('getStrainComponentFromName not tested yet.')
-        retval= 0        
-        if(compName == 'epsilon'): # axial
-            retval= self.epsilon
-        elif(compName == 'kappa_z'): # bending about local z axis
-            retval= self.kappa_z
-        elif(compName == 'gamma_y'): # shear along y-axis.
-            retval= self.gamma_y
-        elif(compName == 'kappa_y'): # bending about local y axis
-            retval= self.kappa_y
-        elif(compName == 'gamma_z'): # shear along z-axis.
-            retval= self.gamma_z
-        elif(compName == 'theta'): # torsion along x-axis.
-            retval= self.theta
+           generalized strain name.
+
+        :param compName: strain component name.
+        :param responseId: response identifiers of the material.
+        '''
+        retval= None
+        availableStrainComponents= self.beamStrainComponents+self.shellStrainComponents
+        if(compName in availableStrainComponents):
+            if(responseId is None):
+                # Beam generalized strains.
+                if((compName == 'epsilon') or (compName == 'epsilon_1')): # axial
+                    retval= self.epsilon
+                elif((compName == 'kappa_z') or (compName == 'kappa_1')): # bending about local z axis
+                    retval= self.kappa_z
+                elif(compName == 'gamma_y'): # shear along y-axis.
+                    retval= self.gamma_y
+                elif(compName == 'kappa_y'): # bending about local y axis
+                    retval= self.kappa_y
+                elif(compName == 'gamma_z'): # shear along z-axis.
+                    retval= self.gamma_z
+                elif(compName == 'theta'): # torsion along x-axis.
+                    retval= self.theta
+                # Shell generalized strains.
+                if(retval is None):
+                    shellResp= xc.RespShellMaterial()
+                    rId= shellResp.getComponentIdFromString(compName)
+                    retval= shellResp.index(rId)
+            else:
+                rId= responseId.getComponentIdFromString(compName)
+                retval= responseId.index(rId)
+                if(retval==-1):
+                    retval= None
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: epsilon, kappa_z, gamma_y, kappa_y, gamma_z, theta')
+            errMsg= '; item '+str(compName)
+            errMsg+= ' is not a valid component. Available components are: '
+            errMsg+= str(availableStrainComponents)
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + errMsg)
         return retval
-
-    def getStressComponentFromName(self, compName):
+    
+    def getStressComponentIndexFromName(self, compName, responseId= None):
         '''Return the component index from the
-           stress name.'''
-        lmsg.warning('getStressComponentFromName not tested yet.')
+           stress name.
+
+        :param compName: strain component name.
+        :param responseId: response identifiers of the material.
+        '''
+        lmsg.warning('getStressComponentIndexFromName not tested yet.')
         retval= 0
-        self.N= 0 # generalized strains; axial strain,
-        self.Mz= 1 # curvature about z-axis,
-        self.Vy= 2 # shear along y-axis.
-        self.My= 3 # curvature about y-axis,
-        self.Vz= 4 # shear along z-axis.
-        self.T= 5 # torsion along x-axis.
-        if((compName == 'N') or (compName == 'P')):
-            retval= self.N
-        elif(compName == 'Mz'):
-            retval= self.Mz
-        elif((compName == 'Qy') or (compName == 'Vy')):
-            retval= self.Qy
-        elif(compName == 'My'):
-            retval= self.My
-        elif((compName == 'Qz') or (compName == 'Vz')):
-            retval= self.Qz
-        elif(compName == 'T'):
-            retval= self.Qz
+        availableStressComponents= self.beamStressComponents+self.shellStressComponents
+        if(compName in availableStressComponents):
+            if(responseId is None):
+                # Beam generalized stresses.
+                if((compName == 'N') or (compName == 'P')): # axial
+                    retval= self.N
+                elif(compName == 'Mz'): # bending about local z axis
+                    retval= self.Mz
+                elif((compName == 'Qy') or (compName == 'Vy')): # shear along y-axis.
+                    retval= self.Qy
+                elif(compName == 'My'): # bending about local y axis
+                    retval= self.My
+                elif((compName == 'Qz') or (compName == 'Vz')):  # shear along z-axis.
+                    retval= self.Qz
+                elif(compName == 'T'): # torsion along x-axis.
+                    retval= self.Qz
+                # Shell generalized stresses.
+                if(retval is None):
+                    shellResp= xc.RespShellMaterial()
+                    rId= shellResp.getComponentIdFromString(compName)
+                    retval= shellResp.index(rId)
+            else:
+                rId= responseId.getComponentIdFromString(compName)
+                retval= responseId.index(rId)
+                if(retval==-1):
+                    retval= None
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name

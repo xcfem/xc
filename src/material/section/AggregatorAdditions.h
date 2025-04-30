@@ -33,11 +33,9 @@
 #define AGGREGATORADDITIONS_H
 
 #include <material/uniaxial/DqUniaxialMaterial.h>
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 
 namespace XC {
-
-class ResponseId;
 
 //! @ingroup MATSCC
 //

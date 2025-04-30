@@ -99,6 +99,9 @@ class LinearSeries: public CFactorSeries
     double getPeakFactor(void) const {return cFactor;} // dummy function
     double getTimeIncr(double pseudoTime) const {return 1.0;} // dummy function
     
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
     

@@ -113,6 +113,9 @@ class PathTimeSeries: public PathSeriesBase
       { return currentTimeLoc; }
     inline void setCurrentTimeLoc(const int &d)
       { currentTimeLoc= d; }
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
 
     bool readFromFile(const std::string &fileName);
     bool readFromFiles(const std::string &filePathName,const std::string &fileTimeName);

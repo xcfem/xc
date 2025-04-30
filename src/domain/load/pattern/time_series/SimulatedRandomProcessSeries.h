@@ -107,6 +107,9 @@ class SimulatedRandomProcessSeries: public TimeSeries
     double getTimeIncr(double pseudoTime) const {return 1.0;} // dummy function
     
     // methods for output    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
 

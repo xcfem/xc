@@ -317,7 +317,14 @@ class SituationCombs(dict):
         '''
         data= self.getDict()
         with open(outputFileName, 'w') as outfile:
-            json.dump(data, outfile)           
+            json.dump(data, outfile)
+
+    def getStatistics(self):
+        ''' Return a dictionary containing the number of load combinations in
+            this container.'''
+        retval= dict()
+        retval[self.description]= len(self)
+        return retval
 
 class SituationsSet(object):
     '''Set of situations as used in limit states
@@ -398,6 +405,15 @@ class SituationsSet(object):
         data= self.getDict()
         with open(outputFileName, 'w') as outfile:
             json.dump(data, outfile)        
+
+    def getStatistics(self):
+        ''' Return a dictionary containing the number of load combinations for
+            each limit state.'''
+        retval= dict()
+        for s in self.situations:
+            name= s.name+'_statistics'
+            retval[name]= len(s)
+        return retval
 
 class SLSCombinations(SituationsSet):
     '''Combinations of actions for serviceability limit states
@@ -497,6 +513,16 @@ class SLSCombinations(SituationsSet):
         newPrefix= prefix+'.earthquake'
         self.earthquake.writePythonScript(prefix= newPrefix, os= os)
 
+    def getStatistics(self):
+        ''' Return a dictionary containing the number of load combinations for
+            each situation.'''
+        retval= dict()
+        retval['rare_statistics']= self.rare.getStatistics()
+        retval['frequent_statistics']= self.freq.getStatistics()
+        retval['quasi_permanent_statistics']= self.qp.getStatistics()
+        retval['earthquake_statistics']= self.earthquake.getStatistics()
+        return retval
+
 class ULSCombinations(SituationsSet):
     '''Combinations of actions for ultimate limit states
 
@@ -595,6 +621,17 @@ class ULSCombinations(SituationsSet):
         self.fatigue.writePythonScript(prefix= newPrefix, os= os)
         newPrefix= prefix+'.earthquake'
         self.earthquake.writePythonScript(prefix= newPrefix, os= os)
+
+    def getStatistics(self):
+        ''' Return a dictionary containing the number of load combinations for
+            each situation.'''
+        retval= dict()
+        retval['perm_statistics']= self.perm.getStatistics()
+        retval['acc_statistics']= self.acc.getStatistics()
+        retval['fatigue_statistics']= self.fatigue.getStatistics()
+        retval['earthquake_statistics']= self.earthquake.getStatistics()
+        return retval
+        
 
 class CombContainer(object):
     '''Container of load combinations.
@@ -776,8 +813,7 @@ class CombContainer(object):
             for row in reader:
                 rows.append(row)
         self.setFromCSV(rows)
-
-                  
+     
     def getLoadCaseDispParameters(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
         '''Returns a suitable LoadCaseDispParameters for the combination.
 
@@ -822,4 +858,12 @@ class CombContainer(object):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+"; design situations: '"+str(designSituations)+"' have no defined combinations.")
+        return retval
+
+    def getStatistics(self):
+        ''' Return a dictionary containing the number of load combinations for
+            each limit state.'''
+        retval= dict()
+        retval['uls_statistics']= self.ULS.getStatistics()
+        retval['sls_statistics']= self.SLS.getStatistics()
         return retval

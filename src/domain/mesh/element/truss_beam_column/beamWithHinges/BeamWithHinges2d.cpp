@@ -66,7 +66,7 @@
 #include <domain/mesh/element/utils/Information.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include "material/section/repres/CrossSectionProperties2d.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 
 XC::Matrix XC::BeamWithHinges2d::theMatrix(6,6);

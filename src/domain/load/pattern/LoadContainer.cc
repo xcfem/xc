@@ -379,6 +379,23 @@ XC::DbTagData &XC::LoadContainer::getDbTagData(void) const
     return retval;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::LoadContainer::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    retval["nodal_loads"]= this->theNodalLoads->getPyDict();
+    retval["elemental_loads"]= this->theElementalLoads->getPyDict();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::LoadContainer::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    this->theNodalLoads->setPyDict(boost::python::extract<boost::python::dict>(d["nodal_loads"]));
+    this->theElementalLoads->setPyDict(boost::python::extract<boost::python::dict>(d["elemental_loads"]));
+  }
+
 //! @brief Send members through the communicator argument.
 int XC::LoadContainer::sendData(Communicator &comm)
   {

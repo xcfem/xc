@@ -42,7 +42,7 @@
 #include "ArrayCommMetaData.h"
 #include "MatrixCommMetaData.h"
 #include "utility/actor/channel/Channel.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "utility/matrix/nDarray/BJtensor.h"
 
 //! @brief Constructor.

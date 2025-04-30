@@ -28,7 +28,7 @@
 
 #include "FiberSectionBase.h"
 #include "utility/matrix/Vector.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "material/section/repres/section/FiberSectionRepr.h"
 #include "material/section/repres/section_geometry/SectionGeometry.h"
 #include "material/section/interaction_diagram/DeformationPlane.h"

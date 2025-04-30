@@ -76,6 +76,7 @@
 #include "preprocessor/prep_handlers/LoadHandler.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 //static data
@@ -198,18 +199,21 @@ const XC::ShellRawLoad *XC::Shell4NBase::vector3dRawLoadLocal(const std::vector<
                 lPatterns.setCurrentElementLoadTag(loadTag+1);
               }
             else
-	      std::cerr << getClassName() << "::" << __FUNCTION__
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                         << " there is no current load pattern."
-                        << " Load ignored." << std::endl; 
+                        << " Load ignored."
+			<< Color::def << std::endl; 
           }
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                     << "; a vector of dimension " << nn
-	            << " was expected." << std::endl;
+	            << " was expected."
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; modeler not defined." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; modeler not defined."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -236,9 +240,10 @@ const XC::ShellRawLoad *XC::Shell4NBase::vector3dRawLoadGlobal(const std::vector
         retval= vector3dRawLoadLocal(tmp);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; a vector of dimension " << nn
-                << " was expected." << std::endl;
+                << " was expected."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -267,17 +272,20 @@ const XC::ShellUniformLoad *XC::Shell4NBase::vector3dUniformLoadLocal(const Vect
                 lPatterns.setCurrentElementLoadTag(loadTag+1);
               }
             else
-	      std::cerr << getClassName() << "::" << __FUNCTION__
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                         << " there is no current load pattern."
-                        << " Load ignored." << std::endl; 
+                        << " Load ignored."
+			<< Color::def << std::endl; 
           }
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
-                    << "; a vector of dimension 3 was expected." << std::endl;
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                    << "; a vector of dimension 3 was expected."
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; modeler not defined." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; modeler not defined."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -295,8 +303,9 @@ const XC::ShellUniformLoad *XC::Shell4NBase::vector3dUniformLoadGlobal(const Vec
         retval= vector3dUniformLoadLocal(vTrf);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; a vector of dimension 3 was expected." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; a vector of dimension 3 was expected."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -322,17 +331,20 @@ void XC::Shell4NBase::strainLoad(const Matrix &strains)
                 lp->addElementalLoad(tmp);
               }
             else
-              std::cerr << getClassName() << "::" << __FUNCTION__
-			<< "; can't create load." << std::endl;
+              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			<< "; can't create load."
+			<< Color::def << std::endl;
           }
         else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; there is no current load pattern."
-                    << " Load ignored." << std::endl; 
+                    << " Load ignored."
+		    << Color::def << std::endl; 
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; mdeler not defined." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; mdeler not defined."
+		<< Color::def << std::endl;
   }
 
 
@@ -376,6 +388,21 @@ const XC::GaussModel &XC::Shell4NBase::getGaussModel(void) const
   { return gauss_model_quad4; }
 
 
+//! @brie Return a pointer to the i-th section of the element.
+const XC::SectionForceDeformation *XC::Shell4NBase::getSectionPtr(const size_t &i) const
+  {
+    const SectionForceDeformation *retval= nullptr;
+    const size_t sz= this->physicalProperties.size();
+    if(sz>i)
+      retval= this->physicalProperties[i];
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; index " << i << " out of range: (0,"
+	        << sz << ")."
+		<< Color::def << std::endl;    
+    return retval;
+  }
+
 //! @brief Sets loads to zero.
 void XC::Shell4NBase::zeroLoad(void)
   {
@@ -391,9 +418,10 @@ void XC::Shell4NBase::zeroLoad(void)
 int XC::Shell4NBase::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << getClassName() << "::" << __FUNCTION__ 
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ 
                 << "; load over inactive element: "
-                << getTag() << std::endl;
+                << getTag()
+		<< Color::def << std::endl;
     else
       {
         if(SelfWeight *shellLoad= dynamic_cast<SelfWeight *>(theLoad))
@@ -423,7 +451,7 @@ int XC::Shell4NBase::addLoad(ElementalLoad *theLoad, double loadFactor)
 //! @param accel: acceleration vector.
 void XC::Shell4NBase::createInertiaLoad(const Vector &accel)
   {
-    const bool haveRho= physicalProperties.haveRho();
+    const bool haveRho= this->physicalProperties.haveRho();
     if(haveRho)
       {
 	const int dim= std::min(accel.Size(),6);
@@ -848,16 +876,18 @@ int XC::Shell4NBase::recvCoordTransf(int posFlag,const int &posClassTag,const in
           {
             theCoordTransf= comm.getNewShellCrdTransf3d(data.getDbTagDataPos(posClassTag));
             if(!theCoordTransf)
-              std::cerr << getClassName() << "::" << __FUNCTION__
-			<< "; ran out of memory\n";
+              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			<< "; ran out of memory."
+		        << Color::def << std::endl;
           }
         if(theCoordTransf)
           {
             res= comm.receiveMovable(*theCoordTransf,data,CommMetaData(posDbTag));
             theCoordTransf->revertToLastCommit();// Revert the crdtransf to its last committed state
             if(res<0)
-              std::cerr << getClassName() << "::" << __FUNCTION__
-			<< "; failed to receive vector data\n";
+              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			<< "; failed to receive vector data."
+		        << Color::def << std::endl;
           }
       }
     return res;
@@ -989,14 +1019,13 @@ void XC::Shell4NBase::Print(std::ostream &s, int flag ) const
     else
       {
         s << std::endl;
-        s << getClassName() << " Four Node Shell \n";
-        s << "Element Number: " << this->getTag() << std::endl;
-        s << "Node 1 : " << theNodes.getTagNode(0) << std::endl;
-        s << "Node 2 : " << theNodes.getTagNode(1) << std::endl;
-        s << "Node 3 : " << theNodes.getTagNode(2) << std::endl;
-        s << "Node 4 : " << theNodes.getTagNode(3) << std::endl;
-
-        s << "Material Information : \n ";
+        s << getClassName() << " Four Node Shell \n"
+          << "Element Number: " << this->getTag() << std::endl
+          << "Node 1 : " << theNodes.getTagNode(0) << std::endl
+          << "Node 2 : " << theNodes.getTagNode(1) << std::endl
+          << "Node 3 : " << theNodes.getTagNode(2) << std::endl
+          << "Node 4 : " << theNodes.getTagNode(3) << std::endl
+	  << "Material Information : \n ";
         physicalProperties.Print( s, flag );
         s << std::endl;
       }

@@ -39,6 +39,23 @@
 XC::PulseBaseSeries::PulseBaseSeries(int classTag,const double &startTime,const double &finishTime,const double &factor)
   : CFactorSeries(classTag,factor), tStart(startTime),tFinish(finishTime) {}
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::PulseBaseSeries::getPyDict(void) const
+  {
+    boost::python::dict retval= CFactorSeries::getPyDict();
+    retval["t_start"]= this->tStart;
+    retval["t_finish"]= this->tFinish;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::PulseBaseSeries::setPyDict(const boost::python::dict &d)
+  {
+    CFactorSeries::setPyDict(d);
+    this->tStart= boost::python::extract<double>(d["t_start"]);
+    this->tFinish= boost::python::extract<double>(d["t_finish"]);
+  }
+
 //! @brief Send object members through the communicator argument.
 int XC::PulseBaseSeries::sendData(Communicator &comm)
   {

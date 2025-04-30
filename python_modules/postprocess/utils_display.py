@@ -175,10 +175,8 @@ class FigureDefinition(SlideDefinition):
 
     def defField(self, xcSet):
         ''' Define field.'''
-        print('********** Enters FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' xcSet.name= ', xcSet.name)
         #self.field= fields.ExtrapolatedScalarField(self.attributeName,"getProp",None,1.0,xcSet)
-        self.field= fields.getScalarFieldFromControlVar(attributeName=self.attributeName,argument=self.argument,xcSet=xcSet,component=None,fUnitConv=1.0,rgMinMax=None)
-        print('********** Exits FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' xcSet.name= ', xcSet.name)
+        self.field= fields.get_scalar_field_from_control_var(attributeName=self.attributeName,argument=self.argument,xcSet=xcSet,component=None,fUnitConv=1.0,rgMinMax=None)
 
     def genGraphicFile(self,displaySettings, xcSet, graphFileName, convertToEPS= False):
         ''' Create a graphic file.

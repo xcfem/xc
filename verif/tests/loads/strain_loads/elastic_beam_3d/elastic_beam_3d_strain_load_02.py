@@ -12,6 +12,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
@@ -80,6 +81,13 @@ nodalLoad= lp0.newNodalLoad(n6.tag, xc.Vector([0.0,0.0,0.0, 0.0, 0.0, M]) )
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
+# Check getStrainComponentIndexFromName
+strainsMatrix= eleLoad.getElementStrainsMatrix(beam1) # element strains matrix.
+responseId= beam1.getSection(0).getResponseType
+componentIndex= modelSpace.getStrainComponentIndexFromName('kappa_z', responseId= responseId)
+componentRefValue= -zCurvature/2.0
+ratio0= math.sqrt((strainsMatrix(0,componentIndex)-componentRefValue)**2+(strainsMatrix(1,componentIndex)-componentRefValue)**2)
+
 # Solve
 result= modelSpace.analyze(calculateNodalReactions= False)
 
@@ -91,6 +99,7 @@ ratio1= abs(yDeflection3-yDeflectionRef)/yDeflectionRef
 ratio2= abs(yDeflection6-yDeflectionRef)/yDeflectionRef
 
 '''
+print("ratio0= ", ratio0)
 print(n3.getDisp)
 print("curvature= ", zCurvature)
 print("yDeflectionRef= ", yDeflectionRef*1e3, 'mm')
@@ -103,7 +112,7 @@ print("ratio2= ", ratio2)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if((abs(ratio1)<1e-8) and (abs(ratio2)<1e-8)):
+if((abs(ratio0)<1e-8) and (abs(ratio1)<1e-8) and (abs(ratio2)<1e-8)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

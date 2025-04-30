@@ -25,7 +25,6 @@
 typedef XC::QuadBase4N<XC::SectionFDPhysicalProperties> QuadBase4N_SFD;
 class_<QuadBase4N_SFD, bases<PlaneElement4N_SFD>, boost::noncopyable >("QuadBase4N_SFD", no_init)
   .def("getPerimeter", &QuadBase4N_SFD::getPerimeter, "Returns element's perimeter.")
-  .def("getArea", &QuadBase4N_SFD::getArea, "Returns element's area.")
    ;
 
 XC::ShellCrdTransf3dBase *(XC::Shell4NBase::*getCoordTransfRef)(void)= &XC::ShellMITC4::getCoordTransf;
@@ -51,6 +50,7 @@ class_<XC::Shell4NBase, bases<QuadBase4N_SFD>, boost::noncopyable >("Shell4NBase
     .def("vector3dUniformLoadLocal",make_function(&XC::ShellMITC4Base::vector3dUniformLoadLocal, return_internal_reference<>() ))
     .def("vector3dUniformLoadGlobal",make_function(&XC::ShellMITC4Base::vector3dUniformLoadGlobal, return_internal_reference<>() ))
     .def("strainLoad",&XC::ShellMITC4Base::strainLoad)
+    .def("getSection", make_function(&XC::ShellMITC4Base::getSectionPtr, return_internal_reference<>() ), "getSection(i): return the i-th section of the element.")
    ;
 
 class_<XC::ShellMITC4Base, bases<XC::Shell4NBase>, boost::noncopyable >("ShellMITC4Base", no_init)
@@ -62,7 +62,6 @@ class_<XC::ShellMITC4, bases<XC::ShellMITC4Base>, boost::noncopyable >("ShellMIT
 typedef XC::QuadBase9N<XC::SectionFDPhysicalProperties> QuadBase9N_SFD;
 class_<QuadBase9N_SFD, bases<PlaneElement9N_SFD>, boost::noncopyable >("QuadBase9N_SFD", no_init)
   .def("getPerimeter", &QuadBase9N_SFD::getPerimeter, "Returns element's perimeter.")
-  .def("getArea", &QuadBase9N_SFD::getArea, "Returns element's area.")
    ;
 
 XC::ShellCrdTransf3dBase *(XC::ShellMITC9::*getMITC9CoordTransfRef)(void)= &XC::ShellMITC9::getCoordTransf;
@@ -71,7 +70,9 @@ class_<XC::ShellMITC9, bases<QuadBase9N_SFD>, boost::noncopyable >("ShellMITC9",
    ;
 
 class_<XC::ShellNLDKGQ, bases<XC::Shell4NBase>, boost::noncopyable >("ShellNLDKGQ", no_init)
+    .def("getSection", make_function(&XC::ShellNLDKGQ::getSectionPtr, return_internal_reference<>() ), "getSection(i): return the i-th section of the element.")
    ;
 
 class_<XC::ASDShellQ4, bases<QuadBase4N_SFD>, boost::noncopyable >("ASDShellQ4", no_init)
+    .def("getSection", make_function(&XC::ASDShellQ4::getSectionPtr, return_internal_reference<>() ), "getSection(i): return the i-th section of the element.")
    ;

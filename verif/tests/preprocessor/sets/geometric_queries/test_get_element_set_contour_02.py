@@ -19,18 +19,18 @@ rho= 0.0 # Density
 
 # Problem type
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/erase.log" # Don't print warning messages.
+feProblem.logFileName= "/tmp/erase.log" # Para no imprimir mensajes de advertencia
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
 # This is the element set:
 #
-#      8+---+7
-#   4   | c |
-#   +---+---+6
-#   | a | b |
-#   +---+---+
+#      7+---+6
+#   4   | b |
+#   +---+---+5
+#   | a |3 
+#   +---+
 #   1   2   5
 
 
@@ -38,10 +38,9 @@ n1= nodes.newNodeIDXY(1,0,0)
 n2= nodes.newNodeIDXY(2,1,0)
 n3= nodes.newNodeIDXY(3,1,1)
 n4= nodes.newNodeIDXY(4,0,1)
-n5= nodes.newNodeIDXY(5,2,0)
-n6= nodes.newNodeIDXY(6,2,1)
-n7= nodes.newNodeIDXY(7,2,2)
-n8= nodes.newNodeIDXY(8,1,2)
+n6= nodes.newNodeIDXY(5,2,1)
+n7= nodes.newNodeIDXY(6,2,2)
+n8= nodes.newNodeIDXY(7,1,2)
 
 
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
@@ -49,13 +48,12 @@ elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= elast2d.name
 a= elements.newElement("FourNodeQuad",xc.ID([1,2,3,4]))
-b= elements.newElement("FourNodeQuad",xc.ID([2,5,6,3]))
-c= elements.newElement("FourNodeQuad",xc.ID([3,6,7,8]))
+b= elements.newElement("FourNodeQuad",xc.ID([3,5,6,7]))
 
 totalSet= preprocessor.getSets.getSet('total')
-polygons= totalSet.getElements.getContours(True)
+polygons= totalSet.getElements.getContours(0.0)
 
-length= polygons[0].getLength()
+length= polygons[0].getLength()+polygons[1].getLength()
 
 ratio1= (length-8.0)/8.0
 

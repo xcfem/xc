@@ -60,7 +60,7 @@ Earthquake Engineering & Structural Dynamics, 2013, 42(5): 705-723*/
 
 #include "PlateFromPlaneStressMaterial.h"
 #include "utility/recorder/response/MaterialResponse.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 
 //static vector and matrices
 XC::Vector  XC::PlateFromPlaneStressMaterial::stress(5);

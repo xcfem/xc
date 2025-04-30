@@ -29,11 +29,10 @@
 #include "ThreedimStrainLoad.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/ID.h"
-
-
 #include "utility/actor/actor/MovableVectors.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/Matrix.h"
+#include "domain/mesh/element/Element.h"
 
 
 XC::ThreedimStrainLoad::ThreedimStrainLoad(int tag, const std::vector<Vector> &t, const ID &theElementTags)
@@ -52,6 +51,37 @@ XC::ThreedimStrainLoad::ThreedimStrainLoad(int tag,const size_t &sz)
 
 XC::ThreedimStrainLoad::ThreedimStrainLoad(const size_t &sz)
   : ThreedimLoad(0,LOAD_TAG_ThreedimStrainLoad), strains(sz) {}
+
+//! @brief Return the category of this kind of loads.
+std::string XC::ThreedimStrainLoad::Category(void) const
+  { return "threedim_strain"; }
+
+//! @brief Return the strain tensors for the given element as rows of a matrix
+//! (one row for each gauss point).
+XC::Matrix XC::ThreedimStrainLoad::getElementStrainsMatrix(const Element &e) const
+  {
+    Matrix retval;
+    const int elemTag= e.getTag();
+    if(this->actsOnElement(elemTag))
+      {
+	// For now, we assume all loaded elements have the
+	// same number of gauss points.
+	const size_t nGaussPoints= strains.size();
+	const size_t dim= strains[0].Size();
+	retval.resize(nGaussPoints, dim);
+	for(size_t i= 0; i<nGaussPoints; i++)
+	  for(size_t j= 0; j<dim; j++)
+	    retval(i,j)= strains[i][j];
+      }
+    else
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ": element with tag: " << elemTag
+		  << " not loaded."
+		  << std::endl;
+      }
+    return retval;
+  }
 
 //! @brief Return the values of the strains in a Python list.
 boost::python::list XC::ThreedimStrainLoad::getStrainsPy(void) const

@@ -62,36 +62,6 @@ void XC::BrickMecLoad::addFixedEndForcesInBasicSystem(const std::vector<double> 
 	      << "; not implemented." << std::endl;
   }
 
-//! @brief Return the dimension of the force vector.
-size_t XC::BrickMecLoad::getForceVectorDimension(void) const
-  { return 3; }
-
-//! @brief Returns force expressed in local coordinates.
-XC::Vector XC::BrickMecLoad::getLocalForce(void) const
-  {
-    Vector retval(3);
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented." << std::endl;
-    return retval;
-  }
-
-//! @brief Return the local components of the
-//! force in a Vector3d. 
-Vector3d XC::BrickMecLoad::getVector3dLocalForce(void) const
-  {
-    Vector f= getLocalForce();
-    return Vector3d(f[0], f[1], f[2]);
-  }
-
-//! @brief Returns the components of the force vectors.
-const XC::Matrix &XC::BrickMecLoad::getLocalForces(void) const
-  {
-    static Matrix retval;
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented." << std::endl;
-    return retval;
-  }
-
 //! @brief Returns the vectors expressed in global coordinates.
 const XC::Matrix &XC::BrickMecLoad::getGlobalVectors(const Matrix &localVectors) const
   {
@@ -121,9 +91,6 @@ const XC::Matrix &XC::BrickMecLoad::getGlobalVectors(const Matrix &localVectors)
     return retval;
   }
 
-//! @brief Return the force expressed in global coordinates.
-const XC::Matrix &XC::BrickMecLoad::getGlobalForces(void) const
-  { return getGlobalVectors(getLocalForces()); }
 
 //! brief Returns load resultant (force and moment integration over the elements).
 SlidingVectorsSystem3d XC::BrickMecLoad::getResultant(const Pos3d &center, bool initialGeometry) const

@@ -34,9 +34,8 @@
 
 namespace XC {
 
+//! @brief Raw load over quad elements.
 //! @ingroup ElemLoads
-//
-//! @brief Uniform load over quad elements.
 class QuadRawLoad: public QuadMecLoad
   {
   protected:

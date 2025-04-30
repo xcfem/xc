@@ -89,6 +89,21 @@ int XC::CFactorSeries::sendData(Communicator &comm)
 int XC::CFactorSeries::recvData(const Communicator &comm)
   { return comm.receiveDouble(cFactor,getDbTagData(),CommMetaData(0)); }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::CFactorSeries::getPyDict(void) const
+  {
+    boost::python::dict retval= TimeSeries::getPyDict();
+    retval["c_factor"]= this->cFactor;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::CFactorSeries::setPyDict(const boost::python::dict &d)
+  {
+    TimeSeries::setPyDict(d);
+    this->setFactor(boost::python::extract<double>(d["c_factor"]));
+  }
+
 //! @brief Sends object through the communicator argument.
 int XC::CFactorSeries::sendSelf(Communicator &comm)
   {

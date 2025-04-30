@@ -54,6 +54,8 @@ class TrussStrainLoad: public ElementBodyLoad
     TrussStrainLoad(int tag);
     TrussStrainLoad(void);    
   
+    std::string Category(void) const;
+  
     inline const double &E1(void) const
       { return e1; }
     inline void setE1(const double &d)
@@ -64,6 +66,7 @@ class TrussStrainLoad: public ElementBodyLoad
       { e2= d; }
     const Vector &getData(int &type, const double &loadFactor) const;
     std::vector<XC::Vector> getStrains(void) const;
+    Matrix getElementStrainsMatrix(const Element &) const;
 
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);

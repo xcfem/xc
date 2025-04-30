@@ -155,18 +155,26 @@ class LimitStateData(object):
         '''
         LimitStateData.envConfig= cfg
         
+    def getInternalForcesResultsPath(self):
+        '''Return the directory where internal forces are stored.'''
+        return self.envConfig.projectDirTree.getInternalForcesResultsPath()
+    
     def getInternalForcesFileName(self):
         '''Return the name of the file where internal forces are stored.'''
-        return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'intForce_'+ self.label +'.json'
+        return self.getInternalForcesResultsPath()+'intForce_'+ self.label +'.json'
     
+    def getReactionsResultsPath(self):
+        '''Return the directory where reactions are stored.'''
+        return self.envConfig.projectDirTree.getReactionsResultsPath()
+        
     def getReactionsFileName(self):
         '''Return the name of the file where reactions are stored.'''
-        return self.envConfig.projectDirTree.getReactionsResultsPath()+'reactions_'+ self.label +'.json'
+        return self.getReactionsResultsPath()+'reactions_'+ self.label +'.json'
         
     def getBucklingAnalysisResultsFileName(self):
         '''Return the name of the file where results of the buckling analysis
            are stored.'''
-        return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'buckling_analysis_results_'+ self.label +'.json'
+        return self.getInternalForcesResultsPath()+'buckling_analysis_results_'+ self.label +'.json'
     
     def readInternalForces(self, setCalc):
         ''' Read the internal forces for the elements in the set argument.
@@ -252,15 +260,24 @@ class LimitStateData(object):
         if(constrainedNodes is not None):
             retval= er.getReactionsDict(nmbComb, constrainedNodes)
         return retval
+
+    def getDisplacementsResultsPath(self):
+        '''Return the file name to read: combination name, node number and 
+        displacements (ux,uy,uz,rotX,rotY,rotZ).'''
+        return self.getInternalForcesResultsPath()
     
     def getDisplacementsFileName(self):
         '''Return the file name to read: combination name, node number and 
         displacements (ux,uy,uz,rotX,rotY,rotZ).'''
-        return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'displ_'+ self.label +'.csv'
+        return self.getDisplacementsResultsPath()+'displ_'+ self.label +'.csv'
+
+    def getFullVerifPath(self):
+        ''' Return the full path for the limit state checking files.'''
+        return self.envConfig.projectDirTree.getFullVerifPath()
     
     def getOutputDataBaseFileName(self):
         '''Return the output file name without extension.'''
-        return self.envConfig.projectDirTree.getFullVerifPath()+self.outputDataBaseFileName
+        return self.getFullVerifPath()+self.outputDataBaseFileName
     
     def getOutputDataFileName(self):
         '''Return the Python executable file name.'''
@@ -471,10 +488,12 @@ class LimitStateData(object):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
         lmsg.error(className+'.'+methodName+"; not implemented yet.")
+        return 0
 
     def getController(self, code_limit_state_checking):
         ''' Return a controller corresponding to this limit state.
@@ -684,8 +703,9 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifBucklingFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifBucklingFile())
         
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' Perform buckling limit state checking.
@@ -752,8 +772,9 @@ class NormalStressesRCLimitStateData(ULS_LimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifNormStrFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifNormStrFile())
             
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' Perform limit state checking.
@@ -791,8 +812,9 @@ class NormalStressesSteelLimitStateData(ULS_LimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifNormStrFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifNormStrFile())
     
     def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
         ''' Perform limit state checking.
@@ -826,8 +848,9 @@ class ShearResistanceRCLimitStateData(ULS_LimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifShearFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifShearFile())
     
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' Perform limit state checking.
@@ -864,8 +887,9 @@ class ShearResistanceSteelLimitStateData(ULS_LimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifShearFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifShearFile())
     
     def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
         ''' Perform limit state checking.
@@ -900,8 +924,9 @@ class TorsionResistanceRCLimitStateData(ULS_LimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifTorsionFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifTorsionFile())
             
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' Perform limit state checking.
@@ -1005,8 +1030,9 @@ class RareLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackRareFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackRareFile())
 
 class FreqLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under frequent loads limit state data.'''
@@ -1024,8 +1050,9 @@ class FreqLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackFreqFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackFreqFile())
             
 class QPLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
@@ -1043,8 +1070,9 @@ class QPLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
 
         :param modelSpace: PredefinedSpace object used to create the FE model
                            (see predefined_spaces.py).
+        :returns: number of properties read.
         '''
-        modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackQpermFile())
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackQpermFile())
                 
 class FreqLoadsDisplacementControlLimitStateData(SLS_LimitStateData):
     ''' Displacement control under frequent loads limit state data.'''
@@ -1291,6 +1319,14 @@ def read_int_forces_dict(intForcCombFileName, setCalc=None, vonMisesStressId= 'm
                     elementTags.add(tagElem)
                     crossSectionInternalForces= get_cross_section_internal_forces(internalForces= internalForces, idComb= idComb, tagElem= tagElem, key= k, vonMisesStressId= vonMisesStressId)
                     internalForcesValues[tagElem].append(crossSectionInternalForces)
+    if(len(elementTags)==0):
+        methodName= sys._getframe(0).f_code.co_name
+        if(setElTags):
+            errMsg= "; no internal forces for elements in set: '"+setCalc.name+"'."
+        else:
+            errMsg= "; no internal forces for any element."
+        lmsg.error(methodName+errMsg)
+        
     return (elementTags, idCombs, internalForcesValues)
 
 class GaussPointStresses(stresses.Stresses3D):

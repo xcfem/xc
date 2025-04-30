@@ -128,6 +128,7 @@ class_<XC::TimeSeriesIntegrator , bases<XC::MovableObject>, boost::noncopyable >
 
 #include "time_series_integrator/python_interface.tcc"
 
+const XC::TimeSeries *(XC::MapLoadPatterns::*findTimeSeriesByName)(const std::string &) const= &XC::MapLoadPatterns::findTS;
 const XC::LoadPattern *(XC::MapLoadPatterns::*findLoadPatternByName)(const std::string &) const= &XC::MapLoadPatterns::findLoadPattern;
 XC::MapLoadPatterns::const_iterator (XC::MapLoadPatterns::*cBegin)(void) const= &XC::MapLoadPatterns::begin;
 XC::MapLoadPatterns::const_iterator (XC::MapLoadPatterns::*cEnd)(void) const= &XC::MapLoadPatterns::end;
@@ -135,14 +136,16 @@ class_<XC::MapLoadPatterns, bases<XC::LoadHandlerMember>, boost::noncopyable >("
   .add_property("defaultElementLoadTag", make_function( &XC::MapLoadPatterns::getCurrentElementLoadTag, return_value_policy<copy_const_reference>() ), &XC::MapLoadPatterns::setCurrentElementLoadTag)
   .add_property("defaultNodeLoadTag", make_function( &XC::MapLoadPatterns::getCurrentElementLoadTag, return_value_policy<copy_const_reference>() ), &XC::MapLoadPatterns::setCurrentElementLoadTag)
   .add_property("currentTimeSeries", make_function( &XC::MapLoadPatterns::getCurrentTimeSeries, return_value_policy<copy_const_reference>() ), &XC::MapLoadPatterns::setCurrentTimeSeries)
+  .def("getTimeSeries", findTimeSeriesByName, return_value_policy<reference_existing_object>(), "Return a pointer to the time series with the given name.")
   .def("newTimeSeries", &XC::MapLoadPatterns::newTimeSeries,return_internal_reference<>(),"Creates a time load modulation and associates it to the load pattern. Syntax: newTimeSeries(type,name), where type can be equal to 'constant_ts', 'linear_ts', 'path_ts', 'path_time_ts', 'pulse_ts','rectangular_ts', 'triangular_ts', 'trig_ts'")
   .add_property("currentLoadPattern", make_function( &XC::MapLoadPatterns::getCurrentLoadPattern, return_value_policy<copy_const_reference>() ), &XC::MapLoadPatterns::setCurrentLoadPattern, "Return the name of the current load pattern object.")
+  .def("getLoadPattern", findLoadPatternByName, return_value_policy<reference_existing_object>(), "Return a pointer to the load pattern with the given name.")
   .def("newLoadPattern", &XC::MapLoadPatterns::newLoadPattern,return_internal_reference<>(),"Creates a load pattern. Syntax: newLoadPattern(type,name), where type can be equal to 'default'(ordinary load pattern,'uniform_excitation','multi_support_pattern' or 'pbowl_loading'")
-.def("removeLoadPattern", &XC::MapLoadPatterns::removeLoadPattern,"Removes a load pattern. Syntax: removeLoadPattern(name). Returns true if the load pattern has been successfully removed.")
+  .def("removeLoadPattern", &XC::MapLoadPatterns::removeLoadPattern,"Removes a load pattern. Syntax: removeLoadPattern(name). Returns true if the load pattern has been successfully removed.")
   .def("addToDomain", &XC::MapLoadPatterns::addToDomain,return_internal_reference<>(),"Applies the load pattern to the domain.")
   .def("removeFromDomain", &XC::MapLoadPatterns::removeFromDomain,return_internal_reference<>(),"Remove load case from the domain.")
   .def("removeAllFromDomain", &XC::MapLoadPatterns::removeAllFromDomain,return_internal_reference<>(),"Remove all loads cases from the domain.")
-  .def("getKeys", &XC::MapLoadPatterns::getKeys,"Returns load case names")
+  .def("getKeys", &XC::MapLoadPatterns::getKeys,"Returns load pattern names")
   .def("__getitem__",findLoadPatternByName, return_value_policy<reference_existing_object>())
   .def("__iter__",range(cBegin, cEnd))
   ;

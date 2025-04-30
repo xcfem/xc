@@ -33,7 +33,7 @@
 #include "boost/any.hpp"
 
 
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "domain/load/beam_loads/BeamStrainLoad.h"
 #include "utility/actor/actor/MovableID.h"
 

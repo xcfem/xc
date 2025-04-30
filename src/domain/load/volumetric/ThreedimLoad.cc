@@ -42,4 +42,4 @@ void XC::ThreedimLoad::Print(std::ostream &s, int flag) const
   }
 
 std::string XC::ThreedimLoad::Category(void) const
-  { return "threedim_nodef"; }
+  { return "threedim_undef"; }

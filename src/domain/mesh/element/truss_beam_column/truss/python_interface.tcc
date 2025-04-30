@@ -28,6 +28,8 @@ class_<XC::ProtoTruss, bases<XC::Element1D>, boost::noncopyable >("ProtoTruss", 
   .def("getN", &XC::ProtoTruss::getAxialForce,"Returns axial (N) internal force.")
   .add_property("getN1", &XC::ProtoTruss::getAxialForce,"Returns axial (N) internal force at node 1.")
   .add_property("getN2", &XC::ProtoTruss::getAxialForce,"Returns axial (N) internal force at node 2.")
+  .add_property("extrapolationMatrix",make_function(&XC::ProtoTruss::getExtrapolationMatrix,return_internal_reference<>() ),"Returns the element extrapolation matrix.")
+  .def("getExtrapolatedValues", &XC::ProtoTruss::getExtrapolatedValues,"Return the values at nodes from the values at the Gauss points.")
   ;
 
 class_<XC::TrussBase, bases<XC::ProtoTruss>, boost::noncopyable >("TrussBase", no_init)

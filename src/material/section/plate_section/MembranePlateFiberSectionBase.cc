@@ -56,7 +56,7 @@
 
 #include "material/section/plate_section/MembranePlateFiberSectionBase.h"
 #include <material/nD/NDMaterial.h>
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "domain/mesh/element/utils/Information.h"
 
 //static vector and matrices

@@ -1001,6 +1001,99 @@ XC::ID XC::CmbEdge::getKPoints(void) const
     return retval;
   }
 
+//! @brief Returns true if this edge is connected to the point.
+bool XC::CmbEdge::isConnectedTo(const Pnt &p) const
+  {
+    bool retval= false;
+    if((this->first_point()==&p) || (this->last_point()==&p))
+      retval= true;
+    return retval;
+  }
+
+//! @brief Returns true if this edge is connected to the given one.
+bool XC::CmbEdge::isConnectedTo(const CmbEdge &edge) const
+  {
+    bool retval= false;
+    if(isConnectedTo(*edge.first_point()) || isConnectedTo(*edge.last_point()))
+      retval= true;
+    return retval;
+  }
+
+//! @brief Return the surfaces that touch this edge.
+std::set<const XC::Face *> XC::CmbEdge::getConnectedSurfaces(void) const
+  {
+    std::set<const Face *> retval;
+    std::deque<const Edge *> edges= this->getEdges();
+    for(std::deque<const Edge *>::const_iterator i= edges.begin(); i!= edges.end(); i++)
+      {
+	const Edge *edge= *i;
+	std::set<const Face *> tmp= edge->getConnectedSurfaces();
+	if(!tmp.empty())
+	  {
+	    std::set<const Face *>::const_iterator j= tmp.begin();
+	    for(;j!=tmp.end();j++)
+	      {
+		const Face *f= *j;
+                retval.insert(f);
+	      }
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Get the surfaces connected to this one that belong to the
+//! given set.
+std::set<const XC::Face *> XC::CmbEdge::getConnectedSurfaces(const SetBase *s) const
+  {
+    std::set<const Face *> retval;
+    std::deque<const Edge *> edges= this->getEdges();
+    for(std::deque<const Edge *>::const_iterator i= edges.begin(); i!= edges.end(); i++)
+      {
+	const Edge *edge= *i;
+	std::set<const Face *> tmp= edge->getConnectedSurfaces();
+	if(!tmp.empty())
+	  {
+	    std::set<const Face *>::const_iterator j= tmp.begin();
+	    for(;j!=tmp.end();j++)
+	      {
+		const Face *f= *j;
+		if(s->In(f))
+		  retval.insert(f);
+	      }
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the surfaces that touch this point (neighbors).
+boost::python::list XC::CmbEdge::getConnectedSurfacesPy(void) const
+  {
+    const std::set<const Face *> tmp= this->getConnectedSurfaces();
+    boost::python::list retval;
+    for(std::set<const Face *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      {
+	const Face *pFace= *i;	
+        boost::python::object pyObj(boost::ref(*pFace));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
+//! @brief Return the surfaces that touch this point and belong to
+//! the given set.
+boost::python::list XC::CmbEdge::getConnectedSurfacesPy(const SetBase *s) const
+  {
+    const std::set<const Face *> tmp= this->getConnectedSurfaces(s);
+    boost::python::list retval;
+    for(std::set<const Face *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+      {
+	const Face *pFace= *i;	
+        boost::python::object pyObj(boost::ref(*pFace));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
 //! @brief Returns a polyline representation of the object.
 Polyline3d XC::CmbEdge::getPolyline(void) const
   {

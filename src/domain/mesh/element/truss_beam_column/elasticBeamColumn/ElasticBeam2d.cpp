@@ -73,7 +73,7 @@
 #include "domain/mesh/node/Node.h"
 
 #include "material/section/repres/CrossSectionProperties2d.h"
-#include "material/section/ResponseId.h"
+#include "material/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"
 
 XC::Matrix XC::ElasticBeam2d::K(6,6);

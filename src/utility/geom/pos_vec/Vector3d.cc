@@ -274,9 +274,21 @@ Vector3d Vector3d::operator-(const Vector3d &v) const
 Vector3d Vector3d::operator*(const GEOM_FT &d) const
   { return Vector3d(ToCGAL()*d); }
 
+Vector3d &Vector3d::operator*=(const GEOM_FT &d)
+  {
+    (*this)= (*this)*d;
+    return *this;
+  }
+
 //! @brief Return el producto del vector por el inverso del escalar.
 Vector3d Vector3d::operator/(const GEOM_FT &d) const
   { return Vector3d(ToCGAL()*(1/d)); }
+
+Vector3d &Vector3d::operator/=(const GEOM_FT &d)
+  {
+    (*this)= (*this)/d;
+    return *this;
+  }
 
 //! @brief Return a vector perpendicular to this one.
 //See: https://math.stackexchange.com/questions/3077099/how-to-find-orthogonal-vector-to-an-arbitrary-3-dimentional-vector

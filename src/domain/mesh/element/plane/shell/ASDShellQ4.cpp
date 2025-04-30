@@ -36,9 +36,9 @@
 
 #include "material/section/SectionForceDeformation.h"
 #include "domain/domain/Domain.h"
+#include "utility/utils/misc_utils/colormod.h"
 // #include <ElementResponse.h>
 // #include <ElementalLoad.h>
-// #include <Channel.h>
 // #include <FEM_ObjectBroker.h>
 // #include <elementAPI.h>
 
@@ -777,6 +777,22 @@ void XC::ASDShellQ4::Print(std::ostream &s, int flag)
 int XC::ASDShellQ4::getNumDOF(void) const
   { return 24; }
 
+
+//! @brie Return a pointer to the i-th section of the element.
+const XC::SectionForceDeformation *XC::ASDShellQ4::getSectionPtr(const size_t &i) const
+  {
+    const SectionForceDeformation *retval= nullptr;
+    const size_t sz= this->physicalProperties.size();
+    if(sz>i)
+      retval= this->physicalProperties[i];
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; index " << i << " out of range: (0,"
+	        << sz << ")."
+		<< Color::def << std::endl;
+    return retval;
+  }
+
 int XC::ASDShellQ4::commitState(void)
   {
     // transformation
@@ -897,9 +913,9 @@ void XC::ASDShellQ4::alive(void)
   {
     if(isDead())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
   	          << "; not implemented yet."
-	          << std::endl;
+		  << Color::def << std::endl;
 	// // Store the current deformation.
         // this->incrementPersistentInitialDeformationWithCurrentDeformation();
 	// this->update();
@@ -912,9 +928,10 @@ void XC::ASDShellQ4::zeroLoad()
 
 int XC::ASDShellQ4::addLoad(ElementalLoad* theLoad, double loadFactor)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	      << "; load type unknown for ele with tag: "
-	      << this->getTag() << std::endl;
+	      << this->getTag()
+	      << Color::def << std::endl;
     return -1;
   }
 
@@ -1037,8 +1054,9 @@ int XC::ASDShellQ4::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; failed to send data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << "; failed to send data."
+		<< Color::def << std::endl;
     return res;
   }
 
@@ -1049,14 +1067,16 @@ int  XC::ASDShellQ4::recvSelf(const Communicator &comm)
     const int dbTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dbTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << "; failed to receive ids."
+		<< Color::def << std::endl;
     else
       {
         res+= recvData(comm);
         if(res<0)
-           std::cerr << getClassName() << "::" << __FUNCTION__
-                     << "; failed to receive data.\n";
+           std::cerr << Color::red<< getClassName() << "::" << __FUNCTION__
+                     << "; failed to receive data."
+		     << Color::def << std::endl;
       }
     return res;
   }
@@ -1094,8 +1114,9 @@ XC::Response *XC::ASDShellQ4::setResponse(const std::vector<std::string> &argv, 
     else if ((argv[0]=="material") || (argv[0]=="Material")) {
         if (argc < 2)
 	  {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; need to specify more data\n";
+            std::cerr << Color::red  << getClassName() << "::" << __FUNCTION__
+		      << "; need to specify more data."
+	              << Color::def << std::endl;
             return 0;
           }
         int pointNum = atoi(argv[1]);

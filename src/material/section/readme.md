@@ -14,5 +14,4 @@ The aim of the classes on this folder is to represent section materials. Those m
 - [Nonlinear Sections, Elastic Elements](https://portwooddigital.com/2022/07/24/nonlinear-sections-elastic-elements/)
 - [Full Fiber Circle](https://portwooddigital.com/2022/06/15/full-fiber-circle/)
 - [Rectangular Hollow Structural Sections](https://portwooddigital.com/2023/11/24/rectangular-hollow-structural-sections/)
-- [Section Integration](https://portwooddigital.com/2023/11/17/section-integration/) 
 - [Flipping Rotation Axes](https://portwooddigital.com/2023/11/12/flipping-rotation-axes/)
