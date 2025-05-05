@@ -74,6 +74,7 @@ class QuadSurfaceLoad: public SurfaceLoadBase<QSL_NUM_NODE>
 
     // public methods to obtain information about dof & connectivity    
     int getNumDOF(void) const;        
+    int resetNodalCoordinates(void);
     void setDomain(Domain *theDomain);
 
     size_t getDimension(void) const;

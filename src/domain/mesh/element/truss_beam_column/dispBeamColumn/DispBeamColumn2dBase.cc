@@ -196,7 +196,7 @@ void XC::DispBeamColumn2dBase::setDomain(Domain *theDomain)
             //        this->getTag());
             return;
           }
-	if(this->initializeCoordTransf() != 0)
+	if(this->resetNodalCoordinates() != 0)
 	  {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; error initializing coordinate transformation\n";

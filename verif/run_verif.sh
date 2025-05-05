@@ -132,6 +132,7 @@ python tests/utility/geom/polylines/2d/polyline2d_test_17.py
 python tests/utility/geom/polylines/2d/polyline2d_test_18.py
 python tests/utility/geom/polylines/2d/polyline2d_test_19.py
 echo "$BLEU" "      3D Polylines" "$NORMAL"
+python tests/utility/geom/polylines/3d/polyline3d_test_00.py
 python tests/utility/geom/polylines/3d/polyline3d_test_01.py
 python tests/utility/geom/polylines/3d/polyline3d_test_02.py
 python tests/utility/geom/polylines/3d/polyline3d_test_03.py
@@ -257,6 +258,7 @@ python tests/utility/geom/coordinate_systems/refsys3d3d_test_01.py
 python tests/utility/geom/coordinate_systems/refsys2d3d_test_01.py
 python tests/utility/geom/coordinate_systems/tensor_transformation_test_01.py
 python tests/utility/geom/coordinate_systems/tensor_transformation_test_02.py
+python tests/utility/geom/coordinate_systems/frenet_trihedron_00.py
 python tests/utility/geom/coordinate_systems/frenet_trihedron_01.py
 python tests/utility/geom/coordinate_systems/frenet_trihedron_02.py
 python tests/utility/geom/coordinate_systems/frenet_trihedron_03.py
@@ -651,6 +653,8 @@ python tests/solution/initial_imperfection/test_geometric_imperfection_00.py
 python tests/solution/initial_imperfection/test_geometric_imperfection_01.py
 python tests/solution/initial_imperfection/test_geometric_imperfection_02.py
 python tests/solution/initial_imperfection/test_geometric_imperfection_03.py
+python tests/solution/initial_imperfection/test_geometric_imperfection_04.py
+python tests/solution/initial_imperfection/test_geometric_imperfection_05.py
 
 ## Constraint handlers tests.
 echo "$BLEU" "  Constraint handler tests." "$NORMAL"

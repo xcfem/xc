@@ -608,7 +608,7 @@ Vector3d Polyline3d::getCurvatureVectorAtVertex(const_iterator nth) const
 	Segment3d sg= this->getSegment(1);
 	retval= sg.getJVector();
       }
-    else
+    else // More than one segment.
       {
 	const_iterator previousVertexIter= nth-1;
 	const_iterator thisVertexIter= nth;
@@ -680,6 +680,18 @@ std::vector<Vector3d> Polyline3d::getCurvatureVectorAtVertices(void) const
     return retval;
   }
 
+//! @brief Return a Python list containing the curvature vectors at each of the
+//! polyline vertices.
+boost::python::list Polyline3d::getCurvatureVectorAtVerticesPy(void) const
+  {
+    const std::vector<Vector3d> curvature_vectors= this->getCurvatureVectorAtVertices();
+    boost::python::list retval;
+    std::vector<Vector3d>::const_iterator i= curvature_vectors.begin();
+    for(;i!=curvature_vectors.end();i++)
+      retval.append(*i);
+    return retval;
+  }
+
 //! @brief Compute the tangent vectors at each of the polyline vertices.
 std::vector<Vector3d> Polyline3d::getTangentVectorAtVertices(void) const
   {
@@ -688,16 +700,23 @@ std::vector<Vector3d> Polyline3d::getTangentVectorAtVertices(void) const
     std::vector<Vector3d> retval(sz+1);
     if(sz>0)
       {
-        Vector3d t0= segments[0].getIVector();
+	Vector3d t0= segments[0].getIVector();
 	retval[0]= t0; // first tangent.
-	Vector3d t1;
-	for(size_t i=1; i<sz; i++)
+	if(sz==1) // one segment only.
 	  {
-	    t1= segments[i].getIVector();
-	    retval[i]= ((t1+t0)*0.5);
-	    t0= t1; // update previous vector.
+	    retval[sz]= t0; // last tangent.
 	  }
-	retval[sz]= t1; // last tangent.
+	else // more than one segment.
+	  {
+	    Vector3d t1;
+	    for(size_t i=1; i<sz; i++)
+	      {
+		t1= segments[i].getIVector();
+		retval[i]= ((t1+t0)*0.5);
+		t0= t1; // update previous vector.
+	      }
+	    retval[sz]= t1; // last tangent.
+	  }
       }
     return retval;
   }
@@ -728,7 +747,7 @@ std::vector<Vector3d> Polyline3d::getNormalVectorAtVertices(void) const
     else if(sz==2) // One segment only.
       {
 	Segment3d sg= this->getSegment(1);
-	retval[0]= sg.getJVector();
+	retval[0]= sg.getKVector();
 	retval[1]= retval[0];
       }
     else // 3 vertex at least.

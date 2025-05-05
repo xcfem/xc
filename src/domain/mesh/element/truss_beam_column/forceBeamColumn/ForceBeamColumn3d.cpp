@@ -204,7 +204,7 @@ void XC::ForceBeamColumn3d::setDomain(Domain *theDomain)
         exit(0);
       }
 
-    if(this->initializeCoordTransf() != 0)
+    if(this->resetNodalCoordinates() != 0)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; error initializing coordinate transformation\n";

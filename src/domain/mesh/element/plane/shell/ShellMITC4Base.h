@@ -69,7 +69,7 @@ class ShellMITC4Base: public Shell4NBase
     const std::vector<Vector> &getPersistentInitialDeformation(void) const;
     void incrementPersistentInitialDeformationWithCurrentDeformation(void);
 
-    //set domain because frank is a dumb ass 
+    int resetNodalCoordinates(void);
     void setDomain(Domain *theDomain);
   
     //return stiffness matrix 

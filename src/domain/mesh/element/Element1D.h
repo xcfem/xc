@@ -76,7 +76,7 @@ class Element1D: public ElementBase<2>
     Matrix getLocalAxes(bool) const;
     virtual CrdTransf *getCoordTransf(void);
     virtual const CrdTransf *getCoordTransf(void) const;
-    int initializeCoordTransf(void);
+    int resetNodalCoordinates(void);
     virtual CrdTransf *checkCoordTransf(void);
     virtual const CrdTransf *checkCoordTransf(void) const;
     virtual const Matrix &getCooPoints(const size_t &ndiv) const;

@@ -85,6 +85,7 @@ class ShellMITC9: public QuadBase9N<SectionFDPhysicalProperties>
 
     int getNumDOF(void) const;
 
+    int resetNodalCoordinates(void);
     void setDomain(Domain *theDomain);
 
     //print out element data

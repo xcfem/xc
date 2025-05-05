@@ -114,6 +114,7 @@ class BrickSurfaceLoad: public SurfaceLoadBase<SL_NUM_NODE>
 
     // public methods to obtain information about dof & connectivity    
     int getNumDOF(void) const;        
+    int resetNodalCoordinates(void);
     void setDomain(Domain *theDomain);
 
     // public methods to obtain stiffness, mass, damping and 

@@ -134,12 +134,22 @@ const XC::Node *XC::FourNodeQuadUP::nd4Ptr(void) const
 int XC::FourNodeQuadUP::getNumDOF(void) const
   { return 12; }
 
+//! @brief Reinitialize values that depend on the nodal coordinates (for
+//! example after a "manual" change in the nodal coordinates, to impose
+//! an imperfect shape or a precamber.
+int XC::FourNodeQuadUP::resetNodalCoordinates(void)
+  {
+    // Compute consistent nodal loads due to pressure
+    this->setPressureLoadAtNodes();
+    return 0;
+  }
+
 void XC::FourNodeQuadUP::setDomain(Domain *theDomain)
   {
     QuadBase4N<SolidMech2D>::setDomain(theDomain);
     theNodes.checkNumDOF(3,getTag());
     // Compute consistent nodal loads due to pressure
-    this->setPressureLoadAtNodes();
+    this->resetNodalCoordinates();
   }
 
 

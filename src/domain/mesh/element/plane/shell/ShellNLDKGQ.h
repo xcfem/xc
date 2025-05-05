@@ -133,7 +133,7 @@ class ShellNLDKGQ: public Shell4NBase
 	 const SectionForceDeformation &theMaterial);
     Element *getCopy(void) const;
 
-    //set domain because frank is a dumb ass 
+    int resetNodalCoordinates(void);
     void setDomain(Domain *theDomain);
 
       

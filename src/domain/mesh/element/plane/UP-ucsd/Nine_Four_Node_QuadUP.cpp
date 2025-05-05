@@ -138,13 +138,21 @@ XC::NineFourNodeQuadUP::~NineFourNodeQuadUP(void)
 int XC::NineFourNodeQuadUP::getNumDOF(void) const
   { return 22; }
 
+//! @brief Reinitialize values that depend on the nodal coordinates (for
+//! example after a "manual" change in the nodal coordinates, to impose
+//! an imperfect shape or a precamber.
+int XC::NineFourNodeQuadUP::resetNodalCoordinates(void)
+  {
+    return 0;
+  }
+
 //! @brief Set the domain for the element.
 void XC::NineFourNodeQuadUP::setDomain(Domain *theDomain)
   {
     ElemWithMaterial<9,SolidMech2D>::setDomain(theDomain);
 
     int dof= -1;
-    bool allZero = true;
+    bool allZero= true;
     for(int i=0; i<nenu; i++)
       {
 	dof = theNodes[i]->getNumberDOF();

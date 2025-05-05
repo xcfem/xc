@@ -287,6 +287,17 @@ void XC::Element::replaceNode(Node *oldNode, Node *newNode)
       }
   }
 
+//! @brief Reinitialize values that depend on the nodal coordinates (for
+//! example after a "manual" change in the nodal coordinates, to impose
+//! an imperfect shape or a precamber.
+int XC::Element::resetNodalCoordinates(void)
+  {
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << " not implemented yet."
+	      << Color::def << std::endl;
+    return 0;
+  }
+
 //! @brief Sets the domain for the element.
 void XC::Element::setDomain(Domain *theDomain)
   {
@@ -294,7 +305,7 @@ void XC::Element::setDomain(Domain *theDomain)
     if(!theDomain)
       {
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-	          << " the domain parameter is null"
+	          << " the domain parameter is null."
 		  << Color::def << std::endl;
         getNodePtrs().inic();
       }

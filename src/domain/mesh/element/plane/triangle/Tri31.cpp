@@ -109,6 +109,16 @@ XC::Tri31::~Tri31(void)
 int XC::Tri31::getNumDOF() const
   { return 6; }
 
+//! @brief Reinitialize values that depend on the nodal coordinates (for
+//! example after a "manual" change in the nodal coordinates, to impose
+//! an imperfect shape or a precamber.
+int XC::Tri31::resetNodalCoordinates(void)
+  {
+    // Compute consistent nodal loads due to pressure
+    this->setPressureLoadAtNodes();
+    return 0;
+  }
+
 void XC::Tri31::setDomain(Domain *theDomain)
   {
     TriBase3N<SolidMech2D>::setDomain(theDomain);
@@ -132,7 +142,7 @@ void XC::Tri31::setDomain(Domain *theDomain)
     }
 
     // Compute consistent nodal loads due to pressure
-    this->setPressureLoadAtNodes();
+    this->resetNodalCoordinates();
   }
 
 

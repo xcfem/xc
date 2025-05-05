@@ -103,6 +103,7 @@ class FourNodeQuadUP: public QuadBase4N<SolidMech2D>
     virtual ~FourNodeQuadUP();
 
     int getNumDOF(void) const;
+    int resetNodalCoordinates(void);
     void setDomain(Domain *theDomain);
 
     // public methods to set the state of the element

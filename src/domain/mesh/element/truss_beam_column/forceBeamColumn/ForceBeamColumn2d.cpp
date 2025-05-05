@@ -239,7 +239,7 @@ void XC::ForceBeamColumn2d::setDomain(Domain *theDomain)
       }
 
     // initialize the transformation
-    if(this->initializeCoordTransf() != 0)
+    if(this->resetNodalCoordinates() != 0)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; error initializing coordinate transformation\n";

@@ -108,17 +108,25 @@ XC::BrickSurfaceLoad::~BrickSurfaceLoad(void)
 //! @brief Virtual constructor.
 XC::Element *XC::BrickSurfaceLoad::getCopy(void) const
   { return new BrickSurfaceLoad(*this); }
+
+//! @brief Reinitialize values that depend on the nodal coordinates (for
+//! example after a "manual" change in the nodal coordinates, to impose
+//! an imperfect shape or a precamber.
+int XC::BrickSurfaceLoad::resetNodalCoordinates(void)
+  {
+    this->dcrd1= theNodes[0]->getCrds();
+    this->dcrd2= theNodes[1]->getCrds();
+    this->dcrd3= theNodes[2]->getCrds();
+    this->dcrd4= theNodes[3]->getCrds();
+    return 0;
+  }
     
 void XC::BrickSurfaceLoad::setDomain(Domain *theDomain)
   {
     SurfaceLoadBase<SL_NUM_NODE>::setDomain(theDomain);
     theNodes.checkNumDOF(3,getTag());
 
-    dcrd1= theNodes[0]->getCrds();
-    dcrd2= theNodes[1]->getCrds();
-    dcrd3= theNodes[2]->getCrds();
-    dcrd4= theNodes[3]->getCrds();
-
+    this->resetNodalCoordinates();
   }
 
 //! @brief return number of dofs

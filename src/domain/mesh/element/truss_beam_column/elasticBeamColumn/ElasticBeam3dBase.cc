@@ -203,7 +203,7 @@ void XC::ElasticBeam3dBase::setDomain(Domain *theDomain)
 	          << dofNd2 << " instead of 6.\n";
         exit(-1);
       }
-    if(this->initializeCoordTransf() != 0)
+    if(this->resetNodalCoordinates() != 0)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; error initializing coordinate transformation\n";

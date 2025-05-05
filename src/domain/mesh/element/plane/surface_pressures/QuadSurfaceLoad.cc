@@ -40,6 +40,7 @@
 #include "utility/geom/pos_vec/Pos2d.h"
 #include "utility/geom/pos_vec/Vector2d.h"
 #include "utility/geom/coo_sys/Rect2d2dCooSys.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::Matrix XC::QuadSurfaceLoad::tangentStiffness(QSL_NUM_DOF, QSL_NUM_DOF);
 
@@ -67,16 +68,26 @@ XC::QuadSurfaceLoad::~QuadSurfaceLoad(void)
 //! @brief Virtual constructor.
 XC::Element *XC::QuadSurfaceLoad::getCopy(void) const
   { return new QuadSurfaceLoad(*this); }
-    
+
+//! @brief Reinitialize values that depend on the nodal coordinates (for
+//! example after a "manual" change in the nodal coordinates, to impose
+//! an imperfect shape or a precamber.
+int XC::QuadSurfaceLoad::resetNodalCoordinates(void)
+  {
+    // calculate vector g
+    const Vector &dcrd1= theNodes[0]->getCrds();
+    const Vector &dcrd2= theNodes[1]->getCrds();
+    this->g= (dcrd2 - dcrd1);
+    return 0;
+  }
+
 void XC::QuadSurfaceLoad::setDomain(Domain *theDomain)
   {
     SurfaceLoadBase<QSL_NUM_NODE>::setDomain(theDomain);
     theNodes.checkNumDOF(QSL_NUM_NDF,getTag());
 
     // calculate vector g
-    const Vector &dcrd1= theNodes[0]->getCrds();
-    const Vector &dcrd2= theNodes[1]->getCrds();
-    g= (dcrd2 - dcrd1);
+    this->resetNodalCoordinates();
   }
 
 //! @brief return number of dofs
@@ -202,8 +213,9 @@ int XC::QuadSurfaceLoad::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; failed to send data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -215,15 +227,17 @@ int XC::QuadSurfaceLoad::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; failed to receive ids."
+	        << Color::def << std::endl;
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "failed to receive data."
+		    << Color::def << std::endl;
       }
     return res;
   }

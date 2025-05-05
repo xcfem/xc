@@ -119,6 +119,7 @@ class NineNodeMixedQuad: public ElemWithMaterial<9,NDMaterialPhysicalProperties>
     virtual ~NineNodeMixedQuad(void);
 
     //set domain 
+    int resetNodalCoordinates(void);
     void setDomain(Domain *);
 
     //return number of dofs

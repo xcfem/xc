@@ -89,6 +89,16 @@ XC::ShellMITC9::ShellMITC9(int tag,const SectionForceDeformation *ptr_mat)
 XC::Element* XC::ShellMITC9::getCopy(void) const
   { return new ShellMITC9(*this); }
 
+//! @brief Reinitialize values that depend on the nodal coordinates (for
+//! example after a "manual" change in the nodal coordinates, to impose
+//! an imperfect shape or a precamber.
+int XC::ShellMITC9::resetNodalCoordinates(void)
+  {
+    //update basis vectors and local coordinates
+    this->computeBasis(); 
+    return 0;
+  }
+
 //! @brief set domain
 void XC::ShellMITC9::setDomain(Domain *theDomain ) 
   {
@@ -114,7 +124,7 @@ void XC::ShellMITC9::setDomain(Domain *theDomain )
     Ktt= std::min( eig(2), std::min( eig(0), eig(1) ) );
 
     //basis vectors and local coordinates
-    computeBasis();
+    this->resetNodalCoordinates(); 
   }
 
 //! @brief return number of dofs
