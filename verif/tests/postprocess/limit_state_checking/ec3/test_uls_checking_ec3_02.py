@@ -106,7 +106,7 @@ for n in xcTotalSet.nodes:
 
 # the nodes.
 for e in xcTotalSet.elements:
-    e.initializeCoordTransf()
+    e.resetNodalCoordinates()
 
 # Actions
 loadCaseManager= load_cases.LoadCaseManager(preprocessor)
