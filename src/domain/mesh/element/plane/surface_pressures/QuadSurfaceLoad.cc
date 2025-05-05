@@ -40,6 +40,7 @@
 #include "utility/geom/pos_vec/Pos2d.h"
 #include "utility/geom/pos_vec/Vector2d.h"
 #include "utility/geom/coo_sys/Rect2d2dCooSys.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::Matrix XC::QuadSurfaceLoad::tangentStiffness(QSL_NUM_DOF, QSL_NUM_DOF);
 
@@ -212,9 +213,9 @@ int XC::QuadSurfaceLoad::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send data."
-	        << std::endl;
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -226,17 +227,17 @@ int XC::QuadSurfaceLoad::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; failed to receive ids."
-	        << std::endl;
+	        << Color::def << std::endl;
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "failed to receive data."
-		    << std::endl;
+		    << Color::def << std::endl;
       }
     return res;
   }
