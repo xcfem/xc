@@ -111,6 +111,7 @@ class FourNodeQuad: public SolidMech4N
     void incrementPersistentInitialDeformationWithCurrentDeformation(void);
     
     int getNumDOF(void) const;
+    int resetNodalCoordinates(void);
     void setDomain(Domain *theDomain);
 
     // public methods to set the state of the element    

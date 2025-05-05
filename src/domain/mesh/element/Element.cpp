@@ -287,10 +287,10 @@ void XC::Element::replaceNode(Node *oldNode, Node *newNode)
       }
   }
 
-//! @brief Reinitialize coordinate transformation (for example after a "manual"
-//! change in the nodal coordinates, to impose an imperfect shape or a
-//! precamber.
-int XC::Element::initializeCoordTransf(void)
+//! @brief Reinitialize values that depend on the nodal coordinates (for
+//! example after a "manual" change in the nodal coordinates, to impose
+//! an imperfect shape or a precamber.
+int XC::Element::resetNodalCoordinates(void)
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	      << " not implemented yet."

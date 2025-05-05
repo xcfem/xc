@@ -680,22 +680,11 @@ XC::ASDShellQ4 &XC::ASDShellQ4::operator=(const ASDShellQ4 &other)
     return *this;
   }
 
-void XC::ASDShellQ4::setDomain(Domain* theDomain)
+//! @brief Reinitialize values that depend on the nodal coordinates (for
+//! example after a "manual" change in the nodal coordinates, to impose
+//! an imperfect shape or a precamber.
+int XC::ASDShellQ4::resetNodalCoordinates(void)
   {
-    // call base class implementation
-    QuadBase4N<SectionFDPhysicalProperties>::setDomain(theDomain);
-    // set domain on transformation
-    m_transformation->setDomain(theDomain, theNodes.getExternalNodes());
-
-    // compute drilling penalty parameter
-    m_drill_stiffness = 0.0;
-    for(int i = 0; i < 4; i++)
-      {
-	const Matrix &dd= physicalProperties[i]->getInitialTangent();
-        m_drill_stiffness+= dd(2, 2);
-      }
-    m_drill_stiffness /= 4.0;
-
     // compute section orientation angle
     ASDShellQ4LocalCoordinateSystem reference_cs = m_transformation->createReferenceCoordinateSystem();
     Vector3Type e1_local = reference_cs.Vx();
@@ -716,6 +705,27 @@ void XC::ASDShellQ4::setDomain(Domain* theDomain)
 
     // AGQI internal DOFs
     AGQIinitialize();
+    return 0;
+  }
+
+void XC::ASDShellQ4::setDomain(Domain* theDomain)
+  {
+    // call base class implementation
+    QuadBase4N<SectionFDPhysicalProperties>::setDomain(theDomain);
+    // set domain on transformation
+    m_transformation->setDomain(theDomain, theNodes.getExternalNodes());
+
+    // compute drilling penalty parameter
+    m_drill_stiffness = 0.0;
+    for(int i = 0; i < 4; i++)
+      {
+	const Matrix &dd= physicalProperties[i]->getInitialTangent();
+        m_drill_stiffness+= dd(2, 2);
+      }
+    m_drill_stiffness /= 4.0;
+
+    // compute section orientation angle
+    this->resetNodalCoordinates(); 
   }
 
 void XC::ASDShellQ4::Print(std::ostream &s, int flag)

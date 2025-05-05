@@ -67,16 +67,25 @@ XC::QuadSurfaceLoad::~QuadSurfaceLoad(void)
 //! @brief Virtual constructor.
 XC::Element *XC::QuadSurfaceLoad::getCopy(void) const
   { return new QuadSurfaceLoad(*this); }
-    
+
+//! @brief Reinitialize values that depend on the nodal coordinates (for
+//! example after a "manual" change in the nodal coordinates, to impose
+//! an imperfect shape or a precamber.
+int XC::QuadSurfaceLoad::resetNodalCoordinates(void)
+  {
+    // calculate vector g
+    const Vector &dcrd1= theNodes[0]->getCrds();
+    const Vector &dcrd2= theNodes[1]->getCrds();
+    this->g= (dcrd2 - dcrd1);
+  }
+
 void XC::QuadSurfaceLoad::setDomain(Domain *theDomain)
   {
     SurfaceLoadBase<QSL_NUM_NODE>::setDomain(theDomain);
     theNodes.checkNumDOF(QSL_NUM_NDF,getTag());
 
     // calculate vector g
-    const Vector &dcrd1= theNodes[0]->getCrds();
-    const Vector &dcrd2= theNodes[1]->getCrds();
-    g= (dcrd2 - dcrd1);
+    this->resetNodalCoordinates();
   }
 
 //! @brief return number of dofs

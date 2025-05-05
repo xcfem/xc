@@ -105,19 +105,30 @@ XC::ConstantPressureVolumeQuad::ConstantPressureVolumeQuad(int tag, int node1,in
 XC::Element* XC::ConstantPressureVolumeQuad::getCopy(void) const
   { return new ConstantPressureVolumeQuad(*this); }
 
-//set domain
-void XC::ConstantPressureVolumeQuad::setDomain(Domain *theDomain )
+//! @brief Reinitialize values that depend on the nodal coordinates (for
+//! example after a "manual" change in the nodal coordinates, to impose
+//! an imperfect shape or a precamber.
+int XC::ConstantPressureVolumeQuad::resetNodalCoordinates(void)
   {
-    QuadBase4N<NDMaterialPhysicalProperties>::setDomain(theDomain);
+    // Update local coordinates.
     for(int i = 0;i<4;i++)
       {
         if(theNodes[i])
           {
             const XC::Vector &coor = theNodes[i]->getCrds();
-            xl[0][i] = coor(0);
-            xl[1][i] = coor(1);
+            this->xl[0][i] = coor(0);
+            this->xl[1][i] = coor(1);
           } // end if
       } //end for i
+    return 0;
+  }
+
+//set domain
+void XC::ConstantPressureVolumeQuad::setDomain(Domain *theDomain )
+  {
+    QuadBase4N<NDMaterialPhysicalProperties>::setDomain(theDomain);
+    // Update local coordinates.
+    this->resetNodalCoordinates(); 
   }
 
 

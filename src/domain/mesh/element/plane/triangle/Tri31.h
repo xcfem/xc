@@ -107,6 +107,7 @@ class Tri31: public TriBase3N<SolidMech2D>
     virtual ~Tri31(void);
 
     int getNumDOF(void) const;
+    int resetNodalCoordinates(void);
     void setDomain(Domain *theDomain);
 
     // public methods to set the state of the element    

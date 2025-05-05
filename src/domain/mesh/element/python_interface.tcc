@@ -117,7 +117,7 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getMinCooNod",&XC::Element::MinCooNod)
 
   //.def("getBaseVector",&XC::Element::getBaseVector,"Return a vector in the direction of the i-th local axis.")
-  .def("initializeCoordTransf",&XC::Element::initializeCoordTransf,"Initialize the coordinate transformation (i.e. after a change in the coordinates of the nodes).")
+  .def("resetNodalCoordinates",&XC::Element::resetNodalCoordinates,"Initialize the element variables that depend on the position of the nodes (i.e. after a change in their coordinates to set an imperfection or a precamber).")
   .def("getBaseVector3d",&XC::Element::getBaseVector3d,"Return a 3D vector in the direction of the i-th local axis.")
   .def("getIVector3d",&XC::Element::getIVector3d,"Return a 3D vector in the direction of the local axis 1.")
   .def("getJVector3d",&XC::Element::getJVector3d,"Return a 3D vector in the direction of the local axis 2.")

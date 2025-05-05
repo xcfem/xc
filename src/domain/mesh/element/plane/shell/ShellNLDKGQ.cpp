@@ -87,12 +87,22 @@ XC::ShellNLDKGQ::ShellNLDKGQ(int tag,
 XC::Element* XC::ShellNLDKGQ::getCopy(void) const
   { return new ShellNLDKGQ(*this); }
 
+//! @brief Reinitialize values that depend on the nodal coordinates (for
+//! example after a "manual" change in the nodal coordinates, to impose
+//! an imperfect shape or a precamber.
+int XC::ShellNLDKGQ::resetNodalCoordinates(void)
+  {
+    //update basis vectors and local coordinates
+    this->computeBasis(); 
+    return 0;
+  }
+
 //! @brief set domain
 void XC::ShellNLDKGQ::setDomain(Domain *theDomain)
   {    
     Shell4NBase::setDomain(theDomain);
     //basis vectors and local coordinates
-    computeBasis();
+    this->resetNodalCoordinates(); 
   }
 
 //! @brief commit state

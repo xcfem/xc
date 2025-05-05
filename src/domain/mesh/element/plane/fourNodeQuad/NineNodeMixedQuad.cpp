@@ -105,6 +105,13 @@ XC::NineNodeMixedQuad::~NineNodeMixedQuad(void)
     if(Ki) delete Ki;
   }
 
+//! @brief Reinitialize values that depend on the nodal coordinates (for
+//! example after a "manual" change in the nodal coordinates, to impose
+//! an imperfect shape or a precamber.
+int XC::NineNodeMixedQuad::resetNodalCoordinates(void)
+  {
+    return 0;
+  }
 
 //set domain
 void XC::NineNodeMixedQuad::setDomain(Domain *theDomain )

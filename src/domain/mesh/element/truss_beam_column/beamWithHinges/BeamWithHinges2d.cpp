@@ -154,7 +154,7 @@ void XC::BeamWithHinges2d::setDomain(Domain *theDomain)
     BeamColumnWithSectionFDTrf2d::setDomain(theDomain);
     if(theDomain)
       {
-	if(this->initializeCoordTransf() != 0)
+	if(this->resetNodalCoordinates() != 0)
 	  {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; error initializing coordinate transformation\n";

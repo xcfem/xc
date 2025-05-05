@@ -178,6 +178,7 @@ class ASDShellQ4: public QuadBase4N<SectionFDPhysicalProperties>
     Element *getCopy(void) const;
 
     // domain
+    int resetNodalCoordinates(void);
     void setDomain(Domain* theDomain);
 
     // print

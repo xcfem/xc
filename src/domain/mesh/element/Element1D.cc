@@ -682,7 +682,7 @@ const XC::CrdTransf *XC::Element1D::getCoordTransf(void) const
 
 //! @brief Reinitialize coordinate transformation (for example after a "manual"
 //! change in the nodal coordinates, to impose an imperfect shape.
-int XC::Element1D::initializeCoordTransf(void)
+int XC::Element1D::resetNodalCoordinates(void)
   {
     CrdTransf *theCoordTransf= this->getCoordTransf();
     int retval= -1;

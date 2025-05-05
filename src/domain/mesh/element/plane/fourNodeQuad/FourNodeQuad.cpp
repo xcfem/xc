@@ -131,6 +131,16 @@ void XC::FourNodeQuad::incrementPersistentInitialDeformationWithCurrentDeformati
 int XC::FourNodeQuad::getNumDOF(void) const
   { return 8; }
 
+//! @brief Reinitialize values that depend on the nodal coordinates (for
+//! example after a "manual" change in the nodal coordinates, to impose
+//! an imperfect shape or a precamber.
+int XC::FourNodeQuad::resetNodalCoordinates(void)
+  {
+    // Compute consistent nodal loads due to pressure
+    this->setPressureLoadAtNodes();
+    return 0;
+  }
+
 //! @brief Sets domain pointer and computes the consistent load vector due to pressure.
 void XC::FourNodeQuad::setDomain(Domain *theDomain)
   {
@@ -139,8 +149,8 @@ void XC::FourNodeQuad::setDomain(Domain *theDomain)
     if(!theNodes.checkNumDOF(2,getTag()))
       std::cerr << theNodes << std::endl;
        
-    // Compute consistent nodal loads due to pressure
-    this->setPressureLoadAtNodes();
+    // Update values depending on nodal coordinates.
+    this->resetNodalCoordinates();
   }
 
 //! @brief Update the values of the state variables.
