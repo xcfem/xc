@@ -77,6 +77,7 @@ int XC::QuadSurfaceLoad::resetNodalCoordinates(void)
     const Vector &dcrd1= theNodes[0]->getCrds();
     const Vector &dcrd2= theNodes[1]->getCrds();
     this->g= (dcrd2 - dcrd1);
+    return 0;
   }
 
 void XC::QuadSurfaceLoad::setDomain(Domain *theDomain)
@@ -212,7 +213,8 @@ int XC::QuadSurfaceLoad::sendSelf(Communicator &comm)
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; failed to send data.\n";
+	        << "; failed to send data."
+	        << std::endl;
     return res;
   }
 
@@ -225,14 +227,16 @@ int XC::QuadSurfaceLoad::recvSelf(const Communicator &comm)
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; failed to receive ids.\n";
+	        << "; failed to receive ids."
+	        << std::endl;
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "failed to receive data.\n";
+		    << "failed to receive data."
+		    << std::endl;
       }
     return res;
   }

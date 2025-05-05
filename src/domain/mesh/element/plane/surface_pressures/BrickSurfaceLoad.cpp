@@ -118,6 +118,7 @@ int XC::BrickSurfaceLoad::resetNodalCoordinates(void)
     this->dcrd2= theNodes[1]->getCrds();
     this->dcrd3= theNodes[2]->getCrds();
     this->dcrd4= theNodes[3]->getCrds();
+    return 0;
   }
     
 void XC::BrickSurfaceLoad::setDomain(Domain *theDomain)
