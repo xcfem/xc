@@ -111,6 +111,16 @@ void XC::ShellMITC4Base::incrementPersistentInitialDeformationWithCurrentDeforma
         persistentInitialDeformation[i]+= this->strains[i]; // increment the current value.
   }
 
+//! @brief Reinitialize coordinate transformation (for example after a "manual"
+//! change in the nodal coordinates, to impose an imperfect shape or a
+//! precamber.
+int XC::ShellMITC4Base::initializeCoordTransf(void)
+  {
+    //update basis vectors and local coordinates
+    this->computeBasis(); 
+    return 0;
+  }
+
 
 //! @brief Set the element domain.
 void XC::ShellMITC4Base::setDomain(Domain *theDomain)
@@ -138,8 +148,8 @@ void XC::ShellMITC4Base::setDomain(Domain *theDomain)
     Ktt= std::min( eig(2), std::min( eig(0), eig(1) ) );
     //Ktt= dd(2,2);
 
-    //basis vectors and local coordinates
-    computeBasis(); 
+    //update basis vectors and local coordinates
+    this->initializeCoordTransf(); 
   }
 
 //! @brief Reactivates the element.

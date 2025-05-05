@@ -8,14 +8,14 @@ __email__= "l.pereztato@gmail.com"
 
 from postprocess.reports import common_formats
 
-def latex_spanish(fck, RH, Ac, u, h0mm, Epscainf, Betaast, t, Epsca, BetaRH, Alfads1, Alfads2, Epscd0, Kh, Betadstts, Epscd, Epscs):
+def latex_spanish(fck, RH, Ac, u, h0, Epscainf, Betaast, t, Epsca, BetaRH, Alfads1, Alfads2, Epscd0, Kh, Betadstts, Epscd, Epscs):
     ''' Writes a report of the shrinkage values in spanish.
 
     :param fck: characteristic (5%) cylinder strength of the concrete
     :param RH: ambient relative humidity(%)
     :param Ac: area of the concrete member (m2)
     :param u: perimeter of the concrete member exposed to drying (m)
-    :param h0mm: notional size of the member h0 expressed in millimeters.
+    :param h0: notional size of the member h0 
     :param Epscainf: coefficient for calculating the autogenous shrinkage strain
     :param Betaast: coefficient for calculating the autogenous shrinkage strain
     :param t: age of the concrete expressed in days.
@@ -35,7 +35,7 @@ def latex_spanish(fck, RH, Ac, u, h0mm, Epscainf, Betaast, t, Epsca, BetaRH, Alf
     outputStr+='Humedad relativa & HR & '+str(RH)+ ' [\\%] \\\\\n'
     outputStr+='Área de hormigón & $A_c$ & '+str(Ac)+ ' [$m^2$] \\\\\n'
     outputStr+='Perímetro en contacto con la atmósfera & u & '+str(round(u,3))+ ' [m] \\\\\n'
-    outputStr+='Espesor medio en milímetros & $2A_c/u$ & '+str(round(h0mm,1))+ ' [mm] \\\\\n'
+    outputStr+='Espesor medio en milímetros & $2A_c/u$ & '+str(round(h0*1e3,1))+ ' [mm] \\\\\n'
 
     outputStr+='\\multicolumn{3}{l}{\\textbf{Retracción autógena:}} \\\\\n'
     outputStr+='Coeficiente $t=\\infty$ & $\\epsilon_{ca,\\infty}$ & '+'{:.2e}'.format(Epscainf)+' \\\\\n'

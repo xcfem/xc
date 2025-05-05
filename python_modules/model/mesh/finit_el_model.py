@@ -116,6 +116,8 @@ class LinSetToMesh(RawLineSetToMesh):
                        'linear') 
     '''
     def __init__(self,linSet,matSect,elemSize,vDirLAxZ, elemType='ElasticBeam3d', dimElemSpace=3, coordTransfType='linear'):
+        if linSet.lines.size==0:
+            lmsg.warning('Set ',linSet.name, 'has no lines')
         self.vDirLAxZ= vDirLAxZ
         cTrf= None
         if(coordTransfType is not None):
@@ -142,6 +144,8 @@ class SurfSetToMesh(SetToMesh):
     '''
     def __init__(self,surfSet,matSect,elemSize,elemType='ShellMITC4'):
         super(SurfSetToMesh,self).__init__(surfSet,elemSize,elemType)
+        if surfSet.surfaces.size==0:
+            lmsg.warning('Set ',surfSet.name, 'has no surfaces')
         self.matSect= matSect
 
     def getSeedElement(self, preprocessor):

@@ -175,6 +175,7 @@ class Element: public MeshComponent
     virtual void setIdNode(const int &i, const int &inode);
     int find(const Node *) const;
     void replaceNode(Node *, Node *);
+    virtual int initializeCoordTransf(void);
     void setDomain(Domain *theDomain);
 
     

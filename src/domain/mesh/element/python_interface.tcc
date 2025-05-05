@@ -117,6 +117,7 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getMinCooNod",&XC::Element::MinCooNod)
 
   //.def("getBaseVector",&XC::Element::getBaseVector,"Return a vector in the direction of the i-th local axis.")
+  .def("initializeCoordTransf",&XC::Element::initializeCoordTransf,"Initialize the coordinate transformation (i.e. after a change in the coordinates of the nodes).")
   .def("getBaseVector3d",&XC::Element::getBaseVector3d,"Return a 3D vector in the direction of the i-th local axis.")
   .def("getIVector3d",&XC::Element::getIVector3d,"Return a 3D vector in the direction of the local axis 1.")
   .def("getJVector3d",&XC::Element::getJVector3d,"Return a 3D vector in the direction of the local axis 2.")
@@ -166,7 +167,6 @@ class_<XC::Element0D , bases<ElementBase2N >, boost::noncopyable >("Element0D", 
 XC::CrdTransf *(XC::Element1D::*getCrdTransf)(void)= &XC::Element1D::getCoordTransf;
 class_<XC::Element1D, bases<ElementBase2N >, boost::noncopyable >("Element1D", no_init)
     .add_property("getCoordTransf", make_function( getCrdTransf, return_internal_reference<>() ))
-    .def("initializeCoordTransf",&XC::Element1D::initializeCoordTransf,"Initialize the coordinate transformation (i.e. after a change in the coordinates of the nodes).")
     .def("getLineSegment", &XC::Element1D::getLineSegment)
     .def("vector2dUniformLoadGlobal", &XC::Element1D::vector2dUniformLoadGlobal,"Element's load.")
     .def("vector2dUniformLoadLocal", &XC::Element1D::vector2dUniformLoadLocal,"Element's load.")

@@ -232,9 +232,9 @@ class GridModel(object):
     def getIJKfromXYZ(self,xyz):
         '''Return (i,j,k) indexes that match the closest with (x,y,z) coordinates
         '''
-        ijk=(dsu. get_index_closest_inlist(self.gridCoo[0],xyz[0]),
-             dsu. get_index_closest_inlist(self.gridCoo[1],xyz[1]),
-             dsu. get_index_closest_inlist(self.gridCoo[2],xyz[2]))
+        ijk=(dsu.get_index_closest_inlist(self.gridCoo[0],xyz[0]),
+             dsu.get_index_closest_inlist(self.gridCoo[1],xyz[1]),
+             dsu.get_index_closest_inlist(self.gridCoo[2],xyz[2]))
         return ijk
 
     def getPntXYZ(self,xyz):
@@ -249,12 +249,12 @@ class GridModel(object):
         xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
         '''
         ijkRange=IJKRange(
-            (dsu. get_index_closest_inlist(self.gridCoo[0],xyzRange[0][0]),
-             dsu. get_index_closest_inlist(self.gridCoo[1],xyzRange[0][1]),
-             dsu. get_index_closest_inlist(self.gridCoo[2],xyzRange[0][2])),
-            (dsu. get_index_closest_inlist(self.gridCoo[0],xyzRange[1][0]),
-             dsu. get_index_closest_inlist(self.gridCoo[1],xyzRange[1][1]),
-             dsu. get_index_closest_inlist(self.gridCoo[2],xyzRange[1][2])))
+            (dsu.get_index_closest_inlist(self.gridCoo[0],xyzRange[0][0]),
+             dsu.get_index_closest_inlist(self.gridCoo[1],xyzRange[0][1]),
+             dsu.get_index_closest_inlist(self.gridCoo[2],xyzRange[0][2])),
+            (dsu.get_index_closest_inlist(self.gridCoo[0],xyzRange[1][0]),
+             dsu.get_index_closest_inlist(self.gridCoo[1],xyzRange[1][1]),
+             dsu.get_index_closest_inlist(self.gridCoo[2],xyzRange[1][2])))
         return ijkRange
     
     def getPntGrid(self,indPnt):

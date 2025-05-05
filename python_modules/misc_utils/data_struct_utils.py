@@ -117,6 +117,17 @@ def remove_duplicates_list(lst):
     '''
     return list(dict.fromkeys(lst))
 
+def remove_close_values(lst,tolerance):
+    ''' Remove close values in a list with the specified tolerance
+    '''
+    ret = list()
+    last_added = None
+    for i in sorted(lst):
+        if (last_added is None) or (last_added + tolerance < i):
+            ret.append(i)
+            last_added = i
+    return ret
+    
 def atoi(text):
     return int(text) if text.isdigit() else text
 
