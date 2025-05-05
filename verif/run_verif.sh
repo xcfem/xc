@@ -653,6 +653,8 @@ python tests/solution/initial_imperfection/test_geometric_imperfection_00.py
 python tests/solution/initial_imperfection/test_geometric_imperfection_01.py
 python tests/solution/initial_imperfection/test_geometric_imperfection_02.py
 python tests/solution/initial_imperfection/test_geometric_imperfection_03.py
+python tests/solution/initial_imperfection/test_geometric_imperfection_04.py
+python tests/solution/initial_imperfection/test_geometric_imperfection_05.py
 
 ## Constraint handlers tests.
 echo "$BLEU" "  Constraint handler tests." "$NORMAL"
