@@ -77,7 +77,7 @@ for n in xcTotalSet.nodes:
 # Update the coordinate transformations after a change in the position of
 # the nodes.
 for e in xcTotalSet.elements:
-    e.initializeCoordTransf()
+    e.resetNodalCoordinates()
     #print('I=', e.getIVector3d(True))
     #print('J=', e.getJVector3d(True))
 

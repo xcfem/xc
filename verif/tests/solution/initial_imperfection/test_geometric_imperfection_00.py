@@ -67,7 +67,7 @@ newCoo= n1.getCoo
 err0= (newCoo-xc.Vector([10,10])).Norm()
 
 # Update the coordinate transformation after a change in the node position.
-elemA.initializeCoordTransf()
+elemA.resetNodalCoordinates()
 elemB= elements.newElement("ElasticBeam2d",xc.ID([n0.tag,n1.tag]))
 
 iVectorA= elemA.getIVector3d(True)
