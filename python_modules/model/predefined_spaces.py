@@ -151,7 +151,7 @@ def setImperfectionsXY(nodeSet, slopeX= 1.0/500.0, slopeY= 1.0/500.0):
             connectedElements.extend(n.connectedElements)
     # Initialize coordinate transformation of the connected elements.
     for e in connectedElements:
-        e.initializeCoordTransf()
+        e.resetNodalCoordinates()
     return math.sqrt(maxValue)
 
 def setImperfectionsX(nodeSet, slopeX= 1.0/500.0):
