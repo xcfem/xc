@@ -49,7 +49,7 @@ def fixDocstring(app,what,name,obj,options,lines):
 			lines[i]=l2[i] if i<len(l2) else ''
 
 def fixSignature(app, what, name, obj, options, signature, return_annotation):
-	print what,obj
+	print(what,obj)
 	if what in ('attribute','class'): return signature,None
 	elif isBoostFunc(what,obj):
 		sig=boostFuncSignature(name,obj)[0] or ' (wrapped c++ function)'
