@@ -131,11 +131,12 @@ class ExtrapolatedScalarField(ScalarField):
                          (if None -> screen window).
         :param caption: text to display in the graphic.
         :param unitDescription: description of the units.
-        :param defFScale: factor to apply to current displacement of nodes 
-                          so that the display position of each node equals to
-                          the initial position plus its displacement multiplied
-                          by this factor. (Defaults to 0.0, i.e. display of 
-                          initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         displaySettings.displayMesh(xcSets= self.xcSet, field= self, diagrams= None, caption= caption, unitDescription= unitDescription, fileName= fileName, defFScale= defFScale)
     
@@ -153,11 +154,12 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
         :param fileName: name of the graphic file to create (if None -> screen window).
         :param caption: text to display in the graphic.
         :param unitDescription: description of the units.
-        :param defFScale: factor to apply to current displacement of nodes 
-                      so that the display position of each node equals to
-                      the initial position plus its displacement multiplied
-                      by this factor. (Defaults to 0.0, i.e. display of 
-                      initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         self.extrapolate()
         displaySettings.displayMesh(self.xcSet, field= self, diagrams= None, caption= caption, unitDescription= unitDescription, fileName= fileName, defFScale= defFScale)

@@ -154,13 +154,14 @@ class RecordDisp(OuputUnits):
         :param setToDisplay: set of elements to be displayed (defaults to total set)
         :param fileName: full name of the graphic file to generate. Defaults to 
                ` None`, in this case it returns a console output graphic.,
-        :param defFScale: factor to apply to current displacement of nodes 
-                      so that the display position of each node equals to
-                      the initial position plus its displacement multiplied
-                      by this factor. (Defaults to 0.0, i.e. display of 
-                      initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
-        # Not a very elegant solution. To enhance.
+        # Not a very elegant solution. Needs to be enhanced.
         outputHandler= self.getOutputHandler(self.setsToDispDspRot)
         for st in self.setsToDispDspRot:
             for arg in self.listDspRot:
@@ -175,12 +176,14 @@ class RecordDisp(OuputUnits):
         :param unitDescription: string like '[kN/m] or [kN m/m]'
         :param fileName:  name of the file to plot the graphic. Defaults to None,
                        in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
-        :param overrideScaleFactor: if not none, override the scale factor in outputStyle.
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
+        :param overrideScaleFactor: if not none, override the scale factor 
+                                    in outputStyle.
         :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
         :param titleScbar: title for the scalar bar (defaults to None)
         '''
@@ -195,11 +198,12 @@ class RecordDisp(OuputUnits):
         :param caption:   caption for the graphic
         :param fileName:  name of the file to plot the graphic. Defaults to None,
                           in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor. (Defaults to 0.0, i.e. display of 
-                  initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         outputHandler= self.getOutputHandler(self.setsToDispDspRot)
         if(not caption):
@@ -214,11 +218,12 @@ class RecordDisp(OuputUnits):
                and the units of the loads.
         :param fileName: full name of the graphic file to generate. Defaults to 
                ` None`, in this case it returns a console output graphic.,
-        :param defFScale: factor to apply to current displacement of nodes 
-                      so that the display position of each node equals to
-                      the initial position plus its displacement multiplied
-                      by this factor. (Defaults to 0.0, i.e. display of 
-                      initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         outputHandler= self.getOutputHandler(self.setsToDispDspRot)
         for st in self.setsToDispLoads:
@@ -231,13 +236,15 @@ class RecordDisp(OuputUnits):
 
         :param fileName:  name of the file to plot the graphic. Defaults to None,
                        in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param inclInertia: include inertia effects (defaults to false).
-        :param reactionCheckTolerance: relative tolerance when checking reaction values.
+        :param reactionCheckTolerance: relative tolerance when checking 
+                                       reaction values.
         '''
         outputHandler= self.getOutputHandler(self.setsToDispDspRot)
         outputHandler.displayReactionsOnSets(setsToDisplayReactions= self.setsToDispReactions, fileName= fileName, defFScale= defFScale, inclInertia= inclInertia, reactionCheckTolerance= reactionCheckTolerance)
@@ -247,11 +254,12 @@ class RecordDisp(OuputUnits):
 
         :param fileName:  name of the file to plot the graphic. Defaults to None,
                        in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         outputHandler= self.getOutputHandler(self.setsToDispEigenvectors[0])
         outputHandler.displayEigenvectorsOnSets(eigenMode,self.setsToDispEigenvectors, fileName,defFScale)

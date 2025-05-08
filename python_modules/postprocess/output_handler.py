@@ -154,11 +154,12 @@ class OutputHandler(object):
            :param caption: title of the graphic.
            :param fileName: name of the file to plot the graphic. Defaults to 
                        None, in that case an screen display is generated
-           :param defFScale: factor to apply to current displacement of nodes 
-                   so that the display position of each node equals to
-                   the initial position plus its displacement multiplied
-                   by this factor. (Defaults to 0.0, i.e. display of 
-                   initial/undeformed shape)
+           :param defFScale: deformation scale factor. Factor to apply to the
+                             current displacement of the nodes so that the 
+                             displayed position of each node equals to
+                             the initial position plus its displacement 
+                             multiplied by this factor. (Defaults to 0.0, i.e. 
+                             display the initial/undeformed shape).
         '''
         if(setsToDisplay is None):
             setsToDisplay= [self.modelSpace.getTotalSet()]
@@ -179,12 +180,13 @@ class OutputHandler(object):
            :param setToDisplay: set to display.
            :param caption: title of the graphic.
            :param fileName: name of the file to plot the graphic. Defaults to 
-                       None, in that case an screen display is generated
-           :param defFScale: factor to apply to current displacement of nodes 
-                   so that the display position of each node equals to
-                   the initial position plus its displacement multiplied
-                   by this factor. (Defaults to 0.0, i.e. display of 
-                   initial/undeformed shape)
+                            None, in that case an screen display is generated
+           :param defFScale: deformation scale factor. Factor to apply to the
+                             current displacement of the nodes so that the 
+                             displayed position of each node equals to
+                             the initial position plus its displacement 
+                             multiplied by this factor. (Defaults to 0.0, i.e. 
+                             display the initial/undeformed shape).
         '''
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
@@ -200,11 +202,12 @@ class OutputHandler(object):
            :param caption: title of the graphic.
            :param fileName: name of the file to plot the graphic. Defaults to 
                        None, in that case an screen display is generated
-           :param defFScale: factor to apply to current displacement of nodes 
-                   so that the display position of each node equals to
-                   the initial position plus its displacement multiplied
-                   by this factor. (Defaults to 0.0, i.e. display of 
-                   initial/undeformed shape)
+           :param defFScale: deformation scale factor. Factor to apply to the
+                             current displacement of the nodes so that the 
+                             displayed position of each node equals to
+                             the initial position plus its displacement 
+                             multiplied by this factor. (Defaults to 0.0, i.e. 
+                             display the initial/undeformed shape).
          '''
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
@@ -224,17 +227,17 @@ class OutputHandler(object):
         :param setToDisplay: set of entities to be represented.
         :param fileName: name of the file to plot the graphic. Defaults to 
                     None, in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
+        :param defFScale: deformation scale factor. Factor to apply to the
+                          current displacement of the nodes so that the 
+                          displayed position of each node equals to
+                          the initial position plus its displacement 
+                          multiplied by this factor. (Defaults to 0.0, i.e. 
+                          display the initial/undeformed shape).
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
-              of the field to be represented (in units of calculation, 
-              not units of display). All the values less than vmin are 
-              displayed in blue and those greater than vmax in red
-              (defaults to None)
-
+                         of the field to be represented (in units of 
+                         calculation, not units of display). All the values 
+                         less than vmin are displayed in blue and those 
+                         greater than vmax in red (defaults to None).
         '''
         field= fields.ScalarField(name=propToDisp, functionName="getProp", component= component, fUnitConv= fUnitConv, rgMinMax=rgMinMax)
         displaySettings= self.getDisplaySettingsFE()
@@ -250,16 +253,17 @@ class OutputHandler(object):
         :param setToDisplay: set of entities to be represented.
         :param fileName: name of the file to plot the graphic. Defaults to 
                     None, in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
+        :param defFScale: deformation scale factor. Factor to apply to the
+                          current displacement of the nodes so that the 
+                          displayed position of each node equals to
+                          the initial position plus its displacement 
+                          multiplied by this factor. (Defaults to 0.0, i.e. 
+                          display the initial/undeformed shape).
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
-              of the field to be represented (in units of calculation, 
-              not units of display). All the values less than vmin are 
-              displayed in blue and those greater than vmax in red
-              (defaults to None)
+                         of the field to be represented (in units of 
+                         calculation, not units of display). All the values 
+                         less than vmin are displayed in blue and those 
+                         greater than vmax in red (defaults to None).
 
         '''
         self.displayPropertyComponentAtNodes(propToDisp= propToDisp, component= None, fUnitConv= fUnitConv, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
@@ -273,18 +277,20 @@ class OutputHandler(object):
         :param setToDisplay: set of entities to be represented.
         :param fileName: name of the file to plot the graphic. Defaults to 
                     None, in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
+        :param defFScale: deformation scale factor. Factor to apply to the
+                          current displacement of the nodes so that the 
+                          displayed position of each node equals to
+                          the initial position plus its displacement 
+                          multiplied by this factor. (Defaults to 0.0, i.e. 
+                          display the initial/undeformed shape).
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values 
-              of the field to be represented  (in units of calculation, 
-              not units of display). All the values less than vmin are 
-              displayed in blue and those greater than vmax in red
-              (defaults to None)
-       :param captionText: caption text. Defaults to None, in which case the default 
-                                 caption text (internal force +  units + set name) is created
+                         of the field to be represented  (in units of 
+                         calculation, not units of display). All the values 
+                         less than vmin are displayed in blue and those greater
+                         than vmax in red (defaults to None)
+        :param captionText: caption text. Defaults to None, in which case the
+                            default caption text (internal force +  units + 
+                            set name) is created
         '''
         # Define the property at nodes.
         if(setToDisplay is None):
@@ -306,15 +312,17 @@ class OutputHandler(object):
         :param setToDisplay: set of entities to be represented.
         :param fileName: name of the file to plot the graphic. Defaults to 
                     None, in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
+        :param defFScale: deformation scale factor. Factor to apply to the
+                          current displacement of the nodes so that the 
+                          displayed position of each node equals to
+                          the initial position plus its displacement 
+                          multiplied by this factor. (Defaults to 0.0, i.e. 
+                          display the initial/undeformed shape).
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values 
-              of the field to be represented  (in units of calculation, 
-              not units of display). All the values less than vmin are 
-              displayed in blue and those greater than vmax in red (defaults to None)
+                         of the field to be represented  (in units of 
+                         calculation, not units of display). All the values 
+                         less than vmin are displayed in blue and those 
+                         greater than vmax in red (defaults to None).
         :param captionText: caption text. Defaults to None, in which case the
                             default caption text (internal force +  units + 
                             set name) is created.
@@ -337,16 +345,17 @@ class OutputHandler(object):
         :param setToDisplay: set of entities to be represented.
         :param fileName: name of the file to plot the graphic. Defaults to 
                     None, in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
+        :param defFScale: deformation scale factor. Factor to apply to the
+                          current displacement of the nodes so that the 
+                          displayed position of each node equals to
+                          the initial position plus its displacement 
+                          multiplied by this factor. (Defaults to 0.0, i.e. 
+                          display the initial/undeformed shape).
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values 
-              of the field to be represented  (in units of calculation, 
-              not units of display). All the values less than vmin are 
-              displayed in blue and those greater than vmax in red
-              (defaults to None)
+                         of the field to be represented  (in units of 
+                         calculation, not units of display). All the values 
+                         less than vmin are displayed in blue and those 
+                         greater than vmax in red (defaults to None).
         :param captionText: caption text. Defaults to None, in which case the
                             default caption text (internal force +  units + 
                             set name) is created.
@@ -372,16 +381,17 @@ class OutputHandler(object):
         :param setToDisplay: set of entities to be represented.
         :param fileName: name of the file to plot the graphic. Defaults to 
                     None, in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
-        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values 
-              of the field to be represented  (in units of calculation, 
-              not units of display). All the values less than vmin are 
-              displayed in blue and those greater than vmax in red
-              (defaults to None)
+        :param defFScale: deformation scale factor. Factor to apply to the
+                          current displacement of the nodes so that the 
+                          displayed position of each node equals to
+                          the initial position plus its displacement 
+                          multiplied by this factor. (Defaults to 0.0, i.e. 
+                          display the initial/undeformed shape).
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+                         of the field to be represented (in units of 
+                         calculation, not units of display). All the values 
+                         less than vmin are displayed in blue and those 
+                         greater than vmax in red (defaults to None).
         :param captionText: caption text. Defaults to None, in which case the
                             default caption text (internal force +  units + 
                             set name) is created.
@@ -402,17 +412,17 @@ class OutputHandler(object):
         :param setToDisplay: set of entities to be represented.
         :param fileName: name of the file to plot the graphic. Defaults to 
                     None, in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
-        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values 
-              of the field to be represented  (in units of calculation, 
-              not units of display). All the values less than vmin are 
-              displayed in blue and those greater than vmax in red
-              (defaults to None)
-
+        :param defFScale: deformation scale factor. Factor to apply to the
+                          current displacement of the nodes so that the 
+                          displayed position of each node equals to
+                          the initial position plus its displacement 
+                          multiplied by this factor. (Defaults to 0.0, i.e. 
+                          display the initial/undeformed shape).
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+                         of the field to be represented (in units of 
+                         calculation, not units of display). All the values 
+                         less than vmin are displayed in blue and those 
+                         greater than vmax in red (defaults to None).
         '''
         # Define the property at nodes.
         if(setToDisplay is None):
@@ -429,11 +439,12 @@ class OutputHandler(object):
         :param setToDisplay: set of entities to be represented.
         :param fileName: name of the file to plot the graphic. Defaults to 
                     None, in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param inclInertia: include inertia effects (defaults to false).
         :param reactionCheckTolerance: relative tolerance when checking reaction values.
         :param captionText: caption text. Defaults to None, in which case the default 
@@ -494,11 +505,12 @@ class OutputHandler(object):
                               reactions on them.
         :param fileName:  name of the file to plot the graphic. Defaults to None,
                        in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param inclInertia: include inertia effects (defaults to false).
         :param reactionCheckTolerance: relative tolerance when checking reaction values.
         '''
@@ -518,11 +530,12 @@ class OutputHandler(object):
         :param caption:      caption to display
         :param unitDescription: description of the units.
         :param fileName:     file to dump the display
-        :param defFScale:    factor to apply to current displacement of nodes 
-                    so that the display position of each node equals to
-                    the initial position plus its displacement multiplied
-                    by this factor. (Defaults to 0.0, i.e. display of 
-                    initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
         :param titleScbar: title for the scalar bar (defaults to None)
         :param defaultDirection: default direction of the diagram (J: element 
@@ -547,13 +560,14 @@ class OutputHandler(object):
           ('N', 'Qy' (or 'Vy'), 'Qz' (or 'Vz'), 'My', 'Mz', 'T') to be depicted 
         :param setToDisplay: set of entities (elements of type beam) to be 
           represented
-        :param fileName:  name of the file to plot the graphic. Defaults to None,
-                       in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
+        :param fileName: name of the file to plot the graphic. Defaults to None,
+                         in that case an screen display is generated
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param overrideScaleFactor: if not none, override the scale factor in outputStyle.
         :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
         :param titleScbar: title for the scalar bar (defaults to None)
@@ -594,16 +608,17 @@ class OutputHandler(object):
              entities)
         :param fileName: name of the file to plot the graphic. Defaults to None,
              in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
-        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values 
-              of the field to be represented  (in units of calculation, 
-              not units of display). All the values less than vmin are 
-              displayed in blue and those greater than vmax in red
-              (defaults to None)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+                         of the field to be represented (in units of 
+                         calculation, not units of display). All the values 
+                         less than vmin are displayed in blue and those 
+                         greater than vmax in red (defaults to None).
         :param captionText: caption text. Defaults to None, in which case the default 
                                  caption text (internal force +  units + set name) is created
            '''
@@ -639,16 +654,18 @@ class OutputHandler(object):
         :param unitDescription: description of the displayed units.
         :param fileName: name of the file to plot the graphic. Defaults to None,
              in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
-        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values 
-              of the field to be represented  (in units of calculation, 
-              not units of display). All the values less than vmin are 
-              displayed in blue and those greater than vmax in red
-              (defaults to None)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
+
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+                         of the field to be represented (in units of 
+                         calculation, not units of display). All the values 
+                         less than vmin are displayed in blue and those 
+                         greater than vmax in red (defaults to None).
         :param captionText: caption text. Defaults to None, in which case the 
                             default caption text (property name + set name) is
                             created.
@@ -672,11 +689,12 @@ class OutputHandler(object):
                and the units of the loads.
         :param fileName: full name of the graphic file to generate. Defaults to 
                      ` None`, in this case it returns a console output graphic.,
-        :param defFScale: factor to apply to current displacement of nodes 
-                      so that the display position of each node equals to
-                      the initial position plus its displacement multiplied
-                      by this factor. (Defaults to 0.0, i.e. display of 
-                      initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         lmsg.warning('displayLoadVectors:: deprecated; Use displayLoads')
         if(setToDisplay is None):
@@ -766,11 +784,12 @@ class OutputHandler(object):
         :param scalarBarOrientation: scalar bar orientation (1 horiz., 
                                      2 left-vert, 3 right-vert)
         :param lRefModSize: representative length of set size (to auto-scale).
-        :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor. (Defaults to 0.0, i.e. display of 
-                  initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         retval= scalarBarOrientation
         elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
@@ -815,11 +834,12 @@ class OutputHandler(object):
         :param scalarBarOrientation: scalar bar orientation (1 horiz., 
                                      2 left-vert, 3 right-vert)
         :param lRefModSize: representative length of set size (to auto-scale).
-        :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor. (Defaults to 0.0, i.e. display of 
-                  initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         retval= scalarBarOrientation
         preprocessor= self.modelSpace.preprocessor
@@ -869,11 +889,12 @@ class OutputHandler(object):
         :param scalarBarOrientation: scalar bar orientation (1 horiz., 
                                      2 left-vert, 3 right-vert)
         :param lRefModSize: representative length of set size (to auto-scale).
-        :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor. (Defaults to 0.0, i.e. display of 
-                  initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         # Display diagrams on linear elements.
         retval= scalarBarOrientation
@@ -903,11 +924,12 @@ class OutputHandler(object):
         :param vectorScale: scale for the displayed vectors.
         :param scalarBarOrientation: scalar bar orientation (1 horiz., 
                                      2 left-vert, 3 right-vert)
-        :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor. (Defaults to 0.0, i.e. display of 
-                  initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         retval= scalarBarOrientation
         preprocessor= self.modelSpace.preprocessor
@@ -948,11 +970,12 @@ class OutputHandler(object):
         :param caption:   caption for the graphic
         :param fileName:  name of the file to plot the graphic. Defaults to None
                           in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor. (Defaults to 0.0, i.e. display of 
-                  initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param scaleConstr: scale of SPConstraints symbols (defaults to 0.2)
         '''
         if(setToDisplay is None):
@@ -1007,11 +1030,12 @@ class OutputHandler(object):
                represented
         :param fileName: name of the file to plot the graphic. Defaults to None,
                          in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor. (Defaults to 0.0, i.e. display of 
-                  initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param defaultDirection: default direction of the diagram (J: element 
                                  local j vector or K: element local K vector).
         :param defaultValue: value to use then the node does not have the
@@ -1050,11 +1074,12 @@ class OutputHandler(object):
                represented
         :param fileName: name of the file to plot the graphic. Defaults to None,
                          in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor. (Defaults to 0.0, i.e. display of 
-                  initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
          '''
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
@@ -1081,13 +1106,14 @@ class OutputHandler(object):
 
         :param mode: mode to which the eigenvectors belong.
         :param setToDisplay: set of elements to be displayed (defaults to total set)
-        :param defFScale: factor to apply to current displacement of nodes 
-                      so that the display position of each node equals to
-                      the initial position plus its displacement multiplied
-                      by this factor. (Defaults to 0.0, i.e. display of 
-                      initial/undeformed shape)
-        :param extractDispComponents: if false, don't extract the displacement components of the eigenvectors.
-        :param extractRotComponents: if false, don't extract the rotational components of the eigenvectors.
+        :param defFScale: deformation scale factor. Factor to apply to the shape                          of the eigenmode so that the displayed position of 
+                          each node equals to the initial position plus its 
+                          eigenVector multiplied by this factor. (Defaults 
+                          to 0.0  i.e. display of initial/undeformed shape).
+        :param extractDispComponents: if false, don't extract the displacement
+                                      components of the eigenvectors.
+        :param extractRotComponents: if false, don't extract the rotational 
+                                     components of the eigenvectors.
         '''
         preprocessor= self.modelSpace.preprocessor
         domain= preprocessor.getDomain
@@ -1140,13 +1166,14 @@ class OutputHandler(object):
                and the units of the loads.
         :param fileName: full name of the graphic file to generate. Defaults to 
                      ` None`, in this case it returns a console output graphic.,
-        :param defFScale: factor to apply to current displacement of nodes 
-                      so that the display position of each node equals to
-                      the initial position plus its displacement multiplied
-                      by this factor. (Defaults to 0.0, i.e. display of 
-                      initial/undeformed shape)
-        :param showDispComponents: if false, don't show the displacement components of the eigenvectors.
-        :param showRotComponents: if false, don't show the rotational components of the eigenvectors.
+        :param defFScale: deformation scale factor. Factor to apply to the shape                          of the eigenmode so that the displayed position of 
+                          each node equals to the initial position plus its 
+                          eigenVector multiplied by this factor. (Defaults 
+                          to 0.0  i.e. display of initial/undeformed shape).
+        :param showDispComponents: if false, don't show the displacement 
+                                   components of the eigenvectors.
+        :param showRotComponents: if false, don't show the rotational 
+                                  components of the eigenvectors.
         '''
         if((showDispComponents==False) and (showRotComponents==False)):
             className= type(self).__name__
@@ -1209,10 +1236,10 @@ class OutputHandler(object):
         :param fileName:  full name of the graphic file to generate. 
                  Defaults to ` None`, in this case it returns a console output 
                  graphic.
-        :param defFScale: factor to apply to deformed shape so that the 
-               displayed position of each node equals to the initial position 
-               plus its eigenVector multiplied by this factor. (Defaults to 0.0 
-               i.e. display of initial/undeformed shape)
+        :param defFScale: deformation scale factor. Factor to apply to the shape                          of the eigenmode so that the displayed position of 
+                          each node equals to the initial position plus its 
+                          eigenVector multiplied by this factor. (Defaults 
+                          to 0.0  i.e. display of initial/undeformed shape).
         '''
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
@@ -1251,12 +1278,12 @@ class OutputHandler(object):
         :param caption:      caption to display
                (defaults to 'attributeName + itemToDisp')
         :param fileName:     file to dump the display (defaults to screen display)
-        :param defFScale:    factor to apply to current displacement of nodes 
-                    so that the display position of each node equals to
-                    the initial position plus its displacement multiplied
-                    by this factor. (Defaults to 0.0, i.e. display of 
-                    initial/undeformed shape)
-
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param defaultDirection: default direction of the diagram (J: element 
                                  local j vector or K: element local K vector).
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
@@ -1301,11 +1328,10 @@ class OutputHandler(object):
         :param setsToDisplay: sets to display on batch mode.
         :param fileName:  name of the file to plot the graphic. Defaults to None,
                        in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
+        :param defFScale: deformation scale factor. Factor to apply to the shape                          of the eigenmode so that the displayed position of 
+                          each node equals to the initial position plus its 
+                          eigenVector multiplied by this factor. (Defaults 
+                          to 0.0  i.e. display of initial/undeformed shape).
         '''
         for st in setsToDisplay:
             self.displayEigenvectors(mode= eigenMode, setToDisplay= st,fileName= fileName, defFScale= defFScale)
@@ -1319,16 +1345,17 @@ class OutputHandler(object):
         :param component: component of the control var to represent.
         :param setToDisplay: represent the field over those elements.
         :param fileName: file name to store the image. If none -> window on screen.
-        :param defFScale: factor to apply to current displacement of nodes 
-                    so that the display position of each node equals to
-                    the initial position plus its displacement multiplied
-                    by this factor. (Defaults to 0.0, i.e. display of 
-                    initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
-                    of the scalar field (if any) to be represented  (in units 
-                    of calculation, not units of display). All the values 
-                    less than vmin are displayed in blue and those greater than vmax 
-                    in red (defaults to None)
+                         of the field to be represented (in units of 
+                         calculation, not units of display). All the values 
+                         less than vmin are displayed in blue and those 
+                         greater than vmax in red (defaults to None).
         '''
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
@@ -1345,16 +1372,18 @@ class OutputHandler(object):
         :param component: component of the control var to represent.
         :param setToDisplay: represent the field over those elements.
         :param fileName: file name to store the image. If none -> window on screen.
-        :param defFScale: factor to apply to current displacement of nodes 
-                    so that the display position of each node equals to
-                    the initial position plus its displacement multiplied
-                    by this factor. (Defaults to 0.0, i.e. display of 
-                    initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
+
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
-                    of the scalar field (if any) to be represented  (in units 
-                    of calculation, not units of display). All the values 
-                    less than vmin are displayed in blue and those greater than vmax 
-                    in red (defaults to None)
+                         of the field to be represented (in units of 
+                         calculation, not units of display). All the values 
+                         less than vmin are displayed in blue and those 
+                         greater than vmax in red (defaults to None).
         '''
         sectRef= ''
         sectDescr= ''

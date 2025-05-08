@@ -142,13 +142,12 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         ''' Load nodes in VTK.
 
         :param nodeSet: set of nodes to load into VTK.
-        :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor. In case of modal analysis, the displayed 
-                  position of each node equals to the initial position plus
-                  its eigenVector multiplied by this factor.
-                  (Defaults to 0.0, i.e. display of initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param eigenMode: eigenvibration mode if we want to display the 
                           deformed shape associated with it when a modal 
                           analysis has been carried out. 
@@ -193,13 +192,12 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
     def _vtk_load_elem_mesh(self, defFScale=0.0, eigenMode=None):
         '''Load the element mesh
 
-        :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor. In case of modal analysis, the displayed 
-                  position of each node equals to the initial position plus
-                  its eigenVector multiplied by this factor.
-                  (Defaults to 0.0, i.e. display of initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param eigenMode: eigenvibration mode if we want to display the 
                           deformed shape associated with it when a modal 
                           analysis has been carried out. 
@@ -246,11 +244,12 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
     def defineMeshScene(self, defFScale= 0.0, eigenMode= None, color= xc.Vector([rd.random(),rd.random(),rd.random()])):
         '''Define the scene for the mesh
 
-        :param defFScale: factor to apply to current displacement of nodes 
-                    so that the display position of each node equals to
-                    the initial position plus its displacement multiplied
-                    by this factor. (Defaults to 0.0, i.e. display of 
-                    initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param eigenMode: eigenvibration mode if we want to display the 
                           deformed shape associated with it when a modal 
                           analysis has been carried out. 
@@ -280,11 +279,12 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         :param setToDisplay:   XC set of elements to be displayed
         :param caption: text to write in the graphic
         :param cameraParameters: camera parameters (position, orientation,...).
-        :param defFScale: factor to apply to current displacement of nodes 
-                   so that the display position of each node equals to
-                   the initial position plus its displacement multiplied
-                   by this factor. (Defaults to 0.0, i.e. display of 
-                   initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
@@ -298,11 +298,12 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         :param setToDisplay: XC set of elements to be displayed.
         :param caption: text title to write in the graphic.
         :param fileName: file name to store the image. If none -> window on screen.
-        :param defFScale: factor to apply to current displacement of nodes 
-                   so that the display position of each node equals to
-                   the initial position plus its displacement multiplied
-                   by this factor. (Defaults to 0.0, i.e. display of 
-                   initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         self.setupGrid(setToDisplay)
         self.defineMeshScene()
@@ -315,11 +316,12 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         :param caption:        text to display in the graphic 
         :param vectorScale:    factor to apply to the vectors length in the representation
         :param fileName: file name to store the image. If none -> window on screen.
-        :param defFScale: factor to apply to current displacement of nodes 
-                   so that the display position of each node equals to
-                   the initial position plus its displacement multiplied
-                   by this factor. (Defaults to 0.0, i.e. display of 
-                   initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         self.setupGrid(setToDisplay)
         elementAvgSize= setToDisplay.elements.getAverageSize(False)
@@ -356,11 +358,12 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         ''' Define the mesh corresponding to the given set.
 
         :param elemSet: set of elements that form the mesh to display.
-        :param defFScale: factor to apply to current displacement of nodes 
-                   so that the display position of each node equals to
-                   the initial position plus its displacement multiplied
-                   by this factor. (Defaults to 0.0, i.e. display of 
-                   initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param nodeSize: size of the spheres that represent nodes.
         '''
         self.setupGrid(elemSet)
@@ -374,11 +377,12 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         ''' Define the fields actors in the given sets.
 
         :param xcSets: set or list of sets to be displayed
-        :param defFScale: factor to apply to current displacement of nodes 
-                   so that the display position of each node equals to
-                   the initial position plus its displacement multiplied
-                   by this factor. (Defaults to 0.0, i.e. display of 
-                   initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param nodeSize: size of the spheres that represent nodes.
         :param scaleConstr: scale of SPConstraints symbols (defaults to 0.2)
         '''
@@ -399,14 +403,15 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         :param caption: text to display in the graphic.
         :param unitDescription: description of the units.
         :param fileName: name of the graphic file to create (if None -> screen window).
-        :param defFScale: factor to apply to current displacement of nodes 
-                    so that the display position of each node equals to
-                    the initial position plus its displacement multiplied
-                    by this factor. (Defaults to 0.0, i.e. display of 
-                    initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param nodeSize: size of the spheres that represent nodes (defaults to
-                    0.01)
-        :param scaleConstr: scale of SPConstraints symbols (defaults to 0.2)
+                         0.01).
+        :param scaleConstr: scale of SPConstraints symbols (defaults to 0.2).
         '''
         if(field):
             self.setField(field)
@@ -422,17 +427,18 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
     def displayLoadOnNode(self, nod, color, force, moment, fScale, defFScale= 0.0):
         '''Display loads on one node
 
-         :param nod: node instance
-         :param color: color
-         :param force: force (displayed as a single arrow)
-         :param moment: moment (displayed as a torque arrow)
-         :param fScale: scaling factor (forces and moments)
-         :param defFScale: factor to apply to current displacement of nodes 
-                    so that the display position of each node equals to
-                    the initial position plus its displacement multiplied
-                    by this factor. (Defaults to 0.0, i.e. display of 
-                    initial/undeformed shape)
-         '''
+        :param nod: node instance
+        :param color: color
+        :param force: force (displayed as a single arrow)
+        :param moment: moment (displayed as a torque arrow)
+        :param fScale: scaling factor (forces and moments)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
+        '''
         #actorName= baseName+"%04d".format(nod.tag) # Node tag.
         pos= nod.getCurrentPos3d(defFScale)
         absForce= force.Norm()
@@ -566,11 +572,12 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         :param preprocessor: preprocessor for the FE problem.
         :param nodsInSet: set of node tags whose constrains will
                           be displayed.
-        :param defFScale: factor to apply to current displacement of nodes 
-                    so that the display position of each node equals to
-                    the initial position plus its displacement multiplied
-                    by this factor. (Defaults to 0.0, i.e. display of 
-                    initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         # direction vectors for each DOF
         pointGraphicData= list()
@@ -598,11 +605,12 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
 
         :param setToDisplay: set to be displayed
         :param scale: scale for SPConstraints symbols.
-        :param defFScale: factor to apply to current displacement of nodes 
-                    so that the display position of each node equals to
-                    the initial position plus its displacement multiplied
-                    by this factor. (Defaults to 0.0, i.e. display of 
-                    initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         prep= setToDisplay.getPreprocessor
         nodsInSet= set(setToDisplay.nodes.getTags())
