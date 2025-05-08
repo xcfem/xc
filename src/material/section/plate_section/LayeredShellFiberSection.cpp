@@ -247,11 +247,11 @@ int XC::LayeredShellFiberSection::setTrialSectionDeformation(const Vector &strai
       {
 	z = h_2*sg[i];
 
-	strain(0) =  strainResultant(0)  - z*strainResultant(3);
-	strain(1) =  strainResultant(1)  - z*strainResultant(4);
-	strain(2) =  strainResultant(2)  - z*strainResultant(5);
-	strain(3) =  strainResultant(6);
-	strain(4) =  strainResultant(7);
+	strain(0)=  strainResultant(0)  - z*strainResultant(3);
+	strain(1)=  strainResultant(1)  - z*strainResultant(4);
+	strain(2)=  strainResultant(2)  - z*strainResultant(5);
+	strain(4)=  strainResultant(6);
+	strain(3)=  strainResultant(7);
 	success += theFibers[i]->setTrialStrain( strain );
 
       } //end for i
@@ -279,18 +279,18 @@ const XC::Vector &XC::LayeredShellFiberSection::getStressResultant(void) const
 	stress = theFibers[i]->getStress( );
 
 	//membrane
-	stressResultant(0)  +=  stress(0)*weight;
-	stressResultant(1)  +=  stress(1)*weight;
-	stressResultant(2)  +=  stress(2)*weight;
+	stressResultant(0)+=  stress(0)*weight;
+	stressResultant(1)+=  stress(1)*weight;
+	stressResultant(2)+=  stress(2)*weight;
 
 	//bending moments
-	stressResultant(3)  +=  ( z*stress(0) ) * weight;
-	stressResultant(4)  +=  ( z*stress(1) ) * weight;
-	stressResultant(5)  +=  ( z*stress(2) ) * weight;
+	stressResultant(3)+=  ( z*stress(0) ) * weight;
+	stressResultant(4)+=  ( z*stress(1) ) * weight;
+	stressResultant(5)+=  ( z*stress(2) ) * weight;
 
 	//shear
-	stressResultant(6)  += stress(3)*weight;
-	stressResultant(7)  += stress(4)*weight;
+	stressResultant(6)+= stress(4)*weight;
+	stressResultant(7)+= stress(3)*weight;
 
       } //end for i
     return this->stressResultant;
@@ -367,92 +367,92 @@ const XC::Matrix &XC::LayeredShellFiberSection::getSectionTangent(void) const
   //[       d51,           d52,           d53,        -d51*z,        -d52*z,        -d53*z,    d54,    d55]
 
 	//row 1
-  //[      d11,           d12,           d13,        -z*d11,        -z*d12,        -z*d13,    d14,    d15]
+	//[      d11,           d12,           d13,        -z*d11,        -z*d12,        -z*d13,    d14,    d15]
 	tangent(0,0) +=     dd(0,0);
 	tangent(0,1) +=     dd(0,1);
 	tangent(0,2) +=     dd(0,2);      
-	tangent(0,3) +=  -z*dd(0,0);      
+	tangent(0,3) +=  -z*dd(0,0);
 	tangent(0,4) +=  -z*dd(0,1);
 	tangent(0,5) +=  -z*dd(0,2);
-	tangent(0,6) +=     dd(0,3);
-	tangent(0,7) +=     dd(0,4);
+	tangent(0,6) +=     dd(0,4);
+	tangent(0,7) +=     dd(0,3);
 
 	//row 2
-  //[      d21,           d22,           d23,        -z*d21,        -z*d22,        -z*d23,    d24,    d25]
+	//[      d21,           d22,           d23,        -z*d21,        -z*d22,        -z*d23,    d24,    d25]
 	tangent(1,0) +=     dd(1,0);
 	tangent(1,1) +=     dd(1,1);
 	tangent(1,2) +=     dd(1,2);      
 	tangent(1,3) +=  -z*dd(1,0);      
 	tangent(1,4) +=  -z*dd(1,1);
 	tangent(1,5) +=  -z*dd(1,2);
-	tangent(1,6) +=     dd(1,3);
-	tangent(1,7) +=     dd(1,4);
+	tangent(1,6) +=     dd(1,4);
+	tangent(1,7) +=     dd(1,3);
 
 	//row 3
-  //[      d31,           d32,           d33,        -z*d31,        -z*d32,        -z*d33,    d34,    d35]
+	//[      d31,           d32,           d33,        -z*d31,        -z*d32,        -z*d33,    d34,    d35]
 	tangent(2,0) +=     dd(2,0);
 	tangent(2,1) +=     dd(2,1);
 	tangent(2,2) +=     dd(2,2);      
 	tangent(2,3) +=  -z*dd(2,0);      
 	tangent(2,4) +=  -z*dd(2,1);
 	tangent(2,5) +=  -z*dd(2,2);
-	tangent(2,6) +=     dd(2,3);
-	tangent(2,7) +=     dd(2,4);
+	tangent(2,6) +=     dd(2,4);
+	tangent(2,7) +=     dd(2,3);
 
 	//row 4
-  //[     z*d11,         z*d12,         z*d13,      -z^2*d11,      -z^2*d12,      -z^2*d13,  z*d14,  z*d15]
+	//[     z*d11,         z*d12,         z*d13,      -z^2*d11,      -z^2*d12,      -z^2*d13,  z*d14,  z*d15]
 	tangent(3,0) +=     z*dd(0,0);
 	tangent(3,1) +=     z*dd(0,1);
 	tangent(3,2) +=     z*dd(0,2);      
 	tangent(3,3) +=  -z*z*dd(0,0);      
 	tangent(3,4) +=  -z*z*dd(0,1);
 	tangent(3,5) +=  -z*z*dd(0,2);
-	tangent(3,6) +=     z*dd(0,3);
-	tangent(3,7) +=     z*dd(0,4);
+	tangent(3,6) +=     z*dd(0,4);
+	tangent(3,7) +=     z*dd(0,3);
 
 	//row 5
-  //[     z*d21,         z*d22,         z*d23,      -z^2*d21,      -z^2*d22,      -z^2*d23,  z*d24,  z*d25]
+	//[     z*d21,         z*d22,         z*d23,      -z^2*d21,      -z^2*d22,      -z^2*d23,  z*d24,  z*d25]
 	tangent(4,0) +=     z*dd(1,0);
 	tangent(4,1) +=     z*dd(1,1);
 	tangent(4,2) +=     z*dd(1,2);      
 	tangent(4,3) +=  -z*z*dd(1,0);      
 	tangent(4,4) +=  -z*z*dd(1,1);
 	tangent(4,5) +=  -z*z*dd(1,2);
-	tangent(4,6) +=     z*dd(1,3);
-	tangent(4,7) +=     z*dd(1,4);
+	tangent(4,6) +=     z*dd(1,4);
+	tangent(4,7) +=     z*dd(1,3);
 
 	//row 6
-  //[     z*d31,         z*d32,         z*d33,      -z^2*d31,      -z^2*d32,      -z^2*d33,  z*d34,  z*d35]
+	//[     z*d31,         z*d32,         z*d33,      -z^2*d31,      -z^2*d32,      -z^2*d33,  z*d34,  z*d35]
 	tangent(5,0) +=     z*dd(2,0);
 	tangent(5,1) +=     z*dd(2,1);
 	tangent(5,2) +=     z*dd(2,2);      
 	tangent(5,3) +=  -z*z*dd(2,0);      
 	tangent(5,4) +=  -z*z*dd(2,1);
 	tangent(5,5) +=  -z*z*dd(2,2);
-	tangent(5,6) +=     z*dd(2,3);
-	tangent(5,7) +=     z*dd(2,4);
+	tangent(5,6) +=     z*dd(2,4);
+	tangent(5,7) +=     z*dd(2,3);
 
 	//row 7
-  //[  d41,    d42,    d43, -d41*z, -d42*z, -d43*z,  d44,  d45]
-	tangent(6,0) +=     dd(3,0);
-	tangent(6,1) +=     dd(3,1);
-	tangent(6,2) +=     dd(3,2);      
-	tangent(6,3) +=  -z*dd(3,0);      
-	tangent(6,4) +=  -z*dd(3,1);
-	tangent(6,5) +=  -z*dd(3,2);
-	tangent(6,6) +=     dd(3,3);
-	tangent(6,7) +=     dd(3,4);
+	//[  d41,    d42,    d43, -d41*z, -d42*z, -d43*z,  d44,  d45]
+	tangent(6,0) +=     dd(4,0);
+	tangent(6,1) +=     dd(4,1);
+	tangent(6,2) +=     dd(4,2);      
+	tangent(6,3) +=  -z*dd(4,0);      
+	tangent(6,4) +=  -z*dd(4,1);
+	tangent(6,5) +=  -z*dd(4,2);
+	tangent(6,6) +=     dd(4,4);
+	tangent(6,7) +=     dd(4,3);
 
 	//row 8 
-  //[  d51,    d52,    d53, -d51*z, -d52*z, -d53*z,  d54,  d55]
-	tangent(7,0) +=     dd(4,0);
-	tangent(7,1) +=     dd(4,1);
-	tangent(7,2) +=     dd(4,2);      
-	tangent(7,3) +=  -z*dd(4,0);      
-	tangent(7,4) +=  -z*dd(4,1);
-	tangent(7,5) +=  -z*dd(4,2);
-	tangent(7,6) +=     dd(4,3);
-	tangent(7,7) +=     dd(4,4);
+	//[  d51,    d52,    d53, -d51*z, -d52*z, -d53*z,  d54,  d55]
+	tangent(7,0) +=     dd(3,0);
+	tangent(7,1) +=     dd(3,1);
+	tangent(7,2) +=     dd(3,2);      
+	tangent(7,3) +=  -z*dd(3,0);      
+	tangent(7,4) +=  -z*dd(3,1);
+	tangent(7,5) +=  -z*dd(3,2);
+	tangent(7,6) +=     dd(3,4);
+	tangent(7,7) +=     dd(3,3);
       } //end for i
 
     return this->tangent;
