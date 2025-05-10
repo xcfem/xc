@@ -29,29 +29,41 @@
 XC::ASDShellQ4Transformation *XC::ASDShellQ4Transformation::getCopy(void) const
   { return new ASDShellQ4Transformation(*this); }
   
-void XC::ASDShellQ4Transformation::setDomain(Domain *domain, const ID &node_ids)
+void XC::ASDShellQ4Transformation::setDomain(Domain *domain, const ID &node_ids, bool initialized)
   {
-    // get nodes and save initial displacements and rotations
-    for(size_t i = 0; i < 4; i++)
+    // if domain is null
+    if (domain == nullptr)
       {
-	m_nodes[i] = domain->getNode(node_ids(i));
-	if(m_nodes[i] == nullptr)
+	for(size_t i = 0; i < 4; i++)
+	  { m_nodes[i] = nullptr; }
+      }
+    else
+      {
+	// get nodes and save initial displacements and rotations
+	for(size_t i = 0; i < 4; i++)
 	  {
-	    std::cerr << "ASDShellQ4Transformation::setDomain - no node "
-		      << node_ids(i) << " exists in the model." << std::endl;
-	    exit(-1);
+	    m_nodes[i] = domain->getNode(node_ids(i));
+	    if(m_nodes[i] == nullptr)
+	      {
+		std::cerr << "ASDShellQ4Transformation::setDomain - no node "
+			  << node_ids(i) << " exists in the model." << std::endl;
+		exit(-1);
+	      }
+            if (!initialized)
+	      {
+		const Vector &iU = m_nodes[i]->getTrialDisp();
+		if(iU.Size() != 6)
+		  {
+		    std::cerr << "ASDShellQ4Transformation::setDomain - node "
+			      << node_ids(i)
+			      << " has " << iU.Size()
+			      << " DOFs, while 6 are expected." << std::endl;
+		    exit(-1);
+		  }
+		const size_t index= i * 6;
+		for(size_t j = 0; j < 6; j++)
+		  { m_U0(index+j)= iU(j); }
+	      }
 	  }
-	const Vector &iU = m_nodes[i]->getTrialDisp();
-	if(iU.Size() != 6)
-	  {
-	    std::cerr << "ASDShellQ4Transformation::setDomain - node "
-		      << node_ids(i)
-		      << " has " << iU.Size()
-		      << " DOFs, while 6 are expected." << std::endl;
-	    exit(-1);
-	  }
-	const size_t index= i * 6;
-	for(size_t j = 0; j < 6; j++)
-	  { m_U0(index+j)= iU(j); }
       }
   }

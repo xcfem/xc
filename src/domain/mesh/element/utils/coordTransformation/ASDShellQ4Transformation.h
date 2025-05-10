@@ -100,7 +100,7 @@ class ASDShellQ4Transformation
     virtual void revertToStart(void)
       { }
 
-    virtual void setDomain(Domain *, const ID &);
+    virtual void setDomain(Domain *, const ID &, bool initialized);
 
     virtual void revertToLastCommit()
       {}
