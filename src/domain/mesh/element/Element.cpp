@@ -217,6 +217,37 @@ double XC::Element::getVolume(bool initialGeometry) const
 	      << Color::def << std::endl;
     return 0.0;
   }
+double XC::Element::getCharacteristicLength(void) const
+  {
+    const int numNodes = this->getNumExternalNodes();
+    const NodePtrs &theNodes= getNodePtrs();
+    double cLength = 0.0;
+    double minSize = 10e14; //Tesser
+
+    for (int i=0; i<numNodes; i++)
+      {
+	Node *nodeI = theNodes[i];
+	Vector iCoords = nodeI->getCrds();
+	int iDOF = iCoords.Size(); // nodeI->getNumberDOF(); // bugfix: Massimo Petracca 03/25/2020
+	for (int j=i+1; j<numNodes; j++)
+	  {
+	    Node *nodeJ = theNodes[j];
+	    Vector jCoords = nodeJ->getCrds();      
+	    int jDOF = jCoords.Size(); // nodeI->getNumberDOF(); // bugfix: Massimo Petracca 03/25/2020
+	    double ijLength = 0;
+	    for (int k=0; k<iDOF && k<jDOF; k++)
+	      {
+		ijLength += (jCoords(k)-iCoords(k))*(jCoords(k)-iCoords(k)); //Tesser
+	      }	
+	    ijLength = sqrt(ijLength);
+	    if (ijLength > cLength)
+	      cLength = ijLength;
+	    if (ijLength < minSize) 
+	      minSize = ijLength;
+	  }
+      }
+    return minSize;
+  }
 
 //! @brief Set the nodes.
 void XC::Element::setIdNodes(const std::vector<int> &inodes)

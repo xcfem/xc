@@ -170,6 +170,7 @@ class Element: public MeshComponent
     virtual double getLength(bool initialGeometry= true) const;
     virtual double getArea(bool initialGeometry= true) const;
     virtual double getVolume(bool initialGeometry= true) const;
+    virtual double getCharacteristicLength(void) const;
     virtual void setIdNodes(const std::vector<int> &inodes);
     virtual void setIdNodes(const ID &inodes);
     virtual void setIdNode(const int &i, const int &inode);
