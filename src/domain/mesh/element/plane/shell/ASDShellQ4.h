@@ -110,6 +110,7 @@
 #include "utility/matrix/ID.h"
 #include "domain/mesh/element/plane/QuadBase4N.h"
 #include "domain/mesh/element/utils/physical_properties/SectionFDPhysicalProperties.h"
+#include "domain/mesh/element/utils/damping/DampingVector.h"
 
 namespace XC {
 
@@ -119,6 +120,33 @@ class ASDShellQ4LocalCoordinateSystem;
 
 class ASDShellQ4: public QuadBase4N<SectionFDPhysicalProperties>
   {
+  public:
+    enum DrillingDOFMode
+      {
+        DrillingDOF_Elastic = 0,
+        DrillingDOF_NonLinear = 1,
+      };
+    class NLDrillingData
+      {
+      public:
+        std::vector<Vector> strain_comm = { Vector(8), Vector(8), Vector(8), Vector(8) };
+        std::vector<Vector> stress_comm = { Vector(8), Vector(8), Vector(8), Vector(8) };
+        std::vector<double> damage = { 0.0, 0.0, 0.0, 0.0 };
+        std::vector<double> damage_comm = { 0.0, 0.0, 0.0, 0.0 };
+      };
+    class EASData
+      {
+      public:
+        Vector Q = Vector(4);
+        Vector Q_converged = Vector(4);
+        Vector U = Vector(24);
+        Vector U_converged = Vector(24);
+        Vector Q_residual = Vector(4);
+        Matrix KQQ_inv = Matrix(4, 4);
+        Matrix KQU = Matrix(4, 24); // L = G'*C*B
+        Matrix KUQ = Matrix(24, 4); // L^T = B'*C'*G
+      };
+    
   private:
     // coordinate transformation
     ASDShellQ4Transformation *m_transformation= nullptr;
@@ -131,25 +159,36 @@ class ASDShellQ4: public QuadBase4N<SectionFDPhysicalProperties>
     double m_drill_stiffness = 0.0;
 
     // section orientation with respect to the local coordinate system
+    Vector m_local_x;
     double m_angle = 0.0;
 
-    // members for non-linear treatement of AGQI internal DOFs:
+    // initialization flag
+    bool m_initialized= false;
+    // damping
+    DampingVector m_damping;
+    
+    // members for non-linear treatment of AGQI internal DOFs:
     // it has 24 displacement DOFs
     // and 4 internal DOFs for membrane enhancement
-    mutable Vector m_Q = Vector(4);
-    Vector m_Q_converged = Vector(4);
-    mutable Vector m_U = Vector(24);
-    Vector m_U_converged = Vector(24);
-    mutable Vector m_Q_residual = Vector(4);
-    mutable Matrix m_KQQ_inv = Matrix(4, 4);
-    mutable Matrix m_KQU = Matrix(4, 24); // L = G'*C*B
-    mutable Matrix m_KUQ = Matrix(24, 4); // L^T = B'*C'*G
-
+    EASData *m_eas= nullptr;
+    
+    // drilling strain for the independent rotation field (Hughes-Brezzi)
+    DrillingDOFMode m_drill_mode = DrillingDOF_Elastic;
+    double m_drill_stab = 0.01;
+    NLDrillingData* m_nldrill= nullptr;
+    
   private:
 
     void free_mem(void);
+    void free_crd_transf(void);
+    void free_eas(void);
+    void free_nldrill(void);
     void alloc(bool corotational);
     void alloc(const ASDShellQ4Transformation *);
+    void alloc_eas(void);
+    void copy_eas(const EASData &);
+    void alloc_nldrill(void);
+    void copy_nldrill(const NLDrillingData &);
     // internal method to compute everything using switches...
     int calculateAll(Matrix& LHS, Vector& RHS, int options) const;
 
@@ -171,7 +210,12 @@ class ASDShellQ4: public QuadBase4N<SectionFDPhysicalProperties>
         int node3,
         int node4,
         SectionForceDeformation* section,
-        bool corotational = true);
+	const Vector &local_x,
+	bool corotational= true,
+        bool use_eas = true,
+        DrillingDOFMode drill_mode = DrillingDOF_Elastic,
+        double drilling_stab = 0.01,
+	Damping *theDamping= nullptr);
     ASDShellQ4(const ASDShellQ4 &);
     ASDShellQ4 &operator=(const ASDShellQ4 &);
     virtual ~ASDShellQ4();
@@ -180,6 +224,7 @@ class ASDShellQ4: public QuadBase4N<SectionFDPhysicalProperties>
     // domain
     int resetNodalCoordinates(void);
     void setDomain(Domain* theDomain);
+    int setDamping(Domain *theDomain, Damping *theDamping);
 
     // print
     void Print(std::ostream &, int flag);
@@ -200,6 +245,8 @@ class ASDShellQ4: public QuadBase4N<SectionFDPhysicalProperties>
     const Matrix &getInitialStiff(void) const;
     const Matrix &getMass(void) const;
 
+    double getCharacteristicLength(void) const;
+    
     // methods for applying loads
     void alive(void);
     void zeroLoad(void);

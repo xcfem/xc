@@ -15,3 +15,6 @@ shell elements.
 - [Rotary inertia for 5 degree of freedom shell elements](https://classes.engineering.wustl.edu/2009/spring/mase5513/abaqus/docs/v6.6/books/stm/default.htm?startat=ch03s06ath83.html)
 - [Rotary inertia](http://193.136.142.5/v6.11/books/usb/default.htm?startat=pt06ch29s02alm23.html#usb-elm-erotinertia)
 - [Rotary inertia element](http://193.136.142.5/v6.11/books/stm/default.htm?startat=ch03s09ath98.html)
+
+### Programming references
+- [Singleton pattern](https://en.wikipedia.org/wiki/Singleton_pattern)
