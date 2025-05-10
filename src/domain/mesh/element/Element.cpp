@@ -217,6 +217,14 @@ double XC::Element::getVolume(bool initialGeometry) const
 	      << Color::def << std::endl;
     return 0.0;
   }
+
+//! @brief Return the characteristic length of this element.
+//!
+//! The characteristic length is used to control the localization
+//! of deformation or damage in a material within a finite element
+//! model. It helps define the spatial scale at which these phenomena
+//! occur. Here is computed as the minimum distance between two
+//! different nodes of the element.
 double XC::Element::getCharacteristicLength(void) const
   {
     const int numNodes = this->getNumExternalNodes();
@@ -239,13 +247,15 @@ double XC::Element::getCharacteristicLength(void) const
 	      {
 		ijLength += (jCoords(k)-iCoords(k))*(jCoords(k)-iCoords(k)); //Tesser
 	      }	
-	    ijLength = sqrt(ijLength);
+	    // ijLength = sqrt(ijLength); no need to compute the square root LP 20250510.
 	    if (ijLength > cLength)
 	      cLength = ijLength;
 	    if (ijLength < minSize) 
 	      minSize = ijLength;
 	  }
       }
+    // cLength= sqrt(cLength);
+    minSize= sqrt(minSize); //now we compute the square root at once LP 20250510.
     return minSize;
   }
 
