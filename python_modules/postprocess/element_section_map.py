@@ -935,8 +935,8 @@ class ElementSectionMap(object):
             lmsg.warning(className+'.'+methodName+'; element set is empty.')
 
         for e in elemSet:
+            eTag= e.tag # element identifier.
             if(not e.hasProp(self.propName)):
-                eTag= e.tag # element identifier.
                 # Element dimension.
                 self.elementDimension[eTag]= e.getDimension
                 # Element sections.
