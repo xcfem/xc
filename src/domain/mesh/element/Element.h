@@ -321,6 +321,16 @@ class Element: public MeshComponent
     ID getEdgesNodeByTag(const int &) const;
     virtual ID getLocalIndexNodesEdge(const size_t &i) const;
     
+    std::set<const Element *> getConnectedElements(void) const;
+    std::set<Element *> getConnectedElements(void);
+    boost::python::list getConnectedElementsPy(void);    
+    boost::python::list getConnectedElementTags(void) const;
+    
+    std::set<const Element *> getConnectedElements(const SetBase *) const;
+    std::set<Element *> getConnectedElements(const SetBase *);
+    boost::python::list getConnectedElementsPy(const SetBase *);    
+    boost::python::list getConnectedElementTags(const SetBase *) const;
+    
     virtual std::set<std::string> getMaterialNames(void) const;
     boost::python::list getMaterialNamesPy(void) const;
 

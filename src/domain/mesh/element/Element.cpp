@@ -1483,6 +1483,92 @@ XC::ElemPtrArray3d XC::Element::sew(const SetEstruct &f1,const SetEstruct &f2) c
     return ElemPtrArray3d();
   }
 
+//! @brief Return a set of pointers to the elements that are connected with this node.
+std::set<const XC::Element *> XC::Element::getConnectedElements(void) const
+  {
+    std::set<const Element *> retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Return a set of pointers to the elements of the given set that are
+//! connected with this node.
+std::set<const XC::Element *> XC::Element::getConnectedElements(const SetBase *s) const
+  {
+    std::set<const Element *> retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Return a set of pointers to the elements that are connected with this node.
+std::set<XC::Element *> XC::Element::getConnectedElements(void)
+  {
+    std::set<Element *> retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Return a set of pointers to the elements of the given set that are
+//! connected with this node.
+std::set<XC::Element *> XC::Element::getConnectedElements(const SetBase *s)
+  {
+    std::set<Element *> retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Return a python list of pointers to the elements that
+//! are connected with this node.
+boost::python::list XC::Element::getConnectedElementsPy(void)
+  {
+    boost::python::list retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Return a python list of pointers to the elements from the give set
+//! that are connected with this node.
+boost::python::list XC::Element::getConnectedElementsPy(const SetBase *s)
+  {
+    boost::python::list retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Return a python list containing the tags of the elements that
+//! are connected with this node.
+boost::python::list XC::Element::getConnectedElementTags(void) const
+  {
+    boost::python::list retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Return a python list containing the tags of the elements from the
+//! given set that are connected with this node.
+boost::python::list XC::Element::getConnectedElementTags(const SetBase *s) const
+  {
+    boost::python::list retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
 //! @brief Return the names of the material(s) of the element.
 std::set<std::string> XC::Element::getMaterialNames(void) const
   {

@@ -54,6 +54,10 @@ double (XC::Element::*getDistPos2d)(const Pos2d &,bool initialGeometry) const= &
 double (XC::Element::*getDistPos3d)(const Pos3d &,bool initialGeometry) const= &XC::Element::getDist;
 double (XC::Element::*getDist2Pos2d)(const Pos2d &,bool initialGeometry) const= &XC::Element::getDist2;
 double (XC::Element::*getDist2Pos3d)(const Pos3d &,bool initialGeometry) const= &XC::Element::getDist2;
+boost::python::list (XC::Element::*get_connected_elements_element_py)(void)= &XC::Element::getConnectedElementsPy;    
+boost::python::list (XC::Element::*get_connected_elements_element_set_py)(const XC::SetBase *)= &XC::Element::getConnectedElementsPy; 
+boost::python::list (XC::Element::*get_connected_elements_tags_element_py)(void) const= &XC::Element::getConnectedElementTags;    
+boost::python::list (XC::Element::*get_connected_elements_tags_element_set_py)(const XC::SetBase *) const= &XC::Element::getConnectedElementTags; 
 class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >("Element", no_init)
   .add_property("getNodes", make_function( getNodePtrsRef, return_internal_reference<>() ),"DEPRECATED; return the element nodes.")
   .add_property("nodes", make_function( getNodePtrsRef, return_internal_reference<>() ),"Return the element nodes.")
@@ -131,6 +135,11 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getValuesAtNodes",&XC::Element::getValuesAtNodes,"getValuesAtNodes(string, silent): return the value of the argument at the element nodes. If silent==True don't complain about non-existent property.")
   .def("createInertiaLoad", &XC::Element::createInertiaLoad,"Create the inertia load for the given acceleration vector.")
   .def("copySetsFrom", &XC::Element::copySetsFrom,"Add this element to all the sets containing the given element.")
+
+  .add_property("connectedElements", get_connected_elements_element_py, "Returns the elements connected to any of the nodes of this element.")
+  .def("getConnectedElements", get_connected_elements_element_set_py, "Returns the elements from the given set that are connected to any of the nodes of this element.")
+.add_property("connectedElementTags", get_connected_elements_tags_element_py, "Returns the tags of the elements connected to any of the nodes of this element.")
+  .def("getConnectedElementTags", get_connected_elements_tags_element_set_py, "Returns the tags of the elements from the given set that are connected to any of the nodes of this element.")
    ;
 
 XC::Element *(XC::ElementIter::*element_iter_parenthesis_op)(void)= &XC::ElementIter::operator();
@@ -138,7 +147,8 @@ class_<XC::ElementIter, boost::noncopyable >("ElementIter", no_init)
   .def("next", element_iter_parenthesis_op, return_internal_reference<>(),"Return next node.")
    ;
 
-class_<ElementBase2N, bases<XC::Element >, boost::noncopyable >("ElementBase2N","Base class for 2 node elements.", no_init);
+class_<ElementBase2N, bases<XC::Element >, boost::noncopyable >("ElementBase2N","Base class for 2 node elements.", no_init)
+  ;
 
 class_<ElementBase3N, bases<XC::Element >, boost::noncopyable >("ElementBase3N","Base class for 3 node elements.", no_init);
 
