@@ -31,6 +31,7 @@
 #define NodePtrs_h
 
 #include "utility/kernel/CommandEntity.h"
+#include "domain/mesh/node/Node.h"
 #include <list>
 #include <vector>
 
@@ -44,11 +45,11 @@ class BND3d;
 
 namespace XC {
 class Element;
-class Node;
 class Domain;
 class ID;
 class Matrix;
-class Vector; 
+class Vector;
+class SetBase;
 
 //! @ingroup Elem
 //!
@@ -65,6 +66,8 @@ class NodePtrs: public CommandEntity, public std::vector<Node *>
     typedef vector_ptr_nodes::reference reference;
     typedef vector_ptr_nodes::iterator iterator;
     typedef vector_ptr_nodes::const_iterator const_iterator;
+    typedef Node::ElementPtrSet ElementPtrSet; //!< Container of element pointers.
+    typedef Node::ElementConstPtrSet ElementConstPtrSet; //!< Container of const element pointers.
 
   protected:
     void disconnect(void);
@@ -120,6 +123,16 @@ class NodePtrs: public CommandEntity, public std::vector<Node *>
     int getNodeIndex(const int &tag) const;
 
     void reverse(void);
+
+    ElementConstPtrSet getConnectedElements(void) const;
+    ElementPtrSet getConnectedElements(void);
+    boost::python::list getConnectedElementsPy(void);    
+    boost::python::list getConnectedElementTags(void) const;
+    
+    ElementConstPtrSet getConnectedElements(const SetBase *) const;
+    ElementPtrSet getConnectedElements(const SetBase *);
+    boost::python::list getConnectedElementsPy(const SetBase *);    
+    boost::python::list getConnectedElementTags(const SetBase *) const;   
   };
 } // end of XC namespace
 

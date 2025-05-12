@@ -33,6 +33,8 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/domain/Domain.h"
 
+#include "preprocessor/set_mgmt/SetBase.h"
+
 #include "utility/geom/pos_vec/Pos3d.h"
 #include "utility/geom/pos_vec/Pos2d.h"
 #include "utility/geom/pos_vec/Vector3d.h"
@@ -635,3 +637,131 @@ void XC::NodePtrs::reverse(void)
   { std::reverse(begin(),end()); }
 
   
+//! @brief Return a set of pointers to the elements that are connected with this node.
+XC::NodePtrs::ElementConstPtrSet XC::NodePtrs::getConnectedElements(void) const
+  {
+    ElementConstPtrSet retval;
+    const int numNodes= size();
+    for(int i=0; i<numNodes; i++)
+      {
+	const Node *n= (*this)[i];
+        ElementConstPtrSet tmp= n->getConnectedElements();
+	retval.insert(tmp.begin(), tmp.end());
+      }
+    return retval;
+  }
+
+//! @brief Return a set of pointers to the elements of the given set that are
+//! connected with this node.
+XC::NodePtrs::ElementConstPtrSet XC::NodePtrs::getConnectedElements(const SetBase *s) const
+  {
+    XC::NodePtrs::ElementConstPtrSet retval;
+    const std::set<const Element *> tmp= this->getConnectedElements();
+    if(s)
+      {
+	for(XC::NodePtrs::ElementConstPtrSet::const_iterator i= tmp.begin();i!=tmp.end();i++)
+	  {
+	    const Element *ptrElem= *i;
+	    if(ptrElem)
+	      if(s->In(ptrElem))
+		retval.insert(ptrElem);
+	  }
+      }
+    else
+      retval= tmp;
+    return retval;
+  }
+
+//! @brief Return a set of pointers to the elements that are connected with this node.
+XC::NodePtrs::ElementPtrSet XC::NodePtrs::getConnectedElements(void)
+  {
+    XC::NodePtrs::ElementPtrSet retval;
+    const int numNodes= size();
+    for(int i=0; i<numNodes; i++)
+      {
+	Node *n= (*this)[i];
+        ElementPtrSet tmp= n->getConnectedElements();
+	retval.insert(tmp.begin(), tmp.end());
+      }
+    return retval;
+  }
+
+//! @brief Return a set of pointers to the elements of the given set that are
+//! connected with this node.
+XC::NodePtrs::ElementPtrSet XC::NodePtrs::getConnectedElements(const SetBase *s)
+  {
+    XC::NodePtrs::ElementPtrSet retval;
+    const std::set<Element *> tmp= this->getConnectedElements();
+    if(s)
+      {
+	for(XC::NodePtrs::ElementPtrSet::const_iterator i= tmp.begin();i!=tmp.end();i++)
+	  {
+	    Element *ptrElem= *i;
+	    if(ptrElem)
+	      if(s->In(ptrElem))
+		retval.insert(ptrElem);
+	  }
+      }
+    else
+      retval= tmp;
+    return retval;
+  }
+
+//! @brief Return a python list of pointers to the elements that
+//! are connected with this node.
+boost::python::list XC::NodePtrs::getConnectedElementsPy(void)
+  {
+    boost::python::list retval;
+    XC::NodePtrs::ElementPtrSet elements= getConnectedElements();
+    for(XC::NodePtrs::ElementPtrSet::iterator i= elements.begin(); i!= elements.end(); i++)
+      {
+        Element *ptrElem= *i;
+	boost::python::object pyObj(boost::ref(*ptrElem));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
+//! @brief Return a python list of pointers to the elements from the give set
+//! that are connected with this node.
+boost::python::list XC::NodePtrs::getConnectedElementsPy(const SetBase *s)
+  {
+    boost::python::list retval;
+    XC::NodePtrs::ElementPtrSet elements= getConnectedElements(s);
+    for(XC::NodePtrs::ElementPtrSet::iterator i= elements.begin(); i!= elements.end(); i++)
+      {
+        Element *ptrElem= *i;
+	boost::python::object pyObj(boost::ref(*ptrElem));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
+//! @brief Return a python list containing the tags of the elements that
+//! are connected with this node.
+boost::python::list XC::NodePtrs::getConnectedElementTags(void) const
+  {
+    boost::python::list retval;
+    XC::NodePtrs::ElementConstPtrSet elements= this->getConnectedElements();
+    for(std::set<const Element *>::iterator i= elements.begin(); i!= elements.end(); i++)
+      {
+        const Element *ptrElem= *i;
+        retval.append(ptrElem->getTag());
+      }
+    return retval;
+  }
+
+//! @brief Return a python list containing the tags of the elements from the
+//! given set that are connected with this node.
+boost::python::list XC::NodePtrs::getConnectedElementTags(const SetBase *s) const
+  {
+    boost::python::list retval;
+    XC::NodePtrs::ElementConstPtrSet elements= this->getConnectedElements(s);
+    for(std::set<const Element *>::iterator i= elements.begin(); i!= elements.end(); i++)
+      {
+        const Element *ptrElem= *i;
+        retval.append(ptrElem->getTag());
+      }
+    return retval;
+  }
+
