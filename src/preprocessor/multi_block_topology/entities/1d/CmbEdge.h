@@ -86,6 +86,10 @@ class CmbEdge: public Edge
 
 	// Node positions.
         Pos3dArray get_positions(void) const;
+        std::vector<Node *> getNodesForward(void);
+        std::vector<Node *> getNodesReverse(void);
+        std::vector<const Node *> getNodesForward(void) const;
+        std::vector<const Node *> getNodesReverse(void) const;
         std::vector<int> getTagsNodesForward(void) const;
         std::vector<int> getTagsNodesReverse(void) const;
         Pos3dArray getNodePosForward(void) const;
@@ -203,6 +207,7 @@ class CmbEdge: public Edge
     std::set<const Face *> getConnectedSurfaces(const SetBase *) const;
     boost::python::list getConnectedSurfacesPy(const SetBase *) const;    
 
+    
     BND3d Bnd(void) const;
     void genMesh(meshing_dir dm);
 

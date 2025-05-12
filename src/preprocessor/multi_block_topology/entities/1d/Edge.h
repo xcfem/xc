@@ -123,6 +123,10 @@ class Edge: public EntMdlr
     Node *getLastNode(void);
     const Node *getLastNode(void) const;
 
+    std::vector<Node *> getNodesForward(void);
+    std::vector<Node *> getNodesReverse(void);
+    std::vector<const Node *> getNodesForward(void) const;
+    std::vector<const Node *> getNodesReverse(void) const;
     std::vector<int> getTagsNodesForward(void) const;
     std::vector<int> getTagsNodesReverse(void) const;
     Pos3dArray getNodePosForward(void) const;
