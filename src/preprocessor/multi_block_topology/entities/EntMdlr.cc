@@ -247,17 +247,29 @@ const XC::Element *XC::EntMdlr::getNearestElement(const Pos3d &p) const
   }
 
 
-//! @brief Return the elements connected to the given node..
+//! @brief Return the elements of this entity connected to the given node.
 std::set<const XC::Element *> XC::EntMdlr::getConnectedElements(const Node *n) const
   { return ttzElements.getConnectedElements(n); }
 
-//! @brief Return the elements connected to the given node..
+//! @brief Return the elements of this entity connected to the given node.
 std::set<XC::Element *> XC::EntMdlr::getConnectedElements(const Node *n)
   { return ttzElements.getConnectedElements(n); }
 
-//! @brief Return the elements connected to the given node..
+//! @brief Return the elements of this entity connected to the given node.
 boost::python::list XC::EntMdlr::getConnectedElementsPy(const Node *n)
   { return ttzElements.getConnectedElementsPy(n); }
+
+//! @brief Return the elements connected to any of the nodes of this entity.
+std::set<const XC::Element *> XC::EntMdlr::getConnectedElements(void) const
+  { return ttzNodes.getConnectedElements(); }
+
+//! @brief Return the elements connected to any of the nodes of this entity.
+std::set<XC::Element *> XC::EntMdlr::getConnectedElements(void)
+  { return ttzNodes.getConnectedElements(); }
+
+//! @brief Return the elements connected to any of the nodes of this entity.
+boost::python::list XC::EntMdlr::getConnectedElementsPy(void)
+  { return ttzNodes.getConnectedElementsPy(); }
 
 //! @brief Returns a pointer to the node cuyo identifier is being passed as parameter.
 XC::Node *XC::EntMdlr::findNode(const int &tag)
