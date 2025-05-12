@@ -2444,7 +2444,7 @@ size_t XC::Node::getNumberOfConnectedElements(const SetBase *s) const
     return retval;
   }
 
-//! @brief Return a list of pointers to the elements that are connected with this node.
+//! @brief Return a set of pointers to the elements that are connected with this node.
 XC::Node::ElementConstPtrSet XC::Node::getConnectedElements(void) const
   {
     XC::Node::ElementConstPtrSet retval;
@@ -2457,7 +2457,7 @@ XC::Node::ElementConstPtrSet XC::Node::getConnectedElements(void) const
     return retval;
   }
 
-//! @brief Return a list of pointers to the elements of the given set that are
+//! @brief Return a set of pointers to the elements of the given set that are
 //! connected with this node.
 XC::Node::ElementConstPtrSet XC::Node::getConnectedElements(const SetBase *s) const
   {
@@ -2478,7 +2478,7 @@ XC::Node::ElementConstPtrSet XC::Node::getConnectedElements(const SetBase *s) co
     return retval;
   }
 
-//! @brief Return a list of pointers to the elements that are connected with this node.
+//! @brief Return a set of pointers to the elements that are connected with this node.
 XC::Node::ElementPtrSet XC::Node::getConnectedElements(void)
   {
     XC::Node::ElementPtrSet retval;
@@ -2491,7 +2491,7 @@ XC::Node::ElementPtrSet XC::Node::getConnectedElements(void)
     return retval;
   }
 
-//! @brief Return a list of pointers to the elements of the given set that are
+//! @brief Return a set of pointers to the elements of the given set that are
 //! connected with this node.
 XC::Node::ElementPtrSet XC::Node::getConnectedElements(const SetBase *s)
   {
