@@ -34,11 +34,13 @@
 #include "PtrArrayBase.h"
 #include "utility/matrices/m_int.h"
 #include <vector>
+#include <set>
 
 class Pos3d;
 
 namespace XC{
 class Node;
+class Element;
 class SFreedom_Constraint;
 
 //! @ingroup MultiBlockTopologyMR
@@ -59,7 +61,13 @@ class NodePtrArray: public PtrArrayBase<Node>
     const Node *getNearestNode(const Pos3d &p) const;
     bool removeNode(Node *);
     bool removeNode(const int &);
+    
+    std::set<const Element *> getConnectedElements(void) const;
+    std::set<Element *> getConnectedElements(void);
+    boost::python::list getConnectedElementsPy(void);
+    
     std::deque<const Node *> getNodePtrs(void) const;
+    std::deque<Node *> getNodePtrs(void);
     boost::python::list getPyNodeList(void) const;
   };
 

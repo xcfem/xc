@@ -28,6 +28,7 @@
 
 #include "NodePtrArray.h"
 #include "domain/mesh/node/Node.h"
+#include "domain/mesh/element/Element.h"
 #include "domain/domain/Domain.h"
 #include "domain/constraints/SFreedom_Constraint.h"
 
@@ -175,6 +176,24 @@ std::deque<const XC::Node *> XC::NodePtrArray::getNodePtrs(void) const
     return retval;
   }
 
+//! @brief Returns the pointers to the nodes of this array.
+std::deque<XC::Node *> XC::NodePtrArray::getNodePtrs(void)
+  {
+    std::deque<Node *> retval;
+    if(!Null())
+      {
+	const size_t numberOfRows= getNumberOfRows();
+	const size_t numberOfColumns= getNumberOfColumns();
+	for(size_t j= 1;j<=numberOfRows;j++)
+	  for(size_t k= 1;k<=numberOfColumns;k++)
+	    {
+	      Node *node= operator()(j,k);
+   	      retval.push_back(node);
+	    }
+      }
+    return retval;
+  }
+
 //! @brief Returns a Python list containing the nodes of this array.
 boost::python::list XC::NodePtrArray::getPyNodeList(void) const
   {
@@ -188,6 +207,57 @@ boost::python::list XC::NodePtrArray::getPyNodeList(void) const
 	    const Node *node= tmp[j];
    	    retval.append(node);
 	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the elements connected to any of the nodes of this entity.
+std::set<const XC::Element *> XC::NodePtrArray::getConnectedElements(void) const
+  {
+    std::set<const Element *> retval;
+    if(!Null())
+      {
+	const std::deque<const Node *> tmp= this->getNodePtrs();
+	const size_t sz= tmp.size();
+	for(size_t j= 0;j<sz;j++)
+	  {
+	    const Node *node= tmp[j];
+	    std::set<const Element *> tmp=  node->getConnectedElements();
+   	    retval.insert(tmp.begin(), tmp.end());
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the elements connected to any of the nodes of this entity.
+std::set<XC::Element *> XC::NodePtrArray::getConnectedElements(void)
+  {
+    std::set<Element *> retval;
+    if(!Null())
+      {
+	const std::deque<Node *> tmp= this->getNodePtrs();
+	const size_t sz= tmp.size();
+	for(size_t j= 0;j<sz;j++)
+	  {
+	    Node *node= tmp[j];
+	    std::set<Element *> tmp= node->getConnectedElements();
+   	    retval.insert(tmp.begin(), tmp.end());
+	  }
+      }
+    return retval;
+  }
+
+
+//! @brief Return the elements connected to any of the nodes of this entity.
+boost::python::list XC::NodePtrArray::getConnectedElementsPy(void)
+  {
+    boost::python::list retval;
+    const std::set<Element *> tmp= this->getConnectedElements();
+    for(std::set<Element *>::iterator i= tmp.begin(); i!=tmp.end(); i++)
+      {
+	Element *element= *i;
+	boost::python::object pyObj(boost::ref(*element));
+	retval.append(pyObj);
       }
     return retval;
   }

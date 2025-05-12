@@ -45,6 +45,8 @@ class Array3dRange;
 
 namespace XC{
 
+class Element;
+
 //! @ingroup MultiBlockTopologyMR
 //! 
 //! @brief Three-dimensional array of pointers to nodes.
@@ -63,6 +65,10 @@ class NodePtrArray3d: public PtrArray3dBase<NodePtrArray>
     boost::python::list getPyNodeList(void) const;
     bool removeNode(Node *);
     bool removeNode(const int &);
+    
+    std::set<const Element *> getConnectedElements(void) const;
+    std::set<Element *> getConnectedElements(void);
+    boost::python::list getConnectedElementsPy(void);
     
     template <class F>
     std::deque<double> RowSimpsonIntegration(const F &,const std::string &,const size_t &,const ExprAlgebra &,const size_t &) const;
