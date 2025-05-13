@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Home made test.'''
+''' Home made test. Check ShellMITC4 coordinate transformation '''
 
 from __future__ import print_function
 

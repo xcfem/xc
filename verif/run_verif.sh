@@ -434,7 +434,8 @@ python tests/elements/change_material_properties/test_change_element_material.py
 python tests/elements/change_material_properties/test_change_element_material_properties_01.py
 python tests/elements/change_material_properties/test_change_element_material_properties_02.py
 python tests/elements/change_material_properties/test_change_element_material_properties_03.py
-python tests/elements/change_material_properties/test_change_element_material_properties_03.py
+python tests/elements/change_material_properties/test_change_element_material_properties_04.py
+python tests/elements/change_material_properties/test_change_element_material_properties_05.py
 echo "$BLEU" "  Beam column tests." "$NORMAL"
 echo "$BLEU" "    Elastic beam-column 2D tests." "$NORMAL"
 python tests/elements/beam_column/elastic_beam_2d/cantilever2d_01.py
