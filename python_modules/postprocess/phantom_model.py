@@ -168,7 +168,7 @@ class PhantomModel(object):
                                         methodName= sys._getframe(0).f_code.co_name
                                         msg= className+'.'+methodName+'; section: '+str(idSection)
                                         msg+= ' of element: '+str(tagElem)
-                                        msg+= ' is exhausted (CF= '+str(CF)+'>1)'
+                                        msg+= ' is exhausted (CF= '+str(CF)+'>'+str(thresholdCF)+')'
                                         msg+= ' under internal forces for load combination: '+str(idComb)
                                         msg+= '. The section will be excluded from the analysis to avoid the solver to crash.'
                                         lmsg.warning(msg)
