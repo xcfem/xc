@@ -76,6 +76,7 @@ python tests/utility/geom/points/pos3d_test_01.py
 python tests/utility/geom/points/pos3d_list_test_01.py
 python tests/utility/geom/points/pos2d_list_test_01.py
 python tests/utility/geom/points/closest_pair_of_points.py
+python tests/utility/geom/points/test_group_by_distance.py
 python tests/utility/geom/points/point_cloud_2d_test_01.py
 python tests/utility/geom/points/point_cloud_2d_test_02.py
 python tests/utility/geom/points/point_cloud_2d_test_03.py
