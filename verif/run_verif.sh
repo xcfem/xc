@@ -745,6 +745,7 @@ python tests/preprocessor/geom_entities/test_k_points_01.py
 python tests/preprocessor/geom_entities/test_k_points_02.py
 python tests/preprocessor/geom_entities/line.py
 python tests/preprocessor/geom_entities/line_02.py
+python tests/preprocessor/geom_entities/line_num_connected_surfaces_01.py
 python tests/preprocessor/geom_entities/linea_tramos.py
 python tests/preprocessor/geom_entities/test_line_seq_01.py
 python tests/preprocessor/geom_entities/test_line_seq_02.py
