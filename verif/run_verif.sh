@@ -746,7 +746,7 @@ python tests/preprocessor/geom_entities/test_k_points_01.py
 python tests/preprocessor/geom_entities/test_k_points_02.py
 python tests/preprocessor/geom_entities/line.py
 python tests/preprocessor/geom_entities/line_02.py
-python tests/preprocessor/geom_entities/line_num_connected_surfaces_01.py
+python tests/preprocessor/geom_entities/test_num_connected_surfaces_01.py
 python tests/preprocessor/geom_entities/linea_tramos.py
 python tests/preprocessor/geom_entities/test_line_seq_01.py
 python tests/preprocessor/geom_entities/test_line_seq_02.py
@@ -871,6 +871,9 @@ python tests/preprocessor/meshing/mesh_refinement/test_shell_3-refinement_4_03.p
 python tests/preprocessor/meshing/mesh_refinement/test_shell_3-refinement_stable_transition.py
 python tests/preprocessor/meshing/mesh_refinement/test_shell_3-refinement_01.py
 python tests/preprocessor/meshing/mesh_refinement/test_shell_3-refinement_02.py
+echo "$BLEU" "    Bridge paremetric modeling." "$NORMAL"
+python tests/preprocessor/meshing/bridge_parametric_modeling/bridge_parametric_modeler_test_01.py
+python tests/preprocessor/meshing/bridge_parametric_modeling/bridge_parametric_modeler_test_02.py
 
 echo "$BLEU" "  Sets handling tests." "$NORMAL"
 python tests/preprocessor/sets/test_exist_set.py
