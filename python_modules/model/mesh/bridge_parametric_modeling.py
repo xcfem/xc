@@ -195,7 +195,58 @@ class BridgeModeller(object):
         self.computeLineConnections(modelSpace)
         self.computeSurfaceConnections(modelSpace)
 
+def simplify_placements(placements, tol= 1e-3):
+    ''' Remove placements that are too close (distance smaller than the given
+        tolerance.
 
+    :param placements: sequence of positions along an axis.
+    '''
+    p0= placements[0]
+    retval= [p0]
+    for p1 in placements[1:]:
+        if(abs(p1-p0)>1e-3):
+            retval.append(p1)
+        p0= p1
+    return retval
+
+def get_positions_indexes(input_placements, positions, tol= 1e-3):
+    ''' Return the indexes of the given positions in the given placements.
+
+    :param input_placements: placements to search the positions in.
+    :param positions: position to compute the indexes for.
+    :param tol: tolerance (maximum distance to consider the positions the same).
+    '''
+    retval= list()
+    failed= list()
+    for p in positions:
+        index= None
+        for i, ip in enumerate(input_placements):
+            if(abs(ip-p)<1e-3):
+                index= i
+                break;
+        if(index):
+            retval.append(index)
+        else:
+            failed.append(index)
+    if(len(failed)>0):
+        methodName= sys._getframe(0).f_code.co_name
+        errMsg= '; some positions were not found: '+str(failed)
+        lmsg.error(methodName+errMsg)
+    return retval
+
+def get_closest_placements(input_placements, positions, tol= 1e-3):
+    ''' Return the closest placements to the given positions.
+
+    :param input_placements: placements to search the positions in.
+    :param positions: position to compute the indexes for.
+    :param tol: tolerance (maximum distance to consider the positions the same).
+    '''
+    tmp= get_positions_indexes(input_placements= input_placements, positions= positions, tol= tol)
+    retval= list()
+    for i in tmp:
+        retval.append(input_placements[i])
+    return retval
+        
 def create_sets_from_labels(modelSpace, xcInputSet):
     ''' Create sets from the label properties of the given set members.
 

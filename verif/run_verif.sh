@@ -874,6 +874,7 @@ python tests/preprocessor/meshing/mesh_refinement/test_shell_3-refinement_02.py
 echo "$BLEU" "    Bridge paremetric modeling." "$NORMAL"
 python tests/preprocessor/meshing/bridge_parametric_modeling/bridge_parametric_modeler_test_01.py
 python tests/preprocessor/meshing/bridge_parametric_modeling/bridge_parametric_modeler_test_02.py
+python tests/preprocessor/meshing/bridge_parametric_modeling/bridge_parametric_modeler_test_03.py
 
 echo "$BLEU" "  Sets handling tests." "$NORMAL"
 python tests/preprocessor/sets/test_exist_set.py
