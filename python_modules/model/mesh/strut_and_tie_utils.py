@@ -23,6 +23,19 @@ dummy_spring_material= None
 dummy_spring_material_name= 'strut-and-tie_dummy_spring_material'
 dummy_spring_stiffness= 1e6
 
+def create_dummy_spring_material(modelSpace):
+    ''' Initializes the dummy spring material which will be used to add 
+        rotational stiffnes to the desired nodes.
+
+    :param modelSpace: PredefinedSpace object used to create the FE model.
+    '''
+    global dummy_spring_material
+    if(dummy_spring_material is None):
+        preprocessor= modelSpace.preprocessor
+        dummy_spring_material= typical_materials.defElasticMaterial(preprocessor, dummy_spring_material_name, dummy_spring_stiffness)
+    return dummy_spring_material
+    
+
 def create_dummy_spring(modelSpace, node):
     ''' Put a spring to constrain the rotation of the given node. The nodes that
         are connected only to struts and ties can rotate freely, and that makes
@@ -32,10 +45,7 @@ def create_dummy_spring(modelSpace, node):
     :param modelSpace: PredefinedSpace object used to create the FE model.
     :param node: node whose rotations need to be constrained.
     '''
-    global dummy_spring_material
-    if(dummy_spring_material is None):
-        preprocessor= modelSpace.preprocessor
-        dummy_spring_material= typical_materials.defElasticMaterial(preprocessor, "dummy_spring_stiffness", dummy_spring_stiffness)
+    create_dummy_spring_material(modelSpace)
     constrainedDOFs= model_inquiry.get_node_rotational_dofs(node)
     if(not constrainedDOFs):
         methodName= sys._getframe(0).f_code.co_name
