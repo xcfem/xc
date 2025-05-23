@@ -532,6 +532,8 @@ python tests/elements/zero_length/test_winkler.py
 python tests/elements/zero_length/test_quasi_winkler.py
 python tests/elements/zero_length/test_rotational_dummy_spring_stiffness_01.py 
 python tests/elements/zero_length/test_rotational_dummy_spring_stiffness_02.py 
+python tests/elements/zero_length/test_rotational_dummy_spring_stiffness_03.py 
+python tests/elements/zero_length/test_rotational_dummy_spring_stiffness_04.py 
 echo "$BLEU" "  Plane elasticity elements tests." "$NORMAL"
 python tests/elements/plane/test_tri31.py
 python tests/elements/plane/test_four_node_quad_01.py
