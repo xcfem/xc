@@ -76,7 +76,7 @@ def define_dummy_springs(modelSpace, nodes):
     retval= list()
     for node in nodes:
         zl, newNode= create_dummy_spring(modelSpace, node)
-    retval.append((zl, newNode))
+        retval.append((zl, newNode))
     # Revert the default materials.
     modelSpace.setDefaultMaterials(previousDefaultMaterials)
     return retval
