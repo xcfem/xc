@@ -243,13 +243,13 @@ if testOK:
 else:
     lmsg.error(fname+' ERROR.')
 
-# # Graphic stuff.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(modelSpace)
+# # # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
 
-oh.displayBlocks(displayLocalAxes= False)
-for label in xcSets:
-    setToDisplay= xcSets[label]
-    oh.displayBlocks(setToDisplay= setToDisplay, displayLocalAxes= False)
-# oh.displayFEMesh()
-# oh.displayLocalAxes()
+# oh.displayBlocks(displayLocalAxes= False)
+# for label in xcSets:
+#     setToDisplay= xcSets[label]
+#     oh.displayBlocks(setToDisplay= setToDisplay, displayLocalAxes= False)
+# # oh.displayFEMesh()
+# # oh.displayLocalAxes()
