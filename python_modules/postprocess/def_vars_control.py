@@ -14,6 +14,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import sys
 from misc_utils import log_messages as lmsg
 from model import model_inquiry
 from typing import Iterable
@@ -34,7 +35,10 @@ def def_var_control_mov(obj, code):
     :param code: movement identifier.
     '''
     if(not obj.hasProp('span')):
-        lmsg.warning('span property not defined for: '+str(obj.tag) + ' object.')
+        warningMsg= '; span property not defined for: '
+        warningMsg+= str(obj.tag) + ' object.'
+        funcName= sys._getframe(0).f_code.co_name
+        lmsg.warning(funcName+warningMsg)
     obj.setProp(code+'Max',0.0)
     obj.setProp('Comb'+code+'Max',"")
     obj.setProp(code+'Min',0.0)
@@ -61,7 +65,10 @@ def def_vars_control_mov_modulus(nodes: Iterable):
     tags= []
     for n in nodes:
         if(not n.hasProp('span')):
-            lmsg.warning('span property not defined for node: '+str(n.tag) + '.')
+            warningMsg= '; span property not defined for node: '
+            warningMsg+= str(n.tag) + '.'
+            funcName= sys._getframe(0).f_code.co_name
+            lmsg.warning(funcName+warningMsg)
         tags.append(n.tag)
         n.setProp("dispMax",0.0)
         n.setProp("CombDispMax","")
@@ -189,14 +196,14 @@ def update_reactions_envelope(nodes):
 def def_vars_envelope_internal_forces_truss_elems(elems):
     '''Defines properties to store extreme values of internal forces.
 
-    :param elems: nodes whose generalized stresses will be controlled.
+    :param elems: elements whose generalized stresses will be controlled.
     '''
     def_envelope_vars(elems, ['N'])
         
 def def_vars_envelope_internal_forces_beam_elems(elems):
     '''Defines properties to store extreme values of internal forces.
 
-    :param elems: nodes whose generalized stresses will be controlled.
+    :param elems: elements nodes whose generalized stresses will be controlled.
     '''
     def_envelope_vars(elems, ['N', 'Mz', 'My', 'T', 'Vy','Vz'])
 
@@ -352,6 +359,58 @@ def update_envelope_internal_forces_beam_elem_3d(beamElem):
     beamElem.setProp('Vy-',minVy)
     beamElem.setProp('Vz-',minVz)
     beamElem.setProp('T-',minT)
+
+def update_envelope_internal_forces_element(element):
+    '''Update values for extreme values of internal forces.
+
+    :param element: finite element whose envelope will be updated.
+    '''
+    element.getResistingForce()
+    if(element.hasProp('T+')): # 3D beam element.
+        update_envelope_internal_forces_beam_elem_3d(element)
+    elif(element.hasProp('Vy+') and not element.hasProp('Vz+')): # 2D beam element.
+        update_envelope_internal_forces_beam_elem_2d(element)
+    elif(element.hasProp('N+')): # Truss element.
+        update_envelope_internal_forces_truss(element)
+    else:
+        errorMsg= '; not implemented yet for elements of type: '
+        errorMsg+= str(element.tipo()) + '.'
+        funcName= sys._getframe(0).f_code.co_name
+        lmsg.error(funcName+errorMsg)
+         
+def update_envelope_internal_forces(elements):
+    ''' Update the internal forces envelope of the given elements.
+
+    :param elements: element whose envelope will be updated.
+    '''
+    for e in elements:
+        update_envelope_internal_forces_element(e)
+
+def extrapolate_internal_forces_envelope_component_to_nodes(elements, component):
+    ''' Extrapolate the values of the given component of the envelope to the 
+        nodes.
+
+    :param elements: elements whose envelope will be extrapolated to the 
+                     connected nodes.
+    '''
+    visitedNodes= set()
+    nodeValues= dict()
+    nodeDict= dict()
+    for e in elements:
+        values= e.getProp(component)
+        nodes= e.getNodes
+        for i, n in enumerate(nodes):
+            nTag= n.tag
+            if(nTag not in nodeDict):
+                nodeDict[nTag]= n
+            if(nTag not in nodeValues):
+                nodeValues[nTag]= [values[i]]
+            else:
+                nodeValues[nTag].append(values[i])
+    for nTag in nodeValues:
+        n= nodeDict[nTag]
+        values= nodeValues[nTag]
+        n.setProp(component, sum(values)/len(values))
   
 def def_steel_shape_elastic_range_element_parameters(e,shape):
     e.setProp("nmbSecc",shape.name)
