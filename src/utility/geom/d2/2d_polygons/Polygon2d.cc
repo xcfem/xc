@@ -485,6 +485,17 @@ boost::python::list Polygon2d::ClipPy(const BND2d &bnd) const
   }
 
 //! @brief Return the polygons that result from clipping this one
+//! with the BND argument.
+std::list<Polygon2d> Polygon2d::Clip(const HalfPlane2d &hp) const
+  { return Polygon2d::getIntersection(hp); }
+
+//! @brief Return the polygons that result from clipping this one
+//! with the BND argument in a Python list.
+boost::python::list Polygon2d::ClipPy(const HalfPlane2d &hp) const
+  { return Polygon2d::getIntersectionPy(hp); }
+
+
+//! @brief Return the polygons that result from clipping this one
 //! with the polygon argument.
 std::list<Polygon2d> Polygon2d::Clip(const Polygon2d &other) const
   { return intersection(*this,other); }

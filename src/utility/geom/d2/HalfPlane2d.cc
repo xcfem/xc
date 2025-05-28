@@ -350,7 +350,21 @@ std::deque<Polyline2d> HalfPlane2d::clip(const Polyline2d &pline, const GEOM_FT 
 //! @brief Return the polyline chunks that result from clipping the given
 //! polyline with this half plane.
 boost::python::list HalfPlane2d::clipPy(const Polyline2d &pline, const GEOM_FT &tol) const
-  { return pline.clipPy(*this, tol); } 
+  { return pline.clipPy(*this, tol); }
+
+//! @brief Return the polygons that result from clipping the given
+//! polygon with this half plane.
+std::deque<Polygon2d> HalfPlane2d::clip(const Polygon2d &plg) const
+  {
+    std::list<Polygon2d> tmp(plg.Clip(*this));
+    std::deque<Polygon2d> retval(tmp.begin(), tmp.end());
+    return retval;
+  } 
+
+//! @brief Return the polygons that result from clipping the given
+//! polygon with this half plane.
+boost::python::list HalfPlane2d::clipPy(const Polygon2d &plg) const
+  { return plg.ClipPy(*this); } 
   
 GeomGroup2d intersection(const HalfPlane2d &sp,const Line2d &r)
   { return sp.getIntersection(r); }

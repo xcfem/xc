@@ -18,6 +18,7 @@ Length= "{:4.2f}"
 Area= "{:6.2f}"
 Factor= "{:4.2f}"
 Displacement= "{:4.2f}"
+Angle= "{:4.2f}"
 
 fmt3_1f= '{:3.1f}'
 fmt4_1f= '{:4.1f}'

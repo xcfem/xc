@@ -43,6 +43,9 @@ bool (HalfPlane2d::*HalfPlaneExistIntersLine)(const Line2d &) const= &HalfPlane2
 bool (HalfPlane2d::*HalfPlaneExistIntersRay)(const Ray2d &) const= &HalfPlane2d::intersects;
 bool (HalfPlane2d::*HalfPlaneExistIntersSegment)(const Segment2d &) const= &HalfPlane2d::intersects;
 bool (HalfPlane2d::*HalfPlaneExistIntersPolyline)(const Polyline2d &) const= &HalfPlane2d::intersects;
+
+boost::python::list (HalfPlane2d::*HalfPlaneClipPolyline)(const Polyline2d &, const GEOM_FT &tol) const= &HalfPlane2d::clipPy;
+boost::python::list (HalfPlane2d::*HalfPlaneClipPolygon)(const Polygon2d &) const= &HalfPlane2d::clipPy;
 class_<HalfPlane2d, bases<Surface2d> >("HalfPlane2d")
   .def(init<>())
   .def(init<Line2d>())
@@ -64,7 +67,8 @@ class_<HalfPlane2d, bases<Surface2d> >("HalfPlane2d")
   .def("intersects", HalfPlaneExistIntersRay, "return true if the intersection with the given ray exists.")
   .def("intersects", HalfPlaneExistIntersSegment, "return true if the intersection with the given segment exists.")
   .def("intersects", HalfPlaneExistIntersPolyline, "return true if the intersection with the given polyline exists.")
-  .def("clip", &HalfPlane2d::clipPy, "Return the polyline chunks that result from clipping the given polyline with this half plane.")
+  .def("clip", HalfPlaneClipPolyline, "Return the polyline chunks that result from clipping the given one with this half plane.")
+  .def("clip", HalfPlaneClipPolygon, "Return the polygons chunks that result from clipping the given one with this half plane.")
   ;
 
 class_<BND2d, bases<GeomObj2d> >("BND2d")
