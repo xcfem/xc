@@ -509,8 +509,11 @@ def k_janssen(k,d,B,z):
     '''
     retval= 0.0
     if(z!=0.0):
-        tanD= math.tan(d)
-        retval= 1.0/(2*tanD)*(B/z)*(1-math.exp(-2*k*z/B*tanD))
+        if(abs(d)>1e-6):
+            tanD= math.tan(d)
+            retval= 1.0/(2*tanD)*(B/z)*(1-math.exp(-2*k*z/B*tanD))
+        else:
+            retval= k
     return retval
 
 def kp_coulomb(a,b,phi,d):
