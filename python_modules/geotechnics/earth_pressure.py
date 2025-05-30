@@ -502,7 +502,7 @@ def k_janssen(k,d,B,z):
     Lateral earth pressure coefficient for limited backfills according
     to Janssen's Theory (1895) and Kniss et Al (2007):
 
-    :param k: lateral earth pressure (usually k= K_0).
+    :param k: lateral earth pressure coefficient (usually k= K_0).
     :param d: friction angle between soil an back of retaining wall (radians).
     :param B: width of the backfill (radians).
     :param z: depth from top of wall.
