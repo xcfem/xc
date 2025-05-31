@@ -1451,6 +1451,28 @@ class OutputHandler(object):
         caption= captionBaseText + ', ' + sectDescr
         field.display(displaySettings, caption= caption, unitDescription= unitDescription, fileName= fileName, defFScale= defFScale)
 
+def append_graphic_to_tex_file(texFile, graphicFileName, graphicWidth, captionText, label=''):
+    '''Include a graphic in a LaTeX file.
+
+    :param texFile:    laTex file where to include the graphics 
+                       (e.g.:'text/report_loads.tex')
+    :param graphicFileName: name of the graphic file with path and without 
+                            extension.
+    :param graphicWidth: width of the graphic in the LaTeX file.
+    :param captionText:  text for the caption
+    :param label: label indentifying the figure in the LaTeX file
+    '''
+    texFile.write('\\begin{figure}[ht]\n')
+    texFile.write('\\begin{center}\n')
+    texFile.write('\\includegraphics[width='+graphicWidth+']{'+graphicFileName+'}\n')
+    texFile.write('\\caption{'+captionText+'}')
+    if(label!=''):
+        texFile.write('\\label{'+label+'}\n')
+    else:
+        texFile.write('\n')
+    texFile.write('\\end{center}\n')
+    texFile.write('\\end{figure}\n')
+        
 def insertGrInTex(texFile, grFileNm, grWdt, capText, labl=''):
     '''Include a graphic in a LaTeX file.
 
@@ -1461,12 +1483,8 @@ def insertGrInTex(texFile, grFileNm, grWdt, capText, labl=''):
     :param capText:    text for the caption
     :param labl:       label
     '''
-    texFile.write('\\begin{figure}[ht]\n')
-    texFile.write('\\begin{center}\n')
-    texFile.write('\\includegraphics[width='+grWdt+']{'+grFileNm+'}\n')
-    texFile.write('\\caption{'+capText+'}\n')
-    if(labl!=''):
-        texFile.write('\\label{'+labl+'}\n')
-    texFile.write('\\end{center}\n')
-    texFile.write('\\end{figure}\n')
-    return
+    methodName= sys._getframe(0).f_code.co_name
+    warningMsg= '; function: '+str(methodName)+' will be deprecated soon'
+    warningMsg+= ' use append_graphic_to_tex_file instead.'
+    lmsg.warning(warningMsg)
+    append_graphic_to_tex_file(texFile= texFile, graphicFileName= grFileNm, graphicWidth= grWdt, captionText= capText, label= labl)
