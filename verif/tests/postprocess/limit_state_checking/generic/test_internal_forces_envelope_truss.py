@@ -65,7 +65,7 @@ for loadCase in loadCases:
     result= modelSpace.analyze(calculateNodalReactions= True)
     if(result!=0):
         lmsg.error("Can't solve.")
-    vc.update_envelope_internal_forces(xcTotalSet.elements)
+    vc.update_envelope_internal_forces(xcTotalSet.elements, loadCase)
     
 # Check results.
 results= dict()

@@ -1484,7 +1484,7 @@ def insertGrInTex(texFile, grFileNm, grWdt, capText, labl=''):
     :param labl:       label
     '''
     methodName= sys._getframe(0).f_code.co_name
-    warningMsg= '; function: '+str(methodName)+' will be deprecated soon'
+    warningMsg= '; function: '+str(methodName)+' will be deprecated soon,'
     warningMsg+= ' use append_graphic_to_tex_file instead.'
     lmsg.warning(warningMsg)
     append_graphic_to_tex_file(texFile= texFile, graphicFileName= grFileNm, graphicWidth= grWdt, captionText= capText, label= labl)
