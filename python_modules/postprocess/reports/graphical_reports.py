@@ -347,7 +347,7 @@ class LoadCaseDispParameters(RecordDisp):
             grFileName= fullgrfname+'.png'
             outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= grFileName)  # changed 22/06/2020
             #outputHandler.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
-            output_handler.insertGrInTex(texFile= texFile, grFileNm= rltvgrfname, grWdt= cfg.grWidth, capText= capt, labl= labl)
+            output_handler.append_graphic_to_tex_file(texFile= texFile, graphicFileName= rltvgrfname, graphicWidth= cfg.grWidth, captionText= capt, label= labl)
         for st in self.setsToDispBeamLoads:
             fullgrfname= fullPath+self.loadCaseName+st.name
             rltvgrfname= rltvPath+self.loadCaseName+st.name
@@ -355,7 +355,7 @@ class LoadCaseDispParameters(RecordDisp):
             labl= getLabelText(capt)
             grFileName= fullgrfname+'.png'
             outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= grFileName)  # changed 22/06/2020
-            output_handler.insertGrInTex(texFile= texFile, grFileNm= rltvgrfname, grWdt= cfg.grWidth, capText= capt, labl= labl)
+            output_handler.append_graphic_to_tex_file(texFile= texFile, graphicFileName= rltvgrfname, graphicWidth= cfg.grWidth, captionText= capt, label= labl)
 
     def loadReports(self,FEcase,texFile,cfg):
         '''Creates the graphics files of loads for the load case and insert 
@@ -407,7 +407,7 @@ class LoadCaseDispParameters(RecordDisp):
                 # else:
                 #     unDesc=cfg.getRotationUnitsDescription()
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= unDesc)
-                output_handler.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
+                output_handler.append_graphic_to_tex_file(texFile=texFile, graphicFileName= rltvgrfname, graphicWidth= cfg.grWidth, captionText= capt)
                 
         # The disctinction between beam elements and the rest of elements
         # is to deprecate. The idea is to specify the type of output for all
@@ -420,7 +420,7 @@ class LoadCaseDispParameters(RecordDisp):
                 grFileName= fullgrfname+'.png'
                 outputHandler.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= grFileName)
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= cfg.getForceUnitsDescription())
-                output_handler.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
+                output_handler.append_graphic_to_tex_file(texFile=texFile, graphicFileName= rltvgrfname, graphicWidth= cfg.grWidth, captionText= capt)
         #Internal forces displays on sets of «beam» elements
         for st in self.setsToDispBeamIntForc:
             for arg in self.listBeamIntForc:
@@ -429,7 +429,7 @@ class LoadCaseDispParameters(RecordDisp):
                 grFileName= fullgrfname+'.png'
                 outputHandler.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= grFileName,orientScbar=1,titleScbar=None)
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= cfg.getForceUnitsDescription())
-                output_handler.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
+                output_handler.append_graphic_to_tex_file(texFile=texFile, graphicFileName= rltvgrfname, graphicWidth= cfg.grWidth, captionText= capt)
         texFile.write('\\cleardoublepage\n')
         
     def simplLCReports(self,FEproblem,texFile,cfg):
