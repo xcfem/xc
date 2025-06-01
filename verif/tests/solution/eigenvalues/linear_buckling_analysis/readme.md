@@ -13,3 +13,4 @@ To capture the P-little delta effecs in beam elements you need to use at least s
 - [Corotational Rigid Offsets](https://portwooddigital.com/2024/11/11/corotational-rigid-offsets/)
 - [Critical Buckling Loads via CBDI](https://portwooddigital.com/2024/11/16/critical-buckling-loads-via-cbdi/)
  - [Minimal Plate Buckling Example](https://portwooddigital.com/2025/05/24/minimal-plate-buckling-example/)
+ - [Buckling of Restrained Plates](https://portwooddigital.com/2025/05/31/buckling-of-restrained-plates/)

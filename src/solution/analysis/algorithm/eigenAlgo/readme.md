@@ -17,3 +17,4 @@ The classes on this folder implement the algorithms needed so solve standard and
  - [Universal File Format](https://en.wikipedia.org/wiki/Universal_File_Format)
  - [One and Only One](https://portwooddigital.com/2023/11/18/one-and-only-one/)
  - [Minimal Plate Buckling Example](https://portwooddigital.com/2025/05/24/minimal-plate-buckling-example/)
+ - [Buckling of Restrained Plates](https://portwooddigital.com/2025/05/31/buckling-of-restrained-plates/)

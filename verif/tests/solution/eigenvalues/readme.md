@@ -18,3 +18,5 @@ Geometrically, an eigenvector, corresponding to a real nonzero eigenvalue, point
  - [Another Way to Get Bad Eigenvalues](https://portwooddigital.com/2022/11/11/another-way-to-get-bad-eigenvalues/)
  - [Quick (and Dirty) Modal Damping](https://portwooddigital.com/2022/11/08/quick-and-dirty-modal-damping/)
  - [Eigenvalues of the Stiffness Matrix](https://portwooddigital.com/2023/01/16/eigenvalues-of-the-stiffness-matrix/)
+ - [Minimal Plate Buckling Example](https://portwooddigital.com/2025/05/24/minimal-plate-buckling-example/)
+ - [Buckling of Restrained Plates](https://portwooddigital.com/2025/05/31/buckling-of-restrained-plates/)

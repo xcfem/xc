@@ -24,6 +24,8 @@ Classes that implement the different types of analysis:
 - [Parameter Updates in the Loop](https://portwooddigital.com/2021/08/15/parameter-updates-in-the-loop)
 - [Numerical Modeling Techniques of High-Speed Rail Bridge Structures](https://trid.trb.org/view/1844146)
 - [OpenSeees modalProperties Command](https://opensees.github.io/OpenSeesDocumentation/user/manual/analysis/modalProperties.html#modalproperties-command)
+ - [Minimal Plate Buckling Example](https://portwooddigital.com/2025/05/24/minimal-plate-buckling-example/)
+ - [Buckling of Restrained Plates](https://portwooddigital.com/2025/05/31/buckling-of-restrained-plates/)
 
 ### Modal analysis
 - [Modal analysis of rigid multy-storey frames](https://structville.com/2016/04/on-modal-analysis-of-rigid-multi-storey-frames.html)
