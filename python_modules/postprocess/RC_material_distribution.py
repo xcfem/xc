@@ -172,12 +172,25 @@ class RCMaterialDistribution(object):
             lmsg.warning(className+'.'+methodName+'; no section found for elements with tags: '+str(elementsWithoutSection))
         return retval
 
-    def getSectionDefinition(self,sectionName):
-        '''Returns the section definition which has the name being passed
-           as a parameter.''' 
+    def getElementsWithoutSection(self, elementTags):
+        '''Returns the elements that have no assigned sections.
+
+        :param elementTags: list of element identifiers.
+        '''
+        retval= set()
+        for eTag in elementTags:
+            if eTag not in self.sectionDistribution.keys():
+                retval.add(eTag)
+        return retval
+
+    def getSectionDefinition(self, sectionName):
+        '''Returns the section definition which has the given name.
+
+        :param sectionName: name of the desired section.
+        ''' 
         return self.sectionDefinition[sectionName]
 
-    def getSectionDefinitionsForElement(self,tagElem):
+    def getSectionDefinitionsForElement(self, tagElem):
         '''Returns the section names for the element which tag is being passed
            as a parameter.'''
         retval= []
