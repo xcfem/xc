@@ -280,13 +280,56 @@ class PredefinedSpace(object):
         '''
         return self.dBase.restore(flag)
 
+    def getBodyHandler(self):
+        ''' Return the surface handler for this model.'''
+        return self.preprocessor.getMultiBlockTopology.getBodies
+    
+    def getBodies(self, tags: Sequence[int]):
+        ''' Return the bodies that correspond to the given tags.
+
+        :param tags: body tags.
+        '''
+        retval= list()
+        bodyHandler= self.getBodyHandler()
+        for t in tags:
+            b= bodyHandler.get(t)
+            if(b):
+                retval.append(b)
+        return retval
+    
     def getSurfaceHandler(self):
         ''' Return the surface handler for this model.'''
         return self.preprocessor.getMultiBlockTopology.getSurfaces
 
+    def getSurfaces(self, tags: Sequence[int]):
+        ''' Return the surfaces that correspond to the given tags.
+
+        :param tags: surface tags.
+        '''
+        retval= list()
+        surfaceHandler= self.getSurfaceHandler()
+        for t in tags:
+            s= surfaceHandler.get(t)
+            if(s):
+                retval.append(s)
+        return retval
+    
     def getLineHandler(self):
         ''' Return the line handler for this model.'''
         return self.preprocessor.getMultiBlockTopology.getLines
+
+    def getLines(self, tags: Sequence[int]):
+        ''' Return the lines that correspond to the given tags.
+
+        :param tags: line tags.
+        '''
+        retval= list()
+        lineHandler= self.getLineHandler()
+        for t in tags:
+            l= lineHandler.get(t)
+            if(l):
+                retval.append(l)
+        return retval
 
     def getPointHandler(self):
         ''' Return the point handler for this model.'''
@@ -535,7 +578,7 @@ class PredefinedSpace(object):
 
     def conciliaNDivs(self):
         '''Conciliate the number of divisions of the lines.'''
-        bodies= self.preprocessor.getMultiBlockTopology.getBodies
+        bodies= self.getBodyHandler()
         if(bodies.size>0):
             retval= bodies.conciliaNDivs()
         else:
