@@ -1084,7 +1084,7 @@ class PredefinedSpace(object):
            entities.'''
         return self.getSet('total')
 
-    def defSet(self, setName: str= None, nodes= None, elements= None, points= None, lines= None, surfaces= None, bodies= None):
+    def defSet(self, setName: str= None, nodes= None, elements= None, points= None, lines= None, surfaces= None, bodies= None, nodeTags= None, elementTags= None):
         ''' Defines a set with the name argument.
 
         :param setName: name of the set to define.
@@ -1092,8 +1092,12 @@ class PredefinedSpace(object):
         :param element: element iterable to initizalize the elements of the set.
         :param points: point iterable to initizalize the points of the set.
         :param lines: line iterable to initizalize the lines of the set.
-        :param surfaces: surface iterable to initizalize the surfaces of the set.
+        :param surfaces: surface iterable to initizalize the surfaces of 
+                         the set.
         :param bodies: body iterable to initizalize the bodies of the set.
+        :param nodeTags: node identifiers to initizalize the nodes of the set.
+        :param elementTags: element identifiers to initizalize the nodes of ç
+                            the set.
         '''
         if(setName is None):
             setName= uuid.uuid4().hex
@@ -1116,6 +1120,14 @@ class PredefinedSpace(object):
         if(bodies):
             for b in bodies:
                 retval.bodies.append(b)
+        if(nodeTags):
+            cNodes= self.getNodes(nodeTags)
+            for cn in cNodes:
+                retval.nodes.append(cn)
+        if(elementTags):
+            cElements= self.getElements(elementTags)
+            for ce in cElements:
+                retval.elements.append(ce)
         return retval
     
     def removeSet(self, setName: str):
