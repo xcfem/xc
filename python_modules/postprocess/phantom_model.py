@@ -210,6 +210,15 @@ class PhantomModel(object):
             elements.defaultMaterial= sccFICT.name
         elementsWithoutSection= set()
         sectionNames= self.sectionsDistribution.getSectionNames(self.elementTags)
+        if(len(sectionNames)!=len(self.elementTags)):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            if(len(sectionNames)<len(self.elementTags)):
+                warningMsg= '; some elements have no assigned section.'
+            else:
+                # I (LP) think this is impossible 2025/06/05 
+                warningMsg= '; some section have no corresponding element.'
+            lmsg.warning(className+'.'+methodName+warningMsg)
         for tagElem, elementSectionNames in zip(self.elementTags, sectionNames):
             if(elementSectionNames):
                 elementSectionDefinitions= self.sectionsDistribution.getSectionDefinitionsForElement(tagElem)
