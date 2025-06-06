@@ -77,7 +77,7 @@ class ReportGenerator(oh.OutputHandler):
                         methodName= sys._getframe(0).f_code.co_name
                         lmsg.error(className+'.'+methodName+'; something went wrong, file: '+str(fullgrFileNmAndExt) + ' doesn\'t exist.')
                     label= limitStateLabel+suffix
-                    oh.append_graphic_to_tex_file(texFile=report,  graphicFileName= rltvgrFileNm, grWdt= cfg.grWidth, capText= capt, label= label)
+                    oh.append_graphic_to_tex_file(texFile=report,  graphicFileName= rltvgrFileNm, graphicWidth= cfg.grWidth, captionText= capt, label= label)
                 
         for stV in setsBmEl:
             for argS in argsBmEl:
@@ -118,7 +118,7 @@ class ReportGenerator(oh.OutputHandler):
                     bitmapFileName= fLabel+'.png'
                     outputFileName= outputPath+bitmapFileName
                     self.displayLoads(setToDisplay= xcSet, fileName= outputFileName, caption= caption)
-                    oh.append_graphic_to_tex_file(texFile= latexOutputFile,  graphicFileName=  outputFileName, grWdt= cfg.grWidth, capText= caption, label= fLabel)
+                    oh.append_graphic_to_tex_file(texFile= latexOutputFile,  graphicFileName=  outputFileName, graphicWidth= cfg.grWidth, captionText= caption, label= fLabel)
                     retval.append(bitmapFileName)
                 self.modelSpace.removeLoadCaseFromDomain(lcName)
         return retval
