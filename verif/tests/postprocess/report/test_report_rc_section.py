@@ -54,6 +54,7 @@ pdfFile= datosScc1LosC.pdfReport(showPDF= False, keepPDF= True)
 testOK= os.path.isfile(pdfFile)
 if os.path.exists(pdfFile):
     os.remove(pdfFile)
+    
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if testOK:
