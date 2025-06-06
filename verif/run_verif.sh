@@ -1977,6 +1977,7 @@ python tests/postprocess/vtk/display_limit_state_results/test_display_shear_uls_
 echo "$BLEU" "  Report output." "$NORMAL"
 python tests/postprocess/report/test_report_loads_01.py
 python tests/postprocess/report/test_report_check_01.py
+python tests/postprocess/report/test_report_rc_section.py
 
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)
