@@ -148,7 +148,7 @@ def get_subset_inside(geomObj,fromSet,toSetName,tol=0.0):
     :param tol: geometric tolerance for the search (defaults to 0.0)
     '''
     newSet=fromSet.getPreprocessor.getSets.defSet(toSetName)
-    newSet.bodies= fromSet.surfaces.pickBodiesInside(geomObj,tol)
+    # newSet.bodies= fromSet.surfaces.pickBodiesInside(geomObj,tol)
     newSet.surfaces= fromSet.surfaces.pickSurfacesInside(geomObj,tol)
     newSet.lines= fromSet.lines.pickLinesInside(geomObj,tol)
     newSet.points= fromSet.points.pickPointsInside(geomObj,tol)
