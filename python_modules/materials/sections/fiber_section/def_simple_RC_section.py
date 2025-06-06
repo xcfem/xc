@@ -1517,6 +1517,7 @@ class RCSectionBase(object):
                             corresponding to characteristic values of the 
                             material, if "d" use the design values one.
         '''
+        retval= None
         if(showPDF or keepPDF):
             if(not outputFileName):
                 outputFileName= self.gmSectionName()+'.tex'
@@ -1537,7 +1538,9 @@ class RCSectionBase(object):
                 Path(outputPath+outputFileName).unlink()
                 if(showPDF):
                     input("Press Enter to continue...")
-                if(not keepPDF): # remove PDF file.
+                if(keepPDF): # return the PDF file name for later use.
+                    retval= pdfFile
+                else: # remove PDF file.
                     if os.path.exists(pdfFile):
                         os.remove(pdfFile)
             else:
@@ -1548,6 +1551,7 @@ class RCSectionBase(object):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; both showPDF and keepPDF are false; nothing to do.')
+        return retval
         
     def writeDXF(self, modelSpace, concreteLayerName= 'concrete', reinforcementLayerName= 'reinforcement'):
         ''' Writes the shape contour in the model
