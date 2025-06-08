@@ -6,4 +6,5 @@ when solving a some kind of problem instead of checking a particular type of ele
 ## Contents
 
 - strut-and-tie: [strut and tie models](https://www.concretecentre.com/Codes/Eurocode-2/Stut-and-Tie.aspx).
+- soil subgrade reaction: [Soil Subgrade Reaction](https://www.geoengineer.org/education/foundation-design-construction/soil-subgrade-reaction)
 

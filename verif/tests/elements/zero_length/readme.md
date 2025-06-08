@@ -12,9 +12,6 @@ This directory contains some verification tests related with this type of elemen
 - [Switching Sides](https://portwooddigital.com/2022/05/08/switching-sides/)
 - [A Simple Solution to a Complicated Equivalent](https://portwooddigital.com/2022/06/19/a-simple-solution-to-a-complicated-equivalent)
 
-# Winkler models
-- [Soil Subgrade Reaction](https://www.geoengineer.org/education/foundation-design-construction/soil-subgrade-reaction)
-- [Vigas sobre fundaciones bi-paramétricas del tipo Cuasi-Winkler](https://cimec.org.ar/ojs/index.php/mc/article/view/2412/0)
 
 # Inerters and tuned mass dampers.
 - [Tuned Damper Models](https://portwooddigital.com/2023/11/11/tuned-damper-models/)

@@ -1,13 +1,19 @@
 # -*- coding: utf-8 -*-
-'''Verification of Winkler model.'''
-# Verification of Winkler model according to the
-#    article of Gabriel E. Barrientos
-#    «Vigas sobre fundaciones bi-paramétricas del tipo Cuasi-Winker»
-#    Departamento de Ingeniería Mecánica. Universidad del Bío-Bío.
-#    Casilla 5-C. Concepción. Chile.
+'''Verification of Winkler model  according to the
+   article of Gabriel E. Barrientos
+   «Vigas sobre fundaciones bi-paramétricas del tipo Cuasi-Winker»
+   Departamento de Ingeniería Mecánica. Universidad del Bío-Bío.
+   Casilla 5-C. Concepción. Chile.
+'''
 
 from __future__ import print_function
 from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import geom
 import xc
@@ -16,12 +22,6 @@ from model import predefined_spaces
 from materials import typical_materials
 from model.geometry import geom_utils
 import math
-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 numDiv= 30
 L= 5500.0

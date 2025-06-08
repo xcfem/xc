@@ -528,8 +528,6 @@ python tests/elements/zero_length/test_strains_sign01.py
 python tests/elements/zero_length/test_strains_sign02.py
 python tests/elements/zero_length/test_strains_sign03.py
 python tests/elements/zero_length/test_strains_sign04.py
-python tests/elements/zero_length/test_winkler.py
-python tests/elements/zero_length/test_quasi_winkler.py
 python tests/elements/zero_length/test_rotational_dummy_spring_stiffness_01.py 
 python tests/elements/zero_length/test_rotational_dummy_spring_stiffness_02.py 
 python tests/elements/zero_length/test_rotational_dummy_spring_stiffness_03.py 
@@ -637,6 +635,9 @@ python tests/sample_problems/strut-and-tie/strut-and-tie_test_04.py
 python tests/sample_problems/strut-and-tie/strut-and-tie_test_05.py
 python tests/sample_problems/strut-and-tie/strut-and-tie_test_06.py
 python tests/sample_problems/strut-and-tie/strut-and-tie_test_07.py
+echo "$BLEU" "  Soil subgrade reaction." "$NORMAL"
+python tests/sample_problems/soil_subgrade_reaction/test_winkler.py
+python tests/sample_problems/soil_subgrade_reaction/test_quasi_winkler.py
 
 echo "$BLEU" "Solution tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py
