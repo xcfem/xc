@@ -12,6 +12,5 @@ This directory contains some verification tests related with this type of elemen
 - [Switching Sides](https://portwooddigital.com/2022/05/08/switching-sides/)
 - [A Simple Solution to a Complicated Equivalent](https://portwooddigital.com/2022/06/19/a-simple-solution-to-a-complicated-equivalent)
 
-
 # Inerters and tuned mass dampers.
 - [Tuned Damper Models](https://portwooddigital.com/2023/11/11/tuned-damper-models/)
