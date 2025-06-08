@@ -34,12 +34,12 @@ nodZ= [nodes.newNodeXYZ(i,2,0) for i in range(3)] # nodes to be connected to
 
 # Generation on spring boundary conditions
 springXYZ=springs.SpringBC(name='springXYZ',modelSpace=modelSpace,Kx=KX,Ky=KY,Kz=KZ)
-springXYZ.applyOnNodesLst(Nodelist=nodXYZ)
+springXYZ.applyOnNodesLst(nodeList= nodXYZ)
 
 fixedNodXYZ=[nodes.getNode(7),nodes.getNode(8),nodes.getNode(9)] # fixed nodes
 
 springZ=springs.SpringBC(name='springZ',modelSpace=modelSpace,Kx=0,Ky=0,Kz=KZ)
-springZ.applyOnNodesLst(Nodelist=nodZ)
+springZ.applyOnNodesLst(nodeList= nodZ)
 
 fixedNodZ=[nodes.getNode(10),nodes.getNode(11),nodes.getNode(12)] # fixed nodes
 
