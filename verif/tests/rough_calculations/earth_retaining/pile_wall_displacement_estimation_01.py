@@ -24,7 +24,7 @@ H= 3.6 # Excavation depth (m).
 t= 3.6 # Depth of penetration (m).
 
 # Pile wall displacements.
-Umax, Umin= sheet_pile.getPileWallDisplacements(soil= rankineSoil, wallHeight= H+t, excavationDepth= H)
+Umax, Umin= sheet_pile.get_pile_wall_displacements_muzas(soil= rankineSoil, wallHeight= H+t, excavationDepth= H)
 
 ratio1= abs(Umax-14.01902227240521e-3)/14.01902227240521e-3
 ratio2= abs(Umin+0.1664962021138603e-3)/0.1664962021138603e-3

@@ -1825,7 +1825,8 @@ python tests/rough_calculations/earth_retaining/sheet_pile_example_02.py
 python tests/rough_calculations/earth_retaining/sheet_pile_example_03.py
 python tests/rough_calculations/earth_retaining/sheet_pile_tricked_example_01.py
 python tests/rough_calculations/earth_retaining/sheet_pile_tricked_example_02.py
-python tests/rough_calculations/earth_retaining/pile_wall_displacement_estimation.py
+python tests/rough_calculations/earth_retaining/pile_wall_displacement_estimation_01.py
+python tests/rough_calculations/earth_retaining/pile_wall_displacement_estimation_02.py
 echo "$BLEU" "  Beam formulas..." "$NORMAL"
 python tests/rough_calculations/beam_formulas/test_cantilever01.py
 python tests/rough_calculations/beam_formulas/test_cantilever02.py

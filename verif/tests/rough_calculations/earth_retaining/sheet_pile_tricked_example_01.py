@@ -92,6 +92,8 @@ print('D= ', D, 'm')
 print('L= ', L, 'm')
 print('Mmax= ', Mmax/1e3,'kN.m/m')
 print('ratioMmax= ', ratioMmax)
+sheetPile.soil.E= 50e6 # Deformation modulus (N/m2).
+sheetPile.report()
 '''
 
 import os

@@ -16,8 +16,39 @@ from postprocess.reports import common_formats as fmt
 from scipy import interpolate
 from misc_utils import log_messages as lmsg
 
-def getPileWallDisplacements(soil, wallHeight, excavationDepth):
-    ''' Return the an estimation of the displacements at the top and bottom
+def get_pile_wall_rotation_muzas(soil, wallHeight, excavationDepth):
+    ''' Return an estimation of the rotation of the wall according to the 
+        article: "El Coeficiente de Balasto  en el Cálculo de Pantallas." 
+        of Fernando Muzás Labad. ETSAM UPM.
+
+    :param soil: soil type.
+    :param wallHeight: total wall height.
+    :param excavationDepth: depth of the excavation.
+    '''
+    Kar= soil.Ka() # Rankine active pressure coefficient. 
+    K0= soil.K0Jaky() # at rest pressure coefficient. 
+    gamma= soil.gamma() # unit weight.
+    E= soil.E # soil deformation modulus.
+    t= wallHeight-excavationDepth
+    return gamma*201.4*math.pow(Kar, 3.36)/E*pow(excavationDepth/t,4.3) # rotation
+
+def get_pile_wall_initial_translation_muzas(soil, wallHeight, excavationDepth):
+    ''' Return an estimation of the initial translation of the wall according
+        to the  article: "El Coeficiente de Balasto  en el Cálculo de 
+        Pantallas." of Fernando Muzás Labad. ETSAM UPM.
+
+    :param soil: soil type.
+    :param wallHeight: total wall height.
+    :param excavationDepth: depth of the excavation.
+    '''
+    K0= soil.K0Jaky() # at rest pressure coefficient. 
+    gamma= soil.gamma() # unit weight.
+    E= soil.E # soil deformation modulus.
+    return 2.77778*gamma*excavationDepth/E*K0 # initial translation
+
+
+def get_pile_wall_displacements_muzas(soil, wallHeight, excavationDepth):
+    ''' Return an estimation of the displacements at the top and bottom
         of the wall according to the article: "El Coeficiente de Balasto 
         en el Cálculo de Pantallas." of Fernando Muzás Labad. ETSAM UPM.
 
@@ -25,18 +56,59 @@ def getPileWallDisplacements(soil, wallHeight, excavationDepth):
     :param wallHeight: total wall height.
     :param excavationDepth: depth of the excavation.
     '''
-    Ka= soil.Ka() # active pressure coefficient. 
+    Kar= soil.Ka() # Rankine active pressure coefficient. 
     K0= soil.K0Jaky() # at rest pressure coefficient. 
     gamma= soil.gamma()
     E= soil.E # soil deformation modulus.
     t= wallHeight-excavationDepth
     Uo= 2.77778*gamma*excavationDepth/E*K0 # initial translation
     #P= 72.5*math.pow(Ka, 3.36)*pow(excavationDepth/t,4.3)
-    G= gamma*201.4*math.pow(Ka, 3.36)/E*pow(excavationDepth/t,4.3) # rotation
+    G= gamma*201.4*math.pow(Kar, 3.36)/E*pow(excavationDepth/t,4.3) # rotation
 
     Umax= 1.7*excavationDepth*G+Uo
     Umin= -(t-0.7*excavationDepth)*G+Uo
     return Umax, Umin
+
+
+def get_unload_subgrade_reaction_from_rest_muzas(soil, wallHeight, excavationDepth):
+    ''' Return an estimation of the unload subgrade reaction from rest
+        to active earth pressure according to the expression of Ka at the end of 
+        the  section 6.A of the article: "El Coeficiente de Balasto en el Cálculo
+        de  Pantallas."  of Fernando Muzás Labad. ETSAM UPM.
+
+    :param soil: soil type.
+    :param wallHeight: total wall height.
+    :param excavationDepth: depth of the excavation.
+    '''
+    E= soil.E # soil deformation modulus.
+    sqKar= soil.Ka()**2 # Squared Rankine active pressure coefficient. 
+    G= get_pile_wall_rotation_muzas(soil, wallHeight, excavationDepth)
+    return 200*math.sqrt(E)*sqKar*math.sqrt(1.0/G)
+
+def get_load_subgrade_reaction_from_rest_muzas(soil, wallHeight, excavationDepth):
+    ''' Return an estimation of the load subgrade reaction from rest
+        to passive earth pressure according to the expression of Kp at the end of 
+        the  section 6.A of the article: "El Coeficiente de Balasto en el Cálculo
+        de  Pantallas."  of Fernando Muzás Labad. ETSAM UPM.
+
+    :param soil: soil type.
+    :param wallHeight: total wall height.
+    :param excavationDepth: depth of the excavation.
+    '''
+    return 6.0*get_unload_subgrade_reaction_from_rest_muzas(soil, wallHeight, excavationDepth)
+
+def get_reload_subgrade_reaction_from_excavated_rest_muzas(soil, wallHeight, excavationDepth):
+    ''' Return an estimation of the load subgrade reaction from the excavated
+        rest to initial rest according to the expression of Kr of the section
+        6.A of the article: "El Coeficiente de Balasto en el Cálculo
+        de  Pantallas."  of Fernando Muzás Labad. ETSAM UPM.
+
+    :param soil: soil type.
+    :param wallHeight: total wall height.
+    :param excavationDepth: depth of the excavation.
+    '''
+    Et= soil.E # soil deformation modulus.
+    return Et/2.778
 
 class CantileverSheetPileWall(object):
     ''' Cantilever sheet pile. according to chapter 14
@@ -230,7 +302,57 @@ class CantileverSheetPileWall(object):
         :param wallHeight: wall total height.
         :param E: soil deformation modulus.
         '''
-        return getPileWallDisplacements(soil= self.soil, wallHeight= wallHeight, excavationDepth= self.excavationDepth)
+        return get_pile_wall_displacements_muzas(soil= self.soil, wallHeight= wallHeight, excavationDepth= self.excavationDepth)
+
+    def getRotation(self, wallHeight):
+        ''' Return an estimation of the rotation of the wall according to the 
+            article: "El Coeficiente de Balasto  en el Cálculo de Pantallas." 
+            of Fernando Muzás Labad. ETSAM UPM.
+
+        :param wallHeight: total wall height.
+        '''
+        return get_pile_wall_rotation_muzas(soil= self.soil, wallHeight= wallHeight, excavationDepth= self.excavationDepth)
+
+    def getInitialTranslation(self, wallHeight):
+        ''' Return an estimation of the initial translation of the wall according
+            to the  article: "El Coeficiente de Balasto  en el Cálculo de 
+            Pantallas." of Fernando Muzás Labad. ETSAM UPM.
+
+        :param wallHeight: total wall height.
+        '''
+        return get_pile_wall_initial_translation_muzas(soil= self.soil, wallHeight= wallHeight, excavationDepth= self.excavationDepth)
+
+
+    def getUnloadSubgradeReactionFromRest(self, wallHeight):
+        ''' Return an estimation of the unload subgrade reaction from rest
+            to active earth pressure according to the expression of Ka at the end of 
+            the  section 6.A of the article: "El Coeficiente de Balasto en el Cálculo
+            de  Pantallas."  of Fernando Muzás Labad. ETSAM UPM.
+
+        :param wallHeight: total wall height.
+        '''
+        return get_unload_subgrade_reaction_from_rest_muzas(soil= self.soil, wallHeight= wallHeight, excavationDepth= self.excavationDepth)
+
+    def getLoadLoadSubgradeReactionFromRest(self, wallHeight):
+        ''' Return an estimation of the load subgrade reaction from rest
+            to passive earth pressure according to the expression of Kp at the end of 
+            the  section 6.A of the article: "El Coeficiente de Balasto en el Cálculo
+            de  Pantallas."  of Fernando Muzás Labad. ETSAM UPM.
+
+        :param wallHeight: total wall height.
+        '''
+        return get_load_subgrade_reaction_from_rest_muzas(soil= self.soil, wallHeight= wallHeight, excavationDepth= self.excavationDepth)
+
+    def getReloadSubgradeReactionFromExcavatedRest(self, wallHeight):
+        ''' Return an estimation of the load subgrade reaction from the excavated
+            rest to initial rest according to the expression of Kr of the section
+            6.A of the article: "El Coeficiente de Balasto en el Cálculo
+            de  Pantallas."  of Fernando Muzás Labad. ETSAM UPM.
+
+        :param wallHeight: total wall height.
+        '''
+        return get_reload_subgrade_reaction_from_excavated_rest_muzas(soil= self.soil, wallHeight= wallHeight, excavationDepth= self.excavationDepth)
+        
     
     def report(self, os= sys.stdout, indentation= ''):
         ''' Get a report of the design results.'''
@@ -256,10 +378,23 @@ class CantileverSheetPileWall(object):
         os.write(indentation+'  actual depth: Dact= '+fmt.Length.format(Dactual)+' m\n')
         os.write(indentation+'  total length: L= '+fmt.Length.format(L)+' m\n')
         os.write(indentation+'  maximum bending moment: Mmax= '+ fmt.Esf.format(Mmax/1e3)+' kN.m/m\n')
-        if(Umax):
-            os.write(indentation+'  maximum displacement on wall top: Umax= '+fmt.Length.format(Umax*1000)+' mm\n')
-        if(Umin):
-            os.write(indentation+'  minimum displacement on wall bottom: Umin= '+fmt.Length.format(Umin*1000)+' mm\n')
+        if(Umax or Umin):
+            os.write(indentation+'  Displacement estimation.')
+            if(Umax):
+                os.write(indentation+'    maximum displacement on wall top: Umax= '+fmt.Length.format(Umax*1000)+' mm\n')
+            if(Umin):
+                os.write(indentation+'    minimum displacement on wall bottom: Umin= '+fmt.Length.format(Umin*1000)+' mm\n')
+            G= self.getRotation(wallHeight= L)
+            os.write('    rotation G= '+fmt.Length.format(G*1e3)+' mrad\n')
+            Uo= self.getInitialTranslation(wallHeight= L)
+            os.write('    initial uniform translation Uo= '+fmt.Length.format(Uo*1e3)+' mm\n')
+            Ka= self.getUnloadSubgradeReactionFromRest(wallHeight= L)
+            os.write('    unload subgrade reaction from rest Ka= '+fmt.Pressure.format(Ka/1e6)+' MN/m3\n')
+            Kr= self.getReloadSubgradeReactionFromExcavatedRest(wallHeight= L)
+            os.write('    reload subgrade reaction from excavated rest Kr= '+fmt.Pressure.format(Kr/1e6)+' MN/m3\n')
+            Kp= self.getLoadLoadSubgradeReactionFromRest(wallHeight= L)
+            os.write('    unload subgrade reaction from rest  Kp= '+fmt.Pressure.format(Kp/1e6)+' MN/m3\n')
+
     
 class AnchoredSheetPileWall(CantileverSheetPileWall):
     ''' Anchored sheet pile. according to chapter 14
