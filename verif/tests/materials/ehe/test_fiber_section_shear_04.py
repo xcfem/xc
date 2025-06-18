@@ -56,12 +56,10 @@ mainReinf= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
-materialHandler= preprocessor.getMaterialHandler
-
-# Section geometry
+## Section geometry
 section.mainReinf= mainReinf
 section.shReinf= shearReinf
-
+## Define section material.
 section.defRCSection(preprocessor, matDiagType= 'd')
 
 zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, section.name)
