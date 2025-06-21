@@ -101,8 +101,10 @@ feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum
 meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y', controller= controller,threeDim= True)
 feProblem.errFileName= "cerr" # From now on display errors if any.
 
+# Check results (21/06/2025: update values after fixing error in the EHE08
+# shear controller).
 ratio1= abs(meanCFs[0]-0.2851648810430528)/0.2851648810430528
-ratio2= abs(meanCFs[1]-0.2768071589693887)/0.2768071589693887
+ratio2= abs(meanCFs[1]-0.27817040469035537)/0.27817040469035537
 
 '''
 print('meanCFs= ',meanCFs)

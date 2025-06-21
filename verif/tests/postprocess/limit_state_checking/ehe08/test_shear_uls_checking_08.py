@@ -100,7 +100,9 @@ controller.exhaustedSectionsThresholdCF= 1.03 # Accept some yielding.
 ## Perform checking.
 meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y', controller= controller,threeDim= True)
 
-ratio1= abs(meanCFs[0]-0.3711686838673839)/0.3711686838673839
+# Check results (21/06/2025: update values after fixing error in the EHE08
+# shear controller).
+ratio1= abs(meanCFs[0]-0.3834250069696015)/0.3834250069696015
 ratio2= abs(meanCFs[1]-0.37791745348202144)/0.37791745348202144
 
 '''
