@@ -93,18 +93,18 @@ ratio0= abs(z-zRef)/zRef
 Nc= shearController.concreteAxialForce
 K= shearController.getKEHE08()
 Vu1= shearController.Vu1
-Vu1Ref= 3529.64451637474e3  # See spreadsheet with the same name in this folder.
+Vu1Ref= 3514.20085047592e3  # See spreadsheet with the same name in this folder.
 ratio1= ((Vu1-Vu1Ref)/Vu1Ref)
 thetaFisuras= shearController.thetaFisuras
 Vcu= shearController.Vcu
-VcuRef= 494.864973264713e3 # See spreadsheet with the same name in this folder.
+VcuRef= 492.944570034517e3 # See spreadsheet with the same name in this folder.
 ratio2= (abs(Vcu-VcuRef)/VcuRef)
 Vsu= shearController.Vsu
-VsuRef= 616.9504190129e3
+VsuRef= 616.617223367593e3 # See spreadsheet with the same name in this folder.
 ratio3= ((Vsu-VsuRef)/VsuRef)
 Vu2= shearController.Vu2
 Vu= shearController.Vu
-VuRef= 1111.81539227761e3
+VuRef= 1109.56179340211e3 # See spreadsheet with the same name in this folder.
 ratio4= ((Vu-VuRef)/VuRef)
 cf= shearCF[0]
 
@@ -131,7 +131,7 @@ print("ratio4= ",ratio4)
 print("CF= ",cf)
 '''
 
-if ((abs(ratio0)<1e-2) & (abs(ratio1)<1e-2) & (abs(ratio2)<1e-2) & (abs(ratio3)<1e-3) & (abs(ratio4)<1e-2)):
+if ((abs(ratio0)<1e-2) & (abs(ratio1)<1e-4) & (abs(ratio2)<1e-4) & (abs(ratio3)<1e-4) & (abs(ratio4)<1e-4)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
