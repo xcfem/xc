@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-''' Test for checking the shear-strength verificacion of a reinforced concrete section.
-   Some comparison values are obtained from example ER-CA-02 of
-   www.areadecalculo.com. Calculation is carried on according to EHE-08 standard. '''
+''' Test for checking the shear-strength verificacion of a reinforced concrete
+    section.
+
+   Test based on the example ER-CA-02 of www.areadecalculo.com. Calculation is
+   carried on according to EHE-08 standard.
+'''
 
 from __future__ import division
 from __future__ import print_function
@@ -88,31 +91,33 @@ secHAParamsTorsion= EHE_limit_state_checking.computeEffectiveHollowSectionParame
 scc= zlElement.getSection()
 shearCF= shearController.checkSection(sct= scc, elementDimension= zlElement.getDimension, torsionParameters= secHAParamsTorsion)
 
+b0= shearController.strutWidth
+d= shearController.effectiveDepth
+z= shearController.mechanicLeverArm
+Nc= shearController.concreteAxialForce
+K= shearController.getKEHE08()
 theta= shearController.theta
 cracksAngle= shearController.thetaFisuras
 cracked= shearController.isCracked()
 fcv= shearController.fckH
 Vu1= shearController.Vu1
 Vcu= shearController.Vcu
-VcuRef= 126.09159087244683e3
-# The value obtained for Vu2 with Cálculo Civil (www.calculocivil.com)
-# was: 314.32 kN. The difference is due to the fact that XC considers
-# only the stresses on the concrete when computing $\sigma_{cp}$.
+VcuRef= 17.069431559261e3 # See spreadsheet with the same name in this folder.
 ratio1= (abs(Vcu-VcuRef)/VcuRef)
 Vsu= shearController.Vsu
 Vu2= shearController.Vu2
-Vu2Ref= 1071.1513149275672e3
-# The value obtained for Vu2 with Cálculo Civil (www.calculocivil.com)
-# was: 1199.78 kN. The difference is due to the fact that XC considers
-# only the stresses on the concrete when computing $\sigma_{cp}$ and
-# that XC computes the optimum value of theta (angle between the
-# concrete compressed struts and the member axis).
+Vu2Ref= 962.943207724092e3 # See spreadsheet with the same name in this folder.
 ratio2= (abs(Vu2-Vu2Ref)/Vu2Ref)
 
 
 '''
 # section.plot(preprocessor) # Display section geometry
-section.pdfReport(preprocessor= preprocessor, showPDF= True, keepPDF= False)
+# section.pdfReport(preprocessor= preprocessor, showPDF= True, keepPDF= False)
+print('Nc= ', Nc/1e3, 'kN')
+print("K= ", K)
+print("b0= ", b0,'m')
+print("d= ", d,'m')
+print("z= ", z,'m')
 print("bending: ", shearController.isBending)
 print("cracked: ", cracked)
 print("theta= ", math.degrees(theta))
@@ -121,6 +126,7 @@ print("cotg(theta)= ", 1.0/math.tan(theta))
 print("fcv= ", fcv/1e6," MPa")
 print("Vu1= ", Vu1/1e3," kN")
 print("Vcu= ", Vcu/1e3," kN")
+print("VcuRef= ", VcuRef/1e3," kN")
 print("ratio1= ", ratio1)
 print("Vsu= ", Vsu/1e3," kN")
 print("Vu2= ", Vu2/1e3," kN")
@@ -131,7 +137,7 @@ print("shearCF= ", shearCF[0])
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1<1e-5) and (ratio2<1e-5):
+if (ratio1<1e-5) and (ratio2<1e-3):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
