@@ -379,7 +379,7 @@ class CantileverSheetPileWall(object):
         os.write(indentation+'  total length: L= '+fmt.Length.format(L)+' m\n')
         os.write(indentation+'  maximum bending moment: Mmax= '+ fmt.Esf.format(Mmax/1e3)+' kN.m/m\n')
         if(Umax or Umin):
-            os.write(indentation+'  Displacement estimation.')
+            os.write(indentation+'  Displacement estimation.\n')
             if(Umax):
                 os.write(indentation+'    maximum displacement on wall top: Umax= '+fmt.Length.format(Umax*1000)+' mm\n')
             if(Umin):
