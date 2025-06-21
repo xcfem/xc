@@ -503,13 +503,12 @@ def getF1cdEHE08(fck,fcd):
     '''
     retval=0.6
     if(fck>60e6):
-        retval=max(0.9-fck/200.e6,0.5)
+        retval= max(0.9-fck/200.e6,0.5)
     retval= retval*fcd
     return retval
 
 
-
-def getKEHE08(sgpcd,fcd):
+def getKEHE08(sgpcd, fcd):
     '''getKEHE08(sgpcd,fcd). Return the value of K (coefficent that depends of the axial force) according to clause 44.2.3.1 de la EHE-08
 
     :param sgpcd: effective normal stress in concrete Ncd/Ac.
@@ -522,17 +521,17 @@ def getKEHE08(sgpcd,fcd):
     if s<=0:
         retval=1.0
     elif s<=0.25:
-        retval=1+s
+        retval= 1+s
     elif s<=0.5:
-        retval=1.25
+        retval= 1.25
     else:
-        retval=2.5*(1-s)
+        retval= 2.5*(1-s)
     return retval
 
 def getVu1EHE08(fck, fcd, Ncd, Ac, b0, d, alpha, theta):
     '''getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta) [units: N, m, rad]. Return
-       the value of Vu1 (shear strength at failure due to diagonal compression in the web) 
-       according to clause 44.2.3.1 of EHE-08.
+       the value of Vu1 (shear strength at failure due to diagonal compression
+       in the web) according to clause 44.2.3.1 of EHE-08.
 
     :param fck: concrete characteristic compressive strength.
     :param fcd: design value of concrete compressive strength (N/m2).
@@ -550,7 +549,7 @@ def getVu1EHE08(fck, fcd, Ncd, Ac, b0, d, alpha, theta):
                to the tension fyd.
     :param fyd: Design strength of reinforcement As.
     '''
-    f1cd=getF1cdEHE08(fck,fcd)
+    f1cd= getF1cdEHE08(fck,fcd)
     K= 1
     if(Ncd<0): # compressed section.
         sgpcd= Ncd/Ac
@@ -579,7 +578,7 @@ def getVu2EHE08NoAtNoFis(fctd,I,S,b0,alphal,Ncd,Ac):
       tmp=math.sqrt(fctd**2-alphal*sgpcd*fctd)
     return I*b0/S*tmp
 
-def getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct):
+def getFcvEHE08(fact, fcv, gammaC, b0, d, chi, sgpcd, AsPas, AsAct):
     '''getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct) [units: N, m, rad]
      Return the value of fcv (concrete virtual shear strength)
      for members WITH or WITHOUT shear reinforcement in cracked regions, according
@@ -602,11 +601,11 @@ def getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct):
     :param AsAct: Area of tensioned longitudinal prestressed steel anchored
      at a distance greater than the effective depth of the section.
     '''
-    rol=min((AsPas+AsAct)/(b0*d),0.02)
-    return fact/gammaC*chi*(rol*fcv/1e4)**(1/3)*1e6-0.15*sgpcd
+    rhol= min((AsPas+AsAct)/(b0*d),0.02)
+    return fact/gammaC*chi*(rhol*fcv/1e4)**(1/3)*1e6-0.15*sgpcd
 
 
-def getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd):
+def getFcvMinEHE08(fcv, gammaC, d, chi, sgpcd):
     '''getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd)
      Return the minimum value of fcv (concrete virtual shear strength)
      for members WITHOUT shear reinforcement in cracked regions, according to
@@ -622,7 +621,9 @@ def getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd):
      inside the effective depth.
     :param sgpcd: average axial stress in the web (positive if in compression).
     '''
-    return 0.075/gammaC*math.pow(chi,1.5)*math.sqrt(fcv)*1e3-0.15*sgpcd
+    retval= 0.075/gammaC*math.pow(chi,1.5)*math.sqrt(fcv)*1e3
+    retval-= 0.15*sgpcd
+    return retval
 
 
 def getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct):
@@ -649,8 +650,8 @@ def getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct):
     '''
     chi=min(2,1+math.sqrt(200/(d*1000.))) #HA DE EXPRESARSE EN METROS.
     sgpcd=max(max(Ncd/Ac,-0.3*fcd),-12e6)
-    fcvTmp=getFcvEHE08(0.18,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct)
-    fcvMinTmp=getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd)
+    fcvTmp= getFcvEHE08(0.18,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct)
+    fcvMinTmp= getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd)
     return max(fcvTmp,fcvMinTmp)*b0*d
 
 def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
@@ -680,7 +681,7 @@ def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
     '''
     concrTmp= EHE_materials.EHEConcrete("HA",fck,gammaC)
     fctdTmp=concrTmp.fctkEHE08()/gammaC
-    fcdTmp=fck/gammaC
+    fcdTmp= fck/gammaC
     if M<=Mfis:
         retval=getVu2EHE08NoAtNoFis(fctdTmp,I,S,b0,alphaL,Ncd,Ac)
     else:
@@ -817,20 +818,35 @@ def getVcuEHE08CrackAngle(fcv, fcd, gammaC, Ncd, Ac, b0, d, AsPas, AsAct, theta,
      axis (figure 44.2.3.1.a EHE)
     :param thetaEvCu: reference angle of inclination of cracks (in radians).
     '''
-    chi=min(2,1+math.sqrt(200/(d*1000.)))  # must be expressed in meters.
+    chi= min(2,1+math.sqrt(200/(d*1000.)))  # must be expressed in meters.
     sgpcd=max(max(Ncd/Ac,-0.3*fcd),-12e6)
-    FcvVcu=getFcvEHE08(0.15,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct)
+    FcvVcu= getFcvEHE08(0.15,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct)
     betaVcu= getBetaVcuEHE08(theta,thetaEVcu)
-    fcv= FcvVcu*betaVcu
-    # Compute also the minimum value of the virtual shear strength
-    # according to clause 44.2.3.2.2 (see definition of Vcu).
-    fcvMin= getFcvMinEHE08(fcv, gammaC, d, chi, sgpcd)
-    retval= max(fcv, fcvMin)*b0*d
-    return retval
+    return FcvVcu*betaVcu*b0*d
 
+def getVu2MinEHE08(fcv, fcd, gammaC, Ncd, Ac, b0, d):
+    '''getVu2MinEHE08(fcv, fcd, gammaC, Ncd, Ac, b0, d) 
+     [units: N, m, rad]
+     Return the minimum value of Vu2 according to clause 44.2.3.2.2 (see 
+     definition of Vcu) for members WITH shear reinforcement.
 
+    :param fcv: effective concrete shear strength. For members without shear 
+                reinforcement fcv= min(fck,60MPa). For members with shear 
+                reinforcement fcv= min(fck,100MPa). In both cases, if 
+                concrete quality control is not direct fcv= 15 MPa.
+    :param fcd: design value of concrete compressive strength).
+    :param gammaC: Partial safety factor for concrete.
+    :param Ncd: design value of axial force in concrete
+                (positive if in tension).
+    :param Ac: concrete section total area.
+    :param b0: net width of the element according to clause 40.3.5.
+    :param d: effective depth (meters).
+    '''
+    chi= min(2,1+math.sqrt(200/(d*1000.)))  # must be expressed in meters.
+    sgpcd=max(max(Ncd/Ac,-0.3*fcd),-12e6)
+    return getFcvMinEHE08(fcv, gammaC, d, chi, sgpcd)*b0*d
  
-def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue):
+def getVcuEHE08(fcv, fcd, gammaC, Ncd, Ac, b0, d, z, AsPas, AsAct, theta, Nd, Md, Vd, Td, Es, Ep, Fp, Ae, ue):
     '''getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue) 
      [units: N, m, rad]
      Return the value of Vcu (contribution of the concrete to shear strength)
@@ -869,7 +885,7 @@ def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep
     return getVcuEHE08CrackAngle(fcv= fcv, fcd= fcd, gammaC= gammaC, Ncd= Ncd, Ac= Ac, b0= b0, d= d, AsPas= AsPas, AsAct= AsAct, theta= theta, thetaEVcu= thetaEVcu)
 
   
-def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue, circular= False):
+def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC, Ncd, Ac, b0, d, z, AsPas, AsAct, AsTrsv, alpha, theta, Nd, Md, Vd, Td, Es, Ep, Fp, Ae, ue, circular= False):
     '''getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue) [units: N, m, rad]. 
      Return the value of Vu2 (shear strength at failure due to tensile force in the web)
      for members WITH shear reinforcement, according to clause 
@@ -1622,6 +1638,15 @@ class ShearController(lscb.ShearControllerBase):
         ''' Return true if the concrete stress is greater than its tensile strength.'''
         return ((self.E0*self.eps1)>=self.fctdH)
 
+    def getKEHE08(self):
+        '''getKEHE08(sgpcd,fcd). Return the value of K (coefficent that 
+           depends of the axial force) according to clause 44.2.3.1 of EHE-08
+        '''
+        fcd= self.fcdH
+        Nc= self.concreteAxialForce
+        Ac= self.concreteArea
+        return getKEHE08(sgpcd= Nc/Ac, fcd= self.fcdH)
+        
     def calcVuEHE08NoAt(self, scc, rcSets):
         ''' Compute the shear strength at failure without shear reinforcement
          according to clause 44.2.3.2.1 of EHE-08.
@@ -1709,7 +1734,7 @@ class ShearController(lscb.ShearControllerBase):
             self.strutWidth= scc.getCompressedStrutWidth() # b0
             self.effectiveDepth= scc.getEffectiveDepth() # d
             self.concreteAxialForce= concrFibers.getCompressionResultant()
-            self.Vu1= getVu1EHE08(self.fckH,self.fcdH,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.effectiveDepth, alpha= self.alpha, theta= self.theta)
+            self.Vu1= getVu1EHE08(fck= self.fckH, fcd= self.fcdH, Ncd= self.concreteAxialForce, Ac= self.concreteArea, b0= self.strutWidth, d= self.effectiveDepth, alpha= self.alpha, theta= self.theta)
             if(self.isBending):
                 self.eps1= concrFibers.getStrainMax()
                 self.reinforcementElasticModulus= reinfFibers[0].getMaterial().getInitialTangent()
@@ -1721,7 +1746,10 @@ class ShearController(lscb.ShearControllerBase):
                 self.thetaFisuras= getCrackAngleEHE08(Nd= Nd, Md= Md, Vd= Vd, Td= Td, z= self.mechanicLeverArm, AsPas= self.tensionedRebars.area, AsAct= 0.0, Es= self.reinforcementElasticModulus, Ep= 0.0, Fp= 0.0, Ae= self.VuAe, ue= self.Vuue)
                 self.Vcu= getVcuEHE08CrackAngle(fcv= self.fckH, fcd= self.fcdH, gammaC= self.gammaC, Ncd= self.concreteAxialForce, Ac= self.concreteArea, b0= self.strutWidth, d= self.effectiveDepth, AsPas= self.tensionedRebars.area, AsAct= 0.0, theta= self.theta, thetaEVcu= self.thetaFisuras)
                 self.Vsu= getVsuEHE08(self.mechanicLeverArm,self.alpha,self.theta,self.AsTrsv,self.fydS, circular)
-                self.Vu2= self.Vcu+self.Vsu
+                # Compute also the minimum value of the virtual shear strength
+                # according to clause 44.2.3.2.2 (see definition of Vcu).
+                minVu2= getVu2MinEHE08(fcv= self.fckH, fcd= self.fcdH, gammaC= self.gammaC, Ncd= self.concreteAxialForce, Ac= self.concreteArea, b0= self.strutWidth, d= self.effectiveDepth)
+                self.Vu2= max(self.Vcu+self.Vsu, minVu2)
             else: # Uncracked section
                 # I (LCPT) don't find an expression for this case in EHE
                 axes= scc.getInternalForcesAxes()
@@ -1730,7 +1758,10 @@ class ShearController(lscb.ShearControllerBase):
                 self.Vcu= getVcuEHE08CrackAngle(fcv= self.fckH, fcd= self.fcdH, gammaC= self.gammaC, Ncd= self.concreteAxialForce, Ac= self.concreteArea, b0= self.strutWidth, d= self.effectiveDepth, AsPas= self.tensionedRebars.area, AsAct= 0.0, theta= self.theta, thetaEVcu= self.thetaFisuras)
                 self.mechanicLeverArm= scc.getMechanicLeverArm()
                 self.Vsu= getVsuEHE08(self.mechanicLeverArm,self.alpha,self.theta,self.AsTrsv,self.fydS, circular)
-                self.Vu2= self.Vcu+self.Vsu
+                # Compute also the minimum value of the virtual shear strength
+                # according to clause 44.2.3.2.2 (see definition of Vcu).
+                minVu2= getVu2MinEHE08(fcv= self.fckH, fcd= self.fcdH, gammaC= self.gammaC, Ncd= self.concreteAxialForce, Ac= self.concreteArea, b0= self.strutWidth, d= self.effectiveDepth)
+                self.Vu2= max(self.Vcu+self.Vsu, minVu2)
                 # self.I= scc.getFibers().getHomogenizedSectionIRelToLine(self.E0,axes)
                 # self.S= scc.getFibers().getSPosHomogenizedSection(self.E0,geom.HalfPlane2d(axes))
                 # self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
