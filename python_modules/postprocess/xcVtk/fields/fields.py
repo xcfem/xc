@@ -31,7 +31,8 @@ class ScalarField(fb.FieldBase):
 
         :param name: node property that contains the value to represent.
         :param functionName: name of the node method to obtain the value (usually 'getProp').
-        :param component: component of the control var to represent.
+        :param component: component of the control var to represent (None if the property
+                          is already an scalar).
         :param fUnitConv: unit conversion factor.
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
                          of the scalar field (if any) to be represented. All 
