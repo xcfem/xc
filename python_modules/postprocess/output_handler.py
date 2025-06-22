@@ -226,7 +226,8 @@ class OutputHandler(object):
         '''displays the scalar property defined at the nodes of the set.
 
         :param propeToDisp: scalar property defined at nodes. 
-        :param component: component of the control var to represent.
+        :param component: component of the control var to represent (None if the property
+                          is already an scalar).
         :param fUnitConv: conversion factor for units
         :param unitDescription: unit(s) symbol(s)
         :param captionText: caption text.
