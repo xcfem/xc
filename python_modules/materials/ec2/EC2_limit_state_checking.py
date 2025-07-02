@@ -1364,6 +1364,20 @@ class ShearController(lscb.ShearControllerBase):
         self.concreteFibersSetName= "concrete" # Name of the concrete fibers set.
         self.rebarFibersSetName= "reinforcement" # Name of the rebar fibers set.
         self.nationalAnnex= nationalAnnex # national annex.
+        self.effectiveDepth= None # current effective depth
+        self.innerLeverArm= None # current value of mechanic lever arm.
+        self.strutWidth= 0.0 # compressed strut width «bw».
+
+    def getConcreteArea(self, scc):
+        ''' Return the product of bw (the smallest width of the cross-section 
+            in the tensile area) and d (its effective depth) that will be used
+            in the expressions 6.2.a  and 6.2.b of EC2:2004.
+
+         :param scc: fiber model of the section.
+        '''
+        self.strutWidth= scc.getCompressedStrutWidth() # bw
+        self.effectiveDepth= scc.getEffectiveDepth() # d
+        return self.strutWidth*self.effectiveDepth
         
     def getShearStrengthCrackedNoShearReinf(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
         '''Return the design value of the shear resistance VRdc for cracked 
@@ -1382,13 +1396,12 @@ class ShearController(lscb.ShearControllerBase):
                           reinforcement due to the transverse inclination of
                           its elements.
         '''
-        Ac= rcSets.getConcreteArea(1) # Ac
-        strutWidth= scc.getCompressedStrutWidth() # b0
+        Ac= self.getConcreteArea(scc= scc) # bw*d
         # area of the tensile reinforcement
         tensileReinforcementArea= 0.0
         if(rcSets.getNumTensionRebars()>0):
             tensileReinforcementArea= rcSets.tensionFibers.getArea(1)
-        return getShearResistanceCrackedNoShearReinf(concrete= concrete, NEd= Nd, Ac= Ac, Asl= tensileReinforcementArea, bw= strutWidth, d= scc.getEffectiveDepth(), nationalAnnex= self.nationalAnnex)
+        return getShearResistanceCrackedNoShearReinf(concrete= concrete, NEd= Nd, Ac= Ac, Asl= tensileReinforcementArea, bw= self.strutWidth, d= self.effectiveDepth, nationalAnnex= self.nationalAnnex)
     
     def getShearStrengthNonCrackedNoShearReinf(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
         ''' Return the design value of the shear resistance VRdc for non-cracked 
@@ -1407,15 +1420,14 @@ class ShearController(lscb.ShearControllerBase):
                           reinforcement due to the transverse inclination of
                           its elements.
         '''
-        Ac= rcSets.getConcreteArea(1) # Ac
-        strutWidth= scc.getCompressedStrutWidth() # b0
+        Ac= self.getConcreteArea(scc= scc) # bw*d
         E0= rcSets.getConcreteInitialTangent()
         # second moment of area.
         I= scc.getHomogenizedI(E0)
         # first moment of area above and about the centroidal axis.
         S= scc.getSPosHomogenized(E0)
         alpha_l= 1.0 # see expression 6.4 in EC2:2004.
-        return getShearResistanceNonCrackedNoShearReinf(concrete= concrete, I= I, S= S, NEd= Nd, Ac= Ac, bw= strutWidth, alpha_l= alpha_l)
+        return getShearResistanceNonCrackedNoShearReinf(concrete= concrete, I= I, S= S, NEd= Nd, Ac= Ac, bw= self.strutWidth, alpha_l= alpha_l)
     
     def getShearStrengthNoShearReinf(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
         ''' Return the design value of the shear resistance VRdc for cracked
@@ -1452,10 +1464,9 @@ class ShearController(lscb.ShearControllerBase):
             # over the pinned support (M= 0) so, normally, this code is not
             # reach. Anyway, we return a safe estimation based on the shear
             # strength of a T-beam flange in its plane.
-            hf= scc.getCompressedStrutWidth()
-            Ac= rcSets.getConcreteArea(1) # Ac
-            DeltaX= Ac/hf
-            retval= getConcreteFlangeShearStrength(concrete= concrete, hf= hf, DeltaX= DeltaX, nationalAnnex= None)
+            Ac= self.getConcreteArea(scc= scc) # bw*d
+            DeltaX= Ac/self.strutWidth
+            retval= getConcreteFlangeShearStrength(concrete= concrete, hf= self.strutWidth, DeltaX= DeltaX, nationalAnnex= self.nationalAnnex)
         return retval
         
     def getShearStrengthShearReinf(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
@@ -1475,17 +1486,17 @@ class ShearController(lscb.ShearControllerBase):
                           its elements.
         '''
         Ac= rcSets.getConcreteArea(1) # Ac
-        strutWidth= scc.getCompressedStrutWidth() # b0
+        self.strutWidth= scc.getCompressedStrutWidth() # b0
         isBending= scc.isSubjectedToBending(0.1)
         if(isBending):
-            innerLeverArm= scc.getMechanicLeverArm() # z
+            self.innerLeverArm= scc.getMechanicLeverArm() # z
         else: # not bending
             # In real problems you don't need to check the shear strength right
             # over the pinned support (M= 0) so, normally, this code is not
             # reach. Anyway, we return a safe estimation of the lever arm.
-            sectionDepth= Ac/strutWidth
-            innerLeverArm= 0.7*sectionDepth
-        return getShearResistanceShearReinf(concrete= concrete, NEd= Nd, Ac= Ac, bw= strutWidth, Asw= self.Asw, s= self.stirrupSpacing, z= innerLeverArm, shearReinfSteel= reinfSteel, shearReinfAngle= self.alpha, webStrutAngle= math.pi/4.0, nationalAnnex= self.nationalAnnex)
+            sectionDepth= Ac/self.strutWidth
+            self.innerLeverArm= 0.7*sectionDepth
+        return getShearResistanceShearReinf(concrete= concrete, NEd= Nd, Ac= Ac, bw= self.strutWidth, Asw= self.Asw, s= self.stirrupSpacing, z= self.innerLeverArm, shearReinfSteel= reinfSteel, shearReinfAngle= self.alpha, webStrutAngle= math.pi/4.0, nationalAnnex= self.nationalAnnex)
 
     def getShearStrength(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
         ''' Compute the shear strength at failure WITH or WITHIOUT shear 
@@ -1525,13 +1536,13 @@ class ShearController(lscb.ShearControllerBase):
         reinforcementCode= section.getReinfSteelType()
         shReinf= section.getShearReinfY()
         circular= section.isCircular()
-        strutWidth= sct.getCompressedStrutWidth() # bw
+        self.strutWidth= sct.getCompressedStrutWidth() # bw
         self.Asw= shReinf.getAs()
         self.stirrupSpacing= shReinf.shReinfSpacing
         self.alpha= shReinf.angAlphaShReinf
         #Searching for the best theta angle (concrete strut inclination).
         if(self.Asw>0.0):
-            self.theta= getWebStrutAngleForSimultaneousCollapse(concrete= concreteCode, bw= strutWidth, s= self.stirrupSpacing, Asw= self.Asw, shearReinfSteel= reinforcementCode, shearReinfAngle= shReinf.angAlphaShReinf)
+            self.theta= getWebStrutAngleForSimultaneousCollapse(concrete= concreteCode, bw= self.strutWidth, s= self.stirrupSpacing, Asw= self.Asw, shearReinfSteel= reinforcementCode, shearReinfAngle= shReinf.angAlphaShReinf)
         else:
             self.theta= math.pi/4.0
         #We calculate Vu for several values of theta and chose the highest Vu with its associated theta
