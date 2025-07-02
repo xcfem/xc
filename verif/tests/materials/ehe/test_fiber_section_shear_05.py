@@ -50,8 +50,6 @@ shearReinf= def_simple_RC_section.ShearReinforcement(familyName= "sh", nShReinfB
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-# Materials definition
-materialHandler= preprocessor.getMaterialHandler
 
 # Materials definition
 concr= EHE_materials.HA35

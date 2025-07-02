@@ -43,10 +43,10 @@ shearReinfArea= stirrups['area']
 nBranches= 4
 section1.shReinf= def_simple_RC_section.ShearReinforcement(familyName= "sh",nShReinfBranches= nBranches, areaShReinfBranch= shearReinfArea, shReinfSpacing= 0.25, angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
 
+# Define FE problem.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Create the section material
-materialHandler= preprocessor.getMaterialHandler
 section1.defRCSection(preprocessor, matDiagType= 'd')
 
 # Create ZeroLength element and assign the section to it.
