@@ -94,18 +94,18 @@ Nc= shearController.concreteAxialForce
 K= shearController.getKEHE08()
 Vu1= shearController.Vu1
 Vu1Ref= 3514.20085047592e3  # See spreadsheet with the same name in this folder.
-ratio1= ((Vu1-Vu1Ref)/Vu1Ref)
+ratio1= (abs(Vu1-Vu1Ref)/Vu1Ref)
 thetaFisuras= shearController.thetaFisuras
 Vcu= shearController.Vcu
 VcuRef= 492.944570034517e3 # See spreadsheet with the same name in this folder.
 ratio2= (abs(Vcu-VcuRef)/VcuRef)
 Vsu= shearController.Vsu
 VsuRef= 616.617223367593e3 # See spreadsheet with the same name in this folder.
-ratio3= ((Vsu-VsuRef)/VsuRef)
+ratio3= (abs(Vsu-VsuRef)/VsuRef)
 Vu2= shearController.Vu2
 Vu= shearController.Vu
 VuRef= 1109.56179340211e3 # See spreadsheet with the same name in this folder.
-ratio4= ((Vu-VuRef)/VuRef)
+ratio4= (abs(Vu-VuRef)/VuRef)
 cf= shearCF[0]
 
 '''
