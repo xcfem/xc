@@ -684,8 +684,11 @@ class LongReinfLayers(object):
                     initAngle= anglePairs[0]; finalAngle= anglePairs[1]
                     layer= rbRow.defCircularLayer(reinforcement,code,diagramName, extRad, initAngle, finalAngle)
                     self.reinfLayers.append(layer)
-        else:
-            lmsg.warning('No longitudinal reinforcement.')
+        else:            
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            warningMsg= '; no longitudinal reinforcement.'
+            lmsg.warning(className+'.'+methodName+warningMsg)
 
     def clearLayers(self):
         ''' Clear the previously defined reinforcement layers.'''
@@ -957,7 +960,7 @@ class RCSectionBase(object):
                                   concrete fiber section.
     :ivar fiberSectionRepr: fiber model of the section.
     '''
-    def __init__(self, sectionDescr= None, concrType=None,reinfSteelType=None, nDivIJ= 10, nDivJK= 10):
+    def __init__(self, sectionDescr= None, concrType=None, reinfSteelType=None, nDivIJ= 10, nDivJK= 10):
         ''' Constructor.
 
         :param sectionDescr: section description.
@@ -1201,10 +1204,6 @@ class RCSectionBase(object):
     def clearRCSection(self):
         ''' Clear a previously defined XC reinforced concrete section (possibly
             with a different preprocessor, which can lead to errors).
-
-        :param preprocessor: preprocessor of the finite element problem.
-        :param matDiagType: type of stress-strain diagram 
-                    ("k" for characteristic diagram, "d" for design diagram)
         '''
         self.clearShearResponse()
         self.clearSectionGeometry()
@@ -1228,33 +1227,57 @@ class RCSectionBase(object):
         '''
         return self.fiberSectionParameters.defInteractionDiagramParameters(preprocessor)
 
-    def defInteractionDiagram(self, preprocessor):
+    def defInteractionDiagram(self, preprocessor, matDiagType= None):
         '''Defines 3D interaction diagram.
 
         :param preprocessor: preprocessor of the finite element problem.
+        :param matDiagType: if not None call defRCSection to create the fiber
+                            model of this section.
         '''
+        if(matDiagType):
+            self.defRCSection(preprocessor= preprocessor, matDiagType= matDiagType)
         if(not self.fiberSectionRepr):
-            lmsg.error("defInteractionDiagram: fiber section representation for section: "+ self.name + ";  not defined yet; use defRCSection (or defRCSection2d) method.\n")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= "Fiber section representation for section: "+ self.name + ";  not defined yet; use defRCSection (or defRCSection2d) method."
+            lmsg.error(className+'.'+methodName+errMsg)
+            exit(1)
         self.defInteractionDiagramParameters(preprocessor)
         return preprocessor.getMaterialHandler.calcInteractionDiagram(self.name,self.fiberSectionParameters.idParams)
 
-    def defInteractionDiagramNMy(self, preprocessor):
+    def defInteractionDiagramNMy(self, preprocessor, matDiagType= None):
         '''Defines N-My interaction diagram.
 
         :param preprocessor: preprocessor of the finite element problem.
+        :param matDiagType: if not None call defRCSection to create the fiber
+                            model of this section.
         '''
+        if(matDiagType):
+            self.defRCSection(preprocessor= preprocessor, matDiagType= matDiagType)
         if(not self.fiberSectionRepr):
-            lmsg.error("defInteractionDiagramNMy: fiber section representation for section: "+ self.name + ";  not defined yet; use defRCSection (or defRCSection2d) method.\n")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= "Fiber section representation for section: "+ self.name + ";  not defined yet; use defRCSection (or defRCSection2d) method."
+            lmsg.error(className+'.'+methodName+errMsg)
+            exit(1)
         self.defInteractionDiagramParameters(preprocessor)
         return preprocessor.getMaterialHandler.calcInteractionDiagramNMy(self.name,self.fiberSectionParameters.idParams)
 
-    def defInteractionDiagramNMz(self, preprocessor):
+    def defInteractionDiagramNMz(self, preprocessor, matDiagType= None):
         '''Defines N-Mz interaction diagram.
 
         :param preprocessor: preprocessor of the finite element problem.
+        :param matDiagType: if not None call defRCSection to create the fiber
+                            model of this section.
         '''
+        if(matDiagType):
+            self.defRCSection(preprocessor= preprocessor, matDiagType= matDiagType)
         if(not self.fiberSectionRepr):
-            lmsg.error("defInteractionDiagramNMz: fiber section representation for section: "+ self.name + ";  not defined yet; use defRCSection (or defRCSection2d) method.\n")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= "Fiber section representation for section: "+ self.name + ";  not defined yet; use defRCSection (or defRCSection2d) method."
+            lmsg.error(className+'.'+methodName+errMsg)
+            exit(1)
         self.defInteractionDiagramParameters(preprocessor)
         return preprocessor.getMaterialHandler.calcInteractionDiagramNMz(self.name,self.fiberSectionParameters.idParams)
 
@@ -1742,7 +1765,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             errMsg= className+'.'+methodName+"; bending axis must be 'z' or 'y'"
-            lmsg.error(errMsg)
+            lmsg.error(className+'.'+methodName+errMsg)
         return retval
     
     def getDepth(self):
@@ -2211,7 +2234,10 @@ class RCRectangularSection(BasicRectangularRCSection):
     def getIyHomogenizedSection(self):
         '''returns the second moment of area about the axis parallel to 
         the section depth through the center of gravity'''
-        lmsg.error('getIyHomogenizedSection not implemented yet.')
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        errMsg= '; not implemented yet.'
+        lmsg.error(className+'.'+methodName+errMsg)
         # Need to compute the steel distribution along the z axis.
         return None
     

@@ -31,7 +31,7 @@ lmbdArcLength= -0.5 # parameter (0.0->start of the axis, 1.0->end of the axis),
 loadFactor= 1.0 # factor to apply to the loads.
 contour.logFileName= "/tmp/erase.log" # Don't print error messages.
 wheelLoads= axis.getWheelLoads(loadModel= loadModel, lmbdArcLength= lmbdArcLength, loadFactor= loadFactor)
-contour.logileName= "clog" # Display errors if any.
+contour.logFileName= "clog" # Display errors if any.
 
 # Check results.
 ## Reference values.

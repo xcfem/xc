@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-''' Checks the computation of the interaction diagram according
-    to Eurocode 2.
+''' Checks the computation of the interaction diagram according to Eurocode 2.
+
    Based on the article: 
-   "Interaction diagrams for reinforced
-    concrete circular cross-section"
-   of Željko Smolčić and Davor Grandić '''
+   "Interaction diagrams for reinforced concrete circular cross-section"
+   of Željko Smolčić and Davor Grandić 
+'''
 
 from __future__ import division
 from __future__ import print_function
