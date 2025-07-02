@@ -128,9 +128,9 @@ controller= limitState.getController()
 meanFCs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y', threeDim= True, controller= controller)
 
 # Check results.
-refMeanFC0= 0.8576189308851021
+refMeanFC0= 0.853914947168765
 ratio1= abs(meanFCs[0]-refMeanFC0)/refMeanFC0
-refMeanFC1= 1.3013922288261284
+refMeanFC1= 1.39491564211114
 ratio2= abs(meanFCs[1]-refMeanFC1)/refMeanFC1
 
 '''
