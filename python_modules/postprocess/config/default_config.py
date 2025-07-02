@@ -285,7 +285,7 @@ class ProjectDirTree(object):
 
     def getReportSectionsFile(self):
         ''' Return the full path for the sections report file.'''        
-        return self.getFullTextReportPath()+'report_RCsections.tex'
+        return self.getFullTextReportPath()+'report_rc_sections.tex'
     
     def getReportSectionsGrPath(self):
         ''' Return the full path for the sections graphic files.'''        
