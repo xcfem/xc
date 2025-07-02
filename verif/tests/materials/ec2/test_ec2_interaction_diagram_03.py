@@ -71,6 +71,12 @@ ratio= abs(CF-CFRef)/CFRef
 print("CF= ",CF)
 print("CFRef= ",CFRef)
 print("ratio= ",ratio)
+print('NMax= ', interactionDiagram.getXMax/1e3, 'kN')
+print('NMin= ', interactionDiagram.getXMin/1e3, 'kN')
+print('MyMax= ', interactionDiagram.getYMax/1e3, 'kN.m')
+print('MyMin= ', interactionDiagram.getYMin/1e3, 'kN.m')
+print('MzMax= ', interactionDiagram.getZMax/1e3, 'kN.m')
+print('MzMin= ', interactionDiagram.getZMin/1e3, 'kN.m')
 '''
 
 import os
