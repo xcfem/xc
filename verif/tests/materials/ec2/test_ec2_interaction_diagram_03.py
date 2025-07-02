@@ -2,7 +2,7 @@
 ''' Checks the computation of the interaction diagram according to Eurocode 2.
     This test uses the 3D interaction diagram (N, My, Mz).
 
-   Results checked agoin those of the website:
+   Results checked against those of the website:
    https://eurocodeapplied.com/design/en1992/uls-design-rectangular-section
 '''
 

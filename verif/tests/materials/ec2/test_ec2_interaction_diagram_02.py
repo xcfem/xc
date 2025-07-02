@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ''' Checks the computation of the interaction diagram according to Eurocode 2.
 
-   Results checked agoin those of the website:
+   Results checked against those of the website:
    https://eurocodeapplied.com/design/en1992/uls-design-rectangular-section
 '''
 
