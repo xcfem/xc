@@ -228,11 +228,11 @@ class PhantomModel(object):
                     diagInt= None
                     if(mapInteractionDiagrams is not None):
                         diagInt= mapInteractionDiagrams[sectionName]
-                    createPhantomElement= True
+                    create_phantom_element= True
                     if(tagElem in exhaustedSections):
                         if(i in exhaustedSections[tagElem]):
-                            createPhantomElement= False # section exhausted.
-                    if(createPhantomElement):
+                            create_phantom_element= False # section exhausted.
+                    if(create_phantom_element):
                         phantomElem= self.createPhantomElement(masterElementId= tagElem, masterElementDimension= masterElementDimension, sectionName= sectionName, sectionDefinition= elementSectionDefinitions[i], sectionIndex= i+1, interactionDiagram= diagInt, fakeSection= outputCfg.controller.fakeSection)
                         retval.append(phantomElem)
                         self.tagsNodesToLoad[tagElem].append(phantomElem.getNodes[1].tag) # Node to load
