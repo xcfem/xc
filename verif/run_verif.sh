@@ -1517,6 +1517,7 @@ python tests/materials/ec2/test_smearedCracking_06.py
 echo "$BLEU" "    EC2 bending resistance determination tests." "$NORMAL"
 python tests/materials/ec2/test_ec2_interaction_diagram_01.py
 python tests/materials/ec2/test_ec2_interaction_diagram_02.py
+python tests/materials/ec2/test_ec2_interaction_diagram_03.py
 python tests/materials/ec2/test_EC2_bending_01.py
 python tests/materials/ec2/test_EC2_bending_02.py
 python tests/materials/ec2/test_EC2_bending_03.py
