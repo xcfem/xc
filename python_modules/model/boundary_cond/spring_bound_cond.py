@@ -341,7 +341,7 @@ class ElasticFoundation(object):
 
         field= fields.ExtrapolatedScalarField('soilPressure','getProp',self.foundationSet,component=2,fUnitConv= fUnitConv,rgMinMax=rgMinMax)
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        field.display(displaySettings, caption= caption+' '+unitDescription,fileName=fileName)
+        field.display(displaySettings, caption= caption, fileName=fileName, unitDescription= unitDescription)
 
     def displayMaxPressures(self, modelSpace, analysis, combs, caption, fUnitConv, unitDescription, rgMinMax=None, fileName=None):
         '''
