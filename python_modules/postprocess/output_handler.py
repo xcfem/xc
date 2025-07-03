@@ -47,11 +47,14 @@ class OutputHandler(object):
         ''' Return the text to use in the image caption.
 
         :param itemToDisp: magnitude to display.
-        :param setToDisplay: name of the set that will be displayed.
+        :param setToDisplay: XC set that will be displayed.
         :param includeLoadCaseName: if true include the name of the current load
                                     case in the caption text.
         '''
-        retval= itemToDisp+' '+setToDisplay.description
+        setCaption= setToDisplay.description
+        if not setCaption: # if no description available use the set name.
+            setCaption= setToDisplay.name
+        retval= itemToDisp+' '+setCaption
         if(includeLoadCaseName):
             loadCaseName= self.modelSpace.getCurrentLoadCaseName()
             retval= loadCaseName+' '+retval
