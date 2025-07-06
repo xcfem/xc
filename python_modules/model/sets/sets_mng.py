@@ -15,6 +15,61 @@ import xc
 import math
 from misc_utils import log_messages as lmsg
 
+# The tributary area is cumulative (to avoid discontinuities for
+# the nodes at the set boundaries), so if you call it twice, you'll get this
+# value doubled unless you call resetTributaries first.
+# The following functions are written to avoid this problem by returning
+# the tributary values in a dictionary whose key is the node tag and
+# reseting them inmediately.
+
+def get_tributary_lengths(xcSet, initialGeometry= False):
+    ''' Compute the tributary lengths corresponding to the nodes of a set.
+
+    :param xcSet: set contaning the nodes whose tributary element lengths 
+                  will be computed.
+    :param initialGeometry: if true compute lengths on the initial geometry
+                            of the model. Otherwise use its current geometry.
+    '''
+    retval= dict()
+    xcSet.resetTributaries()
+    xcSet.computeTributaryLengths(initialGeometry)
+    for n in xcSet.nodes:
+        retval[n.tag]= n.getTributaryLength()
+    xcSet.resetTributaries() # Keep the tributary values clean.
+    return retval
+
+def get_tributary_areas(xcSet, initialGeometry= False):
+    ''' Compute the tributary areas corresponding to the nodes of a set.
+
+    :param xcSet: set contaning the nodes whose tributary element lengths 
+                  will be computed.
+    :param initialGeometry: if true compute lengths on the initial geometry
+                            of the model. Otherwise use its current geometry.
+    '''
+    retval= dict()
+    xcSet.resetTributaries()
+    xcSet.computeTributaryAreas(initialGeometry)
+    for n in xcSet.nodes:
+        retval[n.tag]= n.getTributaryArea()
+    xcSet.resetTributaries() # Keep the tributary values clean.
+    return retval
+
+def get_tributary_volumes(xcSet, initialGeometry= False):
+    ''' Compute the tributary volumes corresponding to the nodes of a set.
+
+    :param xcSet: set contaning the nodes whose tributary element lengths 
+                  will be computed.
+    :param initialGeometry: if true compute lengths on the initial geometry
+                            of the model. Otherwise use its current geometry.
+    '''
+    retval= dict()
+    xcSet.resetTributaries()
+    xcSet.computeTributaryVolumes(initialGeometry)
+    for n in xcSet.nodes:
+        retval[n.tag]= n.getTributaryVolume()
+    xcSet.resetTributaries() # Keep the tributary values clean.
+    return retval
+
 def check_element_sets_are_disjoint(xcSets):
     ''' Check that the given element sets are disjoint.
 
