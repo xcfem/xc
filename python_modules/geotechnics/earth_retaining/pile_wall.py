@@ -492,7 +492,7 @@ class PileWall(object):
         soilResponseMaterials= dict()
         self.tributaryAreas= dict()
         #### Compute tributary lengths.
-        tributaryLengths= sets_mng.get_tributary_lengths(xcSet= self.pileSet, initialGeometry= initialGeometry) # tributary lengths.
+        tributaryLengths= sets_mng.get_tributary_lengths(xcSet= self.pileSet, initialGeometry= True) # tributary lengths.
         #### Compute soils at nodes.
         self.setNodeSoils()
         #### Minimum depth.
