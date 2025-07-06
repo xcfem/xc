@@ -15,6 +15,7 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 from materials.ec2 import EC2_materials
+from model.sets import sets_mng 
 
 # Problem geometry
 foundationWidth= 10.0
@@ -51,8 +52,7 @@ slabSet= modelSpace.defSet(setName= 'slabSet', surfaces= [slab])
 slabSet.fillDownwards()
 
 # Compute tributary areas.
-slabSet.resetTributaries()
-slabSet.computeTributaryAreas(False)
+tributaryAreas= sets_mng.get_tributary_areas(xcSet= slabSet, initialGeometry= False)
 
 testOK= True
 visitedNodes= set()
@@ -60,19 +60,19 @@ visitedNodes= set()
 # Check results.
 for p in [pt0, pt1, pt2, pt3]:
     n= p.getNode()
-    a= n.getTributaryArea()
+    a= tributaryAreas[n.tag]
     testOK= testOK and (abs(a-0.25)<1e-6)
     visitedNodes.add(n.tag)
 
 for l in slabSet.lines:
     for n in l.nodes:
         if not n.tag in visitedNodes:
-            a= n.getTributaryArea()
+            a= tributaryAreas[n.tag]
             testOK= testOK and (abs(a-0.5)<1e-6)
             visitedNodes.add(n.tag)
 for n in slabSet.nodes:
     if not n.tag in visitedNodes:
-        a= n.getTributaryArea()
+        a= tributaryAreas[n.tag]
         testOK= testOK and (abs(a-1.0)<1e-6)
         visitedNodes.add(n.tag)
         

@@ -76,7 +76,8 @@ class Micropile(guia.Micropile):
             else:
                 soilReactionModulus= -15000e3*z
             assert(soilReactionModulus>=0)
-            springStiffness= soilReactionModulus*n.getTributaryLength()
+            tL= self.tributaryLengths[n.tag]
+            springStiffness= soilReactionModulus*tL
             retval[n.tag]= [alphaKh_x*springStiffness, alphaKh_y*springStiffness, 1e-5]
         # Compute vertical stiffness on the tip.
         tipNode= lstNodPile[-1][0]
