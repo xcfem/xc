@@ -22,6 +22,7 @@ from materials import typical_materials
 from materials.sections import section_properties
 from materials.sections.fiber_section import def_simple_RC_section
 from model.geometry import retaining_wall_geometry
+from model.sets import sets_mng 
 from rough_calculations import ng_rc_section
 from misc_utils import log_messages as lmsg
 from misc_utils import path_utils
@@ -1174,7 +1175,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
                     self.wallSet.elements.append(e)
                     e.setProp("baseSection", stemRCSection)
         # Springs on nodes.
-        self.foundationSet.computeTributaryLengths(False)
+        tributaryLengths= sets_mng.get_tributary_lengths(xcSet= self.foundationSet, initialGeometry= False) # tributary areas.
         self.fixedNodes= []
         elasticBearingNodes= self.foundationSet.nodes
         kX= springMaterials[0] #Horizontal
@@ -1183,7 +1184,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         kSy= kY.E
         lngTot= 0.0
         for n in elasticBearingNodes:
-            lT= n.getTributaryLength()
+            lT= tributaryLengths[n.tag]
             lngTot+= lT
             #print("tag= ", n.tag, " lT= ", lT)
             #print("before k= ", kY.E)
