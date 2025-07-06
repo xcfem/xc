@@ -140,7 +140,7 @@ class PileFoundation(pile.CircularPile):
                 lmsg.warning(className+'.'+methodName+'; wrong type of soil: '+str(soilType))
             while(y>yBottom):
                 n= lstNodPile[0][0]
-                lnTribNod= n.getTributaryLength()
+                lnTribNod= self.tributaryLengths[n.tag]
                 if(soilType == 'sa'): # sandy soil
                     Kh_x= alphaKh_x*soilPrp*(self.soilLayers.groundLevel-y)*lnTribNod*coefKh
                 else: # cohesive soil
@@ -195,7 +195,7 @@ class PileFoundation(pile.CircularPile):
                 lmsg.warning(className+'.'+methodName+'; wrong type of soil: '+str(soilType))
             while(z>zBottom):
                 n= lstNodPile[0][0]
-                lnTribNod= n.getTributaryLength()
+                lnTribNod= self.tributaryLengths[n.tag]
                 if(soilType == 'sa'): #sandy soil
                     Kh_x= alphaKh_x*soilPrp*(self.soilLayers.groundLevel-z)*lnTribNod*coefKh
                     Kh_y= alphaKh_y*soilPrp*(self.soilLayers.groundLevel-z)*lnTribNod*coefKh

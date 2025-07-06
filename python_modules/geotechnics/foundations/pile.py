@@ -16,6 +16,7 @@ from misc_utils import log_messages as lmsg
 from materials.sections import section_properties as sp
 from materials import typical_materials
 from model import predefined_spaces
+from model.sets import sets_mng 
 
 def get_node_zs(nodes):
     ''' Return a list of tuples containing the (node, z) paris with the z 
@@ -236,8 +237,7 @@ class Pile(object):
                                 of the model. Otherwise use its current 
                                 geometry.
         '''
-        self.pileSet.resetTributaries()
-        self.pileSet.computeTributaryLengths(initialGeometry)
+        self.tributaryLengths= sets_mng.get_tributary_lengths(xcSet= self.pileSet, initialGeometry= initialGeometry) # tributary lengths.
 
     def getNodeZs(self):
         ''' Return a list of tuples containing the node an its z coordinate

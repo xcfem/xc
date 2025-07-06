@@ -11,6 +11,7 @@ import xc
 from geotechnics import earth_pressure
 from scipy.constants import g
 from model import predefined_spaces
+from model.sets import sets_mng 
 from solution import predefined_solutions
 
 from operator import itemgetter
@@ -491,8 +492,7 @@ class PileWall(object):
         soilResponseMaterials= dict()
         self.tributaryAreas= dict()
         #### Compute tributary lengths.
-        self.pileSet.resetTributaries()
-        self.pileSet.computeTributaryLengths(False) # Compute tributary lenghts.
+        tributaryLengths= sets_mng.get_tributary_lengths(xcSet= self.pileSet, initialGeometry= initialGeometry) # tributary lengths.
         #### Compute soils at nodes.
         self.setNodeSoils()
         #### Minimum depth.
@@ -506,7 +506,7 @@ class PileWall(object):
             rightNonLinearSpringMaterial= None
             tributaryArea= 0.0
             if(nodeDepth>minimumDepth): # Avoid zero soil response.
-                tributaryLength= n.getTributaryLength()
+                tributaryLength= tributaryLengths[n.tag]
                 tributaryArea= tributaryLength*self.pileSpacing
                 materialName= 'soilResponse_z_'+str(n.tag)
                 nodeSoil= self.soilsAtNodes[n.tag]
