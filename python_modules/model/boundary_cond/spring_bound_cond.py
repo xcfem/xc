@@ -27,6 +27,8 @@ class SpringBC(object):
     :ivar Kx: spring stiffness in X direction (defaults to 0 -> free)
     :ivar Ky: spring stiffness in Y direction (defaults to 0 -> free)
     :ivar Kz: spring stiffness in Z direction (defaults to 0 -> free)
+    :ivar foundationSet: set of nodes and elements that belong to the
+                         spring supported foundation.
     '''
     def __init__(self, name, modelSpace, Kx= 0, Ky= 0, Kz= 0):
         ''' Constructor.
@@ -179,7 +181,7 @@ class ElasticFoundation(object):
         tributary area of the node.
 
         :param preprocessor: pre-processor of the FE problem at hand.
-        :param name: name to give to the 
+        :param name: name to give to the spring materials. 
         '''
         if(self.xSpring is None and
            self.ySpring is None): # if not already created.
@@ -206,7 +208,7 @@ class ElasticFoundation(object):
         tributary area.
 
         :param preprocessor: pre-processor of the FE problem at hand.
-        :param name: name to give to the 
+        :param name: name to give to the spring materials. 
         '''
         if(self.xSpring is None and
            self.ySpring is None and
@@ -237,7 +239,7 @@ class ElasticFoundation(object):
             depending on its tributary area.
 
         :param preprocessor: pre-processor of the FE problem at hand.
-        :param name: name to give to the 
+        :param name: name to give to the spring materials. 
         '''
         dimSpace= preprocessor.getNodeHandler.dimSpace # space dimension.
         if(dimSpace==2):
