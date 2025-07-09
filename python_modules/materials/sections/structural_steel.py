@@ -406,7 +406,7 @@ class SteelShape(sp.SectionProperties):
 
 class IShape(SteelShape):
     ''' I (or double tee) shaped steel profile.'''
-    def __init__(self,steel,name,table):
+    def __init__(self, steel, name, table):
         ''' Constructor.
 
         :param steel: steel object (e.g. S275JR)
