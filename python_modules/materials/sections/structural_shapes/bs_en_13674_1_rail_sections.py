@@ -19,11 +19,10 @@ for item in RAIL:
     E= shape['E']
     nu= shape['nu']
     b= shape['foot_width']
+    shape['b']= b
     h= shape['h']
     shape['alpha']= 1.0/2.0
     shape['G']= E/(2*(1+nu))
-    shape['AreaQy']= shape['t']*shape['h']
-    # shape['AreaQz']= 
 
 class RailShape(structural_steel.IShape):
     ''' Rail profile according to BS EN 13674-1.'''
@@ -37,3 +36,7 @@ class RailShape(structural_steel.IShape):
         '''
         super().__init__(steel= steel, name= name, table= RAIL)
         
+    
+    def getWarpingConstant(self):
+        ''' Return the value of the section warping constant.'''
+        return self.get('Cw')

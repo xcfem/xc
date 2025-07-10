@@ -1576,6 +1576,7 @@ python tests/materials/steel_shapes/test_arcelor_metric_shapes_02.py
 python tests/materials/steel_shapes/test_arcelor_metric_shapes_03.py
 python tests/materials/steel_shapes/test_arcelor_metric_shapes_04.py
 python tests/materials/steel_shapes/test_en_13674_1_rail_shapes_01.py
+python tests/materials/steel_shapes/test_en_13674_1_rail_shapes_02.py
 echo "$BLEU" "    EC3 tests." "$NORMAL"
 python tests/materials/ec3/compare_mech_properties.py
 python tests/materials/ec3/test_cross_section_verification_01.py
