@@ -31,19 +31,19 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 n1= nodes.newNodeXYZ(0,0.0,0.0)
 n2= nodes.newNodeXYZ(L,0.0,0.0)
 
-R260= EN_13674_1_materials.R260
+steel= EN_13674_1_materials.R260
 gammaM0= 1.05
-R260.gammaM= gammaM0 
-UIC54= bs_en_13674_1_rail_sections.RailShape(steel= R260, name= "RAIL_UIC54") # Section geometry.
-profil= UIC54.defElasticShearSection3d(preprocessor)
+steel.gammaM= gammaM0 
+rail= bs_en_13674_1_rail_sections.RailShape(steel= steel, name= "RAIL_UIC54") # Section geometry.
+profil= rail.defElasticShearSection3d(preprocessor)
 
 # Elements definition
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 modelSpace.setDefaultCoordTransf(lin)
-modelSpace.setDefaultMaterial(UIC54)
+modelSpace.setDefaultMaterial(rail)
 
 elem= modelSpace.newElement("ElasticBeam3d", [n1.tag, n2.tag])
-elem.rho= UIC54.get('P')
+elem.rho= rail.get('P')
 
 # Constraints
 modelSpace.fixNode000_000(n1.tag)
