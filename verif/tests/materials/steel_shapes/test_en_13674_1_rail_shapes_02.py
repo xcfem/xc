@@ -31,11 +31,12 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 n1= nodes.newNodeXYZ(0,0.0,0.0)
 n2= nodes.newNodeXYZ(L,0.0,0.0)
 
+# Material definition
+gammaM0= 1.05 # Partial safety factor.
 steel= EN_13674_1_materials.R260
-gammaM0= 1.05
 steel.gammaM= gammaM0 
 rail= bs_en_13674_1_rail_sections.RailShape(steel= steel, name= "RAIL_UIC54") # Section geometry.
-profil= rail.defElasticShearSection3d(preprocessor)
+xcSection= rail.defElasticShearSection3d(preprocessor)
 
 # Elements definition
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
@@ -64,7 +65,7 @@ elem.getResistingForce()
 M= elem.getMz1
 V= elem.getVy()
 
-EIz= profil.getEI1()
+EIz= xcSection.getEI1()
 deltateor= -F*L**3/3/EIz
 ratio1= (abs(delta-deltateor)/deltateor)
 ratio2= ((M-F*L)/(F*L))
