@@ -640,6 +640,8 @@ echo "$BLEU" "  Soil subgrade reaction." "$NORMAL"
 python tests/sample_problems/soil_subgrade_reaction/test_winkler.py
 python tests/sample_problems/soil_subgrade_reaction/test_quasi_winkler.py
 python tests/sample_problems/soil_subgrade_reaction/test_foundation_slab.py
+echo "$BLEU" "  Earth retaining." "$NORMAL"
+python tests/sample_problems/earth_retaining/test_rail_retaining_wall.py
 
 echo "$BLEU" "Solution tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py
