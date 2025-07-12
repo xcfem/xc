@@ -280,8 +280,10 @@ python tests/actions/test_prestressing.py
 python tests/actions/test_report_load_cases.py
 echo "$BLEU" "  Earth pressure tests." "$NORMAL"
 python tests/actions/earth_pressure/test_peck_pressure_envelope.py
+python tests/actions/earth_pressure/test_uniform_load_on_stem_01.py
 python tests/actions/earth_pressure/test_uniform_pressure_on_ground_01.py
 python tests/actions/earth_pressure/test_uniform_pressure_on_ground_02.py
+python tests/actions/earth_pressure/test_uniform_pressure_on_ground_03.py
 python tests/actions/earth_pressure/test_earth_pressure_01.py
 python tests/actions/earth_pressure/test_earth_pressure_02.py
 python tests/actions/earth_pressure/test_earth_pressure_03.py
