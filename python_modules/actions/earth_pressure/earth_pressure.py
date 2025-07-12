@@ -83,7 +83,8 @@ class PressureModelBase(object):
     def appendLoadToCurrentLoadPattern(self, xcSet, vDir, iCoo= 2, delta= 0.0):
         '''Append earth thrust on a set of elements to the current load pattern.
 
-        :param xcSet: set that contains the elements (shells and/or beams)
+        :param xcSet: set that contains the elements (shells and/or beams) that
+                      will receive the load.
         :param vDir: unit xc vector defining pressures direction
         :param iCoo: index of the coordinate that represents depth.
         :param delta: soil-wall friction angle (usually: delta= 2/3*Phi).
@@ -176,9 +177,9 @@ class UniformPressureOnBackfill(PressureModelBase):
 
         :param zGround: global Z coordinate of ground level
         :param zBottomSoils: list of global Z coordinates of the bottom level
-              for each soil (from top to bottom)
+                             for each soil (from top to bottom)
         :param KSoils: list of pressure coefficients for each soil (from top 
-              to bottom)
+                       to bottom)
         :param qUnif: uniform load over the backfill surface (defaults to 0)
         '''
         super(UniformPressureOnBackfill,self).__init__()
@@ -428,7 +429,7 @@ class UniformLoadOnStem(PressureModelBase):
 
     :ivar qLoad: surcharge load (force per unit area).
     '''
-    def __init__(self,qLoad):
+    def __init__(self, qLoad):
         ''' Constructor.
 
         :param qLoad: surcharge load (force per unit area).
@@ -453,7 +454,7 @@ class StripLoadOnBackfill(UniformLoadOnStem):
     :ivar coef: is a coefficient = 1.5 (default) for the usual case of non-rigid
                 walls. It can be redefined =2 for rigid walls
     '''
-    def __init__(self ,qLoad, zLoad,distWall, stripWidth):
+    def __init__(self , qLoad, zLoad,distWall, stripWidth):
         ''' Constructor.
 
         :param qLoad: surcharge load (force per unit area).
@@ -473,7 +474,7 @@ class StripLoadOnBackfill(UniformLoadOnStem):
         :param z: global z coordinate.
         '''
         ret_press=0.0
-        difZ=self.zLoad-z
+        difZ= self.zLoad-z
         if difZ>0:
             bet1=math.atan(self.distWall/difZ)
             bet2=math.atan((self.distWall+self.stripWidth)/difZ)
