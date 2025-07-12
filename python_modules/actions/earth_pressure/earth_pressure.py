@@ -180,7 +180,7 @@ class UniformPressureOnBackfill(PressureModelBase):
                              for each soil (from top to bottom)
         :param KSoils: list of pressure coefficients for each soil (from top 
                        to bottom)
-        :param qUnif: uniform load over the backfill surface (defaults to 0)
+        :param qUnif: uniform load over the backfill surface.
         '''
         super(UniformPressureOnBackfill,self).__init__()
         self.zGround= zGround
