@@ -42,6 +42,7 @@ loadedAreaWidth= 3.0
 loadedAreaLength= 1.0
 pressure= earth_pressure.HorizontalLoadOnBackfill(phi= phi, qLoad= qLoad, zLoad= zLoad, distWall= 2.56, loadedAreaWidth= loadedAreaWidth,  loadedAreaLength= loadedAreaLength)
 
+# Reference values obtained from the drawing in the DXF file of the same name.
 zMaxPressure= pressure.getZMaxPressure()
 ratio0= abs(zMaxPressure-7.8563)/7.8563
 zMinPressure= pressure.getZMinPressure()
