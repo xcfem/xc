@@ -94,6 +94,7 @@ python tests/utility/geom/lines/line3d_test_03.py
 python tests/utility/geom/lines/line3d_test_04.py
 python tests/utility/geom/lines/line3d_test_05.py
 python tests/utility/geom/lines/line2d_intersection_test.py
+python tests/utility/geom/lines/line_intersection_test.py
 python tests/utility/geom/lines/line_segment_intersection_test.py
 python tests/utility/geom/lines/ray2d_test.py
 echo "$BLEU" "    Segments." "$NORMAL"
@@ -296,9 +297,11 @@ python tests/actions/earth_pressure/test_earth_pressure_point_load.py
 python tests/actions/earth_pressure/test_boussinesq_earth_pressure_01.py
 python tests/actions/earth_pressure/test_boussinesq_earth_pressure_02.py
 python tests/actions/earth_pressure/test_boussinesq_earth_pressure_03.py
+python tests/actions/earth_pressure/test_horizontal_load_earth_pressure_00.py
 python tests/actions/earth_pressure/test_horizontal_load_earth_pressure_01.py
 python tests/actions/earth_pressure/test_horizontal_load_earth_pressure_02.py
 python tests/actions/earth_pressure/test_horizontal_load_earth_pressure_03.py
+python tests/actions/earth_pressure/test_horizontal_load_earth_pressure_04.py
 python tests/actions/earth_pressure/test_strip_load_on_backfill_01.py
 echo "$BLEU" "  Earthquake action tests." "$NORMAL"
 python tests/actions/quake/mononobe_okabe_test_01.py

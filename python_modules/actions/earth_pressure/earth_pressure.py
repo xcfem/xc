@@ -27,6 +27,18 @@ from geotechnics import iskander_method
 from model.sets import sets_mng as sets
 import bisect
 
+def get_rankine_rupture_line_angle(phi, beta):
+    ''' Return the angle with the horizontal of the Rankine's rupture line
+        for a dry, homogeneous granular medimum.
+
+    :param phi: soil angle of internal friction.
+    :param beta: slope inclination of backfill.
+    '''
+    retval= math.pi/4.+phi/2.0
+    if(beta!=0.0):
+        retval-= 0.5*(math.asin(math.sin(beta)/math.sin(phi))-beta)
+    return retval
+
 class PressureModelBase(object):
     '''Base class for objects defining earth pressures.'''
     
@@ -657,62 +669,77 @@ class HorizontalLoadOnBackfill(PressureModelBase):
     '''Lateral earth pressure on a retaining wall due to a surcharge 
     load acting in horizontal direction on the backfill.
 
-     See: https://estructurando.net/2017/04/18/empujes-muros-sobrecarga-horizontal/
+     See: ROM 0.5-05 Recomendaciones Geotécnicas para Obras Marítimas y 
+          Portuarias section 3.7.5.6.4
+     See also: https://estructurando.net/2017/04/18/empujes-muros-sobrecarga-horizontal/
 
 
-    :ivar soilIntFi: agle of internal friction of the soil (º)
-    :ivar qLoad: surcharge load (force per unit length)
+    :ivar phi: angle of internal friction of the soil (rad).
+    :ivar qLoad: surcharge load (force per unit length).
     :ivar zLoad: global Z coordinate where the line load acts
-    :ivar distWall: minimal horizontal distance between the wall and
-          the area where the surcharge load acts (e.g.: a foundation)
-    :ivar widthLoadArea: width (perperdicular to wall) of the area on
-          which the horizontal load acts (e.g.: a foundation). 
-    :ivar lengthLoadArea: length (normal to wall) of the area on
-          which the horizontal load acts (e.g.: a foundation). We can
-          take lengthLoadArea=1 (default) for a continous load  
+    :ivar distWall: minimal horizontal distance between the wall and the loaded
+                    area (e.g.: a foundation).
+    :ivar loadedAreaWidth: width (perperdicular to wall) of the loaded area
+                           (e.g.: a foundation). 
+    :ivar loadedAreaLength: length (normal to wall) of the loaded area
+                            (e.g.: a foundation). We can take 
+                            loadedAreaLength=1 (default) for a continous load.  
     :ivar horDistrAngle: angle to distribute load in the direction of
-          the lengthLoadArea (defaults to 0 to apply all the load to a
-          length of wall =lengthLoadArea, which would be the case of a
-          continous load)
+                         the loadedAreaLength (defaults to 0 to apply all the 
+                         load to a length of wall equal to loadedAreaLength, 
+                         which would be the case of a continous load).
+    :ivar beta: slope inclination of backfill.
     '''
-    def __init__(self,soilIntFi, qLoad, zLoad,distWall,widthLoadArea,lengthLoadArea=1,horDistrAngle=0):
+    def __init__(self, phi, qLoad, zLoad, distWall, loadedAreaWidth, loadedAreaLength=1, horDistrAngle=0, beta= 0):
         ''' Constructor.
 
-        :param soilIntFi: agle of internal friction of the soil (º)
+        :param phi: angle of internal friction of the soil (rad)
         :param qLoad: surcharge load (force per unit length)
         :param zLoad: global Z coordinate where the line load acts
         :param distWall: minimal horizontal distance between the wall and
-              the area where the surcharge load acts (e.g.: a foundation)
-        :param widthLoadArea: width (perperdicular to wall) of the area on
-              which the horizontal load acts (e.g.: a foundation). 
-        :param lengthLoadArea: width (parallel to wall) of the area on
-              which the horizontal load acts (e.g.: a foundation). We can
-              take lengthLoadArea=1 (default) for a continous load  
-        :param horDistrAngle: angle to distribute load in the direction of
-              the lengthLoadArea (defaults to 0 to apply all the load to a
-              length of wall =lengthLoadArea, which would be the case of a
-              continous load)
+                         the loaded area (e.g.: a foundation)
+        :param loadedAreaWidth: width (perperdicular to wall) of the loaded 
+                                area (e.g.: a foundation). 
+        :param loadedAreaLength: length (normal to wall) of the loaded area
+                                (e.g.: a foundation). We can take 
+                                loadedAreaLength=1 (default) for a continous 
+                                load.  
+        :param horDistrAngle: angle to distribute load in the direction of the
+                              loadedAreaLength (defaults to 0 to apply all the 
+                              load to a length of wall equal to 
+                              loadedAreaLength, which would be the case of a 
+                              continous load),
+        :param beta: slope inclination of backfill.
         '''
         super(HorizontalLoadOnBackfill,self).__init__()
-        self.soilIntFi=soilIntFi
+        self.phi= phi
         self.qLoad=qLoad
         self.zLoad=zLoad
-        self.distWall=abs(distWall)
-        self.widthLoadArea=widthLoadArea
-        self.lengthLoadArea=lengthLoadArea
-        self.horDistrAngle=horDistrAngle
+        self.distWall= abs(distWall)
+        self.loadedAreaWidth= loadedAreaWidth
+        self.loadedAreaLength= loadedAreaLength
+        self.horDistrAngle= horDistrAngle
+        self.beta= beta
+        self.zeta= get_rankine_rupture_line_angle(phi= self.phi, beta= self.beta)
+        self.zpresmax= self.zLoad-self.distWall*math.tan(self.phi)
+        self.zpresmin= self.zLoad-(self.distWall+self.loadedAreaWidth)*math.tan(self.zeta)
+        wallLoadedAreaLength= self.loadedAreaLength+2*self.distWall*math.tan(horDistrAngle)
+        wallLoadedAreaHeight= self.zpresmax-self.zpresmin
+        self.presmax= 2*self.qLoad*(self.loadedAreaLength/wallLoadedAreaLength)/wallLoadedAreaHeight
 
-    def setup(self):
-        '''Calculate basic parameters.'''
-        IntFiRad=math.radians(self.soilIntFi)
-        psi=math.pi/4+IntFiRad/2
-        self.zpresmax=self.zLoad-self.distWall*math.tan(IntFiRad)
-        self.zpresmin=self.zLoad-(self.distWall+self.widthLoadArea)*math.tan(psi)
-        horDistrAngleRad=math.radians(self.horDistrAngle)
-        self.presmax=(self.qLoad*self.lengthLoadArea)/(self.lengthLoadArea+2*self.distWall*math.tan(horDistrAngleRad))*2/(self.zpresmax-self.zpresmin)
-                                                  
-        
-    def getPressure(self,z):
+    def getZMaxPressure(self):
+        ''' Return the z coordinate of the point with maximum pressure.'''
+        return self.zpresmax
+
+    def getZMinPressure(self):
+        ''' Return the z coordinate of the point with maximum pressure.'''
+        return self.zpresmin
+
+    def getMaxPressure(self):
+        ''' Return the maximum value of the pressure against the wall.'''
+        return self.presmax
+
+    def getPressure(self, z):
         '''Return the earth pressure acting on the points at global coordinate z.
         :param z: global z coordinate.
         '''
@@ -721,6 +748,26 @@ class HorizontalLoadOnBackfill(PressureModelBase):
             ret_press=self.presmax/(self.zpresmax-self.zpresmin)*(z-self.zpresmin)
         return ret_press
 
+    def getForces2D(self, segment2d, numDiv= 10, beta= 0.0):
+        ''' Return the sliding vector system which is equivalent to the 
+            pressures acting on the surface represented by the 2D segment
+            argument.
+
+        :param numDiv: number of sample points along the segment.
+        :param beta: slope inclination of backfill.
+        '''
+        pTop= segment2d.getFromPoint()
+        pBottom= segment2d.getToPoint()
+        if(pTop.y<pBottom.y): # swap points.
+            pTop, pBottom= pBottom, pTop
+        supportLine= segment2d.getSupportLine()
+        zMax= min(self.getZMaxPressure(), pTop.y)
+        zMin= max(self.getZMinPressure(), pBottom.y)
+        pBottom= supportLine.getIntersection(2, zMin)[0]
+        pTop= supportLine.getIntersection(2, zMax)[0]
+        sg2d= geom.Segment2d(pBottom, pTop)
+        return super().getForces2D(segment2d= sg2d, numDiv= numDiv, beta= beta)
+    
     def appendLoadToCurrentLoadPattern(self, xcSet, vDir, iCoo= 2, delta= 0.0):
         '''Append to the current load pattern the earth thrust on a set of 
         elements due to the horizontal load.
@@ -730,13 +777,11 @@ class HorizontalLoadOnBackfill(PressureModelBase):
         :param iCoo: index of the coordinate that represents depth.
         :param delta: soil-wall friction angle (usually: delta= 2/3*Phi).
         '''
-        self.setup()
         return super(HorizontalLoadOnBackfill,self).appendLoadToCurrentLoadPattern(xcSet= xcSet, vDir= vDir, iCoo= iCoo, delta= delta)
 
     def getMaxMagnitude(self):
         '''Return the maximum magnitude of the vector loads'''
-        self.setup()
-        maxValue=self.getPressure(self.zpresmax)
+        maxValue= self.getPressure(self.zpresmax)
         return maxValue
 
 class SeismicPressureDistribution(EarthPressureBase):

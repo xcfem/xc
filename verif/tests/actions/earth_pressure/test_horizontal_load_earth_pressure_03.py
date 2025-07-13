@@ -99,7 +99,7 @@ loadCaseNames= ['earth_pressure']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 cLC= loadCaseManager.setCurrentLoadCase('earth_pressure')
 
-# Define concentreted load
+# Define concentrated load
 ## Position of the concentrated load.
 pos= geom.Pos3d(wallLength/2.0, wallHeight/2.0, wallHeight) # Centroid.
 ### Corners:
