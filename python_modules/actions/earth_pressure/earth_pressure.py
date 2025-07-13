@@ -447,17 +447,18 @@ class StripLoadOnBackfill(UniformLoadOnStem):
     '''Lateral earth pressure on a retaining wall due to a strip surcharge 
     load on the backfill. (J.Calavera, pg.40)
 
-    :ivar zLoad: global Z coordinate where the surcharge load acts
+    :ivar zLoad: global Z coordinate where the surcharge load is applied.
     :ivar distWall: minimal horizontal distance between the wall and the 
-                    surcharge load
+                    surcharge load.
     :ivar stripWidth: width of the strip
     :ivar coef: is a coefficient = 1.5 (default) for the usual case of non-rigid
                 walls. It can be redefined =2 for rigid walls
     '''
-    def __init__(self , qLoad, zLoad,distWall, stripWidth):
+    def __init__(self , qLoad, zLoad, distWall, stripWidth):
         ''' Constructor.
 
         :param qLoad: surcharge load (force per unit area).
+        :param zLoad: global Z coordinate where the surcharge load is applied.
         :param distWall: minimal horizontal distance between the wall and the 
                         surcharge load
         :param stripWidth: width of the strip
