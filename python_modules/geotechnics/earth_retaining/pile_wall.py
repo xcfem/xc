@@ -7,6 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
+import sys
 import xc
 from geotechnics import earth_pressure
 from scipy.constants import g
@@ -162,6 +163,11 @@ class SoilLayers(object):
         :param waterUnitWeight: water weight per volume unit.
         :param excavationDepths: excavation levels for each phase.
         '''
+        if(len(depths)!=len(soils)):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; number of soils must be equal to the number of soil depths.')
+            exit(1)
         self.depths= depths
         self.soils= soils
         self.setWaterTableDepths(waterTableDepths= waterTableDepths)
@@ -457,7 +463,8 @@ class PileWall(object):
         # Problem geometry
         lines= list()
         kPoints= list()
-        for depth in self.soilLayers.getDepths():
+        depths= self.soilLayers.getDepths()
+        for depth in depths:
             kPoints.append(self.modelSpace.newKPoint(0,-depth,0))
         kPt0= kPoints[0]
         for kPt1 in kPoints[1:]:
