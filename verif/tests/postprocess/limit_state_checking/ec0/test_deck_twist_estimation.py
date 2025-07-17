@@ -199,3 +199,4 @@ else:
 # # oh.displayReactions()
 # # oh.displayDispRot(itemToDisp='uX', defFScale= 10.0)
 # # oh.displayDispRot(itemToDisp='uY', defFScale= 10.0)
+# # oh.displayDispRot(itemToDisp='uZ', defFScale= 10.0)
