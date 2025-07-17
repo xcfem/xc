@@ -239,6 +239,23 @@ class Pile(object):
         '''
         self.tributaryLengths= sets_mng.get_tributary_lengths(xcSet= self.pileSet, initialGeometry= initialGeometry) # tributary lengths.
 
+    def getTributaryLength(self, n):
+        ''' Return the tributary length corresponding to the given node.
+
+        :param n: node to retrieve the triburary length for.
+        '''
+        retval= 0.0
+        if(hasattr(self, 'tributaryLengths')):
+            nTag= n.tag
+            if(nTag in self.tributaryLengths):
+                retval= self.tributaryLengths[nTag]
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= '; have not been computed yet. Call computeTributaryLengths to compute them.'
+            lmsg.error(className+'.'+methodName+errorMsg)
+        return retval
+
     def getNodeZs(self):
         ''' Return a list of tuples containing the node an its z coordinate
             sorted in descending order.'''
