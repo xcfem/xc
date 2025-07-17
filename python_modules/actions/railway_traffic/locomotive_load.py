@@ -138,7 +138,6 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
             twist= plane.dist(p3)*factor
             retval.append(twist)
         return retval
-            
     
     def getNosingLoadPositions(self):
         ''' Return a list with the positions for the nosing loads: center 
