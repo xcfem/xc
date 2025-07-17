@@ -1882,6 +1882,8 @@ echo "$BLEU" "    SIA 262 limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/sia262/test_shell_normal_stresses_uls_checking.py
 echo "$BLEU" "    ACI limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/aci/test_shear_uls_checking_aci.py
+echo "$BLEU" "    EC0 limit state checking." "$NORMAL"
+python tests/postprocess/limit_state_checking/ec0/test_deck_twist_estimation.py
 echo "$BLEU" "    EC2 limit state checking." "$NORMAL"
 echo "$BLEU" "      EC2 limit state checking: bending." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec2/test_2D_bending_uls_checking_01.py

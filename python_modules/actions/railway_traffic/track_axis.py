@@ -81,6 +81,42 @@ class TrackAxis(object):
         ''' Return the cross-section of the track.'''
         return tcs.TrackCrossSection(s= self.trackGauge+.04, u= self.u)
 
+    def getWheelsGlobalPositions(self, trainModel:tm.TrainLoadModel, relativePosition):
+        ''' Return the positions of the wheels that correspond to the position
+            specified by the relativePosition parameter.
+
+        :param trainModel: load model of the train (see TrainLoadModel class).
+        :param relativePosition: parameter (0.0->start of the axis, 1.0->end of
+                              the axis).
+        '''
+        ref= self.getReferenceAt(lmbdArcLength= relativePosition)
+        return trainModel.getWheelsGlobalPositions(ref= ref)
+
+    def getDisplacementsUnderWheels(self, trainModel:tm.TrainLoadModel, relativePosition, xcSet):
+        ''' Return the positions and displacements of the nodes under each 
+            wheel (the nearest one).
+
+        :param trainModel: load model of the train (see TrainLoadModel class).
+        :param relativePosition: parameter (0.0->start of the axis, 1.0->end of
+                              the axis).
+        :param xcSet: set to search the nodes on.
+        '''
+        ref= self.getReferenceAt(lmbdArcLength= relativePosition)
+        return trainModel.getDisplacementsUnderWheels(ref= ref, xcSet= xcSet)
+    
+    def getTwist(self, trainModel:tm.TrainLoadModel, relativePosition, xcSet, length= 3.0):
+        ''' Computes the deck twist fromn the displacements of the nodes
+            under the locomotive wheels.
+
+        :param trainModel: load model of the train (see TrainLoadModel class).
+        :param relativePosition: parameter (0.0->start of the axis, 1.0->end of
+                              the axis).
+        :param xcSet: set to search the nodes on.
+        :param length: length to measure the twist over.
+        '''
+        ref= self.getReferenceAt(lmbdArcLength= relativePosition)
+        return trainModel.getTwist(ref= ref, xcSet= xcSet, length= length)
+    
     def getWheelLoads(self, trainModel:tm.TrainLoadModel, relativePosition, loadFactor= 1.0, directionVector= xc.Vector([0,0,-1])):
         ''' Return the wheel loads of load model argument in the position
             specified by the relativePosition parameter.
@@ -89,6 +125,7 @@ class TrackAxis(object):
         :param relativePosition: parameter (0.0->start of the axis, 1.0->end of
                               the axis).
         :param loadFactor: factor to apply to the loads.
+        :param directionVector: load direction vector.
         '''
         wheelLoads= list()
         posSides= list()

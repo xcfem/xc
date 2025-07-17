@@ -11,6 +11,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmail.com"
 
 import sys
+import math
 import geom
 import xc
 from misc_utils import log_messages as lmsg
@@ -67,7 +68,7 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
         ''' Return the number of wheels of the locomotive.'''
         return self.nAxes*2
 
-    def getWheelPositions(self):
+    def getWheelLocalPositions(self):
         ''' Return a list with the positions of the wheels.'''
         dX= self.xSpacing
         dY= self.ySpacing/2.0
@@ -81,6 +82,64 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
                 retval.append(geom.Pos2d(x,y))
         return retval
 
+    def getWheelsGlobalPositions(self, ref):
+        ''' Return the loads of the wheels of the tandem along with its
+            positions.
+
+        :param ref: reference system at the center of the locomotive.
+        '''
+        # Compute local positions.
+        positions= self.getWheelLocalPositions()
+        # Transform to global positions.
+        retval= list()
+        for pos2d in positions:
+            retval.append(ref.getGlobalPosition(pos2d))
+        return retval
+
+    def getDisplacementsUnderWheels(self, ref, xcSet):
+        ''' Return the positions and displacements of the nodes under each 
+            wheel (the nearest one).
+
+        :param ref: reference system at the center of the locomotive.
+        :param xcSet: set to search the nodes on.
+        '''
+        retval= list()
+        wheelsPositions= self.getWheelsGlobalPositions(ref= ref)
+        for wheelPos in wheelsPositions:
+            nearestNode= xcSet.getNearestNode(wheelPos)
+            nearestNodePos= nearestNode.getInitialPos3d
+            nearestNodeDisp= nearestNode.getDisp
+            retval.append((nearestNodePos, nearestNodeDisp))
+        return retval
+
+    def getTwist(self, ref, xcSet, length= 3.0):
+        ''' Computes the deck twist fromn the displacements of the nodes
+            under the wheels.
+
+        :param ref: reference system at the center of the locomotive.
+        :param xcSet: set to search the nodes on.
+        :param length: length to measure the twist over.
+        '''
+        wheelsDisplacements= self.getDisplacementsUnderWheels(ref= ref, xcSet= xcSet)
+        displacedPositions= list()
+        for (nodePos, nodeDisp) in wheelsDisplacements:
+        
+            displacedPositions.append(nodePos+geom.Vector3d(nodeDisp[0], nodeDisp[1], nodeDisp[2]))
+        axisStep= math.ceil(length/self.xSpacing)
+        factor= length/(self.xSpacing*axisStep)
+        numberOfComputedTwists= int(self.nAxes/axisStep)
+        retval= list()
+        for i in range(0, numberOfComputedTwists):
+            p0= displacedPositions[i]
+            p1= displacedPositions[i+self.nAxes]
+            p2= displacedPositions[i+axisStep]
+            p3= displacedPositions[i+self.nAxes+axisStep]
+            plane= geom.Plane3d(p0, p1, p2)
+            twist= plane.dist(p3)*factor
+            retval.append(twist)
+        return retval
+            
+    
     def getNosingLoadPositions(self):
         ''' Return a list with the positions for the nosing loads: center 
             of the rails under the locomotive.'''
@@ -113,7 +172,7 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
         else:
             wheelLoad= self.getDynamicWheelLoad()*loadFactor
         # Compute local positions.
-        positions= self.getWheelPositions()
+        positions= self.getWheelLocalPositions()
         wheelLoads= list()
         for p in positions:
             wl= wheel_load.WheelLoad(pos= p, ld=wheelLoad, directionVector= loadDirectionVector)
@@ -149,7 +208,7 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
                                    clause 4.3.6 on Eurocode 1-2:2003).
         :param loadFactor: factor to apply to the loads.
         '''
-        positions= self.getWheelPositions()
+        positions= self.getWheelLocalPositions()
         wheelLoads= list()
         for p, cl in zip(positions, centrifugalLoads):
             if(ref):
@@ -211,7 +270,7 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
                                    surface and the deck mid-plane (see
                                    clause 4.3.6 on Eurocode 1-2:2003).
         '''
-        positions= self.getWheelPositions()
+        positions= self.getWheelLocalPositions()
         wheelLoads= list()
         if(ref):
             refKVector= ref.getKVector()
