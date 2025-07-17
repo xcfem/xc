@@ -46,7 +46,7 @@ L3= L2+4*ft # water table level at left (m).
 L4= L3+(22-4)*ft # Soil 2 bottom (m), excavation depth.
 L= L4+(31-22)*ft # pile wall tip (m).
 soilLayersDepths= [L0, L1, L2, L3, L4, L]
-soilLayers= [soil1, soil1, soil2, soil2, soil3, soil3, soil3]
+soilLayers= [soil1, soil1, soil2, soil2, soil3, soil3]
 
 ## Pile material.
 sheetPileSectionGeometry= section_properties.GenericSection2D(name= 'sheet_pile_section_geometry', area= 9.4*inch**2, I= 220.4*inch**4, W=1.0, alph= 5/6.0)
