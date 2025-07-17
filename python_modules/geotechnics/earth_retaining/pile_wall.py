@@ -166,7 +166,8 @@ class SoilLayers(object):
         if(len(depths)!=len(soils)):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; number of soils must be equal to the number of soil depths.')
+            errMsg= '; number of soils ('+str(len(soils))+') must be equal to the number of soil depths ('+str(len(depths))+').'
+            lmsg.error(className+'.'+methodName+errMsg)
             exit(1)
         self.depths= depths
         self.soils= soils
