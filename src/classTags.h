@@ -362,6 +362,12 @@
 #define CRDTR_TAG_CorotCrdTransf3d  30
 #define CRDTR_TAG_ShellLinearCrdTransf3d 100
 
+#define DMP_TAG_UniformDamping 1
+#define DMP_TAG_SecStifDamping 2
+#define DMP_TAG_URDDamping 3
+#define DMP_TAG_URDDampingbeta 4
+#define DAMPING_VECTOR_TAG 10
+
 #define NOD_TAG_Node      	1
 #define NOD_TAG_DummyNode 	2
 #define NOD_TAG_NodeVectors    	3 //Added by LCPT.

@@ -70,6 +70,17 @@ class ElementBase: public Element
     const NodePtrsWithIDs &getNodePtrs(void) const;
     Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
     
+
+    NodePtrs::ElementConstPtrSet getConnectedElements(void) const;
+    NodePtrs::ElementPtrSet getConnectedElements(void);
+    boost::python::list getConnectedElementsPy(void);    
+    boost::python::list getConnectedElementTags(void) const;
+    
+    NodePtrs::ElementConstPtrSet getConnectedElements(const SetBase *) const;
+    NodePtrs::ElementPtrSet getConnectedElements(const SetBase *);
+    boost::python::list getConnectedElementsPy(const SetBase *);    
+    boost::python::list getConnectedElementTags(const SetBase *) const;
+    
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);
   };
@@ -78,18 +89,18 @@ class ElementBase: public Element
 
 //! @brief Default constructor.
 template <int NNODES>
-XC::ElementBase<NNODES>::ElementBase(int tag, int classTag)
+ElementBase<NNODES>::ElementBase(int tag, int classTag)
   : Element(tag,classTag), theNodes(this,NNODES) {}
 
 //! @brief Copy constructor.
 template <int NNODES>
-XC::ElementBase<NNODES>::ElementBase(const ElementBase<NNODES> &other)
+ElementBase<NNODES>::ElementBase(const ElementBase<NNODES> &other)
   : Element(other), theNodes(other.theNodes) 
   { theNodes.set_owner(this); }
 
 //! @brief Assignment operator.
 template <int NNODES>
-XC::ElementBase<NNODES> &XC::ElementBase<NNODES>::operator=(const ElementBase &other)
+ElementBase<NNODES> &ElementBase<NNODES>::operator=(const ElementBase &other)
   {
     Element::operator=(other);
     theNodes= other.theNodes;
@@ -99,17 +110,17 @@ XC::ElementBase<NNODES> &XC::ElementBase<NNODES>::operator=(const ElementBase &o
 
 //! @brief Return the number of external nodes.
 template <int NNODES>
-int XC::ElementBase<NNODES>::getNumExternalNodes(void) const
+int ElementBase<NNODES>::getNumExternalNodes(void) const
   { return theNodes.size(); }
 
 //! @brief Returns a pointer to the node vector.
 template <int NNODES>
-const XC::NodePtrsWithIDs &XC::ElementBase<NNODES>::getNodePtrs(void) const
+const XC::NodePtrsWithIDs &ElementBase<NNODES>::getNodePtrs(void) const
   { return theNodes; }
 
 //! @brief Returns a pointer to the node vector.
 template <int NNODES>
-XC::NodePtrsWithIDs &XC::ElementBase<NNODES>::getNodePtrs(void)
+XC::NodePtrsWithIDs &ElementBase<NNODES>::getNodePtrs(void)
   { return theNodes; }
 
 //! @brief Casts the material pointer to a suitable type.
@@ -156,7 +167,7 @@ TIPOMAT *ElementBase<NNODES>::cast_material(const Material *ptr_mat)
 
 //! @brief Send members through the communicator argument.
 template <int NNODES>
-int XC::ElementBase<NNODES>::sendData(Communicator &comm)
+int ElementBase<NNODES>::sendData(Communicator &comm)
   {
     int res= Element::sendData(comm);
     res+= comm.sendMovable(theNodes,getDbTagData(),CommMetaData(6));
@@ -165,7 +176,7 @@ int XC::ElementBase<NNODES>::sendData(Communicator &comm)
 
 //! @brief Receives members through the communicator argument.
 template <int NNODES>
-int XC::ElementBase<NNODES>::recvData(const Communicator &comm)
+int ElementBase<NNODES>::recvData(const Communicator &comm)
   {
     int res= Element::recvData(comm);
     res+= comm.receiveMovable(theNodes,getDbTagData(),CommMetaData(6));
@@ -174,7 +185,7 @@ int XC::ElementBase<NNODES>::recvData(const Communicator &comm)
 
 //! @brief Return a Python dictionary with the object members values.
 template <int NNODES>
-boost::python::dict XC::ElementBase<NNODES>::getPyDict(void) const
+boost::python::dict ElementBase<NNODES>::getPyDict(void) const
   {
     boost::python::dict retval= Element::getPyDict();
     retval["nodes"]= theNodes.getPyDict();
@@ -182,7 +193,7 @@ boost::python::dict XC::ElementBase<NNODES>::getPyDict(void) const
   }
 //! @brief Set the values of the object members from a Python dictionary.
 template <int NNODES>
-void XC::ElementBase<NNODES>::setPyDict(const boost::python::dict &d)
+void ElementBase<NNODES>::setPyDict(const boost::python::dict &d)
   {
     Element::setPyDict(d);
     theNodes.setPyDict(boost::python::extract<boost::python::dict>(d["nodes"]));
@@ -190,8 +201,55 @@ void XC::ElementBase<NNODES>::setPyDict(const boost::python::dict &d)
   
 //! @brief Return position of the element centroid.
 template <int NNODES>
-Pos3d XC::ElementBase<NNODES>::getCenterOfMassPosition(bool initialGeometry) const
+Pos3d ElementBase<NNODES>::getCenterOfMassPosition(bool initialGeometry) const
   { return theNodes.getCenterOfMassPosition(initialGeometry); }
 
+//! @brief Return a set of pointers to the elements that are connected with this node.
+template <int NNODES>
+XC::NodePtrs::ElementConstPtrSet ElementBase<NNODES>::getConnectedElements(void) const
+  { return theNodes.getConnectedElements(); }
+
+//! @brief Return a set of pointers to the elements of the given set that are
+//! connected with this node.
+template <int NNODES>
+XC::NodePtrs::ElementConstPtrSet ElementBase<NNODES>::getConnectedElements(const SetBase *s) const
+  { return theNodes.getConnectedElements(s); }
+
+//! @brief Return a set of pointers to the elements that are connected with this node.
+template <int NNODES>
+XC::NodePtrs::ElementPtrSet ElementBase<NNODES>::getConnectedElements(void)
+  { return theNodes.getConnectedElements(); }
+
+//! @brief Return a set of pointers to the elements of the given set that are
+//! connected with this node.
+template <int NNODES>
+XC::NodePtrs::ElementPtrSet ElementBase<NNODES>::getConnectedElements(const SetBase *s)
+  { return theNodes.getConnectedElements(s); }
+
+//! @brief Return a python list of pointers to the elements that
+//! are connected with this node.
+template <int NNODES>
+boost::python::list ElementBase<NNODES>::getConnectedElementsPy(void)
+  { return theNodes.getConnectedElementsPy(); }
+
+//! @brief Return a python list of pointers to the elements from the give set
+//! that are connected with this node.
+template <int NNODES>
+boost::python::list ElementBase<NNODES>::getConnectedElementsPy(const SetBase *s)
+  { return theNodes.getConnectedElementsPy(s); }
+
+
+//! @brief Return a python list containing the tags of the elements that
+//! are connected with this node.
+template <int NNODES>
+boost::python::list ElementBase<NNODES>::getConnectedElementTags(void) const
+   { return theNodes.getConnectedElementTags(); }
+
+//! @brief Return a python list containing the tags of the elements from the
+//! given set that are connected with this node.
+template <int NNODES>
+boost::python::list ElementBase<NNODES>::getConnectedElementTags(const SetBase *s) const
+   { return theNodes.getConnectedElementTags(s); }
+  
 } //end of XC namespace
 #endif

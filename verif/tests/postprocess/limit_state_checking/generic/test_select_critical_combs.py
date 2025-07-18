@@ -15,7 +15,7 @@ from misc_utils import log_messages as lmsg
 pth= os.path.dirname(__file__)
 # print("pth= ", pth)
 if(not pth):
-  pth= "."
+    pth= "."
 auxModulePath= pth+"/../../../../"
 cfg= default_config.EnvConfig(resultsPath= 'tests/',verifPath= 'aux/')
 cfg.setWorkingDirectory(auxModulePath)

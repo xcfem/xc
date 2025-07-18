@@ -807,6 +807,35 @@ XC::Material *XC::FEM_ObjectBroker::getNewMaterial(int classTag)
     return mat;
   }
 
+//! @brief Broke a Damping object from its class tag.
+XC::Damping *XC::FEM_ObjectBroker::getNewDamping(int classTag)
+  {
+    Damping *retval= nullptr;
+    switch(classTag)
+      {
+      case DMP_TAG_UniformDamping:
+        retval= new UniformDamping();
+	break;
+      case DMP_TAG_SecStifDamping:
+        retval= new SecStifDamping();
+	break;
+      case DMP_TAG_URDDamping:
+	retval= new URDDamping();
+	break;
+      case DMP_TAG_URDDampingbeta:
+	retval= new URDDampingbeta();
+	break;
+      default:
+        std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
+		  << "; no Damping type exists for class tag "
+                  << classTag
+		  << Color::def << std::endl;
+        retval= nullptr;
+      }
+
+    return retval;
+  }
+
 //! @brief Broke a Fiber object from its class tag.
 XC::Fiber *XC::FEM_ObjectBroker::getNewFiber(int classTag)
   {

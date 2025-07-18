@@ -77,6 +77,7 @@ Segment2d (Polygon2d::*Plg2dIntersRay2d)(const Ray2d &) const= &Polygon2d::getIn
 Segment2d (Polygon2d::*Plg2dIntersSegment2d)(const Segment2d &) const= &Polygon2d::getIntersection;
 void (Polygon2d::*unePolygon2d)(const Polygon2d &) =&Polygon2d::une;
 boost::python::list (Polygon2d::*clipPolygon)(const Polygon2d &) const= &Polygon2d::ClipPy;
+boost::python::list (Polygon2d::*clipHalfPlane2d)(const HalfPlane2d &) const= &Polygon2d::ClipPy;
 boost::python::list (Polygon2d::*Plg2dIntersHalfPlane2d)(const HalfPlane2d &) const= &Polygon2d::getIntersectionPy;
 boost::python::list (Polygon2d::*Plg2dIntersPlg2d)(const Polygon2d &) const= &Polygon2d::getIntersectionPy;
 class_<Polygon2d, Polygon2d *, bases<PolygonalSurface2d> >("Polygon2d")
@@ -105,6 +106,7 @@ class_<Polygon2d, Polygon2d *, bases<PolygonalSurface2d> >("Polygon2d")
   .def("clip",clipLine, "Clips the line.")
   .def("clip",clipRay, "Clips the ray.")
   .def("clip",clipSegment, "Clips the segment.")
+  .def("clip",clipHalfPlane2d, "Return the given half plane clipped by this one.")
   .def("clip",clipPolygon, "Return the given polygon clipped by this one.")
   .def("swap", &Polygon2d::swap,"Reverse the orientation of the polygon.")
   ;

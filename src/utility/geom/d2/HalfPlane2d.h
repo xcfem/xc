@@ -131,6 +131,8 @@ class HalfPlane2d : public Surface2d
     Segment2d clip(const Segment2d &) const;
     std::deque<Polyline2d> clip(const Polyline2d &, const GEOM_FT &tol= 0.0) const;
     boost::python::list clipPy(const Polyline2d &, const GEOM_FT &tol= 0.0) const;
+    std::deque<Polygon2d> clip(const Polygon2d &) const;
+    boost::python::list clipPy(const Polygon2d &) const;
 
     void Transform(const Trf2d &trf2d);
 

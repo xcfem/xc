@@ -122,3 +122,11 @@ if (ratioForTest<=1e-12) :
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+
+# oh.displayBlocks()
+# oh.displayFEMesh()
+# oh.displayLocalAxes()

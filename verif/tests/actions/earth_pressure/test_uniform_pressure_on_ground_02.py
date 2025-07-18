@@ -47,6 +47,13 @@ virtualBack= geom.Segment2d(geom.Pos2d(2.95,0.818933), geom.Pos2d(2.95, -6.8))
 qUnif= 5e3
 zBottomSoils=[-1e3]
 kSoils= [0.486]
+
+# zGround: global Z coordinate of ground level
+# zBottomSoils: list of global Z coordinates of the bottom level
+#               for each soil (from top to bottom)
+# KSoils: list of pressure coefficients for each soil (from top 
+#         to bottom)
+# qUnif: uniform load over the backfill surface.
 soil= ep.UniformPressureOnBackfill(zGround=virtualBack.getFromPoint().y, zBottomSoils= zBottomSoils, KSoils= kSoils, qUnif= qUnif)
 slopeOfBackfillSurface= math.radians(20)
 

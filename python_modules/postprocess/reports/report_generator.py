@@ -28,6 +28,14 @@ class ReportGenerator(oh.OutputHandler):
         '''
         return self.outputStyle
 
+    def getReportFileName(self, limitStateLabel):
+        ''' Return the name of the file where the report will be written.
+
+        :param limitStateLabel: label that identifies the limit state.
+        '''
+        cfg= self.getEnvConfig()
+        return cfg.projectDirTree.getReportFile(limitStateLabel)
+
     def checksReport(self, limitStateLabel, setsShEl, argsShEl, setsBmEl=[], argsBmEl=[], rgMinMax=None, defaultDiagramDirection= 'J'):
         '''Create a LaTeX report including the desired graphical results 
         obtained in the verification of a limit state.
@@ -47,8 +55,8 @@ class ReportGenerator(oh.OutputHandler):
         '''
         retval= list()
         cfg= self.getEnvConfig()
-        texReportFile= cfg.projectDirTree.getReportFile(limitStateLabel)
-        report= cfg.projectDirTree.open(fileName= texReportFile, mode= 'w') # report latex file
+        texReportFileName= self.getReportFileName(limitStateLabel= limitStateLabel)
+        report= cfg.projectDirTree.open(fileName= texReportFileName, mode= 'w') # report latex file
         fullPath= cfg.projectDirTree.getReportGrPath(limitStateLabel)
         cfg.makedirs(fullPath) # crate the directory if needed.
         rltvPath= cfg.projectDirTree.getReportRltvGrPath(limitStateLabel)
@@ -69,7 +77,7 @@ class ReportGenerator(oh.OutputHandler):
                         methodName= sys._getframe(0).f_code.co_name
                         lmsg.error(className+'.'+methodName+'; something went wrong, file: '+str(fullgrFileNmAndExt) + ' doesn\'t exist.')
                     label= limitStateLabel+suffix
-                    oh.insertGrInTex(texFile=report, grFileNm=rltvgrFileNm, grWdt= cfg.grWidth, capText= capt, labl= label)
+                    oh.append_graphic_to_tex_file(texFile=report,  graphicFileName= rltvgrFileNm, graphicWidth= cfg.grWidth, captionText= capt, label= label)
                 
         for stV in setsBmEl:
             for argS in argsBmEl:
@@ -81,7 +89,7 @@ class ReportGenerator(oh.OutputHandler):
                 fullgrFileNmAndExt= fullPath+bitmapFileName
                 self.displayBeamResult(attributeName=limitStateLabel,itemToDisp=argS,beamSetDispRes=stV,setToDisplay=stV,caption=capt,fileName= fullgrFileNmAndExt, defaultDirection= defaultDiagramDirection)
                 label= limitStateLabel+suffix
-                oh.insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt, labl= label)
+                oh.append_graphic_to_tex_file(texFile=report, graphicFileName= rltvgrFileNm, graphicWidth= cfg.grWidth, captionText= capt, label= label)
         report.close()
         return retval
 
@@ -94,11 +102,11 @@ class ReportGenerator(oh.OutputHandler):
                                  load case on.
         '''
         cfg= self.getEnvConfig()
-        texReportFile= cfg.projectDirTree.getReportLoadsFile() # laTex file where the graphics will be included.
+        texReportFileName= cfg.projectDirTree.getReportLoadsFile() # laTex file where the graphics will be included.
         outputPath= cfg.projectDirTree.getReportLoadsGrPath() # directory to place the figures.
         cfg.projectDirTree.makedirs(outputPath) # Create the directory if doesn't exists.
         retval= list()
-        with cfg.projectDirTree.open(fileName= texReportFile, mode= 'w') as latexOutputFile:
+        with cfg.projectDirTree.open(fileName= texReportFileName, mode= 'w') as latexOutputFile:
             for lcName in loadCasesAndSets:
                 setsToDisplay= loadCasesAndSets[lcName]
                 self.modelSpace.addLoadCaseToDomain(lcName)
@@ -110,7 +118,7 @@ class ReportGenerator(oh.OutputHandler):
                     bitmapFileName= fLabel+'.png'
                     outputFileName= outputPath+bitmapFileName
                     self.displayLoads(setToDisplay= xcSet, fileName= outputFileName, caption= caption)
-                    oh.insertGrInTex(texFile= latexOutputFile, grFileNm= outputFileName, grWdt= cfg.grWidth, capText= caption, labl= fLabel)
+                    oh.append_graphic_to_tex_file(texFile= latexOutputFile,  graphicFileName=  outputFileName, graphicWidth= cfg.grWidth, captionText= caption, label= fLabel)
                     retval.append(bitmapFileName)
                 self.modelSpace.removeLoadCaseFromDomain(lcName)
         return retval

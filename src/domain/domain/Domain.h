@@ -246,6 +246,8 @@ class Domain: public ObjWithRecorders, public DistributedBase
     //! @brief Return the current value fo the pseudo-time.
     inline double getCurrentTime(void) const
       { return timeTracker.getCurrentTime(); }
+    inline double getDt(void) const
+      { return timeTracker.getDt(); }
     
     
     inline int getCurrentGeoTag(void) const

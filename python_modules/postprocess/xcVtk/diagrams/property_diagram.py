@@ -46,11 +46,12 @@ class PropertyDiagram(cd.ColoredDiagram):
 
         :param eSet: Element set.
         :param diagramIndex: index-counter for the values to insert.
-        :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor. (Defaults to 0.0, i.e. display of 
-                  initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         ''' 
         self.computeDiagramValues();
         return self.appendDataToDiagram(elements= self.elements, diagramIndex= diagramIndex, valueCouples= self.valueCouples, directions= self.directions, defFScale= defFScale)
@@ -61,15 +62,15 @@ class PropertyDiagram(cd.ColoredDiagram):
         self.valueCouples.clear()
 
     def addDiagram(self, defFScale= 0.0):
-        '''
+        ''' Add diagram to the scene.
 
-        :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor. (Defaults to 0.0, i.e. display of 
-                  initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
-        '''Add diagram to the scene.'''
         self.computeDiagramValues()
         
         self.createDiagramDataStructure()

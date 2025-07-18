@@ -690,7 +690,7 @@ class WoodSection(object):
             fctn[1]= FCTN2
             elem.setProp("HIPCPTN2",nmbComb)
         elem.setProp("FCTNCP",fctn)
-        vc.update_envelope_internal_forces_beam_elem_2d(elem)
+        vc.update_envelope_internal_forces_beam_elem_2d(elem, nmbComb)
         
     def checkBiaxialBendingForElement(self, elem, nmbComb):
         '''Called in every commit to check biaxial bending criterion 
@@ -715,7 +715,7 @@ class WoodSection(object):
             fctn[1]= FCTN2
             elem.setProp("HIPCPTN2",nmbComb)
         elem.setProp("FCTNCP",fctn)
-        vc.update_envelope_internal_forces_beam_elem_3d(elem)
+        vc.update_envelope_internal_forces_beam_elem_3d(elem, nmbComb)
         
     def checkYShearForElement(self,elem,nmbComb):
         '''Called in every commit to y shear criterion.

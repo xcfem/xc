@@ -27,8 +27,18 @@ class SpringBC(object):
     :ivar Kx: spring stiffness in X direction (defaults to 0 -> free)
     :ivar Ky: spring stiffness in Y direction (defaults to 0 -> free)
     :ivar Kz: spring stiffness in Z direction (defaults to 0 -> free)
+    :ivar foundationSet: set of nodes and elements that belong to the
+                         spring supported foundation.
     '''
-    def __init__(self,name,modelSpace,Kx=0,Ky=0,Kz=0):
+    def __init__(self, name, modelSpace, Kx= 0, Ky= 0, Kz= 0):
+        ''' Constructor.
+
+        :param name: name
+        :param modelSpace: model space
+        :param Kx: spring stiffness in X direction (defaults to 0 -> free)
+        :param Ky: spring stiffness in Y direction (defaults to 0 -> free)
+        :param Kz: spring stiffness in Z direction (defaults to 0 -> free)
+        '''
         self.name=name
         self.modelSpace= modelSpace
         self.Kx=Kx
@@ -39,54 +49,75 @@ class SpringBC(object):
     def createSpringMaterials(self):
         '''create the spring materials in X, Y, Z directions. If there is
         no spring in any of these directions, its corresponding material is
-        equal to None 
+        equal to None.
         '''
-        if self.Kx != 0:
-            typical_materials.defElasticMaterial(self.modelSpace.preprocessor,self.name + '_xSpring',self.Kx)
-            self.springMat[0]=self.name + '_xSpring'
-        if self.Ky != 0:
-            typical_materials.defElasticMaterial(self.modelSpace.preprocessor,self.name + '_ySpring',self.Ky)
-            self.springMat[1]=self.name + '_ySpring'
-        if self.Kz != 0:
-            typical_materials.defElasticMaterial(self.modelSpace.preprocessor,self.name + '_zSpring',self.Kz)
-            self.springMat[2]=self.name + '_zSpring'
+        if(self.springMat[0] is None and
+           self.springMat[1] is None and
+           self.springMat[2] is None): # if not already created.
+           
+            xSpringMaterialName= self.name + '_xSpring'
+            ySpringMaterialName= self.name + '_ySpring'
+            zSpringMaterialName= self.name + '_zSpring'
+            if self.Kx != 0:
+                typical_materials.defElasticMaterial(self.modelSpace.preprocessor,xSpringMaterialName, self.Kx)
+                self.springMat[0]= xSpringMaterialName
+            if self.Ky != 0:
+                typical_materials.defElasticMaterial(self.modelSpace.preprocessor,ySpringMaterialName, self.Ky)
+                self.springMat[1]= ySpringMaterialName
+            if self.Kz != 0:
+                typical_materials.defElasticMaterial(self.modelSpace.preprocessor,zSpringMaterialName, self.Kz)
+                self.springMat[2]= zSpringMaterialName
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            warningMsg= '; spring materials already created. Command ignored.'
+            lmsg.warning(className+'.'+methodName+warningMsg)
+            
 
+    def applyOnPointsInSet(self, setEnt):
+        ''' Create springs in all the points included in the given set.
 
-    def applyOnPointsInSet(self,setEnt):
-        '''create springs in all the points included in the set of entities 
-        given as parameter
+        :param setEnt: set containing the points that whose nodes will be
+                       constrained with a spring.
         '''
-        lstnod=sets_mng.get_lstNod_on_points_fromSet(setEnt)
+        lstnod= sets_mng.get_lstNod_on_points_fromSet(setEnt)
         return self.applyOnNodesLst(lstnod)
         
     def applyOnNodesInSet(self,setEnt):
-        '''create springs in all the nodes included in the set of entities 
-        given as parameter
+        ''' Create springs in all the nodes included in the given set.
+
+        :param setEnt: set containing the points that whose nodes will be
+                       constrained with a spring.
         '''
         lstnod=sets_mng.setNod_to_lst(setEnt)
         self.applyOnNodesLst(lstnod)
         
-    def applyOnNodesIn3Dpos(self,lst3DPos):
-        '''create springs in the nearest nodes to the coordinates in the 
-        list of 3D positions given as parameter
+    def applyOnNodesIn3Dpos(self, lst3DPos):
+        ''' Create springs in the nearest nodes to the coordinates in the 
+        list of 3D positions given as parameter.
+
+        :param lst3DPos: list of positions to locate the nodes.
         '''
         lstnod=sets_mng.get_lstNod_from_lst3DPos(self.modelSpace.preprocessor,lst3DPos)
         self.applyOnNodesLst(lstnod)
         
-    def applyOnNodesLst(self,Nodelist):
-        '''create spring boundary conditions in the nodes included in 
-        the list of nodes passed as parameter.
+    def applyOnNodesLst(self, nodeList):
+        '''C reate spring boundary conditions in the nodes included in 
+        the given list.
+
+        :param nodeList: list of nodes.
         '''
         self.createSpringMaterials()
-        for n in Nodelist:
+        for n in nodeList:
             fixedNode, elem= self.modelSpace.setBearing(n.tag,self.springMat)
             if(__debug__):
                 if((not elem) or (not fixedNode)):
                     AssertionError('Can\'t set bearing on node: '+str(n.tag))
                 
 
-    def applyBConNode(self,node):
-        '''create spring boundary conditions in the node.
+    def applyBConNode(self, node):
+        '''Create spring boundary conditions in the given node.
+
         Return the spring element created.
         '''
         self.createSpringMaterials()
@@ -102,47 +133,113 @@ class ElasticFoundation(object):
     :ivar noTensionZ: if True springs in Z direction are made of 
                       no-tension material (defaults to None)
     '''
-    def __init__(self,wModulus,cRoz,noTensionZ=False):
+    def __init__(self, wModulus, cRoz, noTensionZ=False):
+        ''' Constructor.
+
+        :param wModulus: Winkler modulus of the foundation (springs in Z 
+                         direction).
+        :param cRoz: fraction of the Winkler modulus to apply for friction
+                     in the contact plane (springs in X, Y directions).
+        :param noTensionZ: if True springs in Z direction are made of 
+                           no-tension material (defaults to None)
+        '''
         self.wModulus= wModulus
         self.cRoz= cRoz
-        self.noTensionZ=noTensionZ
+        self.noTensionZ= noTensionZ
+        self.xSpring= None
+        self.ySpring= None
+        self.zSpring= None
+
+    def getSupportingNode(self, node):
+        ''' Return the node that supports the given one (i.e. the node at the
+            other end of the spring).
+
+        :param node: node whose supporting one will be returned.
+        '''
+        retval= None
+        if(len(self.springs)>0):
+            nTag= node.tag
+            if(nTag in self.springs):
+                e= self.springs[nTag]
+                retval= e.getNodes[0]
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errorMsg= '; node: '+str(nTag)+' not found.'
+                lmsg.error(className+'.'+methodName+errorMsg)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= '; springs not created yet.'
+            lmsg.error(className+'.'+methodName+errorMsg)
+        return retval
         
     def createMaterials2D(self, preprocessor, name):
-        ''' Create the elastic materials for the zero-length elements in a 2D
-        space.
+        ''' Create the spring materials for the zero-length elements in a 2D
+        space. The materials are initialized here and the corresponding soil
+        reaction modulus is assigned later to each node depending on the 
+        tributary area of the node.
 
-        elastic materials (initialize them here and then we apply the 
-        corresponding elastic modulus to each node).
+        :param preprocessor: pre-processor of the FE problem at hand.
+        :param name: name to give to the spring materials. 
         '''
-        self.xSpringName= name + '_xSpring'
-        self.xSpring=typical_materials.defElasticMaterial(preprocessor,self.xSpringName,0.1)
-        self.ySpringName= name + '_ySpring'
-        if self.noTensionZ:
-            self.ySpring= typical_materials.defElastNoTensMaterial(preprocessor,self.ySpringName,1)
+        if(self.xSpring is None and
+           self.ySpring is None): # if not already created.
+           
+            xSpringMaterialName= name + '_xSpring'
+            ySpringMaterialName= name + '_ySpring'
+            self.xSpringName= xSpringMaterialName
+            self.xSpring= typical_materials.defElasticMaterial(preprocessor,self.xSpringName,0.1)
+            self.ySpringName= ySpringMaterialName
+            if self.noTensionZ:
+                self.ySpring= typical_materials.defElastNoTensMaterial(preprocessor,self.ySpringName,1)
+            else:
+                self.ySpring= typical_materials.defElasticMaterial(preprocessor,self.ySpringName,1)
         else:
-            self.ySpring= typical_materials.defElasticMaterial(preprocessor,self.ySpringName,1)
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            warningMsg= '; spring materials already created. Command ignored.'
+            lmsg.warning(className+'.'+methodName+warningMsg)
             
     def createMaterials3D(self, preprocessor, name):
-        ''' Create the elastic materials for the zero-length elements in a 3D
-        space.
+        ''' Create the spring materials for the zero-length elements in a 3D
+        space. The materials are initialized here and the corresponding soil
+        reaction modulus is assigned later to each node depending on its 
+        tributary area.
 
-         elastic materials (initialize them here and then we apply the corresponding elastic modulus to each node).
+        :param preprocessor: pre-processor of the FE problem at hand.
+        :param name: name to give to the spring materials. 
         '''
-        self.xSpringName= name + '_xSpring'
-        self.xSpring=typical_materials.defElasticMaterial(preprocessor,self.xSpringName,0.1)
-        self.ySpringName= name + '_ySpring'
-        self.ySpring=typical_materials.defElasticMaterial(preprocessor,self.ySpringName,0.1)
-        self.zSpringName= name + '_zSpring'
-        if self.noTensionZ:
-            self.zSpring=typical_materials.defElastNoTensMaterial(preprocessor,self.zSpringName,1)
+        if(self.xSpring is None and
+           self.ySpring is None and
+           self.zSpring is None): # if not already created.
+           
+            xSpringMaterialName= name + '_xSpring'
+            ySpringMaterialName= name + '_ySpring'
+            zSpringMaterialName= name + '_zSpring'
+            self.xSpringName= xSpringMaterialName
+            self.xSpring=typical_materials.defElasticMaterial(preprocessor,self.xSpringName,0.1)
+            self.ySpringName= ySpringMaterialName
+            self.ySpring=typical_materials.defElasticMaterial(preprocessor,self.ySpringName,0.1)
+            self.zSpringName= zSpringMaterialName
+            if self.noTensionZ:
+                self.zSpring=typical_materials.defElastNoTensMaterial(preprocessor,self.zSpringName,1)
+            else:
+                self.zSpring=typical_materials.defElasticMaterial(preprocessor,self.zSpringName,1)
         else:
-            self.zSpring=typical_materials.defElasticMaterial(preprocessor,self.zSpringName,1)
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            warningMsg= '; spring materials already created. Command ignored.'
+            lmsg.warning(className+'.'+methodName+warningMsg)
             
     def createMaterials(self, preprocessor, name):
-        ''' Create the elastic materials for the zero-length elements in a 3D
-        space.
+        ''' Create the spring materials for the zero-length elements regardless
+            of the space dimension. The materials are initialized here and the 
+            corresponding soil reaction modulus is assigned later to each node 
+            depending on its tributary area.
 
-         elastic materials (initialize them here and then we apply the corresponding elastic modulus to each node).
+        :param preprocessor: pre-processor of the FE problem at hand.
+        :param name: name to give to the spring materials. 
         '''
         dimSpace= preprocessor.getNodeHandler.dimSpace # space dimension.
         if(dimSpace==2):
@@ -150,13 +247,14 @@ class ElasticFoundation(object):
         else:
             self.createMaterials3D(preprocessor, name)
             
-    def generateSprings(self,xcSet):
-        '''Creates the springs at the nodes of the xcSet given as parameter.'''
+    def generateSprings(self, xcSet):
+        '''Creates the springs at the nodes of the given set.
+
+        :param xcSet: set whose nodes will be constrained by the springs.
+        '''
         self.foundationSet= xcSet #Set with elastic supported elements
-        self.springs= list() #spring elements.
-        self.foundationSet.resetTributaries()
-        self.foundationSet.computeTributaryAreas(False)
-        sNod= self.foundationSet.nodes
+        self.springs= dict() # spring elements.
+        self.tributaryAreas= sets_mng.get_tributary_areas(xcSet= self.foundationSet, initialGeometry= False) # tributary areas.
         preprocessor= self.foundationSet.getPreprocessor
         # Get the dimensions of the space (usually 2 or 3).
         dimSpace= preprocessor.getNodeHandler.dimSpace # space dimension.
@@ -164,33 +262,36 @@ class ElasticFoundation(object):
             modelSpace= predefined_spaces.getStructuralMechanics2DSpace(preprocessor)
         else:
             modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
-        self.createMaterials(preprocessor,self.foundationSet.name)
+        self.createMaterials(preprocessor, self.foundationSet.name)
         idElem= preprocessor.getElementHandler.defaultTag
+        sNod= self.foundationSet.nodes
         for n in sNod:
-            arTribNod= n.getTributaryArea()
-            self.xSpring.E= self.cRoz*self.wModulus*arTribNod
+            nodeTributaryArea= self.tributaryAreas[n.tag]
+            self.xSpring.E= self.cRoz*self.wModulus*nodeTributaryArea
             if(dimSpace==2): # Two-dimensional problem.
-                self.ySpring.E= self.wModulus*arTribNod
+                self.ySpring.E= self.wModulus*nodeTributaryArea
                 nodeSprings= [self.xSpringName,self.ySpringName]
             else: # Three-dimensional problem.
-                self.ySpring.E= self.cRoz*self.wModulus*arTribNod
-                self.zSpring.E= self.wModulus*arTribNod
-                nodeSprings= [self.xSpringName,self.ySpringName,self.zSpringName]
-            Nn= modelSpace.setBearing(n.tag, nodeSprings)
+                self.ySpring.E= self.cRoz*self.wModulus*nodeTributaryArea
+                self.zSpring.E= self.wModulus*nodeTributaryArea
+                nodeSprings= [self.xSpringName, self.ySpringName,self.zSpringName]
+            newNode, springElement= modelSpace.setBearing(n.tag, nodeSprings)
             if __debug__:
-                if(not Nn):
+                if(not newNode):
                     AssertionError('Can\'t set bearing on node: '+str(n.tag))
                 
-            self.springs.append(preprocessor.getElementHandler.getElement(idElem))
+            self.springs[n.tag]= springElement
+            self.tributaryAreas[n.tag]= nodeTributaryArea
             idElem+= 1
             
     def getCentroid(self):
         '''Returns the geometric baricenter of the springs.'''
         dx= 0.0; dy= 0.0; dz= 0.0
         A= 0.0
-        for e in self.springs:
+        for nTag in self.springs:
+            e= self.springs[nTag]
             n= e.getNodes[1]
-            a= n.getTributaryArea()
+            a= self.tributaryAreas[n.tag]
             pos= n.getInitialPos3d
             A+= a
             dx+= a*pos[0]; dy+= a*pos[1]; dz+= a*pos[2]
@@ -198,17 +299,19 @@ class ElasticFoundation(object):
         return geom.Pos3d(dx,dy,dz)
     
     def calcPressures(self):
-        ''' Foundation pressures over the soil. Calculates pressures
-         and forces in the free nodes of the springs
+        ''' Compute the foundation pressures over the soil. Calculates 
+         pressures  and forces in the free nodes of the springs
          (those that belongs to both the spring and the foundation)
          and stores these values as properties of those nodes:
          property 'soilPressure:' [xStress,yStress,zStress]
-         property 'soilReaction:' [xForce,yForce,zForce]'''
+         property 'soilReaction:' [xForce,yForce,zForce]
+        '''
         self.svdReac= geom.SlidingVectorsSystem3d()
-        for e in self.springs:
+        for eTag in self.springs:
+            e= self.springs[eTag]
             n= e.getNodes[1]
             rf= e.getResistingForce()
-            a= n.getTributaryArea()
+            a= self.tributaryAreas[n.tag]
             if(len(rf)==6):
                 f3d= geom.Vector3d(rf[0],rf[1],0.0)
                 m3d= geom.Vector3d(0.0,0.0,rf[2])
@@ -222,8 +325,62 @@ class ElasticFoundation(object):
             
         return self.svdReac.reduceTo(self.getCentroid())
 
+    def getFoundationSupportedNodes(self):
+        ''' Return the nodes that belong to both the foundation ond to one of
+            the springs that support the foundation.
+        '''
+        retval= list()
+        for eTag in self.springs:
+            e= self.springs[eTag]
+            n= e.getNodes[1]
+            retval.append(n)
+        return retval
+    
+    def getMaxMinAvgPressure(self, component):
+        ''' Return the maximum foundation pressure component over the soil. 
+         Calculates pressures  and forces in the free nodes of the springs
+         (those that belongs to both the spring and the foundation)
+         and stores these values as properties of those nodes:
+         property 'soilPressure:' [xStress,yStress,zStress]
+         property 'soilReaction:' [xForce,yForce,zForce]
+
+        :param component: component of the pressure (0, 1, or 2) to be 
+                          considered.
+        '''
+        foundationNodes= self.getFoundationSupportedNodes()
+        maxPressure= 0.0
+        maxPressureNode= None
+        minPressure= 0.0
+        minPressureNode= None
+        
+        if(foundationNodes):
+            # Compute  pressures.
+            self.calcPressures()
+            n0= foundationNodes[0]
+            pressure= n0.getProp('soilPressure')[component]
+            maxPressure= pressure
+            maxPressureNode= n0
+            minPressure= pressure
+            minPressureNode= n0
+            avgPressure= pressure
+            for n in foundationNodes[1:]:
+                pressure= n.getProp('soilPressure')[component]
+                if(pressure>maxPressure):
+                    maxPressure= pressure
+                    maxPressureNode= n
+                if(pressure<minPressure):
+                    minPressure= pressure
+                    minPressureNode= n
+                avgPressure+= pressure
+            avgPressure/=len(foundationNodes)
+        return maxPressure, maxPressureNode, minPressure, minPressureNode, avgPressure             
+
     def displayPressures(self, caption,fUnitConv,unitDescription,rgMinMax=None,fileName=None):
         '''Display foundation pressures for a single load case.
+
+        :param caption: caption for the displayed image.
+        :param fUnitConv: unit conversion factor.
+        :param unitDescription: unit description. 
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
               of the scalar field (if any) to be represented. All the values 
               less than vmin are displayed in blue and those greater than vmax 
@@ -237,34 +394,37 @@ class ElasticFoundation(object):
 
         field= fields.ExtrapolatedScalarField('soilPressure','getProp',self.foundationSet,component=2,fUnitConv= fUnitConv,rgMinMax=rgMinMax)
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        field.display(displaySettings,caption= caption+' '+unitDescription,fileName=fileName)
+        field.display(displaySettings, caption= caption, fileName=fileName, unitDescription= unitDescription)
 
-    def displayMaxPressures(self,modelSpace,analysis,combs,caption,fUnitConv,unitDescription,rgMinMax=None,fileName=None):
+
+    def displayMaxPressures(self, modelSpace, analysis, combs, caption, fUnitConv, unitDescription, rgMinMax=None, fileName=None):
         '''
         Calculate and display the maximum earth pressures (Z direction)
         obtained from the group of load combinations passed as paremeter.
 
-        :param analysis: analysis type (e.g. predefined_solutions.simple_static_linear(FEcase))
+        :param modelSpace: wrapper for the preprocessor of the FE problem at
+                           hand.
+        :param analysis: analysis type 
+                         (e.g. predefined_solutions.simple_static_linear(FEprb))
         
         :param combs: load cases to analyze and compare to obtain the maximum 
-                    pressures.
-        :param caption: caption text to diaplay.
-        :param fUnitConv: factor to apply to results (unit conversion)
+                      pressures.
+        :param caption: caption for the displayed image.
+        :param fUnitConv: unit conversion factor to apply to the results.
         :param unitDescription: text to display as unit description.
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
-              of the scalar field (if any) to be represented. All the values 
-              less than vmin are displayed in blue and those greater than vmax 
-              in red (defaults to None)
+                         of the scalar field (if any) to be represented. All 
+                         the values less than vmin are displayed in blue and 
+                         those greater than vmax  in red (defaults to None).
         :param fileName: file name (defaults to None -> screen display)
         '''
         #Init max. pressures
-        nodSet=self.foundationSet.getNodes
+        nodSet= self.foundationSet.getNodes
         for n in nodSet:
             n.setProp('maxSoilPressure',-1e10)
         # Calculate max. pressure
         comb_keys=[key for key in combs] 
         for k in comb_keys:
-            print(combs[k].name,combs[k].expr)
             modelSpace.removeAllLoadPatternsFromDomain()
             modelSpace.addNewLoadCaseToDomain(combs[k].name,combs[k].expr)
             result= analysis.analyze(1)
@@ -287,11 +447,8 @@ class ElasticFoundation(object):
         field.display(displaySettings,caption= caption+' '+unitDescription,fileName=fileName)
         modelSpace.removeLoadCaseFromDomain(combs[k].name)
         
-
-    
-        
 def spring_bound_cond_anydir(setNodes,orientation,Klist,name):
-    '''Apply spring boundary conditions to a set of nodes
+    '''Apply spring boundary conditions to a set of nodes.
 
     :param setNodes: set of nodes to apply boundary conditions
     :param orientation: (list) of two vectors [x,y] used to orient 

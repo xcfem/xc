@@ -27,6 +27,8 @@ XC::Node *(XC::EntMdlr::*getNodeEntMdlr)(const size_t &i,const size_t &,const si
 XC::Node *(XC::EntMdlr::*getNearestNodeEntMdlr)(const Pos3d &)= &XC::EntMdlr::getNearestNode;
 XC::Element *(XC::EntMdlr::*getElementEntMdlr)(const size_t &i,const size_t &,const size_t &)= &XC::EntMdlr::getElement; 
 XC::Element *(XC::EntMdlr::*getNearestElementEntMdlr)(const Pos3d &)= &XC::EntMdlr::getNearestElement;
+boost::python::list (XC::EntMdlr::*get_ent_mdlr_elements_connected_to_node)(const XC::Node *)= &XC::EntMdlr::getConnectedElementsPy;
+boost::python::list (XC::EntMdlr::*get_elements_connected_to_ent_mdlr)(void)= &XC::EntMdlr::getConnectedElementsPy;
 class_<XC::EntMdlr, bases<XC::SetEstruct>, boost::noncopyable >("EntMdlr", no_init)
   .add_property("description", &XC::EntMdlr::getDescription, "Description (string) of the entity.")
   .add_property("getIdx", &XC::EntMdlr::getIdx)
@@ -41,7 +43,8 @@ class_<XC::EntMdlr, bases<XC::SetEstruct>, boost::noncopyable >("EntMdlr", no_in
   .def("In", &XC::EntMdlr::In,"\n""In(geomObject,tolerance) \n""Return true if this object lies inside the geometric object.")
   .def("Out", &XC::EntMdlr::Out,"\n""Out(geomObject,tolerance) \n""Return true if this object lies outside the geometric object.")
   .def("getPosCentroid", &XC::EntMdlr::getCentroid,"Returns the centroid of the object.")
-  .def("getConnectedElements",&XC::EntMdlr::getConnectedElementsPy,"Returns the elements of this object connected to the given node.")
+  .def("getConnectedElements",get_ent_mdlr_elements_connected_to_node,"Returns the elements of this object connected to the given node.")
+  .def("getConnectedElements",get_elements_connected_to_ent_mdlr,"Returns elements connected to the any node of this object.")
   .def("dist2", &XC::EntMdlr::getSquaredDistanceTo, "Return the square of the distance to the point argument.")
   .def("dist", &XC::EntMdlr::getDistanceTo, "Return the distance to the point argument.")
    ;

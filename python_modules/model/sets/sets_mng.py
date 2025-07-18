@@ -15,6 +15,184 @@ import xc
 import math
 from misc_utils import log_messages as lmsg
 
+# The tributary area is cumulative (to avoid discontinuities for
+# the nodes at the set boundaries), so if you call it twice, you'll get this
+# value doubled unless you call resetTributaries first.
+# The following functions are written to avoid this problem by returning
+# the tributary values in a dictionary whose key is the node tag and
+# reseting them inmediately.
+
+def get_tributary_lengths(xcSet, initialGeometry= False):
+    ''' Compute the tributary lengths corresponding to the nodes of a set.
+
+    :param xcSet: set contaning the nodes whose tributary element lengths 
+                  will be computed.
+    :param initialGeometry: if true compute lengths on the initial geometry
+                            of the model. Otherwise use its current geometry.
+    '''
+    retval= dict()
+    xcSet.resetTributaries()
+    xcSet.computeTributaryLengths(initialGeometry)
+    for n in xcSet.nodes:
+        retval[n.tag]= n.getTributaryLength()
+    xcSet.resetTributaries() # Keep the tributary values clean.
+    return retval
+
+def get_tributary_areas(xcSet, initialGeometry= False):
+    ''' Compute the tributary areas corresponding to the nodes of a set.
+
+    :param xcSet: set contaning the nodes whose tributary element lengths 
+                  will be computed.
+    :param initialGeometry: if true compute lengths on the initial geometry
+                            of the model. Otherwise use its current geometry.
+    '''
+    retval= dict()
+    xcSet.resetTributaries()
+    xcSet.computeTributaryAreas(initialGeometry)
+    for n in xcSet.nodes:
+        retval[n.tag]= n.getTributaryArea()
+    xcSet.resetTributaries() # Keep the tributary values clean.
+    return retval
+
+def get_tributary_volumes(xcSet, initialGeometry= False):
+    ''' Compute the tributary volumes corresponding to the nodes of a set.
+
+    :param xcSet: set contaning the nodes whose tributary element lengths 
+                  will be computed.
+    :param initialGeometry: if true compute lengths on the initial geometry
+                            of the model. Otherwise use its current geometry.
+    '''
+    retval= dict()
+    xcSet.resetTributaries()
+    xcSet.computeTributaryVolumes(initialGeometry)
+    for n in xcSet.nodes:
+        retval[n.tag]= n.getTributaryVolume()
+    xcSet.resetTributaries() # Keep the tributary values clean.
+    return retval
+
+def check_element_sets_are_disjoint(xcSets):
+    ''' Check that the given element sets are disjoint.
+
+    :param xcSets: sets to check.
+    '''
+    retval= dict()
+    visitedSets= list()
+    for xcSet in xcSets:
+        for e in xcSet.elements:
+            for visitedSet in visitedSets:
+                if visitedSet.In(e):
+                    eTag= e.tag
+                    tpl= (visitedSet.name, xcSet.name)
+                    if(eTag in retval):
+                        retval[eTag].append(tpl)
+                    else:
+                        retval[eTag]= [tpl]
+        visitedSets.append(xcSet)
+    return retval
+
+def check_node_sets_are_disjoint(xcSets):
+    ''' Check that the given node sets are disjoint.
+
+    :param xcSets: sets to check.
+    '''
+    retval= dict()
+    visitedSets= list()
+    for xcSet in xcSets:
+        for n in xcSet.nodes:
+            for visitedSet in visitedSets:
+                if visitedSet.In(n):
+                    nTag= n.tag
+                    tpl= (visitedSet.name, xcSet.name)
+                    if(nTag in retval):
+                        retval[nTag].append(tpl)
+                    else:
+                        retval[nTag]= [tpl]
+        visitedSets.append(xcSet)
+    return retval
+
+def check_line_sets_are_disjoint(xcSets):
+    ''' Check that the given line sets are disjoint.
+
+    :param xcSets: sets to check.
+    '''
+    retval= dict()
+    visitedSets= list()
+    for xcSet in xcSets:
+        for l in xcSet.lines:
+            for visitedSet in visitedSets:
+                if visitedSet.In(l):
+                    lTag= l.tag
+                    tpl= (visitedSet.name, xcSet.name)
+                    if(lTag in retval):
+                        retval[lTag].append(tpl)
+                    else:
+                        retval[lTag]= [tpl]
+        visitedSets.append(xcSet)
+    return retval
+
+def check_surface_sets_are_disjoint(xcSets):
+    ''' Check that the given surface sets are disjoint.
+
+    :param xcSets: sets to check.
+    '''
+    retval= dict()
+    visitedSets= list()
+    for xcSet in xcSets:
+        for s in xcSet.surfaces:
+            for visitedSet in visitedSets:
+                if visitedSet.In(s):
+                    sTag= s.tag
+                    tpl= (visitedSet.name, xcSet.name)
+                    if(sTag in retval):
+                        retval[sTag].append(tpl)
+                    else:
+                        retval[sTag]= [tpl]
+        visitedSets.append(xcSet)
+    return retval
+
+def check_body_sets_are_disjoint(xcSets):
+    ''' Check that the given body sets are disjoint.
+
+    :param xcSets: sets to check.
+    '''
+    retval= dict()
+    visitedSets= list()
+    for xcSet in xcSets:
+        for b in xcSet.bodies:
+            for visitedSet in visitedSets:
+                if visitedSet.In(s):
+                    bTag= b.tag
+                    tpl= (visitedSet.name, xcSet.name)
+                    if(bTag in retval):
+                        retval[bTag].append(tpl)
+                    else:
+                        retval[bTag]= [tpl]
+        visitedSets.append(xcSet)
+    return retval
+
+def check_sets_are_disjoint(xcSets):
+    ''' Check that the given sets are disjoint.
+
+    :param xcSets: sets to check.
+    '''
+    retval= dict()
+    nodeDict= check_node_sets_are_disjoint(xcSets)
+    if(len(nodeDict)>0):
+        retval['nodes']= nodeDict
+    elementDict= check_element_sets_are_disjoint(xcSets)
+    if(len(elementDict)>0):
+        retval['elements']= elementDict
+    lineDict= check_line_sets_are_disjoint(xcSets)
+    if(len(lineDict)>0):
+        retval['lines']= lineDict
+    surfaceDict= check_surface_sets_are_disjoint(xcSets)
+    if(len(surfaceDict)>0):
+        retval['surfaces']= surfaceDict
+    bodyDict= check_body_sets_are_disjoint(xcSets)
+    if(len(bodyDict)>0):
+        retval['bodys']= bodyDict
+    return retval
+
 def get_subset_inside(geomObj,fromSet,toSetName,tol=0.0):
     '''return a subset of fromSet composed by the entities inside the 
     3D geometric figure geomObj.
@@ -25,11 +203,12 @@ def get_subset_inside(geomObj,fromSet,toSetName,tol=0.0):
     :param tol: geometric tolerance for the search (defaults to 0.0)
     '''
     newSet=fromSet.getPreprocessor.getSets.defSet(toSetName)
-    newSet.surfaces=fromSet.surfaces.pickSurfacesInside(geomObj,tol)
-    newSet.lines=fromSet.lines.pickLinesInside(geomObj,tol)
-    newSet.points=fromSet.points.pickPointsInside(geomObj,tol)
-    newSet.elements=fromSet.elements.pickElemsInside(geomObj,tol)
-    newSet.nodes=fromSet.nodes.pickNodesInside(geomObj,tol)
+    # newSet.bodies= fromSet.surfaces.pickBodiesInside(geomObj,tol)
+    newSet.surfaces= fromSet.surfaces.pickSurfacesInside(geomObj,tol)
+    newSet.lines= fromSet.lines.pickLinesInside(geomObj,tol)
+    newSet.points= fromSet.points.pickPointsInside(geomObj,tol)
+    newSet.elements= fromSet.elements.pickElemsInside(geomObj,tol)
+    newSet.nodes= fromSet.nodes.pickNodesInside(geomObj,tol)
     return newSet
 
 def get_subset_elem_of_type(elemType,fromSet,toSetName):

@@ -220,11 +220,12 @@ class ColoredDiagram(vtk_lut_field.LUTField):
            :param valueCouples: (vStart, vEnd) couple of values at the start node
                                 and the end node of the element.
            :param directions: direction of the diagram on each element.
-           :param defFScale: factor to apply to current displacement of nodes 
-                      so that the display position of each node equals to
-                      the initial position plus its displacement multiplied
-                      by this factor. (Defaults to 0.0, i.e. display of 
-                      initial/undeformed shape)
+           :param defFScale: deformation scale factor. Factor to apply to the
+                             current displacement of the nodes so that the 
+                             displayed position of each node equals to
+                             the initial position plus its displacement 
+                             multiplied by this factor. (Defaults to 0.0, i.e. 
+                             display the initial/undeformed shape).
         '''
         for elem, (v0, v1), direction in zip(elements, valueCouples, directions):
             posNode0= elem.getNodes[0].getCurrentPos3d(defFScale)
@@ -280,11 +281,12 @@ class ColoredDiagram(vtk_lut_field.LUTField):
            :param diagramIndex: index-counter for the values to insert.
            :param value1: value at the start node.
            :param value2: value at the end node. 
-           :param defFScale: factor to apply to current displacement of nodes 
-                      so that the display position of each node equals to
-                      the initial position plus its displacement multiplied
-                      by this factor. (Defaults to 0.0, i.e. display of 
-                      initial/undeformed shape)
+           :param defFScale: deformation scale factor. Factor to apply to the
+                             current displacement of the nodes so that the 
+                             displayed position of each node equals to
+                             the initial position plus its displacement 
+                             multiplied by this factor. (Defaults to 0.0, i.e. 
+                             display the initial/undeformed shape).
         '''
         for elem, (v0, v1), dirVector in zip(elements, valueCouples, dirVectors):
             posNode0= elem.getNodes[0].getCurrentPos3d(defFScale)

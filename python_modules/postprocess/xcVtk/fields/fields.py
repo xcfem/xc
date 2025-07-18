@@ -31,7 +31,8 @@ class ScalarField(fb.FieldBase):
 
         :param name: node property that contains the value to represent.
         :param functionName: name of the node method to obtain the value (usually 'getProp').
-        :param component: component of the control var to represent.
+        :param component: component of the control var to represent (None if the property
+                          is already an scalar).
         :param fUnitConv: unit conversion factor.
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
                          of the scalar field (if any) to be represented. All 
@@ -131,11 +132,12 @@ class ExtrapolatedScalarField(ScalarField):
                          (if None -> screen window).
         :param caption: text to display in the graphic.
         :param unitDescription: description of the units.
-        :param defFScale: factor to apply to current displacement of nodes 
-                          so that the display position of each node equals to
-                          the initial position plus its displacement multiplied
-                          by this factor. (Defaults to 0.0, i.e. display of 
-                          initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         displaySettings.displayMesh(xcSets= self.xcSet, field= self, diagrams= None, caption= caption, unitDescription= unitDescription, fileName= fileName, defFScale= defFScale)
     
@@ -153,11 +155,12 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
         :param fileName: name of the graphic file to create (if None -> screen window).
         :param caption: text to display in the graphic.
         :param unitDescription: description of the units.
-        :param defFScale: factor to apply to current displacement of nodes 
-                      so that the display position of each node equals to
-                      the initial position plus its displacement multiplied
-                      by this factor. (Defaults to 0.0, i.e. display of 
-                      initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         self.extrapolate()
         displaySettings.displayMesh(self.xcSet, field= self, diagrams= None, caption= caption, unitDescription= unitDescription, fileName= fileName, defFScale= defFScale)

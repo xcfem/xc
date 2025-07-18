@@ -7,10 +7,12 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
+import sys
 import xc
 from geotechnics import earth_pressure
 from scipy.constants import g
 from model import predefined_spaces
+from model.sets import sets_mng 
 from solution import predefined_solutions
 
 from operator import itemgetter
@@ -161,6 +163,12 @@ class SoilLayers(object):
         :param waterUnitWeight: water weight per volume unit.
         :param excavationDepths: excavation levels for each phase.
         '''
+        if(len(depths)!=len(soils)):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= '; number of soils ('+str(len(soils))+') must be equal to the number of soil depths ('+str(len(depths))+').'
+            lmsg.error(className+'.'+methodName+errMsg)
+            exit(1)
         self.depths= depths
         self.soils= soils
         self.setWaterTableDepths(waterTableDepths= waterTableDepths)
@@ -456,7 +464,8 @@ class PileWall(object):
         # Problem geometry
         lines= list()
         kPoints= list()
-        for depth in self.soilLayers.getDepths():
+        depths= self.soilLayers.getDepths()
+        for depth in depths:
             kPoints.append(self.modelSpace.newKPoint(0,-depth,0))
         kPt0= kPoints[0]
         for kPt1 in kPoints[1:]:
@@ -491,8 +500,7 @@ class PileWall(object):
         soilResponseMaterials= dict()
         self.tributaryAreas= dict()
         #### Compute tributary lengths.
-        self.pileSet.resetTributaries()
-        self.pileSet.computeTributaryLengths(False) # Compute tributary lenghts.
+        tributaryLengths= sets_mng.get_tributary_lengths(xcSet= self.pileSet, initialGeometry= True) # tributary lengths.
         #### Compute soils at nodes.
         self.setNodeSoils()
         #### Minimum depth.
@@ -506,7 +514,7 @@ class PileWall(object):
             rightNonLinearSpringMaterial= None
             tributaryArea= 0.0
             if(nodeDepth>minimumDepth): # Avoid zero soil response.
-                tributaryLength= n.getTributaryLength()
+                tributaryLength= tributaryLengths[n.tag]
                 tributaryArea= tributaryLength*self.pileSpacing
                 materialName= 'soilResponse_z_'+str(n.tag)
                 nodeSoil= self.soilsAtNodes[n.tag]

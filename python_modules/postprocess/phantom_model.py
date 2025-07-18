@@ -144,27 +144,34 @@ class PhantomModel(object):
                                 Mz= iForces.Mz
                                 idComb= iForces.idComb
                                 idSection= iForces.idSection
-                                diagDimension= diagInt.getDimension()
-                                if(diagDimension==2):
-                                    posEsf= geom.Pos2d(N,My) # assume Mz is zero.
-                                    if(abs(Mz)>1e-3):
+                                # Check if the section has already been marked as exhausted.
+                                sectionAlreadyDiscarded= False
+                                if(tagElem in retval):
+                                    if(idSection in retval[tagElem]):
+                                        sectionAlreadyDiscarded= True
+                                if(not sectionAlreadyDiscarded):
+                                    diagDimension= diagInt.getDimension()
+                                    if(diagDimension==2):
+                                        posEsf= geom.Pos2d(N,My) # assume Mz is zero.
+                                        if(abs(Mz)>1e-3):
+                                            className= type(self).__name__
+                                            methodName= sys._getframe(0).f_code.co_name
+                                            warningMsg= className+'.'+methodName+' element: '+str(tagElem)
+                                            warningMsg+= '; using a two-dimensional interaction with biaxial bending internal forces (Mz!=0) use a three-dimensional one instead.'
+                                            lmsg.warning(warningMsg)
+                                    else:
+                                        posEsf= geom.Pos3d(N,My,Mz)                    
+                                    CF= diagInt.getCapacityFactor(posEsf)
+                                    if(CF>thresholdCF):
+                                        retval[tagElem].append(idSection)
                                         className= type(self).__name__
                                         methodName= sys._getframe(0).f_code.co_name
-                                        warningMsg= className+'.'+methodName+' element: '+str(tagElem)+'; using a two-dimensional interaction with biaxial bending internal forces (Mz!=0) use a three-dimensional one instead.'
-                                        lmsg.warning(warningMsg)
-                                else:
-                                    posEsf= geom.Pos3d(N,My,Mz)                    
-                                CF= diagInt.getCapacityFactor(posEsf)
-                                if(CF>thresholdCF):
-                                    retval[tagElem].append(idSection)
-                                    className= type(self).__name__
-                                    methodName= sys._getframe(0).f_code.co_name
-                                    msg= className+'.'+methodName+'; section: '+str(idSection)
-                                    msg+= ' of element: '+str(tagElem)
-                                    msg+= ' is exhausted (CF= '+str(CF)+'>1)'
-                                    msg+= ' under internal forces for load combination: '+str(idComb)
-                                    msg+= '. The section will be excluded from the analysis to avoid the solver to crash.'
-                                    lmsg.warning(msg)
+                                        msg= className+'.'+methodName+'; section: '+str(idSection)
+                                        msg+= ' of element: '+str(tagElem)
+                                        msg+= ' is exhausted (CF= '+str(CF)+'>'+str(thresholdCF)+')'
+                                        msg+= ' under internal forces for load combination: '+str(idComb)
+                                        msg+= '. The section will be excluded from the analysis to avoid the solver to crash.'
+                                        lmsg.warning(msg)
                 else:
                     elementsWithoutSection.add(tagElem)
             if(elementsWithoutSection):
@@ -203,6 +210,15 @@ class PhantomModel(object):
             elements.defaultMaterial= sccFICT.name
         elementsWithoutSection= set()
         sectionNames= self.sectionsDistribution.getSectionNames(self.elementTags)
+        if(len(sectionNames)!=len(self.elementTags)):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            if(len(sectionNames)<len(self.elementTags)):
+                warningMsg= '; some elements have no assigned section.'
+            else:
+                # I (LP) think this is impossible 2025/06/05 
+                warningMsg= '; some section have no corresponding element.'
+            lmsg.warning(className+'.'+methodName+warningMsg)
         for tagElem, elementSectionNames in zip(self.elementTags, sectionNames):
             if(elementSectionNames):
                 elementSectionDefinitions= self.sectionsDistribution.getSectionDefinitionsForElement(tagElem)
@@ -212,15 +228,17 @@ class PhantomModel(object):
                     diagInt= None
                     if(mapInteractionDiagrams is not None):
                         diagInt= mapInteractionDiagrams[sectionName]
-                    createPhantomElement= True
+                    create_phantom_element= True
                     if(tagElem in exhaustedSections):
                         if(i in exhaustedSections[tagElem]):
-                            createPhantomElement= False # section exhausted.
-                    if(createPhantomElement):
+                            create_phantom_element= False # section exhausted.
+                    if(create_phantom_element):
                         phantomElem= self.createPhantomElement(masterElementId= tagElem, masterElementDimension= masterElementDimension, sectionName= sectionName, sectionDefinition= elementSectionDefinitions[i], sectionIndex= i+1, interactionDiagram= diagInt, fakeSection= outputCfg.controller.fakeSection)
                         retval.append(phantomElem)
                         self.tagsNodesToLoad[tagElem].append(phantomElem.getNodes[1].tag) # Node to load
                                                                                           # for this element
+                    else:
+                        self.tagsNodesToLoad[tagElem].append(None) # No node to load.
             else:
                 elementsWithoutSection.add(tagElem)
         if(elementsWithoutSection):
@@ -260,12 +278,12 @@ class PhantomModel(object):
                     if(idSection in exhaustedSections[tagElem]):
                         createLoad= False # section exhausted.
                 if(createLoad):
-                    tagsNodesToLoad= self.tagsNodesToLoad[iforce.tagElem]
+                    tagsNodesToLoad= self.tagsNodesToLoad[tagElem]
                     if(tagsNodesToLoad):
-                        nodeTag= tagsNodesToLoad[iforce.idSection]
+                        nodeTag= tagsNodesToLoad[idSection]
                         lp.newNodalLoad(nodeTag,xc.Vector(iforce.getComponents()))
                     else:
-                        elementsWithoutLoadedNodes.add(iforce.tagElem)
+                        elementsWithoutLoadedNodes.add(tagElem)
         if(elementsWithoutLoadedNodes):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name

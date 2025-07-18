@@ -13,11 +13,13 @@ __email__= "l.pereztato@gmail.com, ana.ortega.ort@gmail.com"
 Force= "{:6.2f}"
 Esf= Force
 Stress= "{:6.2f}"
+Pressure= Stress
 Diam= "{:2.0f}"
 Length= "{:4.2f}"
 Area= "{:6.2f}"
 Factor= "{:4.2f}"
 Displacement= "{:4.2f}"
+Angle= "{:4.2f}"
 
 fmt3_1f= '{:3.1f}'
 fmt4_1f= '{:4.1f}'

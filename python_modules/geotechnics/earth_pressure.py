@@ -502,15 +502,18 @@ def k_janssen(k,d,B,z):
     Lateral earth pressure coefficient for limited backfills according
     to Janssen's Theory (1895) and Kniss et Al (2007):
 
-    :param k: lateral earth pressure (usually k= K_0).
+    :param k: lateral earth pressure coefficient (usually k= K_0).
     :param d: friction angle between soil an back of retaining wall (radians).
     :param B: width of the backfill (radians).
     :param z: depth from top of wall.
     '''
     retval= 0.0
     if(z!=0.0):
-        tanD= math.tan(d)
-        retval= 1.0/(2*tanD)*(B/z)*(1-math.exp(-2*k*z/B*tanD))
+        if(abs(d)>1e-6):
+            tanD= math.tan(d)
+            retval= 1.0/(2*tanD)*(B/z)*(1-math.exp(-2*k*z/B*tanD))
+        else:
+            retval= k
     return retval
 
 def kp_coulomb(a,b,phi,d):

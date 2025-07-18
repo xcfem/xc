@@ -218,6 +218,47 @@ double XC::Element::getVolume(bool initialGeometry) const
     return 0.0;
   }
 
+//! @brief Return the characteristic length of this element.
+//!
+//! The characteristic length is used to control the localization
+//! of deformation or damage in a material within a finite element
+//! model. It helps define the spatial scale at which these phenomena
+//! occur. Here is computed as the minimum distance between two
+//! different nodes of the element.
+double XC::Element::getCharacteristicLength(void) const
+  {
+    const int numNodes = this->getNumExternalNodes();
+    const NodePtrs &theNodes= getNodePtrs();
+    double cLength = 0.0;
+    double minSize = 10e14; //Tesser
+
+    for (int i=0; i<numNodes; i++)
+      {
+	Node *nodeI = theNodes[i];
+	Vector iCoords = nodeI->getCrds();
+	int iDOF = iCoords.Size(); // nodeI->getNumberDOF(); // bugfix: Massimo Petracca 03/25/2020
+	for (int j=i+1; j<numNodes; j++)
+	  {
+	    Node *nodeJ = theNodes[j];
+	    Vector jCoords = nodeJ->getCrds();      
+	    int jDOF = jCoords.Size(); // nodeI->getNumberDOF(); // bugfix: Massimo Petracca 03/25/2020
+	    double ijLength = 0;
+	    for (int k=0; k<iDOF && k<jDOF; k++)
+	      {
+		ijLength += (jCoords(k)-iCoords(k))*(jCoords(k)-iCoords(k)); //Tesser
+	      }	
+	    // ijLength = sqrt(ijLength); no need to compute the square root LP 20250510.
+	    if (ijLength > cLength)
+	      cLength = ijLength;
+	    if (ijLength < minSize) 
+	      minSize = ijLength;
+	  }
+      }
+    // cLength= sqrt(cLength);
+    minSize= sqrt(minSize); //now we compute the square root at once LP 20250510.
+    return minSize;
+  }
+
 //! @brief Set the nodes.
 void XC::Element::setIdNodes(const std::vector<int> &inodes)
   {
@@ -1440,6 +1481,92 @@ XC::ElemPtrArray3d XC::Element::sew(const SetEstruct &f1,const SetEstruct &f2) c
               << " is not implemented."
 	      << Color::def << std::endl;
     return ElemPtrArray3d();
+  }
+
+//! @brief Return a set of pointers to the elements that are connected with this node.
+std::set<const XC::Element *> XC::Element::getConnectedElements(void) const
+  {
+    std::set<const Element *> retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Return a set of pointers to the elements of the given set that are
+//! connected with this node.
+std::set<const XC::Element *> XC::Element::getConnectedElements(const SetBase *s) const
+  {
+    std::set<const Element *> retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Return a set of pointers to the elements that are connected with this node.
+std::set<XC::Element *> XC::Element::getConnectedElements(void)
+  {
+    std::set<Element *> retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Return a set of pointers to the elements of the given set that are
+//! connected with this node.
+std::set<XC::Element *> XC::Element::getConnectedElements(const SetBase *s)
+  {
+    std::set<Element *> retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Return a python list of pointers to the elements that
+//! are connected with this node.
+boost::python::list XC::Element::getConnectedElementsPy(void)
+  {
+    boost::python::list retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Return a python list of pointers to the elements from the give set
+//! that are connected with this node.
+boost::python::list XC::Element::getConnectedElementsPy(const SetBase *s)
+  {
+    boost::python::list retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Return a python list containing the tags of the elements that
+//! are connected with this node.
+boost::python::list XC::Element::getConnectedElementTags(void) const
+  {
+    boost::python::list retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Return a python list containing the tags of the elements from the
+//! given set that are connected with this node.
+boost::python::list XC::Element::getConnectedElementTags(const SetBase *s) const
+  {
+    boost::python::list retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " is not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
   }
 
 //! @brief Return the names of the material(s) of the element.

@@ -127,6 +127,9 @@ class EntMdlr: public SetEstruct
     std::set<const Element *> getConnectedElements(const Node *) const;
     std::set<Element *> getConnectedElements(const Node *);
     boost::python::list getConnectedElementsPy(const Node *);
+    std::set<const Element *> getConnectedElements(void) const;
+    std::set<Element *> getConnectedElements(void);
+    boost::python::list getConnectedElementsPy(void);
 
     NodePtrArray3d &getTtzNodes(void)
       { return ttzNodes; }

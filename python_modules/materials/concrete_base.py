@@ -910,16 +910,22 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         '''
         return 2*self.fmaxK()/self.epsilon0()
         
-    def plotDesignStressStrainDiagram(self,preprocessor,path=''):
+    def plotDesignStressStrainDiagram(self, preprocessor, path=''):
+        '''Draws the concrete design diagram.
+
+        :param preprocessor: pre-processor of the FE problem.
+        :param path: path to store the graphic output file.
+        '''
         if self.materialDiagramD is None:
             self.defDiagD(preprocessor) # Define stress-strain design diagram.
+        title= self.getDesignStressStrainDiagramTitle()
         if self.tensionStiffparam is None:
-            retval= graph_material.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=0,title=self.materialName + ' design stress-strain diagram')
+            retval= graph_material.UniaxialMaterialDiagramGraphic(epsMin= self.epsilonU(), epsMax=0, title= title)
         else:
-            retval= graph_material.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=20*self.fctd()/self.E0(),title=self.materialName + ' design stress-strain diagram')
-        retval.setupGraphic(plt,self.materialDiagramD)
-        fileName= path+self.materialName+'_design_stress_strain_diagram'
-        retval.savefig(plt,fileName+'.png')
+            retval= graph_material.UniaxialMaterialDiagramGraphic(epsMin= self.epsilonU(), epsMax=20*self.fctd()/self.E0(), title= title)
+        retval.setupGraphic(plt, self.materialDiagramD)
+        outputFileName= self.getDesignStressStrainDiagramFileName(path= path, withExtension= True)
+        retval.savefig(plt, outputFileName)
         return retval
     
     def getElasticMaterialData(self, overrideRho= None):
@@ -1522,17 +1528,22 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         ''' Clear the previously defined diagrams.'''
         self.clearDiagD()
         self.clearDiagK()
-        self.clearDiagE()        
+        self.clearDiagE()
 
-    def plotDesignStressStrainDiagram(self,preprocessor,path=''):
-        '''Draws the steel design diagram.'''
+    def plotDesignStressStrainDiagram(self, preprocessor, path=''):
+        '''Draws the steel design diagram.
+
+        :param preprocessor: pre-processor of the FE problem.
+        :param path: path to store the graphic output file.
+        '''
         if self.materialDiagramD is None:
             self.defDiagD(preprocessor)
-        retval= mg.UniaxialMaterialDiagramGraphic(-0.016,0.016, self.materialName + ' design stress-strain diagram')
+        title= self.getDesignStressStrainDiagramTitle()
+        retval= mg.UniaxialMaterialDiagramGraphic(-0.016,0.016, title)
         retval.setupGraphic(plt,self.materialDiagramD)
-        fileName= path+self.materialName+'_design_stress_strain_diagram'
-        retval.savefig(plt,fileName+'.png')
-        retval.savefig(plt,fileName+'.eps')
+        outputFileName= self.getDesignStressStrainDiagramFileName(path= path, withExtension= False)
+        retval.savefig(plt, outputFileName+'.png')
+        retval.savefig(plt, outputFileName+'.eps')
         return retval
     
     def defElasticMaterial(self, preprocessor, name= None, overrideRho= None, initStrain= 0.0):

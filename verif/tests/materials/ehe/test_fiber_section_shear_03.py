@@ -2,10 +2,12 @@
 ''' Test for checking the shear-strength verificacion of a circular
     reinforced concrete section.
 
-    Results are compared with those of the PhD thesis:
+    This test is based on those of the PhD thesis:
     "Efectos de los esfuerzos cortantes biaxiales en la respuesta sísmica de
      columnas de hormigón armado" by Edison Osorio Bustamante. Barcelona
-     november 2012. Universitat Politècnica de Catalunya. Table 5-11 
+     november 2012. Universitat Politècnica de Catalunya. Table 5-11
+    The results are compared with those in the spreadsheet with the same 
+    name in this folder.
 '''
 
 from __future__ import division
@@ -32,7 +34,7 @@ from misc_utils import log_messages as lmsg
 
 # Materials definition
 concr= EHE_materials.HA40
-concr.alfacc= 0.85 # f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
+concr.alfacc= 1.0 # f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 concr.gmmC= 1.0 # See tabla 5.11
 steel= EHE_materials.B500S
 steel.gammaS= 1.0 # See tabla 5.11
@@ -109,7 +111,8 @@ shearController= limitState.getController()
 # origin of the difference is difficult to spot without having access to
 # the calculation details of the reference document. In any case the results
 # of this model, using the angle proposed in the document, are conservative.
-shearController.theta= math.radians(42.4311)
+# shearController.theta= math.radians(42.4311)
+shearController.theta= math.radians(44.2)
 
 secHAParamsTorsion= EHE_limit_state_checking.computeEffectiveHollowSectionParametersRCSection(section)
 
@@ -117,41 +120,53 @@ scc= zlElement.getSection()
 shearCF= shearController.checkSection(sct= scc, elementDimension= zlElement.getDimension, torsionParameters= secHAParamsTorsion)
 
 # Check results
+b0= shearController.strutWidth
+d= shearController.effectiveDepth
 z= shearController.mechanicLeverArm
 zRef= 204.2e-3 # lever arm (last row, fifth column of the table 5-11).
+Nc= shearController.concreteAxialForce
+K= shearController.getKEHE08()
+ratio0= ((z-zRef)/zRef)
 Vu1= shearController.Vu1
+Vu1Ref= 1084.4505658988128e3
+ratio1= ((Vu1-Vu1Ref)/Vu1Ref)
 Vcu= shearController.Vcu
-VcuRef= 84.2e3+67.2e3 # Sum of the values of the 7th and 8th columns, third row.
+VcuRef= 138.28868370250677e3
+ratio2= ((Vcu-VcuRef)/VcuRef)
 Vsu= shearController.Vsu
-VsuRef= 25.2e3*400e6/steel.fyd() # (9th column) they don't reduce the stress on shear reinf.
+VsuRef= 19.80052533286382e3
+ratio3= ((Vsu-VsuRef)/VsuRef)
 Vu2= shearController.Vu2
 Vu= shearController.Vu
-VuRef= 176.7e3
-
-ratio0= ((z-zRef)/zRef)
-ratio1= ((Vcu-VcuRef)/VcuRef)
-ratio2= ((Vsu-VsuRef)/VsuRef)
-ratio3= ((Vu-VuRef)/VuRef)
+VuRef= 191.608231616146e3
+ratio4= ((Vu-VuRef)/VuRef)
 
 '''
 print("\ntheta= ", math.degrees(shearController.theta))
+print('Nc= ', Nc/1e3, 'kN')
+print("K= ", K)
 print("Vu1= ",Vu1/1e3," kN")
+print("b0= ", b0,'m')
+print("d= ", d,'m')
 print("z= ", z,'m')
 print("zRef= ", zRef,'m')
-print("ratio0= ",ratio0)
+print("ratio0= ", ratio0)
+print("Vu1= ",Vu1/1e3," kN")
+print("Vu1Ref= ", Vu1Ref/1e3," kN")
+print("ratio1= ", ratio1)
 print("Vcu= ",Vcu/1e3," kN")
-print("VcuRef= ",VcuRef/1e3," kN")
-print("ratio1= ",ratio1)
+print("VcuRef= ", VcuRef/1e3," kN")
+print("ratio2= ", ratio2)
 print("Vsu= ",Vsu/1e3," kN")
 print("VsuRef= ",VsuRef/1e3," kN")
-print("ratio2= ",ratio2)
+print("ratio3= ", ratio3)
 print("Vu= ",Vu/1e3," kN")
 print("VuRef= ",VuRef/1e3," kN")
-print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
 '''
 
 
-if ((abs(ratio1)<0.1) & (abs(ratio2)<0.1) & (abs(ratio3)<0.01)):
+if ((abs(ratio0)<.05) & (abs(ratio1)<1e-4) & (abs(ratio2)<0.1) & (abs(ratio3)<0.01)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

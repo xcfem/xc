@@ -296,6 +296,13 @@
 #include "domain/mesh/element/utils/fvectors/FVectorQuad.h"
 #include "domain/mesh/element/utils/fvectors/FVectorBrick.h"
 
+// Damping.
+#include "domain/mesh/element/utils/damping/Damping.h"
+#include "domain/mesh/element/utils/damping/SecStifDamping.h"
+#include "domain/mesh/element/utils/damping/UDampingBase.h"
+#include "domain/mesh/element/utils/damping/UniformDamping.h"
+#include "domain/mesh/element/utils/damping/URDDampingbeta.h"
+#include "domain/mesh/element/utils/damping/URDDamping.h"
 
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/plastic_hinge_integration/HingeMidpointBeamIntegration.h"
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/plastic_hinge_integration/HingeMidpointBeamIntegration2d.h"

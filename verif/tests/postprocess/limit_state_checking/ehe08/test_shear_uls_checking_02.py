@@ -109,9 +109,10 @@ controller.verbose= False # Don't display log messages.
 ## Perform checking.
 meanCFs= limitState.check(setCalc= None, listFile='N',calcMeanCF='Y', controller= controller, threeDim= True, crossSections= reinfConcreteSectionDistribution)
 
-# Check results.
-ratio1= abs(meanCFs[0]-0.36664102827984885)/0.36664102827984885
-ratio2= abs(meanCFs[1]-0.31946661434667833)/0.31946661434667833
+# Check results (21/06/2025: update values after fixing error in the EHE08
+# shear controller).
+ratio1= abs(meanCFs[0]-0.519223902491736)/0.519223902491736
+ratio2= abs(meanCFs[1]-0.42377459585998756)/0.42377459585998756
 
 '''
 print('meanCFs= ',meanCFs)

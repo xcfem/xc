@@ -25,6 +25,7 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
+from model.sets import sets_mng 
 from materials import typical_materials
 
 # Problem type
@@ -64,11 +65,7 @@ for l in sides:
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 
-# Warning: the tributary area is cumulative (to avoid discontinuities for
-# the nodes at the set boundaries), so if you call it twice, you'll get this
-# value doubled unless you call resetTributaries first.
-s.resetTributaries()
-s.computeTributaryAreas(False)
+tributaryAreas= sets_mng.get_tributary_areas(xcSet= s, initialGeometry= False)
 tributaryArea= 0.0
 nNodes= s.getNumNodes
 capa1= s.getNodeLayers.getLayer(0)
@@ -77,7 +74,7 @@ nc= capa1.nCol
 for i in range(2,nf):
     for j in range(2,nc):
         node= capa1.getNode(i,j)
-        tributaryArea= node.getTributaryArea()
+        tributaryArea= tributaryAreas[node.tag]
         lp0.newNodalLoad(node.tag,xc.Vector([0,0,-unifLoad*tributaryArea,0,0,0])) # Concentrated load
 
 nElems= s.getNumElements

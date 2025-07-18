@@ -68,6 +68,31 @@ class TrainLoadModel(object):
     def getDynamicUniformLoad(self):
         ''' Return the uniform load affected by the dynamic factor.'''
         return self.getClassificationFactor()*self.getDynamicFactor()*self.uniformLoad
+    def getWheelsGlobalPositions(self, ref):
+        ''' Return the positions of the wheels of the locomotive.
+
+        :param ref: reference system at the center of the locomotive.
+        '''
+        return self.locomotive.getWheelsGlobalPositions(ref= ref)
+        
+    def getDisplacementsUnderWheels(self, ref, xcSet):
+        ''' Return the positions and displacements of the nodes under each 
+            wheel (the nearest one).
+
+        :param ref: reference system at the center of the locomotive.
+        :param xcSet: set to search the nodes on.
+        '''
+        return self.locomotive.getDisplacementsUnderWheels(ref= ref, xcSet= xcSet)
+
+    def getTwist(self, ref, xcSet, length= 3.0):
+        ''' Computes the deck twist fromn the displacements of the nodes
+            under the locomotive wheels.
+
+        :param ref: reference system at the center of the locomotive.
+        :param xcSet: set to search the nodes on.
+        :param length: length to measure the twist over.
+        '''
+        return self.locomotive.getTwist(ref= ref, xcSet= xcSet, length= length) 
     
     def getWheelLoads(self, ref, loadFactor= 1.0, directionVector= xc.Vector([0,0,-1])):
         ''' Return the loads of the wheels of the locomotive along with its
@@ -75,6 +100,7 @@ class TrainLoadModel(object):
 
         :param ref: reference system at the center of the locomotive.
         :param loadFactor: factor to apply to the loads.
+        :param directionVector: direction vector for the loads.
         '''
         return self.locomotive.getWheelLoads(ref= ref, loadFactor= loadFactor, loadDirectionVector= directionVector)
 

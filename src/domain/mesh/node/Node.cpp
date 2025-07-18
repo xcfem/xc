@@ -2444,10 +2444,10 @@ size_t XC::Node::getNumberOfConnectedElements(const SetBase *s) const
     return retval;
   }
 
-//! @brief Return a list of pointers to the elements that are connected with this node.
-std::set<const XC::Element *> XC::Node::getConnectedElements(void) const
+//! @brief Return a set of pointers to the elements that are connected with this node.
+XC::Node::ElementConstPtrSet XC::Node::getConnectedElements(void) const
   {
-    std::set<const Element *> retval;
+    XC::Node::ElementConstPtrSet retval;
     for(std::set<ContinuaReprComponent *>::const_iterator i= connected.begin();i!=connected.end();i++)
       {
         const Element *ptrElem= dynamic_cast<const Element *>(*i);
@@ -2457,11 +2457,11 @@ std::set<const XC::Element *> XC::Node::getConnectedElements(void) const
     return retval;
   }
 
-//! @brief Return a list of pointers to the elements of the given set that are
+//! @brief Return a set of pointers to the elements of the given set that are
 //! connected with this node.
-std::set<const XC::Element *> XC::Node::getConnectedElements(const SetBase *s) const
+XC::Node::ElementConstPtrSet XC::Node::getConnectedElements(const SetBase *s) const
   {
-    std::set<const Element *> retval;
+    XC::Node::ElementConstPtrSet retval;
     const std::set<const Element *> tmp= this->getConnectedElements();
     if(s)
       {
@@ -2478,10 +2478,10 @@ std::set<const XC::Element *> XC::Node::getConnectedElements(const SetBase *s) c
     return retval;
   }
 
-//! @brief Return a list of pointers to the elements that are connected with this node.
-std::set<XC::Element *> XC::Node::getConnectedElements(void)
+//! @brief Return a set of pointers to the elements that are connected with this node.
+XC::Node::ElementPtrSet XC::Node::getConnectedElements(void)
   {
-    std::set<Element *> retval;
+    XC::Node::ElementPtrSet retval;
     for(std::set<ContinuaReprComponent *>::const_iterator i= connected.begin();i!=connected.end();i++)
       {
         Element *ptrElem= dynamic_cast<Element *>(*i);
@@ -2491,15 +2491,15 @@ std::set<XC::Element *> XC::Node::getConnectedElements(void)
     return retval;
   }
 
-//! @brief Return a list of pointers to the elements of the given set that are
+//! @brief Return a set of pointers to the elements of the given set that are
 //! connected with this node.
-std::set<XC::Element *> XC::Node::getConnectedElements(const SetBase *s)
+XC::Node::ElementPtrSet XC::Node::getConnectedElements(const SetBase *s)
   {
-    std::set<Element *> retval;
-    const std::set<Element *> tmp= this->getConnectedElements();
+    XC::Node::ElementPtrSet retval;
+    const XC::Node::ElementPtrSet tmp= this->getConnectedElements();
     if(s)
       {
-	for(std::set<Element *>::const_iterator i= tmp.begin();i!=tmp.end();i++)
+	for(XC::Node::ElementPtrSet::const_iterator i= tmp.begin();i!=tmp.end();i++)
 	  {
 	    Element *ptrElem= *i;
 	    if(ptrElem)
@@ -2517,8 +2517,8 @@ std::set<XC::Element *> XC::Node::getConnectedElements(const SetBase *s)
 boost::python::list XC::Node::getConnectedElementsPy(void)
   {
     boost::python::list retval;
-    std::set<Element *> elements= getConnectedElements();
-    for(std::set<Element *>::iterator i= elements.begin(); i!= elements.end(); i++)
+    XC::Node::ElementPtrSet elements= getConnectedElements();
+    for(XC::Node::ElementPtrSet::iterator i= elements.begin(); i!= elements.end(); i++)
       {
         Element *ptrElem= *i;
 	boost::python::object pyObj(boost::ref(*ptrElem));
@@ -2532,15 +2532,12 @@ boost::python::list XC::Node::getConnectedElementsPy(void)
 boost::python::list XC::Node::getConnectedElementsPy(const SetBase *s)
   {
     boost::python::list retval;
-    std::set<Element *> elements= getConnectedElements();
-    for(std::set<Element *>::iterator i= elements.begin(); i!= elements.end(); i++)
+    XC::Node::ElementPtrSet elements= getConnectedElements(s);
+    for(XC::Node::ElementPtrSet::iterator i= elements.begin(); i!= elements.end(); i++)
       {
         Element *ptrElem= *i;
-	if(s->In(ptrElem))
-	  {
-	    boost::python::object pyObj(boost::ref(*ptrElem));
-	    retval.append(pyObj);
-	  }
+	boost::python::object pyObj(boost::ref(*ptrElem));
+	retval.append(pyObj);
       }
     return retval;
   }

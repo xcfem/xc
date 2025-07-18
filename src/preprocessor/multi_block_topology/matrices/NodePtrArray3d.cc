@@ -204,6 +204,49 @@ bool XC::NodePtrArray3d::removeNode(const int &tag)
     return this->removeNode(ePtr);
   }
 
+//! @brief Return the elements connected to any of the nodes of this entity.
+std::set<const XC::Element *> XC::NodePtrArray3d::getConnectedElements(void) const
+  {
+    std::set<const Element *> retval;
+    const size_t numberOfLayers= getNumberOfLayers();
+    for(size_t i=1;i<=numberOfLayers;i++)
+      {
+	const NodePtrArray &layer= operator()(i);
+	std::set<const Element *> tmp= layer.getConnectedElements();
+	retval.insert(tmp.begin(), tmp.end());
+      }
+    return retval;
+  }
+
+//! @brief Return the elements connected to any of the nodes of this entity.
+std::set<XC::Element *> XC::NodePtrArray3d::getConnectedElements(void)
+  {
+    std::set<Element *> retval;
+    const size_t numberOfLayers= getNumberOfLayers();
+    for(size_t i=1;i<=numberOfLayers;i++)
+      {
+	NodePtrArray &layer= operator()(i);
+	std::set<Element *> tmp= layer.getConnectedElements();
+	retval.insert(tmp.begin(), tmp.end());
+      }
+    return retval;
+  }
+
+
+//! @brief Return the elements connected to any of the nodes of this entity.
+boost::python::list XC::NodePtrArray3d::getConnectedElementsPy(void)
+  {
+    boost::python::list retval;
+    const std::set<Element *> tmp= this->getConnectedElements();
+    for(std::set<Element *>::iterator i= tmp.begin(); i!=tmp.end(); i++)
+      {
+	Element *element= *i;
+	boost::python::object pyObj(boost::ref(*element));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
 XC::Vector XC::NodePtrArray3d::IRowSimpsonIntegration(const size_t &f,const size_t &c,const ExprAlgebra &e,const size_t &n) const
   {
     const_ref_i_row iRow= getIRowConstRef(f,c);

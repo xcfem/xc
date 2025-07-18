@@ -170,6 +170,7 @@ class Element: public MeshComponent
     virtual double getLength(bool initialGeometry= true) const;
     virtual double getArea(bool initialGeometry= true) const;
     virtual double getVolume(bool initialGeometry= true) const;
+    virtual double getCharacteristicLength(void) const;
     virtual void setIdNodes(const std::vector<int> &inodes);
     virtual void setIdNodes(const ID &inodes);
     virtual void setIdNode(const int &i, const int &inode);
@@ -319,6 +320,16 @@ class Element: public MeshComponent
     std::set<int> getEdgesNodes(const NodePtrSet &) const;
     ID getEdgesNodeByTag(const int &) const;
     virtual ID getLocalIndexNodesEdge(const size_t &i) const;
+    
+    std::set<const Element *> getConnectedElements(void) const;
+    std::set<Element *> getConnectedElements(void);
+    boost::python::list getConnectedElementsPy(void);    
+    boost::python::list getConnectedElementTags(void) const;
+    
+    std::set<const Element *> getConnectedElements(const SetBase *) const;
+    std::set<Element *> getConnectedElements(const SetBase *);
+    boost::python::list getConnectedElementsPy(const SetBase *);    
+    boost::python::list getConnectedElementTags(const SetBase *) const;
     
     virtual std::set<std::string> getMaterialNames(void) const;
     boost::python::list getMaterialNamesPy(void) const;

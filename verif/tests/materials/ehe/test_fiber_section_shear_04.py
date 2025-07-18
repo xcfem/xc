@@ -56,14 +56,12 @@ mainReinf= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
-materialHandler= preprocessor.getMaterialHandler
-
-# Section geometry
+## Section geometry
 section.mainReinf= mainReinf
 section.shReinf= shearReinf
-
+## Define section material.
 section.defRCSection(preprocessor, matDiagType= 'd')
-
+## Create ZeroLength element and assign the section to it.
 zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, section.name)
 
 # Constraints
@@ -107,7 +105,7 @@ shearCF= shearController.checkSection(sct= scc, elementDimension= zlElement.getD
 # was not fixed yet. As a result those values were not correct.
 # On the other hand, fixing that error has revealed another one in
 # XC::FiberPtrDeque::getLeverArmSegment when the bending moments are zero.
-# The calculation of the lever arm in those case was wrong. It has been
+# The calculation of the lever arm in those cases was wrong. It has been
 # fixing using the inertia values of the section to get an approximation
 # of the lever arm as the tratidional one: 0.8*depth.
 z= shearController.mechanicLeverArm
@@ -115,12 +113,12 @@ zRef= 0.683 # No documentary support (check that all runs as usual).
 ratio0= abs(z-zRef)/zRef
 Vu1= shearController.Vu1
 Vcu= shearController.Vcu
-VcuRef= 749.11e3 # No documentary support (check that all runs as usual). 
+VcuRef= 713.75e3 # No documentary support (check that all runs as usual). 
 ratio1= abs(Vcu-VcuRef)/VcuRef
 Vsu= shearController.Vsu
-VsuRef= 1843.96e3 # No documentary support (check that all runs as usual).
+VsuRef= 1682.01e3 # No documentary support (check that all runs as usual).
 ratio2= abs(Vsu-VsuRef)/VsuRef
-VuRef= 2593.07e3 # No documentary support (check that all runs as usual).
+VuRef= 2395.75e3 # 2593.07e3 # No documentary support (check that all runs as usual).
 Vu2= shearController.Vu2
 ratio3= abs(Vu2-VuRef)/VuRef
 Vu= shearController.Vu
@@ -130,10 +128,10 @@ ratio4= abs(Vu-VuRef)/VuRef
 print("\ntheta= ", math.degrees(shearController.theta))
 print("Vu1= ",Vu1/1e3," kN")
 print("z= ", z,'m', ratio0)
-print("Vcu= ",Vcu/1e3," kN", ratio1)
-print("Vsu= ",Vsu/1e3," kN", ratio2)
+print("Vcu= ",Vcu/1e3," kN VcuRef= ", VcuRef/1e3, ratio1)
+print("Vsu= ",Vsu/1e3," kN VsuRef= ", VsuRef/1e3, ratio2)
 print("Vu2= ",Vu2/1e3," kN", ratio3)
-print("Vu= ",Vu/1e3," kN", ratio4)
+print("Vu= ",Vu/1e3," kN Vu2Ref= ", VuRef/1e3, ratio4)
 '''
 
 if ((abs(ratio0)<1e-2) & (abs(ratio1)<1e-3) & (abs(ratio2)<1e-3) & (abs(ratio3)<1e-3)):

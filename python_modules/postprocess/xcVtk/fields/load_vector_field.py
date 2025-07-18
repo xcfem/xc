@@ -258,10 +258,12 @@ class LoadVectorField(LoadOnPoints):
     def dumpNodalPositions(self, preprocessor, defFScale):
         ''' Iterate over loaded nodes dumping its loads into the graphic.
 
-        :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor.    
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         for nTag in self.nodalLoadVectors.keys():
             node= preprocessor.getNodeHandler.getNode(nTag)
@@ -288,10 +290,12 @@ class LoadVectorField(LoadOnPoints):
         ''' Iterate over loads dumping them into the graphic.
 
         :param preprocessor: preprocessor of the FE problem.
-        :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor.
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param showElementalLoads: if true show loads over elements.
         :param showNodalLoads: if true show loads over nodes.
         '''
@@ -325,10 +329,12 @@ class LoadVectorField(LoadOnPoints):
         ''' Iterate over nodal loads dumping them into the graphic.
 
         :param preprocessor: preprocessor of the FE problem.
-        :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor.
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         return self.dumpVectors(preprocessor, defFScale,showElementalLoads=False,showNodalLoads=True)
     
@@ -336,10 +342,12 @@ class LoadVectorField(LoadOnPoints):
         ''' Iterate over elemental loads dumping them into the graphic.
 
         :param preprocessor: preprocessor of the FE problem.
-        :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor.
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         return self.dumpVectors(preprocessor, defFScale, showElementalLoads=True, showNodalLoads=False)
     

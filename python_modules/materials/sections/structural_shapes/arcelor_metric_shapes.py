@@ -472,6 +472,13 @@ def getSteelShapeDepthRange(namePattern:str, minDepth:float, maxDepth):
 class IPNShape(structural_steel.IShape):
     ''' Arcelor IPN shape.'''
     def __init__(self,steel,name):
+        ''' Constructor.
+
+        :param steel: steel object (e.g. S275JR)
+        :param name: name identifying the section in the table
+        :param table: module containing a dictionary with mechanical 
+                      characteristics of a series of shapes.
+        '''
         super(IPNShape,self).__init__(steel,name,IPN)
         
     def d(self):

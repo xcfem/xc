@@ -149,7 +149,7 @@ class LocomotiveLoad(ll.LocomotiveLoad):
             railLoads= trackCrossSection.getRailLoads(Q= Q, h= h)
             leftRailLoad= geom.Vector2d(railLoads[0], railLoads[1])
             rightRailLoad= geom.Vector2d(railLoads[2], railLoads[3])
-            wheelPositions= self.getWheelPositions()
+            wheelPositions= self.getWheelLocalPositions()
             retval= list()
             for wp in wheelPositions:
                 if(wp.y<0): # right rail

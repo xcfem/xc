@@ -10,6 +10,7 @@ from __future__ import division
 import xc
 
 from model import predefined_spaces
+from model.sets import sets_mng 
 from solution import predefined_solutions
 from materials import typical_materials
 # from postprocess import output_handler
@@ -71,10 +72,9 @@ if(elementRho==0.0):
                                [0,0,0,0,0,0],
                                [0,0,0,0,0,0]])
     totalMass= 0.0
-    s.resetTributaries()
-    s.computeTributaryAreas(False)
+    tributaryAreas= sets_mng.get_tributary_areas(xcSet= s, initialGeometry= False)
     for n in s.nodes:
-        tributaryArea= n.getTributaryArea()
+        tributaryArea= tributaryAreas[n.tag]
         tributaryMass= tributaryArea*dens*h
         totalMass+= tributaryMass
         n.mass= tributaryMass*templateMatrix

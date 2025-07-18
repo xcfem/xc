@@ -16,4 +16,5 @@ The classes on this folder implement the algorithms needed so solve standard and
  - [Modal Assurance Criterion](https://doi.org/10.1016/j.proeng.2012.09.551)
  - [Universal File Format](https://en.wikipedia.org/wiki/Universal_File_Format)
  - [One and Only One](https://portwooddigital.com/2023/11/18/one-and-only-one/)
-
+ - [Minimal Plate Buckling Example](https://portwooddigital.com/2025/05/24/minimal-plate-buckling-example/)
+ - [Buckling of Restrained Plates](https://portwooddigital.com/2025/05/31/buckling-of-restrained-plates/)

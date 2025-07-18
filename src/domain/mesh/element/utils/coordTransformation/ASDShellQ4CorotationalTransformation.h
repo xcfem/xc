@@ -85,30 +85,30 @@ class ASDShellQ4CorotationalTransformation: public ASDShellQ4Transformation
       { return false; }
 
     virtual void revertToStart(void);
-    virtual void setDomain(Domain* domain, const ID& node_ids);
+    virtual void setDomain(Domain* domain, const ID& node_ids, bool initialized);
 
     virtual void revertToLastCommit()
-    {
+      {
         for (int i = 0; i < 4; i++)
-        {
+          {
             m_RV[i] = m_RV_converged[i];
             m_QN[i] = m_QN_converged[i];
-        }
-    }
+          }
+      }
 
     virtual void commit()
-    {
+      {
         for (int i = 0; i < 4; i++)
-        {
+          {
             m_RV_converged[i] = m_RV[i];
             m_QN_converged[i] = m_QN[i];
-        }
-    }
+          }
+      }
 
     virtual void update(const VectorType& globalDisplacements)
-    {
+      {
         for (int i = 0; i < 4; i++)
-        {
+          {
             // compute current rotation vector removing initial rotations if any
             Vector3Type currentRotVec;
             int index = i * 6;
@@ -127,28 +127,30 @@ class ASDShellQ4CorotationalTransformation: public ASDShellQ4Transformation
 
             // update nodal quaternion
             m_QN[i] = incrementalQuaternion * m_QN[i];
-        }
-    }
+	  }
+      }
 
     virtual ASDShellQ4LocalCoordinateSystem createLocalCoordinateSystem(const VectorType& globalDisplacements)const
-    {
+      {
         // reference coordinate system
         ASDShellQ4LocalCoordinateSystem a = createReferenceCoordinateSystem();
 
         // compute nodal positions at current configuration removing intial displacements if any
-        std::array<Vector3Type, 4> def = {
+        std::array<Vector3Type, 4> def =
+	  {
             Vector3Type(m_nodes[0]->getCrds()),
             Vector3Type(m_nodes[1]->getCrds()),
             Vector3Type(m_nodes[2]->getCrds()),
             Vector3Type(m_nodes[3]->getCrds())
-        };
-        for (int i = 0; i < 4; i++) {
+	  };
+        for (int i = 0; i < 4; i++)
+	  {
             int index = i * 6;
             Vector3Type& iP = def[i];
             iP(0) += globalDisplacements(index) - m_U0(index);
             iP(1) += globalDisplacements(index + 1) - m_U0(index + 1);
             iP(2) += globalDisplacements(index + 2) - m_U0(index + 2);
-        }
+	  }
 
         // current coordinate system
         ASDShellQ4LocalCoordinateSystem b(def[0], def[1], def[2], def[3]);
@@ -197,7 +199,7 @@ class ASDShellQ4CorotationalTransformation: public ASDShellQ4Transformation
         const ASDShellQ4LocalCoordinateSystem& LCS,
         const VectorType& globalDisplacements,
         VectorType& localDisplacements)
-    {
+      {
         // orientation and center of current local coordinate system
         QuaternionType Q = QuaternionType::FromRotationMatrix(LCS.Orientation());
         const Vector3Type& C = LCS.Center();

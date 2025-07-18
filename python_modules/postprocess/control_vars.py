@@ -1970,6 +1970,32 @@ def get_maximum_control_var_value_on_surfaces(xcSet, propName, argument):
         retval[s.tag]= [max(listCV1), max(listCV2)]
     return retval
 
+def get_maximum_control_var_value_on_lines(xcSet, propName, argument):
+    ''' Compute the maximum of a control var value for each line of the
+        given set.
+
+     :param xcSet: set of lines
+     :param propName: name of the property that contains the control variables.
+     :param argument: name of the control variable to extrapolate.
+    '''
+    retval= dict()
+    sect1CV= propName+'Sect1'
+    sect2CV= propName+'Sect2'
+    for l in xcSet.lines:
+        cvDict1= get_control_var_values_from_elements(elements= l.elements, propName= sect1CV, argument= argument)
+        cvDict2= get_control_var_values_from_elements(elements= l.elements, propName= sect2CV, argument= argument)
+        listCV1= list()
+        listCV2= list()
+        for key in cvDict1:
+            cv1= cvDict1[key]
+            if(cv1 is not None):
+                listCV1.append(cv1)
+            cv2= cvDict2[key]
+            if(cv2 is not None):
+                listCV2.append(cv2)
+        retval[l.tag]= [max(listCV1), max(listCV2)]
+    return retval
+
 def extrapolate_control_var_from_elements(preprocessor, elements, propName, argument, initialValue= 0.0):
     '''Extrapolates element's control var values to the nodes.
 

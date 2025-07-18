@@ -62,6 +62,13 @@ Once the analyst has defined the model, the next step is to define the analysis 
  - [Quick (and Dirty) Modal Damping](https://portwooddigital.com/2022/11/08/quick-and-dirty-modal-damping/)
  - [Eigenvalues of the Stiffness Matrix](https://portwooddigital.com/2023/01/16/eigenvalues-of-the-stiffness-matrix/)
  - [Spectra. C++ Library For Large Scale Eigenvalue Problems](https://spectralib.org/)
+ 
+#### Linear buckling analysis.
+- [Buckling](https://en.wikipedia.org/wiki/Buckling)
+- [Linear buckling in plain language!](https://enterfea.com/linear-buckling-explained/)
+- [Linear buckling analysis](https://portwooddigital.com/2021/05/29/right-under-your-nose)
+- [Minimal Plate Buckling Example](https://portwooddigital.com/2025/05/24/minimal-plate-buckling-example/)
+- [Buckling of Restrained Plates](https://portwooddigital.com/2025/05/31/buckling-of-restrained-plates/)
 
 ### Arc-length technique
 - [Arc-length technique for nonlinear finite element analysis](https://www.researchgate.net/publication/8618852_Arc-length_technique_for_nonlinear_finite_element_analysis)

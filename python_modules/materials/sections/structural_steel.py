@@ -282,7 +282,7 @@ class SteelShape(sp.SectionProperties):
             fctn[1]= FCTN2
             elem.setProp("HIPCPTN2",nmbComb)
         elem.setProp("FCTNCP",fctn)
-        vc.update_envelope_internal_forces_beam_elem_2d(elem)
+        vc.update_envelope_internal_forces_beam_elem_2d(elem, nmbComb)
 
     def checkBiaxialBendingForElement(self, elem, nmbComb):
         '''Called in every commit to check biaxial bending criterion 
@@ -305,7 +305,7 @@ class SteelShape(sp.SectionProperties):
             fctn[1]= FCTN2
             elem.setProp("HIPCPTN2",nmbComb)
         elem.setProp("FCTNCP",fctn)
-        vc.update_envelope_internal_forces_beam_elem_3d(elem)
+        vc.update_envelope_internal_forces_beam_elem_3d(elem, nmbComb)
 
     def checkYShearForElement(self,elem,nmbComb):
         '''Called in every commit to y shear criterion.
@@ -406,7 +406,7 @@ class SteelShape(sp.SectionProperties):
 
 class IShape(SteelShape):
     ''' I (or double tee) shaped steel profile.'''
-    def __init__(self,steel,name,table):
+    def __init__(self, steel, name, table):
         ''' Constructor.
 
         :param steel: steel object (e.g. S275JR)

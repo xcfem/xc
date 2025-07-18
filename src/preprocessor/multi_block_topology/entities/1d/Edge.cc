@@ -454,43 +454,87 @@ XC::Node *XC::Edge::getLastNode(void)
     return retval;
   }
 
+//! @brief Return the node pointers in forward order.
+std::vector<XC::Node *> XC::Edge::getNodesForward(void)
+  {
+    const size_t nn= getNumberOfNodes();
+    std::vector<Node *> retval(nn, nullptr);
+    for(size_t i=1;i<=nn;i++)
+      retval[i-1]= this->getNode(i);
+    return retval;
+  }
+
+//! @brief Return the node pointersin reverse order.
+std::vector<XC::Node *> XC::Edge::getNodesReverse(void)
+  {
+    const size_t nn= getNumberOfNodes();
+    std::vector<Node *> retval(nn, nullptr);
+    for(size_t i=1;i<=nn;i++)
+      retval[i-1]= this->getNode(nn-i+1);
+    return retval;
+  }
+
+//! @brief Return the node pointers in forward order.
+std::vector<const XC::Node *> XC::Edge::getNodesForward(void) const
+  {
+    const size_t nn= getNumberOfNodes();
+    std::vector<const Node *> retval(nn, nullptr);
+    for(size_t i=1;i<=nn;i++)
+      retval[i-1]= this->getNode(i);
+    return retval;
+  }
+
+//! @brief Return the node pointersin reverse order.
+std::vector<const XC::Node *> XC::Edge::getNodesReverse(void) const
+  {
+    const size_t nn= getNumberOfNodes();
+    std::vector<const Node *> retval(nn, nullptr);
+    for(size_t i=1;i<=nn;i++)
+      retval[i-1]= this->getNode(nn-i+1);
+    return retval;
+  }
+
 //! @brief Return the IDs of the nodes in forward order.
 std::vector<int> XC::Edge::getTagsNodesForward(void) const
   {
-    const size_t nn= getNumberOfNodes();
-    std::vector<int> retval(nn);
-    for(size_t i=1;i<=nn;i++)
-      retval[i-1]= getNode(i)->getTag();
+    const std::vector<const Node *> tmp= this->getNodesForward();
+    std::vector<int> retval(tmp.size());
+    size_t j= 0;
+    for(std::vector<const Node *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++, j++)
+      retval[j]= (*i)->getTag();
     return retval;
   }
 
 //! @brief Return the IDs of the nodes in reverse order.
 std::vector<int> XC::Edge::getTagsNodesReverse(void) const
   {
-    const size_t nn= getNumberOfNodes();
-    std::vector<int> retval(nn);
-    for(size_t i=1;i<=nn;i++)
-      retval[i-1]= getNode(nn-i+1)->getTag();
+    const std::vector<const Node *> tmp= this->getNodesReverse();
+    std::vector<int> retval(tmp.size());
+    size_t j= 0;
+    for(std::vector<const Node *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++, j++)
+      retval[j]= (*i)->getTag();
     return retval;
   }
 
 //! @brief Return the positions of the nodes in forward order.
 Pos3dArray XC::Edge::getNodePosForward(void) const
   {
-    const size_t nn= getNumberOfNodes();
-    Pos3dArray retval(nn);
-    for(size_t i=1;i<=nn;i++)
-      retval(i,1)= pos_node(*getNode(i));
+    const std::vector<const Node *> tmp= this->getNodesForward();
+    Pos3dArray retval(tmp.size());
+    size_t j= 1;
+    for(std::vector<const Node *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++, j++)
+      retval(j,1)= pos_node(**i);
     return retval;
   }
 
 //! @brief Return the positions of the nodes in reverse order.
 Pos3dArray XC::Edge::getNodePosReverse(void) const
   {
-    const size_t nn= getNumberOfNodes();
-    Pos3dArray retval(nn);
-    for(size_t i=1;i<=nn;i++)
-      retval(i,1)= pos_node(*getNode(nn-i+1));
+    const std::vector<const Node *> tmp= this->getNodesReverse();
+    Pos3dArray retval(tmp.size());
+    size_t j= 1;
+    for(std::vector<const Node *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++, j++)
+      retval(j,1)= pos_node(**i);
     return retval;
   }
 

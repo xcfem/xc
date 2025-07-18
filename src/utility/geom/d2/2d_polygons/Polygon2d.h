@@ -176,6 +176,8 @@ class Polygon2d: public PolygonalSurface2d
     Segment2d Clip(const Segment2d &) const;
     std::list<Polygon2d> Clip(const BND2d &bnd) const;
     boost::python::list ClipPy(const BND2d &) const;
+    std::list<Polygon2d> Clip(const HalfPlane2d &) const;
+    boost::python::list ClipPy(const HalfPlane2d &) const;
     std::list<Polygon2d> Clip(const Polygon2d &) const;
     boost::python::list ClipPy(const Polygon2d &) const;
 

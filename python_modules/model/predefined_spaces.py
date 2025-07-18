@@ -280,13 +280,56 @@ class PredefinedSpace(object):
         '''
         return self.dBase.restore(flag)
 
+    def getBodyHandler(self):
+        ''' Return the surface handler for this model.'''
+        return self.preprocessor.getMultiBlockTopology.getBodies
+    
+    def getBodies(self, tags: Sequence[int]):
+        ''' Return the bodies that correspond to the given tags.
+
+        :param tags: body tags.
+        '''
+        retval= list()
+        bodyHandler= self.getBodyHandler()
+        for t in tags:
+            b= bodyHandler.get(t)
+            if(b):
+                retval.append(b)
+        return retval
+    
     def getSurfaceHandler(self):
         ''' Return the surface handler for this model.'''
         return self.preprocessor.getMultiBlockTopology.getSurfaces
 
+    def getSurfaces(self, tags: Sequence[int]):
+        ''' Return the surfaces that correspond to the given tags.
+
+        :param tags: surface tags.
+        '''
+        retval= list()
+        surfaceHandler= self.getSurfaceHandler()
+        for t in tags:
+            s= surfaceHandler.get(t)
+            if(s):
+                retval.append(s)
+        return retval
+    
     def getLineHandler(self):
         ''' Return the line handler for this model.'''
         return self.preprocessor.getMultiBlockTopology.getLines
+
+    def getLines(self, tags: Sequence[int]):
+        ''' Return the lines that correspond to the given tags.
+
+        :param tags: line tags.
+        '''
+        retval= list()
+        lineHandler= self.getLineHandler()
+        for t in tags:
+            l= lineHandler.get(t)
+            if(l):
+                retval.append(l)
+        return retval
 
     def getPointHandler(self):
         ''' Return the point handler for this model.'''
@@ -535,7 +578,7 @@ class PredefinedSpace(object):
 
     def conciliaNDivs(self):
         '''Conciliate the number of divisions of the lines.'''
-        bodies= self.preprocessor.getMultiBlockTopology.getBodies
+        bodies= self.getBodyHandler()
         if(bodies.size>0):
             retval= bodies.conciliaNDivs()
         else:
@@ -1084,7 +1127,7 @@ class PredefinedSpace(object):
            entities.'''
         return self.getSet('total')
 
-    def defSet(self, setName: str= None, nodes= None, elements= None, points= None, lines= None, surfaces= None, bodies= None):
+    def defSet(self, setName: str= None, nodes= None, elements= None, points= None, lines= None, surfaces= None, bodies= None, nodeTags= None, elementTags= None):
         ''' Defines a set with the name argument.
 
         :param setName: name of the set to define.
@@ -1092,8 +1135,12 @@ class PredefinedSpace(object):
         :param element: element iterable to initizalize the elements of the set.
         :param points: point iterable to initizalize the points of the set.
         :param lines: line iterable to initizalize the lines of the set.
-        :param surfaces: surface iterable to initizalize the surfaces of the set.
+        :param surfaces: surface iterable to initizalize the surfaces of 
+                         the set.
         :param bodies: body iterable to initizalize the bodies of the set.
+        :param nodeTags: node identifiers to initizalize the nodes of the set.
+        :param elementTags: element identifiers to initizalize the nodes of ç
+                            the set.
         '''
         if(setName is None):
             setName= uuid.uuid4().hex
@@ -1116,6 +1163,14 @@ class PredefinedSpace(object):
         if(bodies):
             for b in bodies:
                 retval.bodies.append(b)
+        if(nodeTags):
+            cNodes= self.getNodes(nodeTags)
+            for cn in cNodes:
+                retval.nodes.append(cn)
+        if(elementTags):
+            cElements= self.getElements(elementTags)
+            for ce in cElements:
+                retval.elements.append(ce)
         return retval
     
     def removeSet(self, setName: str):
@@ -1722,11 +1777,12 @@ class PredefinedSpace(object):
         :param caption:   caption for the graphic
         :param fileName:  name of the file to plot the graphic. Defaults to None
                           in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                  so that the display position of each node equals to
-                  the initial position plus its displacement multiplied
-                  by this factor. (Defaults to 0.0, i.e. display of 
-                  initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param scaleConstr: scale of SPConstraints symbols (defaults to 0.2)
         '''
         if(setsToDisplay is None):
@@ -1753,11 +1809,12 @@ class PredefinedSpace(object):
         :param combContainer: load combinations whose reaction will be displayed.
         :param fileName: name of the file to plot the graphic. Defaults to 
                     None, in that case an screen display is generated
-        :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         :param inclInertia: include inertia effects (defaults to false).
         :param reactionCheckTolerance: relative tolerance when checking reaction values.
         '''

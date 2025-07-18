@@ -114,6 +114,8 @@ class CrdTransf2d;
 class CrdTransf3d;
 class ShellCrdTransf3dBase;
 
+class Damping;
+
 class BeamIntegration;
 
 class UniaxialMaterial;
@@ -185,6 +187,7 @@ class FEM_ObjectBroker: public ObjectBroker
     virtual Fiber *getNewFiber(int classTag);
     virtual FrictionModel *getNewFrictionModel(int classTag);
     virtual Material *getNewMaterial(int classTag);
+    virtual Damping *getNewDamping(int classTag);
 
     virtual ConvergenceTest *getNewConvergenceTest(CommandEntity *owr,int classTag);
     virtual NodeLocker *getNewNodeLocker(int classTag);

@@ -11,7 +11,7 @@ Then we create the html files:
 
 We change to our local [XCmanual](http://github.com/xcfem/XCmanual/) repository:
 
-`cd /usr/local/src/prg/XCmanual`
+`cd .../XCmanual`
 
 and update the newly created/updated files:
 

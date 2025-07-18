@@ -95,7 +95,8 @@ class PileFoundation(pile.CircularPile):
             return self.getCalcLengthEndBearingPile()
 
     def getVerticalStiffnessSinglePile(self):
-        '''Return the vertical stiffness of a single pile
+        '''Return the vertical stiffness of a single pile according to clause
+           5.13.1.1 of the reference document (see the docstring of this file).
         '''
         Lc= self.getCalcLength()
         A= self.getCrossSectionArea()
@@ -139,7 +140,7 @@ class PileFoundation(pile.CircularPile):
                 lmsg.warning(className+'.'+methodName+'; wrong type of soil: '+str(soilType))
             while(y>yBottom):
                 n= lstNodPile[0][0]
-                lnTribNod= n.getTributaryLength()
+                lnTribNod= self.tributaryLengths[n.tag]
                 if(soilType == 'sa'): # sandy soil
                     Kh_x= alphaKh_x*soilPrp*(self.soilLayers.groundLevel-y)*lnTribNod*coefKh
                 else: # cohesive soil
@@ -194,7 +195,7 @@ class PileFoundation(pile.CircularPile):
                 lmsg.warning(className+'.'+methodName+'; wrong type of soil: '+str(soilType))
             while(z>zBottom):
                 n= lstNodPile[0][0]
-                lnTribNod= n.getTributaryLength()
+                lnTribNod= self.tributaryLengths[n.tag]
                 if(soilType == 'sa'): #sandy soil
                     Kh_x= alphaKh_x*soilPrp*(self.soilLayers.groundLevel-z)*lnTribNod*coefKh
                     Kh_y= alphaKh_y*soilPrp*(self.soilLayers.groundLevel-z)*lnTribNod*coefKh

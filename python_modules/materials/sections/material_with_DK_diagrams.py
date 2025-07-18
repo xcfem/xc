@@ -96,3 +96,21 @@ class MaterialWithDKDiagrams(object):
     def getDiagD(self,preprocessor):
         return preprocessor.getMaterialHandler.getMaterial(self.nmbDiagD)
 
+    def getDesignStressStrainDiagramFileName(self, path= '', withExtension= True):
+        ''' Return the file name for the design stress strain diagram.
+
+        :param path: path for the file.
+        :param withExtension: if true append the file extension.
+        '''
+        retval= path
+        if(len(retval)>0):
+            if(retval[-1]!= '/'):
+                retval+= '/'
+        retval+= self.materialName+'_design_stress_strain_diagram'
+        if(withExtension):
+            retval+= '.png'
+        return retval
+    
+    def getDesignStressStrainDiagramTitle(self):
+        ''' Return the title for the design stress strain diagram.'''
+        return self.materialName + ' design stress-strain diagram'

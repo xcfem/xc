@@ -2,7 +2,7 @@
 ''' Test the computation of the Frenet trihedron along a line segment.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
-__copyright__= "Copyright 2024, LCPT and AO_O"
+__copyright__= "Copyright 2025, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
@@ -14,7 +14,6 @@ pth= geom.Polyline3d([geom.Pos3d(0,0,0), geom.Pos3d(1,0,0)])
 
 ft= geom.FrenetTrihedron(pth)
 
-halfSqrt2= math.sqrt(2)/2.0
 t0= ft.getTangent(0.0)
 t0Ref= geom.Vector3d(1,0,0)
 t1= ft.getTangent(1.0)

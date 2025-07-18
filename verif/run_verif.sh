@@ -76,6 +76,7 @@ python tests/utility/geom/points/pos3d_test_01.py
 python tests/utility/geom/points/pos3d_list_test_01.py
 python tests/utility/geom/points/pos2d_list_test_01.py
 python tests/utility/geom/points/closest_pair_of_points.py
+python tests/utility/geom/points/test_group_by_distance.py
 python tests/utility/geom/points/point_cloud_2d_test_01.py
 python tests/utility/geom/points/point_cloud_2d_test_02.py
 python tests/utility/geom/points/point_cloud_2d_test_03.py
@@ -93,6 +94,7 @@ python tests/utility/geom/lines/line3d_test_03.py
 python tests/utility/geom/lines/line3d_test_04.py
 python tests/utility/geom/lines/line3d_test_05.py
 python tests/utility/geom/lines/line2d_intersection_test.py
+python tests/utility/geom/lines/line_intersection_test.py
 python tests/utility/geom/lines/line_segment_intersection_test.py
 python tests/utility/geom/lines/ray2d_test.py
 echo "$BLEU" "    Segments." "$NORMAL"
@@ -279,8 +281,10 @@ python tests/actions/test_prestressing.py
 python tests/actions/test_report_load_cases.py
 echo "$BLEU" "  Earth pressure tests." "$NORMAL"
 python tests/actions/earth_pressure/test_peck_pressure_envelope.py
+python tests/actions/earth_pressure/test_uniform_load_on_stem_01.py
 python tests/actions/earth_pressure/test_uniform_pressure_on_ground_01.py
 python tests/actions/earth_pressure/test_uniform_pressure_on_ground_02.py
+python tests/actions/earth_pressure/test_uniform_pressure_on_ground_03.py
 python tests/actions/earth_pressure/test_earth_pressure_01.py
 python tests/actions/earth_pressure/test_earth_pressure_02.py
 python tests/actions/earth_pressure/test_earth_pressure_03.py
@@ -293,9 +297,12 @@ python tests/actions/earth_pressure/test_earth_pressure_point_load.py
 python tests/actions/earth_pressure/test_boussinesq_earth_pressure_01.py
 python tests/actions/earth_pressure/test_boussinesq_earth_pressure_02.py
 python tests/actions/earth_pressure/test_boussinesq_earth_pressure_03.py
+python tests/actions/earth_pressure/test_horizontal_load_earth_pressure_00.py
 python tests/actions/earth_pressure/test_horizontal_load_earth_pressure_01.py
 python tests/actions/earth_pressure/test_horizontal_load_earth_pressure_02.py
 python tests/actions/earth_pressure/test_horizontal_load_earth_pressure_03.py
+python tests/actions/earth_pressure/test_horizontal_load_earth_pressure_04.py
+python tests/actions/earth_pressure/test_strip_load_on_backfill_01.py
 echo "$BLEU" "  Earthquake action tests." "$NORMAL"
 python tests/actions/quake/mononobe_okabe_test_01.py
 python tests/actions/quake/mononobe_okabe_test_02.py
@@ -434,7 +441,9 @@ python tests/elements/change_material_properties/test_change_element_material.py
 python tests/elements/change_material_properties/test_change_element_material_properties_01.py
 python tests/elements/change_material_properties/test_change_element_material_properties_02.py
 python tests/elements/change_material_properties/test_change_element_material_properties_03.py
-python tests/elements/change_material_properties/test_change_element_material_properties_03.py
+python tests/elements/change_material_properties/test_change_element_material_properties_04.py
+python tests/elements/change_material_properties/test_change_element_material_properties_05.py
+python tests/elements/change_material_properties/test_change_element_material_properties_06.py
 echo "$BLEU" "  Beam column tests." "$NORMAL"
 echo "$BLEU" "    Elastic beam-column 2D tests." "$NORMAL"
 python tests/elements/beam_column/elastic_beam_2d/cantilever2d_01.py
@@ -525,8 +534,10 @@ python tests/elements/zero_length/test_strains_sign01.py
 python tests/elements/zero_length/test_strains_sign02.py
 python tests/elements/zero_length/test_strains_sign03.py
 python tests/elements/zero_length/test_strains_sign04.py
-python tests/elements/zero_length/test_winkler.py
-python tests/elements/zero_length/test_quasi_winkler.py
+python tests/elements/zero_length/test_rotational_dummy_spring_stiffness_01.py 
+python tests/elements/zero_length/test_rotational_dummy_spring_stiffness_02.py 
+python tests/elements/zero_length/test_rotational_dummy_spring_stiffness_03.py 
+python tests/elements/zero_length/test_rotational_dummy_spring_stiffness_04.py 
 echo "$BLEU" "  Plane elasticity elements tests." "$NORMAL"
 python tests/elements/plane/test_tri31.py
 python tests/elements/plane/test_four_node_quad_01.py
@@ -570,6 +581,7 @@ python tests/elements/shell/test_shell_mitc9_01.py
 python tests/elements/shell/test_shell_mitc9_02.py
 python tests/elements/shell/test_shell_mitc9_03.py
 python tests/elements/shell/test_tributary_area_01.py
+python tests/elements/shell/test_tributary_area_02.py
 python tests/elements/shell/test_shell_mitc4_natural_coordinates_01.py
 python tests/elements/shell/test_transform_internal_forces.py
 python tests/elements/shell/test_gauss_points_cartesian_coordinates.py
@@ -630,6 +642,12 @@ python tests/sample_problems/strut-and-tie/strut-and-tie_test_04.py
 python tests/sample_problems/strut-and-tie/strut-and-tie_test_05.py
 python tests/sample_problems/strut-and-tie/strut-and-tie_test_06.py
 python tests/sample_problems/strut-and-tie/strut-and-tie_test_07.py
+echo "$BLEU" "  Soil subgrade reaction." "$NORMAL"
+python tests/sample_problems/soil_subgrade_reaction/test_winkler.py
+python tests/sample_problems/soil_subgrade_reaction/test_quasi_winkler.py
+python tests/sample_problems/soil_subgrade_reaction/test_foundation_slab.py
+echo "$BLEU" "  Earth retaining." "$NORMAL"
+python tests/sample_problems/earth_retaining/test_rail_retaining_wall.py
 
 echo "$BLEU" "Solution tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py
@@ -743,6 +761,7 @@ python tests/preprocessor/geom_entities/test_k_points_01.py
 python tests/preprocessor/geom_entities/test_k_points_02.py
 python tests/preprocessor/geom_entities/line.py
 python tests/preprocessor/geom_entities/line_02.py
+python tests/preprocessor/geom_entities/test_num_connected_surfaces_01.py
 python tests/preprocessor/geom_entities/linea_tramos.py
 python tests/preprocessor/geom_entities/test_line_seq_01.py
 python tests/preprocessor/geom_entities/test_line_seq_02.py
@@ -867,6 +886,10 @@ python tests/preprocessor/meshing/mesh_refinement/test_shell_3-refinement_4_03.p
 python tests/preprocessor/meshing/mesh_refinement/test_shell_3-refinement_stable_transition.py
 python tests/preprocessor/meshing/mesh_refinement/test_shell_3-refinement_01.py
 python tests/preprocessor/meshing/mesh_refinement/test_shell_3-refinement_02.py
+echo "$BLEU" "    Bridge paremetric modeling." "$NORMAL"
+python tests/preprocessor/meshing/bridge_parametric_modeling/bridge_parametric_modeler_test_01.py
+python tests/preprocessor/meshing/bridge_parametric_modeling/bridge_parametric_modeler_test_02.py
+python tests/preprocessor/meshing/bridge_parametric_modeling/bridge_parametric_modeler_test_03.py
 
 echo "$BLEU" "  Sets handling tests." "$NORMAL"
 python tests/preprocessor/sets/test_exist_set.py
@@ -962,6 +985,7 @@ python tests/constraints/test_elastic_bearing_01.py
 python tests/constraints/test_elastic_bearing_02.py
 python tests/constraints/test_elastic_bearing_03.py
 python tests/constraints/test_elastic_bearing_04.py
+python tests/constraints/test_elastic_foundation_01.py
 python tests/constraints/test_huge_beam.py
 python tests/constraints/test_huge_truss.py
 python tests/constraints/test_fulcrum_01.py
@@ -1452,6 +1476,7 @@ python tests/materials/ehe/test_fiber_section_shear_02.py
 python tests/materials/ehe/test_fiber_section_shear_03.py
 python tests/materials/ehe/test_fiber_section_shear_04.py
 python tests/materials/ehe/test_fiber_section_shear_05.py
+python tests/materials/ehe/test_fiber_section_shear_06.py
 echo "$BLEU" "    Torsion resistance determination tests (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_torsion_check_01.py
 echo "$BLEU" "    Shrinkage and creep determination tests (EHE-08)." "$NORMAL"
@@ -1500,7 +1525,9 @@ python tests/materials/ec2/test_smearedCracking_04.py
 python tests/materials/ec2/test_smearedCracking_05.py
 python tests/materials/ec2/test_smearedCracking_06.py
 echo "$BLEU" "    EC2 bending resistance determination tests." "$NORMAL"
-python tests/materials/ec2/test_ec2_interaction_diagram.py
+python tests/materials/ec2/test_ec2_interaction_diagram_01.py
+python tests/materials/ec2/test_ec2_interaction_diagram_02.py
+python tests/materials/ec2/test_ec2_interaction_diagram_03.py
 python tests/materials/ec2/test_EC2_bending_01.py
 python tests/materials/ec2/test_EC2_bending_02.py
 python tests/materials/ec2/test_EC2_bending_03.py
@@ -1510,6 +1537,7 @@ python tests/materials/ec2/test_EC2_shear_02.py
 python tests/materials/ec2/test_EC2_shear_03.py
 python tests/materials/ec2/test_EC2_shear_04.py
 python tests/materials/ec2/test_EC2_shear_05.py
+python tests/materials/ec2/test_ec2_fiber_section_shear_01.py
 python tests/materials/ec2/test_EC2_shear_between_web_and_flanges_01.py
 echo "$BLEU" "    EC2 punching shear resistance determination tests." "$NORMAL"
 python tests/materials/ec2/test_ec2_punching_shear_01.py
@@ -1555,6 +1583,8 @@ python tests/materials/steel_shapes/test_arcelor_metric_shapes_01.py
 python tests/materials/steel_shapes/test_arcelor_metric_shapes_02.py
 python tests/materials/steel_shapes/test_arcelor_metric_shapes_03.py
 python tests/materials/steel_shapes/test_arcelor_metric_shapes_04.py
+python tests/materials/steel_shapes/test_en_13674_1_rail_shapes_01.py
+python tests/materials/steel_shapes/test_en_13674_1_rail_shapes_02.py
 echo "$BLEU" "    EC3 tests." "$NORMAL"
 python tests/materials/ec3/compare_mech_properties.py
 python tests/materials/ec3/test_cross_section_verification_01.py
@@ -1750,6 +1780,7 @@ python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_coulomb
 python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_bell_soil_test_01.py
 python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_test_04.py
 python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_test_05.py
+python tests/geotechnics/earth_retaining/test_k_janssen_01.py
 
 #Database tests
 echo "$BLEU" "Database tests (MySQL, Berkeley db, sqlite,...)." "$NORMAL"
@@ -1810,7 +1841,8 @@ python tests/rough_calculations/earth_retaining/sheet_pile_example_02.py
 python tests/rough_calculations/earth_retaining/sheet_pile_example_03.py
 python tests/rough_calculations/earth_retaining/sheet_pile_tricked_example_01.py
 python tests/rough_calculations/earth_retaining/sheet_pile_tricked_example_02.py
-python tests/rough_calculations/earth_retaining/pile_wall_displacement_estimation.py
+python tests/rough_calculations/earth_retaining/pile_wall_displacement_estimation_01.py
+python tests/rough_calculations/earth_retaining/pile_wall_displacement_estimation_02.py
 echo "$BLEU" "  Beam formulas..." "$NORMAL"
 python tests/rough_calculations/beam_formulas/test_cantilever01.py
 python tests/rough_calculations/beam_formulas/test_cantilever02.py
@@ -1850,6 +1882,8 @@ echo "$BLEU" "    SIA 262 limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/sia262/test_shell_normal_stresses_uls_checking.py
 echo "$BLEU" "    ACI limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/aci/test_shear_uls_checking_aci.py
+echo "$BLEU" "    EC0 limit state checking." "$NORMAL"
+python tests/postprocess/limit_state_checking/ec0/test_deck_twist_estimation.py
 echo "$BLEU" "    EC2 limit state checking." "$NORMAL"
 echo "$BLEU" "      EC2 limit state checking: bending." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec2/test_2D_bending_uls_checking_01.py
@@ -1916,6 +1950,7 @@ echo "$BLEU" "    serviceability limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/serviceability_limit_states/test_ibc2018_deflection.py
 echo "$BLEU" "    generic limit state tools." "$NORMAL"
 python tests/postprocess/limit_state_checking/generic/test_select_critical_combs.py 
+python tests/postprocess/limit_state_checking/generic/test_internal_forces_envelope_truss.py 
 # Graphic output tests
 ##python tests/postprocess/vtk/dibuja_edges.py
 echo "$BLEU" "  Graphic output." "$NORMAL"
@@ -1935,7 +1970,7 @@ python tests/postprocess/vtk/display_loads/test_display_inertia_load_on_shell_01
 python tests/postprocess/vtk/display_loads/test_display_inertia_load_on_elastic_beam_2d_01.py
 python tests/postprocess/vtk/display_loads/test_display_inertia_load_on_elastic_beam_3d_01.py
 python tests/postprocess/vtk/display_loads/test_display_inertia_load_on_truss_01.py
-echo "$BLEU" "      Graphic output. Strain loads." "$NORMAL"
+echo "$BLEU" "    Graphic output. Strain loads." "$NORMAL"
 python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load_on_brick_01.py
 python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load_on_quad_01.py
 python tests/postprocess/vtk/display_loads/strain_loads/test_display_strain_load_on_truss_01.py
@@ -1963,6 +1998,8 @@ python tests/postprocess/vtk/display_limit_state_results/test_display_shear_uls_
 echo "$BLEU" "  Report output." "$NORMAL"
 python tests/postprocess/report/test_report_loads_01.py
 python tests/postprocess/report/test_report_check_01.py
+python tests/postprocess/report/test_report_rc_section.py
+python tests/postprocess/report/test_rc_section_report_generator.py
 
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)

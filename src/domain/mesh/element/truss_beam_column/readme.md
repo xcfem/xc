@@ -45,5 +45,6 @@ To capture the P-little delta effecs in beam elements you need to use at least s
 ### Buckling
 - [Meshing for Column Loads](https://portwooddigital.com/2020/05/10/meshing-for-column-loads/)
 - [Apples and Oranges](https://portwooddigital.com/2025/04/06/apples-and-oranges/)
+ - [Linear buckling analysis](https://portwooddigital.com/2021/05/29/right-under-your-nose)
 #### Lateral-torsional buckling
 - [Torsional Buckling](https://portwooddigital.com/2024/11/01/torsional-buckling/)

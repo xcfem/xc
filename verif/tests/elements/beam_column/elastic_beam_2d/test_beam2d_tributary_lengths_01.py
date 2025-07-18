@@ -12,6 +12,7 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
+from model.sets import sets_mng 
 from materials import typical_materials
 
 # Create FE problem.
@@ -58,16 +59,12 @@ beam2d.h= h
 ## Generate mesh.
 ln.genMesh(xc.meshDir.I)
 
-# Warning: the tributary area is cumulative (to avoid discontinuities for
-# the nodes at the set boundaries), so if you call it twice, you'll get this
-# value doubled unless you call resetTributaries first.
-ln.resetTributaries()
-ln.computeTributaryLengths(False)
+tributaryLengths= sets_mng.get_tributary_lengths(xcSet= ln, initialGeometry= False)
 
 # Check results.
 tributaryLength= 0.0
 for n in ln.nodes:
-    tributaryLength+= n.getTributaryLength()
+    tributaryLength+= tributaryLengths[n.tag]
 
 error= abs(tributaryLength-l)/l
 

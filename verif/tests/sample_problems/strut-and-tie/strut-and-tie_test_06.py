@@ -210,7 +210,7 @@ for combName in combs.getKeys():
     if(not stressesOK):
         exit(1)
     varNames= vc.update_reactions_envelope(nodes= pileBottomNodes)
-    vc.update_envelope_internal_forces_beam_elem_3d(lintelElement)
+    vc.update_envelope_internal_forces_beam_elem_3d(lintelElement, combName)
 
 pileSet= modelSpace.defSet('pileSet', elements= pileElements)
 pileSet.fillDownwards()

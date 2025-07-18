@@ -165,40 +165,78 @@ Pos3dArray XC::CmbEdge::Side::get_positions(void) const
       return Pos3dArray();
   }
 
+//! @brief Return the pointers to the nodes of the forward sequence.
+std::vector<XC::Node *> XC::CmbEdge::Side::getNodesForward(void)
+  {
+    if(forward)
+      return edge->getNodesForward();
+    else
+      return edge->getNodesReverse();
+  }
+
+//! @brief Return the pointers to the nodes of the reverse sequence.
+std::vector<XC::Node *> XC::CmbEdge::Side::getNodesReverse(void)
+  {
+    if(forward)
+      return this->edge->getNodesReverse();
+    else
+      return this->edge->getNodesForward();
+  }
+
+//! @brief Return the pointers to the nodes of the forward sequence.
+std::vector<const XC::Node *> XC::CmbEdge::Side::getNodesForward(void) const
+  {
+    const Edge *e= this->edge;
+    if(forward)
+      return e->getNodesForward();
+    else
+      return e->getNodesReverse();
+  }
+
+//! @brief Return the pointers to the nodes of the reverse sequence.
+std::vector<const XC::Node *> XC::CmbEdge::Side::getNodesReverse(void) const
+  {
+    const Edge *e= this->edge;
+    if(forward)
+      return e->getNodesReverse();
+    else
+      return e->getNodesForward();
+  }
+
 //! @brief Return the identifiers of the nodes of the forward sequence.
 std::vector<int> XC::CmbEdge::Side::getTagsNodesForward(void) const
   {
     if(forward)
-      return edge->getTagsNodesForward();
+      return this->edge->getTagsNodesForward();
     else
-      return edge->getTagsNodesReverse();
+      return this->edge->getTagsNodesReverse();
   }
 
 //! @brief Return the identifiers of the nodes of the reverse sequence.
 std::vector<int> XC::CmbEdge::Side::getTagsNodesReverse(void) const
   {
     if(forward)
-      return edge->getTagsNodesReverse();
+      return this->edge->getTagsNodesReverse();
     else
-      return edge->getTagsNodesForward();
+      return this->edge->getTagsNodesForward();
   }
 
 //! @brief Return the positions of the nodes of the forward sequence.
 Pos3dArray XC::CmbEdge::Side::getNodePosForward(void) const
   {
     if(forward)
-      return edge->getNodePosForward();
+      return this->edge->getNodePosForward();
     else
-      return edge->getNodePosReverse();
+      return this->edge->getNodePosReverse();
   }
 
 //! @brief Return the positions of the nodes of the reverse sequence.
 Pos3dArray XC::CmbEdge::Side::getNodePosReverse(void) const
   {
     if(forward)
-      return edge->getNodePosReverse();
+      return this->edge->getNodePosReverse();
     else
-      return edge->getNodePosForward();
+      return this->edge->getNodePosForward();
   }
 
 //! @brief Return the node which index is being passed as parameter empezando por el principio.
@@ -208,9 +246,9 @@ XC::Node *XC::CmbEdge::Side::getNodeForward(const size_t &i)
       return nullptr;
     else
       if(forward)
-        return edge->getNodeForward(i);
+        return this->edge->getNodeForward(i);
       else
-        return edge->getNodeReverse(i);
+        return this->edge->getNodeReverse(i);
   }
 
 //! @brief Return the node which index is being passed as parameter empezando por el final.
@@ -220,9 +258,9 @@ XC::Node *XC::CmbEdge::Side::getNodeReverse(const size_t &i)
       return nullptr;
     else
       if(forward)
-        return edge->getNodeReverse(i);
+        return this->edge->getNodeReverse(i);
       else
-        return edge->getNodeForward(i);
+        return this->edge->getNodeForward(i);
   }
 
 //! @brief Return the node which index is being passed as parameter.

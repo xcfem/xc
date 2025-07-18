@@ -108,11 +108,12 @@ class LinearLoadDiagram(ld.LoadDiagram):
 
         :param actLP: list of active load patterns.
         :param diagramIndex: index-counter for the values to insert.
-        :param defFScale: factor to apply to current displacement of nodes 
-                   so that the display position of each node equals to
-                   the initial position plus its displacement multiplied
-                   by this factor. (Defaults to 0.0, i.e. display of 
-                   initial/undeformed shape).
+	:param defFScale: deformation scale factor. Factor to apply to the
+			  current displacement of the nodes so that the 
+			  displayed position of each node equals to
+			  the initial position plus its displacement 
+			  multiplied by this factor. (Defaults to 0.0, i.e. 
+			  display the initial/undeformed shape).
         '''
         preprocessor= actLP[0].getDomain.getPreprocessor
         if not self.dictActLoadVectors:

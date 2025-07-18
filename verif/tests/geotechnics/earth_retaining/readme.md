@@ -13,9 +13,12 @@ Verification tests concerning earth retaining structures.
 - [Shear strength](https://en.wikipedia.org/wiki/Shear_strength_(soil))
 - [Sergio Rodríguez, explicación clase pantallas](http://www.tocasa.es/ingeniero/Sergio_Rodriguez_Explicacion_clase_pantallas.pdf)
 - [Design of deep excavations according to Eurocode 7](https://hal.science/hal-03358160/document)
+- [Modèle de Janssen](https://fr.wikipedia.org/wiki/Mod%C3%A8le_de_Janssen)
+
 ### Norms
 - [Eurocode 7: Geotechnical design](https://eurocodes.jrc.ec.europa.eu/EN-Eurocodes/eurocode-7-geotechnical-design)
 - [Eurocode 7: Geotechnical Design. Worked examples](https://publications.jrc.ec.europa.eu/repository/handle/JRC85029)
 - [Eurocode 7: Design approachs and partial factors](https://www.midasgeotech.com/blog/design-approach-partial-factor)
+
 ### Benchmark tests
 - [Proceedings of the International Workshop on the evaluation of Eurocode 7](https://www.is-argebau.de/Dokumente/42310413.pdf)

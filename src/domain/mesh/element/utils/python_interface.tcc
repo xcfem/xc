@@ -61,18 +61,27 @@ bool (XC::NodePtrs::*NodePtrsIn3D)(const GeomObj3d &,const double &,const double
 bool (XC::NodePtrs::*NodePtrsOut3D)(const GeomObj3d &,const double &,const double &) const= &XC::NodePtrs::Out;
 int (XC::NodePtrs::*getNodeIndexPTR)(const XC::Node *) const= &XC::NodePtrs::getNodeIndex;
 int (XC::NodePtrs::*getNodeIndexTAG)(const int &tag) const= &XC::NodePtrs::getNodeIndex;
+boost::python::list (XC::NodePtrs::*get_connected_elements_node_ptrs_py)(void)= &XC::NodePtrs::getConnectedElementsPy;    
+boost::python::list (XC::NodePtrs::*get_connected_elements_node_ptrs_set_py)(const XC::SetBase *)= &XC::NodePtrs::getConnectedElementsPy; 
+boost::python::list (XC::NodePtrs::*get_connected_elements_tags_node_ptrs_py)(void) const= &XC::NodePtrs::getConnectedElementTags;    
+boost::python::list (XC::NodePtrs::*get_connected_elements_tags_node_ptrs_set_py)(const XC::SetBase *) const= &XC::NodePtrs::getConnectedElementTags; 
 class_<XC::NodePtrs, bases<CommandEntity,vector_ptr_nodes>, boost::noncopyable >("NodePtrs", no_init)
   .def("getNearestNode",make_function(getNearestNodePtr, return_internal_reference<>() ),"Return nearest node.")
   .def("In", NodePtrsIn3D,"\n""In(geomObject,factor,tolerance) \n""Return true if the current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement lie inside the geometric object.")
   .def("Out", NodePtrsOut3D,"\n""Out(geomObject,factor,tolerance) \n""Return true if current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement lie outside the geometric object.")
   .def("getNodeIndex", getNodeIndexPTR, " Return the index of the node in the array.")
   .def("getNodeTAG", getNodeIndexTAG, " Return the index of the node in the array.")
+  .add_property("connectedElements", get_connected_elements_node_ptrs_py, "Returns the elements connected to any of these nodes.")
+  .def("getConnectedElements", get_connected_elements_node_ptrs_set_py, "Returns the elements from the given set that are connected to any of these nodes.")
+.add_property("connectedElementTags", get_connected_elements_tags_node_ptrs_py, "Returns the tags of the elements connected to any of these nodes.")
+  .def("getConnectedElementTags", get_connected_elements_tags_node_ptrs_set_py, "Returns the tags of the elements from the given set that are connected to any of these nodes.")
   ;
 
 class_<XC::NodePtrsWithIDs, bases<XC::NodePtrs>, boost::noncopyable >("NodePtrsWithIDs", no_init)
   .add_property("getExternalNodes",make_function(&XC::NodePtrsWithIDs::getExternalNodes, return_internal_reference<>() ),"Return tags of external nodes.")
   ;
 
+#include "damping/python_interface.tcc"
 #include "physical_properties/python_interface.tcc"
 #include "fvectors/python_interface.tcc"
 #include "gauss_models/python_interface.tcc"

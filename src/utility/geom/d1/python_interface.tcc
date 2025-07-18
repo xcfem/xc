@@ -31,6 +31,7 @@ Line2d (Line2d::*OffsetVector)(const Vector2d &v) const= &Line2d::offset;
 Line2d (Line2d::*OffsetDouble)(const GEOM_FT &) const= &Line2d::offset;
 GeomObj::list_Pos2d (Line2d::*intersectionWithR2D)(const Line2d &) const= &Line2d::getIntersection;
 GeomObj::list_Pos2d (Line2d::*intersectionWithPline2D)(const Polyline2d &) const= &Line2d::getIntersection;
+GeomObj::list_Pos2d (Line2d::*intersectionWithLineParallelToAxis)(unsigned short int , const double &) const= &Line2d::getIntersection;
 Pos2d (Line2d::*Pos2dProj)(const Pos2d &) const= &Line2d::Projection;
 Vector2d (Line2d::*Vector2dProj)(const Vector2d &) const= &Line2d::Projection;
 class_<Line2d, bases<Linear2d> >("Line2d")
@@ -45,6 +46,7 @@ class_<Line2d, bases<Linear2d> >("Line2d")
   .def("getParamB",&Line2d::GetParamB,"returns line y-intercept; 'b' parameter from equation (y= a*x+b).")
   .def("getIntersection", intersectionWithR2D, "Return the intersection with the line argument.")
   .def("getIntersection", intersectionWithPline2D, "Return the intersection with the given polyline.")
+  .def("getIntersection", intersectionWithLineParallelToAxis, "getIntersection(i, d): return the intersection with a line parallel to the i-th axis at a distance d from the origin.")
   .def("getPos2dProj",Pos2dProj,"return the projection of a point onto the line.")
   .def("getVector2dProj",Vector2dProj,"return the projection of a vector onto the line.")
   .def("getPoint",&Line2d::PtoParametricas,"return a point on the line.")
