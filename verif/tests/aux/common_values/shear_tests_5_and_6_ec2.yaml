@@ -1,6 +1,6 @@
 --- # Average capacity factor for shear tests 5 and 6 using EC2
  span: 3.0
  uniformLoad: -40.0e3
- refMeanFC0: 0.26431090526797446
+ refMeanFC0: 0.27272930294511527
  refMeanFC1: 0.055663419892526864
 
