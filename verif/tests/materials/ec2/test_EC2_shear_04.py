@@ -47,7 +47,7 @@ optimumStrutAngleRef= math.radians(25.32151662757501)
 ratio2= abs(optimumStrutAngle-optimumStrutAngleRef)/optimumStrutAngleRef
 
 # design value of the shear resistance
-VRds= EC2_limit_state_checking.getShearResistanceShearReinf(concrete= concrete, NEd= 0.0, Ac= Ac, bw= bw, Asw= Asw, s= stirrupsSpacing, z= z, shearReinfSteel= stirrupsSteel, shearReinfAngle= stirrupsAngle, webStrutAngle= optimumStrutAngle, nationalAnnex= None)
+VRds= EC2_limit_state_checking.get_shear_resistance_shear_reinf(concrete= concrete, NEd= 0.0, Ac= Ac, bw= bw, Asw= Asw, s= stirrupsSpacing, z= z, shearReinfSteel= stirrupsSteel, shearReinfAngle= stirrupsAngle, webStrutAngle= optimumStrutAngle, nationalAnnex= None)
 VRdsRef= 608.9415444951244e3
 ratio3= abs(VRds-VRdsRef)/VRdsRef
 
