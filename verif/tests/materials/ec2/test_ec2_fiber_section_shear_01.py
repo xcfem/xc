@@ -47,6 +47,7 @@ topRow= def_simple_RC_section.ReinfRow(rebarsDiam= topRebarsDiam, width= width, 
 rcSection.positvRebarRows= def_simple_RC_section.LongReinfLayers([bottomRow])
 rcSection.negatvRebarRows= def_simple_RC_section.LongReinfLayers([topRow])
 
+# Create FE model.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Create the section material
