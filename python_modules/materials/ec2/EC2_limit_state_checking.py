@@ -894,7 +894,7 @@ def getWebStrutAngleForSimultaneousCollapse(concrete, bw, s, Asw, shearReinfStee
     # nu1: strength reduction factor for concrete cracked in shear
     nu= concrete.getShearStrengthReductionFactor(nationalAnnex)
     fcd= -concrete.fcd() # design value of concrete compressive strength (MPa).
-    fywd= shearReinfSteel.fyd() # design yield strength of the shear reinforcement
+    fywd= min(shearReinfSteel.fyd(), 400e6) # design yield strength of the shear reinforcement
     ratio= (bw*s*nu*fcd)/(Asw*fywd*math.sin(shearReinfAngle))
     if(ratio<1):
         methodName= sys._getframe(0).f_code.co_name
@@ -945,7 +945,7 @@ def getMaximumEffectiveShearReinforcement(concrete, NEd, Ac, bw, s, shearReinfSt
     # nu1: strength reduction factor for concrete cracked in shear
     nu1= concrete.getShearStrengthReductionFactor(nationalAnnex)
     fcd= -concrete.fcd() # design value of concrete compressive strength (MPa).
-    fywd= shearReinfSteel.fyd()
+    fywd= min(shearReinfSteel.fyd(), 400e6)
     return 0.5*alpha_cw*nu1*fcd/fywd*bw*s
 
 def getWebStrutAngleLimits(nationalAnnex= None):
@@ -983,7 +983,7 @@ def checkWebStrutAngleLimits(webStrutAngle, nationalAnnex= None):
         lmsg.warning(errString)
     return retval
 
-def getShearResistanceShearReinf(concrete, NEd, Ac, bw, Asw, s, z, shearReinfSteel, shearReinfAngle= math.pi/2.0, webStrutAngle= math.pi/4.0, nationalAnnex= None):
+def get_shear_resistance_shear_reinf(concrete, NEd, Ac, bw, Asw, s, z, shearReinfSteel, shearReinfAngle= math.pi/2.0, webStrutAngle= math.pi/4.0, nationalAnnex= None, circular= False):
     ''' Return the design value of the shear resistance VRds for shear 
         reinforced members according to expressions 6.7N, 6.13 and 6.14 of
         EC2:2004.
@@ -999,14 +999,19 @@ def getShearResistanceShearReinf(concrete, NEd, Ac, bw, Asw, s, z, shearReinfSte
     :param shearReinfAngle: (alpha) angle between shear reinforcement and the beam axis perpendicular to the shear force.
     :param webStrutAngle: (theta) angle between the concrete compression web strut and the beam axis perpendicular to the shear force.
     :param nationalAnnex: identifier of the national annex.
+    :param circular: if true we reduce the efectiveness of the shear 
+                     reinforcement due to the transverse inclination of its
+                     elements.
     '''
     webStrutAngle= checkWebStrutAngleLimits(webStrutAngle, nationalAnnex)
     cotgTheta= 1/math.tan(webStrutAngle)
     cotgAlpha= 1/math.tan(shearReinfAngle)
     sinAlpha= math.sin(shearReinfAngle)
-    fywd= shearReinfSteel.fyd()
+    fywd= min(shearReinfSteel.fyd(), 400e6)
     cotgThetaPluscotgAlpha= cotgTheta+cotgAlpha
     VRds= Asw/s*z*fywd*cotgThetaPluscotgAlpha*sinAlpha
+    if(circular):
+        VRds*= 0.85
     # nu1: strength reduction factor for concrete cracked in shear
     nu1= concrete.getShearStrengthReductionFactor(nationalAnnex)
     
@@ -1485,8 +1490,7 @@ class ShearController(lscb.ShearControllerBase):
                           reinforcement due to the transverse inclination of
                           its elements.
         '''
-        Ac= rcSets.getConcreteArea(1) # Ac
-        self.strutWidth= scc.getCompressedStrutWidth() # b0
+        Ac= self.getConcreteArea(scc= scc) # bw*d 
         isBending= scc.isSubjectedToBending(0.1)
         if(isBending):
             self.innerLeverArm= scc.getMechanicLeverArm() # z
@@ -1496,7 +1500,7 @@ class ShearController(lscb.ShearControllerBase):
             # reach. Anyway, we return a safe estimation of the lever arm.
             sectionDepth= Ac/self.strutWidth
             self.innerLeverArm= 0.7*sectionDepth
-        return getShearResistanceShearReinf(concrete= concrete, NEd= Nd, Ac= Ac, bw= self.strutWidth, Asw= self.Asw, s= self.stirrupSpacing, z= self.innerLeverArm, shearReinfSteel= reinfSteel, shearReinfAngle= self.alpha, webStrutAngle= math.pi/4.0, nationalAnnex= self.nationalAnnex)
+        return get_shear_resistance_shear_reinf(concrete= concrete, NEd= Nd, Ac= Ac, bw= self.strutWidth, Asw= self.Asw, s= self.stirrupSpacing, z= self.innerLeverArm, shearReinfSteel= reinfSteel, shearReinfAngle= self.alpha, webStrutAngle= math.pi/4.0, nationalAnnex= self.nationalAnnex, circular= circular)
 
     def getShearStrength(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
         ''' Compute the shear strength at failure WITH or WITHIOUT shear 
