@@ -43,6 +43,8 @@ class PrincipalAxes3D
     PrincipalAxes3D(void);
     PrincipalAxes3D(const Pos3d &, const double A[3][3]);
     PrincipalAxes3D(const Pos3d &, const GEOM_FT &, const GEOM_FT &, const GEOM_FT &, const GEOM_FT &, const GEOM_FT &, const GEOM_FT &);
+    inline Pos3d getOrg(void) const
+      { return center_of_mass; }
     Ref3d3d getAxis(void) const;
     const GEOM_FT &I1() const;
     const GEOM_FT &I2() const;
