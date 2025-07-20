@@ -213,10 +213,16 @@ feProblem.errFileName= "cerr" # From now on display errors if any.
 feProblem.logFileName= "clog" # From now on display warnings if any.
 
 relError= list() # Relative errors.
-refMeanCFs= [0.08543032671148505, 0.33687225608980853]
+refMeanCFs= [0.08848053233910935, 0.3610025152145464] # 20/07/2025 those values
+                                                      # have been updated
+                                                      # due to the limitation
+                                                      # of the design yield
+                                                      # stress of the shear
+                                                      # reinforcement to 400
+                                                      # MPa.
 for meanCF, refMeanCF in zip(meanCFs, refMeanCFs):
     relError.append(abs(meanCF-refMeanCF)/refMeanCF)
-                    
+
 '''
 print('meanCFs= ', meanCFs)
 print("relError[0]= ",relError[0])
