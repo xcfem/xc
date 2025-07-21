@@ -23,6 +23,7 @@
 
 class_<XC::ID, bases<CommandEntity> >("ID")
   .def(vector_indexing_suite<XC::ID>() )  
+  .def(init<const XC::ID &>())
   .def(init<boost::python::list>())
   .def(init<std::set<int> >())
   .def(init<std::vector<int> >())
@@ -44,6 +45,7 @@ def("id_to_py_list",XC::xc_id_to_py_list);
 
 double &(XC::Vector::*getItemVector)(const size_t &)= &XC::Vector::at;
 class_<XC::Vector, bases<CommandEntity> >("Vector")
+  .def(init<const XC::Vector &>())
   .def(init<boost::python::list>())
   .def(init<Vector2d>())
   .def(init<Vector3d>())
