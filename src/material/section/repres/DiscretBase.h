@@ -60,6 +60,7 @@ class DiscretBase: public NamedEntity
     void setMaterialPtr(Material *mat);
     Material *getMaterialPtr(void) const;
 
+    virtual void clear(void);
   };
 } // end of XC namespace
 

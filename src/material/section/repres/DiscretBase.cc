@@ -41,3 +41,10 @@ void XC::DiscretBase::setMaterialPtr(Material *m)
 XC::Material *XC::DiscretBase::getMaterialPtr(void) const
   { return mat; }
 
+//! @brief Set the material pointer to null.
+void XC::DiscretBase::clear(void)
+  {
+    mat= nullptr;
+    NamedEntity::clearPyProps();
+  }
+

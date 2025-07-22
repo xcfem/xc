@@ -84,6 +84,7 @@ class_<XC::DiscretBase, bases<NamedEntity>, boost::noncopyable >("DiscretBase", 
   .def("getMinY",&XC::DiscretBase::getMinY,"Returns y coordinate minimum value.")
   .def("getMinZ",&XC::DiscretBase::getMinZ,"Returns z coordinate minimum value.")
   .def("getMaterial",make_function(getMaterialPtr,return_internal_reference<>()), "returns a pointer to the material.")
+  .def("clear", &XC::DiscretBase::clear,"Clear the objects members.")
   ;
 
 class_<XC::SectionMassProperties, bases<CommandEntity>, boost::noncopyable >("SectionMassProperties", no_init)
