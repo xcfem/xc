@@ -13,7 +13,8 @@ import sys
 import geom
 from model import predefined_spaces
 from materials import typical_materials
-from model.sets import sets_mng 
+from model.sets import sets_mng
+from geotechnics import ground_pressure
 from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import fields
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
@@ -301,30 +302,14 @@ class ElasticFoundation(object):
     def calcPressures(self):
         ''' Compute the foundation pressures over the soil. Calculates 
          pressures  and forces in the free nodes of the springs
-         (those that belongs to both the spring and the foundation)
+         (those that belong to both the spring and the foundation)
          and stores these values as properties of those nodes:
          property 'soilPressure:' [xStress,yStress,zStress]
          property 'soilReaction:' [xForce,yForce,zForce]
         '''
-        self.svdReac= geom.SlidingVectorsSystem3d()
-        for eTag in self.springs:
-            e= self.springs[eTag]
-            n= e.getNodes[1]
-            rf= e.getResistingForce()
-            a= self.tributaryAreas[n.tag]
-            if(len(rf)==6):
-                f3d= geom.Vector3d(rf[0],rf[1],0.0)
-                m3d= geom.Vector3d(0.0,0.0,rf[2])
-            else: #len(rf)==12
-                f3d= geom.Vector3d(rf[0],rf[1],rf[2])
-                m3d= geom.Vector3d(rf[3],rf[4],rf[5])
-            pos= n.getInitialPos3d
-            self.svdReac+= geom.SlidingVectorsSystem3d(pos,f3d,m3d)
-            n.setProp('soilPressure',[f3d.x/a,f3d.y/a,f3d.z/a])
-            n.setProp('soilReaction',[f3d.x,f3d.y,f3d.z])
-            
-        return self.svdReac.reduceTo(self.getCentroid())
-
+        self.svdReac= ground_pressure.compute_ground_pressure_from_springs(soilSprings= self.springs, tributaryAreas= self.tributaryAreas, foundationCentroid= self.getCentroid())
+        return self.svdReac
+        
     def getFoundationSupportedNodes(self):
         ''' Return the nodes that belong to both the foundation ond to one of
             the springs that support the foundation.
@@ -375,12 +360,13 @@ class ElasticFoundation(object):
             avgPressure/=len(foundationNodes)
         return maxPressure, maxPressureNode, minPressure, minPressureNode, avgPressure             
 
-    def displayPressures(self, caption,fUnitConv,unitDescription,rgMinMax=None,fileName=None):
+    def displayPressures(self, caption, fUnitConv, unitDescription,component= 2, rgMinMax=None,fileName=None):
         '''Display foundation pressures for a single load case.
 
         :param caption: caption for the displayed image.
         :param fUnitConv: unit conversion factor.
-        :param unitDescription: unit description. 
+        :param unitDescription: unit description.
+        :param component: component of the pressure to display.
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
               of the scalar field (if any) to be represented. All the values 
               less than vmin are displayed in blue and those greater than vmax 
@@ -392,7 +378,7 @@ class ElasticFoundation(object):
             if(not reac):
                 AssertionError('Error computing pressures.')
 
-        field= fields.ExtrapolatedScalarField('soilPressure','getProp',self.foundationSet,component=2,fUnitConv= fUnitConv,rgMinMax=rgMinMax)
+        field= fields.ExtrapolatedScalarField('soilPressure','getProp', self.foundationSet, component=2, fUnitConv= fUnitConv, rgMinMax= rgMinMax)
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         field.display(displaySettings, caption= caption, fileName=fileName, unitDescription= unitDescription)
 
