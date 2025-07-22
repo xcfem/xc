@@ -563,6 +563,22 @@ XC::Material *load_material(int tag_mat,const std::string &cmd,XC::MaterialHandl
     return retval;
   }
 
+//! @brief Remove a material from this container.
+void XC::MaterialHandler::removeMaterial(const std::string &cod_mat)
+  {
+    map_materials::iterator i= materials.find(cod_mat);
+    if(i!=materials.end()) //Material exists.
+      {
+	delete materials[cod_mat];
+	materials[cod_mat]= nullptr;
+	materials.erase(cod_mat);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; material: '" << cod_mat << "' not found."
+	        << Color::def << std::endl;
+  }
+
 //! @brief Defines a new material.
 XC::Material *XC::MaterialHandler::newMaterial(const std::string &mat_type,const std::string &cod_mat)
   {
@@ -593,7 +609,7 @@ XC::Material *XC::MaterialHandler::newMaterial(const std::string &mat_type,const
 //! @brief Defines a new material.
 XC::SectionGeometry *XC::MaterialHandler::newSectionGeometry(const std::string &cod)
   {
-    XC::SectionGeometry *retval= nullptr;
+    SectionGeometry *retval= nullptr;
     if(sections_geometry.find(cod)!=sections_geometry.end()) //Section geometry already exists.
       {
 	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -608,6 +624,22 @@ XC::SectionGeometry *XC::MaterialHandler::newSectionGeometry(const std::string &
         sections_geometry[cod]= retval;
       }
     return retval;
+  }
+
+//! @brief Remove a section geometry from this container.
+void XC::MaterialHandler::removeSectionGeometry(const std::string &cod)
+  {
+    map_geom_secc::iterator i= sections_geometry.find(cod);
+    if(i!=sections_geometry.end()) //Material exists.
+      {
+	delete sections_geometry[cod];
+	sections_geometry[cod]= nullptr;
+	sections_geometry.erase(cod);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; material: '" << cod << "' not found."
+	        << Color::def << std::endl;
   }
 
 //! @brief New interaction diagram
@@ -629,6 +661,22 @@ XC::InteractionDiagram *XC::MaterialHandler::newInteractionDiagram(const std::st
     return retval;
   }
 
+//! @brief Remove an interaction diagram from this container.
+void XC::MaterialHandler::removeInteractionDiagram(const std::string &cod)
+  {
+    map_interaction_diagram::iterator i= interaction_diagrams.find(cod);
+    if(i!=interaction_diagrams.end()) //Material exists.
+      {
+	delete interaction_diagrams[cod];
+	interaction_diagrams[cod]= nullptr;
+	interaction_diagrams.erase(cod);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; interaction diagram: '" << cod << "' not found."
+	        << Color::def << std::endl;
+  }
+
 //! @brief New 2d interaction diagram
 XC::InteractionDiagram2d *XC::MaterialHandler::new2DInteractionDiagram(const std::string &cod_diag)
   {
@@ -646,6 +694,22 @@ XC::InteractionDiagram2d *XC::MaterialHandler::new2DInteractionDiagram(const std
         interaction_diagrams2D[cod_diag]= retval;
       }
     return retval;
+  }
+
+//! @brief Remove a 2D interaction diagram from this container.
+void XC::MaterialHandler::remove2DInteractionDiagram(const std::string &cod)
+  {
+    map_interaction_diagram2d::iterator i= interaction_diagrams2D.find(cod);
+    if(i!=interaction_diagrams2D.end()) //Material exists.
+      {
+	delete interaction_diagrams2D[cod];
+	interaction_diagrams2D[cod]= nullptr;
+	interaction_diagrams2D.erase(cod);
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; interaction diagram: '" << cod << "' not found."
+	        << Color::def << std::endl;
   }
 
 //! @brief New interaction diagram

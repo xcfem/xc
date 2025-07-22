@@ -63,4 +63,5 @@ class_<XC::Preprocessor, bases<CommandEntity>, boost::noncopyable >("Preprocesso
   .def("removeSFreedom_Constraint", &XC::Preprocessor::removeSFreedom_Constraint, "Remove the constraint with the given tag from the FE problem.")
   .def("removeMFreedom_Constraint", &XC::Preprocessor::removeMFreedom_Constraint, "Remove the constraint with the given tag from the FE problem.")
   .def("removeMRMFreedom_Constraint", &XC::Preprocessor::removeMRMFreedom_Constraint, "Remove the constraint with the given tag from the FE problem.")
+  .def("clearAll",  &XC::Preprocessor::clearAll, "Removes all the objects contained in the preprocessor")
   ;
