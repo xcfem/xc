@@ -239,6 +239,7 @@ class PredefinedSpace(object):
         ''' Clear the finite element model.'''
         prb= self.getProblem()
         prb.clearAll()
+        self.preprocessor.clearAll()
         self.setPreprocessor(preprocessor= None)
 
     def setVerbosityLevel(self, level):
