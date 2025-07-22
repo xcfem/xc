@@ -443,7 +443,20 @@ class PileWall(object):
             self.solProc= predefined_solutions.PenaltyKrylovNewton(prb= self.feProblem, numSteps= 10, maxNumIter= 300, convergenceTestTol= convergenceTestTol, printFlag= 0)
         else:
             self.solProc= predefined_solutions.PenaltyNewtonRaphson(prb= self.feProblem, numSteps= 10, maxNumIter= 300, convergenceTestTol= convergenceTestTol, printFlag= 0)
-        
+
+    def clear(self):
+        ''' Clear FE problem and solution procedure.'''
+        if(hasattr(self, 'pileSection')):
+            self.pileSection.clear(preprocessor= self.modelSpace.preprocessor)
+        if(hasattr(self, 'solProc')):
+           print('clear solProc.')
+           self.solProc.clear()
+           self.solProc= None
+        if(hasattr(self, 'modelSpace')):
+           print('clear modelSpace.')
+           self.modelSpace.clearAll()
+           self.modelSpace= None
+            
     def setNodeSoils(self):
         ''' Compute the soil corresponding to each node.'''
         self.soilsAtNodes= dict()
