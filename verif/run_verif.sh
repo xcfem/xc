@@ -1206,6 +1206,7 @@ python tests/loads/combinations/test_davit_02.py
 #Uniaxial materials.
 echo "$BLEU" "Materials tests." "$NORMAL"
 python tests/materials/test_get_material_names.py
+python tests/materials/test_clear_xc_material.py
 echo "$BLEU" "  XC materials tests." "$NORMAL"
 echo "$BLEU" "    Uniaxial materials tests." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/test_elastic_material.py
