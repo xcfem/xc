@@ -166,6 +166,18 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         section_properties.CircularSection.setFromDict(self, dct)
         self.mainReinf= dct['mainReinf']
         self.shReinf= dct['shReinf']
+
+    def clear(self, preprocessor):
+        ''' Clears all the members of this object.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
+        self.mainReinf.clear()
+        self.mainReinf= None
+        self.shReinf.clear()
+        self.shReinf= None
+        section_properties.CircularSection.clear(self, preprocessor= preprocessor)
+        super(RCCircularSection, self).clear()
         
     def __eq__(self, other):
         ''' Redefines equal operator.'''
@@ -315,8 +327,12 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
 
         '''
         self.minCover= None
-        self.mainReinf.clearLayers()
-        self.geomSection.clear()
+        if(self.mainReinf):
+            self.mainReinf.clearLayers()
+        self.mainReinf= None
+        if(hasattr(self,'geomSection')):
+            if(self.geomSection):
+                self.geomSection.clear()
         self.geomSection= None
         self.clearDiagrams()        
 

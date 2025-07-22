@@ -68,6 +68,20 @@ class SectionProperties(object):
         self.name= dct['name']
         self.xc_material= dct['xc_material']
         self.torsionalStiffnessFactor= dct['torsional_stiffness_factor']
+
+    def clear(self, preprocessor):
+        ''' Clears all the members of this object.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
+        self.name= None
+        if(self.xc_material):
+            materialHandler= preprocessor.getMaterialHandler
+            matName= self.xc_material.name
+            if(materialHandler.materialExists(matName)):
+                materialHandler.removeMaterial(matName)
+                self.xc_material= None
+        self.torsionalStiffnessFactor= None    
         
     def A(self):
         '''cross-sectional area (abstract method)'''

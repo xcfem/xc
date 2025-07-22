@@ -112,7 +112,16 @@ class ShearReinforcement(object):
         self.shReinfSpacing= dct['shReinfSpacing']
         self.angAlphaShReinf= dct['angAlphaShReinf']
         self.angThetaConcrStruts= dct['angThetaConcrStruts']
-    
+
+    def clear(self):
+        ''' Clears all the members of this object.'''
+        self.familyName= None
+        self.nShReinfBranches= None
+        self.areaShReinfBranch= None
+        self.shReinfSpacing= None
+        self.angAlphaShReinf= None
+        self.angThetaConcrStruts= None
+        
     @classmethod
     def newFromDict(cls, dct= None):
         ''' Builds a new object from the data in the given dictionary.
@@ -217,6 +226,11 @@ class TorsionReinforcement(ShearReinforcement):
         '''
         super().setFromDict(dct)
         self.A1= dct['A1']
+        
+    def clear(self):
+        ''' Clears all the members of this object.'''
+        self.A1= None
+        super().clear()
         
     def getAt(self):
         '''returns the area of the reinforcements used as hoops or 
@@ -354,6 +368,20 @@ class ReinfRow(object):
         if('latCover' in dct):
             self.latCover= dct['latCover']
             
+    def clear(self):
+        ''' Clears all the members of this object.'''
+        self.rebarsDiam= None
+        self.areaRebar= None
+        self.rebarsSpacing= None
+        self.nRebars= None
+        self.width= None
+        self.cover= None
+        if(hasattr(self, 'latCover')):
+            self.latCover= None
+        if(hasattr(self, 'reinfLayer')):
+            self.reinfLayer.clear()
+            self.reinfLayer= None
+        
     @classmethod
     def newFromDict(cls, dct= None):
         ''' Builds a new object from the data in the given dictionary.
@@ -692,6 +720,8 @@ class LongReinfLayers(object):
 
     def clearLayers(self):
         ''' Clear the previously defined reinforcement layers.'''
+        for reinfLayer in self.reinfLayers:
+            reinfLayer.clear()
         self.reinfLayers.clear()
 
     def clear(self):
@@ -797,7 +827,16 @@ class RCFiberSectionParameters(object):
         self.reinfDiagName= dct['reinforcing_steel_diagram_name']
         self.nDivIJ= dct['n_div_ij']
         self.nDivJK= dct['n_div_jk']
-        
+
+    def clear(self):
+        ''' Clears all the members of this object.'''
+        self.clearDiagrams()
+        self.concrType= None
+        self.concrDiagName= None
+        self.reinfSteelType= None
+        self.reinfDiagName= None
+        self.nDivIJ= None
+        self.nDivJK= None
             
     @classmethod
     def newFromDict(cls, dct= None):
@@ -992,6 +1031,18 @@ class RCSectionBase(object):
         self.sectionDescr= dct['section_description']
         self.fiberSectionParameters= dct['fiber_section_parameters']
         self.fiberSectionRepr= dct['fiber_section_representation']
+
+    def clear(self):
+        ''' Clears all the members of this object.'''
+        self.clearShearResponse()
+        self.clearDiagrams()
+        self.clearRCSection()
+        self.sectionDescr= None
+        self.fiberSectionParameters.clear()
+        self.fiberSectionParameters= None
+        if(self.fiberSectionRepr):
+            self.fiberSectionRepr.clear()
+            self.fiberSectionRepr= None
         
     @classmethod
     def newFromDict(cls, dct= None):
@@ -1683,6 +1734,18 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         self.shReinfZ= dct['shear_reinforcement_z']
         self.shReinfY= dct['shear_reinforcement_y']
         self.torsionReinf= dct['torsion_reinforcement']
+
+    def clear(self):
+        ''' Clears all the members of this object.'''
+        self.swapReinforcementAxes= None
+        self.shReinfZ.clear()
+        self.shReinfY= None
+        self.shReinfZ.clear()
+        self.shReinfZ= None
+        self.torsionReinf.clear()
+        self.torsionReinf= None
+        RCSectionBase.clear(self)
+        section_properties.clear(self)
                 
     def __eq__(self, other):
         '''Overrides the default implementation'''
@@ -1981,6 +2044,16 @@ class RCRectangularSection(BasicRectangularRCSection):
         self.minCover= dct['min_cover']
         self.positvRebarRows= dct['positive_rebar_rows']
         self.negatvRebarRows= dct['negative_rebar_rows']
+
+
+    def clear(self):
+        ''' Clears all the members of this object.'''
+        self.minCover= None
+        self.positvRebarRows.clear()
+        self.positvRebarRows= None
+        self.negatvRebarRows.clear()
+        self.negatvRebarRows= None
+        super().clear(self)
             
     def __eq__(self, other):
         '''Overrides the default implementation'''
