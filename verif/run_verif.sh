@@ -1337,6 +1337,7 @@ python tests/materials/section_properties/test_box_girder_torsional_stiffness.py
 python tests/materials/section_properties/test_rectangular_hollow_section_01.py
 python tests/materials/section_properties/test_rectangular_hollow_section_02.py
 python tests/materials/section_properties/test_rectangular_hollow_section_03.py
+python tests/materials/section_properties/test_rectangular_hollow_section_04.py
 
 echo "$BLEU" "      Section stiffness." "$NORMAL"
 python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_01.py
