@@ -1332,6 +1332,7 @@ echo "$BLEU" "      Section properties." "$NORMAL"
 python tests/materials/section_properties/test_compound_section_01.py
 python tests/materials/section_properties/test_compound_section_02.py
 python tests/materials/section_properties/test_compound_section_03.py
+python tests/materials/section_properties/test_hot_rolled_round_steel_bar_01.py
 python tests/materials/section_properties/test_box_girder_torsional_stiffness.py
 python tests/materials/section_properties/test_rectangular_hollow_section_01.py
 python tests/materials/section_properties/test_rectangular_hollow_section_02.py
