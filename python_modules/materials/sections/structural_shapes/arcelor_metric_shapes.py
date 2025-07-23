@@ -335,27 +335,6 @@ for item in CHS:
 # ARCELOR's hot rolled round steel bars.
 
 R= arcelor_shapes_dictionaries.R
-for item in R:
-    shape= R[item]
-    A= shape['A']
-    E= shape['E']
-    nu= shape['nu']
-    r= shape['r']
-    Iz= math.pi*r**4/4.0
-    Iy= Iz
-    shape['alpha']= 0.5*5/6.0
-    shape['G']= E/(2*(1+nu))
-    shape['AreaQy']=  9/10*A
-    shape['AreaQz']=  9/10*A
-    shape['Iz']= Iz
-    shape['Iy']= Iy
-    shape['iz']= Iz/r
-    shape['iy']= Iy/r
-    shape['Wzel']= Iz/r
-    shape['Wyel']= Iy/r
-    shape['Wypl']= 4.0*r**3/3.0
-    shape['Wzpl']= 4.0*r**3/3.0
-    shape['J']= math.pi*r**4/2.0
 
 UC= arcelor_shapes_dictionaries.UC
 for item in UC:
@@ -553,6 +532,18 @@ class UPNShape(structural_steel.UShape):
 class AUShape(structural_steel.SteelShape):
     def __init__(self,steel,name):
         super(AUShape,self).__init__(steel,name,AU)
+    def getRho(self):
+        ''' Returns mass per unit length. '''
+        return self.get('P')
+        
+    def getWarpingConstant(self):
+        ''' Return the value of the section warping constant.'''
+        return self.get('Iw')
+
+class RShape(structural_steel.SteelShape):
+    def __init__(self, steel, name):
+        super(RShape,self).__init__(steel,name,R)
+        
     def getRho(self):
         ''' Returns mass per unit length. '''
         return self.get('P')

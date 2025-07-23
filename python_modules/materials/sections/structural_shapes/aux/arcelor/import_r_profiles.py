@@ -67,7 +67,7 @@ def post_process(shapesDict):
         av= estimate_av(shapeRecord)
         shapeRecord['Avy']= av
         shapeRecord['Avz']= av
-        shapeRecord['Cw']= 0.0 # no warping under torsion.
+        shapeRecord['Iw']= 0.0 # no warping under torsion.
         shapeRecord['It']= estimate_st_venant_torsion_constant(shapeRecord)
         retval[shapeName]= shapeRecord
     return retval

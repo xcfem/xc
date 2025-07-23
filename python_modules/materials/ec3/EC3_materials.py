@@ -1161,6 +1161,17 @@ class CFCHSShape(EC3Shape, bs_en_10219_shapes.CFCHSShape):
         '''
         return 2*self.A()/math.pi
 
+class RShape(EC3Shape, arcelor_metric_shapes.RShape):
+    """AU shape with Eurocode 3 verification routines."""
+    def __init__(self, steel, name):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. AU_23)
+        '''
+        super(RShape, self).__init__(name= name, typo= 'rolled')
+        arcelor_metric_shapes.RShape.__init__(self,steel,name)
+
 from materials.sections.structural_shapes import common_micropile_tubes
 
 # Shapes for micropile tubes.
