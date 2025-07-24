@@ -22,15 +22,12 @@ from actions.wind import ec1_wind
 # Compute the value of the probability factor.
 c_prob= ec1_wind.get_probability_factor(T= 5)
 
+# Structural factor according to section 6 (see 6.2(1))
 c_dir= 1.0
 c_season= 1.0
 # Compute basic velocity
 vb0= 26
 vb= c_prob*c_dir*c_season*vb0
-rho= 1.25
-
-
-cscd= 1.0 # structural factor.
 
 # Compute peak velocity pressure.
 terrainCategory= 'III'
@@ -42,7 +39,7 @@ solidityRatio= 1.0 # Solidity ratio.
 c0= 1.0 # orography factor.
 rho= 1.25 # air density.
 k1= 1.0 # turbulence factor.
-zMax= 200.0
+zMax= 200.0 # maximum height according to clause 4.3.2 of EN 1991-1-4:2005.
 qp= ec1_wind.get_peak_velocity_pressure(terrainCategory= terrainCategory, vb= vb, z= hBase+wallHeight, zMax= zMax, rho= rho, k1= k1, c0= c0)
 
 # Compute pressure distribution.
