@@ -13,8 +13,8 @@ import math
 from actions.snow import ec1_snow
 
 # Snow load shape coefficients for mUlti-span roofs
-alpha1= math.radians(45)
-alpha2= math.radians(30)
+alpha1= math.atan2(1,1)
+alpha2= math.atan2(1,3)
 
 snow_load_shape_coefficients= ec1_snow.get_snow_load_shape_coefficients_multi_span_roofs(alpha1Radians=alpha1, alpha2Radians= alpha2)
 
@@ -22,7 +22,11 @@ ref_snow_load_shape_coefficients= [[(0.25, 0.25), (0.8, 0.8), (0.25, 0.25), (0.8
 
 testOK= (snow_load_shape_coefficients==ref_snow_load_shape_coefficients)
 
-# print(snow_load_shape_coefficients)
+'''
+print('alpha1= ', math.degrees(alpha1))
+print('alpha2= ', math.degrees(alpha2))
+print(snow_load_shape_coefficients)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
