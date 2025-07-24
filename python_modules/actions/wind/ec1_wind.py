@@ -646,3 +646,30 @@ def get_free_standing_wall_net_pressure_distribution(terrainCategory:str, vb:flo
     for cp in cp_i:
         wnet_i.append(cp*qp)
     return scipy.interpolate.interp1d(xi, wnet_i, kind='linear')
+
+# Overall force coefficients according to clause 7.3 and table 7.7
+# of EN 1991-1-4:2005
+duopitch_canopy_angles= [-20, -15, -10, -5, 5, 10, 15, 20]
+maximum_duopitch_canopy_cf_values= [+0.7, +0.5, +0.4, +0.3, +0.3, +0.4, +0.4, +0.6]
+maximum_duopitch_canopy_cf= scipy.interpolate.interp1d(duopitch_canopy_angles, maximum_duopitch_canopy_cf_values, kind='linear', fill_value="extrapolate")
+minimum_duopitch_canopy_zero_blockage_cf_values= [-0.7, -0.6, -0.6, -0.5, -0.6, -0.7, -0.8, -0.9]
+minimum_duopitch_canopy_zero_blockage_cf= scipy.interpolate.interp1d(duopitch_canopy_angles, minimum_duopitch_canopy_zero_blockage_cf_values, kind='linear', fill_value="extrapolate")
+minimum_duopitch_canopy_total_blockage_cf_values= [-1.3, -1.4, -1.4, -1.3, -1.3, -1.3, -1.3, -1.3]
+minimum_duopitch_canopy_total_blockage_cf= scipy.interpolate.interp1d(duopitch_canopy_angles, minimum_duopitch_canopy_total_blockage_cf_values, kind='linear', fill_value="extrapolate")
+def get_duopitch_canopy_overall_force_coefficients(roofAngleRadians, degreeOfBlockage):
+    ''' Return the maximum and minimum overall force coefficients for a duopitch
+        canopy according to table 7.7 of EN 1991-1-4:2005.
+
+    :param roofAngle: angle of the roof according to figure 7.17 of 
+                      EN 1991-1-4:2005 (expressed in radians).
+    :param degreeOfBlockage: degree of blockage according to paragraph (2) of
+                             clause 7.3 of EN 1991-1-4:2005.
+    '''
+    roofAngleDegrees= math.degrees(roofAngleRadians)
+    maxCf= float(maximum_duopitch_canopy_cf(roofAngleDegrees))
+    minCf_zero_blockage= float( minimum_duopitch_canopy_zero_blockage_cf(roofAngleDegrees))
+    minCf_total_blockage= float( minimum_duopitch_canopy_total_blockage_cf(roofAngleDegrees))
+    minCf= (minCf_total_blockage-minCf_zero_blockage)*degreeOfBlockage+minCf_zero_blockage
+    return maxCf, minCf
+
+    

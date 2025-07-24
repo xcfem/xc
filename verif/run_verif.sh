@@ -331,6 +331,8 @@ echo "$BLEU" "    CTE wind action tests." "$NORMAL"
 python tests/actions/wind/cte/test_cte_wind_load.py
 echo "$BLEU" "    EC1 wind action tests." "$NORMAL"
 python tests/actions/wind/ec1/test_ec1_cylinder_force_coefficient.py
+python tests/actions/wind/ec1/test_ec1_duopitch_canopy_overall_force_coefficients_01.py
+python tests/actions/wind/ec1/test_ec1_duopitch_canopy_overall_force_coefficients_02.py
 python tests/actions/wind/ec1/test_ec1_longitudinal_wind_reduction_factor.py 
 python tests/actions/wind/ec1/test_ec1_bridge_deck_vertical_force_coefficient.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_without_traffic_01.py
