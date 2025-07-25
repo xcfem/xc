@@ -31,6 +31,7 @@ comb4= combs.newLoadCombination("COMB4","1.33*A")
 comb3= combs.newLoadCombination("COMB3","1.33*A+0.5*B")
 difference= combs.newLoadCombination("DIFFERENCE","")
 previousName= combs.getCombPrevia(combs.getComb("COMB1")).name
+print(previousName)
 difference.asigna("COMB1")
 difference.subtract(previousName)
 descompDifference= difference.getComponents("%3.1f")
@@ -38,10 +39,12 @@ descompDifference= difference.getComponents("%3.1f")
 ratio1= (previousName=="COMB3")
 ratio2= (descompDifference=="1.5*B")
 
-
-# print("ratio1= ",ratio1)
-# print("ratio2= ",ratio2)
-
+'''
+print('previousName= ', previousName)
+print("ratio1= ",ratio1)
+print('descombDifference= ', descompDifference)
+print("ratio2= ",ratio2)
+'''
 
 import os
 from misc_utils import log_messages as lmsg

@@ -450,7 +450,7 @@ std::string XC::LoadPatternCombination::getString(const std::string &fmt) const
   {
     std::string retval= "";
     const MapLoadPatterns &lPatterns= handler->getLoadPatterns();
-    if(!empty())
+    if(!descomp.empty())
       {
         const_iterator i= begin();
         retval= (*i).getString(lPatterns,fmt);
