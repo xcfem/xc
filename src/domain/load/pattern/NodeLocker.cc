@@ -64,8 +64,7 @@
 #include <utility/tagged/storage/ArrayOfTaggedObjects.h>
 #include <domain/domain/single/SingleDomSFreedom_Iter.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-
-
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Allocates memory.
 void XC::NodeLocker::alloc_containers(void)
@@ -74,8 +73,9 @@ void XC::NodeLocker::alloc_containers(void)
 
     if(!theSPs)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; ran out of memory\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; ran out of memory"
+		  << Color::def << std::endl;
         exit(-1);
       }
   }
@@ -87,8 +87,9 @@ void XC::NodeLocker::alloc_iterators(void)
 
     if(theSpIter == 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; ran out of memory\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; ran out of memory"
+		  << Color::def << std::endl;
         exit(-1);
       }
   }
@@ -169,7 +170,9 @@ bool XC::NodeLocker::addSFreedom_Constraint(SFreedom_Constraint *theSp)
         currentGeoTag++;
       }
     else
-      std::cerr << "WARNING: XC::NodeLocker::addSFreedom_Constraint() - load could not be added\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; constraint could not be added."
+		  << Color::def << std::endl;
     return result;
   }
 
@@ -188,6 +191,10 @@ int XC::NodeLocker::getNumSPs(void) const
       retval= theSPs->getNumComponents();
     return retval;
   }
+
+//! @brief Returns true if there is no constraints.
+bool XC::NodeLocker::empty(void) const
+  { return (getNumSPs()==0); }
 
 //! @brief Returns true if it contains a single freedom constraint
 //! with the identifier passes as parameter.
@@ -240,9 +247,10 @@ bool XC::NodeLocker::removeSFreedom_Constraint(int tag)
   {
     const bool retval= theSPs->removeComponent(tag);
     if(!retval)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; constraint identified by: "
-                << tag << " not found." << std::endl;
+                << tag << " not found."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -293,7 +301,9 @@ int XC::NodeLocker::sendSelf(Communicator &comm)
     const int dataTag= getDbTag(comm);
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "NodeLocker::sendSelf() - failed to send extra data\n";    
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data."
+		<< Color::def << std::endl;
     return res;
   }
 
@@ -305,7 +315,9 @@ int XC::NodeLocker::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "NodeLocker::recvSelf() - data could not be received.\n" ;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; data could not be received."
+		<< Color::def << std::endl;
     else
       res+=recvData(comm);
     return res;
@@ -315,7 +327,7 @@ int XC::NodeLocker::recvSelf(const Communicator &comm)
 void XC::NodeLocker::Print(std::ostream &s, int flag) const
   {
     s << "SPC Pattern: " << this->getTag() << "\n";
-    std::cerr << "\n  Single Point Constraints: \n";
+    s << "\n  Single Point Constraints: \n";
     theSPs->Print(s, flag);
   }
 

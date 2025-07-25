@@ -154,6 +154,7 @@ class LoadPattern: public NodeLocker
     //! @brief Return the number of loads.
     inline int getNumLoads(void) const
       { return theLoads.getNumLoads(); }
+    bool empty(void) const;
 
     // methods to remove things (loads, time_series,...)
     virtual void clearAll(void);

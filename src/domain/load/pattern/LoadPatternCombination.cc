@@ -34,12 +34,12 @@
 #include "preprocessor/prep_handlers/LoadHandler.h"
 #include "boost/lexical_cast.hpp"
 
-
 #include "domain/load/pattern/MapLoadPatterns.h"
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableString.h"
 #include "utility/database/FE_Datastore.h"
 #include "preprocessor/Preprocessor.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //used only to receive data.
 std::map<int,std::string> XC::LoadPatternCombination::map_str_descomp;
@@ -73,8 +73,9 @@ bool XC::LoadPatternCombination::summand::set_gamma_f(void)
       lp->GammaF()= getFactor();
     else
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	  	  << "; null pointer found in expression." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	  	  << "; null pointer found in expression."
+		  << Color::def << std::endl;
 	retval= false;
       }
     return retval;
@@ -98,8 +99,9 @@ const XC::LoadPatternCombination::summand &XC::LoadPatternCombination::summand::
     if(lpattern==other.lpattern)
       factor+= other.factor;
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; incompatible summands." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; incompatible summands."
+		<< Color::def << std::endl;
     return *this;
   }
 
@@ -109,8 +111,9 @@ const XC::LoadPatternCombination::summand &XC::LoadPatternCombination::summand::
     if(lpattern==other.lpattern)
       factor-= other.factor;
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; incompatible summands." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; incompatible summands."
+		<< Color::def << std::endl;
     return *this;
   }
 
@@ -166,6 +169,34 @@ XC::LoadPatternCombination::~LoadPatternCombination(void)
 void XC::LoadPatternCombination::clear(void)
   { descomp.clear(); }
 
+//! @brief Returns true if there is no load patterns in this combination
+//! of they are empty.
+bool XC::LoadPatternCombination::empty(void) const
+  {
+    bool retval= descomp.empty();
+    if(!retval)
+      {
+	retval= true; // assume all LPs are empty.
+	for(const_iterator i= this->begin();i!=this->end();i++)
+	  {
+	    const LoadPattern *lp= i->getLoadPattern();
+	    if(lp)
+	      {
+	        if(!lp->empty()) // they are not.
+		  {
+		    retval= false;
+		    break;
+	 	  }
+	      }
+	    else
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			<< "; null pointer found in expression."
+			<< Color::def << std::endl;
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Adds a component to the combination.
 void XC::LoadPatternCombination::add_component(const summand &sum)
   {
@@ -195,8 +226,9 @@ bool XC::LoadPatternCombination::interpreta_descomp(const std::string &str_desco
         const size_t sz= str_prod.size();
         if(sz!=2)
 	  {
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "Term: " << str_sum_i << " is incorrect." << std::endl;
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "Term: " << str_sum_i << " is incorrect."
+		      << Color::def << std::endl;
 	    retval= false;
 	  }
         else
@@ -210,16 +242,18 @@ bool XC::LoadPatternCombination::interpreta_descomp(const std::string &str_desco
                   add_component(summand(factor,lp));
                 else
 		  {
-	            std::cerr << getClassName() << "::" << __FUNCTION__
+	            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		              << " load pattern identified by: '" 
-                              << hypothesis_name << "' not found.\n";
+                              << hypothesis_name << "' not found."
+			      << Color::def << std::endl;
 		    retval= false;
 		    //exit(EXIT_FAILURE);
 		  }
               }
             else
-	      std::cerr << getClassName() << "::" << __FUNCTION__
-			<< "; pointer to LoadHandler not set." << std::endl;
+	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			<< "; pointer to LoadHandler not set."
+			<< Color::def << std::endl;
           } 
       }
     return retval;
@@ -280,8 +314,9 @@ void XC::LoadPatternCombination::set_domain(void)
         if(lp)
           lp->setDomain(dom);
         else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; null pointer found in expression." << std::endl;
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << "; null pointer found in expression."
+		    << Color::def << std::endl;
       }
   }
 
@@ -308,16 +343,18 @@ bool XC::LoadPatternCombination::add_to_domain(TDescomp &desc)
             if((!result) && (verbosity>3))
               {
                 const MapLoadPatterns &lPatterns= handler->getLoadPatterns();
-	        std::cerr << "Can't add load case: '"
+	        std::cerr << Color::red << "Can't add load case: '"
                           << i->getLoadPatternName(lPatterns)
                           << "' when activating combination: '"
-                          << getTag() << "'\n";
+                          << getTag()
+			  << Color::def << std::endl;
               }
             retval= (retval && result);
           }
         else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; null pointer found in expression." << std::endl;
+	  std::cerr << Color::red<< getClassName() << "::" << __FUNCTION__
+	            << "; null pointer found in expression."
+		    << Color::def << std::endl;
       }
     return retval;
   }
@@ -400,8 +437,9 @@ void XC::LoadPatternCombination::removeFromDomain(void)
         if(lp)
           dom->removeLoadPattern(lp);
         else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; null pointer found in expression." << std::endl;
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << "; null pointer found in expression."
+		    << Color::def << std::endl;
       }
   }
 
