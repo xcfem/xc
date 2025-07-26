@@ -31,7 +31,6 @@ comb4= combs.newLoadCombination("COMB4","1.33*A")
 comb3= combs.newLoadCombination("COMB3","1.33*A+0.5*B")
 difference= combs.newLoadCombination("DIFFERENCE","")
 previousName= combs.getCombPrevia(combs.getComb("COMB1")).name
-print(previousName)
 difference.asigna("COMB1")
 difference.subtract(previousName)
 descompDifference= difference.getComponents("%3.1f")
