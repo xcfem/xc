@@ -12,7 +12,8 @@ import loadCombinations
 from misc_utils import log_messages as lmsg
 
 def _set_bridges_combination_factors(combination_factors):
-    ''' Sets the partial safety factors corrsponding to bridges.
+    ''' Sets the partial safety factors corresponding to bridges according to
+        table AN.5 (table A2.1).
 
     :param combination_factors: object that stores the combination factors
                                 for bridges.

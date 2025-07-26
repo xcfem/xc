@@ -12,9 +12,10 @@ import loadCombinations
 from actions.load_combination_utils import utils
 from actions.load_combination_utils import ec0_bridges_partial_safety_factors_es
 from actions.load_combination_utils import ec0_bridges_combination_factors_es
+from actions.load_combination_utils import ec0_buildings_partial_safety_factors_es
+from actions.load_combination_utils import ec0_buildings_combination_factors_es
 from misc_utils import log_messages as lmsg
 
-bridge_factors= loadCombinations.Factors()
 
 #Coef.FULS('favorable','desfavorable','favorable accidental','desfavorable accidental')
 
@@ -36,13 +37,6 @@ bridge_factors= loadCombinations.Factors()
 #      - Approach 3: Applying design values of actions from Table A2.4(C) to the geotechnical actions and, simultaneously, applying design values of actions from Table A2.4(B) to the actions on/from the structure.
  
 
-# Partial safety factors for bridges.
-bridges_partial_safety_factors= bridge_factors.getPartialSafetyFactors()
-ec0_bridges_partial_safety_factors_es._set_bridges_partial_safety_factors(bridges_partial_safety_factors)
-
-# Combination factors for road bridges (table AN.5 (table A2.1) )
-bridge_combination_factors= bridge_factors.getCombinationFactors()
-ec0_bridges_combination_factors_es._set_bridges_combination_factors(bridge_combination_factors)
 
 # Importance factors for bridges (See Spanish National Annex AN/UNE-EN 1998-2 clause 2.1(6))
 lessImportantBridgesImportanceFactor= None # Must be fixed by the competent authority.
@@ -60,7 +54,17 @@ class BridgeCombGenerator(utils.CombGenerator):
 
         :param structureType: structure type (road_bridge or footbridge or railway_bridge or building).
         '''
-        super().__init__(combGeneratorName= 'EC0_ES', factors= bridge_factors)
+        factors= loadCombinations.Factors()
+        
+        # Partial safety factors for bridges.
+        partial_safety_factors= factors.getPartialSafetyFactors()
+        ec0_bridges_partial_safety_factors_es._set_bridges_partial_safety_factors(partial_safety_factors)
+
+        # Combination factors for road bridges (table AN.5 (table A2.1) )
+        combination_factors= factors.getCombinationFactors()
+        ec0_bridges_combination_factors_es._set_bridges_combination_factors(combination_factors)
+
+        super().__init__(combGeneratorName= 'EC0_ES', factors= factors)
         self.structureType= structureType
         
     def defSeismicPartialSafetyFactors(self, ulsImportanceFactor, slsImportanceFactor= 0.0):
@@ -564,7 +568,8 @@ class BridgeCombGenerator(utils.CombGenerator):
         :param context: context for the action (building, railway_bridge, footbridge,...)
         '''
         code= "seismic_"+str(ulsImportanceFactor)+"_"+str(slsImportanceFactor)
-        if not code in bridges_partial_safety_factors: # Part. sfty fctrs not yet defnd
+        partial_safety_factors= self.getPartialSafetyFactors().getKeys()
+        if not code in partial_safety_factors: # Part. sfty fctrs not yet defnd
             self.defSeismicPartialSafetyFactors(ulsImportanceFactor, slsImportanceFactor)
         return self.newAction(family= "seismic", actionName= actionName, actionDescription= actionDescription, combinationFactorsName= '', partialSafetyFactorsName= code, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
 
@@ -591,18 +596,213 @@ class BridgeCombGenerator(utils.CombGenerator):
     
 bridgeCombGenerator= BridgeCombGenerator()
 
-building_factors= loadCombinations.Factors()
-
-# Partial safety factors for buildings.
-buildings_partial_safety_factors= building_factors.getPartialSafetyFactors()
-
 
 class BuildingCombGenerator(utils.CombGenerator):
     ''' Generate combinations corresponding to Eurocode 0 (Spanish annex).
 
+    :ivar altitude: altitude of the building roof (meters above sea level).
+    :ivar cen_state: CEN member state.
     '''
 
-    def __init__(self):
+    def __init__(self, altitude:float, cen_state= 'Spain'):
         ''' Constructor.
+
+        :param altitude: altitude of the roof (meters above sea level).
+        :param cen_state: CEN member state.
         '''
-        super().__init__(combGeneratorName= 'EC0_ES', factors= building_factors)
+        self.altitude= altitude
+        self.cen_state= cen_state
+        factors= loadCombinations.Factors()
+        
+        # Partial safety factors for buildings.
+        partial_safety_factors= factors.getPartialSafetyFactors()
+        ec0_buildings_partial_safety_factors_es._set_buildings_partial_safety_factors(partial_safety_factors)
+
+        # Combination factors for road buildings (table AN.5 (table A2.1) )
+        combination_factors= factors.getCombinationFactors()
+        ec0_buildings_combination_factors_es._set_buildings_combination_factors(combination_factors, altitude= self.altitude, cen_state= self.cen_state)
+        
+        super().__init__(combGeneratorName= 'EC0_ES', factors= factors)
+
+    def getPartialSafetyFactorsName(self, safetyFactorSet:str, designSituation:str, approach:int= 2):
+        ''' Return the name of the partial safety factors to use in the given
+            condition.
+
+        :param safetyFactorSet: identifier of the safety factor set 'A', 'B' 
+                                or 'C' corresponding to tables Table A1.2(A), 
+                                Table A1.2(B) or A1.2(C)
+        :param designSituation: design situation according to clause AI.3.1: 
+                                'EQU', 'STR', 'GEO' or 'STR/GEO'.
+        :param approach: aproach for the design of structural members involving
+                         geotechnical actions and the resistance of the ground
+                         (footings, piles, basement walls, etc.). See paragraph
+                         (5) of the clause A1.3.1 of Eurocode 0.
+        '''
+        retval= None
+        if(approach!=2):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= className+'.'+methodName+'; design approach: '+str(approach)+' not implemented yet.'
+            lmsg.error(errorMsg)
+            
+        if(designSituation=='EQU'):
+            if(safetyFactorSet=='A'):
+                retval= 'permanent_equ_set_a'
+            elif(safetyFactorSet=='B'):
+                retval= 'permanent_equ_set_b'
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errorMsg= className+'.'+methodName+'; safety factor set: '+str(safetyFactorSet)+' not implemented'
+                lmsg.error(errorMsg)
+        elif(designSituation in ['STR', 'GEO', 'STR/GEO']):
+            if(safetyFactorSet=='A'):
+                retval= 'permanent_str/geo_set_a'
+            elif(safetyFactorSet=='B'):
+                retval= 'permanent_str/geo_set_b'
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errorMsg= className+'.'+methodName+'; safety factor set: '+str(safetyFactorSet)+' not implemented'
+                lmsg.error(errorMsg)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= className+'.'+methodName+'; design situation: '+str(designSituation)+' not implemented.'
+            lmsg.error(errorMsg)
+        return retval
+        
+    def newPermanentAction(self, actionName: str, actionDescription:str, safetyFactorSet:str, designSituation:str, approach:int= 2, dependsOn= None, incompatibleActions= None):
+        ''' Creates a permanent action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param safetyFactorSet: identifier of the safety factor set 'A', 'B' 
+                                or 'C' corresponding to tables Table A1.2(A), 
+                                Table A1.2(B) or A1.2(C)
+        :param designSituation: design situation according to clause AI.3.1: 
+                                'EQU', 'STR', 'GEO' or 'STR/GEO'.
+        :param approach: aproach for the design of structural members involving
+                         geotechnical actions and the resistance of the ground
+                         (footings, piles, basement walls, etc.). See paragraph
+                         (5) of the clause A1.3.1 of Eurocode 0.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+        partialSafetyFactorsName= self.getPartialSafetyFactorsName(safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
+        return self.newAction(family= 'permanent',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+
+    def newImposedLoadAction(self, actionName: str, actionDescription:str, imposedLoadType, safetyFactorSet:str, designSituation:str, approach:int= 2, dependsOn= None, incompatibleActions= None):
+        ''' Creates a wind load action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param imposedLoadType: one of the following types: 'residential',
+                                'office', 'congregation', 'shopping', 'storage',
+                                'ligth_vehicles', 'heavy_vehicles'
+        :param safetyFactorSet: identifier of the safety factor set 'A', 'B' 
+                                or 'C' corresponding to tables Table A1.2(A), 
+                                Table A1.2(B) or A1.2(C)
+        :param designSituation: design situation according to clause AI.3.1: 
+                                'EQU', 'STR', 'GEO' or 'STR/GEO'.
+        :param approach: aproach for the design of structural members involving
+                         geotechnical actions and the resistance of the ground
+                         (footings, piles, basement walls, etc.). See paragraph
+                         (5) of the clause A1.3.1 of Eurocode 0.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+        partialSafetyFactorsName= self.getPartialSafetyFactorsName(safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
+        keys= self.getCombinationFactors().getKeys()
+        for key in keys:
+            if(imposedLoadType in key):
+                combinationFactorsName= key
+            elif(imposedLoadType=='light_vehicles'):
+                combinationFactorsName= 'cat_F_traffic_area_vehicle_weight_leq_30kN'
+            elif(imposedLoadType=='heave_vehicles'):
+                combinationFactorsName= 'cat_G_traffic_area_30kN_lt_vehicle weight_leq_160kN'
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errorMsg= className+'.'+methodName+'; imposed load type: '+str(imposedLoadTypen)+' not implemented.'
+                lmsg.error(errorMsg)
+                exit(1)
+        return self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= combinationFactorsName, partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+    
+    def newWindLoadAction(self, actionName: str, actionDescription:str, safetyFactorSet:str, designSituation:str, approach:int= 2, dependsOn= None, incompatibleActions= None):
+        ''' Creates a wind load action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param safetyFactorSet: identifier of the safety factor set 'A', 'B' 
+                                or 'C' corresponding to tables Table A1.2(A), 
+                                Table A1.2(B) or A1.2(C)
+        :param designSituation: design situation according to clause AI.3.1: 
+                                'EQU', 'STR', 'GEO' or 'STR/GEO'.
+        :param approach: aproach for the design of structural members involving
+                         geotechnical actions and the resistance of the ground
+                         (footings, piles, basement walls, etc.). See paragraph
+                         (5) of the clause A1.3.1 of Eurocode 0.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+        partialSafetyFactorsName= self.getPartialSafetyFactorsName(safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
+        return self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'wind_loads_on_buildings', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+    
+    def newSnowLoadAction(self, actionName: str, actionDescription:str, safetyFactorSet:str, designSituation:str, approach:int= 2, dependsOn= None, incompatibleActions= None):
+        ''' Creates a snow load action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param safetyFactorSet: identifier of the safety factor set 'A', 'B' 
+                                or 'C' corresponding to tables Table A1.2(A), 
+                                Table A1.2(B) or A1.2(C)
+        :param designSituation: design situation according to clause AI.3.1: 
+                                'EQU', 'STR', 'GEO' or 'STR/GEO'.
+        :param approach: aproach for the design of structural members involving
+                         geotechnical actions and the resistance of the ground
+                         (footings, piles, basement walls, etc.). See paragraph
+                         (5) of the clause A1.3.1 of Eurocode 0.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+        partialSafetyFactorsName= self.getPartialSafetyFactorsName(safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
+        return self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'cat_H_snow_loads_on_building_roofs', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+    
+    def newThermalLoadAction(self, actionName: str, actionDescription:str, safetyFactorSet:str, designSituation:str, approach:int= 2, dependsOn= None, incompatibleActions= None):
+        ''' Creates a thermal load action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param safetyFactorSet: identifier of the safety factor set 'A', 'B' 
+                                or 'C' corresponding to tables Table A1.2(A), 
+                                Table A1.2(B) or A1.2(C)
+        :param designSituation: design situation according to clause AI.3.1: 
+                                'EQU', 'STR', 'GEO' or 'STR/GEO'.
+        :param approach: aproach for the design of structural members involving
+                         geotechnical actions and the resistance of the ground
+                         (footings, piles, basement walls, etc.). See paragraph
+                         (5) of the clause A1.3.1 of Eurocode 0.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+        partialSafetyFactorsName= self.getPartialSafetyFactorsName(safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
+        return self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'temperature_in_buildings', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+
+    def newAccidentalAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
+        ''' Creates an accidental action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param dependsOn: name of another action that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+
+        return self.newAction(family= "accidental", actionName= actionName, actionDescription= actionDescription, combinationFactorsName= '', partialSafetyFactorsName= 'accidentales', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+    
