@@ -24,6 +24,7 @@
 #define RELACCIONES_H
 
 #include "utility/kernel/CommandEntity.h"
+#include <set>
 
 //! \namespace<cmb_acc>
 //! Routines that generate combinations of actions.
@@ -37,31 +38,32 @@ class LoadCombinationVector;
 class ActionRelationships: public CommandEntity
   {
   public:
+    typedef std::set<std::string> set_string;
+    
     typedef std::deque<std::string> dq_string;
-    typedef dq_string::iterator iterator;
-    typedef dq_string::const_iterator const_iterator;
 
     static std::string limpia(const std::string &str);
     static std::deque<std::string> get_combination_addends(const std::string &str);
     static std::deque<std::string> get_combination_actions_names(const std::string &str);
   private:
-    dq_string incompatibles; //!< Expresiones regulares verdaderas para acciones incompatibles con ésta.
+    set_string incompatibles; //!< Expresiones regulares verdaderas para acciones incompatibles con ésta.
     dq_string main_actions; //!< Expresiones regulares verdaderas para acciones de las que ésta es esclava.
     bool contiene_incomp; //!< True if the combination contains incompatible actions.
-
-    std::string names(const dq_string &) const;
-    void concat_incompatibles(const dq_string &);
+    
+    template<typename InputIterator>
+    std::string names(InputIterator, InputIterator) const;
+    void concat_incompatibles(const set_string &);
     void concat_main_actions(const dq_string &);
     bool match(const std::string &,const dq_string &) const;
-    bool match_any(const dq_string &,const dq_string &) const;
-    bool match_all(const dq_string &,const dq_string &) const;
+    bool match_any(const set_string &,const dq_string &) const;
+    bool match_all(const set_string &,const dq_string &) const;
 
   public:
     ActionRelationships(void);
 
     //! @brief Append the regular expression argument to the list of incompatible actions.
     inline void appendIncompatible(const std::string &str)
-      { incompatibles.push_back(str); }
+      { incompatibles.insert(str); }
     //! @brief Append the regular expression argument to the list of main actions.
     inline void appendMain(const std::string &str)
       { main_actions.push_back(str); }
@@ -97,6 +99,22 @@ std::ostream &operator<<(std::ostream &os,const ActionRelationships &acc);
 
 const LoadCombinationVector &get_compatibles(const LoadCombinationVector &);
 const LoadCombinationVector &filtraCombsEsclavasHuerfanas(const LoadCombinationVector &);
+  
+//! @brief Return a string with the names of the list
+//! separated by commas.
+template<typename InputIterator>
+std::string cmb_acc::ActionRelationships::names(InputIterator begin, InputIterator end) const
+  {
+    std::string retval;
+    if(begin!=end)
+      {
+	InputIterator i= begin;
+        retval= (*i); i++;
+        for(;i!= end;i++)
+          retval+= "," + (*i);
+      }
+    return retval;
+  }
 
 } //fin namespace nmb_acc.
 
