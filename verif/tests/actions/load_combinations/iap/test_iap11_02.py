@@ -116,6 +116,17 @@ elsQuasiPermanentCoefs= elsQuasiPermanent.getCoefficients(actionNames)
 err+= computeError(elsQuasiPermanentCoefs, elsQuasiPermanentCoefsRef)
 
 #print(err)
+# values= dict()
+# values['eluPersistCoefsRef']= eluPersistCoefs
+# values['eluSeismicCoefsRef']= eluSeismicCoefs
+# values['elsCharacteristicCoefsRef']= elsCharacteristicCoefs
+# values['elsFrequentCoefsRef']= elsFrequentCoefs
+# values['elsQuasiPermanentCoefsRef']= elsQuasiPermanentCoefs
+# outputFile= pth+'/ref_test_iap11_02.json'
+# with open(outputFile,'w') as f:
+#    json.dump(values, f)
+
+
 fname= os.path.basename(__file__)
 if (abs(err)<1e-6):
     print('test: '+fname+': ok.')
