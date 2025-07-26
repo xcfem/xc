@@ -63,34 +63,20 @@ std::deque<std::string> cmb_acc::ActionRelationships::get_combination_actions_na
 
 //! @brief Default constructor.
 cmb_acc::ActionRelationships::ActionRelationships(void)
-  : CommandEntity(), incompatibles(0), main_actions(0), contiene_incomp(false) {}
+  : CommandEntity(), main_actions(0), contiene_incomp(false) {}
 
-//! @brief Return a string with the names of the list
-//! separated by commas.
-std::string cmb_acc::ActionRelationships::names(const dq_string &l) const
-  {
-    std::string retval;
-    if(!l.empty())
-      {
-        const_iterator i=l.begin();
-        retval= (*i); i++;
-        for(;i!=l.end();i++)
-          retval+= "," + (*i);
-      }
-    return retval;
-  }
 
 //! @brief Añade a las acciones incompatibles la lista de expresiones regulares que se pasa como parámetro.
-void cmb_acc::ActionRelationships::concat_incompatibles(const dq_string &other)
+void cmb_acc::ActionRelationships::concat_incompatibles(const set_string &other)
   {
-    for(const_iterator i= other.begin();i!=other.end();i++)
+    for(set_string::const_iterator i= other.begin();i!=other.end();i++)
       appendIncompatible(*i);
   }
 
 //! @brief Añade a las acciones main_actions la lista de expresiones regulares que se pasa como parámetro.
 void cmb_acc::ActionRelationships::concat_main_actions(const dq_string &other)
   {
-    for(const_iterator i= other.begin();i!=other.end();i++)
+    for(dq_string::const_iterator i= other.begin();i!=other.end();i++)
       appendMain(*i);
   }
 
@@ -100,7 +86,7 @@ bool cmb_acc::ActionRelationships::match(const std::string &exprReg,const dq_str
   {
     bool retval= false;
     boost::regex expresion(exprReg); //Inicializamos la expresión regular.
-    for(const_iterator j= combActionsNames.begin();j!=combActionsNames.end();j++)
+    for(dq_string::const_iterator j= combActionsNames.begin();j!=combActionsNames.end();j++)
       {
         const std::string &test= *j;
         retval= regex_match(test, expresion);
@@ -111,12 +97,12 @@ bool cmb_acc::ActionRelationships::match(const std::string &exprReg,const dq_str
 
 //! @brief Return verdadero si alguna de las text strings que se pasan como parámetro
 //! verifica alguna de las expresiones del contenedor de expresiones regulares "exprReg".
-bool cmb_acc::ActionRelationships::match_any(const dq_string &exprReg,const dq_string &combActionsNames) const
+bool cmb_acc::ActionRelationships::match_any(const set_string &exprReg,const dq_string &combActionsNames) const
   {
     bool retval= false;
-    for(const_iterator i= exprReg.begin();i!=exprReg.end();i++)
+    for(set_string::const_iterator i= exprReg.begin();i!=exprReg.end();i++)
       {
-        const std::string str= *i;
+        const std::string str= (*i);
         retval= match(str,combActionsNames);
         if(retval) break; //No hace falta seguir.
       }
@@ -125,10 +111,10 @@ bool cmb_acc::ActionRelationships::match_any(const dq_string &exprReg,const dq_s
 
 //! @brief Return verdadero si para cada una de las expresiones regulares de "exprReg"
 //! existe alguna text string de combActionsNames que la verifica.
-bool cmb_acc::ActionRelationships::match_all(const dq_string &exprReg,const dq_string &combActionsNames) const
+bool cmb_acc::ActionRelationships::match_all(const set_string &exprReg,const dq_string &combActionsNames) const
   {
     bool retval= false;
-    for(const_iterator i= exprReg.begin();i!=exprReg.end();i++)
+    for(set_string::const_iterator i= exprReg.begin();i!=exprReg.end();i++)
       {
         const std::string str= *i;
         retval= match(str,combActionsNames);
@@ -159,7 +145,7 @@ bool cmb_acc::ActionRelationships::incompatible(const std::string &nmb) const
 bool cmb_acc::ActionRelationships::esclavaDe(const std::string &nmb) const
   { 
     bool retval= false;
-    for(const_iterator i= main_actions.begin();i!=main_actions.end();i++)
+    for(dq_string::const_iterator i= main_actions.begin();i!=main_actions.end();i++)
       {
         boost::regex expresion(*i); //Inicializamos la expresión regular.
         retval= regex_match(nmb,expresion);
@@ -176,7 +162,7 @@ void cmb_acc::ActionRelationships::updateMainActions(const std::string &nmb)
       {
         const dq_string combActionsNames= get_combination_actions_names(nmb); //Names of the actions in this combination.
         dq_string nuevas;
-        for(const_iterator i= main_actions.begin();i!=main_actions.end();i++)
+        for(dq_string::const_iterator i= main_actions.begin();i!=main_actions.end();i++)
           if(!match(*i,combActionsNames)) // main action not found.
             nuevas.push_back(*i);
         main_actions= nuevas;
@@ -190,15 +176,16 @@ void cmb_acc::ActionRelationships::concat(const ActionRelationships &other)
   }
 
 std::string cmb_acc::ActionRelationships::incompatibleNames(void) const
-  { return names(incompatibles); }
+  { return this->names(incompatibles.begin(), incompatibles.end()); }
+
 std::string cmb_acc::ActionRelationships::masterNames(void) const
-  { return names(main_actions); }
+  { return this->names(main_actions.begin(), main_actions.end()); }
 
 void cmb_acc::ActionRelationships::Print(std::ostream &os) const
   {
     os << "incompatibles: {" << incompatibleNames() << "}; main_actions: {"
        << masterNames() << "}";
-    if(contiene_incomp) os << " contiente incompatibles." << std::endl;
+    if(contiene_incomp) os << " contains incompatible actions." << std::endl;
   }
 
 //! @brief Return a Python dictionary with the object members values.
@@ -206,7 +193,7 @@ boost::python::dict cmb_acc::ActionRelationships::getPyDict(void) const
   {
     boost::python::dict retval= CommandEntity::getPyDict();
     boost::python::list lstIncomp;
-    for(dq_string::const_iterator i= incompatibles.begin();i!=incompatibles.end(); i++)
+    for(set_string::const_iterator i= incompatibles.begin();i!=incompatibles.end(); i++)
       lstIncomp.append(*i);
     retval["incompatibles"]= lstIncomp;
     boost::python::list lstMainAct;
@@ -224,7 +211,10 @@ void cmb_acc::ActionRelationships::setPyDict(const boost::python::dict &d)
     boost::python::list lstIncomp= boost::python::extract<boost::python::list>(d["incompatibles"]);
     const size_t szi= len(lstIncomp);
     for(size_t i=0; i<szi; i++)
-      incompatibles.push_back(boost::python::extract<std::string>(lstIncomp[i]));
+      {
+	const std::string &str= boost::python::extract<std::string>(lstIncomp[i]);
+	incompatibles.insert(str);
+      }
     boost::python::list lstMainAct= boost::python::extract<boost::python::list>(d["main_actions"]);
     const size_t szm= len(lstMainAct);
     for(size_t i=0; i<szm; i++)
@@ -287,3 +277,4 @@ const cmb_acc::LoadCombinationVector &cmb_acc::filtraCombsEsclavasHuerfanas(cons
       retval[i]= tmp[i];
     return retval;
   }
+
