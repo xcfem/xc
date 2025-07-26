@@ -10,6 +10,8 @@ __email__= 'l.pereztato@ciccp.es ana.ortega@ciccp.es'
 import sys
 import loadCombinations
 from actions.load_combination_utils import utils
+from actions.load_combination_utils import ec0_bridges_partial_safety_factors_es
+from actions.load_combination_utils import ec0_bridges_combination_factors_es
 from misc_utils import log_messages as lmsg
 
 bridge_factors= loadCombinations.Factors()
@@ -36,87 +38,11 @@ bridge_factors= loadCombinations.Factors()
 
 # Partial safety factors for bridges.
 bridges_partial_safety_factors= bridge_factors.getPartialSafetyFactors()
-
-#Partial safety factors for permanent actions
-## Permanent loads.
-### Eurocode 0. Table AN.8 [table A2.4(A)]. Design values of actions (EQU) (Set A)
-bridges_partial_safety_factors['self_weight_set_a']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0.9,1.1,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['dead_load_set_a']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0.9,1.1,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['earth_pressure_set_a']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0,1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-### Eurocode 0. Table AN.9 [table A2.4(B)]. Design values of actions (STR/GEO) (Set B)
-bridges_partial_safety_factors['permanent_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1,1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['self_weight_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0,1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['dead_load_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['rheological_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['friction_in_sliding_supports_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['earth_pressure_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['pore_water_pressure_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['settlement_linear_analysis_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.20,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-bridges_partial_safety_factors['settlement_non_linear_analysis_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-# Partial safety factors for variable actions.
-### Eurocode 0. Table AN.9 [table A2.4(B)]. Design values of actions (STR/GEO) (Set B)
-#### Traffic loads.
-bridges_partial_safety_factors['variable_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.5,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-bridges_partial_safety_factors['road_traffic_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-bridges_partial_safety_factors['pedestrian_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-bridges_partial_safety_factors['railway_traffic_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.45,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-#### Thermal actions.
-bridges_partial_safety_factors['thermal_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.5,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-#### Hydrostatic pressure
-bridges_partial_safety_factors['hydrostatic_pressure_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-#### Eurocode 7 variable load. Table AN.9 [table A2.4(B)]. Live load on backfill surfaces.
-bridges_partial_safety_factors['load_on_backfill_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.5,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-bridges_partial_safety_factors['construction_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1), loadCombinations.SLSPartialSafetyFactors(0,0))
-
-### Eurocode 0. Table AN.8 [table A2.4(A)]. Design values of actions (EQU) (Set A)
-bridges_partial_safety_factors['variable_set_a']= bridges_partial_safety_factors['variable_set_b']
-bridges_partial_safety_factors['road_traffic_set_a']= bridges_partial_safety_factors['road_traffic_set_b']
-bridges_partial_safety_factors['pedestrian_set_a']= bridges_partial_safety_factors['pedestrian_set_b']
-bridges_partial_safety_factors['railway_traffic_set_a']= bridges_partial_safety_factors['railway_traffic_set_b']
-#### Thermal actions.
-bridges_partial_safety_factors['thermal_set_a']= bridges_partial_safety_factors['thermal_set_b']
-#### Hydrostatic pressure
-bridges_partial_safety_factors['pore_water_pressure_set_a']= bridges_partial_safety_factors['pore_water_pressure_set_b']
-bridges_partial_safety_factors['hydrostatic_pressure_set_a']= bridges_partial_safety_factors['hydrostatic_pressure_set_b']
-#### Eurocode 7 variable load. Table AN.9 [table A2.4(B)]. Live load on backfill surfaces.
-bridges_partial_safety_factors['load_on_backfill_set_a']= bridges_partial_safety_factors['load_on_backfill_set_b']
-bridges_partial_safety_factors['construction_set_a']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.25,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-
-# Partial safety factors for accidental actions.
-bridges_partial_safety_factors['accidentales']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,0,0,1), loadCombinations.SLSPartialSafetyFactors(0,0))
+ec0_bridges_partial_safety_factors_es._set_bridges_partial_safety_factors(bridges_partial_safety_factors)
 
 # Combination factors for road bridges (table AN.5 (table A2.1) )
 bridge_combination_factors= bridge_factors.getCombinationFactors()
-# 
-bridge_combination_factors.insert('permanent', loadCombinations.CombinationFactors(1,1,1))
-bridge_combination_factors.insert('road_traffic_loads_gr1a_trucks', loadCombinations.CombinationFactors(0.75,0.75,0.0))
-bridge_combination_factors.insert('road_traffic_loads_gr1a_udl', loadCombinations.CombinationFactors(0.40,0.40,0.0))
-bridge_combination_factors.insert('road_traffic_loads_gr1a_footway', loadCombinations.CombinationFactors(0.40,0.40,0.0))
-bridge_combination_factors.insert('road_traffic_loads_gr1b_single_axe', loadCombinations.CombinationFactors(0.0,0.75,0.0))
-bridge_combination_factors.insert('road_traffic_loads_gr2_horizontal_forces', loadCombinations.CombinationFactors(0.0,0.0,0.0))
-bridge_combination_factors.insert('road_traffic_loads_gr3_pedestrian_loads', loadCombinations.CombinationFactors(0.0,0.0,0.0))
-bridge_combination_factors.insert('road_traffic_loads_gr4_crowd_loading', loadCombinations.CombinationFactors(0.0,0.0,0.0))
-bridge_combination_factors.insert('road_traffic_loads_gr5_vertical_forces', loadCombinations.CombinationFactors(0.0,0.0,0.0)) # Special vehicles. Vertical forces.
-bridge_combination_factors.insert('road_traffic_loads_gr6_horizontal_forces', loadCombinations.CombinationFactors(0.0,0.0,0.0)) # Special vehicles. Horizontal forces.
-bridge_combination_factors.insert('road_bridge_construction', loadCombinations.CombinationFactors(1.0, 0.0, 1.0)) # Tabla AN.5 (tabla A2.1) - Factores de simultaneidad para puentes de carretera.
-bridge_combination_factors.insert('road_bridge_wind_persistent_situation', loadCombinations.CombinationFactors(0.6,0.2,0.0))
-bridge_combination_factors.insert('road_bridge_wind_during_execution', loadCombinations.CombinationFactors(0.8,0.0,0.0))
-bridge_combination_factors.insert('road_bridge_wind_aster', loadCombinations.CombinationFactors(1.0,0.0,0.0))
-bridge_combination_factors.insert('road_bridge_thermal', loadCombinations.CombinationFactors(0.6,0.6,0.5))
-bridge_combination_factors.insert('road_bridge_snow', loadCombinations.CombinationFactors(0.8,0.0,0.0))
-bridge_combination_factors.insert('road_bridge_hydrostatic_pressure', loadCombinations.CombinationFactors(1.0,1.0,1.0))
-bridge_combination_factors.insert('road_bridge_construction_loads', loadCombinations.CombinationFactors(1.0,0.0,1.0))
-# Combination factors for railway bridges according to table A2.3 of Eurocode 0.
-bridge_combination_factors.insert('LM71_alone_uls', loadCombinations.CombinationFactors(0.8,0.8,0.0))
-bridge_combination_factors.insert('SW/0_alone_uls', loadCombinations.CombinationFactors(0.8,0.8,0.0))
-bridge_combination_factors.insert('SW/2_uls', loadCombinations.CombinationFactors(0.0,1.0,0.0))
-bridge_combination_factors.insert('unloaded_train_uls', loadCombinations.CombinationFactors(1.0,0.0,0.0))
-bridge_combination_factors.insert('railway_bridge_construction', loadCombinations.CombinationFactors(1.0, 0.0, 1.0)) # Tabla A2.3 - Factores de simultaneidad para puentes de ferrocearril.
-bridge_combination_factors.insert('railway_bridge_wind_persistent_situation', loadCombinations.CombinationFactors(0.75,0.5,0.0))
-bridge_combination_factors.insert('railway_bridge_wind_aster', loadCombinations.CombinationFactors(1.0,0.0,0.0))
-bridge_combination_factors.insert('railway_bridge_thermal', loadCombinations.CombinationFactors(0.6,0.6,0.5))
-bridge_combination_factors.insert('railway_bridge_snow', loadCombinations.CombinationFactors(0.8,0.0,0.0))
-bridge_combination_factors.insert('railway_bridge_construction_loads', loadCombinations.CombinationFactors(1.0,0.0,1.0))
+ec0_bridges_combination_factors_es._set_bridges_combination_factors(bridge_combination_factors)
 
 # Importance factors for bridges (See Spanish National Annex AN/UNE-EN 1998-2 clause 2.1(6))
 lessImportantBridgesImportanceFactor= None # Must be fixed by the competent authority.
@@ -126,7 +52,7 @@ specialBridgesImportanceFactor= 1.3
 class BridgeCombGenerator(utils.CombGenerator):
     ''' Generate combinations corresponding to Eurocode 0 (Spanish annex).
 
-    :ivar structureType: structure type (road_bridge or footbridge or railway_bridge or building).
+    :ivar structureType: structure type (road_bridge or footbridge or railway_bridge).
     '''
 
     def __init__(self, structureType= 'road_bridge'):
@@ -664,3 +590,19 @@ class BridgeCombGenerator(utils.CombGenerator):
         return super().newActionGroup(family= family, actionTuples= actionTuples, partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
     
 bridgeCombGenerator= BridgeCombGenerator()
+
+building_factors= loadCombinations.Factors()
+
+# Partial safety factors for buildings.
+buildings_partial_safety_factors= building_factors.getPartialSafetyFactors()
+
+
+class BuildingCombGenerator(utils.CombGenerator):
+    ''' Generate combinations corresponding to Eurocode 0 (Spanish annex).
+
+    '''
+
+    def __init__(self):
+        ''' Constructor.
+        '''
+        super().__init__(combGeneratorName= 'EC0_ES', factors= building_factors)
