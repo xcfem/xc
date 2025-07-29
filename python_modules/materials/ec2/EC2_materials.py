@@ -71,6 +71,12 @@ class EC2Concrete(concrete_base.Concrete):
         '''
         return math.pow(self.getFcmT(t)/self.getFcm(), 0.3)*self.getEcm()
 
+    def getEc0(self):
+        '''Initial modulus of longitudinal deformation at 28 days expressed 
+        in [Pa] according to paragraph (2) of clause 3.1.4 of EC2:2004.
+        '''
+        return 1.05*self.getEcm()
+
     def getFctm(self):
         """Fctm: mean tensile strength [Pa][+] (table 3.1 EC2)."""
         if(self.fckMPa()<=50):
