@@ -50,7 +50,7 @@ cmb_acc::Variations cmb_acc::Variations::first_combination(const Variation &v)
     return retval;
   }
 
-//! @brief Return el producto cartesiano de las variations que se pasan como parámetro.
+//! @brief Return the cartesian product of the given variations.
 cmb_acc::Variations cmb_acc::Variations::prod_cartesiano(const Variations &a,const Variations &b)
   {
     const size_t sz_a= a.size();
@@ -67,6 +67,14 @@ cmb_acc::Variations cmb_acc::Variations::prod_cartesiano(const Variations &a,con
     for(size_t i= 0;i<sz;i++)
       retval[i]= tmp[i];
     return retval;
+  }
+
+//! @brief Set all the variations to zero.
+void cmb_acc::Variations::zero(void)
+  {
+    const size_t sz= size();
+    for(size_t i=0;i<sz;i++)
+      (*this)[i].zero();
   }
 
 //! @brief Operador salida.

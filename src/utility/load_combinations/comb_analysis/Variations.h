@@ -41,6 +41,7 @@ class Variations: public std::vector<Variation>
 
     Variations(const size_t &sz=0,const Variation &v=Variation());
     friend std::ostream &operator<<(std::ostream &os,const Variations &vs);
+    void zero(void);
   };
 
     std::ostream &operator<<(std::ostream &os,const Variations &vs);
