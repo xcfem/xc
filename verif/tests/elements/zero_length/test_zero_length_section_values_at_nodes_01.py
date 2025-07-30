@@ -82,7 +82,6 @@ zl= elements.newElement("ZeroLengthSection",xc.ID([n1.tag,n2.tag]))
 modelSpace.fixNode000_000(n1.tag)
 
 # Loads definition
-# Load case definition.
 loadPatterns= list()
 for i in range(0,6):
   lp= modelSpace.newLoadPattern(name= str(i))
