@@ -653,6 +653,7 @@ class EC2RebarFamily(rf.RebarFamily):
         :param concreteCover: concrete cover of the bars.
         :param pos: reinforcement position according to clause 66.5.1
                    of EC2.
+        :param nationalAnnex: identifier of the national annex.
         '''
         super(EC2RebarFamily,self).__init__(steel,diam,spacing,concreteCover)
         self.pos= pos
@@ -806,6 +807,26 @@ class EC2RebarFamily(rf.RebarFamily):
         '''
         retval=max(20e-3,self.diam,maxAggrSize+5e-3)
         return retval
+
+def get_rebar_family_from_reinf_row(reinfRow, steel, pos, nationalAnnex):
+    ''' Return a EC2RebarFamily object from the given 
+        def_simple_RC_section.ReinfRow object.
+
+    :param reinfRow: def_simple_RC_section.ReinfRow object.
+    :param steel: reinforcing steel material.
+    :param pos: reinforcement position according to clause 66.5.1
+                of EC2.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    steel= steel # reinforcing steel material.
+    diam= reinfRow.rebarsDiam # diameter of the bars.
+    spacing= reinfRow.rebarsSpacing # spacing of the bars.
+    concreteCover= reinfRow.cover # concrete cover of the bars.
+    pos= pos # reinforcement position according to clause 66.5.1
+             # of EC2.
+    nationalAnnex= nationalAnnex # identifier of the national annex.
+    
+    return EC2RebarFamily(steel= steel, diam= diam, spacing= spacing, concreteCover= concreteCover, pos= pos, nationalAnnex= nationalAnnex)    
 
 
 def define_rebar_families(steel, cover, diameters= [8e-3, 10e-3, 12e-3, 14e-3, 16e-3, 20e-3, 25e-3, 32e-3], spacings= [0.1, 0.15, 0.2]):
