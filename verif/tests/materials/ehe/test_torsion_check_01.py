@@ -31,7 +31,8 @@ section= def_simple_RC_section.RCRectangularSection(name='test', sectionDescr= '
 section.negatvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam= 32e-3, nRebars= 6, width= 1.1, nominalCover= 40e-3)])
 section.positvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam= 32e-3, nRebars= 6, width= 1.1, nominalCover= 40e-3)])
 ## Torsion reinforcement.
-section.torsionReinf= def_simple_RC_section.TorsionReinforcement(familyName= "torsionReinf", A1= 31.41592e-4, nShReinfBranches= 2, areaShReinfBranch= math.pi*(12e-3/2)**2, shReinfSpacing= 0.30, angThetaConcrStruts= math.pi/4.0)
+torsionLongitudinalReinforcementArea= 31.41592e-4
+section.torsionReinf= def_simple_RC_section.TorsionReinforcement(familyName= "torsionReinf", A1= torsionLongitudinalReinforcementArea, nShReinfBranches= 2, areaShReinfBranch= math.pi*(12e-3/2)**2, shReinfSpacing= 0.30, angThetaConcrStruts= math.pi/4.0)
 
 
 ## Compute section geometry
