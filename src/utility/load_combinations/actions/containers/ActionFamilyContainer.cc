@@ -191,7 +191,8 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetVariables(cons
       {
         LoadCombinationVector SQ= Q.getActions().getCombinationsWhenLeading(uls,sit_accidental, sit_sismica,v);
         retval= LoadCombinationVector::ProdCartesiano(permanentes,SQ,Action::zero);
-        if(uls) retval= LoadCombinationVector::Concat(permanentes,retval,Action::zero); //Si ULS consideramos también las cargas permanentes SOLAS.
+        if(uls)
+	  retval= LoadCombinationVector::Concat(permanentes,retval,Action::zero); //Si ULS consideramos también las cargas permanentes SOLAS.
       }
     else //No hay acciones variables.
       retval= permanentes;
