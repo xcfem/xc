@@ -1108,10 +1108,18 @@ class RCSectionBase(object):
                             the material density.
         '''
         return self.fiberSectionParameters.concrType.getElasticMaterialData(overrideRho= overrideRho)
+
+    def getEcm(self):
+        ''' Return the elastic modulus of the concrete.'''
+        return self.fiberSectionParameters.concrType.Ecm()
+
+    def getEs(self):
+        ''' Return the elastic modulus of the concrete.'''
+        return self.fiberSectionParameters.reinfSteelType.Es
     
     def getHomogenizationCoefficient(self):
         '''Return the homogenization coefficient of the section.'''
-        return self.fiberSectionParameters.reinfSteelType.Es/self.fiberSectionParameters.concrType.Ecm()
+        return self.getEs()/self.getEcm()
     
     def izHomogenizedSection(self):
         '''Return the radius of gyration of the section around
