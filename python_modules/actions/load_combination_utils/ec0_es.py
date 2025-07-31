@@ -624,10 +624,14 @@ class BuildingCombGenerator(utils.CombGenerator):
         
         super().__init__(combGeneratorName= 'EC0_ES', factors= factors)
 
-    def getPartialSafetyFactorsName(self, safetyFactorSet:str, designSituation:str, approach:int= 2):
+    def getPartialSafetyFactorsName(self, permanent:bool, safetyFactorSet:str, designSituation:str, approach:int= 2):
         ''' Return the name of the partial safety factors to use in the given
             condition.
 
+ 
+        :param permanent: if true return the partial safety factors for 
+                          permanent loads otherwise return those corresponding
+                          to variable ones.
         :param safetyFactorSet: identifier of the safety factor set 'A', 'B' 
                                 or 'C' corresponding to tables Table A1.2(A), 
                                 Table A1.2(B) or A1.2(C)
@@ -644,7 +648,7 @@ class BuildingCombGenerator(utils.CombGenerator):
             methodName= sys._getframe(0).f_code.co_name
             errorMsg= className+'.'+methodName+'; design approach: '+str(approach)+' not implemented yet.'
             lmsg.error(errorMsg)
-            
+            exit(1)
         if(designSituation=='EQU'):
             if(safetyFactorSet=='A'):
                 retval= 'permanent_equ_set_a'
@@ -665,11 +669,15 @@ class BuildingCombGenerator(utils.CombGenerator):
                 methodName= sys._getframe(0).f_code.co_name
                 errorMsg= className+'.'+methodName+'; safety factor set: '+str(safetyFactorSet)+' not implemented'
                 lmsg.error(errorMsg)
+                exit(1)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             errorMsg= className+'.'+methodName+'; design situation: '+str(designSituation)+' not implemented.'
             lmsg.error(errorMsg)
+            exit(1)
+        if(not permanent):
+            retval= retval.replace('permanent_', 'variable_')
         return retval
         
     def newPermanentAction(self, actionName: str, actionDescription:str, safetyFactorSet:str, designSituation:str, approach:int= 2, dependsOn= None, incompatibleActions= None):
@@ -690,7 +698,7 @@ class BuildingCombGenerator(utils.CombGenerator):
         :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         '''
-        partialSafetyFactorsName= self.getPartialSafetyFactorsName(safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
+        partialSafetyFactorsName= self.getPartialSafetyFactorsName(permanent= True, safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
         return self.newAction(family= 'permanent',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
 
     def newImposedLoadAction(self, actionName: str, actionDescription:str, imposedLoadType, safetyFactorSet:str, designSituation:str, approach:int= 2, dependsOn= None, incompatibleActions= None):
@@ -714,7 +722,7 @@ class BuildingCombGenerator(utils.CombGenerator):
         :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         '''
-        partialSafetyFactorsName= self.getPartialSafetyFactorsName(safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
+        partialSafetyFactorsName= self.getPartialSafetyFactorsName(permanent= False, safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
         keys= self.getCombinationFactors().getKeys()
         for key in keys:
             if(imposedLoadType in key):
@@ -749,7 +757,7 @@ class BuildingCombGenerator(utils.CombGenerator):
         :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         '''
-        partialSafetyFactorsName= self.getPartialSafetyFactorsName(safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
+        partialSafetyFactorsName= self.getPartialSafetyFactorsName(permanent= False, safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
         return self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'wind_loads_on_buildings', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
     
     def newSnowLoadAction(self, actionName: str, actionDescription:str, safetyFactorSet:str, designSituation:str, approach:int= 2, dependsOn= None, incompatibleActions= None):
@@ -770,7 +778,7 @@ class BuildingCombGenerator(utils.CombGenerator):
         :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         '''
-        partialSafetyFactorsName= self.getPartialSafetyFactorsName(safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
+        partialSafetyFactorsName= self.getPartialSafetyFactorsName(permanent= False, safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
         return self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'cat_H_snow_loads_on_building_roofs', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
     
     def newThermalLoadAction(self, actionName: str, actionDescription:str, safetyFactorSet:str, designSituation:str, approach:int= 2, dependsOn= None, incompatibleActions= None):
@@ -791,7 +799,7 @@ class BuildingCombGenerator(utils.CombGenerator):
         :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
         '''
-        partialSafetyFactorsName= self.getPartialSafetyFactorsName(safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
+        partialSafetyFactorsName= self.getPartialSafetyFactorsName(permanent= False, safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
         return self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'temperature_in_buildings', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
 
     def newAccidentalAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
