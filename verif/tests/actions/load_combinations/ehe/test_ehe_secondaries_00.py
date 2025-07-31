@@ -23,7 +23,7 @@ F1= lcg.newVariableAction(actionName= "F1", actionDescription= "Frenado puente g
 #lcg.setVerbosityLevel(3)
 lcg.computeCombinations()
 
-coeficientesRef_elu_persistentes= [[1.0, 0.0, 0.0, 0.0], [1.35, 0.0, 0.0, 0.0], [1.0, 1.5, 0.0, 0.0], [1.0, 1.5, 0.0, 1.05], [1.0, 0.0, 1.5, 0.0], [1.0, 1.05, 0.0, 0.0], [1.0, 1.05, 0.0, 1.05], [1.0, 1.05, 0.0, 1.5], [1.35, 1.5, 0.0, 0.0], [1.35, 1.5, 0.0, 1.05], [1.35, 0.0, 1.5, 0.0], [1.35, 1.05, 0.0, 0.0], [1.35, 1.05, 0.0, 1.05], [1.35, 1.05, 0.0, 1.5]]
+coeficientesRef_elu_persistentes= [[1.0, 0.0, 0.0, 0.0], [1.35, 0.0, 0.0, 0.0], [1.0, 1.5, 0.0, 0.0], [1.0, 1.5, 0.0, 1.05], [1.0, 0.0, 1.5, 0.0], [1.0, 1.05, 0.0, 1.5], [1.35, 1.5, 0.0, 0.0], [1.35, 1.5, 0.0, 1.05], [1.35, 0.0, 1.5, 0.0], [1.35, 1.05, 0.0, 1.5]]
 
 coeficientes_elu_persistentes= []
 combAcc= lcg.getULSTransientCombinations()
