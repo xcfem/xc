@@ -536,7 +536,7 @@ python tests/elements/zero_length/zero_length_element_test_04.py
 python tests/elements/zero_length/zero_length_element_test_05.py
 python tests/elements/zero_length/zero_length_element_test_06.py
 python tests/elements/zero_length/test_zero_length_section_sign_criteria.py
-python tests/elements/zero_length/test_zero_length_values_at_nodes_01.py
+python tests/elements/zero_length/test_zero_length_section_values_at_nodes_01.py
 python tests/elements/zero_length/test_strains_sign00.py
 python tests/elements/zero_length/test_strains_sign01.py
 python tests/elements/zero_length/test_strains_sign02.py
