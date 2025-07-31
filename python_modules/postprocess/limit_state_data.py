@@ -160,7 +160,7 @@ class LimitStateData(object):
         ''' Get the configuration of XC environment variables.'''
         retval= None
         if(LimitStateData.envConfig):
-            retval= LimitStateData.envConfig.projectDirTree.getFullVerifPath()
+            retval= LimitStateData.envConfig
         else:
            className= 'LimitStateData'
            methodName= sys._getframe(0).f_code.co_name
