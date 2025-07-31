@@ -115,7 +115,7 @@ elsQuasiPermanentCoefs= elsQuasiPermanent.getCoefficients(actionNames)
 
 err+= computeError(elsQuasiPermanentCoefs, elsQuasiPermanentCoefsRef)
 
-#print(err)
+# print(err)
 # values= dict()
 # values['eluPersistCoefsRef']= eluPersistCoefs
 # values['eluSeismicCoefsRef']= eluSeismicCoefs
