@@ -53,11 +53,14 @@ def get_results_table(resultsDict):
     retval.insert(0, headerRow)
     return retval
 
-def plot_results(resultsDict, title= None):
-    ''' Return the given results in tabular format.
+def plot_results(resultsDict, title= None, outputFileName= None, xy_size_mm= None):
+    ''' Creates a matplotlib figure showing the calculation results.
 
     :param resultsDict: dictionary containing the results.
     :param title: title.
+    :param outputFile: name of the output file (if None show the results
+                       on the screen).
+    :param xy_size_mm: width and height of the graphic in mm.
     '''
     def get_results(resultsDict, x_field:str, x_scale_factor:float, y_field= 'depth'):
         ''' Extract the results from the given dictionary and sort them on
@@ -112,8 +115,13 @@ def plot_results(resultsDict, title= None):
             ax.set(xlabel= x_label)
         ax.set_title(title)
         ax.grid()
-        
-    fig, (disp, moment, shear, presDif, soilReact, netWp) = plt.subplots(1, 6)
+    # Set figure size if required.
+    if(xy_size_mm is not None):
+        mm= 1/25.4
+        sz= (xy_size_mm[0]*mm, xy_size_mm[1]*mm)
+        fig, (disp, moment, shear, presDif, soilReact, netWp) = plt.subplots(1, 6, figsize= sz)
+    else:
+        fig, (disp, moment, shear, presDif, soilReact, netWp) = plt.subplots(1, 6)
     pileWallColor= 'tab:blue'
     diagramsColor= 'tab:red'
     # Plot displacements.
@@ -136,7 +144,10 @@ def plot_results(resultsDict, title= None):
 
     if(title):
         fig.suptitle(title)
-    plt.show()
+    if(outputFileName is not None):
+        plt.savefig(outputFileName)
+    else:
+        plt.show()
 
 class SoilLayers(object):
     '''Layers of different soils.
