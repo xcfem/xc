@@ -41,6 +41,8 @@ def _set_bridges_combination_factors(combination_factors):
     combination_factors.insert('SW/0_alone_uls', loadCombinations.CombinationFactors(0.8,0.8,0.0))
     combination_factors.insert('SW/2_uls', loadCombinations.CombinationFactors(0.0,1.0,0.0))
     combination_factors.insert('unloaded_train_uls', loadCombinations.CombinationFactors(1.0,0.0,0.0))
+    combination_factors.insert('earth_pressure_due_to_railway_traffic', loadCombinations.CombinationFactors(0.8,0.5,0.0))
+    combination_factors.insert('aerodynamic_effects', loadCombinations.CombinationFactors(0.8,0.5,0.0))
     combination_factors.insert('railway_bridge_construction', loadCombinations.CombinationFactors(1.0, 0.0, 1.0)) # Tabla A2.3 - Factores de simultaneidad para puentes de ferrocearril.
     combination_factors.insert('railway_bridge_wind_persistent_situation', loadCombinations.CombinationFactors(0.75,0.5,0.0))
     combination_factors.insert('railway_bridge_wind_aster', loadCombinations.CombinationFactors(1.0,0.0,0.0))
