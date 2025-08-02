@@ -53,6 +53,7 @@ ratio3= abs(tef-tef_ref)/tef_ref
 ratio4= abs(Ak-AkRef)/AkRef
 ratio5= abs(uk-uk_ref)/uk_ref
 
+''' 
 print("A= ",A)
 print("u= ",u)
 print("tef= ",tef)
@@ -63,7 +64,6 @@ print("ratio2= ",ratio2)
 print("ratio3= ",ratio3)
 print("ratio4= ",ratio4)
 print("ratio5= ",ratio5)
-''' 
 '''
 
 
