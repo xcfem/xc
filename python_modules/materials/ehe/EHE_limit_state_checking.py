@@ -2423,26 +2423,56 @@ class TorsionParameters(object):
     '''Methods for checking reinforced concrete section under torsion 
        according to clause 45.1 of EHE-08.
 
-    :ivar h0: Actual thickness of the section wall in the case of hollow sections.
+    :ivar h0: Actual thickness of the section wall in the case of hollow 
+              sections.
     :ivar c: Covering of longitudinal reinforcements.
 
     :ivar crossSectionContour: Cross section contour.
-    :ivar midLine: Polygon defined by the midline of the effective hollow section.
-    :ivar intLine: Polygon defined by the interior contour of the effective hollow section.
-    :ivar effectiveHollowSection: Effective hollow section contour
+    :ivar midLine: Polygon defined by the midline of the effective hollow 
+                   section.
+    :ivar intLine: Polygon defined by the interior contour of the effective 
+                   hollow section.
+    :ivar effectiveHollowSection: Effective hollow section contour.
     '''
-    def __init__(self):
-        self.h0= 0.0  # Actual thickness of the sectin wall in the case of hollow sections.
-        self.c= 0.0  # Covering of longitudinal reinforcements.
+    def __init__(self, c= 0.0, h0= None, crossSectionContour= None, midLine= None, intLine= None):
+        ''' Constructor.
 
-        self.crossSectionContour= geom.Polygon2d()  # Cross section contour.
-        self.midLine=  geom.Polygon2d() # Polygon defined by the midline of the effective hollow section.
-        self.intLine=  geom.Polygon2d() # Polygon defined by the interior contour of the effective hollow section.
+        :param h0: Actual thickness of the section wall in the case of hollow 
+                   sections.
+        :param c: Covering of longitudinal reinforcements.
+
+        :param crossSectionContour: Cross section contour.
+        :param midLine: Polygon defined by the midline of the effective hollow 
+                        section.
+        :param intLine: Polygon defined by the interior contour of the effective
+                        hollow section.
+        '''
+        self.h0= h0 # Actual thickness of the sectin wall in the case
+                    # of hollow sections.
+        self.c= c # Cover of longitudinal reinforcements.
+        # Cross section contour.
+        if(crossSectionContour):
+            self.crossSectionContour= crossSectionContour
+        else:
+            self.crossSectionContour= geom.Polygon2d()
+        # Polygon defined by the midline of the effective hollow section.
+        if(midLine):
+            self.midLine= geom.Polygon2d()
+        # Polygon defined by the interior contour of the effective hollow
+        # section.
+        if(intLine):
+            self.intLine= intLine
+        else:
+            self.intLine=  geom.Polygon2d() 
         self.effectiveHollowSection= geom.PolygonWithHoles2d() # Effective hollow section contour
+        if(crossSectionContour):
+            self.effectiveHollowSection.contour(self.crossSectionContour)
+        if(intLine):
+            self.effectiveHollowSection.addHole(self.intLine)
         
     def A(self):
         '''Return the area of the transverse section inscribed in the 
-           external circumference including inner void areas
+           external perimeter including inner void areas
         '''
         return self.crossSectionContour.getArea()
     
@@ -2454,7 +2484,13 @@ class TorsionParameters(object):
     def he(self):
         '''Return the effective thickness of the wall of the design section.
         '''
-        return max(2*self.c,min(self.A()/self.u(),self.h0))
+        retval= self.A()/self.u()
+        # If hollow section, not bigger then the true thickness.
+        if(self.h0 is not None):
+            retval= min(retval, self.h0)
+        # Not less than twice the cover.
+        retval= max(2*self.c, retval)
+        return retval
     
     def Ae(self):
         '''Return the area enclosed by the middle line of the design 
@@ -2468,14 +2504,14 @@ class TorsionParameters(object):
         '''
         return self.midLine.getPerimeter()
 
-def computeEffectiveHollowSectionParameters(sectionGeometry, h0, c):
+def compute_effective_hollow_section_parameters(sectionGeometry, c, h0= None):
     '''Computes the parameters for torsion analysis of an
      effective hollow section according to clause 45.2.1
      of EHE-08. Not valid if for non-convex sections.
 
     :param sectionGeometry: section geometry.
-    :param h0: actual thickness of the wall for hollow sections.
     :param c: cover of longitudinal reinforcement.
+    :param h0: if not None, actual thickness of the wall for hollow sections.
     '''
     retval= TorsionParameters()
     retval.h0= h0
@@ -2488,7 +2524,7 @@ def computeEffectiveHollowSectionParameters(sectionGeometry, h0, c):
     retval.effectiveHollowSection.addHole(retval.intLine)
     return retval
 
-def computeEffectiveHollowSectionParametersRCSection(rcSection):
+def compute_effective_hollow_section_parameters_rc_section(rcSection):
     '''Computes the parameters for torsion analysis of an
      effective hollow section according to clause 45.2.1
      of EHE-08.
@@ -2496,7 +2532,7 @@ def computeEffectiveHollowSectionParametersRCSection(rcSection):
     :param rcSection: reinforced concrete section
     '''
     h0= rcSection.getTorsionalThickness()
-    return computeEffectiveHollowSectionParameters(rcSection.geomSection,h0,rcSection.minCover)
+    return compute_effective_hollow_section_parameters(rcSection.geomSection, c= rcSection.minCover, h0= h0)
 
 class ReinforcementRatios(object):
     ''' Maximum and minimum reinforcement ratios according to EHE-08.

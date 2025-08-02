@@ -43,7 +43,7 @@ preprocessor=  feProblem.getPreprocessor
 section.defSectionGeometry(preprocessor= preprocessor, matDiagType= 'd')
 
 # Compute torsion parameters.
-torsionParameters= EHE_limit_state_checking.computeEffectiveHollowSectionParametersRCSection(section)
+torsionParameters= EHE_limit_state_checking.compute_effective_hollow_section_parameters_rc_section(section)
 
 # Check values of torsion parameters.
 ## Get effetive thickness

@@ -114,7 +114,7 @@ shearController= limitState.getController()
 # shearController.theta= math.radians(42.4311)
 shearController.theta= math.radians(44.2)
 
-secHAParamsTorsion= EHE_limit_state_checking.computeEffectiveHollowSectionParametersRCSection(section)
+secHAParamsTorsion= EHE_limit_state_checking.compute_effective_hollow_section_parameters_rc_section(section)
 
 scc= zlElement.getSection()
 shearCF= shearController.checkSection(sct= scc, elementDimension= zlElement.getDimension, torsionParameters= secHAParamsTorsion)

@@ -1328,7 +1328,6 @@ python tests/materials/xc_materials/sections/section_geom/test_mass_properties_0
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_03.py
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_04.py
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_05.py
-python tests/materials/xc_materials/sections/section_geom/test_geom_params_torsion_ehe_01.py
 python tests/materials/xc_materials/sections/section_geom/test_modify_section_properties.py
 echo "$BLEU" "      Cross-sections region tests." "$NORMAL"
 python tests/materials/xc_materials/sections/section_geom/regions/quad_sect_region_test_01.py
@@ -1490,7 +1489,8 @@ python tests/materials/ehe/test_fiber_section_shear_04.py
 python tests/materials/ehe/test_fiber_section_shear_05.py
 python tests/materials/ehe/test_fiber_section_shear_06.py
 echo "$BLEU" "    Torsion resistance determination tests (EHE-08)." "$NORMAL"
-python tests/materials/ehe/test_torsion_check_01.py
+python tests/materials/ehe/torsion/test_geom_params_torsion_ehe_01.py
+python tests/materials/ehe/torsion/test_torsion_check_01.py
 echo "$BLEU" "    Shrinkage and creep determination tests (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_creep_01.py
 python tests/materials/ehe/test_creep_02.py
@@ -1551,6 +1551,9 @@ python tests/materials/ec2/test_EC2_shear_04.py
 python tests/materials/ec2/test_EC2_shear_05.py
 python tests/materials/ec2/test_ec2_fiber_section_shear_01.py
 python tests/materials/ec2/test_EC2_shear_between_web_and_flanges_01.py
+echo "$BLEU" "    Torsion resistance determination tests." "$NORMAL"
+python tests/materials/ec2/torsion/test_geom_params_torsion_ehe_01.py
+python tests/materials/ec2/torsion/test_geom_params_torsion_ehe_02.py
 echo "$BLEU" "    EC2 punching shear resistance determination tests." "$NORMAL"
 python tests/materials/ec2/test_ec2_punching_shear_01.py
 python tests/materials/ec2/test_ec2_punching_shear_02.py
