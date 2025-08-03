@@ -1905,9 +1905,21 @@ class ShearResistanceLimitStateData(lsd.ShearResistanceRCLimitStateData):
 shearResistance= ShearResistanceLimitStateData()
 
 class TorsionController(lscb.ShearControllerBase):
-    '''Torsion strength control according to EHE-08.'''
+    '''Torsion strength control according to EHE-08.
 
-     # ControlVars= cv.RCTorsionControlVars
+    :ivar thetaMin: Minimal value of the theta angle.
+    :ivar thetaMax: Maximal value of the theta angle.
+    :ivar Tu1: Maximum torsional moment which the concrete’s compressed struts
+               can resist.
+    :ivar Tu2: Maximum torsional moment which transverse reinforcements can 
+               resist.
+    :ivar Tu3: Maximum torsional moment which longitudinal reinforcements can 
+               resist.
+    '''
+
+    # ControlVars= cv.RCTorsionControlVars
+    thetaMin= math.atan(0.5) # Minimal value of the theta angle.
+    thetaMax= math.atan(2) # Maximal value of the theta angle.
     
     def __init__(self, limitStateLabel, solutionProcedureType= lscb.defaultStaticNonLinearSolutionProcedure):
         ''' Constructor.
@@ -1917,8 +1929,6 @@ class TorsionController(lscb.ShearControllerBase):
                                       when computing load combination results.
         '''
         super(TorsionController,self).__init__(limitStateLabel= limitStateLabel, fakeSection= False, solutionProcedureType= solutionProcedureType)
-        self.thetaMin= math.atan(0.5) # Minimal value of the theta angle.
-        self.thetaMax= math.atan(2) # Maximal value of the theta angle.
 
         self.Tu1= 0.0 # Maximum torsional moment which the concrete’s compressed struts can resist.
         self.Tu2= 0.0 # Maximum torsional moment which transverse reinforcements can resist.

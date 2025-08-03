@@ -2131,3 +2131,95 @@ def compute_effective_hollow_section_parameters(sectionGeometry, c, t0= None):
     retval.effectiveHollowSection.contour(retval.crossSectionContour)
     retval.effectiveHollowSection.addHole(retval.intLine)
     return retval
+
+def compute_effective_hollow_section_parameters_rc_section(rcSection):
+    '''Computes the parameters for torsion analysis of an
+     effective hollow section according to clause 45.2.1
+     of EHE-08.
+
+    :param rcSection: reinforced concrete section
+    '''
+    t0= rcSection.getTorsionalThickness()
+    return compute_effective_hollow_section_parameters(rcSection.geomSection, c= rcSection.minCover, t0= t0)
+
+class TorsionController(lscb.ShearControllerBase):
+    '''Torsion strength control according to clause 6.3 of EC2:2004.
+
+    :ivar TRd_max: design torsional resistance moment according to expression
+                   (6.30) of EC2:2004.
+    '''
+    
+    def __init__(self, limitStateLabel, solutionProcedureType= lscb.defaultStaticNonLinearSolutionProcedure):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
+        '''
+        super(TorsionController,self).__init__(limitStateLabel= limitStateLabel, fakeSection= False, solutionProcedureType= solutionProcedureType)
+
+        self.TRd_max= 0.0 # design torsional resistance moment according to
+                          # to expression (6.30) of EC2:2004.
+
+    def calcTRd_max(self, rcSection, NEd, Ac, Ak, tef, nationalAnnex= None):
+        ''' Return the design torsional resistance moment according to
+            to expression (6.30) of EC2:2004.
+
+        :param rcSection: reinforced concrete section.
+        :param NEd: design value of axial force in concrete only (positive if 
+                    in tension).
+        :param Ac: area of concrete cross-section. 
+        :param Ak: Area enclosed by the middle line of the design effective 
+                   hollow section (figure 6.11).
+        :param tef: effective thickness of the wall of the design section.
+        :param nationalAnnex: identifier of the national annex.
+        '''
+        concrete= rcSection.getConcreteType()
+        fcd= -concrete.fcd()
+        # nu: strength reduction factor for concrete cracked in shear
+        nu= concrete.getShearStrengthReductionFactor(nationalAnnex)
+        # alpha_cw: coefficient taking account of the state of the stress in the compression chord.
+        alpha_cw= concrete.getAlphaCw(NEd, Ac, nationalAnnex)
+        # angle of compression struts (see Figure 6.5).
+        theta= rcSection.torsionReinf.angThetaConcrStruts
+        return 2.0*nu*alpha_cw*fcd*Ak*tef*math.sin(theta)*math.cos(theta)
+
+    def calcTu2(self, rcSection, Ak:float):
+        ''' Compute the torsional stress which transverse reinforcements can 
+            resist according to clause 45.2.2.2 of EHE-08.
+
+        :param rcSection: reinforced concrete section.
+        :param Ak: Area enclosed by the middle line of the design effective 
+                   hollow section (figure 45.2.1).
+        '''
+        # Do not multiply by 2 because getAs() already returns the double
+        # of At in the formula.
+        steel= rcSection.getReinfSteelType()
+        fytd= min(steel.fyd(), 400e6)
+        tan_theta= math.tan(rcSection.torsionReinf.angThetaConcrStruts)
+        return Ak*rcSection.torsionReinf.getAs()/rcSection.torsionReinf.shReinfSpacing*fytd/tan_theta
+    
+    def calcTu3(self, rcSection, Ae:float, ue:float):
+        ''' Compute the torsional stress which longitudinal reinforcements can 
+            resist according to expression (6.28) of EC2.
+
+        :param rcSection: reinforced concrete section.
+        :param Ak: Area enclosed by the middle line of the design effective 
+                   hollow section (figure 6.11).
+        :param uk: perimeter of the middle line in the design effective 
+                   hollow section Ak.
+        '''
+        steel= rcSection.getReinfSteelType()
+        fy1d= min(steel.fyd(), 400e6)
+        theta= rcSection.torsionReinf.angThetaConcrStruts
+        return 2*Ak*rcSection.torsionReinf.A1/uk*fy1d*math.tan(theta)
+
+class TorsionResistanceLimitStateData(lsd.TorsionResistanceRCLimitStateData):
+    ''' Reinforced concrete torsion strength limit state data.'''
+
+    def getController(self):
+        ''' Return a controller corresponding to this limit state.
+        '''
+        return TorsionController(self.label)
+    
+torsionResistance= TorsionResistanceLimitStateData()
