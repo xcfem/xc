@@ -1970,12 +1970,10 @@ class TorsionController(lscb.ShearControllerBase):
         :param Ae: Area enclosed by the middle line of the design effective 
                    hollow section (figure 45.2.1).
         '''
-        # Do not multiply by 2 because getAs() already returns the double
-        # of At in the formula.
         steel= rcSection.getReinfSteelType()
         fytd= min(steel.fyd(), 400e6)
         theta= rcSection.torsionReinf.angThetaConcrStruts
-        return Ae*rcSection.torsionReinf.getAs()/rcSection.torsionReinf.shReinfSpacing*fytd/math.tan(theta)
+        return 2*Ae*rcSection.torsionReinf.getAs()*fytd/math.tan(theta)
     
     def calcTu3(self, rcSection, Ae:float, ue:float):
         ''' Compute the torsional stress which longitudinal reinforcements can 
