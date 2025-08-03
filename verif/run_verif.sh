@@ -1490,7 +1490,8 @@ python tests/materials/ehe/test_fiber_section_shear_05.py
 python tests/materials/ehe/test_fiber_section_shear_06.py
 echo "$BLEU" "    Torsion resistance determination tests (EHE-08)." "$NORMAL"
 python tests/materials/ehe/torsion/test_geom_params_torsion_ehe_01.py
-python tests/materials/ehe/torsion/test_torsion_check_01.py
+python tests/materials/ehe/torsion/test_ehe_torsion_check_01.py
+python tests/materials/ehe/torsion/test_ehe_torsion_check_02.py
 echo "$BLEU" "    Shrinkage and creep determination tests (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_creep_01.py
 python tests/materials/ehe/test_creep_02.py
@@ -1555,6 +1556,7 @@ echo "$BLEU" "    Torsion resistance determination tests." "$NORMAL"
 python tests/materials/ec2/torsion/test_geom_params_torsion_ec2_01.py
 python tests/materials/ec2/torsion/test_geom_params_torsion_ec2_02.py
 python tests/materials/ec2/torsion/test_ec2_torsion_check_01.py
+python tests/materials/ec2/torsion/test_ec2_torsion_check_02.py
 echo "$BLEU" "    EC2 punching shear resistance determination tests." "$NORMAL"
 python tests/materials/ec2/test_ec2_punching_shear_01.py
 python tests/materials/ec2/test_ec2_punching_shear_02.py
