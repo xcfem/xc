@@ -405,6 +405,43 @@ class CrackController(lscb.LimitStateControllerBase):
         s_r_max= self.s_r_max(k2= k2, cover= cover, reinfPhi= reinfPhi, spacing= spacing, ro_eff= ro_eff)
         meanStrainDifference= self.meanStrainDifference(sigma_s= sigma_s, steel= steel, concrete= concrete, ro_eff= ro_eff)
         return meanStrainDifference*s_r_max
+
+    def checkSection(self, sct):
+        ''' Check shear on the section argument.
+
+        :param sct: reinforced concrete section object to check crack on.
+        '''
+        sctCrkProp= lscb.FibSectLSProperties(sct)
+        sctCrkProp.setupStrghCrackDist()
+        sigma_s= sctCrkProp.getMaxReinforcementTensileStress()
+        if(sctCrkProp.eps1<=0): # No tensile strains.
+            s_rmax= 0.0
+            wk= 0.0
+        else:
+            concrete= sctCrkProp.sctProp.getConcreteType()
+            flexuralTensileStrain= concrete.getFlexuralTensileStrain(h= sctCrkProp.h)
+            if(sctCrkProp.eps1<flexuralTensileStrain): # Very small tensile strain => no cracking
+                s_rmax= 0.0
+                wk= 0.0
+            else:
+                hceff= self.EC2_hceff(sctCrkProp.h,sctCrkProp.d,sctCrkProp.x)
+                Aceff= sct.getNetEffectiveConcreteArea(hceff,'tensSetFb',15.0)
+                if(Aceff<=0):
+                    s_rmax= 0.0
+                    wk= 0.0
+                else:
+                    rfSteel= sctCrkProp.sctProp.getReinfSteelType()
+                    k2= self.EC2_k2(sctCrkProp.eps1, sctCrkProp.eps2)
+                    ro_s_eff= sctCrkProp.As/Aceff #effective ratio of reinforcement
+                    s_rmax= self.s_r_max(k2= k2, cover= sctCrkProp.cover, reinfPhi= sctCrkProp.fiEqu, spacing= sctCrkProp.spacing, ro_eff= ro_s_eff)
+                    meanStrainDifference= self.meanStrainDifference(sigma_s= sigma_s, steel= rfSteel, concrete= concrete, ro_eff= ro_s_eff)
+                    wk= meanStrainDifference*s_rmax
+        CF= wk/self.wk_lim # Capacity factor.
+        N= sct.getStressResultantComponent("N")
+        My= sct.getStressResultantComponent("My")
+        Mz= sct.getStressResultantComponent("Mz")
+        sigma_c= sctCrkProp.sigma_c
+        return CF, wk, s_rmax, sigma_s, sigma_c, N, My, Mz
     
     def check(self, elements, loadCombinationName):
         ''' For each element in the 'elememts' container passed as first 
@@ -423,7 +460,7 @@ class CrackController(lscb.LimitStateControllerBase):
 
         :param elements: elements to check.
         :param loadCombinationName: name of the load combination.
-      '''
+        '''
         if(self.verbose):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -432,35 +469,10 @@ class CrackController(lscb.LimitStateControllerBase):
             Aceff=0  #initial  value
             R= e.getResistingForce()
             sct= e.getSection()
-            sctCrkProp= lscb.FibSectLSProperties(sct)
-            sctCrkProp.setupStrghCrackDist()
-            sigma_s= sctCrkProp.getMaxReinforcementTensileStress()
-            if(sctCrkProp.eps1<=0): # No tensile strains.
-                s_rmax= 0.0
-                wk= 0.0
-            else:
-                concrete= sctCrkProp.sctProp.getConcreteType()
-                flexuralTensileStrain= concrete.getFlexuralTensileStrain(h= sctCrkProp.h)
-                if(sctCrkProp.eps1<flexuralTensileStrain): # Very small tensile strain => no cracking
-                    s_rmax= 0.0
-                    wk= 0.0
-                else:
-                    hceff= self.EC2_hceff(sctCrkProp.h,sctCrkProp.d,sctCrkProp.x)
-                    Aceff= sct.getNetEffectiveConcreteArea(hceff,'tensSetFb',15.0)
-                    if(Aceff<=0):
-                        s_rmax= 0.0
-                        wk= 0.0
-                    else:
-                        rfSteel= sctCrkProp.sctProp.getReinfSteelType()
-                        k2= self.EC2_k2(sctCrkProp.eps1, sctCrkProp.eps2)
-                        ro_s_eff= sctCrkProp.As/Aceff #effective ratio of reinforcement
-                        s_rmax= self.s_r_max(k2= k2, cover= sctCrkProp.cover, reinfPhi= sctCrkProp.fiEqu, spacing= sctCrkProp.spacing, ro_eff= ro_s_eff)
-                        meanStrainDifference= self.meanStrainDifference(sigma_s= sigma_s, steel= rfSteel, concrete= concrete, ro_eff= ro_s_eff)
-                        wk= meanStrainDifference*s_rmax
+            cf, wk, s_rmax, sigma_s, sigma_c, N, My, Mz= self.checkSection(sct)
             if(wk>=e.getProp(self.limitStateLabel).wk):
-                CF= wk/self.wk_lim # Capacity factor.
-                sigma_c= sctCrkProp.sigma_c
-                e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp('idSection'), combName=loadCombinationName, N=-R[0], My=-R[4], Mz=-R[5], s_rmax= s_rmax, sigma_s= sigma_s, sigma_c= sigma_c, wk= wk, CF= CF))
+                CF= cf
+                e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp('idSection'), combName=loadCombinationName, N= N, My= My, Mz= Mz, s_rmax= s_rmax, sigma_s= sigma_s, sigma_c= sigma_c, wk= wk, CF= CF))
 
 class CrackStraightController(CrackController):
     ''' Object that verifies the cracking serviceability limit state according 
