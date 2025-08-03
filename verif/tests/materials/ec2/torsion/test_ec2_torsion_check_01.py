@@ -29,7 +29,7 @@ steel= EC2_materials.S450B
 
 # Define reinforced concrete section.
 cover= 25e-3
-section= def_simple_RC_section.RCRectangularSection(name='test', sectionDescr= 'dummy section for testing computation of torsion parameters', width= 0.3, depth= 0.5, concrType= concrete, reinfSteelType= steel)
+section= def_simple_RC_section.RCRectangularSection(name='test', sectionDescr= 'dummy section for testing torsion ULS checking', width= 0.3, depth= 0.5, concrType= concrete, reinfSteelType= steel)
 ## Main reinforcement.
 section.negatvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam= 16e-3, nRebars= 3, nominalCover= cover)])
 section.positvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam= 16e-3, nRebars= 3, nominalCover= cover)])
