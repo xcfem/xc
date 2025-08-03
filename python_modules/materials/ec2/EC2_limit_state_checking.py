@@ -2184,24 +2184,22 @@ class TorsionController(lscb.ShearControllerBase):
         theta= rcSection.torsionReinf.angThetaConcrStruts
         return 2.0*nu*alpha_cw*fcd*Ak*tef*math.sin(theta)*math.cos(theta)
 
-    def calcTu2(self, rcSection, Ak:float):
-        ''' Compute the torsional stress which transverse reinforcements can 
-            resist according to clause 45.2.2.2 of EHE-08.
+    def calcTrdc(self,  rcSection, Ak:float, tef:float):
+        ''' Compute the torsional moment strength of the section without 
+            torsional reinforcement.
 
         :param rcSection: reinforced concrete section.
         :param Ak: Area enclosed by the middle line of the design effective 
-                   hollow section (figure 45.2.1).
+                   hollow section (figure 6.11).
+        :param tef: effective thickness of the wall of the design section.
         '''
-        # Do not multiply by 2 because getAs() already returns the double
-        # of At in the formula.
-        steel= rcSection.getReinfSteelType()
-        fytd= min(steel.fyd(), 400e6)
-        tan_theta= math.tan(rcSection.torsionReinf.angThetaConcrStruts)
-        return Ak*rcSection.torsionReinf.getAs()/rcSection.torsionReinf.shReinfSpacing*fytd/tan_theta
-    
-    def calcTu3(self, rcSection, Ae:float, ue:float):
-        ''' Compute the torsional stress which longitudinal reinforcements can 
-            resist according to expression (6.28) of EC2.
+        concrete= rcSection.getConcreteType()
+        fctd= concrete.fctd() # concrete design tensile strength.
+        return 2*Ak*fctd*tef
+        
+    def calcTasl_max(self, rcSection, Ak:float, uk:float):
+        ''' Compute the maximum torsional strength with the amount of torsional
+            longitudinal reinforcement arranged in the section.
 
         :param rcSection: reinforced concrete section.
         :param Ak: Area enclosed by the middle line of the design effective 
@@ -2213,6 +2211,19 @@ class TorsionController(lscb.ShearControllerBase):
         fy1d= min(steel.fyd(), 400e6)
         theta= rcSection.torsionReinf.angThetaConcrStruts
         return 2*Ak*rcSection.torsionReinf.A1/uk*fy1d*math.tan(theta)
+    
+    def calcTasw_max(self, rcSection, Ak:float):
+        ''' Compute the torsional stress which longitudinal reinforcements can 
+            resist according to expression (6.28) of EC2.
+
+        :param rcSection: reinforced concrete section.
+        :param Ak: Area enclosed by the middle line of the design effective 
+                   hollow section (figure 6.11).
+        '''
+        steel= rcSection.getReinfSteelType()
+        fytd= min(steel.fyd(), 400e6)
+        theta= rcSection.torsionReinf.angThetaConcrStruts
+        return 2*Ak*rcSection.torsionReinf.getAs()*fytd/math.tan(theta)
 
 class TorsionResistanceLimitStateData(lsd.TorsionResistanceRCLimitStateData):
     ''' Reinforced concrete torsion strength limit state data.'''
