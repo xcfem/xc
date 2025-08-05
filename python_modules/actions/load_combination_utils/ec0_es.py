@@ -389,6 +389,39 @@ class BridgeCombGenerator(utils.CombGenerator):
             lmsg.error(className+'.'+methodName+'; not implemented for context: '+str(context) + ' return None.')
         return retval
         
+    def newLoadOnBackfillAction(self, actionName: str, actionDescription: str, safetyFactorSet:str, dependsOn= None, incompatibleActions= None, context= None, notDeterminant= False):
+        ''' Creates a wind action on bridge and appends it to the combinations
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param safetyFactorSet: identifier of the safety factor set 'A', 'B' or 'C' corresponding to tables Table A2.4(A), Table A2.4(B) or A2.4(C)
+        :param dependsOn: name of another action that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        :param context: context for the action (building, railway_bridge, footbridge,...)
+        :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
+        '''
+        retval= None
+        if(safetyFactorSet=='A'):
+            partialSafetyFactorsName= 'load_on_backfill_set_a'
+        elif(safetyFactorSet=='B'):
+            partialSafetyFactorsName= 'load_on_backfill_set_b'
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= className+'.'+methodName+'; safety factor set: '+str(safetyFactorSet)+' not implemented for railway traffic actions.'
+            lmsg.error(errorMsg)                        
+        if(context=='road_bridge'):
+            retval= self.newAction(family= 'variables', actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_bridge_construction', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
+        elif(context=='railway_bridge'):
+            retval= self.newAction(family= 'variables', actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'railway_bridge_construction', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; not implemented for context: '+str(context) + ' return None.')
+            exit(1)
+        return retval
+    
     def newConstructionAction(self, actionName: str, actionDescription: str, safetyFactorSet:str, dependsOn= None, incompatibleActions= None, context= None, notDeterminant= False):
         ''' Creates a wind action on bridge and appends it to the combinations
             generator.
