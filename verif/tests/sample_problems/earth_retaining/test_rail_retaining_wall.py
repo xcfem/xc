@@ -121,15 +121,15 @@ for nodeTag in results:
     UMin= min(UMin, U)
     UMax= max(UMax, U)
 
-UMaxRef= -65.7295070960316e-3
-ratio1= abs(UMax-UMaxRef)/UMaxRef
+UMinRef= -65.7295070960316e-3
+ratio1= abs(UMin-UMinRef)/UMinRef
 MkMaxRef= 2.2398731135622656e3
 ratio2= abs(MkMax-MkMaxRef)/MkMaxRef
 MkMinRef= -54.27597625732579e3
 ratio3= abs(MkMin-MkMinRef)/MkMinRef
 QkMaxRef= 24.01744718024069e3
 ratio4= abs(QkMax-QkMaxRef)/QkMaxRef
-QkMinRef= 36.97638444024668e3
+QkMinRef= -36.97638444024668e3
 ratio5= abs(QkMin-QkMinRef)/QkMinRef
 
 '''
@@ -151,12 +151,21 @@ print('\nMdMax= ', gammaG*MkMax/1e3, 'kN.m')
 print('MdMin= ', gammaG*MkMin/1e3, 'kN.m')
 print('QdMax= ', gammaG*QkMax/1e3, 'kN')
 print('QdMin= ', gammaG*QkMin/1e3, 'kN')
+print(UMin)
+print(UMin, UMinRef)
+print(ratio1)
+print(ratio2)
+print(ratio3)
+print(ratio4)
+print(QkMin, QkMinRef)
+print(ratio5)
 '''
+
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if((ratio1<1e-15) & (ratio2<1e-15) & (ratio3<0.03)):
+if((abs(ratio1)<1e-10) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10)& (abs(ratio4)<1e-10) & (abs(ratio5)<1e-10)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
@@ -171,7 +180,8 @@ else:
 # with open(csvFileName, "w") as csvFile:
 #     csvFile.write(content)
     
-# Matplotlib output.
+# # Matplotlib output.
+# title= 'Rail pile wall test.'
 # pw.plot_results(resultsDict= results, title= title)
 
 # # VTK output
