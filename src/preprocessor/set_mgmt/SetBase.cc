@@ -325,27 +325,37 @@ void XC::SetBase::computeTributaryLengths(bool initialGeometry) const
   {
     checkTributaries();
     const std::set<int> tmp= getElementTags();
-    const Domain *dom= getPreprocessor()->getDomain();
-    if(dom)
+    const size_t sz= tmp.size();
+    if(sz>0)
       {
-        for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++)
-          {
-            const int &tag_elem= *i;
-            const Element *elem= dom->getElement(tag_elem);
-            if(elem)
-              elem->computeTributaryLengths(initialGeometry);
-            else
-	      std::cerr << Color::red
-			<< getClassName() << "::" << __FUNCTION__
-                        << " element identified by: "
-                        << tag_elem << " not found."
-			<< Color::def << std::endl;
-          }
+	const Domain *dom= getPreprocessor()->getDomain();
+	if(dom)
+	  {
+	    for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++)
+	      {
+		const int &tag_elem= *i;
+		const Element *elem= dom->getElement(tag_elem);
+		if(elem)
+		  elem->computeTributaryLengths(initialGeometry);
+		else
+		  std::cerr << Color::red
+			    << getClassName() << "::" << __FUNCTION__
+			    << " element identified by: "
+			    << tag_elem << " not found."
+			    << Color::def << std::endl;
+	      }
+	  }
+	else
+	  std::cerr << Color::red
+		    << getClassName() << "::" << __FUNCTION__
+		    << "domain not set."
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << Color::red
-		<< getClassName() << "::" << __FUNCTION__
-		<< "domain not set."
+      std::clog << Color::yellow
+                << getClassName() << "::" << __FUNCTION__
+		<< "; this set (" << this->getName()
+	        << ") has no elements. No tributary lengths computed."
 		<< Color::def << std::endl;
   }
 
@@ -355,27 +365,37 @@ void XC::SetBase::computeTributaryAreas(bool initialGeometry) const
   {
     checkTributaries();
     const std::set<int> tmp= getElementTags();
-    const Domain *dom= getPreprocessor()->getDomain();
-    if(dom)
+    const size_t sz= tmp.size();
+    if(sz>0)
       {
-        for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++)
-          {
-            const int &tag_elem= *i;
-            const Element *elem= dom->getElement(tag_elem);
-            if(elem)
-              elem->computeTributaryAreas(initialGeometry);
-            else
-	      std::cerr << Color::red
-			<< getClassName() << "::" << __FUNCTION__
-                        << " element identified by: "
-                        << tag_elem << " not found."
-			<< Color::def << std::endl;
-          }
+	const Domain *dom= getPreprocessor()->getDomain();
+	if(dom)
+	  {
+	    for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++)
+	      {
+		const int &tag_elem= *i;
+		const Element *elem= dom->getElement(tag_elem);
+		if(elem)
+		  elem->computeTributaryAreas(initialGeometry);
+		else
+		  std::cerr << Color::red
+			    << getClassName() << "::" << __FUNCTION__
+			    << " element identified by: "
+			    << tag_elem << " not found."
+			    << Color::def << std::endl;
+	      }
+	  }
+	else
+	  std::cerr << Color::red
+		    << getClassName() << "::" << __FUNCTION__
+		    << "domain not set."
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << Color::red
-		<< getClassName() << "::" << __FUNCTION__
-		<< "domain not set."
+      std::clog << Color::yellow
+                << getClassName() << "::" << __FUNCTION__
+		<< "; this set (" << this->getName()
+	        << ") has no elements. No tributary areas computed."
 		<< Color::def << std::endl;
   }
 
@@ -385,27 +405,37 @@ void XC::SetBase::computeTributaryVolumes(bool initialGeometry) const
   {
     checkTributaries();
     const std::set<int> tmp= getElementTags();
-    const Domain *dom= getPreprocessor()->getDomain();
-    if(dom)
+    const size_t sz= tmp.size();
+    if(sz>0)
       {
-        for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++)
-          {
-            const int &tag_elem= *i;
-            const Element *elem= dom->getElement(tag_elem);
-            if(elem)
-              elem->computeTributaryVolumes(initialGeometry);
-            else
-	      std::cerr << Color::red
-			<< getClassName() << "::" << __FUNCTION__
-                        << " element identified by: "
-                        << tag_elem << " not found."
-			<< Color::def << std::endl;
-          }
+	const Domain *dom= getPreprocessor()->getDomain();
+	if(dom)
+	  {
+	    for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++)
+	      {
+		const int &tag_elem= *i;
+		const Element *elem= dom->getElement(tag_elem);
+		if(elem)
+		  elem->computeTributaryVolumes(initialGeometry);
+		else
+		  std::cerr << Color::red
+			    << getClassName() << "::" << __FUNCTION__
+			    << " element identified by: "
+			    << tag_elem << " not found."
+			    << Color::def << std::endl;
+	      }
+	  }
+	else
+	  std::cerr << Color::red
+		    << getClassName() << "::" << __FUNCTION__
+		    << "domain not set."
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << Color::red
-		<< getClassName() << "::" << __FUNCTION__
-		<< "domain not set."
+      std::clog << Color::yellow
+                << getClassName() << "::" << __FUNCTION__
+		<< "; this set (" << this->getName()
+	        << ") has no elements. No tributary volumes computed."
 		<< Color::def << std::endl;
   }
 

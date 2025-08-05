@@ -182,14 +182,16 @@ void XC::MapLoadPatterns::addToDomain(const std::string &lp_code)
       {
         bool result= getDomain()->addLoadPattern(lp);
         if((!result) && (verbosity>3))
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; can't add the load pattern: '"
-                    << lp_code << "'\n";
+                    << lp_code
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; load pattern: '" 
-                << lp_code << "' not found." << std::endl;
+                << lp_code << "' not found."
+		<< Color::red << std::endl;
   }
 
 //! @brief Remove the load pattern del domain.
@@ -199,9 +201,10 @@ void XC::MapLoadPatterns::removeFromDomain(const std::string &lp_code)
     if(lp)
       getDomain()->removeLoadPattern(lp);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; load pattern: '" 
-                << lp_code << "' not found." << std::endl;
+                << lp_code << "' not found."
+		<< Color::def << std::endl;
   }
 
 //! @brief Remove the loadpatterns del domain.
@@ -226,10 +229,10 @@ XC::TimeSeries *XC::MapLoadPatterns::newTimeSeries(const std::string &type, cons
   {
     TimeSeries *ts= this->findTS(cod_ts);
     if(ts)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING time series: '" << cod_ts
                 << "' already_exists. This command redefines it."
-		<< std::endl;
+		<< Color::red << std::endl;
     if(type == "constant_ts")
       ts= create_time_series<ConstantSeries>(cod_ts);
     else if(type == "linear_ts")
@@ -247,13 +250,15 @@ XC::TimeSeries *XC::MapLoadPatterns::newTimeSeries(const std::string &type, cons
     else if(type == "trig_ts")
       ts= create_time_series<TrigSeries>(cod_ts);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; time series type: '" << type
-                << "' unknown." << std::endl;
+                << "' unknown."
+		<< Color::def << std::endl;
     if(!ts)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; error in time series definition of type: '" 
-                << type << "'." << std::endl;
+                << type << "'."
+		<< Color::def << std::endl;
     return ts;
   }
 
@@ -288,10 +293,10 @@ XC::LoadPattern *XC::MapLoadPatterns::newLoadPattern(const std::string &type,con
 	  retval= create_load_pattern<PBowlLoading>(cod_lp);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; load pattern: '" << cod_lp
 	        << "' already defined. Command ignored."
-	        << std::endl;
+	        << Color::def << std::endl;
     return retval;
   }
 
@@ -312,10 +317,10 @@ bool XC::MapLoadPatterns::removeLoadPattern(const std::string &cod_lp)
 	retval= true;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; load pattern: '" << cod_lp
 	        << "' not found. Command ignored."
-	        << std::endl;
+	        << Color::def << std::endl;
     return retval;
   }
 
@@ -588,7 +593,9 @@ int XC::MapLoadPatterns::sendSelf(Communicator &comm)
     const int dataTag= getDbTag(comm);
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "MapLoadPatterns::sendSelf() - failed to send data.\n";    
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data."
+	        << Color::def << std::endl;    
     return res;
   }
 
@@ -603,7 +610,9 @@ int XC::MapLoadPatterns::recvSelf(const Communicator &comm)
         const int dataTag= getDbTag();
         res= comm.receiveIdData(getDbTagData(),dataTag);
         if(res<0)
-          std::cerr << "MapLoadPatterns::recvSelf() - data could not be received.\n" ;
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; data could not be received."
+		    << Color::def << std::endl;
         else
           res+= recvData(comm);
       }

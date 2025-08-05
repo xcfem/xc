@@ -10,9 +10,12 @@ __email__= 'l.pereztato@ciccp.es ana.ortega@ciccp.es'
 import sys
 import loadCombinations
 from actions.load_combination_utils import utils
+from actions.load_combination_utils import ec0_bridges_partial_safety_factors_es
+from actions.load_combination_utils import ec0_bridges_combination_factors_es
+from actions.load_combination_utils import ec0_buildings_partial_safety_factors_es
+from actions.load_combination_utils import ec0_buildings_combination_factors_es
 from misc_utils import log_messages as lmsg
 
-bridge_factors= loadCombinations.Factors()
 
 #Coef.FULS('favorable','desfavorable','favorable accidental','desfavorable accidental')
 
@@ -34,89 +37,6 @@ bridge_factors= loadCombinations.Factors()
 #      - Approach 3: Applying design values of actions from Table A2.4(C) to the geotechnical actions and, simultaneously, applying design values of actions from Table A2.4(B) to the actions on/from the structure.
  
 
-# Partial safety factors for bridges.
-bridges_partial_safety_factors= bridge_factors.getPartialSafetyFactors()
-
-#Partial safety factors for permanent actions
-## Permanent loads.
-### Eurocode 0. Table AN.8 [table A2.4(A)]. Design values of actions (EQU) (Set A)
-bridges_partial_safety_factors['self_weight_set_a']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0.9,1.1,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['dead_load_set_a']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0.9,1.1,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['earth_pressure_set_a']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0,1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-### Eurocode 0. Table AN.9 [table A2.4(B)]. Design values of actions (STR/GEO) (Set B)
-bridges_partial_safety_factors['permanent_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1,1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['self_weight_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0,1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['dead_load_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['rheological_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['friction_in_sliding_supports_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['earth_pressure_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['pore_water_pressure_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
-bridges_partial_safety_factors['settlement_linear_analysis_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.20,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-bridges_partial_safety_factors['settlement_non_linear_analysis_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-# Partial safety factors for variable actions.
-### Eurocode 0. Table AN.9 [table A2.4(B)]. Design values of actions (STR/GEO) (Set B)
-#### Traffic loads.
-bridges_partial_safety_factors['variable_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.5,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-bridges_partial_safety_factors['road_traffic_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-bridges_partial_safety_factors['pedestrian_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-bridges_partial_safety_factors['railway_traffic_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.45,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-#### Thermal actions.
-bridges_partial_safety_factors['thermal_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.5,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-#### Hydrostatic pressure
-bridges_partial_safety_factors['hydrostatic_pressure_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-#### Eurocode 7 variable load. Table AN.9 [table A2.4(B)]. Live load on backfill surfaces.
-bridges_partial_safety_factors['load_on_backfill_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.5,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-bridges_partial_safety_factors['construction_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1), loadCombinations.SLSPartialSafetyFactors(0,0))
-
-### Eurocode 0. Table AN.8 [table A2.4(A)]. Design values of actions (EQU) (Set A)
-bridges_partial_safety_factors['variable_set_a']= bridges_partial_safety_factors['variable_set_b']
-bridges_partial_safety_factors['road_traffic_set_a']= bridges_partial_safety_factors['road_traffic_set_b']
-bridges_partial_safety_factors['pedestrian_set_a']= bridges_partial_safety_factors['pedestrian_set_b']
-bridges_partial_safety_factors['railway_traffic_set_a']= bridges_partial_safety_factors['railway_traffic_set_b']
-#### Thermal actions.
-bridges_partial_safety_factors['thermal_set_a']= bridges_partial_safety_factors['thermal_set_b']
-#### Hydrostatic pressure
-bridges_partial_safety_factors['pore_water_pressure_set_a']= bridges_partial_safety_factors['pore_water_pressure_set_b']
-bridges_partial_safety_factors['hydrostatic_pressure_set_a']= bridges_partial_safety_factors['hydrostatic_pressure_set_b']
-#### Eurocode 7 variable load. Table AN.9 [table A2.4(B)]. Live load on backfill surfaces.
-bridges_partial_safety_factors['load_on_backfill_set_a']= bridges_partial_safety_factors['load_on_backfill_set_b']
-bridges_partial_safety_factors['construction_set_a']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.25,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
-
-# Partial safety factors for accidental actions.
-bridges_partial_safety_factors['accidentales']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,0,0,1), loadCombinations.SLSPartialSafetyFactors(0,0))
-
-# Combination factors for road bridges (table AN.5 (table A2.1) )
-bridge_combination_factors= bridge_factors.getCombinationFactors()
-# 
-bridge_combination_factors.insert('permanent', loadCombinations.CombinationFactors(1,1,1))
-bridge_combination_factors.insert('road_traffic_loads_gr1a_trucks', loadCombinations.CombinationFactors(0.75,0.75,0.0))
-bridge_combination_factors.insert('road_traffic_loads_gr1a_udl', loadCombinations.CombinationFactors(0.40,0.40,0.0))
-bridge_combination_factors.insert('road_traffic_loads_gr1a_footway', loadCombinations.CombinationFactors(0.40,0.40,0.0))
-bridge_combination_factors.insert('road_traffic_loads_gr1b_single_axe', loadCombinations.CombinationFactors(0.0,0.75,0.0))
-bridge_combination_factors.insert('road_traffic_loads_gr2_horizontal_forces', loadCombinations.CombinationFactors(0.0,0.0,0.0))
-bridge_combination_factors.insert('road_traffic_loads_gr3_pedestrian_loads', loadCombinations.CombinationFactors(0.0,0.0,0.0))
-bridge_combination_factors.insert('road_traffic_loads_gr4_crowd_loading', loadCombinations.CombinationFactors(0.0,0.0,0.0))
-bridge_combination_factors.insert('road_traffic_loads_gr5_vertical_forces', loadCombinations.CombinationFactors(0.0,0.0,0.0)) # Special vehicles. Vertical forces.
-bridge_combination_factors.insert('road_traffic_loads_gr6_horizontal_forces', loadCombinations.CombinationFactors(0.0,0.0,0.0)) # Special vehicles. Horizontal forces.
-bridge_combination_factors.insert('road_bridge_construction', loadCombinations.CombinationFactors(1.0, 0.0, 1.0)) # Tabla AN.5 (tabla A2.1) - Factores de simultaneidad para puentes de carretera.
-bridge_combination_factors.insert('road_bridge_wind_persistent_situation', loadCombinations.CombinationFactors(0.6,0.2,0.0))
-bridge_combination_factors.insert('road_bridge_wind_during_execution', loadCombinations.CombinationFactors(0.8,0.0,0.0))
-bridge_combination_factors.insert('road_bridge_wind_aster', loadCombinations.CombinationFactors(1.0,0.0,0.0))
-bridge_combination_factors.insert('road_bridge_thermal', loadCombinations.CombinationFactors(0.6,0.6,0.5))
-bridge_combination_factors.insert('road_bridge_snow', loadCombinations.CombinationFactors(0.8,0.0,0.0))
-bridge_combination_factors.insert('road_bridge_hydrostatic_pressure', loadCombinations.CombinationFactors(1.0,1.0,1.0))
-bridge_combination_factors.insert('road_bridge_construction_loads', loadCombinations.CombinationFactors(1.0,0.0,1.0))
-# Combination factors for railway bridges according to table A2.3 of Eurocode 0.
-bridge_combination_factors.insert('LM71_alone_uls', loadCombinations.CombinationFactors(0.8,0.8,0.0))
-bridge_combination_factors.insert('SW/0_alone_uls', loadCombinations.CombinationFactors(0.8,0.8,0.0))
-bridge_combination_factors.insert('SW/2_uls', loadCombinations.CombinationFactors(0.0,1.0,0.0))
-bridge_combination_factors.insert('unloaded_train_uls', loadCombinations.CombinationFactors(1.0,0.0,0.0))
-bridge_combination_factors.insert('railway_bridge_construction', loadCombinations.CombinationFactors(1.0, 0.0, 1.0)) # Tabla A2.3 - Factores de simultaneidad para puentes de ferrocearril.
-bridge_combination_factors.insert('railway_bridge_wind_persistent_situation', loadCombinations.CombinationFactors(0.75,0.5,0.0))
-bridge_combination_factors.insert('railway_bridge_wind_aster', loadCombinations.CombinationFactors(1.0,0.0,0.0))
-bridge_combination_factors.insert('railway_bridge_thermal', loadCombinations.CombinationFactors(0.6,0.6,0.5))
-bridge_combination_factors.insert('railway_bridge_snow', loadCombinations.CombinationFactors(0.8,0.0,0.0))
-bridge_combination_factors.insert('railway_bridge_construction_loads', loadCombinations.CombinationFactors(1.0,0.0,1.0))
 
 # Importance factors for bridges (See Spanish National Annex AN/UNE-EN 1998-2 clause 2.1(6))
 lessImportantBridgesImportanceFactor= None # Must be fixed by the competent authority.
@@ -126,7 +46,7 @@ specialBridgesImportanceFactor= 1.3
 class BridgeCombGenerator(utils.CombGenerator):
     ''' Generate combinations corresponding to Eurocode 0 (Spanish annex).
 
-    :ivar structureType: structure type (road_bridge or footbridge or railway_bridge or building).
+    :ivar structureType: structure type (road_bridge or footbridge or railway_bridge).
     '''
 
     def __init__(self, structureType= 'road_bridge'):
@@ -134,7 +54,17 @@ class BridgeCombGenerator(utils.CombGenerator):
 
         :param structureType: structure type (road_bridge or footbridge or railway_bridge or building).
         '''
-        super().__init__(combGeneratorName= 'EC0_ES', factors= bridge_factors)
+        factors= loadCombinations.Factors()
+        
+        # Partial safety factors for bridges.
+        partial_safety_factors= factors.getPartialSafetyFactors()
+        ec0_bridges_partial_safety_factors_es._set_bridges_partial_safety_factors(partial_safety_factors)
+
+        # Combination factors for road bridges (table AN.5 (table A2.1) )
+        combination_factors= factors.getCombinationFactors()
+        ec0_bridges_combination_factors_es._set_bridges_combination_factors(combination_factors)
+
+        super().__init__(combGeneratorName= 'EC0_ES', factors= factors)
         self.structureType= structureType
         
     def defSeismicPartialSafetyFactors(self, ulsImportanceFactor, slsImportanceFactor= 0.0):
@@ -459,6 +389,39 @@ class BridgeCombGenerator(utils.CombGenerator):
             lmsg.error(className+'.'+methodName+'; not implemented for context: '+str(context) + ' return None.')
         return retval
         
+    def newLoadOnBackfillAction(self, actionName: str, actionDescription: str, safetyFactorSet:str, dependsOn= None, incompatibleActions= None, context= None, notDeterminant= False):
+        ''' Creates a wind action on bridge and appends it to the combinations
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param safetyFactorSet: identifier of the safety factor set 'A', 'B' or 'C' corresponding to tables Table A2.4(A), Table A2.4(B) or A2.4(C)
+        :param dependsOn: name of another action that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        :param context: context for the action (building, railway_bridge, footbridge,...)
+        :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
+        '''
+        retval= None
+        if(safetyFactorSet=='A'):
+            partialSafetyFactorsName= 'load_on_backfill_set_a'
+        elif(safetyFactorSet=='B'):
+            partialSafetyFactorsName= 'load_on_backfill_set_b'
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= className+'.'+methodName+'; safety factor set: '+str(safetyFactorSet)+' not implemented for railway traffic actions.'
+            lmsg.error(errorMsg)                        
+        if(context=='road_bridge'):
+            retval= self.newAction(family= 'variables', actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'road_bridge_construction', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
+        elif(context=='railway_bridge'):
+            retval= self.newAction(family= 'variables', actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'railway_bridge_construction', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; not implemented for context: '+str(context) + ' return None.')
+            exit(1)
+        return retval
+    
     def newConstructionAction(self, actionName: str, actionDescription: str, safetyFactorSet:str, dependsOn= None, incompatibleActions= None, context= None, notDeterminant= False):
         ''' Creates a wind action on bridge and appends it to the combinations
             generator.
@@ -638,7 +601,8 @@ class BridgeCombGenerator(utils.CombGenerator):
         :param context: context for the action (building, railway_bridge, footbridge,...)
         '''
         code= "seismic_"+str(ulsImportanceFactor)+"_"+str(slsImportanceFactor)
-        if not code in bridges_partial_safety_factors: # Part. sfty fctrs not yet defnd
+        partial_safety_factors= self.getPartialSafetyFactors().getKeys()
+        if not code in partial_safety_factors: # Part. sfty fctrs not yet defnd
             self.defSeismicPartialSafetyFactors(ulsImportanceFactor, slsImportanceFactor)
         return self.newAction(family= "seismic", actionName= actionName, actionDescription= actionDescription, combinationFactorsName= '', partialSafetyFactorsName= code, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
 
@@ -664,3 +628,222 @@ class BridgeCombGenerator(utils.CombGenerator):
         return super().newActionGroup(family= family, actionTuples= actionTuples, partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
     
 bridgeCombGenerator= BridgeCombGenerator()
+
+
+class BuildingCombGenerator(utils.CombGenerator):
+    ''' Generate combinations corresponding to Eurocode 0 (Spanish annex).
+
+    :ivar altitude: altitude of the building roof (meters above sea level).
+    :ivar cen_state: CEN member state.
+    '''
+
+    def __init__(self, altitude:float, cen_state= 'Spain'):
+        ''' Constructor.
+
+        :param altitude: altitude of the roof (meters above sea level).
+        :param cen_state: CEN member state.
+        '''
+        self.altitude= altitude
+        self.cen_state= cen_state
+        factors= loadCombinations.Factors()
+        
+        # Partial safety factors for buildings.
+        partial_safety_factors= factors.getPartialSafetyFactors()
+        ec0_buildings_partial_safety_factors_es._set_buildings_partial_safety_factors(partial_safety_factors)
+
+        # Combination factors for road buildings (table AN.5 (table A2.1) )
+        combination_factors= factors.getCombinationFactors()
+        ec0_buildings_combination_factors_es._set_buildings_combination_factors(combination_factors, altitude= self.altitude, cen_state= self.cen_state)
+        
+        super().__init__(combGeneratorName= 'EC0_ES', factors= factors)
+
+    def getPartialSafetyFactorsName(self, permanent:bool, safetyFactorSet:str, designSituation:str, approach:int= 2):
+        ''' Return the name of the partial safety factors to use in the given
+            condition.
+
+ 
+        :param permanent: if true return the partial safety factors for 
+                          permanent loads otherwise return those corresponding
+                          to variable ones.
+        :param safetyFactorSet: identifier of the safety factor set 'A', 'B' 
+                                or 'C' corresponding to tables Table A1.2(A), 
+                                Table A1.2(B) or A1.2(C)
+        :param designSituation: design situation according to clause AI.3.1: 
+                                'EQU', 'STR', 'GEO' or 'STR/GEO'.
+        :param approach: aproach for the design of structural members involving
+                         geotechnical actions and the resistance of the ground
+                         (footings, piles, basement walls, etc.). See paragraph
+                         (5) of the clause A1.3.1 of Eurocode 0.
+        '''
+        retval= None
+        if(approach!=2):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= className+'.'+methodName+'; design approach: '+str(approach)+' not implemented yet.'
+            lmsg.error(errorMsg)
+            exit(1)
+        if(designSituation=='EQU'):
+            if(safetyFactorSet=='A'):
+                retval= 'permanent_equ_set_a'
+            elif(safetyFactorSet=='B'):
+                retval= 'permanent_equ_set_b'
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errorMsg= className+'.'+methodName+'; safety factor set: '+str(safetyFactorSet)+' not implemented'
+                lmsg.error(errorMsg)
+        elif(designSituation in ['STR', 'GEO', 'STR/GEO']):
+            if(safetyFactorSet=='A'):
+                retval= 'permanent_str/geo_set_a'
+            elif(safetyFactorSet=='B'):
+                retval= 'permanent_str/geo_set_b'
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errorMsg= className+'.'+methodName+'; safety factor set: '+str(safetyFactorSet)+' not implemented'
+                lmsg.error(errorMsg)
+                exit(1)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= className+'.'+methodName+'; design situation: '+str(designSituation)+' not implemented.'
+            lmsg.error(errorMsg)
+            exit(1)
+        if(not permanent):
+            retval= retval.replace('permanent_', 'variable_')
+        return retval
+        
+    def newPermanentAction(self, actionName: str, actionDescription:str, safetyFactorSet:str, designSituation:str, approach:int= 2, dependsOn= None, incompatibleActions= None):
+        ''' Creates a permanent action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param safetyFactorSet: identifier of the safety factor set 'A', 'B' 
+                                or 'C' corresponding to tables Table A1.2(A), 
+                                Table A1.2(B) or A1.2(C)
+        :param designSituation: design situation according to clause AI.3.1: 
+                                'EQU', 'STR', 'GEO' or 'STR/GEO'.
+        :param approach: aproach for the design of structural members involving
+                         geotechnical actions and the resistance of the ground
+                         (footings, piles, basement walls, etc.). See paragraph
+                         (5) of the clause A1.3.1 of Eurocode 0.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+        partialSafetyFactorsName= self.getPartialSafetyFactorsName(permanent= True, safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
+        return self.newAction(family= 'permanent',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+
+    def newImposedLoadAction(self, actionName: str, actionDescription:str, imposedLoadType, safetyFactorSet:str, designSituation:str, approach:int= 2, dependsOn= None, incompatibleActions= None):
+        ''' Creates a wind load action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param imposedLoadType: one of the following types: 'residential',
+                                'office', 'congregation', 'shopping', 'storage',
+                                'ligth_vehicles', 'heavy_vehicles'
+        :param safetyFactorSet: identifier of the safety factor set 'A', 'B' 
+                                or 'C' corresponding to tables Table A1.2(A), 
+                                Table A1.2(B) or A1.2(C)
+        :param designSituation: design situation according to clause AI.3.1: 
+                                'EQU', 'STR', 'GEO' or 'STR/GEO'.
+        :param approach: aproach for the design of structural members involving
+                         geotechnical actions and the resistance of the ground
+                         (footings, piles, basement walls, etc.). See paragraph
+                         (5) of the clause A1.3.1 of Eurocode 0.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+        partialSafetyFactorsName= self.getPartialSafetyFactorsName(permanent= False, safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
+        keys= self.getCombinationFactors().getKeys()
+        for key in keys:
+            if(imposedLoadType in key):
+                combinationFactorsName= key
+            elif(imposedLoadType=='light_vehicles'):
+                combinationFactorsName= 'cat_F_traffic_area_vehicle_weight_leq_30kN'
+            elif(imposedLoadType=='heave_vehicles'):
+                combinationFactorsName= 'cat_G_traffic_area_30kN_lt_vehicle weight_leq_160kN'
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errorMsg= className+'.'+methodName+'; imposed load type: '+str(imposedLoadTypen)+' not implemented.'
+                lmsg.error(errorMsg)
+                exit(1)
+        return self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= combinationFactorsName, partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+    
+    def newWindLoadAction(self, actionName: str, actionDescription:str, safetyFactorSet:str, designSituation:str, approach:int= 2, dependsOn= None, incompatibleActions= None):
+        ''' Creates a wind load action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param safetyFactorSet: identifier of the safety factor set 'A', 'B' 
+                                or 'C' corresponding to tables Table A1.2(A), 
+                                Table A1.2(B) or A1.2(C)
+        :param designSituation: design situation according to clause AI.3.1: 
+                                'EQU', 'STR', 'GEO' or 'STR/GEO'.
+        :param approach: aproach for the design of structural members involving
+                         geotechnical actions and the resistance of the ground
+                         (footings, piles, basement walls, etc.). See paragraph
+                         (5) of the clause A1.3.1 of Eurocode 0.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+        partialSafetyFactorsName= self.getPartialSafetyFactorsName(permanent= False, safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
+        return self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'wind_loads_on_buildings', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+    
+    def newSnowLoadAction(self, actionName: str, actionDescription:str, safetyFactorSet:str, designSituation:str, approach:int= 2, dependsOn= None, incompatibleActions= None):
+        ''' Creates a snow load action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param safetyFactorSet: identifier of the safety factor set 'A', 'B' 
+                                or 'C' corresponding to tables Table A1.2(A), 
+                                Table A1.2(B) or A1.2(C)
+        :param designSituation: design situation according to clause AI.3.1: 
+                                'EQU', 'STR', 'GEO' or 'STR/GEO'.
+        :param approach: aproach for the design of structural members involving
+                         geotechnical actions and the resistance of the ground
+                         (footings, piles, basement walls, etc.). See paragraph
+                         (5) of the clause A1.3.1 of Eurocode 0.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+        partialSafetyFactorsName= self.getPartialSafetyFactorsName(permanent= False, safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
+        return self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'cat_H_snow_loads_on_building_roofs', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+    
+    def newThermalLoadAction(self, actionName: str, actionDescription:str, safetyFactorSet:str, designSituation:str, approach:int= 2, dependsOn= None, incompatibleActions= None):
+        ''' Creates a thermal load action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param safetyFactorSet: identifier of the safety factor set 'A', 'B' 
+                                or 'C' corresponding to tables Table A1.2(A), 
+                                Table A1.2(B) or A1.2(C)
+        :param designSituation: design situation according to clause AI.3.1: 
+                                'EQU', 'STR', 'GEO' or 'STR/GEO'.
+        :param approach: aproach for the design of structural members involving
+                         geotechnical actions and the resistance of the ground
+                         (footings, piles, basement walls, etc.). See paragraph
+                         (5) of the clause A1.3.1 of Eurocode 0.
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+        partialSafetyFactorsName= self.getPartialSafetyFactorsName(permanent= False, safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
+        return self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'temperature_in_buildings', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+
+    def newAccidentalAction(self, actionName: str, actionDescription: str, dependsOn= None, incompatibleActions= None):
+        ''' Creates an accidental action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param dependsOn: name of another action that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        '''
+
+        return self.newAction(family= "accidental", actionName= actionName, actionDescription= actionDescription, combinationFactorsName= '', partialSafetyFactorsName= 'accidentales', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
+    

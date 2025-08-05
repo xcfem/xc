@@ -157,6 +157,7 @@ class_<Ref3d3d , bases<ref_Rect3d3dCooSys> >("Ref3d3d")
  ;
 
 class_<PrincipalAxes2D>("PrincipalAxes2D",init<const Pos2d &,const GEOM_FT &,const GEOM_FT &,const GEOM_FT &>())
+  .add_property("Org", &PrincipalAxes2D::getOrg, "Origin of the principal axes frame.")
   .add_property("I1",  make_function( &PrincipalAxes2D::I1,  return_value_policy<copy_const_reference>() ),"first principal moment of inertia.")
   .add_property("I2",  make_function( &PrincipalAxes2D::I2,  return_value_policy<copy_const_reference>() ),"second principal moment of inertia.")
   .def("getAxis", &PrincipalAxes2D::getAxis,"Returns the reference system corresponding to principal axes.")
@@ -165,6 +166,7 @@ class_<PrincipalAxes2D>("PrincipalAxes2D",init<const Pos2d &,const GEOM_FT &,con
  ;
 
 class_<PrincipalAxes3D>("PrincipalAxes3D",init<const Pos3d &, const GEOM_FT &, const GEOM_FT &, const GEOM_FT &, const GEOM_FT &, const GEOM_FT &, const GEOM_FT &>())
+  .add_property("Org", &PrincipalAxes3D::getOrg, "Origin of the principal axes frame.")
   .add_property("I1",  make_function( &PrincipalAxes3D::I1,  return_value_policy<copy_const_reference>() ),"first principal moment of inertia.")
   .add_property("I2",  make_function( &PrincipalAxes3D::I2,  return_value_policy<copy_const_reference>() ),"second principal moment of inertia.")
   .add_property("I3",  make_function( &PrincipalAxes3D::I3,  return_value_policy<copy_const_reference>() ),"third principal moment of inertia.")

@@ -54,7 +54,7 @@ gammaQ= 1.5 # partial safety factor for variable loads.
 beta= math.radians(15) # angle of the backfill with the horizontal
 ## Partial safety factors for soil.
 gammaMc= 1.25 # partial safety factor for soil cohesion.
-gammaRe= 1.0 # partial safety factor for passive
+gammaRe= 1.0 # partial safety factor for passive earth resistance.
 gammaReFict= gammaRe*gammaG
 
 coluvialSup= earth_pressure.BellSoil(phi= math.radians(15), c= 700*g, beta= beta, rho= 1.8e3, rhoSat= 1.8e3, Kh= 30e6, gammaMc= gammaMc, gammaRe= gammaReFict)

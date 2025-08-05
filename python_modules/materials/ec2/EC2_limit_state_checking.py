@@ -405,6 +405,43 @@ class CrackController(lscb.LimitStateControllerBase):
         s_r_max= self.s_r_max(k2= k2, cover= cover, reinfPhi= reinfPhi, spacing= spacing, ro_eff= ro_eff)
         meanStrainDifference= self.meanStrainDifference(sigma_s= sigma_s, steel= steel, concrete= concrete, ro_eff= ro_eff)
         return meanStrainDifference*s_r_max
+
+    def checkSection(self, sct):
+        ''' Check shear on the section argument.
+
+        :param sct: reinforced concrete section object to check crack on.
+        '''
+        sctCrkProp= lscb.FibSectLSProperties(sct)
+        sctCrkProp.setupStrghCrackDist()
+        sigma_s= sctCrkProp.getMaxReinforcementTensileStress()
+        if(sctCrkProp.eps1<=0): # No tensile strains.
+            s_rmax= 0.0
+            wk= 0.0
+        else:
+            concrete= sctCrkProp.sctProp.getConcreteType()
+            flexuralTensileStrain= concrete.getFlexuralTensileStrain(h= sctCrkProp.h)
+            if(sctCrkProp.eps1<flexuralTensileStrain): # Very small tensile strain => no cracking
+                s_rmax= 0.0
+                wk= 0.0
+            else:
+                hceff= self.EC2_hceff(sctCrkProp.h,sctCrkProp.d,sctCrkProp.x)
+                Aceff= sct.getNetEffectiveConcreteArea(hceff,'tensSetFb',15.0)
+                if(Aceff<=0):
+                    s_rmax= 0.0
+                    wk= 0.0
+                else:
+                    rfSteel= sctCrkProp.sctProp.getReinfSteelType()
+                    k2= self.EC2_k2(sctCrkProp.eps1, sctCrkProp.eps2)
+                    ro_s_eff= sctCrkProp.As/Aceff #effective ratio of reinforcement
+                    s_rmax= self.s_r_max(k2= k2, cover= sctCrkProp.cover, reinfPhi= sctCrkProp.fiEqu, spacing= sctCrkProp.spacing, ro_eff= ro_s_eff)
+                    meanStrainDifference= self.meanStrainDifference(sigma_s= sigma_s, steel= rfSteel, concrete= concrete, ro_eff= ro_s_eff)
+                    wk= meanStrainDifference*s_rmax
+        CF= wk/self.wk_lim # Capacity factor.
+        N= sct.getStressResultantComponent("N")
+        My= sct.getStressResultantComponent("My")
+        Mz= sct.getStressResultantComponent("Mz")
+        sigma_c= sctCrkProp.sigma_c
+        return CF, wk, s_rmax, sigma_s, sigma_c, N, My, Mz
     
     def check(self, elements, loadCombinationName):
         ''' For each element in the 'elememts' container passed as first 
@@ -423,7 +460,7 @@ class CrackController(lscb.LimitStateControllerBase):
 
         :param elements: elements to check.
         :param loadCombinationName: name of the load combination.
-      '''
+        '''
         if(self.verbose):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -432,35 +469,10 @@ class CrackController(lscb.LimitStateControllerBase):
             Aceff=0  #initial  value
             R= e.getResistingForce()
             sct= e.getSection()
-            sctCrkProp= lscb.FibSectLSProperties(sct)
-            sctCrkProp.setupStrghCrackDist()
-            sigma_s= sctCrkProp.getMaxReinforcementTensileStress()
-            if(sctCrkProp.eps1<=0): # No tensile strains.
-                s_rmax= 0.0
-                wk= 0.0
-            else:
-                concrete= sctCrkProp.sctProp.getConcreteType()
-                flexuralTensileStrain= concrete.getFlexuralTensileStrain(h= sctCrkProp.h)
-                if(sctCrkProp.eps1<flexuralTensileStrain): # Very small tensile strain => no cracking
-                    s_rmax= 0.0
-                    wk= 0.0
-                else:
-                    hceff= self.EC2_hceff(sctCrkProp.h,sctCrkProp.d,sctCrkProp.x)
-                    Aceff= sct.getNetEffectiveConcreteArea(hceff,'tensSetFb',15.0)
-                    if(Aceff<=0):
-                        s_rmax= 0.0
-                        wk= 0.0
-                    else:
-                        rfSteel= sctCrkProp.sctProp.getReinfSteelType()
-                        k2= self.EC2_k2(sctCrkProp.eps1, sctCrkProp.eps2)
-                        ro_s_eff= sctCrkProp.As/Aceff #effective ratio of reinforcement
-                        s_rmax= self.s_r_max(k2= k2, cover= sctCrkProp.cover, reinfPhi= sctCrkProp.fiEqu, spacing= sctCrkProp.spacing, ro_eff= ro_s_eff)
-                        meanStrainDifference= self.meanStrainDifference(sigma_s= sigma_s, steel= rfSteel, concrete= concrete, ro_eff= ro_s_eff)
-                        wk= meanStrainDifference*s_rmax
+            cf, wk, s_rmax, sigma_s, sigma_c, N, My, Mz= self.checkSection(sct)
             if(wk>=e.getProp(self.limitStateLabel).wk):
-                CF= wk/self.wk_lim # Capacity factor.
-                sigma_c= sctCrkProp.sigma_c
-                e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp('idSection'), combName=loadCombinationName, N=-R[0], My=-R[4], Mz=-R[5], s_rmax= s_rmax, sigma_s= sigma_s, sigma_c= sigma_c, wk= wk, CF= CF))
+                CF= cf
+                e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp('idSection'), combName=loadCombinationName, N= N, My= My, Mz= Mz, s_rmax= s_rmax, sigma_s= sigma_s, sigma_c= sigma_c, wk= wk, CF= CF))
 
 class CrackStraightController(CrackController):
     ''' Object that verifies the cracking serviceability limit state according 
@@ -544,7 +556,7 @@ class CrackStraightController(CrackController):
                 e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp('idSection'),combName=loadCombinationName,N=-R[0],My=-R[4],Mz=-R[5],s_rmax=srmax,eps_sm=eps_sm,wk=wk))
 
 class CrackControlLimitStateData(lsd.CrackControlRCLimitStateData):
-    ''' EHE crack control limit state data.'''
+    ''' EC2 crack control limit state data.'''
         
     def getController(self, wk_lim= 0.3e-3, k1= 0.8, shortTermLoading= False, solutionProcedureType= None):
         ''' Return a controller corresponding to this limit state.
@@ -653,6 +665,7 @@ class EC2RebarFamily(rf.RebarFamily):
         :param concreteCover: concrete cover of the bars.
         :param pos: reinforcement position according to clause 66.5.1
                    of EC2.
+        :param nationalAnnex: identifier of the national annex.
         '''
         super(EC2RebarFamily,self).__init__(steel,diam,spacing,concreteCover)
         self.pos= pos
@@ -807,6 +820,26 @@ class EC2RebarFamily(rf.RebarFamily):
         retval=max(20e-3,self.diam,maxAggrSize+5e-3)
         return retval
 
+def get_rebar_family_from_reinf_row(reinfRow, steel, pos, nationalAnnex):
+    ''' Return a EC2RebarFamily object from the given 
+        def_simple_RC_section.ReinfRow object.
+
+    :param reinfRow: def_simple_RC_section.ReinfRow object.
+    :param steel: reinforcing steel material.
+    :param pos: reinforcement position according to clause 66.5.1
+                of EC2.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    steel= steel # reinforcing steel material.
+    diam= reinfRow.rebarsDiam # diameter of the bars.
+    spacing= reinfRow.rebarsSpacing # spacing of the bars.
+    concreteCover= reinfRow.cover # concrete cover of the bars.
+    pos= pos # reinforcement position according to clause 66.5.1
+             # of EC2.
+    nationalAnnex= nationalAnnex # identifier of the national annex.
+    
+    return EC2RebarFamily(steel= steel, diam= diam, spacing= spacing, concreteCover= concreteCover, pos= pos, nationalAnnex= nationalAnnex)    
+
 
 def define_rebar_families(steel, cover, diameters= [8e-3, 10e-3, 12e-3, 14e-3, 16e-3, 20e-3, 25e-3, 32e-3], spacings= [0.1, 0.15, 0.2]):
     ''' Creates a dictionary with predefined rebar families.
@@ -894,7 +927,7 @@ def getWebStrutAngleForSimultaneousCollapse(concrete, bw, s, Asw, shearReinfStee
     # nu1: strength reduction factor for concrete cracked in shear
     nu= concrete.getShearStrengthReductionFactor(nationalAnnex)
     fcd= -concrete.fcd() # design value of concrete compressive strength (MPa).
-    fywd= shearReinfSteel.fyd() # design yield strength of the shear reinforcement
+    fywd= min(shearReinfSteel.fyd(), 400e6) # design yield strength of the shear reinforcement
     ratio= (bw*s*nu*fcd)/(Asw*fywd*math.sin(shearReinfAngle))
     if(ratio<1):
         methodName= sys._getframe(0).f_code.co_name
@@ -945,7 +978,7 @@ def getMaximumEffectiveShearReinforcement(concrete, NEd, Ac, bw, s, shearReinfSt
     # nu1: strength reduction factor for concrete cracked in shear
     nu1= concrete.getShearStrengthReductionFactor(nationalAnnex)
     fcd= -concrete.fcd() # design value of concrete compressive strength (MPa).
-    fywd= shearReinfSteel.fyd()
+    fywd= min(shearReinfSteel.fyd(), 400e6)
     return 0.5*alpha_cw*nu1*fcd/fywd*bw*s
 
 def getWebStrutAngleLimits(nationalAnnex= None):
@@ -983,7 +1016,7 @@ def checkWebStrutAngleLimits(webStrutAngle, nationalAnnex= None):
         lmsg.warning(errString)
     return retval
 
-def getShearResistanceShearReinf(concrete, NEd, Ac, bw, Asw, s, z, shearReinfSteel, shearReinfAngle= math.pi/2.0, webStrutAngle= math.pi/4.0, nationalAnnex= None):
+def get_shear_resistance_shear_reinf(concrete, NEd, Ac, bw, Asw, s, z, shearReinfSteel, shearReinfAngle= math.pi/2.0, webStrutAngle= math.pi/4.0, nationalAnnex= None, circular= False):
     ''' Return the design value of the shear resistance VRds for shear 
         reinforced members according to expressions 6.7N, 6.13 and 6.14 of
         EC2:2004.
@@ -999,14 +1032,19 @@ def getShearResistanceShearReinf(concrete, NEd, Ac, bw, Asw, s, z, shearReinfSte
     :param shearReinfAngle: (alpha) angle between shear reinforcement and the beam axis perpendicular to the shear force.
     :param webStrutAngle: (theta) angle between the concrete compression web strut and the beam axis perpendicular to the shear force.
     :param nationalAnnex: identifier of the national annex.
+    :param circular: if true we reduce the efectiveness of the shear 
+                     reinforcement due to the transverse inclination of its
+                     elements.
     '''
     webStrutAngle= checkWebStrutAngleLimits(webStrutAngle, nationalAnnex)
     cotgTheta= 1/math.tan(webStrutAngle)
     cotgAlpha= 1/math.tan(shearReinfAngle)
     sinAlpha= math.sin(shearReinfAngle)
-    fywd= shearReinfSteel.fyd()
+    fywd= min(shearReinfSteel.fyd(), 400e6)
     cotgThetaPluscotgAlpha= cotgTheta+cotgAlpha
     VRds= Asw/s*z*fywd*cotgThetaPluscotgAlpha*sinAlpha
+    if(circular):
+        VRds*= 0.85
     # nu1: strength reduction factor for concrete cracked in shear
     nu1= concrete.getShearStrengthReductionFactor(nationalAnnex)
     
@@ -1349,7 +1387,7 @@ normalStressesResistance= NormalStressesLimitStateData()
 
 # Shear checking.
 class ShearController(lscb.ShearControllerBase):
-    '''Shear control according to EHE-08.'''
+    '''Shear control according to EC2.'''
 
     ControlVars= cv.RCShearControlVars
     def __init__(self, limitStateLabel, solutionProcedureType= lscb.defaultStaticNonLinearSolutionProcedure, nationalAnnex= None):
@@ -1485,8 +1523,7 @@ class ShearController(lscb.ShearControllerBase):
                           reinforcement due to the transverse inclination of
                           its elements.
         '''
-        Ac= rcSets.getConcreteArea(1) # Ac
-        self.strutWidth= scc.getCompressedStrutWidth() # b0
+        Ac= self.getConcreteArea(scc= scc) # bw*d 
         isBending= scc.isSubjectedToBending(0.1)
         if(isBending):
             self.innerLeverArm= scc.getMechanicLeverArm() # z
@@ -1496,7 +1533,7 @@ class ShearController(lscb.ShearControllerBase):
             # reach. Anyway, we return a safe estimation of the lever arm.
             sectionDepth= Ac/self.strutWidth
             self.innerLeverArm= 0.7*sectionDepth
-        return getShearResistanceShearReinf(concrete= concrete, NEd= Nd, Ac= Ac, bw= self.strutWidth, Asw= self.Asw, s= self.stirrupSpacing, z= self.innerLeverArm, shearReinfSteel= reinfSteel, shearReinfAngle= self.alpha, webStrutAngle= math.pi/4.0, nationalAnnex= self.nationalAnnex)
+        return get_shear_resistance_shear_reinf(concrete= concrete, NEd= Nd, Ac= Ac, bw= self.strutWidth, Asw= self.Asw, s= self.stirrupSpacing, z= self.innerLeverArm, shearReinfSteel= reinfSteel, shearReinfAngle= self.alpha, webStrutAngle= math.pi/4.0, nationalAnnex= self.nationalAnnex, circular= circular)
 
     def getShearStrength(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
         ''' Compute the shear strength at failure WITH or WITHIOUT shear 
@@ -2000,4 +2037,212 @@ def compute_punching_shear_beta(punchingPos, criticalPerimeterForces, criticalCo
         warningMessage+= '  beta= {:2f}'.format(retval)
         lmsg.warning(warningMessage)
     return retval
+
+class TorsionParameters(object):
+    '''Methods for checking reinforced concrete section under torsion 
+       according to clause 6.3.2 of EN 1992-1-1:2004.
+
+    :ivar t0: Actual thickness of the section wall in the case of hollow 
+              sections.
+    :ivar c: Covering of longitudinal reinforcements.
+
+    :ivar crossSectionContour: Cross section contour.
+    :ivar midLine: Polygon defined by the midline of the effective hollow 
+                   section.
+    :ivar intLine: Polygon defined by the interior contour of the effective 
+                   hollow section.
+    :ivar effectiveHollowSection: Effective hollow section contour.
+    '''
+    def __init__(self, c= 0.0, t0= None, crossSectionContour= None, midLine= None, intLine= None):
+        ''' Constructor.
+
+        :param t0: Actual thickness of the section wall in the case of hollow 
+                   sections.
+        :param c: Cover of longitudinal reinforcements.
+
+        :param crossSectionContour: Cross section contour.
+        :param midLine: Polygon defined by the midline of the effective hollow 
+                        section.
+        :param intLine: Polygon defined by the interior contour of the effective
+                        hollow section.
+        '''
+        self.t0= t0 # Actual thickness of the sectin wall in the case
+                    # of hollow sections.
+        self.c= c # Cover of longitudinal reinforcements.
+        # Cross section contour.
+        if(crossSectionContour):
+            self.crossSectionContour= crossSectionContour
+        else:
+            self.crossSectionContour= geom.Polygon2d()
+        # Polygon defined by the midline of the effective hollow section.
+        if(midLine):
+            self.midLine= geom.Polygon2d()
+        # Polygon defined by the interior contour of the effective hollow
+        # section.
+        if(intLine):
+            self.intLine= intLine
+        else:
+            self.intLine=  geom.Polygon2d() 
+        self.effectiveHollowSection= geom.PolygonWithHoles2d() # Effective hollow section contour
+        if(crossSectionContour):
+            self.effectiveHollowSection.contour(self.crossSectionContour)
+        if(intLine):
+            self.effectiveHollowSection.addHole(self.intLine)
+        
+    def A(self):
+        '''Return the area of the transverse section inscribed in the 
+           external perimeter including inner void areas.
+        '''
+        return self.crossSectionContour.getArea()
     
+    def u(self):
+        '''Return the outer perimeter of the transverse section.
+        '''
+        return self.crossSectionContour.getPerimeter()
+    
+    def tef(self):
+        '''Return the effective thickness of the wall of the design section
+           according to figure 6.11.
+        '''
+        retval= self.A()/self.u()
+        # If hollow section, not more then the true thickness.
+        if(self.t0 is not None):
+            retval= min(retval,self.t0)
+        # Not less than twice the cover.
+        retval= max(2*self.c, retval)
+        return retval
+    
+    def Ak(self):
+        '''Return the area enclosed by the middle line of the design 
+           effective hollow section (see figure 6.11 of EC2).
+        '''
+        return self.midLine.getArea()
+    
+    def uk(self):
+        '''Return the perimeter of the middle line in the design effective 
+           hollow section Ak.
+        '''
+        return self.midLine.getPerimeter()
+    
+def compute_effective_hollow_section_parameters(sectionGeometry, c, t0= None):
+    '''Computes the parameters for torsion analysis of an
+     effective hollow section according to clause 45.2.1
+     of EC2. Not valid for non-convex sections.
+
+    :param sectionGeometry: section geometry.
+    :param c: cover of longitudinal reinforcement.
+    :param t0: if not None, actual thickness of the wall for hollow sections.
+    '''
+    retval= TorsionParameters()
+    retval.t0= t0
+    retval.c= c
+    retval.crossSectionContour= sectionGeometry.getRegionsContour()
+    tef= retval.tef() # effective thickness.
+    retval.midLine= retval.crossSectionContour.offset(-tef/2) # mid-line
+    retval.intLine= retval.crossSectionContour.offset(-tef) # internal line
+    retval.effectiveHollowSection.contour(retval.crossSectionContour)
+    retval.effectiveHollowSection.addHole(retval.intLine)
+    return retval
+
+def compute_effective_hollow_section_parameters_rc_section(rcSection):
+    '''Computes the parameters for torsion analysis of an
+     effective hollow section according to clause 45.2.1
+     of EHE-08.
+
+    :param rcSection: reinforced concrete section
+    '''
+    t0= rcSection.getTorsionalThickness()
+    return compute_effective_hollow_section_parameters(rcSection.geomSection, c= rcSection.minCover, t0= t0)
+
+class TorsionController(lscb.ShearControllerBase):
+    '''Torsion strength control according to clause 6.3 of EC2:2004.
+
+    :ivar TRd_max: design torsional resistance moment according to expression
+                   (6.30) of EC2:2004.
+    '''
+    
+    def __init__(self, limitStateLabel, solutionProcedureType= lscb.defaultStaticNonLinearSolutionProcedure):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
+        '''
+        super(TorsionController,self).__init__(limitStateLabel= limitStateLabel, fakeSection= False, solutionProcedureType= solutionProcedureType)
+
+        self.TRd_max= 0.0 # design torsional resistance moment according to
+                          # to expression (6.30) of EC2:2004.
+
+    def calcTRd_max(self, rcSection, NEd, Ac, Ak, tef, nationalAnnex= None):
+        ''' Return the design torsional resistance moment according to
+            to expression (6.30) of EC2:2004.
+
+        :param rcSection: reinforced concrete section.
+        :param NEd: design value of axial force in concrete only (positive if 
+                    in tension).
+        :param Ac: area of concrete cross-section. 
+        :param Ak: Area enclosed by the middle line of the design effective 
+                   hollow section (figure 6.11).
+        :param tef: effective thickness of the wall of the design section.
+        :param nationalAnnex: identifier of the national annex.
+        '''
+        concrete= rcSection.getConcreteType()
+        fcd= -concrete.fcd()
+        # nu: strength reduction factor for concrete cracked in shear
+        nu= concrete.getShearStrengthReductionFactor(nationalAnnex)
+        # alpha_cw: coefficient taking account of the state of the stress in the compression chord.
+        alpha_cw= concrete.getAlphaCw(NEd, Ac, nationalAnnex)
+        # angle of compression struts (see Figure 6.5).
+        theta= rcSection.torsionReinf.angThetaConcrStruts
+        return 2.0*nu*alpha_cw*fcd*Ak*tef*math.sin(theta)*math.cos(theta)
+
+    def calcTrdc(self,  rcSection, Ak:float, tef:float):
+        ''' Compute the torsional moment strength of the section without 
+            torsional reinforcement.
+
+        :param rcSection: reinforced concrete section.
+        :param Ak: Area enclosed by the middle line of the design effective 
+                   hollow section (figure 6.11).
+        :param tef: effective thickness of the wall of the design section.
+        '''
+        concrete= rcSection.getConcreteType()
+        fctd= concrete.fctd() # concrete design tensile strength.
+        return 2*Ak*fctd*tef
+        
+    def calcTasl_max(self, rcSection, Ak:float, uk:float):
+        ''' Compute the maximum torsional strength with the amount of torsional
+            longitudinal reinforcement arranged in the section.
+
+        :param rcSection: reinforced concrete section.
+        :param Ak: Area enclosed by the middle line of the design effective 
+                   hollow section (figure 6.11).
+        :param uk: perimeter of the middle line in the design effective 
+                   hollow section Ak.
+        '''
+        steel= rcSection.getReinfSteelType()
+        fy1d= min(steel.fyd(), 400e6)
+        theta= rcSection.torsionReinf.angThetaConcrStruts
+        return 2*Ak*rcSection.torsionReinf.A1/uk*fy1d*math.tan(theta)
+    
+    def calcTasw_max(self, rcSection, Ak:float):
+        ''' Compute the torsional stress which longitudinal reinforcements can 
+            resist according to expression (6.28) of EC2.
+
+        :param rcSection: reinforced concrete section.
+        :param Ak: Area enclosed by the middle line of the design effective 
+                   hollow section (figure 6.11).
+        '''
+        steel= rcSection.getReinfSteelType()
+        fytd= min(steel.fyd(), 400e6)
+        theta= rcSection.torsionReinf.angThetaConcrStruts
+        return 2*Ak*rcSection.torsionReinf.getAs()*fytd/math.tan(theta)
+
+class TorsionResistanceLimitStateData(lsd.TorsionResistanceRCLimitStateData):
+    ''' Reinforced concrete torsion strength limit state data.'''
+
+    def getController(self):
+        ''' Return a controller corresponding to this limit state.
+        '''
+        return TorsionController(self.label)
+    
+torsionResistance= TorsionResistanceLimitStateData()

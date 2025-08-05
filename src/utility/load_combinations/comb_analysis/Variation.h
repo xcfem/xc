@@ -43,6 +43,7 @@ class Variation: public std::vector<double>
     static Variation concat(const Variation &a,const Variation &b);
     bool compatible(const ActionWrapperList &lvr);
     friend std::ostream &operator<<(std::ostream &os,const Variation &v);
+    void zero(void);
   };
 
 std::ostream &operator<<(std::ostream &os,const Variation &v);

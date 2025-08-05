@@ -41,6 +41,8 @@ class PrincipalAxes2D
     PrincipalAxes2D(void);
     PrincipalAxes2D(const Pos2d &, const double A[2][2]);
     PrincipalAxes2D(const Pos2d &,const GEOM_FT &,const GEOM_FT &,const GEOM_FT &);
+    inline Pos2d getOrg(void) const
+      { return center_of_mass; }
     Ref2d2d getAxis(void) const;
     const GEOM_FT &I1() const;
     const GEOM_FT &I2() const;

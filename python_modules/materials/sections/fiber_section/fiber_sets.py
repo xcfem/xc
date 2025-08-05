@@ -6,6 +6,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "ana.ortega@ciccp.es"
 
+import sys
+from misc_utils import log_messages as lmsg
+
 
 class FiberSet:
     '''This class constructs a set of all the  fibers made of the same material
@@ -18,14 +21,30 @@ class FiberSet:
     '''
     fSet= None
 
-    def __init__(self,scc,setName,matTag):
+    def __init__(self, scc, setName, matTag):
+        ''' Constructor.
+
+        :param scc: fiber section.
+        :param setName: name for the new set.
+        :param matTag: identifier of the material.
+        '''
         fiberSets= scc.getFiberSets()
         self.fSet= fiberSets.create(setName)
         fibras= scc.getFibers()
         for f in fibras:
             if(f.getMaterial().tag==matTag):
                 self.fSet.insert(f)
-        self.fSet.updateCenterOfMass()
+        if(self.fSet.empty()):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= '; section: '+str(scc.name)
+            errMsg+= ' has no fibers of material: '+str(matTag)
+            errMsg+= ' the set named: '+str(setName)
+            errMsg+= ' is empty.'
+            lmsg.error(className+'.'+methodName+errMsg)
+        else:
+            self.fSet.updateCenterOfMass()
+        
     def getFiberWithMinStrain(self):
         '''returns the fiber with the minimum strain from the set of fibers
         '''
@@ -37,6 +56,7 @@ class FiberSet:
                 retval= f
                 epsMin= eps
         return retval
+    
     def getFiberWithMaxStrain(self):
         '''returns the fiber with the maximum strain from the set of fibers
         '''

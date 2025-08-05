@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-from __future__ import division
 '''Test for checking the deflections in a prestressed concrete beam.
 Data for the problem and approximate calculation are taken from 
 Example 4.1 of the topic 4 of course "Prestressed Concrete Design 
@@ -14,6 +12,9 @@ Determine the midspan deflection of a beam:
 reduced to 4500 kN. 
 Take self weight of beam = 11.26 kN/m; I =0.06396m4 ; E = 28 x 10^6 kN/m2
 '''
+
+from __future__ import print_function
+from __future__ import division
 
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2019, AO_O"

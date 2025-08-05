@@ -26,30 +26,29 @@ concrete= typical_materials.defElasticMaterial(preprocessor, 'concrete',Ec)
 sectionGeometryTest= preprocessor.getMaterialHandler.newSectionGeometry("sectionGeometryTest")
 regions= sectionGeometryTest.getRegions
 concrete= regions.newQuadRegion('concrete')
+sectionWidth= 1.0
+sectionHeight= 1.0
 concrete.pMin= geom.Pos2d(0.0,0.0)
-concrete.pMax= geom.Pos2d(1.0,1.0)
+concrete.pMax= geom.Pos2d(sectionWidth, sectionHeight)
 
-pt= EHE_limit_state_checking.computeEffectiveHollowSectionParameters(sectionGeometryTest,0.5,0.03)
+h0= None # if not None, actual thickness of the wall for hollow sections.
+cover= .03 # cover of longitudinal reinforcement.
+pt= EHE_limit_state_checking.compute_effective_hollow_section_parameters(sectionGeometryTest, c= cover, h0= h0)
 
 
-ratio1= (pt.A()-1)
-ratio2= (pt.u()-4)/4
-ratio3= (pt.he()-0.25)/0.25
-ratio4= (pt.Ae()-(0.75**2))/(0.75**2)
-ratio5= (pt.ue()-3)/3
+ratio1= abs(pt.A()-1)
+ratio2= abs(pt.u()-4)/4
+ratio3= abs(pt.he()-0.25)/0.25
+ratio4= abs(pt.Ae()-(0.75**2))/(0.75**2)
+ratio5= abs(pt.ue()-3)/3
 
 ''' 
-    print("A= ",A)
-    print("u= ",u)
-    print("he= ",he)
-    print("Ae= ",Ae)
-    print("ue= ",ue)
     print("ratio1= ",ratio1)
     print("ratio2= ",ratio2)
     print("ratio3= ",ratio3)
     print("ratio4= ",ratio4)
     print("ratio5= ",ratio5)
-   '''
+'''
 
 
 import os

@@ -326,7 +326,6 @@ void XC::Preprocessor::resetLoadCase(void)
                 << Color::def << std::endl;
   }
 
-
 //! @brief Delete all preprocessor entities.
 void XC::Preprocessor::clearAll(void)
   {

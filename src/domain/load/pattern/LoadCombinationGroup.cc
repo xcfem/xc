@@ -92,9 +92,10 @@ bool XC::LoadCombinationGroup::remove(const std::string &comb_code)
 	retval= true;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; load combination: '" 
-                << comb_code << "' not found." << std::endl;
+                << comb_code << "' not found."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -105,9 +106,10 @@ void XC::LoadCombinationGroup::addToDomain(const std::string &comb_code)
     if(comb)
       getDomain()->addLoadCombination(comb);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; load combination: '" 
-                << comb_code << "' not found." << std::endl;
+                << comb_code << "' not found."
+		<< Color::def << std::endl;
   }
 
 //! @brief Removes the combination from the domain.
@@ -117,9 +119,10 @@ void XC::LoadCombinationGroup::removeFromDomain(const std::string &comb_code)
     if(comb)
       getDomain()->removeLoadCombination(comb);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; load combination: '" 
-                << comb_code << "' not found." << std::endl;
+                << comb_code << "' not found."
+		<< Color::def << std::endl;
   }
 
 //! @brief Remomves all the load combinations from the domain.
@@ -136,15 +139,17 @@ XC::LoadCombination *XC::LoadCombinationGroup::newLoadCombination(const std::str
     LoadCombination *comb= find_combination(code);
     if(comb) //Load combination already exists.
       {
-        std::clog << getClassName() << "::" << __FUNCTION__
+        std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	          << "; load combination: " << code
-                  << " already exists, will be redefined." << std::endl;
+                  << " already exists, will be redefined."
+		  << Color::def << std::endl;
         bool ok= comb->setDescomp(descomp);
 	if(!ok)
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; when redefining load combination: " << code
                       << " definition: '"
-	              << descomp << "' was incorrect." << std::endl;
+	              << descomp << "' was incorrect."
+		      << Color::def << std::endl;
       }
     else //New combination
       {
@@ -158,20 +163,22 @@ XC::LoadCombination *XC::LoadCombinationGroup::newLoadCombination(const std::str
                 (*this)[comb->getName()]= comb;
 	    else
 	      {
-	        std::cerr << getClassName() << "::" << __FUNCTION__
+	        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		          << "; could not create load combination: " << code
                           << " definition: '"
-	                  << descomp << "' was incorrect." << std::endl;
+	                  << descomp << "' was incorrect."
+			  << Color::def << std::endl;
 		delete comb;
 		comb= nullptr;
 	      }
           }
 	else
 	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; could not create load combination: " << code
                       << " defined as: '"
-	              << descomp << "'." << std::endl;
+	              << descomp << "'."
+		      << Color::def << std::endl;
 	  }
       }
     return comb;
@@ -283,7 +290,9 @@ int XC::LoadCombinationGroup::sendSelf(Communicator &comm)
     const int dataTag= getDbTag(comm);
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "LoadCombinationGroup::sendSelf() - failed to send data.\n";    
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data."
+	        << Color::def << std::endl;    
     return res;
   }
 
@@ -299,7 +308,9 @@ int XC::LoadCombinationGroup::recvSelf(const Communicator &comm)
         const int dataTag= getDbTag();
         res= comm.receiveIdData(getDbTagData(),dataTag);
         if(res<0)
-          std::cerr << "LoadCombinationGroup::recvSelf() - data could not be received.\n" ;
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; data could not be received."
+		    << Color::def << std::endl;
         else
           res+= recvData(comm);
       }

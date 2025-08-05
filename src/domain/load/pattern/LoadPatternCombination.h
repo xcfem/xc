@@ -132,8 +132,7 @@ class LoadPatternCombination: public ForceReprComponent
       { return descomp.end(); }
     size_t size(void) const
       { return descomp.size(); }
-    bool empty(void) const
-      { return descomp.empty(); }
+    bool empty(void) const;
 
     std::string getString(const std::string &fmt= "") const;
     boost::python::dict getPyDict(void) const;

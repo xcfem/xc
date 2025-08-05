@@ -227,6 +227,15 @@ bool XC::LoadPattern::isActive(void) const
     return retval;
   }
 
+//! @brief Returns true if there is no loads nor constraints.
+bool XC::LoadPattern::empty(void) const
+  {
+    bool retval= NodeLocker::empty();
+    if(retval)
+      retval= theLoads.empty();
+    return retval;
+  }
+
 //! @brief Adds the nodal load being passed as parameter.
 bool XC::LoadPattern::addNodalLoad(NodalLoad *load)
   {

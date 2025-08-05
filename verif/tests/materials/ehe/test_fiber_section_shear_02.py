@@ -83,7 +83,7 @@ analOk= analysis.analyze(10)
 limitState= EHE_limit_state_checking.shearResistance
 shearController= limitState.getController()
 
-secHAParamsTorsion= EHE_limit_state_checking.computeEffectiveHollowSectionParametersRCSection(section)
+secHAParamsTorsion= EHE_limit_state_checking.compute_effective_hollow_section_parameters_rc_section(section)
 
 scc= zlElement.getSection()
 shearCF= shearController.checkSection(sct= scc, elementDimension= zlElement.getDimension, torsionParameters= secHAParamsTorsion)

@@ -120,9 +120,9 @@ def get_peak_velocity_pressure(terrainCategory:str, vb, z, zMax= 200.0, rho= 1.2
     vm= Cr*c0*vb
     Iv= get_turbulence_intensity(terrainCategory= terrainCategory, z= z, k1= k1, c0= c0)
     return (1+7*Iv)*0.5*rho*vm**2
-    
-def get_rectangular_wall_peak_velocity_pressure_distribution(b, h, terrainCategory:str, vb, zMax= 200.0, rho= 1.25, k1= 1.0, c0= 1.0, factor= 1.0):
-    ''' Return the peak velocity pressure distribution of a rectangular wall
+
+def get_rectangular_wall_peak_velocity_pressure_data(b, h, terrainCategory:str, vb, zMax= 200.0, rho= 1.25, k1= 1.0, c0= 1.0, factor= 1.0):
+    ''' Return the peak velocity pressure values along a rectangular wall
         of a rectangular plan building according to figure 7.4 of 
         EN 1991-1-4:2005.
 
@@ -149,6 +149,25 @@ def get_rectangular_wall_peak_velocity_pressure_distribution(b, h, terrainCatego
         qpb= get_peak_velocity_pressure(terrainCategory= terrainCategory, vb= vb, z= b, zMax= zMax, rho= rho, k1= k1, c0= c0)
         zi= [0, b, h-b, h]
         pi= [qpb*factor, qpb*factor, qph*factor, qph*factor]
+    return pi, zi
+
+
+def get_rectangular_wall_peak_velocity_pressure_distribution(b, h, terrainCategory:str, vb, zMax= 200.0, rho= 1.25, k1= 1.0, c0= 1.0, factor= 1.0):
+    ''' Return the peak velocity pressure distribution of a rectangular wall
+        of a rectangular plan building according to figure 7.4 of 
+        EN 1991-1-4:2005.
+
+    :param b: wall width.
+    :param h: wall height.
+    :param terrainCategory: terrain category.
+    :param vb: basic wind velocity.
+    :param zMax: maximum height according to clause 4.3.2 of EN 1991-1-4:2005.
+    :param rho: air density.
+    :param k1: turbulence factor.
+    :param c0: orography factor.
+    :param factor: factor multiplying the returned pressures.
+    '''
+    pi, zi= get_rectangular_wall_peak_velocity_pressure_data(b= b, h= h, terrainCategory= terrainCategory, vb= vb, zMax= zMax, rho= rho, k1= k1, c0= c0, factor= factor)
     return scipy.interpolate.interp1d(zi, pi, kind='linear'), zi
 
 def get_exposure_factor(terrainCategory:str, vb, z, zMax= 200.0, rho= 1.25, k1= 1.0, c0= 1.0):
@@ -242,8 +261,8 @@ def get_vertical_pressure(terrainCategory:str, b:float, dtotVP:float, z:float, v
     cfz= get_bridge_deck_vertical_force_coefficient(b= b, dtotVP= dtotVP, alpha= alpha, beta= beta)
     return (qp*-cfz, qp*cfz)
 
-def get_vertical_pressure_distribution(terrainCategory:str, x0: float, x1: float, dtotVP:float, z:float, vb:float, zMax= 200.0, rho= 1.25, k1:float= 1.0, c0:float= 1.0, alpha= math.radians(10), beta= 0.0):
-    ''' Return the vertical pressure distribution over a bridge deck, so 
+def get_vertical_pressure_data(terrainCategory:str, x0: float, x1: float, dtotVP:float, z:float, vb:float, zMax= 200.0, rho= 1.25, k1:float= 1.0, c0:float= 1.0, alpha= math.radians(10), beta= 0.0):
+    ''' Return the vertical pressure data over a bridge deck, so 
         the resultant force has a horizontal eccentricity of a quarter 
         of the deck width.
 
@@ -270,8 +289,33 @@ def get_vertical_pressure_distribution(terrainCategory:str, x0: float, x1: float
     (a,b)= base_wind.getLinearDistribution(h= b, hR= 0.75*b)
     xi= [x0, x1]
     y0i= [averagePressure[0]*a, averagePressure[0]*b]
-    pressureDistrib0= scipy.interpolate.interp1d(xi, y0i, kind='linear')
     y1i= [averagePressure[1]*a, averagePressure[1]*b]
+    return y0i, y1i, xi
+
+def get_vertical_pressure_distribution(terrainCategory:str, x0: float, x1: float, dtotVP:float, z:float, vb:float, zMax= 200.0, rho= 1.25, k1:float= 1.0, c0:float= 1.0, alpha= math.radians(10), beta= 0.0):
+    ''' Return the vertical pressure distribution over a bridge deck, so 
+        the resultant force has a horizontal eccentricity of a quarter 
+        of the deck width.
+
+    :param terrainCategory: terrain category according to clause 4.2.2 
+                            of IAP-11.
+    :param x0: leftmost point of the deck.
+    :param x1: rigthmost point of the deck.
+    :param dtotVP: sum of the projected (windward) depth of the structure. Here
+                 d_tot must be computed disregarding the traffic and any 
+                 bridge equipment (see NOTE 1 in clause 8.3.3 of 
+                 EN 1991-1-4:2005.
+    :param z: Height above ground surface.
+    :param vb: basic wind velocity.
+    :param zMax: maximum height according to clause 4.3.2 of EN 1991-1-4:2005.
+    :param rho: density of air (defaults to 1.25 kg/m3).
+    :param k1: turbulence factor.
+    :param c0: orography factor.
+    :parma alpha: angle of the wind with the horizontal (see figure 8.6 of EN 1991-1-4:2005).
+    :param beta: superelevation of the bridge deck (see figure 8.6 of EN 1991-1-4:2005).
+    '''
+    y0i, y1i, xi= get_vertical_pressure_data(terrainCategory= terrainCategory, x0= x0, x1= x1, dtotVP= dtotVP, z= z, vb=vb, zMax= zMax, rho= rho, k1= k1, c0= c0, alpha= alpha, beta= beta)
+    pressureDistrib0= scipy.interpolate.interp1d(xi, y0i, kind='linear')
     pressureDistrib1= scipy.interpolate.interp1d(xi, y1i, kind='linear')
     return (pressureDistrib0, pressureDistrib1)
 
@@ -378,6 +422,27 @@ def get_rectangular_section_force_coefficient(d, b, l, r= 0.0, solidityRatio= 1.
 
     return cf0*psi_r*psi_l
 
+def get_rectangular_prism_pressure_data(d, b, h, terrainCategory:str, vb, zMax= 200.0, rho= 1.25, k1= 1.0, c0= 1.0, cscd= 1.0, r= 0.0):
+    ''' Return the wind pressure values along a rectangular prism according to
+        EN 1991-1-4:2005.
+
+    :param d: length of the section (parallel to wind direction).
+    :param b: width of the prism (perpendicular to wind direction).
+    :param h: prism height.
+    :param terrainCategory: terrain category.
+    :param vb: basic wind velocity.
+    :param zMax: maximum height according to clause 4.3.2 of EN 1991-1-4:2005.
+    :param rho: air density.
+    :param k1: turbulence factor.
+    :param c0: orography factor.
+    :param cscd: structural factor.
+    :param r: radius of the corners.
+    '''
+    cf= get_rectangular_section_force_coefficient(d= d, b= b, l= h, r= r, solidityRatio= 1.0)
+    factor= cscd*cf
+    pi, zi= get_rectangular_wall_peak_velocity_pressure_data(b= b, h= h, terrainCategory= terrainCategory, vb= vb, zMax= zMax, rho= rho, k1= k1, c0= c0, factor= factor)
+    return pi, zi
+
 def get_rectangular_prism_pressure_distribution(d, b, h, terrainCategory:str, vb, zMax= 200.0, rho= 1.25, k1= 1.0, c0= 1.0, cscd= 1.0, r= 0.0):
     ''' Return the wind pressure distribution of a rectangular prism
         according to EN 1991-1-4:2005.
@@ -394,9 +459,8 @@ def get_rectangular_prism_pressure_distribution(d, b, h, terrainCategory:str, vb
     :param cscd: structural factor.
     :param r: radius of the corners.
     '''
-    cf= get_rectangular_section_force_coefficient(d= d, b= b, l= h, r= r, solidityRatio= 1.0)
-    factor= cscd*cf
-    p, zi= get_rectangular_wall_peak_velocity_pressure_distribution(b= b, h= h, terrainCategory= terrainCategory, vb= vb, zMax= zMax, rho= rho, k1= k1, c0= c0, factor= factor)
+    pi, zi= get_rectangular_prism_pressure_data(d= d, b= b, h= h, terrainCategory= terrainCategory, vb= vb, zMax= zMax, rho= rho, k1= k1, c0= c0, cscd= cscd, r= r)
+    p= scipy.interpolate.interp1d(zi, pi, kind='linear')
     return p, zi
 
 
@@ -646,3 +710,30 @@ def get_free_standing_wall_net_pressure_distribution(terrainCategory:str, vb:flo
     for cp in cp_i:
         wnet_i.append(cp*qp)
     return scipy.interpolate.interp1d(xi, wnet_i, kind='linear')
+
+# Overall force coefficients according to clause 7.3 and table 7.7
+# of EN 1991-1-4:2005
+duopitch_canopy_angles= [-20, -15, -10, -5, 5, 10, 15, 20]
+maximum_duopitch_canopy_cf_values= [+0.7, +0.5, +0.4, +0.3, +0.3, +0.4, +0.4, +0.6]
+maximum_duopitch_canopy_cf= scipy.interpolate.interp1d(duopitch_canopy_angles, maximum_duopitch_canopy_cf_values, kind='linear', fill_value="extrapolate")
+minimum_duopitch_canopy_zero_blockage_cf_values= [-0.7, -0.6, -0.6, -0.5, -0.6, -0.7, -0.8, -0.9]
+minimum_duopitch_canopy_zero_blockage_cf= scipy.interpolate.interp1d(duopitch_canopy_angles, minimum_duopitch_canopy_zero_blockage_cf_values, kind='linear', fill_value="extrapolate")
+minimum_duopitch_canopy_total_blockage_cf_values= [-1.3, -1.4, -1.4, -1.3, -1.3, -1.3, -1.3, -1.3]
+minimum_duopitch_canopy_total_blockage_cf= scipy.interpolate.interp1d(duopitch_canopy_angles, minimum_duopitch_canopy_total_blockage_cf_values, kind='linear', fill_value="extrapolate")
+def get_duopitch_canopy_overall_force_coefficients(roofAngleRadians, degreeOfBlockage):
+    ''' Return the maximum and minimum overall force coefficients for a duopitch
+        canopy according to table 7.7 of EN 1991-1-4:2005.
+
+    :param roofAngle: angle of the roof according to figure 7.17 of 
+                      EN 1991-1-4:2005 (expressed in radians).
+    :param degreeOfBlockage: degree of blockage according to paragraph (2) of
+                             clause 7.3 of EN 1991-1-4:2005.
+    '''
+    roofAngleDegrees= math.degrees(roofAngleRadians)
+    maxCf= float(maximum_duopitch_canopy_cf(roofAngleDegrees))
+    minCf_zero_blockage= float( minimum_duopitch_canopy_zero_blockage_cf(roofAngleDegrees))
+    minCf_total_blockage= float( minimum_duopitch_canopy_total_blockage_cf(roofAngleDegrees))
+    minCf= (minCf_total_blockage-minCf_zero_blockage)*degreeOfBlockage+minCf_zero_blockage
+    return maxCf, minCf
+
+    

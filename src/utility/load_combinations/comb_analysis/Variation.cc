@@ -63,6 +63,14 @@ bool cmb_acc::Variation::compatible(const ActionWrapperList &lvr)
     return true;
   }
 
+//! @brief Set all the components to zero.
+void cmb_acc::Variation::zero(void)
+  {
+    const size_t sz= size();
+    for(size_t i=0;i<sz;i++)
+      (*this)[i]= 0.0;
+  }
+
 //! \fn std::ostream &cmb_acc::operator<<(std::ostream &os,const cmb_acc::Variation &v)
 //! @brief Operador salida.
 std::ostream &cmb_acc::operator<<(std::ostream &os,const cmb_acc::Variation &v)

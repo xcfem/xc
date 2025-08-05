@@ -164,15 +164,34 @@ const cmb_acc::PartialSafetyFactorsMap *cmb_acc::ActionWrapperList::getPtrPartia
 //! @param leadingActionIndex: index of the leading action (-1 if no one is).
 cmb_acc::Variations cmb_acc::ActionWrapperList::computeVariations(const bool &uls,const bool &sit_accidental,const int &leadingActionIndex) const
   {
-    
+    const ActionWrapper *leadingActionWrapper= nullptr;
     const_iterator i= begin();
-    Variations v= (*i).get()->getVariations(uls,sit_accidental);
-    Variations retval(v);
+    if(leadingActionIndex>=0) // If there is a leading action.
+      {
+	const_iterator leadingActionIterator= i+leadingActionIndex;
+        leadingActionWrapper= (*leadingActionIterator).get();
+      }
+    const ActionWrapper *awi= (*i).get();
+    Variations vi= awi->getVariations(uls,sit_accidental);
+    // If the leading action is incompatible with *awi discard
+    // the computed variations.
+    if(leadingActionWrapper)
+      if(awi!=leadingActionWrapper)
+        if(leadingActionWrapper->Incompatible(*awi))
+	  vi.zero();
+    Variations retval(vi);
     i++;
     for(;i!=end();i++)
       {
-	v= (*i).get()->getVariations(uls,sit_accidental);
-	retval= Variations::prod_cartesiano(retval,v); //Order is important (LCPT 4/08/2018) 
+	const ActionWrapper *awj= (*i).get();
+	Variations vj= awj->getVariations(uls,sit_accidental);
+	// If the leading action is incompatible with *awj discard
+	// the computed variations.
+	if(leadingActionWrapper)
+	  if(awj!=leadingActionWrapper)
+	    if(leadingActionWrapper->Incompatible(*awj))
+	      vj.zero();
+	retval= Variations::prod_cartesiano(retval,vj); //Order is important (LCPT 4/08/2018) 
       }
     if(retval.empty())
       std::cerr << getClassName() << "::" << __FUNCTION__

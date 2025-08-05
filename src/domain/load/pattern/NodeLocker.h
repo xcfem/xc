@@ -80,6 +80,7 @@ class NodeLocker: public ForceReprComponent
 
     virtual SFreedom_ConstraintIter &getSPs(void);
     int getNumSPs(void) const;
+    virtual bool empty(void) const;
     bool hasSPWithTag(const int &) const;
     const SFreedom_Constraint *getSFreedomConstraint(const int &) const;
 

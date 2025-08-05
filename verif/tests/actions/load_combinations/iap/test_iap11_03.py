@@ -22,7 +22,7 @@ Q2= lcg.newFootbridgeAction(actionName= "Q2", actionDescription= "Veh. servicio.
 Q3= lcg.newFootbridgeAction(actionName= "Q3", actionDescription= "Carga barandilla.", incompatibleActions=['Q.*'])
 Qcon= lcg.newThermalAction(actionName= "Qcon", actionDescription= "Contracción térmica.", incompatibleActions=['Qexp', 'Qw'])
 Qexp= lcg.newThermalAction(actionName= "Qexp", actionDescription= "Contracción térmica.", incompatibleActions=['Qexp', 'Qw'])
-Qw= lcg.newFootbridgeWindAction(actionName= "Qw", actionDescription= "Contracción térmica.")
+Qw= lcg.newFootbridgeWindAction(actionName= "Qw", actionDescription= "Wind.")
 
 lcg.computeCombinations()
 combContainer= lcg.getCombContainer()

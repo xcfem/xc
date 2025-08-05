@@ -173,6 +173,8 @@ python tests/utility/geom/polygons/2d/polygon2D_test_19.py
 python tests/utility/geom/polygons/2d/polygon2D_test_20.py
 python tests/utility/geom/polygons/2d/polygon2D_test_21.py
 python tests/utility/geom/polygons/2d/polygon2D_test_22.py
+python tests/utility/geom/polygons/2d/polygon2D_test_23.py
+python tests/utility/geom/polygons/2d/polygon2D_test_24.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_01.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_02.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_03.py
@@ -314,7 +316,8 @@ python tests/actions/quake/test_NCSP_01.py
 echo "$BLEU" "  Snow action tests." "$NORMAL"
 python tests/actions/snow/test_snowSIA.py
 python tests/actions/snow/test_snowASCE7.py
-python tests/actions/snow/test_snow_ec1.py
+python tests/actions/snow/test_snow_ec1_01.py
+python tests/actions/snow/test_snow_ec1_02.py
 python tests/actions/snow/test_snow_iapf.py
 echo "$BLEU" "  Wind action tests." "$NORMAL"
 python tests/actions/wind/test_wind_cylindr_01.py
@@ -328,6 +331,8 @@ echo "$BLEU" "    CTE wind action tests." "$NORMAL"
 python tests/actions/wind/cte/test_cte_wind_load.py
 echo "$BLEU" "    EC1 wind action tests." "$NORMAL"
 python tests/actions/wind/ec1/test_ec1_cylinder_force_coefficient.py
+python tests/actions/wind/ec1/test_ec1_duopitch_canopy_overall_force_coefficients_01.py
+python tests/actions/wind/ec1/test_ec1_duopitch_canopy_overall_force_coefficients_02.py
 python tests/actions/wind/ec1/test_ec1_longitudinal_wind_reduction_factor.py 
 python tests/actions/wind/ec1/test_ec1_bridge_deck_vertical_force_coefficient.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_without_traffic_01.py
@@ -336,7 +341,8 @@ python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_with_traffic_0
 python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_with_traffic_02.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_free_standing_wall.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_squat_rectangular_pier.py
-python tests/actions/wind/ec1/test_ec1_wind_action_on_high_circular_cylindrical_pier.py 
+python tests/actions/wind/ec1/test_ec1_wind_action_on_high_circular_cylindrical_pier.py
+python tests/actions/wind/ec1/test_ec1_wind_action_on_duopitch_canopy.py
 echo "$BLEU" "    IAP wind action tests." "$NORMAL"
 python tests/actions/wind/iap/test_iap_wind_load_01.py
 python tests/actions/wind/iap/test_iap_wind_load_02.py
@@ -406,6 +412,8 @@ python tests/actions/load_combinations/ec0/test_ec0_accidental_combinations_01.p
 python tests/actions/load_combinations/ec0/test_ec0_accidental_combinations_02.py
 python tests/actions/load_combinations/ec0/test_ec0_railway_bridge_load_combinations_01.py
 python tests/actions/load_combinations/ec0/test_ec0_railway_bridge_load_combinations_02.py
+python tests/actions/load_combinations/ec0/test_ec0_railway_bridge_load_combinations_03.py
+python tests/actions/load_combinations/ec0/test_ec0_canopy_load_combinations_01.py
 echo "$BLEU" "  Load combination container tests." "$NORMAL"
 python tests/actions/load_combinations/comb_container/test_comb_container_01.py
 python tests/actions/load_combinations/comb_container/test_comb_container_02.py
@@ -529,6 +537,7 @@ python tests/elements/zero_length/zero_length_element_test_04.py
 python tests/elements/zero_length/zero_length_element_test_05.py
 python tests/elements/zero_length/zero_length_element_test_06.py
 python tests/elements/zero_length/test_zero_length_section_sign_criteria.py
+python tests/elements/zero_length/test_zero_length_section_values_at_nodes_01.py
 python tests/elements/zero_length/test_strains_sign00.py
 python tests/elements/zero_length/test_strains_sign01.py
 python tests/elements/zero_length/test_strains_sign02.py
@@ -1204,6 +1213,7 @@ python tests/loads/combinations/test_davit_02.py
 #Uniaxial materials.
 echo "$BLEU" "Materials tests." "$NORMAL"
 python tests/materials/test_get_material_names.py
+python tests/materials/test_clear_xc_material.py
 echo "$BLEU" "  XC materials tests." "$NORMAL"
 echo "$BLEU" "    Uniaxial materials tests." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/test_elastic_material.py
@@ -1318,7 +1328,6 @@ python tests/materials/xc_materials/sections/section_geom/test_mass_properties_0
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_03.py
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_04.py
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_05.py
-python tests/materials/xc_materials/sections/section_geom/test_geom_params_torsion_ehe_01.py
 python tests/materials/xc_materials/sections/section_geom/test_modify_section_properties.py
 echo "$BLEU" "      Cross-sections region tests." "$NORMAL"
 python tests/materials/xc_materials/sections/section_geom/regions/quad_sect_region_test_01.py
@@ -1329,10 +1338,12 @@ echo "$BLEU" "      Section properties." "$NORMAL"
 python tests/materials/section_properties/test_compound_section_01.py
 python tests/materials/section_properties/test_compound_section_02.py
 python tests/materials/section_properties/test_compound_section_03.py
+python tests/materials/section_properties/test_hot_rolled_round_steel_bar_01.py
 python tests/materials/section_properties/test_box_girder_torsional_stiffness.py
 python tests/materials/section_properties/test_rectangular_hollow_section_01.py
 python tests/materials/section_properties/test_rectangular_hollow_section_02.py
 python tests/materials/section_properties/test_rectangular_hollow_section_03.py
+python tests/materials/section_properties/test_rectangular_hollow_section_04.py
 
 echo "$BLEU" "      Section stiffness." "$NORMAL"
 python tests/materials/xc_materials/sections/stiffness/test_tangent_stiffness_01.py
@@ -1478,7 +1489,9 @@ python tests/materials/ehe/test_fiber_section_shear_04.py
 python tests/materials/ehe/test_fiber_section_shear_05.py
 python tests/materials/ehe/test_fiber_section_shear_06.py
 echo "$BLEU" "    Torsion resistance determination tests (EHE-08)." "$NORMAL"
-python tests/materials/ehe/test_torsion_check_01.py
+python tests/materials/ehe/torsion/test_geom_params_torsion_ehe_01.py
+python tests/materials/ehe/torsion/test_ehe_torsion_check_01.py
+python tests/materials/ehe/torsion/test_ehe_torsion_check_02.py
 echo "$BLEU" "    Shrinkage and creep determination tests (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_creep_01.py
 python tests/materials/ehe/test_creep_02.py
@@ -1539,6 +1552,11 @@ python tests/materials/ec2/test_EC2_shear_04.py
 python tests/materials/ec2/test_EC2_shear_05.py
 python tests/materials/ec2/test_ec2_fiber_section_shear_01.py
 python tests/materials/ec2/test_EC2_shear_between_web_and_flanges_01.py
+echo "$BLEU" "    Torsion resistance determination tests." "$NORMAL"
+python tests/materials/ec2/torsion/test_geom_params_torsion_ec2_01.py
+python tests/materials/ec2/torsion/test_geom_params_torsion_ec2_02.py
+python tests/materials/ec2/torsion/test_ec2_torsion_check_01.py
+python tests/materials/ec2/torsion/test_ec2_torsion_check_02.py
 echo "$BLEU" "    EC2 punching shear resistance determination tests." "$NORMAL"
 python tests/materials/ec2/test_ec2_punching_shear_01.py
 python tests/materials/ec2/test_ec2_punching_shear_02.py

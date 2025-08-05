@@ -8,6 +8,8 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
 import sys
+import uuid
+from geotechnics import ground_pressure
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.CAD_model import vtk_CAD_graphic
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
@@ -1455,6 +1457,34 @@ class OutputHandler(object):
         caption= captionBaseText + ', ' + sectDescr
         field.display(displaySettings, caption= caption, unitDescription= unitDescription, fileName= fileName, defFScale= defFScale)
 
+    def displayGroundPressures(self, elasticFoundations, caption, fUnitConv, unitDescription, component= 2, rgMinMax=None, fileName=None):
+        '''Display foundation pressures for the current load case.
+
+        :param elasticFoundations: list of elastic foundatins to display the
+                                   ground pressures on.
+        :param caption: caption for the displayed image.
+        :param fUnitConv: unit conversion factor.
+        :param unitDescription: unit description.
+        :param component: component of the ground pressure to display.
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+              of the scalar field (if any) to be represented. All the values 
+              less than vmin are displayed in blue and those greater than vmax 
+              in red (defaults to None)
+        :param fileName: file name (defaults to None -> screen display)
+        '''
+        # Compute ground pressures and create temporary set.
+        retval= ground_pressure.compute_elastic_foundations_ground_pressure(elasticFoundations= elasticFoundations)
+        foundationElements= list()
+        for ef in elasticFoundations:
+            for e in ef.foundationSet.elements:
+                foundationElements.append(e)
+        temporarySetName= str(uuid.uuid4())
+        temporarySet= self.modelSpace.defSet(temporarySetName, elements= foundationElements)
+        field= fields.ExtrapolatedScalarField('soilPressure', 'getProp', temporarySet, component= component, fUnitConv= fUnitConv, rgMinMax= rgMinMax)
+        displaySettings= self.getDisplaySettingsFE()
+        field.display(displaySettings, caption= caption, fileName= fileName, unitDescription= unitDescription)
+        return retval
+        
 def append_graphic_to_tex_file(texFile, graphicFileName, graphicWidth, captionText, label=''):
     '''Include a graphic in a LaTeX file.
 

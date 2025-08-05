@@ -25,6 +25,8 @@
 class_<XC::NodeLocker,XC::NodeLocker *, bases<XC::ForceReprComponent>, boost::noncopyable >("NodeLocker", no_init)
   .def("newSPConstraint", &XC::NodeLocker::newSPConstraint,return_internal_reference<>(),"\n" "newSPConstraint(nodeTag,dofId,value) \n" "Create a single-point boundary constraint by assigning a value to the degree of freedom dofId of node whose ID is nodeTag.")
   .def("removeSPConstraint", &XC::NodeLocker::removeSFreedom_Constraint,"Remove a single-point boundary constraint.")
+  .add_property("getNumSPs",&XC::NodeLocker::getNumSPs,"Return the number of constraints in this object.")
+  .def("empty", &XC::NodeLocker::empty, "Returns true if there is no constraints.")
   .def("clearAll",&XC::NodeLocker::clearAll)
   ;
 
@@ -34,7 +36,7 @@ class_<XC::LoadContainer, bases<CommandEntity>, boost::noncopyable >("LoadContai
   .add_property("getNumNodalLoads",&XC::LoadContainer::getNumNodalLoads,"return the number of nodal loads.")
     .add_property("getNumElementalLoads",&XC::LoadContainer::getNumElementalLoads,"return the number of elemental loads.")
   .add_property("getNumLoads",&XC::LoadContainer::getNumLoads,"return the totalnumber of loads.")
-  .def("empty",&XC::LoadContainer::empty,"return true if there is no loads.")
+  .def("empty", &XC::LoadContainer::empty, "Returns true if there is no loads.")
   ;
 
 class_<XC::TimeSeries, XC::TimeSeries*, bases<CommandEntity,XC::MovableObject>, boost::noncopyable >("TimeSeries", no_init)
@@ -76,6 +78,7 @@ class_<XC::LoadPattern, XC::LoadPattern*, bases<XC::NodeLocker>, boost::noncopya
   .def("addToDomain", &XC::LoadPattern::addToDomain,"Add load pattern to the domain.")
   .def("removeFromDomain", &XC::LoadPattern::removeFromDomain,"Removes the load pattern from the domain.")
   .def("isActive", &XC::LoadPattern::isActive,"Return true if the load pattern is currently added to the domain.")
+  .def("empty", &XC::LoadPattern::empty, "Returns true if there is no loads nor constraints.")
   .def(self *= double())
   ;
 
@@ -91,6 +94,7 @@ class_<XC::LoadPatternCombination, XC::LoadPatternCombination *, bases<XC::Force
   .def("removeFromDomain", &XC::LoadPatternCombination::removeFromDomain,"Remove combination from the domain.")
   .def("isActive", &XC::LoadPatternCombination::isActive,"Return true if the combination is fully added to the domain.")
   .def("getComponents", &XC::LoadPatternCombination::getString,"Returns combination expression.")
+  .def("empty", &XC::LoadPatternCombination::empty, "Returns true if there is no load patterns in this combination.")
   ;
 
 XC::LoadCombination &(XC::LoadCombination::*add)(const std::string &)= &XC::LoadCombination::add;

@@ -99,14 +99,18 @@ class MaterialHandler: public PrepHandler
     bool InteractionDiagramExists(const std::string &nmb) const;
     bool InteractionDiagramExists2d(const std::string &nmb) const;
     Material *newMaterial(const std::string &,const std::string &);
+    void removeMaterial(const std::string &);
     Material &getMaterial(const std::string &);
     Material &getMaterial(const int &);
     SectionGeometry *newSectionGeometry(const std::string &);
+    void removeSectionGeometry(const std::string &);
     SectionGeometry &getSectionGeometry(const std::string &);
     InteractionDiagram *newInteractionDiagram(const std::string &);
+    void removeInteractionDiagram(const std::string &);
     InteractionDiagram *calcInteractionDiagram(const std::string &,const InteractionDiagramData &diag_data);
     InteractionDiagram &getInteractionDiagram(const std::string &);
     InteractionDiagram2d *new2DInteractionDiagram(const std::string &);
+    void remove2DInteractionDiagram(const std::string &);
     InteractionDiagram2d *calcInteractionDiagramNMy(const std::string &,const InteractionDiagramData &diag_data);
     InteractionDiagram2d *calcInteractionDiagramNMz(const std::string &,const InteractionDiagramData &diag_data);
     InteractionDiagram2d &getNMzInteractionDiagram(const std::string &);

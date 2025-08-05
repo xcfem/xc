@@ -38,10 +38,12 @@ descompDifference= difference.getComponents("%3.1f")
 ratio1= (previousName=="COMB3")
 ratio2= (descompDifference=="1.5*B")
 
-
-# print("ratio1= ",ratio1)
-# print("ratio2= ",ratio2)
-
+'''
+print('previousName= ', previousName)
+print("ratio1= ",ratio1)
+print('descombDifference= ', descompDifference)
+print("ratio2= ",ratio2)
+'''
 
 import os
 from misc_utils import log_messages as lmsg

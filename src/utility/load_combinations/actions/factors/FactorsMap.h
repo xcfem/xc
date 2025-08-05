@@ -70,18 +70,26 @@ template <class Factors>
 void FactorsMap<Factors>::print_err_not_found(const std::string &functionName, const std::string &name) const
    {
        std::cerr << Color::red << getClassName() << "::" << functionName
-		<< "; factors with name: '"
-		<< name << "' not found." << std::endl
-		<< " candidates are: ";
+		 << "; factors with name: '"
+		 << name << "' not found."
+		 << Color::def << std::endl;
+		
       const std::deque<std::string> candidates= this->getNames();
       if(!candidates.empty())
 	{
+	  std::cerr << Color::red << "  Candidates are: ";
 	  std::deque<std::string>::const_iterator i= candidates.begin();
 	  std::cerr << *i;
 	  i++;
           for(;i!=candidates.end();i++)
 	    std::cerr << ", " << *i;
 	  std::cerr << Color::def << std::endl;
+	}
+      else
+        {
+	  std::cerr << Color::red << "  " << getClassName() << "::" << functionName
+		    << "; the factors container is empty."
+		    << Color::def << std::endl;
 	}
    }
    

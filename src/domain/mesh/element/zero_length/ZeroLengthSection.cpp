@@ -394,6 +394,58 @@ int XC::ZeroLengthSection::addInertiaLoadToUnbalance(const Vector &accel)
     return 0;
   }
 
+//! @brief Extrapolate from Gauss points to nodes.
+XC::Matrix XC::ZeroLengthSection::getExtrapolatedValues(const Matrix &values) const
+  {
+    const size_t sz= values.noCols();
+    Matrix retval(2,sz); // Two nodes and sz values per node.
+    const Matrix &e_matrix= getExtrapolationMatrix();
+    for(size_t i= 0;i<sz;i++)
+      {
+	retval(0,i)= e_matrix(0,0)*values(0,i);
+	retval(1,i)= e_matrix(1,0)*values(0,i);
+      }
+    return retval;
+  }
+
+//! @brief Return a python list with the values of the argument property
+//! at element nodes.
+//! When the property requested its located at the integration point this
+//! function is responsible of the extrapolation of values from
+//! Gauss points to nodes.
+//!
+//! @param code: identifier of the requested value.
+//! @param silent: if true, don't complain about non-existent property.
+boost::python::list XC::ZeroLengthSection::getValuesAtNodes(const std::string &code, bool silent) const
+  {
+    boost::python::list retval;
+    if(code=="strain")
+      {
+	const Matrix elementStrains(theSection->getGeneralizedStrain());
+	const Matrix strainsAtNodes= getExtrapolatedValues(elementStrains);
+	const size_t nRows= strainsAtNodes.noRows();
+	for(size_t i= 0;i<nRows;i++)
+	  {
+	    Vector strainAtNode= strainsAtNodes.getRow(i);
+	    retval.append(strainAtNode);
+	  }
+      }
+    else if(code=="stress")
+      {
+	const Matrix elementStresses(theSection->getGeneralizedStress());
+	const Matrix stressesAtNodes= getExtrapolatedValues(elementStresses);
+	const size_t nRows= stressesAtNodes.noRows();
+	for(size_t i= 0;i<nRows;i++)
+	  {
+	    Vector stressAtNode= stressesAtNodes.getRow(i);
+	    retval.append(stressAtNode);
+	  }
+      }
+    else
+      retval= Element0D::getValuesAtNodes(code, silent); 
+    return retval;
+  }
+
 //! @brief Return resisting force vector for element.  The element resisting force
 //! is computed from the section stress resultants, \f$s\f$, as \f$P_e = A^T s\f$.
 //! The section stress resulant is obtained by calling getStressResultant().

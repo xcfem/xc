@@ -22,7 +22,7 @@ cfg.setWorkingDirectory(auxModulePath)
 
 
 limitState= lsd.normalStressesResistance # any limit state that has been previously checked
-limitState.envConfig=cfg
+limitState.setEnvConfig(cfg)
 lCombNormalULS=limitState.getCriticalLCombs(threshold=0.50)
 
 limitState= lsd.shearResistance

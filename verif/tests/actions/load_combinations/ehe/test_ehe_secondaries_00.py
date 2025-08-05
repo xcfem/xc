@@ -23,7 +23,7 @@ F1= lcg.newVariableAction(actionName= "F1", actionDescription= "Frenado puente g
 #lcg.setVerbosityLevel(3)
 lcg.computeCombinations()
 
-coeficientesRef_elu_persistentes= [[1,0,0,0],[1.35,0,0,0],[1,1.5,0,0],[1,1.5,0,1.05],[1,0,1.5,0],[1,1.05,0,1.5],[1.35,1.5,0,0],[1.35,1.5,0,1.05],[1.35,0,1.5,0],[1.35,1.05,0,1.5]]
+coeficientesRef_elu_persistentes= [[1.0, 0.0, 0.0, 0.0], [1.35, 0.0, 0.0, 0.0], [1.0, 1.5, 0.0, 0.0], [1.0, 1.5, 0.0, 1.05], [1.0, 0.0, 1.5, 0.0], [1.0, 1.05, 0.0, 1.5], [1.35, 1.5, 0.0, 0.0], [1.35, 1.5, 0.0, 1.05], [1.35, 0.0, 1.5, 0.0], [1.35, 1.05, 0.0, 1.5]]
 
 coeficientes_elu_persistentes= []
 combAcc= lcg.getULSTransientCombinations()
@@ -37,11 +37,11 @@ sz= len(coeficientesRef_elu_persistentes)
 for i in range(0,sz):
   vR= coeficientesRef_elu_persistentes[i]
   v= coeficientes_elu_persistentes[i]
-  #print("vR", vR, " v= ", v)
+  # print("vR", vR, " v= ", v)
   resta= numpy.subtract(vR,v)
   error+= numpy.linalg.norm(resta)**2
-  #print(resta)
-  #print("error= ", error)
+  # print(resta)
+  # print("error= ", error)
 
 import math
 error= math.sqrt(error)

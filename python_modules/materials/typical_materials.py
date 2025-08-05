@@ -1430,6 +1430,17 @@ class MaterialData(BasicElasticMaterial):
         super(MaterialData,self).__init__(E,nu,rho)
         self.name= name
         self.xc_material= None
+        
+    def clearXCMaterial(self, preprocessor):
+        ''' Removes the XC material defined by this object from the XC problem.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
+        if(self.xc_material):
+            materialHandler= preprocessor.getMaterialHandler
+            if(materialHandler.materialExists(self.name)):
+                materialHandler.removeMaterial(self.name)
+                self.xc_material= None
 
 class DeckMaterialData(MaterialData):
     '''Material for Isotropic elastic sections
@@ -1448,6 +1459,7 @@ class DeckMaterialData(MaterialData):
         '''return the mass per unit area'''
         lmsg.warning('DeckMaterialData.getAreaDensity will be deprecated soon. Use the XC material method.')
         return self.rho*self.thickness
+    
     def setupElasticSection(self,preprocessor, overrideRho= None):
         '''create an elastic isotropic section appropriate for plate 
            and shell analysis.
@@ -1468,7 +1480,7 @@ class DeckMaterialData(MaterialData):
                 self.xc_material= defElasticMembranePlateSection(preprocessor, name= self.name,E= self.E, nu= self.nu, rho= rho, h= self.thickness)
         else:
             lmsg.warning('Material: '+ self.name+ ' already defined.')
-        return self.xc_material
+        return self.xc_material        
 
 class BeamMaterialData(MaterialData):
     '''Elastic section appropriate for 3D beam analysis, including shear deformations.

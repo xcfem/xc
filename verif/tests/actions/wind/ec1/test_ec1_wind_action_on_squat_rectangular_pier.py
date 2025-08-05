@@ -44,7 +44,6 @@ ratio1= abs(qp-qpRef)/qpRef
 # Compute the force coefficient.
 d= 5.0 # pier length.
 b= 2.5 # pier width.
-l= 10.0 # pier height.
 cf0= ec1_wind.get_rectangular_section_force_coefficient_without_free_end_flow(d= d, b= b)
 ratio2= abs(cf0-1.65)/1.65
 
@@ -54,9 +53,11 @@ psi_r= ec1_wind.get_square_section_round_corners_reduction_factor(b= b, r= r)
 ratio3= abs(psi_r-1)
 
 # end-effect factor (for elements with free-end flow [see 7.13 on EN 1991-1-4:2005])
-psi_l= ec1_wind.get_polygonal_section_end_effect_factor(b= b, l=10.0, solidityRatio= 1.0)
+l= 10.0 # pier height.
+psi_l= ec1_wind.get_polygonal_section_end_effect_factor(b= b, l= l, solidityRatio= 1.0)
 ratio4= abs(psi_l-0.6885)/0.6885
 
+# Compute force coefficient for rectangular section.
 cf= ec1_wind.get_rectangular_section_force_coefficient(d= d, b= b, l= l, r= r, solidityRatio= 1.0)
 cfRef= cf0*psi_l*psi_r
 ratio5= abs(cf-cfRef)/cfRef

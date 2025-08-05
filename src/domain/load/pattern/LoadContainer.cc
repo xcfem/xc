@@ -41,6 +41,7 @@
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 #include "preprocessor/prep_handlers/LoadHandler.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Frees memory.
 void XC::LoadContainer::free_containers(void)
@@ -82,8 +83,9 @@ void XC::LoadContainer::alloc_containers(void)
 
     if(!theNodalLoads || !theElementalLoads)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; ran out of memory\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; ran out of memory."
+		  << Color::def << std::endl;
         exit(-1);
       }
   }
@@ -97,8 +99,9 @@ void XC::LoadContainer::alloc_iterators(void)
 
     if(theEleIter == 0 || theNodIter == 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; ran out of memory\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; ran out of memory."
+		  << Color::def << std::endl;
         exit(-1);
       }
   }
@@ -123,8 +126,9 @@ XC::LoadContainer::LoadContainer(CommandEntity *owr)
 //! @brief Virtual constructor.
 XC::LoadContainer *XC::LoadContainer::getCopy(void)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented."
+	      << Color::def << std::endl;
     return nullptr;
   }
 
@@ -158,8 +162,9 @@ bool XC::LoadContainer::addNodalLoad(NodalLoad *load)
   {
     const bool result= theNodalLoads->addComponent(load);
     if(!result)
-      std::cerr << "LoadContainer::" << __FUNCTION__
-	        << "; WARNING: load could not be added\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; WARNING: nodal load could not be added"
+		<< Color::def << std::endl;
     return result;
   }
 
@@ -168,8 +173,9 @@ bool XC::LoadContainer::addElementalLoad(ElementalLoad *load)
   {
     const bool result= theElementalLoads->addComponent(load);
     if(!result)
-      std::cerr << "LoadContainer::" << __FUNCTION__
-	        << "; WARNING: load could not be added\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; WARNING: elementa load could not be added"
+		<< Color::def << std::endl;
     return result;
   }
 
@@ -209,11 +215,9 @@ int XC::LoadContainer::getNumElementalLoads(void) const
 int XC::LoadContainer::getNumLoads(void) const
   { return getNumNodalLoads()+getNumElementalLoads(); }
 
-
 //! @brief Returns true if there is no loads.
 bool XC::LoadContainer::empty(void) const
   { return (getNumLoads()==0); }
-
 
 //! @brief Deletes all loads.
 void XC::LoadContainer::clearLoads(void)
@@ -421,8 +425,9 @@ int XC::LoadContainer::sendSelf(Communicator &comm)
     const int dataTag= getDbTag(comm);
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; failed to send data.\n";    
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send data."
+		<< Color::def << std::endl;    
     return res;
   }
 
@@ -434,8 +439,9 @@ int XC::LoadContainer::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; data could not be received.\n" ;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; data could not be received."
+		<< Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;
@@ -502,8 +508,9 @@ int XC::LoadContainer::setParameter(const std::vector<std::string> &argv, Parame
       {
         if(argv.size() < 3)
           return -1;
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; elementPointLoad not implemented." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; elementPointLoad not implemented." 
+		  << Color::def << std::endl;
 //       RVisRandomProcessDiscretizer = false;
 
 //       int eleNumber = atoi(argv[1]);
@@ -613,8 +620,9 @@ int XC::LoadContainer::activateParameter(int parameterID)
               }
           }
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; error in identifier. " << std::endl;
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; error in identifier. "
+		    << Color::def << std::endl;
       }
     return 0;
   }

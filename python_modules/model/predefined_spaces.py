@@ -239,6 +239,7 @@ class PredefinedSpace(object):
         ''' Clear the finite element model.'''
         prb= self.getProblem()
         prb.clearAll()
+        self.preprocessor.clearAll()
         self.setPreprocessor(preprocessor= None)
 
     def setVerbosityLevel(self, level):
@@ -1380,6 +1381,14 @@ class PredefinedSpace(object):
         :param xcSet: set with the elements to load.
         :param gravityVector: gravity acceleration vector.
         '''
+        spaceDimension= self.getSpaceDimension()
+        if(len(gravityVector)!= spaceDimension):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= '; gravity vector: '+str(gravityVector)+' must be of size '
+            errMsg+= str(spaceDimension)+'.\n'
+            lmsg.error(className+'.'+methodName+errMsg)
+            exit(1)
         retval= set()
         if(alreadyLoaded):
             retval.update(alreadyLoaded)

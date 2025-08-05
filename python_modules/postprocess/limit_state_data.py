@@ -154,10 +154,24 @@ class LimitStateData(object):
         :param cfg: configuration of XC environment variables.
         '''
         LimitStateData.envConfig= cfg
+
+    @staticmethod
+    def getEnvConfig():
+        ''' Get the configuration of XC environment variables.'''
+        retval= None
+        if(LimitStateData.envConfig):
+            retval= LimitStateData.envConfig
+        else:
+           className= 'LimitStateData'
+           methodName= sys._getframe(0).f_code.co_name
+           errMsg= "; envConfig not set. Use setEnvConfig method to set it."  
+           lmsg.warning(className+'.'+methodName+errMsg)
+           exit(1)
+        return retval
         
     def getInternalForcesResultsPath(self):
         '''Return the directory where internal forces are stored.'''
-        return self.envConfig.projectDirTree.getInternalForcesResultsPath()
+        return LimitStateData.getEnvConfig().projectDirTree.getInternalForcesResultsPath()
     
     def getInternalForcesFileName(self):
         '''Return the name of the file where internal forces are stored.'''
@@ -165,7 +179,7 @@ class LimitStateData(object):
     
     def getReactionsResultsPath(self):
         '''Return the directory where reactions are stored.'''
-        return self.envConfig.projectDirTree.getReactionsResultsPath()
+        return LimitStateData.getEnvConfig().projectDirTree.getReactionsResultsPath()
         
     def getReactionsFileName(self):
         '''Return the name of the file where reactions are stored.'''
@@ -273,7 +287,7 @@ class LimitStateData(object):
 
     def getFullVerifPath(self):
         ''' Return the full path for the limit state checking files.'''
-        return self.envConfig.projectDirTree.getFullVerifPath()
+        return LimitStateData.getEnvConfig().projectDirTree.getFullVerifPath()
     
     def getOutputDataBaseFileName(self):
         '''Return the output file name without extension.'''
@@ -330,7 +344,7 @@ class LimitStateData(object):
 
     def createOutputFiles(self):
         ''' Create the internal forces and displacement output files.'''
-        self.envConfig.projectDirTree.createTree()
+        LimitStateData.getEnvConfig().projectDirTree.createTree()
         self.fNameIntForc= self.getInternalForcesFileName()
         self.fNameReactions= self.getReactionsFileName()
         self.fNameDispl= self.getDisplacementsFileName()
@@ -705,7 +719,7 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
                            (see predefined_spaces.py).
         :returns: number of properties read.
         '''
-        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifBucklingFile())
+        return modelSpace.readControlVars(inputFileName= LimitStateData.getEnvConfig().projectDirTree.getVerifBucklingFile())
         
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' Perform buckling limit state checking.
@@ -774,7 +788,7 @@ class NormalStressesRCLimitStateData(ULS_LimitStateData):
                            (see predefined_spaces.py).
         :returns: number of properties read.
         '''
-        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifNormStrFile())
+        return modelSpace.readControlVars(inputFileName= LimitStateData.getEnvConfig().projectDirTree.getVerifNormStrFile())
             
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' Perform limit state checking.
@@ -814,7 +828,7 @@ class NormalStressesSteelLimitStateData(ULS_LimitStateData):
                            (see predefined_spaces.py).
         :returns: number of properties read.
         '''
-        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifNormStrFile())
+        return modelSpace.readControlVars(inputFileName= LimitStateData.getEnvConfig().projectDirTree.getVerifNormStrFile())
     
     def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
         ''' Perform limit state checking.
@@ -850,7 +864,7 @@ class ShearResistanceRCLimitStateData(ULS_LimitStateData):
                            (see predefined_spaces.py).
         :returns: number of properties read.
         '''
-        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifShearFile())
+        return modelSpace.readControlVars(inputFileName= LimitStateData.getEnvConfig().projectDirTree.getVerifShearFile())
     
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' Perform limit state checking.
@@ -889,7 +903,7 @@ class ShearResistanceSteelLimitStateData(ULS_LimitStateData):
                            (see predefined_spaces.py).
         :returns: number of properties read.
         '''
-        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifShearFile())
+        return modelSpace.readControlVars(inputFileName= LimitStateData.getEnvConfig().projectDirTree.getVerifShearFile())
     
     def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
         ''' Perform limit state checking.
@@ -926,7 +940,7 @@ class TorsionResistanceRCLimitStateData(ULS_LimitStateData):
                            (see predefined_spaces.py).
         :returns: number of properties read.
         '''
-        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifTorsionFile())
+        return modelSpace.readControlVars(inputFileName= LimitStateData.getEnvConfig().projectDirTree.getVerifTorsionFile())
             
     def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
         ''' Perform limit state checking.
@@ -1032,7 +1046,7 @@ class RareLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
                            (see predefined_spaces.py).
         :returns: number of properties read.
         '''
-        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackRareFile())
+        return modelSpace.readControlVars(inputFileName= LimitStateData.getEnvConfig().projectDirTree.getVerifCrackRareFile())
 
 class FreqLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under frequent loads limit state data.'''
@@ -1052,7 +1066,7 @@ class FreqLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
                            (see predefined_spaces.py).
         :returns: number of properties read.
         '''
-        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackFreqFile())
+        return modelSpace.readControlVars(inputFileName= LimitStateData.getEnvConfig().projectDirTree.getVerifCrackFreqFile())
             
 class QPLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
     ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
@@ -1072,7 +1086,7 @@ class QPLoadsCrackControlRCLimitStateData(CrackControlRCLimitStateData):
                            (see predefined_spaces.py).
         :returns: number of properties read.
         '''
-        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifCrackQpermFile())
+        return modelSpace.readControlVars(inputFileName= LimitStateData.getEnvConfig().projectDirTree.getVerifCrackQpermFile())
                 
 class FreqLoadsDisplacementControlLimitStateData(SLS_LimitStateData):
     ''' Displacement control under frequent loads limit state data.'''

@@ -215,30 +215,27 @@ void cmb_acc::Action::suma(const Action &f)
   {
     if(f.Nula(zero)) return;
 
-    //Mark the incompatible combinations.
-    if((Incompatible(f))) 
-      relaciones.setContieneIncomp(true);
-    if(f.relaciones.contieneIncomp())
-      relaciones.setContieneIncomp(true);
-
-    if(getName().size()>0)
+    if((!Incompatible(f)) && (!f.relaciones.contieneIncomp())) // if compatible
       {
-        NamedEntity::Name()+= " + " + f.getName();
-        description+= " + " + f.description;
+	if(this->getName().size()>0)
+	  {
+	    NamedEntity::Name()+= " + " + f.getName();
+	    description+= " + " + f.description;
+	  }
+	else
+	  {
+	    NamedEntity::Name()= f.getName();
+	    description= f.description;
+	  }
+	relaciones.concat(f.relaciones);
+	relaciones.updateMainActions(getName());
+	if(Nula(zero) && f.Nula(zero)) //Si ambas son nulas la suma es nula.
+	  f_pond= 0.0;
+	else //Otherwise we don't know.
+	  f_pond= 1.0;
+	if(!Owner())
+	  set_owner(const_cast<CommandEntity *>(f.Owner()));
       }
-    else
-      {
-	NamedEntity::Name()= f.getName();
-        description= f.description;
-      }
-    relaciones.concat(f.relaciones);
-    relaciones.updateMainActions(getName());
-    if(Nula(zero) && f.Nula(zero)) //Si ambas son nulas la suma es nula.
-      f_pond= 0.0;
-    else //Otherwise we don't know.
-      f_pond= 1.0;
-    if(!Owner())
-      set_owner(const_cast<CommandEntity *>(f.Owner()));
   }
 
 //! @brief Return true si la acción que se pasa como parámetro es incompatible con esta,
@@ -250,8 +247,15 @@ void cmb_acc::Action::suma(const Action &f)
 bool cmb_acc::Action::incompatible(const Action &f) const
   {
     bool retval= false;
-    if(this != &f) //La carga no puede ser incompatible consigo misma.
-      retval= relaciones.incompatible(f.getName());
+    if(this != &f) // Not incompatible with itself.
+      {
+	const std::string &thisName= this->getName();
+	const std::string &otherName= f.getName();
+	if(thisName!=otherName)
+	  retval= relaciones.incompatible(f.getName());
+        else
+	  retval= false; // Not incompatible with itself.
+      }
     return retval;
   }
 

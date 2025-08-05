@@ -111,8 +111,9 @@ def read_shapes_from_spreadsheet(namePrefix, columnOrder, columnUnits, spreadshe
                             if(len(key)>0):
                                 column= columnKeys[key]
                                 shapeRecord[key]= r[column].value
-                        shapeRecord['E']= 210000e6 # To deprecate
-                        shapeRecord['nu']= 0.3 # To deprecate
+                        shapeRecord['E']= E # To deprecate
+                        shapeRecord['nu']= nu # To deprecate
+                        shapeRecord['G']= E/(2*(1+nu)) # To deprecate
                         retval[name]= shapeRecord
     if(len(retval)==0):
         methodName= sys._getframe(0).f_code.co_name
