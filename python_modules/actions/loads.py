@@ -2,11 +2,11 @@
 from __future__ import division
 from __future__ import print_function
 
-__author__= "Ana Ortega (AO_O)"
-__copyright__= "Copyright 2017, AO_O"
+__author__= "Ana Ortega (AO_O) Luis C. Pérez Tato"
+__copyright__= "Copyright 2017, AO_O LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "ana.Ortega@ciccp.es"
+__email__= "ana.ortega.org@gmail.com l.pereztato@ciccp.es"
 
 import sys
 import geom
@@ -63,6 +63,7 @@ class InertialLoad(BaseVectorLoad):
 
     def appendLoadToCurrentLoadPattern(self):
         for s in self.lstSets:
+            s.fillDownwards()
             s.createInertiaLoads((-1)*self.loadVector)
 '''
     def getMaxMagnitude(self):
@@ -121,6 +122,7 @@ class UniformLoadOnBeams(BaseVectorLoad):
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
+        self.xcSet.fillDownwards()
         retval= list()
         elements= self.xcSet.elements
         if(elements):
@@ -172,6 +174,7 @@ class UniformLoadOnTrusses(BaseVectorLoad):
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
+        self.xcSet.fillDownwards()
         for e in self.xcSet.elements:
             L= e.getLength(True); n1=e.getNodes[0]; n2=e.getNodes[1]
             F_nod=self.loadVector*L/2.
@@ -197,6 +200,7 @@ class UniformLoadOnLines(BaseVectorLoad):
         self.xcSet=xcSet
 
     def appendLoadToCurrentLoadPattern(self):
+        self.xcSet.fillDownwards()
         prep=self.xcSet.getPreprocessor
         pointsCont=prep.getMultiBlockTopology.getPoints
         for l in self.xcSet.getLines:
@@ -240,6 +244,7 @@ class UniformLoadOnSurfaces(BaseVectorLoad):
         
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
+        self.xcSet.fillDownwards()
         retval= list()
         for e in self.xcSet.elements:
             if self.refSystem=='Local':
@@ -269,6 +274,7 @@ class UnifLoadSurfNodesDistributed(BaseVectorLoad):
         
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
+        self.surfSet.fillDownwards()
         prep=self.surfSet.getPreprocessor
         if prep.getSets.exists('auxNodSet'): prep.getSets.removeSet('auxNodSet')
         for s in self.surfSet.surfaces:
@@ -317,6 +323,7 @@ class PointLoadOverShellElems(BaseVectorLoad):
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
         aux_set,factor=self.distrParam()
+        aux_set.fillDownwards()
         retval= list()
         for e in aux_set.elements:
             if self.refSystem=='Local':
@@ -388,6 +395,7 @@ class EarthPressLoad():
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
+        self.xcSet.fillDownwards()
         if(self.soilData!=None):
             # self.soilData.xcSet=self.xcSet; self.soilData.vDir=self.vDir
             self.soilData.appendLoadToCurrentLoadPattern(xcSet=self.xcSet,vDir=self.vDir)
@@ -514,6 +522,7 @@ class StrainLoadOnShells(object):
     
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the load pattern passed as parameter.'''
+        self.xcSet.fillDownwards()
         prep=self.xcSet.getPreprocessor
         loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
         loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
@@ -535,6 +544,7 @@ class StrainLoadOnBeams(object):
     
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the load pattern passed as parameter.'''
+        self.xcSet.fillDownwards()
         prep=self.xcSet.getPreprocessor
         loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
         loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
@@ -554,6 +564,7 @@ class StrainLoadOnTrusses(object):
     
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the load pattern passed as parameter.'''
+        self.xcSet.fillDownwards()
         prep=self.xcSet.getPreprocessor
         loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
         loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
@@ -584,6 +595,7 @@ class StrainGradientThermalLoadOnShells(imps.gradThermalStrain):
     
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the load pattern passed as parameter.'''
+        self.elemSet.fillDownwards()
         prep=self.elemSet.getPreprocessor
         loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
         loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
@@ -617,6 +629,7 @@ class WindLoadOnShells(BaseVectorLoad):
         self.Gf=Gf
 
     def appendLoadToCurrentLoadPattern(self):
+        self.xcSet.fillDownwards()
         for e in self.xcSet.elements:
             zCoo=e.getPosCentroid(True).z
             press=self.windParams.qz(zCoo)*self.Cp*self.Gf
@@ -647,6 +660,7 @@ class WindLoadOnBeams(BaseVectorLoad):
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
+        self.xcSet.fillDownwards()
         if self.exposedSurf:
             for e in self.xcSet.elements:
                 zCoo=e.getPosCentroid(True).z
@@ -699,6 +713,7 @@ class WindLoadOnTrusses(BaseVectorLoad):
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
+        self.xcSet.fillDownwards()
         if self.exposedSurf:
             for e in self.xcSet.elements:
                 L=e.getLength(True); n1=e.getNodes[0]; n2=e.getNodes[1]
