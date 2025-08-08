@@ -41,9 +41,12 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 import sys
 import math
 import scipy.interpolate
+import xc
 from itertools import count
 from materials import typical_materials
-import xc
+from postprocess.reports import common_formats as cf
+from misc.latex import supertabular
+from misc.latex import latex_utils
 
 
 class Bearing(object):
@@ -97,26 +100,6 @@ class Bearing(object):
     def getMaterialNames(self):
         '''Return material names for each DOF in a list.'''
         return self.materials
-    
-    # def setBearingBetweenNodes(self,predefinedSpace, iNodA,iNodB, orientation= None):
-    #   '''Modelize a bearing between the nodes and return newly created zero 
-    #    length element that represents the bearing.
-
-    #    :param predefinedSpace: model space (object).
-    #    :param iNodA: (int) first node identifier (tag).
-    #    :param iNodB: (int) second node identifier (tag).
-    #   '''
-    #   return predefinedSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials, orientation)
-  
-    # def setBearing(self,predefinedSpace, iNodA, orientation= None):
-    #   '''Modelize a bearing on X, XY or XYZ directions.
-
-    #      :param predefinedSpace: model space (object).
-    #      :param iNod: (int) node identifier (tag).
-    #      :param bearingMaterials (list): material names for the zero length element.
-    #      :return rtype: (int, int) new node tag, new element tag.
-    #   '''
-    #   return predefinedSpace.setBearing(iNodA,self.materials, orientation)
     
 class ElastomericBearing(Bearing):
     '''Rectangular elastomeric bearing.
@@ -368,33 +351,42 @@ class PTFEPotBearingMat(Bearing):
 
      Attibutes:
     :ivar d: (float) Pot diameter.
-    :ivar unidirX: unidirectional POT in local-X direction (uY constrained) (defaults to False)
-    :ivar unidirY: unidirectional POT in local-Y direction (uX constrained) (defaults to False)
-    :ivar factStiff: factor to increase stiffness in constrained locad directions  (defaults to 1e5)
+    :ivar unidirX: unidirectional POT in local-X direction (uY constrained).
+    :ivar unidirY: unidirectional POT in local-Y direction (uX constrained).
+    :ivar factStiff: factor to increase stiffness in constrained local 
+                     directions.
+    :ivar deltaFrict: Displacement when the friction force is reached.
+    :parma Fperp: mean compressive force perperdicular to the pot surface.
+    :ivar rotStiff: rotational stiffness 
     '''
     teflonMuTable= scipy.interpolate.interp1d(xT,yT)
 
-    def __init__(self,d,unidirX=False,unidirY=False,factStiff=1e5,deltaFrict=20e-3,Fperp=None, bearing_type= None, rotStiff=1e-5):
+    def __init__(self, d, unidirX=False, unidirY=False, factStiff=1e5, deltaFrict=20e-3, Fperp=None, bearing_type= None, rotStiff=1e-5):
         '''Class constructor.
 
         :param d: pot diameter.
         :param unidirX: unidirectional POT in local-X direction (uY constrained) (defaults to False)
         :param unidirY: unidirectional POT in local-Y direction (uX constrained) (defaults to False)
-        :param factStiff: factor to increase stiffness in constrained locad directions (defaults to 1e5)
+        :param factStiff: factor to increase stiffness in constrained local directions (defaults to 1e5)
         :param deltaFrict: Displacement when the friction force is reached (defaults to 20 mm).
-        :parma Fperp: mean compressive force perperdicular to the pot surface. If Fperp is not given, the 
-                      compressive stress is taken as 35Mpa
-        :param bearing_type: string that identifies the type of the bearing in the problem.
+        :parma Fperp: mean compressive force perperdicular to the pot surface. 
+                      If Fperp is not given, the compressive stress is taken 
+                      as 35 MPa.
+        :param bearing_type: string that identifies the type of the bearing in
+                             the problem.
         :param rotStiff: rotational stiffness 
         '''
         super(PTFEPotBearingMat,self).__init__(bearing_type= bearing_type)
-        self.d= d
-        self.unidirX=unidirX
-        self.unidirY=unidirY
-        self.factStiff=factStiff
-        self.deltaFrict=deltaFrict
-        self.Fperp=Fperp
-        self.rotStiff=rotStiff
+        self.d= d # pot diameter.
+        self.unidirX= unidirX # true if unidirectional POT in local-X direction.
+        self.unidirY= unidirY # true if unidirectional POT in local-Y direction.
+        self.factStiff= factStiff # factor to increase stiffness in constrained
+                                  # local directions (defaults to 1e5)
+        self.deltaFrict= deltaFrict # Displacement when the friction force
+                                    # is reached
+        self.Fperp= Fperp # mean compressive force perperdicular to the pot
+                          # surface.
+        self.rotStiff= rotStiff # rotational stiffness.
 
     def getMeanStress(self):
         Apot=math.pi*(self.d/2.0)**2
@@ -403,15 +395,19 @@ class PTFEPotBearingMat(Bearing):
         return sigma
 
     def getMu(self):
+        ''' Return the friction coeficient of the bearing at the current mean
+           stress.
+        '''
         sigma=self.getMeanStress()
-        mu=1.0*self.teflonMuTable(sigma)
+        mu= 1.0*self.teflonMuTable(sigma)
         return mu
         
     def getHorizontalStiffness(self):
-        '''Returns the fictitious stiffness with respect to the horizontal displacement of a PTFE slide bearing.
+        '''Returns the fictitious stiffness with respect to the horizontal 
+           displacement of a PTFE slide bearing.
         '''
-        mu=self.getMu()
-        K=mu*self.Fperp/self.deltaFrict
+        mu= self.getMu()
+        K= mu*self.Fperp/self.deltaFrict
         return K
 
     def defineMaterials(self, preprocessor):
@@ -447,6 +443,34 @@ class PTFEPotBearingMat(Bearing):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; materials already defined, command ignored.')
+
+    def getReportRow(self):
+        ''' Return a list of the characteristics of theis bearing that
+        will be reported.
+
+        :param pot_bearing: pot bearing object.
+        '''
+        diameter= cf.LengthMM.format(self.d*1e3) # pot diameter.
+        # mean compressive force perperdicular to the pot surface.
+        fPerp= cf.Force.format(self.Fperp*1e-3)
+        # average stress on the pot surface.
+        meanStress= cf.Stress.format(self.getMeanStress()*1e-6) 
+        # friction coefficient.
+        mu= cf.Factor.format(self.getMu()) # friction coefficient.
+        # Displacement when the friction force is reached.
+        deltaFrict= cf.LengthMM.format(self.deltaFrict*1e3)
+        # Horizontal stiffness.
+        horizontalStiffness= cf.Force.format(self.getHorizontalStiffness()*1e-3)
+        return [diameter, fPerp, meanStress, mu, deltaFrict, horizontalStiffness]
+    @staticmethod
+    def getReportHeaders():
+        ''' Return a list of the headers corresponding to the quantities
+            returned by getReportRow.
+        '''
+        return [ ['$\\Phi$', '$F_{vert,avg}$','$\\sigma _{vert,avg}$', '$\\mu$', '$\\delta_{fric.}$','$K_h$'],
+                 ['(mm)', '(kN)','(MPa)', ' ', '(mm)','(kN/m)']]
+
+        
 
 
 class PotBearing(object):
@@ -614,6 +638,61 @@ class PotBearing(object):
         vDispB= self.nodB.getDisp
         return xc.Vector([vDispB[0], vDispB[1], vDispB[2]])
 
+    def getResultsDict(self):
+        ''' Return a Python dictionary contaning the reaction and displacement
+            results in the bearing.
+        '''
+        Rx= self.getMatXlocal().getStress()
+        Ry= self.getMatYlocal().getStress()
+        Rz= self.getMatZlocal().getStress()
+        dispX= self.getMatXlocal().getStrain()
+        dispY= self.getMatYlocal().getStrain()
+        dispZ= self.getMatZlocal().getStrain()
+        rotX= self.getMatTHXlocal().getStrain()
+        rotY= self.getMatTHYlocal().getStrain()
+        return {'Rx':Rx, 'Ry':Ry, 'Rz':Rz, 'dispX':dispX, 'dispY':dispY, 'dispZ':dispZ, 'rotX': rotX, 'rotY': rotY}
+        
+
+    def getReportRow(self):
+        ''' Return a list of the characteristics of theis bearing that
+        will be reported.
+
+        :param pot_bearing: pot bearing object.
+        '''
+        pot_id= '-' # no identifier.
+        if(hasattr(self, 'name')):
+            pot_id= self.name
+        return [pot_id]+self.potMat.getReportRow()
+
+    @staticmethod
+    def getReportHeaders():
+        ''' Return a list of the headers corresponding to the quantities
+            returned by getReportRow.
+        '''
+        mat_report_headers= PTFEPotBearingMat.getReportHeaders()
+        headers= ['Id']+mat_report_headers[0]
+        units= ['']+mat_report_headers[1]
+        return [headers, units]
+    
+    @staticmethod
+    def getSupertabularHeadTail(caption, label):
+        ''' Return the head and tail strings for a LaTeX supertabular 
+            environment that will be used to report the characteristics of
+            some pot bearings.
+
+        :param caption: caption of the table.
+        :param label: label of the table.
+        '''
+        report_headers= PotBearing.getReportHeaders()
+        headTitles= report_headers[0]
+        unitHeaders= report_headers[1]
+        return supertabular.get_supertabular_head_tail(headTitles= headTitles,
+                                                       tit2ndLine= unitHeaders,
+                                                       justif='lrrrrrr',
+                                                       caption= caption,
+                                                       label= label)
+        
+
 def get_reaction_on_pot(preprocessor,iElem,inclInertia= False):
     ''' Return the element reaction.
 
@@ -630,3 +709,304 @@ def get_reaction_on_pot(preprocessor,iElem,inclInertia= False):
     elem= preprocessor.getElementHandler.getElement(iElem)
     reac0= elem.getNodes[0].getReaction
     return xc.Vector([reac0[0],reac0[1],reac0[2]])
+
+def report_pot_characteristics(pot_bearings, caption, label):
+    ''' Return a dictionary containing the forces on the bearing pots of the
+        pergola.
+
+    :param pot_bearings: list of pot bearings to report.
+    :param caption: caption of the table.
+    :param label: label of the table.
+    '''
+    head, tail=  PotBearing.getSupertabularHeadTail(caption= caption, label= label)
+    retval= head # Open supertabular.
+    for pb in pot_bearings:
+        # Get the data to report.
+        latex_row= latex_utils.get_table_row(pb.getReportRow())
+        retval+= latex_row
+    retval+= tail # Close supertabular.
+    return retval
+
+def get_pot_reaction_extreme_values(pot_results_dict, load_combinations= None):
+    ''' Return the maximum and minimum values of the reactions on X, Y and Z
+        axes and the combinations that produce them.
+
+    :param pot_results_dict: dictionary contaning the reaction values for each
+                             load combination.
+    :param load_combinations: load combinations to consider in the calculation.
+                              If None, consider all the load combinations in the
+                              results dictionary.
+    :returns: dictionary containing a the extreme values of the reactions
+              in each pot bearing and the corresponding load combinations.
+    '''
+    retval= dict()
+    # Populate load combinations list if needed.
+    if(load_combinations is None):
+        load_combs= list()
+        for pot_id in pot_results_dict:
+            for lc in pot_results_dict[pot_id]:
+                load_combs.append(lc)
+    else:
+        load_combs= load_combinations
+    # Compute extremes.
+    for pot_id in pot_results_dict:
+        pot_results= pot_results_dict[pot_id]
+        if(load_combs):
+            lc0= load_combs[0]
+            pot_results0= pot_results[lc0]
+            # Initialize values.
+            RXmax= pot_results0['Rx']
+            combNameRXmax= lc0
+            RYmax= pot_results0['Ry']
+            combNameRYmax= lc0
+            RZmax= pot_results0['Rz']
+            combNameRZmax= lc0
+            RXmin= RXmax
+            combNameRXmin= lc0
+            RYmin= RYmax
+            combNameRYmin= lc0
+            RZmin= RZmax
+            combNameRZmin= lc0
+            # Compare them with the rest of the combinations.
+            for lc in load_combs[1:]: 
+                pot_results_lc= pot_results[lc]
+                RX= pot_results_lc['Rx']
+                RY= pot_results_lc['Ry']
+                RZ= pot_results_lc['Rz']
+                if RX<RXmin:
+                    RXmin= RX
+                    combNameRXmin=lc
+                if RY<RYmin:
+                    RYmin= RY
+                    combNameRYmin= lc
+                if RZ<RZmin:
+                    RZmin= RZ
+                    combNameRZmin= lc
+                if RX>RXmax:
+                    RXmax= RX
+                    combNameRXmax=lc
+                if RY>RYmax:
+                    RYmax= RY
+                    combNameRYmax= lc
+                if RZ>RZmax:
+                    RZmax= RZ
+                    combNameRZmax= lc
+            retval[pot_id]= {'RXmax': RXmax, 'combNameRXmax': combNameRXmax, 'RYmax': RYmax, 'combNameRYmax': combNameRYmax, 'RZmax': RZmax, 'combNameRZmax': combNameRZmax, 'RXmin': RXmin, 'combNameRXmin': combNameRXmin, 'RYmin': RYmin, 'combNameRYmin': combNameRYmin, 'RZmin': RZmin, 'combNameRZmin':combNameRZmin}
+    return retval
+
+def get_pot_reaction_extreme_values_table(reactionExtremeValues, caption, label):
+    ''' Return the maximum and minimum values of the reactions on X, Y and Z
+        axes and the combinations that produce them.
+
+    :param reactionExtremeValues: dictionary contaning the extreme values of
+                                  the reactions for each pot bearing.
+    :param caption: caption of the table.
+    :param label: label of the table.
+    :returns: LaTeX table containing the extreme values of the reactions
+              in each pot bearing and the corresponding load combinations.
+    '''    
+    head,tail= supertabular.get_supertabular_head_tail(headTitles=['Load type ','Value (kN)','Combination'],justif='lrl',caption=caption,label=label)
+    retval= head
+    for pot_id in reactionExtremeValues.keys():
+        values= reactionExtremeValues[pot_id]
+        # Extract values from dictionary.
+        RXmax= cf.Force.format(values['RXmax']*1e-3)
+        combNameRXmax= str(values['combNameRXmax'])
+        RYmax= cf.Force.format(values['RYmax']*1e-3)
+        combNameRYmax= str(values['combNameRYmax'])
+        RZmax= cf.Force.format(values['RZmax']*1e-3)
+        combNameRZmax= str(values['combNameRZmax'])
+        RXmin= cf.Force.format(values['RXmin']*1e-3)
+        combNameRXmin= str(values['combNameRXmin'])
+        RYmin= cf.Force.format(values['RYmin']*1e-3)
+        combNameRYmin= str(values['combNameRYmin'])
+        RZmin= cf.Force.format(values['RZmin']*1e-3)
+        combNameRZmin= str(values['combNameRZmin'])
+        # retval+= '\\hline \\multicolumn{3}{c}{'+ str(values['potDescr']) +'} \\\\ \\hline \n'
+        retval+= '\\hline \\multicolumn{3}{c}{'+ str(pot_id) +'} \\\\ \\hline \n'
+        retval+= '$F_{\\text{vert.}, \\min}$ & '+ RZmin +' & '+ str(values['combNameRZmin']) + '\\\\  \n'
+        retval+= '$F_{\\text{vert.}, \\max}$ & '+ RZmax +' & '+ str(values['combNameRZmax']) + '\\\\  \n'
+        retval+= '$F_{\\text{long.}, \\min}$ & '+ RXmin +' & '+ str(values['combNameRXmin']) + '\\\\  \n'
+        retval+= '$F_{\\text{long.}, \\max}$ & '+ RXmax +' & '+ str(values['combNameRXmax']) + '\\\\  \n'
+        retval+= '$F_{\\text{transv.}, \\min}$ & '+ RYmin +' & '+ str(values['combNameRYmin']) + '\\\\  \n'
+        retval+= '$F_{\\text{transv.}, \\max}$ & '+ RYmax +' & '+ str(values['combNameRYmax']) + '\\\\  \n'
+    retval+= tail
+    return retval
+
+def get_pot_rotation_extreme_values(pot_results_dict, load_combinations= None):
+    ''' Return the maximum and minimum values of the rotations on X and Y
+        axes and the combinations that produce them.
+
+    :param pot_results_dict: dictionary contaning the rotation values for each
+                             load combination.
+    :param load_combinations: load combinations to consider in the calculation.
+                              If None, consider all the load combinations in the
+                              results dictionary.
+    :returns: dictionary containing a the extreme values of the rotations
+              in each pot bearing and the corresponding load combinations.
+    '''
+    retval= dict()
+    # Populate load combinations list if needed.
+    if(load_combinations is None):
+        load_combs= list()
+        for pot_id in pot_results_dict:
+            for lc in pot_results_dict[pot_id]:
+                load_combs.append(lc)
+    else:
+        load_combs= load_combinations
+    # Compute extremes.
+    for pot_id in pot_results_dict:
+        pot_results= pot_results_dict[pot_id]
+        if(load_combs):
+            lc0= load_combs[0]
+            pot_results0= pot_results[lc0]
+            # Initialize values.
+            rotXmax= pot_results0['rotX']
+            combNameRotXmax= lc0
+            rotYmax= pot_results0['rotY']
+            combNameRotYmax= lc0
+            rotXmin= rotXmax
+            combNameRotXmin= lc0
+            rotYmin= rotYmax
+            combNameRotYmin= lc0
+            # Compare them with the rest of the combinations.
+            for lc in load_combs[1:]: 
+                pot_results_lc= pot_results[lc]
+                rotX= pot_results_lc['rotX']
+                rotY= pot_results_lc['rotY']
+                if rotX<rotXmin:
+                    rotXmin= rotX
+                    combNameRotXmin=lc
+                if rotY<rotYmin:
+                    rotYmin= rotY
+                    combNameRotYmin= lc
+                if rotX>rotXmax:
+                    rotXmax= rotX
+                    combNameRotXmax=lc
+                if rotY>rotYmax:
+                    rotYmax= rotY
+                    combNameRotYmax= lc
+            retval[pot_id]= {'rotXmax': rotXmax, 'combNameRotXmax': combNameRotXmax, 'rotYmax': rotYmax, 'combNameRotYmax': combNameRotYmax, 'rotXmin': rotXmin, 'combNameRotXmin': combNameRotXmin, 'rotYmin': rotYmin, 'combNameRotYmin': combNameRotYmin}
+    return retval
+
+def get_pot_rotation_extreme_values_table(rotationExtremeValues, caption, label):
+    ''' Return the maximum and minimum values of the rotations on X and Y
+        axes and the combinations that produce them.
+
+    :param rotationExtremeValues: dictionary contaning the extreme values of
+                                  the rotations for each pot bearing.
+    :param caption: caption of the table.
+    :param label: label of the table.
+    :returns: LaTeX table containing the extreme values of the rotations
+              in each pot bearing and the corresponding load combinations.
+    '''    
+    head,tail= supertabular.get_supertabular_head_tail(headTitles=['Rotation type ','Value (mrad)','Combination'],justif='lrl',caption=caption,label=label)
+    retval= head
+    for pot_id in rotationExtremeValues.keys():
+        values= rotationExtremeValues[pot_id]
+        # Extract values from dictionary.
+        rotXmax= cf.Angle.format(values['rotXmax']*1e3)
+        combNameRotXmax= str(values['combNameRotXmax'])
+        rotYmax= cf.Angle.format(values['rotYmax']*1e3)
+        combNameRotYmax= str(values['combNameRotYmax'])
+        rotXmin= cf.Angle.format(values['rotXmin']*1e3)
+        combNameRotXmin= str(values['combNameRotXmin'])
+        rotYmin= cf.Angle.format(values['rotYmin']*1e3)
+        combNameRotYmin= str(values['combNameRotYmin'])
+        # retval+= '\\hline \\multicolumn{3}{c}{'+ str(values['potDescr']) +'} \\\\ \\hline \n'
+        retval+= '\\hline \\multicolumn{3}{c}{'+ str(pot_id) +'} \\\\ \\hline \n'
+        retval+= '$\\alpha_{\\text{long.}, \\min}$ & '+ rotXmin +' & '+ str(values['combNameRotXmin']) + '\\\\  \n'
+        retval+= '$\\alpha_{\\text{long.}, \\max}$ & '+ rotXmax +' & '+ str(values['combNameRotXmax']) + '\\\\  \n'
+        retval+= '$\\alpha_{\\text{transv.}, \\min}$ & '+ rotYmin +' & '+ str(values['combNameRotYmin']) + '\\\\  \n'
+        retval+= '$\\alpha_{\\text{transv.}, \\max}$ & '+ rotYmax +' & '+ str(values['combNameRotYmax']) + '\\\\  \n'
+    retval+= tail
+    return retval
+
+def get_pot_displacement_extreme_values(pot_results_dict, load_combinations= None):
+    ''' Return the maximum and minimum values of the displacements on X and Y
+        axes and the combinations that produce them.
+
+    :param pot_results_dict: dictionary contaning the displacement values for each
+                             load combination.
+    :param load_combinations: load combinations to consider in the calculation.
+                              If None, consider all the load combinations in the
+                              results dictionary.
+    :returns: dictionary containing a the extreme values of the displacements
+              in each pot bearing and the corresponding load combinations.
+    '''
+    retval= dict()
+    # Populate load combinations list if needed.
+    if(load_combinations is None):
+        load_combs= list()
+        for pot_id in pot_results_dict:
+            for lc in pot_results_dict[pot_id]:
+                load_combs.append(lc)
+    else:
+        load_combs= load_combinations
+    # Compute extremes.
+    for pot_id in pot_results_dict:
+        pot_results= pot_results_dict[pot_id]
+        if(load_combs):
+            lc0= load_combs[0]
+            pot_results0= pot_results[lc0]
+            # Initialize values.
+            dispXmax= pot_results0['dispX']
+            combNameDispXmax= lc0
+            dispYmax= pot_results0['dispY']
+            combNameDispYmax= lc0
+            dispXmin= dispXmax
+            combNameDispXmin= lc0
+            dispYmin= dispYmax
+            combNameDispYmin= lc0
+            # Compare them with the rest of the combinations.
+            for lc in load_combs[1:]: 
+                pot_results_lc= pot_results[lc]
+                dispX= pot_results_lc['dispX']
+                dispY= pot_results_lc['dispY']
+                if dispX<dispXmin:
+                    dispXmin= dispX
+                    combNameDispXmin=lc
+                if dispY<dispYmin:
+                    dispYmin= dispY
+                    combNameDispYmin= lc
+                if dispX>dispXmax:
+                    dispXmax= dispX
+                    combNameDispXmax=lc
+                if dispY>dispYmax:
+                    dispYmax= dispY
+                    combNameDispYmax= lc
+            retval[pot_id]= {'dispXmax': dispXmax, 'combNameDispXmax': combNameDispXmax, 'dispYmax': dispYmax, 'combNameDispYmax': combNameDispYmax, 'dispXmin': dispXmin, 'combNameDispXmin': combNameDispXmin, 'dispYmin': dispYmin, 'combNameDispYmin': combNameDispYmin}
+    return retval
+
+def get_pot_displacement_extreme_values_table(displacementExtremeValues, caption, label):
+    ''' Return the maximum and minimum values of the displacements on X and Y
+        axes and the combinations that produce them.
+
+    :param displacementExtremeValues: dictionary contaning the extreme values of
+                                  the displacements for each pot bearing.
+    :param caption: caption of the table.
+    :param label: label of the table.
+    :returns: LaTeX table containing the extreme values of the displacements
+              in each pot bearing and the corresponding load combinations.
+    '''    
+    head,tail= supertabular.get_supertabular_head_tail(headTitles=['Displacement type ','Value (mm)','Combination'],justif='lrl',caption=caption,label=label)
+    retval= head
+    for pot_id in displacementExtremeValues.keys():
+        values= displacementExtremeValues[pot_id]
+        # Extract values from dictionary.
+        dispXmax= cf.LengthMM.format(values['dispXmax']*1e3)
+        combNameDispXmax= str(values['combNameDispXmax'])
+        dispYmax= cf.LengthMM.format(values['dispYmax']*1e3)
+        combNameDispYmax= str(values['combNameDispYmax'])
+        dispXmin= cf.LengthMM.format(values['dispXmin']*1e3)
+        combNameDispXmin= str(values['combNameDispXmin'])
+        dispYmin= cf.LengthMM.format(values['dispYmin']*1e3)
+        combNameDispYmin= str(values['combNameDispYmin'])
+        # retval+= '\\hline \\multicolumn{3}{c}{'+ str(values['potDescr']) +'} \\\\ \\hline \n'
+        retval+= '\\hline \\multicolumn{3}{c}{'+ str(pot_id) +'} \\\\ \\hline \n'
+        retval+= '$U_{\\text{long.}, \\min}$ & '+ dispXmin +' & '+ str(values['combNameDispXmin']) + '\\\\  \n'
+        retval+= '$U_{\\text{long.}, \\max}$ & '+ dispXmax +' & '+ str(values['combNameDispXmax']) + '\\\\  \n'
+        retval+= '$U_{\\text{transv.}, \\min}$ & '+ dispYmin +' & '+ str(values['combNameDispYmin']) + '\\\\  \n'
+        retval+= '$U_{\\text{transv.}, \\max}$ & '+ dispYmax +' & '+ str(values['combNameDispYmax']) + '\\\\  \n'
+    retval+= tail
+    return retval
