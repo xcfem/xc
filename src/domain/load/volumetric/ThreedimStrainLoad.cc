@@ -33,7 +33,7 @@
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/Matrix.h"
 #include "domain/mesh/element/Element.h"
-
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::ThreedimStrainLoad::ThreedimStrainLoad(int tag, const std::vector<Vector> &t, const ID &theElementTags)
   :ThreedimLoad(tag, LOAD_TAG_ThreedimStrainLoad, theElementTags), strains(t) {}
@@ -75,10 +75,10 @@ XC::Matrix XC::ThreedimStrainLoad::getElementStrainsMatrix(const Element &e) con
       }
     else
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << ": element with tag: " << elemTag
 		  << " not loaded."
-		  << std::endl;
+		  << Color::def << std::endl;
       }
     return retval;
   }
@@ -111,16 +111,42 @@ void XC::ThreedimStrainLoad::setStrainComp(const size_t &i,const size_t &j,const
         if(j<size_t(def.Size()))
           def(j)= strain;
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                     << " component: " << j
 	            << " doesn't exist."
-		    << std::endl;
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << " gauss point: "  << i
                 << " doesn't exist."
-		<< std::endl;
+		<< Color::def << std::endl;
+  }
+
+//! @brief Sets the strains for a Gauss point.
+//! @param i: Gauss point index.
+//! @param j: Strain component.
+//! @param strain: Strain value.
+double XC::ThreedimStrainLoad::getStrainComp(const size_t &i,const size_t &j)
+  {
+    double retval= 0.0;
+    if(i<strains.size())
+      {
+        Vector &def= strains.at(i);
+        if(j<size_t(def.Size()))
+          retval= def(j);
+        else
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                    << " component: " << j
+	            << " doesn't exist."
+		    << Color::def << std::endl;
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << " gauss point: "  << i
+                << " doesn't exist."
+		<< Color::def << std::endl;
+    return retval;
   }
 
 //! @brief Set the values of the strains.
@@ -146,12 +172,12 @@ void XC::ThreedimStrainLoad::setStrainsPy(const boost::python::list &values)
     const size_t sz= strains.size();
     if(nRows!=sz)
       {
-	std::clog << getClassName() << "::" << __FUNCTION__
+	std::clog << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING, input list has " << nRows
 	          << " rows "
 	          << " which is different from the number of rows in the strain vector: "
 	          << sz
-		  << std::endl;
+		  << Color::def << std::endl;
 	nRows= std::min(nRows, sz);
       }
     for(size_t i= 0; i<nRows; i++)
@@ -161,12 +187,12 @@ void XC::ThreedimStrainLoad::setStrainsPy(const boost::python::list &values)
 	const size_t srsz= strains[0].Size();
 	if(rsz!=srsz)
 	  {
-	    std::clog << getClassName() << "::" << __FUNCTION__
+	    std::clog << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING, input list has " << rsz
 		      << " componenets "
 		      << " which is different from the number of components of the strain vector: "
 		      << srsz
-		      << std::endl;
+		      << Color::def << std::endl;
 	    rsz= std::min(rsz, srsz);
 	  }
         for(size_t j= 0; j<rsz; j++)
@@ -181,8 +207,9 @@ void XC::ThreedimStrainLoad::setStrainsPy(const boost::python::list &values)
 const XC::Vector &XC::ThreedimStrainLoad::getData(int &type, const double &loadFactor) const
   {
     type = getClassTag();
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " not implemented yet." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " not implemented yet."
+	      << Color::def << std::endl;
     static const Vector trash;
     return trash;
   }
@@ -220,7 +247,9 @@ int XC::ThreedimStrainLoad::sendSelf(Communicator &comm)
     const int dataTag= getDbTag(comm);
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ThreedimStrainLoad::sendSelf() - failed to send data\n";    
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data."
+	        << Color::def << std::endl;    
     return res;
   }
 
@@ -230,8 +259,9 @@ int XC::ThreedimStrainLoad::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; data could not be received.\n" ;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; data could not be received."
+	        << Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;
