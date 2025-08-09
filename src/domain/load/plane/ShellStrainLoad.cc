@@ -30,6 +30,15 @@
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/ID.h"
 
+// strain compoment 0: strain along x axis.
+// strain compoment 1: strain along y axis.
+// strain component 2: shear strain in xy plane (gamma_xy)
+// strain component 3: curvature around local y axis (normal to local x axis).
+// strain component 4: curvature around local x axis (normal to local y axis).
+// strain component 5: torsion
+// strain component 6: shear strain in xz? plane.
+// strain component 7: shear strain in yz? plane.
+
 //! @brief Constructor.
 XC::ShellStrainLoad::ShellStrainLoad(int tag, const ID &theElementTags)
   :BidimStrainLoad(tag,4,Vector(8), theElementTags) {}
