@@ -2018,6 +2018,7 @@ python tests/postprocess/report/test_report_loads_01.py
 python tests/postprocess/report/test_report_check_01.py
 python tests/postprocess/report/test_report_rc_section.py
 python tests/postprocess/report/test_rc_section_report_generator.py
+python tests/postprocess/report/test_pot_bearing_report_01.py
 
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)
