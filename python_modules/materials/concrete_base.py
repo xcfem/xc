@@ -1788,7 +1788,7 @@ def createInteractionDiagram(materialHandler, concreteDiagram, steelDiagram, con
 
     :param materiaHandler: material handler.
     :param concreteDiagram: diagram for concrete material.
-    :parma steelDiagram: diagram for steel material.
+    :param steelDiagram: diagram for steel material.
     :param concreteSection: concrete section to compute the interaction
                             diagram for.
     '''

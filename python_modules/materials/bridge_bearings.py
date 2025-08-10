@@ -356,7 +356,7 @@ class PTFEPotBearingMat(Bearing):
     :ivar factStiff: factor to increase stiffness in constrained local 
                      directions.
     :ivar deltaFrict: Displacement when the friction force is reached.
-    :parma Fperp: mean compressive force perperdicular to the pot surface.
+    :ivar Fperp: mean compressive force perperdicular to the pot surface.
     :ivar rotStiff: rotational stiffness 
     '''
     teflonMuTable= scipy.interpolate.interp1d(xT,yT)
@@ -369,7 +369,7 @@ class PTFEPotBearingMat(Bearing):
         :param unidirY: unidirectional POT in local-Y direction (uX constrained) (defaults to False)
         :param factStiff: factor to increase stiffness in constrained local directions (defaults to 1e5)
         :param deltaFrict: Displacement when the friction force is reached (defaults to 20 mm).
-        :parma Fperp: mean compressive force perperdicular to the pot surface. 
+        :param Fperp: mean compressive force perperdicular to the pot surface. 
                       If Fperp is not given, the compressive stress is taken 
                       as 35 MPa.
         :param bearing_type: string that identifies the type of the bearing in
@@ -469,9 +469,6 @@ class PTFEPotBearingMat(Bearing):
         '''
         return [ ['$\\Phi$', '$F_{vert,avg}$','$\\sigma _{vert,avg}$', '$\\mu$', '$\\delta_{fric.}$','$K_h$'],
                  ['(mm)', '(kN)','(MPa)', ' ', '(mm)','(kN/m)']]
-
-        
-
 
 class PotBearing(object):
     '''POT structural bearing

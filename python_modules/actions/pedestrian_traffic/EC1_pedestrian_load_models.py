@@ -196,7 +196,7 @@ class PedestrianLoad(object):
     def plot(self, loadToDisp:str, tStart= 0.0, tInc= None, duration= None):
         ''' Create a plot of the loads.
 
-        :parma loadToDisp: load to display (vertical, lateral or both).
+        :param loadToDisp: load to display (vertical, lateral or both).
         :param tStart: first item in the sequence.
         :param tInc: time increment (defaults to T/10).
         :param duration: duration of the sequence (defaults to 2*T).
