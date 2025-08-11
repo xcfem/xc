@@ -2,7 +2,8 @@
 ''' Test based on Benchmark 4 (Ultimate load of a single column -page 46-)
 of the document:
 
-Comparison of global analysis methods and design rules for steel frames according to Eurocode 3
+Comparison of global analysis methods and design rules for steel frames 
+according to Eurocode 3
 Klemann, B. W. (Author). 31 Jan 2010
 
 http://https://research.tue.nl/en/studentTheses/comparison-of-global-analysis-methods-and-design-rules-for-steel-
