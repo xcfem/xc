@@ -1627,6 +1627,7 @@ python tests/materials/ec3/test_lateral_torsional_buckling_00.py
 python tests/materials/ec3/test_lateral_torsional_buckling_01.py
 python tests/materials/ec3/test_lateral_torsional_buckling_02.py
 python tests/materials/ec3/test_lateral_torsional_buckling_03.py
+python tests/materials/ec3/test_lateral_torsional_buckling_04.py
 echo "$BLEU" "      compression_lateral-torsional buckling tests." "$NORMAL"
 echo "$BLEU" "    EAE tests." "$NORMAL"
 python tests/materials/eae/test_steel_corbel_weld.py
