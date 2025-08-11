@@ -30,88 +30,90 @@ class ElementPropertyDiagram(pd.PropertyDiagram):
                            the values less than vmin are displayed in blue and 
                            those greater than vmax in red (defaults to None)
         '''
-        super(ElementPropertyDiagram,self).__init__(scaleFactor= scaleFactor, lRefModSize= lRefModSize, fUnitConv= fUnitConv, sets= sets, attributeName= attributeName, rgMinMax= rgMinMax)
+        super(ElementPropertyDiagram,self).__init__(scaleFactor= scaleFactor, lRefModSize= lRefModSize, fUnitConv= fUnitConv, sets= sets, attributeName= propertyName, rgMinMax= rgMinMax)
 
-    def computeDiagramValues(self, eSet):
+    def computeDiagramValues(self):
         ''' Return the values needed to create the diagram representation.'''
         self.valueCouples= list()
         self.elements= list()
         self.directions= list()
+        propertyNames= [self.propertyName]
+        filtered_elements= self.filterElements()
         if(self.propertyName=='FCTNCP'):
-            for e in elems:
+            for e in filtered_elements:
                 self.directions.append(e.getJVector3d(True)) #initialGeometry= True
                 values= e.getProp(self.propertyName) # [back node value, front node value]
                 self.elements.append(e)
                 self.valueCouples.append((values[0],values[1]))
         elif(self.propertyName=='FCVCP'):
-            for e in elems:
+            for e in filtered_elements:
                 self.directions.append(e.getJVector3d(True)) #initialGeometry= True
                 values= e.getProp(self.propertyName) # [back node value, front node value]
                 self.elements.append(e)
                 self.valueCouples.append((values[0],values[1]))      
         elif(self.propertyName=='N+'):
-            for e in elems:
+            for e in filtered_elements:
                 self.directions.append(e.getJVector3d(True)) #initialGeometry= True
                 values= e.getProp(self.propertyName) # [back node value, front node value]
                 self.elements.append(e)
                 self.valueCouples.append((values[0],values[1]))      
         elif(self.propertyName=='N-'):
-            for e in elems:
+            for e in filtered_elements:
                 self.directions.append(e.getJVector3d(True)) #initialGeometry= True
                 values= e.getProp(self.propertyName) # [back node value, front node value]
                 self.elements.append(e)
                 self.valueCouples.append((values[0],values[1]))      
         elif(self.propertyName=='My+'):
-            for e in elems:
+            for e in filtered_elements:
                 self.directions.append(e.elem.getKVector3d(True)) # initialGeometry= True  
                 values= e.getProp(self.propertyName) # [back node value, front node value]
                 self.elements.append(e)
                 self.valueCouples.append((values[0],values[1]))      
         elif(self.propertyName=='My-'):
-            for e in elems:
+            for e in filtered_elements:
                 self.directions.append(e.elem.getKVector3d(True)) # initialGeometry= True  
                 values= e.getProp(self.propertyName) # [back node value, front node value]
                 self.elements.append(e)
                 self.valueCouples.append((values[0],values[1]))      
         elif(self.propertyName=='Mz+'):
-            for e in elems:
+            for e in filtered_elements:
                 self.directions.append(e.elem.getJVector3d(True)) # initialGeometry= True  
                 values= e.getProp(self.propertyName) # [back node value, front node value]
                 valueCouples.append((values[0],values[1]))      
         elif(self.propertyName=='Mz-'):
-            for e in elems:
+            for e in filtered_elements:
                 self.directions.append(e.elem.getJVector3d(True)) # initialGeometry= True  
                 values= e.getProp(self.propertyName) # [back node value, front node value]
                 self.elements.append(e)
                 self.valueCouples.append((values[0],values[1]))      
         elif(self.propertyName=='Vy+'):
-            for e in elems:
+            for e in filtered_elements:
                 self.directions.append(e.elem.getJVector3d(True)) # initialGeometry= True  
                 values= e.getProp(self.propertyName) # [back node value, front node value]
                 self.elements.append(e)
                 self.valueCouples.append((values[0],values[1]))      
         elif(self.propertyName=='Vy-'):
-            for e in elems:
+            for e in filtered_elements:
                 self.directions.append(e.elem.getJVector3d(True)) # initialGeometry= True  
                 values= e.getProp(self.propertyName) # [back node value, front node value]
                 self.elements.append(e)
                 self.valueCouples.append((values[0],values[1]))      
         elif(self.propertyName=='Vz+'):
-            for e in elems:
+            for e in filtered_elements:
                 self.directions.append(e.elem.getKVector3d(True)) # initialGeometry= True  
                 values= e.getProp(self.propertyName) # [back node value, front node value]
                 self.elements.append(e)
                 self.valueCouples.append((values[0],values[1]))      
         elif(self.propertyName=='Vz-'):
-            for e in elems:
+            for e in filtered_elements:
                 self.directions.append(e.elem.getKVector3d(True)) # initialGeometry= True  
                 values= e.getProp(self.propertyName) # [back node value, front node value]
                 self.elements.append(e)
                 self.valueCouples.append((values[0],values[1]))      
         else:
-            elems= eSet.elements
-            extrapolate_elem_attr.extrapolate_elem_function_attr(elems, self.propertyName, "getProp", self.propertyName)
-            for e in elems:
+            preprocessor= self.elemSets[0].getPreprocessor
+            extrapolate_elem_attr.extrapolate_elem_function_attr(elemSet= filtered_elements, attributeName= self.propertyName, function= "getProp", argument= self.propertyName, preprocessor= preprocessor)
+            for e in filtered_elements:
                 self.directions.append(e.getJVector3d(True)) #initialGeometry= True
                 v0= e.getNodes[0].getProp(self.propertyName)
                 v1= e.getNodes[1].getProp(self.propertyName)
