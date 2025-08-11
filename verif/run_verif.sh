@@ -1623,10 +1623,10 @@ python tests/materials/ec3/test_buckling_resistance_03.py
 python tests/materials/ec3/test_buckling_resistance_04.py
 python tests/materials/ec3/test_buckling_resistance_05.py
 echo "$BLEU" "      lateral-torsional buckling tests." "$NORMAL"
-python tests/materials/ec3/test_lateral_torsional_buckling00.py
-python tests/materials/ec3/test_lateral_torsional_buckling01.py
-python tests/materials/ec3/test_lateral_torsional_buckling02.py
-python tests/materials/ec3/test_lateral_torsional_buckling03.py
+python tests/materials/ec3/test_lateral_torsional_buckling_00.py
+python tests/materials/ec3/test_lateral_torsional_buckling_01.py
+python tests/materials/ec3/test_lateral_torsional_buckling_02.py
+python tests/materials/ec3/test_lateral_torsional_buckling_03.py
 echo "$BLEU" "      compression_lateral-torsional buckling tests." "$NORMAL"
 echo "$BLEU" "    EAE tests." "$NORMAL"
 python tests/materials/eae/test_steel_corbel_weld.py
