@@ -16,26 +16,22 @@ __email__= "l.pereztato@gmail.com"
 
 import numpy as np
 from materials.ec3 import EC3_materials
+from materials.ec3 import EC3_limit_state_checking as EC3lsc
 from geom_utils import interpolation as intp
 from rough_calculations import ng_cantilever as cv
 
-def get_simple_beam_moments(cantileverLength, uniformLoad):
+def get_cantilever_moments(cantileverLength, uniformLoad):
     ''' Applies a simmetry to the bending moments in a cantilever under uniform
         load to obtain the "equivalent" law in a simply supported beam.
 
     :param cantileverLength: length of the cantilever.
     :param uniformLoad: value of the uniform load.
     '''
-    twiceL= 2.0*cantileverLength
     li= np.linspace(0, 1, 11)
-    xi= [x*twiceL for x in li] # points along the beam.
+    xi= [x*cantileverLength for x in li] # points along the beam.
     M= list() # bending moments along the beam.
     for x in xi:
-        if(x<L):
-            xx= x
-        else:
-            xx= (twiceL-x)
-        M.append(cantilever.getBendingMomentUnderUniformLoad(q= qz, x= xx))
+        M.append(cantilever.getBendingMomentUnderUniformLoad(q= qz, x= x))
     return intp.interpEquidistPoints(xi= xi, yi=M, nDiv=4)
     
 
@@ -49,38 +45,43 @@ shape.sectionClass= 1
 # Compute bending moments along the cantilever.
 L= 4.0
 cantilever= cv.Cantilever(E= shape.steelType.E, I= shape.Iz(), l= L)
-
+# Cantilever beam support coefficients ky= 2-0 and k1= 0.5
+beamSupportCoefs= EC3lsc.BeamSupportCoefficients(ky= 2.0, kw= 1.0, k1= 0.5, k2= 1.0)
+ 
 qz= 6e3 # Uniform load.
-twiceL= 2*L # length of the "equivalent" simply supported beam.
-Mi= get_simple_beam_moments(cantileverLength= L, uniformLoad= qz)
+Mi= get_cantilever_moments(cantileverLength= L, uniformLoad= qz)
 
 # The value of the critical bending moment obtained in the article
-# is 69.93 kN.m greater than the value obtained here (59.17 kN.m), so
-# the result is on the safety side.
-Mcr= shape.getMcr(L= twiceL, Mi= Mi)
-McrRef= 59.16608074865926e3
+# is 69.93 kN.m smaller than the value obtained here (77.53 kN.m), so
+# the result is NOT on the safety side.
+Mcr= shape.getMcr(L= L, Mi= Mi, beamSupportCoefs= beamSupportCoefs)
+McrRef= 77.52732371217022e3
 ratio0= abs(Mcr-McrRef)/McrRef
+
 # The value of the non dimensional beam slenderness obtained in the article
-# is 1.05 smaller than the value obtained here (1.15), so
-# the result is on the safety side.
-overlineLambdaLT= shape.getLateralBucklingNonDimensionalBeamSlenderness(L= twiceL, Mi= Mi)
-overlineLambdaLTRef= 1.1504838580042076
+# is 1.05 greater than the value obtained here (1.01), so
+# the result is NOT on the safety side.
+overlineLambdaLT= shape.getLateralBucklingNonDimensionalBeamSlenderness(L= L, Mi= Mi, beamSupportCoefs= beamSupportCoefs)
+overlineLambdaLTRef= 1.0050543197277177
 ratio1= abs(overlineLambdaLT-overlineLambdaLTRef)/overlineLambdaLTRef
 
 # The value of the lateral torsional buckling reduction factor obtained in
-# the article is 0.672 greater than the value obtained here (0.562), so
+# the article is 0.672 greater than the value obtained here (0.662), so
 # the result is on the safety side.
-chiLT= shape.getLateralBucklingReductionFactor(L= twiceL, Mi= Mi)
-chiLTRef= 0.5620082928939704
+chiLT= shape.getLateralBucklingReductionFactor(L= L, Mi= Mi, beamSupportCoefs= beamSupportCoefs)
+chiLTRef= 0.6620686266446377
 ratio2= abs(chiLT-chiLTRef)/chiLTRef
 
 # The value of the bending moment capacity obtained in the article is 52.6 kN.m
-# greater than the value obtained here (44.01 kN.m), so the result is on the
+# greater than the value obtained here (51.85 kN.m), so the result is on the
 # safety side.
-MbRd= shape.getLateralTorsionalBucklingResistance(L= twiceL, Mi= Mi)
-MbRdRef= 44.0125554414055e3 # Reference value.
+MbRd= shape.getLateralTorsionalBucklingResistance(L= L, Mi= Mi, beamSupportCoefs= beamSupportCoefs)
+MbRdRef= 51.848580358421515e3 # Reference value.
 ratio3= abs(MbRd-MbRdRef)/MbRdRef
 
+# The result that is used to check the element internal forces (chiLT) is on
+# the safety side with respect to the values proposed in the article, so the
+# this procedure can be applied safely.
 '''
 print('Mcr= ', Mcr/1e3, 'kN.m', ratio0)
 print('overlineLambdaLT= ', overlineLambdaLT, ratio1)
