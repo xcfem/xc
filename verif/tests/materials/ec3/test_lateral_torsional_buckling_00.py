@@ -16,7 +16,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 
-def caseASampleMoments(L,M,FF):
+def case_a_sample_moments(L,M,FF):
     nDiv= 20
     step= L/nDiv
     xx=(0,L)
@@ -42,8 +42,8 @@ c1=list()
 psii= -1.0
 C1i= 0.0
 for i in range(1,nDiv+2): 
-    mD= caseASampleMoments(5.0,10.0,psii)
-    Mi=intp.interpEquidistPoints(xi=mD[0],yi=mD[1],nDiv=4)
+    mD= case_a_sample_moments(5.0,10.0,psii)
+    Mi= intp.interpEquidistPoints(xi=mD[0],yi=mD[1],nDiv=4)
     mgf= EC3lsc.MomentGradientFactorC1(Mi)
     C1i= mgf.getC1(beamSupportCoefs)
     psi.append(psii)

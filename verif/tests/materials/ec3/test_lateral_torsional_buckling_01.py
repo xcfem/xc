@@ -23,7 +23,7 @@ __email__= "l.pereztato@gmail.com"
 beamSupportCoefs= EC3lsc.BeamSupportCoefficients(k1= 1.0,k2= 1.0)
 x= [0.0,0.25,0.5,0.75,1.0]
 M= [50,122.5,105,-2.5,-200]
-Mi=intp.interpEquidistPoints(xi=x,yi=M,nDiv=4)
+Mi= intp.interpEquidistPoints(xi=x,yi=M,nDiv=4)
 mgf1= EC3lsc.MomentGradientFactorC1(Mi)
 C11= mgf1.getC1(beamSupportCoefs)
 C11Teor= math.sqrt(35*200**2/(200**2+9*122.5**2+16*105**2+9*2.5**2))
