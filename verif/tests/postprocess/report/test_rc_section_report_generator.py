@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-''' Check reinforced concrete sections report generation.'''
+''' Check reinforced concrete sections report generation. The test does not
+ verify the output contents, only that the code runs and the file is
+ created. The accuracy of the results is tested elsewhere.'''
 
 import os
 import math

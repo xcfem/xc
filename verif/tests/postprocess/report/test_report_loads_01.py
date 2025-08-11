@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-''' Verify crack control limit state checking.'''
+''' Verify load report generation. The test does not verify the output 
+contents, only that the code runs and the file is created. The accuracy of 
+the results is tested elsewhere.'''
 
 from __future__ import print_function
 

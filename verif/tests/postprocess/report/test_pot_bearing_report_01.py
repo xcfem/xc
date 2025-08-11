@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-''' Test functions that report results from PotBearing class objects.'''
+''' Test functions that report results from PotBearing class objects. The test
+    does not verify the output contents, only that the code runs and the file 
+    is created. The accuracy of the results is tested elsewhere.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2025, LCPT and AOO"
