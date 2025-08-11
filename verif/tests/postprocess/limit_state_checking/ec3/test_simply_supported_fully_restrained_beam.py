@@ -69,7 +69,6 @@ xcSection= shape.defElasticShearSection3d(preprocessor)
 # We use a set of small lines to simulate the lateral restraint
 # of the upper flange.
 ## Points.
-pointHandler= preprocessor.getMultiBlockTopology.getPoints
 points= list()
 numLines= 10
 spanIncrement= beamSpan/numLines
@@ -88,7 +87,6 @@ for p in points[1:]:
 
 
 # Mesh
-modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 trfs= preprocessor.getTransfCooHandler
 lin= trfs.newLinearCrdTransf3d('lin')
 lin.xzVector= xc.Vector([0,1,0])
