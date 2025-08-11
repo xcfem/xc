@@ -88,13 +88,14 @@ s    '''
         if(not self.elemSet):
             self.createElementSet()
         
-        lstEqPos3d= gu.lstEquPnts_from_polyline(self.pline, nDiv=4) #(five points equally spaced)
+        lstEqPos3d= gu.lstEquPnts_from_polyline(self.pline, nDiv=4) # (five points equally spaced)
         lstEqElem= [self.elemSet.getNearestElement(p) for p in lstEqPos3d]
         self.contrPnt= list()
         for i in range(5):
             elem= lstEqElem[i]
-            elSegm= elem.getLineSegment(0)
-            relDistPointInElem= (lstEqPos3d[i]-elSegm.getFromPoint()).getModulus()/elSegm.getLength()
+            elSegm= elem.getLineSegment(True)
+            length= elSegm.getLength()
+            relDistPointInElem= (lstEqPos3d[i]-elSegm.getFromPoint()).getModulus()/length
             self.contrPnt.append((elem,relDistPointInElem))
 
     def getBendingMomentsAtControlPoints(self):
@@ -104,7 +105,7 @@ s    '''
         sz= len(self.contrPnt)
         Mi= list()
         for i in range(sz):
-            e=self.contrPnt[i][0]
+            e= self.contrPnt[i][0]
             e.getResistingForce()
             Mz1= 0.0
             if(hasattr(e,'getMz1')):
@@ -112,7 +113,7 @@ s    '''
             Mz2= 0.0
             if(hasattr(e,'getMz2')):
                Mz2= e.getMz2  #Z bending moment at the front end of the element
-            MzCP=Mz1+(Mz2-Mz1)*self.contrPnt[i][1] # Z bending moment at the control point
+            MzCP= Mz1+(Mz2-Mz1)*self.contrPnt[i][1] # Z bending moment at the control point
             Mi.append(MzCP)
         return Mi;
             
