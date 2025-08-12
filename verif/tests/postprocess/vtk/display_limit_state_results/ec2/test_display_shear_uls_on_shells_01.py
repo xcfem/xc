@@ -30,7 +30,7 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
     pth= "."
-fName= pth+"/../../../aux/common_values/shear_tests_5_and_6_ec2.yaml"
+fName= pth+"/../../../../aux/common_values/shear_tests_5_and_6_ec2.yaml"
 with open(fName) as file:
     try:
         valueData= yaml.safe_load(file)
