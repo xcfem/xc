@@ -217,10 +217,12 @@ def getUIShapeNominalFlexuralStrength(shape, lateralUnbracedLength, Cb, majorAxi
             slenderFlanges= shape.bendingSlenderFlangeRatio(majorAxis)
             Sy= shape.get('Wyel') # Elastic section modulus about minor axis.
             if(slenderFlanges<=1.0): # flanges are noncompact -> equation F6-2 applies.
-                lmbd= 2.0*shape.get('bSlendernessRatio') # see lambda expression in F6. 
+                lmbd= shape.get('bSlendernessRatio') # see lambda expression in F6 and the
+                                                     # definition of b in the same clause.
                 lmbd_pf= shape.getLambdaPFlangeBending()
                 lmbd_rf= shape.getLambdaRFlangeBending()
-                Mn= Mp-(Mp-0.7*Fy*Sy)*((lmbd-lmbd_pf)/(lmbd_rf-lmbd_pf)) # equation F6-2
+                lmbd_factor= (lmbd-lmbd_pf)/(lmbd_rf-lmbd_pf)
+                Mn= Mp-(Mp-0.7*Fy*Sy)*lmbd_factor # equation F6-2
             else: # slender flanges.
                 Fcr= shape.getCriticalStressF(None, None, majorAxis)
                 Mn= Fcr*Sy # equation F6-3
@@ -1153,7 +1155,7 @@ class WShape(structural_steel.IShape):
         :param Cb: lateral-torsional buckling modification factor.
         :param majorAxis: true if flexure about the major axis.
         '''
-        return getUIShapeNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis)
+        return getUIShapeNominalFlexuralStrength(self, lateralUnbracedLength= lateralUnbracedLength, Cb= Cb, majorAxis= majorAxis)
     
     def getDesignFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
         ''' Return the design flexural strength of the section
