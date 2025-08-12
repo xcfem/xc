@@ -1923,6 +1923,7 @@ echo "$BLEU" "    EC3 limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_01.py
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_02.py
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_03.py
+python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_04.py
 python tests/postprocess/limit_state_checking/ec3/test_simply_supported_fully_restrained_beam.py
 echo "$BLEU" "    EHE limit state checking." "$NORMAL"
 echo "$BLEU" "      EHE limit state checking: shear." "$NORMAL"
@@ -2012,7 +2013,10 @@ python tests/postprocess/vtk/display_mat_response/test_display_stresses_on_brick
 python tests/postprocess/vtk/display_mat_response/test_display_strains_on_shell_01.py
 python tests/postprocess/vtk/display_mat_response/test_display_internal_forces_on_shell_01.py
 echo "$BLEU" "    Graphic output. Limit state results." "$NORMAL"
-python tests/postprocess/vtk/display_limit_state_results/test_display_shear_uls_on_shells_01.py
+echo "$BLEU" "      Eurocode 2." "$NORMAL"
+python tests/postprocess/vtk/display_limit_state_results/ec2/test_display_shear_uls_on_shells_01.py
+echo "$BLEU" "      Eurocode 3." "$NORMAL"
+python tests/postprocess/vtk/display_limit_state_results/ec2/test_display_bending_uls_cf_on_beams_01.py
 
 # Report tests.
 echo "$BLEU" "  Report output." "$NORMAL"
