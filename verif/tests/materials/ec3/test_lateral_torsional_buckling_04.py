@@ -2,14 +2,16 @@
 ''' Lateral torsional buckling of steel beams. Test based on the example
     at section 4.3 of the article:
 
-    "Stability Study of Cantilever-Beams – Numerical Analysis and Analytical Calculation (LTB)" Matthias Kraus, Nicolae-Andrei Crișan, Björn Witto
-URL: https://d-nb.info/125069664X/34
+    "Stability Study of Cantilever-Beams – Numerical Analysis and Analytical 
+     Calculation (LTB)" Matthias Kraus, Nicolae-Andrei Crișan, Björn Witto
+
+    URL: https://d-nb.info/125069664X/34
 '''
 from __future__ import print_function
 from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2014, LCPT"
+__copyright__= "Copyright 2025, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
