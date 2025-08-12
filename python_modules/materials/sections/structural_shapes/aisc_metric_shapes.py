@@ -104,28 +104,28 @@ def getUIShapeRts(shape, majorAxis= True):
 def getUIShapeLambdaPFlangeBending(shape):
     '''Return he limiting slenderness for a compact flange, 
        defined in Table B4.1b of AISC-360-16.'''
-    E= shape.get('E')
+    E= shape.steelType.E # shape.get('E')
     Fy= shape.steelType.fy
     return 0.38*math.sqrt(E/Fy) # Case 10 or case 13
 
 def getUIShapeLambdaRFlangeBending(shape):
     '''Return he limiting slenderness for a noncompact flange, 
        defined in Table B4.1b of AISC-360-16.'''
-    E= shape.get('E')
+    E= shape.steelType.E # shape.get('E')
     Fy= shape.steelType.fy
     return 1.0*math.sqrt(E/Fy) # Case 10 or case 13
 
 def getUIShapeLambdaRFlangeCompression(shape):
     '''Return he limiting slenderness for a nonslender flange, 
        defined in Table B4.1a of AISC-360-16.'''
-    E= shape.get('E')
+    E= shape.steelType.E # shape.get('E')
     Fy= shape.steelType.fy
     return 0.56*math.sqrt(E/Fy) # Case 1
 
 def getUIShapeLambdaPWebBending(shape):
     '''Return he limiting slenderness for a compact web, 
        defined in Table B4.1b of AISC-360-16.'''
-    E= shape.get('E')
+    E= shape.steelType.E # shape.get('E')
     Fy= shape.steelType.fy
     return 3.76*math.sqrt(E/Fy) # Case 10 or case 13
 
@@ -140,7 +140,7 @@ def getUIShapeLp(shape, majorAxis= True):
     if(not majorAxis):
         lmsg.error(__name__+': L_p not implemented for minor axis.')
     ry= shape.get('iy') # Radius of gyration about minor axis.
-    E= shape.get('E') # Elastic modulus.
+    E= shape.steelType.E # shape.get('E') # Elastic modulus.
     Fy= shape.steelType.fy # specified minimum yield stress
     return 1.76*ry*math.sqrt(E/Fy)
 
@@ -155,7 +155,7 @@ def getUIShapeLr(shape, majorAxis= True):
     if(not majorAxis):
         lmsg.error(__name__+': L_r not implemented for minor axis.')
     rts= shape.getRts()
-    E= shape.get('E') # Elastic modulus.
+    E= shape.steelType.E # shape.get('E') # Elastic modulus.
     Fy= shape.steelType.fy # specified minimum yield stress
     Sz= shape.get('Wzel') # Elastic section modulus about major axis.
     h0= shape.get('ho') # Distance between the flange centroids
@@ -179,10 +179,10 @@ def getUIShapeCriticalStressF(shape, lateralUnbracedLength, Cb, majorAxis= True)
     :param Cb: lateral-torsional buckling modification factor.
     :param majorAxis: true if flexure about the major axis.
     '''
-    E= shape.get('E') # Elastic modulus.
+    E= shape.steelType.E # shape.get('E') # Elastic modulus.
     if(not majorAxis):
         b_tf= 2.0*shape.get('bSlendernessRatio') # see lambda expression in F6. 
-        return 0.69*E/b_tf**2 # equation F6-4
+        retval= 0.69*E/b_tf**2 # equation F6-4
     else:
         Sz= shape.get('Wzel') # Elastic section modulus about major axis.
         h0= shape.get('ho') # Distance between the flange centroids
@@ -190,8 +190,10 @@ def getUIShapeCriticalStressF(shape, lateralUnbracedLength, Cb, majorAxis= True)
         Lb_rts2= (lateralUnbracedLength/rts)**2
         J= shape.get('It') # Torsional moment of inertia
         c= shape.getCCoefficient()
-        sqroot= math.sqrt(1+0.078*J*c/Sz/h0*Lb_rts2)
-        return Cb*math.pi**2*E/Lb_rts2*sqroot
+        Jc_Szh0= J*c/Sz/h0
+        sqroot= math.sqrt(1+0.078*Jc_Szh0*Lb_rts2)
+        retval= Cb*math.pi**2*E/Lb_rts2*sqroot
+    return retval
 
 def getUIShapeNominalFlexuralStrength(shape, lateralUnbracedLength, Cb, majorAxis= True):
     ''' Return the nominal flexural strength of the member
@@ -220,7 +222,6 @@ def getUIShapeNominalFlexuralStrength(shape, lateralUnbracedLength, Cb, majorAxi
                 lmbd_rf= shape.getLambdaRFlangeBending()
                 Mn= Mp-(Mp-0.7*Fy*Sy)*((lmbd-lmbd_pf)/(lmbd_rf-lmbd_pf)) # equation F6-2
             else: # slender flanges.
-
                 Fcr= shape.getCriticalStressF(None, None, majorAxis)
                 Mn= Fcr*Sy # equation F6-3
     else:
@@ -250,7 +251,7 @@ def getUIShapeNominalFlexuralStrength(shape, lateralUnbracedLength, Cb, majorAxi
                     Mn= Mp-(Mp-0.7*Fy*Sz)*((lmbd-lmbd_pf)/(lmbd_rf-lmbd_pf)) # equation F3-1
                 else: # flanges are slender -> equation F3-2 applies.
                     kc= max(min(4.0/math.sqrt(shape.get('hSlendernessRatio')),0.76),0.35)
-                    Mn= 0.9*shape.get('E')*kc*Sz/lmbd**2 # equation F3-2
+                    Mn= 0.9*shape.steelType.E # shape.get('E')*kc*Sz/lmbd**2 # equation F3-2
             else: # web is not compact. To implement from sections F4 and F5
                 lmsg.error(__name__+': nominal flexural strength for noncompact web sections not implemented yet.')
                 Mn= 1e-9
@@ -308,7 +309,7 @@ def getG22WebShearBucklingStrengthCoefficient(shape, kv, majorAxis= True):
     h_t= shape.get('hSlendernessRatio')
     if(not majorAxis):
         h_t= shape.get('bSlendernessRatio')
-    E= shape.get('E')
+    E= shape.steelType.E # shape.get('E')
     Fy= shape.steelType.fy
     return getG22ShearBucklingStrengthCoefficient(h_t, E, Fy, kv, majorAxis)
 
@@ -354,7 +355,7 @@ def getShapeTorsionalElasticBucklingStress(shape, effectiveLengthX):
 def getUIShapeLambdaMDFlange(shape):
     '''Return the limiting width-to-thickness ratio for the unstiffened flange
        of a moderate ductile member according to table D1.1 of AISC 341-16.'''
-    E= shape.get('E')
+    E= shape.steelType.E # shape.get('E')
     Fy= shape.steelType.fy
     Ry= shape.steelType.Ry
     return 0.40*math.sqrt(E/Fy/Ry) # Case 1
@@ -362,7 +363,7 @@ def getUIShapeLambdaMDFlange(shape):
 def getUIShapeLambdaHDFlange(shape):
     '''Return the limiting width-to-thickness ratio for the unstiffened flange
        of a highly ductile member according to table D1.1 of AISC 341-16.'''
-    E= shape.get('E')
+    E= shape.steelType.E # shape.get('E')
     Fy= shape.steelType.fy
     Ry= shape.steelType.Ry
     return 0.32*math.sqrt(E/Fy/Ry) # Case 1
@@ -370,7 +371,7 @@ def getUIShapeLambdaHDFlange(shape):
 def getUIShapeLambdaMDWeb(shape, factor= 1.57):
     '''Return the limiting width-to-thickness ratio for the web
        of a moderate ductile member according to table D1.1 of AISC 341-16.'''
-    E= shape.get('E')
+    E= shape.steelType.E # shape.get('E')
     Fy= shape.steelType.fy
     Ry= shape.steelType.Ry
     return factor*math.sqrt(E/Fy/Ry) # Case 5
@@ -378,7 +379,7 @@ def getUIShapeLambdaMDWeb(shape, factor= 1.57):
 def getUIShapeLambdaHDWeb(shape, factor= 1.57):
     '''Return the limiting width-to-thickness ratio for the web
        of a higly ductile member according to table D1.1 of AISC 341-16.'''
-    E= shape.get('E')
+    E= shape.steelType.E # shape.get('E')
     Fy= shape.steelType.fy
     Ry= shape.steelType.Ry
     return factor*math.sqrt(E/Fy/Ry) # Case 5
@@ -3004,7 +3005,7 @@ class HSSShape(structural_steel.QHShape):
         '''Return the limiting width-to-thickness ratio for the walls 
            of a moderate ductile member according to table D1.1 
            of AISC 341-16.'''
-        E= shape.get('E')
+        E= shape.steelType.E # shape.get('E')
         Fy= shape.steelType.fy
         Ry= shape.steelType.Ry
         return 0.76*math.sqrt(E/Fy/Ry) # Case 4
@@ -3013,7 +3014,7 @@ class HSSShape(structural_steel.QHShape):
         '''Return the limiting width-to-thickness ratio for the walls 
            of a highly ductile member according to table D1.1 
            of AISC 341-16.'''
-        E= shape.get('E')
+        E= shape.steelType.E # shape.get('E')
         Fy= shape.steelType.fy
         Ry= shape.steelType.Ry
         return 0.65*math.sqrt(E/Fy/Ry) # Case 4
@@ -3205,7 +3206,7 @@ class CHSSShape(structural_steel.CHShape):
            equation F8-4 of  AISC-360-16.
         '''
         slendernessRatio= self.get('slendernessRatio')
-        E= shape.get('E')
+        E= shape.steelType.E # shape.get('E')
         return 0.33*E/slendernessRatio
 
     def getLambdaPWallBending(self):
@@ -3292,7 +3293,7 @@ class CHSSShape(structural_steel.CHShape):
         '''Return the limiting width-to-thickness ratio for the wall 
            of a moderate ductile member according to table D1.1 
            of AISC 341-16.'''
-        E= shape.get('E')
+        E= shape.steelType.E # shape.get('E')
         Fy= shape.steelType.fy
         Ry= shape.steelType.Ry
         return 0.062*(E/Fy/Ry) # Case 10
@@ -3301,7 +3302,7 @@ class CHSSShape(structural_steel.CHShape):
         '''Return the limiting width-to-thickness ratio for the wall 
            of a highly ductile member according to table D1.1 
            of AISC 341-16.'''
-        E= shape.get('E')
+        E= shape.steelType.E # shape.get('E')
         Fy= shape.steelType.fy
         Ry= shape.steelType.Ry
         return 0.053*math.sqrt(E/Fy/Ry) # Case 10
