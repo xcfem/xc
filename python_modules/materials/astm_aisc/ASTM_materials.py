@@ -1523,7 +1523,7 @@ class ASTMShape(object):
         else:
             NcRd= self.getDesignTensileStrength() # available axial strength.
             ratioN= Nd/NcRd
-        McRdy= self.getDesignFlexuralStrength(None, None, majorAxis= False) # available flexural strength minor axis.
+        McRdy= self.getDesignFlexuralStrength(lateralUnbracedLength= None, Cb= None, majorAxis= False) # available flexural strength minor axis.
         McRdz= self.getReferenceFlexuralStrength() # reference flexural strength major axis.
         # MvRdz= self.getMvRdz(Vyd)
         MvRdz= McRdz # available flexural strength due to shear interaction.
