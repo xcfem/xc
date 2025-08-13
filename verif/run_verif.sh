@@ -2018,6 +2018,7 @@ echo "$BLEU" "      Eurocode 2." "$NORMAL"
 python tests/postprocess/vtk/display_limit_state_results/ec2/test_display_shear_uls_on_shells_01.py
 echo "$BLEU" "      Eurocode 3." "$NORMAL"
 python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_bending_uls_cf_on_beams_01.py
+python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_bending_uls_cf_on_beams_02.py
 
 # Report tests.
 echo "$BLEU" "  Report output." "$NORMAL"
