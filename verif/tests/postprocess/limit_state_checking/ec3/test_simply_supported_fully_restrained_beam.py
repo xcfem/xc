@@ -155,7 +155,7 @@ ec3CalcSet.fillDownwards()
 
 ## Compute internal forces for each combination
 for ls in limitStates:
-    ls.analyzeLoadCombinations(combContainer,ec3CalcSet, bucklingMembers= ec3Members)
+    ls.analyzeLoadCombinations(combContainer= combContainer, setCalc= ec3CalcSet, bucklingMembers= ec3Members)
 
 ## Check normal stresses.
 ### Limit state to check.
