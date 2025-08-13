@@ -1924,6 +1924,7 @@ python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_01.py
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_02.py
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_03.py
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_04.py
+python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_05.py
 python tests/postprocess/limit_state_checking/ec3/test_simply_supported_fully_restrained_beam.py
 echo "$BLEU" "    EHE limit state checking." "$NORMAL"
 echo "$BLEU" "      EHE limit state checking: shear." "$NORMAL"
