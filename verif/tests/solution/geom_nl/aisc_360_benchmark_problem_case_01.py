@@ -71,7 +71,7 @@ loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## Uniform load.
 cLC= loadCaseManager.setCurrentLoadCase('uLoad')
-uLoad= xc.Vector([2.92e3, 0.0, 0.0])
+uLoad= xc.Vector([2.92e3, 0.0])
 for e in xcTotalSet.elements:
     e.vector2dUniformLoadGlobal(uLoad)
   
