@@ -24,7 +24,7 @@ def compute_results_under_permanent_loads_on_bearings(modelSpace, bearingElement
         lcExpr= permLoadCombinations[lcName]
         modelSpace.removeAllLoadsAndCombinationsFromDomain()
         modelSpace.revertToStart()
-        modelSpace.addNewLoadCaseToDomain(loadCaseName= lcName, loadCaseExpression= lcExpr)
+        modelSpace.addNewLoadCaseToDomain(loadCaseName= lcName, loadCaseExpression= lcExpr, reset= False) # Previous loads removed already, so no need to reset.
         result= modelSpace.analyze(calculateNodalReactions= True)
 
         combResults= dict()
@@ -58,7 +58,7 @@ def compute_results_under_variable_loads_on_bearings(modelSpace, bearingElements
         lcExpr= varLoadCombinations[lcName]
         modelSpace.removeAllLoadsAndCombinationsFromDomain()
         modelSpace.revertToStart()
-        modelSpace.addNewLoadCaseToDomain(loadCaseName= lcName, loadCaseExpression= lcExpr)
+        modelSpace.addNewLoadCaseToDomain(loadCaseName= lcName, loadCaseExpression= lcExpr, reset= False) # Previous loads removed already, so no need to reset.
         result= modelSpace.analyze(calculateNodalReactions= True)
 
         combResults= dict()

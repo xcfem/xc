@@ -1345,6 +1345,13 @@ class PredefinedSpace(object):
         ''' Remove all the load cases from the domain.'''
         self.preprocessor.resetLoadCase()        
         
+    # 13/08/2025 LP:
+    # The addNewLoadCaseToDomain method has changed its behavior. Until now, it
+    # always removed the previous loads and reverted the model to start.
+    # This is counterintuitive given the “add” in its name; one can expect to be
+    # adding loads to the model and not removing the previous ones. From now on
+    # the removal of previous loads and reverting to the initial state is
+    # optional. The reset parameter controls it.
     def addNewLoadCaseToDomain(self, loadCaseName: str, loadCaseExpression:str, force= False, reset= False):
         '''Defines a new combination and add it to the domain.
 
@@ -1843,8 +1850,8 @@ class PredefinedSpace(object):
                     self.removeAllLoadPatternsFromDomain()
                     self.revertToStart()
                     if(echo):
-                        lmsg.info(str(combKey)+': '+str(loadCombination))
-                    self.addNewLoadCaseToDomain(loadCaseName= combKey, loadCaseExpression= loadCombination)
+                        lmsg.info(str(combKey)+': '+str(loadCombination))    
+                    self.addNewLoadCaseToDomain(loadCaseName= combKey, loadCaseExpression= loadCombination, reset= False) # Previous loads removed already, so no need to reset.
                     self.analyze()
                     for xcSet in setsToDisplay:
                         oh.displayReactions(setToDisplay= xcSet)
