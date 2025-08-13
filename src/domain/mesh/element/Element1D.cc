@@ -66,18 +66,33 @@ XC::Element1D::Element1D(int tag, int classTag,int Nd1,int Nd2)
 
 void XC::Element1D::vector2dUniformLoadGlobal(const Vector &v)
   {
-    const CrdTransf *crd_trf= getCoordTransf();
-    // Some 1D elements like Trusses have no coordinate
-    // transformation (and don't accept body loads neither).
-    if(crd_trf)
+    const size_t sz= v.Size();
+    if(sz>2)
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; WARNING the given vector has "
+	        << sz << " components."
+	        << " Only the first two will be considered."
+		<< Color::def << std::endl;      
+    if(sz>1)
       {
-	const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
-	vector2dUniformLoadLocal(vTrf);
+	const CrdTransf *crd_trf= getCoordTransf();
+	// Some 1D elements like Trusses have no coordinate
+	// transformation (and don't accept body loads neither).
+	if(crd_trf)
+	  {
+	    const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
+	    vector2dUniformLoadLocal(vTrf);
+	  }
+	else
+	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		    << "; WARNING element has no coordinate transformation"
+		    << " load ignored."
+		    << Color::def << std::endl;
       }
     else
-      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
-		<< "; WARNING element has no coordinate transformation"
-		<< " load ignored."
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << "; ERROR a vector of dimension 2"
+	        << " was expected instead of: " << v
 		<< Color::def << std::endl;
   }
 
@@ -284,6 +299,12 @@ void XC::Element1D::vector2dPointLoadLocal(const Vector &p,const Vector &v)
 void XC::Element1D::vector3dUniformLoadGlobal(const Vector &v)
   {
     const size_t sz= v.Size();
+    if(sz>3)
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; WARNING the given vector has "
+	        << sz << " components."
+	        << " Only the first three will be considered."
+		<< Color::def << std::endl;      
     if(sz>2)
       {
         const CrdTransf *crd_trf= getCoordTransf();
