@@ -79,13 +79,13 @@ creepFactorDeadLoad= 1.0
 creepFactorLiveLoad= 1.0
 # Upper chord loads
 uniformLiveLoad= (creepFactorDeadLoad*10.0+creepFactorLiveLoad*40.0)*centerSpacing*psfTokNm2*1e3
-loadVector=xc.Vector([0,0,-uniformLiveLoad,0,0,0])
+loadVector=xc.Vector([0,0,-uniformLiveLoad])
 for e in truss.upperChordSet.getElements:
     e.vector3dUniformLoadGlobal(loadVector)
 
 # Lower chord loads
 uniformLiveLoad= (creepFactorDeadLoad*5.0)*centerSpacing*psfTokNm2*1e3
-loadVector=xc.Vector([0,0,-uniformLiveLoad,0,0,0])
+loadVector=xc.Vector([0,0,-uniformLiveLoad])
 for e in truss.lowerChordSet.getElements:
     e.vector3dUniformLoadGlobal(loadVector)
 
