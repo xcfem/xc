@@ -142,7 +142,7 @@ for ls in limitStates:
 ### Limit state to check.
 limitState= limitStates[0]
 ### Build controller.
-controller= limitState.getController(biaxialBending= True)
+controller= limitState.getController(biaxialBending= False)
 ### Perform checking.
 bendingAverage= limitState.check(setCalc=ec3CalcSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)
 
