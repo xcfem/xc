@@ -24,7 +24,7 @@ from postprocess.reports import common_formats as fmt
 from postprocess import extrapolate_elem_attr as ext
 from materials import stresses
 
-__all__= ['AxialForceControlVars', 'BiaxialBendingControlVars', 'BiaxialBendingStrengthControlVars', 'CFN', 'CFNMy', 'CFNMyMz', 'CFVy', 'ControlVarsBase', 'CrackControlBaseVars', 'CrackControlVars', 'FatigueControlBaseVars', 'FatigueControlVars', 'N', 'NMy', 'NMyMz', 'RCCrackControlVars', 'RCCrackStraightControlVars', 'RCShearControlVars', 'SIATypeRCShearControlVars', 'ShVy', 'ShearYControlVars', 'SteelShapeBiaxialBendingControlVars', 'UniaxialBendingControlVars', 'VonMisesControlVars', 'RCBucklingControlVars', 'SteelBucklingControlVars', 'extrapolate_control_var', 'getControlVarImportModuleStr', 'get_diagram_direction', 'get_element_internal_force_component_data', 'write_control_vars_from_elements', 'write_control_vars_from_elements_for_ansys', 'write_control_vars_from_phantom_elements']
+__all__= ['AxialForceControlVars', 'BiaxialBendingControlVars', 'BiaxialBendingStrengthControlVars', 'CFN', 'CFNMy', 'CFNMyMz', 'CFVy', 'ControlVarsBase', 'CrackControlBaseVars', 'CrackControlVars', 'FatigueControlBaseVars', 'FatigueControlVars', 'N', 'NMy', 'NMyMz', 'RCCrackControlVars', 'RCCrackStraightControlVars', 'RCShearControlVars', 'SIATypeRCShearControlVars', 'ShVy', 'ShearYControlVars', 'SteelShapeUniaxialBendingControlVars', 'SteelShapeBiaxialBendingControlVars', 'UniaxialBendingControlVars', 'VonMisesControlVars', 'RCBucklingControlVars', 'SteelBucklingControlVars', 'extrapolate_control_var', 'getControlVarImportModuleStr', 'get_diagram_direction', 'get_element_internal_force_component_data', 'write_control_vars_from_elements', 'write_control_vars_from_elements_for_ansys', 'write_control_vars_from_phantom_elements']
 
 def get_diagram_direction(elem, component, defaultDirection):
     '''Return the direction vector to represent the diagram over the element
@@ -476,11 +476,11 @@ class ShearYControlVars(CFVy):
         self.idSection= dct['idSection']
 
 class UniaxialBendingControlVars(CFNMy):
-    '''Uniaxial bending. Normal stresses limit state variables [CF,N,My].
+    '''Uniaxial bending. Normal stresses limit state variables [CF,N,M].
 
     :ivar idSection: section identifier.
     '''
-    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0):
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0, My= 0.0):
         '''
         Constructor.
 
@@ -490,7 +490,7 @@ class UniaxialBendingControlVars(CFNMy):
         :param N: axial force (defaults to 0.0).
         :param My: bending moment about Y axis (defaults to 0.0).
         '''
-        super(UniaxialBendingControlVars,self).__init__(combName,CF,N,My)
+        super(UniaxialBendingControlVars,self).__init__(combName,CF,N, My)
         self.idSection= idSection # Section identifier.
 
     def getDict(self):
@@ -769,6 +769,52 @@ class UniaxialBucklingControlVars(UniaxialBendingControlVars):
         self.ef= dct['ef'] #additional eccentricity for buckling.
         self.mode= dct['mode'] # buckling mode that corresponds to the previous parameters.
     
+class UniaxialBendingStrengthControlVars(UniaxialBendingControlVars):
+    '''Control variables for biaxial bending normal stresses LS 
+    verification on steel-shape elements.
+
+    :ivar Ncrd:  design strength to axial compression
+    :ivar McRdz: design moment strength about Z (strong) axis
+    :ivar chiLT: reduction factor for lateral-torsional buckling (defaults to 1)
+    :ivar chiN:  reduction factor for compressive strength (defaults to 1)
+    '''
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0, N= 0.0, Mz= 0.0,Ncrd=0.0, McRdz=0.0,chiLT=1.0, chiN= 1.0):
+        '''
+        Constructor.
+
+        :param idSection: section identifier.
+        :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor (efficiency) (defaults to -1)
+        :param N:        axial force (defaults to 0.0)
+        :param Mz:       bending moment about Z axis (defaults to 0.0)
+        :param Ncrd:     design strength to axial compression
+        :param McRdz:    design moment strength about Z (strong) axis
+        :param chiLT:    reduction factor for lateral-torsional buckling (defaults to 1)
+        :param chiN:     reduction factor for compressive strength (defaults to 1)
+        '''
+        super(UniaxialBendingStrengthControlVars,self).__init__(idSection= idSection, combName= combName, CF= CF, N= N, My= Mz)
+        self.Ncrd=Ncrd
+        self.McRdz=McRdz
+        self.chiLT=chiLT
+        self.chiN= chiN
+        
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(UniaxialBendingStrengthControlVars,self).getDict()
+        retval.update({'Ncrd':self.Ncrd, 'McRdz':self.McRdz, 'chiLT':self.chiLT, 'chiN':self.chiN})
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super(BiaxialBendingStrengthControlVars,self).setFromDict(dct)
+        self.Ncrd= dct['Ncrd']
+        self.McRdz= dct['McRdz']
+        self.chiLT= dct['chiLT']
+        self.chiN= dct['chiN']
+        
 class BiaxialBendingStrengthControlVars(BiaxialBendingControlVars):
     '''Control variables for biaxial bending normal stresses LS 
     verification on steel-shape elements.
@@ -819,6 +865,48 @@ class BiaxialBendingStrengthControlVars(BiaxialBendingControlVars):
         self.McRdz= dct['McRdz']
         self.chiLT= dct['chiLT']
         self.chiN= dct['chiN']
+        
+class SteelShapeUniaxialBendingControlVars(UniaxialBendingStrengthControlVars):
+    '''Control variables for biaxial bending normal stresses LS 
+    verification en steel-shape elements.
+
+    :ivar MvRdz:    reduced design moment strength about Z (strong) axis for shear interaction
+    :ivar MbRdz:    reduced design moment strength about Z (strong) axis for lateral-torsional bucking
+    '''
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0, Mz= 0.0, Ncrd=0.0, McRdz=0.0,MvRdz=0.0, MbRdz=0.0, chiLT=1.0, chiN=1.0):
+        '''
+        Constructor.
+
+        :param idSection: section identifier.
+        :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor (efficiency) (defaults to -1)
+        :param N:        axial force (defaults to 0.0)
+        :param Mz:       bending moment about Z axis (defaults to 0.0)
+        :param Ncrd:     design strength to axial compression
+        :param McRdz:    design moment strength about Z (strong) axis
+        :param MvRdz:    reduced design moment strength about Z (strong) axis for shear interaction
+        :param MbRdz:    reduced design moment strength about Z (strong) axis for lateral-torsional bucking
+        :param chiLT:    reduction factor for lateral-torsional buckling (defaults to 1)
+        :param chiN:     reduction factor for compressive strength (defaults to 1)
+        '''
+        super(SteelShapeUniaxialBendingControlVars,self).__init__(idSection= idSection,combName= combName, CF= CF, N= N, Mz= Mz, Ncrd= Ncrd, McRdz= McRdz, chiLT=chiLT, chiN= chiN)
+        self.MvRdz=MvRdz
+        self.MbRdz=MbRdz
+        
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(SteelShapeUniaxialBendingControlVars,self).getDict()
+        retval.update({'MvRdz':self.MvRdz, 'MbRdz':self.MbRdz})
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super(SteelShapeUniaxialBendingControlVars,self).setFromDict(dct)
+        self.MvRdz= dct['MvRdz']
+        self.MbRdz= dct['MbRdz']
         
 class SteelShapeBiaxialBendingControlVars(BiaxialBendingStrengthControlVars):
     '''Control variables for biaxial bending normal stresses LS 
