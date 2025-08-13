@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Reinforced concrete section. Crack control verification test.
-   results are compared with those of the «Prontuario informático del hormigón armado». '''
+''' Check reinforced concrete section report method. The test does not
+ verify the output contents, only that the code runs and the file is
+ created. The accuracy of the results is tested elsewhere.
+'''
 from __future__ import print_function
 from __future__ import division
 

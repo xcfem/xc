@@ -619,7 +619,7 @@ class PredefinedSpace(object):
     def setCurrentTime(self, t):
         ''' Set the value of the current pseudo-time.
 
-        :parma t: time to set.
+        :param t: time to set.
         '''
         self.preprocessor.getDomain.currentTime= t
 

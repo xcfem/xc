@@ -54,4 +54,44 @@ def get_annual_temp_variation(deck_type:str, z:float, h:float, s:float):
         lmsg.error(methodName+"; deck type: '"+str(deck_type)+"' unknown.")
     return retval
         
-    
+# K1 factor interpolation according to figure 2.29 of IAPF-07.
+fig_2_29_hi= [1.0, 1.5, 2.0, 2.5]
+fig_2_29_k1_d_3_5= [1.2, 1.06, 0.96, 0.96]
+fig_2_29_k1_d_3_0= [1.16, 1.00, 0.92, 0.92]
+fig_2_29_k1_d_2_5= [1.12, 0.96, 0.86, 0.86]
+fig_2_29_k1_d_2_0= [1.06, 0.91, 0.80, 0.77]
+f_2_29_k1_d_3_5= scipy.interpolate.interp1d(fig_2_29_hi, fig_2_29_k1_d_3_5, kind='linear')
+f_2_29_k1_d_3_0= scipy.interpolate.interp1d(fig_2_29_hi, fig_2_29_k1_d_3_0, kind='linear')
+f_2_29_k1_d_2_5= scipy.interpolate.interp1d(fig_2_29_hi, fig_2_29_k1_d_2_5, kind='linear')
+f_2_29_k1_d_2_0= scipy.interpolate.interp1d(fig_2_29_hi, fig_2_29_k1_d_2_0, kind='linear')
+
+def get_k1_according_to_figure_2_29(h:float, d:float):
+    ''' Return the value of the K1 factor according to figure 2.29 of IAPF-07.
+
+    :param h: depth of the deck beams (m).
+    :param d: distance between beams (m).
+    '''
+    retval= 1.2
+    if (h<2.5) and (d< 3.5):
+        if(d>=3.0):
+            v35= float(f_2_29_k1_d_3_5(h))
+            v30= float(f_2_29_k1_d_3_0(h))
+            retval= (v35-v30)/0.5*(h-3.0)+v30
+        elif(d>=2.5):
+            v30= float(f_2_29_k1_d_3_0(h))
+            v25= float(f_2_29_k1_d_2_5(h))
+            retval= (v30-v25)/0.5*(h-2.5)+v25            
+        elif(d>=2.0):
+            v25= float(f_2_29_k1_d_2_5(h))
+            v20= float(f_2_29_k1_d_2_0(h))
+            retval= (v25-v20)/0.5*(h-2.0)+v20            
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        errMsg= '; '
+        if(h>2.5):
+            errMsg+= 'beam depth: '+str(h)+ 'out of range (1, 2.5).\n'
+        if(d>3.5):
+            errMsg+= 'beam spacing: '+str(d)+ 'out of range (2, 3.5).\n'
+        lmsg.error(methodName+errMsg)
+    return retval
+

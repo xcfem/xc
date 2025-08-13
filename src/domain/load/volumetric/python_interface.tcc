@@ -48,6 +48,7 @@ class_<XC::ThreedimStrainLoad, bases<XC::ThreedimLoad>, boost::noncopyable >("Th
   .def("getStrain", make_function(&XC::ThreedimStrainLoad::getStrain, return_internal_reference<>() ),"getStrain(gaussPointIndex) return the strain at the given gauss point.")
   .def("getStrains", &XC::ThreedimStrainLoad::getStrainsPy, "Return the values of the strains for each gauss point.")
   .def("setStrainComp",&XC::ThreedimStrainLoad::setStrainComp, "setStrainComp(gaussPointIndex, j, strainValue), set the j-th component of the strain at the given gauss point")
+  .def("getStrainComp",&XC::ThreedimStrainLoad::getStrainComp, "getStrainComp(gaussPointIndex, j), get the j-th component of the strain at the given gauss point.")
   .def("getElementStrainsMatrix", &XC::ThreedimStrainLoad::getElementStrainsMatrix, "Return a matrix containing the element gauss points strain tensors as rows.") 
   ;
 

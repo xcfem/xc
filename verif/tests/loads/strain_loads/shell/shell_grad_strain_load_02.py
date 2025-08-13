@@ -67,6 +67,7 @@ lp0= modelSpace.newLoadPattern(name= '0')
 eleLoad= lp0.newElementalLoad("shell_strain_load")
 eleLoad.elementTags= xc.ID([elem1.tag])
 curvature=alpha*(Ttop-Tbottom)/thickness  # rad/m
+# strain component 3: curvature around local y axis (normal to local x axis).
 eleLoad.setStrainComp(0,3,curvature) #(id of Gauss point, id of component, value)
 eleLoad.setStrainComp(1,3,curvature)
 eleLoad.setStrainComp(2,3,curvature)

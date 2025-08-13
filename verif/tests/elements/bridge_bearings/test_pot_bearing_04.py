@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Home made test.'''
+''' Test PotBearing class.'''
 from __future__ import print_function
 import math
 

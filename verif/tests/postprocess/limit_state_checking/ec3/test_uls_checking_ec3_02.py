@@ -2,8 +2,8 @@
 ''' Test based on Benchmark 4 (Ultimate load of a single column -page 46-)
 of the document:
 
-Comparison of global analysis methods and design rules for steel frames according to Eurocode 3
-Klemann, B. W. (Author). 31 Jan 2010
+Comparison of global analysis methods and design rules for steel frames 
+according to Eurocode 3 Klemann, B. W. (Author). 31 Jan 2010
 
 http://https://research.tue.nl/en/studentTheses/comparison-of-global-analysis-methods-and-design-rules-for-steel-
 '''
@@ -136,7 +136,7 @@ class SolProc(predefined_solutions.PenaltyNewtonRaphson):
         
 ## Setup working directory.
 cfg= default_config.get_temporary_env_config()
-lsd.LimitStateData.envConfig= cfg
+lsd.LimitStateData.setEnvConfig(cfg)
 
 ## Set combinations to compute.
 loadCombinations= preprocessor.getLoadHandler.getLoadCombinations

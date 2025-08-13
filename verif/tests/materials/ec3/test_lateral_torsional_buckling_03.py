@@ -22,14 +22,11 @@ S355JR.gammaM= gammaM0
 IPE400= EC3_materials.IPEShape(S355JR,"IPE_400")
 IPE400.sectionClass= 1
 
-# Geometry
-k1= 1.0; k2= 1.0
-
-#Check results pages 34 and 35
+# Check results pages 34 and 35
 L= 3 # Bar length (m)
-x= [0.0,0.25*L,0.5*L,0.75*L,1.0*L]
-M= [-93.7e3,-93.7e3/2.0,0.0,114.3e3/2.0,114.3e3]
-Mi=intp.interpEquidistPoints(xi=x,yi=M,nDiv=4)
+x= [0.0,0.25*L,0.5*L,0.75*L,1.0*L] # points along the beam.
+M= [-93.7e3,-93.7e3/2.0,0.0,114.3e3/2.0,114.3e3] # bending moments along the beam.
+Mi= intp.interpEquidistPoints(xi=x,yi=M, nDiv=4)
 overlineLambdaLT= IPE400.getLateralBucklingNonDimensionalBeamSlenderness(L= L, Mi= Mi)
 alphaLT= IPE400.getLateralBucklingImperfectionFactor()
 # phiLT= IPE400.getLateralBucklingIntermediateFactor(1,x,M)

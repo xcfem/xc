@@ -19,18 +19,11 @@ from materials.astm_aisc import AISC_limit_state_checking as aisc
 from model import predefined_spaces
 from actions import load_cases
 from actions import combinations as combs
-# from postprocess import output_handler
 from postprocess import limit_state_data as lsd
 from postprocess.config import default_config
 
 from misc_utils import units_utils
 
-
-MPa2ksi= 0.145038
-kN2kips= 0.2248
-kip2kN= 1.0/kN2kips
-
-m2Toin2= 1.0/units_utils.inchToMeter**2
 
 # Problem type
 steelBeam= xc.FEProblem()
@@ -146,8 +139,8 @@ controller= limitState.getController()
 # Perform checking.
 average= limitState.check(setCalc=aiscCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y', controller= controller)
 
-ratio= ((average[0]-0.72538261095588463)/0.72538261095588463)**2
-ratio+= ((average[1]-0.72538261095588563)/0.72538261095588563)**2
+ratio= ((average[0]-0.727462840221129)/0.727462840221129)**2
+ratio+= ((average[1]-0.72746284022113)/0.72746284022113)**2
 ratio= math.sqrt(ratio)
 
 '''
@@ -165,6 +158,7 @@ else:
 
 # #########################################################
 # # Graphic stuff.
+# from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
 # oh.displayElementValueDiagram('chiN', setToDisplay= aiscCalcSet)

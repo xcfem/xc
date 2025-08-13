@@ -271,6 +271,20 @@ class Member(steel_member_base.BucklingMember):
         retval= mf.getLateralTorsionalBucklingModificationFactor()
         return retval
 
+    def _get_c_b(self):
+        ''' Convenience method that returns the lateral torsional buckling
+            modification factor.
+        '''
+        retval= 1.0 # conservative value
+        if(self.Cb):
+            retval= self.Cb
+        else:
+            if(self.lstLines):
+                retval= self.getLateralTorsionalBucklingModificationFactor()
+            else:
+                lmsg.error('Can\'t compute lateral-torsional buckling modification factor, taken as: '+str(retval))
+        return retval
+        
     def getNominalFlexuralStrength(self, majorAxis= True):
         ''' Return the nominal flexural strength of the member
             according to chapter F of AISC-360-16.
@@ -279,14 +293,7 @@ class Member(steel_member_base.BucklingMember):
                           bending around major axis. 
         '''
         lateralUnbracedLength= self.getEffectiveLengthX()
-        Cb= 1.0 # conservative value
-        if(self.Cb):
-            Cb= self.Cb
-        else:
-            if(self.lstLines):
-                Cb= self.getLateralTorsionalBucklingModificationFactor()
-            else:
-                lmsg.error('Can\'t compute lateral-torsional buckling modification factor, taken as: '+str(Cb))
+        Cb= self._get_c_b()
         return self.shape.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
 
     def getDesignFlexuralStrength(self, majorAxis= True):

@@ -69,7 +69,7 @@ def average_on_nodes(preprocessor, touchedNodes, attributeName):
         denom= touchedNodes[tag]
         n.setProp(attributeName, n.getProp(attributeName)*(1.0/denom))
 
-def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,initialValue= 0.0):
+def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,initialValue= 0.0, preprocessor= None):
     '''Extrapolate element's function values to the nodes.
 
     :param elemSet: set of elements.
@@ -92,7 +92,8 @@ def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,init
                 oldValue= n.getProp(attributeName)
                 n.setProp(attributeName,oldValue+value)
     #Divide by number of elements in the set that touch the node.
-    preprocessor= elemSet.owner.getPreprocessor
+    if(not preprocessor):
+        preprocessor= elemSet.owner.getPreprocessor
     average_on_nodes(preprocessor,touchedNodes, attributeName)
 
 def transform_to_local_coordinates(element, value):

@@ -81,6 +81,27 @@ class PropertyDiagram(cd.ColoredDiagram):
         self.createLookUpTable()
         self.createDiagramActor()
         self.clear()
-        
+
+    def filterElements(self):
+        ''' Return the elements that actually have the required property.
+        '''
+        retval= list()
+        refused_elements= list()
+        for s in self.elemSets:
+            for e in s.elements:
+                if(e.hasProp(self.propertyName)):
+                    retval.append(e)
+                else:
+                    refused_elements.append(e)
+        if(len(refused_elements)>0):
+            tag_lst= list()
+            for e in refused_elements:
+                tag_lst.append(e.tag)
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            warningMsg= '; elements: '+str(tag_lst) + ' do not have the required properties: '+str(propertyNames)
+            lmsg.warning(className+'.'+methodName+warningMsg)
+        return retval
+       
 
 

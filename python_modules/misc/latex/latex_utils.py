@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' LaTeX related utils.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
@@ -118,3 +119,16 @@ def get_unicode_symbol_from_name(compName: str):
     c= flatlatex.converter()
     latexExpr= get_latex_symbol_from_name(compName)
     return c.convert(latexExpr)
+
+def get_table_row(value_list):
+    '''Return a tex line to insert on any kind of LaTeX table.
+
+    :param value_list: list of values of the columns for the table 
+                       (they will be converted to strings).
+    '''
+    retval=''
+    for v in value_list:
+        retval+=str(v)+' & '
+    retval= retval[:-2]
+    retval+=' \\\\ \n'
+    return retval

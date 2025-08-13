@@ -16,6 +16,7 @@ Stress= "{:6.2f}"
 Pressure= Stress
 Diam= "{:2.0f}"
 Length= "{:4.2f}"
+LengthMM= "{:4.0f}" # Length in mm (without decimals).
 Area= "{:6.2f}"
 Factor= "{:4.2f}"
 Displacement= "{:4.2f}"

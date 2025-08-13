@@ -215,7 +215,7 @@ def get_bridge_deck_vertical_force_coefficient(b, dtotVP, alpha= math.radians(10
                  d_tot must be computed disregarding the traffic and any 
                  bridge equipment (see NOTE 1 in clause 8.3.3 of 
                  EN 1991-1-4:2005.
-    :parma alpha: angle of the wind with the horizontal (see figure 8.6 of EN 1991-1-4:2005).
+    :param alpha: angle of the wind with the horizontal (see figure 8.6 of EN 1991-1-4:2005).
     :param beta: superelevation of the bridge deck (see figure 8.6 of EN 1991-1-4:2005).
     '''
     angle10= math.radians(10)
@@ -252,7 +252,7 @@ def get_vertical_pressure(terrainCategory:str, b:float, dtotVP:float, z:float, v
     :param rho: density of air (defaults to 1.25 kg/m3).
     :param k1: turbulence factor.
     :param c0: orography factor.
-    :parma alpha: angle of the wind with the horizontal (see figure 8.6 of EN 1991-1-4:2005).
+    :param alpha: angle of the wind with the horizontal (see figure 8.6 of EN 1991-1-4:2005).
     :param beta: superelevation of the bridge deck (see figure 8.6 of EN 1991-1-4:2005).
     '''
     # Compute peak velocity pressure (qp= qb*ce).
@@ -280,7 +280,7 @@ def get_vertical_pressure_data(terrainCategory:str, x0: float, x1: float, dtotVP
     :param rho: density of air (defaults to 1.25 kg/m3).
     :param k1: turbulence factor.
     :param c0: orography factor.
-    :parma alpha: angle of the wind with the horizontal (see figure 8.6 of EN 1991-1-4:2005).
+    :param alpha: angle of the wind with the horizontal (see figure 8.6 of EN 1991-1-4:2005).
     :param beta: superelevation of the bridge deck (see figure 8.6 of EN 1991-1-4:2005).
     '''
     b= x1-x0 # Deck width
@@ -311,7 +311,7 @@ def get_vertical_pressure_distribution(terrainCategory:str, x0: float, x1: float
     :param rho: density of air (defaults to 1.25 kg/m3).
     :param k1: turbulence factor.
     :param c0: orography factor.
-    :parma alpha: angle of the wind with the horizontal (see figure 8.6 of EN 1991-1-4:2005).
+    :param alpha: angle of the wind with the horizontal (see figure 8.6 of EN 1991-1-4:2005).
     :param beta: superelevation of the bridge deck (see figure 8.6 of EN 1991-1-4:2005).
     '''
     y0i, y1i, xi= get_vertical_pressure_data(terrainCategory= terrainCategory, x0= x0, x1= x1, dtotVP= dtotVP, z= z, vb=vb, zMax= zMax, rho= rho, k1= k1, c0= c0, alpha= alpha, beta= beta)

@@ -365,7 +365,7 @@ class Member(steel_member_base.BucklingMember):
         '''Update the value of the lateral buckling reduction factor.'''
         chiLT= self.getLateralBucklingReductionFactor()
         for e in self.elemSet:
-             e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
+            e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
     def updateReductionFactors(self):
         '''Update the value of the appropriate reduction factors.'''
         self.updateLateralBucklingReductionFactor()

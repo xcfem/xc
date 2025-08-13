@@ -1623,10 +1623,11 @@ python tests/materials/ec3/test_buckling_resistance_03.py
 python tests/materials/ec3/test_buckling_resistance_04.py
 python tests/materials/ec3/test_buckling_resistance_05.py
 echo "$BLEU" "      lateral-torsional buckling tests." "$NORMAL"
-python tests/materials/ec3/test_lateral_torsional_buckling00.py
-python tests/materials/ec3/test_lateral_torsional_buckling01.py
-python tests/materials/ec3/test_lateral_torsional_buckling02.py
-python tests/materials/ec3/test_lateral_torsional_buckling03.py
+python tests/materials/ec3/test_lateral_torsional_buckling_00.py
+python tests/materials/ec3/test_lateral_torsional_buckling_01.py
+python tests/materials/ec3/test_lateral_torsional_buckling_02.py
+python tests/materials/ec3/test_lateral_torsional_buckling_03.py
+python tests/materials/ec3/test_lateral_torsional_buckling_04.py
 echo "$BLEU" "      compression_lateral-torsional buckling tests." "$NORMAL"
 echo "$BLEU" "    EAE tests." "$NORMAL"
 python tests/materials/eae/test_steel_corbel_weld.py
@@ -1922,6 +1923,7 @@ echo "$BLEU" "    EC3 limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_01.py
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_02.py
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_03.py
+python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_04.py
 python tests/postprocess/limit_state_checking/ec3/test_simply_supported_fully_restrained_beam.py
 echo "$BLEU" "    EHE limit state checking." "$NORMAL"
 echo "$BLEU" "      EHE limit state checking: shear." "$NORMAL"
@@ -2009,8 +2011,12 @@ python tests/postprocess/vtk/display_mat_response/test_beam3d_bending_moment_bel
 python tests/postprocess/vtk/display_mat_response/test_beam3d_bending_moment_belly_02.py
 python tests/postprocess/vtk/display_mat_response/test_display_stresses_on_brick_01.py
 python tests/postprocess/vtk/display_mat_response/test_display_strains_on_shell_01.py
+python tests/postprocess/vtk/display_mat_response/test_display_internal_forces_on_shell_01.py
 echo "$BLEU" "    Graphic output. Limit state results." "$NORMAL"
-python tests/postprocess/vtk/display_limit_state_results/test_display_shear_uls_on_shells_01.py
+echo "$BLEU" "      Eurocode 2." "$NORMAL"
+python tests/postprocess/vtk/display_limit_state_results/ec2/test_display_shear_uls_on_shells_01.py
+echo "$BLEU" "      Eurocode 3." "$NORMAL"
+python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_bending_uls_cf_on_beams_01.py
 
 # Report tests.
 echo "$BLEU" "  Report output." "$NORMAL"
@@ -2018,6 +2024,7 @@ python tests/postprocess/report/test_report_loads_01.py
 python tests/postprocess/report/test_report_check_01.py
 python tests/postprocess/report/test_report_rc_section.py
 python tests/postprocess/report/test_rc_section_report_generator.py
+python tests/postprocess/report/test_pot_bearing_report_01.py
 
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)

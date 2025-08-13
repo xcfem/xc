@@ -67,6 +67,7 @@ curvature=alpha*(Tbottom-Ttop)/thickness  # rad/m
 # Curvature is positive when the center of curvature
 # lies along the direction of the normal to the element
 # so, in this case, is negative.
+# strain component 3: curvature around local y axis (normal to local x axis).
 eleLoad.setStrainComp(0,3,curvature) #(id of Gauss point, id of component, value)
 eleLoad.setStrainComp(1,3,curvature)
 eleLoad.setStrainComp(2,3,curvature)
