@@ -130,9 +130,12 @@ ec3CalcSet= modelSpace.defSet('ec3CalcSet')
 ec3Members= list() # EC3 members.
 for l in xcTotalSet.getLines:
     member= EC3_limit_state_checking.Member(name= l.name, ec3Shape= shape, lstLines= [l], beamSupportCoefs= beamSupportCoefs)
-    #member.setControlPoints()
-    member.installULSControlRecorder(recorderType="element_prop_recorder", calcSet= ec3CalcSet)
     ec3Members.append(member)
+    
+## Populate the ec3CalcSet set. 
+ec3CalcSet= modelSpace.defSet('ec3CalcSet') 
+for member in ec3Members:
+    member.installULSControlRecorder(recorderType="element_prop_recorder", calcSet= ec3CalcSet)
 ec3CalcSet.fillDownwards()
 
 ## Compute internal forces for each combination
