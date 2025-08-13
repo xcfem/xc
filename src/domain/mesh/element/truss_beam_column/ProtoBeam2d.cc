@@ -333,7 +333,7 @@ void XC::ProtoBeam2d::zeroLoad(void)
 void XC::ProtoBeam2d::createInertiaLoad(const Vector &accel)
   {
     const Vector load= -accel*getLinearRho();
-    vector2dUniformLoadGlobal(load);
+    this->vector2dUniformLoadGlobal(load);
   }
 
 //! @brief Return a python list with the values of the argument property
