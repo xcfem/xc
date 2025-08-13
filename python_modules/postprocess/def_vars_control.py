@@ -255,17 +255,17 @@ def update_envelope_internal_forces_beam_elem_2d(beamElem2D, loadCombinationName
     beamElem2D.getResistingForce()
     [[N1, M1, V1], [N2, M2, V2]]= model_inquiry.get_values_at_nodes(beamElem2D, ['N', 'M', 'V'], False)        
     maxN= beamElem2D.getProp('N+') # [back node value, front node value]
-    maxNcomb= trussElem.getProp('comb_N+') # load combinations.
+    maxNcomb= beamElem2D.getProp('comb_N+') # load combinations.
     maxM= beamElem2D.getProp('Mz+')
-    maxMcomb= trussElem.getProp('comb_Mz+')
+    maxMcomb= beamElem2D.getProp('comb_Mz+')
     maxV= beamElem2D.getProp('Vy+')
-    maxVcomb= trussElem.getProp('comb_Vy+')
+    maxVcomb= beamElem2D.getProp('comb_Vy+')
     minN= beamElem2D.getProp('N-')
-    minNcomb= trussElem.getProp('comb_N-') # load combinations.
+    minNcomb= beamElem2D.getProp('comb_N-') # load combinations.
     minM= beamElem2D.getProp('Mz-')
-    minMcomb= trussElem.getProp('comb_Mz-')
+    minMcomb= beamElem2D.getProp('comb_Mz-')
     minV= beamElem2D.getProp('Vy-')
-    minVcomb= trussElem.getProp('comb_Vy-')
+    minVcomb= beamElem2D.getProp('comb_Vy-')
     # Back node axial load.
     if(N1>maxN[0]):
         maxN[0]= N1
