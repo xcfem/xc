@@ -1345,7 +1345,7 @@ class PredefinedSpace(object):
         ''' Remove all the load cases from the domain.'''
         self.preprocessor.resetLoadCase()        
         
-    def addNewLoadCaseToDomain(self, loadCaseName: str, loadCaseExpression:str, force= False):
+    def addNewLoadCaseToDomain(self, loadCaseName: str, loadCaseExpression:str, force= False, reset= False):
         '''Defines a new combination and add it to the domain.
 
            :param loadCaseName: name of the load pattern or combination.
@@ -1354,9 +1354,13 @@ class PredefinedSpace(object):
                                       e.g. '1.0*GselfWeight+1.0*GearthPress'
            :param force: if true, force redefinition of the load combination
                          even if it exists.
+           :param reset: if true, remove al the previous loads from the domain
+                         and prepare it to solver for a new load pattern
+                         from scratch.
         '''
         lCase= self.newLoadCombination(loadCaseName, loadCaseExpression, force= force)
-        self.preprocessor.resetLoadCase()
+        if(reset):
+            self.preprocessor.resetLoadCase()
         self.addLoadCaseToDomain(lCase.name)
 
     def addCombinationForNonLinearAnalysis(self, loadCaseExpression:str):
