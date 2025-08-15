@@ -116,8 +116,8 @@ else:
     lmsg.error(fname+' ERROR.')
     
 # # Output stuff.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(modelSpace)
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
 ## Uncomment to display the mesh
 # oh.displayFEMesh()
 # oh.displayLoads()
