@@ -67,8 +67,8 @@ class Bolt(object):
         '''Creates the section-material to model bolt
         '''
         gsect=sectpr.CircularSection('gsect',self.diam)
-        mName=str(uuid.uuid1())
-        self.sectMat=tm.BeamMaterialData(mName+'_mat',gsect,self.mat)
+        matName= 'bolt_section_material_'+str(self.id())
+        self.sectMat=tm.BeamMaterialData(matName, gsect, self.mat)
         self.sectMat.defElasticShearSection3d(prep)
 
     def createBolt(self,entLst,setName):
@@ -103,7 +103,7 @@ class Bolt(object):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+'; entities in the list must be points or nodes.')
-        linname= str(uuid.uuid1())
+        linname= 'bolt_lin_trf'+str(self.id())
         lin=prep.getTransfCooHandler.newLinearCrdTransf3d(linname)
         lin.xzVector=predefined_spaces.getSuitableXZVector(nodLst[0],nodLst[1])
         elements.defaultTransformation= lin.name
@@ -125,7 +125,7 @@ class Bolt(object):
         A=0.25*k_be/self.mat.E
         l=math.sqrt(A)
         gsectR=sectpr.RectangularSection('gsectR',l,l)
-        mRname=str(uuid.uuid1())
+        mRname= 'radii_material_'+str(self.id())
         radMat=tm.BeamMaterialData(mRname+'_Rmat',gsectR,self.mat)
         radMat.defElasticShearSection3d(prep)
         return radMat
@@ -181,7 +181,7 @@ class Bolt(object):
         vz=cross(vx,vaux)
         vz=vz.Normalized()
         vy=cross(vx,vz)
-        linname= str(uuid.uuid1())
+        linname= 'radii_lin_trf_'+str(self.id())
         lin= prep.getTransfCooHandler.newLinearCrdTransf3d(linname)
         lin.xzVector=vz
         elements.defaultTransformation= lin.name
@@ -322,7 +322,8 @@ class BaseWeld(object):
         self.weldP1+= 0.5*distWeldEl*p1p2Dir
         self.weldP2-= 0.5*distWeldEl*p1p2Dir
         
-        if not self.setName: self.setName=str(uuid.uuid1())
+        if not self.setName:
+            self.setName=str(uuid.uuid1())
         if prep.getSets.exists(self.setName):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -387,26 +388,31 @@ class BaseWeld(object):
         sectWeldPr= xc.CrossSectionProperties3d()
         sectWeldPr.A= A_w; sectWeldPr.E= fictE ; sectWeldPr.G= fictG
         sectWeldPr.Iz= I_w ;  sectWeldPr.Iy= I_w ; sectWeldPr.J= I_w
-        sectWeld= tm.defElasticSectionFromMechProp3d(prep, "sectWeld",sectWeldPr)
+        selfId= str(id(self))
+        sectWeldName= "sect_weld_"+selfId
+        sectWeld= tm.defElasticSectionFromMechProp3d(prep, sectWeldName, sectWeldPr)
         # welding elements section in the extremities of the weld seam 
         sectWeldExtrPr= xc.CrossSectionProperties3d()
         sectWeldExtrPr.A= A_w/2.; sectWeldExtrPr.E= fictE ; sectWeldExtrPr.G= fictG
         sectWeldExtrPr.Iz= I_w/2. ;  sectWeldExtrPr.Iy= I_w/2. ; sectWeldExtrPr.J= I_w/2.
-        sectWeldExtr= tm.defElasticSectionFromMechProp3d(prep, "sectWeldExtr",sectWeldExtrPr)
+        sectWeldExtrName= "sect_weld_extr_"+selfId
+        sectWeldExtr= tm.defElasticSectionFromMechProp3d(prep, sectWeldExtrName,sectWeldExtrPr)
         #rigid elements section
         A_r=20*A_w
         I_r=1/12*A_r**2
         sectRigPr= xc.CrossSectionProperties3d()
         sectRigPr.A= A_r; sectRigPr.E= fictE ; sectRigPr.G= fictG
         sectRigPr.Iz= I_r ;  sectRigPr.Iy= I_r ; sectRigPr.J= I_r
-        sectRig= tm.defElasticSectionFromMechProp3d(prep, "sectRig",sectRigPr)
-         #rigid elements section  in the extremities of the weld seam 
+        sectRigName= "sect_rig_"+selfId
+        sectRig= tm.defElasticSectionFromMechProp3d(prep, sectRigName,sectRigPr)
+        # rigid elements section in the extremities of the weld seam 
         sectRigExtrPr= xc.CrossSectionProperties3d()
         sectRigExtrPr.A= A_r/2.; sectRigExtrPr.E= fictE ; sectRigExtrPr.G= fictG
         sectRigExtrPr.Iz= I_r/2. ;  sectRigExtrPr.Iy= I_r/2. ; sectRigExtrPr.J= I_r/2.
-        sectRigExtr= tm.defElasticSectionFromMechProp3d(prep, "sectRigExtr",sectRigExtrPr)
+        sectRigExtrName= "sect_rig_extr_"+selfId
+        sectRigExtr= tm.defElasticSectionFromMechProp3d(prep, sectRigExtrName,sectRigExtrPr)
         #linear transformation
-        linname= str(uuid.uuid1())
+        linname= 'weld_lin_trf'+selfId
         lin= prep.getTransfCooHandler.newLinearCrdTransf3d(linname)
         lin.xzVector= xc.Vector(vps1.cross(vps2))
         # set of rigid elements to glue to surface 1
@@ -679,7 +685,8 @@ class MultiFilletWeld(object):
         :param bothSidesOfWS2: if True, weld on both sides of surface SW2 
                                (WS2sign ignored) (defaults to False)
         '''
-        if not self.setName: self.setName= str(uuid.uuid1())
+        if not self.setName:
+            self.setName= str(uuid.uuid1())
         if len(self.specDescr) < len(self.lstLines):
             self.specDescr=['weld '+str(i) for i in range(len(self.lstLines))]
         for i in range(len(self.lstLines)):
