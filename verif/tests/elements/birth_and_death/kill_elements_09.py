@@ -105,15 +105,8 @@ for s in [s9]:
     interiorSet.surfaces.append(s)
 interiorSet.fillDownwards()
 
-# Define material
-E= 30e6 # Young modulus (psi)
-nu= 0.3 # Poisson's ratio
-rho= 0.0 # Density
-elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
-
 modelSpace.deactivateElements(middleSet)
 modelSpace.deactivateElements(interiorSet)
-
 
 modelSpace.activateElements(middleSet)
 
