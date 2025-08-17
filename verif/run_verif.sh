@@ -1570,6 +1570,9 @@ python tests/materials/ec2/test_ec2_prestressing_01.py
 python tests/materials/ec2/test_ec2_prestressing_02.py
 python tests/materials/ec2/test_ec2_prestressing_03.py
 python tests/materials/ec2/test_ec2_prestressing_04.py
+echo "$BLEU" "    MC10 tests." "$NORMAL"
+python tests/materials/mc10/test_mc10_shrinkage_and_creep_parameters_01.py
+python tests/materials/mc10/test_mc10_shrinkage_and_creep_parameters_02.py
 echo "$BLEU" "    SIA 262 tests." "$NORMAL"
 python tests/materials/sia262/sia262_concrete_01.py
 python tests/materials/sia262/shear_01.py
