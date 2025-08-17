@@ -791,8 +791,10 @@ int XC::ForceBeamColumn2d::update(void)
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING - failed to get compatible "
 		  << "element forces & deformations for element: "
-		  << getTag() << "(dW: << " << dW  << ", dW0: "
-		  << dW0 << ")"
+		  << getTag()
+		  << " (dW: << " << dW
+		  << ", dW0: " << dW0
+		  << ", tol: " << tol << ")"
 	          << Color::def << std::endl;
         return -1;
       }
