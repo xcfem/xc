@@ -48,20 +48,28 @@ class EC2Concrete(concrete_base.Concrete):
         '''
         super(EC2Concrete,self).__init__(nmbConcrete,fck, gammaC, alphacc)
     
+    def get_alpha_na(self):
+        ''' Return the alpha_na parameter which depends on the aggregate type.
+        '''
+        retval= 1.0
+        if self.typeAggregate == 'L': # limestone.
+            retval= 0.9
+        elif self.typeAggregate == 'S': # sandstone.
+            retval= 0.7
+        elif self.typeAggregate == 'B': # basalt.
+            retval= 1.2
+        elif self.typeAggregate == 'Q': # quartzite.
+            retval= 1.0
+        return retval
+    
     def getEcm(self):
         """
         Ecm: approximate value of the modulus of elasticity [Pa][+] secant value between sigma_c=0 and 0,4fcm, at age 28 days (table 3.1 EC2)
          """
         fcmMPa=abs(self.getFcm())*1e-6
         EcmGPa=22*(fcmMPa/10)**0.3
-        if self.typeAggregate == 'L': # limestone.
-            return 0.9*EcmGPa*1e9
-        elif self.typeAggregate == 'S': # sandstone.
-            return 0.7*EcmGPa*1e9
-        elif self.typeAggregate == 'B': # basalt.
-            return 1.2*EcmGPa*1e9
-        else: # quartzite.
-            return EcmGPa*1e9
+        alpha_na= self.get_alpha_na()
+        return EcmGPa*alpha_na*1e9
         
     def getEcmT(self, t=28):
         '''EcmT: Value of the modulus of elasticity at an age of t days 
