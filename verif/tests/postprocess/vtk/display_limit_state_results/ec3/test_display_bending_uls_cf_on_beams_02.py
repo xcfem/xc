@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Lateral torsional buckling on cantilever beam. Test based on the example 
-   at section 4.3 of the article:
+''' Lateral torsional buckling on cantilever beam. 2D version. Test based on 
+   the example  at section 4.3 of the article:
 
     "Stability Study of Cantilever-Beams – Numerical Analysis and Analytical 
      Calculation (LTB)" Matthias Kraus, Nicolae-Andrei Crișan, Björn Witto
@@ -53,11 +53,11 @@ steelBeam= xc.FEProblem()
 steelBeam.title= 'Cantilever LTB ULS check'
 preprocessor= steelBeam.getPreprocessor
 nodes= preprocessor.getNodeHandler
-modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 #Materials
 ## Profile geometry
-xcSection= shape.defElasticShearSection3d(preprocessor)
+xcSection= shape.defElasticShearSection2d(preprocessor)
 
 # Model geometry
 # We use a set of small lines to simulate the lateral restraint
@@ -72,17 +72,16 @@ l.nDiv= 6
 
 # Mesh
 trfs= preprocessor.getTransfCooHandler
-lin= trfs.newLinearCrdTransf3d('lin')
-lin.xzVector= xc.Vector([0,1,0])
+lin= trfs.newLinearCrdTransf2d('lin')
 modelSpace.setDefaultCoordTransf(lin)
 modelSpace.setDefaultMaterial(xcSection)
-modelSpace.newSeedElement("ElasticBeam3d")
+modelSpace.newSeedElement("ElasticBeam2d")
 
 xcTotalSet= modelSpace.getTotalSet()
 mesh= xcTotalSet.genMesh(xc.meshDir.I)
 
 # Constraints (simply supported beam)
-modelSpace.fixNode('000_000', p1.getNode().tag)
+modelSpace.fixNode('000', p1.getNode().tag)
 
 # Actions
 loadCaseManager= load_cases.LoadCaseManager(preprocessor)
@@ -90,16 +89,16 @@ loadCaseNames= ['permanentAction','variableAction']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## Permanent action.
-deadLoad= xc.Vector([0.0,0.0,-permanentAction])
+deadLoad= xc.Vector([0.0,-permanentAction])
 cLC= loadCaseManager.setCurrentLoadCase('permanentAction')
 for e in xcTotalSet.elements:
-    e.vector3dUniformLoadGlobal(deadLoad)
+    e.vector2dUniformLoadGlobal(deadLoad)
     
 ## Variable action.
-liveLoad= xc.Vector([0.0,0.0,-variableAction])
+liveLoad= xc.Vector([0.0,-variableAction])
 cLC= loadCaseManager.setCurrentLoadCase('variableAction')
 for e in xcTotalSet.elements:
-    e.vector3dUniformLoadGlobal(liveLoad)
+    e.vector2dUniformLoadGlobal(liveLoad)
     
 ## Load combinations
 combContainer= combs.CombContainer()
@@ -126,10 +125,10 @@ EC3_limit_state_checking.shearResistance, # Shear stresses resistance
 ### Cantilever beam support coefficients ky= 2-0 and k1= 0.5
 beamSupportCoefs= EC3_limit_state_checking.BeamSupportCoefficients(ky= 2.0, kw= 1.0, k1= 0.5, k2= 1.0)
 # Elements to be checked as EC3 members.
-ec3CalcSet= modelSpace.defSet('ec3CalcSet') 
 ec3Members= list() # EC3 members.
 for l in xcTotalSet.getLines:
     member= EC3_limit_state_checking.Member(name= l.name, ec3Shape= shape, lstLines= [l], beamSupportCoefs= beamSupportCoefs)
+    #member.setControlPoints()
     ec3Members.append(member)
     
 ## Populate the ec3CalcSet set. 
@@ -146,7 +145,7 @@ for ls in limitStates:
 ### Limit state to check.
 limitState= limitStates[0]
 ### Build controller.
-controller= limitState.getController(biaxialBending= True)
+controller= limitState.getController(biaxialBending= False)
 ### Perform checking.
 bendingAverage= limitState.check(setCalc=ec3CalcSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)
 

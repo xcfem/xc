@@ -421,6 +421,7 @@ python tests/actions/load_combinations/comb_container/test_comb_container_03.py
 
 echo "$BLEU" "Nodes tests." "$NORMAL"
 echo "$BLEU" "  Mixed DOFs tests." "$NORMAL"
+python tests/nodes/mixed_dofs/test_quad_and_beam2d_01.py
 python tests/nodes/mixed_dofs/test_brick_and_shell_01.py
 python tests/nodes/mixed_dofs/test_truss_and_beam2d_01.py
 echo "$BLEU" "Elements tests." "$NORMAL"
@@ -1569,6 +1570,9 @@ python tests/materials/ec2/test_ec2_prestressing_01.py
 python tests/materials/ec2/test_ec2_prestressing_02.py
 python tests/materials/ec2/test_ec2_prestressing_03.py
 python tests/materials/ec2/test_ec2_prestressing_04.py
+echo "$BLEU" "    MC10 tests." "$NORMAL"
+python tests/materials/mc10/test_mc10_shrinkage_and_creep_parameters_01.py
+python tests/materials/mc10/test_mc10_shrinkage_and_creep_parameters_02.py
 echo "$BLEU" "    SIA 262 tests." "$NORMAL"
 python tests/materials/sia262/sia262_concrete_01.py
 python tests/materials/sia262/shear_01.py
@@ -1924,6 +1928,7 @@ python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_01.py
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_02.py
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_03.py
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_04.py
+python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_05.py
 python tests/postprocess/limit_state_checking/ec3/test_simply_supported_fully_restrained_beam.py
 echo "$BLEU" "    EHE limit state checking." "$NORMAL"
 echo "$BLEU" "      EHE limit state checking: shear." "$NORMAL"
@@ -2017,6 +2022,7 @@ echo "$BLEU" "      Eurocode 2." "$NORMAL"
 python tests/postprocess/vtk/display_limit_state_results/ec2/test_display_shear_uls_on_shells_01.py
 echo "$BLEU" "      Eurocode 3." "$NORMAL"
 python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_bending_uls_cf_on_beams_01.py
+python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_bending_uls_cf_on_beams_02.py
 
 # Report tests.
 echo "$BLEU" "  Report output." "$NORMAL"

@@ -103,6 +103,7 @@ Journal of Structural Engineering, Approved for publication, February 2007.
 
 #include "material/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 void XC::ForceBeamColumn2d::free_mem(void)
@@ -118,9 +119,9 @@ void XC::ForceBeamColumn2d::alloc(const BeamIntegration &bi)
     beamIntegr= bi.getCopy();
     if(!beamIntegr)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; could not create copy of beam integration object"
-		  << std::endl;
+		  << Color::def << std::endl;
         exit(-1);
       }
   }
@@ -171,9 +172,9 @@ XC::ForceBeamColumn2d &XC::ForceBeamColumn2d::operator=(const ForceBeamColumn2d 
 //       alloc(*other.beamIntegr);
 //     v0= other.v0;
 //     maxSubdivisions= other.maxSubdivisions;
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red<< getClassName() << "::" << __FUNCTION__
 	      << "; assignment operator must not be called."
-              << std::endl;
+              << Color::def << std::endl;
     return *this;    
   }
 
@@ -233,16 +234,18 @@ void XC::ForceBeamColumn2d::setDomain(Domain *theDomain)
 
     if((dofNode1 != NND) || (dofNode2 != NND))
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; Nd2 or Nd1 incorrect dof" << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; Nd2 or Nd1 incorrect dof"
+		  << Color::def << std::endl;
         exit(0);
       }
 
     // initialize the transformation
     if(this->resetNodalCoordinates() != 0)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; error initializing coordinate transformation\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; error initializing coordinate transformation."
+	          << Color::def << std::endl;
       }
     if(initialFlag == 0)
       this->initializeSectionHistoryVariables();
@@ -255,8 +258,9 @@ int XC::ForceBeamColumn2d::commitState(void)
     // call element commitState to do any base class stuff
     if((err = NLForceBeamColumn2dBase::commitState()) != 0)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; ERROR: failed in base class";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; ERROR: failed in base class"
+	          << Color::def << std::endl;
       }
     const size_t numSections= getNumSections();
     size_t i= 0;
@@ -593,8 +597,9 @@ int XC::ForceBeamColumn2d::update(void)
     
                         if(theSections[i]->setTrialSectionDeformation(section_matrices.getVsSubdivide()[i]) < 0)
                           {
-                            std::cerr << getClassName() << "::" << __FUNCTION__
-				      << "; ERROR  section failed in setTrial\n";
+                            std::cerr << Color::red << std::endl << getClassName() << "::" << __FUNCTION__
+				      << "; ERROR  section failed in setTrial."
+			              << Color::def << std::endl;
                             return -1;
                           }
     
@@ -707,8 +712,9 @@ int XC::ForceBeamColumn2d::update(void)
                     // calculate element stiffness matrix
                     // invert3by3Matrix(f, kv);
                     if(f.Solve(I, kvTrial) < 0)
-                      std::cerr << getClassName() << "::" << __FUNCTION__
-				<< "; ERROR: could not invert flexibility\n";
+                      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+				<< "; ERROR: could not invert flexibility"
+			        << Color::def << std::endl;
     
                     // dv = vin + dvTrial  - vr
                     dv= vin;
@@ -737,8 +743,9 @@ int XC::ForceBeamColumn2d::update(void)
                           { converged = true; }
                         else
                           { // we convreged but we have more to do
-                            std::cerr << getClassName() << "::" << __FUNCTION__
-				      << dvToDo << dvTrial << std::endl;
+                            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+				      << ' ' << dvToDo << dvTrial
+				      << Color::def << std::endl;
                             // reset variables for start of next subdivision
                             dvTrial = dvToDo;
                             numSubdivide = 1;  // NOTE setting subdivide to 1 again maybe too much
@@ -781,11 +788,14 @@ int XC::ForceBeamColumn2d::update(void)
 
     if(converged == false)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING - failed to get compatible "
 		  << "element forces & deformations for element: "
-		  << getTag() << "(dW: << " << dW  << ", dW0: "
-		  << dW0 << ")\n";
+		  << getTag()
+		  << " (dW: << " << dW
+		  << ", dW0: " << dW0
+		  << ", tol: " << tol << ")"
+	          << Color::def << std::endl;
         return -1;
       }
 
@@ -876,10 +886,10 @@ void XC::ForceBeamColumn2d::zeroLoad(void)
 int XC::ForceBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << getClassName() << "::" << __FUNCTION__ 
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ 
                 << "; load over inactive element: "
                 << getTag()  
-                << std::endl;
+                << Color::def << std::endl;
     else
       {
         const double L = theCoordTransf->getInitialLength();
@@ -903,9 +913,10 @@ int XC::ForceBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
           }
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; ERROR: load type unknown for element with tag: "
-		      << this->getTag() << std::endl;
+		      << this->getTag()
+		      << Color::def << std::endl;
             return -1;
           }
       }
@@ -999,8 +1010,9 @@ int XC::ForceBeamColumn2d::sendSelf(Communicator &comm)
     const int dataTag= getDbTag();
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; ERROR: failed to send ID data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; ERROR: failed to send ID data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -1013,8 +1025,9 @@ int XC::ForceBeamColumn2d::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; ERROR: failed to receive ID data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; ERROR: failed to receive ID data."
+		<< Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;
@@ -1153,8 +1166,9 @@ void XC::ForceBeamColumn2d::compSectionDisplacements(std::vector<Vector> &sectio
             }
         if(ii == code.Size())
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; FATAL: section does not provide Mz response\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; FATAL: section does not provide Mz response."
+		      << Color::def << std::endl;
             exit(-1);
           }
 
@@ -1542,9 +1556,9 @@ int XC::ForceBeamColumn2d::updateParameter (int parameterID, Information &info)
           }
         if(ok < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; ERROR: could not update parameter. "
-		      << std::endl;
+		      << Color::def << std::endl;
             return ok;
           }
         else
@@ -1552,9 +1566,9 @@ int XC::ForceBeamColumn2d::updateParameter (int parameterID, Information &info)
       }
     else
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; ERROR: could not update parameter. "
-		  << std::endl;
+		  << Color::def << std::endl;
         return -1;
       }
   }
@@ -1564,8 +1578,9 @@ void XC::ForceBeamColumn2d::setSectionPointers(const std::vector<PrismaticBarCro
     const size_t numSections= getNumSections();
     if(numSections > section_matrices.getMaxNumSections())
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; ERROR: max number of sections exceeded";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; ERROR: max number of sections exceeded."
+		  << Color::def << std::endl;
       }
     setSections(secPtrs);
   }

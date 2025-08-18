@@ -52,8 +52,8 @@ class NLForceBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
 
     
     // internal data
-    int maxIters; //!<maximum number of local iterations
-    double tol;	 //!<tolerance for relative energy norm for local iterations
+    int maxIters; //!< maximum number of local iterations
+    double tol;	 //!< tolerance for relative energy norm for local iterations
 
     int initialFlag; //!<indicates if the element has been initialized
 	
@@ -94,6 +94,11 @@ class NLForceBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
     const Matrix &getTangentStiff(void) const;
 
     const Vector &getResistingForce(void) const;
+
+    inline double getTol(void) const // Get tolerance for relative energy norm.
+      { return this->tol; }
+    inline void setTol(const double &d) // Get tolerance for relative energy norm.
+      { this->tol= d; }
 
     inline double getV(void) const //Shear force in the middle.
       { return -(Secommit(1)+Secommit(2))/theCoordTransf->getInitialLength(); }

@@ -80,14 +80,14 @@ loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## Dead load.
 deadLoad= -48.0e3*kip2kN/span*2
-deadLoadVector= xc.Vector([0.0,deadLoad, 0.0])
+deadLoadVector= xc.Vector([0.0,deadLoad])
 cLC= loadCaseManager.setCurrentLoadCase('deadLoad')
 for e in xcTotalSet.elements:
     e.vector2dUniformLoadGlobal(deadLoadVector)
   
 ## Live load.
 liveLoad= -145.0e3*kip2kN/span*2
-liveLoadVector= xc.Vector([0.0,liveLoad, 0.0])
+liveLoadVector= xc.Vector([0.0,liveLoad])
 cLC= loadCaseManager.setCurrentLoadCase('liveLoad')
 for e in xcTotalSet.elements:
     e.vector2dUniformLoadGlobal(liveLoadVector)

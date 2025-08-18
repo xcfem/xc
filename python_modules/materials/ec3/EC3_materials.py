@@ -535,6 +535,25 @@ class EC3Shape(object):
         :param chiN: axial strength reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
         '''
+        if(self.sectionClass<=2):
+            # Axial efficiency.
+            NcRd= chiN*self.getNcRd() # Flexural buckling reduction.
+            nCF= abs(Nd)/NcRd
+            # Bending efficiency.
+            bendingFactor= (1-math.pow(nCF,1.7))
+            McRdz= self.getMcRdz()*bendingFactor
+            MvRdz= self.getMvRdz(Vyd)
+            MbRdz= chiLT*MvRdz # Lateral buckling reduction.
+            alpha, beta= self.getBiaxBendCoeffs(Nd,NcRd)
+            mCF= math.pow((abs(Mzd)/MbRdz),alpha) # Bending efficiency
+            CF= math.sqrt(nCF**2+mCF**2)
+            McRdy= self.getMcRdy()*bendingFactor # No bending for this axis anyway.
+            return (CF, NcRd, McRdy, McRdz, MvRdz, MbRdz)
+        else:
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': not implemented for cross section class greater than 2.')
+            return None
+        
         if(Nd!=0.0):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name

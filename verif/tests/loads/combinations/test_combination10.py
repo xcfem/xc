@@ -23,7 +23,7 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 modelSpace.newLoadPattern(name= 'lp01')
 modelSpace.newLoadPattern(name= 'lp02')
-modelSpace.addNewLoadCaseToDomain(loadCaseName= 'test', loadCaseExpression= '1.0*lp01+1.0*lp02')
+modelSpace.addNewLoadCaseToDomain(loadCaseName= 'test', loadCaseExpression= '1.0*lp01+1.0*lp02', reset= False) # no previous loads, so no need to reset
 
 currentLCNameBefore= modelSpace.getCurrentLoadCaseName() # Must be 'test'
 modelSpace.removeAllLoadPatternsFromDomain() # Now it must be wiped-out.

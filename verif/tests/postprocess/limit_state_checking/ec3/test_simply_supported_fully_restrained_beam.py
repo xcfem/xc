@@ -141,16 +141,21 @@ EC3_limit_state_checking.shearResistance, # Shear stresses resistance
 ]
 
 ## Create EC3 Member objects.
-ec3CalcSet= modelSpace.defSet('ec3CalcSet') # Elements to be checked as EC3 members.
 ec3Members= list() # EC3 members.
 for l in xcTotalSet.getLines:
     member= EC3_limit_state_checking.Member(name= l.name, ec3Shape= shape, lstLines= [l])
     #member.setControlPoints()
-    member.installULSControlRecorder(recorderType="element_prop_recorder", calcSet= ec3CalcSet)
     ec3Members.append(member)
+    
+## Populate the ec3CalcSet set. 
+ec3CalcSet= modelSpace.defSet('ec3CalcSet') 
+for member in ec3Members:
+    member.installULSControlRecorder(recorderType="element_prop_recorder", calcSet= ec3CalcSet)
+ec3CalcSet.fillDownwards()
+
 ## Compute internal forces for each combination
 for ls in limitStates:
-    ls.analyzeLoadCombinations(combContainer,ec3CalcSet, bucklingMembers= ec3Members)
+    ls.analyzeLoadCombinations(combContainer= combContainer, setCalc= ec3CalcSet, bucklingMembers= ec3Members)
 
 ## Check normal stresses.
 ### Limit state to check.

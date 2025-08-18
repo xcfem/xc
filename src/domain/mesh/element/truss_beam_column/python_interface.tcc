@@ -80,6 +80,7 @@ class_<XC::BeamColumnWithSectionFDTrf3d, bases<XC::BeamColumnWithSectionFD>, boo
 
 class_<XC::NLForceBeamColumn2dBase, bases<XC::BeamColumnWithSectionFDTrf2d>, boost::noncopyable >("NLForceBeamColumn2dBase", no_init)
   .add_property("rho", &XC::NLForceBeamColumn2dBase::getRho,&XC::NLForceBeamColumn2dBase::setRho)
+  .add_property("tol", &XC::NLForceBeamColumn2dBase::getTol,&XC::NLForceBeamColumn2dBase::setTol)
   .def("getV", &XC::NLForceBeamColumn2dBase::getV, "Mean shear force.")
   .add_property("getV1", &XC::NLForceBeamColumn2dBase::getV1, "Internal shear force at back end.")
   .add_property("getV2", &XC::NLForceBeamColumn2dBase::getV2, "Internal shear force at front end.")

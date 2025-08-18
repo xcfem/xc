@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Lateral torsional buckling on cantilever beam. Test based on the example 
-   at section 4.3 of the article:
+''' Lateral torsional buckling on cantilever beam. Plane model. Test based on 
+    the example at section 4.3 of the article:
 
     "Stability Study of Cantilever-Beams – Numerical Analysis and Analytical 
      Calculation (LTB)" Matthias Kraus, Nicolae-Andrei Crișan, Björn Witto
@@ -17,7 +17,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es"
 
-import os
+import math
+import geom
 import xc
 from materials.ec3 import EC3_materials
 from materials.ec3 import EC3_limit_state_checking
@@ -26,7 +27,6 @@ from actions import load_cases
 from actions import combinations as combs
 from postprocess import limit_state_data as lsd
 from postprocess.config import default_config
-from postprocess import output_handler
 
 # Geometry
 beamSpan= 4.0
@@ -53,11 +53,11 @@ steelBeam= xc.FEProblem()
 steelBeam.title= 'Cantilever LTB ULS check'
 preprocessor= steelBeam.getPreprocessor
 nodes= preprocessor.getNodeHandler
-modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 #Materials
 ## Profile geometry
-xcSection= shape.defElasticShearSection3d(preprocessor)
+xcSection= shape.defElasticShearSection2d(preprocessor)
 
 # Model geometry
 # We use a set of small lines to simulate the lateral restraint
@@ -72,17 +72,16 @@ l.nDiv= 6
 
 # Mesh
 trfs= preprocessor.getTransfCooHandler
-lin= trfs.newLinearCrdTransf3d('lin')
-lin.xzVector= xc.Vector([0,1,0])
+lin= trfs.newLinearCrdTransf2d('lin')
 modelSpace.setDefaultCoordTransf(lin)
 modelSpace.setDefaultMaterial(xcSection)
-modelSpace.newSeedElement("ElasticBeam3d")
+modelSpace.newSeedElement("ElasticBeam2d")
 
 xcTotalSet= modelSpace.getTotalSet()
 mesh= xcTotalSet.genMesh(xc.meshDir.I)
 
 # Constraints (simply supported beam)
-modelSpace.fixNode('000_000', p1.getNode().tag)
+modelSpace.fixNode('000', p1.getNode().tag)
 
 # Actions
 loadCaseManager= load_cases.LoadCaseManager(preprocessor)
@@ -90,17 +89,17 @@ loadCaseNames= ['permanentAction','variableAction']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## Permanent action.
-deadLoad= xc.Vector([0.0,0.0,-permanentAction])
+deadLoad= xc.Vector([0.0,-permanentAction])
 cLC= loadCaseManager.setCurrentLoadCase('permanentAction')
 for e in xcTotalSet.elements:
-    e.vector3dUniformLoadGlobal(deadLoad)
-    
+    e.vector2dUniformLoadGlobal(deadLoad)
+
 ## Variable action.
-liveLoad= xc.Vector([0.0,0.0,-variableAction])
+liveLoad= xc.Vector([0.0,-variableAction])
 cLC= loadCaseManager.setCurrentLoadCase('variableAction')
 for e in xcTotalSet.elements:
-    e.vector3dUniformLoadGlobal(liveLoad)
-    
+    e.vector2dUniformLoadGlobal(liveLoad)
+
 ## Load combinations
 combContainer= combs.CombContainer()
 ### Ultimate limit state.
@@ -125,30 +124,45 @@ EC3_limit_state_checking.shearResistance, # Shear stresses resistance
 ## Create EC3 Member objects.
 ### Cantilever beam support coefficients ky= 2-0 and k1= 0.5
 beamSupportCoefs= EC3_limit_state_checking.BeamSupportCoefficients(ky= 2.0, kw= 1.0, k1= 0.5, k2= 1.0)
-# Elements to be checked as EC3 members.
-ec3CalcSet= modelSpace.defSet('ec3CalcSet') 
+
+# Create EC3 members.
 ec3Members= list() # EC3 members.
 for l in xcTotalSet.getLines:
     member= EC3_limit_state_checking.Member(name= l.name, ec3Shape= shape, lstLines= [l], beamSupportCoefs= beamSupportCoefs)
+    #member.setControlPoints()
     ec3Members.append(member)
     
-## Populate the ec3CalcSet set. 
-ec3CalcSet= modelSpace.defSet('ec3CalcSet') 
+## Populate the ec3CalcSet set.     
+ec3CalcSet= modelSpace.defSet('ec3CalcSet')
 for member in ec3Members:
     member.installULSControlRecorder(recorderType="element_prop_recorder", calcSet= ec3CalcSet)
 ec3CalcSet.fillDownwards()
 
 ## Compute internal forces for each combination
 for ls in limitStates:
-    ls.analyzeLoadCombinations(combContainer, ec3CalcSet, bucklingMembers= ec3Members)
+    ls.analyzeLoadCombinations(combContainer= combContainer, setCalc= ec3CalcSet, bucklingMembers= ec3Members)
 
 ## Check normal stresses.
 ### Limit state to check.
 limitState= limitStates[0]
 ### Build controller.
-controller= limitState.getController(biaxialBending= True)
+controller= limitState.getController(biaxialBending= False)
 ### Perform checking.
 bendingAverage= limitState.check(setCalc=ec3CalcSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)
+
+### Get the lateral torsional buckling reduction factor.
+chiLT= 0.0
+for e in xcTotalSet.elements:
+    chiLT+= e.getProp('chiLT')
+
+chiLT/= len(xcTotalSet.elements)
+
+### Get the maximum efficiency.
+maxBendingCF= 0.0
+for e in xcTotalSet.elements:
+    CF1= e.getProp('ULS_normalStressesResistanceSect1').CF
+    CF2= e.getProp('ULS_normalStressesResistanceSect2').CF
+    maxBendingCF= max(maxBendingCF, CF1, CF2)
 
 ## Check shear.
 ### Limit state to check.
@@ -158,44 +172,48 @@ controller= limitState.getController()
 ### Perform checking.
 shearAverage= limitState.check(setCalc=ec3CalcSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)
 
+### Get the maximum efficiency.
+maxShearCF= 0.0
+for e in xcTotalSet.elements:
+    CF1= e.getProp('ULS_shearResistanceSect1').CF
+    CF2= e.getProp('ULS_shearResistanceSect2').CF
+    maxShearCF= max(maxShearCF, CF1, CF2)
+
 # Check results.
-fname= os.path.basename(__file__)
+## Lateral torsional buckling reduction factor.
+## The value of the lateral torsional buckling reduction factor obtained in
+## the article is 0.672 greater than the value obtained here (0.661), so
+## the result is on the safety side.
+ratio0= abs(chiLT-0.6609805363859881)/0.6609805363859881
+## Maximum bending capacity factor.
+ratio1= abs(maxBendingCF-1.783045394470495)/1.783045394470495
+## Maximum shear capacity factor.
+ratio2= abs(maxShearCF-0.12044200463987757)/0.12044200463987757
 
-oh= output_handler.OutputHandler(modelSpace)
-outputFileNames= list()
-# Display lateral buckling reduction factor.
-# oh.displayElementValueDiagram('chiLT', setToDisplay= ec3CalcSet)
-chiLTOutputFileName= '/tmp/'+fname.replace('.py', '_chi_lt.jpeg')
-oh.displayElementValueDiagram('chiLT', setToDisplay= ec3CalcSet, fileName= chiLTOutputFileName)
-outputFileNames.append(chiLTOutputFileName)
+'''
+print('Lateral torsional buckling reduction factor: ', chiLT, ratio0)
+print('Maximum bending capacity factor:', maxBendingCF, ratio1)
+print('Maximum shear capacity factor:', maxShearCF, ratio2)
+'''
 
-# Display normal stresses efficiency.
-# oh.displayBeamResult(attributeName= limitStates[0].label, itemToDisp='CF', beamSetDispRes= ec3CalcSet, setToDisplay=xcTotalSet)
-bendingCFOutputFileName= '/tmp/'+fname.replace('.py', '_bending_cf.jpeg')
-oh.displayBeamResult(attributeName= limitStates[0].label, itemToDisp='CF', beamSetDispRes= ec3CalcSet, setToDisplay=xcTotalSet, fileName= bendingCFOutputFileName)
-outputFileNames.append(bendingCFOutputFileName)
-
-# Display shear efficiency.
-# oh.displayBeamResult(attributeName= limitStates[1].label, itemToDisp='CF', beamSetDispRes= ec3CalcSet, setToDisplay=xcTotalSet)
-shearCFOutputFileName= '/tmp/'+fname.replace('.py', '_shear_cf.jpeg')
-oh.displayBeamResult(attributeName= limitStates[1].label, itemToDisp='CF', beamSetDispRes= ec3CalcSet, setToDisplay=xcTotalSet, fileName= shearCFOutputFileName)
-outputFileNames.append(shearCFOutputFileName)
-
-##  Check that all the tree file exists
-testOK= True
-for fName in outputFileNames:
-    testOK= testOK and os.path.isfile(fName)
-
-# print(testOK)
-
-import os
+cfg.cleandirs() # Clean after yourself.
 from misc_utils import log_messages as lmsg
-if testOK:
+import os
+fname= os.path.basename(__file__)
+if(ratio0<1e-8 and ratio1<1e-8 and ratio2<1e-8):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
 
-cfg.cleandirs() # Clean after yourself.
-os.remove(chiLTOutputFileName)
-os.remove(bendingCFOutputFileName)
-os.remove(shearCFOutputFileName)
+# #########################################################
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+
+# # Display lateral buckling reduction factor.
+# oh.displayElementValueDiagram('chiLT', setToDisplay= ec3CalcSet)
+
+# # Display normal stresses efficiency.
+# oh.displayBeamResult(attributeName= limitStates[0].label, itemToDisp='CF', beamSetDispRes= ec3CalcSet, setToDisplay=xcTotalSet)
+# # Display shear efficiency.
+# oh.displayBeamResult(attributeName= limitStates[1].label, itemToDisp='CF', beamSetDispRes= ec3CalcSet, setToDisplay=xcTotalSet)

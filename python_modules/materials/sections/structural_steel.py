@@ -11,6 +11,7 @@ __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
 import math
+import sys
 from materials.sections import section_properties as sp
 from postprocess import def_vars_control as vc
 from misc_utils import log_messages as lmsg
@@ -36,7 +37,14 @@ class SteelShape(sp.SectionProperties):
         '''
         self.steelType= steel
         if(name!=''):
-            self.shape= table[name]
+            if name in table:
+                self.shape= table[name]
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errorMsg= '; shape named: '+str(name)+' not found.'
+                lmsg.error(className+'.'+methodName+errorMsg)
+                exit(1)
         else:
             self.shape= None
         super(SteelShape,self).__init__(name)

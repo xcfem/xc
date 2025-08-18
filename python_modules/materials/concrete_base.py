@@ -738,14 +738,14 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return epscs
 
 #Creep
-    def getCreepFitt0(self,t,t0,RH,h0, gamma_t0= 0.3):
+    def getCreepFitt0(self, t, t0, RH, h0, gamma_t0= 0.3):
         '''Creep coefficient  
         (Annex B Eurocode 2 part 1-1 : 2004 - Eq. B.1)
 
         :param t: age of concrete in days at the moment considered
         :param t0: age of concrete in days at loading
         :param RH: ambient relative humidity(%)
-        :param h0: notional size of the member in mm
+        :param h0: notional size of the member
 
                   - h0= 2*Ac/u, where:
                   - Ac= cross sectional area
@@ -757,7 +757,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
                          is introduced here as a parameter to allowing use the
                          expression of the Model Code 2010.
         '''
-        fitt0= self.getCreepFi0(t0,RH,h0)*self.getCreepBetactt0(t,t0,RH,h0, gamma_t0= gamma_t0)
+        fitt0= self.getCreepFi0(t0,RH,h0)*self.getCreepBetactt0(t,t0,RH, h0, gamma_t0= gamma_t0)
         return fitt0
 
     def getCreepAlfa1(self):
@@ -798,10 +798,11 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         '''
         fcmMPa=abs(self.getFcm())/1e6
         h0mm= h0*1e3
+        frac= (1-RH/100)/(0.1*math.pow(h0mm,1/3.0))
         if fcmMPa <= 35:
-            fiRH=1+(1-RH/100)/0.1/h0mm**(1/3.0)
+            fiRH=1+frac
         else:
-            fiRH=(1+(1-RH/100)/0.1/h0mm**(1/3.0)*self.getCreepAlfa1())*self.getCreepAlfa2()
+            fiRH=(1+frac*self.getCreepAlfa1())*self.getCreepAlfa2()
         return fiRH
 
     def getCreepBetafcm(self):
@@ -821,7 +822,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         betat0=1/(0.1+t0**0.20)
         return betat0
 
-    def getCreepFi0(self,t0,RH,h0):
+    def getCreepFi0(self, t0, RH, h0):
         '''notational creep coefficient for the calculation of the creep coefficient
         (Annex B Eurocode 2 part 1-1 : 2004)
 

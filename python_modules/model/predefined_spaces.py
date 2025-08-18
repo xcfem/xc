@@ -1345,6 +1345,13 @@ class PredefinedSpace(object):
         ''' Remove all the load cases from the domain.'''
         self.preprocessor.resetLoadCase()        
         
+    # 13/08/2025 LP:
+    # The addNewLoadCaseToDomain method has changed its behavior. Until now, it
+    # always removed the previous loads and reverted the model to start.
+    # This is counterintuitive given the “add” in its name; one can expect to be
+    # adding loads to the model and not removing the previous ones. From now on
+    # the removal of previous loads and reverting to the initial state is
+    # optional. The reset parameter controls it.
     def addNewLoadCaseToDomain(self, loadCaseName: str, loadCaseExpression:str, force= False, reset= False):
         '''Defines a new combination and add it to the domain.
 
@@ -1843,8 +1850,8 @@ class PredefinedSpace(object):
                     self.removeAllLoadPatternsFromDomain()
                     self.revertToStart()
                     if(echo):
-                        lmsg.info(str(combKey)+': '+str(loadCombination))
-                    self.addNewLoadCaseToDomain(loadCaseName= combKey, loadCaseExpression= loadCombination)
+                        lmsg.info(str(combKey)+': '+str(loadCombination))    
+                    self.addNewLoadCaseToDomain(loadCaseName= combKey, loadCaseExpression= loadCombination, reset= False) # Previous loads removed already, so no need to reset.
                     self.analyze()
                     for xcSet in setsToDisplay:
                         oh.displayReactions(setToDisplay= xcSet)
@@ -3256,12 +3263,37 @@ class StructuralMechanics3D(StructuralMechanics):
             KrotX= tangent(3,3)*stiffnessFactors[3]
             KrotY= tangent(2,2)*stiffnessFactors[4]
             KrotZ= tangent(1,1)*stiffnessFactors[5]
-            matKX= tm.defElasticMaterial(self.preprocessor,'matKX'+str(KX),KX)
-            matKY= tm.defElasticMaterial(self.preprocessor,'matKY'+str(KY),KY)
-            matKZ= tm.defElasticMaterial(self.preprocessor,'matKZ'+str(KZ),KZ)
-            matKrotX= tm.defElasticMaterial(self.preprocessor,'matKrotX'+str(KrotX),KrotX)
-            matKrotY= tm.defElasticMaterial(self.preprocessor,'matKropY'+str(KrotY),KrotY)
-            matKrotZ= tm.defElasticMaterial(self.preprocessor,'matKrotZ'+str(KrotZ),KrotZ)
+            
+            matKXName= 'matKX'+str(KX)
+            matKX= self.getMaterialFromName(matKXName)
+            if(matKX is None): # Not defined yet.
+                matKX= tm.defElasticMaterial(self.preprocessor,matKXName,KX)
+                
+            matKYName= 'matKY'+str(KY)
+            matKY= self.getMaterialFromName(matKYName)
+            if(matKY is None): # Not defined yet.
+                matKY= tm.defElasticMaterial(self.preprocessor,matKYName,KY)
+                
+            matKZName= 'matKZ'+str(KZ)
+            matKZ= self.getMaterialFromName(matKZName)
+            if(matKZ is None): # Not defined yet.
+                matKZ= tm.defElasticMaterial(self.preprocessor,matKZName,KZ)
+                
+            matKrotXName= 'matKrotX'+str(KrotX)
+            matKrotX= self.getMaterialFromName(matKrotXName)
+            if(matKrotX is None): # Not defined yet.
+                matKrotX= tm.defElasticMaterial(self.preprocessor,matKrotXName,KrotX)
+                
+            matKrotYName= 'matKrotY'+str(KrotY)
+            matKrotY= self.getMaterialFromName(matKrotYName)
+            if(matKrotY is None): # Not defined yet.
+                matKrotY= tm.defElasticMaterial(self.preprocessor,matKrotYName,KrotY)
+                
+            matKrotZName= 'matKrotZ'+str(KrotZ)
+            matKrotZ= self.getMaterialFromName(matKrotZName)
+            if(matKrotZ is None): # Not defined yet.
+                matKrotZ= tm.defElasticMaterial(self.preprocessor,matKrotZName,KrotZ)
+                
             releaseMats=  [matKX,matKY,matKZ,matKrotX,matKrotY,matKrotZ]
             releaseMatsNames=[mat.name for mat in releaseMats]
             vx= xc.Vector(beamElement.getIVector3d(False))

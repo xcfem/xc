@@ -126,18 +126,21 @@ EC3_limit_state_checking.shearResistance, # Shear stresses resistance
 ### Cantilever beam support coefficients ky= 2-0 and k1= 0.5
 beamSupportCoefs= EC3_limit_state_checking.BeamSupportCoefficients(ky= 2.0, kw= 1.0, k1= 0.5, k2= 1.0)
 # Elements to be checked as EC3 members.
-ec3CalcSet= modelSpace.defSet('ec3CalcSet') 
 ec3Members= list() # EC3 members.
 for l in xcTotalSet.getLines:
     member= EC3_limit_state_checking.Member(name= l.name, ec3Shape= shape, lstLines= [l], beamSupportCoefs= beamSupportCoefs)
     #member.setControlPoints()
-    member.installULSControlRecorder(recorderType="element_prop_recorder", calcSet= ec3CalcSet)
     ec3Members.append(member)
+    
+## Populate the ec3CalcSet set. 
+ec3CalcSet= modelSpace.defSet('ec3CalcSet') 
+for member in ec3Members:
+    member.installULSControlRecorder(recorderType="element_prop_recorder", calcSet= ec3CalcSet)
 ec3CalcSet.fillDownwards()
 
 ## Compute internal forces for each combination
 for ls in limitStates:
-    ls.analyzeLoadCombinations(combContainer, ec3CalcSet, bucklingMembers= ec3Members)
+    ls.analyzeLoadCombinations(combContainer= combContainer, setCalc= ec3CalcSet, bucklingMembers= ec3Members)
 
 ## Check normal stresses.
 ### Limit state to check.

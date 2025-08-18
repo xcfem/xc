@@ -335,7 +335,7 @@ class LoadCaseDispParameters(RecordDisp):
         outputHandler= output_handler.OutputHandler(modelSpace)
         modelSpace.removeAllLoadPatternsFromDomain()
         modelSpace.revertToStart()
-        modelSpace.addNewLoadCaseToDomain(self.loadCaseName,self.loadCaseExpr)
+        modelSpace.addNewLoadCaseToDomain(self.loadCaseName, self.loadCaseExpr, reset= False) # Previous loads removed already, so no need to reset.
         # The disctinction between beam elements and the rest of elements
         # is to deprecate. The idea is to specify the type of output for all
         # the elements.
@@ -375,7 +375,7 @@ class LoadCaseDispParameters(RecordDisp):
         '''
         modelSpace.removeAllLoadPatternsFromDomain()
         modelSpace.revertToStart()
-        modelSpace.addNewLoadCaseToDomain(self.loadCaseName,self.loadCaseExpr)
+        modelSpace.addNewLoadCaseToDomain(self.loadCaseName,self.loadCaseExpr, reset= False) # Previous loads removed already, so no need to reset.
         #solve for load case
         modelSpace.analyze()
          

@@ -412,7 +412,8 @@ class ElasticFoundation(object):
         comb_keys=[key for key in combs] 
         for k in comb_keys:
             modelSpace.removeAllLoadPatternsFromDomain()
-            modelSpace.addNewLoadCaseToDomain(combs[k].name,combs[k].expr)
+            modelSpace.revertToStart()
+            modelSpace.addNewLoadCaseToDomain(combs[k].name,combs[k].expr, reset= False) # Previous loads removed already, so no need to reset.
             result= analysis.analyze(1)
             if(result!=0):
                 className= type(self).__name__

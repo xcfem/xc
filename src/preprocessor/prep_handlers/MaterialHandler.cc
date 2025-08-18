@@ -582,21 +582,25 @@ void XC::MaterialHandler::removeMaterial(const std::string &cod_mat)
 //! @brief Defines a new material.
 XC::Material *XC::MaterialHandler::newMaterial(const std::string &mat_type,const std::string &cod_mat)
   {
+    
+    std::string material_code= cod_mat;
+    if((material_code.size()==0) || (material_code=="auto"))
+      material_code= mat_type+'_'+std::to_string(tag_mat);
     Material *retval= load_material(tag_mat,mat_type,this);
     
     if(retval)
       {
         retval->set_owner(this);
-        if(materials.find(cod_mat)!=materials.end()) //Material exists.
+        if(materials.find(material_code)!=materials.end()) //Material exists.
           {
-	    if(getVerbosityLevel()> 1)
-	      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
-	                << "; warning material: '"
-                        << cod_mat << "' redefined."
-			<< Color::def << std::endl;
-            delete materials[cod_mat];
+	    std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		      << "; warning material: '"
+		      << material_code << "' redefined."
+	              << " Use 'auto' to let the system assign the name for you."
+		      << Color::def << std::endl;
+            delete materials[material_code];
           }
-        materials[cod_mat]= retval;
+        materials[material_code]= retval;
         tag_mat++;
       }
     else

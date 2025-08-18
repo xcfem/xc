@@ -40,9 +40,11 @@ class Member(wood_member_base.Member):
                            about z-axis.
     :ivar Cr: repetitive member factor.
     :ivar connection: connection type at member ends.
-    :ivar memberRestraint: Member restrain condition according  to clause 4.4.1.2 of AWC_NDS2018.
-    :ivar memberLoadingCondition: parameters defining the member condition in order to obtain 
-                                  its effective length accordint to table 3.3.3 of AWC NDS-2018.
+    :ivar memberRestraint: Member restrain condition according  to clause 
+                           4.4.1.2 of AWC_NDS2018.
+    :ivar memberLoadingCondition: parameters defining the member condition 
+                                  in order to obtain its effective length 
+                                  accordint to table 3.3.3 of AWC NDS-2018.
     :ivar loadCombDurationFactorFunction: function that returns the load 
                                           duration factor corresponding to
                                           a load combination expression
@@ -61,9 +63,12 @@ class Member(wood_member_base.Member):
         :param unbracedLengthZ: unbraced length for flexural buckling 
                                about z-axis.
         :param connection: connection type at member ends.
-        :param memberRestraint: Member restrain condition according  to clause 4.4.1.2 of AWC_NDS2018.
-        :param memberLoadingCondition: parameters defining the member condition in order to obtain 
-                                       its effective length accordint to table 3.3.3 of AWC NDS-2018.
+        :param memberRestraint: Member restrain condition according to clause 
+                                4.4.1.2 of AWC_NDS2018.
+        :param memberLoadingCondition: parameters defining the member condition
+                                       in order to obtain  its effective 
+                                       length accordint to table 3.3.3 
+                                       of AWC NDS-2018.
         :param loadCombDurationFactorFunction: function that returns the load 
                                           duration factor corresponding to
                                           a load combination expression
@@ -94,9 +99,11 @@ class Member(wood_member_base.Member):
         return CP*sectionFbAdj
     
     def getFbAdj(self, majorAxis= True):
-        ''' Return the adjusted value of Fb including the beam stability factor.
+        ''' Return the adjusted value of Fb including the beam stability 
+            factor.
 
-        :param majorAxis: if true return adjusted Fb for bending around major axis.
+        :param majorAxis: if true return adjusted Fb for bending around 
+                          major axis.
         '''
         sectionFbAdj= self.crossSection.getFbAdj(majorAxis= majorAxis)
         CL= self.getBeamStabilityFactor()
@@ -193,8 +200,8 @@ class Member(wood_member_base.Member):
             return (EB, EH)
         
     def getConcentratedLoadsBucklingLength(self, unbracedLength):
-        ''' Return the effective length coefficient of the member according to table
-            3.3.3 of NDS-2018.
+        ''' Return the effective length coefficient of the member according to
+            table 3.3.3 of NDS-2018.
 
            :param unbracedLength: unbraced length for the bending axis.
         '''
@@ -296,8 +303,10 @@ class Member(wood_member_base.Member):
         :param Myd: required bending strength (minor axis).
         :param Mzd: required bending strength (major axis).
         :param Vyd: required shear strength (major axis)
-        :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
-        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
+        :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018
+                     (default= 1.0).
+        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018
+                     (default= 1.0).
         '''
         # Critical buckling design values for compression.
         FcE= self.getFcE()
@@ -328,11 +337,13 @@ class Member(wood_member_base.Member):
         :param recorderType: type of the recorder to install.
         :param chiN: compressive strength reduction factor.
         :param chiLT: flexural strength reduction factor.
-        :param FcE: critical buckling design values for compression members (both axis).
+        :param FcE: critical buckling design values for compression members
+                    (both axis).
         :param FbE: critical buckling design value for bending members.
         :param calcSet: set of elements to be checked (defaults to 'None' which 
                         means that this set will be created elsewhere). In not
-                        'None' the member elements will be appended to this set.
+                        'None' the member elements will be appended to this 
+                        set.
         '''
         recorder= self.createRecorder(recorderType, calcSet)
         self.crossSection.setupULSControlVars(self.elemSet, chiN= chiN, chiLT= chiLT, FcE= FcE, FbE= FbE)
@@ -370,8 +381,9 @@ class BeamMember(Member):
                                 about the longitudinal axis.
         :param connection: connection type at beam ends.
         :param Cr: repetitive member factor.
-        :param memberLoadingCondition: parameters defining the member condition in order to obtain 
-                                       its effective length accordint to table 3.3.3 of AWC NDS-2018.
+        :param memberLoadingCondition: parameters defining the member condition
+                                       in order to obtain its effective length
+                                       accordint to table 3.3.3 of AWC NDS-2018.
         '''
         super(BeamMember,self).__init__(name= None, unbracedLengthX= unbracedLength, section= section, Cr= Cr, connection= connection, memberRestraint= memberRestraint, memberLoadingCondition= memberLoadingCondition)        
         
@@ -395,8 +407,10 @@ class BeamMember(Member):
         :param Myd: required bending strength (minor axis).
         :param Mzd: required bending strength (major axis).
         :param Vyd: required shear strength (major axis)
-        :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
-        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
+        :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018
+                     (default= 1.0).
+        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018
+                      (default= 1.0).
         '''
         # Critical buckling design values for compression.
         return self.crossSection.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, chiN= chiN, chiLT= chiLT)
@@ -414,12 +428,14 @@ class ColumnMember(Member):
         :param section: member cross-section.
         :param repetitiveMemberFactor: repetitive member adjustment factor.
         :param connection: connection type.
-        :param memberLoadingCondition: parameters defining the member condition in order to obtain 
-                                       its effective length accordint to table 3.3.3 of AWC NDS-2018.
+        :param memberLoadingCondition: parameters defining the member condition
+                                       in order to obtain its effective length
+                                       accordint to table 3.3.3 of AWC NDS-2018.
         :param loadCombDurationFactorFunction: function that returns the load 
-                                          duration factor corresponding to
-                                          a load combination expression
-                                          (e.g.: 1.0*deadLoad+0.7*windLoad).
+                                               duration factor corresponding to
+                                               a load combination expression
+                                               (e.g.: 
+                                               1.0*deadLoad+0.7*windLoad).
         '''
         super(ColumnMember,self).__init__(name= None, unbracedLengthX= unbracedLengthB, unbracedLengthZ= unbracedLengthH, Cr= repetitiveMemberFactor, section= section, connection= connection, memberRestraint= memberRestraint, memberLoadingCondition= memberLoadingCondition, loadCombDurationFactorFunction= loadCombDurationFactorFunction)
 
@@ -480,9 +496,10 @@ class StudArrangement(object):
         :param studSpacing: distance between consecutive studs.
         :param wallHeight: height of the bearing wall.
         :param loadCombDurationFactorFunction: function that returns the load 
-                                          duration factor corresponding to
-                                          a load combination expression
-                                          (e.g.: 1.0*deadLoad+0.7*windLoad).
+                                               duration factor corresponding to
+                                               a load combination expression
+                                               (e.g.:
+                                               1.0*deadLoad+0.7*windLoad).
         '''
         self.name= name
         self.studSpacing= studSpacing
@@ -582,9 +599,10 @@ class WallTopPlates(object):
         :param trussSpacing: spacing of the trusses supported by the plates.
         :param pointLoadFactor: ??
         :param loadCombDurationFactorFunction: function that returns the load 
-                                              duration factor corresponding to
-                                              a load combination expression
-                                              (e.g.: 1.0*deadLoad+0.7*windLoad).
+                                               duration factor corresponding to
+                                               a load combination expression
+                                               (e.g.:
+                                               1.0*deadLoad+0.7*windLoad).
         '''
         self.prb= xc.FEProblem()
         self.prb.title= title
@@ -868,7 +886,8 @@ class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
     '''Control variables for biaxial bending normal stresses LS 
     verification in steel-shape elements according to AISC.
 
-    :ivar FcE: critical buckling design value for compression members (both axis).
+    :ivar FcE: critical buckling design value for compression members
+               (both axis).
     '''
     def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0,Ncrd=0.0,McRdy=0.0,McRdz=0.0, FcE= (0.0,0.0), FbE= 0.0, chiLT=1.0, chiN= 1.0):
         '''
@@ -883,11 +902,13 @@ class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
         :param Ncrd:     design strength to axial compression
         :param McRdy:    design moment strength about Y (weak) axis
         :param McRdz:    design moment strength about Z (strong) axis
-        :param FcE: critical buckling design value for compression members (both axis).
+        :param FcE: critical buckling design value for compression members
+                    (both axis).
         :param FbE: critical bucking design value for bending according to 
                     section 3.3.3.8 of NDS-2018.
-        :param chiLT:    reduction factor for lateral-torsional buckling (defaults to 1)
-        :param chiN:     reduction factor for compressive strength (defaults to 1)
+        :param chiLT: reduction factor for lateral-torsional buckling
+                      (defaults to 1)
+        :param chiN: reduction factor for compressive strength (defaults to 1).
         '''
         super(AWCNDSBiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My,Mz,Ncrd=Ncrd,McRdy=McRdy,McRdz=McRdz, chiLT=chiLT, chiN= chiN)
         self.FcE= FcE

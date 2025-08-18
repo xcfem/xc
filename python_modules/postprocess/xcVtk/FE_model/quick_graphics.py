@@ -56,7 +56,8 @@ class LoadCaseResults(QuickGraphics):
 
     def solve(self):
         self.modelSpace.removeAllLoadPatternsFromDomain()
-        self.modelSpace.addNewLoadCaseToDomain(self.loadCaseName,self.loadCaseExpr)
+        self.modelSpace.revertToStart()
+        self.modelSpace.addNewLoadCaseToDomain(self.loadCaseName,self.loadCaseExpr, reset= False) # Previous loads removed already, so no need to reset.
         #Solution
         lmsg.warning('Here we use a simple linear static solution that is not always a suitable method.')
         analysis= predefined_solutions.simple_static_linear(self.feProblem)

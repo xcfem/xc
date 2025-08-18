@@ -22,6 +22,7 @@ Once the analyst has defined the model, the next step is to define the analysis 
  - [Failures detected by LAPACK routines](https://www.netlib.org/lapack/lug/node136.html)
  - [Examining finite element characteristics by eigen modes](http://www.visualfea.com/manual-cbt/chapter/05_02chap.htm)
  - [Invertible Does Not Mean Stable](https://portwooddigital.com/2024/12/11/invertible-does-not-mean-stable/)
+- [A Model of Inconsistency](https://portwooddigital.com/2025/08/10/a-model-of-inconsistency/)
 
 ### Constraint handling
 - [Handling a Doubt](https://portwooddigital.com/2023/11/09/handling-a-doubt/)

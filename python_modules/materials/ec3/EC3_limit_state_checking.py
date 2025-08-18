@@ -413,6 +413,46 @@ class Member(steel_member_base.BucklingMember):
 #      \__\___/_||_\__|_| \___/_|_\___|_| /__/   
 # Limit state controllers.
    
+class UniaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections):
+    '''Object that controls normal stresses limit state.'''
+
+    ControlVars= cv.SteelShapeUniaxialBendingControlVars
+    
+    def __init__(self, limitStateLabel, solutionProcedureType= lsc.defaultStaticLinearSolutionProcedure):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        :param solutionProcedureType: type of the solution procedure to use
+                                      when computing load combination results.
+        '''
+        super(UniaxialBendingNormalStressController,self).__init__(limitStateLabel, solutionProcedureType= solutionProcedureType)
+    
+    def updateEfficiency(self, elem, elementInternalForces):
+        ''' Compute the efficiency of the element steel shape
+            subjected to the internal forces argument and update
+            its value if its bigger than the previous one.
+
+        :param elem: finite element whose section will be checked.
+        :param elementInternalForces: internal forces acting on the steel shape.
+        '''
+        # Get element section properties.
+        steelShape= elem.getProp('crossSection')
+        if(steelShape):
+            # Check each element section.
+            for lf in elementInternalForces: 
+                # Compute efficiency.
+                CFtmp, NcRdtmp, McRdytmp, McRdztmp, MvRdztmp, MbRdztmp= steelShape.getZBendingEfficiency(Nd= lf.N, Mzd= lf.Mz, Vyd= lf.Vy, chiLT= lf.chiLT, chiN= lf.chiN)
+                sectionLabel= self.getSectionLabel(lf.idSection)
+                label= self.limitStateLabel+sectionLabel
+                # Update efficiency.
+                if(CFtmp>elem.getProp(label).CF):
+                    elem.setProp(label, self.ControlVars(idSection= sectionLabel+'s', combName= lf.idComb, CF= CFtmp, N= lf.N, Mz= lf.Mz, Ncrd= NcRdtmp, McRdz= McRdztmp, MvRdz= MvRdztmp, MbRdz= MbRdztmp, chiN= lf.chiN, chiLT= lf.chiLT))
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= className+'.'+methodName+"; cross section not defined for element: " + str(elem.tag) + "\n"
+            lmsg.error(errMsg)
+            
 class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections):
     '''Object that controls normal stresses limit state.'''
 
@@ -466,10 +506,7 @@ class NormalStressesLimitStateData(lsd.NormalStressesSteelLimitStateData):
         if(biaxialBending):
             retval= BiaxialBendingNormalStressController(self.label)
         else:
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+"; not implemented yet for uniaxial bending.") 
-            retval= None
+            retval= UniaxialBendingNormalStressController(self.label)
         return retval
     
 normalStressesResistance= NormalStressesLimitStateData()

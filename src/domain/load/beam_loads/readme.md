@@ -9,3 +9,4 @@ The classes in this directory serve to define the loads action on beam elements.
 ## References
 - [Trapezoidal beam loads](https://portwooddigital.com/2021/05/05/trapezoidal-beam-loads/)
 - [Making a Point Load](https://portwooddigital.com/2023/11/27/making-a-point-load/)
+- [Distributed Moments](https://portwooddigital.com/2025/08/17/distributed-moments/)
