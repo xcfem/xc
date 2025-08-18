@@ -10,6 +10,7 @@ __email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
 
 import math
 from materials import concrete_base
+from materials import typical_materials
 
 # Concrete according to Model Code 2010.
 
@@ -385,3 +386,52 @@ class ShrinkageAndCreepParameters(object):
     
     def get_opensees_cem(self):
         return self.get_alpha()
+    
+def get_TDConcrete_mc10(preprocessor, name, concrete, cement, h0, T, RH, ts, age, beta, rca= 0.0, xi_cbs_2= 1.0, xi_cds_2= 1.0, xi_cb_2= 1.0, xi_cd_2= 1.0):
+    '''
+    Defines a TDConcreteMC10 uniaxial material.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param name: name identifying the new TDConcreteMC10 material. 
+    :param concrete: basic concrete material.
+    :param cement: cement type (32.5N, 32.5R, 42.5N, 42.5R, 52.5N, 52.5R)
+    :param h0: notional size of the section (2*A/u)
+    :param T: average temperature over entire analysis period.
+    :param RH: average relative humidity over entire analysis period.
+    :param ts: time at start of drying (days).
+    :param age: concrete age at first loading.
+    :param beta: tension softening parameter.
+    :param rca: percentage of coarse recycled aggregate concrete in the 
+                mixture.
+    :param xi_cbs_2: this is a free fitting shrinkage parameter; its 
+                     default value is 1.0.
+    :param xi_cds_2: this is a free fitting shrinkage parameter; its 
+                     default value is 1.0.
+    :param xi_cb_2: this is a free fitting creep parameter; its 
+                    default value is 1.0.
+    :param xi_cd_2: this is a free fitting creep parameter; its 
+                    default value is 1.0.
+    '''
+    # concrete parameters.
+    Ec = concrete.getEcmT(t= age) # concrete modulus of elasticity at loading age.
+    Ecm= concrete.getEcm() # 28-day modulus of elasticity
+    fc= concrete.getFckt() # cylinder compressive strength (this is a dummy parameter since compression behavior is linear).
+    ft= concrete.getFctm() # the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
+
+    # shrinkage and creep parameters.
+    ## Shrinkage
+    shrinkageAndCreepParameters= ShrinkageAndCreepParameters(concrete= concrete, cement= cement, h0= h0, T= T, RH= RH, ts= ts, t0= age)
+    epsba= shrinkageAndCreepParameters.get_opensees_epsba() # ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010. Row 21 column F in the TDCI_input spreadsheet.
+    epsbb= shrinkageAndCreepParameters.get_opensees_epsbb() # fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017. Row 22 column F in the TDCI_input spreadsheet.
+    epsda= shrinkageAndCreepParameters.get_opensees_epsda() # product of εcds,0 and βRH, as per Model Code 2010. Row 23 column F in the TDCI_input spreadsheet.
+    epsdb= shrinkageAndCreepParameters.get_opensees_epsdb() # fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017. Row 24 column F in the TDCI_input spreadsheet.
+
+    ## Creep
+    phiba= shrinkageAndCreepParameters.get_opensees_phiba() # parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010. Row 20 column M in the TDCI_input spreadsheet.
+    phibb= shrinkageAndCreepParameters.get_opensees_phibb() # fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017. Row 21 column M in the TDCI_input spreadsheet.
+    phida= shrinkageAndCreepParameters.get_opensees_phida() # product of βdc(fcm) and β(RH), as per Model Code 2010. Row 22 column M in the TDCI_input spreadsheet.
+    phidb= shrinkageAndCreepParameters.get_opensees_phidb() # fitting constant within the drying creep time evolution function as per Model Code 2010. Row 23 column M in the TDCI_input spreadsheet.
+
+    ## Cement type
+    cem= shrinkageAndCreepParameters.get_opensees_cem() # coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
+    return typical_materials.defTDConcreteMC10(preprocessor= preprocessor, name= 'tdConcrete', fc= fc, ft= ft, Ec= Ec, Ecm= Ecm, beta= beta, age= age, epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, tcast= 0.0, cem= cem)
