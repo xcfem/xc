@@ -1235,6 +1235,7 @@ python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_material_0
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_material_02.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10_material_01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10_material_02.py
+python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10_material_03.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10nl_material_01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10nl_material_02.py
 python tests/materials/xc_materials/uniaxial/concrete/test_HA25_01.py
@@ -1573,6 +1574,7 @@ python tests/materials/ec2/test_ec2_prestressing_04.py
 echo "$BLEU" "    MC10 tests." "$NORMAL"
 python tests/materials/mc10/test_mc10_shrinkage_and_creep_parameters_01.py
 python tests/materials/mc10/test_mc10_shrinkage_and_creep_parameters_02.py
+python tests/materials/mc10/test_mc10_shrinkage_and_creep_parameters_03.py
 echo "$BLEU" "    SIA 262 tests." "$NORMAL"
 python tests/materials/sia262/sia262_concrete_01.py
 python tests/materials/sia262/shear_01.py
