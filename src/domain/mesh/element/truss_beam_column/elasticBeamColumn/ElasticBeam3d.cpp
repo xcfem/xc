@@ -486,10 +486,6 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
     const CrossSectionProperties3d &sprop= getSectionProperties();
     const double E= sprop.E();
     const double EA= sprop.A()*E; // EA
-    const double EIz2= 2.0*sprop.Iz()*E; // 2EIz
-    const double EIz4= 2.0*EIz2; // 4EIz
-    const double EIy2= 2.0*sprop.Iy()*E; // 2EIy
-    const double EIy4= 2.0*EIy2; // 4EIy
     const double GJ= sprop.GJ(); // GJ
     
     //Element internal forces due to the actions of the structure over its nodes.
@@ -498,6 +494,8 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
 
     if(releasez==0)
       {
+	const double EIz2= 2.0*sprop.Iz()*E; // 2EIz
+	const double EIz4= 2.0*EIz2; // 4EIz
         q.Mz1()= EIz4*v(1) + EIz2*v(2); //z bending moment in node 1: 4EI*v(1)+2EI*v(2).
         q.Mz2()= EIz2*v(1) + EIz4*v(2); //z bending moment in node 2: 2EI*v(1)+4EI*v(2).
       }
@@ -521,6 +519,8 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
     
     if(releasey==0)
       {
+	const double EIy2= 2.0*sprop.Iy()*E; // 2EIy
+	const double EIy4= 2.0*EIy2; // 4EIy
         q.My1()= EIy4*v(3) + EIy2*v(4); //y bending moment in node 1: 4EI*v(3)+2EI*v(4).
         q.My2()= EIy2*v(3) + EIy4*v(4); //y bending moment in node 2: 2EI*v(3)+4EI*v(4).
       }
@@ -559,9 +559,13 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
 
     // std::cerr << P;
 
-    // P = P - load;
-    P.addVector(1.0, load, -1.0);
-
+    const double &rho= getRho();
+    if(rho!=0.0)
+      {
+	// P = P - load;
+	P.addVector(1.0, load, -1.0);
+      }
+    
     if(isDead())
       P*= dead_srf;
     return P;

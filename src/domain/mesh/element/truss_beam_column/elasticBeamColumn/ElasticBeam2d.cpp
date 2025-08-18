@@ -381,14 +381,14 @@ const XC::Vector &XC::ElasticBeam2d::getResistingForce(void) const
 
     const CrossSectionProperties2d &sprop= getSectionProperties();
     const double EA= sprop.EA(); // EA
-    const double EI2= 2.0*sprop.EI(); // 2EI
-    const double EI4= 2.0*EI2; // 4EI
 
 
     // determine q= kv + q0
     q(0)= EA*v(0);
     if(release==0)
       {
+	const double EI2= 2.0*sprop.EI(); // 2EI
+	const double EI4= 2.0*EI2; // 4EI
         q(1)= EI4*v(1) + EI2*v(2);
         q(2)= EI2*v(1) + EI4*v(2);
       }
@@ -424,9 +424,13 @@ const XC::Vector &XC::ElasticBeam2d::getResistingForce(void) const
 
     P= theCoordTransf->getGlobalResistingForce(q, p0Vec);
 
-    // P= P - load;
-    P.addVector(1.0, load, -1.0);
-
+    const double &rho= getRho();
+    if(rho!=0.0)
+      {
+	// P= P - load;
+	P.addVector(1.0, load, -1.0);
+      }
+    
     if(isDead())
       P*=dead_srf;
     return P;
