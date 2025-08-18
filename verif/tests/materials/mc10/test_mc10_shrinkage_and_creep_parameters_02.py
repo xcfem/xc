@@ -18,6 +18,13 @@ from materials.mc10 import MC10_materials
 
 concrete= EC2_materials.EC2Concrete("C25/30", -25e6, 1.5)
 
+# concrete: concrete material.
+# cement: 32.5N, 32.5R, 42.5N, 42.5R, 52.5N, 52.5R)
+# h0: notional size of the section (2*A/u)
+# T: average temperature over entire analysis period.
+# RH: average relative humidity over entire analysis period.
+# ts: time at start of drying (days).
+# t0: loading age (days).
 parameters= MC10_materials.ShrinkageAndCreepParameters(concrete= concrete, cement= '32.5N', h0= 0.124, T= 21, RH= 70, ts= 7, t0= 7)
 t= 1000 # time at analysis.
 # Shrinkage related parameters.
