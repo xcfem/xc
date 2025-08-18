@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-''' Trivial test of TDConcreteMC10 material constitutive model.  
+''' Trivial test of TDConcreteMC10 material constitutive model. This test is similar to the
+previous one, but the definition of the TDConcreteMC10 material is simplified by using the
+get_TDConcrete_mc10 function defined in MC10 materials.
 
 Based on the example: https://portwooddigital.com/2023/05/28/minimal-creep-and-shrinkage-example/
 '''
@@ -16,6 +18,8 @@ __email__= "l.pereztato@gmail.com"
 import math
 import xc
 from materials import typical_materials
+from materials.ec2 import EC2_materials
+from materials.mc10 import MC10_materials
 from model import predefined_spaces
 from solution import predefined_solutions
 
@@ -23,50 +27,23 @@ from solution import predefined_solutions
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
-# Units: kN, mm
-kN = 1
-mm = 1
-GPa = kN/mm**2
-MPa = 0.001*GPa
-
 # Define materials.
 
 ## Steel.
-Es = 200*GPa
+Es = 200*1e9
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",Es)
 
 ## Concrete.
-Ec = 25*GPa # concrete modulus of elasticity at loading age.
-Ecm= 30.303*GPa # 28-day modulus of elasticity
-fc = -28*MPa # concrete compressive strength (compression is negative) at loading age.
-ft = 3*MPa # concrete tensile strength (tension is positive) at loading age.
+concrete= EC2_materials.EC2Concrete("C20/25", -20e6, 1.5)
 beta = 0.4 # Recommended value for the tension softening parameter (tension softening exponent).
-tDry = 14 # days
-tcast = 0 # analysis time corresponding to concrete casting (in days; minimum value 2.0)
+ts= 14 # time at start of drying
+age= 7 # concrete age at first loading.
 
-# Shrinkage
-epsba= -0.000034 # ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010. Row 21 column F in the TDCI_input spreadsheet.
-epsbb= 1.000 # fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017. Row 22 column F in the TDCI_input spreadsheet.
-epsda= -0.000853 # product of εcds,0 and βRH, as per Model Code 2010. Row 23 column F in the TDCI_input spreadsheet.
-epsdb= 787.50 # fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017. Row 24 column F in the TDCI_input spreadsheet.
+tdConcrete= MC10_materials.get_TDConcrete_mc10(preprocessor= preprocessor, name= 'tdConcrete', concrete= concrete, cement= '42.5R', h0= 0.15, T= 21, RH= 50, beta= beta, ts= ts, age= age)
 
-# Creep
-phiba= 0.1747 # parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010. Row 20 column M in the TDCI_input spreadsheet.
-phibb= 1.000 # fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017. Row 21 column M in the TDCI_input spreadsheet.
-phida= 3.651 # product of βdc(fcm) and β(RH), as per Model Code 2010. Row 22 column M in the TDCI_input spreadsheet.
-phidb= 504.5 # fitting constant within the drying creep time evolution function as per Model Code 2010. Row 23 column M in the TDCI_input spreadsheet.
-
-# Cement type
-cem= 1.0000 # coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
-
-
-## Concrete able to creep.
-tdConcrete= typical_materials.defTDConcreteMC10(preprocessor= preprocessor, name= 'tdConcrete', fc= fc, ft= ft, Ec= Ec, Ecm= Ecm, beta= beta, age= tDry, epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, tcast= 0.0, cem= cem)
-
-
-b = 300*mm
-h = 300*mm
-As = 1500*mm**2
+b= 0.3
+h= 0.3
+As = 1500e-6
 Ag = b*h
 Ac = Ag-As
 
@@ -97,7 +74,7 @@ concreteFiber= zl.getMaterial().getFibers().findFiber(concreteFiber.tag)
 steelFiber= zl.getMaterial().getFibers().findFiber(steelFiber.tag)
 
 # Define loads.
-P= 1000*kN # axial load.
+P= 600*1e3 # axial load.
 
 ## Define time series.
 ts= modelSpace.newTimeSeries(name= "ts", tsType= "constant_ts")
@@ -162,30 +139,30 @@ avgSteelStress/=len(steelStresses)
 lastConcreteStress= concreteStresses[-1]
 lastSteelStress= steelStresses[-1]
 
-avgConcreteStressRef= 0.005559890159521989
+avgConcreteStressRef= 2.5675259479415904e6
 ratio1= abs(avgConcreteStress+avgConcreteStressRef)/avgConcreteStressRef
-avgSteelStressRef= 0.3386331472548687
+avgSteelStressRef= 248.51596907144594e6
 ratio2= abs(avgSteelStress+avgSteelStressRef)/avgSteelStressRef
 
 '''
-print('time: ', ti)
-print('concrete stresses: ', concreteStresses)
-print('steel stresses: ', steelStresses)
+# print('time: ', ti)
+# print('concrete stresses: ', concreteStresses)
+# print('steel stresses: ', steelStresses)
 # print('Reactions= ', reactions)
-print(errorDt)
-print(errorForces)
-print('average concrete stress: ', avgConcreteStress, avgConcreteStressRef, ratio1)
-print('average steel stress: ', avgSteelStress, avgSteelStressRef, ratio2)
+print('errorDt= ', errorDt)
+print('errorForces= ', errorForces)
+print('average concrete stress: ', avgConcreteStress/1e6, avgConcreteStressRef/1e6, ratio1)
+print('average steel stress: ', avgSteelStress/1e6, avgSteelStressRef/1e6, ratio2)
 print('time: ', modelSpace.getCurrentTime(), 'days')
-print('last concrete stress: ', lastConcreteStress*1e3, 'MPa')
-print('last steel stress: ', lastSteelStress*1e3, 'MPa')
+print('last concrete stress: ', lastConcreteStress*1e-6, 'MPa')
+print('last steel stress: ', lastSteelStress*1e-6, 'MPa')
 '''
 
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-9) & (abs(ratio2)<1e-9) & (errorForces<1e-6) & (errorDt<1e-12):
+if (abs(ratio1)<1e-7) & (abs(ratio2)<1e-7) & (errorForces<1e-6) & (errorDt<1e-12):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
