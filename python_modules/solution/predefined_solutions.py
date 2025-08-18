@@ -781,7 +781,13 @@ class PenaltyModifiedNewtonMUMPS(PenaltyModifiedNewtonBase):
         :param integratorType: integrator type (see integratorSetup).
         '''
         super(PenaltyModifiedNewtonMUMPS,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'mumps_soe', solverType= 'mumps_solver', integratorType= integratorType)
-        
+
+### Convenience function
+def penalty_modified_newton_raphson_mumps(prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', integratorType:str= 'load_control_integrator'):
+    solProc= PenaltyModifiedNewtonMUMPS(prb= prb, name= name, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, integratorType= integratorType)
+    solProc.setup()
+    return solProc.analysis
+
 class LineSearchBase(SolutionProcedure):
     ''' Base class for line search solution aggregations.
 
