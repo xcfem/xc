@@ -50,7 +50,7 @@ numberOfBars= 3
 rebarArea= bars['area']
 As= numberOfBars*rebarArea
 
-# Define reinforce concrete cross-section.
+# Define reinforced concrete cross-section.
 ## Reinforcement.
 lowerRow= def_simple_RC_section.ReinfRow(areaRebar= rebarArea, width= b, nRebars= numberOfBars, nominalCover= nominalCover, nominalLatCover= nominalCover)
 ## Concrete section template.
