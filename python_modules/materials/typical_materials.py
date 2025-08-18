@@ -472,13 +472,12 @@ def defTDConcreteMC10(preprocessor,name, fc, ft, Ec, Ecm, beta, age, epsba, epsb
 
     :param preprocessor: preprocessor of the finite element problem.
     :param name: name identifying the new material
-    :param fc: cylinder compressive strength (this is a dummy parameter since compression behavior is linear).
-    :param epscu: strain at crushing strength.
+    :param fc: mean 28-day cylinder compressive strength (this is a dummy parameter since compression behavior is linear).
     :param ft: the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
     :param Ec: modulus of elasticity (preferably at time of loading if there is a single loading age).
     :param Ecm: 28-day modulus, necessary for normalizing creep coefficient.
     :param beta: tension softening parameter.
-    :param age: analysis time at initiation of drying (in days).
+    :param age: concrete age at first loading.
     :param epsba: ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010.
     :param epsbb: fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
     :param epsda: product of εcds,0 and βRH, as per Model Code 2010.
