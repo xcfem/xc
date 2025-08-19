@@ -937,7 +937,6 @@ class OutputHandler(object):
 			  display the initial/undeformed shape).
         '''
         # Display diagrams on linear elements.
-        retval= scalarBarOrientation
         loadRepresentationType= self.getLoadRepresentationType()
         if(loadRepresentationType=='force'):
             scalarBarOrientation= self._display_elemental_force_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, elLoadComp= elLoadComp, forceComponents= forceComponents, vectorScale=vectorScale, scalarBarOrientation= scalarBarOrientation, lRefModSize= lRefModSize, defFScale= defFScale)
@@ -950,7 +949,7 @@ class OutputHandler(object):
             loadCaseName= preprocessor.getDomain.currentCombinationName
             errorMsg= '; load case: '+str(loadCaseName)+' requires '+str(loadRepresentationType)+' which is not implemented yet.'
             lmsg.error(className+'.'+methodName+errorMsg)
-        return retval
+        return scalarBarOrientation
         
     def _display_nodal_loads(self, displaySettings, setToDisplay, forceComponents, vectorScale, scalarBarOrientation, defFScale):
         ''' Display the loads applied on nodes.
@@ -971,7 +970,7 @@ class OutputHandler(object):
 			  multiplied by this factor. (Defaults to 0.0, i.e. 
 			  display the initial/undeformed shape).
         '''
-        retval= scalarBarOrientation
+        #retval= scalarBarOrientation
         preprocessor= self.modelSpace.preprocessor
         loadCaseName= preprocessor.getDomain.currentCombinationName
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
@@ -991,7 +990,7 @@ class OutputHandler(object):
             vFieldMNodTitle= 'Nodal moments ('+self.getOutputForceUnitSym()+')'
             vFieldMNod.addToDisplay(displaySettings,orientation= scalarBarOrientation, title= vFieldMNodTitle)
             retval= scalarBarOrientation+1
-        return retval
+        return scalarBarOrientation
         
     def displayLoads(self, setToDisplay=None, elLoadComp='xyzComponents', fUnitConv=1, caption= None, fileName=None, defFScale=0.0, scaleConstr= 0.2):
         '''Display the loads applied on beam elements and nodes for the domain
