@@ -77,6 +77,19 @@ XC::Response *XC::Fiber::setResponse(const std::vector<std::string> &argv, Infor
 int XC::Fiber::getResponse(int responseID, Information &info)
   { return -1; }
 
+//! @brief Return true if the fiber material needs to update its internal
+//! state even if the trial strains have not changed. This is the case
+//! when the material deforms without load or under constant load, for
+//! example by shrinkage or creep.
+bool XC::Fiber::needsUpdate(void) const
+  {
+    bool retval= false;
+    const UniaxialMaterial *mat= this->getMaterial();
+    if(mat)
+      retval= mat->needsUpdate();
+    return retval;
+  }
+
 //! @brief Return the force response of the fiber.
 double XC::Fiber::getForce(void) const
   { 

@@ -80,6 +80,24 @@ void XC::FiberPtrDeque::push_back(Fiber *f)
    { fiber_ptrs_dq::push_back(f); }
 
 
+//! @brief Return true if the material of any of its fibers needs to update
+//! its internal state even if the trial strains have not changed. This is
+//! the case when the material deforms without load or under constant load, for
+//! example by shrinkage or creep.
+bool XC::FiberPtrDeque::needsUpdate(void) const
+  {
+    bool retval= false;
+    const Fiber *fiberPtr= nullptr;
+    std::deque<Fiber *>::const_iterator i= begin();
+    for(;i!= end();i++)
+      if((*i)->needsUpdate())
+        {
+          retval= true;
+          break;
+        }    
+    return retval;
+  }
+
 //! @brief Search for the fiber identified by the parameter.
 const XC::Fiber *XC::FiberPtrDeque::findFiber(const int &tag) const
   {

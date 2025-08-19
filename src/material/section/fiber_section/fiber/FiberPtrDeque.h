@@ -99,7 +99,8 @@ class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>, public Mo
     void push_back(Fiber *f);
     inline size_t getNumFibers(void) const
       { return size(); }
-    
+
+    bool needsUpdate(void) const;
     const Fiber *findFiber(const int &tag) const;
     Fiber *findFiber(const int &tag);
     bool in(const Fiber *ptr) const;
