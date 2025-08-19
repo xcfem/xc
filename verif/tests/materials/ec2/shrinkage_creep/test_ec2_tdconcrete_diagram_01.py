@@ -39,6 +39,7 @@ beta = 0.4 # Recommended value for the tension softening parameter (tension soft
 ts= 14 # time at start of drying
 age= 7 # concrete age at first loading.
 
+# Define the parameters needed to create a TDConcrete diagram.
 concrete.defTDConcreteParameters(beta= beta, cement= '42.5R', h0= 0.15, T= 21, RH= 50, ts= ts, t0= age)
 
 tdConcreteDiagram= concrete.defDiagTD(preprocessor= preprocessor)
