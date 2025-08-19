@@ -376,7 +376,11 @@ int XC::ForceBeamColumn3d::update(void)
     static Vector v(NEBD), dv(NEBD), vin(NEBD);
     this->getCurrentDisplacements(v, dv);
     if(initialFlag != 0 && dv.Norm() <= DBL_EPSILON && sp.isEmpty())
-      return 0;
+      {
+	//Check that the sections don't need to be updated.
+	if(!theSections.needsUpdate())
+	  { return 0; }
+      }
 
     vin = v;
     vin -= dv;

@@ -398,17 +398,20 @@ int XC::ForceBeamColumn2d::update(void)
       this->revertToLastCommit();
 
     static Vector v(NEBD), dv(NEBD), vin(NEBD);
+    const size_t numSections= getNumSections();
     this->getCurrentDisplacements(v, dv);
     if(initialFlag != 0 && dv.Norm() <= DBL_EPSILON && (sp.isEmpty()))
-      return 0;
-
+      {
+	//Check that the sections don't need to be updated.
+	if(!theSections.needsUpdate())
+	  { return 0; }
+      }
     vin= v;
     vin-= dv;
     
     const double L= theCoordTransf->getInitialLength();
     const double oneOverL= 1.0/L;
 
-    const size_t numSections= getNumSections();
     std::vector<double> xi(section_matrices.getMaxNumSections());
     beamIntegr->getSectionLocations(numSections, L, &xi[0]);
 
@@ -594,10 +597,9 @@ int XC::ForceBeamColumn2d::update(void)
                         // set section deformations
                         if(initialFlag != 0)
                           section_matrices.getVsSubdivide()[i]+= dvs;
-    
                         if(theSections[i]->setTrialSectionDeformation(section_matrices.getVsSubdivide()[i]) < 0)
                           {
-                            std::cerr << Color::red << std::endl << getClassName() << "::" << __FUNCTION__
+                            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 				      << "; ERROR  section failed in setTrial."
 			              << Color::def << std::endl;
                             return -1;
@@ -1532,7 +1534,7 @@ int XC::ForceBeamColumn2d::setParameter(const std::vector<std::string> &argv, Pa
     return result;
   }
 
-int XC::ForceBeamColumn2d::updateParameter (int parameterID, Information &info)
+int XC::ForceBeamColumn2d::updateParameter(int parameterID, Information &info)
   {
     // If the parameterID value is not equal to 1 it belongs
     // to section or material further down in the hierarchy.
