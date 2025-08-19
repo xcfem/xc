@@ -35,13 +35,12 @@ reinfSteel= EC2_materials.S500B
 
 ## Concrete.
 concrete= EC2_materials.EC2Concrete("C20/25", -20e6, 1.5)
-beta = 0.4 # Recommended value for the tension softening parameter (tension softening exponent).
+beta= 0.4 # Recommended value for the tension softening parameter (tension softening exponent).
 ts= 14 # time at start of drying
 age= 7 # concrete age at first loading.
 
 # Define the parameters needed to create a TDConcrete diagram.
 concrete.defTDConcreteParameters(beta= beta, cement= '42.5R', h0= 0.15, T= 21, RH= 50, ts= ts, t0= age)
-
 
 b= 0.3
 h= 0.3
@@ -61,26 +60,27 @@ rcSection.positvRebarRows= def_simple_RC_section.LongReinfLayers([rebarRow])
 rcSection.negatvRebarRows= def_simple_RC_section.LongReinfLayers([rebarRow])
 # Define mesh
 nodes= preprocessor.getNodeHandler
-modelSpace= predefined_spaces.StructuralMechanics2D(nodes) # Problem space.
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes) # Problem space.
 
 ## Define nodes.
-n1= modelSpace.newNode(0, 0)
-n2= modelSpace.newNode(0, 0)
+n1= modelSpace.newNode(0, 0, 0)
+n2= modelSpace.newNode(0, 0, 1)
 
 ## Define constraints.
-modelSpace.fixNode000(n1.tag)
-modelSpace.fixNodeF0F(n2.tag)
+modelSpace.fixNode("000_000", n1.tag)
+modelSpace.fixNode("00F_0FF", n2.tag)
 
 ## Define fiber section.
-rcSection.defRCSection2d(preprocessor, matDiagType= 'td')
+rcSection.defRCSection(preprocessor, matDiagType= 'td')
 
 ## Create element.
-elements= preprocessor.getElementHandler
-elements.defaultMaterial= rcSection.name
-elements.dimElem= 1 # Dimension of element space
-zl= elements.newElement("ZeroLengthSection",xc.ID([n1.tag, n2.tag]))
+modelSpace.setDefaultMaterial(rcSection.fiberSection)
+### Geometric transformation.
+lin= modelSpace.newLinearCrdTransf("lin", xc.Vector([1,0,0]))
+modelSpace.setDefaultCoordTransf(lin)
+bc= modelSpace.newElement("ForceBeamColumn3d", [n1.tag, n2.tag])
 
-fiberSection= zl.getSection()
+fiberSection= bc.getSection(0)
 fibers= fiberSection.getFibers()
 steelFibers= list()
 concreteFibers= list()
@@ -90,7 +90,7 @@ for fiber in fibers:
         steelFibers.append(fiber)
     else:
         concreteFibers.append(fiber)
-        
+
 # Define loads.
 P= 600*1e3 # axial load.
 
@@ -98,7 +98,7 @@ P= 600*1e3 # axial load.
 ts= modelSpace.newTimeSeries(name= "ts", tsType= "constant_ts")
 lp0= modelSpace.newLoadPattern(name= 'lp0')
 modelSpace.setCurrentLoadPattern(lp0.name)
-lp0.newNodalLoad(n2.tag, xc.Vector([-P, 0, 0]))
+lp0.newNodalLoad(n2.tag, xc.Vector([0, 0, -P, 0, 0, 0]))
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 Tcr = 28 # creep model age (in days)

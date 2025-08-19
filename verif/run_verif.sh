@@ -1532,6 +1532,8 @@ python tests/materials/ec2/shrinkage_creep/test_EC2_2021_shrinkage.py
 python tests/materials/ec2/shrinkage_creep/test_ec2_creep_and_shrinkage_calculation.py
 python tests/materials/ec2/shrinkage_creep/test_ec2_tdconcrete_diagram_01.py
 python tests/materials/ec2/shrinkage_creep/test_ec2_tdconcrete_fibet_section_01.py
+python tests/materials/ec2/shrinkage_creep/test_ec2_tdconcrete_fibet_section_02.py
+python tests/materials/ec2/shrinkage_creep/test_ec2_tdconcrete_fibet_section_03.py
 
 echo "$BLEU" "    EC2 crack amplitude determination tests." "$NORMAL"
 python tests/materials/ec2/test_crack_control_without_direct_calculation_01.py
