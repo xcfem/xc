@@ -99,7 +99,9 @@ class FiberSectionBase: public PrismaticBarCrossSection
     ~FiberSectionBase(void);
 
     void clear(void);
-    
+
+    bool needsUpdate(void) const;
+
     virtual void setupFibers(void) = 0;
     inline size_t getNumFibers(void) const
       { return fibers.getNumFibers(); }
