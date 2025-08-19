@@ -46,6 +46,7 @@ class FiberSets: public std::map<std::string,FiberSet>, public CommandEntity, pu
   public:
     FiberSets(void); 
 
+    boost::python::list getKeys(void) const;
     bool exists(const std::string &);
     FiberSet &create_fiber_set(const std::string &);
     iterator get_fiber_set(const std::string &);

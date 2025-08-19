@@ -196,5 +196,6 @@ class_<map_fiber_sets, boost::noncopyable >("map_fiber_sets", no_init)
 
 class_<XC::FiberSets , bases<map_fiber_sets>, boost::noncopyable >("FiberSets", no_init)
   .def("create",make_function(&XC::FiberSets::create_fiber_set, return_internal_reference<>()),"creates set.")
+  .def("getKeys", &XC::FiberSets::getKeys, "Returns a Python list with the names of the sets in the container")
   ;
 
