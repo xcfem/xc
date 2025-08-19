@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Trivial test of TDConcreteMC10 material constitutive model. This test is similar to the
-previous one, but the definition of the TDConcreteMC10 material is simplified by using the
-get_TDConcrete_mc10 function defined in MC10 materials.
+''' Trivial test of TDConcreteMC10 material constitutive model. This test is 
+similar to the previous one, but the definition of the TDConcreteMC10 material
+is simplified by using the get_TDConcrete_mc10 function defined in MC10 
+materials.
 
 Based on the example: https://portwooddigital.com/2023/05/28/minimal-creep-and-shrinkage-example/
 '''
