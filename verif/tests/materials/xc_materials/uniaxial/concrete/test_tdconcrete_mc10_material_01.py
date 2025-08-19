@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 ''' Trivial test of TDConcreteMC10 material constitutive model.  
-TDConcreteMC10: uniaxial time-dependent concrete material object with linear behavior in compression, nonlinear behavior in tension (REF: Tamai et al., 1988) and creep and shrinkage according to fib Model Code 2010.
+TDConcreteMC10: uniaxial time-dependent concrete material object with linear 
+behavior in compression, nonlinear behavior in tension 
+(REF: Tamai et al., 1988) and creep and shrinkage according to fib Model 
+Code 2010.
 
 Based on the example: https://portwooddigital.com/2023/05/28/minimal-creep-and-shrinkage-example/
 '''
@@ -22,10 +25,10 @@ from materials import typical_materials
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
-fc = -24.80  
-fct= 2.00
-Ec= 22820.0
-Ecm= 24950.0
+fc = -24.80 # mean 28-day cylinder compressive strength.
+fct= 2.00 # the tensile strength (splitting or axial tensile strength).
+Ec= 22820.0 # modulus of elasticity at the time of loading.
+Ecm= 24950.0 # 28-day modulus.
 
 
 # Creep Input from CreepParameters.txt
@@ -46,7 +49,7 @@ tDry = 14.0
 beta = 0.7 # can be changed (softening parameter)
 
 ## Concrete able to creep.
-tdConcrete= typical_materials.defTDConcreteMC10(preprocessor= preprocessor, name= 'tdConcrete', fc= fc, ft= fct, Ec= Ec, Ecm= Ecm, beta= beta, age= tDry, epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, tcast= 0.0, cem= cem)
+tdConcrete= typical_materials.defTDConcreteMC10(preprocessor= preprocessor, name= 'tdConcrete', fcm= fc, ft= fct, Ec= Ec, Ecm= Ecm, beta= beta, age= tDry, epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, tcast= 0.0, cem= cem)
 
 error= (tdConcrete.fpc-fc)**2 # 1
 error+= (tdConcrete.ft-fct)**2 # 2

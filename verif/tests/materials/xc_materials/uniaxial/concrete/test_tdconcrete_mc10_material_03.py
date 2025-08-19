@@ -11,7 +11,7 @@ from __future__ import print_function
 
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2023, LCPT and AOO"
+__copyright__= "Copyright 2025, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
@@ -20,7 +20,7 @@ import math
 import xc
 from materials import typical_materials
 from materials.ec2 import EC2_materials
-from materials.mc10 import MC10_materials
+from materials.mc10 import MC10_td_concrete
 from model import predefined_spaces
 from solution import predefined_solutions
 
@@ -40,7 +40,7 @@ beta = 0.4 # Recommended value for the tension softening parameter (tension soft
 ts= 14 # time at start of drying
 age= 7 # concrete age at first loading.
 
-tdConcrete= MC10_materials.get_TDConcrete_mc10(preprocessor= preprocessor, name= 'tdConcrete', concrete= concrete, cement= '42.5R', h0= 0.15, T= 21, RH= 50, beta= beta, ts= ts, age= age)
+tdConcrete= MC10_td_concrete.get_TDConcrete_mc10(preprocessor= preprocessor, name= 'tdConcrete', concrete= concrete, cement= '42.5R', h0= 0.15, T= 21, RH= 50, beta= beta, ts= ts, age= age)
 
 b= 0.3
 h= 0.3

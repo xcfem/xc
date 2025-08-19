@@ -37,10 +37,10 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",Es)
  
 Ec = 25*GPa # concrete modulus of elasticity
 Ecm= 30.303*GPa # 28-day modulus of elasticity
-fc = -28*MPa # concrete compressive strength (compression is negative)
-fcu= -2.8*MPa
-epscu= -0.00350
-ft = 3*MPa # concrete tensile strength (tension is positive)
+fcm= -28*MPa # mean 28-day cylinder compressive strength (compression is negative)
+fcu= -2.8*MPa # stress at ultimate (crushing) strain.
+epscu= -0.00350 # strain at crushing strength.
+ft = 3*MPa # concrete tensile strength (tension is positive) at loading age.
 beta = 0.4 # Recommended value for the tension softening parameter (tension softening exponent).
 tDry = 14 # days
 tcast = 0 # analysis time corresponding to concrete casting (in days; minimum value 2.0)
@@ -62,7 +62,7 @@ cem= 1.0000
 
 
 ## Concrete able to creep.
-tdConcrete= typical_materials.defTDConcreteMC10NL(preprocessor= preprocessor, name= 'tdConcrete', fc= fc, fcu= fcu, epscu= epscu, ft= ft, Ec= Ec, Ecm= Ecm, beta= beta, age= tDry, epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, tcast= 0.0, cem= cem)
+tdConcrete= typical_materials.defTDConcreteMC10NL(preprocessor= preprocessor, name= 'tdConcrete', fcm= fcm, fcu= fcu, epscu= epscu, ft= ft, Ec= Ec, Ecm= Ecm, beta= beta, age= tDry, epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, tcast= 0.0, cem= cem)
 
 
 b = 300*mm
