@@ -12,6 +12,7 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
 import math
 import sys
+import scipy.interpolate
 from materials import steel_base
 from materials import typical_materials
 from materials.ec3 import EC3_limit_state_checking as EC3lsc
@@ -1328,6 +1329,13 @@ class BoltFastener(bolts.BoltBase):
 
     :ivar steelType: type of the bolt steel. 
     '''
+    # Nominal clearence for bolts and pins [mm] acc. to EN 1090-2 table 11
+    standardBoldDiameters= [12e-3, 14e-3, 16e-3, 18e-3, 20e-3, 22e-3, 24e-3, 27e-3, 30e-3, 36e-3]
+    standardHoleClearance=  [1e-3,  1e-3,  2e-3,  2e-3,  2e-3,  2e-3,  2e-3,  3e-3,  3e-3,  3e-3]
+    oversizeHoleClearance=  [3e-3,  3e-3,  4e-3,  4e-3,  4e-3,  4e-3,  6e-3,  8e-3,  8e-3,  8e-3]
+    fStandardHoleClearance= scipy.interpolate.interp1d(standardBoldDiameters, standardHoleClearance, fill_value="extrapolate")
+    fOversizeHoleClearance= scipy.interpolate.interp1d(standardBoldDiameters, oversizeHoleClearance, fill_value="extrapolate")
+
     def __init__(self, diameter, steelType= bolt8dot8Steel, gammaM3= 1.25, pos3d= None):
        ''' Constructor.
 
@@ -1339,6 +1347,47 @@ class BoltFastener(bolts.BoltBase):
        super(BoltFastener,self).__init__(diameter, pos3d)
        self.steelType= steelType
        self.gammaM3= gammaM3
+    
+    def getNominalHoleDiameter(self, oversized= False):
+        ''' Return the minimum distance between centers of standard, 
+            oversized or slotted holes according to table J3.3M of
+            AISC 360-16.
+
+        :param oversized: true if hole is oversized.
+        '''
+        if(oversized):
+            if(self.diameter>=36e-3):
+                return self.diameter+oversizeHoleClearance[-1]
+            else:
+                if self.diameter < BoltFastener.standardBoldDiameters[0]:
+                    lmsg.error('Bolt diameter = '+ str(round(self.diameter*1e3,1)) +' mm is less than minimum coded = '+ str(round(BoltFastener.standardBoldDiameters[0]*1e3,1)) + 'mm.')
+                else:
+                    return self.diameter+float(self.fOversizeHoleClearance(self.diameter))
+        else:
+            if(self.diameter>=36e-3):
+                return self.diameter+standardHoleClearance[-1]
+            else:
+                if self.diameter<BoltFastener.standardBoldDiameters[0]:
+                    lmsg.error('Bolt diameter = '+ str(round(self.diameter*1e3,1)) +' mm is less than minimum coded = '+ str(round(BoltFastener.standardBoldDiameters[0]*1e3,1)) + 'mm.')
+                else:
+                    return self.diameter+float(self.fStandardHoleClearance(self.diameter))
+                
+    def getMinDistanceBetweenCenters(self, oversized= False, parallelToLoad= False):
+        ''' Return the minimum distance between centers of standard, 
+            oversized or slotted holes according to table 3.3 of
+            EC3-1-8:2005.
+
+        :param oversized: true if hole is oversized.
+        :param parallelToLoad: true if the required distance is
+                               parallel to the load in the
+                               bolted plate.
+        '''
+        d0= self.getNominalHoleDiameter(oversized= oversized)
+        if(parallelToLoad):
+            retval= 2.2*d0
+        else:
+            retval= 2.4*d0
+        return retval
     
     def getNominalShearStrength(self, threadsExcluded= False, numberOfShearPlanes= 1):
         ''' Return the nominal shear strength of the fastener according
