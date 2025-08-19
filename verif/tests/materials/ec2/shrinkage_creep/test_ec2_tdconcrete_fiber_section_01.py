@@ -69,7 +69,7 @@ n2= modelSpace.newNode(0, 0)
 
 ## Define constraints.
 modelSpace.fixNode000(n1.tag)
-modelSpace.fixNodeF00(n2.tag)
+modelSpace.fixNodeF0F(n2.tag)
 
 ## Define fiber section.
 rcSection.defRCSection2d(preprocessor, matDiagType= 'td')
