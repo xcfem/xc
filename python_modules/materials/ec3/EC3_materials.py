@@ -1298,6 +1298,24 @@ class EC3BoltSteel(steel_base.BasicSteel):
         '''
         return self.getNominalShearStrength(threadsExcluded= threadsExcluded)/self.gammaM
     
+    def getNominalTensileStrength(self):
+        ''' Return the nominal shear strength of the steel according
+            to table 3.4 of EC3-1-8:2005.
+
+        :param threadsExcluded: true if threads and transition area of 
+                                shank are excluded from the shear plane.
+        '''
+        return self.fu
+
+    def getDesignTensileStrength(self, threadsExcluded= False):
+        ''' Return the design shear strength of the steel according
+            to table 3.4 of EC3-1-8:2005.
+
+        :param threadsExcluded: true if threads and transition area of 
+                                shank are excluded from the shear plane.
+        '''
+        return self.getNominalTensileStrength()/self.gammaM
+    
 bolt4dot6Steel= EC3BoltSteel(name='4.6', fy= 240e6, fu= 400e6, gammaM2= 1.25)
 bolt4dot8Steel= EC3BoltSteel(name= '4.8', fy= 320e6, fu= 400e6, gammaM2= 1.25)
 bolt5dot6Steel= EC3BoltSteel(name= '5.6', fy= 300e6, fu= 500e6, gammaM2= 1.25)
@@ -1342,6 +1360,36 @@ class BoltFastener(bolts.BoltBase):
         '''
         return self.steelType.getDesignShearStrength()*self.getTensileStressArea(threadsExcluded= threadsExcluded)*numberOfShearPlanes
 
+    def getNominalTensionStrength(self, threadsExcluded= False, countersunkBolt= False):
+        ''' Return the nominal shear strength of the fastener according
+            to table 3.4 of EC3-1-8:2005.
+
+        :param threadsExcluded: true if threads and transition area of 
+                                shank are excluded from the shear plane.
+        :param countersunkBolt: true if it is a countersunk bolt.
+        '''
+        k2= 0.9
+        if(countersunkBolt):
+            k2= 0.63
+        fub= self.steelType.getNominalTensileStrength(threadsExcluded= threadsExcluded)
+        As= self.getTensileStressArea(threadsExcluded= threadsExcluded)
+        return k2*fub*As
+
+    def getDesignTensionStrength(self, threadsExcluded= False, countersunkBolt= False):
+        ''' Return the design shear strength of the fastener according
+            to table 3.4 of EC3-1-8:2005.
+
+        :param threadsExcluded: true if threads and transition area of 
+                                shank are excluded from the shear plane.
+        :param countersunkBolt: true if it is a countersunk bolt.
+        '''
+        k2= 0.9
+        if(countersunkBolt):
+            k2= 0.63
+        fub= self.steelType.getDesignTensileStrength(threadsExcluded= threadsExcluded)
+        As= self.getTensileStressArea(threadsExcluded= threadsExcluded)
+        return k2*fub*As
+    
     def getKs(self, holeType= 'normal', slotParallelToLoad= False):
         ''' Return the value of k_s according to table 3.6 of EC3-1-8:2005.
 
