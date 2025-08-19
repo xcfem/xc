@@ -345,6 +345,30 @@ class EC2Concrete(concrete_base.Concrete):
                 retval= min(retval, fbed)
         return retval
             
+    def defTDConcreteParameters(self, beta, cement, h0, T, RH, ts, t0, rca= 0.0, xi_cbs_2= 1.0, xi_cds_2= 1.0, xi_cb_2= 1.0, xi_cd_2= 1.0):
+        ''' Define the self.tdConcreteParameters object from the given 
+            arguments.
+
+        :param beta: tension softening parameter.
+        :param cement: 32.5N, 32.5R, 42.5N, 42.5R, 52.5N, 52.5R)
+        :param h0: notional size of the section (2*A/u)
+        :param T: average temperature over entire analysis period.
+        :param RH: average relative humidity over entire analysis period.
+        :param ts: time at start of drying (days).
+        :param t0: loading age (days).
+        :param rca: percentage of coarse recycled aggregate concrete in the 
+                    mixture.
+        :param xi_cbs_2: this is a free fitting shrinkage parameter; its 
+                         default value is 1.0.
+        :param xi_cds_2: this is a free fitting shrinkage parameter; its 
+                         default value is 1.0.
+        :param xi_cb_2: this is a free fitting creep parameter; its 
+                        default value is 1.0.
+        :param xi_cd_2: this is a free fitting creep parameter; its 
+                        default value is 1.0.
+        '''
+        self.tdConcreteParameters= concrete_base.get_mc10_td_concrete_parameters(beta= beta, concrete= self, cement= cement, h0= h0, T= T, RH= RH, ts= ts, t0= t0, rca= rca, xi_cbs_2= xi_cbs_2, xi_cds_2= xi_cds_2, xi_cb_2= xi_cb_2, xi_cd_2= xi_cd_2)
+        return self.tdConcreteParameters
         
 #    def getEcmT(self):
 #        """

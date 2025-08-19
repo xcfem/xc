@@ -21,14 +21,12 @@ from materials import typical_materials
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
-fc = -24.80  
-fcu= -2.48
-epscu= -0.00350
-fct= 2.00
-Ec= 22820.0
-Ecm= 24950.0
-wgt= 0.000024
-
+fc = -24.80  # mean 28-day cylinder compressive strength.
+fcu= -2.48 # stress at ultimate (crushing) strain.
+epscu= -0.00350 # strain at crushing strength.
+fct= 2.00 # the tensile strength (splitting or axial tensile strength).
+Ec= 22820.0 # modulus of elasticity at the time of loading.
+Ecm= 24950.0 # 28-day modulus.
 
 # Creep parameters.
 epsba= -0.000046 
@@ -49,7 +47,7 @@ tDry = 14.0
 beta = 0.7 # can be changed (softening parameter)
 
 ## Concrete able to creep.
-tdConcrete= typical_materials.defTDConcreteMC10NL(preprocessor= preprocessor, name= 'tdConcrete', fc= fc, fcu= fcu, epscu= epscu, ft= fct, Ec= Ec, Ecm= Ecm, beta= beta, age= tDry, epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, tcast= 0.0, cem= cem)
+tdConcrete= typical_materials.defTDConcreteMC10NL(preprocessor= preprocessor, name= 'tdConcrete', fcm= fc, fcu= fcu, epscu= epscu, ft= fct, Ec= Ec, Ecm= Ecm, beta= beta, age= tDry, epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, tcast= 0.0, cem= cem)
 
 error= (tdConcrete.fpc-fc)**2 # 1
 error+= (tdConcrete.fcu-fcu)**2 # 2

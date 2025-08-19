@@ -466,36 +466,47 @@ def defTDConcrete(preprocessor,name, fpc, ft, Ec, beta, age, epsshu, epssha, tcr
     retval.setup()
     return retval
 
-def defTDConcreteMC10(preprocessor,name, fc, ft, Ec, Ecm, beta, age, epsba, epsbb, epsda, epsdb, phiba, phibb, phida, phidb, tcast, cem):
+def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, epsba, epsbb, epsda, epsdb, phiba, phibb, phida, phidb, tcast, cem):
     '''
     Defines a TDConcreteMC10 uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
     :param name: name identifying the new material
-    :param fc: cylinder compressive strength (this is a dummy parameter since compression behavior is linear).
-    :param epscu: strain at crushing strength.
-    :param ft: the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
-    :param Ec: modulus of elasticity (preferably at time of loading if there is a single loading age).
+    :param fcm: mean 28-day cylinder compressive strength (this is a dummy 
+                parameter since compression behavior is linear).
+    :param ft: the tensile strength (splitting or axial tensile strength 
+               should be input, rather than the flexural).
+    :param Ec: modulus of elasticity (preferably at time of loading if there 
+               is a single loading age).
     :param Ecm: 28-day modulus, necessary for normalizing creep coefficient.
     :param beta: tension softening parameter.
-    :param age: analysis time at initiation of drying (in days).
-    :param epsba: ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010.
-    :param epsbb: fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+    :param age: concrete age at first loading.
+    :param epsba: ultimate basic shrinkage strain, εcbs,0, as per Model Code 
+                  2010.
+    :param epsbb: fitting parameter within the basic shrinkage time evolution 
+                  function as per Model Code 2010 and prEN1992-1-1:2017.
     :param epsda: product of εcds,0 and βRH, as per Model Code 2010.
-    :param epsdb: fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-    :param phiba: parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
-    :param phibb: fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+    :param epsdb: fitting parameter within the drying shrinkage time evolution 
+                  function as per Model Code 2010 and prEN1992-1-1:2017.
+    :param phiba: parameter for the effect of compressive strength on basic 
+                  creep βbc(fcm), as per Model Code 2010.
+    :param phibb: fitting parameter within the basic creep time evolution 
+                  function as per Model Code 2010 and prEN1992-1-1:2017.
     :param phida: product of βdc(fcm) and β(RH), as per Model Code 2010.
-    :param phidb: fitting constant within the drying creep time evolution function as per Model Code 2010.
-    :param tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
-    :param cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
+    :param phidb: fitting constant within the drying creep time evolution 
+                  function as per Model Code 2010.
+    :param tcast: analysis time corresponding to concrete casting in days 
+                  (note: concrete will not be able to take on loads until the 
+                  age of 2 days).
+    :param cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 
+                for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
     '''
     materialHandler= preprocessor.getMaterialHandler
     matName= name
     if(not matName):
         matName= uuid.uuid1().hex
     retval= materialHandler.newMaterial("tdconcrete_mc10_material", matName)
-    retval.fpc= fc # concrete compressive strength at 28 days (compression is negative)
+    retval.fpc= fcm # mean concrete compressive strength at 28 days (compression is negative)
     retval.ft= ft # concrete tensile strength.
     retval.Ec= Ec # concrete stiffness.
     retval.Ecm= Ecm # 28-day modulus, necessary for normalizing creep coefficient.
@@ -515,35 +526,47 @@ def defTDConcreteMC10(preprocessor,name, fc, ft, Ec, Ecm, beta, age, epsba, epsb
     retval.setup()
     return retval
 
-def defTDConcreteMC10NL(preprocessor,name, fc, fcu, epscu, ft, Ec, Ecm, beta, age, epsba, epsbb, epsda, epsdb, phiba, phibb, phida, phidb, tcast, cem):
+def defTDConcreteMC10NL(preprocessor,name, fcm, fcu, epscu, ft, Ec, Ecm, beta, age, epsba, epsbb, epsda, epsdb, phiba, phibb, phida, phidb, tcast, cem):
     '''
     :param preprocessor: preprocessor of the finite element problem.
     :param name: name identifying the new material.
-    :param fc: cylinder compressive strength (this is a dummy parameter since compression behavior is linear).
+    :param fcm: mean 28-day cylinder compressive strength (this is a dummy 
+                parameter since compression behavior is linear).
     :param fcu: stress at ultimate (crushing) strain.
     :param epscu: strain at crushing strength.
-    :param ft: the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
-    :param Ec: modulus of elasticity (preferably at time of loading if there is a single loading age).
+    :param ft: the tensile strength (splitting or axial tensile strength 
+               should be input, rather than the flexural).
+    :param Ec: modulus of elasticity (preferably at time of loading if there 
+               is a single loading age).
     :param Ecm: 28-day modulus, necessary for normalizing creep coefficient.
     :param beta: tension softening parameter.
     :param age: analysis time at initiation of drying (in days).
-    :param epsba: ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010.
-    :param epsbb: fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+    :param epsba: ultimate basic shrinkage strain, εcbs,0, as per Model Code 
+                  2010.
+    :param epsbb: fitting parameter within the basic shrinkage time evolution 
+                  function as per Model Code 2010 and prEN1992-1-1:2017.
     :param epsda: product of εcds,0 and βRH, as per Model Code 2010.
-    :param epsdb: fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-    :param phiba: parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
-    :param phibb: fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+    :param epsdb: fitting parameter within the drying shrinkage time evolution
+                  function as per Model Code 2010 and prEN1992-1-1:2017.
+    :param phiba: parameter for the effect of compressive strength on basic 
+                  creep βbc(fcm), as per Model Code 2010.
+    :param phibb: fitting parameter within the basic creep time evolution 
+                  function as per Model Code 2010 and prEN1992-1-1:2017.
     :param phida: product of βdc(fcm) and β(RH), as per Model Code 2010.
-    :param phidb: fitting constant within the drying creep time evolution function as per Model Code 2010.
-    :param tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
-    :param cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
+    :param phidb: fitting constant within the drying creep time evolution 
+                  function as per Model Code 2010.
+    :param tcast: analysis time corresponding to concrete casting in days
+                  (note: concrete will not be able to take on loads until the 
+                  age of 2 days).
+    :param cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 
+                for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
     '''
     materialHandler= preprocessor.getMaterialHandler
     matName= name
     if(not matName):
         matName= uuid.uuid1().hex
     retval= materialHandler.newMaterial("tdconcrete_mc10_material", matName)
-    retval.fpc= fc # concrete compressive strength at 28 days (compression is negative)
+    retval.fpc= fcm # mean concrete compressive strength at 28 days (compression is negative)
     retval.fcu= fcu # stress at ultimate (crushing) strain.
     retval.epscu= epscu # strain at crushing strength.
     retval.ft= ft # concrete tensile strength.

@@ -117,6 +117,7 @@ class Material: public TaggedObject, public MovableObject
     virtual int getResponse(int responseID, Information &info);
     virtual Matrix getValues(const std::string &, bool silent= false) const;
 
+    virtual bool needsUpdate(void) const;
     virtual void update(void);
 
     virtual const Vector &getGeneralizedStress(void) const= 0;

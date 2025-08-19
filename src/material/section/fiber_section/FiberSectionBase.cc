@@ -192,7 +192,14 @@ void XC::FiberSectionBase::clear(void)
     free_section_repres();
   }
 
-
+//! @brief Return true if the material of any of the section fibers needs to
+//! update its internal state even if the trial strains have not changed. This
+//! is the case when the material deforms without load or under constant
+//! load, for example by shrinkage or creep.
+bool XC::FiberSectionBase::needsUpdate(void) const
+  {
+    return fibers.needsUpdate();
+  }
 
 //! @brief Add a fiber to the section.
 XC::Fiber *XC::FiberSectionBase::addFiber(const std::string &nmbMat,const double &area,const Vector &coo)

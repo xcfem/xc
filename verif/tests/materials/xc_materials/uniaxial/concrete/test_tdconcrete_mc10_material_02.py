@@ -34,10 +34,11 @@ MPa = 0.001*GPa
 ## Steel.
 Es = 200*GPa
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",Es)
- 
+
+## Concrete.
 Ec = 25*GPa # concrete modulus of elasticity at loading age.
 Ecm= 30.303*GPa # 28-day modulus of elasticity
-fc = -28*MPa # concrete compressive strength (compression is negative) at loading age.
+fcm = -28*MPa # mean 28-day cylinder compressive strength (compression is negative) at loading age.
 ft = 3*MPa # concrete tensile strength (tension is positive) at loading age.
 beta = 0.4 # Recommended value for the tension softening parameter (tension softening exponent).
 tDry = 14 # days
@@ -60,7 +61,7 @@ cem= 1.0000 # coefficient dependent on the type of cement: –1 for 32.5N, 0 for
 
 
 ## Concrete able to creep.
-tdConcrete= typical_materials.defTDConcreteMC10(preprocessor= preprocessor, name= 'tdConcrete', fc= fc, ft= ft, Ec= Ec, Ecm= Ecm, beta= beta, age= tDry, epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, tcast= 0.0, cem= cem)
+tdConcrete= typical_materials.defTDConcreteMC10(preprocessor= preprocessor, name= 'tdConcrete', fcm= fcm, ft= ft, Ec= Ec, Ecm= Ecm, beta= beta, age= tDry, epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, tcast= 0.0, cem= cem)
 
 
 b = 300*mm

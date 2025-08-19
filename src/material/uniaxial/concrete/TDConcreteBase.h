@@ -124,6 +124,8 @@ class TDConcreteBase : public RawConcrete
 
     double getInitialTangent(void) const;
 
+    bool needsUpdate(void) const;
+
     double getCurrentTime(void) const; //Added by AMK
     double getStrain(void) const;
     double getStress(void) const;
@@ -155,6 +157,7 @@ class TDConcreteBase : public RawConcrete
 
     static void setCreepOn(void);
     static void setCreepOff(void);
+    static bool isCreepOn(void);
     static void setCreepDt(const double &);
     static double getCreepDt(void);
   };

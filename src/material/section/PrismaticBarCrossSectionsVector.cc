@@ -173,6 +173,23 @@ void XC::PrismaticBarCrossSectionsVector::clearAll(void)
   }
 
 
+//! @brief Return true if any of the sections needs to update its internal
+//! state even if the trial strains have not changed. This is the case
+//! when the material deforms without load or under constant load, for
+//! example by shrinkage or creep.
+bool XC::PrismaticBarCrossSectionsVector::needsUpdate(void) const
+  {
+    bool retval= false;
+
+    for(const_iterator i=begin();i!=end();i++)
+      if((*i)->needsUpdate())
+	{
+	  retval= true;
+	  break;
+	}
+    return retval;
+  }
+
 //! @brief Commits sections state.
 int XC::PrismaticBarCrossSectionsVector::commitState(void)
   {

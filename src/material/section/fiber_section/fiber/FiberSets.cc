@@ -44,6 +44,18 @@ bool XC::FiberSets::exists(const std::string &name)
     return retval;
   }
 
+//! @brief Return a Python list containing the set names on this container.
+boost::python::list XC::FiberSets::getKeys(void) const
+  {
+    boost::python::list retval;
+    for(const_iterator i= this->begin();i!= this->end();i++)
+      {
+	const std::string &label= (*i).first;
+	retval.append(label);
+      }
+    return retval;
+  }
+
 //! @brief Creates a new fiber set.
 XC::FiberSet &XC::FiberSets::create_fiber_set(const std::string &name)
   {

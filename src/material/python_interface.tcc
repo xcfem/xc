@@ -29,6 +29,7 @@ class_<XC::Material, bases<XC::MovableObject,XC::TaggedObject>, boost::noncopyab
   .def("getGeneralizedStress", make_function(&XC::Material::getGeneralizedStress, return_internal_reference<>() ),"Return the stress in this material point.")
   .def("getGeneralizedStrain", make_function(&XC::Material::getGeneralizedStrain, return_internal_reference<>() ),"Return the strain in this material point.")
   .add_property("getResponseType",make_function(&XC::Material::getResponseType, return_internal_reference<>()),"Returns the type of response of the material.")
+  .def("needsUpdate", &XC::Material::needsUpdate, "Return true if the material needs to update its internal state even if the trial strains have not changed. This is the case when the material deforms without load or under constant load, for example by shrinkage or creep.")
    ;
 
 boost::python::list (XC::ResponseId::*getComponentIndexesFromCodePy_string)(const std::string &) const= &XC::ResponseId::getComponentIndexesFromCodePy;

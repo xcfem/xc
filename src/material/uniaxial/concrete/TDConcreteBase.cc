@@ -171,6 +171,13 @@ XC::TDConcreteBase::TDConcreteBase(int tag, int classTag, double _fpc, double _f
     // setup_parameters(); Called in the constructors of derived classes.
   }
 
+//! @brief Return true if the material needs to update its internal
+//! state even if the trial strains have not changed. This is the case
+//! when the material deforms without load or under constant load, for
+//! example by shrinkage or creep.
+bool XC::TDConcreteBase::needsUpdate(void) const
+  { return true; }
+
 double XC::TDConcreteBase::getInitialTangent(void) const
   {
     return Ec; //Added by AMK
@@ -271,6 +278,9 @@ void XC::TDConcreteBase::setCreepOn(void)
 void XC::TDConcreteBase::setCreepOff(void)
   { creepControl= 0; }
 
+bool XC::TDConcreteBase::isCreepOn(void)
+  { return (creepControl==1); }
+
 void XC::TDConcreteBase::setCreepDt(const double &d)
   { creepDt= d; }
 
@@ -330,18 +340,12 @@ void XC::TDConcreteBase::Print(std::ostream &s, int flag) const
   s << "TDConcreteBase:(strain, stress, tangent) " << eps << " " << sig << " " << e << std::endl;
   }
 
-
-
-
-
-  
 void XC::TDConcreteBase::Compr_Envlp(double epsc, double &sigc, double &Ect) 
-{
-//Linear
-Ect = Ec;
-sigc = Ect*epsc;
-  return;
-}
+  {
+    //Linear
+    Ect= Ec;
+    sigc= Ect*epsc;
+  }
 
 int XC::TDConcreteBase::getVariable(const std::string &varName, Information &theInfo) const
   {

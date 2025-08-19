@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Trivial test of TDConcreteMC10NL material constitutive model.  
+''' Trivial test of TDConcreteMC10 material constitutive model. This test is 
+similar to the
+previous one, but the definition of the TDConcreteMC10 material is simplified by using the
+get_TDConcrete_mc10 function defined in MC10 materials.
 
 Based on the example: https://portwooddigital.com/2023/05/28/minimal-creep-and-shrinkage-example/
 '''
@@ -8,7 +11,7 @@ from __future__ import print_function
 
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2023, LCPT and AOO"
+__copyright__= "Copyright 2025, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
@@ -16,6 +19,7 @@ __email__= "l.pereztato@gmail.com"
 import math
 import xc
 from materials import typical_materials
+from materials.ec2 import EC2_materials
 from model import predefined_spaces
 from solution import predefined_solutions
 
@@ -23,51 +27,26 @@ from solution import predefined_solutions
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
-# Units: kN, mm
-kN = 1
-mm = 1
-GPa = kN/mm**2
-MPa = 0.001*GPa
-
 # Define materials.
 
 ## Steel.
-Es = 200*GPa
+Es = 200*1e9
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",Es)
- 
-Ec = 25*GPa # concrete modulus of elasticity
-Ecm= 30.303*GPa # 28-day modulus of elasticity
-fcm= -28*MPa # mean 28-day cylinder compressive strength (compression is negative)
-fcu= -2.8*MPa # stress at ultimate (crushing) strain.
-epscu= -0.00350 # strain at crushing strength.
-ft = 3*MPa # concrete tensile strength (tension is positive) at loading age.
+
+## Concrete.
+concrete= EC2_materials.EC2Concrete("C20/25", -20e6, 1.5)
 beta = 0.4 # Recommended value for the tension softening parameter (tension softening exponent).
-tDry = 14 # days
-tcast = 0 # analysis time corresponding to concrete casting (in days; minimum value 2.0)
+ts= 14 # time at start of drying
+age= 7 # concrete age at first loading.
 
-# Shrinkage (parameters obtained from the TDCI_Input spreadsheet)
-epsba= -0.000034
-epsbb= 1.000
-epsda= -0.000853
-epsdb= 787.50
+# Define the parameters needed to create a TDConcrete diagram.
+concrete.defTDConcreteParameters(beta= beta, cement= '42.5R', h0= 0.15, T= 21, RH= 50, ts= ts, t0= age)
 
-# Creep  (parameters obtained from the TDCI_Input spreadsheet)
-phiba= 0.1747
-phibb= 1.000
-phida= 3.651
-phidb= 504.5
+tdConcreteDiagram= concrete.defDiagTD(preprocessor= preprocessor)
 
-# Cement type
-cem= 1.0000
-
-
-## Concrete able to creep.
-tdConcrete= typical_materials.defTDConcreteMC10NL(preprocessor= preprocessor, name= 'tdConcrete', fcm= fcm, fcu= fcu, epscu= epscu, ft= ft, Ec= Ec, Ecm= Ecm, beta= beta, age= tDry, epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, tcast= 0.0, cem= cem)
-
-
-b = 300*mm
-h = 300*mm
-As = 1500*mm**2
+b= 0.3
+h= 0.3
+As = 1500e-6
 Ag = b*h
 Ac = Ag-As
 
@@ -86,7 +65,7 @@ modelSpace.fixNodeF00(n2.tag)
 ## Define fiber section.
 twoFibersSection= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","twoFibersSection")
 steelFiber= twoFibersSection.addFiber(elast.name, As, xc.Vector([0,0]))
-concreteFiber= twoFibersSection.addFiber(tdConcrete.name, Ac, xc.Vector([0,0]))
+concreteFiber= twoFibersSection.addFiber(tdConcreteDiagram.name, Ac, xc.Vector([0,0]))
 
 
 ## Create element.
@@ -98,7 +77,7 @@ concreteFiber= zl.getMaterial().getFibers().findFiber(concreteFiber.tag)
 steelFiber= zl.getMaterial().getFibers().findFiber(steelFiber.tag)
 
 # Define loads.
-P= 1000*kN # axial load.
+P= 600*1e3 # axial load.
 
 ## Define time series.
 ts= modelSpace.newTimeSeries(name= "ts", tsType= "constant_ts")
@@ -163,30 +142,30 @@ avgSteelStress/=len(steelStresses)
 lastConcreteStress= concreteStresses[-1]
 lastSteelStress= steelStresses[-1]
 
-avgConcreteStressRef= 0.005559890159521989
+avgConcreteStressRef= 2.5675259479415904e6
 ratio1= abs(avgConcreteStress+avgConcreteStressRef)/avgConcreteStressRef
-avgSteelStressRef= 0.3386331472548687
+avgSteelStressRef= 248.51596907144594e6
 ratio2= abs(avgSteelStress+avgSteelStressRef)/avgSteelStressRef
 
 '''
-print('time: ', ti)
-print('concrete stresses: ', concreteStresses)
-print('steel stresses: ', steelStresses)
+# print('time: ', ti)
+# print('concrete stresses: ', concreteStresses)
+# print('steel stresses: ', steelStresses)
 # print('Reactions= ', reactions)
-print(errorDt)
-print(errorForces)
-print('average concrete stress: ', avgConcreteStress, avgConcreteStressRef, ratio1)
-print('average steel stress: ', avgSteelStress, avgSteelStressRef, ratio2)
+print('errorDt= ', errorDt)
+print('errorForces= ', errorForces)
+print('average concrete stress: ', avgConcreteStress/1e6, avgConcreteStressRef/1e6, ratio1)
+print('average steel stress: ', avgSteelStress/1e6, avgSteelStressRef/1e6, ratio2)
 print('time: ', modelSpace.getCurrentTime(), 'days')
-print('last concrete stress: ', lastConcreteStress*1e3, 'MPa')
-print('last steel stress: ', lastSteelStress*1e3, 'MPa')
+print('last concrete stress: ', lastConcreteStress*1e-6, 'MPa')
+print('last steel stress: ', lastSteelStress*1e-6, 'MPa')
 '''
 
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-9) & (abs(ratio2)<1e-9) & (errorForces<1e-6) & (errorDt<1e-12):
+if (abs(ratio1)<1e-7) & (abs(ratio2)<1e-7) & (errorForces<1e-6) & (errorDt<1e-12):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
