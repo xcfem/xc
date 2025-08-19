@@ -298,7 +298,7 @@ int XC::ZeroLengthSection::commitState()
     int retVal=0;
 
     // call element commitState to do any base class stuff
-    if((retVal = this->XC::Element::commitState()) != 0)
+    if((retVal = this->XC::Element0D::commitState()) != 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; failed in base class.\n";
