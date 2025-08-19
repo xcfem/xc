@@ -1524,12 +1524,14 @@ python tests/materials/ec2/test_lap_length_01.py
 python tests/materials/ec2/test_ec2_concrete_01.py
 python tests/materials/ec2/test_ec2_concrete_02.py
 echo "$BLEU" "    EC2 misc. shrinkage and creep tests." "$NORMAL"
-python tests/materials/ec2/test_EC2_creep_01.py
-python tests/materials/ec2/test_EC2_creep_02.py
-python tests/materials/ec2/test_EC2_2004_shrinkage_01.py
-python tests/materials/ec2/test_EC2_2004_shrinkage_02.py
-python tests/materials/ec2/test_EC2_2021_shrinkage.py
-python tests/materials/ec2/test_ec2_creep_and_shrinkage_calculation.py
+python tests/materials/ec2/shrinkage_creep/test_EC2_creep_01.py
+python tests/materials/ec2/shrinkage_creep/test_EC2_creep_02.py
+python tests/materials/ec2/shrinkage_creep/test_EC2_2004_shrinkage_01.py
+python tests/materials/ec2/shrinkage_creep/test_EC2_2004_shrinkage_02.py
+python tests/materials/ec2/shrinkage_creep/test_EC2_2021_shrinkage.py
+python tests/materials/ec2/shrinkage_creep/test_ec2_creep_and_shrinkage_calculation.py
+python tests/materials/ec2/shrinkage_creep/test_ec2_tdconcrete_diagram_01.py
+
 echo "$BLEU" "    EC2 crack amplitude determination tests." "$NORMAL"
 python tests/materials/ec2/test_crack_control_without_direct_calculation_01.py
 python tests/materials/ec2/test_crack_control_01.py
