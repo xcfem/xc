@@ -14,7 +14,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 from materials.ec2 import EC2_materials
-from materials.mc10 import MC10_materials
+from materials.mc10 import MC10_td_concrete
 
 concrete= EC2_materials.EC2Concrete("C20/25", -20e6, 1.5)
 
@@ -25,7 +25,7 @@ concrete= EC2_materials.EC2Concrete("C20/25", -20e6, 1.5)
 # RH: average relative humidity over entire analysis period.
 # ts: time at start of drying (days).
 # t0: loading age (days).
-parameters= MC10_materials.ShrinkageAndCreepParameters(concrete= concrete, cement= '42.5R', h0= 0.15, T= 21, RH= 50, ts= 14, t0= 7)
+parameters= MC10_td_concrete.ShrinkageAndCreepParameters(concrete= concrete, cement= '42.5R', h0= 0.15, T= 21, RH= 50, ts= 14, t0= 7)
 
 # Shrinkage related parameters for TDConcrete material.
 opensees_epsba= parameters.get_opensees_epsba()
