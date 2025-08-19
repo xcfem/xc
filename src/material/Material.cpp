@@ -241,6 +241,13 @@ XC::Matrix XC::Material::getValues(const std::string &cod, bool silent) const
     return retval;
   }
 
+//! @brief Return true if the material needs to update its internal
+//! state even if the trial strains have not changed. This is the case
+//! when the material deforms without load or under constant load, for
+//! example by shrinkage or creep.
+bool XC::Material::needsUpdate(void) const
+  { return false; }
+
 //! @brief Update state variables for the material
 //! according to the new values of the parameters.
 void XC::Material::update(void)
