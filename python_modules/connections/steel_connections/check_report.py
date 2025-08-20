@@ -19,12 +19,12 @@ __version__= "3.0"
 __email__= "ana.ortega.ort@gmail.com l.pereztato@gmail.com"
 
 # Functions to check bolts and welds according to AISC-16
-def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],baseMetal=None,meanShearProc=True,resFile=None, solutionProcedureType= predefined_solutions.SimpleStaticLinearUMF,reactionCheckTolerance=1e-4,warningsFile=None,Phi=0.75):
+def aisc_check_bolts_welds(modelSpace,analysis,ULSs,boltSets2Check=[],welds2Check=[],baseMetal=None,meanShearProc=True,resFile=None,warningsFile=None,Phi=0.75):
     '''Verification of bolts and welds according to AISC-16
     Checking of bolts uses the capacity factor # formula proposed by Rugarli
     https://www.steelchecks.com/CONNECTIONS-GUIDE/index.html?check_welds.htm
     Parasitic moments in the bolt shafts are neglected.
-
+    :param analysis: analysis type (e.g.;  predefined_solutions.PenaltyModifiedNewtonMUMPS(prb=FEcase,maxNumIter=20,convergenceTestTol=1e-3,printFlag=1)
     :param ULSs: list of names of existing load cases to be analyzed
     :param boltSets2Check: list of pairs (bolt set, bolt type) with the
           set of bolts and bolt material (instance of class
@@ -35,8 +35,6 @@ def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],base
                           the set of bolts (defaults to True)
     :param resFile: file to which dump the results (path and name without extension)
                     (if None-> print to terminal)
-    :param solutionProcedureType: solution procedure type (defaults to SimpleStaticLinearUMF).
-    :param reactionCheckTolerance: tolerance to check reactions (defaults to 1e-4)
     :param warningsFile: name of the file of warnings (defaults to None)
     :param Phi: resistance factor (defaults to 0.75)
     '''
@@ -44,13 +42,12 @@ def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],base
     init_prop_checking_bolts(boltSets2Check)
     singlWelds=init_prop_checking_welds(welds2Check)
     # Calculation and checking
-    modelSpace.solutionProcedureType=  solutionProcedureType
     for ULS in ULSs:
         ULS=str(ULS)
         modelSpace.removeAllLoadPatternsFromDomain()
         modelSpace.revertToStart()
         modelSpace.addLoadCaseToDomain(ULS)
-        result= modelSpace.analyze(calculateNodalReactions= True, reactionCheckTolerance=reactionCheckTolerance)
+        result=analysis.analyze(1)
         if(result!=0):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(methodName+'; can\'t solve for load case: '+str(ULS)+'.')
@@ -165,10 +162,10 @@ def set_welds_check_resprop_current_LC(ULS,singlWelds,baseMetal,Phi=0.75):
             singlWelds[i][1]=[LS,CF]
 
 # Funtions to generate weld and bolt calculation-reports
-def gen_report_files(modelSpace,genDescr,specDescr,loadCaseNames,reportPath,rltvResPath,grWidth,texfileNm,boltSets2Check=[],welds2Check=[],baseMetal=None,meanShearProc=True,genGrULSs=True, solutionProcedureType= predefined_solutions.SimpleStaticLinearUMF,warningsFile=None,Phi=0.75):
+def gen_report_files(modelSpace,analysis,genDescr,specDescr,loadCaseNames,reportPath,rltvResPath,grWidth,texfileNm,boltSets2Check=[],welds2Check=[],baseMetal=None,meanShearProc=True,genGrULSs=True,warningsFile=None,Phi=0.75):
     '''Generates the graphics corresponding to loads and displacements for each load case,
     together with the tex file to include them in a report.
-
+    :param analysis: analysis type (e.g.;  predefined_solutions.PenaltyModifiedNewtonMUMPS(prb=FEcase,maxNumIter=20,convergenceTestTol=1e-3,printFlag=1)
     :param genDescr: general description
     :param specDescr: specific description
     :param loadCaseNames: list of load case names
@@ -185,7 +182,6 @@ def gen_report_files(modelSpace,genDescr,specDescr,loadCaseNames,reportPath,rltv
                           the set of bolts (defaults to True)
     :param genGrULSs: generate graphics of loads and displacements for all
                       the load cases. (Defaults to True)
-    :param solutionProcedureType: solution procedure type (defaults to SimpleStaticLinearUMF)..
     :param warningsFile: name of the file of warnings (defaults to None)
     :param Phi: resistance factor (defaults to 0.75)
     '''
@@ -203,13 +199,12 @@ def gen_report_files(modelSpace,genDescr,specDescr,loadCaseNames,reportPath,rltv
     lcNm.sort()
     if genGrULSs: f=open(texPath+texfileNm+'_load_disp.tex','w')
     cont=0
-    modelSpace.solutionProcedureType=  solutionProcedureType
     for ULS in lcNm:
         txtDescr=genDescr+' '+specDescr+' '+ULS + ': '
         modelSpace.removeAllLoadPatternsFromDomain()
         modelSpace.revertToStart()
         modelSpace.addLoadCaseToDomain(ULS)
-        result= modelSpace.analyze(calculateNodalReactions= True)
+        result= analysis.analyze(1)
         if genGrULSs:
             #loads
             captFig=specDescr+' '+ ULS + ': loads [kN]'
