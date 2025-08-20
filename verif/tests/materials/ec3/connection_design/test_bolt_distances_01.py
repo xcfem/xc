@@ -18,7 +18,7 @@ boltSpacingRef= 2.4*d0
 ratio1= abs(boltSpacing-boltSpacingRef)/boltSpacingRef
 distToEdge= bolt.getMinimumEdgeDistance(oversized= False, slotted= False)
 distToEdgeRef= 1.2*d0
-ratio1= abs(distToEdge-distToEdgeRef)/distToEdgeRef
+ratio2= abs(distToEdge-distToEdgeRef)/distToEdgeRef
 
 '''
 print('Bolt spacing: ', boltSpacing*1e3, 'mm')
@@ -30,7 +30,7 @@ print(ratio2)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(abs(ratio1)<1e-3 and abs(ratio2)<1e-3):
+if(abs(ratio1)<1e-6 and abs(ratio2)<1e-6):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
