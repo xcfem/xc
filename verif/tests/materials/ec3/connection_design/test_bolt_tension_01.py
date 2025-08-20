@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
-'''Classification of steel cross-sections (clause 5.5 of EN 1993-1-1:2005).'''
-
-from __future__ import print_function
-from __future__ import division
-
+'''Check bolt axile strength calculation according to EN 1993-1-8:2005.'''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2021, LCPT"
+__copyright__= "Copyright 2025, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"

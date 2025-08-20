@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Classification of steel cross-sections (clause 5.5 of EN 1993-1-1:2005).'''
+'''Check bolt shear strength calculation according to EN 1993-1-8:2005.'''
 
 from __future__ import print_function
 from __future__ import division
