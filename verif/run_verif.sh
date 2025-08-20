@@ -1626,6 +1626,7 @@ python tests/materials/ec3/test_section_classification_02.py
 python tests/materials/ec3/test_section_classification_03.py
 python tests/materials/ec3/test_beam_with_full_lateral_restraint.py
 python tests/materials/ec3/test_bolt_shear_01.py
+python tests/materials/ec3/test_bolt_tension_01.py
 python tests/materials/ec3/compressed_section_test_01.py
 echo "$BLEU" "      buckling tests." "$NORMAL"
 python tests/materials/ec3/test_buckling_resistance_01.py
