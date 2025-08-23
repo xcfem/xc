@@ -1389,6 +1389,21 @@ class BoltFastener(bolts.BoltBase):
             retval= 2.4*d0
         return retval
     
+    def getMinimumEdgeDistance(self, oversized= False, slotted= False):
+        ''' Return the minimum distance to an edge of standard, 
+            oversized or slotted holes according to table 3.3 of
+            EC3-1-8:2005.
+
+        :param oversized: true if hole is oversized.
+        :param oversized: true if hole is slotted.
+        '''
+        d0= self.getNominalHoleDiameter(oversized= oversized)
+        if(slotted):
+            retval= 1.5*d0
+        else:
+            retval= 1.2*d0
+        return retval
+        
     def getNominalShearStrength(self, threadsExcluded= False, numberOfShearPlanes= 1):
         ''' Return the nominal shear strength of the fastener according
             to table 3.4 of EC3-1-8:2005.

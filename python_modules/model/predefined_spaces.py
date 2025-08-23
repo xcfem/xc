@@ -698,6 +698,7 @@ class PredefinedSpace(object):
         :param lpName: load pattern name.
         '''
         self.getLoadHandler().getLoadPatterns.currentLoadPattern= lpName
+        return self.getLoadPattern(lpName)
     
     def getLoadPattern(self, lpName: str):
         ''' Return the load pattern with the argument name.

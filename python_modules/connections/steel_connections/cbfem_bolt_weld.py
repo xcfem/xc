@@ -67,7 +67,7 @@ class Bolt(object):
         '''Creates the section-material to model bolt
         '''
         gsect=sectpr.CircularSection('gsect',self.diam)
-        matName= 'bolt_section_material_'+str(self.id())
+        matName= 'bolt_section_material_'+str(uuid.uuid1())
         self.sectMat=tm.BeamMaterialData(matName, gsect, self.mat)
         self.sectMat.defElasticShearSection3d(prep)
 
@@ -103,7 +103,7 @@ class Bolt(object):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+'; entities in the list must be points or nodes.')
-        linname= 'bolt_lin_trf'+str(self.id())
+        linname= 'bolt_lin_trf'+str(uuid.uuid1())
         lin=prep.getTransfCooHandler.newLinearCrdTransf3d(linname)
         lin.xzVector=predefined_spaces.getSuitableXZVector(nodLst[0],nodLst[1])
         elements.defaultTransformation= lin.name
@@ -125,7 +125,7 @@ class Bolt(object):
         A=0.25*k_be/self.mat.E
         l=math.sqrt(A)
         gsectR=sectpr.RectangularSection('gsectR',l,l)
-        mRname= 'radii_material_'+str(self.id())
+        mRname= 'radii_material_'+str(uuid.uuid1())
         radMat=tm.BeamMaterialData(mRname+'_Rmat',gsectR,self.mat)
         radMat.defElasticShearSection3d(prep)
         return radMat
@@ -181,7 +181,7 @@ class Bolt(object):
         vz=cross(vx,vaux)
         vz=vz.Normalized()
         vy=cross(vx,vz)
-        linname= 'radii_lin_trf_'+str(self.id())
+        linname= 'radii_lin_trf_'+str(uuid.uuid1())
         lin= prep.getTransfCooHandler.newLinearCrdTransf3d(linname)
         lin.xzVector=vz
         elements.defaultTransformation= lin.name
