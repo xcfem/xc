@@ -1615,32 +1615,35 @@ python tests/materials/steel_shapes/test_arcelor_metric_shapes_04.py
 python tests/materials/steel_shapes/test_en_13674_1_rail_shapes_01.py
 python tests/materials/steel_shapes/test_en_13674_1_rail_shapes_02.py
 echo "$BLEU" "    EC3 tests." "$NORMAL"
-python tests/materials/ec3/compare_mech_properties.py
-python tests/materials/ec3/test_cross_section_verification_01.py
-python tests/materials/ec3/test_cross_section_verification_02.py
-python tests/materials/ec3/test_beam_control_points_01.py
-python tests/materials/ec3/test_beam_control_points_02.py
-python tests/materials/ec3/test_biax_bend_coeff.py
-python tests/materials/ec3/test_section_classification_01.py
-python tests/materials/ec3/test_section_classification_02.py
-python tests/materials/ec3/test_section_classification_03.py
-python tests/materials/ec3/test_beam_with_full_lateral_restraint.py
-python tests/materials/ec3/test_bolt_shear_01.py
-python tests/materials/ec3/test_bolt_tension_01.py
-python tests/materials/ec3/compressed_section_test_01.py
-echo "$BLEU" "      buckling tests." "$NORMAL"
-python tests/materials/ec3/test_buckling_resistance_01.py
-python tests/materials/ec3/test_buckling_resistance_02.py
-python tests/materials/ec3/test_buckling_resistance_03.py
-python tests/materials/ec3/test_buckling_resistance_04.py
-python tests/materials/ec3/test_buckling_resistance_05.py
-echo "$BLEU" "      lateral-torsional buckling tests." "$NORMAL"
-python tests/materials/ec3/test_lateral_torsional_buckling_00.py
-python tests/materials/ec3/test_lateral_torsional_buckling_01.py
-python tests/materials/ec3/test_lateral_torsional_buckling_02.py
-python tests/materials/ec3/test_lateral_torsional_buckling_03.py
-python tests/materials/ec3/test_lateral_torsional_buckling_04.py
-echo "$BLEU" "      compression_lateral-torsional buckling tests." "$NORMAL"
+echo "$BLEU" "      EC3 member dssign tests." "$NORMAL"
+python tests/materials/ec3/member_design/compare_mech_properties.py
+python tests/materials/ec3/member_design/test_cross_section_verification_01.py
+python tests/materials/ec3/member_design/test_cross_section_verification_02.py
+python tests/materials/ec3/member_design/test_beam_control_points_01.py
+python tests/materials/ec3/member_design/test_beam_control_points_02.py
+python tests/materials/ec3/member_design/test_biax_bend_coeff.py
+python tests/materials/ec3/member_design/test_section_classification_01.py
+python tests/materials/ec3/member_design/test_section_classification_02.py
+python tests/materials/ec3/member_design/test_section_classification_03.py
+python tests/materials/ec3/member_design/test_beam_with_full_lateral_restraint.py
+python tests/materials/ec3/member_design/compressed_section_test_01.py
+echo "$BLEU" "        buckling tests." "$NORMAL"
+python tests/materials/ec3/member_design/test_buckling_resistance_01.py
+python tests/materials/ec3/member_design/test_buckling_resistance_02.py
+python tests/materials/ec3/member_design/test_buckling_resistance_03.py
+python tests/materials/ec3/member_design/test_buckling_resistance_04.py
+python tests/materials/ec3/member_design/test_buckling_resistance_05.py
+echo "$BLEU" "        lateral-torsional buckling tests." "$NORMAL"
+python tests/materials/ec3/member_design/test_lateral_torsional_buckling_00.py
+python tests/materials/ec3/member_design/test_lateral_torsional_buckling_01.py
+python tests/materials/ec3/member_design/test_lateral_torsional_buckling_02.py
+python tests/materials/ec3/member_design/test_lateral_torsional_buckling_03.py
+python tests/materials/ec3/member_design/test_lateral_torsional_buckling_04.py
+echo "$BLEU" "      EC3 connection design tests." "$NORMAL"
+python tests/materials/ec3/connection_design/test_bolt_distances_01.py
+python tests/materials/ec3/connection_design/test_bolt_shear_01.py
+python tests/materials/ec3/connection_design/test_bolt_tension_01.py
+
 echo "$BLEU" "    EAE tests." "$NORMAL"
 python tests/materials/eae/test_steel_corbel_weld.py
 python tests/materials/eae/test_simple_shear_welded_web.py
