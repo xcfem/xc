@@ -1536,14 +1536,14 @@ python tests/materials/ec2/shrinkage_creep/test_ec2_tdconcrete_fiber_section_02.
 python tests/materials/ec2/shrinkage_creep/test_ec2_tdconcrete_fiber_section_03.py
 
 echo "$BLEU" "    EC2 crack amplitude determination tests." "$NORMAL"
-python tests/materials/ec2/test_crack_control_without_direct_calculation_01.py
-python tests/materials/ec2/test_crack_control_01.py
-python tests/materials/ec2/test_smearedCracking_01.py
-python tests/materials/ec2/test_smearedCracking_02.py
-python tests/materials/ec2/test_smearedCracking_03.py
-python tests/materials/ec2/test_smearedCracking_04.py
-python tests/materials/ec2/test_smearedCracking_05.py
-python tests/materials/ec2/test_smearedCracking_06.py
+python tests/materials/ec2/crack_control/test_crack_control_without_direct_calculation_01.py
+python tests/materials/ec2/crack_control/test_crack_control_01.py
+python tests/materials/ec2/crack_control/test_smearedCracking_01.py
+python tests/materials/ec2/crack_control/test_smearedCracking_02.py
+python tests/materials/ec2/crack_control/test_smearedCracking_03.py
+python tests/materials/ec2/crack_control/test_smearedCracking_04.py
+python tests/materials/ec2/crack_control/test_smearedCracking_05.py
+python tests/materials/ec2/crack_control/test_smearedCracking_06.py
 echo "$BLEU" "    EC2 bending resistance determination tests." "$NORMAL"
 python tests/materials/ec2/test_ec2_interaction_diagram_01.py
 python tests/materials/ec2/test_ec2_interaction_diagram_02.py
