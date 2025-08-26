@@ -1987,6 +1987,7 @@ python tests/postprocess/limit_state_checking/serviceability_limit_states/test_i
 echo "$BLEU" "    generic limit state tools." "$NORMAL"
 python tests/postprocess/limit_state_checking/generic/test_select_critical_combs.py 
 python tests/postprocess/limit_state_checking/generic/test_internal_forces_envelope_truss.py 
+python tests/postprocess/limit_state_checking/generic/test_compute_maximum_deflection.py
 # Graphic output tests
 ##python tests/postprocess/vtk/dibuja_edges.py
 echo "$BLEU" "  Graphic output." "$NORMAL"
