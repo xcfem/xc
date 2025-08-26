@@ -161,33 +161,17 @@ for situation in [combContainer.SLS.qp, combContainer.SLS.freq]:
         modelSpace.removeLoadCaseFromDomain(lcName)
         modelSpace.revertToStart()
             
-
-dispMax= -1
-combDispMax= ""
-fmax= 0
-for n in xcTotalSet.getNodes:
-    dm= n.getProp("dispMax")
-    f= dm/n.getProp('span')
-    n.setProp('f',f)
-    if(dispMax<dm):
-        x= n.getCoo[0]
-        dispMax= dm
-        fmax= dispMax/n.getProp('span')
-        combDispMax= n.getProp("CombDispMax")
-
-# print('x= ', x, 'dispMax=', dispMax*1000, 'mm', 'combDispMax=', combDispMax, 'f= L/', 1.0/fmax)
-
 fname= os.path.basename(__file__)
 outputFileName= '/tmp/'+fname.replace('.py', '.png')
 from postprocess import output_handler
 oh= output_handler.OutputHandler(modelSpace)
 
 # Write graphic file.
+# oh.displayNodeValueDiagram(itemToDisp= 'dispMax')
 oh.displayNodeValueDiagram(itemToDisp= 'dispMax', fileName= outputFileName)
 # Check if file exists.
 testOK= os.path.isfile(outputFileName)
 
-from misc_utils import log_messages as lmsg
 if testOK:
     print('test '+fname+': ok.')
 else:
