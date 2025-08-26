@@ -1060,7 +1060,7 @@ class OutputHandler(object):
             displaySettings.displayConstraints(setToDisplay= setToDisplay, scale= scaleConstr)
             displaySettings.displayScene(caption=caption, unitDescription= unitDescription, fileName=fileName)
     
-    def displayNodeValueDiagram(self, itemToDisp, setToDisplay=None,caption= None,fileName=None, defFScale=0.0, defaultDirection= 'J', defaultValue= 0.0, rgMinMax= None):
+    def displayNodeValueDiagram(self, itemToDisp, setToDisplay=None,caption= None,fileName=None, defFScale=0.0, defaultDirection= 'J', defaultValue= 0.0, rgMinMax= None, fUnitConv= None, unitDescription= None):
         '''displays the a displacement (uX,uY,...) or a property defined in 
            nodes as a diagram over lines.
 
@@ -1082,11 +1082,18 @@ class OutputHandler(object):
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values 
                          of the scalar field (if any) to be represented. All 
                          the values less than vmin are displayed in blue and 
-                         those greater than vmax in red (defaults to None)
+                         those greater than vmax in red (defaults to None).
+        :param fUnitConv: conversion factor for units. If None it will be 
+                          deduced from the value itemToDisp parameter.
+        :param unitDescription: unit(s) symbol(s). If None it will be 
+                          deduced from the value itemToDisp parameter.
         '''
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
-        unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
+        if(fUnitConv is None):
+            unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
+        else:
+            unitConversionFactor= fUnitConv
         LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
         diagram= npd.NodePropertyDiagram(scaleFactor= 1.0, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor,sets=[setToDisplay], attributeName= itemToDisp, defaultDirection= defaultDirection, defaultValue= defaultValue)
         diagram.addDiagram(defFScale= defFScale)
