@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test displaying of maximum node displacements.'''
+''' Test computation of deflections along a beam.'''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2025, LCPT"
