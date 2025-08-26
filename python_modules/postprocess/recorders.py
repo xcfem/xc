@@ -9,6 +9,8 @@ __email__= "l.pereztato@gmail.com"
 from postprocess import callback_controls
 from postprocess import def_vars_control
 
+default_restart_callback= "print('Restart method called.')"
+
 def installNodeDisplacementRecorder(recorderName, nodeSet):
     def_vars_control.def_vars_control_mov_modulus(nodeSet)
 
@@ -22,6 +24,6 @@ def installNodeDisplacementRecorder(recorderName, nodeSet):
     else:
       recorder.callbackRecord= callback_controls.controlMovModulusUVW()
 
-    recorder.callbackRestart= "print \"Restart method called.\""
+    # recorder.callbackRestart= default_restart_callback #20250826
     return recorder
 
