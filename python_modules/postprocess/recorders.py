@@ -11,7 +11,7 @@ from postprocess import def_vars_control
 
 default_restart_callback= "print('Restart method called.')"
 
-def installNodeDisplacementRecorder(recorderName, nodeSet):
+def install_node_displacement_recorder(recorderName, nodeSet):
     def_vars_control.def_vars_control_mov_modulus(nodeSet)
 
     preprocessor= nodeSet.owner.getPreprocessor
