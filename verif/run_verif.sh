@@ -202,7 +202,10 @@ python tests/utility/geom/circles/circular_sector_2d_test_01.py
 python tests/utility/geom/circles/circular_sector_2d_test_02.py
 python tests/utility/geom/circles/circular_sector_2d_test_03.py
 echo "$BLEU" "    Parabolas." "$NORMAL"
-python tests/utility/geom/parabola_test_01.py
+python tests/utility/geom/parabolas/parabola_test_01.py
+python tests/utility/geom/parabolas/parabola_test_02.py
+python tests/utility/geom/parabolas/generalized_parabola_test_01.py
+python tests/utility/geom/parabolas/generalized_parabola_test_02.py
 echo "$BLEU" "    Other geometric objects." "$NORMAL"
 python tests/utility/geom/pyramidal_frustum_test_01.py
 
@@ -331,6 +334,7 @@ echo "$BLEU" "    CTE wind action tests." "$NORMAL"
 python tests/actions/wind/cte/test_cte_wind_load.py
 echo "$BLEU" "    EC1 wind action tests." "$NORMAL"
 python tests/actions/wind/ec1/test_ec1_cylinder_force_coefficient.py
+python tests/actions/wind/ec1/test_ec1_monopitch_canopy_overall_force_coefficients_01.py
 python tests/actions/wind/ec1/test_ec1_duopitch_canopy_overall_force_coefficients_01.py
 python tests/actions/wind/ec1/test_ec1_duopitch_canopy_overall_force_coefficients_02.py
 python tests/actions/wind/ec1/test_ec1_longitudinal_wind_reduction_factor.py 

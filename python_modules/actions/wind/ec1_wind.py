@@ -711,8 +711,40 @@ def get_free_standing_wall_net_pressure_distribution(terrainCategory:str, vb:flo
         wnet_i.append(cp*qp)
     return scipy.interpolate.interp1d(xi, wnet_i, kind='linear')
 
+# Monopitch canopies.
+# Overall force coefficients according to clause 7.3 and table 7.6
+# of EN 1991-1-4:2005
+# + values indicate a net downward acting wind action.
+# - values represent a net upward acting wind action.
+monopitch_canopy_angles= [0, 5, 10, 15, 20, 25, 30]
+maximum_monopitch_canopy_cf_values= [0.2, 0.4, 0.5, 0.7, 0.8, 1.0, 1.2]
+maximum_monopitch_canopy_cf= scipy.interpolate.interp1d(monopitch_canopy_angles, maximum_monopitch_canopy_cf_values, kind='linear', fill_value="extrapolate")
+minimum_monopitch_canopy_zero_blockage_cf_values= [-0.5, -0.7, -0.9, -1.1, -1.3, -1.6, -1.8]
+minimum_monopitch_canopy_zero_blockage_cf= scipy.interpolate.interp1d(monopitch_canopy_angles, minimum_monopitch_canopy_zero_blockage_cf_values, kind='linear', fill_value="extrapolate")
+minimum_monopitch_canopy_total_blockage_cf_values= [-1.3, -1.4, -1.4, -1.4, -1.4, -1.4, -1.4]
+minimum_monopitch_canopy_total_blockage_cf= scipy.interpolate.interp1d(monopitch_canopy_angles, minimum_monopitch_canopy_total_blockage_cf_values, kind='linear', fill_value="extrapolate")
+
+def get_monopitch_canopy_overall_force_coefficients(roofAngleRadians, degreeOfBlockage):
+    ''' Return the maximum and minimum overall force coefficients for a duopitch
+        canopy according to table 7.7 of EN 1991-1-4:2005.
+
+    :param roofAngle: angle of the roof according to figure 7.17 of 
+                      EN 1991-1-4:2005 (expressed in radians).
+    :param degreeOfBlockage: degree of blockage according to paragraph (2) of
+                             clause 7.3 of EN 1991-1-4:2005.
+    '''
+    roofAngleDegrees= math.degrees(roofAngleRadians)
+    maxCf= float(maximum_monopitch_canopy_cf(roofAngleDegrees))
+    minCf_zero_blockage= float( minimum_monopitch_canopy_zero_blockage_cf(roofAngleDegrees))
+    minCf_total_blockage= float( minimum_monopitch_canopy_total_blockage_cf(roofAngleDegrees))
+    minCf= (minCf_total_blockage-minCf_zero_blockage)*degreeOfBlockage+minCf_zero_blockage
+    return maxCf, minCf
+
+# Duopitch canopies.
 # Overall force coefficients according to clause 7.3 and table 7.7
 # of EN 1991-1-4:2005
+# + values indicate a net downward acting wind action.
+# - values represent a net upward acting wind action.
 duopitch_canopy_angles= [-20, -15, -10, -5, 5, 10, 15, 20]
 maximum_duopitch_canopy_cf_values= [+0.7, +0.5, +0.4, +0.3, +0.3, +0.4, +0.4, +0.6]
 maximum_duopitch_canopy_cf= scipy.interpolate.interp1d(duopitch_canopy_angles, maximum_duopitch_canopy_cf_values, kind='linear', fill_value="extrapolate")
@@ -720,6 +752,7 @@ minimum_duopitch_canopy_zero_blockage_cf_values= [-0.7, -0.6, -0.6, -0.5, -0.6, 
 minimum_duopitch_canopy_zero_blockage_cf= scipy.interpolate.interp1d(duopitch_canopy_angles, minimum_duopitch_canopy_zero_blockage_cf_values, kind='linear', fill_value="extrapolate")
 minimum_duopitch_canopy_total_blockage_cf_values= [-1.3, -1.4, -1.4, -1.3, -1.3, -1.3, -1.3, -1.3]
 minimum_duopitch_canopy_total_blockage_cf= scipy.interpolate.interp1d(duopitch_canopy_angles, minimum_duopitch_canopy_total_blockage_cf_values, kind='linear', fill_value="extrapolate")
+
 def get_duopitch_canopy_overall_force_coefficients(roofAngleRadians, degreeOfBlockage):
     ''' Return the maximum and minimum overall force coefficients for a duopitch
         canopy according to table 7.7 of EN 1991-1-4:2005.
