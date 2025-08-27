@@ -48,13 +48,13 @@ leftBorder= geom.Pos2d(0,0)
 rightBorder= geom.Pos2d(5.0, -math.sin(roofAngle))
 canopySegment= geom.Segment2d(leftBorder, rightBorder)
 normalVector= canopySegment.getNormal()
+# Make sure the normal vector points upwards.
+if(normalVector.y<0):
+    normalVector= -normalVector
 
 maxCf, minCf= ec1_wind.get_monopitch_canopy_overall_force_coefficients(roofAngleRadians= roofAngle, degreeOfBlockage= degree_of_blockage)
 
 windDirections= [1, -1]
-# Make sure the normal vector points upwards.
-if(normalVector.y<0):
-    normalVector= -normalVector
 # Compute pressures for each arrangement according to equation (5.3) of
 # EN 1991-1-4:2005.
 # For each case store the pressures in a tuple:
@@ -75,7 +75,7 @@ for windDir in windDirections:
         pressureParabola= pb.define_generalized_parabola_from_vertex_and_point(ref= ref, vertex= vertex, pt= pt)
         pressureAtVertex= ref.getLocalPosition(pressureParabola.y(vertex)).y
         pressureAtWindwardPt= ref.getLocalPosition(pressureParabola.y(windwardPt)).y
-        if(windDir>0):
+        if(windDir>0): # wind from the left.
             pressures.append((pressureAtWindwardPt, pressureAtVertex))
         else:
             pressures.append((pressureAtVertex, pressureAtWindwardPt))
