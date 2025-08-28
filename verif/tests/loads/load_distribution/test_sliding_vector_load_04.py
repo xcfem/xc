@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 ''' home made test
-    SlidingVectorLoad class verification (3D solid mechanics).'''
+    SlidingVectorLoad class verification (3D solid mechanics).
+'''
 
 from __future__ import print_function
 
@@ -33,7 +34,7 @@ modelSpace.fixNode000(n2.tag)
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 modelSpace.setCurrentLoadPattern("0")
-lVector= xc.Vector([0,-f, 0])
+lVector= xc.Vector([0,-f, 0]) # Fx, Fy, Fz
 slidingVectorLoad= loads.SlidingVectorLoad(name= 'test', nodes= [n1,n2], pntCoord= [0.0,0.0,0.0], loadVector= lVector)
 slidingVectorLoad.appendLoadToCurrentLoadPattern()
 

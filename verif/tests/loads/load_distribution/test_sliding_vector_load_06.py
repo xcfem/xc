@@ -43,10 +43,10 @@ for n in [n1, n2, n3, n4]:
 lp0= modelSpace.newLoadPattern(name= '0')
 modelSpace.setCurrentLoadPattern(lp0.name)
 ## Load nodes n1 and n2
-lVectorA= xc.Vector([0,0,-f, 0,0,0])
+lVectorA= xc.Vector([0,0,-f, 0,0,0]) # Fx, Fy, Fz, Mx, My, Mz
 slidingVectorLoadAa= loads.SlidingVectorLoad(name= 'test', nodes= [n1,n2], pntCoord= [0.0,0.0,0.0], loadVector= lVectorA)
 slidingVectorLoadAa.appendLoadToCurrentLoadPattern()
-lVectorB= xc.Vector([f,0,0, 0,0,0])
+lVectorB= xc.Vector([f,0,0, 0,0,0]) # Fx, Fy, Fz, Mx, My, Mz
 slidingVectorLoadBa= loads.SlidingVectorLoad(name= 'test', nodes= [n1,n2], pntCoord= [0.0,0.0,0.0], loadVector= lVectorB)
 slidingVectorLoadBa.appendLoadToCurrentLoadPattern()
 ## Load nodes n3 and nh

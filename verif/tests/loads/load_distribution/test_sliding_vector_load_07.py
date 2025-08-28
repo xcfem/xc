@@ -98,7 +98,7 @@ for n in xcTotalSet.nodes:
     if(abs(pos.x-L)<1e-3):
         loadedNodes.append(n)
         
-lVector= xc.Vector([0, 0, 0, 0, M, 0])
+lVector= xc.Vector([0, 0, 0, 0, M, 0]) # Fx, Fy, Fz, Mx, My, Mz
 pntCoord= [L,0.0,0.0]
 slidingVectorLoad= loads.SlidingVectorLoad(name= 'test', nodes= loadedNodes, pntCoord= pntCoord, loadVector= lVector)
 slidingVectorLoad.appendLoadToCurrentLoadPattern()
