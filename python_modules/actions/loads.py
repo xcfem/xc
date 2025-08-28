@@ -818,7 +818,7 @@ class SlidingVectorLoad(BaseVectorLoad):
             elif(numDOFs==2):
                 O= geom.Pos2d(self.pntCoord[0],self.pntCoord[1])
                 force= geom.Vector2d(self.loadVector[0],self.loadVector[1])
-                moment= 0.0
+                moment= self.loadVector[5]
                 loadSVS= geom.SlidingVectorsSystem2d(O,force,moment)
                 ptList= list()
                 for n in nodeList:
