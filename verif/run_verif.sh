@@ -222,6 +222,8 @@ python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_2d_test
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_2d_test_06.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_2d_test_07.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_2d_test_08.py
+python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_2d_test_09.py
+python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_2d_test_10.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_3d_test_01.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_3d_test_02.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_3d_test_03.py

@@ -110,5 +110,5 @@ boost::python::dict SlidingVector2d::getPyDict(void) const
 void SlidingVector2d::setPyDict(const boost::python::dict &d)
   {
     Vector2d::setPyDict(d);
-    this->org= boost::python::extract<Pos2d>(d["org"]);
+    this->org.setPyDict(boost::python::extract<boost::python::dict>(d["org"]));
   }    

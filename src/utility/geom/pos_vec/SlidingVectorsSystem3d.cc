@@ -413,7 +413,7 @@ boost::python::dict SlidingVectorsSystem3d::getPyDict(void) const
 void SlidingVectorsSystem3d::setPyDict(const boost::python::dict &d)
   {
     SlidingVector3d::setPyDict(d);
-    this->mom= boost::python::extract<Vector3d>(d["moment"]);
+    this->mom.setPyDict(boost::python::extract<boost::python::dict>(d["moment"]));
   }    
 
 
