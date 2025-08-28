@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Generation of a simple linear elastic pilecap model that transfer the
-    loads from the piles to the piles. This example tries to show how the
+    loads from the pier to the piles. This example tries to show how the
     Pilecap3Piles object can be used inside a bigger model.
 
     When analyzing the pilecap itself we create the strut-and-tie model by
