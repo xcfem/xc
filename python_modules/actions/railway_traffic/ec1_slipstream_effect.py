@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
-''' Slipstream effect according to EC1-2 clause 6.6.'''
+''' Slipstream effect according to EC1-2 clause 6.6.
+
+A slipstream is a region behind a moving object in which a wake of fluid
+(typically air or water) is moving at velocities comparable to that of the
+moving object, relative to the ambient fluid through which the object is 
+moving.
+'''
 
 from __future__ import division
 from __future__ import print_function
