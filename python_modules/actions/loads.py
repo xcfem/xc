@@ -818,7 +818,9 @@ class SlidingVectorLoad(BaseVectorLoad):
             elif(numDOFs==2):
                 O= geom.Pos2d(self.pntCoord[0],self.pntCoord[1])
                 force= geom.Vector2d(self.loadVector[0],self.loadVector[1])
-                moment= self.loadVector[5]
+                moment= 0.0
+                if(self.loadVector.size()>2): # Has bending moment.
+                    moment= self.loadVector[2]
                 loadSVS= geom.SlidingVectorsSystem2d(O,force,moment)
                 ptList= list()
                 for n in nodeList:
