@@ -44,6 +44,7 @@
 #include "utility/geom/d2/2d_polygons/Quadrilateral2d.h"
 #include "utility/geom/d1/Segment2d.h"
 #include "utility/geom/d1/Polyline3d.h"
+#include "utility/geom/pos_vec/SlidingVectorsSystem2d.h"
 #include "utility/geom/pos_vec/SlidingVectorsSystem3d.h"
 #include "utility/geom/pos_vec/Pos3dArray3d.h"
 #include "utility/gnu_gts/TriangleMap.h"
