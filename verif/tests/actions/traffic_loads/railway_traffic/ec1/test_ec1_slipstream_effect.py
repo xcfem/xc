@@ -16,10 +16,22 @@ from actions.railway_traffic import ec1_slipstream_effect
 # v: speed of the train.
 # a_g: distance from the track axis to the surface of the structure (m).
 # h_g: distance from top of rail level to the underside of the structure (m).
+
+# Characteristic value of  the aerodinamic action for simple
+# vertical surfaces parallel to the track (q1k) according to
+# figure 6.22 of EC1-2.
 q1k_300_2dot3= ec1_slipstream_effect.q1k(v= 300/3.6, a_g= 2.3)
 q1k_300_6dot3= ec1_slipstream_effect.q1k(v= 300/3.6, a_g= 6.0)
+
+# Characteristic value of  the aerodinamic action for simple
+# horizontal surfaces above the track (q2k) according to
+# figure 6.23 of EC1-2.
 q2k_300_5= ec1_slipstream_effect.q2k(v= 300/3.6, h_g= 5.0)
 q2k_300_9= ec1_slipstream_effect.q2k(v= 300/3.6, h_g= 9.0)
+
+# Characteristic value of  the aerodinamic action for simple
+# horizontal surfaces adjacent to the track (q3k) according to
+# figure 6.24 of EC1-2.
 q3k_200_2= ec1_slipstream_effect.q3k(v= 200/3.6, a_g= 2.0)
 q3k_200_6= ec1_slipstream_effect.q3k(v= 200/3.6, a_g= 6.0)
 
