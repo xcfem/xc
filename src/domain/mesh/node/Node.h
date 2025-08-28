@@ -75,6 +75,7 @@
 class Pos2d;
 class Pos3d;
 class SlidingVectorsSystem3d;
+class SlidingVectorsSystem2d;
 class GeomObj2d;
 class GeomObj3d;
 
@@ -365,11 +366,17 @@ class Node: public MeshComponent
 
     Vector3d get3dForceComponents(const Vector &) const;
     Vector3d get3dMomentComponents(const Vector &) const;
+    Vector2d get2dForceComponents(const Vector &) const;
+    double get2dMomentComponent(const Vector &) const;
     
     virtual const Vector &getReaction(void) const;
     void setReaction(const Vector &);
     Vector3d getReactionForce3d(void) const;
     Vector3d getReactionMoment3d(void) const;
+    SlidingVectorsSystem3d getReactionSlidingVectorsSystem3d(bool initialGeometry= true) const;
+    Vector2d getReactionForce2d(void) const;
+    double getReactionMoment2d(void) const;
+    SlidingVectorsSystem2d getReactionSlidingVectorsSystem2d(bool initialGeometry= true) const;
     const Vector &getResistingForce(const ElementConstPtrSet &,const bool &) const;
     SlidingVectorsSystem3d getResistingSlidingVectorsSystem3d(const ElementConstPtrSet &,const bool &) const;
     virtual int addReactionForce(const Vector &, double factor);
