@@ -78,6 +78,10 @@ class SlidingVectorsSystem3d: public SlidingVector3d
     friend SlidingVectorsSystem3d operator*(const SlidingVectorsSystem3d &s,const GEOM_FT &d);
     void Print(std::ostream &os) const;
     void PrintLtx(std::ostream &os,const std::string &ud_long= " m",const GEOM_FT &f_long=1.0, const std::string &ud_f= " N",const GEOM_FT &f_f=1.0) const;
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     friend std::ostream &operator<<(std::ostream &os, const SlidingVectorsSystem3d &svd3d);
   };
 

@@ -107,6 +107,21 @@ SlidingVector3d operator*(const GEOM_FT &p,const SlidingVector3d &m)
 
 SlidingVector3d operator/(const SlidingVector3d &m,const GEOM_FT &p)
   { return m*(1/p); }
+    
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict SlidingVector3d::getPyDict(void) const
+  {
+    boost::python::dict retval= Vector3d::getPyDict();
+    retval["org"]= org.getPyDict();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void SlidingVector3d::setPyDict(const boost::python::dict &d)
+  {
+    Vector3d::setPyDict(d);
+    this->org= boost::python::extract<Pos3d>(d["org"]);
+  }    
 
 std::ostream &operator<<(std::ostream &os,const SlidingVector3d &v)
   {
