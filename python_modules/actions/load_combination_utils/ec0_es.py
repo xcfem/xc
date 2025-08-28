@@ -735,7 +735,7 @@ class BuildingCombGenerator(utils.CombGenerator):
         return self.newAction(family= 'permanent',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
 
     def newImposedLoadAction(self, actionName: str, actionDescription:str, imposedLoadType, safetyFactorSet:str, designSituation:str, approach:int= 2, dependsOn= None, incompatibleActions= None):
-        ''' Creates a wind load action and appends it to the combinations 
+        ''' Creates an imposed load action and appends it to the combinations 
             generator.
 
         :param actionName: name of the action.
@@ -757,19 +757,28 @@ class BuildingCombGenerator(utils.CombGenerator):
         '''
         partialSafetyFactorsName= self.getPartialSafetyFactorsName(permanent= False, safetyFactorSet= safetyFactorSet, designSituation= designSituation, approach= approach)
         keys= self.getCombinationFactors().getKeys()
-        for key in keys:
-            if(imposedLoadType in key):
-                combinationFactorsName= key
-            elif(imposedLoadType=='light_vehicles'):
-                combinationFactorsName= 'cat_F_traffic_area_vehicle_weight_leq_30kN'
-            elif(imposedLoadType=='heave_vehicles'):
-                combinationFactorsName= 'cat_G_traffic_area_30kN_lt_vehicle weight_leq_160kN'
-            else:
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                errorMsg= className+'.'+methodName+'; imposed load type: '+str(imposedLoadTypen)+' not implemented.'
-                lmsg.error(errorMsg)
-                exit(1)
+        if(imposedLoadType in keys):
+            combinationFactorsName= key
+        elif(imposedLoadType=='residential'):
+            combinationFactorsName= 'cat_a_domestic_residential_areas'
+        elif(imposedLoadType=='office'):
+            combinationFactorsName= 'cat_c_congregation_areas'
+        elif(imposedLoadType=='congregation'):
+            combinationFactorsName= 'cat_c_congregation_areas'
+        elif(imposedLoadType=='shopping'):
+            combinationFactorsName= 'cat_D_shopping_areas'
+        elif(imposedLoadType=='storage'):
+            combinationFactorsName= 'cat_E_storage_areas'
+        elif(imposedLoadType=='light_vehicles'):
+            combinationFactorsName= 'cat_F_traffic_area_vehicle_weight_leq_30kN'
+        elif(imposedLoadType=='heavy_vehicles'):
+            combinationFactorsName= 'cat_G_traffic_area_30kN_lt_vehicle weight_leq_160kN'
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= className+'.'+methodName+'; imposed load type: '+str(imposedLoadType)+' not implemented.'
+            lmsg.error(errorMsg)
+            exit(1)
         return self.newAction(family= 'variables',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= combinationFactorsName, partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions)
     
     def newWindLoadAction(self, actionName: str, actionDescription:str, safetyFactorSet:str, designSituation:str, approach:int= 2, dependsOn= None, incompatibleActions= None):
