@@ -14,6 +14,10 @@ O=geom.Pos2d(0,0)
 A=geom.Pos2d(1,0)
 V=geom.Vector2d(0,1)
 
+# A: point where the resultant is applied.
+# V: resultant of the sliding vector system.
+# M: momoent of the sliding vectors system with respect to the A point
+#    (zero in this case).
 svs1= geom.SlidingVectorsSystem2d(A,V,0.0)
 pto= svs1.getOrg()
 momO= svs1.getMoment(O)

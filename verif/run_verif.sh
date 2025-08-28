@@ -1080,6 +1080,7 @@ python tests/loads/load_distribution/test_sliding_vector_load_04.py
 python tests/loads/load_distribution/test_sliding_vector_load_05.py
 python tests/loads/load_distribution/test_sliding_vector_load_06.py
 python tests/loads/load_distribution/test_sliding_vector_load_07.py
+python tests/loads/load_distribution/test_sliding_vector_load_08.py
 python tests/loads/load_distribution/test_surf_unif_load_distributed.py
 python tests/loads/load_distribution/test_wheel_load_distribution_01.py
 python tests/loads/load_distribution/test_notional_lane_load_distribution.py
