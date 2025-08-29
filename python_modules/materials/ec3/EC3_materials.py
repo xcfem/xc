@@ -469,14 +469,22 @@ class EC3Shape(object):
         '''
         return EC3lsc.getLateralBucklingIntermediateFactor(steelShape= self, L= L, Mi= Mi, beamSupportCoefs= beamSupportCoefs)
 
+    def isCircular(self):
+        ''' Return true if it is a circular section.'''
+        return False
+    
     def getLateralBucklingReductionFactor(self, L, Mi, beamSupportCoefs= EC3lsc.BeamSupportCoefficients()):
         ''' Returns lateral torsional buckling reduction factor value.
 
           :param L: member length.
           :param Mi: ordinate for the moment diagram
           :param beamSupportCoefs: coefficients that represent support conditions.
-        '''  
-        return EC3lsc.getLateralBucklingReductionFactor(steelShape= self, L= L, Mi= Mi, beamSupportCoefs= beamSupportCoefs)
+        '''
+        if(self.isCircular()):
+            retval= 1.0
+        else:
+            retval= EC3lsc.getLateralBucklingReductionFactor(steelShape= self, L= L, Mi= Mi, beamSupportCoefs= beamSupportCoefs)
+        return retval
 
     def getLateralTorsionalBucklingResistance(self, L, Mi, beamSupportCoefs= EC3lsc.BeamSupportCoefficients()):
         '''Return lateral torsional buckling resistance of this cross-section.
@@ -979,6 +987,10 @@ class CHSShape(EC3Shape, arcelor_metric_shapes.CHSShape):
         super(CHSShape, self).__init__(name= name, typo='rolled')
         arcelor_metric_shapes.CHSShape.__init__(self,steel,name)
 
+    def isCircular(self):
+        ''' Return true if it is a circular section.'''
+        return True
+    
     def getClassInternalPartInCompression(self):
         '''Return the cross-section classification of the section 
         subject to compression. Clause 5.5 EC3-1-1.
@@ -1158,7 +1170,11 @@ class CFCHSShape(EC3Shape, bs_en_10219_shapes.CFCHSShape):
         '''
         super(CFCHSShape, self).__init__(name= name, typo= 'welded')
         bs_en_10219_shapes.CFCHSShape.__init__(self, steel= steel, name= name)
-        
+
+    def isCircular(self):
+        ''' Return true if it is a circular section.'''
+        return True
+
     def getBucklingCurve(self, majorAxis= False):
         ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
             according to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
@@ -1206,7 +1222,10 @@ class MicropileTubeShape(EC3Shape, common_micropile_tubes.MicropileTubeShape):
         '''
         super(MicropileTubeShape, self).__init__(name= name, typo= 'rolled')
         common_micropile_tubes.MicropileTubeShape.__init__(self, steel= steel, name= name)
-        
+    def isCircular(self):
+        ''' Return true if it is a circular section.'''
+        return True
+    
     def getClassInternalPartInCompression(self):
         '''Return the cross-section classification of the section 
         subject to compression. Clause 5.5 EC3-1-1.
