@@ -28,6 +28,8 @@
 #include "utility/kernel/python_utils.h"
 #include "ActionWrapperList.h"
 #include "utility/functions/algebra/ExprAlgebra.h"
+#include "utility/load_combinations/actions/containers/ActionsFamily.h"
+#include "utility/load_combinations/actions/ActionWrapperList.h"
 
 const double cmb_acc::Action::zero= 1e-6;
 
@@ -276,6 +278,70 @@ bool cmb_acc::Action::Incompatible(const Action &f) const
         if(!retval) retval= f.relaciones.incompatible(getName());
       }
     return retval;
+  }
+
+//! @brief Return true if this actions contains the given one.
+bool cmb_acc::Action::Contains(const Action &f) const
+  {
+    bool retval= false;
+    if(this==&f)
+      retval= true;
+    else
+      {
+	const std::string actionName= f.getName();
+	cmb_acc::Action::map_descomp components= this->getComponents();
+	for(map_descomp::const_iterator i= components.begin(); i!= components.end(); i++)
+	  {
+	    const std::string key= (*i).first;
+	    if(key==actionName)
+	      {
+		retval= true;
+		break;
+	      }		
+	  }
+
+      }
+    return retval;
+    
+  }
+
+//! @brief Return true if any of the given actions is found on this container.
+bool cmb_acc::Action::ContainsAnyOf(const ActionWrapper &actionsWrapper) const
+  {
+    bool retval= false;
+    const std::vector<const Action *> wrappedActions= actionsWrapper.getWrappedActions();
+    for(std::vector<const Action *>::const_iterator i= wrappedActions.begin(); i!=wrappedActions.end(); i++)
+      {
+        const Action *other_action= *i;
+	if(this->Contains(*other_action))
+	  {
+	    retval= true;
+	    break;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return true if any of the given actions is found on this container.
+bool cmb_acc::Action::ContainsAnyOf(const ActionWrapperList &actionsWrapperList) const
+  {
+    bool retval= false;
+    for(ActionWrapperList::const_iterator i= actionsWrapperList.begin(); i!=actionsWrapperList.end();i++)
+      {
+	const ActionWrapper *awi= (*i).get();
+	if(this->ContainsAnyOf(*awi))
+	  {
+	    retval= true;
+	    break;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return true if any of the given actions is found on this container.
+bool cmb_acc::Action::ContainsAnyOf(const ActionsFamily &actionsFamily) const
+  {
+    return this->ContainsAnyOf(actionsFamily.getActions());
   }
 
 //! @brief Print stuff.

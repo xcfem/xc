@@ -29,6 +29,8 @@
 #include "utility/matrices/m_double.h"
 
 namespace cmb_acc{
+
+  
 //! @ingroup CMBACC
 //
 //! @brief Combination container. Each component of the vector is a
@@ -51,6 +53,7 @@ class LoadCombinationVector: public std::vector<Action>, public CommandEntity
     const LoadCombinationVector &GetNoNulas(const double &tol) const;
     m_double getCoefficients(const std::vector<std::string> &) const;
     boost::python::list getCoefficientsPy(const boost::python::list &) const;
+  
     void Print(std::ostream &os) const;
   };
 

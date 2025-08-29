@@ -417,6 +417,7 @@ python tests/actions/load_combinations/ec0/test_ec0_traffic_groups.py
 python tests/actions/load_combinations/ec0/test_ec0_seismic_combinations.py
 python tests/actions/load_combinations/ec0/test_ec0_accidental_combinations_01.py
 python tests/actions/load_combinations/ec0/test_ec0_accidental_combinations_02.py
+python tests/actions/load_combinations/ec0/test_ec0_accidental_combinations_03.py
 python tests/actions/load_combinations/ec0/test_ec0_railway_bridge_load_combinations_01.py
 python tests/actions/load_combinations/ec0/test_ec0_railway_bridge_load_combinations_02.py
 python tests/actions/load_combinations/ec0/test_ec0_railway_bridge_load_combinations_03.py

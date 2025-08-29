@@ -222,6 +222,7 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionFamilyContainer::GetAccSis(const L
         retval= LoadCombinationVector::ProdCartesiano(retval,SA,Action::zero);
       }
     retval= get_compatibles(retval); //Filtramos las que contienen acciones incompatibles.
+    retval= must_contain(retval, Acc); // Remove those that don't contain any accidental action.
     return retval;
   }
 

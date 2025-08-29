@@ -31,6 +31,7 @@
 namespace cmb_acc{
 
 class LoadCombinationVector;
+class ActionsFamily;
 
 //! @ingroup CMBACC
 //
@@ -99,6 +100,7 @@ std::ostream &operator<<(std::ostream &os,const ActionRelationships &acc);
 
 const LoadCombinationVector &get_compatibles(const LoadCombinationVector &);
 const LoadCombinationVector &filtraCombsEsclavasHuerfanas(const LoadCombinationVector &);
+const LoadCombinationVector &must_contain(const LoadCombinationVector &, const ActionsFamily &);
   
 //! @brief Return a string with the names of the list
 //! separated by commas.
