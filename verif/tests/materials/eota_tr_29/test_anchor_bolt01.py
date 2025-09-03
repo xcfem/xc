@@ -1,18 +1,21 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-# Verification test according to EOTA TR 029.
-# results compared with those of the document
-# "Hilti HIT-HY 150 with rebar".
+''' Verification test according to EOTA TR 029.
 
-from materials.eota import EOTA_TR029_limit_state_checking as eota
-import math
-import geom
+Results compared with those of the document
+"Hilti HIT-HY 150 with rebar".
+'''
+
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+from materials.eota import EOTA_TR029_limit_state_checking as eota
+import math
+import geom
 
 # Datos
 gammaMs= 1.4 # Partial safety factor for steel.
@@ -21,8 +24,8 @@ barDiameter= 25e-3 # Bar diameter in meters.
 barArea= math.pi*(barDiameter/2.0)**2 # Bar area in square meters.
 h= 274e-3 # Concrete element thickness.
 hef= 210e-3 # Effective anchor depth.
-anchorPosition=  geom.Pos2d(.135,0) # Anchor position
-baseMaterialContour=  geom.Polygon2d([geom.Pos2d(0,-1), geom.Pos2d(1,-1), geom.Pos2d(1,1), geom.Pos2d(0,1)]) # Contour of concrete element.
+anchorPosition= geom.Pos2d(.135,0) # Anchor position
+baseMaterialContour= geom.Polygon2d([geom.Pos2d(0,-1), geom.Pos2d(1,-1), geom.Pos2d(1,1), geom.Pos2d(0,1)]) # Contour of concrete element.
 
 fuk= 550e6 # Characteristic steel ultimate tensile strength (Pa).
 tauRk= 7.5e6 # Characteristic bond strength (taken from ETA-05/0051 table 11).
