@@ -321,6 +321,16 @@ class ElasticFoundation(object):
             retval.append(n)
         return retval
     
+    def getFoundationSupportingNodes(self):
+        ''' Return the nodes support the foundation (the constrained nodes).
+        '''
+        retval= list()
+        for eTag in self.springs:
+            e= self.springs[eTag]
+            n= e.getNodes[0]
+            retval.append(n)
+        return retval
+    
     def getMaxMinAvgPressure(self, component):
         ''' Return the maximum foundation pressure component over the soil. 
          Calculates pressures  and forces in the free nodes of the springs
