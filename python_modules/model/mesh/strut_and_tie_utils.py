@@ -546,9 +546,9 @@ class PileCap3Piles(StrutAndTieModel):
 
         # Create the pile cap nodes.
         ## Nodes over the piles.
-        pileBottomNodeA= self.pileTopNodeA # already exists.
-        pileBottomNodeB= self.pileTopNodeB # already exists.
-        pileBottomNodeC= self.pileTopNodeC # already exists.
+        pileBottomNodeA= self.pileTopNodeA # already exists (no need to create it).
+        pileBottomNodeB= self.pileTopNodeB # already exists (no need to create it).
+        pileBottomNodeC= self.pileTopNodeC # already exists (no need to create it).
         pileTopNodeA= modelSpace.newNodePos3d(pileTopNodePosA)
         pileTopNodeB= modelSpace.newNodePos3d(pileTopNodePosB)
         pileTopNodeC= modelSpace.newNodePos3d(pileTopNodePosC)
@@ -641,6 +641,12 @@ class PileCap3Piles(StrutAndTieModel):
         ## Define ties.
         ### Define material.
         steelNoCompression= self.getTieMaterial(modelSpace= modelSpace, reinfSteel= reinfSteel, linearElastic= linearElastic)
+        #### Material for elastic ties.
+        if(not linearElastic):
+            elasticTiesMaterial= self.reinfSteel.defElasticMaterial(preprocessor= modelSpace.preprocessor)
+        else:
+            elasticTiesMaterial= steelNoCompression
+            
         modelSpace.setDefaultMaterial(steelNoCompression)
         modelSpace.setElementDimension(3)
 
@@ -682,11 +688,15 @@ class PileCap3Piles(StrutAndTieModel):
             self.bottomChordTies.append(newTie)
             n0Bottom= n1Bottom
         #### Vertical ties over each pile.
+        # Make this particular ties elastic anyway.
+        modelSpace.setDefaultMaterial(elasticTiesMaterial)
         self.pileTies= list()
         for (nBottom, nTop) in zip(pilesContourBottomNodes, pilesContourTopNodes):
             newTie= modelSpace.newElement("Truss", [nBottom.tag, nTop.tag])
             newTie.sectionArea= pileTiesArea
             self.pileTies.append(newTie)
+        modelSpace.setDefaultMaterial(steelNoCompression) # Restore material.
+        
         #### Shear ties between piles.
         self.shearTies= list()
         for (nBottom, nTop) in zip(midContourBottomNodes, midContourTopNodes):
@@ -715,9 +725,9 @@ class PileCap3Piles(StrutAndTieModel):
         #### Top to bottom bars (they can take tensions and compressions).
         # Top-down ties in the pier(dummy bars to make the forces reach the
         # bottom of the pile cap).
-        pierTopDownBarsMaterial= self.reinfSteel.defElasticMaterial(preprocessor= modelSpace.preprocessor)
+        pierTopDownBarsMaterial= elasticTiesMaterial
         modelSpace.setDefaultMaterial(pierTopDownBarsMaterial)
-        pierTopDownBarsArea= pileTiesArea # XXX 
+        pierTopDownBarsArea= pileTiesArea 
         self.pierTopDownBars= list()
         for (nBottom, nTop) in zip(pierContourBottomNodes[:-1], pierContourTopNodes[:-1]):
             newTie= modelSpace.newElement("Truss", [nBottom.tag, nTop.tag])
@@ -727,7 +737,7 @@ class PileCap3Piles(StrutAndTieModel):
         ### Define dummy springs (to fix rotational DOFs only).
         nodesToConstrain= contourTopNodes+midContourBottomNodes+pierContourBottomNodes
         springsAndNodes= define_dummy_springs(modelSpace, nodesToConstrain)
-        
+
         ### Connect the pier with the pile cap using the pier section
         ### as "rigid beam".
         modelSpace.setDefaultMaterial(xcPierSectionMaterial)
