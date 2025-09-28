@@ -1599,7 +1599,7 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         materialHandler= preprocessor.getMaterialHandler
         matName= name
         if(not matName):
-            matName= self.materialName+'_xc_material'
+            matName= self.materialName+'_elastic'
         retval= materialHandler.newMaterial("elastic_material", matName)
         retval.E= self.Es
         matRho= self.rho
@@ -1619,9 +1619,10 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         :param b: parameter to define the compresion behaviour.
         :param name: name for the new material.
         '''
-        if(name is None):
-            name= self.materialName+'_uniaxial'
-        return typical_materials.defElastNoCompressionMaterial(preprocessor= preprocessor, name= name, E= self.Es, a= a, b= b)
+        matName= name
+        if(not matName):
+            matName= self.materialName+'_elastic_nc'
+        return typical_materials.defElastNoCompressionMaterial(preprocessor= preprocessor, name= matName, E= self.Es, a= a, b= b)
 
 def defReinfSteelCharacteristicDiagram(preprocessor, steelRecord):
     '''Characteristic stress-strain diagram.'''
