@@ -560,6 +560,13 @@ class PredefinedSpace(object):
         :param tag: name of the desired material.
         '''
         return self.preprocessor.getMaterialHandler.getMaterial(name)
+
+    def materialWithNameExists(self, name):
+        ''' Return true if the material with the given name already exists.
+
+        :param tag: name of the desired material.
+        '''
+        return self.preprocessor.getMaterialHandler.materialExists(name)
     
     def setCreepOn(self):
         ''' Activates creep for TD concrete materials.'''
