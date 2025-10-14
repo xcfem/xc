@@ -50,8 +50,12 @@ def generate_springs_pile_2d(modelSpace, nodes, linearSpringsConstants, storeAsP
     '''
     #init spring elastic materials
     prep= modelSpace.preprocessor
-    springX= typical_materials.defElasticMaterial(prep,'springX',1e-5)
-    springY= typical_materials.defElasticMaterial(prep,'springY',1e-5)
+    springX= modelSpace.getMaterialFromName(name= 'generate_springs_pile_2d_springX')
+    if(not springX):
+        springX= typical_materials.defElasticMaterial(prep,'generate_springs_pile_2d_springX',1e-5)
+    springY= modelSpace.getMaterialFromName(name= 'generate_springs_pile_2d_springY')
+    if(not springY):
+        springY= typical_materials.defElasticMaterial(prep,'generate_springs_pile_2d_springY',1e-5)
     retval= list() # Spring elements.
     for n in nodes:
         if(n.tag in linearSpringsConstants):
@@ -80,9 +84,15 @@ def generate_springs_pile_3d(modelSpace, nodes, linearSpringsConstants, storeAsP
     '''
     #init spring elastic materials
     prep= modelSpace.preprocessor
-    springX= typical_materials.defElasticMaterial(prep,'springX',1e-5)
-    springY= typical_materials.defElasticMaterial(prep,'springY',1e-5)
-    springZ= typical_materials.defElasticMaterial(prep,'springZ',1e-5)
+    springX= modelSpace.getMaterialFromName(name= 'generate_springs_pile_3d_springX')
+    if(not springX):
+        springX= typical_materials.defElasticMaterial(prep,'generate_springs_pile_3d_springX',1e-5)
+    springY= modelSpace.getMaterialFromName(name= 'generate_springs_pile_3d_springY')
+    if(not springY):
+        springY= typical_materials.defElasticMaterial(prep,'generate_springs_pile_3d_springY',1e-5)
+    springZ= modelSpace.getMaterialFromName(name= 'generate_springs_pile_3d_springZ')
+    if(not springZ):
+        springZ= typical_materials.defElasticMaterial(prep,'generate_springs_pile_3d_springZ',1e-5)
     retval= list() # Spring elements.
     for n in nodes:
         if(n.tag in linearSpringsConstants):
@@ -90,7 +100,7 @@ def generate_springs_pile_3d(modelSpace, nodes, linearSpringsConstants, storeAsP
             springX.E= k_i[0]
             springY.E= k_i[1]
             springZ.E= k_i[2]
-            newNode, newElement= modelSpace.setBearing(n.tag,['springX','springY','springZ'])
+            newNode, newElement= modelSpace.setBearing(n.tag,[springX.name, springY.name, springZ.name])
             retval.append(newElement) # append the "spring" element.
             # store spring constants as node properties.
             if(storeAsPileNodeProperties):
