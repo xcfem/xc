@@ -21,6 +21,10 @@ import scipy.interpolate
 import geom
 import xc
 
+# Suffix to add to the name of the fiber section materials to avoid collision
+# with other materials (elastic sections, etc.) created from the same section
+# definition object.
+fiber_section_name_suffix= '_fiber_section'
 
 class SectionProperties(object):
     '''Abstract section properties (area, moments of inertia,...)
