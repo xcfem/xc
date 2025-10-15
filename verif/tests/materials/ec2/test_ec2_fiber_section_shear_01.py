@@ -49,7 +49,6 @@ rcSection.negatvRebarRows= def_simple_RC_section.LongReinfLayers([topRow])
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Create the section material
-materialHandler= preprocessor.getMaterialHandler
 fiberSectionName= rcSection.defRCSection(preprocessor, matDiagType= 'd')
 
 # Create ZeroLength element and assign the section to it.
