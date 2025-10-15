@@ -60,9 +60,9 @@ preprocessor=  feProblem.getPreprocessor
 section.mainReinf= mainReinf
 section.shReinf= shearReinf
 ## Define section material.
-section.defRCSection(preprocessor, matDiagType= 'd')
+fiberSectionName= section.defRCSection(preprocessor, matDiagType= 'd')
 ## Create ZeroLength element and assign the section to it.
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, section.name)
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSectionName)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

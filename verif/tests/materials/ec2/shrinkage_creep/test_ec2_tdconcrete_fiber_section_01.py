@@ -76,7 +76,7 @@ rcSection.defRCSection2d(preprocessor, matDiagType= 'td')
 
 ## Create element.
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= rcSection.name
+elements.defaultMaterial= rcSection.getFiberSectionName()
 elements.dimElem= 1 # Dimension of element space
 zl= elements.newElement("ZeroLengthSection",xc.ID([n1.tag, n2.tag]))
 

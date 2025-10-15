@@ -55,8 +55,8 @@ preprocessor=  feProblem.getPreprocessor
 materialHandler= preprocessor.getMaterialHandler
 
 # Section geometry
-section.defRCSection(preprocessor,matDiagType= 'k')
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, section.name)
+fiberSectionName= section.defRCSection(preprocessor,matDiagType= 'k')
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSectionName)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

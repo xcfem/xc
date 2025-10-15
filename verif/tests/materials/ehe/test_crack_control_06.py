@@ -45,9 +45,8 @@ concreteMatTag= EHE_materials.HA25.defDiagK(preprocessor)
 reinfSteelMaterialTag= EHE_materials.B500S.defDiagK(preprocessor)
 
 
-datosScc1LosC.defRCSection(preprocessor, "k")
-
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, datosScc1LosC.name)
+fiberSectionName= datosScc1LosC.defRCSection(preprocessor, "k")
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSectionName)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
