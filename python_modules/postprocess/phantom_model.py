@@ -91,7 +91,8 @@ class PhantomModel(object):
         nB= self.preprocessor.getNodeHandler.newNodeXYZ(0,0,0)
         self.modelSpace.fixNode000_000(nA.tag)
         if(not fakeSection):
-            self.preprocessor.getElementHandler.defaultMaterial= sectionName
+            fiberSectionName= sectionName+section_properties.fiber_section_name_suffix
+            self.preprocessor.getElementHandler.defaultMaterial= fiberSectionName
         phantomElement= self.preprocessor.getElementHandler.newElement("ZeroLengthSection",xc.ID([nA.tag,nB.tag]))
         phantomElement.setProp("idElem", masterElementId) # Element to check
         phantomElement.setProp("idSection", sectionName) # Section to check
