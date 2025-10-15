@@ -33,8 +33,6 @@ topCover= 0.068 # Concrete cover of top reinforcement expressed in meters.
 topNominalCover= topCover-topRebarsDiam/2.0
 numRebars= 6 # Number of rebars.
 
-feProblem= xc.FEProblem()
-preprocessor=  feProblem.getPreprocessor
 # Materials definition
 concrete= EC2_materials.C25 # Concrete.
 steel= EC2_materials.S500B # Reinforcing steel.
