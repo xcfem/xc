@@ -10,7 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com, ana.ortega.ort@gmail.com"
 
-Force= "{:6.2f}"
+Force= "{:6.2f}" # six places two decimals.
 Esf= Force
 Stress= "{:6.2f}"
 Pressure= Stress
@@ -20,6 +20,7 @@ Speed= Length
 Acceleration= Length
 LengthMM= "{:4.0f}" # Length in mm (without decimals).
 Area= "{:6.2f}"
+Inertia= "{:6.4f}" # six places four decimals.
 Factor= "{:4.2f}"
 Displacement= "{:4.2f}"
 Angle= "{:4.2f}"
