@@ -65,7 +65,7 @@ p3= geom.Pos3d(halfWidth, halfHeight, 0.0)
 ## K-points.
 kPoints= list()
 for p in [p0, p1, p2, p3]:
-    kPoints.append(modelSpace.newKPoint(p.x, p.y, p.z))
+    kPoints.append(modelSpace.newKPointFromPos3d(p))
 
 leftWallLine= modelSpace.newLine(kPoints[1],kPoints[0])
 bottomSlabLine= modelSpace.newLine(kPoints[1],kPoints[2])

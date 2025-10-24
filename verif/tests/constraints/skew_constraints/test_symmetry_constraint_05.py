@@ -58,7 +58,7 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 ### Half simply-suppoted slab (symmetry at points p2 and p3)
 halfSlabQuadPoints= list()
 for pos in halfSlabQuadPositions:
-    halfSlabQuadPoints.append(modelSpace.newKPoint(pos.x, pos.y, pos.z))
+    halfSlabQuadPoints.append(modelSpace.newKPointFromPos3d(pos3d= pos))
 ### Vertical plane passing through points p2 and p3 (symmetry at points p2 and p3).
 pA= halfSlabQuadPositions[-2]
 pB= halfSlabQuadPositions[-1]
@@ -66,7 +66,7 @@ vertPlane= geom.Plane3d(pA, pB, pB+geom.Vector3d(0,0,100)) # Vertical plane at b
 
 wholeSlabQuadPoints= list()
 for pos in wholeSlabQuadPositions:
-    wholeSlabQuadPoints.append(modelSpace.newKPoint(pos.x, pos.y, pos.z))
+    wholeSlabQuadPoints.append(modelSpace.newKPointFromPos3d(pos3d= pos))
 
 halfSlabFace= modelSpace.newSurface(halfSlabQuadPoints)
 wholeSlabFace= modelSpace.newSurface(wholeSlabQuadPoints)
