@@ -416,6 +416,13 @@ class PredefinedSpace(object):
         '''
         return self.preprocessor.removeElement(element)
 
+    def getElement(self, elementTag):
+        ''' Return the elements that correspond to the given tag.
+
+        :param elementTag: element identifier.
+        '''
+        return self.getElementHandler().getElement(elementTag)
+
     def getElements(self, tags: Sequence[int]):
         ''' Return the elements that correspond to the argument
             tags.
@@ -492,6 +499,15 @@ class PredefinedSpace(object):
     def duplicateNode(self, node):
         ''' Duplicate the given node.'''
         return self.getNodeHandler().duplicateNode(node.tag)
+
+    def getNode(self, nodeTag):
+        ''' Return the node that correspond to given tag.
+
+        :param tag: node identifier.
+        '''
+        nodeHandler= self.getNodeHandler()
+        retval= nodeHandler.getNode(nodeTag)
+        return retval
     
     def getNodes(self, tags: Sequence[int]):
         ''' Return the nodes that correspond to the argument

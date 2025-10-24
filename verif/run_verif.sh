@@ -630,6 +630,8 @@ echo "$BLEU" "  Misc elements tests." "$NORMAL"
 python tests/elements/spring_test_01.py
 python tests/elements/spring_test_02.py
 echo "$BLEU" "  Element birth and death tests." "$NORMAL"
+python tests/elements/birth_and_death/remove_node_test_01.py
+python tests/elements/birth_and_death/remove_element_test_01.py
 python tests/elements/birth_and_death/kill_elements_01.py
 python tests/elements/birth_and_death/kill_elements_02.py
 python tests/elements/birth_and_death/kill_elements_03.py

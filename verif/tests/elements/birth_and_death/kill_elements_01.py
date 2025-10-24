@@ -39,14 +39,13 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
 # Elements definition
-elements= preprocessor.getElementHandler
-elements.defaultTransformation= lin.name
-elements.defaultMaterial= scc.name
+modelSpace.setDefaultCoordTransf(lin)
+modelSpace.setDefaultMaterial(scc)
 #  syntax: beam2d_02[<tag>] 
-beamA= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
+beamA= modelSpace.newElement("ElasticBeam2d",[n1.tag,n2.tag])
 beamA.h= h
         
-beamB= elements.newElement("ElasticBeam2d",xc.ID([n3.tag,n4.tag]))
+beamB= modelSpace.newElement("ElasticBeam2d", [n3.tag,n4.tag])
 beamB.h= h
     
 # Constraints
