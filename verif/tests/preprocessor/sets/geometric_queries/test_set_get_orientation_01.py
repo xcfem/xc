@@ -32,9 +32,9 @@ aPoints= list()
 bPoints= list()
 for i in range(0,11):
     newPoint= pA+i*dirVector
-    aPoints.append(modelSpace.newKPoint(newPoint.x, newPoint.y, newPoint.z))
+    aPoints.append(modelSpace.newKPointFromPos3d(newPoint))
     newPoint= pB+i*dirVector
-    bPoints.append(modelSpace.newKPoint(newPoint.x, newPoint.y, newPoint.z))
+    bPoints.append(modelSpace.newKPointFromPos3d(newPoint))
 
 # Create surfaces.
 p0a= aPoints[0]

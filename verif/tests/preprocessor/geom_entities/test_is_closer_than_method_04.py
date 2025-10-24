@@ -34,9 +34,9 @@ topPoints= list()
 for i in range(0,5):
     v= i*iVector
     bp= origin+v
-    bottomPoints.append(modelSpace.newKPoint(bp.x, bp.y, bp.z))
+    bottomPoints.append(modelSpace.newKPointFromPos3d(bp))
     tp= origin+jVector+v
-    topPoints.append(modelSpace.newKPoint(tp.x, tp.y, tp.z))
+    topPoints.append(modelSpace.newKPointFromPos3d(tp))
 
 bigQuads= list()
 bottomPoint0= bottomPoints[0]
@@ -63,9 +63,9 @@ topPoints= list()
 for i in range(0,11):
     v= i*iVector
     bp= origin+v
-    bottomPoints.append(modelSpace.newKPoint(bp.x, bp.y, bp.z))
+    bottomPoints.append(modelSpace.newKPointFromPos3d(bp))
     tp= origin+jVector+v
-    topPoints.append(modelSpace.newKPoint(tp.x, tp.y, tp.z))
+    topPoints.append(modelSpace.newKPointFromPos3d(tp))
 
 smallQuads= list()
 bottomPoint0= bottomPoints[0]
