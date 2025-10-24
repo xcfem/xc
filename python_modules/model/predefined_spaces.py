@@ -1617,17 +1617,14 @@ class PredefinedSpace(object):
             retval+= ', '+dl
         return retval
 
-    def newKPoint(self, x, y, z= 0.0, tol= 0.0):
-        ''' Creates a key point.
+    def newKPointFromPos3d(self, pos3d, tol= 0.0):
+        ''' Creates a key point from the given 3D position.
 
-        :param x: x coordinate for the new point.
-        :param y: y coordinate for the new point.
-        :param z: z coordinate for the new point (defaults to 0.0).
+        :param pos3d: 3D position object.
         :param tol: if greter than zero create the point only if
                     there is no other point at a distance smaller than
                     tol, otherwise return the already existing point.
         '''
-        pos3d= geom.Pos3d(x,y,z)
 
         pointHandler= self.preprocessor.getMultiBlockTopology.getPoints
         if(tol>0.0): # Search for the nearest point.
@@ -1639,6 +1636,19 @@ class PredefinedSpace(object):
         else:
             retval= pointHandler.newPoint(pos3d)
         return retval
+    
+    def newKPoint(self, x, y, z= 0.0, tol= 0.0):
+        ''' Creates a key point.
+
+        :param x: x coordinate for the new point.
+        :param y: y coordinate for the new point.
+        :param z: z coordinate for the new point (defaults to 0.0).
+        :param tol: if greter than zero create the point only if
+                    there is no other point at a distance smaller than
+                    tol, otherwise return the already existing point.
+        '''
+        pos3d= geom.Pos3d(x,y,z)
+        return self.newKPointFromPos3d(pos3d= pos3d, tol= tol)
     
     def newLine(self, p1: xc.Pnt, p2: xc.Pnt):
         ''' Creates a line between the argument points.
