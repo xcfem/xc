@@ -297,7 +297,51 @@ XC::Pnt *XC::PntMap::Copy(const Pnt *p,const Vector3d &v= Vector3d())
 	  }
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; memoria agotada." << std::endl; 
+		    << "; memory exhausted." << std::endl; 
+      }
+    return retval;
+  }
+
+//! @brief Creates a new point, copied from the point argument with
+//! the corresponding name according to the value of the tag.
+XC::Pnt *XC::PntMap::duplicatePoint(const Pnt &p)
+  {
+    Pnt *retval= busca(getTag());
+    if(retval)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; the point identified by: " 
+                << getTag() << " already exists, no changes made." << std::endl;
+    else //The point is new.
+      {
+        retval= new Pnt(p);
+        if(retval)
+          {
+            retval->Name()= "p"+boost::lexical_cast<std::string>(getTag());
+            (*this)[getTag()]= retval;
+            updateSets(retval);
+            tag++;
+	  }
+        else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; memory exhausted." << std::endl; 
+      }
+    return retval;
+  }
+
+//! @brief Creates a new point, copied from the point with the given id.
+XC::Pnt *XC::PntMap::duplicatePoint(const size_t &orgPointTag)
+  {
+    Pnt *retval= nullptr;    
+    const Pnt *p= busca(orgPointTag);
+    if(p)
+      retval= duplicatePoint(*p);
+    else
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; point with tag: "
+	          << orgPointTag
+	          << " not found."
+		  << std::endl;
       }
     return retval;
   }
