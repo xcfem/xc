@@ -27,6 +27,8 @@ XC::Node *(XC::NodeHandler::*newNodeFromXYZ)(const double &x,const double &y,con
 XC::Node *(XC::NodeHandler::*newNodeFromXY)(const double &x,const double &y)= &XC::NodeHandler::newNode;
 XC::Node *(XC::NodeHandler::*newNodeFromX)(const double &x)= &XC::NodeHandler::newNode;
 XC::Node *(XC::NodeHandler::*newNodeFromVector)(const XC::Vector &)= &XC::NodeHandler::newNode;
+XC::Node *(XC::NodeHandler::*duplicateNodeFromNode)(const XC::Node &)= &XC::NodeHandler::duplicateNode;
+XC::Node *(XC::NodeHandler::*duplicateNodeFromTag)(const int &)= &XC::NodeHandler::duplicateNode;
 class_<XC::NodeHandler, bases<XC::PrepHandler>, boost::noncopyable >("NodeHandler", no_init)
   .add_property("numDOFs", &XC::NodeHandler::getNumDOFs, &XC::NodeHandler::setNumDOFs,"Number of degrees ocf freedom per node.")
   .add_property("dimSpace", &XC::NodeHandler::getSpaceDim, &XC::NodeHandler::setSpaceDim, "Space dimension.")
@@ -41,7 +43,8 @@ class_<XC::NodeHandler, bases<XC::PrepHandler>, boost::noncopyable >("NodeHandle
   .def("newNodeIDV", &XC::NodeHandler::newNodeIDV,return_internal_reference<>(),"\n""newNodeIDV(tag,vector)""Create a node whose ID=tag from the vector passed as parameter.")
   .def("newNodeX", newNodeFromX,return_internal_reference<>(),"\n""newNodeX(x)\n""Create a node from global coordinate (x).")
   .def("newSeedNode", &XC::NodeHandler::newSeedNode,return_internal_reference<>(),"\n""newSeedNode()\n""Defines the seed node.")
-  .def("duplicateNode", &XC::NodeHandler::duplicateNode,return_internal_reference<>(),"\n""duplicateNode(orgNodeTag) \n" "Create a duplicate copy of node with ID=orgNodeTag")
+  .def("duplicateNode", duplicateNodeFromNode,return_internal_reference<>(),"\n""duplicateNode(orgNode) \n" "Create a duplicate of the given node.")
+  .def("duplicateNode", duplicateNodeFromTag,return_internal_reference<>(),"\n""duplicateNode(orgNodeTag) \n" "Create a duplicate of the node with the given identifier.")
   ;
 
 bool (XC::MaterialHandler::*materialExistsFromName)(const std::string &) const= &XC::MaterialHandler::materialExists;
