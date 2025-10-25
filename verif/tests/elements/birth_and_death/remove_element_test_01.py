@@ -37,28 +37,28 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 # Elements definition
 modelSpace.setDefaultCoordTransf(lin)
 modelSpace.setDefaultMaterial(scc)
-elementTags= list()
+elementList= list()
 n0Tag= nodeTags[0]
 h= 30 # Beam cross-section depth in inches.
 for n1Tag in nodeTags[1:]:
     elem= modelSpace.newElement("ElasticBeam2d",[n0Tag,n1Tag])
     elem.h= h
-    elementTags.append(elem.tag)
+    elementList.append(elem)
     n0Tag= n1Tag
 
 numberOfElementsBefore= modelSpace.getNumberOfElements()
 
 elementsToRemove= [1]
 for i in elementsToRemove:
-    elementTag= elementTags[i]
-    element= modelSpace.getElement(elementTag)
-    modelSpace.removeElement(element)
-for i in elementsToRemove:
-    elementTags.remove(i)
+    elementTag= elementList[i].tag
+    elementList[i]= None # Avoid calls to a non-existent element.
+    modelSpace.removeElement(elementTag)
+# Pop removed elements from list.
+for i in reversed(elementsToRemove):
+    elementList.pop(i)
 
 xi= list()
-for elementTag in elementTags:
-    element= modelSpace.getElement(elementTag)
+for element in elementList:
     xi.append(element.getPosCentroid(True).x)
 
 numberOfElementsAfter= modelSpace.getNumberOfElements()
