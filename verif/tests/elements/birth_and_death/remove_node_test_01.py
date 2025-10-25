@@ -20,24 +20,24 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 l= 10.0 
-nodeTags= list()
+nodeList= list()
 for i in range(0,4):
     newNode= nodes.newNodeXY(i*l,0)
-    nodeTags.append(newNode.tag)
+    nodeList.append(newNode)
 
 numberOfNodesBefore= modelSpace.getNumberOfNodes()
 
 nodesToRemove= [1, 3]
 for i in nodesToRemove:
-    nodeTag= nodeTags[i]
-    node= modelSpace.getNode(nodeTag)
-    modelSpace.removeNode(node)
-for i in nodesToRemove:
-    nodeTags.remove(i)
+    nodeTag= nodeList[i].tag
+    nodeList[i]= None # Avoid calls to a non-existent node.
+    modelSpace.removeNode(nodeTag)
+# Pop removed nodes from list.
+for i in reversed(nodesToRemove):
+    nodeList.pop(i)
 
 xi= list()
-for nodeTag in nodeTags:
-    node= modelSpace.getNode(nodeTag)
+for node in nodeList:
     xi.append(node.getInitialPos3d.x)
 
 numberOfNodesAfter= modelSpace.getNumberOfNodes()
