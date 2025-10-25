@@ -101,9 +101,7 @@ vJElem= crdTransf.getJVector
 loadVector= f*vIElem-p*vJElem
 el.vector2dUniformLoadGlobal(loadVector)
 
-
-loadHandler= preprocessor.getLoadHandler
-loadHandler.addToDomain(lp0.name) # Append load pattern to domain.
+modelSpace.addLoadCaseToDomain(lp0.name) # Append load pattern to domain.
 
 # Solution procedure
 analysis= predefined_solutions.plain_newton_raphson(feProblem)
