@@ -665,7 +665,7 @@ class PlainStaticModifiedNewton(SolutionProcedure):
     ''' Static solution procedure with a modified Newton
         solution algorithm with a plain constraint handler.
     '''
-    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', integratorType:str= 'load_control_integrator'):
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType:str= 'load_control_integrator'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -674,19 +674,27 @@ class PlainStaticModifiedNewton(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
-        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        :param numberingMethod: numbering method (plain or reverse 
+                                Cuthill-McKee or alternative minimum degree).
+        :param convTestType: convergence test for non linear analysis (norm 
+                             unbalance,...).
+        :param soeType: type of the system of equations object.
+        :param solverType: type of the solver.
         :param integratorType: integrator type (see integratorSetup).
         '''
-        super(PlainStaticModifiedNewton,self).__init__(name= name,  constraintHandlerType= 'plain', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType, solutionAlgorithmType= 'modified_newton_soln_algo')
+        super(PlainStaticModifiedNewton,self).__init__(name= name,  constraintHandlerType= 'plain', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= integratorType, solutionAlgorithmType= 'modified_newton_soln_algo')
         self.feProblem= prb
         
 ### Convenience function
-def plain_static_modified_newton(prb, maxNumIter= 150,  convergenceTestTol= .01, convTestType= 'relative_total_norm_disp_incr_conv_test', printFlag= 0):
+def plain_static_modified_newton(prb, maxNumIter= 150,  convergenceTestTol= .01, convTestType= 'relative_total_norm_disp_incr_conv_test', soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', printFlag= 0):
     ''' Return a simple static modified Newton solution procedure.
 
     :param maxNumIter: maximum number of iterations (defauts to 10)
     :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+    :param convTestType: convergence test for non linear analysis (norm 
+                         unbalance,...).
+    :param soeType: type of the system of equations object.
+    :param solverType: type of the solver.
     :param printFlag: print message on each iteration
     '''
     solProc= PlainStaticModifiedNewton(prb, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, convTestType= convTestType, printFlag= printFlag)
