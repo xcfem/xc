@@ -15,6 +15,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
+from misc_utils import log_messages as lmsg
 
 # Geometry
 width= .05
@@ -104,6 +105,9 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution procedure
 analysis= predefined_solutions.plain_static_modified_newton(feProblem)
 result= analysis.analyze(10)
+if(result!=0):
+    lmsg.error("Can't solve.")
+    exit(1)
 
 # Get displacements.
 delta= n2.getDisp[0]  # Node 2 xAxis displacement
@@ -134,7 +138,6 @@ print("RN= ",RN)
 print("ratio3= ",ratio3)
 print("RN2= ",RN2)
    '''
-from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-6) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10) & (abs(RN2)<1e-14):
     print('test '+fname+': ok.')
