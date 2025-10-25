@@ -133,6 +133,8 @@ void XC::SuperLU::free_mem(void)
       }
   }
 
+//! @brief Alloc permutation vectors.
+//! @param n: new size.
 void XC::SuperLU::alloc_permutation_vectors(const size_t &n)
   {
     // create space for the permutation vectors 
@@ -146,6 +148,8 @@ void XC::SuperLU::alloc_permutation_vectors(const size_t &n)
       }
   }
 
+//! @brief Alloc matrices.
+//! @param n: new size.
 void XC::SuperLU::alloc_matrices(const size_t &n)
   {
     free_matrices();
@@ -164,6 +168,9 @@ void XC::SuperLU::alloc_matrices(const size_t &n)
     // create the rhs SuperMatrix B 
     dCreate_Dense_Matrix(&B, n, 1, theSOE->getPtrX(), n, SLU_DN, SLU_D, SLU_GE);
   }
+
+//! @brief Alloc matrices and permutation vectors.
+//! @param n: new size.
 void XC::SuperLU::alloc(const size_t &n)
   {
     free_mem();
@@ -373,21 +380,22 @@ int XC::SuperLU::setSize(void)
     if(n>0)
       {
         const size_t sizePerm= perm_r.Size();
-        if((sizePerm>0) && (sizePerm<n))
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << " SuperLU, sometimes, fails when dimension"
-	            << " of the system is changed." << std::endl;
-
+	// ***** Commented out in 25/10/2025 by LP
+        // if((sizePerm>0) && (sizePerm<n))
+        //   std::cerr << getClassName() << "::" << __FUNCTION__
+	// 	    << " SuperLU, sometimes, fails when dimension"
+	//             << " of the system is changed." << std::endl;
+        // ***** Apparently this works fine now.
         
         // set the refact variable to 'N' after first factorization with new_ size 
         // can set to 'Y'.
         options.Fact = DOFACT; // IMPORTANT make this BEFORE alloc.
-        //set_default_options(&options);
 	
 	// 13/07/2020 SuperLU solver fails sometimes trying
 	// to reuse super matrices.
         alloc(n);
-
+	
+        //set_default_options(&options);
         if(symmetric == 'Y')
 	  options.SymmetricMode= YES;
       }
