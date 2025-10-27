@@ -34,10 +34,9 @@ l23= modelSpace.newLine(pt2, pt3)
 ## Define material
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 ## Define seed element.
-seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.dimElem= 2 # Bars defined in a two dimensional space.
-seedElemHandler.defaultMaterial= elast.name
-truss= seedElemHandler.newElement("Truss")
+modelSpace.setDefaultMaterial(elast)
+modelSpace.setElementDimension(2) # Truss defined in a two-dimensional space.
+truss= modelSpace.newSeedElement('Truss')
 truss.sectionArea= 10
 ## Generate mesh.
 setTotal= preprocessor.getSets.getSet("total")
