@@ -179,6 +179,7 @@ python tests/utility/geom/polygons/2d/quadrilateral2D_test_01.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_02.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_03.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_04.py
+python tests/utility/geom/polygons/2d/quadrilateral2D_test_05.py
 echo "$BLEU" "      3D Polygons." "$NORMAL"
 python tests/utility/geom/polygons/3d/polygon3D_test_01.py
 python tests/utility/geom/polygons/3d/polygon3D_test_02.py
@@ -838,6 +839,7 @@ python tests/preprocessor/geom_entities/test_is_closer_than_method_03.py
 python tests/preprocessor/geom_entities/test_is_closer_than_method_04.py
 python tests/preprocessor/geom_entities/test_get_regression_plane_from_edge_list.py
 python tests/preprocessor/geom_entities/test_connected_edges_01.py
+python tests/preprocessor/geom_entities/test_connected_elements_01.py
 
 echo "$BLEU" "  Meshing routines tests." "$NORMAL"
 python tests/preprocessor/meshing/test_surface_axes_01.py
