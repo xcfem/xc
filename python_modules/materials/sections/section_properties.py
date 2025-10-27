@@ -320,9 +320,14 @@ class SectionProperties(object):
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
                 csp= self.getCrossSectionProperties3D(material)
-                rho= material.rho*csp.A
                 if(overrideRho!=None):
                     rho= overrideRho
+                else:
+                    if(hasattr(material, 'rho')):
+                        matRho= material.rho
+                    else: # Concrete material.
+                        matRho= material.density()
+                    rho= matRho*csp.A
                 E= csp.E
                 if(reductionFactor!= 1.0):
                     E/= reductionFactor
@@ -355,9 +360,14 @@ class SectionProperties(object):
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
                 csp= self.getCrossSectionProperties3D(material)
-                rho= material.rho*csp.A
                 if(overrideRho!=None):
                     rho= overrideRho
+                else:
+                    if(hasattr(material, 'rho')):
+                        matRho= material.rho
+                    else: # Concrete material.
+                        matRho= material.density()
+                    rho= matRho*csp.A
                 E= csp.E
                 if(reductionFactor!= 1.0):
                     E/= reductionFactor
@@ -389,9 +399,14 @@ class SectionProperties(object):
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
                 csp= self.getCrossSectionProperties2D(material)
-                rho= material.rho*csp.A
                 if(overrideRho!=None):
                     rho= overrideRho
+                else:
+                    if(hasattr(material, 'rho')):
+                        matRho= material.rho
+                    else: # Concrete material.
+                        matRho= material.density()
+                    rho= matRho*csp.A
                 E= csp.E
                 if(reductionFactor!= 1.0):
                     E/= reductionFactor
@@ -427,9 +442,14 @@ class SectionProperties(object):
                 I= csp.Iz;
                 if(not majorAxis):
                     I= csp.Iy
-                rho= material.rho*csp.A
                 if(overrideRho!=None):
                     rho= overrideRho
+                else:
+                    if(hasattr(material, 'rho')):
+                        matRho= material.rho
+                    else: # Concrete material.
+                        matRho= material.density()
+                    rho= matRho*csp.A
                 E= csp.E
                 if(reductionFactor!= 1.0):
                     E/= reductionFactor
@@ -465,9 +485,14 @@ class SectionProperties(object):
                 I= csp.Iz;
                 if(not majorAxis):
                     I= csp.Iy
-                rho= material.rho*csp.A
                 if(overrideRho!=None):
                     rho= overrideRho
+                else:
+                    if(hasattr(material, 'rho')):
+                        matRho= material.rho
+                    else: # Concrete material.
+                        matRho= material.density()
+                    rho= matRho*csp.A
                 E= csp.E
                 if(reductionFactor!= 1.0):
                     E/= reductionFactor
@@ -482,11 +507,17 @@ class SectionProperties(object):
         '''Return a CrossSectionProperties object with the 2D properties of 
            the section.'''
         retval= xc.CrossSectionProperties2d()
-        retval.E= material.E
+        if(hasattr(material, 'E')):
+            retval.E= material.E
+        else: # Concrete material.
+            retval.E= material.Ecm()
         retval.A= self.A()
         retval.Iw= self.getWarpingConstant()
         retval.I= self.Iz()
-        retval.G= material.G()
+        if(hasattr(material, 'Gcm')): # Concrete material.
+            retval.G= material.Gcm()
+        else: 
+            retval.G= material.G()
         retval.Alpha= self.alphaY()
         return retval
     
@@ -494,12 +525,18 @@ class SectionProperties(object):
         '''Return a CrossSectionProperties object with the 2D properties of 
            the section.'''
         retval= xc.CrossSectionProperties3d()
-        retval.E= material.E
+        if(hasattr(material, 'E')):
+            retval.E= material.E
+        else: # Concrete material.
+            retval.E= material.Ecm()
         retval.A= self.A()
         retval.Iw= self.getWarpingConstant()
         retval.Iz= self.Iz()
         retval.Iy= self.Iy()
-        retval.G= material.G()
+        if(hasattr(material, 'Gcm')): # Concrete material.
+            retval.G= material.Gcm()
+        else: 
+            retval.G= material.G()
         retval.J= self.J()
         retval.AlphaY= self.alphaY()
         retval.AlphaZ= self.alphaZ()
@@ -835,9 +872,14 @@ class RectangularSection(SectionProperties):
                 lmsg.warning(className+'.'+methodName+'; section: '+self.name+' already defined.')
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
-                rho= material.rho # mass per volume unit.
+                # mass per volume unit.
                 if(overrideRho!=None):
                     rho= overrideRho
+                else:
+                    if(hasattr(material, 'rho')):
+                        rho= material.rho
+                    else: # Concrete material.
+                        rho= material.density()                    
                 E= material.E
                 if(reductionFactor!= 1.0):
                     E/= reductionFactor
