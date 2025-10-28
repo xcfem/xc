@@ -19,3 +19,4 @@ The available constraint handlers are:
 
 - [Handle Your Constraints with Care](https://portwooddigital.com/2020/06/05/handle-your-constraints-with-care)
 - [Handling a Doubt](https://portwooddigital.com/2023/11/09/handling-a-doubt/)
+- [Daisy Chains and Gaffes](https://portwooddigital.com/2025/10/26/daisy-chains-and-gaffes/)

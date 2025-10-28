@@ -13,3 +13,4 @@ The ConstraintHandler object determines how the constraint equations are enforce
 - [MultiFreedom constraints II](https://quickfem.com/wp-content/uploads/IFEM.Ch09.pdf)
 - [What Is a Good Penalty Number?](https://portwooddigital.com/2023/11/29/what-is-a-good-penalty-number/)
 - [Concepts and Applications of Finite Element Analysis](https://books.google.es/books/about/Concepts_and_Applications_of_Finite_Elem.html?id=b8seAQAAIAAJ&redir_esc=y)
+- [Daisy Chains and Gaffes](https://portwooddigital.com/2025/10/26/daisy-chains-and-gaffes/)

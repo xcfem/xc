@@ -27,6 +27,7 @@ Once the analyst has defined the model, the next step is to define the analysis 
 ### Constraint handling
 - [Handling a Doubt](https://portwooddigital.com/2023/11/09/handling-a-doubt/)
 - [What Is a Good Penalty Number?](https://portwooddigital.com/2023/11/29/what-is-a-good-penalty-number/)
+- [Daisy Chains and Gaffes](https://portwooddigital.com/2025/10/26/daisy-chains-and-gaffes/)
 
 ### Static analysis
 
