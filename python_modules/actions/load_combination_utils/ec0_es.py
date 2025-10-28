@@ -101,7 +101,7 @@ class BridgeCombGenerator(utils.CombGenerator):
         '''
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
-        warningMsg= className+'.'+methodName+'; has been DEPRECATED, specify the nature of the action usinf newSelfWeightAction or newDeadLoadAction or ...'
+        warningMsg= className+'.'+methodName+'; has been DEPRECATED, specify the nature of the action using newSelfWeightAction or newDeadLoadAction or ...'
         lmsg.warning(warningMsg)
         return self.newAction(family= 'permanent',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= 'permanent_set_b', dependsOn= dependsOn, incompatibleActions= incompatibleActions)
         
