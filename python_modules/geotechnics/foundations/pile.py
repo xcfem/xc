@@ -276,7 +276,7 @@ class Pile(object):
             sorted in descending order.'''
         return get_node_ys(nodes= self.pileSet.nodes)
     
-    def getLinearSpringsConstants2D(self, alphaKh_x= 1.0, alphaKh_y= 1.0, alphaKv_z= 1.0):
+    def getLinearSpringsConstants2D(self, alphaKh_x= 1.0, alphaKv_y= 1.0):
         '''Compute the spring contants that simulate the soils along the pile 
            for a 2D problem.
 
