@@ -530,10 +530,11 @@ XC::Matrix XC::SetMeshComp::getInitialStiff(const Node &n)
 
 //! @brief Creates the inertia load that corresponds to the
 //! acceleration argument.
-void XC::SetMeshComp::createInertiaLoads(const Vector &accel)
+boost::python::list XC::SetMeshComp::createInertiaLoads(const Vector &accel)
   {
-    nodes.createInertiaLoads(accel);
-    elements.createInertiaLoads(accel);
+    boost::python::list retval= nodes.createInertiaLoads(accel);
+    retval.extend(elements.createInertiaLoads(accel));
+    return retval;
   }
 
 //! @brief Return the total mass matrix.

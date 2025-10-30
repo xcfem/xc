@@ -212,7 +212,7 @@ class Element: public MeshComponent
  
     // methods for applying loads
     virtual void zeroLoad(void);
-    virtual void createInertiaLoad(const Vector &);
+    virtual ElementalLoad *createInertiaLoad(const Vector &);
     virtual int addLoad(ElementalLoad *, double loadFactor)=0;
     virtual int addInertiaLoadToUnbalance(const Vector &accel)=0;
 

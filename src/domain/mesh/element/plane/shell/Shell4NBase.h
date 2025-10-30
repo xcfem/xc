@@ -114,12 +114,12 @@ class Shell4NBase: public QuadBase4N<SectionFDPhysicalProperties>
     Vector getInterpolatedDisplacements(const Pos3d &) const;
 
     //Load definition methods.
-    const ShellRawLoad *vector3dRawLoadLocal(const std::vector<Vector> &);
-    const ShellRawLoad *vector3dRawLoadGlobal(const std::vector<Vector> &);
-    const ShellUniformLoad *vector3dUniformLoadLocal(const Vector &);
-    const ShellUniformLoad *vector3dUniformLoadGlobal(const Vector &);
-    void strainLoad(const Matrix &);
-    virtual void createInertiaLoad(const Vector &);
+    ElementalLoad *vector3dRawLoadLocal(const std::vector<Vector> &);
+    ElementalLoad *vector3dRawLoadGlobal(const std::vector<Vector> &);
+    ElementalLoad *vector3dUniformLoadLocal(const Vector &);
+    ElementalLoad *vector3dUniformLoadGlobal(const Vector &);
+    ElementalLoad *strainLoad(const Matrix &);
+    virtual ElementalLoad *createInertiaLoad(const Vector &);
 
     // methods for applying loads
     void zeroLoad(void);

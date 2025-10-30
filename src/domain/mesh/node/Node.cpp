@@ -1154,14 +1154,14 @@ const XC::NodalLoad *XC::Node::newLoad(const Vector &v)
 
 //! @brief Creates the inertia load that corresponds to the
 //! acceleration argument.
-void XC::Node::createInertiaLoad(const Vector &accel)
+const XC::NodalLoad *XC::Node::createInertiaLoad(const Vector &accel)
   {
     Vector v= unbalLoad;
     v.Zero();
     const size_t sz= accel.Size();
     for(size_t i= 0;i<sz;i++)
       v[i]-= mass(i,i)*accel(i); //Like Ansys.
-    newLoad(v); //Put the load in the current load pattern.
+    return newLoad(v); //Put the load in the current load pattern.
   }
 
 //! @brief Causes the node to zero out its unbalanced load vector.

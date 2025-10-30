@@ -64,8 +64,9 @@ XC::Element1D::Element1D(int tag, int classTag,int Nd1,int Nd2)
   { theNodes.set_id_nodes(Nd1,Nd2); }
 
 
-void XC::Element1D::vector2dUniformLoadGlobal(const Vector &v)
+XC::ElementalLoad *XC::Element1D::vector2dUniformLoadGlobal(const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     const size_t sz= v.Size();
     if(sz>2)
       std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
@@ -81,7 +82,7 @@ void XC::Element1D::vector2dUniformLoadGlobal(const Vector &v)
 	if(crd_trf)
 	  {
 	    const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
-	    vector2dUniformLoadLocal(vTrf);
+	    retval= vector2dUniformLoadLocal(vTrf);
 	  }
 	else
 	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
@@ -94,10 +95,12 @@ void XC::Element1D::vector2dUniformLoadGlobal(const Vector &v)
                 << "; ERROR a vector of dimension 2"
 	        << " was expected instead of: " << v
 		<< Color::def << std::endl;
+    return retval;
   }
 
-void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
+XC::ElementalLoad *XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     Preprocessor *preprocessor= getPreprocessor();
     MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
     static ID eTags(1);
@@ -112,11 +115,11 @@ void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
 		    << "; WARNING a vector of dimension 2"
 	            << " was expected instead of: " << v
 		    << Color::def << std::endl;
-        Beam2dUniformLoad *tmp= new Beam2dUniformLoad(loadTag,v[1],v[0],eTags);
         LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
         if(lp)
           {
-            lp->addElementalLoad(tmp);
+	    retval= new Beam2dUniformLoad(loadTag,v[1],v[0],eTags);
+            lp->addElementalLoad(retval);
             lPatterns.setCurrentElementLoadTag(loadTag+1);
           }
         else
@@ -129,27 +132,31 @@ void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
                 << "; ERROR a vector of dimension 2"
 	        << " was expected instead of: " << v
 		<< Color::def << std::endl;
+    return retval;
   }
 
-void XC::Element1D::vector2dPartialUniformLoadGlobal(const double &aOverL, const double &bOverL, const Vector &v)
+XC::ElementalLoad *XC::Element1D::vector2dPartialUniformLoadGlobal(const double &aOverL, const double &bOverL, const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     const CrdTransf *crd_trf= getCoordTransf();
     // Some 1D elements like Trusses have no coordinate
     // transformation (and don't accept body loads neither).
     if(crd_trf)
       {
         const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
-        vector2dPartialUniformLoadLocal(aOverL, bOverL, vTrf);
+        retval= vector2dPartialUniformLoadLocal(aOverL, bOverL, vTrf);
       }
     else
       std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING element has no coordinate transformation"
 		<< " load ignored."
 		<< Color::def << std::endl;
+    return retval;
   }
 
-void XC::Element1D::vector2dPartialUniformLoadLocal(const double &aOverL, const double &bOverL, const Vector &v)
+XC::ElementalLoad *XC::Element1D::vector2dPartialUniformLoadLocal(const double &aOverL, const double &bOverL, const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     Preprocessor *preprocessor= getPreprocessor();
     MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
     static ID eTags(1);
@@ -164,11 +171,11 @@ void XC::Element1D::vector2dPartialUniformLoadLocal(const double &aOverL, const 
 		    << "; WARNING a vector of dimension 2"
 	            << " was expected instead of: " << v
 		    << Color::def << std::endl;
-        Beam2dPartialUniformLoad *tmp= new Beam2dPartialUniformLoad(loadTag,v[1],v[0],aOverL,bOverL,eTags);
         LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
         if(lp)
           {
-            lp->addElementalLoad(tmp);
+            retval= new Beam2dPartialUniformLoad(loadTag,v[1],v[0],aOverL,bOverL,eTags);
+            lp->addElementalLoad(retval);
             lPatterns.setCurrentElementLoadTag(loadTag+1);
           }
         else
@@ -181,10 +188,12 @@ void XC::Element1D::vector2dPartialUniformLoadLocal(const double &aOverL, const 
                 << "; ERROR a vector of dimension 2"
 	        << " was expected instead of: " << v
 		<< Color::def << std::endl;
+    return retval;
   }
 
-void XC::Element1D::vector2dPointByRelDistLoadGlobal(const double &x,const Vector &v)
+XC::ElementalLoad *XC::Element1D::vector2dPointByRelDistLoadGlobal(const double &x,const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     const size_t sz= v.Size();
     if(sz>1)
       {
@@ -194,7 +203,7 @@ void XC::Element1D::vector2dPointByRelDistLoadGlobal(const double &x,const Vecto
 	if(crd_trf)
 	  {
 	    const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
-	    vector2dPointByRelDistLoadLocal(x,vTrf);
+	    retval= vector2dPointByRelDistLoadLocal(x,vTrf);
 	  }
 	else
 	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
@@ -207,10 +216,12 @@ void XC::Element1D::vector2dPointByRelDistLoadGlobal(const double &x,const Vecto
                 << "; ERROR a vector of dimension 2"
 	        << " was expected instead of: " << v
 		<< Color::def << std::endl;
+    return retval;
   }
 
-void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector &v)
+XC::ElementalLoad *XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     const size_t sz= v.Size();
     if(sz>1)
       {
@@ -225,11 +236,11 @@ void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector
                     << "; ERROR a vector of dimension 2"
 	            << " was expected instead of: " << v
 		    << Color::def << std::endl;
-        Beam2dPointLoad *tmp= new Beam2dPointLoad(loadTag,v[1],x,eTags,v[0]);
         LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
         if(lp)
           {
-            lp->addElementalLoad(tmp);
+	    retval= new Beam2dPointLoad(loadTag,v[1],x,eTags,v[0]);
+            lp->addElementalLoad(retval);
             lPatterns.setCurrentElementLoadTag(loadTag+1);
           }
         else
@@ -242,14 +253,16 @@ void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector
                 << "; ERROR a vector of dimension 2"
                 << " was expected instead of: " << v
 		<< Color::def << std::endl;
+    return retval;
   }
 
 //! @brief Define an elemental concentrated load at position p with value v
 //! expressed in global coordinates.
 //! @param p: position of the load.
 //! @param v: value of the load vector expressed in global coordinates.
-void XC::Element1D::vector2dPointLoadGlobal(const Vector &p,const Vector &v)
+XC::ElementalLoad *XC::Element1D::vector2dPointLoadGlobal(const Vector &p,const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     const CrdTransf *crd_trf= getCoordTransf();
     // Some 1D elements like Trusses have no coordinate
     // transformation (and don't accept loads neither).
@@ -262,17 +275,19 @@ void XC::Element1D::vector2dPointLoadGlobal(const Vector &p,const Vector &v)
 		    << x << " obtained from point: " << p
 		    << " must be between 0 and 1."
 		    << Color::def << std::endl;
-	vector2dPointByRelDistLoadGlobal(x,v);
+	retval= vector2dPointByRelDistLoadGlobal(x,v);
       }
     else
       std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING element has no coordinate transformation"
 		<< " load ignored."
-		<< Color::def << std::endl;    
+		<< Color::def << std::endl;
+    return retval;
   }
 
-void XC::Element1D::vector2dPointLoadLocal(const Vector &p,const Vector &v)
+XC::ElementalLoad *XC::Element1D::vector2dPointLoadLocal(const Vector &p,const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     const CrdTransf *crd_trf= getCoordTransf();
     // Some 1D elements like Trusses have no coordinate
     // transformation (and don't accept loads neither).
@@ -285,19 +300,21 @@ void XC::Element1D::vector2dPointLoadLocal(const Vector &p,const Vector &v)
 		    << x << " obtained from point: " << p
 		    << " must be between 0 and 1."
 		    << Color::def << std::endl;
-	vector2dPointByRelDistLoadLocal(x,v);
+	retval= vector2dPointByRelDistLoadLocal(x,v);
       }
     else
       std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING element has no coordinate transformation"
 		<< " load ignored."
-		<< Color::def << std::endl;    
+		<< Color::def << std::endl;
+    return retval;
   }
 
 //! @bried Defines a uniform load on the vector from a
 //! vector in global coordinates.
-void XC::Element1D::vector3dUniformLoadGlobal(const Vector &v)
+XC::ElementalLoad *XC::Element1D::vector3dUniformLoadGlobal(const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     const size_t sz= v.Size();
     if(sz>3)
       std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
@@ -313,7 +330,7 @@ void XC::Element1D::vector3dUniformLoadGlobal(const Vector &v)
 	if(crd_trf)
 	  {
             const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
-            vector3dUniformLoadLocal(vTrf);
+            retval= vector3dUniformLoadLocal(vTrf);
 	  }
 	else
 	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
@@ -326,10 +343,12 @@ void XC::Element1D::vector3dUniformLoadGlobal(const Vector &v)
                 << "; ERROR a vector of dimension 3"
 	        << " was expected instead of: " << v
 		<< Color::def << std::endl;
+    return retval;
   }
 
-void XC::Element1D::vector3dUniformLoadLocal(const Vector &v)
+XC::ElementalLoad *XC::Element1D::vector3dUniformLoadLocal(const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     const size_t sz= v.Size();
     if(sz>2)
       {
@@ -342,8 +361,8 @@ void XC::Element1D::vector3dUniformLoadLocal(const Vector &v)
         LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
         if(lp)
           {
-            Beam3dUniformLoad *tmp= new Beam3dUniformLoad(loadTag,v,0.0,eTags);
-            lp->addElementalLoad(tmp);
+            retval= new Beam3dUniformLoad(loadTag,v,0.0,eTags);
+            lp->addElementalLoad(retval);
             lPatterns.setCurrentElementLoadTag(loadTag+1);
           }
         else
@@ -356,10 +375,12 @@ void XC::Element1D::vector3dUniformLoadLocal(const Vector &v)
                 << "; ERROR a vector of dimension 3"
 	        << " was expected instead of: " << v
 		<< Color::def << std::endl;
+    return retval;
   }
 
-void XC::Element1D::vector3dPointByRelDistLoadGlobal(const double &x,const Vector &v)
+XC::ElementalLoad *XC::Element1D::vector3dPointByRelDistLoadGlobal(const double &x,const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     const size_t sz= v.Size();
     if(sz>2)
       {
@@ -369,7 +390,7 @@ void XC::Element1D::vector3dPointByRelDistLoadGlobal(const double &x,const Vecto
 	if(crd_trf)
 	  {
             const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
-            vector3dPointByRelDistLoadLocal(x,vTrf);
+            retval= vector3dPointByRelDistLoadLocal(x,vTrf);
 	  }
 	else
 	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
@@ -382,10 +403,12 @@ void XC::Element1D::vector3dPointByRelDistLoadGlobal(const double &x,const Vecto
                 << "; ERROR a vector of dimension 3"
 	        << " was expected instead of: " << v
 		<< Color::def << std::endl;
+    return retval;
   }
 
-void XC::Element1D::vector3dPointByRelDistLoadLocal(const double &x,const Vector &v)
+XC::ElementalLoad *XC::Element1D::vector3dPointByRelDistLoadLocal(const double &x,const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     const size_t sz= v.Size();
     if(sz>2)
       {
@@ -395,11 +418,11 @@ void XC::Element1D::vector3dPointByRelDistLoadLocal(const double &x,const Vector
         eTags[0]= getTag(); //Load for this element.
         const int &loadTag= lPatterns.getCurrentElementLoadTag(); //Load identifier.
 
-        Beam3dPointLoad *tmp= new Beam3dPointLoad(loadTag,v[1],v[2],x,eTags,v[0]);
         LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
         if(lp)
           {
-            lp->addElementalLoad(tmp);
+	    retval= new Beam3dPointLoad(loadTag,v[1],v[2],x,eTags,v[0]);
+            lp->addElementalLoad(retval);
             lPatterns.setCurrentElementLoadTag(loadTag+1);
           }
         else
@@ -413,10 +436,12 @@ void XC::Element1D::vector3dPointByRelDistLoadLocal(const double &x,const Vector
                 << "; ERROR a vector of dimension 3"
 	        << " was expected instead of: " << v
 		<< Color::def << std::endl;
+    return retval;
   }
 
-void XC::Element1D::vector3dPointLoadGlobal(const Vector &p,const Vector &v)
+XC::ElementalLoad *XC::Element1D::vector3dPointLoadGlobal(const Vector &p,const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     const CrdTransf *crd_trf= getCoordTransf();
     // Some 1D elements like Trusses have no coordinate
     // transformation (and don't accept loads neither).
@@ -429,17 +454,19 @@ void XC::Element1D::vector3dPointLoadGlobal(const Vector &p,const Vector &v)
 		    << x << " obtained from point: " << p
 		    << " must be between 0 and 1."
 		    << Color::def << std::endl;
-	vector3dPointByRelDistLoadGlobal(x,v);
+	retval= vector3dPointByRelDistLoadGlobal(x,v);
       }
     else
       std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING element has no coordinate transformation"
 		<< " load ignored."
 		<< Color::def << std::endl;
+    return retval;
   }
 
-void XC::Element1D::vector3dPointLoadLocal(const Vector &p,const Vector &v)
+XC::ElementalLoad *XC::Element1D::vector3dPointLoadLocal(const Vector &p,const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     const CrdTransf *crd_trf= getCoordTransf();
     // Some 1D elements like Trusses have no coordinate
     // transformation (and don't accept loads neither).
@@ -452,36 +479,40 @@ void XC::Element1D::vector3dPointLoadLocal(const Vector &p,const Vector &v)
 		    << x << " obtained from point: " << p
 		    << " must be between 0 and 1."
 		    << Color::def << std::endl;
-	vector3dPointByRelDistLoadLocal(x,v);
+	retval= vector3dPointByRelDistLoadLocal(x,v);
       }
     else
       std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING element has no coordinate transformation"
 		<< " load ignored."
 		<< Color::def << std::endl;
+    return retval;
   }
 
-void XC::Element1D::strainLoad(const DeformationPlane &p1,const DeformationPlane &p2)
+XC::ElementalLoad *XC::Element1D::strainLoad(const DeformationPlane &p1,const DeformationPlane &p2)
   {
+    ElementalLoad *retval= nullptr;
     Preprocessor *preprocessor= getPreprocessor();
     MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
     static ID eTags(1);
     eTags[0]= getTag(); //Load for this element.
     const int &loadTag= lPatterns.getCurrentElementLoadTag(); //Load identifier.
 
-    BeamStrainLoad *tmp= new BeamStrainLoad(loadTag,eTags);
-    tmp->setDeformationPlane1(p1);
-    tmp->setDeformationPlane2(p2);
     LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
     if(lp)
       {
+	BeamStrainLoad *tmp= new BeamStrainLoad(loadTag,eTags);
+	tmp->setDeformationPlane1(p1);
+	tmp->setDeformationPlane2(p2);
         lp->addElementalLoad(tmp);
+	retval= tmp;
         lPatterns.setCurrentElementLoadTag(loadTag+1);
       }
     else
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; there is no current load pattern. Load ignored."
-                << Color::def << std::endl; 
+                << Color::def << std::endl;
+    return retval;
   }
 
 //! @brief Return the element dimension (0, 1, 2 or 3).

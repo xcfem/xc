@@ -90,7 +90,7 @@ class SetBase: public EntMdlrBase
 
     virtual size_t getNumberOfNodes(void) const= 0;
     virtual size_t getNumberOfElements(void) const= 0;    
-    virtual void createInertiaLoads(const Vector &);
+    virtual boost::python::list createInertiaLoads(const Vector &);
     
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);

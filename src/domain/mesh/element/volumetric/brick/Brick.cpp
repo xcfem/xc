@@ -578,8 +578,9 @@ void XC::Brick::formInertiaTerms( int tangFlag ) const
 //! acceleration argument.
 //!
 //! @param accel: acceleration vector.
-void XC::Brick::createInertiaLoad(const Vector &accel)
+XC::ElementalLoad *XC::Brick::createInertiaLoad(const Vector &accel)
   {
+    ElementalLoad *retval= nullptr;
     const bool haveRho= physicalProperties.haveRho();
     if(haveRho)
        {
@@ -611,8 +612,9 @@ void XC::Brick::createInertiaLoad(const Vector &accel)
 	       }
 	     nLoads[i]= nLoad;
 	   }
-        vector3dRawLoadGlobal(nLoads);
+        retval= vector3dRawLoadGlobal(nLoads);
       }
+    return retval;
   }
 
 //! @brief Form residual and tangent

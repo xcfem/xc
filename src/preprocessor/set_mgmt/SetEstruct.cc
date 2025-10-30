@@ -30,7 +30,10 @@
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "domain/mesh/node/Node.h"
+#include "domain/load/NodalLoad.h"
 #include "domain/mesh/element/Element.h"
+#include "domain/load/ElementalLoad.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 //! @brief Constructor.
@@ -258,10 +261,11 @@ boost::python::list XC::SetEstruct::getElementsPy(void)
     return retval;
   }
 
-//! @brief Creates the inertia load that corresponds to the
+//! @brief Creates the inertia loads that corresponds to the
 //! acceleration argument.
-void XC::SetEstruct::createInertiaLoads(const Vector &accel)
+boost::python::list XC::SetEstruct::createInertiaLoads(const Vector &accel)
   {
+    boost::python::list retval;
     size_t numberOfLayers= getNumNodeLayers();
     if(numberOfLayers>0)
       {
@@ -270,7 +274,24 @@ void XC::SetEstruct::createInertiaLoads(const Vector &accel)
         for(size_t i= 1;i<=numberOfLayers;i++)
           for(size_t j= 1;j<=numberOfRows;j++)
             for(size_t k= 1;k<=numberOfColumns;k++)
-              getNode(i,j,k)->createInertiaLoad(accel);
+	      {
+		Node *nodePtr= getNode(i,j,k);
+		const NodalLoad *loadPtr= nodePtr->createInertiaLoad(accel);
+		if(loadPtr)
+		  {
+		    boost::python::object pyObj(boost::ref(*loadPtr));
+		    retval.append(pyObj);
+		  }
+		else
+		  {
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			      << "; null pointer returned by createInertiaLoad"
+			      << " for node: " << nodePtr->getTag()
+			      << " of type: " << nodePtr->getClassName()
+			      << Color::def << std::endl;
+		  }
+		
+	      }
       }
     numberOfLayers= getNumElementLayers();
     if(numberOfLayers>0)
@@ -280,8 +301,25 @@ void XC::SetEstruct::createInertiaLoads(const Vector &accel)
         for(size_t i= 1;i<=numberOfLayers;i++)
           for(size_t j= 1;j<=numberOfRows;j++)
             for(size_t k= 1;k<=numberOfColumns;k++)
-              getElement(i,j,k)->createInertiaLoad(accel);
+	      {
+		Element *elemPtr= getElement(i,j,k);
+		ElementalLoad *loadPtr= elemPtr->createInertiaLoad(accel);
+		if(loadPtr)
+		  {
+		    boost::python::object pyObj(boost::ref(*loadPtr));
+		    retval.append(pyObj);
+		  }
+		else
+		  {
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			      << "; null pointer returned by createInertiaLoad"
+			      << " for element: " << elemPtr->getTag()
+			      << " of type: " << elemPtr->getClassName()
+			      << Color::def << std::endl;
+		  }		
+	      }
       }
+    return retval;
   }
 
 //! @brief Returns true if the node belongs to the set.
@@ -340,8 +378,9 @@ XC::Node *XC::SetEstruct::getNodeI(const size_t &i)
       return getNode(1,1,i);
     else
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; node set is not one-dimensional." << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; node set is not one-dimensional."
+		  << Color::def << std::endl;
         return nullptr;
       }
   }
@@ -357,8 +396,9 @@ XC::Node *XC::SetEstruct::getNodeIJ(const size_t &i,const size_t &j)
       return getNode(i,j,1);
     else
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; the node set is not bidimensional." << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; the node set is not bidimensional."
+		  << Color::def << std::endl;
         return nullptr;
       } 
   }

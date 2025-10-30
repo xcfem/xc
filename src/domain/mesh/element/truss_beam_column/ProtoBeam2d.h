@@ -102,7 +102,7 @@ class ProtoBeam2d: public BeamColumn
 
     void alive(void);
     void zeroLoad(void);
-    virtual void createInertiaLoad(const Vector &);
+    virtual ElementalLoad *createInertiaLoad(const Vector &);
 
     Vector getVDirStrongAxisLocalCoord(void) const;
     Vector getVDirWeakAxisLocalCoord(void) const;

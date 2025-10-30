@@ -580,8 +580,9 @@ void XC::FourNodeQuad::formInertiaTerms(int tangFlag) const
 //! acceleration argument.
 //!
 //! @param accel: acceleration vector.
-void XC::FourNodeQuad::createInertiaLoad(const Vector &accel)
+XC::ElementalLoad *XC::FourNodeQuad::createInertiaLoad(const Vector &accel)
   {
+    ElementalLoad *retval= nullptr;
     const bool haveRho= physicalProperties.haveRho();
     if(haveRho)
       {
@@ -610,8 +611,9 @@ void XC::FourNodeQuad::createInertiaLoad(const Vector &accel)
 	       }
 	    nLoads[i]= nLoad;
 	  }
-        vector2dRawLoadGlobal(nLoads);
+        retval= vector2dRawLoadGlobal(nLoads);
       }
+    return retval;
   }
 
 //! @brief Send object members through the communicator argument.

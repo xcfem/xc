@@ -176,7 +176,7 @@ XC::Shell4NBase::~Shell4NBase(void)
 //! in local coordinates.
 //!
 //! @param nLoads: loads on each element node.
-const XC::ShellRawLoad *XC::Shell4NBase::vector3dRawLoadLocal(const std::vector<Vector> &nLoads)
+XC::ElementalLoad *XC::Shell4NBase::vector3dRawLoadLocal(const std::vector<Vector> &nLoads)
   {
     ShellRawLoad *retval= nullptr;
     Preprocessor *preprocessor= getPreprocessor();
@@ -221,9 +221,9 @@ const XC::ShellRawLoad *XC::Shell4NBase::vector3dRawLoadLocal(const std::vector<
 //! in global coordinates.
 //!
 //! @param nLoads: loads on each element node.
-const XC::ShellRawLoad *XC::Shell4NBase::vector3dRawLoadGlobal(const std::vector<Vector> &nLoads)
+XC::ElementalLoad *XC::Shell4NBase::vector3dRawLoadGlobal(const std::vector<Vector> &nLoads)
   {
-    const ShellRawLoad *retval= nullptr;
+    ElementalLoad *retval= nullptr;
     const size_t sz= nLoads.size();
     const size_t nn= getNumExternalNodes();
     if(sz==nn)
@@ -250,7 +250,7 @@ const XC::ShellRawLoad *XC::Shell4NBase::vector3dRawLoadGlobal(const std::vector
 //! @brief Defines a load over the element from a vector in local coordinates.
 //!
 //! @param v: vector that defines the load values.
-const XC::ShellUniformLoad *XC::Shell4NBase::vector3dUniformLoadLocal(const Vector &v)
+XC::ElementalLoad *XC::Shell4NBase::vector3dUniformLoadLocal(const Vector &v)
   {
     ShellUniformLoad *retval= nullptr;
     Preprocessor *preprocessor= getPreprocessor();
@@ -292,9 +292,9 @@ const XC::ShellUniformLoad *XC::Shell4NBase::vector3dUniformLoadLocal(const Vect
 //! @brief Defines a load over the element from a vector in global coordinates. 
 //!
 //! @param v: vector that defines the load values.
-const XC::ShellUniformLoad *XC::Shell4NBase::vector3dUniformLoadGlobal(const Vector &v)
+XC::ElementalLoad *XC::Shell4NBase::vector3dUniformLoadGlobal(const Vector &v)
   {
-    const ShellUniformLoad *retval= nullptr;
+    ElementalLoad *retval= nullptr;
     const size_t sz= v.Size();
     if(sz>2)
       {
@@ -311,8 +311,9 @@ const XC::ShellUniformLoad *XC::Shell4NBase::vector3dUniformLoadGlobal(const Vec
 
 //! @brief Defines a strain load on this element.
 //! 
-void XC::Shell4NBase::strainLoad(const Matrix &strains)
+XC::ElementalLoad *XC::Shell4NBase::strainLoad(const Matrix &strains)
   {
+    ElementalLoad *retval= nullptr;
     Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
@@ -324,11 +325,12 @@ void XC::Shell4NBase::strainLoad(const Matrix &strains)
         if(lp)
           {
             ShellStrainLoad *tmp= new ShellStrainLoad(loadTag,eTags);
-            tmp->setStrains(strains);
             if(tmp)
               {
+		tmp->setStrains(strains);
                 tmp->set_owner(this);
                 lp->addElementalLoad(tmp);
+		retval= tmp;
               }
             else
               std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -345,6 +347,7 @@ void XC::Shell4NBase::strainLoad(const Matrix &strains)
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; mdeler not defined."
 		<< Color::def << std::endl;
+    return retval;
   }
 
 
@@ -449,8 +452,9 @@ int XC::Shell4NBase::addLoad(ElementalLoad *theLoad, double loadFactor)
 //! acceleration argument.
 //!
 //! @param accel: acceleration vector.
-void XC::Shell4NBase::createInertiaLoad(const Vector &accel)
+XC::ElementalLoad *XC::Shell4NBase::createInertiaLoad(const Vector &accel)
   {
+    ElementalLoad *retval= nullptr;
     const bool haveRho= this->physicalProperties.haveRho();
     if(haveRho)
       {
@@ -485,8 +489,9 @@ void XC::Shell4NBase::createInertiaLoad(const Vector &accel)
 	       }
 	    nLoads[i]= nLoad;
 	  }
-        vector3dRawLoadGlobal(nLoads);
+        retval= vector3dRawLoadGlobal(nLoads);
       }
+    return retval;
   }
 
 //! @brief get residual

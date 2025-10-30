@@ -36,7 +36,6 @@
 namespace XC {
 class NDMaterial;
 class ParticlePos3d;
-class BrickRawLoad;
   
 //              hexahedron
 //
@@ -91,8 +90,8 @@ class BrickBase: public ElemWithMaterial<8,NDMaterialPhysicalProperties>
     BoolArray3d getNodePattern(void) const;
     int getVtkCellType(void) const;
 
-    const BrickRawLoad *vector3dRawLoadLocal(const std::vector<Vector> &);
-    const BrickRawLoad *vector3dRawLoadGlobal(const std::vector<Vector> &);
+    ElementalLoad *vector3dRawLoadLocal(const std::vector<Vector> &);
+    ElementalLoad *vector3dRawLoadGlobal(const std::vector<Vector> &);
     void zeroLoad(void);	
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     

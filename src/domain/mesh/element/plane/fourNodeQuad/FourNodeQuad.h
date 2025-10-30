@@ -131,7 +131,7 @@ class FourNodeQuad: public SolidMech4N
 
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;            
-    virtual void createInertiaLoad(const Vector &);
+    virtual ElementalLoad *createInertiaLoad(const Vector &);
 
     Pos2d getCartesianCoordinates(const ParticlePos2d &, bool initialGeometry= true) const;
     

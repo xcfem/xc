@@ -27,6 +27,7 @@
 
 #include "DqPtrsNode.h"
 #include "domain/mesh/node/Node.h"
+#include "domain/load/NodalLoad.h"
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "utility/functions/algebra/ExprAlgebra.h"
 #include "utility/geom/pos_vec/Pos3d.h"
@@ -35,6 +36,7 @@
 #include "utility/geom/d2/Plane.h"
 #include "utility/geom/lists/utils_list_pos3d.h"
 #include "utility/geom/coo_sys/ref_sys/PrincipalAxes3D.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 XC::DqPtrsNode::DqPtrsNode(CommandEntity *owr)
@@ -167,12 +169,29 @@ void XC::DqPtrsNode::numerate(void)
       }
   }
 
-//! @brief Creates the inertia load that corresponds to the
-//! acceleration argument.
-void  XC::DqPtrsNode::createInertiaLoads(const Vector &accel)
+//! @brief Creates the inertia load that correspond to the acceleration
+//! argument.
+boost::python::list XC::DqPtrsNode::createInertiaLoads(const Vector &accel)
   {
+    boost::python::list retval;
     for(iterator i= begin();i!=end();i++)
-      (*i)->createInertiaLoad(accel);
+      {
+        const NodalLoad *loadPtr= (*i)->createInertiaLoad(accel);
+	if(loadPtr)
+	  {
+	    boost::python::object pyObj(boost::ref(*loadPtr));
+	    retval.append(pyObj);
+	  }
+	else
+	  {
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	              << "; null pointer returned by createInertiaLoad"
+	              << " for node: " << (*i)->getTag()
+	              << " of type: " << (*i)->getClassName()
+	              << Color::def << std::endl;
+	  }
+      }
+    return retval;
   }
 
 //! @brief Return the total mass matrix.
@@ -376,9 +395,10 @@ Plane XC::DqPtrsNode::getRegressionPlane(const double &factor= 1.0) const
         retval= Plane(lp);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; at least 3 nodes are needed. This set contains: "
-	        << sz << " nodes." << std::endl;
+	        << sz << " nodes."
+		<< Color::def << std::endl;
     return retval;
   }
 

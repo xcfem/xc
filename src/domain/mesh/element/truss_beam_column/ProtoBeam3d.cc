@@ -348,10 +348,10 @@ int XC::ProtoBeam3d::revertToStart()
 
 //! @brief Creates the inertia load that corresponds to the
 //! acceleration argument.
-void XC::ProtoBeam3d::createInertiaLoad(const Vector &accel)
+XC::ElementalLoad *XC::ProtoBeam3d::createInertiaLoad(const Vector &accel)
   {
     const Vector load= -accel*getLinearRho();
-    vector3dUniformLoadGlobal(load);
+    return vector3dUniformLoadGlobal(load);
   }
 
 //! @brief Reactivates the element.

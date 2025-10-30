@@ -330,10 +330,10 @@ void XC::ProtoBeam2d::zeroLoad(void)
 
 //! @brief Creates the inertia load that corresponds to the
 //! acceleration argument.
-void XC::ProtoBeam2d::createInertiaLoad(const Vector &accel)
+XC::ElementalLoad *XC::ProtoBeam2d::createInertiaLoad(const Vector &accel)
   {
     const Vector load= -accel*getLinearRho();
-    this->vector2dUniformLoadGlobal(load);
+    return this->vector2dUniformLoadGlobal(load);
   }
 
 //! @brief Return a python list with the values of the argument property

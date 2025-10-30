@@ -77,7 +77,7 @@ class ProtoTruss: public Element1D
     virtual double getRho(void) const= 0;
     virtual double getLinearRho(void) const;
 
-    virtual void createInertiaLoad(const Vector &);
+    virtual ElementalLoad *createInertiaLoad(const Vector &);
     
     virtual double getAxialForce(void) const= 0;
     virtual double getInitialStrain(void) const;

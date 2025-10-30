@@ -160,7 +160,7 @@ double XC::ProtoTruss::getLinearRho(void) const
 
 //! @brief Creates the inertia load that corresponds to the
 //! acceleration argument.
-void XC::ProtoTruss::createInertiaLoad(const Vector &accel)
+XC::ElementalLoad *XC::ProtoTruss::createInertiaLoad(const Vector &accel)
   {
     const int accelSize= accel.Size();
     const double Lo= getLength(true); // element length
@@ -179,6 +179,7 @@ void XC::ProtoTruss::createInertiaLoad(const Vector &accel)
       nLoad[i]= load[i];
     theNodes[0]->newLoad(nLoad);
     theNodes[1]->newLoad(nLoad);
+    return nullptr; // It is NOT a real elemental load.
   }
 
 //! @brief Return the element initial strain.
