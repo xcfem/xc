@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Trivial test for removing and existing load pattern.'''
+''' Trivial test for removing an existing load pattern.'''
 
 from __future__ import print_function
 

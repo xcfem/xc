@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Trivial test for removing and existing load pattern.'''
+''' Trivial test for removing an existing nodal load.'''
 
 from __future__ import print_function
 
