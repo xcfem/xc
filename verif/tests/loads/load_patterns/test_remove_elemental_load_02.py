@@ -31,77 +31,80 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 n1= modelSpace.newNode(0,0)
-n2= modelSpace.newNode(l,0)
+n2= modelSpace.newNode(l/2.0,0)
+n3= modelSpace.newNode(l,0)
 
 # Materials definition
-rho= 10.0
+rho= 7850.0
 lin= modelSpace.newLinearCrdTransf("lin")
 # Materials
 sectionProperties= xc.CrossSectionProperties2d()
 sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G
 sectionProperties.I= Iz;
 sectionProperties.rho= rho # Material density
-refLinearRho= rho*A # linear density
-ratio0= abs(sectionProperties.linearRho-refLinearRho)/refLinearRho
 section= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "section",sectionProperties)
 
 # Element definition.
 modelSpace.setDefaultCoordTransf(lin)
 modelSpace.setDefaultMaterial(section)
-beam= modelSpace.newElement("ElasticBeam2d", [n1.tag,n2.tag])
+elemA= modelSpace.newElement("ElasticBeam2d", [n1.tag,n2.tag])
+elemB= modelSpace.newElement("ElasticBeam2d", [n2.tag,n3.tag])
 
-## Element mass data.
-beamMassZ= beam.getTotalMassComponent(1)
-beamMassRefZ= refLinearRho*l
-ratio1= abs(beamMassZ-beamMassRefZ)/beamMassRefZ
-
-
-# Zero movement for node 1.
-modelSpace.fixNode('000', n1.tag)
-# Zero movement for node 2.
-modelSpace.fixNode('000', n2.tag)
+# Constraints.
+modelSpace.fixNode('00F', n1.tag)
+modelSpace.fixNode('00F', n3.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 modelSpace.setCurrentLoadPattern(lp0.name)
 accel= xc.Vector([0,gravity])
-beam.createInertiaLoad(accel)
+inertiaLoadA= elemA.createInertiaLoad(accel)
+inertiaLoadB= elemB.createInertiaLoad(accel)
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
-# Solution
+# Solve.
 result= modelSpace.analyze(calculateNodalReactions= True)
+if(result!=0):
+    lmsg.error("Can't solve.")
+    exit(1)
 
-R= n2.getReaction[1]
-R_ref= 0.5*beamMassRefZ*gravity
-ratio2= abs(R-R_ref)/(-R_ref)
+# Check results.
+R0= n1.getReaction[1]+n3.getReaction[1]
+beamMassRefZ= rho*A*l
+R_ref= beamMassRefZ*gravity
+ratio0= abs(R0-R_ref)/(-R_ref)
 
-xcTotalSet= modelSpace.getTotalSet()
-totalMassZ= xcTotalSet.getTotalMassComponent(1)
-totalWeightZ= totalMassZ*gravity
-ratio3= abs(R-0.5*totalWeightZ)/R_ref
+# Remove inertia loads.
+inertiaLoadATag= inertiaLoadA.tag # Get the identifier of interest.
+inertiaLoadA= None # Avoid calling an object that will not exist anymore.
+lp0.removeElementalLoad(inertiaLoadATag)
+inertiaLoadBTag= inertiaLoadB.tag # Get the identifier of interest.
+inertiaLoadB= None # Avoid calling an object that will not exist anymore.
+lp0.removeElementalLoad(inertiaLoadBTag)
 
+# Solve again.
+result= modelSpace.analyze(calculateNodalReactions= True)
+if(result!=0):
+    lmsg.error("Can't solve.")
+    exit(1)
+
+# Check results.
+R1= n1.getReaction[1]+n3.getReaction[1]
+ratio1= abs(R1)
 
 '''
-print('sectionProperties.rho= ', sectionProperties.rho)
-print('sectionProperties.linearRho= ', sectionProperties.linearRho)
-print('ratio0= ', ratio0)
-print('beam mass: ', beamMassZ, 'kg')
-print('reference beam mass: ', beamMassRefZ, 'kg')
-print('ratio1= ', ratio1)
-print('R= ', R)
-print('R_ref= ', R_ref)
-print('ratio2= ', ratio2)
-print("totalMassZ= ", totalMassZ)
-print("totalWeightZ= ", totalWeightZ)
-print('ratio3= ', ratio3)
+print('R0= ', R0/1e3)
+print('R_ref= ', R_ref/1e3)
+print(ratio0)
+print('R1= ', R1/1e3)
+print(ratio1)
 '''
-
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio0)<1e-12 and abs(ratio1)<1e-12 and abs(ratio2)<1e-12 and abs(ratio3)<1e-12 :
+if abs(ratio0)<1e-10 and abs(ratio1)<1e-10:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

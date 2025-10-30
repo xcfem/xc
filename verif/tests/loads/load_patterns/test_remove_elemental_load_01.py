@@ -71,6 +71,7 @@ R0= 0.0
 for n in [n1, n2, n3]:
     R0+= n.getReaction[1]
 
+# Remove elemental loads.
 eLBTag= eLB.tag # Get the identifier of interest.
 eLB= None # Avoid calling an object that will not exist anymore.
 testLP.removeElementalLoad(eLBTag)

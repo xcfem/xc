@@ -1018,7 +1018,9 @@ python tests/constraints/test_release_beam_node_01.py
 echo "$BLEU" "Loads tests." "$NORMAL"
 echo "$BLEU" "  Load patterns tests." "$NORMAL"
 python tests/loads/load_patterns/test_remove_load_pattern.py
-python tests/loads/load_patterns/test_remove_nodal_load.py
+python tests/loads/load_patterns/test_remove_nodal_load_01.py
+python tests/loads/load_patterns/test_remove_elemental_load_01.py
+python tests/loads/load_patterns/test_remove_elemental_load_02.py
 python tests/loads/load_patterns/load_case_test_01.py
 python tests/loads/load_patterns/load_case_manager_test_01.py
 python tests/loads/load_patterns/load_case_manager_test_02.py
