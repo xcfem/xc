@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Check inertia loads on ElasticBeam2d elements.'''
+''' Check removal of inertia loads on ElasticBeam2d elements.'''
 
 from __future__ import division
 from __future__ import print_function
