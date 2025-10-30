@@ -599,19 +599,23 @@ XC::ElementalLoad *XC::FourNodeQuad::createInertiaLoad(const Vector &accel)
 	formInertiaTerms(tangFlag);
 	Vector force(8);
 	force.addMatrixVector(1.0, mass, nodeAccel, -1.0);//= -mass*nodeAccel;
-	// Extract nodal loads.
-	std::vector<Vector> nLoads(4);
-	for(int i=0;i<4;i++)
+	const double norm= force.Norm2();
+	if(norm>0.0)
 	  {
-	    Vector nLoad(2);
-	    for(int j= 0; j<2;j++)
-	       {
- 	         const int k= 2*i+j;
-	         nLoad(j)+= force(k);
-	       }
-	    nLoads[i]= nLoad;
+	    // Extract nodal loads.
+	    std::vector<Vector> nLoads(4);
+	    for(int i=0;i<4;i++)
+	      {
+		Vector nLoad(2);
+		for(int j= 0; j<2;j++)
+		   {
+		     const int k= 2*i+j;
+		     nLoad(j)+= force(k);
+		   }
+		nLoads[i]= nLoad;
+	      }
+	    retval= vector2dRawLoadGlobal(nLoads);
 	  }
-        retval= vector2dRawLoadGlobal(nLoads);
       }
     return retval;
   }

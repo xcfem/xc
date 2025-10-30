@@ -186,14 +186,6 @@ boost::python::list XC::DqPtrsElem::createInertiaLoads(const Vector &accel)
 	    boost::python::object pyObj(boost::ref(*loadPtr));
 	    retval.append(pyObj);
 	  }
-	else
-          {
-            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-	              << "; null pointer returned by createInertiaLoad"
-	              << " for element: " << (*i)->getTag()
-	              << " of type: " << (*i)->getClassName()
-	              << Color::def << std::endl;
-          }
       }
     return retval;
   }

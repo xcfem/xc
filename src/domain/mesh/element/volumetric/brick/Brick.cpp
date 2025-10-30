@@ -600,19 +600,24 @@ XC::ElementalLoad *XC::Brick::createInertiaLoad(const Vector &accel)
 	 formInertiaTerms(tangFlag);
 	 Vector force(dim);
 	 force.addMatrixVector(1.0, mass, nodeAccel, -1.0);//= -mass*nodeAccel;
-	 // Extract nodal loads.
-	 std::vector<Vector> nLoads(nNodes);
-	 for(int i=0;i<nNodes;i++)
+	 const double norm= force.Norm2();
+	 if(norm>0.0)
 	   {
-	     Vector nLoad(nGDL);
-	     for(int j= 0; j<nGDL;j++)
+	     // Extract nodal loads.
+	     std::vector<Vector> nLoads(nNodes);
+	     for(int i=0;i<nNodes;i++)
 	       {
-	         const int k= nGDL*i+j;
-	         nLoad(j)+= force(k);
+		 Vector nLoad(nGDL);
+		 for(int j= 0; j<nGDL;j++)
+		   {
+		     const int k= nGDL*i+j;
+		     nLoad(j)+= force(k);
+		   }
+		 nLoads[i]= nLoad;
 	       }
-	     nLoads[i]= nLoad;
+
+	     retval= vector3dRawLoadGlobal(nLoads);
 	   }
-        retval= vector3dRawLoadGlobal(nLoads);
       }
     return retval;
   }
