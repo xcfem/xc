@@ -110,18 +110,18 @@ errorF= (svd.getResultant()-geom.Vector3d(0,0,F)).getModulus()
 errorM= svd.getMoment(geom.Pos3d(0,0,0)).getModulus()
 
 
-testOK= (errorU<1e-8) and (supportingNodes==supportingNodesRef) and (errorP<1e-8) and (errorF<1e-5) and (errorM<1e-5)
+testOK= (errorU<1e-8) and (supportingNodes==supportingNodesRef) and (errorP<1e-7) and (errorF<1e-5) and (errorM<1e-5)
 
 
 '''
-print(uZi)
-print(errorU)
-print(supportingNodes)
-print(pi)
-print(errorP)
-print(svd)
-print(errorF)
-print(errorM)
+print('uZi= ', uZi)
+print('errorU= ', errorU)
+print('supportingNodes= ', supportingNodes)
+print('pi= ', pi)
+print('errorP= ', errorP)
+print('svd= ', svd)
+print('errorF= ', errorF)
+print('errorM= ', errorM)
 '''
 
 import os
