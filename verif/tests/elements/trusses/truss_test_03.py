@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
+''' Test from Ansys manual.
 
-# Test from Ansys manual
-# Reference:  Strength of Material, Part I, Elementary Theory and Problems, pg. 10, problem 2
+Reference:  Strength of Material, Part I, Elementary Theory and Problems, pg. 10, problem 2
+'''
+
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
