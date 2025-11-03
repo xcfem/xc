@@ -19,7 +19,7 @@ test_values= [438e3, 638e3, 808e3, 997e3, 219e3, 499e3, 722e3, 912e3, 1131e3, 15
 
 err= 0.0
 for tv, bar in zip(test_values, [eta_05_0123.bar_26E, eta_05_0123.bar_32E, eta_05_0123.bar_36E, eta_05_0123.bar_40E, eta_05_0123.bar_18WR, eta_05_0123.bar_26WR, eta_05_0123.bar_32WR, eta_05_0123.bar_36WR, eta_05_0123.bar_40WR, eta_05_0123.bar_47WR, eta_05_0123.bar_32WS, eta_05_0123.bar_36WS]):
-    err+= (tv-bar.getMaxOverstressingForce)
+    err+= (tv-bar.getMaxOverstressingForce())
 err= math.sqrt(err)
 
 # print(err)
