@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
-'''SeriesMaterial trivial test.''' 
+'''Initial strain uniaxial material trivial test.''' 
 
 from __future__ import print_function
-
-import numpy as np
-import xc
-from model import predefined_spaces
-from materials import typical_materials
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2022, LCPT"
@@ -14,11 +9,16 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import numpy as np
+import xc
+from model import predefined_spaces
+from materials import typical_materials
+
 # Model definition
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 mat1= typical_materials.defElasticMaterial(preprocessor, "mat1", E= 1e3)
-mat2= typical_materials.defInitStrainMaterial(preprocessor, "mat2", mat1.name)
+mat2= typical_materials.def_init_strain_material(preprocessor, "mat2", mat1.name)
 
 initStrain= .01
 mat2.initialStrain= initStrain

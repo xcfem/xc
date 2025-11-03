@@ -36,6 +36,23 @@ class Bar(object):
         self.maxPrestressingForce= maxPrestressingForce
         self.maxOverstressingForce= maxOverstressingForce
 
+    @property
+    def elasticModulus(self):
+        ''' Returnn the elastic modulus of the bar steel.'''
+        return 205e9
+
+    def getPrestressedMaterial(self, prestressingLoad, materialToEncapsulate= None):
+        ''' Create a prestressed material for the bar.
+
+        :param prestressingLoad: prestressing force.
+        :param materialToEncapsulate: material model to prestress (if None an
+                                      elastic material is used).
+        '''
+        if(materialToEncapsulate is None):
+            materialToEncapsulate= typical_materials.defElasticMaterial(E= self.elasticModulus)
+        newMaterialName= materialToEncapsulate.name+'_prestressed_'+str(prestressingLoad)
+        typical_materials.def_init_stress_material(preprocessor, name= newMaterialName, materialToEncapsulate= materialToEncapsulate.name)
+
     def getDesignation(self):
         ''' Return the designation of the bar.'''
         return self.designation

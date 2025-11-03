@@ -318,7 +318,7 @@ def defSteel01(preprocessor,name,E,fy,b):
     return retval
 
 #Steel 02.
-def defSteel02(preprocessor,name,E,fy,b, initialStress= 0.0, params= None, a1= None, a2= None, a3= None, a4= None):
+def defSteel02(preprocessor, name, E, fy, b, initialStress= 0.0, params= None, a1= None, a2= None, a3= None, a4= None):
     '''Constructs a uniaxial bilinear Giuffre-Menegotto-Pinto steel material with 
     isotropic strain hardening
 
@@ -1002,7 +1002,7 @@ def defMultiLinearMaterial(preprocessor, name, points):
     retval.setValues(points)
     return retval
 
-def defInitStrainMaterial(preprocessor, name, materialToEncapsulate):
+def def_init_strain_material(preprocessor, name, materialToEncapsulate):
     '''Constructs an initial strain uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
@@ -1017,12 +1017,13 @@ def defInitStrainMaterial(preprocessor, name, materialToEncapsulate):
     retval.setMaterial(materialToEncapsulate)
     return retval
 
-def defInitStressMaterial(preprocessor, name, materialToEncapsulate):
-    '''Constructs an initial strain uniaxial material.
+def def_init_stress_material(preprocessor, name, materialToEncapsulate, initStress= None):
+    '''Constructs an initial stress uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
     :param name: name for the new material (if None compute a suitable name).
     :param materialToEncapsulate: material that will name of the materials to be connected.
+    :param initStress: initial stress.
     '''
     materialHandler= preprocessor.getMaterialHandler
     matName= name
@@ -1030,6 +1031,8 @@ def defInitStressMaterial(preprocessor, name, materialToEncapsulate):
         matName= uuid.uuid1().hex
     retval= materialHandler.newMaterial("init_stress_material", matName)
     retval.setMaterial(materialToEncapsulate)
+    if(initStress):
+        retval.initialStress= initStress
     return retval
 
 def defInvertMaterial(preprocessor, name, materialToEncapsulate):
@@ -1110,13 +1113,13 @@ def defHorizontalSoilReactionMaterial(preprocessor, name, samplePoints, initStra
     inverted= defInvertMaterial(preprocessor, name= invertedMaterialName, materialToEncapsulate= encapsulated.name)
     if(noTension):
         initStrainMaterialName= invertedMaterialName+'_e0'
-        initStrainMaterial= defInitStrainMaterial(preprocessor, name= initStrainMaterialName, materialToEncapsulate= inverted.name)
+        initStrainMaterial= def_init_strain_material(preprocessor, name= initStrainMaterialName, materialToEncapsulate= inverted.name)
         retval= defCompressionOnlyMaterial(preprocessor, name= name, materialToEncapsulate= initStrainMaterial.name) 
         retval.material.initialStrain= initStrain # displacement at rest.
         mLinearMat= retval.material.material.material
         mLinearMat.setValues(samplePoints) # and now we set the points AGAIN.
     else:
-        retval= defInitStrainMaterial(preprocessor, name= name, materialToEncapsulate= inverted.name)
+        retval= def_init_strain_material(preprocessor, name= name, materialToEncapsulate= inverted.name)
         retval.initialStrain= initStrain # displacement at rest.
         retval.material.material.setValues(samplePoints) # and now we set the points AGAIN.
     return retval
