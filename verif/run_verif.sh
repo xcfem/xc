@@ -1779,6 +1779,9 @@ echo "$BLEU" "  EOTA TR-29." "$NORMAL"
 python tests/materials/eota_tr_29/test_anchor_bolt01.py
 python tests/materials/eota_tr_29/test_shear_anchor.py
 
+echo "$BLEU" "  ETA-05/0123" "$NORMAL"
+python tests/materials/test_dywidag_bar.py
+
 echo "$BLEU" "  Other materials tests." "$NORMAL"
 python tests/materials/test_elastomeric_bearing_stiffness.py
 
