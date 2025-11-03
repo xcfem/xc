@@ -18,13 +18,10 @@ __email__= "l.pereztato@gmail.com"
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 mat1= typical_materials.defElasticMaterial(preprocessor, "mat1", E= 1e6)
-mat2= typical_materials.def_init_stress_material(preprocessor, "mat2", mat1.name)
-
 initStress= 1e3
-mat2.initialStress= initStress
-#mat2.setTrialStress(0.0,0.0)
-#mat2.commitState()
+mat2= typical_materials.def_init_stress_material(preprocessor, name= "mat2", materialToEncapsulate= mat1.name, initStress= initStress)
 
+# Check results.
 stress= mat2.getStress()
 refStress= initStress
 ratio= abs(refStress-stress)/refStress

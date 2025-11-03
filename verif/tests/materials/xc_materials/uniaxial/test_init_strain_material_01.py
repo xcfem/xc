@@ -18,10 +18,8 @@ from materials import typical_materials
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 mat1= typical_materials.defElasticMaterial(preprocessor, "mat1", E= 1e3)
-mat2= typical_materials.def_init_strain_material(preprocessor, "mat2", mat1.name)
-
 initStrain= .01
-mat2.initialStrain= initStrain
+mat2= typical_materials.def_init_strain_material(preprocessor, "mat2", mat1.name, initStrain= initStrain)
 
 stress= mat2.getStress()
 refStress= initStrain*mat1.E
