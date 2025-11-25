@@ -11,6 +11,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es"
 
+from materials import typical_materials
 
 class Bar(object):
     ''' Python representation of a Dywidag bar.
@@ -41,17 +42,17 @@ class Bar(object):
         ''' Returnn the elastic modulus of the bar steel.'''
         return 205e9
 
-    def getPrestressedMaterial(self, prestressingLoad, materialToEncapsulate= None):
-        ''' Create a prestressed material for the bar.
+    def getInitStressMaterial(self, preprocessor, materialToEncapsulate= None):
+        ''' Create a initial stress material for the bar.
 
-        :param prestressingLoad: prestressing force.
+        :param preprocessor: pre-processor of the FE problem.
         :param materialToEncapsulate: material model to prestress (if None an
                                       elastic material is used).
         '''
         if(materialToEncapsulate is None):
-            materialToEncapsulate= typical_materials.defElasticMaterial(E= self.elasticModulus)
-        newMaterialName= materialToEncapsulate.name+'_prestressed_'+str(prestressingLoad)
-        typical_materials.def_init_stress_material(preprocessor, name= newMaterialName, materialToEncapsulate= materialToEncapsulate.name)
+            materialToEncapsulate= typical_materials.defElasticMaterial(preprocessor= preprocessor, name= 'auto', E= self.elasticModulus)
+        newMaterialName= materialToEncapsulate.name+'_init_stress'
+        return typical_materials.def_init_stress_material(preprocessor, name= newMaterialName, materialToEncapsulate= materialToEncapsulate.name)
 
     def getDesignation(self):
         ''' Return the designation of the bar.'''
