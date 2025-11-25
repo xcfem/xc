@@ -105,7 +105,10 @@ void XC::Set::substract(const SetEntities::lst_ptr_uniform_grids &ugrids)
 //!
 //! extend the lists with the objects from the argument.
 void XC::Set::substract(const Set &other)
-  { entities-= other.entities; }
+  {
+    SetMeshComp::substract(other);
+    entities.substract(other.entities);
+  }
 
 
 //! @brief Addition assignment operator.
