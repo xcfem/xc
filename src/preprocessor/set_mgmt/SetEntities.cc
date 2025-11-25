@@ -109,6 +109,49 @@ void XC::SetEntities::extend(const lst_body_pointers &bds)
 //! @brief Extend this set with the uniform grids of the argument.
 void XC::SetEntities::extend(const lst_ptr_uniform_grids &ugrids)
   { uniform_grids.extend(ugrids); }
+  
+//! @brief Extend this set with the given one.
+void XC::SetEntities::extend(const SetEntities &other)
+  { this->extend_lists(other); }
+
+//! @brief Removes from this set the points of the argument.
+void XC::SetEntities::substract(const lst_ptr_points &pts)
+  {
+    this->points-= pts;
+    this->points.set_owner(this);
+  }
+
+//! @brief Removes from this set the lines of the argument.
+void XC::SetEntities::substract(const lst_line_pointers &lns)
+  {
+    this->lines-= lns;
+    this->lines.set_owner(this);
+  }
+
+//! @brief Removes from this set the surfaces of the argument.
+void XC::SetEntities::substract(const lst_surface_ptrs &sfs)
+  {
+    this->surfaces-= sfs;
+    this->surfaces.set_owner(this);
+  }
+
+//! @brief Removes from this set the bodies of the argument.
+void XC::SetEntities::substract(const lst_body_pointers &bds)
+  {
+    this->bodies-= bds;
+    this->bodies.set_owner(this);
+  }
+
+//! @brief Removes from this set the uniform grids of the argument.
+void XC::SetEntities::substract(const lst_ptr_uniform_grids &ugrids)
+  {
+    this->uniform_grids-= ugrids;
+    this->uniform_grids.set_owner(this);
+  }
+
+//! @brief Removes from this set the uniform grids of the argument.
+void XC::SetEntities::substract(const SetEntities &other)
+  { this->substract_lists(other); }
 
 //! @brief Extend this set with the objects of the set
 //! being passed as parameter.
@@ -125,11 +168,11 @@ void XC::SetEntities::extend_lists(const SetEntities &other)
 //! also to the argument.
 void XC::SetEntities::substract_lists(const SetEntities &other)
   {
-    points-= other.points;
-    lines-= other.lines;
-    surfaces-= other.surfaces;
-    bodies-= other.bodies;
-    uniform_grids-= other.uniform_grids;
+    this->substract(other.points);
+    this->substract(other.lines);
+    this->substract(other.surfaces);
+    this->substract(other.bodies);
+    this->substract(other.uniform_grids);
   }
 
 //! @brief Removes from this set the objects that belongs

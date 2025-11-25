@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
-''' Home made test.'''
-
-from __future__ import print_function
-#    Check of the function that computes the force resultant
-#    when cutting a subset of the model by a plane.
+''' Check of the function that computes the force resultant when cutting a 
+    subset of the model by a plane.
+'''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import geom
+import xc
+from model import predefined_spaces
+from materials import typical_materials
 
 Ec= 2e5*9.81/1e-4 # Concrete Young modulus (Pa).
 nuC= 0.2 # Concrete Poisson's ratio EHE-08.
@@ -25,10 +28,6 @@ fMax= 1860e6 # Maximum unit load of the material expressed in MPa.
 fy= 1171e6 # Yield stress of the material expressed in Pa.
 tInic= 0.75**2*fMax # Effective prestress (0.75*P0 y 25% prestress losses).
 
-import geom
-import xc
-from model import predefined_spaces
-from materials import typical_materials
 
 # Problem type
 feProblem= xc.FEProblem()

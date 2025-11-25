@@ -157,32 +157,32 @@ void XC::SetMeshComp::extend(const lst_ptr_constraints &cs)
 void XC::SetMeshComp::extend(const SetMeshComp &other)
   { extend_lists(other); }
 
-//! @brief Appends to this set the nodes from the argument.
+//! @brief Removes from this set the nodes from the argument.
 void XC::SetMeshComp::substract(const DqPtrsNode &nds)
   {
     nodes= this->nodes-nds;
     nodes.set_owner(this);
   }
 
-//! @brief Appends to this set the elements from the argument.
+//! @brief Removes from this set the elements from the argument.
 void XC::SetMeshComp::substract(const DqPtrsElem &elems)
   {
     elements= this->elements-elems;
     elements.set_owner(this);
   }
       
-//! @brief Appends to this set the constraints from the argument.
+//! @brief Removes from this set the constraints from the argument.
 void XC::SetMeshComp::substract(const lst_ptr_constraints &cs)
   {
     constraints= this->constraints-cs;
     constraints.set_owner(this);
   }
        
-//! @brief Appends to this set the objects from the argument set.
+//! @brief Removes from this set the objects from the argument set.
 void XC::SetMeshComp::substract(const SetMeshComp &other)
   { substract_lists(other); }
 
-//! @brief Appends to this set the objects from the argument set.
+//! @brief Removes from this set the objects from the argument set.
 void XC::SetMeshComp::extend_lists(const SetMeshComp &other)
   {
     nodes.extend(other.nodes);

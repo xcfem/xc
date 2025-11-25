@@ -1152,7 +1152,7 @@ class PredefinedSpace(object):
            entities.'''
         return self.getSet('total')
 
-    def defSet(self, setName: str= None, nodes= None, elements= None, points= None, lines= None, surfaces= None, bodies= None, nodeTags= None, elementTags= None):
+    def defSet(self, setName: str= None, nodes= None, elements= None, points= None, lines= None, surfaces= None, bodies= None, sets= None, nodeTags= None, elementTags= None):
         ''' Defines a set with the name argument.
 
         :param setName: name of the set to define.
@@ -1163,6 +1163,7 @@ class PredefinedSpace(object):
         :param surfaces: surface iterable to initizalize the surfaces of 
                          the set.
         :param bodies: body iterable to initizalize the bodies of the set.
+        :param sets: set iterable to extend the set.
         :param nodeTags: node identifiers to initizalize the nodes of the set.
         :param elementTags: element identifiers to initizalize the nodes of ç
                             the set.
@@ -1188,6 +1189,20 @@ class PredefinedSpace(object):
         if(bodies):
             for b in bodies:
                 retval.bodies.append(b)
+        if(sets):
+            for st in sets:
+                for b in st.bodies:
+                    retval.bodies.append(b)
+                for s in st.surfaces:
+                    retval.surfaces.append(s)
+                for l in st.lines:
+                    retval.lines.append(l)
+                for p in st.points:
+                    retval.points.append(p)
+                for e in st.elements:
+                    retval.elements.append(e)
+                for n in st.nodes:
+                    retval.nodes.append(n)
         if(nodeTags):
             cNodes= self.getNodes(nodeTags)
             for cn in cNodes:

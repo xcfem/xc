@@ -213,6 +213,14 @@ class Set: public SetMeshComp
     void extend(const SetEntities::lst_body_pointers &);
     void extend(const SetEntities::lst_ptr_uniform_grids &);
     void extend(const Set &);
+    void substract(const SetEntities::lst_ptr_points &);
+    void substract(const SetEntities::lst_line_pointers &);
+    void substract(const SetEntities::lst_surface_ptrs &);
+    void substract(const SetEntities::lst_body_pointers &);
+    void substract(const SetEntities::lst_ptr_uniform_grids &);
+    void substract(const Set &);
+
+    
     Set &operator+=(const Set &);
     Set &operator-=(const Set &);
     Set &operator*=(const Set &);

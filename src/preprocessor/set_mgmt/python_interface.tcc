@@ -367,6 +367,12 @@ void (XC::Set::*extend_surfaces)(const XC::SetEntities::lst_surface_ptrs &)= &XC
 void (XC::Set::*extend_bodies)(const XC::SetEntities::lst_body_pointers &)= &XC::Set::extend;
 void (XC::Set::*extend_ugrids)(const XC::SetEntities::lst_ptr_uniform_grids &)= &XC::Set::extend;
 void (XC::Set::*extend_set)(const XC::Set &)= &XC::Set::extend;
+void (XC::Set::*substract_points)(const XC::SetEntities::lst_ptr_points &)= &XC::Set::substract;
+void (XC::Set::*substract_lines)(const XC::SetEntities::lst_line_pointers &)= &XC::Set::substract;
+void (XC::Set::*substract_surfaces)(const XC::SetEntities::lst_surface_ptrs &)= &XC::Set::substract;
+void (XC::Set::*substract_bodies)(const XC::SetEntities::lst_body_pointers &)= &XC::Set::substract;
+void (XC::Set::*substract_ugrids)(const XC::SetEntities::lst_ptr_uniform_grids &)= &XC::Set::substract;
+void (XC::Set::*substract_set)(const XC::Set &)= &XC::Set::substract;
 XC::Set (XC::Set::*SETpickNodesInside3D)(const std::string &, const GeomObj3d &, const double &)= &XC::Set::pickNodesInside;
 XC::Set (XC::Set::*SETpickNodesInside2D)(const std::string &, const GeomObj2d &, const double &)= &XC::Set::pickNodesInside;
 XC::Set (XC::Set::*SETpickElemsInside3D)(const std::string &, const GeomObj3d &, const double &)= &XC::Set::pickElemsInside;
@@ -450,6 +456,15 @@ class_<XC::Set, XC::Set *,bases<XC::SetMeshComp> >("Set")
   .def("extend", extend_bodies, "Appends the bodies in the argument to the set.")
   .def("extend", extend_ugrids, "Appends the uniform grids in the argument to the set.")
   .def("extend", extend_set, "Appends the argument components to the set.")
+  .def("substract", substract_nodes, "Removes the nodes in the argument to the set.")
+  .def("substract", substract_elements, "Removes the elements in the argument to the set.")
+  .def("substract", substract_constraints, "Removes the constraints in the argument to the set.")
+  .def("substract", substract_points, "Removes the points in the argument to the set.")
+  .def("substract", substract_lines, "Removes the lines in the argument to the set.")
+  .def("substract", substract_surfaces, "Removes the surfaces in the argument to the set.")
+  .def("substract", substract_bodies, "Removes the bodies in the argument to the set.")
+  .def("substract", substract_ugrids, "Removes the uniform grids in the argument to the set.")
+  .def("substract", substract_set, "Removes the argument components to the set.")
   .def(self += self)
   .def(self -= self)
   .def(self *= self)

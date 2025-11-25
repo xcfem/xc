@@ -930,6 +930,12 @@ python tests/preprocessor/sets/test_get_mesh_components_01.py
 python tests/preprocessor/sets/test_get_sets_containing_01.py
 python tests/preprocessor/sets/test_pick_elements_crossing_01.py
 python tests/preprocessor/sets/test_pick_elements_crossing_02.py
+python tests/preprocessor/sets/test_set_substract_nodes.py
+python tests/preprocessor/sets/test_set_substract_elements.py
+python tests/preprocessor/sets/test_set_substract_points.py
+python tests/preprocessor/sets/test_set_substract_lines.py
+python tests/preprocessor/sets/test_set_substract_set.py
+
 echo "$BLEU" "    Sets geometry queries." "$NORMAL"
 python tests/preprocessor/sets/geometric_queries/test_get_element_set_contour_01.py
 python tests/preprocessor/sets/geometric_queries/test_get_element_set_contour_02.py

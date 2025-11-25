@@ -252,6 +252,13 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void extend(const lst_surface_ptrs &);
     void extend(const lst_body_pointers &);
     void extend(const lst_ptr_uniform_grids &);
+    void extend(const SetEntities &);
+    void substract(const lst_ptr_points &);
+    void substract(const lst_line_pointers &);
+    void substract(const lst_surface_ptrs &);
+    void substract(const lst_body_pointers &);
+    void substract(const lst_ptr_uniform_grids &);
+    void substract(const SetEntities &);
     
     SetEntities &operator+=(const SetEntities &);
     SetEntities &operator-=(const SetEntities &);
