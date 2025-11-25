@@ -35,6 +35,7 @@
 #include "domain/load/beam_loads/Beam3dPointLoad.h"
 #include "domain/load/beam_loads/Beam3dUniformLoad.h"
 #include "domain/load/beam_loads/TrussStrainLoad.h"
+#include "domain/load/beam_loads/TrussPrestressLoad.h"
 #include "domain/load/volumetric/BrickRawLoad.h"
 #include "domain/load/volumetric/BrickSelfWeight.h"
 #include "domain/load/volumetric/BrickStrainLoad.h"
@@ -93,6 +94,8 @@ XC::ElementalLoad *XC::process_element_load(XC::LoadPattern *lp,int &tag_el,cons
       }
     else if(loadType == "truss_strain_load")
       retval= new_elem_load<TrussStrainLoad>(lp, tag_el);
+    else if(loadType == "truss_prestress_load")
+      retval= new_elem_load<TrussPrestressLoad>(lp, tag_el);
     else if(loadType == "surface_load")
       retval= new_elem_load<SurfaceLoad>(lp, tag_el);
     else

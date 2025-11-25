@@ -28,6 +28,13 @@ class_<XC::TrussStrainLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("Tr
   .def("getElementStrainsMatrix", &XC::TrussStrainLoad::getElementStrainsMatrix, "Return a matrix containing the axial strains at both ends as rows.") 
   ;
 
+class_<XC::TrussPrestressLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("TrussPrestressLoad", no_init)
+  .add_property("sigma1", make_function( &XC::TrussPrestressLoad::getSigma1, return_value_policy<return_by_value>() ),&XC::TrussPrestressLoad::setSigma1, "get/set the prestress load at back end.")
+  .add_property("sigma2", make_function( &XC::TrussPrestressLoad::getSigma2, return_value_policy<return_by_value>() ),&XC::TrussPrestressLoad::setSigma2, "get/set the prestress load at front end.")
+  .def("getStresses",&XC::TrussPrestressLoad::getStresses, "return the prestress loads at both ends.")
+  .def("getElementStressesMatrix", &XC::TrussPrestressLoad::getElementStressesMatrix, "Return a matrix containing the axial stresses at both ends as rows.") 
+  ;
+
 class_<XC::BeamLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("BeamLoad", no_init)
   .add_property("category", &XC::BeamLoad::Category)
   .def("getElementResponseId", &XC::BeamLoad::getElementResponseId, "Return the response id of the given element.") 

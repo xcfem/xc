@@ -35,7 +35,7 @@ const std::set<std::string> nodal_load_class_names= {"XC::NodalLoad"};
 bool XC::is_nodal_load(const std::string &className)
   { return (nodal_load_class_names.find(className)!= nodal_load_class_names.end()); }
   
-const std::set<std::string> elemental_load_class_names= {"XC::Beam2dPointLoad", "XC::Beam3dPointLoad", "XC::Beam2dPartialUniformLoad", "XC::Beam2dUniformLoad", "XC::Beam3dUniformLoad", "XC::BeamStrainLoad", "XC::QuadRawLoad", "XC::ShellRawLoad", "XC::ShellUniformLoad", "XC::ShellStrainLoad", "XC::QuadStrainLoad", "XC::SelfWeight", "XC::SurfaceLoad", "XC::BrickSelfWeight", "XC::BrickRawLoad", "XC::BrickStrainLoad", "XC::TrussStrainLoad"};
+const std::set<std::string> elemental_load_class_names= {"XC::Beam2dPointLoad", "XC::Beam3dPointLoad", "XC::Beam2dPartialUniformLoad", "XC::Beam2dUniformLoad", "XC::Beam3dUniformLoad", "XC::BeamStrainLoad", "XC::QuadRawLoad", "XC::ShellRawLoad", "XC::ShellUniformLoad", "XC::ShellStrainLoad", "XC::QuadStrainLoad", "XC::SelfWeight", "XC::SurfaceLoad", "XC::BrickSelfWeight", "XC::BrickRawLoad", "XC::BrickStrainLoad", "XC::TrussStrainLoad", "XC::TrussPrestressLoad"};
   
 //! @brief Return true if the given class name corresponds to an elemental load.
 bool XC::is_elemental_load(const std::string &className)

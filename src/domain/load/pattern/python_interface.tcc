@@ -68,7 +68,7 @@ class_<XC::LoadPattern, XC::LoadPattern*, bases<XC::NodeLocker>, boost::noncopya
   .add_property("getNumNodalLoads",&XC::LoadPattern::getNumNodalLoads,"return the number of nodal loads.")
   .add_property("getNumElementalLoads",&XC::LoadPattern::getNumElementalLoads,"return the number of elemental loads.")
   .add_property("getNumLoads",&XC::LoadPattern::getNumLoads,"return the totalnumber of loads.")
-  .def("newElementalLoad", make_function(defElementalLoad, return_internal_reference<>()),"\n" "Create a load over an element.\n"  "Possible load types:  beam2d_uniform_load ,  beam2d_point_load , beam_strain_load , beam3d_point_load , beam3d_uniform_load , brick_self_weight , shell_uniform_load , bidim_strain_load , shell_strain_load , truss_temp_load ")
+  .def("newElementalLoad", make_function(defElementalLoad, return_internal_reference<>()),"\n" "Create a load over an element.\n"  "Possible load types:  beam2d_uniform_load ,  beam2d_point_load , beam_strain_load , beam3d_point_load , beam3d_uniform_load , brick_self_weight , shell_uniform_load , bidim_strain_load , shell_strain_load, truss_strain_load, truss_presstress_load ")
   .add_property("loads", make_function(getLoadsRef, return_internal_reference<>() ),"return a reference to the load container.")
   .def("removeNodalLoad",&XC::LoadPattern::removeNodalLoad,"removes the nodal load with the tag passed as parameter.")
   .def("removeElementalLoad",&XC::LoadPattern::removeElementalLoad,"remove the elemental load with the tag passed as parameter.")
