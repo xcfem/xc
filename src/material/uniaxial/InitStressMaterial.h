@@ -74,7 +74,6 @@ class InitStressMaterial: public InitStrainBaseMaterial
     DbTagData &getDbTagData(void) const;
     int sendData(Communicator &);  
     int recvData(const Communicator &);
-    int findInitialStrain(void);
   public:
     InitStressMaterial(int tag= 0);
     InitStressMaterial(int tag, const UniaxialMaterial &material, double sigInit); 
@@ -83,9 +82,13 @@ class InitStressMaterial: public InitStrainBaseMaterial
     
     virtual void setMaterial(const UniaxialMaterial &);
     
-    virtual int setInitialStrain(const double &);
     int setInitialStress(const double &);
+    int incrementInitialStress(const double &);
     double getInitialStress(void) const;
+    
+    virtual int setInitialStrain(const double &);
+    virtual int incrementInitialStrain(const double &);
+    virtual void zeroInitialStrain(void);
     
     int setTrialStrain(double strain, double strainRate = 0.0); 
     double getStrain(void) const;          

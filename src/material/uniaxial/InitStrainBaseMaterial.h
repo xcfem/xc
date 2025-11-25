@@ -73,14 +73,14 @@ class InitStrainBaseMaterial: public EncapsulatedUniaxialMaterial
 
     int sendData(Communicator &);  
     int recvData(const Communicator &);
+
+    int findInitialStrain(const double &);   
   public:
     InitStrainBaseMaterial(int tag, int classTag);
     InitStrainBaseMaterial(int tag, int classTag, const UniaxialMaterial &material, double epsInit);
 
     
     virtual int setInitialStrain(const double &);
-    virtual int incrementInitialStrain(const double &);
-    virtual void zeroInitialStrain(void);
     double getInitialStrain(void) const;
     
     double getStrainRate(void) const;

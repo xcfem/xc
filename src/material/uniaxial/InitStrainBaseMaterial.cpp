@@ -51,6 +51,8 @@
 #include <material/uniaxial/InitStrainBaseMaterial.h>
 #include <domain/mesh/element/utils/Information.h>
 #include "domain/component/Parameter.h"
+#include "utility/utils/misc_utils/matem.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::InitStrainBaseMaterial::InitStrainBaseMaterial(int tag, int classTag, const UniaxialMaterial &material, double epsini)
   : EncapsulatedUniaxialMaterial(tag, classTag, material),
@@ -69,20 +71,57 @@ XC::InitStrainBaseMaterial::InitStrainBaseMaterial(int tag, int classTag)
   :EncapsulatedUniaxialMaterial(tag, classTag),
    epsInit(0.0) {}
 
+//! @brief Determine the initial strain corresponding to the given stress.
+int XC::InitStrainBaseMaterial::findInitialStrain(const double &sigInit)
+  {
+    // determine the initial strain
+    const double abs_tol= 1e-12;
+    const double rel_tol= abs_tol*1e2;
+    double dSig= sigInit;
+    double tStrain = 0.0, tStress = 0.0;
+    int count= 0;
+
+    UniaxialMaterial *tmp= this->getMaterial();
+    double K= tmp->getTangent();
+    double dStrain= dSig/K;
+    do
+      {
+        count++;
+        tStrain+= dStrain;
+        tmp->setTrialStrain(tStrain);
+        tStress = tmp->getStress();
+        dSig= sigInit-tStress; // residual.
+        K= tmp->getTangent();
+        dStrain= dSig/K;
+      }
+    while ((std::abs(dSig) > abs_tol) && (count <= 100));
+
+    epsInit = tStrain;
+
+    if (isclose(tStress, sigInit, rel_tol, abs_tol)) 
+      tmp->setTrialStrain(epsInit);
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: could not find initStrain to within tol for material: "
+		  << tmp->getTag()
+		  << " wanted sigInit: " << sigInit
+		  << " using tStress: " << tmp->getStress()
+	          << " residual: " << std::abs(dSig)
+	          << " absolute tolerance: " << abs_tol
+	          << " relative tolerance: " << rel_tol
+	          << " number of iterations: " << count
+	          << " close: " << isclose(tStress, sigInit, rel_tol, abs_tol)
+		  << Color::def << std::endl;
+        return -1;
+      }
+    return 0;
+  }
+
 int XC::InitStrainBaseMaterial::setInitialStrain(const double &initStrain)
   {
     epsInit= initStrain;
     return 0;
-  }
-
-int XC::InitStrainBaseMaterial::incrementInitialStrain(const double &incStrain)
-  {
-    return setInitialStrain(epsInit+incStrain);
-  }
-
-void XC::InitStrainBaseMaterial::zeroInitialStrain(void)
-  {
-    setInitialStrain(0.0);
   }
 
 double XC::InitStrainBaseMaterial::getInitialStrain(void) const
