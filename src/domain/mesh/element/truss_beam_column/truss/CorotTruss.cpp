@@ -60,10 +60,11 @@
 #include <domain/mesh/node/Node.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <material/uniaxial/UniaxialMaterial.h>
+#include "material/uniaxial/InitStressMaterial.h"
 #include <material/uniaxial/CableMaterial.h>
 #include <utility/recorder/response/ElementResponse.h>
-
 #include "domain/load/beam_loads/TrussStrainLoad.h"
+#include "domain/load/beam_loads/TrussPrestressLoad.h"
 #include "utility/actor/actor/MovableVector.h"
 
 //! @brief Free the material pointer.
@@ -500,6 +501,27 @@ int XC::CorotTruss::addLoad(ElementalLoad *theLoad, double loadFactor)
             double ezero= theMaterial->getInitialStrain();
             ezero+= (e2+e1)/2;
             theMaterial->setInitialStrain(ezero);
+          }
+        else if(TrussPrestressLoad *trsLoad= dynamic_cast<TrussPrestressLoad *>(theLoad))
+          {
+	    InitStressMaterial *initStressMaterial= dynamic_cast<InitStressMaterial *>(this->theMaterial);
+	    if(initStressMaterial)
+	      {
+		const double &sg1= trsLoad->getSigma1()*loadFactor;
+		const double &sg2= trsLoad->getSigma2()*loadFactor;
+		const double sg= (sg1+sg2)/2.0;
+		initStressMaterial->incrementInitialStress(sg);
+	      }
+	    else
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  <<"; materials of type: "
+			  << this->theMaterial->getClassName()
+		          << " don't support prestress loads."
+			  << " Load ignored."
+			  << std::endl;
+		return -1;
+	      }
           }
         else
           {

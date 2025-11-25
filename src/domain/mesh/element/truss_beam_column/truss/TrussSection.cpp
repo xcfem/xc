@@ -70,6 +70,7 @@
 #include "material/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "domain/load/beam_loads/TrussStrainLoad.h"
+#include "domain/load/beam_loads/TrussPrestressLoad.h"
 
 #include <cmath>
 
@@ -414,6 +415,16 @@ int XC::TrussSection::addLoad(ElementalLoad *theLoad, double loadFactor)
             Vector ezero(1);
 	    ezero[0]= (e2+e1)/2;
             physicalProperties[0]->incrementInitialSectionDeformation(ezero);
+          }
+        else if(TrussPrestressLoad *trsLoad= dynamic_cast<TrussPrestressLoad *>(theLoad))
+          {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      <<"; loads of type: "
+		      << trsLoad->getClassName()
+		      << " not implemented yet."
+		      << " Load ignored."
+		      << std::endl;
+	    return -1;
           }
         else
           {
