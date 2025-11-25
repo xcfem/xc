@@ -390,6 +390,7 @@
 #include "domain/load/beam_loads/Beam3dUniformLoad.h"
 #include "domain/load/beam_loads/Beam3dPointLoad.h"
 #include "domain/load/beam_loads/TrussStrainLoad.h"
+#include "domain/load/beam_loads/TrussPrestressLoad.h"
 #include "domain/load/beam_loads/BeamStrainLoad.h"
 #include "domain/load/plane/QuadRawLoad.h"
 #include "domain/load/plane/QuadStrainLoad.h"

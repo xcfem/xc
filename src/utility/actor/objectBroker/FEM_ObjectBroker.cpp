@@ -398,6 +398,8 @@ XC::ElementalLoad *XC::FEM_ObjectBroker::getNewElementalLoad(int classTag)
         return new BeamStrainLoad();
       case LOAD_TAG_TrussStrainLoad:
         return new TrussStrainLoad();
+      case LOAD_TAG_TrussPrestressLoad:
+        return new TrussPrestressLoad();
       case LOAD_TAG_BidimStrainLoad:
         return new BidimStrainLoad();
       case LOAD_TAG_ThreedimStrainLoad:
