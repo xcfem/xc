@@ -18,8 +18,10 @@ climateZn= 4 # Climate zone for Madrid according to figure AN.2 of Spanish Natio
 height= 590 # Height above sea level.
 TmaxAir= 44 # Minimum shade air temperature in MADRID according to figure AN.1 of Spanish National Annex.
 TminAir= EC1_thermal.getMinAnnualShadeAirTemp(climateZn= climateZn, height= height)
+# Maximum and minimum temperatures at the bridge location.
 TmaxBridge= EC1_thermal.getMaxAnnualUniformBridgeTemp(tMax= TmaxAir, returnPeriod= 100)
 TminBridge= EC1_thermal.getMinAnnualUniformBridgeTemp(climateZn= climateZn, height= height, returnPeriod= 100)
+# Maximum and minimum temperatures of the bridge itself.
 bridgeType=EC1_thermal.concrete_beam
 TminBridgeComp= EC1_thermal.getMinimumUniformBridgeTemperatureComponent(bridgeType= bridgeType, Tmin= TminBridge)
 TmaxBridgeComp= EC1_thermal.getMaximumUniformBridgeTemperatureComponent(bridgeType= bridgeType, Tmax= TmaxBridge)
@@ -46,10 +48,12 @@ err= math.sqrt(err)
 '''
 print('  maximum shade air temperature (T= 50 years): ', TmaxAir)
 print('  minimum shade air temperature (T= 50 years): ', TminAir)
-print('  maximum bridge temperature (T= 100 years): ', TmaxBridge)
-print('  minimum bridge temperature (T= 100 years): ', TminBridge)
-print('  maximum bridge temperature component (T= 100 years): ', TmaxBridgeComp)
-print('  minimum bridge temperature component (T= 100 years): ', TminBridgeComp)
+print('  Maximum and minimum annual temperatures at the bridge location.')
+print('    maximum temperature at bridge location (T= 100 years): ', TmaxBridge)
+print('    minimum temperature at bridge location (T= 100 years): ', TminBridge)
+print('  Maximum and minimum annual temperatures of the bridge.')
+print('    maximum bridge temperature component (T= 100 years): ', TmaxBridgeComp)
+print('    minimum bridge temperature component (T= 100 years): ', TminBridgeComp)
 print('  annual temperature variation (T= 100 years): ', (TmaxBridgeComp-TminBridgeComp))
 print('  characteristic value of the maximum contraction range: ', ATcon)
 print('  characteristic value of the maximum expansion range: ', ATexp)

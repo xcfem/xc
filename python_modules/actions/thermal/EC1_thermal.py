@@ -94,7 +94,8 @@ minAnnualShadeAirTemp= [[-7.0, -11.0, -11.0, -6.0, -5.0, -6.0, 6.0],
 fMinAnnualShadeAirTemp= scipy.interpolate.interp2d(climateZone, height, minAnnualShadeAirTemp, kind='linear')
 
 def getMinAnnualShadeAirTemp(climateZn: int, height: float):
-    ''' Return the minimal annual shade air temperature for a return period of 50 years according to table AN.1 of the Spanish National Annex.
+    ''' Return the minimal annual shade air temperature for a return period 
+        of 50 years according to table AN.1 of the Spanish National Annex.
 
     :param climateZn: climate zone according to figure AN.2 of the Spanish National Annes (identical to figure 4.3-b of IAP-11).
     :param height: height of the bridge location.
@@ -103,8 +104,9 @@ def getMinAnnualShadeAirTemp(climateZn: int, height: float):
 
 # Uniform temperature component on bridges.
 def getMinAnnualUniformBridgeTemp(climateZn: int, height: float, returnPeriod: float= 100):
-    '''Return the minimal annual temperature according to table AN.1 of the 
-       Spansh National Annex (identical to table 4.3-a of IAP-11).
+    '''Return the minimal annual temperature at the bridge location according 
+       to table AN.1 of the  Spansh National Annex (identical to table 4.3-a 
+       of IAP-11).
 
     :param climateZn: climate zone according to figure AN.2 of the Spanish National Annes (identical to figure 4.3-b of IAP-11).
     :param height: height of the bridge location.
@@ -120,8 +122,8 @@ def getMinAnnualUniformBridgeTemp(climateZn: int, height: float, returnPeriod: f
     return retval
 
 def getMaxAnnualUniformBridgeTemp(tMax: float, returnPeriod: float= 100):
-    '''Return the maximal annual temperature according to Spanish National 
-       Annex (or IAP-11).
+    '''Return the maximal annual temperature at the bridge location according
+       to Spanish National Annex (or IAP-11).
 
     :param tMax: annual maximum temperature according to (figure AN.1 of the 
                  Spanish National Annex identical to figure 4.3-a of IAP-11).
