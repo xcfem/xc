@@ -37,7 +37,8 @@ def getMinimumUniformBridgeTemperatureComponent(bridgeType:int, Tmin:float):
         of EC1-1-5:2003.
 
     :param bridgeType: type of bridge: 1 steel deck, 2 composite deck or 3 concrete deck.
-    :param Tmin: minimum shade air temperature (celsius degrees).
+    :param Tmin: minimum shade air temperature (celsius degrees) obtained from
+                 the function getMinAnnualUniformBridgeTemp in this module.
     '''
     retval= Tmin
     if(int(bridgeType)==concrete_deck_type): # type 3
@@ -49,6 +50,7 @@ def getMinimumUniformBridgeTemperatureComponent(bridgeType:int, Tmin:float):
     else:
         methodName= sys._getframe(0).f_code.co_name
         lmsg.error(methodName+"; bridge type: '"+str(bridgeType)+"' unknown.")
+        exit(1)
     return retval
 
 def getMaximumUniformBridgeTemperatureComponent(bridgeType:int, Tmax:float):
@@ -57,7 +59,8 @@ def getMaximumUniformBridgeTemperatureComponent(bridgeType:int, Tmax:float):
         of EC1-1-5:2003.
 
     :param bridgeType: type of bridge: 1 steel deck, 2 composite deck or 3 concrete deck.
-    :param Tmax: maximum shade air temperature (celsius degrees).
+    :param Tmax: maximum shade air temperature (celsius degrees) obtained from
+                 the function getMinAnnualUniformBridgeTemp in this module.
     '''
     retval= Tmax
     if(int(bridgeType)==concrete_deck_type):
@@ -66,6 +69,10 @@ def getMaximumUniformBridgeTemperatureComponent(bridgeType:int, Tmax:float):
         retval+= 4.0
     elif(bridgeType==steel_deck_type):
         retval+= 16
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+"; bridge type: '"+str(bridgeType)+"' unknown.")
+        exit(1)
     return retval
 
 # Minimum shade air temperature (Spanish National Annex).
@@ -96,7 +103,8 @@ def getMinAnnualShadeAirTemp(climateZn: int, height: float):
 
 # Uniform temperature component on bridges.
 def getMinAnnualUniformBridgeTemp(climateZn: int, height: float, returnPeriod: float= 100):
-    '''Return the minimal annual temperature according to table AN.1 of the Spansh National Annex (identical to table 4.3-a of IAP-11).
+    '''Return the minimal annual temperature according to table AN.1 of the 
+       Spansh National Annex (identical to table 4.3-a of IAP-11).
 
     :param climateZn: climate zone according to figure AN.2 of the Spanish National Annes (identical to figure 4.3-b of IAP-11).
     :param height: height of the bridge location.
@@ -112,9 +120,11 @@ def getMinAnnualUniformBridgeTemp(climateZn: int, height: float, returnPeriod: f
     return retval
 
 def getMaxAnnualUniformBridgeTemp(tMax: float, returnPeriod: float= 100):
-    '''Return the maximal annual temperature according to Spanish National Annex (or IAP-11).
+    '''Return the maximal annual temperature according to Spanish National 
+       Annex (or IAP-11).
 
-    :param tMax: annual maximum temperature according to (figure AN.1 of the Spanish National Annex identical to figure 4.3-a of IAP-11).
+    :param tMax: annual maximum temperature according to (figure AN.1 of the 
+                 Spanish National Annex identical to figure 4.3-a of IAP-11).
     :parem returnPeriod: return period of the temperature minimum in years.
     '''
     retval= tMax

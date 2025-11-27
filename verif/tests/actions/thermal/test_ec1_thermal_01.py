@@ -20,9 +20,12 @@ TmaxAir= 44 # Minimum shade air temperature in MADRID according to figure AN.1 o
 TminAir= EC1_thermal.getMinAnnualShadeAirTemp(climateZn= climateZn, height= height)
 TmaxBridge= EC1_thermal.getMaxAnnualUniformBridgeTemp(tMax= TmaxAir, returnPeriod= 100)
 TminBridge= EC1_thermal.getMinAnnualUniformBridgeTemp(climateZn= climateZn, height= height, returnPeriod= 100)
+bridgeType=EC1_thermal.concrete_beam
+TminBridgeComp= EC1_thermal.getMinimumUniformBridgeTemperatureComponent(bridgeType= bridgeType, Tmin= TminBridge)
+TmaxBridgeComp= EC1_thermal.getMaximumUniformBridgeTemperatureComponent(bridgeType= bridgeType, Tmax= TmaxBridge)
 T0= 15 # initial bridge temperature
-ATcon= T0-TminBridge # characteristic value of the maximum contraction range.
-ATexp= TmaxBridge-T0 # characteristic value of the maximum expansion range.
+ATcon= T0-TminBridgeComp # characteristic value of the maximum contraction range.
+ATexp= TmaxBridgeComp-T0 # characteristic value of the maximum expansion range.
 
 ## Temperature difference components on bridges.
 deltaTMheat= EC1_thermal.getLinearTemperatureDifferenceComponent(bridgeType=EC1_thermal.concrete_beam, topWarmerThanBottom= True, surfacingDepth= 20e-3, ballast= False, waterproofedOnly= False) # ballast= False because is not extended over the pergola surface.
@@ -32,8 +35,10 @@ deltaTMcool= EC1_thermal.getLinearTemperatureDifferenceComponent(bridgeType=EC1_
 err= (TminAir+11.9)**2
 err+= (TmaxBridge-45.6987676947775)**2
 err+= (TminBridge+13.21641702458804)**2
-err+= (ATcon-28.21641702458804)**2
-err+= (ATexp-30.6987676947775)**2
+err+= (TmaxBridgeComp-47.6987676947775)**2
+err+= (TminBridgeComp+5.21641702458804)**2
+err+= (ATcon-20.21641702458804)**2
+err+= (ATexp-32.6987676947775)**2
 err+= (deltaTMheat-13.2)**2
 err+= (deltaTMcool-8.48)**2
 err= math.sqrt(err)
@@ -43,7 +48,9 @@ print('  maximum shade air temperature (T= 50 years): ', TmaxAir)
 print('  minimum shade air temperature (T= 50 years): ', TminAir)
 print('  maximum bridge temperature (T= 100 years): ', TmaxBridge)
 print('  minimum bridge temperature (T= 100 years): ', TminBridge)
-print('  annual temperature variation (T= 100 years): ', (TmaxBridge-TminBridge))
+print('  maximum bridge temperature component (T= 100 years): ', TmaxBridgeComp)
+print('  minimum bridge temperature component (T= 100 years): ', TminBridgeComp)
+print('  annual temperature variation (T= 100 years): ', (TmaxBridgeComp-TminBridgeComp))
 print('  characteristic value of the maximum contraction range: ', ATcon)
 print('  characteristic value of the maximum expansion range: ', ATexp)
 print('  top warmer than bottom temperature increment: ', deltaTMheat)
