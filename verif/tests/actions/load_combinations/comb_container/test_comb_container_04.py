@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Write load combinations in LaTeX format.'''
+''' Write load combinations in LaTeX format using supertabular.'''
 
 from __future__ import print_function
 from __future__ import division
@@ -27,13 +27,14 @@ jsonFileName= pth+'/../../../aux/reference_files/ref_railway_load_combinations_e
 combContainer.readFromJSON(inputFileName= jsonFileName)
 
 # Export to LaTeX.
-texFileNameRef= jsonFileName.replace('.json', '.tex')
+texFileNameRef= jsonFileName.replace('.json', '_supertabular.tex')
 ## Extract file name
 texFileName= os.path.basename(texFileNameRef)
 texFileName= texFileName.replace('ref_','./')
 ## Write LaTeX file
-combContainer.exportToLatex(fileName= texFileName)
-# combContainer.exportToPDF(fileName= texFileName.replace('.tex', '.pdf'), superTabular= False)
+combContainer.exportToLatex(fileName= texFileName, superTabular= True)
+# pdfFileName= texFileName.replace('.tex', '.pdf')
+# combContainer.exportToPDF(fileName= pdfFileName, superTabular= True)
 
 # Check result.
 comparisonOK= filecmp.cmp(texFileNameRef, texFileName, shallow=False)
@@ -44,5 +45,4 @@ if comparisonOK:
    print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
-if(comparisonOK):
-    os.remove(texFileName) # Your garbage, you clean it.
+os.remove(texFileName) # Your garbage, you clean it.

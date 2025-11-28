@@ -286,7 +286,8 @@ python tests/utility/geom/ezdxf_test_01.py
 # Tests about actions.
 echo "$BLEU" "Actions tests." "$NORMAL"
 python tests/actions/test_prestressing.py
-python tests/actions/test_report_load_cases.py
+python tests/actions/test_report_load_cases_longtable.py
+python tests/actions/test_report_load_cases_supertabular.py
 echo "$BLEU" "  Earth pressure tests." "$NORMAL"
 python tests/actions/earth_pressure/test_peck_pressure_envelope.py
 python tests/actions/earth_pressure/test_uniform_load_on_stem_01.py
@@ -427,6 +428,7 @@ echo "$BLEU" "  Load combination container tests." "$NORMAL"
 python tests/actions/load_combinations/comb_container/test_comb_container_01.py
 python tests/actions/load_combinations/comb_container/test_comb_container_02.py
 python tests/actions/load_combinations/comb_container/test_comb_container_03.py
+python tests/actions/load_combinations/comb_container/test_comb_container_04.py
 
 echo "$BLEU" "Nodes tests." "$NORMAL"
 echo "$BLEU" "  Mixed DOFs tests." "$NORMAL"

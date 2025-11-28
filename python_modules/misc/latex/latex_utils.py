@@ -37,18 +37,22 @@ def mathExprToLaTeX(mathExprStr):
     '''
     return sympy.latex(sympy.sympify(mathExprStr))
   
-def latex_to_pdf(latexCode:str, pdfFileName):
+def latex_to_pdf(latexCode:str, pdfFileName, superTabular= False):
     ''' Creates a PDF file from the given LaTeX code.
 
     :param latexCode: text in LaTeX format.
     :param pdfFileName: output file name.
+    :param superTabular: if true, use supertabular instead longtable.
     '''
-    texDocument= u'''\\documentclass{article}
-    \\usepackage[utf8]{inputenc}
-    \\usepackage{longtable}
-    \\begin{document}
+    texDocument= u'''\\documentclass{article}%\n
+    \\usepackage[utf8]{inputenc}%\n'''
+    if(superTabular):
+        texDocument+= '\\usepackage{supertabular}%\n'
+    else:
+        texDocument+= '\\usepackage{longtable}%\n'
+    texDocument+= '''\\begin{document}%\n
     **LaTeXCode**
-    \\end{document}
+    \\end{document}%\n
     '''
     texDocument= texDocument.replace('**LaTeXCode**', latexCode)
     with tempfile.NamedTemporaryFile(mode= 'w', delete= False) as tmp:

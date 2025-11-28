@@ -242,6 +242,8 @@ class BridgeCombGenerator(utils.CombGenerator):
         :param safetyFactorSet: identifier of the safety factor set 'A', 'B' or 'C' corresponding to tables Table A2.4(A), Table A2.4(B) or A2.4(C)
         :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
         :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        :param nonLinearAnalysis: if True, the resulting load combinations will be used in a non linear analysis otherwise 
+                                  they are intended to be used in a linear analysis.
         :param context: context for the action (building, railway_bridge, footbridge,...)
         :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
         '''
@@ -249,6 +251,41 @@ class BridgeCombGenerator(utils.CombGenerator):
             partialSafetyFactorsName= 'settlement_non_linear_analysis'
         else:
             partialSafetyFactorsName= 'settlement_linear_analysis'
+        if(safetyFactorSet=='B'):
+            partialSafetyFactorsName+= '_set_b'
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= className+'.'+methodName+'; safety factor set: '+str(safetyFactorSet)+' not implemented for rheological actions.'
+            lmsg.error(errorMsg)        
+        return self.newAction(family= 'variable',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
+    
+    def newPrestressingAction(self, actionName: str, actionDescription: str, safetyFactorSet:str, dependsOn= None, incompatibleActions= None, p2Type= False, localVerifications= False, context= None, notDeterminant= False):
+        ''' Creates a permanent action and appends it to the combinations 
+            generator.
+
+        :param actionName: name of the action.
+        :param actionDescription: description of the action.
+        :param safetyFactorSet: identifier of the safety factor set 'A', 'B' or 'C' corresponding to tables Table A2.4(A), Table A2.4(B) or A2.4(C)
+        :param dependsOn: name of another load that must be present with this one (for example brake loads depend on traffic loads).
+        :param incompatibleActions: list of regular expressions that match the names of the actions that are incompatible with this one.
+        :param p2Type: if true, the prestressing correspond to an element outside to the section depth (stays, 
+                       suspenders, etc.), otherwise the prestressing correspond to an element inside the section depth
+                       (interior or exterior prestressing tendons).
+        :param localVerifications: if true, the verifications to be made using the resulting load combinations will be used
+                                   to verify local states like transmission of forces around prestressing anchors when the
+                                   maximum prestressing load is considered. Othewise the resulting load combinations are
+                                   supposed to be used to analyze global effects of the prestressing.
+        :param context: context for the action (building, railway_bridge, footbridge,...)
+        :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
+        '''
+        if(p2Type):
+            if(localVerifications):
+                partialSafetyFactorsName= 'prestressing_p1_local_verifications'
+            else:
+                partialSafetyFactorsName= 'prestressing_p1_global_verifications'
+        else:
+            partialSafetyFactorsName= 'prestressing_p2'
         if(safetyFactorSet=='B'):
             partialSafetyFactorsName+= '_set_b'
         else:

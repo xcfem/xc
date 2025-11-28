@@ -33,6 +33,12 @@ def _set_bridges_partial_safety_factors(partial_safety_factors):
     partial_safety_factors['pore_water_pressure_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.35,1,1), loadCombinations.SLSPartialSafetyFactors(1,1))
     partial_safety_factors['settlement_linear_analysis_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.20,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
     partial_safety_factors['settlement_non_linear_analysis_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1.35,0,1), loadCombinations.SLSPartialSafetyFactors(0,1))
+    #### P1: prestressing introduced by elements inside the section depth (interior or exterior prestressing).
+    partial_safety_factors['prestressing_p1_local_verifications_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.20, 1, 1), loadCombinations.SLSPartialSafetyFactors(1, 1))
+    partial_safety_factors['prestressing_p1_global_verifications_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.30, 1, 1), loadCombinations.SLSPartialSafetyFactors(1, 1))
+    #### P2: prestressing introduced by elements outside the section depth (stays, suspenders, etc.).
+    partial_safety_factors['prestressing_p2_set_b']= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(1.0, 1.35, 1, 1), loadCombinations.SLSPartialSafetyFactors(1, 1))
+
     # Partial safety factors for variable actions.
     ### Eurocode 0. Table AN.9 [table A2.4(B)]. Design values of actions (STR/GEO) (Set B)
     #### Traffic loads.

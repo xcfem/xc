@@ -59,7 +59,7 @@ class CombinationRecord(object):
         retval= self.name.replace('_','\\_')
         retval+= ' & '
         retval+= self.expr.replace('*',' ')
-        retval+= '\\\\\n'
+        retval+= '\\\\%\n'
         return retval
     
     def exportToLatex(self, outputFile):
@@ -230,13 +230,14 @@ class SituationCombs(dict):
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+': couln\'t create combination: \''+key+'\'')
 
-    def getLaTeXCode(self, limitState= None, small= True):
+    def getLaTeXCode(self, limitState= None, small= True, superTabular= False):
         '''Creates LaTeX tables and put the combinations in them.
 
         :param outputFile: file to write into.
         :param limitState: description of the limit state to which 
                            this situation corresponds.
         :param small: if true, use small font.
+        :param superTabular: if true, use supertabular instead longtable.
         '''
         retval= str()
         if(len(self)>0):
@@ -247,43 +248,72 @@ class SituationCombs(dict):
             retval+= ('\\begin{center}\n')
             if(small):
                 retval+= ('\\begin{small}\n')
-            retval+= ('\\begin{longtable}{|l|p{10cm}|}\n')
-            retval+= ('\\hline\n')
-            retval+= ('\\multicolumn{2}{|c|}{'+header+'}\\\\\n')
-            retval+= ('\\hline\n')
-            retval+= ('\\textbf{Notation} & \\textbf{Combination} \\\\\n')
-            retval+= ('\\hline\n')
-            retval+= ('\\endfirsthead\n')
+            tableStr= '|l|p{10cm}|'
+            if(superTabular):
+                # Create LaTeX supertabular.
+                firstHeadStr= '\\hline%\n'
+                firstHeadStr+= '\\multicolumn{2}{|c|}{'+header+'}\\\\%\n'
+                firstHeadStr+= '\\hline%\n'
+                firstHeadStr+= '\\textbf{Notation} & \\textbf{Combination} \\\\%\n'
+                firstHeadStr+= '\\hline%\n'
+                retval+= '\\tablefirsthead{'+firstHeadStr+'}%\n'
 
-            retval+= ('\\hline\n')
-            retval+= ('\\multicolumn{2}{|c|}{'+header+'}\\\\\n')
-            retval+= ('\\hline\n')
-            retval+= ('\\textbf{Notation} & \\textbf{Combination} \\\\\n')
-            retval+= ('\\hline\n')
-            retval+= ('\\endhead\n')
+                headStr= firstHeadStr
+                retval+= '\\tablehead{'+headStr+'}%\n'
 
-            retval+= ('\\hline \\multicolumn{2}{|r|}{{../..}} \\\\ \\hline\n')
-            retval+= ('\\endfoot\n')
+                tailStr= '\\hline%\n'
+                tailStr+= '\\multicolumn{2}{|r|}{{../..}} \\\\%\n'
+                tailStr+= '\\hline%\n'
+                retval+= '\\tabletail{'+tailStr+'}%\n'
+
+                lastTailStr= '\\hline%\n'
+                retval+= '\\tablelasttail{'+lastTailStr+'}%\n'
+                retval+= '\\begin{supertabular}{'+tableStr+'}%\n'
+            else:
+                # Create LaTeX longtable.
+                retval+= ('\\begin{longtable}{'+tableStr+'}%\n')
+                
+                retval+= ('\\hline%\n')
+                retval+= ('\\multicolumn{2}{|c|}{'+header+'}\\\\%\n')
+                retval+= ('\\hline%\n')
+                retval+= ('\\textbf{Notation} & \\textbf{Combination} \\\\%\n')
+                retval+= ('\\hline%\n')
+                retval+= ('\\endfirsthead%\n')
+
+                retval+= ('\\hline%\n')
+                retval+= ('\\multicolumn{2}{|c|}{'+header+'}\\\\%\n')
+                retval+= ('\\hline%\n')
+                retval+= ('\\textbf{Notation} & \\textbf{Combination} \\\\%\n')
+                retval+= ('\\hline%\n')
+                retval+= ('\\endhead%\n')
+
+                retval+= ('\\hline \\multicolumn{2}{|r|}{{../..}} \\\\ \\hline%\n')
+                retval+= ('\\endfoot%\n')
 
             retval+= ('\\hline\n')
             retval+= ('\\endlastfoot\n')
             for key in sorted(self):
                 retval+= self[key].getLaTeXCode()
             retval+= ('\\hline\n')
-            retval+= ('\\end{longtable}\n')
+            if(superTabular):
+                retval+= ('\\end{supertabular}\n')
+            else:
+                retval+= ('\\end{longtable}\n')
             if(small):
                 retval+= ('\\end{small}\n')
             retval+= ('\\end{center}\n')
         return retval
             
-    def exportToLatex(self, outputFile, limitState= None):
+    def exportToLatex(self, outputFile, limitState= None, small= False, superTabular= False):
         '''Creates LaTeX tables and put the combinations in them.
 
         :param outputFile: file to write into.
         :param limitState: description of the limit state to which 
                            this situation corresponds.
+        :param small: if true, use small font.
+        :param superTabular: if true, use supertabular instead longtable.
         '''
-        outputFile.write(self.getLaTeXCode(limitState= limitState))
+        outputFile.write(self.getLaTeXCode(limitState= limitState, small= small, superTabular= superTabular))
 
     def getLoadCaseDispParameters(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
         '''Returns a suitable LoadCaseDispParameters for the combination.
@@ -370,17 +400,25 @@ class SituationsSet(object):
         for s in self.situations:
             s.dumpCombinations(xcCombHandler)
 
-    def getLaTeXCode(self):
+    def getLaTeXCode(self, small= True, superTabular= False):
         '''Return the LaTeX code corresponding to the combinations in this
-           container.'''
+           container.
+
+        :param small: if true, use small font.
+        :param superTabular: if true, use supertabular instead longtable.
+        '''
         retval= ''
         for s in self.situations:
-            retval+= s.getLaTeXCode(limitState= self.name)
+            retval+= s.getLaTeXCode(limitState= self.name, small= small, superTabular= superTabular)
         return retval
             
-    def exportToLatex(self, outputFile):
-        '''Creates LaTeX tables and put the combinations in them.'''
-        ouputFile.write(self.getLaTeXCode())
+    def exportToLatex(self, outputFile, small= True, superTabular= False):
+        '''Creates LaTeX tables and put the combinations in them.
+
+        :param small: if true, use small font.
+        :param superTabular: if true, use supertabular instead longtable.
+        '''
+        ouputFile.write(self.getLaTeXCode(small= small, superTabular= superTabular))
         
     def getLoadCaseDispParameters(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
         '''Returns a suitable LoadCaseDispParameters for the combination.
@@ -722,29 +760,37 @@ class CombContainer(object):
         for ls in self.limitStates:
             ls.dumpCombinations(xcCombHandler)
 
-    def getLaTeXCode(self):
+    def getLaTeXCode(self, small= True, superTabular= False):
         ''' Return the LaTeX code correspoding to the combinations in this
-            container.'''
+            container.
+
+        :param small: if true, use small font.
+        :param superTabular: if true, use supertabular instead longtable.
+        '''
         retval= ''
         for ls in self.limitStates:
-            retval+= ls.getLaTeXCode()
+            retval+= ls.getLaTeXCode(small= small, superTabular= superTabular)
         return retval
             
-    def exportToLatex(self, fileName):
+    def exportToLatex(self, fileName, small= True, superTabular= False):
         '''Creates LaTeX tables and put the combinations in them.
 
         :param fileName: output file name.
+        :param small: if true, use small font.
+        :param superTabular: if true, use supertabular instead longtable.
         '''
         with open(fileName, "w") as f:
-            f.write(self.getLaTeXCode())
+            f.write(self.getLaTeXCode(small= small, superTabular= superTabular))
 
-    def exportToPDF(self, fileName):
+    def exportToPDF(self, fileName, small= True, superTabular= False):
         ''' Creates a PDF file and write the combinations to it.
 
         :param fileName: output file name.
+        :param small: if true, use small font.
+        :param superTabular: if true, use supertabular instead longtable.
         '''
-        latexCode= self.getLaTeXCode()
-        latex_utils.latex_to_pdf(latexCode= latexCode, pdfFileName= fileName)
+        latexCode= self.getLaTeXCode(small= small, superTabular= superTabular)
+        latex_utils.latex_to_pdf(latexCode= latexCode, pdfFileName= fileName, superTabular= superTabular)
 
     def getList(self):
         ''' Return a list populated with the combinations.'''
