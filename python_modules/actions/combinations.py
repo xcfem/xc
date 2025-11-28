@@ -289,9 +289,9 @@ class SituationCombs(dict):
 
                 retval+= ('\\hline \\multicolumn{2}{|r|}{{../..}} \\\\ \\hline%\n')
                 retval+= ('\\endfoot%\n')
-
-            retval+= ('\\hline\n')
-            retval+= ('\\endlastfoot\n')
+                retval+= ('\\hline\n')
+                retval+= ('\\endlastfoot\n')
+                
             for key in sorted(self):
                 retval+= self[key].getLaTeXCode()
             retval+= ('\\hline\n')
