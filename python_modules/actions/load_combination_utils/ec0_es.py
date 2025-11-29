@@ -280,20 +280,20 @@ class BridgeCombGenerator(utils.CombGenerator):
         :param notDeterminant: set to True if action cannot be determinant, otherwise it must be False.
         '''
         if(p2Type):
+            partialSafetyFactorsName= 'prestressing_p2'
+        else:            
             if(localVerifications):
                 partialSafetyFactorsName= 'prestressing_p1_local_verifications'
             else:
                 partialSafetyFactorsName= 'prestressing_p1_global_verifications'
-        else:
-            partialSafetyFactorsName= 'prestressing_p2'
         if(safetyFactorSet=='B'):
             partialSafetyFactorsName+= '_set_b'
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             errorMsg= className+'.'+methodName+'; safety factor set: '+str(safetyFactorSet)+' not implemented for rheological actions.'
-            lmsg.error(errorMsg)        
-        return self.newAction(family= 'variable',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
+            lmsg.error(errorMsg)
+        return self.newAction(family= 'permanent',actionName= actionName, actionDescription= actionDescription, combinationFactorsName= 'permanent', partialSafetyFactorsName= partialSafetyFactorsName, dependsOn= dependsOn, incompatibleActions= incompatibleActions, notDeterminant= notDeterminant)
     
     def newFreeWaterPressureAction(self, actionName: str, actionDescription: str, safetyFactorSet:str, dependsOn= None, incompatibleActions= None, context= None):
         ''' Creates a free water pressure action and appends it to the 

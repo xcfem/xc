@@ -22,16 +22,16 @@
 
 class_<cmb_acc::SLSPartialSafetyFactors, bases<CommandEntity> >("SLSPartialSafetyFactors")
   .def(init<float, float>())
-  .add_property("favorable", &cmb_acc::SLSPartialSafetyFactors::getFavorable, &cmb_acc::SLSPartialSafetyFactors::setFavorable)
-  .add_property("desfavorable", &cmb_acc::SLSPartialSafetyFactors::getDesfavorable, &cmb_acc::SLSPartialSafetyFactors::setDesfavorable)
+  .add_property("favourable", &cmb_acc::SLSPartialSafetyFactors::getFavorable, &cmb_acc::SLSPartialSafetyFactors::setFavorable)
+  .add_property("unfavourable", &cmb_acc::SLSPartialSafetyFactors::getDesfavorable, &cmb_acc::SLSPartialSafetyFactors::setDesfavorable)
   .def(self_ns::str(self_ns::self))
   .def(self_ns::repr(self_ns::self))
   ;
 
 class_<ULSPartialSafetyFactors, bases<SLSPartialSafetyFactors> >("ULSPartialSafetyFactors")
   .def(init<float, float,float,float>())
-  .add_property("favorableAccidental", &ULSPartialSafetyFactors::getFavorableAccidental, &ULSPartialSafetyFactors::setFavorableAccidental)
-  .add_property("desfavorableAccidental", &ULSPartialSafetyFactors::getDesfavorableAccidental, &ULSPartialSafetyFactors::setDesfavorableAccidental);
+  .add_property("favourableAccidental", &ULSPartialSafetyFactors::getFavorableAccidental, &ULSPartialSafetyFactors::setFavorableAccidental)
+  .add_property("unfavourableAccidental", &ULSPartialSafetyFactors::getDesfavorableAccidental, &ULSPartialSafetyFactors::setDesfavorableAccidental);
 
 class_<PartialSafetyFactors, bases<CommandEntity> >("PartialSafetyFactors")
   .def(init<ULSPartialSafetyFactors, SLSPartialSafetyFactors>())

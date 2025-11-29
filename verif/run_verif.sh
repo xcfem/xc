@@ -414,6 +414,12 @@ python tests/actions/load_combinations/iap/test_iap11_03.py
 echo "$BLEU" "    Forming load combination according to SIA 260." "$NORMAL"
 python tests/actions/load_combinations/sia/test_sia_pont_ferroviaire.py
 echo "$BLEU" "    Forming load combination according to EC0." "$NORMAL"
+python tests/actions/load_combinations/ec0/test_ec0_dead_load_action.py
+python tests/actions/load_combinations/ec0/test_ec0_prestressing_action_01.py
+python tests/actions/load_combinations/ec0/test_ec0_prestressing_action_02.py
+python tests/actions/load_combinations/ec0/test_ec0_prestressing_action_03.py
+python tests/actions/load_combinations/ec0/test_ec0_settlement_action_01.py
+python tests/actions/load_combinations/ec0/test_ec0_settlement_action_02.py
 python tests/actions/load_combinations/ec0/test_ec0_road_bridge_context.py
 python tests/actions/load_combinations/ec0/test_ec0_traffic_groups.py
 python tests/actions/load_combinations/ec0/test_ec0_seismic_combinations.py
