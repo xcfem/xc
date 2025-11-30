@@ -1585,6 +1585,18 @@ class PredefinedSpace(object):
             lockerName= elemSet.name+'_locker'
             mesh.freezeDeadNodes(lockerName) # froze nodes surrounded by dead elements.
             self.createdNodeLockersNames.append(lockerName)
+            
+    def deactivateElement(self, element, srf= 1e-6):
+        ''' Deactivate a single element.
+
+        :param element: element to deactivate.
+        :param srf: stress reduction factor for element deactivation.
+        '''
+        if(element.isAlive):
+            element.kill()
+            mesh= self.preprocessor.getDomain.getMesh
+            mesh.setDeadSRF(srf) # set stress reduction factor for
+                                 # element deactivation.            
 
     def activateElements(self, elemSet: xc.Set):
         ''' Activate the (previoulsy deactivated) elements on the set argument.
@@ -1597,6 +1609,14 @@ class PredefinedSpace(object):
         # Check if the nodes have been frozen.
         if(lockerName in self.createdNodeLockersNames):
             mesh.meltAliveNodes(lockerName) # melt frozen nodes.
+
+    def activateElement(self, element):
+        ''' Activate a single (and previoulsy deactivated) element.
+
+        :param element: element to activate.
+        '''
+        if(element.isDead):
+            element.alive()
 
     def getValuesAtNodes(self, element, code: str, silent= False):
         ''' Return the values corresponding to code at each of the element nodes.
