@@ -201,7 +201,7 @@ else:
     analysis= modelSpace.analysis
 
 vc.def_reactions_envelope_vars(nodes= pileBottomNodes)
-vc.def_vars_envelope_internal_forces_beam_elems(elems= [lintelElement])
+vc.def_vars_envelope_internal_forces_beam_elems_3d(elems= [lintelElement])
 for combName in combs.getKeys():
     comb= combs[combName]
     modelSpace.removeAllLoadsAndCombinationsFromDomain()

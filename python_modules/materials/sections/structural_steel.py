@@ -264,7 +264,7 @@ class SteelShape(sp.SectionProperties):
 
         :param elems: elements to define properties on.
         '''
-        vc.def_vars_envelope_internal_forces_beam_elems(elems)
+        vc.def_vars_envelope_internal_forces_beam_elems_3d(elems)
         for e in elems:
             e.setProp('FCTNCP',[-1.0,-1.0]) #Normal stresses efficiency.
             e.setProp('FCVCP',[-1.0,-1.0]) #Shear stresses efficiency.

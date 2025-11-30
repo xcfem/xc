@@ -510,7 +510,7 @@ class WoodSection(object):
         :param FcE: Critical buckling design values for compression.
         :param FbE: Critical buckling design value for bending.
         '''
-        vc.def_vars_envelope_internal_forces_beam_elems(elems)
+        vc.def_vars_envelope_internal_forces_beam_elems_3d(elems)
         for e in elems:
             e.setProp('chiLT',chiLT) # Lateral torsional buckling reduction factor.
             e.setProp('chiN',chiN) # Axial strength reduction factor.
