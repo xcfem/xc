@@ -196,3 +196,69 @@ os.remove(outputFileName)
 # oh.displayNodeValueDiagram(itemToDisp= 'Mz-')
 # # oh.displayLoads()
 # # oh.displayDispRot(itemToDisp='uY')
+
+# # Matplotlib stuff.
+# ## Sort elements on x coordinate.
+# from operator import itemgetter
+# import matplotlib.pyplot as plt
+
+# sortedElements= list()
+# for e in xcTotalSet.elements:
+#     pos= e.getPosCentroid(True)
+#     sortedElements.append((e, pos.x))
+# sortedElements= sorted(sortedElements, key= itemgetter(1))
+# ## Extract envelope values.
+# enveloppes= dict()
+# for item in ['N+', 'N-', 'Mz+', 'Mz-', 'Vy+', 'Vy-']:
+#     xi= list()
+#     vi= list()
+#     (e0, x0)= sortedElements[0]
+#     xn0= e0.getNodes[0].getInitialPos3d.x
+#     xi.append(xn0)
+#     v0= e0.getProp(item)[0]
+#     vi.append(v0)
+#     for (e1, x1) in sortedElements[1:]:
+#         xn0= e1.getNodes[0].getInitialPos3d.x
+#         xi.append(xn0)
+#         v0= e1.getProp(item)[0]
+#         vi.append(v0)
+#     xn1= e1.getNodes[1].getInitialPos3d.x
+#     xi.append(xn1)
+#     v1= e1.getProp(item)[1]
+#     vi.append(v1)
+#     enveloppes[item]= (xi, vi)
+#
+# # Create figures
+# ## Markers.
+# x_markers= list()
+# y_markers= list()
+# for p in kPoints:
+#     n= p.getNode()
+#     pos= n.getInitialPos3d
+#     x_markers.append(float(pos.x))
+#     y_markers.append(float(0.0))
+
+# for (vmax, vmin) in [('N+', 'N-'), ('Mz+', 'Mz-'), ('Vy+', 'Vy-')]:
+#     xi= enveloppes[vmax][0]
+#     vi_max= enveloppes[vmax][1]
+#     vi_min= enveloppes[vmin][1]
+#     fig, ax = plt.subplots()
+#     ax.plot(x_markers, y_markers, marker= '^')
+#     factor= 1e-3
+#     units= '$kN$'
+#     if(vmax[0]== 'M'): # if bending moment.
+#         ax.yaxis.set_inverted(True)  # inverted axis with autoscaling
+#         units= '$kN \cdot m$'
+#     factoredValuesMax= [v * factor for v in vi_max]
+#     ax.plot(xi, factoredValuesMax, label= vmax)
+#     factoredValuesMin= [v * factor for v in vi_min]
+#     ax.plot(xi, factoredValuesMin, label= vmin)
+#     ax.legend(loc="upper right")
+
+#     ax.set(xlabel='x (m)', ylabel= vmax[0]+' ('+units+')',
+#            title='Internal forces enveloppe '+str(vmax)+','+str(vmin))
+#     ax.grid()
+
+# # Show graph
+# #fig.savefig("test.png")
+# plt.show()
