@@ -87,11 +87,11 @@ else:
     
 
 
-# Graphic stuff.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(modelSpace)
-oh.displayFEMesh()
-oh.displayEnvelopeComponent(envelopeComponent= 'N+')
-oh.displayNodeValueDiagram(itemToDisp= 'N+')
-# oh.displayLoads()
-# oh.displayDispRot(itemToDisp='uY')
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayFEMesh()
+# oh.displayEnvelopeComponent(envelopeComponent= 'N+')
+# oh.displayNodeValueDiagram(itemToDisp= 'N+')
+# # oh.displayLoads()
+# # oh.displayDispRot(itemToDisp='uY')
