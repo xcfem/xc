@@ -415,6 +415,7 @@ echo "$BLEU" "    Forming load combination according to SIA 260." "$NORMAL"
 python tests/actions/load_combinations/sia/test_sia_pont_ferroviaire.py
 echo "$BLEU" "    Forming load combination according to EC0." "$NORMAL"
 python tests/actions/load_combinations/ec0/test_ec0_dead_load_action.py
+python tests/actions/load_combinations/ec0/test_ec0_thermal_load_action.py
 python tests/actions/load_combinations/ec0/test_ec0_prestressing_action_01.py
 python tests/actions/load_combinations/ec0/test_ec0_prestressing_action_02.py
 python tests/actions/load_combinations/ec0/test_ec0_prestressing_action_03.py
