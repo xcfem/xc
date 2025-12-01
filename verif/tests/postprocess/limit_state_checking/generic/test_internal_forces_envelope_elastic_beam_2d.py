@@ -191,7 +191,7 @@ else:
 #     sortedElements.append((e, pos.x))
 # sortedElements= sorted(sortedElements, key= itemgetter(1))
 # ## Extract envelope values.
-# enveloppes= dict()
+# envelopes= dict()
 # for item in ['N+', 'N-', 'Mz+', 'Mz-', 'Vy+', 'Vy-']:
 #     xi= list()
 #     vi= list()
@@ -209,7 +209,7 @@ else:
 #     xi.append(xn1)
 #     v1= e1.getProp(item)[1]
 #     vi.append(v1)
-#     enveloppes[item]= (xi, vi)
+#     envelopes[item]= (xi, vi)
 
 # # Create figures
 # ## Markers.
@@ -222,9 +222,9 @@ else:
 #     y_markers.append(float(0.0))
 
 # for (vmax, vmin) in [('N+', 'N-'), ('Mz+', 'Mz-'), ('Vy+', 'Vy-')]:
-#     xi= enveloppes[vmax][0]
-#     vi_max= enveloppes[vmax][1]
-#     vi_min= enveloppes[vmin][1]
+#     xi= envelopes[vmax][0]
+#     vi_max= envelopes[vmax][1]
+#     vi_min= envelopes[vmin][1]
 #     fig, ax = plt.subplots()
 #     ax.plot(x_markers, y_markers, marker= '^')
 #     factor= 1e-3
@@ -239,7 +239,7 @@ else:
 #     ax.legend(loc="upper right")
 
 #     ax.set(xlabel='x (m)', ylabel= vmax[0]+' ('+units+')',
-#            title='Internal forces enveloppe '+str(vmax)+','+str(vmin))
+#            title='Internal forces envelope '+str(vmax)+','+str(vmin))
 #     ax.grid()
 
 # # Show graph
