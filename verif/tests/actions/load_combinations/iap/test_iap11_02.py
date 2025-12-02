@@ -55,7 +55,6 @@ for a in actions:
     
 #lcg.setVerbosityLevel(3)
 lcg.computeCombinations()
-err= 0.0
 eluPersist= lcg.getULSTransientCombinations()
 
 gSmallRegex= re.compile(r'.*1.00\*G.*') # permanent load favourable.
@@ -92,8 +91,7 @@ elsQuasiPermanentCoefsRef= refValues['elsQuasiPermanentCoefsRef']
 eluPersistCoefs= eluPersist.getCoefficients(actionNames)
 
 
-err+= computeError(eluPersistCoefs, eluPersistCoefsRef)
-
+err= computeError(eluPersistCoefs, eluPersistCoefsRef)
 
 eluSeismic= lcg.getULSSeismicCombinations()
 eluSeismicCoefs= eluSeismic.getCoefficients(actionNames)
@@ -115,7 +113,6 @@ elsQuasiPermanentCoefs= elsQuasiPermanent.getCoefficients(actionNames)
 
 err+= computeError(elsQuasiPermanentCoefs, elsQuasiPermanentCoefsRef)
 
-# print(err)
 # values= dict()
 # values['eluPersistCoefsRef']= eluPersistCoefs
 # values['eluSeismicCoefsRef']= eluSeismicCoefs

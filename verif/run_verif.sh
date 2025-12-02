@@ -421,6 +421,7 @@ python tests/actions/load_combinations/ec0/test_ec0_prestressing_action_02.py
 python tests/actions/load_combinations/ec0/test_ec0_prestressing_action_03.py
 python tests/actions/load_combinations/ec0/test_ec0_settlement_action_01.py
 python tests/actions/load_combinations/ec0/test_ec0_settlement_action_02.py
+python tests/actions/load_combinations/ec0/test_ec0_quasi_permanent_combinations.py
 python tests/actions/load_combinations/ec0/test_ec0_road_bridge_context.py
 python tests/actions/load_combinations/ec0/test_ec0_traffic_groups.py
 python tests/actions/load_combinations/ec0/test_ec0_seismic_combinations.py

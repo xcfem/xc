@@ -61,7 +61,7 @@ class ActionWrapperList: public std::deque<std::shared_ptr<ActionWrapper> >, pub
     const PartialSafetyFactorsMap *getPtrPartialSafetyFactors(void) const;
     Variations computeVariations(const bool &,const bool &,const int &) const;
     LoadCombinationVector getCombinations(const bool &,const bool &,const LeadingActionInfo &) const;
-    LoadCombinationVector getCombinationsWhenLeading(const bool &,const bool &,const bool &, const short int &v) const;
+    LoadCombinationVector getCombinationsWhenLeading(const bool &,const bool &,const bool &, const bool &, const short int &v) const;
     void Print(std::ostream &os) const;
   };
 

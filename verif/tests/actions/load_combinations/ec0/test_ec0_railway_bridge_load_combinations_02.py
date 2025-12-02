@@ -54,6 +54,6 @@ if comparisonOK:
    print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
-
-os.remove(outputPath) # clean up after yourself.
+if comparisonOK:
+    os.remove(outputPath) # clean up after yourself.
 
