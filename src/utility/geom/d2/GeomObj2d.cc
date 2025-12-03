@@ -192,6 +192,27 @@ GEOM_FT GeomObj2d::I(const Pos2d &O,const Vector2d &e) const
 GEOM_FT GeomObj2d::IO(const Pos2d &o) const
   { return (I(1,1,o)+I(2,2,o)+I(3,3,o))/2; }
 
+//! @brief Return the section modulus.
+GEOM_FT GeomObj2d::Wx(void) const
+  {
+    const GEOM_FT y0= this->getCenterOfMass().y();
+    const GEOM_FT y_max= this->GetYMax()-y0;
+    const GEOM_FT y_min= this->GetYMin()-y0;
+    const GEOM_FT ix= this->Ix();
+    return ix/std::max(std::abs(y_max), std::abs(y_min));
+  }
+
+
+//! @brief Return the section modulus.
+GEOM_FT GeomObj2d::Wy(void) const
+  {
+    const GEOM_FT x0= this->getCenterOfMass().x();
+    const GEOM_FT x_max= this->GetXMax()-x0;
+    const GEOM_FT x_min= this->GetXMin()-x0;
+    const GEOM_FT iy= this->Iy();
+    return iy/std::max(std::abs(x_max), std::abs(x_min));
+  }
+
 //! @brief Desplaza el objeto.
 void GeomObj2d::Move(const Vector2d &v)
   {

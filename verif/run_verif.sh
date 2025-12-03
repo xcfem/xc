@@ -179,6 +179,7 @@ python tests/utility/geom/polygons/2d/quadrilateral2D_test_01.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_02.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_03.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_04.py
+python tests/utility/geom/polygons/2d/quadrilateral2D_test_05.py
 echo "$BLEU" "      3D Polygons." "$NORMAL"
 python tests/utility/geom/polygons/3d/polygon3D_test_01.py
 python tests/utility/geom/polygons/3d/polygon3D_test_02.py
@@ -202,7 +203,10 @@ python tests/utility/geom/circles/circular_sector_2d_test_01.py
 python tests/utility/geom/circles/circular_sector_2d_test_02.py
 python tests/utility/geom/circles/circular_sector_2d_test_03.py
 echo "$BLEU" "    Parabolas." "$NORMAL"
-python tests/utility/geom/parabola_test_01.py
+python tests/utility/geom/parabolas/parabola_test_01.py
+python tests/utility/geom/parabolas/parabola_test_02.py
+python tests/utility/geom/parabolas/generalized_parabola_test_01.py
+python tests/utility/geom/parabolas/generalized_parabola_test_02.py
 echo "$BLEU" "    Other geometric objects." "$NORMAL"
 python tests/utility/geom/pyramidal_frustum_test_01.py
 
@@ -219,6 +223,8 @@ python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_2d_test
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_2d_test_06.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_2d_test_07.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_2d_test_08.py
+python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_2d_test_09.py
+python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_2d_test_10.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_3d_test_01.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_3d_test_02.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_3d_test_03.py
@@ -280,7 +286,8 @@ python tests/utility/geom/ezdxf_test_01.py
 # Tests about actions.
 echo "$BLEU" "Actions tests." "$NORMAL"
 python tests/actions/test_prestressing.py
-python tests/actions/test_report_load_cases.py
+python tests/actions/test_report_load_cases_longtable.py
+python tests/actions/test_report_load_cases_supertabular.py
 echo "$BLEU" "  Earth pressure tests." "$NORMAL"
 python tests/actions/earth_pressure/test_peck_pressure_envelope.py
 python tests/actions/earth_pressure/test_uniform_load_on_stem_01.py
@@ -331,6 +338,7 @@ echo "$BLEU" "    CTE wind action tests." "$NORMAL"
 python tests/actions/wind/cte/test_cte_wind_load.py
 echo "$BLEU" "    EC1 wind action tests." "$NORMAL"
 python tests/actions/wind/ec1/test_ec1_cylinder_force_coefficient.py
+python tests/actions/wind/ec1/test_ec1_monopitch_canopy_overall_force_coefficients_01.py
 python tests/actions/wind/ec1/test_ec1_duopitch_canopy_overall_force_coefficients_01.py
 python tests/actions/wind/ec1/test_ec1_duopitch_canopy_overall_force_coefficients_02.py
 python tests/actions/wind/ec1/test_ec1_longitudinal_wind_reduction_factor.py 
@@ -343,6 +351,7 @@ python tests/actions/wind/ec1/test_ec1_wind_action_on_free_standing_wall.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_squat_rectangular_pier.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_high_circular_cylindrical_pier.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_duopitch_canopy.py
+python tests/actions/wind/ec1/test_ec1_wind_action_on_monopitch_canopy.py
 echo "$BLEU" "    IAP wind action tests." "$NORMAL"
 python tests/actions/wind/iap/test_iap_wind_load_01.py
 python tests/actions/wind/iap/test_iap_wind_load_02.py
@@ -405,11 +414,20 @@ python tests/actions/load_combinations/iap/test_iap11_03.py
 echo "$BLEU" "    Forming load combination according to SIA 260." "$NORMAL"
 python tests/actions/load_combinations/sia/test_sia_pont_ferroviaire.py
 echo "$BLEU" "    Forming load combination according to EC0." "$NORMAL"
+python tests/actions/load_combinations/ec0/test_ec0_dead_load_action.py
+python tests/actions/load_combinations/ec0/test_ec0_thermal_load_action.py
+python tests/actions/load_combinations/ec0/test_ec0_prestressing_action_01.py
+python tests/actions/load_combinations/ec0/test_ec0_prestressing_action_02.py
+python tests/actions/load_combinations/ec0/test_ec0_prestressing_action_03.py
+python tests/actions/load_combinations/ec0/test_ec0_settlement_action_01.py
+python tests/actions/load_combinations/ec0/test_ec0_settlement_action_02.py
+python tests/actions/load_combinations/ec0/test_ec0_quasi_permanent_combinations.py
 python tests/actions/load_combinations/ec0/test_ec0_road_bridge_context.py
 python tests/actions/load_combinations/ec0/test_ec0_traffic_groups.py
 python tests/actions/load_combinations/ec0/test_ec0_seismic_combinations.py
 python tests/actions/load_combinations/ec0/test_ec0_accidental_combinations_01.py
 python tests/actions/load_combinations/ec0/test_ec0_accidental_combinations_02.py
+python tests/actions/load_combinations/ec0/test_ec0_accidental_combinations_03.py
 python tests/actions/load_combinations/ec0/test_ec0_railway_bridge_load_combinations_01.py
 python tests/actions/load_combinations/ec0/test_ec0_railway_bridge_load_combinations_02.py
 python tests/actions/load_combinations/ec0/test_ec0_railway_bridge_load_combinations_03.py
@@ -418,6 +436,7 @@ echo "$BLEU" "  Load combination container tests." "$NORMAL"
 python tests/actions/load_combinations/comb_container/test_comb_container_01.py
 python tests/actions/load_combinations/comb_container/test_comb_container_02.py
 python tests/actions/load_combinations/comb_container/test_comb_container_03.py
+python tests/actions/load_combinations/comb_container/test_comb_container_04.py
 
 echo "$BLEU" "Nodes tests." "$NORMAL"
 echo "$BLEU" "  Mixed DOFs tests." "$NORMAL"
@@ -622,6 +641,9 @@ echo "$BLEU" "  Misc elements tests." "$NORMAL"
 python tests/elements/spring_test_01.py
 python tests/elements/spring_test_02.py
 echo "$BLEU" "  Element birth and death tests." "$NORMAL"
+python tests/elements/birth_and_death/remove_node_test_01.py
+python tests/elements/birth_and_death/remove_element_test_01.py
+python tests/elements/birth_and_death/remove_element_test_02.py
 python tests/elements/birth_and_death/kill_elements_01.py
 python tests/elements/birth_and_death/kill_elements_02.py
 python tests/elements/birth_and_death/kill_elements_03.py
@@ -827,6 +849,7 @@ python tests/preprocessor/geom_entities/test_is_closer_than_method_03.py
 python tests/preprocessor/geom_entities/test_is_closer_than_method_04.py
 python tests/preprocessor/geom_entities/test_get_regression_plane_from_edge_list.py
 python tests/preprocessor/geom_entities/test_connected_edges_01.py
+python tests/preprocessor/geom_entities/test_connected_elements_01.py
 
 echo "$BLEU" "  Meshing routines tests." "$NORMAL"
 python tests/preprocessor/meshing/test_surface_axes_01.py
@@ -917,6 +940,12 @@ python tests/preprocessor/sets/test_get_mesh_components_01.py
 python tests/preprocessor/sets/test_get_sets_containing_01.py
 python tests/preprocessor/sets/test_pick_elements_crossing_01.py
 python tests/preprocessor/sets/test_pick_elements_crossing_02.py
+python tests/preprocessor/sets/test_set_substract_nodes.py
+python tests/preprocessor/sets/test_set_substract_elements.py
+python tests/preprocessor/sets/test_set_substract_points.py
+python tests/preprocessor/sets/test_set_substract_lines.py
+python tests/preprocessor/sets/test_set_substract_set.py
+
 echo "$BLEU" "    Sets geometry queries." "$NORMAL"
 python tests/preprocessor/sets/geometric_queries/test_get_element_set_contour_01.py
 python tests/preprocessor/sets/geometric_queries/test_get_element_set_contour_02.py
@@ -1005,6 +1034,10 @@ python tests/constraints/test_release_beam_node_01.py
 echo "$BLEU" "Loads tests." "$NORMAL"
 echo "$BLEU" "  Load patterns tests." "$NORMAL"
 python tests/loads/load_patterns/test_remove_load_pattern.py
+python tests/loads/load_patterns/test_remove_nodal_load_01.py
+python tests/loads/load_patterns/test_remove_elemental_load_01.py
+python tests/loads/load_patterns/test_remove_elemental_load_02.py
+python tests/loads/load_patterns/test_remove_elemental_load_03.py
 python tests/loads/load_patterns/load_case_test_01.py
 python tests/loads/load_patterns/load_case_manager_test_01.py
 python tests/loads/load_patterns/load_case_manager_test_02.py
@@ -1075,6 +1108,7 @@ python tests/loads/load_distribution/test_sliding_vector_load_04.py
 python tests/loads/load_distribution/test_sliding_vector_load_05.py
 python tests/loads/load_distribution/test_sliding_vector_load_06.py
 python tests/loads/load_distribution/test_sliding_vector_load_07.py
+python tests/loads/load_distribution/test_sliding_vector_load_08.py
 python tests/loads/load_distribution/test_surf_unif_load_distributed.py
 python tests/loads/load_distribution/test_wheel_load_distribution_01.py
 python tests/loads/load_distribution/test_notional_lane_load_distribution.py
@@ -1523,7 +1557,7 @@ python tests/materials/ec2/test_EC2_max_min_reinforcement_area_02.py
 python tests/materials/ec2/test_lap_length_01.py
 python tests/materials/ec2/test_ec2_concrete_01.py
 python tests/materials/ec2/test_ec2_concrete_02.py
-echo "$BLEU" "    EC2 misc. shrinkage and creep tests." "$NORMAL"
+echo "$BLEU" "    EC2 shrinkage and creep tests." "$NORMAL"
 python tests/materials/ec2/shrinkage_creep/test_EC2_creep_01.py
 python tests/materials/ec2/shrinkage_creep/test_EC2_creep_02.py
 python tests/materials/ec2/shrinkage_creep/test_EC2_2004_shrinkage_01.py
@@ -1536,14 +1570,14 @@ python tests/materials/ec2/shrinkage_creep/test_ec2_tdconcrete_fiber_section_02.
 python tests/materials/ec2/shrinkage_creep/test_ec2_tdconcrete_fiber_section_03.py
 
 echo "$BLEU" "    EC2 crack amplitude determination tests." "$NORMAL"
-python tests/materials/ec2/test_crack_control_without_direct_calculation_01.py
-python tests/materials/ec2/test_crack_control_01.py
-python tests/materials/ec2/test_smearedCracking_01.py
-python tests/materials/ec2/test_smearedCracking_02.py
-python tests/materials/ec2/test_smearedCracking_03.py
-python tests/materials/ec2/test_smearedCracking_04.py
-python tests/materials/ec2/test_smearedCracking_05.py
-python tests/materials/ec2/test_smearedCracking_06.py
+python tests/materials/ec2/crack_control/test_crack_control_without_direct_calculation_01.py
+python tests/materials/ec2/crack_control/test_crack_control_01.py
+python tests/materials/ec2/crack_control/test_smearedCracking_01.py
+python tests/materials/ec2/crack_control/test_smearedCracking_02.py
+python tests/materials/ec2/crack_control/test_smearedCracking_03.py
+python tests/materials/ec2/crack_control/test_smearedCracking_04.py
+python tests/materials/ec2/crack_control/test_smearedCracking_05.py
+python tests/materials/ec2/crack_control/test_smearedCracking_06.py
 echo "$BLEU" "    EC2 bending resistance determination tests." "$NORMAL"
 python tests/materials/ec2/test_ec2_interaction_diagram_01.py
 python tests/materials/ec2/test_ec2_interaction_diagram_02.py
@@ -1615,32 +1649,35 @@ python tests/materials/steel_shapes/test_arcelor_metric_shapes_04.py
 python tests/materials/steel_shapes/test_en_13674_1_rail_shapes_01.py
 python tests/materials/steel_shapes/test_en_13674_1_rail_shapes_02.py
 echo "$BLEU" "    EC3 tests." "$NORMAL"
-python tests/materials/ec3/compare_mech_properties.py
-python tests/materials/ec3/test_cross_section_verification_01.py
-python tests/materials/ec3/test_cross_section_verification_02.py
-python tests/materials/ec3/test_beam_control_points_01.py
-python tests/materials/ec3/test_beam_control_points_02.py
-python tests/materials/ec3/test_biax_bend_coeff.py
-python tests/materials/ec3/test_section_classification_01.py
-python tests/materials/ec3/test_section_classification_02.py
-python tests/materials/ec3/test_section_classification_03.py
-python tests/materials/ec3/test_beam_with_full_lateral_restraint.py
-python tests/materials/ec3/test_bolt_shear_01.py
-python tests/materials/ec3/test_bolt_tension_01.py
-python tests/materials/ec3/compressed_section_test_01.py
-echo "$BLEU" "      buckling tests." "$NORMAL"
-python tests/materials/ec3/test_buckling_resistance_01.py
-python tests/materials/ec3/test_buckling_resistance_02.py
-python tests/materials/ec3/test_buckling_resistance_03.py
-python tests/materials/ec3/test_buckling_resistance_04.py
-python tests/materials/ec3/test_buckling_resistance_05.py
-echo "$BLEU" "      lateral-torsional buckling tests." "$NORMAL"
-python tests/materials/ec3/test_lateral_torsional_buckling_00.py
-python tests/materials/ec3/test_lateral_torsional_buckling_01.py
-python tests/materials/ec3/test_lateral_torsional_buckling_02.py
-python tests/materials/ec3/test_lateral_torsional_buckling_03.py
-python tests/materials/ec3/test_lateral_torsional_buckling_04.py
-echo "$BLEU" "      compression_lateral-torsional buckling tests." "$NORMAL"
+echo "$BLEU" "      EC3 member dssign tests." "$NORMAL"
+python tests/materials/ec3/member_design/compare_mech_properties.py
+python tests/materials/ec3/member_design/test_cross_section_verification_01.py
+python tests/materials/ec3/member_design/test_cross_section_verification_02.py
+python tests/materials/ec3/member_design/test_beam_control_points_01.py
+python tests/materials/ec3/member_design/test_beam_control_points_02.py
+python tests/materials/ec3/member_design/test_biax_bend_coeff.py
+python tests/materials/ec3/member_design/test_section_classification_01.py
+python tests/materials/ec3/member_design/test_section_classification_02.py
+python tests/materials/ec3/member_design/test_section_classification_03.py
+python tests/materials/ec3/member_design/test_beam_with_full_lateral_restraint.py
+python tests/materials/ec3/member_design/compressed_section_test_01.py
+echo "$BLEU" "        buckling tests." "$NORMAL"
+python tests/materials/ec3/member_design/test_buckling_resistance_01.py
+python tests/materials/ec3/member_design/test_buckling_resistance_02.py
+python tests/materials/ec3/member_design/test_buckling_resistance_03.py
+python tests/materials/ec3/member_design/test_buckling_resistance_04.py
+python tests/materials/ec3/member_design/test_buckling_resistance_05.py
+echo "$BLEU" "        lateral-torsional buckling tests." "$NORMAL"
+python tests/materials/ec3/member_design/test_lateral_torsional_buckling_00.py
+python tests/materials/ec3/member_design/test_lateral_torsional_buckling_01.py
+python tests/materials/ec3/member_design/test_lateral_torsional_buckling_02.py
+python tests/materials/ec3/member_design/test_lateral_torsional_buckling_03.py
+python tests/materials/ec3/member_design/test_lateral_torsional_buckling_04.py
+echo "$BLEU" "      EC3 connection design tests." "$NORMAL"
+python tests/materials/ec3/connection_design/test_bolt_distances_01.py
+python tests/materials/ec3/connection_design/test_bolt_shear_01.py
+python tests/materials/ec3/connection_design/test_bolt_tension_01.py
+
 echo "$BLEU" "    EAE tests." "$NORMAL"
 python tests/materials/eae/test_steel_corbel_weld.py
 python tests/materials/eae/test_simple_shear_welded_web.py
@@ -1757,6 +1794,9 @@ python tests/materials/prestressing/test_prestressing_05.py
 echo "$BLEU" "  EOTA TR-29." "$NORMAL"
 python tests/materials/eota_tr_29/test_anchor_bolt01.py
 python tests/materials/eota_tr_29/test_shear_anchor.py
+
+echo "$BLEU" "  ETA-05/0123" "$NORMAL"
+python tests/materials/test_dywidag_bar.py
 
 echo "$BLEU" "  Other materials tests." "$NORMAL"
 python tests/materials/test_elastomeric_bearing_stiffness.py
@@ -1984,6 +2024,8 @@ python tests/postprocess/limit_state_checking/serviceability_limit_states/test_i
 echo "$BLEU" "    generic limit state tools." "$NORMAL"
 python tests/postprocess/limit_state_checking/generic/test_select_critical_combs.py 
 python tests/postprocess/limit_state_checking/generic/test_internal_forces_envelope_truss.py 
+python tests/postprocess/limit_state_checking/generic/test_internal_forces_envelope_elastic_beam_2d.py 
+python tests/postprocess/limit_state_checking/generic/test_compute_maximum_deflection.py
 # Graphic output tests
 ##python tests/postprocess/vtk/dibuja_edges.py
 echo "$BLEU" "  Graphic output." "$NORMAL"
@@ -2025,12 +2067,17 @@ python tests/postprocess/vtk/display_mat_response/test_beam3d_bending_moment_bel
 python tests/postprocess/vtk/display_mat_response/test_display_stresses_on_brick_01.py
 python tests/postprocess/vtk/display_mat_response/test_display_strains_on_shell_01.py
 python tests/postprocess/vtk/display_mat_response/test_display_internal_forces_on_shell_01.py
+echo "$BLEU" "    Graphic output. Geotechnics." "$NORMAL"
+python tests/postprocess/vtk/geotechnics/test_display_pile_spring_stiffnesses_01.py
 echo "$BLEU" "    Graphic output. Limit state results." "$NORMAL"
 echo "$BLEU" "      Eurocode 2." "$NORMAL"
 python tests/postprocess/vtk/display_limit_state_results/ec2/test_display_shear_uls_on_shells_01.py
 echo "$BLEU" "      Eurocode 3." "$NORMAL"
 python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_bending_uls_cf_on_beams_01.py
 python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_bending_uls_cf_on_beams_02.py
+echo "$BLEU" "      Generic." "$NORMAL"
+python tests/postprocess/vtk/display_limit_state_results/generic/test_display_disp_max_on_nodes.py
+python tests/postprocess/vtk/display_limit_state_results/generic/test_display_internal_forces_envelope_01.py
 
 # Report tests.
 echo "$BLEU" "  Report output." "$NORMAL"

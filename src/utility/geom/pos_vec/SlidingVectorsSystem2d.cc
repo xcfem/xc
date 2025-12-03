@@ -341,6 +341,22 @@ Line2d SlidingVectorsSystem2d::getZeroMomentLine(void) const
     return retval;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict SlidingVectorsSystem2d::getPyDict(void) const
+  {
+    boost::python::dict retval= SlidingVector2d::getPyDict();
+    retval["moment"]= mom;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void SlidingVectorsSystem2d::setPyDict(const boost::python::dict &d)
+  {
+    SlidingVector2d::setPyDict(d);
+    this->mom= boost::python::extract<double>(d["moment"]);
+  }    
+
+
 std::ostream &operator<<(std::ostream &os, const SlidingVectorsSystem2d &svd2d)
   {
     svd2d.Print(os);

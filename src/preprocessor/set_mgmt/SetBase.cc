@@ -93,12 +93,14 @@ void XC::SetBase::genMesh(meshing_dir dm)
 
 //! @brief Creates the inertia load that corresponds to the
 //! acceleration argument.
-void XC::SetBase::createInertiaLoads(const Vector &)
+boost::python::list XC::SetBase::createInertiaLoads(const Vector &)
   {
+    boost::python::list retval;
     std::cerr << Color::red
 	      << getClassName() << "::" << __FUNCTION__
               << " not implemented."
 	      << Color::def << std::endl;
+    return retval;
   }
 
 //! @brief Impone desplazamiento nulo for all the nodes of this set.

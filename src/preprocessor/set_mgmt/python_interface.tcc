@@ -98,10 +98,10 @@ class_<XC::DqPtrsElem, bases<dq_ptrs_element> >("DqPtrsElem",no_init)
   .def("pickElemsOfMaterial",&XC::DqPtrsElem::pickElemsOfMaterial,"pickElemsOfMaterial(materialName) return the elements that have that material.")
   // Loads on elements.
   .def("createInertiaLoads", &XC::DqPtrsElem::createInertiaLoads,"Create the inertia load for the given acceleration vector.")
-  .def("vector2dPointLoadGlobal", &XC::DqPtrsElem::vector2dPointLoadGlobal,"Element's load.")
-  .def("vector2dPointLoadLocal", &XC::DqPtrsElem::vector2dPointLoadLocal,"Element's load.")
-  .def("vector3dPointLoadGlobal", &XC::DqPtrsElem::vector3dPointLoadGlobal,"Element's load.")
-  .def("vector3dPointLoadLocal", &XC::DqPtrsElem::vector3dPointLoadLocal,"Element's load.")
+  .def("vector2dPointLoadGlobal",  make_function(&XC::DqPtrsElem::vector2dPointLoadGlobal, return_internal_reference<>() ), "Element's load.")
+  .def("vector2dPointLoadLocal",  make_function(&XC::DqPtrsElem::vector2dPointLoadLocal, return_internal_reference<>() ), "Element's load.")
+  .def("vector3dPointLoadGlobal",  make_function(&XC::DqPtrsElem::vector3dPointLoadGlobal, return_internal_reference<>() ), "Element's load.")
+  .def("vector3dPointLoadLocal",  make_function(&XC::DqPtrsElem::vector3dPointLoadLocal, return_internal_reference<>() ), "Element's load.")
 
   .add_property("totalMass", &XC::DqPtrsElem::getTotalMass, "Return the total mass matrix.")
   .def("getTotalMassComponent", &XC::DqPtrsElem::getTotalMassComponent,"Return the total mass matrix component for the DOF argument.")
@@ -367,6 +367,12 @@ void (XC::Set::*extend_surfaces)(const XC::SetEntities::lst_surface_ptrs &)= &XC
 void (XC::Set::*extend_bodies)(const XC::SetEntities::lst_body_pointers &)= &XC::Set::extend;
 void (XC::Set::*extend_ugrids)(const XC::SetEntities::lst_ptr_uniform_grids &)= &XC::Set::extend;
 void (XC::Set::*extend_set)(const XC::Set &)= &XC::Set::extend;
+void (XC::Set::*substract_points)(const XC::SetEntities::lst_ptr_points &)= &XC::Set::substract;
+void (XC::Set::*substract_lines)(const XC::SetEntities::lst_line_pointers &)= &XC::Set::substract;
+void (XC::Set::*substract_surfaces)(const XC::SetEntities::lst_surface_ptrs &)= &XC::Set::substract;
+void (XC::Set::*substract_bodies)(const XC::SetEntities::lst_body_pointers &)= &XC::Set::substract;
+void (XC::Set::*substract_ugrids)(const XC::SetEntities::lst_ptr_uniform_grids &)= &XC::Set::substract;
+void (XC::Set::*substract_set)(const XC::Set &)= &XC::Set::substract;
 XC::Set (XC::Set::*SETpickNodesInside3D)(const std::string &, const GeomObj3d &, const double &)= &XC::Set::pickNodesInside;
 XC::Set (XC::Set::*SETpickNodesInside2D)(const std::string &, const GeomObj2d &, const double &)= &XC::Set::pickNodesInside;
 XC::Set (XC::Set::*SETpickElemsInside3D)(const std::string &, const GeomObj3d &, const double &)= &XC::Set::pickElemsInside;
@@ -450,6 +456,15 @@ class_<XC::Set, XC::Set *,bases<XC::SetMeshComp> >("Set")
   .def("extend", extend_bodies, "Appends the bodies in the argument to the set.")
   .def("extend", extend_ugrids, "Appends the uniform grids in the argument to the set.")
   .def("extend", extend_set, "Appends the argument components to the set.")
+  .def("substract", substract_nodes, "Removes the nodes in the argument to the set.")
+  .def("substract", substract_elements, "Removes the elements in the argument to the set.")
+  .def("substract", substract_constraints, "Removes the constraints in the argument to the set.")
+  .def("substract", substract_points, "Removes the points in the argument to the set.")
+  .def("substract", substract_lines, "Removes the lines in the argument to the set.")
+  .def("substract", substract_surfaces, "Removes the surfaces in the argument to the set.")
+  .def("substract", substract_bodies, "Removes the bodies in the argument to the set.")
+  .def("substract", substract_ugrids, "Removes the uniform grids in the argument to the set.")
+  .def("substract", substract_set, "Removes the argument components to the set.")
   .def(self += self)
   .def(self -= self)
   .def(self *= self)

@@ -132,7 +132,28 @@ void XC::NodeHandler::node_setup(Node *newNode)
       }
   }
 
-//! @brief Create a duplicate copy of the node whose tag is passed as parameter
+//! @brief Create a duplicate of the given node.
+XC::Node *XC::NodeHandler::duplicateNode(const Node &orgNodeRef)
+  {
+    Node *retval= nullptr;
+    const int ndof= orgNodeRef.getNumberDOF();
+    const size_t dim= orgNodeRef.getDim();
+    const Vector &crds= orgNodeRef.getCrds();
+    const int tg= getDefaultTag();
+    if(dim==1)
+      retval= new_node(tg, dim, ndof, crds[0]);
+    else if(dim==2)
+      retval= new_node(tg, dim, ndof, crds[0], crds[1]);
+    else if(dim==3)
+      retval= new_node(tg, dim, ndof, crds[0], crds[1], crds[2]);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; dimension: "<< dim << " out of range." << std::endl;
+    node_setup(retval);
+    return retval;
+  }
+
+//! @brief Create a duplicate of the node whose tag is passed as parameter
 XC::Node *XC::NodeHandler::duplicateNode(const int &orgNodeTag)
   {
     Node *retval= nullptr;
@@ -143,22 +164,7 @@ XC::Node *XC::NodeHandler::duplicateNode(const int &orgNodeTag)
 	        << "; node identified by:"
                 << orgNodeTag << " not found." << std::endl;
     else
-      {
-        const int ndof= org_node_ptr->getNumberDOF();
-	const size_t dim= org_node_ptr->getDim();
-	const Vector &crds= org_node_ptr->getCrds();
-        const int tg= getDefaultTag();
-	if(dim==1)
-	  retval= new_node(tg, dim, ndof, crds[0]);
-	else if(dim==2)
-	  retval= new_node(tg, dim, ndof, crds[0], crds[1]);
-	else if(dim==3)
-	  retval= new_node(tg, dim, ndof, crds[0], crds[1], crds[2]);
-	else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; dimension: "<< dim << " out of range." << std::endl;
-        node_setup(retval);
-      }
+      {	retval= this->duplicateNode(*org_node_ptr); }
     return retval;
   }
 

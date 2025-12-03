@@ -67,6 +67,7 @@
 #include <utility/recorder/response/ElementResponse.h>
 #include "material/ResponseId.h"
 #include "domain/load/beam_loads/TrussStrainLoad.h"
+#include "domain/load/beam_loads/TrussPrestressLoad.h"
 
 
 //! @brief Constructor:
@@ -473,7 +474,17 @@ int XC::CorotTrussSection::addLoad(ElementalLoad *theLoad, double loadFactor)
 	    ezero[0]= (e2+e1)/2;
             physicalProperties[0]->incrementInitialSectionDeformation(ezero);
           }
-        else
+        else if(TrussPrestressLoad *trsLoad= dynamic_cast<TrussPrestressLoad *>(theLoad))
+          {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      <<"; loads of type: "
+		      << trsLoad->getClassName()
+		      << " not implemented yet."
+		      << " Load ignored."
+		      << std::endl;
+	    return -1;
+          }
+	else
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
 	              << "; load type unknown for truss with tag: "

@@ -101,7 +101,7 @@ lp0.newNodalLoad(n0.tag,xc.Vector([0, 0, -F, 0, 0, 0]))
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
-analysis= predefined_solutions.penalty_newton_raphson(feProblem, maxNumIter= 20, printFlag= 0)
+analysis= predefined_solutions.penalty_newton_raphson(feProblem, maxNumIter= 30, printFlag= 0)
 result= analysis.analyze(1)
 if(result!=0):
     lmsg.error("Can't solve for load case: "+str(lp0.name))

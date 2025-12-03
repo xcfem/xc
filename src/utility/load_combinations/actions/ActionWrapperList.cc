@@ -235,8 +235,9 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionWrapperList::getCombinations(const
 //!
 //! @param uls: Verdadero si se trata de un estado límite último.
 //! @param sit_accidental: Verdadero si estamos en situación accidental.
+//! @param quasi_permanent_sit: True if the combinations correspond to quasi-permanent situations.
 //! @param leadingActioInfo: Information about the leading action.
-cmb_acc::LoadCombinationVector cmb_acc::ActionWrapperList::getCombinationsWhenLeading(const bool &uls,const bool &sit_accidental, const bool &sit_sismica,const short int &v) const
+cmb_acc::LoadCombinationVector cmb_acc::ActionWrapperList::getCombinationsWhenLeading(const bool &uls,const bool &sit_accidental, const bool &sit_sismica, const bool &quasi_permanent_sit, const short int &v) const
   {
     const size_t nq= size();
     LoadCombinationVector retval;
@@ -261,7 +262,7 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionWrapperList::getCombinationsWhenLe
 	    if(sit_accidental)
 	      lci= LeadingActionInfo(i,1,2); //Leading action with frequent value
 					     //rest of actions with quasi-permanent value.
-	    if(sit_sismica)
+	    if(sit_sismica || quasi_permanent_sit)
 	      lci= LeadingActionInfo(-1,2,2); //All actions with quasi-permanent value.
 	    LoadCombinationVector temp= getCombinations(uls,sit_accidental,lci); 
 	    retval= LoadCombinationVector::Concat(retval,temp,Action::zero);

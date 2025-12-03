@@ -97,4 +97,18 @@ SlidingVector2d operator-(const SlidingVector2d &v)
     neg.Neg();
     return neg;
   }
+    
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict SlidingVector2d::getPyDict(void) const
+  {
+    boost::python::dict retval= Vector2d::getPyDict();
+    retval["org"]= org.getPyDict();
+    return retval;
+  }
 
+//! @brief Set the values of the object members from a Python dictionary.
+void SlidingVector2d::setPyDict(const boost::python::dict &d)
+  {
+    Vector2d::setPyDict(d);
+    this->org.setPyDict(boost::python::extract<boost::python::dict>(d["org"]));
+  }    

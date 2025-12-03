@@ -69,9 +69,9 @@ materialHandler= preprocessor.getMaterialHandler
 section.mainReinf= mainReinf
 section.shReinf= shearReinf
 
-section.defRCSection(preprocessor, matDiagType= 'd')
+fiberSectionName= section.defRCSection(preprocessor, matDiagType= 'd')
 
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, section.name)
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSectionName)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

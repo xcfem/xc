@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
-''' Slipstream effect according to EC1-2 clause 6.6.'''
+''' Slipstream effect according to EC1-2 clause 6.6.
+
+A slipstream is a region behind a moving object in which a wake of fluid
+(typically air or water) is moving at velocities comparable to that of the
+moving object, relative to the ambient fluid through which the object is 
+moving.
+'''
 
 from __future__ import division
 from __future__ import print_function
@@ -16,7 +22,9 @@ from misc_utils import log_messages as lmsg
 
 def q1k(v:float, a_g:float):
     '''Characteristic value of q_1k according to figure 6.22 of EC1-2
-    (analytic expression taken from the Spanish national annex).
+    (analytic expression taken from the Spanish national annex). This function
+    return the characteristic value of the aerodinamic action for simple
+    vertical surfaces parallel to the track.
 
     :param v: speed of the train (m/s).
     :param a_g: distance from the track axis to the surface of the structure (m).
@@ -29,7 +37,9 @@ def q1k(v:float, a_g:float):
 
 def q2k(v:float, h_g:float):
     '''Characteristic value of q_2k according to figure 6.23 of EC1-2
-    (analytic expression taken from the Spanish national annex).
+    (analytic expression taken from the Spanish national annex).This function
+    return the characteristic value of the aerodinamic action for simple
+    horizontal surfaces above the track.
 
     :param v: speed of the train (m/s).
     :param h_g: distance from top of rail level to the underside of the structure (m).
@@ -39,7 +49,9 @@ def q2k(v:float, h_g:float):
 
 def q3k(v:float, a_g:float):
     '''Characteristic value of q_3k according to figure 6.24 of EC1-2
-    (analytic expression taken from the Spanish national annex).
+    (analytic expression taken from the Spanish national annex). This function
+    return the characteristic value of the aerodinamic action for simple
+    horizontal surfaces adjacent to the track.
 
     :param v: speed of the train (m/s).
     :param a_g: distance from the track axis to the surface of the structure (m).

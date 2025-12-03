@@ -72,6 +72,9 @@ class SlidingVectorsSystem2d: public SlidingVector2d
     void Print(std::ostream &os) const;
     void PrintLtx(std::ostream &,const std::string &ud_long= " m",const GEOM_FT &f_long=1.0, const std::string &ud_f= " N",const GEOM_FT &f_f=1.0) const;
     friend std::ostream &operator<<(std::ostream &os, const SlidingVectorsSystem2d &svd2d);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
   };
 
 SlidingVectorsSystem2d operator+(const SlidingVectorsSystem2d &s1,const SlidingVectorsSystem2d &s2);

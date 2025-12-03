@@ -33,6 +33,7 @@ texFileName= os.path.basename(texFileNameRef)
 texFileName= texFileName.replace('ref_','./')
 ## Write LaTeX file
 combContainer.exportToLatex(fileName= texFileName)
+# combContainer.exportToPDF(fileName= texFileName.replace('.tex', '.pdf'), superTabular= False)
 
 # Check result.
 comparisonOK= filecmp.cmp(texFileNameRef, texFileName, shallow=False)
@@ -43,4 +44,5 @@ if comparisonOK:
    print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
-os.remove(texFileName) # Your garbage, you clean it.
+if(comparisonOK):
+    os.remove(texFileName) # Your garbage, you clean it.

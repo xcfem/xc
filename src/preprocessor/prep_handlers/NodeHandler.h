@@ -62,6 +62,7 @@ class NodeHandler: public PrepHandler
     Node *newNodeIDXYZ(const int &,const double &,const double &,const double &);
     Node *newNodeIDXY(const int &,const double &,const double &);
     Node *newNodeIDV(const int &,const Vector &);
+    Node *duplicateNode(const Node &);
     Node *duplicateNode(const int &);
 
     size_t getSpaceDim(void) const;

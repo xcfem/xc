@@ -65,7 +65,7 @@ const cmb_acc::LoadCombinationVector &cmb_acc::LoadCombinationVector::GetNoNulas
     return retval;
   }
 
-//! @brief Return true if the combination argument is found on this container.
+//! @brief Return true if the given action is found on this container.
 bool cmb_acc::LoadCombinationVector::Existe(const Action &f) const
   {
     bool retval= false;
@@ -78,7 +78,7 @@ bool cmb_acc::LoadCombinationVector::Existe(const Action &f) const
         }
     return retval;
   }
-        
+
 //! @brief Return the combinations filtering the repeated ones.
 const cmb_acc::LoadCombinationVector &cmb_acc::LoadCombinationVector::GetDistintas(void) const
   {

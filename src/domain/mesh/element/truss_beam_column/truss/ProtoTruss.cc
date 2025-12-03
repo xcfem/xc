@@ -160,25 +160,30 @@ double XC::ProtoTruss::getLinearRho(void) const
 
 //! @brief Creates the inertia load that corresponds to the
 //! acceleration argument.
-void XC::ProtoTruss::createInertiaLoad(const Vector &accel)
+XC::ElementalLoad *XC::ProtoTruss::createInertiaLoad(const Vector &accel)
   {
     const int accelSize= accel.Size();
     const double Lo= getLength(true); // element length
     const double rho= getLinearRho();
     const double M= 0.5*rho*Lo;
     const Vector load= -M*accel;
-    const int nDOF= theNodes[0]->getNumberDOF();
-    Vector nLoad(nDOF);
-    if(accelSize>nDOF)
-         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		   << "; acceleration of incorrect size "
-		   << accelSize << " should be less than " <<  nDOF
-		   << Color::def << std::endl;
-    const int sz= std::min(nDOF,accelSize);
-    for(int i= 0;i<sz;i++)
-      nLoad[i]= load[i];
-    theNodes[0]->newLoad(nLoad);
-    theNodes[1]->newLoad(nLoad);
+    const double norm= load.Norm2();
+    if(norm>0.0)
+      {
+	const int nDOF= theNodes[0]->getNumberDOF();
+	Vector nLoad(nDOF);
+	if(accelSize>nDOF)
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; acceleration of incorrect size "
+		    << accelSize << " should be less than " <<  nDOF
+		    << Color::def << std::endl;
+	const int sz= std::min(nDOF,accelSize);
+	for(int i= 0;i<sz;i++)
+	  nLoad[i]= load[i];
+        theNodes[0]->newLoad(nLoad);
+	theNodes[1]->newLoad(nLoad);
+      }
+    return nullptr; // It is NOT a real elemental load.
   }
 
 //! @brief Return the element initial strain.

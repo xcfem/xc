@@ -94,6 +94,16 @@ int XC::InitStrainMaterial::setInitialStrain(const double &initStrain)
     return 0;
   }
 
+int XC::InitStrainMaterial::incrementInitialStrain(const double &incStrain)
+  {
+    return this->setInitialStrain(epsInit+incStrain);
+  }
+
+void XC::InitStrainMaterial::zeroInitialStrain(void)
+  {
+    this->setInitialStrain(0.0);
+  }
+
 int XC::InitStrainMaterial::setTrialStrain(double strain, double strainRate)
   {
     localStrain = strain;

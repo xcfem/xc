@@ -82,7 +82,7 @@ class DqPtrsNode: public DqPtrsKDTree<Node,KDTreeNodes>
     const Node *findNode(const int &tag) const;
     void numerate(void);
 
-    void createInertiaLoads(const Vector &);
+    boost::python::list createInertiaLoads(const Vector &);
     
     // mass distribution
     Matrix getTotalMass(void) const;

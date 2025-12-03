@@ -32,7 +32,7 @@ class TestSection(bpm.AbstractCrossSection):
         p2= localRefSys.getGlobalPosition(geom.Pos3d(0.0,0.0,-1.0))
         self.points= dict()
         for i, p in enumerate([p0, p1, p2]):
-            self.points[i]= modelSpace.newKPoint(x= p.x, y= p.y, z= p.z)
+            self.points[i]= modelSpace.newKPointFromPos3d(pos3d= p)
     
     def computeSectionComponents(self, modelSpace, axis, placement):
         ''' Return a dictionary containing the components contained inside the

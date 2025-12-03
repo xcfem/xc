@@ -73,7 +73,11 @@
 #include "utility/geom/pos_vec/Pos2d.h"
 #include "utility/geom/pos_vec/Pos3d.h"
 #include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/pos_vec/Vector2d.h"
+#include "utility/geom/pos_vec/SlidingVector2d.h"
+#include "utility/geom/pos_vec/SlidingVectorsSystem2d.h"
 #include "utility/geom/pos_vec/SlidingVectorsSystem3d.h"
+#include "utility/geom/pos_vec/SlidingVector3d.h"
 #include "utility/geom/d2/GeomObj2d.h"
 #include "utility/geom/d3/GeomObj3d.h"
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
@@ -775,34 +779,44 @@ Pos3d XC::Node::getPosition3d(const Vector &v) const
 //! factor: return initPos+ factor * nodDisplacement.
 Pos2d XC::Node::getCurrentPosition2d(const double &factor) const
   {
-    Vector fd= factor*getDisp();
-    if(fd.isnan()) //Something went wrong.
+    if(factor==0.0)
+      return getInitialPosition2d();
+    else
       {
-	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-	          << " displacement vector for node: "
-	          << getTag() << " is NOT VALID"
-	          << " returning original position."
-	          << Color::def << std::endl;
-        fd.Zero();
+	Vector fd= factor*getDisp();
+	if(fd.isnan()) //Something went wrong.
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << " displacement vector for node: "
+		      << getTag() << " is NOT VALID"
+		      << " returning original position."
+		      << Color::def << std::endl;
+	    fd.Zero();
+	  }
+	return getPosition2d(fd);
       }
-    return getPosition2d(fd);
   }
 
 //! @brief Return the current position of the node scaled by
 //! factor: return initPos+ factor * nodDisplacement.
 Pos3d XC::Node::getCurrentPosition3d(const double &factor) const
   {
-    Vector fd= factor*getDisp();
-    if(fd.isnan()) //Something went wrong.
+    if(factor==0.0)
+      return getInitialPosition3d();
+    else
       {
-	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-	          << " displacement vector for node: "
-	          << getTag() << " is NOT VALID"
-	          << " returning original position."
-	          << Color::def << std::endl;
-        fd.Zero();
+	Vector fd= factor*getDisp();
+	if(fd.isnan()) //Something went wrong.
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << " displacement vector for node: "
+		      << getTag() << " is NOT VALID"
+		      << " returning original position."
+		      << Color::def << std::endl;
+	    fd.Zero();
+	  }
+	return getPosition3d(fd);
       }
-    return getPosition3d(fd);
   }
 
 //! @brief Returns true if the current position of the node scaled by
@@ -1140,14 +1154,18 @@ const XC::NodalLoad *XC::Node::newLoad(const Vector &v)
 
 //! @brief Creates the inertia load that corresponds to the
 //! acceleration argument.
-void XC::Node::createInertiaLoad(const Vector &accel)
+const XC::NodalLoad *XC::Node::createInertiaLoad(const Vector &accel)
   {
+    const NodalLoad *retval= nullptr;
     Vector v= unbalLoad;
     v.Zero();
     const size_t sz= accel.Size();
     for(size_t i= 0;i<sz;i++)
       v[i]-= mass(i,i)*accel(i); //Like Ansys.
-    newLoad(v); //Put the load in the current load pattern.
+    const double norm= v.Norm2();
+    if(norm>0.0)
+      retval= newLoad(v); //Put the load in the current load pattern.
+    return retval;
   }
 
 //! @brief Causes the node to zero out its unbalanced load vector.
@@ -2755,6 +2773,19 @@ Vector3d XC::Node::getReactionForce3d(void) const
 Vector3d XC::Node::getReactionMoment3d(void) const
   { return get3dMomentComponents(reaction); }
 
+//! @brief Return the reaction in the form of a 3D sliding vectors system.
+//! @param initialGeometry: if true use the initial position of the node as
+//!                         application point of the system.
+SlidingVectorsSystem3d XC::Node::getReactionSlidingVectorsSystem3d(bool initialGeometry) const
+  {
+    Pos3d org= this->getInitialPosition3d();
+    if(!initialGeometry)
+      org= this->getCurrentPosition3d(1.0);
+    const Vector3d F= this->getReactionForce3d();
+    const Vector3d M= this->getReactionMoment3d();
+    return SlidingVectorsSystem3d(org, F, M);
+  }
+
 //! @brief Return the "force/displacement" components in a 3d vector.
 Vector3d XC::Node::get3dForceComponents(const Vector &v) const
   {
@@ -2830,7 +2861,94 @@ Vector3d XC::Node::get3dMomentComponents(const Vector &v) const
 		<< Color::def << std::endl;
     return retval;
   }
- 
+//*****************************************************************************
+//! @brief Return the reaction force in a 2D vector.
+Vector2d XC::Node::getReactionForce2d(void) const
+  { return get2dForceComponents(reaction); }
+
+//! @brief Return the reaction moment in a 2D vector.
+double XC::Node::getReactionMoment2d(void) const
+  { return get2dMomentComponent(reaction); }
+
+//! @brief Return the reaction in the form of a 2D sliding vectors system.
+//! @param initialGeometry: if true use the initial position of the node as
+//!                         application point of the system.
+SlidingVectorsSystem2d XC::Node::getReactionSlidingVectorsSystem2d(bool initialGeometry) const
+  {
+    Pos2d org= this->getInitialPosition2d();
+    if(!initialGeometry)
+      org= this->getCurrentPosition2d(1.0);
+    const Vector2d F= this->getReactionForce2d();
+    const double M= this->getReactionMoment2d();
+    return SlidingVectorsSystem2d(org, F, M);
+  }
+
+//! @brief Return the "force/displacement" components in a 2d vector.
+Vector2d XC::Node::get2dForceComponents(const Vector &v) const
+  {
+    Vector2d retval(0.0,0.0);
+    const size_t dim= getDim();
+    if(numberDOF== 3)
+      {
+	if(dim==2) // 2D structural
+	  retval= Vector2d(v[0],v[1]);
+	else
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << " not implemented for numDOFs= "	<< numberDOF
+		    << " and spaceDim= " << dim
+		    << Color::def << std::endl;
+      }
+    else if(numberDOF==2)
+      {
+	if(dim==2) // 2D solid mechanics
+	  retval= Vector2d(v[0],v[1]);
+	else
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << " not implemented for numDOFs= "	<< numberDOF
+		    << " and spaceDim= " << dim
+		    << Color::def << std::endl;
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << " not implemented for numDOFs= " << numberDOF
+		<< " and spaceDim= " << dim
+		<< Color::def << std::endl;
+    return retval;
+  }
+  
+//! @brief Return the "moment/rotation" components in a 2d vector.
+double XC::Node::get2dMomentComponent(const Vector &v) const
+  {
+    double retval(0.0);
+    const size_t dim= getDim();
+    if(numberDOF== 3)
+      {
+	if(dim==2) // 2D structural
+	  retval= v[2];
+	else 
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << " not implemented for numDOFs= "	
+                    << numberDOF << " and spaceDim= "
+                    << dim
+		    << Color::def << std::endl;
+      }
+    else if(numberDOF==2)
+      {
+	if(dim!=2) // NOT 2D solid mechanics => error.
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << " not implemented for numDOFs= " << numberDOF
+		    << " and spaceDim= " << dim
+		    << Color::def << std::endl;
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< " not implemented for numDOFs= " << numberDOF
+		<< " and spaceDim= " << dim
+		<< Color::def << std::endl;
+    return retval;
+  }
+
+//*****************************************************************************
 //! @brief Increments the node reaction.
 int XC::Node::addReactionForce(const Vector &add, double factor)
   {

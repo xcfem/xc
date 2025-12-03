@@ -48,15 +48,15 @@ for key in lcDict:
     cLC.description= lcDict[key]
 
 
-texFileName= '/tmp/report_load_cases.tex'
-loadCaseManager.exportToLatex(fileName= texFileName)
-# loadCaseManager.exportToPDF(fileName= './report_load_cases.pdf')
+texFileName= '/tmp/report_load_cases_longtable.tex'
+loadCaseManager.exportToLatex(fileName= texFileName, superTabular= False)
+# loadCaseManager.exportToPDF(fileName= './report_load_cases_longtable.pdf')
 
 ## Get current path.
 pth= os.path.dirname(__file__)
 if(not pth):
     pth= '.'
-texFileNameRef= pth+'/../aux/reference_files/ref_report_load_cases.tex'
+texFileNameRef= pth+'/../aux/reference_files/ref_report_load_cases_longtable.tex'
 
 # Check result.
 comparisonOK= filecmp.cmp(texFileNameRef, texFileName, shallow=False)

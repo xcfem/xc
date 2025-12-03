@@ -75,7 +75,7 @@ else:
     rcSection.defRCSection2d(preprocessor,matDiagType= 'k') # Fiber-section material.
     beamSection= rcSection
     elementType= "ForceBeamColumn2d"
-
+    
 ## Create mesh.
 ### Create nodes.
 span= 5
@@ -90,7 +90,7 @@ for i in range(0,numDiv+1):
 lin= modelSpace.newLinearCrdTransf("lin")
 elemHandler= preprocessor.getElementHandler
 elemHandler.defaultTransformation= lin.name # Coordinate transformation for the new elements
-elemHandler.defaultMaterial= beamSection.name
+elemHandler.defaultMaterial= beamSection.getFiberSectionName()
 
 #### Create elements and its orientation
 # Element local "y" axis points upwards and in this circunstamces the reinforced# defined as so the reinforcement previously defined in "positvRebarRows" is

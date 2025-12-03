@@ -94,11 +94,11 @@ class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
     bool isCloserThan(const GeomObj::list_Pos3d &, const double &) const;
     
     // Loads on elements.
-    void createInertiaLoads(const Vector &);
-    void vector2dPointLoadGlobal(const Vector &,const Vector &);
-    void vector2dPointLoadLocal(const Vector &,const Vector &);
-    void vector3dPointLoadGlobal(const Vector &,const Vector &);
-    void vector3dPointLoadLocal(const Vector &,const Vector &);    
+    boost::python::list createInertiaLoads(const Vector &);
+    ElementalLoad *vector2dPointLoadGlobal(const Vector &,const Vector &);
+    ElementalLoad *vector2dPointLoadLocal(const Vector &,const Vector &);
+    ElementalLoad *vector3dPointLoadGlobal(const Vector &,const Vector &);
+    ElementalLoad *vector3dPointLoadLocal(const Vector &,const Vector &);    
     
     // mass distribution
     Matrix getTotalMass(void) const;

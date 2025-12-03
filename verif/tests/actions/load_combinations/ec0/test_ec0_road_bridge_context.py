@@ -13,14 +13,15 @@ from actions.load_combination_utils import ec0_es # Eurocode 0 Spanish annex.
 
 lcg= ec0_es.bridgeCombGenerator
 safetyFactorSet= 'B' # Table A2.4(B)
+context= 'road_bridge'
 # Permanent load.
-G= lcg.newSelfWeightAction(actionName=  'G', actionDescription= 'Self weight.', context= 'road_bridge', safetyFactorSet= safetyFactorSet)
+G= lcg.newSelfWeightAction(actionName=  'G', actionDescription= 'Self weight.', context= context, safetyFactorSet= safetyFactorSet)
 # Settlement load.
-S= lcg.newSettlementAction(actionName= 'S', actionDescription= 'Settlement.', context= 'road_bridge', safetyFactorSet= safetyFactorSet)
+S= lcg.newSettlementAction(actionName= 'S', actionDescription= 'Settlement.', context= context, safetyFactorSet= safetyFactorSet)
 # Hidrostatic pressure.
-W= lcg.newHydrostaticPressureAction(actionName= 'W', actionDescription= 'Hydrostatic pressure', context= 'road_bridge', safetyFactorSet= safetyFactorSet)
+W= lcg.newHydrostaticPressureAction(actionName= 'W', actionDescription= 'Hydrostatic pressure', context= context, safetyFactorSet= safetyFactorSet)
 # Thermal load.
-T= lcg.newThermalAction(actionName=  'T', actionDescription= 'Thermal action.', context= 'road_bridge', safetyFactorSet= safetyFactorSet)
+T= lcg.newThermalAction(actionName=  'T', actionDescription= 'Thermal action.', context= context, safetyFactorSet= safetyFactorSet)
 # Uniform traffic load.
 TL= lcg.newUniformLoadAction(actionName= 'TL', actionDescription= 'Traffic load.', safetyFactorSet= safetyFactorSet)
 
@@ -43,4 +44,5 @@ if comparisonOK:
    print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
-os.remove(outputFileName) # Your garbage, you clean it.
+if(comparisonOK):
+    os.remove(outputFileName) # Your garbage, you clean it.

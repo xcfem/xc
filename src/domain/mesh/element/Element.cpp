@@ -356,11 +356,12 @@ void XC::Element::setDomain(Domain *theDomain)
 
 //! @brief Creates the inertia load that corresponds to the
 //! acceleration argument.
-void XC::Element::createInertiaLoad(const Vector &)
+XC::ElementalLoad *XC::Element::createInertiaLoad(const Vector &)
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; not implemented yet."
 	      << Color::def << std::endl;
+    return nullptr;
   }
 
 //! @brief Zeroes the loads over the element.

@@ -33,10 +33,10 @@ class TestSection(bpm.AbstractCrossSection):
         '''
         localRefSys= axis.getRefSys(placement)
         pA= localRefSys.getGlobalPosition(geom.Pos3d(0.0,0.0,0.0))
-        kPA= modelSpace.newKPoint(x= pA.x, y= pA.y, z= pA.z)
+        kPA= modelSpace.newKPointFromPos3d(pos3d= pA)
         localZ= parabola.y(placement)
         pB= localRefSys.getGlobalPosition(geom.Pos3d(0.0,0.0,localZ))
-        kPB= modelSpace.newKPoint(x= pB.x, y= pB.y, z= pB.z)
+        kPB= modelSpace.newKPointFromPos3d(pos3d= pB)
         self.points= {'A':kPA, 'B':kPB}
     
     def computeSectionComponents(self, modelSpace, axis, placement):

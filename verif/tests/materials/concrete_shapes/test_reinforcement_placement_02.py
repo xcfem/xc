@@ -133,6 +133,7 @@ for e in beamElements:
 rcSections= def_simple_RC_section.compute_element_rc_sections(beamElements)
 
 ##### Create corresponding XC materials.
+fiberSectionNames= list()
 for s in rcSections:
     s.defRCSection2d(preprocessor, matDiagType= 'k') # Create XC material.
 
@@ -142,7 +143,7 @@ for s in rcSections:
         # Each tuple has (element tag, section number).
         eTag= tple[0] # Only one section, no need to go forward.
         elem= elemHandler.getElement(eTag)
-        elem.setMaterial(s.name)
+        elem.setMaterial(s.getFiberSectionName())
         
 ## Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')

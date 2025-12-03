@@ -33,8 +33,10 @@
 #include "utility/geom/d1/Polyline3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/MeshEdges.h"
+#include "domain/load/ElementalLoad.h"
 #include <boost/algorithm/string/find.hpp>
 #include "utility/geom/d3/BND3d.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 XC::DqPtrsElem::DqPtrsElem(CommandEntity *owr)
@@ -173,10 +175,19 @@ double XC::DqPtrsElem::getAverageSize(bool initialGeometry) const
 
 //! @brief Creates the inertia load that corresponds to the
 //! acceleration argument.
-void XC::DqPtrsElem::createInertiaLoads(const Vector &accel)
+boost::python::list XC::DqPtrsElem::createInertiaLoads(const Vector &accel)
   {
+    boost::python::list retval;
     for(iterator i= begin();i!=end();i++)
-      (*i)->createInertiaLoad(accel);
+      {
+        ElementalLoad *loadPtr= (*i)->createInertiaLoad(accel);
+	if(loadPtr)
+	  {
+	    boost::python::object pyObj(boost::ref(*loadPtr));
+	    retval.append(pyObj);
+	  }
+      }
+    return retval;
   }
 
 //! @brief Return the nearest element if it's a 1D element
@@ -199,17 +210,18 @@ XC::Element1D *XC::DqPtrsElem::get_nearest_element_1d(const Vector &p, const std
 	    const double d= retval->getDist(pos);
 	    const double l= retval->getLength();
 	    if(d>l)
-	      std::clog << getClassName() << "::" << __FUNCTION__
+	      std::clog << Color::yellow << this->getClassName() << "::" << __FUNCTION__
 		        << "; the element: " << retval->getTag()
 		        << " is quite far (d= " << d
 		        << ") from the point: "
-		        << p << std::endl;
+		        << p
+			<< Color::def << std::endl;
 	  }
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; no nearest element to the point: " << p
-		<< std::endl;
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -217,60 +229,68 @@ XC::Element1D *XC::DqPtrsElem::get_nearest_element_1d(const Vector &p, const std
 //! expressed in global coordinates.
 //! @param p: position of the load.
 //! @param v: value of the load vector expressed in global coordinates.
-void XC::DqPtrsElem::vector2dPointLoadGlobal(const Vector &p,const Vector &v)
+XC::ElementalLoad *XC::DqPtrsElem::vector2dPointLoadGlobal(const Vector &p,const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     Element1D *elem1d= get_nearest_element_1d(p, __FUNCTION__);
     if(elem1d)
-      { elem1d->vector2dPointLoadGlobal(p,v); }
+      { retval= elem1d->vector2dPointLoadGlobal(p,v); }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__ 
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ 
 		<< "; no element found near to position: " << p
-		<< std::endl;      
+		<< Color::def << std::endl;
+    return retval;
   }
 
 //! @brief Define an elemental concentrated load at position p with value v
 //! expressed in local (element) coordinates.
 //! @param p: position of the load.
 //! @param v: value of the load vector expressed in local (element) coordinates.
-void XC::DqPtrsElem::vector2dPointLoadLocal(const Vector &p,const Vector &v)
+XC::ElementalLoad *XC::DqPtrsElem::vector2dPointLoadLocal(const Vector &p,const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     Element1D *elem1d= get_nearest_element_1d(p, __FUNCTION__);
     if(elem1d)
-      elem1d->vector2dPointLoadLocal(p,v);
+      retval= elem1d->vector2dPointLoadLocal(p,v);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; no element found near to position: " << p
-		<< std::endl;      
+		<< Color::def << std::endl;      
+    return retval;
   }
 
 //! @brief Define an elemental concentrated load at position p with value v
 //! expressed in global coordinates.
 //! @param p: position of the load.
 //! @param v: value of the load vector expressed in global coordinates.
-void XC::DqPtrsElem::vector3dPointLoadGlobal(const Vector &p,const Vector &v)
+XC::ElementalLoad *XC::DqPtrsElem::vector3dPointLoadGlobal(const Vector &p,const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     Element1D *elem1d= get_nearest_element_1d(p, __FUNCTION__);
     if(elem1d)
-      elem1d->vector3dPointLoadGlobal(p,v);
+      retval= elem1d->vector3dPointLoadGlobal(p,v);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; no element found near to position: " << p
-		<< std::endl;      
+		<< Color::def << std::endl;      
+    return retval;
   }
 
 //! @brief Define an elemental concentrated load at position p with value v
 //! expressed in local (element) coordinates.
 //! @param p: position of the load.
 //! @param v: value of the load vector expressed in local (element) coordinates.
-void XC::DqPtrsElem::vector3dPointLoadLocal(const Vector &p,const Vector &v)
+XC::ElementalLoad *XC::DqPtrsElem::vector3dPointLoadLocal(const Vector &p,const Vector &v)
   {
+    ElementalLoad *retval= nullptr;
     Element1D *elem1d= get_nearest_element_1d(p, __FUNCTION__);
     if(elem1d)
       elem1d->vector2dPointLoadLocal(p,v);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; no element found near to position: " << p
-		<< std::endl;
+		<< Color::def << std::endl;
+    return retval;
   }
 
 //! @brief Return the total mass matrix.

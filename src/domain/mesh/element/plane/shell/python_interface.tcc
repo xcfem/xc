@@ -47,9 +47,9 @@ class_<XC::Shell4NBase, bases<QuadBase4N_SFD>, boost::noncopyable >("Shell4NBase
     .def("getParticlePos3dInterpolationFactors",getParticlePos3dInterpolationFactors)
     .def("getParticlePos3dInterpolatedDisplacements",getParticlePos3dInterpolatedDisplacements)
     .def("getPos3dInterpolatedDisplacements",getPos3dInterpolatedDisplacements)
-    .def("vector3dUniformLoadLocal",make_function(&XC::ShellMITC4Base::vector3dUniformLoadLocal, return_internal_reference<>() ))
-    .def("vector3dUniformLoadGlobal",make_function(&XC::ShellMITC4Base::vector3dUniformLoadGlobal, return_internal_reference<>() ))
-    .def("strainLoad",&XC::ShellMITC4Base::strainLoad)
+    .def("vector3dUniformLoadLocal", make_function(&XC::ShellMITC4Base::vector3dUniformLoadLocal, return_internal_reference<>() ))
+    .def("vector3dUniformLoadGlobal", make_function(&XC::ShellMITC4Base::vector3dUniformLoadGlobal, return_internal_reference<>() ))
+    .def("strainLoad", make_function(&XC::ShellMITC4Base::strainLoad, return_internal_reference<>() ))
     .def("getSection", make_function(&XC::ShellMITC4Base::getSectionPtr, return_internal_reference<>() ), "getSection(i): return the i-th section of the element.")
    ;
 

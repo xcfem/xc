@@ -122,11 +122,15 @@ const XC::Material *XC::ProtoElementHandler::get_ptr_material(void) const
     MaterialHandler::const_iterator imat= get_iter_material();
     if(imat!= get_material_handler().end())
       retval= imat->second;
-    else 
-      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-	        << "; material: '" << material_name
-		<< "' not found."
-	        << Color::def << std::endl;
+    else
+      {
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; material: '" << material_name
+	  	  << "' not found.\n"
+	          << "Terminated." 
+	          << Color::def << std::endl;
+	exit(-1);
+      }
     return retval;
   }
 

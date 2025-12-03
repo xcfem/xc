@@ -416,6 +416,13 @@ class PredefinedSpace(object):
         '''
         return self.preprocessor.removeElement(element)
 
+    def getElement(self, elementTag):
+        ''' Return the elements that correspond to the given tag.
+
+        :param elementTag: element identifier.
+        '''
+        return self.getElementHandler().getElement(elementTag)
+
     def getElements(self, tags: Sequence[int]):
         ''' Return the elements that correspond to the argument
             tags.
@@ -492,6 +499,15 @@ class PredefinedSpace(object):
     def duplicateNode(self, node):
         ''' Duplicate the given node.'''
         return self.getNodeHandler().duplicateNode(node.tag)
+
+    def getNode(self, nodeTag):
+        ''' Return the node that correspond to given tag.
+
+        :param tag: node identifier.
+        '''
+        nodeHandler= self.getNodeHandler()
+        retval= nodeHandler.getNode(nodeTag)
+        return retval
     
     def getNodes(self, tags: Sequence[int]):
         ''' Return the nodes that correspond to the argument
@@ -560,6 +576,13 @@ class PredefinedSpace(object):
         :param tag: name of the desired material.
         '''
         return self.preprocessor.getMaterialHandler.getMaterial(name)
+
+    def materialWithNameExists(self, name):
+        ''' Return true if the material with the given name already exists.
+
+        :param tag: name of the desired material.
+        '''
+        return self.preprocessor.getMaterialHandler.materialExists(name)
     
     def setCreepOn(self):
         ''' Activates creep for TD concrete materials.'''
@@ -698,6 +721,7 @@ class PredefinedSpace(object):
         :param lpName: load pattern name.
         '''
         self.getLoadHandler().getLoadPatterns.currentLoadPattern= lpName
+        return self.getLoadPattern(lpName)
     
     def getLoadPattern(self, lpName: str):
         ''' Return the load pattern with the argument name.
@@ -1128,7 +1152,7 @@ class PredefinedSpace(object):
            entities.'''
         return self.getSet('total')
 
-    def defSet(self, setName: str= None, nodes= None, elements= None, points= None, lines= None, surfaces= None, bodies= None, nodeTags= None, elementTags= None):
+    def defSet(self, setName: str= None, nodes= None, elements= None, points= None, lines= None, surfaces= None, bodies= None, sets= None, nodeTags= None, elementTags= None):
         ''' Defines a set with the name argument.
 
         :param setName: name of the set to define.
@@ -1139,6 +1163,7 @@ class PredefinedSpace(object):
         :param surfaces: surface iterable to initizalize the surfaces of 
                          the set.
         :param bodies: body iterable to initizalize the bodies of the set.
+        :param sets: set iterable to extend the set.
         :param nodeTags: node identifiers to initizalize the nodes of the set.
         :param elementTags: element identifiers to initizalize the nodes of ç
                             the set.
@@ -1164,6 +1189,20 @@ class PredefinedSpace(object):
         if(bodies):
             for b in bodies:
                 retval.bodies.append(b)
+        if(sets):
+            for st in sets:
+                for b in st.bodies:
+                    retval.bodies.append(b)
+                for s in st.surfaces:
+                    retval.surfaces.append(s)
+                for l in st.lines:
+                    retval.lines.append(l)
+                for p in st.points:
+                    retval.points.append(p)
+                for e in st.elements:
+                    retval.elements.append(e)
+                for n in st.nodes:
+                    retval.nodes.append(n)
         if(nodeTags):
             cNodes= self.getNodes(nodeTags)
             for cn in cNodes:
@@ -1546,6 +1585,18 @@ class PredefinedSpace(object):
             lockerName= elemSet.name+'_locker'
             mesh.freezeDeadNodes(lockerName) # froze nodes surrounded by dead elements.
             self.createdNodeLockersNames.append(lockerName)
+            
+    def deactivateElement(self, element, srf= 1e-6):
+        ''' Deactivate a single element.
+
+        :param element: element to deactivate.
+        :param srf: stress reduction factor for element deactivation.
+        '''
+        if(element.isAlive):
+            element.kill()
+            mesh= self.preprocessor.getDomain.getMesh
+            mesh.setDeadSRF(srf) # set stress reduction factor for
+                                 # element deactivation.            
 
     def activateElements(self, elemSet: xc.Set):
         ''' Activate the (previoulsy deactivated) elements on the set argument.
@@ -1558,6 +1609,14 @@ class PredefinedSpace(object):
         # Check if the nodes have been frozen.
         if(lockerName in self.createdNodeLockersNames):
             mesh.meltAliveNodes(lockerName) # melt frozen nodes.
+
+    def activateElement(self, element):
+        ''' Activate a single (and previoulsy deactivated) element.
+
+        :param element: element to activate.
+        '''
+        if(element.isDead):
+            element.alive()
 
     def getValuesAtNodes(self, element, code: str, silent= False):
         ''' Return the values corresponding to code at each of the element nodes.
@@ -1609,17 +1668,14 @@ class PredefinedSpace(object):
             retval+= ', '+dl
         return retval
 
-    def newKPoint(self, x, y, z= 0.0, tol= 0.0):
-        ''' Creates a key point.
+    def newKPointFromPos3d(self, pos3d, tol= 0.0):
+        ''' Creates a key point from the given 3D position.
 
-        :param x: x coordinate for the new point.
-        :param y: y coordinate for the new point.
-        :param z: z coordinate for the new point (defaults to 0.0).
+        :param pos3d: 3D position object.
         :param tol: if greter than zero create the point only if
                     there is no other point at a distance smaller than
                     tol, otherwise return the already existing point.
         '''
-        pos3d= geom.Pos3d(x,y,z)
 
         pointHandler= self.preprocessor.getMultiBlockTopology.getPoints
         if(tol>0.0): # Search for the nearest point.
@@ -1631,6 +1687,19 @@ class PredefinedSpace(object):
         else:
             retval= pointHandler.newPoint(pos3d)
         return retval
+    
+    def newKPoint(self, x, y, z= 0.0, tol= 0.0):
+        ''' Creates a key point.
+
+        :param x: x coordinate for the new point.
+        :param y: y coordinate for the new point.
+        :param z: z coordinate for the new point (defaults to 0.0).
+        :param tol: if greter than zero create the point only if
+                    there is no other point at a distance smaller than
+                    tol, otherwise return the already existing point.
+        '''
+        pos3d= geom.Pos3d(x,y,z)
+        return self.newKPointFromPos3d(pos3d= pos3d, tol= tol)
     
     def newLine(self, p1: xc.Pnt, p2: xc.Pnt):
         ''' Creates a line between the argument points.

@@ -79,7 +79,14 @@ modelSpace.setCurrentLoadPattern("0")
 gravity= 9.81
 accel= xc.Vector([0,0,gravity])
 xcTotalSet= modelSpace.getTotalSet()
+# The inertia loads on trusses are simulated by putting two equivalent nodal
+# loads at their ends. As a consequence, the method that creates the load
+# returns a null pointer (because there is no ElementolLoad to return).
+# This is a know problem and, for the time being, the solution is to
+# redirect the cerr stream to /dev/null.
+feProblem.errFileName= "/dev/null" # Don't print error messages.
 xcTotalSet.createInertiaLoads(accel)
+feProblem.errFileName= "cerr" # Display errors if any.
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 

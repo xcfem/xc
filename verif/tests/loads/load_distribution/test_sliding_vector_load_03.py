@@ -13,6 +13,7 @@ __email__= "l.pereztato@gmail.com"
 import xc
 from model import predefined_spaces
 from actions import loads
+from misc_utils import log_messages as lmsg
 
 # Load
 f= 2e3 # Load magnitude.
@@ -25,7 +26,6 @@ modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 n1= nodes.newNodeXY(-1,0.0)
 n2= nodes.newNodeXY(1,0.0)
 
-
 # Constraints
 modelSpace.fixNode00(n1.tag)
 modelSpace.fixNode00(n2.tag)
@@ -33,7 +33,7 @@ modelSpace.fixNode00(n2.tag)
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 modelSpace.setCurrentLoadPattern("0")
-lVector= xc.Vector([0,-f])
+lVector= xc.Vector([0,-f]) # Fx, Fy
 slidingVectorLoad= loads.SlidingVectorLoad(name= 'test', nodes= [n1,n2], pntCoord= [0.0,0.0], loadVector= lVector)
 slidingVectorLoad.appendLoadToCurrentLoadPattern()
 
@@ -42,7 +42,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution
 result= modelSpace.analyze(1, calculateNodalReactions= True)
 if(result!=0):
-    print('Can\'t solve.')
+    lmsg.error('Can\'t solve.')
     exit(1)
 
 R1= n1.getReaction
@@ -61,7 +61,6 @@ print("ratio3= ",ratio3)
 '''
 
 import os
-from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-6) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10):
     print('test '+fname+': ok.')

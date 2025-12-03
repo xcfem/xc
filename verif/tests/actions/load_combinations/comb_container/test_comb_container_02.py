@@ -44,4 +44,5 @@ if comparisonOK:
    print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
-os.remove(csvFileName) # Your garbage, you clean it.
+if comparisonOK:
+    os.remove(csvFileName) # Your garbage, you clean it.

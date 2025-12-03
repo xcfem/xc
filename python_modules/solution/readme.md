@@ -27,6 +27,7 @@ Once the analyst has defined the model, the next step is to define the analysis 
 ### Constraint handling
 - [Handling a Doubt](https://portwooddigital.com/2023/11/09/handling-a-doubt/)
 - [What Is a Good Penalty Number?](https://portwooddigital.com/2023/11/29/what-is-a-good-penalty-number/)
+- [Daisy Chains and Gaffes](https://portwooddigital.com/2025/10/26/daisy-chains-and-gaffes/)
 
 ### Static analysis
 
@@ -50,6 +51,8 @@ Once the analyst has defined the model, the next step is to define the analysis 
 - [Two Sprung Masses and Some Friction Force](https://portwooddigital.com/2024/02/10/two-sprung-masses-and-some-friction-force/)
 - [A Simple Base-Isolated Model](https://portwooddigital.com/2024/11/26/a-simple-base-isolated-model/)
 - [Minimal Damper Example](https://portwooddigital.com/2025/01/12/minimal-damper-example/)
+- [Minimal Random Process Example](https://portwooddigital.com/2025/09/28/minimal-random-process-example/)
+
 
 ### Eigenvalue analysis
  - [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)

@@ -83,6 +83,8 @@ class InitStrainMaterial: public InitStrainBaseMaterial
     virtual void setMaterial(const UniaxialMaterial &);
     
     virtual int setInitialStrain(const double &);
+    virtual int incrementInitialStrain(const double &);
+    virtual void zeroInitialStrain(void);
     
     int setTrialStrain(double strain, double strainRate = 0.0); 
     double getStrain(void) const;          

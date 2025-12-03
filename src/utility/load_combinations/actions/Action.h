@@ -34,7 +34,9 @@
 //! Routines to generate combinations of actions.
 namespace cmb_acc{
 
+class ActionWrapper;
 class ActionWrapperList;
+class ActionsFamily;
 
 //! @defgroup CMBACC Routines to generate combinations of actions.
 //
@@ -90,6 +92,10 @@ class Action: public NamedEntity
     //! the argument one.
     inline bool Compatible(const Action &f) const
       { return !Incompatible(f); }
+    bool Contains(const Action &f) const;
+    bool ContainsAnyOf(const ActionWrapper &) const;
+    bool ContainsAnyOf(const ActionWrapperList &) const;
+    bool ContainsAnyOf(const ActionsFamily &) const;
 
     bool Simple(void) const;
     //! @brief Return verdadero si la acción es nula.

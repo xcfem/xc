@@ -103,21 +103,21 @@ class Element1D: public ElementBase<2>
     void computeTributaryAreas(bool initialGeometry= true) const;
     double getTributaryArea(const Node *) const;
 
-    void vector2dUniformLoadGlobal(const Vector &);
-    void vector2dUniformLoadLocal(const Vector &);
-    void vector2dPartialUniformLoadGlobal(const double &, const double &, const Vector &);
-    void vector2dPartialUniformLoadLocal(const double &, const double &, const Vector &);
-    void vector2dPointByRelDistLoadGlobal(const double &,const Vector &);
-    void vector2dPointByRelDistLoadLocal(const double &,const Vector &);
-    void vector2dPointLoadGlobal(const Vector &,const Vector &);
-    void vector2dPointLoadLocal(const Vector &,const Vector &);
-    void vector3dUniformLoadGlobal(const Vector &);
-    void vector3dUniformLoadLocal(const Vector &);
-    void vector3dPointByRelDistLoadGlobal(const double &,const Vector &);
-    void vector3dPointByRelDistLoadLocal(const double &,const Vector &);
-    void vector3dPointLoadGlobal(const Vector &,const Vector &);
-    void vector3dPointLoadLocal(const Vector &,const Vector &);
-    void strainLoad(const DeformationPlane &p1, const DeformationPlane &p2);
+    ElementalLoad *vector2dUniformLoadGlobal(const Vector &);
+    ElementalLoad *vector2dUniformLoadLocal(const Vector &);
+    ElementalLoad *vector2dPartialUniformLoadGlobal(const double &, const double &, const Vector &);
+    ElementalLoad *vector2dPartialUniformLoadLocal(const double &, const double &, const Vector &);
+    ElementalLoad *vector2dPointByRelDistLoadGlobal(const double &,const Vector &);
+    ElementalLoad *vector2dPointByRelDistLoadLocal(const double &,const Vector &);
+    ElementalLoad *vector2dPointLoadGlobal(const Vector &,const Vector &);
+    ElementalLoad *vector2dPointLoadLocal(const Vector &,const Vector &);
+    ElementalLoad *vector3dUniformLoadGlobal(const Vector &);
+    ElementalLoad *vector3dUniformLoadLocal(const Vector &);
+    ElementalLoad *vector3dPointByRelDistLoadGlobal(const double &,const Vector &);
+    ElementalLoad *vector3dPointByRelDistLoadLocal(const double &,const Vector &);
+    ElementalLoad *vector3dPointLoadGlobal(const Vector &,const Vector &);
+    ElementalLoad *vector3dPointLoadLocal(const Vector &,const Vector &);
+    ElementalLoad *strainLoad(const DeformationPlane &p1, const DeformationPlane &p2);
   };
 
 } //end of XC namespace

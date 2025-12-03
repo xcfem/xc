@@ -181,6 +181,12 @@ void cmb_acc::ActionWrapper::Print(std::ostream &os) const
     const ActionsFamily *family= this->getFamily();
     if(family)
       os << "actions family: " << family->getName();
+    std::vector<const Action *> this_actions= this->getWrappedActions();
+    for(std::vector<const Action *>::const_iterator i= this_actions.begin(); i!=this_actions.end(); i++)
+      {
+        const Action *this_action= *i;
+        os << " " << *this_action;
+      }
   }
 
 bool cmb_acc::incompatibles(const ActionWrapper &acc_i,const ActionWrapper &acc_j)

@@ -178,6 +178,9 @@ class OutputStyle(object):
         elif(itemToDisp=='rotX' or itemToDisp=='rotY' or itemToDisp=='rotZ'):
             fConvUnits= self.getRotationUnitsScaleFactor()
             unitDescription= self.getRotationUnitsDescription()
+        elif(itemToDisp=='dispMax'):
+            fConvUnits= self.getDisplacementUnitsScaleFactor()
+            unitDescription= self.getDisplacementUnitsDescription()
         elif(itemToDisp=='wk' or itemToDisp=='s_rmax'):
             fConvUnits= self.getDisplacementUnitsScaleFactor()
             unitDescription= self.getDisplacementUnitsDescription()

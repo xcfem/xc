@@ -105,7 +105,7 @@ for e in s.elements:
     
 ## Load combinations
 combContainer= combs.CombContainer()
-### ULS combination.
+### SLS combination.
 combContainer.SLS.freq.add('SLS01','1.0*G1+1.0*G2+1.0*Q')
 
 # Define reinforcement.

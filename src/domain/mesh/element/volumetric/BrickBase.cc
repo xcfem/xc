@@ -575,7 +575,7 @@ int XC::BrickBase::addLoad(ElementalLoad *theLoad, double loadFactor)
 //! in local coordinates.
 //!
 //! @param nLoads: loads on each element node.
-const XC::BrickRawLoad *XC::BrickBase::vector3dRawLoadLocal(const std::vector<Vector> &nLoads)
+XC::ElementalLoad *XC::BrickBase::vector3dRawLoadLocal(const std::vector<Vector> &nLoads)
   {
     BrickRawLoad *retval= nullptr;
     Preprocessor *preprocessor= getPreprocessor();
@@ -620,9 +620,9 @@ const XC::BrickRawLoad *XC::BrickBase::vector3dRawLoadLocal(const std::vector<Ve
 //! in global coordinates.
 //!
 //! @param nLoads: loads on each element node.
-const XC::BrickRawLoad *XC::BrickBase::vector3dRawLoadGlobal(const std::vector<Vector> &nLoads)
+XC::ElementalLoad *XC::BrickBase::vector3dRawLoadGlobal(const std::vector<Vector> &nLoads)
   {
-    const BrickRawLoad *retval= nullptr;
+    ElementalLoad *retval= nullptr;
     const size_t sz= nLoads.size();
     const size_t nn= getNumExternalNodes();
     if(sz==nn)

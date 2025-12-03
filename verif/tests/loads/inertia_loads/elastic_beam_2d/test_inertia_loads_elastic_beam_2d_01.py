@@ -30,8 +30,8 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-n1= nodes.newNodeXY(0,0)
-n2= nodes.newNodeXY(l,0)
+n1= modelSpace.newNode(0,0)
+n2= modelSpace.newNode(l,0)
 
 # Materials definition
 rho= 10.0
@@ -45,12 +45,10 @@ refLinearRho= rho*A # linear density
 ratio0= abs(sectionProperties.linearRho-refLinearRho)/refLinearRho
 section= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "section",sectionProperties)
 
-
 # Element definition.
-elements= preprocessor.getElementHandler
-elements.defaultTransformation= lin.name
-elements.defaultMaterial= section.name
-beam= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
+modelSpace.setDefaultCoordTransf(lin)
+modelSpace.setDefaultMaterial(section)
+beam= modelSpace.newElement("ElasticBeam2d", [n1.tag,n2.tag])
 
 ## Element mass data.
 beamMassZ= beam.getTotalMassComponent(1)
@@ -58,19 +56,14 @@ beamMassRefZ= refLinearRho*l
 ratio1= abs(beamMassZ-beamMassRefZ)/beamMassRefZ
 
 
-constraints= preprocessor.getBoundaryCondHandler
 # Zero movement for node 1.
-spc1= constraints.newSPConstraint(n1.tag,0,0.0)
-spc2= constraints.newSPConstraint(n1.tag,1,0.0)
-spc3= constraints.newSPConstraint(n1.tag,2,0.0)
+modelSpace.fixNode('000', n1.tag)
 # Zero movement for node 2.
-spc4= constraints.newSPConstraint(n2.tag,0,0.0)
-spc5= constraints.newSPConstraint(n2.tag,1,0.0)
-spc6= constraints.newSPConstraint(n2.tag,2,0.0)
+modelSpace.fixNode('000', n2.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-modelSpace.setCurrentLoadPattern("0")
+modelSpace.setCurrentLoadPattern(lp0.name)
 accel= xc.Vector([0,gravity])
 beam.createInertiaLoad(accel)
 # We add the load case to domain.

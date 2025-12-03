@@ -23,7 +23,7 @@
 
 class_<XC::Load, bases<XC::DomainComponent>, boost::noncopyable >("Load", no_init);
 
-class_<XC::NodalLoad, bases<XC::Load>, boost::noncopyable >("NodalLoad", no_init)
+class_<XC::NodalLoad, XC::NodalLoad *, bases<XC::Load>, boost::noncopyable >("NodalLoad", no_init)
   .add_property("getNodeTag", &XC::NodalLoad::getNodeTag,"Returns loaded node tag.")
   .add_property("getNode", make_function(&XC::NodalLoad::getNode,return_internal_reference<>()),"Returns loaded node.")
   .add_property("getLoadVector", make_function(&XC::NodalLoad::getLoadVector,return_internal_reference<>()),"Returns the load vector.")
@@ -35,7 +35,7 @@ class_<XC::NodalLoadIter, boost::noncopyable >("NodalLoadIter", no_init)
   .def("next", &XC::NodalLoadIter::operator(), return_internal_reference<>(),"Returns next load.")
    ;
 
-class_<XC::ElementalLoad, bases<XC::Load>, boost::noncopyable >("ElementalLoad", no_init)
+class_<XC::ElementalLoad, XC::ElementalLoad *, bases<XC::Load>, boost::noncopyable >("ElementalLoad", no_init)
   .add_property("numElements", &XC::ElementalLoad::numElements, "Returns the number of loaded elements.")
   .add_property("elementTags", make_function(&XC::ElementalLoad::getElementTags,return_internal_reference<>()),&XC::ElementalLoad::setElementTags)
   .add_property("category", &XC::ElementalLoad::Category," Return the category of the load (uniform, punctual,...)")

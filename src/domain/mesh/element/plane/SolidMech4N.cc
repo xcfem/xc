@@ -103,7 +103,7 @@ void XC::SolidMech4N::checkElem(void)
 //! in local coordinates.
 //!
 //! @param nLoads: loads on each element node.
-const XC::QuadRawLoad *XC::SolidMech4N::vector2dRawLoadLocal(const std::vector<Vector> &nLoads)
+XC::ElementalLoad *XC::SolidMech4N::vector2dRawLoadLocal(const std::vector<Vector> &nLoads)
   {
     QuadRawLoad *retval= nullptr;
     Preprocessor *preprocessor= getPreprocessor();
@@ -145,9 +145,9 @@ const XC::QuadRawLoad *XC::SolidMech4N::vector2dRawLoadLocal(const std::vector<V
 //! in global coordinates.
 //!
 //! @param nLoads: loads on each element node.
-const XC::QuadRawLoad *XC::SolidMech4N::vector2dRawLoadGlobal(const std::vector<Vector> &nLoads)
+XC::ElementalLoad *XC::SolidMech4N::vector2dRawLoadGlobal(const std::vector<Vector> &nLoads)
   {
-    const QuadRawLoad *retval= nullptr;
+    ElementalLoad *retval= nullptr;
     const size_t sz= nLoads.size();
     const size_t nn= getNumExternalNodes();
     if(sz==nn)

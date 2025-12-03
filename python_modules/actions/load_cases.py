@@ -357,11 +357,12 @@ class LoadCaseManager(object):
             for r in rows:
                 writer.writerow(r)
             
-    def getLaTeXCode(self, small= True):
+    def getLaTeXCode(self, small= True, superTabular= False):
         ''' Return the LaTeX string corresponding to load cases in the
             container.
 
         :param small: if true, use small font.
+        :param superTabular: if true, use supertabular instead longtable.
         '''
         retval= str()
         if(len(self.loadCases)>0):
@@ -369,51 +370,79 @@ class LoadCaseManager(object):
             retval+= ('\\begin{center}\n')
             if(small):
                 retval+= ('\\begin{small}\n')
-            retval+= ('\\begin{longtable}{|l|p{10cm}|}\n')
-            retval+= ('\\hline\n')
-            retval+= ('\\multicolumn{2}{|c|}{'+header+'}\\\\\n')
-            retval+= ('\\hline\n')
-            retval+= ('\\textbf{Code} & \\textbf{Description} \\\\\n')
-            retval+= ('\\hline\n')
-            retval+= ('\\endfirsthead\n')
+            tableStr= '|l|p{10cm}|'
+            if(superTabular):
+                # Create LaTeX supertabular.
+                firstHeadStr= '\\hline%\n'
+                firstHeadStr+= '\\multicolumn{2}{|c|}{'+header+'}\\\\%\n'
+                firstHeadStr+= '\\hline%\n'
+                firstHeadStr+= '\\textbf{Code} & \\textbf{Description} \\\\%\n'
+                firstHeadStr+= '\\hline%\n'
+                retval+= '\\tablefirsthead{'+firstHeadStr+'}%\n'
 
-            retval+= ('\\hline\n')
-            retval+= ('\\multicolumn{2}{|c|}{'+header+'}\\\\\n')
-            retval+= ('\\hline\n')
-            retval+= ('\\textbf{Code} & \\textbf{Description} \\\\\n')
-            retval+= ('\\hline\n')
-            retval+= ('\\endhead\n')
+                headStr= firstHeadStr
+                retval+= '\\tablehead{'+headStr+'}%\n'
 
-            retval+= ('\\hline \\multicolumn{2}{|r|}{{../..}} \\\\ \\hline\n')
-            retval+= ('\\endfoot\n')
+                tailStr= '\\hline%\n'
+                tailStr+= '\\multicolumn{2}{|r|}{{../..}} \\\\%\n'
+                tailStr+= '\\hline%\n'
+                retval+= '\\tabletail{'+tailStr+'}%\n'
 
-            retval+= ('\\hline\n')
-            retval+= ('\\endlastfoot\n')
+                lastTailStr= '\\hline%\n'
+                retval+= '\\tablelasttail{'+lastTailStr+'}%\n'
+                retval+= '\\begin{supertabular}{'+tableStr+'}\n'
+            else:
+                # Create LaTeX longtable.
+                retval+= '\\begin{longtable}{'+tableStr+'}\n'
+                retval+= '\\hline\n'
+                retval+= '\\multicolumn{2}{|c|}{'+header+'}\\\\\n'
+                retval+= '\\hline\n'
+                retval+= '\\textbf{Code} & \\textbf{Description} \\\\\n'
+                retval+= '\\hline\n'
+                retval+= '\\endfirsthead\n'
+
+                retval+= '\\hline\n'
+                retval+= '\\multicolumn{2}{|c|}{'+header+'}\\\\\n'
+                retval+= '\\hline\n'
+                retval+= '\\textbf{Code} & \\textbf{Description} \\\\\n'
+                retval+= '\\hline\n'
+                retval+= '\\endhead\n'
+
+                retval+= ('\\hline \\multicolumn{2}{|r|}{{../..}} \\\\ \\hline\n')
+                retval+= ('\\endfoot\n')
+
+                retval+= ('\\hline\n')
+                retval+= ('\\endlastfoot\n')
             for key in self.loadCases:
                 loadCase= self.loadCases[key]
                 retval+= key + ' & '+ loadCase.description +'\\\\\n'
             retval+= ('\\hline\n')
-            retval+= ('\\end{longtable}\n')
+            if(superTabular):
+                retval+= ('\\end{supertabular}\n')
+            else:
+                retval+= ('\\end{longtable}\n')
             if(small):
                 retval+= ('\\end{small}\n')
             retval+= ('\\end{center}\n')
         return retval
     
-    def exportToLatex(self, fileName):
+    def exportToLatex(self, fileName, superTabular= False):
         '''Creates LaTeX tables and put the combinations in them.
 
         :param fileName: output file name.
+        :param superTabular: if true, use supertabular instead longtable.
         '''
         with open(fileName, "w") as f:
             f.write(self.getLaTeXCode())
             
-    def exportToPDF(self, fileName):
+    def exportToPDF(self, fileName, superTabular= False):
         ''' Creates a PDF file and write the combinations to it.
 
         :param fileName: output file name.
+        :param superTabular: if true, use supertabular instead longtable.
         '''
         latexCode= self.getLaTeXCode()
-        latex_utils.latex_to_pdf(latexCode= latexCode, pdfFileName= fileName)
+        latex_utils.latex_to_pdf(latexCode= latexCode, pdfFileName= fileName, superTabular= superTabular)
 
 def resetAccionesConstantTS(preprocessor,tipoTimeSeries, nmbTimeSeries, fct):
     '''Clear all load patterns in the model and create a new TimeSeries

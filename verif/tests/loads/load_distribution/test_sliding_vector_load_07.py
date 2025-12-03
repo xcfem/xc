@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-''' Check the effect of the a bending moment equivalent to a temperature 
-gradient applied across the depth of a cantilever beam.
+''' Check the effect of a bending moment equivalent to a temperature 
+gradient applied across the depth of a cantilever beam (3D structural mechanics 
+version).
 '''
 
 from __future__ import print_function
@@ -74,6 +75,7 @@ for s in [s1, s2]:
 # Constraints
 xcTotalSet= modelSpace.getTotalSet()
 
+constrainedNodes= list()
 for n in xcTotalSet.nodes:
     pos= n.getInitialPos3d
     if(abs(pos.x)<1e-3):
@@ -81,6 +83,7 @@ for n in xcTotalSet.nodes:
             modelSpace.fixNode('000_FF0',n.tag)
         else:
             modelSpace.fixNode('00F_FF0',n.tag)
+        constrainedNodes.append(n)
         
 # Load case definition.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -95,8 +98,9 @@ for n in xcTotalSet.nodes:
     if(abs(pos.x-L)<1e-3):
         loadedNodes.append(n)
         
-lVector= xc.Vector([0, 0, 0, 0, M, 0])
-slidingVectorLoad= loads.SlidingVectorLoad(name= 'test', nodes= loadedNodes, pntCoord= [L,0.0,0.0], loadVector= lVector)
+lVector= xc.Vector([0, 0, 0, 0, M, 0]) # Fx, Fy, Fz, Mx, My, Mz
+pntCoord= [L,0.0,0.0]
+slidingVectorLoad= loads.SlidingVectorLoad(name= 'test', nodes= loadedNodes, pntCoord= pntCoord, loadVector= lVector)
 slidingVectorLoad.appendLoadToCurrentLoadPattern()
 
 # We add the load case to domain.
@@ -112,16 +116,32 @@ deltaZ= midEndNod.getDisp[2]
 deltaZRef= -alpha*AT*L**2/B/2.0 # Theoretical displacement.
 err= abs(deltaZ-deltaZRef)/-deltaZRef
 
+testOK= (err<.03)
+
+# Check reactions.
+totalReaction= geom.SlidingVectorsSystem3d()
+
+for n in constrainedNodes:
+    R= n.getReactionSlidingVectorsSystem3d(True)
+    totalReaction+= R
+
+resultant= totalReaction.getResultant()
+testOK= testOK and (resultant.getModulus()<1e-5)
+moment= totalReaction.getMoment()
+testOK= testOK and (abs(moment.y+M)<1e-5)
+
 '''
 print('deltaZ= ', deltaZ)
 print('deltaZRef= ', deltaZRef)
 print('err= ', err)
+print(resultant, resultant.getModulus())
+print(moment, moment.y, M)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(err<.03):
+if testOK:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

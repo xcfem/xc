@@ -149,7 +149,7 @@ class Brick: public BrickBase
     
     const Vector &getResistingForce(void) const; //get residual
     const Vector &getResistingForceIncInertia(void) const; //get residual with inertia terms
-    virtual void createInertiaLoad(const Vector &);
+    virtual ElementalLoad *createInertiaLoad(const Vector &);
  
     // public methods for element output
     virtual int sendSelf(Communicator &);

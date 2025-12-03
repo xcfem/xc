@@ -607,8 +607,10 @@ boost::python::dict Segment2d::getPyDict(void) const
 void Segment2d::setPyDict(const boost::python::dict &d)
   {
     Linear2d::setPyDict(d);
-    const Pos2d from= boost::python::extract<Pos2d>(d["from"]);
-    const Pos2d to= boost::python::extract<Pos2d>(d["to"]);
+    Pos2d from;
+    from.setPyDict(boost::python::extract<boost::python::dict>(d["from"]));
+    Pos2d to;
+    to.setPyDict(boost::python::extract<boost::python::dict>(d["to"]));
     Put(from,to);
   }
 

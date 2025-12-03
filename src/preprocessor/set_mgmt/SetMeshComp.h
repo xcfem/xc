@@ -256,7 +256,7 @@ class SetMeshComp: public SetBase
     Matrix getTangentStiff(const Node &);
     Matrix getInitialStiff(const Node &);
 
-    void createInertiaLoads(const Vector &);
+    boost::python::list createInertiaLoads(const Vector &);
     
     // mass distribution
     Matrix getTotalMass(void) const;

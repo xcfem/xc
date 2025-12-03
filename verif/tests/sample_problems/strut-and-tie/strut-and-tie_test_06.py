@@ -189,7 +189,7 @@ comb7= combs.newLoadCombination("ELU007","1.35*G + 1.00*H2ELU")
 comb8= combs.newLoadCombination("ELU008","1.35*G + 1.00*H3ELU")
 
 vc.def_reactions_envelope_vars(nodes= pileBottomNodes)
-vc.def_vars_envelope_internal_forces_beam_elems(elems= [lintelElement])
+vc.def_vars_envelope_internal_forces_beam_elems_3d(elems= [lintelElement])
 for combName in combs.getKeys():
     comb= combs[combName]
     modelSpace.removeAllLoadsAndCombinationsFromDomain()

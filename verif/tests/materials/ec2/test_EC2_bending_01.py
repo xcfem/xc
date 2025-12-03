@@ -62,9 +62,9 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 modelSpace= predefined_spaces.StructuralMechanics3D(preprocessor.getNodeHandler)
 ## Fiber-section material.
-sectionTemplate.defRCSection(preprocessor, matDiagType= 'd')
+fiberSectionName= sectionTemplate.defRCSection(preprocessor, matDiagType= 'd')
 ## Zero-length element.
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, sectionTemplate.name)
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSectionName)
 ## Constraints
 modelSpace.fixNode000_000(nodA.tag)
 modelSpace.fixNodeF00_0FF(nodB.tag)

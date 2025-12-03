@@ -39,14 +39,14 @@ class WallLegsSection(bpm.AbstractCrossSection):
             key= i
             if(p.y!=0.0):
                 if(key==0):
-                    self.points[-100]= modelSpace.newKPoint(x= p.x, y= p.y, z= p.z)
+                    self.points[-100]= modelSpace.newKPointFromPos3d(pos3d= p)
                     self.points[100]= modelSpace.newKPoint(x= p.x, y= -p.y, z= p.z)
                     pass
                 else:
-                    self.points[-key]= modelSpace.newKPoint(x= p.x, y= p.y, z= p.z)
+                    self.points[-key]= modelSpace.newKPointFromPos3d(pos3d= p)
                     self.points[key]= modelSpace.newKPoint(x= p.x, y= -p.y, z= p.z)
             else:
-                self.points[key]= modelSpace.newKPoint(x= p.x, y= p.y, z= p.z)
+                self.points[key]= modelSpace.newKPointFromPos3d(pos3d= p)
     
     def computeSectionComponents(self, modelSpace, axis, placement):
         ''' Return a dictionary containing the components contained inside the

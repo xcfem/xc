@@ -278,3 +278,25 @@ const cmb_acc::LoadCombinationVector &cmb_acc::filtraCombsEsclavasHuerfanas(cons
     return retval;
   }
 
+const cmb_acc::LoadCombinationVector &cmb_acc::must_contain(const LoadCombinationVector &comb, const ActionsFamily &actionsFamily)
+  {
+    static LoadCombinationVector retval;
+    const size_t sz= comb.size();
+    if(sz<1)
+      { retval.resize(0); }
+    else
+      {
+	LoadCombinationVector tmp(sz);
+	size_t cont=0;
+	for(size_t i=0;i<sz;i++)
+	  if(comb[i].ContainsAnyOf(actionsFamily)) // Contains any of the actions of the family.
+	    {
+	      tmp[cont]= comb[i]; // append it.
+	      cont++;
+	    }
+	retval.resize(cont);
+	for(size_t i=0;i<cont;i++)
+	  retval[i]= tmp[i];
+      }
+    return retval;
+  }

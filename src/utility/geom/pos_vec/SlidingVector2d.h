@@ -53,6 +53,10 @@ class SlidingVector2d : public Vector2d
     friend SlidingVector2d operator*(const SlidingVector2d &m,const GEOM_FT &p);
     friend SlidingVector2d operator*(const GEOM_FT &p,const SlidingVector2d &m);
     friend SlidingVector2d operator/(const SlidingVector2d &m,const GEOM_FT &p);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     friend std::ostream &operator<<(std::ostream &os,const SlidingVector2d &v);
   };
 

@@ -238,7 +238,6 @@ oh.displayFieldDirs1and2(limitStateLabel= limitState.label, argument= 'CF', setT
 # Check that file exists
 testOK= testOK and os.path.isfile(outputFileName)
 
-import os
 from misc_utils import log_messages as lmsg
 if testOK:
     print('test '+fname+': ok.')

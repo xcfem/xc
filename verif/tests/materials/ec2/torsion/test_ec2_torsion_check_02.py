@@ -10,7 +10,7 @@ from __future__ import division
 from materials.ehe import EHE_materials
 
 __author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2024, LCPT"
+__copyright__= "Copyright 2025, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"

@@ -1204,17 +1204,29 @@ class RCSectionBase(object):
         self.respVy= None
         self.respVz= None
 
+    def getFiberSectionName(self):
+        ''' Return the name to assign to the fiber section created from the 
+            data of this object.
+
+        The suffix is added to the name of the fiber section materials
+        to avoid collision with other materials (elastic sections, etc.)
+        created from the same section definition object.
+        '''
+        return self.name+section_properties.fiber_section_name_suffix
+
     def defFiberSection2d(self, preprocessor):
         '''Define 2D fiber section from geometry data.
 
         :param preprocessor: preprocessor of the finite element problem.
         '''
-        self.fiberSection= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear2d", self.name)
+        fiberSectionName= self.getFiberSectionName()
+        self.fiberSection= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear2d", fiberSectionName)
         self.fiberSectionRepr= self.fiberSection.getFiberSectionRepr()
         self.fiberSectionRepr.setGeomNamed(self.gmSectionName())
         self.fiberSection.setupFibers()
         self.fiberSection.setRespVyByName(self.respVyName())
         self.fiberSection.setProp('sectionData',self)
+        return fiberSectionName
         
     def defRCSection2d(self, preprocessor, matDiagType):
         ''' Definition of a 2D reinforced concrete section.
@@ -1225,14 +1237,15 @@ class RCSectionBase(object):
          '''
         self.defShearResponse2d(preprocessor)
         self.defSectionGeometry(preprocessor,matDiagType)
-        self.defFiberSection2d(preprocessor)
-        
+        return self.defFiberSection2d(preprocessor)
+
     def defFiberSection(self, preprocessor):
         '''Define fiber section from geometry data.
 
         :param preprocessor: preprocessor of the finite element problem.
         '''
-        self.fiberSection= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d", self.name)
+        fiberSectionName= self.getFiberSectionName()
+        self.fiberSection= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d", fiberSectionName)
         self.fiberSectionRepr= self.fiberSection.getFiberSectionRepr()
         self.fiberSectionRepr.setGeomNamed(self.gmSectionName())
         self.fiberSection.setupFibers()
@@ -1240,6 +1253,7 @@ class RCSectionBase(object):
         self.fiberSection.setRespVzByName(self.respVzName())
         self.fiberSection.setRespTByName(self.respTName())
         self.fiberSection.setProp('sectionData',self)
+        return fiberSectionName
         
     def clearFiberSection(self):
         '''Clear the previously defined fiber section.'''
@@ -1258,7 +1272,7 @@ class RCSectionBase(object):
         '''
         self.defShearResponse(preprocessor= preprocessor)
         self.defSectionGeometry(preprocessor= preprocessor, matDiagType= matDiagType)
-        self.defFiberSection(preprocessor= preprocessor)
+        return self.defFiberSection(preprocessor= preprocessor)
         
     def clearRCSection(self):
         ''' Clear a previously defined XC reinforced concrete section (possibly
@@ -1302,7 +1316,7 @@ class RCSectionBase(object):
             lmsg.error(className+'.'+methodName+errMsg)
             exit(1)
         self.defInteractionDiagramParameters(preprocessor)
-        return preprocessor.getMaterialHandler.calcInteractionDiagram(self.name,self.fiberSectionParameters.idParams)
+        return preprocessor.getMaterialHandler.calcInteractionDiagram(self.getFiberSectionName(),self.fiberSectionParameters.idParams)
 
     def defInteractionDiagramNMy(self, preprocessor, matDiagType= None):
         '''Defines N-My interaction diagram.
@@ -1320,7 +1334,7 @@ class RCSectionBase(object):
             lmsg.error(className+'.'+methodName+errMsg)
             exit(1)
         self.defInteractionDiagramParameters(preprocessor)
-        return preprocessor.getMaterialHandler.calcInteractionDiagramNMy(self.name,self.fiberSectionParameters.idParams)
+        return preprocessor.getMaterialHandler.calcInteractionDiagramNMy(self.getFiberSectionName(),self.fiberSectionParameters.idParams)
 
     def defInteractionDiagramNMz(self, preprocessor, matDiagType= None):
         '''Defines N-Mz interaction diagram.
@@ -1338,7 +1352,7 @@ class RCSectionBase(object):
             lmsg.error(className+'.'+methodName+errMsg)
             exit(1)
         self.defInteractionDiagramParameters(preprocessor)
-        return preprocessor.getMaterialHandler.calcInteractionDiagramNMz(self.name,self.fiberSectionParameters.idParams)
+        return preprocessor.getMaterialHandler.calcInteractionDiagramNMz(self.getFiberSectionName(), self.fiberSectionParameters.idParams)
 
     def subplot(self, ax, preprocessor, matDiagType= 'k'):
         ''' Put the section drawing in the subplot argument.

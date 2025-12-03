@@ -67,12 +67,17 @@ class GeomObj2d: public GeomObj
     inline virtual GEOM_FT getVolume(void) const
       { return 0.0; }
     //! @brief Moment of inertia with respect to the center of mass en local axis.
+    //! @brief Moment of inertia with respect to an axis parallel to the
+    //! X axis that passes through the center of mass.
     virtual GEOM_FT Ix(void) const= 0;
-    //! @brief Moment of inertia with respect to the center of mass en local axis.
+    GEOM_FT Wx(void) const;
+    //! @brief Moment of inertia with respect to an axis parallel to the
+    //! Y axis that passes through the center of mass.
     virtual GEOM_FT Iy(void) const= 0;
-    //! @brief ! @brief Product of inertia with respect to the center of mass en local axis.
+    GEOM_FT Wy(void) const;
+    //! @brief Product of inertia with respect to the center of mass.
     virtual GEOM_FT Pxy(void) const= 0;
-    //! @brief Moment of inertia polar with respect to the center of mass en local axis.
+
     inline virtual GEOM_FT Iz(void) const
       { return Ix()+Iy(); }
     double Theta_p(void) const;

@@ -194,6 +194,7 @@
 
 #define LOAD_TAG_BeamStrainLoad           5008 //Modified LCPT.
 #define LOAD_TAG_TrussStrainLoad          5020 //Added by LCPT.
+#define LOAD_TAG_TrussPrestressLoad       5025 //Added by LCPT.
 #define LOAD_TAG_LoadPatternCombination   5029 //Added by LCPT.
 #define LOAD_TAG_LoadCombination          5030 //Added by LCPT.
 #define LOAD_TAG_QuadRawLoad              5034 //Added by LCPT.

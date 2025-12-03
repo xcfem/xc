@@ -40,22 +40,19 @@ modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 ptoAplic=  geom.Pos2d(1+x*L*math.sqrt(2)/2,2+x*L*math.sqrt(2)/2) # Load application point.
 
-
-n1= nodes.newNodeXY(1,2)
-n2= nodes.newNodeXY(1+L*math.sqrt(2)/2,2+L*math.sqrt(2)/2)
-    
-# Geometric transformation(s)
-lin= modelSpace.newLinearCrdTransf("lin")
-    
-# Materials definition
+# Define mesh.
+## Define nodes.
+n1= modelSpace.newNode(1,2)
+n2= modelSpace.newNode(1+L*math.sqrt(2)/2,2+L*math.sqrt(2)/2)
+## Define elements.    
+### Geometric transformation(s)
+lin= modelSpace.newLinearCrdTransf("lin") 
+### Materials definition
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
-
-
-# Elements definition
-elements= preprocessor.getElementHandler
-elements.defaultTransformation= lin.name
-elements.defaultMaterial= scc.name
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
+### Elements definition
+modelSpace.setDefaultCoordTransf(lin)
+modelSpace.setDefaultMaterial(scc)
+beam2d= modelSpace.newElement("ElasticBeam2d", [n1.tag,n2.tag])
 beam2d.h= h
     
 # Constraints
@@ -70,19 +67,21 @@ mesh= feProblem.getDomain.getMesh
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
-  crdTransf= elem.getCoordTransf
-  vIElem= crdTransf.getIVector
-  vJElem= crdTransf.getJVector
-  vCarga= n*vIElem-P*vJElem
-  elem.vector2dPointLoadGlobal(xc.Vector([ptoAplic.x,ptoAplic.y]),vCarga)
-  elem= eIter.next()
+    crdTransf= elem.getCoordTransf
+    vIElem= crdTransf.getIVector
+    vJElem= crdTransf.getJVector
+    vCarga= n*vIElem-P*vJElem
+    elem.vector2dPointLoadGlobal(xc.Vector([ptoAplic.x,ptoAplic.y]),vCarga)
+    elem= eIter.next()
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
-# Solution
-analysis= predefined_solutions.simple_static_linear(feProblem)
-result= analysis.analyze(1)
+# Solve.
+result= modelSpace.analyze(calculateNodalReactions= True)
+if(result!=0):
+    lmsg.error("Can't solve.")
+    exit(1)
 
 tmp= n2.getDisp
 vDisp= xc.Vector([tmp[0],tmp[1]])

@@ -11,3 +11,6 @@ A zero length element has two nodes at the same location. A zeroLength element i
 - [A Simple Solution to a Complicated Equivalent](https://portwooddigital.com/2022/06/19/a-simple-solution-to-a-complicated-equivalent)
 ### Element orientation
 - [Flipping Rotation Axes](https://portwooddigital.com/2023/11/12/flipping-rotation-axes/)
+
+### Zero length contact
+- [Positive OpenSees contact](https://portwooddigital.com/2025/10/19/positive-opensees-contact/)

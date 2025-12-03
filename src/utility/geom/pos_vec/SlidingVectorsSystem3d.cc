@@ -401,6 +401,22 @@ SlidingVectorsSystem3d operator-(const SlidingVectorsSystem3d &svd3d)
     return retval;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict SlidingVectorsSystem3d::getPyDict(void) const
+  {
+    boost::python::dict retval= SlidingVector3d::getPyDict();
+    retval["moment"]= mom.getPyDict();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void SlidingVectorsSystem3d::setPyDict(const boost::python::dict &d)
+  {
+    SlidingVector3d::setPyDict(d);
+    this->mom.setPyDict(boost::python::extract<boost::python::dict>(d["moment"]));
+  }    
+
+
 //! @brief Prints.
 std::ostream &operator<<(std::ostream &os, const SlidingVectorsSystem3d &svd3d)
   {

@@ -33,7 +33,7 @@ modelSpace.fixNode000_000(n2.tag)
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 modelSpace.setCurrentLoadPattern("0")
-lVector= xc.Vector([0,0,-f, 0,0,0])
+lVector= xc.Vector([0,0,-f, 0,0,0]) # Fx, Fy, Fz, Mx, My, Mz
 slidingVectorLoad= loads.SlidingVectorLoad(name= 'test', nodes= [n1,n2], pntCoord= [0.0,0.0,0.0], loadVector= lVector)
 slidingVectorLoad.appendLoadToCurrentLoadPattern()
 

@@ -208,7 +208,14 @@ def def_vars_envelope_internal_forces_truss_elems(elems):
     '''
     def_envelope_vars(elems, ['N'])
         
-def def_vars_envelope_internal_forces_beam_elems(elems):
+def def_vars_envelope_internal_forces_beam_elems_2d(elems):
+    '''Defines properties to store extreme values of internal forces.
+
+    :param elems: elements nodes whose generalized stresses will be controlled.
+    '''
+    def_envelope_vars(elems, ['N', 'Mz', 'Vy'])
+        
+def def_vars_envelope_internal_forces_beam_elems_3d(elems):
     '''Defines properties to store extreme values of internal forces.
 
     :param elems: elements nodes whose generalized stresses will be controlled.

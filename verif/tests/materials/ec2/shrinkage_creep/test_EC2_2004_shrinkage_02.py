@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 '''Shrinkage computation verification test.
 
-Data for comparison obtained from https://eurocodeapplied.com/design/en1992/creep-shrinkage
-
+Data for comparison obtained from:
+https://eurocodeapplied.com/design/en1992/creep-shrinkage
 '''
 
 __author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"

@@ -101,9 +101,7 @@ vJElem= crdTransf.getJVector
 loadVector= f*vIElem-p*vJElem
 el.vector2dUniformLoadGlobal(loadVector)
 
-
-loadHandler= preprocessor.getLoadHandler
-loadHandler.addToDomain(lp0.name) # Append load pattern to domain.
+modelSpace.addLoadCaseToDomain(lp0.name) # Append load pattern to domain.
 
 # Solution procedure
 analysis= predefined_solutions.plain_newton_raphson(feProblem)
@@ -156,3 +154,18 @@ if (abs(ratio0)<1e-6) & (abs(ratio1)<0.05) & (abs(ratio2)<1e-10) & (abs(ratio3)<
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+
+# # oh.displayFEMesh()
+# #oh.displayLocalAxes()
+# # oh.displayStrongWeakAxis()
+# oh.displayLoads()
+# oh.displayReactions(reactionCheckTolerance= 1e-4)
+# #oh.displayDispRot(itemToDisp='uZ', defFScale= 10.0)
+# #oh.displayIntForcDiag(itemToDisp= 'Mz')
+# #oh.displayIntForcDiag(itemToDisp= 'Qy')
+# #oh.displayIntForcDiag(itemToDisp= 'Mz')
+# #oh.displayIntForcDiag(itemToDisp= 'T')

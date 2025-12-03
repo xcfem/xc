@@ -33,8 +33,6 @@ topCover= 0.068 # Concrete cover of top reinforcement expressed in meters.
 topNominalCover= topCover-topRebarsDiam/2.0
 numRebars= 6 # Number of rebars.
 
-feProblem= xc.FEProblem()
-preprocessor=  feProblem.getPreprocessor
 # Materials definition
 concrete= EC2_materials.C25 # Concrete.
 steel= EC2_materials.S500B # Reinforcing steel.
@@ -51,11 +49,10 @@ rcSection.negatvRebarRows= def_simple_RC_section.LongReinfLayers([topRow])
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Create the section material
-materialHandler= preprocessor.getMaterialHandler
-rcSection.defRCSection(preprocessor, matDiagType= 'd')
+fiberSectionName= rcSection.defRCSection(preprocessor, matDiagType= 'd')
 
 # Create ZeroLength element and assign the section to it.
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, rcSection.name)
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSectionName)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

@@ -72,6 +72,8 @@ class PntMap: public EntityMap<Pnt>
     Pnt *New(const size_t &,const Pos3d &);
     Pnt *New(const Pos2d &);
     Pnt *New(const size_t &,const Pos2d &);
+    Pnt *duplicatePoint(const Pnt &);
+    Pnt *duplicatePoint(const size_t &);
 
     Pnt *Copy(const Pnt *,const Vector3d &v);
     void Copy(const std::vector<PntMap::Indice> &);
