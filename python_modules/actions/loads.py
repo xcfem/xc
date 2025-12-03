@@ -231,8 +231,8 @@ class UniformLoadOnSurfaces(BaseVectorLoad):
 
     :ivar name:       name identifying the load
     :ivar xcSet:      set that contains the surfaces
-    :ivar loadVector: xc.Vector with the six components of the load: 
-                      xc.Vector([Fx,Fy,Fz,Mx,My,Mz]).
+    :ivar loadVector: xc.Vector with the three components of the load: 
+                      xc.Vector([Fx,Fy,Fz]]).
     :ivar refSystem: reference system in which loadVector is defined:
                      'Local': element local coordinate system
                      'Global': global coordinate system (defaults to 'Global)
