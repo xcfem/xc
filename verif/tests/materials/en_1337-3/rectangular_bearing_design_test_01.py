@@ -34,6 +34,7 @@ Fyd= 49.1e3 # design horizontal load along y.
 
 ## Elastomeric bearing.
 # bearingCode: code of the bearing in the data dictionary.
+# a: bearing length (see figure 2 of EN 1337-3:2005).
 # b: bearing width (see figure 2 of EN 1337-3:2005).
 # tb: total height (see figure 2 of EN 1337-3:2005).
 # ti: thickness of individual elastomer layer (see figure 2 of EN 1337-3:2005).
