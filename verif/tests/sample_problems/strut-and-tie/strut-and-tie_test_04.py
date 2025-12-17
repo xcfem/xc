@@ -136,7 +136,9 @@ testOK= ((abs(ratio01)<tol) and (abs(ratio02)<tol) and (abs(ratio03)<tol) and (a
 modelSpace.removeLoadCaseFromDomain(lp0.name)
 modelSpace.revertToStart()
 lp1= modelSpace.newLoadPattern(name= '1')
-lp1.newNodalLoad(n0.tag,xc.Vector([-F,0,0,0,0,0]))
+# Set a tiny vertical load to achieve convergence.
+tinyVerticalLoad= F*1e-12
+lp1.newNodalLoad(n0.tag,xc.Vector([-F,0,-tinyVerticalLoad, 0, 0, 0]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp1.name)
 
