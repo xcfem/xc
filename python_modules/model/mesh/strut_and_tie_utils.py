@@ -789,7 +789,7 @@ class PileCap3Piles(StrutAndTieModel):
 
         # Compute data for the coordinate transformations.
         auxPoint= pierTopNodePos-d*kVector # Point in the vertical of the
-                                              # pile.
+                                           # pile.
         planeA= geom.Plane3d(pierTopNodePos, auxPoint, pileBottomNodePosA)
         kVectorA= planeA.getNormal()
         planeB= geom.Plane3d(pierTopNodePos, auxPoint, pileBottomNodePosB)
