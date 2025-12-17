@@ -468,7 +468,7 @@ class PileCap3Piles(StrutAndTieModel):
     :ivar pierEffectiveDiameter: effective diameter of the pier.
     '''
     concrete_a= .0001 # parameter to define the tension behaviour of concrete.
-    steel_a= .00001 # parameter to define the compression behaviour of steel.
+    steel_a= .0001 # parameter to define the compression behaviour of steel.
     
     def __init__(self, pierBottomNode, pileTopNodeA, pileTopNodeB, pileTopNodeC, pierEffectiveDiameter):
         ''' Constructor.
@@ -508,22 +508,24 @@ class PileCap3Piles(StrutAndTieModel):
                               no-compression material). Used with debugging
                               purposes.
         '''
-        pierBottomNodePos= self.pierBottomNode.getInitialPos3d
+        pierTopNodePos= self.pierBottomNode.getInitialPos3d
         pileBottomNodePosA= self.pileTopNodeA.getInitialPos3d
         pileBottomNodePosB= self.pileTopNodeB.getInitialPos3d
         pileBottomNodePosC= self.pileTopNodeC.getInitialPos3d
         bottomTriangle= geom.Triangle3d(pileBottomNodePosA, pileBottomNodePosB, pileBottomNodePosC)
-        bottomCentroid= bottomTriangle.getCenterOfMass()
-        auxLineA= geom.Segment3d(bottomCentroid, pileBottomNodePosA)
-        auxLineB= geom.Segment3d(bottomCentroid, pileBottomNodePosB)
-        auxLineC= geom.Segment3d(bottomCentroid, pileBottomNodePosC)
+        # Compute effective depth
         bottomPlane= bottomTriangle.getPlane()
         kVector= bottomPlane.getNormal().normalized()
-        # Make sure kVectors points to the bottom of the pier
-        pierBottomSide= bottomPlane.getSide(pierBottomNodePos)
+        ## Make sure kVectors points to the bottom of the pier
+        pierBottomSide= bottomPlane.getSide(pierTopNodePos)
         if(pierBottomSide<0):
             kVector*=-1
-        d= bottomPlane.dist(pierBottomNodePos) # effective depth.
+        d= bottomPlane.dist(pierTopNodePos) # effective depth.
+        # Compute auxiliary lines.
+        pierBottomPos= pierTopNodePos-d*kVector
+        auxLineA= geom.Segment3d(pierBottomPos, pileBottomNodePosA)
+        auxLineB= geom.Segment3d(pierBottomPos, pileBottomNodePosB)
+        auxLineC= geom.Segment3d(pierBottomPos, pileBottomNodePosC)
         # Compute the position of the pile top nodes.
         pileTopNodePosA= pileBottomNodePosA+d*kVector
         pileTopNodePosB= pileBottomNodePosB+d*kVector
