@@ -508,7 +508,9 @@ class PileCap3Piles(StrutAndTieModel):
                               no-compression material). Used with debugging
                               purposes.
         '''
+        # Pier bottom node at the top of the pile cap:
         pierTopNodePos= self.pierBottomNode.getInitialPos3d
+        # Pile top nodes at the bottom of the pile cap.
         pileBottomNodePosA= self.pileTopNodeA.getInitialPos3d
         pileBottomNodePosB= self.pileTopNodeB.getInitialPos3d
         pileBottomNodePosC= self.pileTopNodeC.getInitialPos3d
@@ -725,7 +727,7 @@ class PileCap3Piles(StrutAndTieModel):
             n0Bottom= n1Bottom
 
         #### Top to bottom bars (they can take tensions and compressions).
-        # Top-down ties in the pier(dummy bars to make the forces reach the
+        # Top-down ties in the pier (dummy bars to make the forces reach the
         # bottom of the pile cap).
         pierTopDownBarsMaterial= elasticTiesMaterial
         modelSpace.setDefaultMaterial(pierTopDownBarsMaterial)
@@ -765,18 +767,16 @@ class PileCap3Piles(StrutAndTieModel):
         :param releaseExtremities: if true, release the bending moments at
                                    the nodes connecting with the piles.
         '''
-        pierBottomNodePos= self.pierBottomNode.getInitialPos3d
+        # Pier bottom node at the top of the pile cap:
+        pierTopNodePos= self.pierBottomNode.getInitialPos3d
+        # Pile top nodes at the bottom of the pile cap.
         pileBottomNodePosA= self.pileTopNodeA.getInitialPos3d
         pileBottomNodePosB= self.pileTopNodeB.getInitialPos3d
         pileBottomNodePosC= self.pileTopNodeC.getInitialPos3d
         bottomTriangle= geom.Triangle3d(pileBottomNodePosA, pileBottomNodePosB, pileBottomNodePosC)
-        bottomCentroid= bottomTriangle.getCenterOfMass()
-        auxLineA= geom.Segment3d(bottomCentroid, pileBottomNodePosA)
-        auxLineB= geom.Segment3d(bottomCentroid, pileBottomNodePosB)
-        auxLineC= geom.Segment3d(bottomCentroid, pileBottomNodePosC)
         bottomPlane= bottomTriangle.getPlane()
         kVector= bottomPlane.getNormal().normalized()
-        d= bottomPlane.dist(pierBottomNodePos) # effective depth.
+        d= bottomPlane.dist(pierTopNodePos) # effective depth.
         
         n0Tag= self.pierBottomNode.tag
         nATag= self.pileTopNodeA.tag
@@ -787,14 +787,14 @@ class PileCap3Piles(StrutAndTieModel):
         dummyRCSection= def_simple_RC_section.RCRectangularSection(name= dummyRCSectionName, sectionDescr= 'dummy RC section', concrType= concrete, reinfSteelType= None, width= d, depth= d)
         xcDummySectionMaterial= dummyRCSection.defElasticShearSection3d(preprocessor= modelSpace.preprocessor)
 
-        # Compute date for the coordinate transformations.
-        auxPoint= pierBottomNodePos-d*kVector # Point in the vertical of the
+        # Compute data for the coordinate transformations.
+        auxPoint= pierTopNodePos-d*kVector # Point in the vertical of the
                                               # pile.
-        planeA= geom.Plane3d(pierBottomNodePos, auxPoint, pileBottomNodePosA)
+        planeA= geom.Plane3d(pierTopNodePos, auxPoint, pileBottomNodePosA)
         kVectorA= planeA.getNormal()
-        planeB= geom.Plane3d(pierBottomNodePos, auxPoint, pileBottomNodePosB)
+        planeB= geom.Plane3d(pierTopNodePos, auxPoint, pileBottomNodePosB)
         kVectorB= planeB.getNormal()
-        planeC= geom.Plane3d(pierBottomNodePos, auxPoint, pileBottomNodePosC)
+        planeC= geom.Plane3d(pierTopNodePos, auxPoint, pileBottomNodePosC)
         kVectorC= planeC.getNormal()
         # Set element material.
         modelSpace.setDefaultMaterial(xcDummySectionMaterial)
