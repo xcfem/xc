@@ -370,6 +370,20 @@ class PileCap3Piles(strut_and_tie_base.StrutAndTieModel):
                 # Release code; 0: no release, 1: node I, 2: node J, 2: both nodes.
                 # newElement.releaseY= 2
                 newElement.releaseZ= 2
+                
+    def getRadialStrutList(self):
+        ''' Return the struts that connect the pier and the piles.
+
+        '''
+        retval= list()
+        if(hasattr(self,'radialStruts')): # if strut-and-tie model is defined
+            retval= self.radialStruts
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMessage= className+'.'+methodName+"; no strut-and-tie model defined."
+            lmsg.error(errorMessage)
+        return retval
         
     def getStrutList(self):
         ''' Return a list of all the struts.'''

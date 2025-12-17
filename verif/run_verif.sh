@@ -674,6 +674,7 @@ python tests/sample_problems/strut-and-tie/strut-and-tie_test_04.py
 python tests/sample_problems/strut-and-tie/strut-and-tie_test_05.py
 python tests/sample_problems/strut-and-tie/strut-and-tie_test_06.py
 python tests/sample_problems/strut-and-tie/strut-and-tie_test_07.py
+python tests/sample_problems/strut-and-tie/strut-and-tie_test_08.py
 echo "$BLEU" "  Soil subgrade reaction." "$NORMAL"
 python tests/sample_problems/soil_subgrade_reaction/test_winkler.py
 python tests/sample_problems/soil_subgrade_reaction/test_quasi_winkler.py
