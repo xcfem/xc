@@ -18,6 +18,7 @@ A fiber section object is composed of Fibers, with each fiber containing a Uniax
 ### Import section from [sectionproperties](https://sectionproperties.readthedocs.io/en/latest/index.html)
 
 - [One fiber at a time](https://portwooddigital.com/2025/01/19/one-fiber-at-a-time/)
+- [Combined loadings](https://portwooddigital.com/2025/12/14/combined-loadings/)
 
 ### Shell materials
 - [Plate Rebar Material](https://portwooddigital.com/2024/11/08/plate-rebar-material/)
