@@ -86,8 +86,11 @@ int XC::MumpsSolver::initializeMumps(void)
 	id.job=-1; 
 	id.par=1; // host involved in calcs
 	id.sym= theMumpsSOE->matType;
-
+#ifdef _OPENMPI
 	id.comm_fortran=0; // OPENMPI
+#else
+	id.comm_fortran = MPI_Comm_c2f(MPI_COMM_WORLD);
+#endif
 
         dmumps_c(&id);
 	mumps_init= true;
