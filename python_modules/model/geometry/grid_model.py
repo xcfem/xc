@@ -1049,7 +1049,7 @@ class GridModel(object):
         self.appendHexaedrRange(ijkRange,setVol,closeCyl)
         return setVol
     
-    def genSurfOneRegion(self,ijkRange,setName,closeCyl='N',orientI=None):
+    def genSurfOneRegion(self,ijkRange,setName,closeCyl='N',orientI=None,orientK=None):
         '''generate the surfaces limited by a region defined by the coordinates
         that correspond to the indices in the grid 
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
@@ -1062,6 +1062,7 @@ class GridModel(object):
         :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
                         (defaults to 'N')
         :param orientI: [x,y,z] list to define the orientation vector of I local axis
+        :param orientK: [x,y,z] list to define the orientation vector of J local axis
         '''
         setSurf= self.prep.getSets.defSet(setName)
         self.appendSurfRange(ijkRange,setSurf,closeCyl)
@@ -1069,6 +1070,10 @@ class GridModel(object):
             vOrient=geom.Vector3d(orientI[0],orientI[1],orientI[2])
             for s in setSurf.surfaces:
                 s.setIOrientation(vOrient)
+        if orientK:
+            vOrient=geom.Vector3d(orientK[0],orientK[1],orientK[2])
+            for s in setSurf.surfaces:
+                s.setKOrientation(vOrient)
         return setSurf
     
     def genHexaedrOneXYZRegion(self,xyzRange,setName,closeCyl='N'):
@@ -1086,7 +1091,7 @@ class GridModel(object):
         ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
         return self.genHexaedrOneRegion(ijkRange,setName,closeCyl)
 
-    def genSurfOneXYZRegion(self,xyzRange,setName,closeCyl='N',orientI=None):
+    def genSurfOneXYZRegion(self,xyzRange,setName,closeCyl='N',orientI=None,orientK=None):
         '''generate the surfaces limited by a region defined by the coordinates
         defined in the range  xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
         Return a set with the surfaces generated.
@@ -1097,9 +1102,10 @@ class GridModel(object):
         :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
                         (defaults to 'N')
         :param orientI: [x,y,z]list to define the orientation vector of I local axis
+        :param orientK: [x,y,z] list to define the orientation vector of J local axis
          '''
         ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
-        return self.genSurfOneRegion(ijkRange,setName,closeCyl,orientI)
+        return self.genSurfOneRegion(ijkRange,setName,closeCyl,orientI,orientK)
 
     def genHexaedrMultiRegion(self,lstIJKRange,setName,closeCyl='N'):
         '''generate the hexaedral volums limited by all the regions included in the 
@@ -1121,7 +1127,7 @@ class GridModel(object):
             self.appendHexaedrRange(rg,setVol,closeCyl)
         return setVol
     
-    def genSurfMultiRegion(self,lstIJKRange,setName,closeCyl='N',orientI=None):
+    def genSurfMultiRegion(self,lstIJKRange,setName,closeCyl='N',orientI=None,orientK=None):
         '''generate the surfaces limited by all the regions included in the 
         list of ijkRanges passed as parameter.
         Each region defines a volume limited by the coordinates    
@@ -1136,6 +1142,7 @@ class GridModel(object):
         :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
                         (defaults to 'N')
         :param orientI: [x,y,z] list to define the orientation vector of I local axis
+        :param orientK: [x,y,z] list to define the orientation vector of J local axis
         '''
         setSurf= self.prep.getSets.defSet(setName)
         for rg in lstIJKRange:
@@ -1144,6 +1151,11 @@ class GridModel(object):
             vOrient=geom.Vector3d(orientI[0],orientI[1],orientI[2])
             for s in setSurf.surfaces:
                 s.setIOrientation(vOrient)
+        return setSurf
+        if orientK:
+            vOrient=geom.Vector3d(orientK[0],orientK[1],orientK[2])
+            for s in setSurf.surfaces:
+                s.setKOrientation(vOrient)
         return setSurf
 
     def genHexaedrMultiXYZRegion(self,lstXYZRange,setName,closeCyl='N'):
@@ -1165,7 +1177,7 @@ class GridModel(object):
         return self.genHexaedrMultiRegion(lstIJKRange,setName,closeCyl)
     
     
-    def genSurfMultiXYZRegion(self,lstXYZRange,setName,closeCyl='N',orientI=None):
+    def genSurfMultiXYZRegion(self,lstXYZRange,setName,closeCyl='N',orientI=None,orientK=None):
         '''generate the surfaces limited by all the regions included in the 
         list of xyzRanges passed as parameter.
         Each region defines a volume limited by the coordinates    
@@ -1178,11 +1190,12 @@ class GridModel(object):
         :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
                         (defaults to 'N')
         :param orientI: [x,y,z] list to define the orientation vector of I local axis
+        :param orientK: [x,y,z] list to define the orientation vector of J local axis
          '''
         lstIJKRange=list()
         for rg in lstXYZRange:
             lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
-        return self.genSurfMultiRegion(lstIJKRange,setName,closeCyl,orientI)
+        return self.genSurfMultiRegion(lstIJKRange,setName,closeCyl,orientI,orientK)
         
     def appendLinRange(self,ijkRange,setName):
         '''generate the lines limited by a region defined by the coordinates
