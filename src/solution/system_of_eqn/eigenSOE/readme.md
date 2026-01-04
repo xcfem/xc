@@ -24,5 +24,6 @@ The following methods provide the solution of the generalized eigenvalue problem
  - [One Way to Get Bad Eigenvalues](https://portwooddigital.com/2022/11/10/one-way-to-get-bad-eigenvalues/)
  - [Another Way to Get Bad Eigenvalues](https://portwooddigital.com/2022/11/11/another-way-to-get-bad-eigenvalues/)
  - [Eigenvalues of the Stiffness Matrix](https://portwooddigital.com/2023/01/16/eigenvalues-of-the-stiffness-matrix/)
+ - [Eigen Almost Hear You Sigh](https://portwooddigital.com/2025/12/30/eigen-almost-hear-you-sigh/)
 ### Solvers
  - [Spectra (Sparse Eigenvalue Computation Toolkit as a Redesigned ARPACK)](https://github.com/yixuan/spectra/)

@@ -66,7 +66,8 @@ Once the analyst has defined the model, the next step is to define the analysis 
  - [Quick (and Dirty) Modal Damping](https://portwooddigital.com/2022/11/08/quick-and-dirty-modal-damping/)
  - [Eigenvalues of the Stiffness Matrix](https://portwooddigital.com/2023/01/16/eigenvalues-of-the-stiffness-matrix/)
  - [Spectra. C++ Library For Large Scale Eigenvalue Problems](https://spectralib.org/)
- 
+ - [Eigen Almost Hear You Sigh](https://portwooddigital.com/2025/12/30/eigen-almost-hear-you-sigh/)
+
 #### Linear buckling analysis.
 - [Buckling](https://en.wikipedia.org/wiki/Buckling)
 - [Linear buckling in plain language!](https://enterfea.com/linear-buckling-explained/)
