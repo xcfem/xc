@@ -775,13 +775,18 @@ int XC::ForceBeamColumn2d::update(void)
                         if(dvToDo.Norm() <= DBL_EPSILON)
                           { converged = true; }
                         else
-                          { // we convreged but we have more to do
-                            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-				      << ' ' << dvToDo << dvTrial
-				      << Color::def << std::endl;
+                          { // we converged but we have more to do
+			    
+                            // std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+			    // 	      << "\n dvToDo= " << dvToDo
+			    // 	      << "\n dvToDo.Norm()= " << dvToDo.Norm()
+			    // 	      << "\n DBL_EPSILON= " << DBL_EPSILON
+			    // 	      << "\n dvTrial= " << dvTrial
+			    // 	      << Color::def << std::endl;
+			    
                             // reset variables for start of next subdivision
-                            dvTrial = dvToDo;
-                            numSubdivide = 1;  // NOTE setting subdivide to 1 again maybe too much
+                            dvTrial= dvToDo;
+                            numSubdivide= 1;  // NOTE setting subdivide to 1 again maybe too much.
                           }
     
                         // set kv, vs and Se values
@@ -803,13 +808,13 @@ int XC::ForceBeamColumn2d::update(void)
                     else
                       {   //  if(fabs(dW) < tol) {
     
-                        // if we have failed to convrege for all of our newton schemes
+                        // if we have failed to converge for all of our newton schemes
                         // - reduce step size by the factor specified
-                       if(j == (numIters-1) && (l == 2))
-                         {
-                           dvTrial/= factor;
-                           numSubdivide++;
-                         }
+			if(j == (numIters-1) && (l == 2))
+			  {
+			    dvTrial/= factor;
+			    numSubdivide++;
+			  }
                       }
                   } // for(j=0; j<numIters; j++)
 
@@ -818,22 +823,23 @@ int XC::ForceBeamColumn2d::update(void)
       } // while (converged == false)
 
     // if fail to converge we return an error flag & print an error message
-
+    int retval= 0;
     if(converged == false)
       {
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING - failed to get compatible "
 		  << "element forces & deformations for element: "
 		  << getTag()
-		  << " (dW: << " << dW
+	          << " initial flag: " << initialFlag
+		  << " (dW: " << dW
 		  << ", dW0: " << dW0
 		  << ", tol: " << tol << ")"
 	          << Color::def << std::endl;
-        return -1;
+        retval= -1;
       }
-
-    initialFlag= 1;
-    return 0;
+    else
+      initialFlag= 1;
+    return retval;
   }
 
 void XC::ForceBeamColumn2d::getForceInterpolatMatrix(double xi, Matrix &b, const XC::ID &code)

@@ -67,6 +67,7 @@
 
 
 #include "material/ResponseId.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 void XC::ForceBeamColumn3d::free_mem(void)
@@ -108,9 +109,9 @@ XC::ForceBeamColumn3d &XC::ForceBeamColumn3d::operator=(const ForceBeamColumn3d 
 //       alloc(*other.beamIntegr);
 //     v0= other.v0;
 //     maxSubdivisions= other.maxSubdivisions;
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; assignment operator must not be called."
-              << std::endl;
+              << Color::def << std::endl;
     return *this;    
   }
 
@@ -155,9 +156,9 @@ XC::ForceBeamColumn3d::ForceBeamColumn3d (int tag, int nodeI, int nodeJ,
     alloc(bi);
     if(!beamIntegr)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; ERROR: could not create copy of beam integration object."
-		  << std::endl;
+		  << Color::def << std::endl;
         exit(-1);
       }
 
@@ -236,15 +237,17 @@ void XC::ForceBeamColumn3d::setDomain(Domain *theDomain)
 
     if((dofNode1 != NND) || (dofNode2 != NND))
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "ERROR: Nd2 or Nd1 incorrect dof ";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "ERROR: Nd2 or Nd1 incorrect dof."
+	          << Color::def << std::endl;
         exit(0);
       }
 
     if(this->resetNodalCoordinates() != 0)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; error initializing coordinate transformation\n";
+		  << "; error initializing coordinate transformation."
+	          << Color::def << std::endl;
       }
 
     if(initialFlag == 0)
@@ -260,9 +263,9 @@ int XC::ForceBeamColumn3d::commitState(void)
     // call element commitState to do any base class stuff
     if((err = this->NLForceBeamColumn3dBase::commitState()) != 0)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; ERROR: failed in base class."
-		  << std::endl;
+		  << Color::def << std::endl;
       }
     const size_t numSections= getNumSections();
     do
@@ -376,8 +379,9 @@ const XC::Matrix &XC::ForceBeamColumn3d::getInitialStiff(void) const
         // invert3by3Matrix(f, kv);
         static Matrix kvInit(NEBD, NEBD);
         if(f.Solve(I, kvInit) < 0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; ERROR: could not invert flexibility\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; ERROR: could not invert flexibility."
+	            << Color::def << std::endl;
         Ki= Matrix(theCoordTransf->getInitialGlobalStiffMatrix(kvInit));
       }
     return Ki;
@@ -637,9 +641,9 @@ int XC::ForceBeamColumn3d::update(void)
 
 		       if(theSections[i]->setTrialSectionDeformation(section_matrices.getVsSubdivide()[i]) < 0)
 			 {
-			   std::cerr << getClassName() << "::" << __FUNCTION__
+			   std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 				     << "; ERROR: section failed in setTrial."
-				     << std::endl;
+				     << Color::def << std::endl;
 			   return -1;
 			 }
 
@@ -810,8 +814,9 @@ int XC::ForceBeamColumn3d::update(void)
                    // FRANK
                    //          if(f.SolveSVD(I, kvTrial, 1.0e-12) < 0)
                    if(f.Solve(I, kvTrial) < 0)
-                     std::cerr << getClassName() << "::" << __FUNCTION__
-			       << "; ERROR: could not invert flexibility.\n";
+                     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			       << "; ERROR: could not invert flexibility."
+		               << Color::def << std::endl;
 
                    // dv = vin + dvTrial  - vr
                    dv= vin;
@@ -877,30 +882,22 @@ int XC::ForceBeamColumn3d::update(void)
     } // while (converged == false)
 
     // if fail to converge we return an error flag & print an error message
+    int retval= 0;
     if(converged == false)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING: failed to get compatible "
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - failed to get compatible "
 		  << "element forces & deformations for element: "
-		  << this->getTag() << " (dW: << " << dW << ", dW0: "
-		  << dW0 << ")\n";
-
-// 	if(verbosity>3)
-//           {
-//             std::cerr << getClassName() << "::" << __FUNCTION__
-//                       << "Section Tangent Condition Numbers:\n";
-//             for(size_t i=0; i<numSections; i++)
-//               {
-//                 const Matrix &sectionStiff= theSections[i]->getSectionTangent();
-//                 const double conditionNumber = sectionStiff.conditionNumber();
-//                 std::cerr << conditionNumber << " ";
-//               }
-//             std::cerr << std::endl;
-//           }
-        return -1;
+		  << getTag()
+		  << " (dW: " << dW
+		  << ", dW0: " << dW0
+		  << ", tol: " << tol << ")"
+	          << Color::def << std::endl;
+        retval= -1;
       }
-    initialFlag= 1;
-    return 0;
+    else
+      initialFlag= 1;
+    return retval;
   }
 
 void XC::ForceBeamColumn3d::getForceInterpolatMatrix(double xi, Matrix &b, const XC::ID &code)
@@ -1003,10 +1000,10 @@ void XC::ForceBeamColumn3d::zeroLoad(void)
 int XC::ForceBeamColumn3d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; load over inactive element: "
                 << getTag()  
-                << std::endl;
+                << Color::def << std::endl;
     else
       {
         const double L = theCoordTransf->getInitialLength();
@@ -1030,9 +1027,10 @@ int XC::ForceBeamColumn3d::addLoad(ElementalLoad *theLoad, double loadFactor)
           }
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; ERROR: load type unknown for element with tag: "
-		      << this->getTag() << std::endl;
+		      << this->getTag()
+		      << Color::def << std::endl;
             return -1;
            }
       }
@@ -1128,8 +1126,9 @@ int XC::ForceBeamColumn3d::sendSelf(Communicator &comm)
     const int dataTag= getDbTag();
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; ERROR: failed to send ID data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; ERROR: failed to send ID data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -1141,8 +1140,9 @@ int XC::ForceBeamColumn3d::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; ERROR: failed to receive ID data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; ERROR: failed to receive ID data."
+	        << Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;
@@ -1321,14 +1321,16 @@ void XC::ForceBeamColumn3d::compSectionDisplacements(std::vector<Vector> &sectio
           }
         if(sectionKey1 == 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; FATAL: section does not provide Mz response.\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; FATAL: section does not provide Mz response."
+	              << Color::def << std::endl;
             exit(-1);
           }
         if(sectionKey2 == 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; FATAL: section does not provide My response\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; FATAL: section does not provide My response."
+	              << Color::def << std::endl;
             exit(-1);
           }
 
@@ -1806,9 +1808,9 @@ int XC::ForceBeamColumn3d::updateParameter(int parameterID, Information &info)
     }
 
     if(ok < 0) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; ERROR: could not update parameter."
-		<< std::endl;
+		<< Color::def << std::endl;
       return ok;
     }
     else {
@@ -1817,9 +1819,9 @@ int XC::ForceBeamColumn3d::updateParameter(int parameterID, Information &info)
   }
   else
     {
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
  	        << "; ERROR: could not update parameter."
-	        << std::endl;
+	        << Color::def << std::endl;
       return -1;
     }
 }
@@ -1829,13 +1831,15 @@ void XC::ForceBeamColumn3d::setSectionPointers(const std::vector<PrismaticBarCro
     const size_t numSections= getNumSections();
     if(numSections > section_matrices.getMaxNumSections())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "Error: XC::ForceBeamColumn3d::setSectionPointers -- max number of sections exceeded";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; max number of sections exceeded."
+		  << Color::def << std::endl;;
       }
     isTorsion= setSections(secPtrs);
 
     if(!isTorsion)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "XC::ForceBeamColumn3d::ForceBeamColumn3d -- no torsion detected in sections, " <<
-        "continuing with element torsional stiffness GJ/L = " << 1.0/DefaultLoverGJ;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; no torsion detected in sections, "
+		<< " continuing with element torsional stiffness GJ/L = " << 1.0/DefaultLoverGJ
+	        << Color::def << std::endl;;
   }
