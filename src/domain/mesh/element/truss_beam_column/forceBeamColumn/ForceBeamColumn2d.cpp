@@ -128,24 +128,41 @@ void XC::ForceBeamColumn2d::alloc(const BeamIntegration &bi)
 
 // ! @brief Constructor.
 XC::ForceBeamColumn2d::ForceBeamColumn2d(int tag)
-  : NLForceBeamColumn2dBase(tag,ELE_TAG_ForceBeamColumn2d), beamIntegr(nullptr), v0()
+  : NLForceBeamColumn2dBase(tag, ELE_TAG_ForceBeamColumn2d, 1e-12),
+    beamIntegr(nullptr), v0(), maxSubdivisions(4), subdivideFactor(10.0)
   {}
 
 //! @brief Constructor.
-XC::ForceBeamColumn2d::ForceBeamColumn2d(int tag,int numSec,const Material *m,const CrdTransf *trf,const BeamIntegration *integ):
-  NLForceBeamColumn2dBase(tag,ELE_TAG_ForceBeamColumn2d,numSec,m,trf), beamIntegr(nullptr), v0()
+XC::ForceBeamColumn2d::ForceBeamColumn2d(int tag,int numSec,const Material *m,const CrdTransf *trf,const BeamIntegration *integ, const double &tolerance, const double &subFac)
+  : NLForceBeamColumn2dBase(tag,ELE_TAG_ForceBeamColumn2d,numSec, m, trf, tolerance),
+    beamIntegr(nullptr), v0(), maxSubdivisions(4), subdivideFactor(subFac)
   {
+    if(subdivideFactor < 1.0)
+      subdivideFactor = 1.0;
     if(integ) alloc(*integ);
   }
 
 //! @brief Constructor.
 XC::ForceBeamColumn2d::ForceBeamColumn2d (int tag, int nodeI, int nodeJ,
-                                          int numSec,const std::vector<PrismaticBarCrossSection *> &sec,
+                                          int numSec,
+					  const std::vector<PrismaticBarCrossSection *> &sec,
                                           BeamIntegration &bi,
-                                          CrdTransf2d &coordTransf, double massDensPerUnitLength,
-                                          int maxNumIters, double tolerance):
-  NLForceBeamColumn2dBase(tag,ELE_TAG_ForceBeamColumn2d,0),beamIntegr(nullptr), v0()
+                                          CrdTransf2d &coordTransf,
+					  double massDensPerUnitLength,
+                                          int maxNumIters,
+					  const double &tolerance,
+					  const double &subFac,
+					  int maxNumSub)
+  : NLForceBeamColumn2dBase(tag,ELE_TAG_ForceBeamColumn2d, 0, tolerance),
+    beamIntegr(nullptr), v0(),
+    maxSubdivisions(maxNumSub),
+    subdivideFactor(subFac)
   {
+    if(maxSubdivisions < 1)
+      maxSubdivisions= 1;
+    if(subdivideFactor < 1.0)
+      subdivideFactor = 1.0;
+    
     theNodes.set_id_nodes(nodeI,nodeJ);
 
     alloc(bi);
@@ -158,7 +175,7 @@ XC::ForceBeamColumn2d::ForceBeamColumn2d (int tag, int nodeI, int nodeJ,
 
 //! @brief Copy constructor.
 XC::ForceBeamColumn2d::ForceBeamColumn2d(const ForceBeamColumn2d &other)
-  : NLForceBeamColumn2dBase(other), beamIntegr(nullptr), v0(other.v0), maxSubdivisions(other.maxSubdivisions)
+  : NLForceBeamColumn2dBase(other), beamIntegr(nullptr), v0(other.v0), maxSubdivisions(other.maxSubdivisions), subdivideFactor(other.subdivideFactor)
   {
     if(other.beamIntegr)
       alloc(*other.beamIntegr);
@@ -320,6 +337,20 @@ int XC::ForceBeamColumn2d::revertToLastCommit(void)
     return err;
   }
 
+//! @brief Return the maximum number of subdivisons of dv for local iterations.
+double XC::ForceBeamColumn2d::getMaxSubdivisions(void) const
+  { return this->maxSubdivisions; }
+//! @brief Set the maximum number of subdivisons of dv for local iterations.
+void XC::ForceBeamColumn2d::setMaxSubdivisions(const double &d)
+  { this->maxSubdivisions= d; }
+
+//! @brief Return the factor to reduce newton scheme step size.
+double XC::ForceBeamColumn2d::getSubdivideFactor(void) const
+  { return this->subdivideFactor; }
+//! @brief Set the factor to reduce newton scheme step size.
+void XC::ForceBeamColumn2d::setSubdivideFactor(const double &d)
+  { this->subdivideFactor= d; }
+
 int XC::ForceBeamColumn2d::revertToStart(void)
   {
     // revert the sections state to start
@@ -422,7 +453,7 @@ int XC::ForceBeamColumn2d::update(void)
     static Matrix f(NEBD,NEBD);   // element flexibility matrix
 
     static Matrix I(NEBD,NEBD);   // an identity matrix for matrix inverse
-    double dW= 0.0;                   // section strain energy (work) norm
+    double dW= 0.0;               // section strain energy (work) norm
 
     I.Zero();
     for(size_t i=0; i<NEBD; i++)
@@ -439,10 +470,10 @@ int XC::ForceBeamColumn2d::update(void)
     dvToDo= dv;
     dvTrial= dvToDo;
 
-    static double factor = 10;
+    const double &factor= this->subdivideFactor;
     double dW0 = 0.0;
 
-    maxSubdivisions= 4; //XXX 10
+    // maxSubdivisions= 4;
 
     // fmk - modification to get compatible ele forces and deformations
     //   for a change in deformation dV we try first a newton iteration, if
@@ -776,7 +807,7 @@ int XC::ForceBeamColumn2d::update(void)
                         // - reduce step size by the factor specified
                        if(j == (numIters-1) && (l == 2))
                          {
-                           dvTrial /= factor;
+                           dvTrial/= factor;
                            numSubdivide++;
                          }
                       }
@@ -990,6 +1021,7 @@ int XC::ForceBeamColumn2d::sendData(Communicator &comm)
     res+= sendBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),comm);
     res+= v0.sendData(comm,getDbTagData(),CommMetaData(27));
     res+= comm.sendInt(maxSubdivisions,getDbTagData(),CommMetaData(28));
+    res+= comm.sendDouble(subdivideFactor, getDbTagData(), CommMetaData(29));
     return res;
   }
 
@@ -1000,6 +1032,7 @@ int XC::ForceBeamColumn2d::recvData(const Communicator &comm)
     beamIntegr= receiveBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),comm);
     res+= v0.receiveData(comm,getDbTagData(),CommMetaData(27));
     res+= comm.receiveInt(maxSubdivisions,getDbTagData(),CommMetaData(28));
+    res+= comm.receiveDouble(subdivideFactor, getDbTagData(),CommMetaData(29));
     return res;
   }
 

@@ -76,8 +76,9 @@ class ForceBeamColumn2d: public NLForceBeamColumn2dBase
     FVectorBeamColumn2d v0; //!< Initial deformations due to element loads
 
     // following are added for subdivision of displacement increment
-    int maxSubdivisions; //!< maximum number of subdivisons of dv for local iterations
-
+    int maxSubdivisions; //!< maximum number of subdivisons of dv for local iterations.
+    double subdivideFactor; //!< factor to reduce newton scheme step size.
+    
     std::vector<Vector> persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store the deformation during the inactive phase of the element (if any).
     void free_mem(void);
     void alloc(const BeamIntegration &);
@@ -88,16 +89,22 @@ class ForceBeamColumn2d: public NLForceBeamColumn2dBase
   public:
     ForceBeamColumn2d(int tag= 0);
     ForceBeamColumn2d(const ForceBeamColumn2d &);
-    ForceBeamColumn2d(int tag,int numSec,const Material *theSection,const CrdTransf *trf,const BeamIntegration *integ);
+    ForceBeamColumn2d(int tag,int numSec,const Material *theSection,const CrdTransf *trf,const BeamIntegration *integ, const double &tolerance= 1.0e-12, const double &subFac= 10.0);
     ForceBeamColumn2d(int tag, int nodeI, int nodeJ, 
 	              int numSections,const std::vector<PrismaticBarCrossSection *> &,
 		      BeamIntegration &beamIntegr,
 		      CrdTransf2d &coordTransf, double rho = 0.0, 
-		      int maxNumIters = 10, double tolerance = 1.0e-12);
+		      int maxNumIters = 10, const double &tolerance= 1.0e-12,
+		      const double &subFac= 10.0, int maxNumSub= 4);
     ForceBeamColumn2d &operator=(const ForceBeamColumn2d &);
     Element *getCopy(void) const;
     virtual ~ForceBeamColumn2d(void);
   
+    double getMaxSubdivisions(void) const;
+    void setMaxSubdivisions(const double &);
+    double getSubdivideFactor(void) const;
+    void setSubdivideFactor(const double &);
+    
     // Element birth and death stuff.
     const std::vector<Vector> &getPersistentInitialSectionDeformation(void) const;
     void incrementPersistentInitialDeformationWithCurrentDeformation(void);

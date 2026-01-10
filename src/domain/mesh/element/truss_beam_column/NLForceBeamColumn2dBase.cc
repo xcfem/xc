@@ -28,8 +28,8 @@
 
 #include <domain/mesh/element/truss_beam_column/NLForceBeamColumn2dBase.h>
 #include <material/section/PrismaticBarCrossSection.h>
-
 #include "utility/actor/actor/MatrixCommMetaData.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::Matrix XC::NLForceBeamColumn2dBase::theMatrix(6,6);
 XC::Vector XC::NLForceBeamColumn2dBase::theVector(6);
@@ -46,18 +46,18 @@ void XC::NLForceBeamColumn2dBase::resizeMatrices(const size_t &nSections)
 
 // constructor:
 // invoked by a FEM_ObjectBroker, recvSelf() needs to be invoked on this object.
-XC::NLForceBeamColumn2dBase::NLForceBeamColumn2dBase(int tag,int classTag,int numSec)
+XC::NLForceBeamColumn2dBase::NLForceBeamColumn2dBase(int tag,int classTag,int numSec, const double &tolerance)
   : BeamColumnWithSectionFDTrf2d(tag,classTag,numSec),
-    maxIters(10), tol(1e-8), initialFlag(0),
+    maxIters(10), tol(tolerance), initialFlag(0),
     kv(NEBD,NEBD), Se(NEBD), kvcommit(NEBD,NEBD), Secommit(NEBD),
     fs(numSec), vs(numSec), Ssr(numSec), vscommit(numSec), p0()
   {}
 
 // constructor:
 // invoked by a FEM_ObjectBroker, recvSelf() needs to be invoked on this object.
-XC::NLForceBeamColumn2dBase::NLForceBeamColumn2dBase(int tag,int classTag,int numSec,const Material *m,const CrdTransf *coordTransf)
+XC::NLForceBeamColumn2dBase::NLForceBeamColumn2dBase(int tag,int classTag,int numSec,const Material *m,const CrdTransf *coordTransf, const double &tolerance)
   : BeamColumnWithSectionFDTrf2d(tag,classTag,numSec,m,coordTransf),
-    maxIters(10), tol(1e-8), initialFlag(0),
+    maxIters(10), tol(tolerance), initialFlag(0),
     kv(NEBD,NEBD), Se(NEBD), kvcommit(NEBD,NEBD), Secommit(NEBD),
     fs(numSec), vs(numSec), Ssr(numSec), vscommit(numSec), p0()
   {}
@@ -72,8 +72,9 @@ XC::NLForceBeamColumn2dBase::NLForceBeamColumn2dBase(const NLForceBeamColumn2dBa
 //! @brief Assignment operator.
 XC::NLForceBeamColumn2dBase &XC::NLForceBeamColumn2dBase::operator=(const NLForceBeamColumn2dBase &)
   {
-    std::cerr << "NLForceBeamColumn2dBase: No se debe llamar al operador de asignación."
-              << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; must not be called."
+              << Color::def << std::endl;
     return *this;
   }
 

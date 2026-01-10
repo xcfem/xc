@@ -85,12 +85,16 @@ void XC::ForceBeamColumn3d::alloc(const BeamIntegration &bi)
 // constructor:
 // invoked by a FEM_ObjectBroker, recvSelf() needs to be invoked on this object.
 XC::ForceBeamColumn3d::ForceBeamColumn3d(int tag)
-  : NLForceBeamColumn3dBase(tag,ELE_TAG_ForceBeamColumn3d), beamIntegr(nullptr), v0()
+  : NLForceBeamColumn3dBase(tag,ELE_TAG_ForceBeamColumn3d, 1e-12),
+    beamIntegr(nullptr), v0(), maxSubdivisions(4), subdivideFactor(10.0)
   {}
 
 //! @brief Copy constructor.
 XC::ForceBeamColumn3d::ForceBeamColumn3d(const ForceBeamColumn3d &other)
-  : NLForceBeamColumn3dBase(other), beamIntegr(nullptr), v0(other.v0), maxSubdivisions(other.maxSubdivisions)
+  : NLForceBeamColumn3dBase(other),
+    beamIntegr(nullptr), v0(other.v0),
+    maxSubdivisions(other.maxSubdivisions),
+    subdivideFactor(other.subdivideFactor)
   {
     if(other.beamIntegr)
       alloc(*other.beamIntegr);
@@ -111,9 +115,17 @@ XC::ForceBeamColumn3d &XC::ForceBeamColumn3d::operator=(const ForceBeamColumn3d 
   }
 
 //! @brief Constructor.
-XC::ForceBeamColumn3d::ForceBeamColumn3d(int tag, int numSec, const Material *m,const CrdTransf *coordTransf,const BeamIntegration *integ)
-  : NLForceBeamColumn3dBase(tag,ELE_TAG_ForceBeamColumn3d,numSec,m,coordTransf), beamIntegr(nullptr), v0()
+XC::ForceBeamColumn3d::ForceBeamColumn3d(int tag, int numSec,
+					 const Material *m,
+					 const CrdTransf *coordTransf,
+					 const BeamIntegration *integ,
+					 const double &tolerance,
+					 const double &subFac)
+  : NLForceBeamColumn3dBase(tag,ELE_TAG_ForceBeamColumn3d,numSec,m,coordTransf, tolerance),
+    beamIntegr(nullptr), v0(), maxSubdivisions(4), subdivideFactor(subFac)
   {
+    if(subdivideFactor < 1.0)
+      subdivideFactor = 1.0;
     if(integ) alloc(*integ);
   }
 
@@ -121,12 +133,23 @@ XC::ForceBeamColumn3d::ForceBeamColumn3d(int tag, int numSec, const Material *m,
 // and the node XC::ID's of it's nodal end points.
 // allocates the necessary space needed by each object
 XC::ForceBeamColumn3d::ForceBeamColumn3d (int tag, int nodeI, int nodeJ,
-                                      int numSec,const std::vector<PrismaticBarCrossSection *> &sec,
-                                      BeamIntegration &bi,
-                                      CrdTransf3d &coordTransf, double massDensPerUnitLength,
-                                      int maxNumIters, double tolerance):
-  NLForceBeamColumn3dBase(tag,ELE_TAG_ForceBeamColumn3d, numSec), beamIntegr(nullptr),v0()
+					  int numSec,
+					  const std::vector<PrismaticBarCrossSection *> &sec,
+					  BeamIntegration &bi,
+					  CrdTransf3d &coordTransf,
+					  double massDensPerUnitLength,
+					  int maxNumIters,
+					  const double &tolerance,
+					  const double &subFac,
+					  int maxNumSub):
+  NLForceBeamColumn3dBase(tag,ELE_TAG_ForceBeamColumn3d, numSec, tolerance),
+  beamIntegr(nullptr), v0(), maxSubdivisions(maxNumSub), subdivideFactor(subFac)
   {
+    if(maxSubdivisions < 1)
+      maxSubdivisions= 1;
+    if(subdivideFactor < 1.0)
+      subdivideFactor = 1.0;
+    
     theNodes.set_id_nodes(nodeI,nodeJ);
 
     alloc(bi);
@@ -151,6 +174,20 @@ XC::Element* XC::ForceBeamColumn3d::getCopy(void) const
 //! @brief Destructor.
 XC::ForceBeamColumn3d::~ForceBeamColumn3d(void)
   { free_mem(); }
+
+//! @brief Return the maximum number of subdivisons of dv for local iterations.
+double XC::ForceBeamColumn3d::getMaxSubdivisions(void) const
+  { return this->maxSubdivisions; }
+//! @brief Set the maximum number of subdivisons of dv for local iterations.
+void XC::ForceBeamColumn3d::setMaxSubdivisions(const double &d)
+  { this->maxSubdivisions= d; }
+
+//! @brief Return the factor to reduce newton scheme step size.
+double XC::ForceBeamColumn3d::getSubdivideFactor(void) const
+  { return this->subdivideFactor; }
+//! @brief Set the factor to reduce newton scheme step size.
+void XC::ForceBeamColumn3d::setSubdivideFactor(const double &d)
+  { this->subdivideFactor= d; }
 
 //! @brief Return a pointer to the beam integrator object.
 const XC::BeamIntegration *XC::ForceBeamColumn3d::getIntegrator(void) const
@@ -415,10 +452,10 @@ int XC::ForceBeamColumn3d::update(void)
     dvToDo = dv;
     dvTrial = dvToDo;
 
-    static double factor = 10;
+    const double &factor= this->subdivideFactor;
     double dW0 = 0.0;
 
-    maxSubdivisions= 10;
+    // maxSubdivisions= 10;
 
     // fmk - modification to get compatible ele forces and deformations
     //   for a change in deformation dV we try first a newton iteration, if
@@ -1065,6 +1102,9 @@ int XC::ForceBeamColumn3d::sendData(Communicator &comm)
   {
     int res= NLForceBeamColumn3dBase::sendData(comm);
     res+= sendBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),comm);
+    res+= v0.sendData(comm,getDbTagData(),CommMetaData(27));
+    res+= comm.sendInt(maxSubdivisions,getDbTagData(),CommMetaData(28));
+    res+= comm.sendDouble(subdivideFactor, getDbTagData(), CommMetaData(29));
     return res;
   }
 
@@ -1073,6 +1113,9 @@ int XC::ForceBeamColumn3d::recvData(const Communicator &comm)
   {
     int res= NLForceBeamColumn3dBase::recvData(comm);
     beamIntegr= receiveBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),comm);
+    res+= v0.receiveData(comm,getDbTagData(),CommMetaData(27));
+    res+= comm.receiveInt(maxSubdivisions,getDbTagData(),CommMetaData(28));
+    res+= comm.receiveDouble(subdivideFactor, getDbTagData(),CommMetaData(29));
     return res;
   }
 

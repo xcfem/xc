@@ -87,8 +87,8 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
     int recvData(const Communicator &comm);
 
   public:
-    NLForceBeamColumn3dBase(int tag,int classTag,int numSec= 0);
-    NLForceBeamColumn3dBase(int tag,int classTag,int numSec,const Material *theSection,const CrdTransf *coordTransf);
+    NLForceBeamColumn3dBase(int tag,int classTag,int numSec= 0, const double &tolerance= 1e-8);
+    NLForceBeamColumn3dBase(int tag,int classTag,int numSec,const Material *theSection,const CrdTransf *coordTransf, const double &tolerance= 1e-8);
     NLForceBeamColumn3dBase(const NLForceBeamColumn3dBase &);
 
     void setSection(const PrismaticBarCrossSection *sccModel);
@@ -99,6 +99,11 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
 
     const Vector &getResistingForce(void) const;
 
+    inline double getTol(void) const // Get tolerance for relative energy norm.
+      { return this->tol; }
+    inline void setTol(const double &d) // Get tolerance for relative energy norm.
+      { this->tol= d; }
+    
     //! Axial force which acts over the element at its back end.
     //! ¡Warning! call "calc_resisting_force" before calling this method.
     inline double getAN1(void) const

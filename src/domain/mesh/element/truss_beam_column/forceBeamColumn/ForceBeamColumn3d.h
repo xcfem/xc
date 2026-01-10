@@ -80,7 +80,8 @@ class ForceBeamColumn3d: public NLForceBeamColumn3dBase
     FVectorBeamColumn3d v0; //!<Initial deformations due to element loads
   
     // following are added for subdivision of displacement increment
-    int maxSubdivisions;       // maximum number of subdivisons of dv for local iterations
+    int maxSubdivisions; //!< maximum number of subdivisons of dv for local iterations
+    double subdivideFactor; //!< factor to reduce newton scheme step size.
   
     std::vector<Vector> persistentInitialDeformation; //!< Persistent initial strain at element level. Used to store the deformation during the inactive phase of the element (if any).
   protected:
@@ -91,16 +92,30 @@ class ForceBeamColumn3d: public NLForceBeamColumn3dBase
   public:
     ForceBeamColumn3d(int tag= 0);
     ForceBeamColumn3d(const ForceBeamColumn3d &);
-    ForceBeamColumn3d(int tag,int numSec,const Material *theSection,const CrdTransf *coordTransf,const BeamIntegration *integ);
+    ForceBeamColumn3d(int tag,int numSec,
+		      const Material *theSection,
+		      const CrdTransf *coordTransf,
+		      const BeamIntegration *integ,
+		      const double &tolerance= 1.0e-12,
+		      const double &subFac= 10.0);
     ForceBeamColumn3d(int tag, int nodeI, int nodeJ, 
-		    int numSections, const std::vector<PrismaticBarCrossSection *> &,
-		    BeamIntegration &beamIntegr,
-		    CrdTransf3d &coordTransf, double rho = 0.0, 
-		    int maxNumIters = 10, double tolerance = 1.0e-12);
+		      int numSections,
+		      const std::vector<PrismaticBarCrossSection *> &,
+		      BeamIntegration &beamIntegr,
+		      CrdTransf3d &coordTransf,
+		      double rho = 0.0, 
+		      int maxNumIters = 10,
+		      const double &tolerance= 1.0e-12,
+		      const double &subFac= 10.0,
+		      int maxNumSub= 4);
     ForceBeamColumn3d &operator=(const ForceBeamColumn3d &);
     Element *getCopy(void) const;
     virtual ~ForceBeamColumn3d(void);
   
+    double getMaxSubdivisions(void) const;
+    void setMaxSubdivisions(const double &);
+    double getSubdivideFactor(void) const;
+    void setSubdivideFactor(const double &);
   
     // Element birth and death stuff.
     const std::vector<Vector> &getPersistentInitialSectionDeformation(void) const;

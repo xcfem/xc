@@ -51,18 +51,18 @@ void XC::NLForceBeamColumn3dBase::resizeMatrices(const size_t &nSections)
 
 // constructor:
 // invoked by a FEM_ObjectBroker, recvSelf() needs to be invoked on this object.
-XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(int tag,int classTag,int numSec)
+XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(int tag,int classTag,int numSec, const double &tolerance)
   : BeamColumnWithSectionFDTrf3d(tag,classTag,numSec),
-  maxIters(10), tol(1e-8), initialFlag(0), isTorsion(false),
+  maxIters(10), tol(tolerance), initialFlag(0), isTorsion(false),
   kv(NEBD,NEBD), Se(), kvcommit(NEBD,NEBD), Secommit(),
   fs(numSec), vs(numSec), Ssr(numSec),vscommit(numSec), p0()
   {}
 
 // constructor:
 // invoked by a FEM_ObjectBroker, recvSelf() needs to be invoked on this object.
-XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(int tag,int classTag,int numSec,const Material *m,const CrdTransf *coordTransf)
+XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(int tag,int classTag,int numSec,const Material *m,const CrdTransf *coordTransf, const double &tolerance)
   : BeamColumnWithSectionFDTrf3d(tag,classTag,numSec,m,coordTransf),
-  maxIters(10), tol(1e-8), initialFlag(0), isTorsion(false),
+  maxIters(10), tol(tolerance), initialFlag(0), isTorsion(false),
   kv(NEBD,NEBD), Se(), kvcommit(NEBD,NEBD), Secommit(),
   fs(numSec), vs(numSec), Ssr(numSec),vscommit(numSec), p0()
   {

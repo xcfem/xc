@@ -79,8 +79,8 @@ class_<XC::BeamColumnWithSectionFDTrf3d, bases<XC::BeamColumnWithSectionFD>, boo
 #include "beamWithHinges/python_interface.tcc"
 
 class_<XC::NLForceBeamColumn2dBase, bases<XC::BeamColumnWithSectionFDTrf2d>, boost::noncopyable >("NLForceBeamColumn2dBase", no_init)
-  .add_property("rho", &XC::NLForceBeamColumn2dBase::getRho,&XC::NLForceBeamColumn2dBase::setRho)
-  .add_property("tol", &XC::NLForceBeamColumn2dBase::getTol,&XC::NLForceBeamColumn2dBase::setTol)
+  .add_property("rho", &XC::NLForceBeamColumn2dBase::getRho,&XC::NLForceBeamColumn2dBase::setRho, "Get/set the element density.")
+  .add_property("tol", &XC::NLForceBeamColumn2dBase::getTol,&XC::NLForceBeamColumn2dBase::setTol, "Get/set the tolerance for relative energy norm.")
   .def("getV", &XC::NLForceBeamColumn2dBase::getV, "Mean shear force.")
   .add_property("getV1", &XC::NLForceBeamColumn2dBase::getV1, "Internal shear force at back end.")
   .add_property("getV2", &XC::NLForceBeamColumn2dBase::getV2, "Internal shear force at front end.")
@@ -95,7 +95,8 @@ class_<XC::NLForceBeamColumn2dBase, bases<XC::BeamColumnWithSectionFDTrf2d>, boo
    ;
 
 class_<XC::NLForceBeamColumn3dBase, bases<XC::BeamColumnWithSectionFDTrf3d>, boost::noncopyable >("NLForceBeamColumn3dBase", no_init)
-  .add_property("rho", &XC::NLForceBeamColumn3dBase::getRho,&XC::NLForceBeamColumn3dBase::setRho)
+  .add_property("rho", &XC::NLForceBeamColumn3dBase::getRho,&XC::NLForceBeamColumn3dBase::setRho, "Get/set the element density.")
+  .add_property("tol", &XC::NLForceBeamColumn2dBase::getTol,&XC::NLForceBeamColumn2dBase::setTol, "Get/set the tolerance for relative energy norm.")
   .add_property("getAN2", &XC::NLForceBeamColumn3dBase::getAN2,"Axial force which acts over the front end of the element.")
   .add_property("getN1", &XC::NLForceBeamColumn3dBase::getN1,"Internal axial force in the back end of the element.")
   .add_property("getN2", &XC::NLForceBeamColumn3dBase::getN2,"Internal axial force in the front end of the element.")
