@@ -87,7 +87,9 @@ elemHandler.defaultMaterial= dummySection.name
 beamElements= list()
 n0= beamNodes[0]
 for n1 in beamNodes[1:]:
-    beamElements.append(elemHandler.newElement("ForceBeamColumn2d",xc.ID([n0.tag,n1.tag])))
+    newElement= elemHandler.newElement("ForceBeamColumn2d",xc.ID([n0.tag,n1.tag]))
+    newElement.tol= 1e-8 # Be a bit more tolerant.
+    beamElements.append(newElement)
     n0= n1
     
 ## Constraints
