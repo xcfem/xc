@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Nonlinear non-linear spring model to analyze pile wall structutres.'''
+''' Nonlinear spring model to analyze pile wall structutres.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2024, LCPT, AO_O"
