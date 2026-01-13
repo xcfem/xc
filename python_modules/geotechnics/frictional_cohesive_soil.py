@@ -275,8 +275,8 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         '''
         return (self.ep_coulomb(sg_v= sg_v, a= a, b= b, d= d, designValue= designValue)*math.sin(a+d))
       
-    def eq_bell(self, q, a, b, d):
-        ''' eq_bell(p,a,b,d):
+    def eq_bell(self, q, a, b, d, designValue= False):
+        ''' eq_bell(q,a,b,d):
         Return the lateral earth pressure caused by a uniform load q
         action over the backfill surface according to Coulomb's theory.
 
@@ -288,7 +288,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         :param designValue: if true use the design value of the internal
                             friction and the cohesion.
         '''
-        return(self.Ka_bell(sg_v= q, a= a, b= b, d= d, designValue= designValue)*p*math.cos(a)/float(math.cos(b-a)))
+        return(self.Ka_bell(sg_v= q, a= a, b= b, d= d, designValue= designValue)*q*math.cos(a)/float(math.cos(b-a)))
 
     def sq(self, Beff, Leff):
         '''Factor that introduces the effect of foundation shape on
