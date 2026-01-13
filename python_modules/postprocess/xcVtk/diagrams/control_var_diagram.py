@@ -143,7 +143,7 @@ class ControlVarDiagram(cd.ColoredDiagram):
         return retval
 
     def computeDiagramValues(self):
-        ''' Return the values needed to create the diagram representation.'''
+        ''' Compute the values needed to create the diagram representation.'''
         self.dirVectors= list()
         self.valueCouples= list()
         self.elements= list()
@@ -159,6 +159,8 @@ class ControlVarDiagram(cd.ColoredDiagram):
             self.valueCouples= self.filterValueCouples(self.valueCouples)
             lmsg.warning('Displayed values have been clipped whitin the range: ('+str(self.rgMinMax[0])+', '+str(self.rgMinMax[1])+"), so they don't correspond to the computed ones.")
         self.autoScale() # Update scale.
+        # Return the number of computed values.
+        return len(self.valueCouples)
 
     def getMaxAbsComp(self):
         '''Return the maximum absolute value of the component.
@@ -185,11 +187,16 @@ class ControlVarDiagram(cd.ColoredDiagram):
 
     def addDiagram(self):
         '''Add diagram to the scene.'''
-        self.computeDiagramValues()
+        numberOfComputedValues= self.computeDiagramValues()
 
-        self.createDiagramDataStructure()
-        diagramIndex= 0
-        diagramIndex= self.appendDataFromElementEnds(dirVectors= self.dirVectors, elements= self.elements, diagramIndex= diagramIndex, valueCouples= self.valueCouples)
-        self.createLookUpTable()
-        self.createDiagramActor()
-        self.clear()
+        if(numberOfComputedValues>0):
+            self.createDiagramDataStructure()
+            diagramIndex= 0
+            diagramIndex= self.appendDataFromElementEnds(dirVectors= self.dirVectors, elements= self.elements, diagramIndex= diagramIndex, valueCouples= self.valueCouples)
+            self.createLookUpTable()
+            self.createDiagramActor()
+            self.clear()
+            retval= True
+        else:
+            retval= False
+        return retval

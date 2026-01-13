@@ -1,20 +1,27 @@
  # -*- coding: utf-8 -*-
 ''' Diagram to display a property defined at nodes over linear elements. '''
 
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, LCPT, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
+
 import geom
 from postprocess.xcVtk.diagrams import property_diagram as pd
+from misc_utils import log_messages as lmsg
 
 class NodePropertyDiagram(pd.PropertyDiagram):
     '''Diagram to display a property defined at nodes over linear elements.
     '''
-    def __init__(self, scaleFactor, lRefModSize, fUnitConv, sets, attributeName, defaultDirection= 'J', defaultValue= 0.0, rgMinMax= None):
+    def __init__(self, scaleFactor, lRefModSize, fUnitConv, sets, propertyName, defaultDirection= 'J', defaultValue= 0.0, rgMinMax= None):
         ''' Constructor.
 
         :param scaleFactor: scale factor for the diagram (can be negative too).
         :param lRefModSize: reference length of the model (how big the model is).
         :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
         :param sets:      list of element sets for which the diagram will be displayed.
-        :param attributeName: displacement to display (uX or uY or uZ or rotX or rotY or rotZ).
+        :param propertyName: property to display.
         :param defaultDirection: default direction of the diagram (J: element 
                                  local j vector or K: element local K vector).
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
@@ -22,7 +29,7 @@ class NodePropertyDiagram(pd.PropertyDiagram):
                          the values less than vmin are displayed in blue and 
                          those greater than vmax in red (defaults to None)
         '''
-        super(NodePropertyDiagram,self).__init__(scaleFactor= scaleFactor, lRefModSize= lRefModSize, fUnitConv= fUnitConv, sets= sets, attributeName= attributeName, rgMinMax= rgMinMax)
+        super(NodePropertyDiagram,self).__init__(scaleFactor= scaleFactor, lRefModSize= lRefModSize, fUnitConv= fUnitConv, sets= sets, propertyName= propertyName, rgMinMax= rgMinMax)
         self.defaultDirection= defaultDirection
         self.defaultValue= defaultValue
 
@@ -32,27 +39,27 @@ class NodePropertyDiagram(pd.PropertyDiagram):
         :param node: node to get the property from.
         '''
         retval= None
-        if self.propertyName == 'uX':
+        if self.featureName == 'uX':
             retval= node.getDispXYZ[0]
-        elif self.propertyName == 'uY':
+        elif self.featureName == 'uY':
             retval= node.getDispXYZ[1]
-        elif self.propertyName == 'uZ':
+        elif self.featureName == 'uZ':
             retval= node.getDispXYZ[2]
-        elif self.propertyName == 'rotX':
+        elif self.featureName == 'rotX':
             retval= node.getRotXYZ[0]
-        elif self.propertyName == 'rotY':
+        elif self.featureName == 'rotY':
             retval= node.getRotXYZ[1]
-        elif self.propertyName == 'rotZ':
+        elif self.featureName == 'rotZ':
             retval= node.getRotXYZ[2]
         else:
-            if(node.hasProp(self.propertyName)): # don't bother with warnings.
-               retval= node.getProp(self.propertyName)
+            if(node.hasProp(self.featureName)): # don't bother with warnings.
+               retval= node.getProp(self.featureName)
         if(retval is None):
             retval= self.defaultValue
         return retval
 
     def computeDiagramValues(self):
-        ''' Return the values needed to create the diagram representation.'''
+        ''' Compute the values needed to create the diagram representation.'''
         self.valueCouples= list()
         self.elements= list()
         self.directions= list()
@@ -80,4 +87,6 @@ class NodePropertyDiagram(pd.PropertyDiagram):
             self.valueCouples= self.filterValueCouples(self.valueCouples)
             lmsg.warning('Displayed values have been clipped whitin the range: ('+str(self.rgMinMax[0])+', '+str(self.rgMinMax[1])+"), so they don't correspond to the computed ones.")
         self.autoScale() # Update scale.
+        # Return the number of computed values.
+        return len(self.valueCouples)
 

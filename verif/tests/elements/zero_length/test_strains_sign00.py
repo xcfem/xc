@@ -167,7 +167,7 @@ for key in lPatterns.getKeys():
     MyTot+= My
     if(abs(My)>1):
       epsilonZPos= scc.getSection().getStrain(0.0,1.0)
-      fibraEpsZMax= prop_statistics.getItemWithMaxProp(scc.getSection().getFibers(),"getMaterial.getStrain")
+      fibraEpsZMax= prop_statistics.get_item_with_max_prop(scc.getSection().getFibers(),"getMaterial.getStrain")
       epsZMax= fibraEpsZMax.getMaterial().getStrain()
       yEpsZMax= fibraEpsZMax.getPos().x
       zEpsZMax= fibraEpsZMax.getPos().y
@@ -176,11 +176,11 @@ for key in lPatterns.getKeys():
     MzTot+= Mz
     if(abs(Mz)>1):
       epsilonYPos= scc.getSection().getStrain(1.0,0.0)
-      fibraEpsYMax= prop_statistics.getItemWithMaxProp(scc.getSection().getFibers(),"getMaterial.getStrain")
+      fibraEpsYMax= prop_statistics.get_item_with_max_prop(scc.getSection().getFibers(),"getMaterial.getStrain")
       epsYMax= fibraEpsYMax.getMaterial().getStrain()
       yEpsYMax= fibraEpsYMax.getPos().x
       zEpsYMax= fibraEpsYMax.getPos().y
-      fibraEpsYMin= prop_statistics.getItemWithMinProp(scc.getSection().getFibers(),"getMaterial.getStrain")# IMinProp("getMaterial.getStrain")
+      fibraEpsYMin= prop_statistics.get_item_with_min_prop(scc.getSection().getFibers(),"getMaterial.getStrain")# IMinProp("getMaterial.getStrain")
       epsYMin= fibraEpsYMin.getMaterial().getStrain()
       yEpsYMin= fibraEpsYMin.getPos().x
       zEpsYMin= fibraEpsYMin.getPos().y

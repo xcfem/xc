@@ -7,6 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com  ana.ortega@ciccp.es"
 
+import sys
 from misc_utils import log_messages as lmsg
 
 def rec_getattr(obj, attr, argv= ''):
@@ -52,8 +53,13 @@ def rec_setattr(obj, attr, value):
         L = attr.split('.')
         rec_setattr(getattr(obj, L[0]), '.'.join(L[1:]), value)
 
-def getItemWithMaxProp(iterable,attrName, argv= ''):
-    ''' Return item which maximizes property named as indicated in attrName'''
+def get_item_with_max_prop(iterable,attrName, argv= ''):
+    ''' Return item which maximizes the given property
+
+    :param iterable: iterable to traverse.
+    :param propertyName: property name.
+    :param argv: argument for the property (when required).
+    '''
     retval= None
     if(len(iterable)>0):
         retval= iterable[0]#iter(iterable).next()
@@ -67,18 +73,51 @@ def getItemWithMaxProp(iterable,attrName, argv= ''):
         lmsg.error('argument container is empty.')
     return retval
 
-def getItemWithMinProp(iterable,attrName, argv= ''):
-    ''' Return item which minimizes property named as indicated in attrName'''
+def get_item_with_min_prop(iterable,propertyName, argv= ''):
+    ''' Return item which minimizes the given property
+
+    :param iterable: iterable to traverse.
+    :param propertyName: property name.
+    :param argv: argument for the property (when required).
+    '''
     retval= None
     if(len(iterable)>0):
         retval= iterable[0]#iter(iterable).next()
-        vMin= rec_getattr(retval,attrName, argv)  
+        vMin= rec_getattr(retval,propertyName, argv)  
         for e in iterable:
-            v= rec_getattr(e,attrName, argv)
+            v= rec_getattr(e,propertyName, argv)
             if(v<vMin):
                 retval= e
                 vMin= v
     else:
-        lmsg.error('argument container is empty.')                
+        funcName= sys._getframe(0).f_code.co_name
+        lmsg.error(funcName+'; argument container is empty.')
     return retval
 
+def find_property(iterable, propertyName):
+    ''' Return the first item which has the given property.
+
+    :param iterable: iterable to traverse.
+    :param propertyName: property name.
+    '''
+    retval= None
+    if(len(iterable)>0):
+        for item in iterable:
+            if(item.hasProp(propertyName)):
+                retval= item
+                break;
+    return retval
+
+def find_attribute(iterable, attributeName):
+    ''' Return the first item which has the given attribute.
+
+    :param iterable: iterable to traverse.
+    :param attributeName: attribute name.
+    '''
+    retval= None
+    if(len(iterable)>0):
+        for item in iterable:
+            if(hasattr(item, attributeName)):
+                retval= item
+                break;
+    return retval
