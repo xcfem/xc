@@ -2031,7 +2031,8 @@ python tests/postprocess/limit_state_checking/generic/test_compute_maximum_defle
 ##python tests/postprocess/vtk/dibuja_edges.py
 echo "$BLEU" "  Graphic output." "$NORMAL"
 python tests/postprocess/vtk/test_display_blocks.py
-python tests/postprocess/vtk/test_display_node_value_diagram.py
+python tests/postprocess/vtk/test_display_node_value_diagram_01.py
+python tests/postprocess/vtk/test_display_node_value_diagram_02.py
 python tests/postprocess/vtk/test_set_background_color.py
 python tests/postprocess/vtk/test_display_zero_length_local_axes_01.py
 python tests/postprocess/vtk/test_display_zero_length_local_axes_02.py

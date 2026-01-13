@@ -25,6 +25,7 @@ from postprocess.xcVtk.diagrams import internal_force_diagram as ifd
 from postprocess.xcVtk.diagrams import linear_load_diagram as lld
 from postprocess.xcVtk.diagrams import strain_load_diagram as sld
 from postprocess.xcVtk.diagrams import node_property_diagram as npd
+from postprocess.xcVtk.diagrams import node_attribute_diagram as nad
 from postprocess.xcVtk.diagrams import element_property_diagram as epd
 from postprocess.xcVtk.diagrams import element_attribute_diagram as ead
 from postprocess import def_vars_control as vc
@@ -1099,8 +1100,15 @@ class OutputHandler(object):
         else:
             unitConversionFactor= fUnitConv
         LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
-        diagram= npd.NodePropertyDiagram(scaleFactor= 1.0, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor,sets=[setToDisplay], propertyName= itemToDisp, defaultDirection= defaultDirection, defaultValue= defaultValue)
-        diagram.addDiagram(defFScale= defFScale)
+        # Try to create a property diagram.
+        nodesHaveProperty= (prop_statistics.find_property(iterable= setToDisplay.elements, propertyName= itemToDisp) is not None)
+        if(nodesHaveProperty):
+            diagram= npd.NodePropertyDiagram(scaleFactor= 1.0, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor,sets=[setToDisplay], propertyName= itemToDisp, defaultDirection= defaultDirection, defaultValue= defaultValue)
+            diagramAdded= diagram.addDiagram(defFScale= defFScale)
+        else: # itemToDisp is not a property of the nodes.
+            # Try to create an attribute diagram.
+            diagram= nad.NodeAttributeDiagram(scaleFactor= 1.0, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor, sets=[setToDisplay], attributeName= itemToDisp)
+            diagramAdded= diagram.addDiagram()
         displaySettings= self.getDisplaySettingsFE()
         grid= displaySettings.setupGrid(setToDisplay)
         if __debug__:
