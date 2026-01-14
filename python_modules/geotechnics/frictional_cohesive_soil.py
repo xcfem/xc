@@ -191,36 +191,6 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
             retval= max(a1-a2,0.0)
         return retval
 
-    def eah_coulomb(self, sg_v, a, b, d= 0.0, designValue= False):
-        '''
-        Return the horizontal component of the lateral earth active pressure.
-
-        :param sg_v:  vertical stress.
-        :param a:  angle of the back of the retaining wall (radians).
-        :param b:  slope of the backfill (radians).
-        :param d:  friction angle between soil and the back surface of the 
-                   retaining wall (radians).
-        :param designValue: if true use the design value of the internal
-                            friction and the cohesion.
-        '''
-        return (self.ea_coulomb(sg_v= sg_v, a= a, b= b, d= d, designValue= designValue)*math.cos(a+d))
-
-    def eav_coulomb(self, sg_v, a, b, d= 0.0, designValue= False):
-        '''
-        Return the vertical component of the active earth pressure coefficient
-        according to Coulomb's theory.
-
-        :param sg_v:  vertical stress.
-        :param a: angle of the back of the retaining wall (radians).
-        :param b: slope of the backfill (radians).
-        :param fi: internal friction angle of the soil (radians).
-        :param d:  friction angle between soil and the back surface of the 
-                   retaining wall (radians).
-        :param designValue: if true use the design value of the internal
-                            friction and the cohesion.
-        '''
-        return (self.ea_coulomb(sg_v= sg_v, a= a, b= b, d= d, designValue= designValue)*math.sin(a+d))
-      
     def ep_coulomb(self, sg_v, a, b, d= 0.0, designValue= False):
         '''
         Return the lateral earth passive pressure.
@@ -245,36 +215,6 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         retval= max(a1+a2,0.0) # No tension.
         return retval
 
-    def eph_coulomb(self, sg_v, a, b, d, designValue= False):
-        '''
-        Return the horizontal component of the lateral earth passive pressure.
-
-        :param sg_v:  vertical stress.
-        :param a:  angle of the back of the retaining wall (radians).
-        :param b:  slope of the backfill (radians).
-        :param d:  friction angle between soil and the back surface of the 
-                   retaining wall (radians).
-        :param designValue: if true use the design value of the internal
-                            friction and the cohesion.
-        '''
-        return (self.ep_coulomb(sg_v= sg_v, a= a, b= b, d= d, designValue= designValue)*math.cos(a+d))
-
-    def epv_coulomb(self, sg_v, a, b, d, designValue= False):
-        '''
-        Return the vertical component of the passive earth pressure
-        according to Coulomb's theory.
-
-        :param sg_v:  vertical stress.
-        :param a: angle of the back of the retaining wall (radians).
-        :param b: slope of the backfill (radians).
-        :param fi: internal friction angle of the soil (radians).
-        :param d:  friction angle between soil and the back surface of the 
-                   retaining wall (radians).
-        :param designValue: if true use the design value of the internal
-                            friction and the cohesion.
-        '''
-        return (self.ep_coulomb(sg_v= sg_v, a= a, b= b, d= d, designValue= designValue)*math.sin(a+d))
-      
     def eq_bell(self, q, a, b, d, designValue= False):
         ''' eq_bell(q,a,b,d):
         Return the lateral earth pressure caused by a uniform load q

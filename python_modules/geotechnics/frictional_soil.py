@@ -44,18 +44,42 @@ class FrictionalSoil(object):
         self.E= E
         self.nu= nu
 
-    def K0Jaky(self):
-        '''Returns Jaky's coefficient (earth pressure at rest).'''
-        return 1.0-math.sin(self.phi)
+    def K0Jaky(self, designValue= False):
+        '''Returns Jaky's coefficient (earth pressure at rest).
 
-    def Ka(self):
-        '''Active earth pressure coefficient.'''
-        sinPhi= math.sin(self.phi)
+        :param designValue: if true use the design value of the internal
+                            friction.
+        '''
+        if(designValue):
+            phi= self.getDesignPhi()
+        else:
+            phi= self.phi
+        return 1.0-math.sin(phi)
+
+    def Ka(self, designValue= False):
+        '''Active earth pressure coefficient.
+
+        :param designValue: if true use the design value of the internal
+                            friction.
+        '''
+        if(designValue):
+            phi= self.getDesignPhi()
+        else:
+            phi= self.phi
+        sinPhi= math.sin(phi)
         return (1-sinPhi)/(1+sinPhi)
       
-    def Kp(self):
-        '''Passive earth pressure coefficient.'''
-        sinPhi= math.sin(self.phi)
+    def Kp(self, designValue= False):
+        '''Passive earth pressure coefficient.
+
+        :param designValue: if true use the design value of the internal
+                            friction.
+        '''
+        if(designValue):
+            phi= self.getDesignPhi()
+        else:
+            phi= self.phi
+        sinPhi= math.sin(phi)
         return (1+sinPhi)/(1-sinPhi)
       
     def Ka_coulomb(self, a, b, d= 0.0, designValue= False):
@@ -153,6 +177,102 @@ class FrictionalSoil(object):
         '''
         return(self.Ka_coulomb(a,b,d, designValue= designValue)*p*math.cos(a)/float(math.cos(b-a)))
       
+    def ea_coulomb(self, sg_v, a, b, d= 0.0, designValue= False):
+        ''' Return the lateral earth active pressure.
+
+        :param sg_v:  vertical stress.
+        :param a:  angle of the back of the retaining wall (radians).
+        :param b:  slope of the backfill (radians).
+        :param d:  friction angle between soil and the back surface of the 
+                   retaining wall (radians). See Jiménez Salas, Geotecnia y 
+                   Cimientos page 682 and Bell's relationship.
+        :param designValue: if true use the design value of the internal
+                            friction and the cohesion.
+        '''
+        retval= 0.0
+        if(sg_v>0.0):
+            ka= self.Ka_coulomb(a,b,d, designValue= designValue)
+            retval= ka*sg_v
+        return retval
+
+    def eah_coulomb(self, sg_v, a, b, d= 0.0, designValue= False):
+        '''
+        Return the horizontal component of the lateral earth active pressure.
+
+        :param sg_v:  vertical stress.
+        :param a:  angle of the back of the retaining wall (radians).
+        :param b:  slope of the backfill (radians).
+        :param d:  friction angle between soil and the back surface of the 
+                   retaining wall (radians).
+        :param designValue: if true use the design value of the internal
+                            friction and the cohesion.
+        '''
+        return (self.ea_coulomb(sg_v= sg_v, a= a, b= b, d= d, designValue= designValue)*math.cos(a+d))
+
+    def eav_coulomb(self, sg_v, a, b, d= 0.0, designValue= False):
+        '''
+        Return the vertical component of the active earth pressure coefficient
+        according to Coulomb's theory.
+
+        :param sg_v:  vertical stress.
+        :param a: angle of the back of the retaining wall (radians).
+        :param b: slope of the backfill (radians).
+        :param fi: internal friction angle of the soil (radians).
+        :param d:  friction angle between soil and the back surface of the 
+                   retaining wall (radians).
+        :param designValue: if true use the design value of the internal
+                            friction and the cohesion.
+        '''
+        return (self.ea_coulomb(sg_v= sg_v, a= a, b= b, d= d, designValue= designValue)*math.sin(a+d))
+      
+    def ep_coulomb(self, sg_v, a, b, d= 0.0, designValue= False):
+        '''
+        Return the lateral earth passive pressure.
+
+        :param sg_v:  vertical stress.
+        :param a:  angle of the back of the retaining wall (radians).
+        :param b:  slope of the backfill (radians).
+        :param d:  friction angle between the soil an the back surface of the
+                   retaining wall (radians). See Jiménez Salas, Geotecnia y 
+                   Cimientos page 682 and Bell's relationship.
+        :param designValue: if true use the design value of the internal
+                            friction and the cohesion.
+        '''
+        retval= 0.0
+        kp= self.Kp_coulomb(a,b,d, designValue= designValue)
+        retval= max(kp*sg_v, 0.0) # No tension.
+        return retval
+
+    def eph_coulomb(self, sg_v, a, b, d, designValue= False):
+        '''
+        Return the horizontal component of the lateral earth passive pressure.
+
+        :param sg_v:  vertical stress.
+        :param a:  angle of the back of the retaining wall (radians).
+        :param b:  slope of the backfill (radians).
+        :param d:  friction angle between soil and the back surface of the 
+                   retaining wall (radians).
+        :param designValue: if true use the design value of the internal
+                            friction and the cohesion.
+        '''
+        return (self.ep_coulomb(sg_v= sg_v, a= a, b= b, d= d, designValue= designValue)*math.cos(a+d))
+
+    def epv_coulomb(self, sg_v, a, b, d, designValue= False):
+        '''
+        Return the vertical component of the passive earth pressure
+        according to Coulomb's theory.
+
+        :param sg_v:  vertical stress.
+        :param a: angle of the back of the retaining wall (radians).
+        :param b: slope of the backfill (radians).
+        :param fi: internal friction angle of the soil (radians).
+        :param d:  friction angle between soil and the back surface of the 
+                   retaining wall (radians).
+        :param designValue: if true use the design value of the internal
+                            friction and the cohesion.
+        '''
+        return (self.ep_coulomb(sg_v= sg_v, a= a, b= b, d= d, designValue= designValue)*math.sin(a+d))
+    
     def gamma(self):
         '''Unit weight of soil'''
         return self.rho*g
