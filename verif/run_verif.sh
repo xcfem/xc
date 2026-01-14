@@ -1815,7 +1815,7 @@ python tests/geotechnics/foundations/test_micropile_04.py
 python tests/geotechnics/foundations/test_foundation_settlement_01.py
 ## Soil mechanics (basic utilities)
 echo  "$BLEU" "  Soil mechanics (basic utilities)." "$NORMAL"
-python tests/geotechnics/soil_mechanics/test_frictional_soil.py
+python tests/geotechnics/soil_mechanics/test_frictional_soil_01.py
 python tests/geotechnics/soil_mechanics/test_coulomb.py
 python tests/geotechnics/soil_mechanics/test_janssen_limited_backfill_widht.py
 python tests/geotechnics/soil_mechanics/test_rankine.py
