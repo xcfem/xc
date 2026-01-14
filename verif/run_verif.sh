@@ -1821,6 +1821,7 @@ python tests/geotechnics/soil_mechanics/test_janssen_limited_backfill_widht.py
 python tests/geotechnics/soil_mechanics/test_rankine.py
 python tests/geotechnics/soil_mechanics/test_brinch_hansen_01.py
 python tests/geotechnics/soil_mechanics/test_brinch_hansen_02.py
+python tests/geotechnics/soil_mechanics/test_brinch_hansen_03.py
 python tests/geotechnics/soil_mechanics/test_stratified_soil.py
 python tests/geotechnics/soil_mechanics/test_cohesive_soil_01.py
 python tests/geotechnics/soil_mechanics/test_cohesive_soil_02.py
