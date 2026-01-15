@@ -90,3 +90,6 @@ Once the analyst has defined the model, the next step is to define the analysis 
 - [A Brief Introduction to Krylov Space Methods for Solving Linear Systems](https://people.math.ethz.ch/~mhg/pub/biksm.pdf)
 - [A Krylov Subspace Accelerated Newton Algorithm](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=49d46f2df3420b3689212a24ce7e09f609e4a26b)
 - [Secant accelerated Newton Algorithm](https://portwooddigital.com/2024/08/18/secant-accelerated-newton-algorithm)
+
+# Equation numberer
+- [Reverse Engineering the Equation Numberer](https://portwooddigital.com/2026/01/06/reverse-engineering-the-equation-numberer/)

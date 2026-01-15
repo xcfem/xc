@@ -4,9 +4,9 @@ This folder contains the classes that XC uses for equation numbering. You can se
 
 References:
 
+- [Reverse Engineering the Equation Numberer](https://portwooddigital.com/2026/01/06/reverse-engineering-the-equation-numberer/)
 - [Cuthill–McKee algorithm.](https://en.wikipedia.org/wiki/Cuthill%E2%80%93McKee_algorithm)
 - [Approximate minimum degree ordering algorhitm.](https://people.engr.tamu.edu/davis/publications_files/An_Approximate_Minimum_Degree_Ordering_Algorithm.pdf)
-
 
 
 
