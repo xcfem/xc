@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
-'''frictional_soil.py: frictional (or cohesionless) soil model.'''
+'''frictional_soil.py: frictional (or cohesionless) soil model.
+
+References: 
+
+[1] Chapter 4-3 of Foundation Analysis and Design, Ed. 5 by Joseph E. Bowles.
+[2] Brinch Hansen. A general formula for bearing capacity. The Danish Geotechnical Institute. Bulletin 11. Copenhagen 1961.
+[3] Guía de cimentaciones en obras de carretera. Ministerio de Fomento (spain). 2002 (https://books.google.ch/books?id=a0eoygAACAAJ).
+[4] Eurocódigo 7. Proyecto geotécnico. Parte 1: reglas generales.
+'''
 
 from __future__ import division
 from __future__ import print_function
@@ -361,9 +369,9 @@ class FrictionalSoil(object):
     def rgamma(self, eta= 0.0):
         '''Factor that introduces the effect of sloped footing.
 
-           :param eta: angle between the foundation plane with and the 
-                       (see figure 4.8 in page 104 of reference [3])
-                       favourable effect when eta<0.0.
+        :param eta: angle between the normal to the foundation plane and 
+                    the vertical  (see figure 4.8 in page 104 of reference [3])
+                    favourable effect when eta<0.0.
         '''
         return self.rq(eta)
 
@@ -381,9 +389,9 @@ class FrictionalSoil(object):
 
         :param D: foundation depth.
         :param Beff: Width of the effective foundation area
-                     (see figure 12 in page 44 of reference[2]).
+                     (see figure 12 in page 44 (8 in the PDF) of reference 2).
         :param Leff: Length of the effective foundation area
-                     (see figure 12 in page 44 of reference[2]).
+                     (see figure 12 in page 44 (8 in the PDF) of reference 2).
         :param Vload: Vertical load. 
         :param HloadB: Horizontal load on Beff direction. 
         :param HloadL: Horizontal load on Leff direction. 
@@ -392,6 +400,9 @@ class FrictionalSoil(object):
         :param psi: angle of the line on which the q load acts 
                     (see figure 4.7 in page 102 of reference [3])
                     must be determined by iterations.
+        :param eta: angle between the normal to the foundation plane and 
+                    the vertical  (see figure 4.8 in page 104 of reference [3])
+                    favourable effect when eta<0.0.
         '''
         igamma= self.igamma(Vload= Vload, HloadB= HloadB, HloadL= HloadL, Beff= Beff, Leff= Leff) # inclination factor.
         return 0.5*self.gamma()*Beff*self.Ngamma(NgammaCoef)*self.dgamma()*igamma*self.sgamma(Beff,Leff)*self.tgamma(psi)*self.rgamma(eta)
@@ -409,9 +420,9 @@ class FrictionalSoil(object):
            the overburden component.
 
            :param Beff: Width of the effective foundation area
-                        (see figure 12 in page 44 of reference[2]).
+                        (see figure 12 in page 44 (8 in the PDF) of ref. 2).
            :param Leff: Length of the effective foundation area
-                        (see figure 12 in page 44 of reference[2]).
+                        (see figure 12 in page 44 (8 in the PDF) of ref. 2).
         '''
         return 1.0+Beff/Leff*self.Nq()/self.Nc()
 
@@ -449,7 +460,7 @@ class FrictionalSoil(object):
 
            :param D: foundation depth.
            :param Beff: Width of the effective foundation area
-                        (see figure 12 in page 44 of reference[2]).
+                        (see figure 12 in page 44 (8 in the PDF) of ref. 2).
         '''
         k= min(D,2.0*Beff)/Beff
         dphi= self.getDesignPhi()
@@ -488,9 +499,9 @@ class FrictionalSoil(object):
         :param HloadB: Horizontal load on Beff direction. 
         :param HloadL: Horizontal load on Leff direction. 
         :param Beff: Width of the effective foundation area
-                    (see figure 12 in page 44 of reference[2]).
+                   (see figure 12 in page 44 (8 in the PDF) of reference 2).
         :param Leff: Length of the effective foundation area
-                    (see figure 12 in page 44 of reference[2]).
+                    (see figure 12 in page 44 (8 in the PDF) of reference 2).
         '''
         B_L= Beff/Leff
         mB= (2+B_L)/(1+B_L)
@@ -512,9 +523,9 @@ class FrictionalSoil(object):
         :param q: overburden load.
         :param D: foundation depth.
         :param Beff: Width of the effective foundation area
-                     (see figure 12 in page 44 of reference[2]).
+                     (see figure 12 in page 44 (8 in the PDF) of reference 2).
         :param Leff: Length of the effective foundation area
-                     (see figure 12 in page 44 of reference[2]).
+                     (see figure 12 in page 44 (8 in the PDF) of reference 2).
         :param Vload: Vertical load. 
         :param HloadB: Horizontal load on Beff direction. 
         :param HloadL: Horizontal load on Leff direction. 
@@ -531,11 +542,12 @@ class FrictionalSoil(object):
     def qu(self, q, D, Beff, Leff, Vload, HloadB, HloadL, NgammaCoef= 1.5,psi= 0.0, eta= 0.0):
         '''Ultimate bearing capacity pressure of the soil.
 
+        :param q: overburden load.
         :param D: foundation depth.
         :param Beff: Width of the effective foundation area
-                     (see figure 12 in page 44 of reference[2]).
+                     (see figure 12 in page 44 (8 in the PDF) of reference 2).
         :param Leff: Length of the effective foundation area
-                     (see figure 12 in page 44 of reference[2]).
+                     (see figure 12 in page 44 (8 in the PDF) of reference 2).
         :param Vload: Vertical load (positive downwards). 
         :param HloadB: Horizontal load on Beff direction. 
         :param HloadL: Horizontal load on Leff direction. 
@@ -546,7 +558,9 @@ class FrictionalSoil(object):
                     must be determined by iterations.
         '''
         if(Vload<0.0):
-             lmsg.warning('Negative vertical load (V= '+str(Vload)+') means pulling upwards.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; negative vertical load (V= '+str(Vload)+') means pulling upwards.')
         # Body mass component.
         gammaComp= self.quGamma(D,Beff,Leff,Vload,HloadB,HloadL,NgammaCoef,psi,eta)
         # Overburden component.

@@ -251,9 +251,9 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
            the cohesion component.
 
         :param Beff: Width of the effective foundation area
-                    (see figure 12 in page 44 of reference[2]).
+                    (see figure 12 in page 44 (8 in the PDF) of reference 2).
         :param Leff: Length of the effective foundation area
-                    (see figure 12 in page 44 of reference[2]).
+                    (see figure 12 in page 44 (8 in the PDF) of reference 2).
         '''
         return self.sq(Beff,Leff)
 
@@ -265,9 +265,9 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         :param HloadB: Horizontal load on Beff direction. 
         :param HloadL: Horizontal load on Leff direction. 
         :param Beff: Width of the effective foundation area
-                     (see figure 12 in page 44 of reference[2]).
+                     (see figure 12 in page 44 (8 in the PDF) of reference 2).
         :param Leff: Length of the effective foundation area
-                    (see figure 12 in page 44 of reference[2]).
+                    (see figure 12 in page 44 (8 in the PDF) of reference 2).
         '''
         if(self.getDesignPhi()!=0.0):
             iq= self.iq(Vload= Vload, HloadB= HloadB, HloadL= HloadL)
@@ -287,7 +287,7 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
 
            :param D: foundation depth.
            :param Beff: Width of the effective foundation area
-                        (see figure 12 in page 44 of reference[2]).
+                        (see figure 12 in page 44 (8 in the PDF) of reference 2).
         '''
         k= min(D,2.0*Beff)/Beff
         return 1+2*self.Nq()/self.Nc()*(1-math.sin(self.getDesignPhi()))**2*math.atan(k)
@@ -321,9 +321,9 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
 
         :param D: foundation depth.
         :param Beff: Width of the effective foundation area
-                     (see figure 12 in page 44 of reference[2]).
+                     (see figure 12 in page 44 (8 in the PDF) of reference 2).
         :param Leff: Length of the effective foundation area
-                     (see figure 12 in page 44 of reference[2]).
+                     (see figure 12 in page 44 (8 in the PDF) of reference 2).
         :param Vload: Vertical load. 
         :param HloadB: Horizontal load on Beff direction. 
         :param HloadL: Horizontal load on Leff direction. 
@@ -338,11 +338,12 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
     def qu(self, q, D, Beff, Leff, Vload, HloadB, HloadL, NgammaCoef= 1.5,psi= 0.0, eta= 0.0):
         '''Ultimate bearing capacity pressure of the soil.
 
+        :param q: overburden load.
         :param D: foundation depth.
         :param Beff: Width of the effective foundation area
-                     (see figure 12 in page 44 of reference[2]).
+                     (see figure 12 in page 44 (8 in the PDF) of reference 2).
         :param Leff: Length of the effective foundation area
-                     (see figure 12 in page 44 of reference[2]).
+                     (see figure 12 in page 44 (8 in the PDF) of reference 2).
         :param Vload: Vertical load (positive downwards). 
         :param HloadB: Horizontal load on Beff direction. 
         :param HloadL: Horizontal load on Leff direction. 
@@ -555,7 +556,7 @@ class StratifiedSoil(object):
         '''Computes affected depth.
 
         :Beff: (float) width of the effective foundation area
-              (see figure 12 in page 44 of reference[2]).
+               (see figure 12 in page 44 (8 in the PDF) of reference 2).
         '''
         # define the acceptable range for Beff
         Bmin= Beff
@@ -571,7 +572,7 @@ class StratifiedSoil(object):
         '''Computes affected depth.
 
         :param Beff: (float) width of the effective foundation area
-                      (see figure 12 in page 44 of reference[2]).
+                     (see figure 12 in page 44 (8 in the PDF) of reference 2).
         :param gammaMPhi: (float) partial reduction factor for internal 
                           friction angle of the soil.
         :param gammaMc: (float) partial reduction factor for soil cohesion.
