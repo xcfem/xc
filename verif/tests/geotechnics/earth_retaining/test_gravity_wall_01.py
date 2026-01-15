@@ -64,13 +64,14 @@ wallPoints= [geom.Pos2d(0, 0), # 0
 
 # Contour of the gravity wall.
 wallPolygon= geom.Polygon2d(wallPoints)
-# 2D polyline representing the contact of the backfill with the wall.
+# 2D segments representing the contact of the backfill with the wall.
 soilWallInterface= [(geom.Segment2d(wallPoints[1], wallPoints[0]), backfillSoil),
                     (geom.Segment2d(wallPoints[2], wallPoints[1]), foundationSoil)]
 # 2D segment representing the contact of the wall with the foundation soil.
 foundationInterface= (geom.Segment2d(wallPoints[3], wallPoints[2]), foundationSoil)
 # 2D segment representing the contact of the passive wedge with the wall.
-passivePressureContactSurface= geom.Segment2d(wallPoints[3], wallPoints[4])
+passivePressureContactSurface= (geom.Segment2d(wallPoints[3], wallPoints[4]), foundationSoil)
+
 # Unit weight of the concrete.
 wallUnitWeight= 24e3
 gravityWall= gravity_wall.GravityWall(wallContour= wallPolygon, backfillContactSurface= soilWallInterface, passivePressureContactSurface=passivePressureContactSurface, footingContactSurface= foundationInterface, wallUnitWeight= wallUnitWeight)

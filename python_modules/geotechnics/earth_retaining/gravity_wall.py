@@ -155,34 +155,38 @@ class GravityWall(object):
             p0= p
         return retval
 
-    def getPassivePressureSVS(self, soilThicknessOverToe, backfillSoil, backfillSlope, delta):
+    def getPassivePressureSVS(self, soilThicknessOverToe, frontfillSlope, k_delta, gammaRv= 1.4):
         ''' Return the sliding vector system corresponding to a uniform load
-            on the backfill surface.
+            on the frontfill surface.
 
         :param soilThicknessOverToe: thicness of the soil over the wall toe.
-        :param backfillSoil: backfill soil.
-        :param backfillSlope: slope of the backfill surface.
-        :param delta: friction angle between the backfill and the wall.
+        :param frontfillSlope: slope of the frontfill surface.
+        :param k_delta: factor to apply to the soil friction angle to get
+                        the friction angle between the frontfill and the wall.
+                        Its value is normally 1.0 for cast-in-situ concrete 
+                        foundations and 2/3 for smooth precast foundations.
+        :param gammaRv: partial safety factor for the soil resistance.
         '''
         # Passive pressure.
         retval= geom.SlidingVectorsSystem2d()
-        s= self.passivePressureContactSurface
-        p0= s.getFromPoint()
-        p= s.getToPoint()
+        passiveWedgeSegment, passiveWedgeSoil= self.passivePressureContactSurface
+        p0= passiveWedgeSegment.getFromPoint()
+        p= passiveWedgeSegment.getToPoint()
         if(p0.y>p.y):
             p, p0= p0, p
-        normal= s.getNormal().normalized()
+        normal= passiveWedgeSegment.getNormal().normalized()
         # Put the normal in the right direction.
         wallPolygonCentroid= self.contour.getCenterOfMass()
-        earthPressureDir= s.getMidPoint()-wallPolygonCentroid
+        earthPressureDir= passiveWedgeSegment.getMidPoint()-wallPolygonCentroid
         if(normal.dot(earthPressureDir)<0):
             normal= -normal
-        a= math.pi/2.0-s.getXAxisAngle()
+        a= math.pi/2.0-passiveWedgeSegment.getXAxisAngle()
         toeYMax= p.y+soilThicknessOverToe
-        sg_v0= backfillSoil.rho*g*(toeYMax-p0.y)
-        e0= backfillSoil.ep_coulomb(sg_v0, a, backfillSlope, -delta)
-        sg_v= backfillSoil.rho*g*(toeYMax-p.y)
-        e= backfillSoil.ep_coulomb(sg_v, a, backfillSlope, -delta)
+        sg_v0= passiveWedgeSoil.rho*g*(toeYMax-p0.y)
+        delta= k_delta*passiveWedgeSoil.getDesignPhi()
+        e0= passiveWedgeSoil.ep_coulomb(sg_v0, a, frontfillSlope, -delta)
+        sg_v= passiveWedgeSoil.rho*g*(toeYMax-p.y)
+        e= passiveWedgeSoil.ep_coulomb(sg_v, a, frontfillSlope, -delta)
         stressArea= geom.Polygon2d()
         stressArea.appendVertex(p0)
         stressArea.appendVertex(p0-e0*normal)
@@ -190,7 +194,7 @@ class GravityWall(object):
         stressArea.appendVertex(p)
         area= stressArea.getArea()
         if(abs(area)>0.0):
-            area2= (e0+e)/2.0*s.getLength()
+            # area2= (e0+e)/2.0*passiveWedgeSegment.getLength()
             E= area*normal
             C= stressArea.getCenterOfMass()
             retval+= geom.SlidingVectorsSystem2d(geom.SlidingVector2d(C,-E))
@@ -257,7 +261,7 @@ class GravityWall(object):
         e, zml, p= self.getEccentricity(svs)
         b= foundationSegment.getLength() # Foundation width.
         if(e>0):
-          F= b/(3*(e)*gammaR)
+          F= b/(3*(e)*gammaRv)
         else:
           F= 10.0
         return F, R, zml, p
