@@ -1846,6 +1846,7 @@ python tests/geotechnics/earthworks/test_embankment_04.py
 python tests/geotechnics/earthworks/test_embankment_05.py
 echo  "$BLEU" "  Earth retaining." "$NORMAL"
 python tests/geotechnics/earth_retaining/test_bell_soil_01.py
+python tests/geotechnics/earth_retaining/test_gravity_wall_01.py
 python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_rankine_soil_test_01.py
 python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_rankine_soil_test_02.py
 python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_rankine_soil_test_03.py

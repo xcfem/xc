@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
-''' Nonlinear non-linear spring model to analyze pile wall structutres.'''
+''' Nonlinear non-linear spring model to analyze pile wall structutres.
+
+References: 
+
+[1] Chapter 4-3 of Foundation Analysis and Design, Ed. 5 by Joseph E. Bowles.
+[2] Brinch Hansen. A general formula for bearing capacity. The Danish Geotechnical Institute. Bulletin 11. Copenhagen 1961.
+[3] Guía de cimentaciones en obras de carretera. Ministerio de Fomento (spain). 2002 (https://books.google.ch/books?id=a0eoygAACAAJ).
+[4] Eurocódigo 7. Proyecto geotécnico. Parte 1: reglas generales.
+'''
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2026, LCPT, AO_O"
@@ -10,6 +18,7 @@ __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 import sys
 import math
 import geom
+import numpy as np
 from scipy.constants import g
 from misc_utils import log_messages as lmsg
 
@@ -31,9 +40,15 @@ class GravityWall(object):
                                       soil.
         '''
         self.contour= wallContour
-        self.backfillContactSurface= backfillContactSurface
+        # Put the backfill contact surfaces in the right direction.
+        self.backfillContactSurface= list()
+        for (s, soil) in backfillContactSurface:
+            upsideDown= (s.getFromPoint().y>s.getToPoint().y)
+            if(upsideDown):
+                s.swap()
+            self.backfillContactSurface.append((s, soil))
         self.passivePressureContactSurface= passivePressureContactSurface
-        self.footingConctacSurface= footingContactSurface
+        self.footingConctactSurface= footingContactSurface
         self.wallUnitWeight= wallUnitWeight
 
     def getWallWeightSVS(self):
@@ -48,41 +63,46 @@ class GravityWall(object):
 
     def getBackfillContactSurfaceYMax(self):
         ''' Return the maximum ordinate of the backfill contact surface.'''
-        retval= self.backfillContactSurface[0].y
-        for p in self.backfillContactSurface[1:]:
-            retval= max(retval, p.y)
+        contactSegments, soils= zip(*self.backfillContactSurface)
+        firstSegment= contactSegments[0]
+        retval= max(firstSegment.getFromPoint().y, firstSegment.getToPoint().y)
+        for cs in contactSegments[1:]:
+            retval= max(cs.getFromPoint().y, cs.getToPoint().y)
         return retval
 
-    def getEarthPressureSVS(self, backfillSoil, backfillSlope, delta):
+    def getEarthPressureSVS(self, backfillSlope, k_delta= 2/3.0):
         ''' Return the sliding vector system corresponding to earth pressure
             on the wall.
 
-        :param backfillSoil: backfill soil.
         :param backfillSlope: slope of the backfill surface.
-        :param delta: friction angle between the backfill and the wall.
+        :param k_delta: factor to apply to the soil friction angle to get
+                        the friction angle between the backfill and the wall.
         '''
-        yMax= self.getBackfillContactSurfaceYMax()
-        p0= self.backfillContactSurface[0]
         wallPolygonCentroid= self.contour.getCenterOfMass()
 
         ## Earth pressure.
         retval= geom.SlidingVectorsSystem2d()
-        for p in self.backfillContactSurface[1:]:
-            s= geom.Segment2d(p0,p)
+        sg_v0= 0.0
+        for (s, soil) in self.backfillContactSurface:
             normal= s.getNormal().normalized()
+            soilLayerDepth= abs(s.getFromPoint().y-s.getToPoint().y)
             # Put the normal in the right direction.
             earthPressureDir= wallPolygonCentroid-s.getMidPoint()
             if(normal.dot(earthPressureDir)<0):
                 normal= -normal
             # angle of the back of the retaining wall (radians)
             a= math.pi/2.0-s.getXAxisAngle()
-            sg_v0= backfillSoil.rho*g*(yMax-p0.y)
-            e0= backfillSoil.ea_coulomb(sg_v0,a,backfillSlope,delta)
-            sg_v= backfillSoil.rho*g*(yMax-p.y)
-            e= backfillSoil.ea_coulomb(sg_v,a,backfillSlope,delta)
+            delta= k_delta*soil.getDesignPhi()
+            # Pressure at the top of the soil layer.
+            e0= soil.ea_coulomb(sg_v0,a,backfillSlope, d= delta, designValue= True)
+            # Pressure at the bottom of the soil layer.
+            sg_v= sg_v0+soil.rho*g*soilLayerDepth
+            e= soil.ea_coulomb(sg_v,a,backfillSlope, d= delta, designValue= True)
             stressArea= geom.Polygon2d()
+            p0= s.getToPoint()
             stressArea.appendVertex(p0)
             stressArea.appendVertex(p0-e0*normal)
+            p= s.getFromPoint()
             stressArea.appendVertex(p-e*normal)
             stressArea.appendVertex(p)
             area= stressArea.getArea()
@@ -92,35 +112,37 @@ class GravityWall(object):
                 C= stressArea.getCenterOfMass()
                 retval+= geom.SlidingVectorsSystem2d(geom.SlidingVector2d(C,E))
                 #stressAreas.append(stressArea)
-            p0= p
+            sg_v0= sg_v
         return retval
 
-    def getUniformLoadSVS(self, uniformLoad, backfillSoil, backfillSlope, delta):
+    def getUniformLoadSVS(self, uniformLoad, backfillSlope, k_delta):
         ''' Return the sliding vector system corresponding to a uniform load
             on the backfill surface.
 
         :param uniformLoad: uniform load on the backfill surface.
-        :param backfillSoil: backfill soil.
         :param backfillSlope: slope of the backfill surface.
-        :param delta: friction angle between the backfill and the wall.
+        :param k_delta: factor to apply to the soil friction angle to get
+                        the friction angle between the backfill and the wall.
         '''    
-        p0= self.backfillContactSurface[0]
         wallPolygonCentroid= self.contour.getCenterOfMass()
         retval= geom.SlidingVectorsSystem2d()
-        for p in self.backfillContactSurface[1:]:
-            s= geom.Segment2d(p0,p)
+        for (s, soil) in self.backfillContactSurface:
             normal= s.getNormal().normalized()
+            soilLayerDepth= abs(s.getFromPoint().y-s.getToPoint().y)
             # Put the normal in the right direction.
             earthPressureDir= wallPolygonCentroid-s.getMidPoint()
             if(normal.dot(earthPressureDir)<0):
                 normal= -normal
             # angle of the back of the retaining wall (radians)
             a= math.pi/2.0-s.getXAxisAngle()
-            e0= backfillSoil.eq_bell(uniformLoad, a, backfillSlope, delta)
-            e= backfillSoil.eq_bell(uniformLoad, a, backfillSlope, delta)
+            delta= k_delta*soil.getDesignPhi()
+            e0= soil.eq(q= uniformLoad, a= a, b= backfillSlope, d= delta, designValue= True)
+            e= soil.eq(q= uniformLoad, a= a, b= backfillSlope, d= delta, designValue= True)
             stressArea= geom.Polygon2d()
+            p0= s.getToPoint()
             stressArea.appendVertex(p0)
             stressArea.appendVertex(p0-e0*normal)
+            p= s.getFromPoint()
             stressArea.appendVertex(p-e*normal)
             stressArea.appendVertex(p)
             area= stressArea.getArea()
@@ -183,12 +205,13 @@ class GravityWall(object):
         R= svs.getResultant()
 
         #Overturning safety factor.
-        contactPlane= self.footingConctacSurface.getSupportLine()
+        foundationSegment= self.footingConctactSurface[0]
+        contactPlane= foundationSegment.getSupportLine()
         zml= svs.zeroMomentLine() # Zero moment line.
         p= contactPlane.getIntersection(zml)[0] # Intersection with
                                                 # foundation plane.
         # Compute the eccentricity.
-        foundationCenter= self.footingConctacSurface.getMidPoint()
+        foundationCenter= foundationSegment.getMidPoint()
         eVector= p-foundationCenter
         rProj= R.dot(eVector)
         e= eVector.getModulus()
@@ -196,64 +219,103 @@ class GravityWall(object):
             e= -e
         return e, zml, p
         
-    def getOverturningSafetyFactor(self, svs, gammaR= 1.0):
+    def getClassicOverturningSafetyFactorForLoadCombination(self, pointOfRotation, svsList):
+        ''' Return the overturning safety factor according to the classic
+            formula: Mestab/Mdestab.
+
+        :param pointOfRotation: point of rotation
+        :param svsList: list of sliding vector systems action on the retaining
+                        wall corresponding to a load combination. The first one
+                        must be stabilising.
+        '''
+        retval= None
+        if(svsList):
+            Mstab= svsList[0].getMoment(pointOfRotation)
+            signStab= np.sign(Mstab)
+            Mdestab= 0.0
+            for svs in svsList[1:]:
+                M= svs.getMoment(pointOfRotation)
+                if(np.sign(M)== signStab):
+                    Mstab+= M
+                else:
+                    Mdestab+= M
+            retval= abs(Mstab/Mdestab)
+        return retval
+        
+    def getOverturningSafetyFactor(self, svs, gammaRv= 1.0):
         ''' Return the overturning safety factor.
 
         :param svs: sliding vector system that represents the forces acting on
                     the retaining wall.
-        :param gammaR: partial resistance factor.
+        :param gammaRv: partial safety factor for the soil resistance.
         '''
-        foundationCenter= self.footingConctacSurface.getMidPoint()
+        foundationSegment= self.footingConctactSurface[0]
+        foundationCenter= foundationSegment.getMidPoint()
         svs= svs.reduceTo(foundationCenter)
         R= svs.getResultant()
         M= svs.getMoment()
         e, zml, p= self.getEccentricity(svs)
-        b= self.footingConctacSurface.getLength() # Foundation width.
+        b= foundationSegment.getLength() # Foundation width.
         if(e>0):
-          F= (3*(e)*gammaR)/b
+          F= b/(3*(e)*gammaR)
         else:
-          F= 0.01
+          F= 10.0
         return F, R, zml, p
-    
-    def getPressureOnFooting(self, svs, foundationSoil):
-        ''' Return the pressure on the contact surface with the soil.
-
-        :param svs: sliding vector system that represents the forces acting on 
-                    the retaining wall.
-        :param foundationSoil: foundation soil.
-        '''
-        foundationCenter= self.footingConctacSurface.getMidPoint()
-        svs= svs.reduceTo(foundationCenter)
-        R= svs.getResultant()
-        M= svs.getMoment()
-        e, zml, p= self.getEccentricity(svs)
-        b= self.footingConctacSurface.getLength() # Foundation width.
-        bReduced= 2*(b/2.0+e)
-        loadedArea= bReduced
-        normal= self.footingConctacSurface.getNormal().normalized()
-        # Put the normal in the right direction.
-        if(normal.y<0.0):
-            normal= -normal
-
-        stress= R.dot(normal)/loadedArea
-        uStress= foundationSoil.qu(q= 0.0,D= 0.5, Beff= bReduced, Leff= 5.0, Vload= -R.y, HloadB= R.x, HloadL= 0.0)
-        F= abs(stress)/uStress
-        return F, stress, uStress
-    
-    def getSlidingSafetyFactor(self, svs, foundationSoil):
+        
+    def getSlidingSafetyFactor(self, svs, k_delta= 2/3.0):
         ''' Return the safety factor against sliding.
 
         :param svs: sliding vector system that represents the forces acting on 
                     the retaining wall.
-        :param foundationSoil: foundation soil.
+        :param k_delta: factor to apply to the soil friction angle to get
+                        the friction angle between the backfill and the wall.
+                        Its value is normally 1.0 for cast-in-situ concrete 
+                        foundations and 2/3 for smooth precast foundations.
         '''
-        foundationCenter= self.footingConctacSurface.getMidPoint()
+        foundationSegment, foundationSoil= self.footingConctactSurface
+        foundationCenter= foundationSegment.getMidPoint()
         svs= svs.reduceTo(foundationCenter)
         R= svs.getResultant()
-        V= R.y
-        H= R.x
-        if(abs(H)>0.0):
-          F= abs(V*math.tan(foundationSoil.getDesignPhi())/H)
+        totalHorizontalThrust= R.x
+        delta= k_delta*foundationSoil.getDesignPhi()
+        designResistance= R.y*math.tan(delta)
+        if(abs(totalHorizontalThrust)>0.0):
+            F= abs(designResistance/totalHorizontalThrust)
         else:
-          F= 10.0
+            F= 10.0
         return F
+
+    def getPressureOnFooting(self, svs, D, q= 0.0, Leff= 1.0, NgammaCoef= 1.5, gammaRv= 1.4):
+        ''' Return the pressure on the contact surface with the soil.
+
+        :param svs: sliding vector system that represents the forces acting on 
+                    the retaining wall.
+        :param D: foundation depth.
+        :param q: overburden load.
+        :param Leff: Length of the effective foundation area
+                     (see figure 12 in page 44 (8 in the PDF) of reference 2).
+        :param NgammaCoef: 1.5 in reference [1], 1.8 in reference 2 
+                           and 2 in reference 3
+        :param gammaRv: partial safety factor for the soil resistance.
+        '''
+        foundationSegment, foundationSoil= self.footingConctactSurface
+        foundationCenter= foundationSegment.getMidPoint()
+        svs= svs.reduceTo(foundationCenter)
+        R= svs.getResultant()
+        M= svs.getMoment()
+        b= foundationSegment.getLength() # Foundation width.
+        e, zml, p= self.getEccentricity(svs)
+        bReduced= 2*(b/2.0-e) # see figure 12 in page 44 (8 in the PDF) of reference 2.
+        loadedArea= bReduced*Leff
+        normal= foundationSegment.getNormal().normalized()
+        # Put the normal in the right direction.
+        if(normal.y<0.0):
+            normal= -normal
+
+        qEd= R.dot(normal)/loadedArea
+        q+= foundationSoil.gamma()*D # dverburden at foundation base
+        q_ult= foundationSoil.qu(q= q, D= D, Beff= bReduced, Leff= Leff, Vload= -R.y, HloadB= R.x, HloadL= 0.0, NgammaCoef= NgammaCoef)
+        qRd= q_ult/gammaRv
+        F= abs(qEd)/qRd
+        return F, qEd, qRd
+    
