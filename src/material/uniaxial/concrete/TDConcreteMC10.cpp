@@ -87,9 +87,10 @@
 #include "TDConcreteMC10.h"
 #include "domain/mesh/element/utils/Information.h"
 #include <float.h>
+#include <cmath>
 #include "domain/domain/Domain.h" //Added by AMK to get current Domain time;
 #include "utility/recorder/response/MaterialResponse.h"
-#include <cmath>
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 XC::TDConcreteMC10::TDConcreteMC10(int tag)
@@ -115,9 +116,7 @@ XC::TDConcreteMC10::TDConcreteMC10(int tag)
 //! @param _cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
 XC::TDConcreteMC10::TDConcreteMC10(int tag, double _fc, double _ft, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem)
   : TDConcreteMC10Base(tag, MAT_TAG_TDConcreteMC10, _fc, _ft, _Ec, _Ecm, _beta, _age, _epsba, _epsbb, _epsda, _epsdb, _phiba, _phibb, _phida, _phidb, _tcast, _cem)
-  {
-    setup_parameters();
-  }
+  {}
 
 XC::TDConcreteMC10::~TDConcreteMC10(void)
   {
@@ -127,24 +126,23 @@ XC::TDConcreteMC10::~TDConcreteMC10(void)
 XC::UniaxialMaterial *XC::TDConcreteMC10::getCopy(void) const
   { return new TDConcreteMC10(*this); }
 
-
 //ntosic
+//! @brief Return the creep occurring in a sealed (no drying) specimen,
+//! driven by internal moisture movement.
 double XC::TDConcreteMC10::setCreepBasicStrain(double time, double stress)
   {
-    double creepBasic;
-    double runSum = 0.0;
+    double creepBasic= 0.0;
     
     DTIME_i[count] = creepDt;
  
-	for (int i = 1; i<=count; i++) {
-                PHIB_i[i] = setPhiBasic(time,TIME_i[i]); //Determine PHI //ntosic: PHIB
-                runSum += PHIB_i[i]*DSIG_i[i]/Ecm; //CONSTANT STRESS within Time interval //ntosic: changed to Ecm from Ec (according to Model Code formulation of phi basic)
-    }
+    for(int i = 1; i<=count; i++)
+      {
+	PHIB_i[i]= setPhiBasic(time,TIME_i[i]); //Determine PHI //ntosic: PHIB
+	creepBasic+= PHIB_i[i]*DSIG_i[i]/Ecm; //CONSTANT STRESS within Time interval //ntosic: changed to Ecm from Ec (according to Model Code formulation of phi basic)
+      }
     
     phib_i = PHIB_i[count];
-    creepBasic = runSum;
     return creepBasic;
-    
   }
 
 //ntosic
@@ -267,7 +265,7 @@ int XC::TDConcreteMC10::setTrialStrain(double trialStrain, double strainRate)
 double XC::TDConcreteMC10::setStress(double strain, double &stiff)
   {
 // Determine proper load path (comp load, comp unload, tens load, tens unload):
-    double stress=0.0;
+    double stress= 0.0;
     crack_flag = crackP_flag;
     ecmin = ecminP; //Initialized as ecmin = 0; ecmin should never be positive
     ecmax = ecmaxP; //Initialized as ecmax = 0; ecmax should never be negative
@@ -325,7 +323,7 @@ int XC::TDConcreteMC10::commitState(void)
     ecmaxP= ecmax;
     deptP= dept;
 
-    dsig_i[count]=sig-sigP;
+    dsig_i[count]= sig-sigP;
     /* 5/8/2013: commented the following lines so that the DSIG_i[count+1]=sig-sigP;*/
     //if (crack_flag == 1) {// DSIG_i will be different depending on how the fiber is cracked
     //	if (sig < 0 && sigP > 0) { //if current step puts concrete from tension to compression, DSIG_i will be only the comp. stress
@@ -343,15 +341,17 @@ int XC::TDConcreteMC10::commitState(void)
     DSIG_i[count+1] = sig-sigP;
 
     //Secant Stiffness for determination of creep strain:
-	if (fabs(eps_m/sig)>Ec) { //ntosic: originally was eps_m/sig
-	    E_i[count+1] = Ec;
-	} else {
-	    E_i[count+1] = fabs(sig/eps_m); //ADDED 7/22
-	}
+    if(fabs(eps_m/sig)>Ec)
+      { //ntosic: originally was eps_m/sig
+	E_i[count+1] = Ec;
+      }
+    else
+      {
+	E_i[count+1] = fabs(sig/eps_m); //ADDED 7/22
+      }
 
-	if (isnan(E_i[count+1])) {
-	    E_i[count+1] = Ec;
-	}
+    if(isnan(E_i[count+1]))
+      { E_i[count+1] = Ec; }
 
 
     TIME_i[count+1] = getCurrentTime();
@@ -361,46 +361,51 @@ int XC::TDConcreteMC10::commitState(void)
     epsP = eps;
 
     //Added by AMK:
-    epsP_total = eps_total; //Added by AMK;
-    epsP_shb = eps_shb; //ntosic
-    epsP_shd = eps_shd; //ntosic
-    epsP_crb = eps_crb; //ntosic
-    epsP_crd = eps_crd; //ntosic
-    epsP_m = eps_m;
+    epsP_total= eps_total; //Added by AMK;
+    epsP_shb= eps_shb; //ntosic
+    epsP_shd= eps_shd; //ntosic
+    epsP_crb= eps_crb; //ntosic
+    epsP_crd= eps_crd; //ntosic
+    epsP_m= eps_m;
     //ntosic: strain compression limit changed to 0.4fpc/Ec; Include nonlinear creep coefficient?
     
     if(eps_m < 0 && fabs(eps_m)>0.40*fabs(fpc/Ec))
       {
 	double s = fabs(eps_m/fpc)*Ec; // LP: why ??
 	s = 0.4*fabs(fpc/Ec); // LP: why ??
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; strain Compression Limit Exceeded: "
-		  << eps_m << ' ' << -s << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; strain compression limit exceeded: "
+		  << eps_m << ' ' << -s
+		  << Color::def << std::endl;
       }
-		  //Cracking flags:
-		  crackP_flag = crack_flag;
+    //Cracking flags:
+    crackP_flag = crack_flag;
 
-	  //cracked reloading/unloading stiffness:
-	  if (crackP_flag==1) {
-		  if (sig/eps_m<Et) {
-			  Et = sig/eps_m;
-		  }
-	  }
+    //cracked reloading/unloading stiffness:
+    if (crackP_flag==1)
+      {
+	if (sig/eps_m<Et)
+	  { Et = sig/eps_m; }
+      }
 
-	  if(count==0) {
-		  epsInit = epsP_total;
-		  sigInit = sigP;
-	  }
+    if(count==0)
+      {
+	epsInit = epsP_total;
+	sigInit = sigP;
+      }
 
-	  if (sigInit<0.0 && t_load<0.0) {
-		  t_load = getCurrentTime();
-		  sigInit = sigP;
-		  epsInit = epsP_m;
-	  } else if (sigInit>0.0 && sigP<0.0 && t_load<0.0) {
-		  t_load = getCurrentTime();
-		  sigInit = sigP;
-		  epsInit = epsP_m;
-	  }
+    if(sigInit<0.0 && t_load<0.0)
+      {
+	t_load = getCurrentTime();
+	sigInit = sigP;
+	epsInit = epsP_m;
+      }
+    else if (sigInit>0.0 && sigP<0.0 && t_load<0.0)
+      {
+	t_load = getCurrentTime();
+	sigInit = sigP;
+	epsInit = epsP_m;
+      }
 
 	  //if (creepControl==1) {
 	  //	count++;
@@ -413,7 +418,8 @@ int XC::TDConcreteMC10::commitState(void)
 
 void XC::TDConcreteMC10::Print(std::ostream &s, int flag) const
   {
-    s << "TDConcreteMC10:(strain, stress, tangent) " << eps << " " << sig << " " << e << std::endl;
+    s << "TDConcreteMC10:(strain, stress, tangent) "
+      << eps << " " << sig << " " << e << std::endl;
   }
 
 
@@ -432,34 +438,38 @@ void XC::TDConcreteMC10::Tens_Envlp(double epsc, double &sigc, double &Ect)
 !    Ect  = tangent concrete modulus
 !-----------------------------------------------------------------------*/
   
-	double Ec0 = Ec;
-	double eps0 = ft / Ec0;
-	//double epsu = ft * (1.0 / Ets + 1.0 / Ec0);
-	double b = beta;
-	// USE THIS ONE
-	if(epsc <= eps0)
-	  {
-	    sigc = epsc * Ec0;
-	    Ect = Ec0;
-	  }
-	else
-	  {
-	    Ect = -b * eps0*ft / pow(epsc, 2)*pow(eps0 / epsc, b - 1.0);
-	    sigc = ft * pow(eps0 / epsc, b);
-	  }
+    const double Ec0= Ec;
+    const double eps0= ft / Ec0;
+    //double epsu = ft * (1.0 / Ets + 1.0 / Ec0);
+    const double b= beta;
 
-	//THiS IS FOR TESTING LINEAR
-	//sigc = epsc*Ec0;
-	//Ect = Ec0;
-	 /*
-	  if (epsc<=epsu) {
-		Ect  = -Ets;
-		sigc = ft-Ets*(epsc-eps0);
-	  } else {
-		Ect  = 1.0e-10;
-		sigc = 1.0e-10;
-	  }
-	  */
+    // USE THIS ONE
+    if(epsc <= eps0)
+      {
+	sigc= epsc * Ec0;
+	Ect= Ec0;
+      }
+    else
+      {
+	Ect= -b * eps0*ft / pow(epsc, 2)*pow(eps0 / epsc, b - 1.0);
+	sigc= ft * pow(eps0 / epsc, b);
+      }
+
+    //THiS IS FOR TESTING LINEAR
+    //sigc = epsc*Ec0;
+    //Ect = Ec0;
+    /*
+      if (epsc<=epsu)
+        {
+	  Ect= -Ets;
+	  sigc= ft-Ets*(epsc-eps0);
+        } 
+      else
+       {
+         Ect  = 1.0e-10;
+         sigc = 1.0e-10;
+       }
+    */
   }
 
   
