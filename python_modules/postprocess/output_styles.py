@@ -220,6 +220,9 @@ class OutputStyle(object):
         elif(itemToDisp=='alpha_cr'): # factor by which the design loading would have to be increased to cause elastic instability (see Eurocode 4:2004 cl.5.2.1(2)).
             fConvUnits= 1.0
             unitDescription= ''
+        elif(itemToDisp=='sectionArea'):
+            fConvUnits= 1e4
+            unitDescription= 'cm2'
         elif(itemToDisp=='strongAxisBucklingPercent'):
             fConvUnits= 1.0
             unitDescription= 'Dot product (projection) of the buckling eigenvector over the strong axis.'
