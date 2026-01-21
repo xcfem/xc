@@ -532,7 +532,7 @@ int XC::ForceBeamColumn2d::update(void)
                     for(size_t i=0;i<numSections; i++)
                       {
                         const int order= theSections[i]->getOrder();
-                        const ID &code = theSections[i]->getResponseType();
+                        const ID &code= theSections[i]->getResponseType();
                         static Vector Ss;
                         static Vector dSs;
                         static Vector dvs;
@@ -637,10 +637,10 @@ int XC::ForceBeamColumn2d::update(void)
                           }
     
                         // get section resisting forces
-                        section_matrices.getSsrSubdivide()[i] = theSections[i]->getStressResultant();
+                        section_matrices.getSsrSubdivide()[i]= theSections[i]->getStressResultant();
     
                         // get section flexibility matrix
-                        section_matrices.getFsSubdivide()[i] = theSections[i]->getSectionFlexibility();
+                        section_matrices.getFsSubdivide()[i]= theSections[i]->getSectionFlexibility();
     
                         // calculate section residual deformations
                         // dvs = fs * (Ss - Ssr);
@@ -1219,8 +1219,8 @@ void XC::ForceBeamColumn2d::compSectionDisplacements(std::vector<Vector> &sectio
       }
 
      Vector w(numSections);
-     static XC::Vector xl(NDM), uxb(NDM);
-     static XC::Vector xg(NDM), uxg(NDM);
+     static Vector xl(NDM), uxb(NDM);
+     static Vector xg(NDM), uxg(NDM);
 
      // w = ls * kappa;
      w.addMatrixVector (0.0, ls, kappa, 1.0);
