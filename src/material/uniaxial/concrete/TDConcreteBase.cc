@@ -91,6 +91,7 @@
 #include <cmath>
 #include <boost/algorithm/string.hpp>
 #include "domain/mesh/element/Element.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 int XC::TDConcreteBase::creepControl= 0;
 double XC::TDConcreteBase::creepDt= 0.0;
@@ -121,6 +122,7 @@ void XC::TDConcreteBase::setup_parameters(void)
 
     t_load= -1.0; //Added by AMK
     crack_flag= 0;
+    crackP_flag= 0; // Added by LP
     iter= 0;
         
     //Change inputs into the proper sign convention:
@@ -221,9 +223,9 @@ void XC::TDConcreteBase::setFt(const double &d)
     if(ft < 0.0)
       {
         ft= -ft;
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; Warning!, tensile strength must be positive."
-		  << std::endl;
+		  << Color::def << std::endl;
       }
   }
 
@@ -312,7 +314,9 @@ int XC::TDConcreteBase::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data."
+		<< Color::def << std::endl;
     return res;
   }
 
@@ -324,20 +328,25 @@ int XC::TDConcreteBase::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids."
+		<< Color::def << std::endl;
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data."
+		    << Color::def << std::endl;
       }
     return res;
   }
 
 void XC::TDConcreteBase::Print(std::ostream &s, int flag) const
   {
-  s << "TDConcreteBase:(strain, stress, tangent) " << eps << " " << sig << " " << e << std::endl;
+    s << "TDConcreteBase:(strain, stress, tangent) " << eps
+      << " " << sig << " " << e << std::endl;
   }
 
 void XC::TDConcreteBase::Compr_Envlp(double epsc, double &sigc, double &Ect) 

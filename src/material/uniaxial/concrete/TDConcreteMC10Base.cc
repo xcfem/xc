@@ -48,10 +48,11 @@
 
 #include "TDConcreteMC10Base.h"
 #include "domain/mesh/element/utils/Information.h"
+#include <cmath>
 #include <float.h>
 #include "domain/domain/Domain.h" //Added by AMK to get current Domain time;
 #include "utility/recorder/response/MaterialResponse.h"
-#include <cmath>
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Sets initial values for the concrete parameters.
 void XC::TDConcreteMC10Base::setup_parameters(void)
@@ -90,7 +91,9 @@ size_t XC::TDConcreteMC10Base::resize(void)
 //! @brief Constructor.
 XC::TDConcreteMC10Base::TDConcreteMC10Base(int tag, int classTag)
   : TDConcreteBase(tag, classTag)
-  {}
+  {
+    setup_parameters();
+  }
 
 //! @brief Constructor.
 //! @param _fc: cylinder compressive strength (this is a dummy parameter since compression behavior is linear).
@@ -202,20 +205,20 @@ void XC::TDConcreteMC10Base::setCem(const double &d)
 double XC::TDConcreteMC10Base::setPhiBasic(double time, double tp)
   {	
     // ntosic: Model Code 2010 Equations
-    double tmtp = time - tp;
-    double tpa = tp * pow(9.0 / (2.0 + pow(tp, 1.2)) + 1.0, cem);
-    double phiBasic = phiba * log(pow(30.0 / tpa + 0.035, 2.0) * (tmtp / phibb) + 1.0);
+    const double tmtp= time - tp;
+    const double tpa = tp * pow(9.0 / (2.0 + pow(tp, 1.2)) + 1.0, cem);
+    const double phiBasic= phiba * log(pow(30.0 / tpa + 0.035, 2.0) * (tmtp / phibb) + 1.0);
     return phiBasic;
   }
 
 //ntosic
 double XC::TDConcreteMC10Base::setPhiDrying(double time, double tp)
   {
-	// ntosic: Model Code 2010 Equations
-	double tmtp = time - tp;
-	double tpa = tp * pow(9.0 / (2.0 + pow(tp, 1.2)) + 1.0, cem);
-	double phiDrying = phida / (0.1 + pow(tpa,0.2)) * pow(tmtp, 1.0 / (2.3 + 3.5 / pow(tpa, 0.5))) / pow(phidb + tmtp, 1.0 / (2.3 + 3.5/pow(tpa,0.5)));
-	return phiDrying;
+    // ntosic: Model Code 2010 Equations
+    const double tmtp= time - tp;
+    const double tpa= tp * pow(9.0 / (2.0 + pow(tp, 1.2)) + 1.0, cem);
+    const double phiDrying = phida / (0.1 + pow(tpa,0.2)) * pow(tmtp, 1.0 / (2.3 + 3.5 / pow(tpa, 0.5))) / pow(phidb + tmtp, 1.0 / (2.3 + 3.5/pow(tpa,0.5)));
+    return phiDrying;
   }
 
 //ntosic
@@ -331,7 +334,9 @@ int XC::TDConcreteMC10Base::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << Color::red << getClassName() << __FUNCTION__
+		<< "; failed to send data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -342,13 +347,17 @@ int XC::TDConcreteMC10Base::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << __FUNCTION__
+		<< "; failed to receive ids."
+	        << Color::def << std::endl;
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << __FUNCTION__
+		    << "; failed to receive data."
+		    << Color::def << std::endl;
       }
     return res;
   }
