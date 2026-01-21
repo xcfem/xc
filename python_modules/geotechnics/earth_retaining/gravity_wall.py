@@ -21,6 +21,7 @@ import geom
 import numpy as np
 from scipy.constants import g
 from misc_utils import log_messages as lmsg
+from operator import itemgetter
 
 class GravityWall(object):
     ''' Gravity wall design.'''
@@ -41,12 +42,17 @@ class GravityWall(object):
         '''
         self.contour= wallContour
         # Put the backfill contact surfaces in the right direction.
-        self.backfillContactSurface= list()
+        tmp= list()
         for (s, soil) in backfillContactSurface:
             upsideDown= (s.getFromPoint().y>s.getToPoint().y)
             if(upsideDown):
                 s.swap()
-            self.backfillContactSurface.append((s, soil))
+            tmp.append((s, soil, s.getMidPoint().y))
+        # Sort the backfill contact on segment depth.
+        tmp.sort(key= itemgetter(2), reverse= True)
+        self.backfillContactSurface= list()
+        for tpl in tmp:
+            self.backfillContactSurface.append((tpl[0], tpl[1]))
         self.passivePressureContactSurface= passivePressureContactSurface
         self.footingConctactSurface= footingContactSurface
         self.wallUnitWeight= wallUnitWeight
@@ -91,7 +97,7 @@ class GravityWall(object):
             if(normal.dot(earthPressureDir)<0):
                 normal= -normal
             # angle of the back of the retaining wall (radians)
-            a= math.pi/2.0-s.getXAxisAngle()
+            a= s.getXAxisAngle()-math.pi/2.0
             delta= k_delta*soil.getDesignPhi()
             # Pressure at the top of the soil layer.
             e0= soil.ea_coulomb(sg_v0,a,backfillSlope, d= delta, designValue= True)
@@ -134,7 +140,7 @@ class GravityWall(object):
             if(normal.dot(earthPressureDir)<0):
                 normal= -normal
             # angle of the back of the retaining wall (radians)
-            a= math.pi/2.0-s.getXAxisAngle()
+            a= s.getXAxisAngle()-math.pi/2.0
             delta= k_delta*soil.getDesignPhi()
             e0= soil.eq(q= uniformLoad, a= a, b= backfillSlope, d= delta, designValue= True)
             e= soil.eq(q= uniformLoad, a= a, b= backfillSlope, d= delta, designValue= True)
@@ -246,8 +252,9 @@ class GravityWall(object):
             retval= abs(Mstab/Mdestab)
         return retval
         
-    def getOverturningSafetyFactor(self, svs, gammaRv= 1.0):
-        ''' Return the overturning safety factor.
+    def getEccentricitySafetyFactor(self, svs, gammaRv= 1.0):
+        ''' Return the safety factor regarding the load eccentricity (see
+            clause 6.5.4 of Eurocode 7 Part 1.
 
         :param svs: sliding vector system that represents the forces acting on
                     the retaining wall.
@@ -260,13 +267,14 @@ class GravityWall(object):
         M= svs.getMoment()
         e, zml, p= self.getEccentricity(svs)
         b= foundationSegment.getLength() # Foundation width.
+        # Compute overdesign factor.
         if(e>0):
           F= b/(3*(e)*gammaRv)
         else:
           F= 10.0
-        return F, R, zml, p
+        return F, R, zml, p, e
         
-    def getSlidingSafetyFactor(self, svs, k_delta= 2/3.0):
+    def getSlidingSafetyFactor(self, svs, k_delta= 2/3.0, gammaRh= 1.1):
         ''' Return the safety factor against sliding.
 
         :param svs: sliding vector system that represents the forces acting on 
@@ -282,7 +290,7 @@ class GravityWall(object):
         R= svs.getResultant()
         totalHorizontalThrust= R.x
         delta= k_delta*foundationSoil.getDesignPhi()
-        designResistance= R.y*math.tan(delta)
+        designResistance= R.y*math.tan(delta)/gammaRh
         if(abs(totalHorizontalThrust)>0.0):
             F= abs(designResistance/totalHorizontalThrust)
         else:

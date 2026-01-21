@@ -145,7 +145,7 @@ earthPressureSVS= gravityWall.getEarthPressureSVS(backfillSlope= backfillSlope, 
 uniformLoadSVS= gravityWall.getUniformLoadSVS(uniformLoad= pLoad, backfillSlope= backfillSlope, k_delta= k_delta)
 ## Compute over-design factor
 slidingComb1= 1.0*permanentLoadSVS+1.35*earthPressureSVS+1.5*uniformLoadSVS
-slidingOverDesignFactor1= gravityWall.getSlidingSafetyFactor(svs= slidingComb1, k_delta= 1.0)
+slidingOverDesignFactor1= gravityWall.getSlidingSafetyFactor(svs= slidingComb1, k_delta= 1.0, gammaRh= 1.0)
 ## Combination 2
 backfillSoil.gammaMPhi= 1.25
 foundationSoil.gammaMPhi= 1.25
@@ -155,7 +155,7 @@ earthPressureSVS= gravityWall.getEarthPressureSVS(backfillSlope= backfillSlope, 
 uniformLoadSVS= gravityWall.getUniformLoadSVS(uniformLoad= pLoad, backfillSlope= backfillSlope, k_delta= k_delta)
 ## Compute over-design factor
 slidingComb2= 1.0*permanentLoadSVS+1.0*earthPressureSVS+1.3*uniformLoadSVS
-slidingOverDesignFactor2= gravityWall.getSlidingSafetyFactor(svs= slidingComb2, k_delta= 1.0)
+slidingOverDesignFactor2= gravityWall.getSlidingSafetyFactor(svs= slidingComb2, k_delta= 1.0, gammaRh= 1.0)
 slidingOverDesignFactor= min(slidingOverDesignFactor1, slidingOverDesignFactor2)
 ratio5= math.sqrt((slidingOverDesignFactor1-1.2600283524258065)**2+(slidingOverDesignFactor2-1.0643126850908375)**2)
 testOK= testOK and (abs(ratio5)<1e-6)
@@ -180,48 +180,48 @@ CFsgRef= 1.3170259848205654
 ratio6= abs(CFsg-CFsgRef)/CFsgRef
 testOK= testOK and (abs(ratio5)<1e-6)
 
+'''
+print('Soils.')
+print('  Backfill soil.')
+print('    Design value of internal friction of the backfill soil: ', math.degrees(backfillSoilDesignPhi))
+print('    Design wall ground interface parameter of the backfill soil: ', math.degrees(backfillEarthPressureDelta))
+print('    Backfill soil Ka= ', backfillSoilKa)
+print('\n  Foundation soil.')
+print('    Design value of internal friction of the foundation soil: ', math.degrees(foundationSoilDesignPhi))
+print('    Design wall ground interface parameter of the foundation soil: ', math.degrees(foundationEarthPressureDelta))
+print('    Foundation soil Ka= ', foundationSoilKa)
+print('\nActions.')
+print('permanentLoadSVS: ', permanentLoadSVS)
+print('ratio1: ', ratio1)
+print('testOK: ', testOK)
+print('earthPressureRef: ', earthPressureRef)
+print('earthPressureSVS: ', earthPressureSVS)
+print('ratio2: ', ratio2)
+print('testOK: ', testOK)
+print('uniformLoadEarthPressureRef: ', uniformLoadEarthPressureRef)
+print('uniformLoadSVS: ', uniformLoadSVS)
+print('ratio3: ', ratio3)
+print('testOK: ', testOK)
+print('\nLimit state checking.')
+print('Mstab= ', Mstab)
+print('Mdestab= ', Mdestab)
+print('overTurningOverdesignFactorRef= ', overTurningOverdesignFactorRef)
+print('overTurningOverdesignFactor= ', overTurningOverdesignFactor)
+print('ratio4: ', ratio4)
+print('testOK: ', testOK)
 
-# print('Soils.')
-# print('  Backfill soil.')
-# print('    Design value of internal friction of the backfill soil: ', math.degrees(backfillSoilDesignPhi))
-# print('    Design wall ground interface parameter of the backfill soil: ', math.degrees(backfillEarthPressureDelta))
-# print('    Backfill soil Ka= ', backfillSoilKa)
-# print('\n  Foundation soil.')
-# print('    Design value of internal friction of the foundation soil: ', math.degrees(foundationSoilDesignPhi))
-# print('    Design wall ground interface parameter of the foundation soil: ', math.degrees(foundationEarthPressureDelta))
-# print('    Foundation soil Ka= ', foundationSoilKa)
-# print('\nActions.')
-# print('permanentLoadSVS: ', permanentLoadSVS)
-# print('ratio1: ', ratio1)
-# print('testOK: ', testOK)
-# print('earthPressureRef: ', earthPressureRef)
-# print('earthPressureSVS: ', earthPressureSVS)
-# print('ratio2: ', ratio2)
-# print('testOK: ', testOK)
-# print('uniformLoadEarthPressureRef: ', uniformLoadEarthPressureRef)
-# print('uniformLoadSVS: ', uniformLoadSVS)
-# print('ratio3: ', ratio3)
-# print('testOK: ', testOK)
-# print('\nLimit state checking.')
-# print('Mstab= ', Mstab)
-# print('Mdestab= ', Mdestab)
-# print('overTurningOverdesignFactorRef= ', overTurningOverdesignFactorRef)
-# print('overTurningOverdesignFactor= ', overTurningOverdesignFactor)
-# print('ratio4: ', ratio4)
-# print('testOK: ', testOK)
+print('slidingOverdesignFactor1= ', slidingOverDesignFactor1)
+print('slidingOverdesignFactor2= ', slidingOverDesignFactor2)
+print('slidingOverdesignFactor= ', slidingOverDesignFactor)
+print('ratio5: ', ratio5)
+print('testOK: ', testOK)
 
-# print('slidingOverdesignFactor1= ', slidingOverDesignFactor1)
-# print('slidingOverdesignFactor2= ', slidingOverDesignFactor2)
-# print('slidingOverdesignFactor= ', slidingOverDesignFactor)
-# print('ratio5: ', ratio5)
-# print('testOK: ', testOK)
-
-# print('foundation depth: '+str(D)+' m')
-# print('CF(bearing)= ', CFsg)
-# print('qEd(bearing)= ', qEd/1e3, ' kPa' )
-# print('qu(bearing)= ', qRd/1e3, ' kPa' )
-# print('testOK: ', testOK)
-
+print('foundation depth: '+str(D)+' m')
+print('CF(bearing)= ', CFsg)
+print('qEd(bearing)= ', qEd/1e3, ' kPa' )
+print('qRd(bearing)= ', qRd/1e3, ' kPa' )
+print('testOK: ', testOK)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
