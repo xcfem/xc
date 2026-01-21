@@ -187,7 +187,8 @@ class_<Ray3d, bases<Linear3d> >("Ray3d")
 GEOM_FT (Segment3d::*AngleVector3D)(const Vector3d &v) const= &Segment3d::getAngle;
 GEOM_FT (Segment3d::*AngleLine3D)(const Line3d &) const= &Segment3d::getAngle;
 GEOM_FT (Segment3d::*AngleRay3D)(const Ray3d &) const= &Segment3d::getAngle;
-GEOM_FT (Segment3d::*AngleSegment3D)(const Segment3d &v) const= &Segment3d::getAngle;
+GEOM_FT (Segment3d::*AngleSegment3D)(const Segment3d &) const= &Segment3d::getAngle;
+GEOM_FT (Segment3d::*AnglePlane)(const Plane &) const= &Segment3d::getAngle;
 GeomObj::list_Pos3d (Segment3d::*segment3dIntersectionWithLine)(const Line3d &) const= &Segment3d::getIntersection;
 GeomObj::list_Pos3d (Segment3d::*segment3dIntersectionWithRay)(const Ray3d &) const= &Segment3d::getIntersection;
 GeomObj::list_Pos3d (Segment3d::*segment3dIntersectionWithSegment)(const Segment3d &) const= &Segment3d::getIntersection;
@@ -212,6 +213,10 @@ class_<Segment3d, bases<Linear3d> >("Segment3d")
   .def("getAngle",AngleLine3D,"Returns the angle between the line segment and the line.")
   .def("getAngle",AngleRay3D,"Returns the angle between the line segment and the ray.")
   .def("getAngle",AngleSegment3D,"Returns the angle between both line segments.")
+  .def("getAngle",AnglePlane,"Returns the angle between the segment and the given plane.")
+  .def("getAngleXYPlane",&Segment3d::getAngleXYPlane,"Returns the angle between the segment and XY plane.")
+  .def("getAngleXZPlane",&Segment3d::getAngleXZPlane,"Returns the angle between the segment and XZ plane.")
+  .def("getAngleYZPlane",&Segment3d::getAngleYZPlane,"Returns the angle between the segment and YZ plane.")
   .def("getProjection",Segment3dPos3dProj,"return the projection of a point onto the line.")
   .def("getIntersection", segment3dIntersectionWithLine, "Return the intersection with the line argument.")
   .def("getIntersection", segment3dIntersectionWithRay, "Return the intersection with the ray argument.")

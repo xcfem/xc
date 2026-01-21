@@ -31,6 +31,7 @@
 class Dir3d;
 class VectorPos3d;
 class Polyline3d;
+class Plane;
 
 typedef std::pair<int,int> int_pair;
 typedef std::deque<int_pair> int_pair_deque;
@@ -92,10 +93,14 @@ class Segment3d : public Linear3d
     virtual Vector3d getIVector(void) const;
     virtual Vector3d getJVector(void) const;
     virtual Vector3d getKVector(void) const;
-    GEOM_FT getAngle(const Vector3d &v) const;
-    GEOM_FT getAngle(const Line3d &r) const;
-    GEOM_FT getAngle(const Ray3d &sr) const;
-    GEOM_FT getAngle(const Segment3d &v) const;
+    GEOM_FT getAngle(const Vector3d &) const;
+    GEOM_FT getAngle(const Line3d &) const;
+    GEOM_FT getAngle(const Ray3d &) const;
+    GEOM_FT getAngle(const Segment3d &) const;
+    GEOM_FT getAngle(const Plane &) const;
+    GEOM_FT getAngleXYPlane(void) const;
+    GEOM_FT getAngleXZPlane(void) const;
+    GEOM_FT getAngleYZPlane(void) const;
     friend GEOM_FT angle(const Segment3d &r,const Vector3d &v);
     virtual GEOM_FT Ix(void) const;
     virtual GEOM_FT Iy(void) const;
