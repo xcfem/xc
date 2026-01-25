@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Diagram to display a property defined at nodes over linear elements. '''
+''' Diagram to display an attribute defined at nodes over linear elements. '''
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
@@ -11,32 +11,32 @@ import sys
 from postprocess.xcVtk.diagrams import feature_diagram as fd
 from misc_utils import log_messages as lmsg
 
-class PropertyDiagram(fd.FeatureDiagram):
-    '''Diagram to display a property defined at nodes over linear elements.
+class AttributeDiagram(fd.FeatureDiagram):
+    '''Diagram to display a attribute defined at nodes over linear elements.
     '''
-    def __init__(self, scaleFactor, lRefModSize, fUnitConv, sets, propertyName, rgMinMax= None):
+    def __init__(self, scaleFactor, lRefModSize, fUnitConv, sets, attributeName, rgMinMax= None):
         ''' Constructor.
 
         :param scaleFactor: scale factor for the diagram (can be negative too).
         :param lRefModSize: reference length of the model (how big the model is).
         :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
         :param sets:      list of element sets for which the diagram will be displayed.
-        :param propertyName: property to display.
+        :param attributeName: attribute to display.
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
                          of the scalar field (if any) to be represented. All 
                          the values less than vmin are displayed in blue and 
                          those greater than vmax in red (defaults to None)
         '''
-        super(PropertyDiagram, self).__init__(scaleFactor= scaleFactor, lRefModSize= lRefModSize, fUnitConv= fUnitConv, sets= sets, featureName= propertyName, rgMinMax= rgMinMax)
+        super(AttributeDiagram, self).__init__(scaleFactor= scaleFactor, lRefModSize= lRefModSize, fUnitConv= fUnitConv, sets= sets, featureName= attributeName, rgMinMax= rgMinMax)
         
     def filterElements(self):
-        ''' Return the elements that actually have the required property.
+        ''' Return the elements that actually have the required attribute.
         '''
         retval= list()
         refused_elements= list()
         for s in self.elemSets:
             for e in s.elements:
-                if(e.hasProp(self.featureName)):
+                if(hasattr(e, self.featureName)):
                     retval.append(e)
                 else:
                     refused_elements.append(e)
@@ -46,7 +46,7 @@ class PropertyDiagram(fd.FeatureDiagram):
                 tag_lst.append(e.tag)
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            warningMsg= '; elements: '+str(tag_lst) + " do not have the required property: '"+str(self.featureName)+'"'
+            warningMsg= '; elements: '+str(tag_lst) + " do not have the required attribute: '"+str(self.featureName)+'"'
             lmsg.warning(className+'.'+methodName+warningMsg)
         return retval
        

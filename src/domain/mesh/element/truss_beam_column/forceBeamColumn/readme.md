@@ -14,3 +14,4 @@
 - [Could Not Invert Element Flexibility](https://portwooddigital.com/2023/11/20/could-not-invert-element-flexibility/)
 - [A Tale of Two Element Formulations](https://portwooddigital.com/2020/02/23/a-tale-of-two-element-formulations/)
 - [Force-based Element vs. Displacement-based Element](https://opensees.berkeley.edu/wiki/images/c/c5/FBEvsDBE.pdf)
+- [Evaluation of nonlinear frame finite-element models](https://ascelibrary.org/doi/10.1061/%28ASCE%290733-9445%281997%29123%3A7%28958%29)

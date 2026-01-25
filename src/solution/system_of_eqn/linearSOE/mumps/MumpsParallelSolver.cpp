@@ -90,7 +90,11 @@ int XC::MumpsParallelSolver::initializeMumps(void)
 	id.par = 1; // host involved in calcs
 	id.sym = theMumpsSOE->matType;
 
-	id.comm_fortran = 0; // OPENMPI
+#ifdef _OPENMPI
+	id.comm_fortran=0; // OPENMPI
+#else
+	id.comm_fortran = MPI_Comm_c2f(MPI_COMM_WORLD);
+#endif
 
 	id.ICNTL(5) = 0; id.ICNTL(18) = 3;
 

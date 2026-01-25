@@ -87,3 +87,7 @@ class LoadDiagram(cd.ColoredDiagram):
             self.createDiagramActor()
             # self.updateLookUpTable()
             # self.updateDiagramActor()
+            retval= True
+        else:
+            retval= False
+        return retval

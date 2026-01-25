@@ -24,7 +24,7 @@ def printResultsELU(elems, crossSection, os= sys.stdout):
     '''
     fmt= "{:6.1f}"
     fmt2= "{:5.2f}"
-    e= ps.getItemWithMaxProp(elems,"getProp",'FCTNCP')
+    e= ps.get_item_with_max_prop(elems,"getProp",'FCTNCP')
     N= fmt.format(e.getProp("NCP")/1e3)
     My= fmt.format(e.getProp("MyCP")/1e3)
     Mz= fmt.format(e.getProp("MzCP")/1e3)
@@ -33,7 +33,7 @@ def printResultsELU(elems, crossSection, os= sys.stdout):
     sgAdm= fmt.format(crossSection.fyd/1e6)
     fctnCP= fmt2.format(e.getProp("FCTNCP"))
     os.write("tag= "+str(e.tag)+" N= "+str(N)+" kN  My= "+str(My)+" kN.m  Mz= "+str(Mz)+" kN.m   SgMax= "+str(sgMax)+" MPa  SgMin= "+str(sgMin)+ " MPa  sgAdm= "+str(sgAdm)+" MPa  FCTNCP= "+str(fctnCP)+" HIPCPTN= "+str(e.getProp("HIPCPTN")))
-    e=  ps.getItemWithMaxProp(elems,"getProp",'FCVCP')
+    e=  ps.get_item_with_max_prop(elems,"getProp",'FCVCP')
     Vy= fmt.format(e.getProp("VyCP")/1e3)
     Vz= fmt.format(e.getProp("VzCP")/1e3)
     tauMax=  fmt.format(e.getProp("TauMax")/1e6)

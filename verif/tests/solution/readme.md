@@ -53,3 +53,6 @@
 ### Less common problems
 
 - [Solving when all DOFs are constained: Most Solvers Can Be Marplots](https://portwooddigital.com/2020/08/27/most-solvers-can-be-marplots/)
+
+# Equation numberer
+- [Reverse Engineering the Equation Numberer](https://portwooddigital.com/2026/01/06/reverse-engineering-the-equation-numberer/)

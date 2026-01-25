@@ -128,24 +128,41 @@ void XC::ForceBeamColumn2d::alloc(const BeamIntegration &bi)
 
 // ! @brief Constructor.
 XC::ForceBeamColumn2d::ForceBeamColumn2d(int tag)
-  : NLForceBeamColumn2dBase(tag,ELE_TAG_ForceBeamColumn2d), beamIntegr(nullptr), v0()
+  : NLForceBeamColumn2dBase(tag, ELE_TAG_ForceBeamColumn2d, 1e-12),
+    beamIntegr(nullptr), v0(), maxSubdivisions(4), subdivideFactor(10.0)
   {}
 
 //! @brief Constructor.
-XC::ForceBeamColumn2d::ForceBeamColumn2d(int tag,int numSec,const Material *m,const CrdTransf *trf,const BeamIntegration *integ):
-  NLForceBeamColumn2dBase(tag,ELE_TAG_ForceBeamColumn2d,numSec,m,trf), beamIntegr(nullptr), v0()
+XC::ForceBeamColumn2d::ForceBeamColumn2d(int tag,int numSec,const Material *m,const CrdTransf *trf,const BeamIntegration *integ, const double &tolerance, const double &subFac)
+  : NLForceBeamColumn2dBase(tag,ELE_TAG_ForceBeamColumn2d,numSec, m, trf, tolerance),
+    beamIntegr(nullptr), v0(), maxSubdivisions(4), subdivideFactor(subFac)
   {
+    if(subdivideFactor < 1.0)
+      subdivideFactor = 1.0;
     if(integ) alloc(*integ);
   }
 
 //! @brief Constructor.
 XC::ForceBeamColumn2d::ForceBeamColumn2d (int tag, int nodeI, int nodeJ,
-                                          int numSec,const std::vector<PrismaticBarCrossSection *> &sec,
+                                          int numSec,
+					  const std::vector<PrismaticBarCrossSection *> &sec,
                                           BeamIntegration &bi,
-                                          CrdTransf2d &coordTransf, double massDensPerUnitLength,
-                                          int maxNumIters, double tolerance):
-  NLForceBeamColumn2dBase(tag,ELE_TAG_ForceBeamColumn2d,0),beamIntegr(nullptr), v0()
+                                          CrdTransf2d &coordTransf,
+					  double massDensPerUnitLength,
+                                          int maxNumIters,
+					  const double &tolerance,
+					  const double &subFac,
+					  int maxNumSub)
+  : NLForceBeamColumn2dBase(tag,ELE_TAG_ForceBeamColumn2d, 0, tolerance),
+    beamIntegr(nullptr), v0(),
+    maxSubdivisions(maxNumSub),
+    subdivideFactor(subFac)
   {
+    if(maxSubdivisions < 1)
+      maxSubdivisions= 1;
+    if(subdivideFactor < 1.0)
+      subdivideFactor = 1.0;
+    
     theNodes.set_id_nodes(nodeI,nodeJ);
 
     alloc(bi);
@@ -158,7 +175,7 @@ XC::ForceBeamColumn2d::ForceBeamColumn2d (int tag, int nodeI, int nodeJ,
 
 //! @brief Copy constructor.
 XC::ForceBeamColumn2d::ForceBeamColumn2d(const ForceBeamColumn2d &other)
-  : NLForceBeamColumn2dBase(other), beamIntegr(nullptr), v0(other.v0), maxSubdivisions(other.maxSubdivisions)
+  : NLForceBeamColumn2dBase(other), beamIntegr(nullptr), v0(other.v0), maxSubdivisions(other.maxSubdivisions), subdivideFactor(other.subdivideFactor)
   {
     if(other.beamIntegr)
       alloc(*other.beamIntegr);
@@ -320,6 +337,20 @@ int XC::ForceBeamColumn2d::revertToLastCommit(void)
     return err;
   }
 
+//! @brief Return the maximum number of subdivisons of dv for local iterations.
+double XC::ForceBeamColumn2d::getMaxSubdivisions(void) const
+  { return this->maxSubdivisions; }
+//! @brief Set the maximum number of subdivisons of dv for local iterations.
+void XC::ForceBeamColumn2d::setMaxSubdivisions(const double &d)
+  { this->maxSubdivisions= d; }
+
+//! @brief Return the factor to reduce newton scheme step size.
+double XC::ForceBeamColumn2d::getSubdivideFactor(void) const
+  { return this->subdivideFactor; }
+//! @brief Set the factor to reduce newton scheme step size.
+void XC::ForceBeamColumn2d::setSubdivideFactor(const double &d)
+  { this->subdivideFactor= d; }
+
 int XC::ForceBeamColumn2d::revertToStart(void)
   {
     // revert the sections state to start
@@ -422,7 +453,7 @@ int XC::ForceBeamColumn2d::update(void)
     static Matrix f(NEBD,NEBD);   // element flexibility matrix
 
     static Matrix I(NEBD,NEBD);   // an identity matrix for matrix inverse
-    double dW= 0.0;                   // section strain energy (work) norm
+    double dW= 0.0;               // section strain energy (work) norm
 
     I.Zero();
     for(size_t i=0; i<NEBD; i++)
@@ -439,10 +470,10 @@ int XC::ForceBeamColumn2d::update(void)
     dvToDo= dv;
     dvTrial= dvToDo;
 
-    static double factor = 10;
+    const double &factor= this->subdivideFactor;
     double dW0 = 0.0;
 
-    maxSubdivisions= 4; //XXX 10
+    // maxSubdivisions= 4;
 
     // fmk - modification to get compatible ele forces and deformations
     //   for a change in deformation dV we try first a newton iteration, if
@@ -501,7 +532,7 @@ int XC::ForceBeamColumn2d::update(void)
                     for(size_t i=0;i<numSections; i++)
                       {
                         const int order= theSections[i]->getOrder();
-                        const ID &code = theSections[i]->getResponseType();
+                        const ID &code= theSections[i]->getResponseType();
                         static Vector Ss;
                         static Vector dSs;
                         static Vector dvs;
@@ -606,10 +637,10 @@ int XC::ForceBeamColumn2d::update(void)
                           }
     
                         // get section resisting forces
-                        section_matrices.getSsrSubdivide()[i] = theSections[i]->getStressResultant();
+                        section_matrices.getSsrSubdivide()[i]= theSections[i]->getStressResultant();
     
                         // get section flexibility matrix
-                        section_matrices.getFsSubdivide()[i] = theSections[i]->getSectionFlexibility();
+                        section_matrices.getFsSubdivide()[i]= theSections[i]->getSectionFlexibility();
     
                         // calculate section residual deformations
                         // dvs = fs * (Ss - Ssr);
@@ -744,13 +775,18 @@ int XC::ForceBeamColumn2d::update(void)
                         if(dvToDo.Norm() <= DBL_EPSILON)
                           { converged = true; }
                         else
-                          { // we convreged but we have more to do
-                            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-				      << ' ' << dvToDo << dvTrial
-				      << Color::def << std::endl;
+                          { // we converged but we have more to do
+			    
+                            // std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+			    // 	      << "\n dvToDo= " << dvToDo
+			    // 	      << "\n dvToDo.Norm()= " << dvToDo.Norm()
+			    // 	      << "\n DBL_EPSILON= " << DBL_EPSILON
+			    // 	      << "\n dvTrial= " << dvTrial
+			    // 	      << Color::def << std::endl;
+			    
                             // reset variables for start of next subdivision
-                            dvTrial = dvToDo;
-                            numSubdivide = 1;  // NOTE setting subdivide to 1 again maybe too much
+                            dvTrial= dvToDo;
+                            numSubdivide= 1;  // NOTE setting subdivide to 1 again maybe too much.
                           }
     
                         // set kv, vs and Se values
@@ -772,13 +808,13 @@ int XC::ForceBeamColumn2d::update(void)
                     else
                       {   //  if(fabs(dW) < tol) {
     
-                        // if we have failed to convrege for all of our newton schemes
+                        // if we have failed to converge for all of our newton schemes
                         // - reduce step size by the factor specified
-                       if(j == (numIters-1) && (l == 2))
-                         {
-                           dvTrial /= factor;
-                           numSubdivide++;
-                         }
+			if(j == (numIters-1) && (l == 2))
+			  {
+			    dvTrial/= factor;
+			    numSubdivide++;
+			  }
                       }
                   } // for(j=0; j<numIters; j++)
 
@@ -787,22 +823,23 @@ int XC::ForceBeamColumn2d::update(void)
       } // while (converged == false)
 
     // if fail to converge we return an error flag & print an error message
-
+    int retval= 0;
     if(converged == false)
       {
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING - failed to get compatible "
 		  << "element forces & deformations for element: "
 		  << getTag()
-		  << " (dW: << " << dW
+	          << " initial flag: " << initialFlag
+		  << " (dW: " << dW
 		  << ", dW0: " << dW0
 		  << ", tol: " << tol << ")"
 	          << Color::def << std::endl;
-        return -1;
+        retval= -1;
       }
-
-    initialFlag= 1;
-    return 0;
+    else
+      initialFlag= 1;
+    return retval;
   }
 
 void XC::ForceBeamColumn2d::getForceInterpolatMatrix(double xi, Matrix &b, const XC::ID &code)
@@ -990,6 +1027,7 @@ int XC::ForceBeamColumn2d::sendData(Communicator &comm)
     res+= sendBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),comm);
     res+= v0.sendData(comm,getDbTagData(),CommMetaData(27));
     res+= comm.sendInt(maxSubdivisions,getDbTagData(),CommMetaData(28));
+    res+= comm.sendDouble(subdivideFactor, getDbTagData(), CommMetaData(29));
     return res;
   }
 
@@ -1000,6 +1038,7 @@ int XC::ForceBeamColumn2d::recvData(const Communicator &comm)
     beamIntegr= receiveBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),comm);
     res+= v0.receiveData(comm,getDbTagData(),CommMetaData(27));
     res+= comm.receiveInt(maxSubdivisions,getDbTagData(),CommMetaData(28));
+    res+= comm.receiveDouble(subdivideFactor, getDbTagData(),CommMetaData(29));
     return res;
   }
 
@@ -1180,8 +1219,8 @@ void XC::ForceBeamColumn2d::compSectionDisplacements(std::vector<Vector> &sectio
       }
 
      Vector w(numSections);
-     static XC::Vector xl(NDM), uxb(NDM);
-     static XC::Vector xg(NDM), uxg(NDM);
+     static Vector xl(NDM), uxb(NDM);
+     static Vector xg(NDM), uxg(NDM);
 
      // w = ls * kappa;
      w.addMatrixVector (0.0, ls, kappa, 1.0);

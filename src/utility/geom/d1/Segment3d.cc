@@ -32,6 +32,7 @@
 #include <boost/graph/graphviz.hpp>
 #include <boost/graph/graph_utility.hpp>
 #include "utility/geom/d1/Polyline3d.h"
+#include "utility/geom/d2/Plane.h"
 #include "utility/kernel/python_utils.h"
 
 //! @brief Constructor.
@@ -357,6 +358,28 @@ GEOM_FT Segment3d::getAngle(const Ray3d &sr) const
 //! @brief Returns angle with another line segment.
 GEOM_FT Segment3d::getAngle(const Segment3d &s) const
   { return getAngle(s.VDir()); }
+
+//! @brief Returns angle with the given plane.
+GEOM_FT Segment3d::getAngle(const Plane &p) const
+  { return p.getAngle(*this); }
+
+//! @brief Returns angle with the XY plane.
+GEOM_FT Segment3d::getAngleXYPlane(void) const
+  {
+    return XYPlane3d.getAngle(*this);
+  }
+
+//! @brief Returns angle with the XZ plane.
+GEOM_FT Segment3d::getAngleXZPlane(void) const
+  {
+    return XZPlane3d.getAngle(*this);
+  }
+
+//! @brief Returns angle with the YZ plane.
+GEOM_FT Segment3d::getAngleYZPlane(void) const
+  {
+    return YZPlane3d.getAngle(*this);
+  }
 
 GEOM_FT angle(const Segment3d &r,const Vector3d &v)
   { return r.getAngle(v); }

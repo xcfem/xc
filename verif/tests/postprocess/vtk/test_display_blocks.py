@@ -36,31 +36,22 @@ l4= modelSpace.newLine(pt2,pt4)
 l5= modelSpace.newLine(pt2,pt3)
 l6= modelSpace.newLine(pt4,pt3)
 
-fName= "/tmp/dibuja_edges.tiff"
 import os
+fname= os.path.basename(__file__)
+outputFileName= '/tmp/'+fname.replace('.py', '.tiff')
 
 from postprocess import output_handler
 oh= output_handler.OutputHandler(modelSpace)
-oh.displayBlocks(displayLocalAxes= False, fileName= fName)
+oh.displayBlocks(displayLocalAxes= False, fileName= outputFileName)
 
 # Check that file exists
-testOK= os.path.isfile(fName)
-
-# pth= os.path.dirname(__file__)
-# if(not pth):
-#   pth= "."
-# fNameB= pth+"/dibuja_edges.verif.tiff"
-# ratio1= xc.compare_images(fName,fNameB)
-
-# os.system("rm -f " + fName)
-
-# print("ratio1= ",(ratio1))
+testOK= os.path.isfile(outputFileName)
 
 import os
 from misc_utils import log_messages as lmsg
-fname= os.path.basename(__file__)
 if(testOK) :
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
 
+os.remove(outputFileName) # Clean after yourself.

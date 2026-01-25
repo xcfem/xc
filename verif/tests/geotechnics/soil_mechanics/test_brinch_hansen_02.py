@@ -68,7 +68,7 @@ quCohesionLTS= longTermSoil.quCohesion(D= D, Beff= Beff, Leff= Leff, Vload= V, H
 quCohesionTeorLTS= 1.7*NcLTS*scLTS*dcLTS*icLTS
 quQLTS= longTermSoil.quQ(q,D,Beff,Leff,V,H,0.0) # Overburden component of the ultimate bearing capacity pressure of the soil.
 quQTeorLTS= q*NqLTS*sqLTS*dqLTS*iqLTS
-quLTS= longTermSoil.qu(q,D,Beff,Leff,V,H,0.0,1.8) # Ultimate bearing capacity pressure of the soil.
+quLTS= longTermSoil.qu(q= q, D= D, Beff= Beff, Leff= Leff, Vload= V, HloadB= H, HloadL= 0.0, NgammaCoef= 1.8) # Ultimate bearing capacity pressure of the soil.
 quTeorLTS= quGammaTeorLTS+quCohesionTeorLTS+quQTeorLTS
 
 err+= (abs(NgammaLTS-18)/18)**2

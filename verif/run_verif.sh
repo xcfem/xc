@@ -1813,13 +1813,16 @@ python tests/geotechnics/foundations/test_micropile_02.py
 python tests/geotechnics/foundations/test_micropile_03.py
 python tests/geotechnics/foundations/test_micropile_04.py
 python tests/geotechnics/foundations/test_foundation_settlement_01.py
+python tests/geotechnics/foundations/test_pad_footing_bearing_capacity.py
 ## Soil mechanics (basic utilities)
 echo  "$BLEU" "  Soil mechanics (basic utilities)." "$NORMAL"
+python tests/geotechnics/soil_mechanics/test_frictional_soil_01.py
 python tests/geotechnics/soil_mechanics/test_coulomb.py
 python tests/geotechnics/soil_mechanics/test_janssen_limited_backfill_widht.py
 python tests/geotechnics/soil_mechanics/test_rankine.py
 python tests/geotechnics/soil_mechanics/test_brinch_hansen_01.py
 python tests/geotechnics/soil_mechanics/test_brinch_hansen_02.py
+python tests/geotechnics/soil_mechanics/test_brinch_hansen_03.py
 python tests/geotechnics/soil_mechanics/test_stratified_soil.py
 python tests/geotechnics/soil_mechanics/test_cohesive_soil_01.py
 python tests/geotechnics/soil_mechanics/test_cohesive_soil_02.py
@@ -1843,6 +1846,7 @@ python tests/geotechnics/earthworks/test_embankment_04.py
 python tests/geotechnics/earthworks/test_embankment_05.py
 echo  "$BLEU" "  Earth retaining." "$NORMAL"
 python tests/geotechnics/earth_retaining/test_bell_soil_01.py
+python tests/geotechnics/earth_retaining/test_gravity_wall_01.py
 python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_rankine_soil_test_01.py
 python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_rankine_soil_test_02.py
 python tests/geotechnics/earth_retaining/nonlinear_soil_spring_pile_wall_rankine_soil_test_03.py
@@ -2031,12 +2035,14 @@ python tests/postprocess/limit_state_checking/generic/test_compute_maximum_defle
 ##python tests/postprocess/vtk/dibuja_edges.py
 echo "$BLEU" "  Graphic output." "$NORMAL"
 python tests/postprocess/vtk/test_display_blocks.py
-python tests/postprocess/vtk/test_display_node_value_diagram.py
+python tests/postprocess/vtk/test_display_node_value_diagram_01.py
+python tests/postprocess/vtk/test_display_node_value_diagram_02.py
 python tests/postprocess/vtk/test_set_background_color.py
 python tests/postprocess/vtk/test_display_zero_length_local_axes_01.py
 python tests/postprocess/vtk/test_display_zero_length_local_axes_02.py
 python tests/postprocess/vtk/test_display_reactions_01.py
 python tests/postprocess/vtk/test_display_eigenvectors_01.py
+python tests/postprocess/vtk/test_display_truss_areas.py
 echo "$BLEU" "    Graphic output. Loads." "$NORMAL"
 python tests/postprocess/vtk/display_loads/test_display_loads_01.py
 python tests/postprocess/vtk/display_loads/test_display_loads_02.py

@@ -67,6 +67,7 @@
 
 
 #include "material/ResponseId.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 void XC::ForceBeamColumn3d::free_mem(void)
@@ -85,12 +86,16 @@ void XC::ForceBeamColumn3d::alloc(const BeamIntegration &bi)
 // constructor:
 // invoked by a FEM_ObjectBroker, recvSelf() needs to be invoked on this object.
 XC::ForceBeamColumn3d::ForceBeamColumn3d(int tag)
-  : NLForceBeamColumn3dBase(tag,ELE_TAG_ForceBeamColumn3d), beamIntegr(nullptr), v0()
+  : NLForceBeamColumn3dBase(tag,ELE_TAG_ForceBeamColumn3d, 1e-12),
+    beamIntegr(nullptr), v0(), maxSubdivisions(4), subdivideFactor(10.0)
   {}
 
 //! @brief Copy constructor.
 XC::ForceBeamColumn3d::ForceBeamColumn3d(const ForceBeamColumn3d &other)
-  : NLForceBeamColumn3dBase(other), beamIntegr(nullptr), v0(other.v0), maxSubdivisions(other.maxSubdivisions)
+  : NLForceBeamColumn3dBase(other),
+    beamIntegr(nullptr), v0(other.v0),
+    maxSubdivisions(other.maxSubdivisions),
+    subdivideFactor(other.subdivideFactor)
   {
     if(other.beamIntegr)
       alloc(*other.beamIntegr);
@@ -104,16 +109,24 @@ XC::ForceBeamColumn3d &XC::ForceBeamColumn3d::operator=(const ForceBeamColumn3d 
 //       alloc(*other.beamIntegr);
 //     v0= other.v0;
 //     maxSubdivisions= other.maxSubdivisions;
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; assignment operator must not be called."
-              << std::endl;
+              << Color::def << std::endl;
     return *this;    
   }
 
 //! @brief Constructor.
-XC::ForceBeamColumn3d::ForceBeamColumn3d(int tag, int numSec, const Material *m,const CrdTransf *coordTransf,const BeamIntegration *integ)
-  : NLForceBeamColumn3dBase(tag,ELE_TAG_ForceBeamColumn3d,numSec,m,coordTransf), beamIntegr(nullptr), v0()
+XC::ForceBeamColumn3d::ForceBeamColumn3d(int tag, int numSec,
+					 const Material *m,
+					 const CrdTransf *coordTransf,
+					 const BeamIntegration *integ,
+					 const double &tolerance,
+					 const double &subFac)
+  : NLForceBeamColumn3dBase(tag,ELE_TAG_ForceBeamColumn3d,numSec,m,coordTransf, tolerance),
+    beamIntegr(nullptr), v0(), maxSubdivisions(4), subdivideFactor(subFac)
   {
+    if(subdivideFactor < 1.0)
+      subdivideFactor = 1.0;
     if(integ) alloc(*integ);
   }
 
@@ -121,20 +134,31 @@ XC::ForceBeamColumn3d::ForceBeamColumn3d(int tag, int numSec, const Material *m,
 // and the node XC::ID's of it's nodal end points.
 // allocates the necessary space needed by each object
 XC::ForceBeamColumn3d::ForceBeamColumn3d (int tag, int nodeI, int nodeJ,
-                                      int numSec,const std::vector<PrismaticBarCrossSection *> &sec,
-                                      BeamIntegration &bi,
-                                      CrdTransf3d &coordTransf, double massDensPerUnitLength,
-                                      int maxNumIters, double tolerance):
-  NLForceBeamColumn3dBase(tag,ELE_TAG_ForceBeamColumn3d, numSec), beamIntegr(nullptr),v0()
+					  int numSec,
+					  const std::vector<PrismaticBarCrossSection *> &sec,
+					  BeamIntegration &bi,
+					  CrdTransf3d &coordTransf,
+					  double massDensPerUnitLength,
+					  int maxNumIters,
+					  const double &tolerance,
+					  const double &subFac,
+					  int maxNumSub):
+  NLForceBeamColumn3dBase(tag,ELE_TAG_ForceBeamColumn3d, numSec, tolerance),
+  beamIntegr(nullptr), v0(), maxSubdivisions(maxNumSub), subdivideFactor(subFac)
   {
+    if(maxSubdivisions < 1)
+      maxSubdivisions= 1;
+    if(subdivideFactor < 1.0)
+      subdivideFactor = 1.0;
+    
     theNodes.set_id_nodes(nodeI,nodeJ);
 
     alloc(bi);
     if(!beamIntegr)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; ERROR: could not create copy of beam integration object."
-		  << std::endl;
+		  << Color::def << std::endl;
         exit(-1);
       }
 
@@ -151,6 +175,20 @@ XC::Element* XC::ForceBeamColumn3d::getCopy(void) const
 //! @brief Destructor.
 XC::ForceBeamColumn3d::~ForceBeamColumn3d(void)
   { free_mem(); }
+
+//! @brief Return the maximum number of subdivisons of dv for local iterations.
+double XC::ForceBeamColumn3d::getMaxSubdivisions(void) const
+  { return this->maxSubdivisions; }
+//! @brief Set the maximum number of subdivisons of dv for local iterations.
+void XC::ForceBeamColumn3d::setMaxSubdivisions(const double &d)
+  { this->maxSubdivisions= d; }
+
+//! @brief Return the factor to reduce newton scheme step size.
+double XC::ForceBeamColumn3d::getSubdivideFactor(void) const
+  { return this->subdivideFactor; }
+//! @brief Set the factor to reduce newton scheme step size.
+void XC::ForceBeamColumn3d::setSubdivideFactor(const double &d)
+  { this->subdivideFactor= d; }
 
 //! @brief Return a pointer to the beam integrator object.
 const XC::BeamIntegration *XC::ForceBeamColumn3d::getIntegrator(void) const
@@ -199,15 +237,17 @@ void XC::ForceBeamColumn3d::setDomain(Domain *theDomain)
 
     if((dofNode1 != NND) || (dofNode2 != NND))
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "ERROR: Nd2 or Nd1 incorrect dof ";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "ERROR: Nd2 or Nd1 incorrect dof."
+	          << Color::def << std::endl;
         exit(0);
       }
 
     if(this->resetNodalCoordinates() != 0)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; error initializing coordinate transformation\n";
+		  << "; error initializing coordinate transformation."
+	          << Color::def << std::endl;
       }
 
     if(initialFlag == 0)
@@ -223,9 +263,9 @@ int XC::ForceBeamColumn3d::commitState(void)
     // call element commitState to do any base class stuff
     if((err = this->NLForceBeamColumn3dBase::commitState()) != 0)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; ERROR: failed in base class."
-		  << std::endl;
+		  << Color::def << std::endl;
       }
     const size_t numSections= getNumSections();
     do
@@ -339,8 +379,9 @@ const XC::Matrix &XC::ForceBeamColumn3d::getInitialStiff(void) const
         // invert3by3Matrix(f, kv);
         static Matrix kvInit(NEBD, NEBD);
         if(f.Solve(I, kvInit) < 0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; ERROR: could not invert flexibility\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; ERROR: could not invert flexibility."
+	            << Color::def << std::endl;
         Ki= Matrix(theCoordTransf->getInitialGlobalStiffMatrix(kvInit));
       }
     return Ki;
@@ -415,10 +456,10 @@ int XC::ForceBeamColumn3d::update(void)
     dvToDo = dv;
     dvTrial = dvToDo;
 
-    static double factor = 10;
+    const double &factor= this->subdivideFactor;
     double dW0 = 0.0;
 
-    maxSubdivisions= 10;
+    // maxSubdivisions= 10;
 
     // fmk - modification to get compatible ele forces and deformations
     //   for a change in deformation dV we try first a newton iteration, if
@@ -600,9 +641,9 @@ int XC::ForceBeamColumn3d::update(void)
 
 		       if(theSections[i]->setTrialSectionDeformation(section_matrices.getVsSubdivide()[i]) < 0)
 			 {
-			   std::cerr << getClassName() << "::" << __FUNCTION__
+			   std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 				     << "; ERROR: section failed in setTrial."
-				     << std::endl;
+				     << Color::def << std::endl;
 			   return -1;
 			 }
 
@@ -773,8 +814,9 @@ int XC::ForceBeamColumn3d::update(void)
                    // FRANK
                    //          if(f.SolveSVD(I, kvTrial, 1.0e-12) < 0)
                    if(f.Solve(I, kvTrial) < 0)
-                     std::cerr << getClassName() << "::" << __FUNCTION__
-			       << "; ERROR: could not invert flexibility.\n";
+                     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			       << "; ERROR: could not invert flexibility."
+		               << Color::def << std::endl;
 
                    // dv = vin + dvTrial  - vr
                    dv= vin;
@@ -840,30 +882,22 @@ int XC::ForceBeamColumn3d::update(void)
     } // while (converged == false)
 
     // if fail to converge we return an error flag & print an error message
+    int retval= 0;
     if(converged == false)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING: failed to get compatible "
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - failed to get compatible "
 		  << "element forces & deformations for element: "
-		  << this->getTag() << " (dW: << " << dW << ", dW0: "
-		  << dW0 << ")\n";
-
-// 	if(verbosity>3)
-//           {
-//             std::cerr << getClassName() << "::" << __FUNCTION__
-//                       << "Section Tangent Condition Numbers:\n";
-//             for(size_t i=0; i<numSections; i++)
-//               {
-//                 const Matrix &sectionStiff= theSections[i]->getSectionTangent();
-//                 const double conditionNumber = sectionStiff.conditionNumber();
-//                 std::cerr << conditionNumber << " ";
-//               }
-//             std::cerr << std::endl;
-//           }
-        return -1;
+		  << getTag()
+		  << " (dW: " << dW
+		  << ", dW0: " << dW0
+		  << ", tol: " << tol << ")"
+	          << Color::def << std::endl;
+        retval= -1;
       }
-    initialFlag= 1;
-    return 0;
+    else
+      initialFlag= 1;
+    return retval;
   }
 
 void XC::ForceBeamColumn3d::getForceInterpolatMatrix(double xi, Matrix &b, const XC::ID &code)
@@ -966,10 +1000,10 @@ void XC::ForceBeamColumn3d::zeroLoad(void)
 int XC::ForceBeamColumn3d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; load over inactive element: "
                 << getTag()  
-                << std::endl;
+                << Color::def << std::endl;
     else
       {
         const double L = theCoordTransf->getInitialLength();
@@ -993,9 +1027,10 @@ int XC::ForceBeamColumn3d::addLoad(ElementalLoad *theLoad, double loadFactor)
           }
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; ERROR: load type unknown for element with tag: "
-		      << this->getTag() << std::endl;
+		      << this->getTag()
+		      << Color::def << std::endl;
             return -1;
            }
       }
@@ -1065,6 +1100,9 @@ int XC::ForceBeamColumn3d::sendData(Communicator &comm)
   {
     int res= NLForceBeamColumn3dBase::sendData(comm);
     res+= sendBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),comm);
+    res+= v0.sendData(comm,getDbTagData(),CommMetaData(27));
+    res+= comm.sendInt(maxSubdivisions,getDbTagData(),CommMetaData(28));
+    res+= comm.sendDouble(subdivideFactor, getDbTagData(), CommMetaData(29));
     return res;
   }
 
@@ -1073,6 +1111,9 @@ int XC::ForceBeamColumn3d::recvData(const Communicator &comm)
   {
     int res= NLForceBeamColumn3dBase::recvData(comm);
     beamIntegr= receiveBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),comm);
+    res+= v0.receiveData(comm,getDbTagData(),CommMetaData(27));
+    res+= comm.receiveInt(maxSubdivisions,getDbTagData(),CommMetaData(28));
+    res+= comm.receiveDouble(subdivideFactor, getDbTagData(),CommMetaData(29));
     return res;
   }
 
@@ -1085,8 +1126,9 @@ int XC::ForceBeamColumn3d::sendSelf(Communicator &comm)
     const int dataTag= getDbTag();
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; ERROR: failed to send ID data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; ERROR: failed to send ID data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -1098,8 +1140,9 @@ int XC::ForceBeamColumn3d::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; ERROR: failed to receive ID data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; ERROR: failed to receive ID data."
+	        << Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;
@@ -1278,14 +1321,16 @@ void XC::ForceBeamColumn3d::compSectionDisplacements(std::vector<Vector> &sectio
           }
         if(sectionKey1 == 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; FATAL: section does not provide Mz response.\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; FATAL: section does not provide Mz response."
+	              << Color::def << std::endl;
             exit(-1);
           }
         if(sectionKey2 == 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; FATAL: section does not provide My response\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; FATAL: section does not provide My response."
+	              << Color::def << std::endl;
             exit(-1);
           }
 
@@ -1763,9 +1808,9 @@ int XC::ForceBeamColumn3d::updateParameter(int parameterID, Information &info)
     }
 
     if(ok < 0) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; ERROR: could not update parameter."
-		<< std::endl;
+		<< Color::def << std::endl;
       return ok;
     }
     else {
@@ -1774,9 +1819,9 @@ int XC::ForceBeamColumn3d::updateParameter(int parameterID, Information &info)
   }
   else
     {
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
  	        << "; ERROR: could not update parameter."
-	        << std::endl;
+	        << Color::def << std::endl;
       return -1;
     }
 }
@@ -1786,13 +1831,15 @@ void XC::ForceBeamColumn3d::setSectionPointers(const std::vector<PrismaticBarCro
     const size_t numSections= getNumSections();
     if(numSections > section_matrices.getMaxNumSections())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "Error: XC::ForceBeamColumn3d::setSectionPointers -- max number of sections exceeded";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; max number of sections exceeded."
+		  << Color::def << std::endl;;
       }
     isTorsion= setSections(secPtrs);
 
     if(!isTorsion)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "XC::ForceBeamColumn3d::ForceBeamColumn3d -- no torsion detected in sections, " <<
-        "continuing with element torsional stiffness GJ/L = " << 1.0/DefaultLoverGJ;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; no torsion detected in sections, "
+		<< " continuing with element torsional stiffness GJ/L = " << 1.0/DefaultLoverGJ
+	        << Color::def << std::endl;;
   }

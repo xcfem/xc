@@ -64,10 +64,16 @@ class InternalForceDiagram(cd.ColoredDiagram):
                 dirVectors.append(componentData[0])
                 valueCouples.append((componentData[1], componentData[2]))
                 elements.append(e)
-        diagramIndex= self.appendDataFromElementEnds(dirVectors= dirVectors, elements= elements, diagramIndex= diagramIndex, valueCouples= valueCouples)
+        numberOfComputedValues= len(valueCouples)
+        if(numberOfComputedValues>0):
+            diagramIndex= self.appendDataFromElementEnds(dirVectors= dirVectors, elements= elements, diagramIndex= diagramIndex, valueCouples= valueCouples)
 
-        self.updateLookUpTable()
-        self.updateDiagramActor()
+            self.updateLookUpTable()
+            self.updateDiagramActor()
+            retval= True
+        else:
+            retval= False
+        return retval
 
 
 

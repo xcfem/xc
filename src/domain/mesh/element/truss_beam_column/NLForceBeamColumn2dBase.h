@@ -84,8 +84,8 @@ class NLForceBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
     int recvData(const Communicator &comm);
 
   public:
-    NLForceBeamColumn2dBase(int tag,int classTag,int numSec= 0);
-    NLForceBeamColumn2dBase(int tag,int classTag,int numSec,const Material *theSection,const CrdTransf *coordTransf);
+    NLForceBeamColumn2dBase(int tag,int classTag,int numSec= 0, const double &tolerance= 1e-8);
+    NLForceBeamColumn2dBase(int tag,int classTag,int numSec, const Material *theSection,const CrdTransf *coordTransf, const double &tolerance= 1e-8);
     NLForceBeamColumn2dBase(const NLForceBeamColumn2dBase &);
     ~NLForceBeamColumn2dBase(void);
 
