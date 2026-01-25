@@ -33,13 +33,13 @@
 #include "material/uniaxial/UniaxialMaterialWrapper.h"
 
 namespace XC {
-//! @ingroup MatUnx
 //
 //! @brief Encapsulates a copy to an uniaxial material.
+//! @ingroup MatUnx
 class EncapsulatedUniaxialMaterial: public UniaxialMaterial
   {
   protected:
-    UniaxialMaterialWrapper theMaterial;
+    UniaxialMaterialWrapper theMaterialWrapper;
 
   public:
     EncapsulatedUniaxialMaterial(int tag, int classTag, const UniaxialMaterial &material); 
@@ -47,10 +47,10 @@ class EncapsulatedUniaxialMaterial: public UniaxialMaterial
 
     //! @brief Return a pointer to the encapsulated material.
     inline const UniaxialMaterial *getMaterial(void) const
-      { return theMaterial.getMaterial(); }
+      { return theMaterialWrapper.getMaterial(); }
     //! @brief Return a pointer to the encapsulated material.
     inline UniaxialMaterial *getMaterial(void)
-      { return theMaterial.getMaterial(); }
+      { return theMaterialWrapper.getMaterial(); }
     virtual void setMaterial(const UniaxialMaterial &);
     void setMaterial(const std::string &);
     
