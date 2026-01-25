@@ -75,6 +75,41 @@ void XC::Concrete02::setup_parameters(void)
     hstv.setup_parameters(initTang);
   }
 
+//! @brief Default constructor.
+XC::Concrete02::Concrete02(int tag):
+  RawConcrete(tag, MAT_TAG_Concrete02),
+  fpcu(0.0), rat(0.0), ft(0.0), Ets(0.0)
+  {
+    setup_parameters();
+  }
+
+//! @brief Default constructor.
+XC::Concrete02::Concrete02(int tag, int classTag):
+  RawConcrete(tag, classTag),
+  fpcu(0.0), rat(0.0), ft(0.0), Ets(0.0)
+  {
+    setup_parameters();
+  }
+
+//! @brief Constructor.
+//! @param tag: material identifier.
+//! @param classTag: material class identifier.
+//! @param _fpc: concrete compressive strength at 28 days (compression is negative).
+//! @param _epsc0: concrete strain at maximum strength.
+//! @param _fpcu: concrete crushing strength.
+//! @param _epsU: concrete strain at crushing strength.
+//! @param _lambda: ratio between unloading slope at epscu and initial slope.
+//! @param _ft : tensile strength.
+//! @param _Ets : tension softening stiffness (absolute value) (slope of the linear tension softening branch).
+XC::Concrete02::Concrete02(int tag, int classTag, double _fpc, double _epsc0,
+			   double _fpcu, double _epscu, double _rat,
+			   double _ft, double _Ets)
+  :  RawConcrete(tag, classTag,_fpc,_epsc0,_epscu),
+     fpcu(_fpcu), rat(_rat), ft(_ft), Ets(_Ets)
+  {
+    setup_parameters();
+  }
+
 //! @brief Constructor.
 //! @param tag: material identifier.
 //! @param _fpc: concrete compressive strength at 28 days (compression is negative).
@@ -85,16 +120,9 @@ void XC::Concrete02::setup_parameters(void)
 //! @param _ft : tensile strength.
 //! @param _Ets : tension softening stiffness (absolute value) (slope of the linear tension softening branch).
 XC::Concrete02::Concrete02(int tag, double _fpc, double _epsc0, double _fpcu,
-                       double _epscu, double _rat, double _ft, double _Ets)
+			   double _epscu, double _rat, double _ft, double _Ets)
   :  RawConcrete(tag, MAT_TAG_Concrete02,_fpc,_epsc0,_epscu),
      fpcu(_fpcu), rat(_rat), ft(_ft), Ets(_Ets)
-  {
-    setup_parameters();
-  }
-
-XC::Concrete02::Concrete02(int tag):
-  RawConcrete(tag, MAT_TAG_Concrete02),
-  fpcu(0.0), rat(0.0), ft(0.0), Ets(0.0)
   {
     setup_parameters();
   }
@@ -175,6 +203,9 @@ int XC::Concrete02::setTrialStrain(double trialStrain, double strainRate)
     hstv.eps= trialStrain;
     const double deps= hstv.eps - hstvP.eps;
 
+    if(fabs(deps) < DBL_EPSILON)
+      return 0;
+    
     // if the current strain is less than the smallest previous strain 
     // call the monotonic envelope in compression and reset minimum strain 
     if(hstv.eps < hstv.ecmin)

@@ -129,7 +129,7 @@ double XC::InitStrainBaseMaterial::getInitialStrain(void) const
 
 double XC::InitStrainBaseMaterial::getStress(void) const
   {
-    const UniaxialMaterial *tmp= theMaterial.getMaterial();
+    const UniaxialMaterial *tmp= this->getMaterial();
     if(tmp)
       return tmp->getStress();
     else

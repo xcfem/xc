@@ -59,7 +59,7 @@
 #ifndef InitStrainBaseMaterial_h
 #define InitStrainBaseMaterial_h
 
-#include <material/uniaxial/EncapsulatedUniaxialMaterial.h>
+#include "material/uniaxial/EncapsulatedUniaxialMaterial.h"
 
 namespace XC {
 //! @ingroup MatUnx

@@ -30,7 +30,7 @@
 
 //! @brief Sets the encapsulated material.
 void XC::EncapsulatedUniaxialMaterial::setMaterial(const UniaxialMaterial &material)
-  { theMaterial.setMaterial(material); }
+  { theMaterialWrapper.setMaterial(material); }
 
 //! @brief Sets the encapsulated material.
 void XC::EncapsulatedUniaxialMaterial::setMaterial(const std::string &matName)
@@ -40,7 +40,7 @@ void XC::EncapsulatedUniaxialMaterial::setMaterial(const std::string &matName)
       {
 	const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);
 	if(tmp)
-	  theMaterial.setMaterial(*tmp);
+	  theMaterialWrapper.setMaterial(*tmp);
 	else
 	  std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
 		    << "material identified by: '" << matName
@@ -54,29 +54,29 @@ void XC::EncapsulatedUniaxialMaterial::setMaterial(const std::string &matName)
 
 //! @brief Constructor.
 XC::EncapsulatedUniaxialMaterial::EncapsulatedUniaxialMaterial(int tag, int classTag, const UniaxialMaterial &material)
-  :UniaxialMaterial(tag,classTag), theMaterial(material)
+  :UniaxialMaterial(tag,classTag), theMaterialWrapper(material)
   {}
 
 //! @brief Constructor.
 XC::EncapsulatedUniaxialMaterial::EncapsulatedUniaxialMaterial(int tag, int classTag)
-  : UniaxialMaterial(tag,classTag), theMaterial() {}
+  : UniaxialMaterial(tag,classTag), theMaterialWrapper() {}
 
 double XC::EncapsulatedUniaxialMaterial::getStrain(void) const
-  { return theMaterial.getStrain(); }
+  { return theMaterialWrapper.getStrain(); }
 
 double XC::EncapsulatedUniaxialMaterial::getStrainRate(void) const
-  { return theMaterial.getStrainRate(); }
+  { return theMaterialWrapper.getStrainRate(); }
 
 int XC::EncapsulatedUniaxialMaterial::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
-    int res= comm.sendMovable(theMaterial, getDbTagData(), CommMetaData(1));
+    int res= comm.sendMovable(theMaterialWrapper, getDbTagData(), CommMetaData(1));
     return res;
   }
 
 int XC::EncapsulatedUniaxialMaterial::recvData(const Communicator &comm)
   {
     int res= UniaxialMaterial::recvData(comm);
-    res+= comm.receiveMovable(theMaterial, getDbTagData(),CommMetaData(1));
+    res+= comm.receiveMovable(theMaterialWrapper, getDbTagData(),CommMetaData(1));
     return res;
   }

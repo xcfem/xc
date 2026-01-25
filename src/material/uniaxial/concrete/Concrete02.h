@@ -142,15 +142,20 @@ class Concrete02: public RawConcrete
     Conc02HistoryVars hstv; //!< = values at current step (trial values)
 
     void Tens_Envlp(double epsc, double &sigc, double &Ect);
-    void Compr_Envlp(double epsc, double &sigc, double &Ect);
+    virtual void Compr_Envlp(double epsc, double &sigc, double &Ect);
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
     void setup_parameters(void);
+
+    Concrete02(int tag, int classTag);
+    Concrete02(int tag, int classTag, double _fpc, double _epsc0,
+	       double _fpcu,double _epscu, double _rat, double _ft,
+	       double _Ets);
   public:
-    Concrete02(int tag, double _fpc, double _epsc0, double _fpcu,
-	     double _epscu, double _rat, double _ft, double _Ets);
     Concrete02(int tag= 0);
+    Concrete02(int tag, double _fpc, double _epsc0, double _fpcu,
+	       double _epscu, double _rat, double _ft, double _Ets);
  
     void setFpcu(const double &);
     double getFpcu(void) const;
