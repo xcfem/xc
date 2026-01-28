@@ -15,7 +15,6 @@ __email__= "l.pereztato@gmail.com"
 import math
 import geom
 import xc
-from materials import concrete_base
 from materials.ec2 import EC2_materials
 from materials.ec2 import EC2_limit_state_checking
 from materials.sections.fiber_section import def_simple_RC_section
