@@ -17,10 +17,16 @@ import geom
 line= geom.Line2d(geom.Pos2d(0,0), geom.Pos2d(100,0))
 pos= geom.Pos2d(1,1)
 
-proj= line.getProjection(pos)
-error= math.sqrt((proj.x-1)**2+(proj.y)**2)
+projP= line.getProjection(pos)
+error= (projP.x-1)**2+(projP.y)**2
 
-# print(proj, error)
+vect= geom.Vector2d(10,5)
+projV= line.getProjection(vect)
+error+= (projV.x-10)**2+(projV.y)**2
+error= math.sqrt(error)
+
+# print(projP, error)
+# print(projV, error)
 
 import os
 from misc_utils import log_messages as lmsg
