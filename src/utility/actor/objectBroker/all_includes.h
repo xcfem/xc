@@ -28,6 +28,7 @@
 #include "material/uniaxial/concrete/TDConcrete.h"
 #include "material/uniaxial/concrete/TDConcreteMC10.h"
 #include "material/uniaxial/concrete/TDConcreteMC10NL.h"
+#include "material/uniaxial/concrete/CreepMaterial.h"
 #include "material/uniaxial/steel/Steel01.h"
 #include "material/uniaxial/steel/Steel02.h"
 #include "material/uniaxial/HardeningMaterial.h"

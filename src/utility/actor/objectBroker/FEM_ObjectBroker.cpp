@@ -586,6 +586,8 @@ XC::UniaxialMaterial *XC::FEM_ObjectBroker::getNewUniaxialMaterial(int classTag)
         return new TDConcreteMC10();
       case MAT_TAG_TDConcreteMC10NL:
         return new TDConcreteMC10NL();
+      case MAT_TAG_CreepMaterial:
+        return new CreepMaterial();
 //         case MAT_TAG_Concrete06:
 //              return new Concrete06();
       case MAT_TAG_Steel01:

@@ -718,61 +718,63 @@ XC::Response *XC::TDConcrete::setResponse(const std::vector<std::string> &argv, 
 
 int XC::TDConcrete::getResponse(int responseID, Information &matInfo)
   {
-        static Vector stressStrain(2);
-        static Vector stressStrainTangent(3);
-        static Vector CreepStressStrainTangent(6); //Added by AMK
-        // each subclass must implement its own stuff   
+    static Vector stressStrain(2);
+    static Vector stressStrainTangent(3);
+    static Vector CreepStressStrainTangent(6); //Added by AMK
+    // each subclass must implement its own stuff   
         
-        // added for sensitivity recorder. Quan 2009
-        if((responseID>10000)&&(responseID<20000))
-	  {
-            matInfo.setDouble(this->getStressSensitivity(responseID-10000,false));
-                return 0;
-          }
-        else if(responseID>20000){
-                matInfo.setDouble(this->getStrainSensitivity(responseID-20000));
-                return 0;
-        }
+    // added for sensitivity recorder. Quan 2009
+    if((responseID>10000)&&(responseID<20000))
+      {
+	matInfo.setDouble(this->getStressSensitivity(responseID-10000,false));
+	return 0;
+      }
+    else if(responseID>20000)
+      {
+	matInfo.setDouble(this->getStrainSensitivity(responseID-20000));
+	return 0;
+      }
         
-        switch (responseID) {
-                case 1:
-                        matInfo.setDouble(this->getStress());
-                        return 0;
+    switch (responseID)
+      {
+      case 1:
+	matInfo.setDouble(this->getStress());
+	return 0;
                         
-                case 2:
-                        matInfo.setDouble(this->getTangent());
-                        return 0;      
+      case 2:
+	matInfo.setDouble(this->getTangent());
+	return 0;      
                         
-                case 3:
-                        matInfo.setDouble(this->getStrain());
-                        return 0;      
+      case 3:
+	matInfo.setDouble(this->getStrain());
+	return 0;      
                         
-                case 4:
-                        stressStrain(0) = this->getStress();
-                        stressStrain(1) = this->getStrain();
-                        matInfo.setVector(stressStrain);
-                        return 0;
+      case 4:
+	stressStrain(0) = this->getStress();
+	stressStrain(1) = this->getStrain();
+	matInfo.setVector(stressStrain);
+	return 0;
                         
-                case 5:
-                        stressStrainTangent(0) = this->getStress();
-                        stressStrainTangent(1) = this->getStrain();
-                        stressStrainTangent(2) = this->getTangent();
-                        matInfo.setVector(stressStrainTangent);
-                        return 0;
-                
-                case 6:
-                        CreepStressStrainTangent(0) = this->getStress();
-                        CreepStressStrainTangent(1) = this->getStrain();
-                        CreepStressStrainTangent(2) = this->getTangent();
-                        CreepStressStrainTangent(3) = this->getCreep();
-                        CreepStressStrainTangent(4) = this->getMech();
-                        CreepStressStrainTangent(5) = this->getShrink();
-                        matInfo.setVector(CreepStressStrainTangent);
-                        return 0;
-                        
-                default:      
-                        return -1;
-        }
+      case 5:
+	stressStrainTangent(0) = this->getStress();
+	stressStrainTangent(1) = this->getStrain();
+	stressStrainTangent(2) = this->getTangent();
+	matInfo.setVector(stressStrainTangent);
+	return 0;
+        
+      case 6:
+	CreepStressStrainTangent(0) = this->getStress();
+	CreepStressStrainTangent(1) = this->getStrain();
+	CreepStressStrainTangent(2) = this->getTangent();
+	CreepStressStrainTangent(3) = this->getCreep();
+	CreepStressStrainTangent(4) = this->getMech();
+	CreepStressStrainTangent(5) = this->getShrink();
+	matInfo.setVector(CreepStressStrainTangent);
+	return 0;
+        
+      default:      
+	return -1;
+      }
   }
 
 

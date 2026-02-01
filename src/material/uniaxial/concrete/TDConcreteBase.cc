@@ -304,6 +304,7 @@ int XC::TDConcreteBase::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(hstvP.ecmin, hstvP.ecmax, hstvP.dept, hstvP.eps, hstvP.sig, hstvP.e, getDbTagData(),CommMetaData(3));
     return res;
   }
+
 //! @brief Sends object through the communicator argument.
 int XC::TDConcreteBase::sendSelf(Communicator &comm)
   {

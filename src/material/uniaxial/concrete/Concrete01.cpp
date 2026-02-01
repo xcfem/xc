@@ -69,6 +69,7 @@
 #include <cmath>
 #include <cfloat>
 #include "utility/actor/actor/MatrixCommMetaData.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //int count= 0;
 
@@ -129,7 +130,9 @@ void XC::Concrete01::setFpcu(const double &d)
     if(fpcu > 0.0)
       {
         fpcu= -fpcu;
-        std::clog << "Warning!, compressive strength must be negative." << std::endl;
+        std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		  << "Warning!, compressive strength must be negative."
+		  << Color::def << std::endl;
       }
   }
 
@@ -405,7 +408,9 @@ int XC::Concrete01::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << Color::red<< getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -417,13 +422,17 @@ int XC::Concrete01::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids."
+	        << Color::def << std::endl;
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "M failed to receive data."
+		    << Color::def << std::endl;
       }
     return res;
   }
@@ -453,8 +462,9 @@ int XC::Concrete01::setParameter(const std::vector<std::string> &argv, Parameter
       { return param.addObject(4, this); } // Strain at crushing strength
     else
       {
-        std::cerr << "WARNING: Could not set parameter in Concrete01! "
-                  << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; Could not set parameter in Concrete01! "
+                  << Color::def << std::endl;
         return -1;
       }
   }

@@ -96,3 +96,5 @@ class_<XC::TDConcreteMC10NL, bases<XC::TDConcreteMC10>, boost::noncopyable >("TD
   .add_property("fcu", &XC::TDConcreteMC10NL::getFcu, &XC::TDConcreteMC10NL::setFcu, "stress at ultimate (crushing) strain.")
   ;
 
+class_<XC::CreepMaterial, bases<XC::EncapsulatedUniaxialMaterial>, boost::noncopyable >("CreepMaterial", no_init)
+  ;

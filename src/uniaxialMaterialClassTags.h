@@ -117,6 +117,7 @@
 #define MAT_TAG_TDConcreteEXP                   225
 #define MAT_TAG_TDConcreteMC10                  226
 #define MAT_TAG_TDConcreteMC10NL                227
+#define MAT_TAG_CreepMaterial                   228
 
 #define MAT_TAG_UniaxialMaterialWrapper        2000
 #define MAT_TAG_EyBasic                        3000

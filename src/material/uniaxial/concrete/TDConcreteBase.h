@@ -79,13 +79,10 @@ class TDConcreteBase : public RawConcrete
     int count;
     double epsInit;
     double sigInit;
-    double eps_T;
-    double eps_m;
-    double epsP_m;
-    double eps_total;
-    double epsP_total;
-    double e_total;
-    double eP_total;
+    double eps_m; // Mechanical strain.
+    double epsP_m; // Commited mechanical strain.
+    double eps_total; // Total strain.
+    double epsP_total; // Commited total strain.
     double t; //Time
     double t_load; //loaded time
     double Et;
@@ -157,6 +154,10 @@ class TDConcreteBase : public RawConcrete
     { TDConcreteBase::setCreepOn(); }
   inline void set_creep_off(void)
     { TDConcreteBase::setCreepOff(); }
+  inline bool is_creep_on(void)
+    { return TDConcreteBase::isCreepOn(); }
+  inline bool is_creep_off(void)
+    { return !is_creep_on(); }
   inline void set_creep_dt(const double &d)
     { TDConcreteBase::setCreepDt(d); }
   inline double get_creep_dt(void)

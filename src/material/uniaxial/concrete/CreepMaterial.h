@@ -40,35 +40,34 @@
 #ifndef CreepMaterial_h
 #define CreepMaterial_h
 
+#include "material/uniaxial/EncapsulatedUniaxialMaterial.h"
+#include "material/uniaxial/concrete/ConcreteHistoryVars.h"
+
 namespace XC {
 
-#include "material/uniaxial/EncapsulatedUniaxialMaterial.h"
+class RawConcrete;
 
+//! @ingroup MatUnx
+//
+//! @brief Creep material.
 class CreepMaterial: public EncapsulatedUniaxialMaterial
   {
   private:
 
     // matpar : Concrete FIXED PROPERTIES
-    double fc;    // concrete compression strength           : mp(1)
     //	double fcT;  //Time Dependent Strength
-    double epsc0; // strain at compression strength          : mp(2)
-    double fcu;   // stress at ultimate (crushing) strain    : mp(3)
-    double epscu; // ultimate (crushing) strain              : mp(4)       
-    double tcr;   // creep relationship age
-    double ft;    // concrete tensile strength               : mp(6)
+    double tcr; //!< creep relationship age.
     //	double ftT;	//Time dependent strength (tension)
-    double Ets;   // tension stiffening slope                : mp(7)
-    double Ec;  //Concrete stiffness, Added by AMK
     //	double EcT; //Time dependent stiffness
-    double age;   // concrete age at first loading, Added by AMK
-    double epsshu; // ultimate shrinkage
-    double epssha; // shrinkage parameter
-    double epscra; // concrete creep exponent parameter
-    double epscru; // ultimate concrete creep
+    double age; //!< concrete age at first loading, Added by AMK
+    double epsshu; //!< ultimate shrinkage
+    double epssha; //!< shrinkage parameter
+    double epscra; //!< concrete creep exponent parameter
+    double epscru; //!< ultimate concrete creep
     //double sigCr; // stress that creep curve is based on
-    double beta;
-    double epscrd;
-    double tcast;
+    double beta; //!< tension softening parameter
+    double epscrd;  //!< fitting constant within the creep time evolution function as per ACI 209R-92
+    double tcast; //!< the analysis time corresponding to concrete casting in days.
 
     // hstvP : Concerete HISTORY VARIABLES last committed step
     CreepConcreteHistoryVars hstvP; //!< = values at previous converged step
@@ -80,24 +79,26 @@ class CreepMaterial: public EncapsulatedUniaxialMaterial
     int count;
     double epsInit;
     double sigInit;
-    double eps_cr;
-    double eps_sh;
-    double eps_T;
-    double eps_m;
-    double epsP_m;
-    double epsP_cr;
-    double epsP_sh;
-    double eps_total;
-    double epsP_total;
-    double e_total;
-    double eP_total;
-    double t; //Time
-    double t_load; //loaded time
+    
+    double eps_cr; //!< Creep strain.
+    double eps_sh; //!< Shrinkage strain.
+    double eps_m; //!< Mechanical strain.
+    
+    double epsP_cr; //!< Commited creep strain.
+    double epsP_sh; //!< Commited shrinkage strain.
+    double epsP_m; //!< Commited mechanical strain.
+    
+    double eps_total; //!< Total strain.
+    double epsP_total; //!< Commited total strain.
+    
+    double t; //!< Time.
+    double t_load; //!< Loaded time.
     double phi_i;
     double Et;
+    
     int crack_flag;
     int crackP_flag;
-    int iter; //Iteration number
+    int iter; //!< Iteration number
 
     enum{startSize=500, growSize=200};
     int maxSize;
@@ -109,25 +110,31 @@ class CreepMaterial: public EncapsulatedUniaxialMaterial
     std::vector<float> DTIME_i;
 
     void resize();
+
+    const RawConcrete *_get_concrete_material(void) const;
+  protected:
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     CreepMaterial(int tag= 0);
+    CreepMaterial(int tag, double _fc, double _fcu, double _epscu, double _ft, double _Ec, double _beta, double _age, double _epsshu, double _epssha, double _tcr, double _epscru, double _epscra, double _epscrd, double _tcast);
     CreepMaterial(int tag, UniaxialMaterial &matl, double _age, double _epsshu, double _epssha, double _tcr, double _epscru, double _epscra, double _epscrd, double _tcast);
 
-    double getInitialTangent(void);
-    UniaxialMaterial *getCopy(void);
+    double getInitialTangent(void) const;
+    UniaxialMaterial *getCopy(void) const;
 
     int setTrialStrain(double strain, double strainRate = 0.0); 
     double setCreepStrain(double time, double stress); //Added by AMK
-    double getCurrentTime(void); //Added by AMK
-    double getStrain(void);
-    double getPHI_i(void); //Added by AMK      
-    double getStress(void);
-    double getTangent(void);
-    double getCreep(void); //Added by AMK
-    double getMech(void); //Added by AMK
+    double getCurrentTime(void) const; //Added by AMK
+    double getStrain(void) const;
+    double getPHI_i(void) const; //Added by AMK      
+    double getStress(void) const;
+    double getTangent(void) const;
+    double getCreep(void) const; //Added by AMK
+    double getMech(void) const; //Added by AMK
     double setPhi(double time, double tp); //Added by AMK
     double setShrink(double time); //Added by AMK
-    double getShrink(void); //Added by AMK
+    double getShrink(void) const; //Added by AMK
 
     int commitState(void);
     int revertToLastCommit(void);    
