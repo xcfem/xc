@@ -563,7 +563,7 @@ int XC::TDConcrete::recvSelf(const Communicator &comm)
 
 void XC::TDConcrete::Print(std::ostream &s, int flag) const
   {
-  s << "TDConcrete:(strain, stress, tangent) " << hstv.eps << " " << hstv.sig << " " << hstv.e << std::endl;
+    s << "TDConcrete:(strain, stress, tangent) " << hstv.eps << " " << hstv.sig << " " << hstv.e << std::endl;
   }
 
 

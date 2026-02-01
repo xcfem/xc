@@ -407,57 +407,43 @@ int  XC::CreepMaterial::commitState(void)
 
     this->getMaterial()->commitState();
   
-  //if (ops_Creep==1) {
-  //	count++;
-  //}
-  count++;
+    //if (ops_Creep==1) {
+    //	count++;
+    //}
+    count++;
   
-  return 0;
-}
-
-int 
-XC::CreepMaterial::revertToLastCommit(void)
-{
-  eps_total= epsP_total; //Added by AMK;
-  eps_sh= epsP_sh;
-  eps_cr= epsP_cr;
-  eps_m= epsP_m;  
-  
-  ecmin= ecminP;;
-  dept= deptP;
-  
-  e= eP;
-  sig= sigP;
-  eps= epsP;
-
-  this->getMaterial()->revertToLastCommit();
-  
-  return 0;
-}
-
-int 
-XC::CreepMaterial::revertToStart(void)
-{
-  ecminP= 0.0;
-  deptP= 0.0;
-  
-  eP= Ec;
-  epsP= 0.0;
-  sigP= 0.0;
-  eps= 0.0;
-  sig= 0.0;
-  e= Ec;
-  
-  if (ops_Creep==0) {
-    count= 0;
-  } else {
-    count= 1;
+    return 0;
   }
 
-  this->getMaterial()->revertToStart();
+int XC::CreepMaterial::revertToLastCommit(void)
+  {
+    eps_total= epsP_total; //Added by AMK;
+    eps_sh= epsP_sh;
+    eps_cr= epsP_cr;
+    eps_m= epsP_m;  
+
+    hstv= hstvP; // revert history variables.
+
+    this->getMaterial()->revertToLastCommit();
   
-  return 0;
-}
+    return 0;
+  }
+
+int XC::CreepMaterial::revertToStart(void)
+  {
+    hstvP.revertToStart(Ec);
+
+    hstv.setup_parameters(Ec);
+  
+    if(creepControl==0)
+      { count= 0; }
+    else
+      { count= 1; }
+
+    this->getMaterial()->revertToStart();
+  
+    return 0;
+  }
 
 int 
 XC::CreepMaterial::sendSelf(int commitTag, Channel &theChannel)
@@ -689,95 +675,97 @@ void XC::CreepMaterial::Print(std::ostram &s, int flag)
   }
 
 
-int
-XC::CreepMaterial::getVariable(const char *varName, Information &theInfo)
-{
-  if (strcmp(varName,"ec") == 0) {
-    theInfo.theDouble= epsc0;
-    return 0;
-  } else
-    return -1;
-}
+int XC::CreepMaterial::getVariable(const std::string &varName, Information &theInfo) const
+  {
+    if(varName=="ec")
+      {
+        theInfo.theDouble = epsc0;
+        return 0;
+      }
+    else
+      return -1;
+  }
 
 /* Methods added by AMK: */
 
-Response* 
-XC::CreepMaterial::setResponse(const char **argv, int argc,
-							  OPS_Stream &theOutput)
-{	
-  Response *theResponse= 0;
-  
-  theOutput.tag("UniaxialMaterialOutput");
-  theOutput.attr("matType", this->getClassType());
-  theOutput.attr("matTag", this->getTag());
-  
-  // stress
-  if (strcmp(argv[0],"stress") == 0) {
-    theOutput.tag("ResponseType", "sigma11");
-    theResponse=  new MaterialResponse(this, 1, this->getStress());
-  }  
-  // tangent
-  else if (strcmp(argv[0],"tangent") == 0) {
-    theOutput.tag("ResponseType", "C11");
-    theResponse=  new MaterialResponse(this, 2, this->getTangent());
-  }
-  
-  // strain
-  else if (strcmp(argv[0],"strain") == 0) {
-    theOutput.tag("ResponseType", "eps11");
-    theResponse=  new MaterialResponse(this, 3, this->getStrain());
-  }
-  
-  // strain
-  else if ((strcmp(argv[0],"stressStrain") == 0) || 
-	   (strcmp(argv[0],"stressANDstrain") == 0) ||
-	   (strcmp(argv[0],"stressAndStrain") == 0)) {
-    theOutput.tag("ResponseType", "sig11");
-    theOutput.tag("ResponseType", "eps11");
-    theResponse=  new MaterialResponse(this, 4, Vector(2));
-  }
-  
-  else if (strcmp(argv[0],"CreepStressStrainTangent")==0) {
-    theOutput.tag("ResponseType", "sig11");
-    theOutput.tag("ResponseType", "eps11");
-    theOutput.tag("ResponseType", "C11");
-    theOutput.tag("ResponseType", "CreepStrain");
-    theOutput.tag("ResponseType", "MechStrain");
-    theOutput.tag("ResponseType", "ShrinkStrain");
-    theOutput.tag("ResponseType", "t_load");
-    theResponse= new MaterialResponse(this, 6, Vector(6));
-  }
-  
-  else if ((strcmp(argv[0],"stressStrainTangent") == 0) || 
-	   (strcmp(argv[0],"stressANDstrainANDtangent") == 0)) {
-    theOutput.tag("ResponseType", "sig11");
-    theOutput.tag("ResponseType", "eps11");
-    theOutput.tag("ResponseType", "C11");
-    theResponse=  new MaterialResponse(this, 5, Vector(3));
-  }
-  
-  // stress sensitivity for local sensitivity recorder purpose.  Quan 2009
-  // limit:  no more than 10000 random variables/sensitivity parameters
-  else if (strstr(argv[0],"stressSensitivity") != 0) {
-    char *token= strtok((char *) argv[0], " ");
-    if (token != NULL) token= strtok(NULL, " ");
-    int gradient= atoi(token);
-    theOutput.tag("ResponseType", "sigsens11");
-    theResponse=  new MaterialResponse(this, gradient+10000, this->getStress());
-  }
-  // strain sensivitiy
-  else if (strstr(argv[0],"strainSensitivity") != 0) {
-    char *token= strtok((char *) argv[0], " ");
-    if (token != NULL) token= strtok(NULL, " ");
-    int gradient= atoi(token);
-    theOutput.tag("ResponseType", "epssens11");
-    theResponse=  new MaterialResponse(this, gradient+20000, this->getStrain());
-  }
-  
-  
-  theOutput.endTag();
-  return theResponse;
-}
+XC::Response *XC::CreepMaterial::setResponse(const std::vector<std::string> &argv, Information &matInfo)
+  {	
+    Response *theResponse = nullptr;
+
+    //theOutput.tag("UniaxialMaterialOutput");
+    //theOutput.attr("matType", this->getClassType());
+    //theOutput.attr("matTag", this->getTag());
+
+    // stress
+    if(argv[0]=="stress")
+      {
+            //theOutput.tag("ResponseType", "sigma11");
+            theResponse =  new MaterialResponse(this, 1, this->getStress());
+      }  
+    // tangent
+    else if(argv[0]=="tangent")
+      {
+            //theOutput.tag("ResponseType", "C11");
+            theResponse =  new MaterialResponse(this, 2, this->getTangent());
+      }
+
+    // strain
+    else if(argv[0]=="strain") {
+            //theOutput.tag("ResponseType", "eps11");
+            theResponse =  new MaterialResponse(this, 3, this->getStrain());
+    }
+
+    // strain
+    else if((argv[0]=="stressStrain") || 
+                     (argv[0]=="stressANDstrain") ||
+                     (argv[0]=="stressAndStrain")) {
+            //theOutput.tag("ResponseType", "sig11");
+            //theOutput.tag("ResponseType", "eps11");
+            theResponse =  new MaterialResponse(this, 4, Vector(2));
+    }
+
+    else if(argv[0]=="CreepStressStrainTangent")
+      {
+            //theOutput.tag("ResponseType", "sig11");
+            //theOutput.tag("ResponseType", "eps11");
+            //theOutput.tag("ResponseType", "C11");
+            //theOutput.tag("ResponseType", "CreepStrain");
+            //theOutput.tag("ResponseType", "MechStrain");
+            //theOutput.tag("ResponseType", "ShrinkStrain");
+            //theOutput.tag("ResponseType", "t_load");
+            theResponse = new MaterialResponse(this, 6, Vector(6));
+      }
+    else if((argv[0]=="stressStrainTangent") || 
+                     (argv[0]=="stressANDstrainANDtangent"))
+      {
+            //theOutput.tag("ResponseType", "sig11");
+            //theOutput.tag("ResponseType", "eps11");
+            //theOutput.tag("ResponseType", "C11");
+            theResponse =  new MaterialResponse(this, 5, Vector(3));
+      }
+
+    // stress sensitivity for local sensitivity recorder purpose.  Quan 2009
+    // limit:  no more than 10000 random variables/sensitivity parameters
+    else if(argv[0].find("stressSensitivity") != std::string::npos)
+      {
+	std::vector<std::string> tokens;
+	boost::split(tokens, argv[0], boost::is_any_of(" "));
+        const int gradient= atoi(tokens[1]);
+        //theOutput.tag("ResponseType", "sigsens11");
+        theResponse =  new MaterialResponse(this, gradient+10000, this->getStress());
+      }
+    // strain sensivitiy
+    else if(argv[0].find("strainSensitivity") != std::string::npos)
+      {
+	std::vector<std::string> tokens;
+	boost::split(tokens, argv[0], boost::is_any_of(" "));
+        const int gradient= atoi(tokens[1]);
+        //theOutput.tag("ResponseType", "epssens11");
+        theResponse =  new MaterialResponse(this, gradient+20000, this->getStrain());
+      }
+    //theOutput.endTag();
+    return theResponse;
+  } 
 
 int XC::CreepMaterial::getResponse(int responseID, Information &matInfo)
 {
