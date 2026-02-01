@@ -562,18 +562,24 @@ class GridModel(object):
         '''Rotates points in ijkRange around a Z axis passing by xyRotCent.
 
         :param ijkRange: range for the search.
-        :param angle: rotation angle (degrees)
+        :param angle: rotation angle (degrees) (+ X towards Y)
         :param xyRotCent: coordinates [x,y] of the axis Z of rotation
         '''
         theta=math.radians(angle)
         sinTheta=math.sin(theta)
         cosTheta=math.cos(theta)
         sPtMove=self.getSetPntRange(ijkRange,'sPtMove')
+        xCent=xyRotCent[0]; yCent=xyRotCent[1]
         for p in sPtMove.getPoints:
             xp=p.getPos.x
             yp=p.getPos.y
-            p.getPos.x= xyRotCent[0]+cosTheta*(xp-xyRotCent[0])-sinTheta*(yp-xyRotCent[1])
-            p.getPos.y= xyRotCent[1]+sinTheta*(xp-xyRotCent[0])+cosTheta*(yp-xyRotCent[1])
+            R=math.sqrt((xp-xCent)**2+(yp-yCent)**2)
+            print('init:', xp,yp)
+            p.getPos.x=xCent+R*cosTheta
+            p.getPos.y= yCent+R*sinTheta
+            #p.getPos.x= xyRotCent[0]+cosTheta*(xp-xyRotCent[0])-sinTheta*(yp-xyRotCent[1])
+            #p.getPos.y= xyRotCent[1]+sinTheta*(xp-xyRotCent[0])+cosTheta*(yp-xyRotCent[1])
+            print('end:',p.getPos.x,p.getPos.y)
         sPtMove.clear()
     
     def rotPntsXYZrangeZAxis(self,XYZrange,angle,xyRotCent):

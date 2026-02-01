@@ -66,6 +66,7 @@
 #include "domain/load/beam_loads/TrussStrainLoad.h"
 #include "domain/load/beam_loads/TrussPrestressLoad.h"
 #include "utility/actor/actor/MovableVector.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Free the material pointer.
 void XC::CorotTruss::free_material(void)
@@ -85,10 +86,11 @@ void XC::CorotTruss::set_material(const UniaxialMaterial &mat)
     theMaterial= mat.getCopy();
     if(!theMaterial)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; FATAL truss - " << getTag()
 		  << " failed to get a copy of material with tag "
-	          << mat.getTag() << std::endl;
+	          << mat.getTag()
+		  << Color::def << std::endl;
         exit(-1);
       }
   }
@@ -116,8 +118,9 @@ XC::CorotTruss::CorotTruss(int tag,int dim, const Material *ptr_mat)
     if(tmp)
       set_material(*tmp);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; not a suitable material." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; not a suitable material."
+		<< Color::def << std::endl;
   }
 
 //! @brief Copy constructor.
@@ -143,6 +146,28 @@ XC::CorotTruss &XC::CorotTruss::operator=(const CorotTruss &other)
 //! @brief Virtual constructor.
 XC::Element* XC::CorotTruss::getCopy(void) const
   { return new CorotTruss(*this); }
+
+//! @brief Return the area of the section.
+const double &XC::CorotTruss::getSectionArea(void) const
+  { return A; }
+
+//! @brief Set the area of the section.
+void XC::CorotTruss::setSectionArea(const double &a)
+  {
+    if(a<0.0)
+      {
+	A= -a;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "ERROR; specified area: " << a
+		  << "for element: "
+		  << this->getTag()
+		  << " is negative. Using: "
+	          << A
+		  << Color::def << std::endl;
+      }
+    else
+      A= a;
+  }
 
 //! @brief Returns the value of the persistent (does not get wiped out by
 //! zeroLoad) initial deformation of the section.
@@ -190,11 +215,12 @@ void XC::CorotTruss::setDomain(Domain *theDomain)
     // if differing dof at the ends - print a warning message
     if(dofNd1 != dofNd2)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "WARNING; nodes " << theNodes[0]->getTag()
 		  << " and " << theNodes[1]->getTag()
 		  << "have differing dof at ends for CorotTruss element: "
-		  << this->getTag() << std::endl;
+		  << this->getTag()
+		  << Color::def << std::endl;
         // fill this in so don't segment fault later
         numDOF = 6;
         return;
@@ -277,8 +303,9 @@ int XC::CorotTruss::commitState(void)
     // call element commitState to do any base class stuff
     if((retVal = this->CorotTrussBase::commitState()) != 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; failed in base class.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; failed in base class."
+		  << Color::def << std::endl;
       }
     retVal = theMaterial->commitState();
     return retVal;
@@ -347,9 +374,10 @@ const XC::Matrix &XC::CorotTruss::getTangentStiff(void) const
     //
     // Get material tangent
     if(A<1e-8)
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; WARNING area of element: " << getTag()
-	        << " is extremely small: " << A << std::endl;
+	        << " is extremely small: " << A
+		<< Color::def << std::endl;
     double EA = A*theMaterial->getTangent();
     EA/= (Ln * Ln * Lo);
 
@@ -401,9 +429,10 @@ const XC::Matrix &XC::CorotTruss::getInitialStiff(void) const
     static Matrix kl(3,3);
 
     if(A<1e-8)
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; WARNING area of element: " << getTag()
-	        << " is extremely small: " << A << std::endl;
+	        << " is extremely small: " << A
+		<< Color::def << std::endl;
     // Material stiffness
     kl.Zero();
     kl(0,0)= A*theMaterial->getInitialTangent() / Lo;
@@ -489,9 +518,10 @@ void XC::CorotTruss::zeroLoad(void)
 int XC::CorotTruss::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; load over inactive element: "
-                << getTag() << std::endl;
+                << getTag()
+		<< Color::def << std::endl;
     else
       {
         if(TrussStrainLoad *trsLoad= dynamic_cast<TrussStrainLoad *>(theLoad))
@@ -514,20 +544,21 @@ int XC::CorotTruss::addLoad(ElementalLoad *theLoad, double loadFactor)
 	      }
 	    else
 	      {
-		std::cerr << getClassName() << "::" << __FUNCTION__
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			  <<"; materials of type: "
 			  << this->theMaterial->getClassName()
 		          << " don't support prestress loads."
 			  << " Load ignored."
-			  << std::endl;
+			  << Color::def << std::endl;
 		return -1;
 	      }
           }
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      <<"; load type unknown for truss with tag: "
-		      << this->getTag() << std::endl;
+		      << this->getTag()
+		      << Color::def << std::endl;
             return -1;
           }
       }
@@ -687,8 +718,9 @@ int XC::CorotTruss::sendSelf(Communicator &comm)
     const int dataTag= getDbTag(comm);
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send ID data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send ID data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -700,8 +732,9 @@ int XC::CorotTruss::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to recv ID data";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to recv ID data."
+	        << Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;

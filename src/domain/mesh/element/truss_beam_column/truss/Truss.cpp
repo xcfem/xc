@@ -76,6 +76,7 @@
 
 #include "domain/component/Parameter.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Free the material pointer.
 void XC::Truss::free_material(void)
@@ -112,10 +113,11 @@ void XC::Truss::set_material(const UniaxialMaterial &mat)
     theMaterial= mat.getCopy();
     if(!theMaterial)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; FATAL truss - " << getTag()
 		  << " failed to get a copy of material with tag "
-	          << mat.getTag() << std::endl;
+	          << mat.getTag()
+		  << Color::def << std::endl;
         exit(-1);
       }
   }
@@ -128,9 +130,10 @@ void XC::Truss::set_load_sens(const Vector &v)
     theLoadSens= new Vector(v);
     if(!theLoadSens)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; truss " << getTag()
-		  << " failed to get a copy of vector: " << v << std::endl;
+		  << " failed to get a copy of vector: " << v
+		  << Color::def << std::endl;
         exit(-1);
       }
   }
@@ -166,8 +169,9 @@ XC::Truss::Truss(int tag,int dim,const Material *ptr_mat)
     if(tmp)
       set_material(*tmp);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; not a suitable material." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; not a suitable material."
+		<< Color::def << std::endl;
     initialize();
   }
 
@@ -214,6 +218,29 @@ XC::Element* XC::Truss::getCopy(void) const
 XC::Truss::~Truss(void)
   { free_mem(); }
 
+//! @brief Return the area of the section.
+const double &XC::Truss::getSectionArea(void) const
+  { return A; }
+
+//! @brief Set the area of the section.
+void XC::Truss::setSectionArea(const double &a)
+  {
+    if(a<0.0)
+      {
+	A= -a;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "ERROR; specified area: " << a
+		  << "for element: "
+		  << this->getTag()
+		  << " is negative. Using: "
+		  << A
+		  << Color::def << std::endl;
+      }
+    else
+      A= a;
+  }
+
+
 //! @brief Returns the value of the persistent (does not get wiped out by
 //! zeroLoad) initial deformation of the section.
 const double &XC::Truss::getPersistentInitialSectionDeformation(void) const
@@ -258,11 +285,12 @@ void XC::Truss::setDomain(Domain *theDomain)
     // if differing dof at the ends - print a warning message
     if(dofNd1 != dofNd2)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING: nodes " << theNodes[0]->getTag()
                   << " and " <<  theNodes[1]->getTag()
                   << " have differing dof at ends for truss "
-		  << this->getTag() << std::endl;
+		  << this->getTag()
+		  << Color::def << std::endl;
 
         // fill this in so don't segment fault later
         numDOF = 2;
@@ -292,8 +320,9 @@ int XC::Truss::commitState()
     int retVal = 0;
     // call element commitState to do any base class stuff
     if((retVal = this->TrussBase::commitState()) != 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed in base class";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed in base class"
+	        << Color::def << std::endl;
     retVal = theMaterial->commitState();
     return retVal;
   }
@@ -322,8 +351,9 @@ int XC::Truss::revertToStart()
   {
     int retVal= TrussBase::revertToStart();
     if(retVal != 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed in base class";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed in base class"
+	        << Color::def << std::endl;
     retVal+= theMaterial->revertToStart();
     return retVal;
   }
@@ -454,8 +484,9 @@ double XC::Truss::getRho(void) const
     if(theMaterial)
       { retval= theMaterial->getRho(); }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; material not defined yet." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; material not defined yet."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -512,9 +543,10 @@ void XC::Truss::zeroLoad(void)
 int XC::Truss::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; Warning, load over inactive element: "
-                << getTag() << std::endl;
+                << getTag()
+		<< Color::def << std::endl;
     else
       {
         if(TrussStrainLoad *trsLoad= dynamic_cast<TrussStrainLoad *>(theLoad))
@@ -536,20 +568,21 @@ int XC::Truss::addLoad(ElementalLoad *theLoad, double loadFactor)
 	      }
 	    else
 	      {
-		std::cerr << getClassName() << "::" << __FUNCTION__
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			  <<"; materials of type: "
 			  << this->theMaterial->getClassName()
 		          << " don't support prestress loads."
 			  << " Load ignored."
-			  << std::endl;
+			  << Color::def << std::endl;
 		return -1;
 	      }
           }
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	              << "; load type unknown for truss with tag: "
-		      << this->getTag() << std::endl;
+		      << this->getTag()
+		      << Color::def << std::endl;
             return -1;
           }
       }
@@ -612,8 +645,9 @@ int XC::Truss::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accel, boo
 
 #ifdef _G3DEBUG
     if(nodalDOF != Raccel1.Size() || nodalDOF != Raccel2.Size()) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; matrix and vector sizes are incompatible.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; matrix and vector sizes are incompatible."
+	        << Color::def << std::endl;
       return -1;
     }
 #endif
@@ -646,8 +680,9 @@ int XC::Truss::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accel, boo
 
 #ifdef _G3DEBUG
     if(nodalDOF != Raccel1.Size() || nodalDOF != Raccel2.Size()) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; marix and vector sizes are incompatible.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; marix and vector sizes are incompatible."
+		<< Color::def << std::endl;
       return -1;
     }
 #endif
@@ -779,8 +814,9 @@ int XC::Truss::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data."
+		<< Color::def << std::endl;
     return res;
   }
 
@@ -792,14 +828,16 @@ int XC::Truss::recvSelf(const Communicator &comm)
     const int dbTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dbTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids."
+		<< Color::def << std::endl;
     else
       {
         res+= recvData(comm);
         if(res<0)
-           std::cerr << getClassName() << "::" << __FUNCTION__
-		     << "; failed to receive data.\n";
+           std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		     << "; failed to receive data."
+		     << Color::def << std::endl;
       }
     return res;
   }
@@ -836,8 +874,8 @@ void XC::Truss::Print(std::ostream &s, int flag) const
     else
      if(flag == 1)
        {
-         s << this->getTag() << "  " << strain << "  ";
-         s << force << std::endl;
+         s << this->getTag() << "  " << strain << "  "
+	   << force << std::endl;
        }
   }
 
