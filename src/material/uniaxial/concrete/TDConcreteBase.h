@@ -50,6 +50,7 @@
 #define TDConcreteBase_h
 
 #include "material/uniaxial/concrete/RawConcrete.h"
+#include "material/uniaxial/concrete/ConcreteHistoryVars.h"
 
 namespace XC {
 
@@ -69,20 +70,10 @@ class TDConcreteBase : public RawConcrete
     double tcast; //!< the analysis time corresponding to concrete casting in days
 
     // hstvP : Concerete HISTORY VARIABLES last committed step
-    double ecminP; //!<  hstP(1)
-    double ecmaxP; //!< added by AMK
-    double deptP; //!<  hstP(2)
-    double epsP; //!<  = strain at previous converged step
-    double sigP; //!<  = stress at previous converged step
-    double eP; //!<   stiffness modulus at last converged step;
+    CreepConcreteHistoryVars hstvP; //!< = values at previous converged step
 
     // hstv : Concerete HISTORY VARIABLES  current step
-    double ecmin;
-    double ecmax; //!< added by AMK  
-    double dept;   
-    double sig;   
-    double e;     
-    double eps;
+    CreepConcreteHistoryVars hstv; //!< = values at current step (trial values)
 	
     //Added by AMK:
     int count;

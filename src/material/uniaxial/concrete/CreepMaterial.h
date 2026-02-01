@@ -43,12 +43,10 @@
 namespace XC {
 
 #include "material/uniaxial/EncapsulatedUniaxialMaterial.h"
-#include "domain/domain/Domain.h" //Added by AMK
 
-class CreepMaterial: public UniaxialMaterial
+class CreepMaterial: public EncapsulatedUniaxialMaterial
   {
   private:
-    UniaxialMaterial *wrappedMaterial;
 
     // matpar : Concrete FIXED PROPERTIES
     double fc;    // concrete compression strength           : mp(1)
@@ -73,20 +71,10 @@ class CreepMaterial: public UniaxialMaterial
     double tcast;
 
     // hstvP : Concerete HISTORY VARIABLES last committed step
-    double ecminP;  //  hstP(1)
-    double ecmaxP;  // added by AMK
-    double deptP;   //  hstP(2)
-    double epsP;  //  = strain at previous converged step
-    double sigP;  //  = stress at previous converged step
-    double eP;    //   stiffness modulus at last converged step;
+    CreepConcreteHistoryVars hstvP; //!< = values at previous converged step
 
     // hstv : Concerete HISTORY VARIABLES  current step
-    double ecmin;
-    double ecmax; // added by AMK  
-    double dept;   
-    double sig;   
-    double e;     
-    double eps;
+    CreepConcreteHistoryVars hstv; //!< = values at current step (trial values)
 
     //Added by AMK:
     int count;
@@ -120,12 +108,10 @@ class CreepMaterial: public UniaxialMaterial
     std::vector<float> TIME_i;
     std::vector<float> DTIME_i;
 
-    void expandArrays();
+    void resize();
   public:
-    CreepMaterial(void);
+    CreepMaterial(int tag= 0);
     CreepMaterial(int tag, UniaxialMaterial &matl, double _age, double _epsshu, double _epssha, double _tcr, double _epscru, double _epscra, double _epscrd, double _tcast);
-
-    virtual ~CreepMaterial();
 
     double getInitialTangent(void);
     UniaxialMaterial *getCopy(void);
