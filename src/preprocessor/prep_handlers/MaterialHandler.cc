@@ -36,6 +36,7 @@
 #include "material/uniaxial/CableMaterial.h"
 #include "material/uniaxial/concrete/Concrete01.h"
 #include "material/uniaxial/concrete/Concrete02.h"
+#include "material/uniaxial/concrete/Concrete02IS.h"
 #include "material/uniaxial/concrete/Concrete04.h"
 #include "material/uniaxial/concrete/TDConcrete.h"
 #include "material/uniaxial/concrete/TDConcreteMC10.h"
@@ -279,6 +280,7 @@ XC::Material *load_uniaxial_fedeas_material(int tag_mat,const std::string &cmd)
 //! - cable_material: CableMaterial (no compression).
 //! - concrete01_material: Concrete01 uniaxial material.
 //! - concrete02_material: Concrete02 uniaxial material.
+//! - concrete02is_material: Concrete02IS uniaxial material.
 //! - concrete04_material: Concrete04 uniaxial material.
 //! - tdconcrete_material: TDConcrete uniaxial material.
 //! - tdconcrete_mc10_material: TDConcreteMC10 uniaxial material.
@@ -298,6 +300,8 @@ XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
       retval= new XC::Concrete01(tag_mat);
     else if(cmd == "concrete02_material")
       retval= new XC::Concrete02(tag_mat);
+    else if(cmd == "concrete02is_material")
+      retval= new XC::Concrete02IS(tag_mat);
     else if(cmd == "concrete04_material")
       retval= new XC::Concrete04(tag_mat);
     else if(cmd == "tdconcrete_material")

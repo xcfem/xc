@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Home made test.'''
-from __future__ import print_function
+''' Trivial check of the Concrete02IS material.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__copyright__= "Copyright 2026, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
@@ -13,7 +12,7 @@ l= 1e-7 # Distance between nodes
 import xc
 from solution import predefined_solutions
 from materials import typical_materials
-from materials.ehe import EHE_materials
+from materials.ec2 import EC2_materials
 # import matplotlib.pyplot as plt
 import numpy as np
 
@@ -28,13 +27,16 @@ n1= nodes.newNodeX(1)
 n2= nodes.newNodeX(1.0+l)
 
 # Materials definition
-concrAux= EHE_materials.HA25
-concr= typical_materials.defConcrete02(preprocessor=preprocessor,name='concr25',epsc0=concrAux.epsilon0(),fpc=concrAux.fmaxK(),fpcu=0.85*concrAux.fmaxK(),epscu=concrAux.epsilonU(),ratioSlope=0.1,ft=concrAux.fctk(),Ets=concrAux.E0()/19.0)
+concrAux= EC2_materials.C25
+epsc0= concrAux.epsilon0()
+fpc= concrAux.fmaxK()
+Ec0= 2.0*fpc/epsc0
+concrete= typical_materials.defConcrete02IS(preprocessor=preprocessor,name='concrete', Ec0= Ec0, epsc0= epsc0, fpc= fpc, fpcu= 0.85*concrAux.fmaxK(), epscu= concrAux.epsilonU(), ratioSlope= 0.1, ft= concrAux.fctk(), Ets= concrAux.E0()/19.0)
 
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial='concr25'
+elements.defaultMaterial='concrete'
 elements.dimElem= 1 # Dimension of element space
 elem1= elements.newElement("ZeroLength",xc.ID([n1.tag, n2.tag]))
 

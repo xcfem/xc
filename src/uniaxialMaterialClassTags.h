@@ -60,6 +60,7 @@
 #define MAT_TAG_ReinforcingSteel		24
 
 #define MAT_TAG_Concrete02			25
+#define MAT_TAG_Concrete02IS		       250
 #define MAT_TAG_Steel02				26
 
 #define MAT_TAG_Concrete04                      30

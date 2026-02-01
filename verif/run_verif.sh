@@ -1268,6 +1268,7 @@ echo "$BLEU" "      Uniaxial concrete materials tests." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/concrete/test_concrete01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_concrete02_01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_concrete02_02.py
+python tests/materials/xc_materials/uniaxial/concrete/test_concrete02is_01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_material_01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_material_02.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10_material_01.py

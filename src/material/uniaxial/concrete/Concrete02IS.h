@@ -42,7 +42,7 @@
 #ifndef Concrete02IS_h
 #define Concrete02IS_h
 
-#include "material/uniaxial/Concrete02.h"
+#include "material/uniaxial/concrete/Concrete02.h"
 
 namespace XC {
 
@@ -56,17 +56,19 @@ class Concrete02IS : public Concrete02
 
     void Compr_Envlp(double epsc, double &sigc, double &Ect);
 
+  protected:
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     Concrete02IS(int tag= 0);
     Concrete02IS(int tag, double _E0, double _fc, double _epsc0, double _fcu,
 		 double _epscu, double _rat, double _ft, double _Ets);
     Concrete02IS(int tag, double _E0, double _fc, double _epsc0, double _fcu,
 		 double _epscu);  
-
-    virtual ~Concrete02IS(void);
-
-    double getInitialTangent(void);
     UniaxialMaterial *getCopy(void);
+    
+    double getInitialTangent(void) const;
+    void setInitialTangent(const double &);
 
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);    

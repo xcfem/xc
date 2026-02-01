@@ -23,6 +23,7 @@
 #include "material/uniaxial/connected/SeriesMaterial.h"
 #include "material/uniaxial/concrete/Concrete01.h"
 #include "material/uniaxial/concrete/Concrete02.h"
+#include "material/uniaxial/concrete/Concrete02IS.h"
 #include "material/uniaxial/concrete/Concrete04.h"
 #include "material/uniaxial/concrete/TDConcrete.h"
 #include "material/uniaxial/concrete/TDConcreteMC10.h"

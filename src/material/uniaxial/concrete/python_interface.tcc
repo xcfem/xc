@@ -41,6 +41,10 @@ class_<XC::Concrete02, bases<XC::RawConcrete>, boost::noncopyable >("Concrete02"
   .add_property("ratioSlope", &XC::Concrete02::getLambda,  &XC::Concrete02::setLambda,"ratio between unloading slope at epscu and initial slope.")
   ;
 
+class_<XC::Concrete02IS, bases<XC::Concrete02>, boost::noncopyable >("Concrete02IS", no_init)
+  .add_property("Ec0", &XC::Concrete02IS::getInitialTangent,  &XC::Concrete02IS::setInitialTangent,"Get/set the value of the concrete initial tangent.")
+  ;
+
 class_<XC::Concrete04, bases<XC::ConcreteBase>, boost::noncopyable >("Concrete04", no_init);
 
 class_<XC::TDConcreteBase, bases<XC::RawConcrete>, boost::noncopyable >("TDConcreteBase", no_init)

@@ -386,7 +386,48 @@ def defConcrete01(preprocessor,name,epsc0,fpc,fpcu,epscu):
     return retval
 
 
-#Concrete 02.
+# Concrete 02.
+def _def_concrete_02(preprocessor, className, matName, epsc0, fpc, fpcu, epscu, ratioSlope= 0.1, ft= None, Ets= None):
+    ''''Constructs an uniaxial concrete material with linear tension
+    softening. Compressive concrete parameters should be input as negative values.
+    The initial slope for this model is (2*fpc/epsc0) 
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param className: concrete02_material or concrete02is_material
+    :param matName: name identifying the material (if None compute a suitable 
+                    name).
+    :param epsc0: concrete strain at maximum strength 
+    :param fpc: concrete compressive strength at 28 days (compression is 
+                negative).
+    :param fpcu: concrete crushing strength 
+    :param epscu: concrete strain at crushing strength 
+    :param ratioSlope: ratio between unloading slope at epscu and initial slope (defaults to 0.1).
+    :param ft: tensile strength (defaults to None in which case the value is set to -0.1*fpc)
+    :param Ets: tension softening stiffness (absolute value) (slope of the linear tension softening branch) (defaults to None in which case the value is set to 0.1*fpc/epsc0)
+
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    concreteName= matName
+    if(not concreteName):
+        concreteName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial(className, concreteName)
+    retval.epsc0= epsc0
+    retval.fpc= fpc
+    retval.fpcu= fpcu
+    retval.epscu= epscu
+    retval.ratioSlope= ratioSlope
+    if(ft):
+        retval.ft= ft
+    else:
+        retval.ft= -0.1*fpc
+    if(Ets):
+        retval.Ets= Ets
+    else:
+        retval.Ets= 0.1*fpc/epsc0
+    if(fpc==fpcu):
+        lmsg.warning("concrete02 compressive strength fpc is equal to crushing strength fpcu => the solver can return wrong stresses or have convergence problems ")
+    return retval
+
 def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope= 0.1, ft= None, Ets= None):
     ''''Constructs an uniaxial concrete material with linear tension
     softening. Compressive concrete parameters should be input as negative values.
@@ -403,26 +444,51 @@ def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope= 0.1, ft= No
     :param Ets: tension softening stiffness (absolute value) (slope of the linear tension softening branch) (defaults to None in which case the value is set to 0.1*fpc/epsc0)
 
     '''
-    materialHandler= preprocessor.getMaterialHandler
-    matName= name
-    if(not matName):
-        matName= uuid.uuid1().hex
-    retval= materialHandler.newMaterial("concrete02_material", matName)
-    retval.epsc0= epsc0
-    retval.fpc= fpc
-    retval.fpcu= fpcu
-    retval.epscu= epscu
-    retval.ratioSlope= ratioSlope
-    if(ft):
-        retval.ft= ft
+    return _def_concrete_02(preprocessor= preprocessor,
+                            className= "concrete02_material",
+                            matName= name,
+                            epsc0= epsc0,
+                            fpc= fpc,
+                            fpcu= fpcu,
+                            epscu= epscu,
+                            ratioSlope= ratioSlope,
+                            ft= ft,
+                            Ets= Ets)
+    return retval
+
+# Concrete 02.
+def defConcrete02IS(preprocessor,name,epsc0,fpc,fpcu,epscu, Ec0, ratioSlope= 0.1, ft= None, Ets= None):
+    '''Constructs an uniaxial concrete material with linear tension
+       softening and initial stiffness. Compressive concrete parameters should 
+       be input as negative values. The initial slope for this model is Ec0. 
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param name: name identifying the material (if None compute a suitable name)
+    :param epsc0: concrete strain at maximum strength. 
+    :param fpc: concrete compressive strength at 28 days (compression is negative).
+    :param fpcu: concrete crushing strength.
+    :param epscu: concrete strain at crushing strength.
+    :param Ec0: concrete initial stiffness.
+    :param ratioSlope: ratio between unloading slope at epscu and initial slope (defaults to 0.1).
+    :param ft: tensile strength (defaults to None in which case the value is set to -0.1*fpc)
+    :param Ets: tension softening stiffness (absolute value) (slope of the linear tension softening branch) (defaults to None in which case the value is set to 0.1*fpc/epsc0)
+
+    '''
+    retval= _def_concrete_02(preprocessor= preprocessor,
+                             className= "concrete02is_material",
+                             matName= name,
+                             epsc0= epsc0,
+                             fpc= fpc,
+                             fpcu= fpcu,
+                             epscu= epscu,
+                             ratioSlope= ratioSlope,
+                             ft= ft,
+                             Ets= Ets)
+    return retval
+    if(Ec0):
+        retval.Ec0= Ec0
     else:
-        retval.ft= -0.1*fpc
-    if(Ets):
-        retval.Ets= Ets
-    else:
-        retval.Ets= 0.1*fpc/epsc0
-    if(fpc==fpcu):
-        lmsg.warning("concrete02 compressive strength fpc is equal to crushing strength fpcu => the solver can return wrong stresses or have convergence problems ")
+        retval.Ec0= 2.0*fpc/epsc0
     return retval
 
 #TDConcrete.

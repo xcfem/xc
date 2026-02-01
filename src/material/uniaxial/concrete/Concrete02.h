@@ -128,7 +128,7 @@ inline std::ostream &operator<<(std::ostream &os,const Conc02HistoryVars &hv)
 //! Reference: Mohd Hisham Mohd Yassin, "Nonlinear Analysis of Prestressed Concrete Structures under Monotonic and Cycling Loads", PhD dissertation, University of California, Berkeley, 1994. 
 class Concrete02: public RawConcrete
   {
-  private:
+  protected:
 
     // matpar : Concrete FIXED PROPERTIES
     double fpcu; //!< stress at ultimate (crushing) strain.
@@ -143,7 +143,7 @@ class Concrete02: public RawConcrete
 
     void Tens_Envlp(double epsc, double &sigc, double &Ect);
     virtual void Compr_Envlp(double epsc, double &sigc, double &Ect);
-  protected:
+
     int sendData(Communicator &);
     int recvData(const Communicator &);
     void setup_parameters(void);
@@ -156,6 +156,7 @@ class Concrete02: public RawConcrete
     Concrete02(int tag= 0);
     Concrete02(int tag, double _fpc, double _epsc0, double _fpcu,
 	       double _epscu, double _rat, double _ft, double _Ets);
+    UniaxialMaterial *getCopy(void) const;
  
     void setFpcu(const double &);
     double getFpcu(void) const;
@@ -168,7 +169,6 @@ class Concrete02: public RawConcrete
 
     inline double getInitialTangent(void) const
       { return 2.0*fpc/epsc0; }
-    UniaxialMaterial *getCopy(void) const;
 
     int setTrialStrain(double strain, double strainRate = 0.0); 
     inline double getStrain(void) const

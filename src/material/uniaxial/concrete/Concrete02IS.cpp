@@ -43,6 +43,7 @@
 #include <math.h>
 
 #include <material/uniaxial/concrete/Concrete02IS.h>
+#include "domain/mesh/element/utils/Information.h"
 #include <float.h>
 
 //! @brief Default constructor.
@@ -57,21 +58,21 @@ XC::Concrete02IS::Concrete02IS(int tag, double _E0, double _fc, double _epsc0,
 	       _Ets), E0(_E0)
   {}
 
-XC::Concrete02IS::Concrete02IS(int tag, double _E0, double _fc, double _epsc0, double _fcu, double _epscu)
-  : Concrete02(tag, MAT_TAG_Concrete02IS, _fc, _epsc0, _fcu, _epscu, 0.1,
-	       0.1*fc, 0.1*_fc/_epsc0), E0(_E0)
-  { }
-
-XC::Concrete02IS::~Concrete02IS(void)
-  { }
-
+//! @brief Constructor.
 XC::UniaxialMaterial *XC::Concrete02IS::getCopy(void)
   { return new Concrete02IS(*this); }
 
-double XC::Concrete02IS::getInitialTangent(void)
+double XC::Concrete02IS::getInitialTangent(void) const
   {
-    //return 2.0*fc/epsc0; // Marafi Change 2018/01/31
+    //return 2.0*fpc/epsc0; // Marafi Change 2018/01/31
     return E0;
+  }
+
+//! @brief Assigns concrete compressive strength.
+void XC::Concrete02IS::setInitialTangent(const double &d)
+  {
+    this->E0= d;
+    this->setup_parameters();
   }
 
 //! @brief Send object members through the communicator argument.
@@ -83,14 +84,14 @@ int XC::Concrete02IS::sendData(Communicator &comm)
   }
 
 //! @brief Receives object members through the communicator argument.
-int XC::Concrete02::recvData(const Communicator &comm)
+int XC::Concrete02IS::recvData(const Communicator &comm)
   {
     int res= Concrete02::recvData(comm);
     res+= comm.receiveDouble(E0,getDbTagData(),CommMetaData(6));
     return res;
   }
 
-int XC::Concrete02::sendSelf(Communicator &comm)
+int XC::Concrete02IS::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
@@ -104,7 +105,7 @@ int XC::Concrete02::sendSelf(Communicator &comm)
     return res;
   }
 
-int XC::Concrete02::recvSelf(const Communicator &comm)
+int XC::Concrete02IS::recvSelf(const Communicator &comm)
   {
     inicComm(7);
     const int dataTag= getDbTag();
@@ -130,7 +131,7 @@ void XC::Concrete02IS::Compr_Envlp(double epsc, double &sigc, double &Ect)
     /*-----------------------------------------------------------------------
     ! monotonic envelope of concrete in compression (negative envelope)
     !
-    !   fc    = concrete compressive strength
+    !   fpc    = concrete compressive strength
     !   epsc0 = strain at concrete compressive strength
     !   fcu   = stress at ultimate (crushing) strain 
     !   epscu = ultimate (crushing) strain
@@ -148,16 +149,12 @@ void XC::Concrete02IS::Compr_Envlp(double epsc, double &sigc, double &Ect)
       if (epsc>=epsc0)
 	{
 	  // Modify this to use Popovics Prepeak Curve
-	  double Esec = fc / epsc0;
+	  const double Esec= this->fpc/epsc0;
 	  double r = 0.0;
 	  if (Esec >= Ec0)
-	    {
-	      r = 400.0;
-	    }
+	    { r = 400.0; }
 	  else
-	    {
-	      r = Ec0 / (Ec0 - Esec);
-	    }
+	    { r = Ec0 / (Ec0 - Esec); }
 	  const double eta = epsc / epsc0;
 	  sigc= fpc * eta*r / (r - 1 + pow(eta, r));
 	  Ect = fpc * r*(r - 1)*(1 - pow(eta, r)) / (pow((r - 1 + pow(eta, r)), 2)*epsc0);
@@ -169,20 +166,20 @@ void XC::Concrete02IS::Compr_Envlp(double epsc, double &sigc, double &Ect)
 	  //   linear descending branch between epsc0 and epscu
 	  if(epsc>epscu)
 	    {
-	      sigc = (fcu-fc)*(epsc-epsc0)/(epscu-epsc0)+fc;
-	      Ect  = (fcu-fc)/(epscu-epsc0);
+	      sigc = (this->fpcu-this->fpc)*(epsc-epsc0)/(epscu-epsc0)+this->fpc;
+	      Ect  = (this->fpcu-this->fpc)/(epscu-epsc0);
 	    }
 	  else
 	    {
 	      // flat friction branch for strains larger than epscu
-	      sigc = fcu;
+	      sigc = this->fpcu;
 	      Ect  = 1.0e-10;
 	      //       Ect  = 0.0
 	    }
 	}
     }
 
-int XC::Concrete02IS::getVariable(const char *varName, Information &theInfo)
+int XC::Concrete02IS::getVariable(const std::string &varName, Information &theInfo) const
   {
     if(varName=="ec")
       {
