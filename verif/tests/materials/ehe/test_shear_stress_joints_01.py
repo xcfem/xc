@@ -4,7 +4,7 @@ Verification of ultimate limit state due to longitudinal shear stress
 at joints between concretes according to art. 47 EHE.
 
 Results are compared with those obtained in "Cálculo civil" app
-(URL: https://calculocivil.com).
+(URL: https://web.archive.org/web/20241008065525/http://calculocivil.com).
 '''
 from __future__ import print_function
 from __future__ import division

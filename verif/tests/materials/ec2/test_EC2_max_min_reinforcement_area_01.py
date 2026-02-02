@@ -3,7 +3,7 @@
     a beam, according to expression 9.1N of EC2:2004.
 
     Test based on the example obtained from the web page:
-    https://calculocivil.com/es/ec2/armado_minimo/calc
+    https://web.archive.org/web/20241008065525/http://calculocivil.com/es/ec2/armado_minimo/calc
 '''
 
 from __future__ import print_function

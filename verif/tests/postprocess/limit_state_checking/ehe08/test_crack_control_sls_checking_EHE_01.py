@@ -141,7 +141,7 @@ meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDist
 # Check results.
 # The value obtained for the 87th element of the phantom model
 # has been tested against the results obtained for the same data
-# with this calculation tool: https://calculocivil.com/es/ehe08/fisura/calculo
+# with this calculation tool: https://web.archive.org/web/20241008065525/http://calculocivil.com/es/ehe08/fisura/calculo
 # see the readme.md file for more details.
 ratio1= abs(meanCFs[0]-0.8347613436179578)/0.8347613436179578
 ratio2= abs(meanCFs[1]-0.24227419443071926)/0.24227419443071926

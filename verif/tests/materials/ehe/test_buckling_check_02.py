@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ''' Test calculation of fictitious eccentricity according to clause 43.5.1 of EHE-08.
 
-Inspired in the test found in: https://calculocivil.com/es/ehe08/pandeo/calc
+Inspired in the test found in: https://web.archive.org/web/20241008065525/http://calculocivil.com/es/ehe08/pandeo/calc
 '''
 
 from __future__ import division
