@@ -1,7 +1,7 @@
 # Verification tests concerning limit state checking according to EC2
 
 ## Shear strength checking
-See [shear strength checking](https://github.com/xcfem/xc/blob/master/verif/tests/postprocess/limit_state_checking/ehe08/readme.md)
+See [shear strength checking](https://github.com/xcfem/xc/blob/master/verif/tests/postprocess/limit_state_checking/ehe08/readme.md#shear-strength-checking) in ehe08 folder.
 
 ## References
 - [Eurocode 2](https://eurocodes.jrc.ec.europa.eu/EN-Eurocodes/eurocode-2-design-concrete-structures)
