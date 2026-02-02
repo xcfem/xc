@@ -127,7 +127,7 @@ class LimitStateControllerBase(object):
     :ivar exhaustedSectionsThresholdCF: value of the capacity factor above 
                                         which the section will be considered 
                                         exhausted. It is used when building
-                                        the a non-linear phantom model to avoid
+                                        a non-linear phantom model to avoid
                                         the solver to crash (see phantom model
                                         module). 
     '''
