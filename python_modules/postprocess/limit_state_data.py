@@ -434,11 +434,14 @@ class LimitStateData(object):
         #Putting combinations inside XC.
         loadCombinations= self.dumpCombinations(combContainer,loadCombinations)
         
+        verbosityLevel= preprocessor.getVerbosityLevel()
         self.prepareResultsDictionaries()
         for key in loadCombinations.getKeys():
             comb= loadCombinations[key]
             preprocessor.resetLoadCase()
             preprocessor.getDomain.revertToStart()
+            if(verbosityLevel>0):
+                print('Analyzing load combination: ', comb.name, flush=True)
             comb.addToDomain() #Combination to analyze.
             #Solution
             result= solutionProcedure.solve()
@@ -678,11 +681,14 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
         # Putting combinations inside XC.
         loadCombinations= self.dumpCombinations(combContainer, loadCombinations)
 
+        verbosityLevel= preprocessor.getVerbosityLevel()
         self.prepareResultsDictionaries()
         for key in loadCombinations.getKeys():
             comb= loadCombinations[key]
             preprocessor.resetLoadCase()
             preprocessor.getDomain.revertToStart()
+            if(verbosityLevel>0):
+                print('Analyzing load combination: ', comb, flush=True)
             comb.addToDomain() #Combination to analyze.
             #Solution
             result= solutionProcedure.solve()

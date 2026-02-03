@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Crack width calculation according to clause 7.3.4 of EC2:2004. 
-    Test based on the example from: https://calculocivil.com/es/ec2/fisura/calc
+    Test based on the example from: https://web.archive.org/web/20241008065525/http://calculocivil.com/es/ec2/fisura/calc
 '''
 
 from __future__ import division

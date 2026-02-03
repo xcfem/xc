@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Test calculation of anchorage lengths according to EHE.b Art. 69.5.2
-    Home made test, comparison values from https://calculocivil.com/es/ehe08/solape/
+    Home made test, comparison values from https://web.archive.org/web/20241008065525/http://calculocivil.com/es/ehe08/solape/
 '''
 from __future__ import division
 from __future__ import print_function

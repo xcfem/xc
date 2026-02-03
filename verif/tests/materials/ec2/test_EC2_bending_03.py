@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ''' Trivial test of a rectangular section subject to bending with axial force.
 
-Results were compared with those obtained from: https://calculocivil.com/eu/ec2/bending/calc
+Results were compared with those obtained from: https://web.archive.org/web/20241008065525/http://calculocivil.com/eu/ec2/bending/calc
 '''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
