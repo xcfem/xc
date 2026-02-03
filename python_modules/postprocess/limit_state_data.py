@@ -440,7 +440,7 @@ class LimitStateData(object):
             comb= loadCombinations[key]
             preprocessor.resetLoadCase()
             preprocessor.getDomain.revertToStart()
-            if(verbosityLevel>0):
+            if(verbosityLevel>1):
                 print('Analyzing load combination: ', comb.name, flush=True)
             comb.addToDomain() #Combination to analyze.
             #Solution
@@ -687,7 +687,7 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
             comb= loadCombinations[key]
             preprocessor.resetLoadCase()
             preprocessor.getDomain.revertToStart()
-            if(verbosityLevel>0):
+            if(verbosityLevel>1):
                 print('Analyzing load combination: ', comb, flush=True)
             comb.addToDomain() #Combination to analyze.
             #Solution
