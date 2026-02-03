@@ -574,7 +574,6 @@ class GridModel(object):
             xp=p.getPos.x
             yp=p.getPos.y
             R=math.sqrt((xp-xCent)**2+(yp-yCent)**2)
-            print('init:', xp,yp)
             p.getPos.x=xCent+R*cosTheta
             p.getPos.y= yCent+R*sinTheta
             #p.getPos.x= xyRotCent[0]+cosTheta*(xp-xyRotCent[0])-sinTheta*(yp-xyRotCent[1])
