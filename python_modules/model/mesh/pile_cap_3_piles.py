@@ -45,7 +45,29 @@ class PileCap3Piles(strut_and_tie_base.StrutAndTieModel):
         self.pileTopNodeB= pileTopNodeB
         self.pileTopNodeC= pileTopNodeC
         self.pierEffectiveDiameter= pierEffectiveDiameter
+
+    @staticmethod
+    def set_concrete_a(a):
+        ''' Modifies the parameter that defines the tension behaviour of
+            concrete. See ENTMaterial.
+            https://github.com/xcfem/xc/blob/master/src/material/uniaxial/ENTMaterial.h
+
+        :param a: parameter that defines the tension behaviour of
+                  concrete.
+        '''
+        PileCap3Piles.concrete_a= a
         
+    @staticmethod
+    def set_steel_a(a):
+        ''' Modifies the parameter that defines the compresion behaviour of
+            steel. See ENTMaterial.
+            https://github.com/xcfem/xc/blob/master/src/material/uniaxial/ENTMaterial.h
+
+        :param a: parameter that defines the tension behaviour of
+                  steel.
+        '''
+        PileCap3Piles.steel_a= a
+    
     def createStrutAndTieModel(self, modelSpace, strutArea, concrete, pileTiesArea, radialTiesArea, bottomChordsTiesArea, topChordsTiesArea, shearTiesArea, reinfSteel, xcPierSectionMaterial, linearElastic= False):
         ''' Creates an strut-and-tie model and attach it to the nodes of the 
             pier and the piles.
