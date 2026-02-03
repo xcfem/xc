@@ -69,3 +69,8 @@ crackControlQpermDirectory= crackControlDirectory+'_qperm/'
 fatigueVerificationResultsFile= 'verifRsl_fatigueULS'
 fatigueVerificationReportFile= 'report_fatigueULS'
 fatigueDirectory= 'fatigueULS/'
+
+# Strut-and-tie models.
+strutAndTieVerificationResultsFile= 'strut_and_tie_checking'
+strutAndTieVerificationReportFile= 'report_strut_and_tie_checking'
+strutAndTieDirectory= 'strut_and_tie_checking/'
