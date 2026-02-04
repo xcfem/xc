@@ -655,7 +655,9 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
                           going to be performed.
         :param constrainedNodes: constrained nodes (defaults to None)
         '''
+        # Update the internal forces results.
         super().updateResults(combName= combName, calcSet= calcSet, constrainedNodes= constrainedNodes)
+        # Update the eigenmodes.
         self.modesDict.update(self.getModesDict(combName, xcSet= calcSet))
         
     def analyzeLoadCombinations(self, combContainer, setCalc, solutionProcedureType= defaultLinearBucklingProcedureType, constrainedNodeSet= None, bucklingMembers= None):

@@ -98,8 +98,19 @@ class CrossSectionInternalForces:
     def getDict(self):
         '''returns a dictionary whith the values of the internal forces.'''
         retval= dict()
-        retval['N']= self.N; retval['Vy']= self.Vy; retval['Vz']= self.Vz
-        retval['T']= self.T; retval['My']= self.My; retval['Mz']= self.Mz
+        # Store values only if nonzero.
+        if(self.N!=0.0):
+            retval['N']= self.N
+        if(self.Vy!=0.0):
+            retval['Vy']= self.Vy
+        if(self.Vz!=0.0):
+            retval['Vz']= self.Vz
+        if(self.T!=0.0):
+            retval['T']= self.T
+        if(self.My!=0.0):
+            retval['My']= self.My
+        if(self.Mz!= 0.0):
+            retval['Mz']= self.Mz
         # if(hasattr(self, 'chiLT')):
         #     retval['chiLT']= chiLT
         # if(hasattr(self, 'chiN')):
@@ -116,23 +127,42 @@ class CrossSectionInternalForces:
 
         :param dct: dictionary containing the values of the forces.
         '''
-        self.N= dct['N']
-        self.Vy= dct['Vy']
-        self.Vz= dct['Vz']
-        self.T= dct['T']
-        self.My= dct['My']
-        self.Mz= dct['Mz']
+        keys= dct.keys()
+        if('N' in keys):
+            self.N= dct['N']
+        else:
+            self.N= 0.0
+        if('Vy' in keys):
+            self.Vy= dct['Vy']
+        else:
+            self.Vy= 0.0
+        if('Vz' in keys):
+            self.Vz= dct['Vz']
+        else:
+            self.Vz= 0.0
+        if('T' in keys):
+            self.T= dct['T']
+        else:
+            self.T= 0.0
+        if('My' in keys):
+            self.My= dct['My']
+        else:
+            self.My= 0.0
+        if('Mz' in keys):
+            self.Mz= dct['Mz']
+        else:
+            self.Mz= 0.0
         # Lateral torsional buckling reduction factor.
-        if('chiLT' in dct.keys()):
+        if('chiLT' in keys):
             self.chiLT= dct['chiLT']
         # Axial strength reduction factor.     
-        if('chiN' in dct.keys()): 
+        if('chiN' in keys): 
             self.chiN= dct['chiN']
         # AWC NDS-2018 critical buckling design values for compression.
-        if('FcE' in dct.keys()):
+        if('FcE' in keys):
             self.FcE= dct['FcE']
         # AWC NDS-2018 critical buckling design value for bending.
-        if('FbE' in dct.keys()): 
+        if('FbE' in keys): 
             self.FbE= dct['FbE']
 
     def setFromDict(self,dct):
@@ -288,21 +318,60 @@ class ShellMaterialInternalForces:
     def getDict(self):
         '''returns a dictionary whith the values of the internal forces.'''
         retval= dict()
-        retval['n1']= self.n1; retval['n2']= self.n2; retval['n12']= self.n12
-        retval['m1']= self.m1; retval['m2']= self.m2; retval['m12']= self.m12
-        retval['q13']= self.q13; retval['q23']= self.q23
+        # Store values only if nonzero.
+        if(self.n1!=0.0):
+            retval['n1']= self.n1           
+        if(self.n2!=0.0):
+            retval['n2']= self.n2
+        if(self.n12!=0.0):
+            retval['n12']= self.n12
+        if(self.m1!=0.0):
+            retval['m1']= self.m1
+        if(self.m2!=0.0):
+            retval['m2']= self.m2
+        if(self.m12!=0.0):
+            retval['m12']= self.m12
+        if(self.q13!=0.0):
+            retval['q13']= self.q13
+        if(self.q23!=0.0):
+            retval['q23']= self.q23
         return retval
 
     def setFromDict(self,dct):
         '''Sets the internal forces from the dictionary argument.'''
-        self.n1= dct['n1']
-        self.n2= dct['n2']
-        self.n12= dct['n12']
-        self.m1= dct['m1']
-        self.m2= dct['m2']
-        self.m12= dct['m12']
-        self.q13= dct['q13']
-        self.q23= dct['q23']
+        keys= dct.keys()
+        if('n1' in keys):
+            self.n1= dct['n1']
+        else:
+            self.n1= 0.0
+        if('n2' in keys):
+            self.n2= dct['n2']
+        else:
+            self.n2= 0.0
+        if('n12' in keys):
+            self.n12= dct['n12']
+        else:
+            self.n12= 0.0
+        if('m1' in keys):
+            self.m1= dct['m1']
+        else:
+            self.m1= 0.0
+        if('m2' in keys):
+            self.m2= dct['m2']
+        else:
+            self.m2= 0.0
+        if('m12' in keys):
+            self.m12= dct['m12']
+        else:
+            self.m12= 0.0
+        if('q13' in keys):
+            self.q13= dct['q13']
+        else:
+            self.q13= 0.0
+        if('q23' in keys):
+            self.q23= dct['q23']
+        else:
+            self.q23= 0.0
 
     def getCSVString(self):
         '''returns a comma separated values string that represents the
