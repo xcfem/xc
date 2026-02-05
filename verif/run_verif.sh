@@ -2028,6 +2028,8 @@ python tests/postprocess/limit_state_checking/awc_nds/test_uls_checking_nds_03.p
 
 echo "$BLEU" "    serviceability limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/serviceability_limit_states/test_ibc2018_deflection.py
+echo "$BLEU" "    strut-and-tie limit state checking." "$NORMAL"
+python tests/postprocess/limit_state_checking/strut_and_tie/strut_and_tie_stress_checking_01.py
 echo "$BLEU" "    generic limit state tools." "$NORMAL"
 python tests/postprocess/limit_state_checking/generic/test_select_critical_combs.py 
 python tests/postprocess/limit_state_checking/generic/test_internal_forces_envelope_truss.py 

@@ -1,4 +1,6 @@
-# Strut-and-tie problem verification tests 
+# Limit state checking of strut-and-tie models verification tests
+
+An Strut-and-Tie Model (STM) is a design method for reinforced concrete that simplifies complex, non-linear stress regions (D-regions) into a truss system of compressive "struts" and tensile "ties".
 
 ## References
 

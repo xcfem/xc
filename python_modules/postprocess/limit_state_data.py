@@ -89,7 +89,7 @@ class VerifOutVars(object):
         if(self.setCalc):
             if(len(self.setCalc.elements)>0):
                 # Initialize control variables.
-                self.controller.initControlVars(self.setCalc)
+                self.controller.initControlVars(self.setCalc.elements)
                 # Update efficiency values.
                 self.controller.updateEfficiencyForSet(intForcCombFileName,self.setCalc)
                 preprocessor= self.setCalc.getPreprocessor
@@ -1578,8 +1578,8 @@ def calc_max_tension_axial_forces(setCalc,intForcCombFileName,outputFileName):
             if Nsect2>maxNsect2:
                 maxNsect2=Nsect2
                 maxCmbsect2=elIntF[2*ind+1].idComb
-        strSect1=string_el_max_axial_force(el,1,setName,maxCmbsect1,maxNsect1)
-        strSect2=string_el_max_axial_force(el,2,setName,maxCmbsect2,maxNsect2)
+        strSect1= string_el_max_axial_force(el,1,setName,maxCmbsect1,maxNsect1)
+        strSect2= string_el_max_axial_force(el,2,setName,maxCmbsect2,maxNsect2)
         f.write(strSect1) 
         f.write(strSect2) 
     f.close()

@@ -1,4 +1,8 @@
-# Strut-and-tie problem verification tests 
+# Limit state checking of strut-and-tie models
+
+Python modules that make easier to checd strut and tie models.
+
+An Strut-and-Tie Model (STM) is a design method for reinforced concrete that simplifies complex, non-linear stress regions (D-regions) into a truss system of compressive "struts" and tensile "ties".
 
 ## References
 

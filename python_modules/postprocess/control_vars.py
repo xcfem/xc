@@ -960,7 +960,8 @@ class SteelShapeBiaxialBendingControlVars(BiaxialBendingStrengthControlVars):
 # Shear control vars.
         
 class RCShearControlVars(BiaxialBendingControlVars):
-    '''Control variables for shear limit state verification in reinforced concrete elements.
+    '''Control variables for shear limit state verification in reinforced 
+       concrete elements.
 
     :ivar Mu:       ultimate bending moment
     :ivar Vy:       shear force parallel to the y axis
@@ -1706,6 +1707,7 @@ class SteelBucklingControlVars(BucklingControlVarsBase):
         super(SteelBucklingControlVars,self).setFromDict(dct)
         self.strengthReductionFactors= dct['strengthReductionFactors']
         self.bucklingResistance= dct['bucklingResistance']
+        
 
 def read_control_vars(preprocessor, inputFileName):
     ''' Read control var data from the input file an put them as properties
