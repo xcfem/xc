@@ -30,24 +30,28 @@ class StrutAndTieControlVars(cv.CFN):
 
     :ivar typo: element type ('strut' or 'tie').
     '''
-    def __init__(self, CF= -1.0, combName= None, N= 0.0, stress= 0.0, typo= None):
+    def __init__(self, CF= -1.0, combName= None, N= 0.0, stress= 0.0, typo= None, inverted= False):
         '''
         Constructor.
 
         :param combName: name of the load combinations to deal with.
         :param N: axial force (defaults to 0.0).
         :param typo: element type 'strut' or 'tie'.
+        :param inverted: if true, the element is working in the opposite way
+                         to what was intended: strut in tension or tie in
+                         compression.
         '''
         super(StrutAndTieControlVars,self).__init__(CF= CF, combName= combName, N= N)
         self.stress= stress
         self.typo= typo
+        self.inverted= inverted
         
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
         retval= super(StrutAndTieControlVars,self).getDict()
         if(self.stress!=0.0):
             retval.update({'stress':self.stress})
-        retval.update({'type':self.typo})
+        retval.update({'type':self.typo, 'inverted':self.inverted})
         return retval
        
     def setFromDict(self,dct):
@@ -59,6 +63,7 @@ class StrutAndTieControlVars(cv.CFN):
         if('stress' in dct):
             self.stress= retval['stress']
         self.typo= dct['type']
+        self.inverted= dct['inverted']
 
 #       _    _       _ _        _        _       
 #      | |  (_)_ __ (_) |_   __| |_ __ _| |_ ___ 
@@ -137,12 +142,14 @@ class StrutAndTieStressController(lscb.LimitStateControllerBase):
         fyd= self.steel.fyd()
         fctm= self.concrete.fctm()
         fcd= self.concrete.fcd()
+        inverted= False
         N= elementInternalForces.N
         if(elem.tag in self.tieTags):
             typo= 'tie'
             stress= N/elem.sectionArea
             if(stress<0.0): # tie in compression
                 retval= stress/fcd
+                inverted= True
             else: # tie in tension.
                 retval= stress/fyd
         else:
@@ -150,9 +157,10 @@ class StrutAndTieStressController(lscb.LimitStateControllerBase):
             stress= N/elem.sectionArea
             if(stress>0.0): # strut in tension
                 retval= stress/fctm
+                inverted= True
             else: # strut in compression.
                 retval= stress/fcd
-        return retval, typo  
+        return retval, typo, inverted  
 
     def updateEfficiency(self, elem, elementInternalForces):
         ''' Compute the efficiency of the material of the element
@@ -166,12 +174,12 @@ class StrutAndTieStressController(lscb.LimitStateControllerBase):
         # Check each element section.
         for lf in elementInternalForces:
             # Compute efficiency.
-            CFtmp, typo= self.computeEfficiency(elem, elementInternalForces= lf)
+            CFtmp, typo, inverted= self.computeEfficiency(elem, elementInternalForces= lf)
             label= self.limitStateLabel
             # Element type.
             # Update efficiency.
             if(CFtmp>elem.getProp(label).CF):
-                elem.setProp(label, self.ControlVars(combName= lf.idComb, CF= CFtmp, N= lf.N, typo= typo))
+                elem.setProp(label, self.ControlVars(combName= lf.idComb, CF= CFtmp, N= lf.N, typo= typo, inverted= inverted))
           
 class StrutAndTieStressesLimitStateData(lsd.ULS_LimitStateData):
     ''' Strut and tie normal stresses data for limit state checking.'''
