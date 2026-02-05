@@ -41,7 +41,7 @@ class ControlVarDiagram(cd.ColoredDiagram):
         :param scaleFactor: scale factor for the diagram (can be negative too).
         :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
         :param sets:      list of element sets for which the diagram will be displayed.
-        :param attributeName: name of the property that containst the control
+        :param attributeName: name of the property that contains the control
                               variable.
         :param component: component of the control variable to be displayed
                          (possible arguments: 'N', 'My', 'Mz'Vz,...).
@@ -64,7 +64,9 @@ class ControlVarDiagram(cd.ColoredDiagram):
     def getPropertyNames(self):
         ''' Return the names of the properties used to construct the diagram.'''
         retval= list()
-        if(self.attributeName != "intForce"): # not internal forces.
+        if(self.attributeName == 'ULS_StrutAndTie'):
+            retval.append(self.attributeName)
+        elif(self.attributeName != "intForce"): # not internal forces.
             retval.append(self.attributeName + 'Sect1') # Value at start node.
             retval.append(self.attributeName + 'Sect2') # Value at end node.
         return retval;
@@ -83,9 +85,13 @@ class ControlVarDiagram(cd.ColoredDiagram):
                 elemVDir= elem.getJVector3d(True) #initialGeometry= True
             else: # local K vector.
                 elemVDir= elem.getKVector3d(True) #initialGeometry= True
-        if(len(propertyNames)>0):
+        sz= len(propertyNames)
+        if(sz>0):
             prop1= elem.getProp(propertyNames[0])
-            prop2= elem.getProp(propertyNames[1])
+            if(sz>1):
+                prop2= elem.getProp(propertyNames[1])
+            else:
+                prop2= prop1
             if(prop1 and prop2):
                 if('crack' in self.attributeName.lower()):
                     if (self.component == 'getCF'):

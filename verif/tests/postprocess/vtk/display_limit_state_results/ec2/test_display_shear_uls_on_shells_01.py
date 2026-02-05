@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-''' Check graphical representatio of shear limit state checking.'''
+''' Check graphical representation of shear limit state checking on shell
+ elements.
+
+The test does not  verify the output contents, only that the method runs and 
+the file is  created.
+'''
 
 from __future__ import print_function
 

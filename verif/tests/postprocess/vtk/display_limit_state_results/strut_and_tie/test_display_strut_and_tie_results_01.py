@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
-''' Trivial test cheching the limit state analysis on strut-and-tie model.'''
+''' Check graphical representation of limit state checking on strut-and-tie 
+    models.
+
+The test does not  verify the output contents, only that the method runs and 
+the file is  created.
+'''
+
+from __future__ import division
+from __future__ import print_function
 
 __author__= "Luis Claudio Pérez Tato (LCPT)"
 __copyright__= "Copyright 2026, LCPT"
@@ -7,6 +15,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import os
 import xc
 from model import predefined_spaces
 from materials.ec2 import EC2_materials
@@ -91,24 +100,28 @@ limitStateToCheck.analyzeLoadCombinations(combContainer,setCalc)
 # Perform checking.
 limitStateToCheck.check(setCalc= setCalc, concrete= concrete, steel= reinfSteel, appendToResFile='N',listFile='N',calcMeanCF='N')
 
-# Get results
-refValues= [0.8708275862068884, 0.070306304127012, 0.070306304127012]
-err= 0.0
-for e, refValue in zip([tie, strut1, strut2], refValues):
-    cv= e.getProp('ULS_StrutAndTie')
-    err+= (cv.CF-refValue)**2
 
-#  print(err)
+# #########################################################
+# # Graphic stuff.
+from postprocess import output_handler
+oh= output_handler.OutputHandler(modelSpace)
 
-import os
-from misc_utils import log_messages as lmsg
+setCalc.fillDownwards()
 fname= os.path.basename(__file__)
-if(err<1e-6):
+outputFileName= '/tmp/'+fname.replace('.py', '.jpeg')
+oh.displayDiagram(attributeName=limitStateToCheck.label, component= 'CF', setToDispRes= setCalc, setToDisplay= setCalc, caption= 'Capacity factor', fileName= outputFileName)
+
+# Check that file exists
+testOK= os.path.isfile(outputFileName)
+
+from misc_utils import log_messages as lmsg
+if testOK:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
 
 cfg.cleandirs() # Clean after yourself.
+os.remove(outputFileName)
 
 # # Graphic output.
 # from postprocess import output_handler

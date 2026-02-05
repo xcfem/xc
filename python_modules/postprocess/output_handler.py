@@ -562,7 +562,7 @@ class OutputHandler(object):
         for st in setsToDisplayReactions:
             self.displayReactions(setToDisplay= st, fileName= fileName, defFScale= defFScale, inclInertia= inclInertia, reactionCheckTolerance= reactionCheckTolerance)
             
-    def displayDiagram(self, attributeName, component, setToDispRes, setToDisplay, caption, unitDescription, scaleFactor= 1.0, fileName= None, defFScale= 0.0,orientScbar=1,titleScbar=None, defaultDirection= 'J'):
+    def displayDiagram(self, attributeName, component, setToDispRes, setToDisplay, caption, fUnitConv= None, unitDescription= '', scaleFactor= 1.0, fileName= None, defFScale= 0.0,orientScbar=1,titleScbar=None, defaultDirection= 'J'):
         '''Auxiliary function to display results on linear elements.
 
         :param attributeName: attribute name(e.g. 'ULS_normalStressesResistance')
@@ -586,7 +586,11 @@ class OutputHandler(object):
         :param defaultDirection: default direction of the diagram (J: element 
                                  local j vector or K: element local K vector).
         '''
-        unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
+        # unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
+        if(fUnitConv is None):
+            unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(component)
+        else:
+            unitConversionFactor= fUnitConv
         LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
         diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDispRes],attributeName= attributeName,component= component, defaultDirection= defaultDirection, lRefModSize= LrefModSize)
         diagram.addDiagram()

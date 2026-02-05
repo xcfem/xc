@@ -2089,6 +2089,8 @@ python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_bendin
 echo "$BLEU" "      Generic." "$NORMAL"
 python tests/postprocess/vtk/display_limit_state_results/generic/test_display_disp_max_on_nodes.py
 python tests/postprocess/vtk/display_limit_state_results/generic/test_display_internal_forces_envelope_01.py
+echo "$BLEU" "      Strut-and-tie models." "$NORMAL"
+python tests/postprocess/vtk/display_limit_state_results/strut_and_tie/test_display_strut_and_tie_results_01.py
 
 # Report tests.
 echo "$BLEU" "  Report output." "$NORMAL"
