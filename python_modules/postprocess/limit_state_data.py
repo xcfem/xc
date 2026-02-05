@@ -89,7 +89,7 @@ class VerifOutVars(object):
         if(self.setCalc):
             if(len(self.setCalc.elements)>0):
                 # Initialize control variables.
-                self.controller.initControlVars(self.setCalc.elements)
+                self.controller.initControlVars(self.setCalc)
                 # Update efficiency values.
                 self.controller.updateEfficiencyForSet(intForcCombFileName,self.setCalc)
                 preprocessor= self.setCalc.getPreprocessor
