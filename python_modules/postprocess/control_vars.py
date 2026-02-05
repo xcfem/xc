@@ -1822,17 +1822,25 @@ def get_element_data_dict(controlVarsDict, controlVarName):
 
     :param controlVarsDict: dictionary containing the values of the control 
                             variables for each element.
-    :param controlVarName: name of the control var to populate the dictionary with.
+    :param controlVarName: name of the control var to populate the dictionary 
+                           with.
     '''
     retval= dict()
     for eTag in controlVarsDict:
         elementControlVars= controlVarsDict[eTag]
         if not eTag in retval:
             retval[eTag]= dict()
-        for index in elementControlVars:
+        sz= len(elementControlVars)
+        if(sz>1): # Many records for each element.
+            for index in elementControlVars:
+                controlVar= elementControlVars[index]
+                sectionName= 'Sect'+str(index)
+                propName= controlVarName+sectionName
+                retval[eTag][propName]= controlVar.getStrConstructor()
+        else: # One record for each element.
+            index= next(iter(elementControlVars))
             controlVar= elementControlVars[index]
-            sectionName= 'Sect'+str(index)
-            propName= controlVarName+sectionName
+            propName= controlVarName
             retval[eTag][propName]= controlVar.getStrConstructor()
     return retval
 
