@@ -168,10 +168,11 @@ class LimitStateControllerBase(object):
             used for this limit state.'''
         return False
         
-    def initControlVars(self,elements):
-        ''' Initialize control variables over elements.
+    def initControlVars(self, elements):
+        ''' Initialize control variables on the given elements.
 
-          :param elements: elements to define control variables in.
+        :param elements: elements in which the control variables 
+                         will be initialized.
         '''
         for e in elements:
             e.setProp(self.limitStateLabel, self.ControlVars())
@@ -251,13 +252,13 @@ class LimitStateControllerBase2Sections(LimitStateControllerBase):
         ''' Return the label that corresponds to the index argument.'''
         return self.elementSections[idSection]
     
-    def initControlVars(self,setCalc):
-        '''Initialize control variables over elements.
+    def initControlVars(self, elements):
+        '''Initialize control variables on the given elements.
 
-        :param setCalc: set of elements to which define control variables.
-        :param elementSections: element sections to initialize.
+        :param elements: elements in which the control variables 
+                         will be initialized.
         '''
-        for e in setCalc.elements:
+        for e in elements:
             for s in self.elementSections:
                 e.setProp(self.limitStateLabel+s,self.ControlVars(idSection= s))
 

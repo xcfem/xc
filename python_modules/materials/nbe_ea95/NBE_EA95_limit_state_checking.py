@@ -30,12 +30,13 @@ class VonMisesStressController(lsc.LimitStateControllerBase):
         '''
         super(VonMisesStressController,self).__init__(limitStateLabel= limitStateLabel, solutionProcedureType= solutionProcedureType)
 
-    def initControlVars(self,setCalc):
-        '''Initialize control variables over elements.
+    def initControlVars(self, elements):
+        '''Initialize control variables on the given elements.
 
-        :param setCalc: set of elements to which define control variables
+        :param elements: elements in which the control variables 
+                         will be initialized.
         '''
-        for e in setCalc.elements:
+        for e in elements:
             e.setProp(self.limitStateLabel,self.ControlVars())
             
     def readInternalForces(self,intForcCombFileName, setCalc= None):

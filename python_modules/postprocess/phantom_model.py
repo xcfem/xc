@@ -246,7 +246,7 @@ class PhantomModel(object):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; element section names not found for element with tags: '+str(elementsWithoutSection))
-        outputCfg.controller.initControlVars(retval)
+        outputCfg.controller.initControlVars(elements= retval)
         return retval
 
     def createLoads(self, exhaustedSections):

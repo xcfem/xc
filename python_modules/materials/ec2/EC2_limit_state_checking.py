@@ -1832,12 +1832,13 @@ class Ec2InPlaneStressController(lscb.LimitStateControllerBase):
         '''
         super(Ec2InPlaneStressController, self).__init__(limitStateLabel= limitStateLabel, solutionProcedureType= solutionProcedureType)
 
-    def initControlVars(self,setCalc):
-        '''Initialize control variables over elements.
+    def initControlVars(self, elements):
+        '''Initialize control variables on the given elements.
 
-        :param setCalc: set of elements to which define control variables
+        :param elements: elements in which the control variables 
+                         will be defined.
         '''
-        for e in setCalc.elements:
+        for e in elements:
             e.setProp(self.limitStateLabel, self.ControlVars())
             
     def readStresses(self, stressesCombFileName, setCalc= None):

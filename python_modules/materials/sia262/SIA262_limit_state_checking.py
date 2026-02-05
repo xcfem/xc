@@ -397,12 +397,13 @@ class CrackControlSIA262(lsc.CrackControlBaseParameters):
             self.tensionedRebars.setup(tensionedReinforcement)
         return self.tensionedRebars.averageStress
 
-    def initControlVars(self,elements):
-        ''' Initialize control variables over elements.
+    def initControlVars(self, elements):
+        ''' Initialize control variables on the given elements.
 
-          :param elements: elements to define control variables in
+        :param elements: elements in which the control variables 
+                         will be initialized.
         '''
-        for e in elements:
+        for e in setCalc.elements:
             e.setProp(self.limitStateLabel, self.ControlVars(idSection= e.getProp('idSection')))
 
     def check(self,elements,nmbComb):
@@ -702,8 +703,12 @@ class FatigueController(lsc.LimitStateControllerBase):
         '''
         super(FatigueController,self).__init__(limitStateLabel= limitStateLabel, solutionProcedureType= solutionProcedureType)
 
-    def initControlVars(self,elements):
-        ''' Defines limit state control variables for all the elements.'''
+    def initControlVars(self, elements):
+        ''' Defines limit state control variables on the given elements.
+
+        :param setCalc: elements in which the control variables 
+                        will be initialized.
+        '''
         for e in elements:
             idS= e.getProp("idSection")
             e.setProp(self.limitStateLabel,self.ControlVars(idSection= idS))
