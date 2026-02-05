@@ -98,7 +98,7 @@ limitStateToCheck.check(setCalc= setCalc, concrete= concrete, steel= reinfSteel,
 refValues= [0.8708275862068884, 0.070306304127012, 0.070306304127012]
 err= 0.0
 for e, refValue in zip([tie, strut1, strut2], refValues):
-    cv= e.getProp('StrutAndTie')
+    cv= e.getProp('ULS_StrutAndTie')
     err+= (cv.CF-refValue)**2
 
 #  print(err)
