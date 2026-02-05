@@ -142,7 +142,7 @@ class StrutAndTieStressesLimitStateData(lsd.ULS_LimitStateData):
                                  i. e. uls_permanent, sls_quasi-permanent,
                                  sls_frequent, sls_rare, uls_earthquake, etc. 
         '''
-        super(StrutAndTieStressesLimitStateData,self).__init__(limitStateLabel= 'StrutAndTie', outputDataBaseFileName= fn.strutAndTieVerificationResultsFile, designSituations= designSituations)
+        super(StrutAndTieStressesLimitStateData,self).__init__(limitStateLabel= 'ULS_StrutAndTie', outputDataBaseFileName= fn.strutAndTieVerificationResultsFile, designSituations= designSituations)
     
     def getController(self, concrete, steel):
         ''' Return a controller corresponding to this limit state.
