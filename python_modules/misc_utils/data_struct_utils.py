@@ -44,14 +44,16 @@ def remove_accents(input_str):
 
     :param input_str: string to remove accents from. 
     '''
-    if(len(input_str)>0):
-        tmp= to_unicode(input_str)
-        # Remove accents.
-        nfkd_form= unicodedata.normalize('NFKD', tmp)
-        only_ascii= nfkd_form.encode('ASCII', 'ignore').decode('ascii')
-    else:
-        only_ascii= input_str
-    return only_ascii
+    retval= ''
+    if(input_str is not None):
+        if(len(input_str)>0):
+            tmp= to_unicode(input_str)
+            # Remove accents.
+            nfkd_form= unicodedata.normalize('NFKD', tmp)
+            retval= nfkd_form.encode('ASCII', 'ignore').decode('ascii')
+        else:
+            retval= input_str
+    return retval
 
 def slugify(s):
     """

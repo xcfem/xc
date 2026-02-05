@@ -351,15 +351,16 @@ class DisplaySettings(object):
         self.renWin= vtkRenderWindow()
         self.renWin.SetSize(self.windowWidth,self.windowHeight)
         self.renWin.AddRenderer(self.renderer)
-        self.renWin.SetWindowName(caption)
+        if(caption is not None):
+            self.renWin.SetWindowName(caption)
         #Axes
         self.setupAxes()
 
         #Time stamp and window decorations.
-        if(caption==''):
+        if(caption=='' or (caption is None)):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; window caption empty.')
+            lmsg.warning(className+'.'+methodName+'; window caption empty.')
         vtkCornerAnno= self.annotation.getVtkCornerAnnotation(caption= caption, unitDescription= unitDescription)
         self.renderer.AddActor(vtkCornerAnno)
         return self.renWin
