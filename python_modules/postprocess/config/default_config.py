@@ -496,6 +496,11 @@ class ProjectDirTree(object):
             graphics files.'''
         return self.getRltvGraphicsPath()+fn.fatigueDirectory
 
+    def getVerifStrutAndTieFile(self):
+        ''' Return the path of the strut-and-tie verification
+            results file.'''
+        return self.getFullVerifPath()+fn.strutAndTieVerificationResultsFile+'.json'
+
     def getVerifFile(self, limitStateLabel):
         '''Return the path of the verification results file
            for the limit state argument.

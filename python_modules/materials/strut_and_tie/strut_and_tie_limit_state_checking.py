@@ -16,55 +16,6 @@ from postprocess import limit_state_data as lsd
 from postprocess.config import file_names as fn
 from misc_utils import log_messages as lmsg
 
-#        ___         _           _        
-#       / __|___ _ _| |_ _ _ ___| |       
-#      | (__/ _ \ ' \  _| '_/ _ \ |       
-#       \___\___/_||_\__|_| \___/_|       
-#      __ ____ _ _ _(_)__ _| |__| |___ ___
-#      \ V / _` | '_| / _` | '_ \ / -_|_-<
-#       \_/\__,_|_| |_\__,_|_.__/_\___/__/
-# Control variables.
-
-class StrutAndTieControlVars(cv.CFN):
-    '''Control variables for elements of strut-and-tie models.
-
-    :ivar typo: element type ('strut' or 'tie').
-    '''
-    def __init__(self, CF= -1.0, combName= None, N= 0.0, stress= 0.0, typo= None, inverted= False):
-        '''
-        Constructor.
-
-        :param combName: name of the load combinations to deal with.
-        :param N: axial force (defaults to 0.0).
-        :param typo: element type 'strut' or 'tie'.
-        :param inverted: if true, the element is working in the opposite way
-                         to what was intended: strut in tension or tie in
-                         compression.
-        '''
-        super(StrutAndTieControlVars,self).__init__(CF= CF, combName= combName, N= N)
-        self.stress= stress
-        self.typo= typo
-        self.inverted= inverted
-        
-    def getDict(self):
-        ''' Return a dictionary containing the object data.'''
-        retval= super(StrutAndTieControlVars,self).getDict()
-        if(self.stress!=0.0):
-            retval.update({'stress':self.stress})
-        retval.update({'type':self.typo, 'inverted':self.inverted})
-        return retval
-       
-    def setFromDict(self,dct):
-        ''' Set the data values from the dictionary argument.
-
-        :param dct: dictionary containing the values of the object members.
-        '''
-        super(StrutAndTieControlVars,self).setFromDict(dct)
-        if('stress' in dct):
-            self.stress= retval['stress']
-        self.typo= dct['type']
-        self.inverted= dct['inverted']
-
 #       _    _       _ _        _        _       
 #      | |  (_)_ __ (_) |_   __| |_ __ _| |_ ___ 
 #      | |__| | '  \| |  _| (_-<  _/ _` |  _/ -_)
@@ -82,7 +33,7 @@ class StrutAndTieStressController(lscb.LimitStateControllerBase):
     :ivar steel: tie steel material.
     '''
 
-    ControlVars= StrutAndTieControlVars
+    ControlVars= cv.StrutAndTieControlVars
     
     def __init__(self, limitStateLabel, concrete, steel, solutionProcedureType= lscb.defaultStaticLinearSolutionProcedure):
         ''' Constructor.
@@ -202,6 +153,15 @@ class StrutAndTieStressesLimitStateData(lsd.ULS_LimitStateData):
                                around both cross-section axes.
         '''
         return StrutAndTieStressController(limitStateLabel= self.label, concrete= concrete, steel= steel)
+    
+    def readControlVars(self, modelSpace):
+        ''' Read the control vars associated with this limit state.
+
+        :param modelSpace: PredefinedSpace object used to create the FE model
+                           (see predefined_spaces.py).
+        :returns: number of properties read.
+        '''
+        return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifStrutAndTieFile())
     
     def check(self, setCalc, concrete, steel, appendToResFile='N', listFile='N', calcMeanCF='N'):
         ''' Perform limit state checking.

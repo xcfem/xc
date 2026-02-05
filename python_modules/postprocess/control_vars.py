@@ -24,7 +24,7 @@ from postprocess.reports import common_formats as fmt
 from postprocess import extrapolate_elem_attr as ext
 from materials import stresses
 
-__all__= ['AxialForceControlVars', 'BiaxialBendingControlVars', 'BiaxialBendingStrengthControlVars', 'CFN', 'CFNMy', 'CFNMyMz', 'CFVy', 'ControlVarsBase', 'CrackControlBaseVars', 'CrackControlVars', 'FatigueControlBaseVars', 'FatigueControlVars', 'N', 'NMy', 'NMyMz', 'RCCrackControlVars', 'RCCrackStraightControlVars', 'RCShearControlVars', 'SIATypeRCShearControlVars', 'ShVy', 'ShearYControlVars', 'SteelShapeUniaxialBendingControlVars', 'SteelShapeBiaxialBendingControlVars', 'UniaxialBendingControlVars', 'VonMisesControlVars', 'RCBucklingControlVars', 'SteelBucklingControlVars', 'extrapolate_control_var', 'getControlVarImportModuleStr', 'get_diagram_direction', 'get_element_internal_force_component_data', 'write_control_vars_from_elements', 'write_control_vars_from_elements_for_ansys', 'write_control_vars_from_phantom_elements']
+__all__= ['AxialForceControlVars', 'BiaxialBendingControlVars', 'BiaxialBendingStrengthControlVars', 'CFN', 'CFNMy', 'CFNMyMz', 'CFVy', 'ControlVarsBase', 'CrackControlBaseVars', 'CrackControlVars', 'FatigueControlBaseVars', 'FatigueControlVars', 'N', 'NMy', 'NMyMz', 'RCCrackControlVars', 'RCCrackStraightControlVars', 'RCShearControlVars', 'SIATypeRCShearControlVars', 'ShVy', 'ShearYControlVars', 'SteelShapeUniaxialBendingControlVars', 'SteelShapeBiaxialBendingControlVars', 'UniaxialBendingControlVars', 'VonMisesControlVars', 'RCBucklingControlVars', 'SteelBucklingControlVars', 'StrutAndTieControlVars', 'extrapolate_control_var', 'getControlVarImportModuleStr', 'get_diagram_direction', 'get_element_internal_force_component_data', 'write_control_vars_from_elements', 'write_control_vars_from_elements_for_ansys', 'write_control_vars_from_phantom_elements']
 
 def get_diagram_direction(elem, component, defaultDirection):
     '''Return the direction vector to represent the diagram over the element
@@ -73,6 +73,14 @@ def get_element_internal_force_component_data(elem, component, defaultDirection)
         value1= values[0]; value2= values[1]
     return [elemVDir,value1,value2]
 
+#        ___         _           _        
+#       / __|___ _ _| |_ _ _ ___| |       
+#      | (__/ _ \ ' \  _| '_/ _ \ |       
+#       \___\___/_||_\__|_| \___/_|       
+#      __ ____ _ _ _(_)__ _| |__| |___ ___
+#      \ V / _` | '_| / _` | '_ \ / -_|_-<
+#       \_/\__,_|_| |_\__,_|_.__/_\___/__/
+# Classes defining control variables.
 
 class ControlVarsBase(object):
     '''Base class for the control of variables (internal forces, 
@@ -1708,7 +1716,48 @@ class SteelBucklingControlVars(BucklingControlVarsBase):
         self.strengthReductionFactors= dct['strengthReductionFactors']
         self.bucklingResistance= dct['bucklingResistance']
         
+class StrutAndTieControlVars(CFN):
+    '''Control variables for elements of strut-and-tie models.
 
+    :ivar typo: element type ('strut' or 'tie').
+    '''
+    def __init__(self, CF= -1.0, combName= None, N= 0.0, stress= 0.0, typo= None, inverted= False):
+        '''
+        Constructor.
+
+        :param combName: name of the load combinations to deal with.
+        :param N: axial force (defaults to 0.0).
+        :param typo: element type 'strut' or 'tie'.
+        :param inverted: if true, the element is working in the opposite way
+                         to what was intended: strut in tension or tie in
+                         compression.
+        '''
+        super(StrutAndTieControlVars,self).__init__(CF= CF, combName= combName, N= N)
+        self.stress= stress
+        self.typo= typo
+        self.inverted= inverted
+        
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(StrutAndTieControlVars,self).getDict()
+        if(self.stress!=0.0):
+            retval.update({'stress':self.stress})
+        retval.update({'typo':self.typo, 'inverted':self.inverted})
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        super(StrutAndTieControlVars,self).setFromDict(dct)
+        if('stress' in dct):
+            self.stress= retval['stress']
+        self.typo= dct['typo']
+        self.inverted= dct['inverted']
+
+# Control vars classes end.
+        
 def read_control_vars(preprocessor, inputFileName):
     ''' Read control var data from the input file an put them as properties
         of the model elements and/or nodes.
@@ -1732,7 +1781,8 @@ def read_control_vars(preprocessor, inputFileName):
             element= elementHandler.getElement(elementTag)
             elementControlVars= elementData[eKey]
             for propKey in elementControlVars: # iterate on element control vars.
-                propValue= eval(elementControlVars[propKey])
+                expression= elementControlVars[propKey]
+                propValue= eval(expression)
                 element.setProp(propKey, propValue)
                 retval+= 1
     if 'nodeData' in dataDict: # Control variables on nodes.
