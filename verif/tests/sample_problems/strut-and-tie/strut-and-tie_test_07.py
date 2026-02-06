@@ -111,7 +111,7 @@ pierMinInertia= min(pierRCSection.Iy(),pierRCSection.Iz())
 eqRadius= math.pow(4*pierMinInertia/math.pi,1/4.0)
 pierEffectiveDiameter= 0.8*2*eqRadius
 
-pileCap= strut_and_tie_utils.PileCap3Piles(pierBottomNode= n1, pileTopNodeA= pileTopNodes[0], pileTopNodeB= pileTopNodes[1], pileTopNodeC= pileTopNodes[2],  pierEffectiveDiameter= pierEffectiveDiameter)
+pileCap= strut_and_tie_utils.PileCap3Piles(modelSpace= modelSpace, pierBottomNode= n1, pileTopNodeA= pileTopNodes[0], pileTopNodeB= pileTopNodes[1], pileTopNodeC= pileTopNodes[2],  pierEffectiveDiameter= pierEffectiveDiameter)
 
 
 # Define pile cap.
@@ -121,7 +121,7 @@ if(strutAndTieModel):
     diam32Area= math.pi*(32e-3/2.0)**2
     diam25Area= math.pi*(25e-3/2.0)**2
     diam16Area= math.pi*(16e-3/2.0)**2
-    pileCap.createStrutAndTieModel(modelSpace, strutArea= strutArea, concrete= concrete, pileTiesArea= 24*diam25Area, radialTiesArea= 10*diam16Area, bottomChordsTiesArea= 10*diam32Area, topChordsTiesArea= 10*diam25Area, shearTiesArea= 10*diam16Area, reinfSteel= reinfSteel, xcPierSectionMaterial= xcPierSectionMaterial, linearElastic= False)
+    pileCap.createStrutAndTieModel(strutArea= strutArea, concrete= concrete, pileTiesArea= 24*diam25Area, radialTiesArea= 10*diam16Area, bottomChordsTiesArea= 10*diam32Area, topChordsTiesArea= 10*diam25Area, shearTiesArea= 10*diam16Area, reinfSteel= reinfSteel, xcPierSectionMaterial= xcPierSectionMaterial, linearElastic= False)
 else:
     pileCap.createDummyElasticModel(modelSpace, concrete= concrete, releaseExtremities= True)
 

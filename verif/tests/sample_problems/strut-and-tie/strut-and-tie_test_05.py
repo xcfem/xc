@@ -62,7 +62,7 @@ for pt in pileTopPoints:
     pileTopNodes.append(modelSpace.newNode(pt.x, pt.y, pt.z))
     pileBottomNodes.append(modelSpace.newNode(pt.x, pt.y, pt.z-pileLength))
 
-pileCap= strut_and_tie_utils.PileCap3Piles(pierBottomNode= n3, pileTopNodeA= pileTopNodes[0], pileTopNodeB= pileTopNodes[1], pileTopNodeC= pileTopNodes[2],  pierEffectiveDiameter= pierEffectiveDiameter)
+pileCap= strut_and_tie_utils.PileCap3Piles(modelSpace= modelSpace, pierBottomNode= n3, pileTopNodeA= pileTopNodes[0], pileTopNodeB= pileTopNodes[1], pileTopNodeC= pileTopNodes[2],  pierEffectiveDiameter= pierEffectiveDiameter)
 
 # Define materials. 
 concrete= EC2_materials.C30
@@ -76,7 +76,7 @@ strutArea= pierRCSection.getAc()/math.sqrt(2)
 diam32Area= math.pi*(32e-3/2.0)**2
 diam25Area= math.pi*(25e-3/2.0)**2
 diam16Area= math.pi*(16e-3/2.0)**2
-pileCap.createDummyElasticModel(modelSpace, concrete= concrete)
+pileCap.createDummyElasticModel(concrete= concrete)
 
 ### Define pier.
 #### Define pier elements.

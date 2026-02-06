@@ -65,7 +65,7 @@ n9= modelSpace.newNode(v, 0.0) # right pile top.
 n10= modelSpace.newNode(-v, -pileLength)
 n11= modelSpace.newNode(v, -pileLength)
 
-pileCap= strut_and_tie_utils.PileCap2Piles(pierBottomNode= n3, leftPileTopNode= n6, rightPileTopNode= n9, pierEffectiveWidth= pierSide)
+pileCap= strut_and_tie_utils.PileCap2Piles(modelSpace= modelSpace, pierBottomNode= n3, leftPileTopNode= n6, rightPileTopNode= n9, pierEffectiveWidth= pierSide)
 
 # Define materials. 
 concrete= EC2_materials.C30
@@ -77,7 +77,7 @@ pierRCSection= def_simple_RC_section.RCRectangularSection(name= 'pierRCSection',
 xcPierSectionMaterial= pierRCSection.defElasticShearSection2d(preprocessor)
 
 # Define pile cap.
-pileCap.createStrutAndTieModel(modelSpace, strutArea= strutArea, concrete= concrete, topDownTiesArea= tieArea, bottomChordTiesArea= tieArea, topChordTiesArea= tieArea, reinfSteel= reinfSteel, xcPierSectionMaterial= xcPierSectionMaterial, linearElastic= False)
+pileCap.createStrutAndTieModel(strutArea= strutArea, concrete= concrete, topDownTiesArea= tieArea, bottomChordTiesArea= tieArea, topChordTiesArea= tieArea, reinfSteel= reinfSteel, xcPierSectionMaterial= xcPierSectionMaterial, linearElastic= False)
 
 ### Define pier.
 #### Define pier elements.

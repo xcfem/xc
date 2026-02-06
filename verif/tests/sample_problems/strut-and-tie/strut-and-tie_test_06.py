@@ -111,13 +111,13 @@ pierMinInertia= min(pierRCSection.Iy(),pierRCSection.Iz())
 eqRadius= math.pow(4*pierMinInertia/math.pi,1/4.0)
 pierEffectiveDiameter= 0.8*2*eqRadius
 
-pileCap= strut_and_tie_utils.PileCap3Piles(pierBottomNode= n1, pileTopNodeA= pileTopNodes[0], pileTopNodeB= pileTopNodes[1], pileTopNodeC= pileTopNodes[2],  pierEffectiveDiameter= pierEffectiveDiameter)
+pileCap= strut_and_tie_utils.PileCap3Piles(modelSpace= modelSpace, pierBottomNode= n1, pileTopNodeA= pileTopNodes[0], pileTopNodeB= pileTopNodes[1], pileTopNodeC= pileTopNodes[2],  pierEffectiveDiameter= pierEffectiveDiameter)
 
 
 # Define pile cap.
 # releaseExtremities: if true, release the bending moments at the nodes
 #                     connecting with the piles.
-pileCap.createDummyElasticModel(modelSpace, concrete= concrete, releaseExtremities= True)
+pileCap.createDummyElasticModel(concrete= concrete, releaseExtremities= True)
 
 ## Define constraints
 for n in pileBottomNodes:

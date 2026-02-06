@@ -970,7 +970,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
                             the material density.
         '''
         if(name is None):
-            name= self.materialName+'_uniaxial'
+            name= self.materialName+'_uniaxial_nt'
         rho= self.density()
         if(overrideRho):
             rho= overrideRho

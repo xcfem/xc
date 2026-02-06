@@ -26,7 +26,7 @@ def create_dummy_spring_material(modelSpace):
     ''' Initializes the dummy spring material which will be used to add 
         rotational stiffnes to the desired nodes.
 
-    :param modelSpace: PredefinedSpace object used to create the FE model.
+    :param modelSpace: PredefinedSpace object that manages FE model.
     '''
     global dummy_spring_material
     if(dummy_spring_material is None):
@@ -41,7 +41,7 @@ def create_dummy_spring(modelSpace, node):
         the model stiffness matrix singular. This function is used to avoid
         that.
 
-    :param modelSpace: PredefinedSpace object used to create the FE model.
+    :param modelSpace: PredefinedSpace object that manages FE model.
     :param node: node whose rotations need to be constrained.
     '''
     create_dummy_spring_material(modelSpace)
@@ -77,7 +77,7 @@ def define_dummy_springs(modelSpace, nodes):
         makes the model stiffness matrix singular. This function is used to
         avoid that.
 
-    :param modelSpace: PredefinedSpace object used to create the FE model.
+    :param modelSpace: PredefinedSpace object that manages FE model.
     :param node: node whose rotations need to be constrained.
     '''
     # Get the current default materials.
@@ -90,44 +90,151 @@ def define_dummy_springs(modelSpace, nodes):
     modelSpace.setDefaultMaterials(previousDefaultMaterials)
     return retval
 
+def get_strut_material(modelSpace, concrete, linearElastic, a= 1e-4):
+    ''' Create the material for the strut elements.
+
+    :param modelSpace: PredefinedSpace object that manages FE model.
+    :param concrete: concrete material.
+    :param linearElastic: if True, assign a linear elastic material to
+                          struts and ties (insteaa of an no-tension or
+                          no-compression material). Used with debugging
+                          purposes.
+    :param a:  parameter that defines the tension behaviour of
+               no tension concrete. See ENTMaterial.
+    '''
+    if(linearElastic):
+        retval= concrete.defElasticMaterial(preprocessor= modelSpace.preprocessor)
+    else:
+        retval= concrete.defElasticNoTensMaterial(preprocessor= modelSpace.preprocessor, a= a)
+    return retval
+        
+def get_tie_material(modelSpace, steel, linearElastic, a= 1e-4):
+    ''' Get the material for the tie elements.
+
+    :param modelSpace: PredefinedSpace object that manages FE model.
+    :param steel: reinforcing steel material.
+    :param linearElastic: if True, assign a linear elastic material to
+                          struts and ties (insteaa of an no-tension or
+                          no-compression material). Used with debugging
+                          purposes.
+    '''
+    if(linearElastic):
+        retval= steel.defElasticMaterial(preprocessor= modelSpace.preprocessor)
+    else:
+        retval= steel.defElasticNoCompressionMaterial(preprocessor= modelSpace.preprocessor, a= a)
+    return retval
+
 class StrutAndTieModel(object):
     ''' Base class for strut-and-tie models.
 
+    :ivar modelSpace: PredefinedSpace object that manages FE model.
+    :ivar strutMaterial: concrete material for the struts.
+    :ivar tieMaterial: steel material for the ties.
     '''
-    def getStrutMaterial(self, modelSpace, concrete, linearElastic):
-        ''' Get the material for the strut elements.
+    concrete_a= .0001 # parameter to define the tension behaviour of concrete.
+    steel_a= .0001 # parameter to define the compression behaviour of steel.
 
-        :param modelSpace: PredefinedSpace object used to create the FE model.
+    def __init__(self, modelSpace):
+        ''' Constructor.
+
+        :param modelSpace: PredefinedSpace object that manages FE model.
+        '''
+        self.modelSpace= modelSpace
+        self.strutMaterial= None
+        self.tieMaterial= None
+        
+    @staticmethod
+    def set_concrete_a(a):
+        ''' Modifies the parameter that defines the tension behaviour of
+            concrete. See ENTMaterial.
+            https://github.com/xcfem/xc/blob/master/src/material/uniaxial/ENTMaterial.h
+
+        :param a: parameter that defines the tension behaviour of
+                  concrete.
+        '''
+        StrutAndTieModel.concrete_a= a
+        
+    @staticmethod
+    def set_steel_a(a):
+        ''' Modifies the parameter that defines the compresion behaviour of
+            steel. See ENTMaterial.
+            https://github.com/xcfem/xc/blob/master/src/material/uniaxial/ENTMaterial.h
+
+        :param a: parameter that defines the tension behaviour of
+                  steel.
+        '''
+        StrutAndTieModel.steel_a= a
+    
+    def defStrutMaterial(self, concrete, linearElastic):
+        ''' Define the material for the strut elements.
+
         :param concrete: concrete material.
         :param linearElastic: if True, assign a linear elastic material to
                               struts and ties (insteaa of an no-tension or
                               no-compression material). Used with debugging
                               purposes.
         '''
-        self.concrete= concrete
-        if(linearElastic):
-            retval= self.concrete.defElasticMaterial(preprocessor= modelSpace.preprocessor)
-        else:
-            retval= self.concrete.defElasticNoTensMaterial(preprocessor= modelSpace.preprocessor, a= self.concrete_a)
-        return retval
+        if(self.strutMaterial is None):
+            self.concrete= concrete
+            self.strutMaterial= get_strut_material(modelSpace= self.modelSpace, concrete= concrete, linearElastic= linearElastic, a= StrutAndTieModel.concrete_a)
+        return self.strutMaterial
 
-    def getTieMaterial(self, modelSpace, reinfSteel, linearElastic):
-        ''' Get the material for the tie elements.
+    def defTieMaterial(self, reinfSteel, linearElastic):
+        ''' Define the material for the tie elements.
 
-        :param modelSpace: PredefinedSpace object used to create the FE model.
         :param reinfSteel: reinforcing steel material.
         :param linearElastic: if True, assign a linear elastic material to
                               struts and ties (insteaa of an no-tension or
                               no-compression material). Used with debugging
                               purposes.
         '''
-        self.reinfSteel= reinfSteel
-        if(linearElastic):
-            retval= self.reinfSteel.defElasticMaterial(preprocessor= modelSpace.preprocessor)
-        else:
-            retval= self.reinfSteel.defElasticNoCompressionMaterial(preprocessor= modelSpace.preprocessor, a= self.steel_a)
+        if(self.tieMaterial is None):
+            self.reinfSteel= reinfSteel
+            self.tieMaterial= get_tie_material(modelSpace= self.modelSpace, steel= reinfSteel, linearElastic= linearElastic, a= self.steel_a)
+        return self.tieMaterial
+
+    def newTie(self, n1, n2, area):
+        ''' Create a new tie between the given nodes.
+
+        :param n1: first node of the tie.
+        :param n2: second node of the tie.
+        :param area: tie cross-section area.
+        '''
+        previousDefaultMaterials= self.modelSpace.getDefaultMaterials()
+        self.modelSpace.setDefaultMaterial(self.tieMaterial)
+        # Restore the previous material as default.
+        retval= self.modelSpace.newElement("Truss", [n1.tag, n2.tag])
+        retval.sectionArea= area
+        self.modelSpace.setDefaultMaterials(previousDefaultMaterials)
         return retval
-    
+
+    def newStrut(self, n1, n2, area):
+        ''' Create a new strut between the given nodes.
+
+        :param n1: first node of the strut.
+        :param n2: second node of the strut.
+        :param area: strut cross-section area.
+        '''
+        previousDefaultMaterials= self.modelSpace.getDefaultMaterials()
+        self.modelSpace.setDefaultMaterial(self.strutMaterial)
+        # Restore the previous material as default.
+        retval= self.modelSpace.newElement("Truss", [n1.tag, n2.tag])
+        retval.sectionArea= area
+        self.modelSpace.setDefaultMaterials(previousDefaultMaterials)
+        return retval
+
+    def newStrutAndTie(self, n1, n2, strutArea, tieArea):
+        ''' Create a new strut and a new tie between the given nodes.
+
+        :param n1: first node of the tie.
+        :param n2: second node of the tie.
+        :param strutArea: strut cross-section area.
+        :param tieArea: tie cross-section area.
+        '''
+        strut= self.newStrut(n1= n1, n2= n2, area= strutArea)
+        tie= self.newTie(n1= n1, n2= n2, area= tieArea)
+        return strut, tie
+        
     def getStrutList(self):
         ''' Return a list of all the struts.'''
         retval= list()

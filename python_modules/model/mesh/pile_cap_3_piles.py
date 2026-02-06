@@ -26,53 +26,28 @@ class PileCap3Piles(strut_and_tie_base.StrutAndTieModel):
     :ivar pileTopNodeB: top node of the second pile.
     :ivar pileTopNodeC: top node of the third pile.
     :ivar pierEffectiveDiameter: effective diameter of the pier.
-    '''
-    concrete_a= .0001 # parameter to define the tension behaviour of concrete.
-    steel_a= .0001 # parameter to define the compression behaviour of steel.
-    
-    def __init__(self, pierBottomNode, pileTopNodeA, pileTopNodeB, pileTopNodeC, pierEffectiveDiameter):
+    '''    
+    def __init__(self, modelSpace, pierBottomNode, pileTopNodeA, pileTopNodeB, pileTopNodeC, pierEffectiveDiameter):
         ''' Constructor.
 
+        :param modelSpace: PredefinedSpace object that manages FE model.
         :param pierBottomNode: bottom node of the pier.
         :param pileTopNodeA: top node of the first pile.
         :param pileTopNodeB: top node of the second pile.
         :param pileTopNodeC: top node of the third pile.
         :param pierEffectiveDiameter: effective diameter of the pier.
         '''
-        super().__init__()
+        super().__init__(modelSpace)
         self.pierBottomNode= pierBottomNode
         self.pileTopNodeA= pileTopNodeA
         self.pileTopNodeB= pileTopNodeB
         self.pileTopNodeC= pileTopNodeC
         self.pierEffectiveDiameter= pierEffectiveDiameter
-
-    @staticmethod
-    def set_concrete_a(a):
-        ''' Modifies the parameter that defines the tension behaviour of
-            concrete. See ENTMaterial.
-            https://github.com/xcfem/xc/blob/master/src/material/uniaxial/ENTMaterial.h
-
-        :param a: parameter that defines the tension behaviour of
-                  concrete.
-        '''
-        PileCap3Piles.concrete_a= a
-        
-    @staticmethod
-    def set_steel_a(a):
-        ''' Modifies the parameter that defines the compresion behaviour of
-            steel. See ENTMaterial.
-            https://github.com/xcfem/xc/blob/master/src/material/uniaxial/ENTMaterial.h
-
-        :param a: parameter that defines the tension behaviour of
-                  steel.
-        '''
-        PileCap3Piles.steel_a= a
     
-    def createStrutAndTieModel(self, modelSpace, strutArea, concrete, pileTiesArea, radialTiesArea, bottomChordsTiesArea, topChordsTiesArea, shearTiesArea, reinfSteel, xcPierSectionMaterial, linearElastic= False):
+    def createStrutAndTieModel(self, strutArea, concrete, pileTiesArea, radialTiesArea, bottomChordsTiesArea, topChordsTiesArea, shearTiesArea, reinfSteel, xcPierSectionMaterial, linearElastic= False):
         ''' Creates an strut-and-tie model and attach it to the nodes of the 
             pier and the piles.
 
-        :param modelSpace: PredefinedSpace object used to create the FE model.
         :param strutArea: area of the struts.
         :param concrete: concrete material.
         :param pileTiesArea: vertical ties over each pile.
@@ -135,35 +110,35 @@ class PileCap3Piles(strut_and_tie_base.StrutAndTieModel):
         pileBottomNodeA= self.pileTopNodeA # already exists (no need to create it).
         pileBottomNodeB= self.pileTopNodeB # already exists (no need to create it).
         pileBottomNodeC= self.pileTopNodeC # already exists (no need to create it).
-        pileTopNodeA= modelSpace.newNodePos3d(pileTopNodePosA)
-        pileTopNodeB= modelSpace.newNodePos3d(pileTopNodePosB)
-        pileTopNodeC= modelSpace.newNodePos3d(pileTopNodePosC)
+        pileTopNodeA= self.modelSpace.newNodePos3d(pileTopNodePosA)
+        pileTopNodeB= self.modelSpace.newNodePos3d(pileTopNodePosB)
+        pileTopNodeC= self.modelSpace.newNodePos3d(pileTopNodePosC)
         ## Intermediate nodes.
-        midBottomNodeAB= modelSpace.newNodePos3d(midBottomNodePosAB)
-        midTopNodeAB= modelSpace.newNodePos3d(midTopNodePosAB)
-        midBottomNodeBC= modelSpace.newNodePos3d(midBottomNodePosBC)
-        midTopNodeBC= modelSpace.newNodePos3d(midTopNodePosBC)
-        midBottomNodeCA= modelSpace.newNodePos3d(midBottomNodePosCA)
-        midTopNodeCA= modelSpace.newNodePos3d(midTopNodePosCA)
+        midBottomNodeAB= self.modelSpace.newNodePos3d(midBottomNodePosAB)
+        midTopNodeAB= self.modelSpace.newNodePos3d(midTopNodePosAB)
+        midBottomNodeBC= self.modelSpace.newNodePos3d(midBottomNodePosBC)
+        midTopNodeBC= self.modelSpace.newNodePos3d(midTopNodePosBC)
+        midBottomNodeCA= self.modelSpace.newNodePos3d(midBottomNodePosCA)
+        midTopNodeCA= self.modelSpace.newNodePos3d(midTopNodePosCA)
         ## Nodes under the pier.
-        pierBottomNodeA= modelSpace.newNodePos3d(pierBottomNodePosA)
-        pierBottomNodeB= modelSpace.newNodePos3d(pierBottomNodePosB)
-        pierBottomNodeC= modelSpace.newNodePos3d(pierBottomNodePosC)
-        pierTopNodeA= modelSpace.newNodePos3d(pierTopNodePosA)
-        pierTopNodeB= modelSpace.newNodePos3d(pierTopNodePosB)
-        pierTopNodeC= modelSpace.newNodePos3d(pierTopNodePosC)
+        pierBottomNodeA= self.modelSpace.newNodePos3d(pierBottomNodePosA)
+        pierBottomNodeB= self.modelSpace.newNodePos3d(pierBottomNodePosB)
+        pierBottomNodeC= self.modelSpace.newNodePos3d(pierBottomNodePosC)
+        pierTopNodeA= self.modelSpace.newNodePos3d(pierTopNodePosA)
+        pierTopNodeB= self.modelSpace.newNodePos3d(pierTopNodePosB)
+        pierTopNodeC= self.modelSpace.newNodePos3d(pierTopNodePosC)
         # Define elements.
         ## Define struts.
         ### Define material.
-        concreteNoTension= self.getStrutMaterial(modelSpace= modelSpace, concrete= concrete, linearElastic= linearElastic)
-        modelSpace.setElementDimension(3)
-        modelSpace.setDefaultMaterial(concreteNoTension)
+        concreteNoTension= self.defStrutMaterial(concrete= concrete, linearElastic= linearElastic)
+        self.modelSpace.setElementDimension(3)
+        self.modelSpace.setDefaultMaterial(concreteNoTension)
         
         ### Radial struts.
         radialStrutsNodes= [(pierTopNodeA, pileBottomNodeA), (pierBottomNodeA, pileTopNodeA), (pierTopNodeB, pileBottomNodeB), (pierBottomNodeB, pileTopNodeB), (pierTopNodeC, pileBottomNodeC), (pierBottomNodeC, pileTopNodeC)]
         self.radialStruts= list()
         for (n1, n2) in radialStrutsNodes:
-            newStrut= modelSpace.newElement("Truss", [n1.tag, n2.tag])
+            newStrut= self.modelSpace.newElement("Truss", [n1.tag, n2.tag])
             newStrut.sectionArea= strutArea
             self.radialStruts.append(newStrut)
             
@@ -172,10 +147,10 @@ class PileCap3Piles(strut_and_tie_base.StrutAndTieModel):
         stabilizingStrutsNodes= [(pierTopNodeA, pierBottomNodeA, midBottomNodeAB, midTopNodeAB), (pierTopNodeB, pierBottomNodeB, midBottomNodeAB, midTopNodeAB), (pierTopNodeB, pierBottomNodeB, midBottomNodeBC, midTopNodeBC), (pierTopNodeC, pierBottomNodeC, midBottomNodeBC, midTopNodeBC), (pierTopNodeC, pierBottomNodeC, midBottomNodeCA, midTopNodeCA), (pierTopNodeA, pierBottomNodeA, midBottomNodeCA, midTopNodeCA)]
         self.stabilizingStruts= list()
         for (nTop1, nBottom1, nBottom2, nTop2) in stabilizingStrutsNodes:
-            newStrut= modelSpace.newElement("Truss", [nTop1.tag, nBottom2.tag])
+            newStrut= self.modelSpace.newElement("Truss", [nTop1.tag, nBottom2.tag])
             newStrut.sectionArea= 0.25*strutArea
             self.stabilizingStruts.append(newStrut)
-            newStrut= modelSpace.newElement("Truss", [nBottom1.tag, nTop2.tag])
+            newStrut= self.modelSpace.newElement("Truss", [nBottom1.tag, nTop2.tag])
             newStrut.sectionArea= 0.25*strutArea
             self.stabilizingStruts.append(newStrut)
         
@@ -199,10 +174,10 @@ class PileCap3Piles(strut_and_tie_base.StrutAndTieModel):
         n0Bottom= contourBottomNodes[0]
         n0Top= contourTopNodes[0]
         for (n1Bottom, n1Top) in zip(contourBottomNodes[1:], contourTopNodes[1:]):
-            newStrut= modelSpace.newElement("Truss", [n0Bottom.tag, n1Top.tag])
+            newStrut= self.modelSpace.newElement("Truss", [n0Bottom.tag, n1Top.tag])
             newStrut.sectionArea= strutArea
             self.perimeterStruts.append(newStrut)
-            newStrut= modelSpace.newElement("Truss", [n0Top.tag, n1Bottom.tag])
+            newStrut= self.modelSpace.newElement("Truss", [n0Top.tag, n1Bottom.tag])
             newStrut.sectionArea= strutArea
             self.perimeterStruts.append(newStrut)
             n0Bottom= n1Bottom
@@ -215,10 +190,10 @@ class PileCap3Piles(strut_and_tie_base.StrutAndTieModel):
         n0Bottom= pierContourBottomNodes[0]
         n0Top= pierContourTopNodes[0]
         for (n1Bottom, n1Top) in zip(pierContourBottomNodes[1:], pierContourTopNodes[1:]):
-            newStrut= modelSpace.newElement("Truss", [n0Bottom.tag, n1Top.tag])
+            newStrut= self.modelSpace.newElement("Truss", [n0Bottom.tag, n1Top.tag])
             newStrut.sectionArea= strutArea
             self.pierStruts.append(newStrut)
-            newStrut= modelSpace.newElement("Truss", [n0Top.tag, n1Bottom.tag])
+            newStrut= self.modelSpace.newElement("Truss", [n0Top.tag, n1Bottom.tag])
             newStrut.sectionArea= strutArea
             self.pierStruts.append(newStrut)
             n0Bottom= n1Bottom
@@ -226,21 +201,21 @@ class PileCap3Piles(strut_and_tie_base.StrutAndTieModel):
         
         ## Define ties.
         ### Define material.
-        steelNoCompression= self.getTieMaterial(modelSpace= modelSpace, reinfSteel= reinfSteel, linearElastic= linearElastic)
+        steelNoCompression= self.defTieMaterial(reinfSteel= reinfSteel, linearElastic= linearElastic)
         #### Material for elastic ties.
         if(not linearElastic):
-            elasticTiesMaterial= self.reinfSteel.defElasticMaterial(preprocessor= modelSpace.preprocessor)
+            elasticTiesMaterial= self.reinfSteel.defElasticMaterial(preprocessor= self.modelSpace.preprocessor)
         else:
             elasticTiesMaterial= steelNoCompression
             
-        modelSpace.setDefaultMaterial(steelNoCompression)
-        modelSpace.setElementDimension(3)
+        self.modelSpace.setDefaultMaterial(steelNoCompression)
+        self.modelSpace.setElementDimension(3)
 
         ### Define radial ties.
         radialTiesNodes= [(pierTopNodeA, pileTopNodeA), (pierBottomNodeA, pileBottomNodeA), (pierTopNodeB, pileTopNodeB), (pierBottomNodeB, pileBottomNodeB), (pierTopNodeC, pileTopNodeC), (pierBottomNodeC, pileBottomNodeC)]
         self.radialTies= list()
         for (n1, n2) in radialTiesNodes:
-            newTie= modelSpace.newElement("Truss", [n1.tag, n2.tag])
+            newTie= self.modelSpace.newElement("Truss", [n1.tag, n2.tag])
             newTie.sectionArea= radialTiesArea
             self.radialTies.append(newTie)
 
@@ -249,10 +224,10 @@ class PileCap3Piles(strut_and_tie_base.StrutAndTieModel):
         stabilizingTiesNodes= [(pierTopNodeA, pierTopNodeB, midTopNodeAB), (pierBottomNodeA, pierBottomNodeB, midBottomNodeAB), (pierTopNodeB, pierTopNodeC, midTopNodeBC), (pierBottomNodeB, pierBottomNodeC, midBottomNodeBC), (pierTopNodeC, pierTopNodeA, midTopNodeCA), (pierBottomNodeC, pierBottomNodeA, midBottomNodeCA)]
         self.stabilizingTies= list()
         for (n1, n2, n3) in stabilizingTiesNodes:
-            newTie= modelSpace.newElement("Truss", [n1.tag, n3.tag])
+            newTie= self.modelSpace.newElement("Truss", [n1.tag, n3.tag])
             newTie.sectionArea= radialTiesArea
             self.stabilizingTies.append(newTie)
-            newTie= modelSpace.newElement("Truss", [n2.tag, n3.tag])
+            newTie= self.modelSpace.newElement("Truss", [n2.tag, n3.tag])
             newTie.sectionArea= radialTiesArea
             self.stabilizingTies.append(newTie)
 
@@ -261,7 +236,7 @@ class PileCap3Piles(strut_and_tie_base.StrutAndTieModel):
         self.topChordTies= list()
         n0Top= contourTopNodes[0]
         for n1Top in contourTopNodes[1:]:
-            newTie= modelSpace.newElement("Truss", [n0Top.tag, n1Top.tag])
+            newTie= self.modelSpace.newElement("Truss", [n0Top.tag, n1Top.tag])
             newTie.sectionArea= topChordsTiesArea
             self.topChordTies.append(newTie)
             n0Top= n1Top
@@ -269,24 +244,24 @@ class PileCap3Piles(strut_and_tie_base.StrutAndTieModel):
         #### Bottom chord.
         n0Bottom= contourBottomNodes[0]
         for n1Bottom in contourBottomNodes[1:]:
-            newTie= modelSpace.newElement("Truss", [n0Bottom.tag, n1Bottom.tag])
+            newTie= self.modelSpace.newElement("Truss", [n0Bottom.tag, n1Bottom.tag])
             newTie.sectionArea= bottomChordsTiesArea
             self.bottomChordTies.append(newTie)
             n0Bottom= n1Bottom
         #### Vertical ties over each pile.
         # Make this particular ties elastic anyway.
-        modelSpace.setDefaultMaterial(elasticTiesMaterial)
+        self.modelSpace.setDefaultMaterial(elasticTiesMaterial)
         self.pileTies= list()
         for (nBottom, nTop) in zip(pilesContourBottomNodes, pilesContourTopNodes):
-            newTie= modelSpace.newElement("Truss", [nBottom.tag, nTop.tag])
+            newTie= self.modelSpace.newElement("Truss", [nBottom.tag, nTop.tag])
             newTie.sectionArea= pileTiesArea
             self.pileTies.append(newTie)
-        modelSpace.setDefaultMaterial(steelNoCompression) # Restore material.
+        self.modelSpace.setDefaultMaterial(steelNoCompression) # Restore material.
         
         #### Shear ties between piles.
         self.shearTies= list()
         for (nBottom, nTop) in zip(midContourBottomNodes, midContourTopNodes):
-            newTie= modelSpace.newElement("Truss", [nBottom.tag, nTop.tag])
+            newTie= self.modelSpace.newElement("Truss", [nBottom.tag, nTop.tag])
             newTie.sectionArea= shearTiesArea
             self.shearTies.append(newTie)
 
@@ -295,7 +270,7 @@ class PileCap3Piles(strut_and_tie_base.StrutAndTieModel):
         self.pierTopChordTies= list()
         n0Top= pierContourTopNodes[0]
         for n1Top in pierContourTopNodes[1:]:
-            newTie= modelSpace.newElement("Truss", [n0Top.tag, n1Top.tag])
+            newTie= self.modelSpace.newElement("Truss", [n0Top.tag, n1Top.tag])
             newTie.sectionArea= topChordsTiesArea
             self.pierTopChordTies.append(newTie)
             n0Top= n1Top
@@ -303,7 +278,7 @@ class PileCap3Piles(strut_and_tie_base.StrutAndTieModel):
         self.pierBottomChordTies= list()
         n0Bottom= pierContourBottomNodes[0]
         for n1Bottom in pierContourBottomNodes[1:]:
-            newTie= modelSpace.newElement("Truss", [n0Bottom.tag, n1Bottom.tag])
+            newTie= self.modelSpace.newElement("Truss", [n0Bottom.tag, n1Bottom.tag])
             newTie.sectionArea= bottomChordsTiesArea
             self.pierBottomChordTies.append(newTie)
             n0Bottom= n1Bottom
@@ -312,40 +287,40 @@ class PileCap3Piles(strut_and_tie_base.StrutAndTieModel):
         # Top-down ties in the pier (dummy bars to make the forces reach the
         # bottom of the pile cap).
         pierTopDownBarsMaterial= elasticTiesMaterial
-        modelSpace.setDefaultMaterial(pierTopDownBarsMaterial)
+        self.modelSpace.setDefaultMaterial(pierTopDownBarsMaterial)
         pierTopDownBarsArea= pileTiesArea 
         self.pierTopDownBars= list()
         for (nBottom, nTop) in zip(pierContourBottomNodes[:-1], pierContourTopNodes[:-1]):
-            newTie= modelSpace.newElement("Truss", [nBottom.tag, nTop.tag])
+            newTie= self.modelSpace.newElement("Truss", [nBottom.tag, nTop.tag])
             newTie.sectionArea= pierTopDownBarsArea
             self.pierTopDownBars.append(newStrut)
         
         ### Define dummy springs (to fix rotational DOFs only).
         nodesToConstrain= contourTopNodes+midContourBottomNodes+pierContourBottomNodes
-        springsAndNodes= strut_and_tie_base.define_dummy_springs(modelSpace, nodesToConstrain)
+        springsAndNodes= strut_and_tie_base.define_dummy_springs(self.modelSpace, nodesToConstrain)
 
         ### Connect the pier with the pile cap using the pier section
         ### as "rigid beam".
-        modelSpace.setDefaultMaterial(xcPierSectionMaterial)
+        self.modelSpace.setDefaultMaterial(xcPierSectionMaterial)
         n0Tag= self.pierBottomNode.tag
         n1Tag= pierContourTopNodes[1].tag
         n2Tag= pierContourTopNodes[2].tag
         n3Tag= pierContourTopNodes[3].tag
         crdTransfName= str(uuid.uuid4().hex)
         xzVector= xc.Vector([kVector.x, kVector.y, kVector.z])
-        crdTransf= modelSpace.newLinearCrdTransf(crdTransfName, xzVector= xzVector)
-        modelSpace.setDefaultCoordTransf(crdTransf)
-        modelSpace.newElement('ElasticBeam3d', [n0Tag, n1Tag])
-        modelSpace.newElement('ElasticBeam3d', [n0Tag, n2Tag])
-        modelSpace.newElement('ElasticBeam3d', [n0Tag, n3Tag])
+        crdTransf= self.modelSpace.newLinearCrdTransf(crdTransfName, xzVector= xzVector)
+        self.modelSpace.setDefaultCoordTransf(crdTransf)
+        self.modelSpace.newElement('ElasticBeam3d', [n0Tag, n1Tag])
+        self.modelSpace.newElement('ElasticBeam3d', [n0Tag, n2Tag])
+        self.modelSpace.newElement('ElasticBeam3d', [n0Tag, n3Tag])
         
-    def createDummyElasticModel(self, modelSpace, concrete, releaseExtremities= False):
+    def createDummyElasticModel(self, concrete, releaseExtremities= False):
         ''' Creates a simple linear elastic model that transfer the loads from
             the pier to the piles. This model can be used when calculating 
             other parts of the model and the internal forces in the pile cap
             are irrelevant for the purpose of the performed analysis.
 
-        :param modelSpace: PredefinedSpace object used to create the FE model.
+        :param concrete: concrete material.
         :param releaseExtremities: if true, release the bending moments at
                                    the nodes connecting with the piles.
         '''
@@ -367,7 +342,7 @@ class PileCap3Piles(strut_and_tie_base.StrutAndTieModel):
         # Define material.
         dummyRCSectionName= str(uuid.uuid4().hex)
         dummyRCSection= def_simple_RC_section.RCRectangularSection(name= dummyRCSectionName, sectionDescr= 'dummy RC section', concrType= concrete, reinfSteelType= None, width= d, depth= d)
-        xcDummySectionMaterial= dummyRCSection.defElasticShearSection3d(preprocessor= modelSpace.preprocessor)
+        xcDummySectionMaterial= dummyRCSection.defElasticShearSection3d(preprocessor= self.modelSpace.preprocessor)
 
         # Compute data for the coordinate transformations.
         auxPoint= pierTopNodePos-d*kVector # Point in the vertical of the
@@ -379,15 +354,15 @@ class PileCap3Piles(strut_and_tie_base.StrutAndTieModel):
         planeC= geom.Plane3d(pierTopNodePos, auxPoint, pileBottomNodePosC)
         kVectorC= planeC.getNormal()
         # Set element material.
-        modelSpace.setDefaultMaterial(xcDummySectionMaterial)
+        self.modelSpace.setDefaultMaterial(xcDummySectionMaterial)
         for nTag, kVector in zip([nATag, nBTag, nCTag], [kVectorA, kVectorB, kVectorC]):
             # Set coordinate transformation.
             xzVector= xc.Vector([kVector.x, kVector.y, kVector.z])
             crdTransfName= str(uuid.uuid4().hex)
-            crdTransf= modelSpace.newLinearCrdTransf(crdTransfName, xzVector= xzVector)
-            modelSpace.setDefaultCoordTransf(crdTransf)
+            crdTransf= self.modelSpace.newLinearCrdTransf(crdTransfName, xzVector= xzVector)
+            self.modelSpace.setDefaultCoordTransf(crdTransf)
             # Create dummy element.
-            newElement= modelSpace.newElement('ElasticBeam3d', [n0Tag, nTag])
+            newElement= self.modelSpace.newElement('ElasticBeam3d', [n0Tag, nTag])
             if(releaseExtremities):
                 # Release code; 0: no release, 1: node I, 2: node J, 2: both nodes.
                 # newElement.releaseY= 2
