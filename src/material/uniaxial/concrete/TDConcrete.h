@@ -88,6 +88,7 @@
 #define TDConcrete_h
 
 #include "material/uniaxial/concrete/TDConcreteBase.h"
+#include "material/uniaxial/concrete/CreepShrinkageParameters.h"
 
 namespace XC {
 
@@ -96,13 +97,8 @@ class TDConcrete : public TDConcreteBase
   private:
     // matpar : Concrete FIXED PROPERTIES
     //	double fcT; // Time Dependent Strength
-    double tcr; //!< creep model age in days.
-    double epsshu; //!< ultimate shrinkage strain εsh,u, as per ACI 209R-92
-    double epssha; //!< fitting parameter within the shrinkage time evolution function as per ACI 209R-92.
-    double epscru; //!< ultimate creep coefficient φu, as per ACI 209R-92.
-    double epscra; //!< concrete creep exponent fitting constant as per ACI 209R-92.
-    double epscrd; //!< fitting constant within the creep time evolution function as per ACI 209R-92
-
+    CreepShrinkageParameters creepShrinkageParameters; //!< Creep and shrinkage parameters.
+    
     //Added by AMK:
     double eps_cr; //!< Creep strain.
     double eps_sh; //!< Shrinkage strain.
@@ -121,7 +117,7 @@ class TDConcrete : public TDConcreteBase
     
   public:
     TDConcrete(int tag= 0);
-    TDConcrete(int tag, double _fc, double _ft, double _Ec, double _beta, double _age, double _epsshu, double _epssha, double _tcr, double _epscru, double _epscra, double _epscrd, double _tcast);
+    TDConcrete(int tag, double _fc, double _ft, double _Ec, double _beta, double _age, double _tcast, const CreepShrinkageParameters &);
     virtual ~TDConcrete(void);
     void setup_parameters(void);
 
@@ -135,20 +131,9 @@ class TDConcrete : public TDConcreteBase
     double setPhi(double time, double tp); //Added by AMK
     double setShrink(double time); //Added by AMK
     double getShrink(void) const; //Added by AMK
-    
-    void setUltimateShrinkage(const double &);
-    double getUltimateShrinkage(void) const;
-    void setShrinkageParameter(const double &);
-    double getShrinkageParameter(void) const;
-    void setCreepRelationshipAge(const double &);
-    double getCreepRelationshipAge(void) const;
-    void setUltimateConcreteCreep(const double &);
-    double getUltimateConcreteCreep(void) const;
-    void setCreepExponentParameter(const double &);
-    double getCreepExponentParameter(void) const;
-    void setCreepDParameter(const double &);
-    double getCreepDParameter(void) const;
 
+    void setCreepShrinkageParameters(const CreepShrinkageParameters &);
+    const CreepShrinkageParameters &getCreepShrinkageParameters(void) const;
     
     int commitState(void);
     int revertToLastCommit(void);    

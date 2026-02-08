@@ -103,9 +103,7 @@ void XC::TDConcrete::setup_parameters(void)
     epsP_sh = 0.0; 
     epsP_m = 0.0; //Added by AMK
 
-    //Change inputs into the proper sign convention:
-    epsshu = -fabs(epsshu);
-    epscru = fabs(epscru); 
+    creepShrinkageParameters.setup_parameters();
   }
 
 size_t XC::TDConcrete::resize(void)
@@ -127,16 +125,11 @@ XC::TDConcrete::TDConcrete(int tag)
 //! @param _Ec: modulus of elasticity (preferably at time of loading if there is a single loading age).
 //! @param _beta: tension softening parameter.
 //! @param _age: analysis time at initiation of drying (in days).
-//! @param _epsshu: ultimate shrinkage strain εsh,u, as per ACI 209R-92.
-//! @param _epssha: fitting parameter within the shrinkage time evolution function as per ACI 209R-92.
-//! @param _tcr: creep model age in days.
-//! @param _epscru: ultimate creep coefficient φu, as per ACI 209R-92.
-//! @param _epscra: fitting constant within the creep time evolution function as per ACI 209R-92.
-//! @param _epscrd: fitting constant within the creep time evolution function as per ACI 209R-92.
+//! @param _csParameters: creep and shrinkage parameters.
 //! @param _tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
-XC::TDConcrete::TDConcrete(int tag, double _fpc, double _ft, double _Ec, double _beta, double _age, double _epsshu, double _epssha, double _tcr, double _epscru, double _epscra, double _epscrd, double _tcast)
+XC::TDConcrete::TDConcrete(int tag, double _fpc, double _ft, double _Ec, double _beta, double _age, double _tcast, const CreepShrinkageParameters &_csParameters)
   : TDConcreteBase(tag, MAT_TAG_TDConcrete, _fpc, _ft, _Ec, _beta, _age, _tcast),
-    tcr(_tcr), epsshu(_epsshu), epssha(_epssha), epscru(_epscru), epscra(_epscra), epscrd(_epscrd)
+    creepShrinkageParameters(_csParameters)
   {
     setup_parameters();
   }
@@ -166,30 +159,21 @@ double XC::TDConcrete::setCreepStrain(double time, double stress)
     creep = runSum;
     return creep;
     
-}
+  }
 
 double XC::TDConcrete::setPhi(double time, double tp)
   {        
     // ACI Equation:
-    const double tmtp = time-tp;
     //double f1 = pow((4+0.85*tp)/tp,0.5);
-    const double f2= pow(tmtp,epscra)/(epscrd+pow(tmtp,epscra))*epscru;
-    const double f3= (1.25*pow((tp-tcast),-0.118))/(1.25*pow(tcr,-0.118));
+    const double f2= creepShrinkageParameters.getF2(time, tp);
+    const double f3= (1.25*pow((tp-tcast),-0.118))/(1.25*pow(creepShrinkageParameters.getCreepRelationshipAge(),-0.118));
     const double phi= f2*f3;
     return phi;
   }
 
 double XC::TDConcrete::setShrink(double time)
   {
-    const double &tD= this->age; //Age at initiation of drying
-    double shrink = 0.0;
-    if(time-(tD) < 0)
-      {
-        shrink = 0.0;
-      }
-    else
-      { shrink = (time-(tD)) / (epssha + (time - (tD))) * epsshu; }
-    return shrink;
+    return creepShrinkageParameters.getShrink(this->age, time);
   }
 
 int XC::TDConcrete::setTrialStrain(double trialStrain, double strainRate)
@@ -347,53 +331,11 @@ double XC::TDConcrete::getShrink(void) const
     return eps_sh;
   }
 
-//! @brief Assigns ultimate shrinkage.
-void XC::TDConcrete::setUltimateShrinkage(const double &d)
-  { epsshu= d; }
+void XC::TDConcrete::setCreepShrinkageParameters(const CreepShrinkageParameters &csParameters)
+  { this->creepShrinkageParameters= csParameters; }
 
-//! @brief Return ultimate shrinkage.
-double XC::TDConcrete::getUltimateShrinkage(void) const
-  { return epsshu; }
-
-//! @brief Assigns shrinkage parameter.
-void XC::TDConcrete::setShrinkageParameter(const double &d)
-  { epssha= d; }
-
-//! @brief Return shrinkage parameter.
-double XC::TDConcrete::getShrinkageParameter(void) const
-  { return epssha; }
-
-//! @brief Assigns creep relationship age.
-void XC::TDConcrete::setCreepRelationshipAge(const double &d)
-  { tcr= d; }
-
-//! @brief Return creep relationship age.
-double XC::TDConcrete::getCreepRelationshipAge(void) const
-  { return tcr; }
-
-//! @brief Assigns creep exponent parameter.
-void XC::TDConcrete::setUltimateConcreteCreep(const double &d)
-  { epscru= d; }
-
-//! @brief Return creep exponent parameter.
-double XC::TDConcrete::getUltimateConcreteCreep(void) const
-  { return epscru; }
-
-//! @brief Assigns creep exponent parameter.
-void XC::TDConcrete::setCreepExponentParameter(const double &d)
-  { epscra= d; }
-
-//! @brief Return creep exponent parameter.
-double XC::TDConcrete::getCreepExponentParameter(void) const
-  { return epscra; }
-
-//! @brief Assigns creep exponent parameter.
-void XC::TDConcrete::setCreepDParameter(const double &d)
-  { epscrd= d; }
-
-//! @brief Return creep exponent parameter.
-double XC::TDConcrete::getCreepDParameter(void) const
-  { return epscrd; }
+const XC::CreepShrinkageParameters &XC::TDConcrete::getCreepShrinkageParameters(void) const
+  { return this->creepShrinkageParameters; }
 
 int XC::TDConcrete::commitState(void)
   {
@@ -517,7 +459,7 @@ int XC::TDConcrete::revertToStart(void)
 int XC::TDConcrete::sendData(Communicator &comm)
   {
     int res= TDConcreteBase::sendData(comm);
-    res+= comm.sendDoubles(epsshu, epssha, tcr, epscru, epscra, epscrd,getDbTagData(),CommMetaData(3));
+    res+= comm.sendMovable(creepShrinkageParameters, getDbTagData(), CommMetaData(3));
     return res;
   }
 
@@ -525,7 +467,7 @@ int XC::TDConcrete::sendData(Communicator &comm)
 int XC::TDConcrete::recvData(const Communicator &comm)
   {
     int res= TDConcreteBase::recvData(comm);
-    res+= comm.receiveDoubles(epsshu, epssha, tcr, epscru, epscra, epscrd,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveMovable(creepShrinkageParameters, getDbTagData(), CommMetaData(3));
     return res;
   }
 //! @brief Sends object through the communicator argument.
@@ -566,11 +508,8 @@ void XC::TDConcrete::Print(std::ostream &s, int flag) const
     s << "TDConcrete:(strain, stress, tangent) " << hstv.eps << " " << hstv.sig << " " << hstv.e << std::endl;
   }
 
-
-
-
 void XC::TDConcrete::Tens_Envlp (double epsc, double &sigc, double &Ect)
-{
+  {
 /*-----------------------------------------------------------------------
 ! monotonic envelope of concrete in tension (positive envelope)
 !

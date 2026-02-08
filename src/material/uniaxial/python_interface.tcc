@@ -81,10 +81,12 @@ class_<XC::CableMaterial, bases<XC::ElasticBaseMaterial> >("CableMaterial")
   ;
 
 XC::UniaxialMaterial *(XC::EncapsulatedUniaxialMaterial::*getMaterialPtr)(void)= &XC::EncapsulatedUniaxialMaterial::getMaterial;
-void (XC::EncapsulatedUniaxialMaterial::*setEncapsulatedUniaxialMaterial)(const std::string &)= &XC::EncapsulatedUniaxialMaterial::setMaterial;
+void (XC::EncapsulatedUniaxialMaterial::*setEncapsulatedUniaxialMaterialStr)(const std::string &)= &XC::EncapsulatedUniaxialMaterial::setMaterial;
+void (XC::EncapsulatedUniaxialMaterial::*setEncapsulatedUniaxialMaterialUnx)(const XC::UniaxialMaterial &)= &XC::EncapsulatedUniaxialMaterial::setMaterial;
 class_<XC::EncapsulatedUniaxialMaterial, bases<XC::UniaxialMaterial>, boost::noncopyable >("EncapsulatedUniaxialMaterial", no_init)
   .add_property("material", make_function(getMaterialPtr,return_internal_reference<>()), "Return the encapsulated material.")
-  .def("setMaterial", setEncapsulatedUniaxialMaterial, "Assigns the encapsulated material.")
+  .def("setMaterial", setEncapsulatedUniaxialMaterialStr, "Assigns the encapsulated material.")
+  .def("setMaterial", setEncapsulatedUniaxialMaterialUnx, "Assigns the encapsulated material.")
   ;
 
 class_<XC::HalfDiagramMaterial, bases<XC::EncapsulatedUniaxialMaterial>, boost::noncopyable >("HalfDiagramMaterial", no_init)

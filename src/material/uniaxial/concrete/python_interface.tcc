@@ -61,14 +61,23 @@ class_<XC::TDConcreteBase, bases<XC::RawConcrete>, boost::noncopyable >("TDConcr
   .def("setCreepDt", &XC::TDConcreteBase::setCreepDt,"Set time increment for creep.").staticmethod("setCreepDt")
   ;
 
+class_<XC::CreepShrinkageParameters, bases<CommandEntity> >("CreepShrinkageParameters")
+  .def(init<const double &, const double &, const double &,const double &, const double &, const double &>())
+  .def(init<XC::CreepShrinkageParameters>())
+  .def("setup", &XC::CreepShrinkageParameters::setup_parameters,"Sets initial values for the concrete parameters; call after modifying any of the material properties.")
+  .add_property("tcr", &XC::CreepShrinkageParameters::getCreepRelationshipAge,  &XC::CreepShrinkageParameters::setCreepRelationshipAge,"creep relationship age.")
+  .add_property("epsshu", &XC::CreepShrinkageParameters::getUltimateShrinkage,  &XC::CreepShrinkageParameters::setUltimateShrinkage,"ultimate shrinkage.")
+  .add_property("epssha", &XC::CreepShrinkageParameters::getShrinkageParameter,  &XC::CreepShrinkageParameters::setShrinkageParameter,"shrinkage parameter.")
+  .add_property("epscru", &XC::CreepShrinkageParameters::getUltimateConcreteCreep,  &XC::CreepShrinkageParameters::setUltimateConcreteCreep,"ultimate concrete creep.")
+  .add_property("epscra", &XC::CreepShrinkageParameters::getCreepExponentParameter,  &XC::CreepShrinkageParameters::setCreepExponentParameter,"creep exponent parameter.")
+  .add_property("epscrd", &XC::CreepShrinkageParameters::getCreepDParameter,  &XC::CreepShrinkageParameters::setCreepDParameter,"creep d parameter.")
+  ;
+
 class_<XC::TDConcrete, bases<XC::TDConcreteBase>, boost::noncopyable >("TDConcrete", no_init)
   .def("setup", &XC::TDConcrete::setup_parameters,"Sets initial values for the concrete parameters; call after modifying any of the material properties.")
-  .add_property("epsshu", &XC::TDConcrete::getUltimateShrinkage,  &XC::TDConcrete::setUltimateShrinkage,"ultimate shrinkage.")
-  .add_property("epssha", &XC::TDConcrete::getShrinkageParameter,  &XC::TDConcrete::setShrinkageParameter,"shrinkage parameter.")
-  .add_property("tcr", &XC::TDConcrete::getCreepRelationshipAge,  &XC::TDConcrete::setCreepRelationshipAge,"creep relationship age.")
-  .add_property("epscru", &XC::TDConcrete::getUltimateConcreteCreep,  &XC::TDConcrete::setUltimateConcreteCreep,"ultimate concrete creep.")
-  .add_property("epscra", &XC::TDConcrete::getCreepExponentParameter,  &XC::TDConcrete::setCreepExponentParameter,"creep exponent parameter.")
-  .add_property("epscrd", &XC::TDConcrete::getCreepDParameter,  &XC::TDConcrete::setCreepDParameter,"creep d parameter.")
+  .def("getCreepShrinkageParameters", make_function(&XC::TDConcrete::getCreepShrinkageParameters, return_internal_reference<>()))
+  .def("setCreepShrinkageParameters",&XC::TDConcrete::setCreepShrinkageParameters)
+
   ;
 
 class_<XC::TDConcreteMC10Base, bases<XC::TDConcreteBase>, boost::noncopyable >("TDConcreteMC10Base", no_init)
@@ -97,4 +106,7 @@ class_<XC::TDConcreteMC10NL, bases<XC::TDConcreteMC10>, boost::noncopyable >("TD
   ;
 
 class_<XC::CreepMaterial, bases<XC::EncapsulatedUniaxialMaterial>, boost::noncopyable >("CreepMaterial", no_init)
+  .def("setup", &XC::CreepMaterial::setup_parameters,"Sets initial values for the concrete parameters; call after modifying any of the material properties.")
+  .def("getCreepShrinkageParameters", make_function(&XC::CreepMaterial::getCreepShrinkageParameters, return_internal_reference<>()))
+  .def("setCreepShrinkageParameters",&XC::CreepMaterial::setCreepShrinkageParameters)
   ;
