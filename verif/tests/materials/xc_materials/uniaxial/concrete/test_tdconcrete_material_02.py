@@ -40,16 +40,19 @@ fc = -28*MPa # concrete compressive strength (compression is negative)
 ft = 3*MPa # concrete tensile strength (tension is positive)
 beta = 0.4 # Recommended value for the tension softening parameter (tension softening exponent).
 tDry = 14 # days
+tcast = 0 # analysis time corresponding to concrete casting (in days; minimum value 2.0)
+
+# Creep and shrinkage parameters.
 epsshu = -600e-6 # Ultimate shrinkage strain
 psish = 75.4218 # Based on section dimensions
 Tcr = 28 # creep model age (in days)
 phiu = 3.0 # ultimate creep coefficient as per ACI 209R-92
 psicr1 = 1.0 # Recommended value
 psicr2 = 75.4218 # fitting parameter of the creep time evolution function as per ACI 209R-92. Based on section dimensions
-tcast = 0 # analysis time corresponding to concrete casting (in days; minimum value 2.0)
+csParameters= typical_materials.def_creep_and_shrinkage_parameters(tcr= Tcr, epsshu= epsshu, epssha= psish, epscru= phiu, epscra= psicr1, epscrd= psicr2)
 
 ## Concrete able to creep.
-tdConcrete= typical_materials.defTDConcrete(preprocessor= preprocessor, name= 'tdConcrete',fpc= fc,ft= ft, Ec= Ec, beta= beta, age= tDry, epsshu= epsshu, epssha= psish, tcr= Tcr, epscru= phiu, epscra= psicr1, epscrd= psicr2, tcast= tcast)
+tdConcrete= typical_materials.defTDConcrete(preprocessor= preprocessor, name= 'tdConcrete',fpc= fc,ft= ft, Ec= Ec, beta= beta, age= tDry, tcast= tcast, csParameters= csParameters)
 
 b = 300*mm
 h = 300*mm

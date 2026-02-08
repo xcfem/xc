@@ -10,6 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
+import xc
 import sys
 from misc_utils import log_messages as lmsg
 import uuid
@@ -484,15 +485,54 @@ def defConcrete02IS(preprocessor,name,epsc0,fpc,fpcu,epscu, Ec0, ratioSlope= 0.1
                              ratioSlope= ratioSlope,
                              ft= ft,
                              Ets= Ets)
-    return retval
     if(Ec0):
         retval.Ec0= Ec0
     else:
         retval.Ec0= 2.0*fpc/epsc0
     return retval
 
-#TDConcrete.
-def defTDConcrete(preprocessor,name, fpc, ft, Ec, beta, age, epsshu, epssha, tcr, epscru, epscra, epscrd, tcast):
+# Creep materials.
+def def_creep_and_shrinkage_parameters(tcr, epsshu, epssha, epscru, epscra, epscrd):
+    ''' Constructor.
+
+    :param tcr: creep model age in days.
+    :param epsshu: ultimate shrinkage strain εsh,u, as per ACI 209R-92.
+    :param epssha: fitting parameter within the shrinkage time evolution function as per ACI 209R-92.
+    :param epscru: ultimate creep coefficient φu, as per ACI 209R-92.
+    :param epscra: fitting constant within the creep time evolution function as per ACI 209R-92.
+    :param epscrd: fitting constant within the creep time evolution function as per ACI 209R-92.
+    '''
+    return xc.CreepShrinkageParameters(tcr, epsshu, epssha, epscru, epscra, epscrd)
+    
+# Creep material.
+def defCreepMaterial(preprocessor, name, encapsulatedConcrete, beta, age, tcast, csParameters):
+    ''''Constructs an uniaxial concrete material concrete is linear in 
+        compression with nonlinear tension softening; creep and shrinkage ç
+        evolution equations are based on ACI 209R-92 models.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param name: name identifying the material (if None compute a suitable name)
+    :param encapsulatedConcrete: concrete material defining the concrete behaviour.
+    :param beta: tension softening parameter.
+    :param age: analysis time at initiation of drying (in days).
+    :param tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
+    :param csParameters: creep and shrinkage parameters.
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    matName= name
+    if(not matName):
+        matName= uuid.uuid1().hex
+    retval= materialHandler.newMaterial("creep_material", matName)
+    retval.setMaterial(encapsulatedConcrete)
+    retval.beta= beta # beta parameter.
+    retval.age= age # concrete age at first loading.
+    retval.tcast= tcast # analysis time corresponding to concrete casting in days.
+    retval.setCreepShrinkageParameters(csParameters)
+    retval.setup()
+    return retval
+
+# TDConcrete.
+def defTDConcrete(preprocessor, name, fpc, ft, Ec, beta, age, tcast, csParameters):
     ''''Constructs an uniaxial concrete material concrete is linear in 
         compression with nonlinear tension softening; creep and shrinkage ç
         evolution equations are based on ACI 209R-92 models.
@@ -504,13 +544,8 @@ def defTDConcrete(preprocessor,name, fpc, ft, Ec, beta, age, epsshu, epssha, tcr
     :param Ec: modulus of elasticity (preferably at time of loading if there is a single loading age).
     :param beta: tension softening parameter.
     :param age: analysis time at initiation of drying (in days).
-    :param epsshu: ultimate shrinkage strain εsh,u, as per ACI 209R-92.
-    :param epssha: fitting parameter within the shrinkage time evolution function as per ACI 209R-92.
-    :param tcr: creep model age in days.
-    :param epscru: ultimate creep coefficient φu, as per ACI 209R-92.
-    :param epscra: fitting constant within the creep time evolution function as per ACI 209R-92.
-    :param epscrd: fitting constant within the creep time evolution function as per ACI 209R-92.
     :param tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
+    :param csParameters: creep and shrinkage parameters.
     '''
     materialHandler= preprocessor.getMaterialHandler
     matName= name
@@ -522,13 +557,8 @@ def defTDConcrete(preprocessor,name, fpc, ft, Ec, beta, age, epsshu, epssha, tcr
     retval.Ec= Ec # concrete stiffness.
     retval.beta= beta # beta parameter.
     retval.age= age # concrete age at first loading.
-    retval.epsshu= epsshu # ultimate shrinkage
-    retval.epssha= epssha # shrinkage parameter
-    retval.tcr= tcr # creep relationship age
-    retval.epscru= epscru # ultimate concrete creep
-    retval.epscra= epscra # concrete creep exponent parameter.
-    retval.epscrd= epscrd # creep d parameter.
-    retval.tcast= tcast # tcast
+    retval.tcast= tcast # analysis time corresponding to concrete casting in days.
+    retval.setCreepShrinkageParameters(csParameters)
     retval.setup()
     return retval
 
