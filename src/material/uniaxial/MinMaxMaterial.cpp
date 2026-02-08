@@ -143,6 +143,7 @@ int XC::MinMaxMaterial::revertToStart(void)
     return retval;
   }
 
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::MinMaxMaterial::getCopy(void) const
   { return new MinMaxMaterial(*this); }
 

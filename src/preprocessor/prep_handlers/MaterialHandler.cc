@@ -36,10 +36,12 @@
 #include "material/uniaxial/CableMaterial.h"
 #include "material/uniaxial/concrete/Concrete01.h"
 #include "material/uniaxial/concrete/Concrete02.h"
+#include "material/uniaxial/concrete/Concrete02IS.h"
 #include "material/uniaxial/concrete/Concrete04.h"
 #include "material/uniaxial/concrete/TDConcrete.h"
 #include "material/uniaxial/concrete/TDConcreteMC10.h"
 #include "material/uniaxial/concrete/TDConcreteMC10NL.h"
+#include "material/uniaxial/concrete/CreepMaterial.h"
 #include "material/uniaxial/ENTMaterial.h"
 #include "material/uniaxial/ENCMaterial.h"
 #include "material/uniaxial/TensionOnlyMaterial.h"
@@ -279,10 +281,12 @@ XC::Material *load_uniaxial_fedeas_material(int tag_mat,const std::string &cmd)
 //! - cable_material: CableMaterial (no compression).
 //! - concrete01_material: Concrete01 uniaxial material.
 //! - concrete02_material: Concrete02 uniaxial material.
+//! - concrete02is_material: Concrete02IS uniaxial material.
 //! - concrete04_material: Concrete04 uniaxial material.
 //! - tdconcrete_material: TDConcrete uniaxial material.
 //! - tdconcrete_mc10_material: TDConcreteMC10 uniaxial material.
 //! - tdconcrete_mc10nl_material: TDConcreteMC10NL uniaxial material.
+//! - creep_material: Creep uniaxial material.
 //! - steel01: Steel01 material.
 //! - steel02: Steel02 material.
 //! - steel03: Steel03 material.
@@ -298,6 +302,8 @@ XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
       retval= new XC::Concrete01(tag_mat);
     else if(cmd == "concrete02_material")
       retval= new XC::Concrete02(tag_mat);
+    else if(cmd == "concrete02is_material")
+      retval= new XC::Concrete02IS(tag_mat);
     else if(cmd == "concrete04_material")
       retval= new XC::Concrete04(tag_mat);
     else if(cmd == "tdconcrete_material")
@@ -306,6 +312,8 @@ XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
       retval= new XC::TDConcreteMC10(tag_mat);
     else if(cmd == "tdconcrete_mc10nl_material")
       retval= new XC::TDConcreteMC10NL(tag_mat);
+    else if(cmd == "creep_material")
+      retval= new XC::CreepMaterial(tag_mat);
     else if((cmd == "elastic_no_traction_material") or (cmd == "elastic_no_tension_material"))
       retval= new XC::ENTMaterial(tag_mat);
     else if(cmd == "elastic_no_compression_material")
@@ -1097,14 +1105,14 @@ boost::python::list XC::MaterialHandler::getMaterialNamesPy(void) const
     return retval;
   }
 
-void  XC::MaterialHandler::setCreepOn(void)
+void XC::MaterialHandler::setCreepOn(void)
   { TDConcrete::setCreepOn(); }
 
-void  XC::MaterialHandler::setCreepOff(void)
+void XC::MaterialHandler::setCreepOff(void)
   { TDConcrete::setCreepOff(); }
 
-void  XC::MaterialHandler::setCreepDt(const double &d)
+void XC::MaterialHandler::setCreepDt(const double &d)
   { TDConcrete::setCreepDt(d); }
 
-double  XC::MaterialHandler::getCreepDt(void)
+double XC::MaterialHandler::getCreepDt(void)
   { return TDConcrete::getCreepDt(); }

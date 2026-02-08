@@ -104,16 +104,16 @@ class TDConcrete : public TDConcreteBase
     double epscrd; //!< fitting constant within the creep time evolution function as per ACI 209R-92
 
     //Added by AMK:
-    double eps_cr;
-    double eps_sh;
-    double epsP_cr;
-    double epsP_sh;
+    double eps_cr; //!< Creep strain.
+    double eps_sh; //!< Shrinkage strain.
+    double epsP_cr; //!< Commited creep strain
+    double epsP_sh; //!< Commited shrinkage strain. 
     double phi_i;
     
     std::vector<float> PHI_i;
 
-    void Tens_Envlp (double epsc, double &sigc, double &Ect);
-    void Compr_Envlp (double epsc, double &sigc, double &Ect);    
+    void Tens_Envlp(double epsc, double &sigc, double &Ect);
+    void Compr_Envlp(double epsc, double &sigc, double &Ect);    
   protected:
     size_t resize(void);
     int sendData(Communicator &);

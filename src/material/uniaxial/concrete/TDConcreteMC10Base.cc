@@ -271,29 +271,16 @@ int XC::TDConcreteMC10Base::revertToLastCommit(void)
     eps_crb = epsP_crb; //ntosic
     eps_crd = epsP_crd; //ntosic
     eps_m = epsP_m;  
-    
-    ecmin = ecminP;
-    ecmax = ecmaxP; //ntosic
-    dept = deptP;
 
-    e = eP;
-    sig = sigP;
-    eps = epsP;
+    hstv= hstvP;
     return 0;
   }
 
 int XC::TDConcreteMC10Base::revertToStart(void)
   {
-    ecminP = 0.0;
-    ecmaxP = 0.0; //ntosic
-    deptP = 0.0;
+    hstvP.revertToStart(Ec);
 
-    eP = Ec;
-    epsP = 0.0;
-    sigP = 0.0;
-    eps = 0.0;
-    sig = 0.0;
-    e = Ec;
+    hstv.setup_parameters(Ec);
 
     if(creepControl==0)
       { count= 0; }
@@ -307,10 +294,8 @@ int XC::TDConcreteMC10Base::revertToStart(void)
 int XC::TDConcreteMC10Base::sendData(Communicator &comm)
   {
     int res= TDConcreteBase::sendData(comm);
-    res+= comm.sendDoubles(Ecm, epsba, epsbb, epsda, epsdb,getDbTagData(),CommMetaData(3));
-    res+= comm.sendDoubles(phiba, phibb, phida, phidb, getDbTagData(),CommMetaData(4));
-    res+= comm.sendDoubles(cem, ecminP, ecmaxP, deptP, epsP, getDbTagData(),CommMetaData(5));
-    res+= comm.sendDoubles(sigP, eP, getDbTagData(),CommMetaData(6));
+    res+= comm.sendDoubles(Ecm, epsba, epsbb, epsda, epsdb,getDbTagData(),CommMetaData(4));
+    res+= comm.sendDoubles(phiba, phibb, phida, phidb, cem, getDbTagData(),CommMetaData(5));
     return res;
   }
 
@@ -318,10 +303,8 @@ int XC::TDConcreteMC10Base::sendData(Communicator &comm)
 int XC::TDConcreteMC10Base::recvData(const Communicator &comm)
   {
     int res= TDConcreteBase::recvData(comm);
-    res+= comm.receiveDoubles(Ecm, epsba, epsbb, epsda, epsdb,getDbTagData(),CommMetaData(3));
-    res+= comm.receiveDoubles(phiba, phibb, phida, phidb, getDbTagData(),CommMetaData(4));
-    res+= comm.receiveDoubles(cem, ecminP, ecmaxP, deptP, epsP, getDbTagData(),CommMetaData(5));
-    res+= comm.receiveDoubles(sigP, eP, getDbTagData(),CommMetaData(6));
+    res+= comm.receiveDoubles(Ecm, epsba, epsbb, epsda, epsdb,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveDoubles(phiba, phibb, phida, phidb, cem, getDbTagData(),CommMetaData(5));
     return res;
   }
 

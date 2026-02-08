@@ -67,60 +67,10 @@
 #ifndef Concrete02_h
 #define Concrete02_h
 
-#include <material/uniaxial/concrete/RawConcrete.h>
+#include "material/uniaxial/concrete/RawConcrete.h"
+#include "material/uniaxial/concrete/ConcreteHistoryVars.h"
 
 namespace XC {
-
-//! @ingroup MatUnx
-//
-//! @brief Concrete02 history variables.
-struct Conc02HistoryVars
-  {
-    double ecmin;  //!<  hstP(1)
-    double dept;   //!<  hstP(2)
-    double eps;  //!< strain
-    double sig;  //!< stress
-    double e;    //!< stiffness modulus
-    inline Conc02HistoryVars(void)
-      : ecmin(0.0), dept(0.0), eps(0.0), sig(0.0), e(0.0) {}
-    inline void setup_parameters(const double &initialTangent)
-      {
-	e= initialTangent;
-        eps= 0.0;
-        sig= 0.0;
-      }
-    inline double getStrain(void) const
-      { return eps; }
-    inline double getStress(void) const
-      { return sig; }
-    inline double getTangent(void) const
-      { return e; }
-    void cutStress(const double &sigmin,const double &sigmax,const double &er)
-      {
-        if(sig <= sigmin)
-          {
-            sig= sigmin;
-            e= er;
-          }
-        else if(sig >= sigmax)
-	  {
-            sig= sigmax;
-            e= 0.5 * er;
-          }
-      }
-    void Print(std::ostream &os) const
-      {
-        os << "Concrete02:(strain, stress, tangent) " << eps
-	  << ", " << sig << ", " << e << std::endl;
-      }
-  };
-
-//! @brief Printing stuff.
-inline std::ostream &operator<<(std::ostream &os,const Conc02HistoryVars &hv)
-   {
-     hv.Print(os);
-     return os;
-   }
 
 //! @ingroup MatUnx
 //
@@ -128,7 +78,7 @@ inline std::ostream &operator<<(std::ostream &os,const Conc02HistoryVars &hv)
 //! Reference: Mohd Hisham Mohd Yassin, "Nonlinear Analysis of Prestressed Concrete Structures under Monotonic and Cycling Loads", PhD dissertation, University of California, Berkeley, 1994. 
 class Concrete02: public RawConcrete
   {
-  private:
+  protected:
 
     // matpar : Concrete FIXED PROPERTIES
     double fpcu; //!< stress at ultimate (crushing) strain.
@@ -137,9 +87,9 @@ class Concrete02: public RawConcrete
     double Ets; //!< tension stiffening slope.
 
     // hstvP : Concrete HISTORY VARIABLES last committed step
-    Conc02HistoryVars hstvP; //!< = values at previous converged step
+    ConcreteHistoryVars hstvP; //!< = values at previous converged step
     // hstv : Concrete HISTORY VARIABLES  current step
-    Conc02HistoryVars hstv; //!< = values at current step (trial values)
+    ConcreteHistoryVars hstv; //!< = values at current step (trial values)
 
     void Tens_Envlp(double epsc, double &sigc, double &Ect);
     virtual void Compr_Envlp(double epsc, double &sigc, double &Ect);
@@ -156,6 +106,7 @@ class Concrete02: public RawConcrete
     Concrete02(int tag= 0);
     Concrete02(int tag, double _fpc, double _epsc0, double _fpcu,
 	       double _epscu, double _rat, double _ft, double _Ets);
+    UniaxialMaterial *getCopy(void) const;
  
     void setFpcu(const double &);
     double getFpcu(void) const;
@@ -168,7 +119,6 @@ class Concrete02: public RawConcrete
 
     inline double getInitialTangent(void) const
       { return 2.0*fpc/epsc0; }
-    UniaxialMaterial *getCopy(void) const;
 
     int setTrialStrain(double strain, double strainRate = 0.0); 
     inline double getStrain(void) const

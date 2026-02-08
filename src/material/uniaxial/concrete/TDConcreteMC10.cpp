@@ -192,7 +192,7 @@ int XC::TDConcreteMC10::setTrialStrain(double trialStrain, double strainRate)
 	eps_shd = 0.0; //ntosic
 	eps_m = 0.0;
 	eps_total = trialStrain;
-	sig = 0.0;
+	hstv.sig = 0.0;
       }
     else
       { // Concrete has hardened and is ready to accept load
@@ -215,12 +215,12 @@ int XC::TDConcreteMC10::setTrialStrain(double trialStrain, double strainRate)
             	eps_shb = epsP_shb; //ntosic
 		eps_shd = epsP_shd; //ntosic
             	eps_m = eps_total - eps_crb - eps_crd - eps_shb - eps_shd; //ntosic
-            	sig = setStress(eps_m, e);
+            	hstv.sig= setStress(eps_m, hstv.e);
             
 	      }
 	    else
 	      { // if the current calculation is a new time step
-		//if (crackP_flag == 1 && sigP >= 0.0) { //if cracking occurs and previous stress is positive, 
+		//if (crackP_flag == 1 && hstvP.sig >= 0.0) { //if cracking occurs and previous stress is positive, 
 		// creep strain should not increase
 		//	eps_cr = epsP_cr;
 		//} else {
@@ -231,15 +231,15 @@ int XC::TDConcreteMC10::setTrialStrain(double trialStrain, double strainRate)
 		//	eps_sh = epsP_sh;
 		//	eps_cr = epsP_cr;
 		//	eps_m = eps_total - eps_cr - eps_sh;
-		//	sig = setStress(eps_m, e);
+		//	hstv.sig = setStress(eps_m, hstv.e);
 		//} else {
 		if (iter < 1)
 		  {
-                    eps_crb = setCreepBasicStrain(t,sig); 
-		    eps_crd = setCreepDryingStrain(t,sig);
+                    eps_crb = setCreepBasicStrain(t, hstv.sig); 
+		    eps_crd = setCreepDryingStrain(t, hstv.sig);
 		  }
 		eps_m = eps_total - eps_crb - eps_crd - eps_shb - eps_shd; //ntosic
-		sig = setStress(eps_m, e);
+		hstv.sig = setStress(eps_m, hstv.e);
 		//}
 	      }
 	  }
@@ -250,7 +250,7 @@ int XC::TDConcreteMC10::setTrialStrain(double trialStrain, double strainRate)
 	    eps_shb = epsP_shb; //ntosic
 	    eps_shd = epsP_shd; //ntosic
 	    eps_m = eps_total - eps_crb - eps_crd - eps_shb - eps_shd; //ntosic
-	    sig = setStress(eps_m, e);
+	    hstv.sig = setStress(eps_m, hstv.e);
 	  }
 	//
 	//std::cerr<<"\n   eps_cr = "<<eps_cr;
@@ -266,15 +266,15 @@ double XC::TDConcreteMC10::setStress(double strain, double &stiff)
   {
 // Determine proper load path (comp load, comp unload, tens load, tens unload):
     double stress= 0.0;
-    crack_flag = crackP_flag;
-    ecmin = ecminP; //Initialized as ecmin = 0; ecmin should never be positive
-    ecmax = ecmaxP; //Initialized as ecmax = 0; ecmax should never be negative
+    crack_flag= crackP_flag;
+    hstv.ecmin= hstvP.ecmin; //Initialized as ecmin = 0; ecmin should never be positive
+    hstv.ecmax= hstvP.ecmax; //Initialized as ecmax = 0; ecmax should never be negative
     
-    if (strain <= ecmin)
+    if (strain <= hstv.ecmin)
       { // Concrete in compression loading
         this->Compr_Envlp(strain,stress,stiff);
-        ecmin = strain;			// reset ecmin
-        crack_flag = 0;			// concrete in compression, no cracking
+        hstv.ecmin = strain;	// reset ecmin
+        crack_flag = 0;	// concrete in compression, no cracking
       }
     else
       { // Concrete in either: Comp Unload, Tens Load, or Tens Unload/reload
@@ -287,12 +287,12 @@ double XC::TDConcreteMC10::setStress(double strain, double &stiff)
 	else
 	  { // either Tens Load, Tens Unload, or Tens reload
 	    double et0 = ft/Ec;
-	    if (strain >= ecmax)
+	    if (strain >= hstv.ecmax)
 	      { //Tens Load or reload if strain is larger than before
     		//Need to check whether cracking has occurred or not
     		//If cracked, then reloading occurs along Et
     		//If not cracked, then loading occurs according to Tens_Envlp
-		ecmax = strain; // reset ecmax
+		hstv.ecmax = strain; // reset ecmax
 		this->Tens_Envlp(strain, stress, stiff);
 		if (strain >= et0)
 		  {//cracking has occurred, set cracking flag
@@ -301,7 +301,7 @@ double XC::TDConcreteMC10::setStress(double strain, double &stiff)
 	      }
 	    else
 	      { //Tens Unload or Tens Reload
-		if (strain<=et0 && ecmax<=et0)
+		if (strain<=et0 && hstv.ecmax<=et0)
 		  { //Linear unloading/reloading, i.e, not cracked
 		    this->Tens_Envlp(strain,stress,stiff);
 		  }
@@ -319,35 +319,35 @@ double XC::TDConcreteMC10::setStress(double strain, double &stiff)
 int XC::TDConcreteMC10::commitState(void)
   {
     iter= 0;
-    ecminP= ecmin;
-    ecmaxP= ecmax;
-    deptP= dept;
+    hstvP.ecmin= hstv.ecmin;
+    hstvP.ecmax= hstv.ecmax;
+    hstvP.dept= hstv.dept;
 
-    dsig_i[count]= sig-sigP;
-    /* 5/8/2013: commented the following lines so that the DSIG_i[count+1]=sig-sigP;*/
+    dsig_i[count]= hstv.sig-hstvP.sig;
+    /* 5/8/2013: commented the following lines so that the DSIG_i[count+1]=sig-hstvP.sig;*/
     //if (crack_flag == 1) {// DSIG_i will be different depending on how the fiber is cracked
-    //	if (sig < 0 && sigP > 0) { //if current step puts concrete from tension to compression, DSIG_i will be only the comp. stress
+    //	if (sig < 0 && hstvP.sig > 0) { //if current step puts concrete from tension to compression, DSIG_i will be only the comp. stress
     //		DSIG_i[count+1] = sig;
     //	}
     //	if (sig > 0) {// Concrete should not creep when crack is opened
     //		DSIG_i[count+1] = 0.0;
     //	}
-    //	if (sig > 0 && sigP < 0) {//if current step goes from compression to tension, DSIG_i will be the stress difference
-    //		DSIG_i[count+1] = sig-sigP;
+    //	if (sig > 0 && hstvP.sig < 0) {//if current step goes from compression to tension, DSIG_i will be the stress difference
+    //		DSIG_i[count+1] = sig-hstvP.sig;
     //	}
-    //} else { //concrete is uncracked, DSIG = sig - sigP
-    //	DSIG_i[count+1] = sig-sigP;
+    //} else { //concrete is uncracked, DSIG = sig - hstvP.sig
+    //	DSIG_i[count+1] = sig-hstvP.sig;
     //}
-    DSIG_i[count+1] = sig-sigP;
+    DSIG_i[count+1] = hstv.sig-hstvP.sig;
 
     //Secant Stiffness for determination of creep strain:
-    if(fabs(eps_m/sig)>Ec)
+    if(fabs(eps_m/hstv.sig)>Ec)
       { //ntosic: originally was eps_m/sig
 	E_i[count+1] = Ec;
       }
     else
       {
-	E_i[count+1] = fabs(sig/eps_m); //ADDED 7/22
+	E_i[count+1] = fabs(hstv.sig/eps_m); //ADDED 7/22
       }
 
     if(isnan(E_i[count+1]))
@@ -356,9 +356,9 @@ int XC::TDConcreteMC10::commitState(void)
 
     TIME_i[count+1] = getCurrentTime();
 
-    eP = e;
-    sigP = sig;
-    epsP = eps;
+    hstvP.e= hstv.e;
+    hstvP.sig= hstv.sig;
+    hstvP.eps = hstv.eps;
 
     //Added by AMK:
     epsP_total= eps_total; //Added by AMK;
@@ -384,26 +384,26 @@ int XC::TDConcreteMC10::commitState(void)
     //cracked reloading/unloading stiffness:
     if (crackP_flag==1)
       {
-	if (sig/eps_m<Et)
-	  { Et = sig/eps_m; }
+	if (hstv.sig/eps_m<Et)
+	  { Et = hstv.sig/eps_m; }
       }
 
     if(count==0)
       {
 	epsInit = epsP_total;
-	sigInit = sigP;
+	sigInit = hstvP.sig;
       }
 
     if(sigInit<0.0 && t_load<0.0)
       {
 	t_load = getCurrentTime();
-	sigInit = sigP;
+	sigInit = hstvP.sig;
 	epsInit = epsP_m;
       }
-    else if (sigInit>0.0 && sigP<0.0 && t_load<0.0)
+    else if (sigInit>0.0 && hstvP.sig<0.0 && t_load<0.0)
       {
 	t_load = getCurrentTime();
-	sigInit = sigP;
+	sigInit = hstvP.sig;
 	epsInit = epsP_m;
       }
 
@@ -419,7 +419,7 @@ int XC::TDConcreteMC10::commitState(void)
 void XC::TDConcreteMC10::Print(std::ostream &s, int flag) const
   {
     s << "TDConcreteMC10:(strain, stress, tangent) "
-      << eps << " " << sig << " " << e << std::endl;
+      << hstv.eps << " " << hstv.sig << " " << hstv.e << std::endl;
   }
 
 

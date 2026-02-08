@@ -99,17 +99,14 @@ double XC::TDConcreteBase::creepDt= 0.0;
 //! @brief Sets initial values for the concrete parameters.
 void XC::TDConcreteBase::setup_parameters(void)
   {
-    ecminP= 0.0;
-    ecmaxP= 0.0;
-    deptP= 0.0;
+    hstvP.ecmin= 0.0;
+    hstvP.ecmax= 0.0;
+    hstvP.dept= 0.0;
 
     //sigCr= fabs(sigCr);
-    eP= Ec; //Added by AMK
-    epsP= 0.0;
-    sigP= 0.0;
-    eps= 0.0;
-    sig= 0.0;
-    e= Ec; //Added by AMK
+    hstvP.setup_parameters(Ec);
+    hstv.setup_parameters(Ec);
+    
     Et= Ec;
     count= 0; //Added by AMK
     resize();
@@ -129,6 +126,7 @@ void XC::TDConcreteBase::setup_parameters(void)
     fpc= -fabs(fpc); 
   }
 
+//! @brief Resize the vectors that store the creep history.
 size_t XC::TDConcreteBase::resize(void)
   {
     size_t newSize= 10;
@@ -203,17 +201,17 @@ double XC::TDConcreteBase::getStrain(void) const
 
 double XC::TDConcreteBase::getStress(void) const
   {
-    return sig;
+    return hstv.getStress();
   }
 
 double XC::TDConcreteBase::getTangent(void) const
   {
-    return e;
+    return hstv.getTangent();
   }
 
 double XC::TDConcreteBase::getMech(void) const
   {
-        return eps_m;
+    return eps_m;
   }
 
 //! @brief Assigns concrete tensile strength.
@@ -294,6 +292,7 @@ int XC::TDConcreteBase::sendData(Communicator &comm)
   {
     int res= RawConcrete::sendData(comm);
     res+= comm.sendDoubles(ft, Ec, beta, age, getDbTagData(), CommMetaData(2));
+    res+= comm.sendDoubles(hstvP.ecmin, hstvP.ecmax, hstvP.dept, hstvP.eps, hstvP.sig, hstvP.e, getDbTagData(),CommMetaData(3));
     return res;
   }
 
@@ -302,8 +301,10 @@ int XC::TDConcreteBase::recvData(const Communicator &comm)
   {
     int res= RawConcrete::recvData(comm);
     res+= comm.receiveDoubles(ft, Ec, beta, age, getDbTagData(),CommMetaData(2));
+    res+= comm.receiveDoubles(hstvP.ecmin, hstvP.ecmax, hstvP.dept, hstvP.eps, hstvP.sig, hstvP.e, getDbTagData(),CommMetaData(3));
     return res;
   }
+
 //! @brief Sends object through the communicator argument.
 int XC::TDConcreteBase::sendSelf(Communicator &comm)
   {
@@ -345,8 +346,8 @@ int XC::TDConcreteBase::recvSelf(const Communicator &comm)
 
 void XC::TDConcreteBase::Print(std::ostream &s, int flag) const
   {
-    s << "TDConcreteBase:(strain, stress, tangent) " << eps
-      << " " << sig << " " << e << std::endl;
+    s << "TDConcreteBase:(strain, stress, tangent) " << hstv.getStrain()
+      << " " << hstv.getStress() << " " << hstv.getTangent() << std::endl;
   }
 
 void XC::TDConcreteBase::Compr_Envlp(double epsc, double &sigc, double &Ect) 
