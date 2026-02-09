@@ -36,7 +36,7 @@ import json
 # (strong axis parallel to z axis) in other words: values for Y and Z axis 
 # are swapped with respect to those in the catalog.
 
-# XXX Control shear distortion constants:
+# TODO: control shear distortion constants:
 #    alpha-> alphaZ,alphaY
 
 '''
@@ -88,7 +88,7 @@ arcelor_shapes['IPE']= IPE
 # (strong axis parallel to z axis) in other words: values for Y and Z axis 
 # are swapped with respect to those in the catalog.
 
-# XXX Check shear distortion constants:
+# TODO: Check shear distortion constants:
 #   alpha-> alphaY,alphaZ}
 
 IPN= None
@@ -119,7 +119,7 @@ arcelor_shapes['IPN']= IPN
 # (strong axis parallel to z axis) in other words: values for Y and Z axis 
 # are swapped with respect to those in the catalog.
 
-# XXX Check shear distortion constants:
+# TODO: Check shear distortion constants:
 #    alpha-> alphaY,alphaZ
 
 HE= None
@@ -150,7 +150,7 @@ arcelor_shapes['HE']= HE
 # (strong axis parallel to z axis) in other words: values for Y and Z axis 
 # are swapped with respect to those in the catalog.
 
-# XXX Check shear distortion constants:
+# TODO: Check shear distortion constants:
 #    alpha-> alphaY,alphaZ
 
 HL= None
@@ -271,7 +271,7 @@ with importlib.resources.open_text("materials.sections.structural_shapes.aux", "
 arcelor_shapes['SHS']= SHS
 
 '''
-XXX Check shear distortion constants
+TODO: Check shear distortion constants
    alpha-> alphaZ,alphaY
 '''
 

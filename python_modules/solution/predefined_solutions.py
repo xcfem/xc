@@ -1418,7 +1418,8 @@ class ZeroEnergyModes(IllConditioningAnalysisBase):
         :param printFlag: if not zero print convergence results on each step.
         '''        
         # Very slow solver but apparently Arpack cannot
-        # compute zero eigenvalues. XXX
+        # compute zero eigenvalues.
+        # TODO: take a look to SpectraSOE/SpectraSolver as an alternative.
         super(ZeroEnergyModes,self).__init__(prb, name, printFlag= printFlag, systemPrefix= systemPrefix, shift= shift)
         
 ### Convenience function
@@ -1441,7 +1442,8 @@ class IllConditioningAnalysis(IllConditioningAnalysisBase):
         :param printFlag: if not zero print convergence results on each step.
         '''        
         # Very slow solver but apparently Arpack cannot
-        # compute zero eigenvalues. XXX
+        # compute zero eigenvalues.
+        # TODO: take a look to SpectraSOE/SpectraSolver as an alternative.
         super(IllConditioningAnalysis,self).__init__(prb, name, printFlag= printFlag, systemPrefix= systemPrefix, shift= shift)
     
 ### Convenience function

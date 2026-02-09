@@ -288,11 +288,11 @@ class ShearController(lsc.ShearControllerBase):
     def check(self,elements,nmbComb):
         '''
         Check the shear strength of the RC section.
-           XXX Orientation of the transverse reinforcement is not
+           TODO: orientation of the transverse reinforcement is not
            taken into account.
         '''
         lmsg.info("Postprocesing combination: "+nmbComb)
-        # XXX torsional deformation ingnored.
+        # WARNING: torsional deformation ingnored.
 
         for e in elements:
             e.getResistingForce()
@@ -724,8 +724,8 @@ class FatigueController(lsc.LimitStateControllerBase):
 
             - ELUF0: unloaded structure (permanent loads)
             - ELUF1: fatigue load in position 1.
-            - ELUF2: fatigue load in position 2 (XXX not yet implemented!!!).
-            - ELUF3: fatigue load in position 3 (XXX not yet implemented!!!).
+            - ELUF2: fatigue load in position 2 (TODO: not yet implemented!!!).
+            - ELUF3: fatigue load in position 3 (TODO: not yet implemented!!!).
             - ...
         '''
         lmsg.info('Controlling limit state: ',self.limitStateLabel, ' for load combination: ',combNm,"\n")
@@ -752,7 +752,7 @@ class FatigueController(lsc.LimitStateControllerBase):
                 controlVars.state0= resultsComb
             else:
                 controlVars.state1= resultsComb
-                kc= 1.0 #XXX  SIA 262 4.2.1.7
+                kc= 1.0 # WARNING: SIA 262 4.2.1.7
                 controlVars.concreteLimitStress= getConcreteLimitStress(datosScc,kc,controlVars)
                 controlVars.concreteBendingCF= controlVars.getConcreteMinStress()/controlVars.concreteLimitStress
 

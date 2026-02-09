@@ -1509,7 +1509,7 @@ class ShearController(lscb.ShearControllerBase):
         
     def getShearStrengthShearReinf(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
         ''' Compute the shear strength at failure WITH shear reinforcement.
-         XXX Presstressing contribution not implemented yet.
+         TODO: presstressing contribution not implemented yet.
 
          :param scc: fiber model of the section.
          :param concrete: concrete material.
@@ -1538,7 +1538,7 @@ class ShearController(lscb.ShearControllerBase):
     def getShearStrength(self, scc, concrete, reinfSteel, Nd, Md, Vd, Td, rcSets, circular= False):
         ''' Compute the shear strength at failure WITH or WITHIOUT shear 
             reinforcement.
-         XXX Presstressing contribution not implemented yet.
+         TODO: Presstressing contribution not implemented yet.
 
          :param scc: fiber model of the section.
          :param concrete: concrete material.
@@ -1560,7 +1560,7 @@ class ShearController(lscb.ShearControllerBase):
         
     def checkInternalForces(self, sct, Nd, Md, Vd, Td):
         '''  Compute the shear strength at failure.
-         XXX Presstressing contribution not implemented yet.
+         TODO: presstressing contribution not implemented yet.
 
          :param sct: reinforced concrete section object to chech shear on.
          :param Nd: Design value of axial force (positive if in tension)
@@ -1625,7 +1625,7 @@ class ShearController(lscb.ShearControllerBase):
         fakeSection as False, a reinfoced concrete fiber section is generated
         for each of these elements. 
 
-        XXX Rebar orientation not taken into account yet.
+        TODO: rebar orientation not taken into account yet.
         '''
         if(self.verbose):
             lmsg.log("Postprocessing combination: "+combName)

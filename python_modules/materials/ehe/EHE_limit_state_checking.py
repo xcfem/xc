@@ -1650,7 +1650,7 @@ class ShearController(lscb.ShearControllerBase):
     def calcVuEHE08NoAt(self, scc, rcSets):
         ''' Compute the shear strength at failure without shear reinforcement
          according to clause 44.2.3.2.1 of EHE-08.
-         XXX Presstressing contribution not implemented yet.
+         TODO: presstressing contribution not implemented yet.
 
          :param scc: fiber model of the section.
          :param rcSets: fiber sets in the reinforced concrete section.
@@ -1696,7 +1696,7 @@ class ShearController(lscb.ShearControllerBase):
 
     def calcVuEHE08SiAt(self, scc, torsionParameters, Nd, Md, Vd, Td, rcSets, circular= False):
         ''' Compute the shear strength at failure WITH shear reinforcement.
-         XXX Presstressing contribution not implemented yet.
+         TODO: presstressing contribution not implemented yet.
 
          :param scc: fiber model of the section.
          :param torsionParameters: parameters that define torsional behaviour 
@@ -1713,7 +1713,7 @@ class ShearController(lscb.ShearControllerBase):
         if(torsionParameters):
             self.VuAe= torsionParameters.Ae()
             self.Vuue= torsionParameters.ue()
-        else: # XXX Ignore torsional deformation.
+        else: # ignore torsional deformation.
             self.VuAe= 1.0
             self.Vuue= 0.0
 
@@ -1769,7 +1769,7 @@ class ShearController(lscb.ShearControllerBase):
 
     def calcVuEHE08(self, scc, torsionParameters, Nd, Md, Vd, Td, rcSets, circular= False):
         '''  Compute the shear strength at failure.
-         XXX Presstressing contribution not implemented yet.
+         TODO: presstressing contribution not implemented yet.
 
          :param scc: fiber model of the section.
          :param torsionParameters: parameters that define torsional behaviour 
@@ -1790,7 +1790,7 @@ class ShearController(lscb.ShearControllerBase):
 
     def checkInternalForces(self, sct, torsionParameters, Nd, Md, Vd, Td):
         '''  Compute the shear strength at failure.
-         XXX Presstressing contribution not implemented yet.
+         TODO: prestressing contribution not implemented yet.
 
          :param sct: reinforced concrete section object to check shear on.
          :param torsionParameters: parameters that define torsional behaviour 
@@ -1861,7 +1861,7 @@ class ShearController(lscb.ShearControllerBase):
         fakeSection as False, a reinfoced concrete fiber section is generated
         for each of these elements. 
 
-        XXX Rebar orientation not taken into account yet.
+        TODO: rebar orientation not taken into account yet.
 
         :param elements: phantom model elements.
         :param combName: name of the load combination being checked.
@@ -1870,7 +1870,7 @@ class ShearController(lscb.ShearControllerBase):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.log(className+'.'+methodName+"; postprocessing combination: "+combName)
-        torsionParameters= None # XXX Ignore torsional deformation.
+        torsionParameters= None # WARNING ignore torsional deformation.
         for e in elements:
             # Call getResisting force to update the internal forces.
             R= e.getResistingForce()

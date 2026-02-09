@@ -35,7 +35,7 @@ import re
 # (strong axis parallel to z axis) in other words: values for Y and Z axis 
 # are swapped with respect to those in the catalog.
 
-# XXX Check shear distortion constants:
+# TODO: check shear distortion constants:
 #    alpha-> alphaZ,alphaY
 
 '''
@@ -100,7 +100,7 @@ for item in IPE:
 # (strong axis parallel to z axis) in other words: values for Y and Z axis 
 # are swapped with respect to those in the catalog.
 
-# XXX Check shear distortion constants:
+# TODO: check shear distortion constants:
 #   alpha-> alphaY,alphaZ}
 IPN= arcelor_shapes_dictionaries.IPN
 for item in IPN:
@@ -144,7 +144,7 @@ for item in IPN:
 # (strong axis parallel to z axis) in other words: values for Y and Z axis 
 # are swapped with respect to those in the catalog.
 
-# XXX Check shear distortion constants:
+# TODO: check shear distortion constants:
 #    alpha-> alphaY,alphaZ
 
 HE= arcelor_shapes_dictionaries.HE

@@ -251,7 +251,7 @@ class ShearController(lsc.ShearControllerBase):
            taken into account yet.
         '''
         lmsg.log("Postprocesing combination: "+nmbComb)
-        # XXX torsional deformation ingnored.
+        # WARNING: torsional deformation ignored.
 
         for e in elements:
             e.getResistingForce()

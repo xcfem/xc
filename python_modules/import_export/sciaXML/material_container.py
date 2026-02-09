@@ -30,7 +30,7 @@ class MaterialTable(tb.SCXMLTableXMLNodes):
     super(MaterialTable,self).__init__(tableId,'Materials')
     self.progid= tableProgId
   def populate(self,matDict):
-    print("XXX write implementation!")
+    print("TODO: write implementation!")
     
 
 class MaterialContainer(ctr.SCXMLTableContainer):

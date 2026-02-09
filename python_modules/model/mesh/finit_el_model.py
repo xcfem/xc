@@ -83,16 +83,6 @@ def getDefaultCoordinateTransformation(preprocessor,coordTransfName,coordTransfT
     else:
         retval= trfs.newLinearCrdTransf3d(coordTransfName)
     retval.xzVector= vDir
-    '''   13.11.2017 
-    retval= trfs.getCoordTransf(coordTransfName)
-    if(retval is None):
-      msg= "getDefaultCoordinateTransformation creates a PDelta"
-      msg+= " 3D coordinate transformation which is not necessarily"
-      msg+= " the best choice for your element."
-      lmsg.warning(msg)
-      retval= trfs.newPDeltaCrdTransf3d(coordTransfName) #XXX PDelta???
-      retval.xzVector= vDir
-    '''
     return retval
 
 

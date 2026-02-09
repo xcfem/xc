@@ -29,7 +29,7 @@ class SXMLBase(object):
         self.xmlns= xmlns
         self.uuid= ''
         self.defn= scxml_definition.SCXMLDefinition(mesh.name)
-        print('XXX Write material container code.')
+        print('TODO: Write material container code.')
         self.materialContainer= None
         loads= loadContainer.loads
         self.loadGroupContainer= lgc.LoadGroupContainer(loads.loadGroups)
