@@ -682,7 +682,7 @@ const XC::Vector &XC::DispBeamColumn3d::getResistingForceIncInertia(void) const
 	  P+= this->getRayleighDampingForces();
       }
     if(isDead())
-      P*=dead_srf; //XXX Se aplica 2 veces sobre getResistingForce: arreglar.
+      P*=dead_srf; // TODO: it is applied twice over getResistingForce: to fix.
     return P;
   }
 

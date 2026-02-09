@@ -271,7 +271,7 @@ GEOM_FT PolygonalSurface2d::Pxy(void) const
 
 //! @brief Return the points for which the polygon is almost tangent
 //! to the direction argument.
-// XXX Posiblemente falle con polígonos no convexos.
+// WARNING: it will possibly fail with polygons that are not convex.
 GeomObj::list_Pos2d PolygonalSurface2d::getApproxTangentPositions(const Vector2d &v) const
   {
     const size_t sz= getNumEdges();

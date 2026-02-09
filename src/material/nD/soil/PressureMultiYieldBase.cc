@@ -212,8 +212,8 @@ XC::PressureMultiYieldBase::PressureMultiYieldBase(const PressureMultiYieldBase 
 int XC::PressureMultiYieldBase::sendData(Communicator &comm)
   {
     int res= SoilMaterialBase::sendData(comm);
-    //theSurfaces; // XXX not send (position 2 reserved).
-    //committedSurfaces;  // XXX not send (position 3 reserved).
+    //theSurfaces; // WARNING: not send (position 2 reserved).
+    //committedSurfaces;  // WARNING: not send (position 3 reserved).
     res+= comm.sendMovable(currentStress,getDbTagData(),CommMetaData(4));
     res+= comm.sendMovable(trialStress,getDbTagData(),CommMetaData(5));
     res+= comm.sendMovable(currentStrain,getDbTagData(),CommMetaData(6));
@@ -225,8 +225,8 @@ int XC::PressureMultiYieldBase::sendData(Communicator &comm)
 int XC::PressureMultiYieldBase::recvData(const Communicator &comm)
   {
     int res= SoilMaterialBase::recvData(comm);
-    //theSurfaces; // XXX not received (position 2 reserved).
-    //committedSurfaces;  // XXX not received (position 3 reserved).
+    //theSurfaces; // WARNING: not send (position 2 reserved).
+    //committedSurfaces;  // WARNING: not send (position 3 reserved).
     res+= comm.receiveMovable(currentStress,getDbTagData(),CommMetaData(4));
     res+= comm.receiveMovable(trialStress,getDbTagData(),CommMetaData(5));
     res+= comm.receiveMovable(currentStrain,getDbTagData(),CommMetaData(6));

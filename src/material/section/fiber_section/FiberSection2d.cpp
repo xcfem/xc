@@ -125,11 +125,11 @@ double XC::FiberSection2d::get_strain(const double &y) const
 
 //! @brief Returns the strains in the position being passed as parameter.
 double XC::FiberSection2d::getStrain(const double &y,const double &) const
-  { return get_strain(-y); } //XXX We must change sign of the y coordinate
-                               //because of the mess due to the change of
-                               //the coordinate sign in the private member
-                               //of the object. See, for example,
-                               //UniaxialFiber2d constructor
+  { return get_strain(-y); } // TODO: We must change sign of the y coordinate
+                             // because of the mess due to the change of
+                             // the coordinate sign in the private member
+                             // of the object. See, for example,
+                             // UniaxialFiber2d constructor
 
 //! @brief Sets values for initial strains.
 int XC::FiberSection2d::setInitialSectionDeformation(const Vector &deforms)

@@ -471,7 +471,7 @@ const XC::Vector &XC::FiberPtrDeque::getCenterOfMassHomogenizedSection(const dou
 		    << Color::def << std::endl;
       }
     static Vector retval(2);
-    retval[0]= -Qz; //center of mass y coordinate  XXX ¿Signo menos?
+    retval[0]= -Qz; //center of mass y coordinate  TOCHECK: minus sign?
     retval[1]= Qy; //center of mass z coordinate
     if(Atot!=0.0)
       {
@@ -1729,7 +1729,7 @@ int XC::FiberPtrDeque::updateCenterOfMass(void)
         Qz+= -yLoc*fiberArea; //minus y coordinate.
         Qy+= zLoc*fiberArea;
       }
-    yCenterOfMass= -Qz; //center of mass y coordinate  XXX ¿Signo menos?
+    yCenterOfMass= -Qz; //center of mass y coordinate  TOCHECK: minus sign?
     zCenterOfMass= Qy; //center of mass z coordinate
     if(Atot!=0.0)
       {
@@ -1956,7 +1956,7 @@ int XC::FiberPtrDeque::updateKRCenterOfMass(FiberSection3d &Section3d,CrossSecti
             kr3.updateNMzMy(fs0,yLoc,zLoc);
 	  }
       }
-    yCenterOfMass= -Qz; //center of mass y coordinate  XXX ¿Signo menos?
+    yCenterOfMass= -Qz; //center of mass y coordinate  TOCHECK: minus sign?
     zCenterOfMass= Qy; //center of mass z coordinate
     if(Atot!=0.0)
       {
@@ -2113,7 +2113,7 @@ int XC::FiberPtrDeque::updateKRCenterOfMass(FiberSectionGJ &SectionGJ,CrossSecti
             krGJ.updateNMzMy(fs0,yLoc,zLoc);
           }
       }
-    yCenterOfMass= -Qz; //center of mass y coordinate  XXX ¿Signo menos?
+    yCenterOfMass= -Qz; //center of mass y coordinate  TOCHECK: minus sign?
     zCenterOfMass= Qy; //center of mass z coordinate
     if(Atot!=0.0)
       {

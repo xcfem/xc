@@ -271,7 +271,7 @@ int XC::NewmarkHybridSimulation::sendData(Communicator &comm)
 int XC::NewmarkHybridSimulation::recvData(const Communicator &comm)
   {
     int res= NewmarkBase2::recvData(comm);
-    //XXX arreglar.
+    // TODO: fix it.
     //theTest= comm.receiveMovablePtr(theTest,getDbTagData(),PtrCommMetaData(14,15));
     res+= comm.receiveMovable(Ut,getDbTagData(),CommMetaData(16));
     res+= comm.receiveDouble(rFact,getDbTagData(),CommMetaData(17));

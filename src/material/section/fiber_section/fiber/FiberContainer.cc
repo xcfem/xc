@@ -154,11 +154,11 @@ void XC::FiberContainer::setup(FiberSectionGJ &SectionGJ,const fiber_list &fiber
 XC::Fiber *XC::FiberContainer::insert(const Fiber &f)
   {
     Fiber *retval= f.getCopy();
-    push_back(retval);
+    push_back(retval);!
     return retval;
   }
 
-//! @brief Adds a fiber XXX Enhance parameter updating.
+//! @brief Adds a fiber TODO: enhance parameter updating.
 XC::Fiber *XC::FiberContainer::addFiber(FiberSection2d &Section2d,Fiber &newFiber,CrossSectionKR &kr2)
   {
     Fiber *retval= insert(newFiber);
@@ -166,7 +166,7 @@ XC::Fiber *XC::FiberContainer::addFiber(FiberSection2d &Section2d,Fiber &newFibe
     return retval;
   }
 
-//! @brief Adds a fiber to the section XXX Enhance parameter updating.
+//! @brief Adds a fiber to the section TODO: enhance parameter updating.
 XC::Fiber *XC::FiberContainer::addFiber(FiberSection3d &Section3d,Fiber &newFiber,CrossSectionKR &kr3)
   {
     Fiber *retval= insert(newFiber);
@@ -175,7 +175,7 @@ XC::Fiber *XC::FiberContainer::addFiber(FiberSection3d &Section3d,Fiber &newFibe
   }
 
 
-//! @brief Adds a fiber to the container. XXX Enhance parameter updating.
+//! @brief Adds a fiber to the container. TODO: enhance parameter updating.
 XC::Fiber *XC::FiberContainer::addFiber(FiberSectionGJ &SectionGJ,Fiber &newFiber,CrossSectionKR &krGJ)
   {
     Fiber *retval= insert(newFiber);

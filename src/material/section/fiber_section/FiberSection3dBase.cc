@@ -137,7 +137,7 @@ int XC::FiberSection3dBase::updateParameter(int parameterID, Information &info)
 
 //! @brief Returns strain at position being passed as parameter.
 double XC::FiberSection3dBase::getStrain(const double &y,const double &z) const
-  { return get_strain(-y,z); } //XXX We must change sign of the y coordinate
+  { return get_strain(-y,z); } //TODO: We must change sign of the y coordinate
                                //because of the mess due to the change of
                                //the coordinate sign in the private member
                                //of the object. See, for example,

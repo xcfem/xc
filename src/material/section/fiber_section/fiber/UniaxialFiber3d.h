@@ -115,7 +115,7 @@ class UniaxialFiber3d: public UniaxialFiber
 
     void getFiberLocation(double &y, double &z) const;
     inline virtual double getLocY(void) const
-      { return -as[0]; } //XXX sign of y 
+      { return -as[0]; } //TOCHECK: sign of y 
     inline virtual double getLocZ(void) const
       { return as[1]; }
   };

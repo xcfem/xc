@@ -439,10 +439,12 @@ std::map<int, const XC::Node *> XC::PolygonalFace::create_nodes_from_gmsh(void)
 	// Nodes
 	
 	// Classify the nodes as interior nodes, edge nodes or vertex nodes
-	// XXX There is a mechanism in Gmsh to get the nodes at the boundaries
-	// (vertices and edges) without the need of searching for proximity to each
-	// vertex and edge: addPhysicalGroup/getNodesForPhysicalGroup but for now
-	// is disables because there must be an error: TO ENHANCE.
+	// WARNING: There is a mechanism in Gmsh to get the nodes at the
+	// boundaries (vertices and edges) without the need of searching for
+	// proximity to each vertex and edge:
+	// addPhysicalGroup/getNodesForPhysicalGroup
+	// but for now it is disabled because there must be an
+        // error: TO ENHANCE.
        
 	// const std::set<size_t> gmshTagsOfVertexNodes= get_gmshtags_of_nodes_at_vertices();
 	// std::set<size_t> gmshTagsOfEdgeNodes=  get_gmshtags_of_nodes_at_lines();

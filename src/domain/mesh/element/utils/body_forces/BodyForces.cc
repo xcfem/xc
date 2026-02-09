@@ -29,7 +29,7 @@
 #include "BodyForces.h"
 
 XC::BodyForces::BodyForces(const size_t &sz)
-  : MovableObject(-1), forces(sz) {} //XXX Definition of classTag pending.
+  : MovableObject(-1), forces(sz) {} //TODO: Definition of classTag pending.
 
 //! @brief Returns a vector to store the dbTags
 //! of the class members.

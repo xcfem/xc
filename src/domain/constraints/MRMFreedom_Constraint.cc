@@ -166,7 +166,7 @@ XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag,const Element &elem, co
     const size_t numNodes= retainedNodeTags.Size();
     const size_t numDOFs= constrainedDOF.Size();
     constraintMatrix= Matrix(numDOFs,numNodes*numDOFs);
-    const Pos3d pos= node.getInitialPosition3d(); //XXX Time dependence?
+    const Pos3d pos= node.getInitialPosition3d(); //TOCHECK: Time dependence?
     const Vector interpolationFactors= elem.getInterpolationFactors(pos);
     for(size_t j= 0;j<numNodes;j++)
       {

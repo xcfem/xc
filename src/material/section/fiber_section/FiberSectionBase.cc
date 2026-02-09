@@ -420,7 +420,7 @@ std::list<Polygon2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour(
     const double epsMin= fibers.getStrainMin(); //Minimal strain.
     const double epsMax= fibers.getStrainMax(); //Maximal strain.
     if(epsMin>0) //Full section is in tension.
-      retval.push_back(contour); //XXX Is this an error?.
+      retval.push_back(contour); // TOCHECK: Is this an error?.
     else if(epsMax>0) //Some (epsMin<=0) but not all the section is compressed.
       {
         if(hEfMax>1e-6)

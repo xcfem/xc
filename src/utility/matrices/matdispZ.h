@@ -507,7 +507,7 @@ void matdispZ<numero>::writeCpp(std::ostream &os) const
 template <class numero>
 matdispZ<numero> matdispZ<numero>::getBox(size_t f1, size_t c1, size_t f2, size_t c2) const
   {
-    // XXX "mejorar esta rutina"
+    // TODO: enhance this routine.
     this->check_get_box(f1,c1,f2,c2);
     matdispZ<numero> box(f2-f1+1,c2-c1+1);
     const_c_iterator c;

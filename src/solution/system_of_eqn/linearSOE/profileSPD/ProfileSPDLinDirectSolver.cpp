@@ -304,8 +304,8 @@ int XC::ProfileSPDLinDirectSolver::solve(void)
       }    
     
     /*
-    std::cerr << "BBBB " << theSOE->getB();
-    std::cerr << "XXXX " << theSOE->getX();
+    std::cerr << "B vector " << theSOE->getB();
+    std::cerr << "X vector " << theSOE->getX();
     */
     
     return 0;

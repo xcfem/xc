@@ -76,7 +76,7 @@ int XC::DistributedLinSOE::getSubGraphs(Graph &theGraph)
         inicComm(1);
 
         Graph theSubGraph;
-        comm.receiveMovable(theSubGraph,getDbTagData(),CommMetaData(0));//XXX assign position.
+        comm.receiveMovable(theSubGraph,getDbTagData(),CommMetaData(0));// TODO: assign position.
         theGraph.merge(theSubGraph);
         const int numSubVertex= theSubGraph.getNumVertex();
         ID subMap(numSubVertex);
@@ -152,7 +152,7 @@ int XC::DistributedLinSOE::send(Communicator &comm)
     // send remotes processID
     ID idData(1);
     idData(0)= sendID;
-    int res= comm.sendID(idData,getDbTagData(),CommMetaData(0));//XXX assign position.
+    int res= comm.sendID(idData,getDbTagData(),CommMetaData(0));// TODO: assign position.
     if(res < 0)
       {
         std::cerr << "DistributedLinSOE::" << __FUNCTION__
@@ -165,7 +165,7 @@ int XC::DistributedLinSOE::send(Communicator &comm)
 int XC::DistributedLinSOE::receive(const Communicator &comm)
   {
     ID idData(1);
-    int res= comm.receiveID(idData,getDbTagData(),CommMetaData(0));//XXX assign position.
+    int res= comm.receiveID(idData,getDbTagData(),CommMetaData(0));// TODO: assign position.
     if(res < 0)
       {
         std::cerr << "DistributedLinSOE::" << __FUNCTION__

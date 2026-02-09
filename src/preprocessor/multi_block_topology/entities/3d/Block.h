@@ -45,7 +45,7 @@ class Block: public Body
     void put(const size_t &i,Face *s);
   protected:
     void insert(const size_t &);
-    //XXX void add_points(const std::vector<size_t> &);
+    // TODO: void add_points(const std::vector<size_t> &);
     void append_faces(const std::vector<size_t> &);
     void create_face_nodes(void);
     Pos3dArray3d get_positions(void) const;

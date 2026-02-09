@@ -511,7 +511,7 @@ XC::TransformationDOF_Group *XC::AnalysisModel::createTransformationDOF_Group(co
 //! been created their destructor is invoked. Also sets \p numEqn to \f$0\f$.
 void XC::AnalysisModel::clearAll(void) 
   {
-    //XXX LA LÍNEA SIGUIENTE FALLA CUANDO EL MODELO NO CONTIENE ELEMENTOS.
+    // TOCHECK: The following line fails when the set has no elements.
     theFEs.clearAll();
     theDOFGroups.clearAll();
 

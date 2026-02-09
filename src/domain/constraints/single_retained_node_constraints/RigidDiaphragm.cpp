@@ -253,7 +253,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
 //! @brief Destructor.
 XC::RigidDiaphragm::~RigidDiaphragm(void)
   {
-    //XXX Put here calls to disconnect.
+    //TODO: Put here calls to disconnect.
   }
 
 

@@ -518,7 +518,7 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
 int XC::DOF_Numberer::sendData(Communicator &comm)
   {
     //setDbTagDataPos(0,getTag());
-    // XXX arreglar.
+    // TODO: fix it.
     int res= comm.sendMovablePtr(theGraphNumberer,getDbTagData(),PtrCommMetaData(1,2));
     return res;
   }
@@ -534,7 +534,7 @@ int XC::DOF_Numberer::sendData(Communicator &comm)
 int XC::DOF_Numberer::recvData(const Communicator &comm)
   {
     //setTag(getDbTagDataPos(0));
-    // XXX arreglar.
+    // TODO: fix it.
     //theGraphNumberer= comm.receiveMovablePtr(theGraphNumberer,getDbTagData(),PtrCommMetaData(1,2));
     return 0;
   }

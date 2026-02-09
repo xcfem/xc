@@ -1016,7 +1016,7 @@ const XC::Vector &XC::ForceBeamColumn2d::getResistingForceIncInertia(void) const
           theVector+= this->getRayleighDampingForces();
       }
     if(isDead())
-      theVector*=dead_srf; //XXX Applied twice over getResistingForce: to fix.
+      theVector*=dead_srf; // TODO: it is applied twice over getResistingForce: to fix.
     return theVector;
   }
 

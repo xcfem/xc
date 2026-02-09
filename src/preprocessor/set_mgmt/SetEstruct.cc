@@ -387,7 +387,7 @@ XC::Node *XC::SetEstruct::getNodeI(const size_t &i)
 
 XC::Node *XC::SetEstruct::getNodeIJ(const size_t &i,const size_t &j)
   {
-    //XXX Must get the layer (it is not necessarily the first one),
+    //TODO: Must get the layer (it is not necessarily the first one),
     if(isIConstantLayer())
       return getNode(1,i,j);
     else if(isJConstantLayer()) 

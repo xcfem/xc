@@ -49,6 +49,11 @@ Utility classes and functions.
 - [Sloshing Around](https://portwooddigital.com/2024/11/03/sloshing-around/)
 - [Hydrostatic Loading on a Wall](https://portwooddigital.com/2024/11/13/hydrostatic-loading-on-a-wall/)
 
+### Remarks on code:
+- XXX: Continue working here.
+- TODO: pending tast.
+- TOCHECK: something we need to check to be sure that the code works as intended- WARNING: something that is not complete yet and will need to be revisited in a future. 
+
 <!-- NOTES FOR MYSELF: -->
 <!-- notes for alpha cluster: -->
 <!--   1) change 'ssh' in ~/remote/remote.c to 'rsh' -->

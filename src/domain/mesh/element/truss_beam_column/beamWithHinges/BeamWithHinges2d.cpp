@@ -687,7 +687,7 @@ const XC::Vector &XC::BeamWithHinges2d::getResistingForceIncInertia(void) const
          theVector += this->getRayleighDampingForces();
       }
     if(isDead())
-      theVector*=dead_srf; //XXX Se aplica 2 veces sobre getResistingForce: arreglar.
+      theVector*=dead_srf; // WARNING: it is applied twice on getResistingForce: to be fixed.
     return theVector;
   }
 

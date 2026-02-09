@@ -146,7 +146,7 @@ int XC::DistributedBandLinSOE::sendBArecvBX(LinearSOEData &soe,const bool &facto
     if(!factored)
       {
         Vector vectA(A, Asize);        
-        res+= comm.sendVector(vectA,getDbTagData(),CommMetaData(1));//XXX assign position.
+        res+= comm.sendVector(vectA,getDbTagData(),CommMetaData(1)); //TODO: assign position.
       }
 
     soe.receiveBX(comm);
@@ -167,7 +167,7 @@ int XC::DistributedBandLinSOE::recvBAsendBX(FactoredSOEBase &soe) const
     for(int j=0; j<numChannels; j++)
       {
         Communicator comm(0,*theChannels[j]);
-        res+= comm.receiveVector(workArea,getDbTagData(),CommMetaData(0));//XXX assign position.
+        res+= comm.receiveVector(workArea,getDbTagData(),CommMetaData(0)); //TODO: assign position.
         soe.addB(Vector(workArea));
       }
   
@@ -188,7 +188,7 @@ int XC::DistributedBandLinSOE::sendResultsBack(FactoredSOEBase &soe,ID &result)
       {
         Communicator comm(0,*theChannels[j]);
         soe.sendBX(comm);
-        res+= comm.sendID(result,getDbTagData(),CommMetaData(0));//XXX assign position.
+        res+= comm.sendID(result,getDbTagData(),CommMetaData(0));// TODO: assign position.
       }
     return res;
   }
@@ -215,7 +215,7 @@ int XC::DistributedBandLinSOE::recvXA(FactoredSOEBase &soe,const bool &factored,
             const size_t localSize = localMap.Size() * ldA;
             workArea.resize(localSize);
             Vector vectA(workArea);
-            res+= comm.receiveVector(vectA,getDbTagData(),CommMetaData(1));//XXX assign position.
+            res+= comm.receiveVector(vectA,getDbTagData(),CommMetaData(1));// TODO: assign position.
 
             int loc = 0;
             for(int i=0; i<localMap.Size(); i++)

@@ -392,7 +392,7 @@ typename Array3dBase<Array>::reference Array3dBase<Array>::getAtIJ(const size_t 
 template <class Array>
 typename Array3dBase<Array>::const_reference Array3dBase<Array>::getAtIJ(const size_t &i, const size_t &j) const
   {
-    //XXX We still need to get the layer
+    //TODO: We still need to get the layer
     // (It will not necessarily be the first one).
     if(isIConstantLayer())
       return operator()(1,i,j);

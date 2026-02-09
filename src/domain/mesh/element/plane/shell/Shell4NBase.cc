@@ -548,7 +548,7 @@ int XC::Shell4NBase::addInertiaLoadToUnbalance(const Vector &accel)
 	for(int i=0;i<4;i++)
 	  {
 	    const Vector &Raccel= theNodes[i]->getRV(accel);
-	    //XXX ¿change the basis of Raccel to the local system?
+	    //TOCHECK: change the basis of Raccel to the local system?
 	    for(int j=0;j<6;j++)
 	      resid(count++)= Raccel(i);
 	  }

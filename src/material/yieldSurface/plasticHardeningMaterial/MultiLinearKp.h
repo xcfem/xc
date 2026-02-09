@@ -40,9 +40,8 @@
 
 namespace XC {
 
+//! @brief Multilinear plastic stiffness.
 //! @ingroup MATYS
-//
-//! @brief XXX??.
 class MultiLinearKp: public PlasticHardeningMaterial
   {
   private:

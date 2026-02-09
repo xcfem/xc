@@ -186,8 +186,8 @@ int XC::DistributedSparseGenColLinSOE::setSize(Graph &theGraph)
        for(size_t j=0; j<theChannels.size(); j++)
          {
            Communicator comm(0,*theChannels[j]);
-           comm.sendID(rowAdata,DistributedBandLinSOE::getDbTagData(),CommMetaData(3));//XXX assign position.
-           comm.sendID(colStartAdata,DistributedBandLinSOE::getDbTagData(),CommMetaData(4));//XXX assign position.
+           comm.sendID(rowAdata,DistributedBandLinSOE::getDbTagData(),CommMetaData(3));// TODO: assign position.
+           comm.sendID(colStartAdata,DistributedBandLinSOE::getDbTagData(),CommMetaData(4));// TODO: assign position.
          }
       }
     if(nnz > A.Size())
@@ -322,7 +322,7 @@ int XC::DistributedSparseGenColLinSOE::solve(void)
              if(!factored)
                {
                  Vector vectA(workArea);
-                 comm.receiveVector(vectA,CommMetaData(1));//XXX assign position.
+                 comm.receiveVector(vectA,CommMetaData(1));// TODO: assign position.
                  for(int i=0; i<nnz; i++)
                    A[i]+= workArea[i];
                }
@@ -359,7 +359,7 @@ const XC::Vector &XC::DistributedSparseGenColLinSOE::getB(void) const
       {
         Communicator comm(0,*theChannels[0]);
         // send B & recv merged B
-        comm.sendVector(myVectB,CommMetaData(0));//XXX assign position.
+        comm.sendVector(myVectB,CommMetaData(0));// TODO: assign position.
         this_no_const->receiveB(comm);
       }
     else

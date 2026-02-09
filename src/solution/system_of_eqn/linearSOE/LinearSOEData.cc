@@ -260,12 +260,12 @@ double XC::LinearSOEData::normRHS(void) const
 
 void XC::LinearSOEData::receiveB(const Communicator &comm)
   {
-    comm.receiveVector(B,CommMetaData(0)); //XXX assign position.
+    comm.receiveVector(B,CommMetaData(0)); // TODO: assign position.
   }
 
 void XC::LinearSOEData::receiveX(const Communicator &comm)
   {
-    comm.receiveVector(X,CommMetaData(0));//XXX assign position.
+    comm.receiveVector(X,CommMetaData(0));// TODO: assign position.
   }
 
 void XC::LinearSOEData::receiveBX(const Communicator &comm)
@@ -276,12 +276,12 @@ void XC::LinearSOEData::receiveBX(const Communicator &comm)
 
 void XC::LinearSOEData::sendB(Communicator &comm) const
   {
-    comm.sendVector(B,CommMetaData(0));//XXX assign position.
+    comm.sendVector(B,CommMetaData(0));// TODO: assign position.
   }
 
 void XC::LinearSOEData::sendBX(Communicator &comm) const
   {
-    comm.sendVector(X,CommMetaData(0));//XXX assign position.
+    comm.sendVector(X,CommMetaData(0));// TODO: assign position.
     sendB(comm);
   }
 

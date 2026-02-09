@@ -117,7 +117,7 @@ GTSSurface Triang3dMesh::get_gts_surface(void) const
 // 	    s_edges.insert(lado3);
 //             edges.push_back(GTSEdge(vertices[lado3.first],vertices[lado3.second]));
 //           }
-//         GTSEdge l1= XXX
+//         GTSEdge l1= // TOCHECK:
 //       }
     
      std::cerr << "Triang3dMesh::" << __FUNCTION__

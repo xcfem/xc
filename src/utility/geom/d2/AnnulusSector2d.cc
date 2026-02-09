@@ -163,7 +163,7 @@ bool AnnulusSector2d::In(const Pos2d &p, const double &tol) const
   {
     if(CircularSector2d::In(p,tol))
       {
-        return !(SectorInterior().In(p,tol)); //XXX ¿tol?
+        return !(SectorInterior().In(p,tol)); //TOCHECK: tol?
       }
     else
       return false;

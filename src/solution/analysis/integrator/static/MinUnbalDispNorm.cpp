@@ -104,7 +104,7 @@ double XC::MinUnbalDispNorm::getDLambdaNewStep(void) const
       }
     else
       {
-        //XXX Removing constness is not very elegant (LCPT).
+        //TODO: removing constness is not very elegant (LCPT).
         LinearSOE *theLinSOE= const_cast<LinearSOE *>(getLinearSOEPtr());
         const double det= theLinSOE->getDeterminant();
         int signDeterminant = 1;

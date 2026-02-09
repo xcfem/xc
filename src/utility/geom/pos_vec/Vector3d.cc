@@ -387,8 +387,8 @@ GEOM_FT Vector3d::getSignedAngle(const Vector3d &v) const
 GEOM_FT Vector3d::getAngle(const Vector3d &v) const
   {
     GEOM_FT retval= 0;
-    //XXX Modify by splitting in "getAngle" and "getSignedAngle"
-    //como en Vector2d.
+    // TODO: Modify by splitting in "getAngle" and "getSignedAngle"
+    // as in Vector2d.
     if( Nulo() || v.Nulo() )
       {
 	std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__

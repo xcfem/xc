@@ -586,7 +586,7 @@ const XC::Vector &XC::UpdatedLagrangianBeam2D::getResistingForceIncInertia(void)
           force+= this->getRayleighDampingForces();
       }
     if(isDead())
-      force*=dead_srf; //XXX Applied twice over getResistingForce: to fix.
+      force*=dead_srf; // TODO: it is applied twice over getResistingForce: to fix.
     return force;
   }
 

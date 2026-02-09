@@ -26,7 +26,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //Body.h
-//Class for block entities. (XXX: rename as Block?)
+//Class for block entities. (TOCHECK: rename as Block?)
 
 #ifndef BODY_H
 #define BODY_H

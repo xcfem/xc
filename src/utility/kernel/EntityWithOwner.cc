@@ -124,7 +124,7 @@ boost::python::dict EntityWithOwner::getPyDict(void) const
 void EntityWithOwner::setPyDict(const boost::python::dict &d)
   {
     // const size_t ownerAddr= boost::python::extract<size_t>(d["ownerAddress"]);
-    // //XXX we need a mechanism to restore the owner from its address.
+    // // TODO: we need a mechanism to restore the owner from its address.
     // if(ownerAddr!=0)
     //   std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
     // 	        << "; mechanism to restore the owner from its address"

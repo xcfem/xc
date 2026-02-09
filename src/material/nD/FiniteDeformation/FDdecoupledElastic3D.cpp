@@ -477,7 +477,7 @@ int XC::FDdecoupledElastic3D::getOrder(void) const
 int XC::FDdecoupledElastic3D::sendData(Communicator &comm)
   {
     int res= FiniteDeformationElastic3D::sendData(comm);
-    //XXX Falta enviar pointer to WEnergy (W). Position 2 reserved;
+    //TODO: sending pointer to WEnergy (W) missing. Position 2 reserved.
     res+= comm.sendTensor(F,getDbTagData(),CommMetaData(3));
     res+= comm.sendTensor(C,getDbTagData(),CommMetaData(4));
     res+= comm.sendTensor(Cinv,getDbTagData(),CommMetaData(5));
@@ -494,7 +494,7 @@ int XC::FDdecoupledElastic3D::sendData(Communicator &comm)
 int XC::FDdecoupledElastic3D::recvData(const Communicator &comm)
   {
     int res= FiniteDeformationElastic3D::recvData(comm);
-    //XXX Falta recibir pointer to WEnergy (W). Position 2 reserved;
+    // TODO: receiving pointer to WEnergy (W) missing. Position 2 reserved.
     res+= comm.receiveTensor(F,getDbTagData(),CommMetaData(3));
     res+= comm.receiveTensor(C,getDbTagData(),CommMetaData(4));
     res+= comm.receiveTensor(Cinv,getDbTagData(),CommMetaData(5));

@@ -118,7 +118,7 @@ const XC::Vector &XC::beam3dBase::getResistingForceIncInertia(void) const
     if(!rayFactors.nullKValues())
     rForce += this->getRayleighDampingForces();
 
-    if(isDead()) //XXX Se aplica 2 veces sobre getResistingForce: arreglar.
+    if(isDead()) // TODO: Applied twice over getResistingForce: to fix.
       rForce*=dead_srf;
     return rForce;
   }

@@ -68,7 +68,7 @@ Polygon2d::Polygon2d(const GeomObj::list_Pos2d &lv)
 //! @brief Constructor.
 Polygon2d::Polygon2d(const Polyline2d &p)
   {
-    //XXX Fails if the line self-intersects.
+    //WARNING: fails if the polyline self-intersects.
     for(Polyline2d::const_iterator i= p.begin(); i!=p.end(); i++)
       push_back(*i);
   }

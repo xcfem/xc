@@ -770,7 +770,7 @@ const XC::Vector &XC::Truss::getResistingForceIncInertia(void) const
           (*theVector) += this->getRayleighDampingForces();
       }
     if(isDead())
-      (*theVector)*=dead_srf; //XXX It's applied 2 times on getResistingForce: fix it.
+      (*theVector)*=dead_srf; // WARNING: it is applied twice on getResistingForce: to be fixed.
     return *theVector;
   }
 

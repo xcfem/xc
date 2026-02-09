@@ -81,7 +81,7 @@ const XC::Fiber *XC::ComputePivots::getFiberCMaxY(void) const
   }
 
 
-//! @brief Returns the point with zero strain in concrete (XXX enhance explanation).
+//! @brief Returns the point with zero strain in concrete (TODO: enhance explanation).
 Pos3d XC::ComputePivots::getDPoint(void) const
   {
     Pos3d retval;

@@ -259,7 +259,7 @@ const XC::Vector &XC::DistributedBandSPDLinSOE::getB(void) const
       {
         Communicator comm(0,*theChannels[0]);
         // send B & recv merged B
-        comm.sendVector(myVectB,CommMetaData(0));//XXX assign position.
+        comm.sendVector(myVectB,CommMetaData(0));// TODO: assign position.
         this_no_const->receiveB(comm);
       } 
 

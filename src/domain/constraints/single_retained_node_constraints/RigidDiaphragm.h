@@ -75,7 +75,7 @@ class ID;
 //! on included in the diaphragm.
 class RigidDiaphragm: public OneRowMFreedom_Constraint
   {
-    //XXX Put NodePtrsWithIDS to make easier to deal with the disconnection.
+    //TODO: Put NodePtrsWithIDS to make easier to deal with the disconnection.
   public:
     RigidDiaphragm(Domain &theDomain, int nodeR, ID &nodeC, int perpDirnToPlaneConstrained, int startMPtag);
     virtual ~RigidDiaphragm();

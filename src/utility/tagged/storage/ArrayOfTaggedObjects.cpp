@@ -436,7 +436,8 @@ XC::TaggedObjectStorage *XC::ArrayOfTaggedObjects::getEmptyCopy(void)
 //! components have been added to the container.
 void XC::ArrayOfTaggedObjects::clearAll(bool invokeDestructors)
   {
-//XXX Check if this can produce a memory leak (with invokeDestructors= false).
+    //TOCHECK: check if this can produce a memory leak
+    // (with invokeDestructors= false).
     transmitIDs= true;
     if(numComponents>0)
       {
