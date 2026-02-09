@@ -154,7 +154,7 @@ void XC::FiberContainer::setup(FiberSectionGJ &SectionGJ,const fiber_list &fiber
 XC::Fiber *XC::FiberContainer::insert(const Fiber &f)
   {
     Fiber *retval= f.getCopy();
-    push_back(retval);!
+    push_back(retval);
     return retval;
   }
 
