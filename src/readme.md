@@ -50,7 +50,7 @@ Utility classes and functions.
 - [Hydrostatic Loading on a Wall](https://portwooddigital.com/2024/11/13/hydrostatic-loading-on-a-wall/)
 
 ### Remarks on code:
-- XXX: Continue working here.
+- XXX: Continue working here as soon as possible.
 - TODO: pending tast.
 - TOCHECK: something we need to check to be sure that the code works as intended- WARNING: something that is not complete yet and will need to be revisited in a future. 
 

@@ -24,6 +24,8 @@ from materials.ec2 import EC2_materials
 from materials.ec3 import EC3_materials
 from materials.sections.fiber_section import def_simple_RC_section
 
+# XXX: Test does not work yet.
+
 # Geometry
 L= 10.0 # span.
 b= 2.5 # beam spacing.

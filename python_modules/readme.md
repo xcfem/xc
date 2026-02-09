@@ -7,6 +7,6 @@ Python modules to:
 - Integrate the C++ libraries with other software packages (numpy, scipy, VTK, LaTeX,...).
 
 ### Remarks on code:
-- XXX: Continue working here.
+- XXX: Continue working here as soon as possible.
 - TODO: pending tast.
 - TOCHECK: something we need to check to be sure that the code works as intended- WARNING: something that is not complete yet and will need to be revisited in a future. 
