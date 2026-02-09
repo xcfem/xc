@@ -38,7 +38,7 @@ n2= nodes.newNodeXYZ(l,0,0)
 
 # Geometric transformations
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,-1,0]))
-# XXX Check coherence in axis orientation with elastic beams.
+# TODO: Check coherence in axis orientation with elastic beams.
 
 ### Materials definition
 pth= os.path.dirname(__file__)

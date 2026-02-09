@@ -19,8 +19,8 @@ feProblem.logFileName= "/tmp/erase.log" # Ignore warning messages
 preprocessor=  feProblem.getPreprocessor
 
 # Rectangular cross-section definition
-# XXX Is not a rectangular sections so THE TEST SEEMS NOT HAVE MUCH SENSE
-# At last we must create a class for this kind to be consistent with
+# It is not a rectangular sections so THE TEST SEEMS NOT HAVE MUCH SENSE
+# TODO: at least we must create a class for this kind to be consistent with
 # the classes already defined to deal with steel profiles.
 SHS50x50x2_5=  section_properties.RectangularSection("SHS50x50x2_5",b=0.05,h=0.05) # Section geometry.
 matSHS50x50x2_5=  typical_materials.MaterialData(name='matSec',E=210000e6,nu=0.3e6,rho=2500) # Section material.
@@ -41,7 +41,7 @@ SHS50x50x2_5.iy= 1.99e-2
 SHS50x50x2_5.E= 210000e6
 SHS50x50x2_5.nu= 0.3e6
 # SHS50x50x2_5.G= SHS50x50x2_5.E/(2*(1+SHS50x50x2_5.nu))
-SHS50x50x2_5.alpha= 5/6 # XXX Corregir
+SHS50x50x2_5.alpha= 5/6 # TODO: Corregir
 
 
 # Materials definition

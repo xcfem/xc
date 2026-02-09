@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# XXX Migrate to YAML
+# TODO: Migrate to YAML or JSON data file
 
 import geom
 from materials.ehe import EHE_materials

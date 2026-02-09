@@ -24,3 +24,8 @@ Of course you can also learn how to work with XC by examining those tests.
 - [Minimal working example](https://portwooddigital.com/2021/07/01/minimal-working-example/)
 - [Verifying Ain’t Easy](https://portwooddigital.com/2021/07/11/verifying-aint-easy/)
 - [Verifying Will Never Be Easy](https://portwooddigital.com/2022/01/12/verifying-will-never-be-easy)
+
+### Remarks on code:
+- XXX: Continue working here as soon as possible.
+- TODO: pending tast.
+- TOCHECK: something we need to check to be sure that the code works as intended- WARNING: something that is not complete yet and will need to be revisited in a future. 

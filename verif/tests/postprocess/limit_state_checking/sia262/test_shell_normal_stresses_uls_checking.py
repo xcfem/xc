@@ -42,7 +42,7 @@ for eTag in elementTags:
 concrete= SIA262_materials.c30_37
 concrete.alfacc= 0.85  #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 reinfSteel= SIA262_materials.B500B
-areaFi8= 0.50e-4 #XXX Rebar area expressed in square meters.
+areaFi8= 0.50e-4 # WARNING: rebar area expressed in square meters.
 areaFi10= 0.785e-4
 areaFi12= 1.13e-4 
 areaFi16= 2.01e-4

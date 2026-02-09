@@ -97,7 +97,7 @@ result= modelSpace.analyze(calculateNodalReactions= True)
 # Get bottom tip displacement.
 ## Reference values taken from the results of test_micropile_02.py except for
 ## the vertical displacement of the top node which is different:
-## 3D: -0.018579 vs. 2D: -0.0159323 => to investigate XXX.
+## 3D: -0.018579 vs. 2D: -0.0159323 => TODO: investigate this.
 bottomTipDisp= bottomTipNode.getDisp[1]
 ratio1= abs(bottomTipDisp+0.010138959626292113)/0.010138959626292113
 topTipDisp= topTipNode.getDisp
