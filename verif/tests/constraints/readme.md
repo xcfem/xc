@@ -12,6 +12,7 @@ This folder contain tests relative to constraint creation and removal. All the e
 + Simulation of rigid links between nodes: `test_huge_xxx.py` and `test_rigid_xxx.py`.
 
 ## References
+ - [Remote Control](https://portwooddigital.com/2026/02/10/remote-control/)
  - [Handle Your Constraints with Care](https://portwooddigital.com/2020/06/05/handle-your-constraints-with-care/)
  - [Support and Connection Types](https://web.mit.edu/4.441/1_lectures/1_lecture13/1_lecture13.html)
  - [Handling of Constraints in Finite-Element Response Sensitivity Analysis](http://jaguar.ucsd.edu/sensitivity/Gu_2009_b.pdf)
