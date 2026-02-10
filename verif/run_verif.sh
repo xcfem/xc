@@ -266,6 +266,8 @@ python tests/utility/geom/half_spaces/halfspace3d_test_07.py
 # python tests/utility/geom/half_spaces/halfspace3d_test_09.py
 echo "$BLEU" "    Coordinate systems." "$NORMAL"
 python tests/utility/geom/coordinate_systems/coosys_test_01.py
+python tests/utility/geom/coordinate_systems/coosys_test_02.py
+python tests/utility/geom/coordinate_systems/coosys_test_03.py
 python tests/utility/geom/coordinate_systems/refsys3d3d_test_01.py
 python tests/utility/geom/coordinate_systems/refsys2d3d_test_01.py
 python tests/utility/geom/coordinate_systems/tensor_transformation_test_01.py
