@@ -81,7 +81,6 @@ class ColoredDiagram(vtk_lut_field.LUTField):
         :param valDest: Value of the field at the front end.
         :param dirVector: direction vector of the diagram.
         '''
-
         org2= org+(valOrg*self.scaleFactor)*dirVector
         dest2= dest+(valDest*self.scaleFactor)*dirVector
         self.points.InsertPoint(offset,org.x,org.y,org.z)
@@ -181,7 +180,8 @@ class ColoredDiagram(vtk_lut_field.LUTField):
             return self.createChangedSignDiagramInterval(offset, org, vOrg, dest, vDest, dirVector= dirVector)
 
     def createDiagramActor(self):
-        # Crea el actor para el diagrama.
+        ''' Creates the VTC actor for the diagram.
+        '''
         self.diagram= vtkPolyData()
         self.diagram.SetPoints(self.points)
         point_data= self.diagram.GetPointData()
@@ -292,4 +292,5 @@ class ColoredDiagram(vtk_lut_field.LUTField):
             posNode0= elem.getNodes[0].getCurrentPos3d(defFScale)
             posNode1= elem.getNodes[1].getCurrentPos3d(defFScale)
             diagramIndex= self.createDiagramInterval(offset= diagramIndex, org= posNode0, valOrg= v0, dest= posNode1, valDest= v1, dirVector= dirVector)
+        
         return diagramIndex
