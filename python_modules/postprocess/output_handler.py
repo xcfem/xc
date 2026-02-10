@@ -586,7 +586,6 @@ class OutputHandler(object):
         :param defaultDirection: default direction of the diagram (J: element 
                                  local j vector or K: element local K vector).
         '''
-        # unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         if(fUnitConv is None):
             unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(component)
         else:
