@@ -60,6 +60,17 @@ FT_matrix Dir3d::getMatrix(void) const
 Vector3d Dir3d::GetVector(void) const
   { return Vector3d(cgd.vector()); }
 
+Dir3d operator-(const Dir3d &d)
+  {
+    Dir3d retval(d);
+    retval.Neg();
+    return retval;
+  }
+
+//! @brief Return true if the directions are parallel.
+bool parallel(const Dir3d &v1,const Dir3d &v2)
+  { return ((v1==v2) || (v1==-v2)); } 
+
 //! @brief Insertion into an output stream.
 std::ostream &operator<<(std::ostream &stream,const Dir3d &n)
   {

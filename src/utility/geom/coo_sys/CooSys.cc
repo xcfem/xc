@@ -25,6 +25,7 @@
 
 #include "utility/utils/text/text_string.h"
 #include "utility/functions/algebra/ExprAlgebra.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 //! @brief Constructor.
@@ -38,8 +39,9 @@ void CooSys::normalize(void)
     if(!rot.Nulo())
       NormalizeRows(rot);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << rot << " es nula." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << rot << " es nula."
+		<< Color::def << std::endl;
   }
 //! @brief Make the base orthogonal.
 void CooSys::ortogonaliza(void)
@@ -54,9 +56,10 @@ void CooSys::ortogonaliza(void)
         const GEOM_FT imod2= i.Abs2();
         if(imod2<geom_epsilon2)
           {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	              << "; orthogonalize: unit vector i= " << i
-                      << " is too small (" << imod2 << ")." << std::endl;
+                      << " is too small (" << imod2 << ")."
+		      << Color::def << std::endl;
             return;
           }
         else

@@ -22,6 +22,7 @@
 
 #include "FrenetTrihedron.h"
 #include "utility/geom/d2/Circle3d.h" //Circle center.
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Default constructor.
 FrenetTrihedron::FrenetTrihedron(void)
@@ -68,9 +69,9 @@ FrenetTrihedron::IntervalMap::const_iterator FrenetTrihedron::get_interval_end(c
 	  retval= std::prev(interval_map.end()); // last item.
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "The interval map is empty."
-		<< std::endl;
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -91,9 +92,9 @@ void FrenetTrihedron::compute_vectors(void)
     binormal_vectors.resize(sz);
     if(sz<2) // No segments.
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << ";ERROR: no segments, so no curvature vectors."
-		  << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; ERROR: no segments, so no curvature vectors."
+		  << Color::def << std::endl;
       }
     else if(sz==2) // One segment only.
       {
@@ -160,7 +161,9 @@ Vector3d FrenetTrihedron::getTangent(const double &s) const
 	retval= (t1-t0)/(s1-s0)*(s-s0)+t0;
       }
     else
-      std::cerr << "Index out of range." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; index out of range."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -184,7 +187,9 @@ Vector3d FrenetTrihedron::getNormal(const double &s) const
 	retval= (n1-n0)/(s1-s0)*(s-s0)+n0;
       }
     else
-      std::cerr << "Index out of range." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; index out of range."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -208,7 +213,9 @@ Vector3d FrenetTrihedron::getBinormal(const double &s) const
 	retval= (b1-b0)/(s1-s0)*(s-s0)+b0;
       }
     else
-      std::cerr << "Index out of range." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; index out of range."
+		<< Color::def << std::endl;
     return retval;
   }
 

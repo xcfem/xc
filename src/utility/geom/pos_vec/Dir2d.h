@@ -63,14 +63,9 @@ class Dir2d
     friend std::ostream &operator << (std::ostream &stream,const Dir2d &n);
     inline virtual ~Dir2d(void) {}
   };
-inline Dir2d operator-(const Dir2d &d)
-  {
-    Dir2d retval(d);
-    retval.Neg();
-    return retval;
-  }
 
-inline bool parallel(const Dir2d &v1,const Dir2d &v2)
-  { return ((v1==v2) || (v1==-v2)); } 
+Dir2d operator-(const Dir2d &d);
+
+bool parallel(const Dir2d &,const Dir2d &);
 
 #endif

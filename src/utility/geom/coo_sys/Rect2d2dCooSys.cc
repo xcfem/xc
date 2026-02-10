@@ -27,8 +27,6 @@
 #include "utility/matrices/normalize.h"
 #include "utility/utils/misc_utils/matem.h"
 
-
-
 //! @brief Default constructor.
 Rect2d2dCooSys::Rect2d2dCooSys(void): Xd2dCooSys(2) {}
 //! @brief Constructor.

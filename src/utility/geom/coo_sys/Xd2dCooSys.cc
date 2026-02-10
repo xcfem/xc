@@ -24,6 +24,7 @@
 #include "../pos_vec/Vector2d.h"
 #include "../pos_vec/Dir2d.h"
 #include "../pos_vec/Pos2d.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 //! @brief Define a coordinate system of dimension ne
@@ -76,9 +77,10 @@ void Xd2dCooSys::XAxisVector(const VGlobal &vX)
   {
     if(vX.Nulo())
       {
-	std::cerr << "Xd2dCooSys::XAxisVector: the vector: " 
-             << vX << " is null. No changes were made."
-             << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; the vector: " 
+		  << vX << " is null. No changes were made."
+		  << Color::def << std::endl;
         return;
       }
     const VGlobal i_= vX.getNormalized();

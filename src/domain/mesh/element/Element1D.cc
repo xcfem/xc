@@ -804,7 +804,7 @@ XC::Matrix XC::Element1D::getLocalAxes(bool initialGeometry) const
 	  factor= 1.0;
         const Pos3d p0= theNodes[0]->getCurrentPosition3d(factor);
         const Pos3d p1= theNodes[1]->getCurrentPosition3d(factor);
-	const Rect3d3dCooSys sc(p0,p1);
+	const Rect3d3dCooSys sc(p0, p1);
 	const Vector3d i= sc.getIVector();
 	retval= Matrix(3,3);
 	retval(0,0)= i.x(); retval(0,1)= i.y(); retval(0,2)= i.z();

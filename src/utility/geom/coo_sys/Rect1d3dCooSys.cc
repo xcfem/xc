@@ -25,8 +25,6 @@
 #include "../pos_vec/Dir3d.h"
 #include "../pos_vec/Pos3d.h"
 
-
-
 Rect1d3dCooSys::Rect1d3dCooSys(const VGlobal &vX)
   : Xd3dCooSys(1,vX)  //Axis 1 parallelo to Vx.
   {}

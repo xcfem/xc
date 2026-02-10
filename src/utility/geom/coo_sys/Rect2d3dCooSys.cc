@@ -25,10 +25,6 @@
 #include "../pos_vec/Vector3d.h"
 #include "../pos_vec/Vector2d.h"
 
-#include "utility/utils/text/text_string.h"
-
-
-
 //! @brief Constructor.
 //!
 //! @param v: rotation angles about the axis 3, 2 and 1 that

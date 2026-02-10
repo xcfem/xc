@@ -24,12 +24,20 @@
 #include "../pos_vec/Pos3d.h"
 #include "../pos_vec/Vector3d.h"
 
+//! @brief Conctructor from two vectors.
+//! @param v1: direction of the x axis.
+//! @param v2: direction of the y axis.
 Rect3d3dCooSys::Rect3d3dCooSys(const VGlobal &v1,const VGlobal &v2)
   : Xd3dCooSys(3,v1,v2) {}
+//! @brief Conctructor from two points.
 Rect3d3dCooSys::Rect3d3dCooSys(const PGlobal &o,const PGlobal &p)
   : Xd3dCooSys(3,o,p) {}
+//! @brief Conctructor from three points.
 Rect3d3dCooSys::Rect3d3dCooSys(const PGlobal &p1,const PGlobal &p2, const PGlobal &p3)
   : Xd3dCooSys(3,p1,p2,p3) {}
+//! @brief Conctructor from three vectors.
+//! @param v1: direction of the x axis.
+//! @param v2: direction of the y axis.
 Rect3d3dCooSys::Rect3d3dCooSys(const VGlobal &v1,const VGlobal &v2,const VGlobal &v3)
   : Xd3dCooSys(3,v1,v2,v3) {}
 //! @brief Return the unary vector I in global coordinates.

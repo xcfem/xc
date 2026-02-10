@@ -64,6 +64,17 @@ FT_matrix Dir2d::getMatrix(void) const
 Vector2d Dir2d::GetVector(void) const
   { return Vector2d(cgd); }
 
+Dir2d operator-(const Dir2d &d)
+  {
+    Dir2d retval(d);
+    retval.Neg();
+    return retval;
+  }
+
+//! @brief Return true if the directions are parallel.
+bool parallel(const Dir2d &v1,const Dir2d &v2)
+  { return ((v1==v2) || (v1==-v2)); } 
+
 //! @brief insertion into an output operator.
 std::ostream &operator<<(std::ostream &stream,const Dir2d &n)
   {

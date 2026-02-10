@@ -62,7 +62,8 @@ class Dir3d
     inline virtual ~Dir3d(void) {}
   };
 
-inline bool parallel(const Dir3d &v1,const Dir3d &v2)
-  { return (v1==v2); } 
+Dir3d operator-(const Dir3d &d);
+
+bool parallel(const Dir3d &,const Dir3d &);
 
 #endif

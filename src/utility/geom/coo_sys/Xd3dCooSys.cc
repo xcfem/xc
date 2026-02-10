@@ -24,6 +24,7 @@
 #include "../pos_vec/Vector3d.h"
 #include "../pos_vec/Dir3d.h"
 #include "../pos_vec/Pos3d.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 //! @brief Defines a coordinate system of dimension i
@@ -43,7 +44,7 @@ Xd3dCooSys::Xd3dCooSys(const size_t &i,const VGlobal &v)
 //! @param v2: direction of the y axis.
 Xd3dCooSys::Xd3dCooSys(const size_t &i,const VGlobal &v1,const VGlobal &v2)
   : CooSys(i,3)
-  { vectores_unitarios(v1,v2,v1 ^ v2); }
+  { unit_vectors(v1,v2,v1 ^ v2); }
 
 //! @brief Defines a coordinate system of dimension i.
 //! @param i: dimension of the coordinate system.
@@ -61,7 +62,7 @@ Xd3dCooSys::Xd3dCooSys(const size_t &i,const PGlobal &p1,const PGlobal &p2, cons
 //! @param i: dimension of the coordinate system.
 Xd3dCooSys::Xd3dCooSys(const size_t &i,const VGlobal &v1,const VGlobal &v2,const VGlobal &v3)
   : CooSys(i,3)
-  { vectores_unitarios(v1,v2,v3); }
+  { unit_vectors(v1,v2,v3); }
 
 void Xd3dCooSys::putRow(const size_t &axis,const VGlobal &v)
   { CooSys::putRow(axis,traspuesta(v.getMatrix())); }
@@ -97,35 +98,39 @@ FT_matrix Xd3dCooSys::getLocalCoordinates(const Xd3dCooSys::VGlobal &v) const
 //! - The versor corresponding to vector k_, being passed as parameter.
 //!
 //! Controls that the three vectors are not coplanar nor parallel (2 by 2).
-void Xd3dCooSys::vectores_unitarios(const VGlobal &i_,const VGlobal &j_,const VGlobal &k_)
+void Xd3dCooSys::unit_vectors(const VGlobal &i_,const VGlobal &j_,const VGlobal &k_)
   {
     if(coplanarios(i_,j_,k_))
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; vectors: " 
                   << i_ << ' ' << j_ << ' ' << k_ 
-                  << " are coplanar. No changes were made." << std::endl;
+                  << " are coplanar. No changes were made."
+		  << Color::def << std::endl;
         return;
       }
     if(parallel(i_,j_))
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; vectors: i= " << i_ << " y j= " << j_
-                  << " are parallel. No changes were made." << std::endl;
+                  << " are parallel. No changes were made."
+		  << Color::def << std::endl;
         return;
       }
     if(parallel(i_,k_))
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; vectors: i= " << i_ << " y k= " << k_
-                  << " are parallel. No changes were made." << std::endl;
+                  << " are parallel. No changes were made."
+		  << Color::def << std::endl;
         return;
       }
     if(parallel(j_,k_))
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; vectors: j= " << j_ << " y k= " << k_
-                  << " are parallel. No changes were made." << std::endl;
+                  << " are parallel. No changes were made."
+		  << Color::def << std::endl;
         return;
       }
     const size_t ne= numberOfAxis();
@@ -151,10 +156,10 @@ void Xd3dCooSys::XAxisVector(const VGlobal &i_)
   {
     if(i_.Nulo())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; vector: " << i_ << " is zero."
 	          << " System parallel to global axis will be returned."
-                  << std::endl;
+                  << Color::def << std::endl;
         identity();
       }
     else
@@ -163,13 +168,14 @@ void Xd3dCooSys::XAxisVector(const VGlobal &i_)
         //const GEOM_FT tol= imod/1e8;
         VGlobal k_;
         //if( (fabs(i_(1))<tol) && (fabs(i_(2))<tol) ) //If i is almost parallel to global z axis.
-        if(parallel(i_,Vector3d(0,0,1))) //If i is parallel to global z axis.
+	const bool parallel_to_global_z= parallel(i_,K_3d);
+        if(parallel_to_global_z) //If i is parallel to global z axis.
           k_= imod*J_3d; //k parallel to global y axis.
         else
           k_= imod*K_3d; //k parallel to global z axis.
         const VGlobal j_= k_ ^ i_;
         k_= i_ ^ j_;
-        vectores_unitarios(i_,j_,k_); //Lets normalize.
+        unit_vectors(i_,j_,k_); //Lets normalize.
       }
   }
 
@@ -186,15 +192,15 @@ void Xd3dCooSys::ThreePoints(const PGlobal &o,const PGlobal &p1,const PGlobal &p
   {
     if(colineales(o,p1,p2))
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__ 
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ 
              << o << ' ' << p1 << ' ' << p2 
              << " are collinear. Doing nothing."
-             << std::endl;
+             << Color::def << std::endl;
         return;
       }
     const VGlobal i_= p1 - o;
     VGlobal j_= p2 - o;
     const VGlobal k_= i_ ^ j_;
     j_= k_ ^ i_;
-    vectores_unitarios(i_,j_,k_);
+    unit_vectors(i_,j_,k_);
   }

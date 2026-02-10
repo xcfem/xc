@@ -415,8 +415,10 @@ GEOM_FT Vector3d::getPolarAngle(void) const
 GEOM_FT Vector3d::getAzimuthalAngle(void) const
     { return atan2(y(),x()); }
 
+//! @brief Return true if the vectors are parallel.
 bool parallel(const Vector3d &v1,const Vector3d &v2)
-  { return parallel(v1.getDirection(),v2.getDirection()); } 
+  { return parallel(v1.getDirection(),v2.getDirection()); }
+
 bool coplanarios(const Vector3d &v1,const Vector3d &v2,const Vector3d &v3)
   {
     const Pos3d p1= Origin3d + v1;

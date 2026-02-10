@@ -41,7 +41,7 @@ class Xd3dCooSys: public CooSys
     typedef Pos3d PGlobal; //!< Point in the 3D space.
     typedef Dir3d DGlobal; //!< Direction in the 3D space.
   protected:
-    void vectores_unitarios(const VGlobal &i_,const VGlobal &j_,const VGlobal &k_);
+    void unit_vectors(const VGlobal &i_,const VGlobal &j_,const VGlobal &k_);
     Xd3dCooSys(const size_t &i)
       : CooSys(i,3) {}
     Xd3dCooSys(const size_t &i,const VGlobal &v1);
