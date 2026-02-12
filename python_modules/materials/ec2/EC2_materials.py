@@ -119,7 +119,17 @@ class EC2Concrete(concrete_base.Concrete):
         :param h: total member depth.
         '''
         return self.getFlexuralTensileStrength(h)/self.getEcm()
-        
+
+    def getFcdFatigue(self, t0):
+        ''' Return the design fatigue strentgth of concrete according to
+        clause 6.8.7 of EC2:2004. Expression (6.76).
+
+        :param t0: time of the start of the cyclic loading on concrete in days.
+        '''
+        betacc= self.getBetaCC(t0)
+        k1= 0.85 # Recommendend and Spanish National Annex value. 
+        return k1*betacc*self.fcd()*(1+self.fck/250e6)
+
     def getEpsc1(self):
         """
         epsc1: strain [-] at peak stress at stress-strain relation 
