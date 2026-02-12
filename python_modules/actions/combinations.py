@@ -883,27 +883,25 @@ class CombContainer(object):
                                  i. e. uls_permanent, sls_quasi-permanent,
                                  sls_frequent, sls_rare, uls_earthquake, etc. 
         '''
+        availableSituations= {'uls_permanent': self.ULS.perm, 'uls_fatigue': self.ULS.fatigue, 'uls_accidental': self.ULS.acc, 'uls_earthquake': self.ULS.earthquake, 'sls_quasi-permanent': self.SLS.qp, 'sls_frequent': self.SLS.freq, 'sls_rare': self.SLS.rare, 'sls_earthquake': self.SLS.earthquake}
         retval= list()
-        if('uls_permanent' in designSituations):
-            retval.append(self.ULS.perm)
-        if('uls_fatigue' in designSituations):
-            retval.append(self.ULS.fatigue)
-        if('uls_accidental' in designSituations):
-            retval.append(self.ULS.acc)
-        if('uls_earthquake' in designSituations):
-            retval.append(self.ULS.earthquake)
-        if('sls_quasi-permanent' in designSituations):
-            retval.append(self.SLS.qp)
-        if('sls_frequent' in designSituations):
-            retval.append(self.SLS.freq)
-        if('sls_rare' in designSituations):
-            retval.append(self.SLS.rare)
-        if('sls_earthquake' in designSituations):
-            retval.append(self.SLS.earthquake)
+        not_found= list()
+        for key in designSituations:
+            if(key in availableSituations):
+                retval.append(availableSituations[key])
+            else:
+                not_found.append(key)
+        if(len(not_found)>0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            warningMessage= "; design situations: '"+str(not_found)+"' have no corresponding load combinations.\n"
+            warningMessage+= "Candidates are: "+str(list(availableSituations.keys())) 
+            lmsg.warning(className+'.'+methodName+warningMessage)
         if(len(retval)==0):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+"; design situations: '"+str(designSituations)+"' have no defined combinations.")
+            warningMessage= "; design situations: '"+str(designSituations)+"' have no defined load combinations. An empty container is returned."
+            lmsg.warning(className+'.'+methodName+warningMessage)
         return retval
 
     def getStatistics(self):
