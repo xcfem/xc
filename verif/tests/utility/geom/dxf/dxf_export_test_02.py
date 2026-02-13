@@ -19,15 +19,20 @@ doc = ezdxf.new("R2000")
 
 dxfDocument= dxf_document.DXFDocument(ezdxfDoc= doc)
 
-# Define 2D polyline.
-pline2d= geom.Polyline2d([geom.Pos2d(1,0), geom.Pos2d(1,1), geom.Pos2d(0,1)])
-## Add it to the dxf model.
-dxfDocument.addPolyline2d(pline2d)
-
-# Define 3D polyline.
-pline3d= geom.Polyline3d([geom.Pos3d(1,0,1), geom.Pos3d(1,1,1), geom.Pos3d(0,1,1), geom.Pos3d(0,1,2)])
-## Add it to the dxf model.
-dxfDocument.addPolyline3d(pline3d)
+layers= list()
+p02d= geom.Pos2d(0,0)
+p03d= geom.Pos3d(0,0,0)
+for i in range(0, 10):
+    layerName= 'test_'+str(i)
+    layers.append(dxfDocument.newLayer(layerName= layerName, color= i))
+    p12d= geom.Pos2d(1+i, 1+2*i)
+    s2d= geom.Segment2d(p02d, p12d)
+    dxfDocument.addSegment2d(segment2d= s2d, layerName= layerName, color= 2*i)
+    p13d= geom.Pos3d(1+i, 0, 1+2*i)
+    s3d= geom.Segment3d(p03d, p13d)
+    dxfDocument.addSegment3d(segment3d= s3d, layerName= layerName, color= 3*i)
+ 
+testOK= (len(layers)==10)
 
 
 
@@ -36,7 +41,9 @@ outputFileName= '/tmp/'+fname.replace('.py', '.dxf')
 doc.saveas(outputFileName)
 
 # Check that file exists
-testOK= os.path.isfile(outputFileName)
+testOK= testOK and os.path.isfile(outputFileName)
+
+# print(len(layers))
 
 from misc_utils import log_messages as lmsg
 if(testOK) :
