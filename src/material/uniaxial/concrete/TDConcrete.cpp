@@ -137,6 +137,10 @@ XC::UniaxialMaterial *XC::TDConcrete::getCopy(void) const
 double XC::TDConcrete::setCreepStrain(double time, double stress)
   {
     const double retval= creepSteps.computePhi(*this, this->Ec, time); 
+    std::cout << "setCreepStrain time= " << time
+              << " stress= " << stress
+              << " Ec= " << this->Ec/1e9
+	      << " retval= " << retval*1e3 << std::endl;
     phi_i= creepSteps.getLastPhi();
     return retval;    
   }
@@ -175,68 +179,74 @@ int XC::TDConcrete::setTrialStrain(double trialStrain, double strainRate)
     resize();
     */
         
-        // Check casting age:
-        if(t-tcast<(2.0-0.0001))
-	  { //Assumed that concrete can only carry load once hardened at 2 days following casting
-                eps_cr= 0.0;
-                eps_sh= 0.0;
-                eps_m= 0.0;
-                eps_total= trialStrain;
-                hstv.sig= 0.0;
-          }
-	else
-	  { // Concrete has hardened and is ready to accept load
-            // Initialize total strain:
-            eps_total = trialStrain;
+    // Check casting age:
+    if(t-tcast<(2.0-0.0001))
+      { //Assumed that concrete can only carry load once hardened at 2 days following casting
+	eps_cr= 0.0; // Creep strain.
+	eps_sh= 0.0; // Shrinkage strain.
+	eps_m= 0.0; // Mechanical strain.
+	eps_total= trialStrain; // Total strain.
+	hstv.sig= 0.0;
+      }
+    else
+      { // Concrete has hardened and is ready to accept load
+	// Initialize total strain:
+	eps_total = trialStrain;
         
-            // Calculate shrinkage Strain:
-            if(iter < 1)
-	      { eps_sh = setShrink(t); }
-            // Calculate creep and mechanical strain, assuming stress remains constant in a time step:
-            if(creepSteps.isCreepOn())
-	      {
-                if(fabs(t-creepSteps.getLastTime()) <= 0.0001)
-		  { //If t = t(i-1), use creep/shrinkage from last calculated time step
-                    eps_cr = epsP_cr;
-                    eps_sh = epsP_sh;
-                    eps_m = eps_total - eps_cr - eps_sh;
-                    hstv.sig= setStress(eps_m, hstv.e);
-                  }
-		else
-		  { // if the current calculation is a new time step
-		    //if(crackP_flag == 1 && hstvP.sig >= 0.0) { //if cracking occurs and previous stress is positive, 
-		    // creep strain should not increase
-		    //        eps_cr = epsP_cr;
-		    //} else {
-		    //        eps_cr = setCreepStrain(t,hstv.sig);
-		    //}
-		    //if(t < tcast) {
-		    //std::cerr << "\nWARNING: TDConcrete loaded before tcast, creep and shrinkage not calculated" << std::endl;
-		    //        eps_sh = epsP_sh;
-		    //        eps_cr = epsP_cr;
-		    //        eps_m = eps_total - eps_cr - eps_sh;
-		    //        sig = setStress(eps_m, e);
-		    //} else {        
-                    if(iter < 1)
-		      { eps_cr = setCreepStrain(t,hstv.sig); }
-                    eps_m = eps_total - eps_cr - eps_sh;
-                    hstv.sig= setStress(eps_m, hstv.e);
-                        //}
-                  }
-              }
-	    else // no more creep no more shrinkage.
-	      { //Static Analysis using previously converged time-dependent strains
-                eps_cr = epsP_cr;
-                eps_sh = epsP_sh;
-                eps_m = eps_total-eps_cr-eps_sh;
-                hstv.sig= setStress(eps_m, hstv.e);
+	// Calculate shrinkage Strain:
+	if(this->iter < 1)
+	  { eps_sh = setShrink(t); }
+	// Calculate creep and mechanical strain, assuming stress remains constant in a time step:
+	if(creepSteps.isCreepOn())
+	  {
+	    if(fabs(t-creepSteps.getLastTime()) <= 0.0001)
+	      { //If t = t(i-1), use creep/shrinkage from last calculated time step
+		eps_cr = epsP_cr;
+		eps_sh = epsP_sh;
+		eps_m = eps_total - eps_cr - eps_sh;
+		hstv.sig= setStress(eps_m, hstv.e);
 	      }
-                //
-                //std::cerr<<"\n   eps_cr = "<<eps_cr;
-                //std::cerr<<"\n   eps_sh = "<<eps_sh;
-                //std::cerr<<"\n   eps_m = "<<eps_m;
-                //std::cerr<<"\n   sig = "<<sig;
-        }
+	    else
+	      { // if the current calculation is a new time step
+		//if(crackP_flag == 1 && hstvP.sig >= 0.0) { //if cracking occurs and previous stress is positive, 
+		// creep strain should not increase
+		//        eps_cr = epsP_cr;
+		//} else {
+		//        eps_cr = setCreepStrain(t,hstv.sig);
+		//}
+		//if(t < tcast) {
+		//std::cerr << "\nWARNING: TDConcrete loaded before tcast, creep and shrinkage not calculated" << std::endl;
+		//        eps_sh = epsP_sh;
+		//        eps_cr = epsP_cr;
+		//        eps_m = eps_total - eps_cr - eps_sh;
+		//        sig = setStress(eps_m, e);
+		//} else {        
+		if(this->iter < 1)
+		  { eps_cr = setCreepStrain(t,hstv.sig); } // Creep strain.
+		eps_m = eps_total - eps_cr - eps_sh;
+		std::cout << "TDConcrete B eps_total= " << eps_total*1e3 << std::endl;
+		std::cout << "TDConcrete B eps_cr= " << eps_cr*1e3 << std::endl;
+		std::cout << "TDConcrete B eps_sh= " << eps_sh*1e3 << std::endl;
+		std::cout << "TDConcrete B eps_m= " << eps_m*1e3 << std::endl;
+		hstv.sig= setStress(eps_m, hstv.e);
+		std::cout << "TDConcrete B hstv.sig= " << hstv.sig/1e6 << std::endl;
+		std::cout << "TDConcrete B hstv.e= " << hstv.e/1e9 << std::endl;
+		    //}
+	      }
+	  }
+	else // no more creep no more shrinkage.
+	  { //Static Analysis using previously converged time-dependent strains
+	    eps_cr= epsP_cr;
+	    eps_sh= epsP_sh;
+	    eps_m= eps_total-eps_cr-eps_sh;
+	    hstv.sig= setStress(eps_m, hstv.e);
+	  }
+	//
+	//std::cerr<<"\n   eps_cr = "<<eps_cr;
+	//std::cerr<<"\n   eps_sh = "<<eps_sh;
+	//std::cerr<<"\n   eps_m = "<<eps_m;
+	//std::cerr<<"\n   sig = "<<sig;
+      }
     iter++;
     return 0;
   }
@@ -318,7 +328,7 @@ const XC::CreepShrinkageParameters &XC::TDConcrete::getCreepShrinkageParameters(
 
 int XC::TDConcrete::commitState(void)
   {
-    iter = 0;
+    this->iter = 0;
     hstvP.ecmin= hstv.ecmin;
     hstvP.ecmax= hstv.ecmax;
     hstvP.dept= hstv.dept;

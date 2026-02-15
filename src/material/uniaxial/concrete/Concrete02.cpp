@@ -247,6 +247,7 @@ int XC::Concrete02::setTrialStrain(double trialStrain, double strainRate)
             const double sigmax= er * .5f * (hstv.eps - ept);
             hstv.sig= hstvP.sig + ec0 * deps;
             hstv.e= ec0;
+	    std::cout << "a hstv.e= " << hstv.e << std::endl;
 	    hstv.cutStress(sigmin,sigmax,er);
           }
         else
@@ -269,6 +270,7 @@ int XC::Concrete02::setTrialStrain(double trialStrain, double strainRate)
                   { hstv.e= sicn / hstv.dept; }
                 else
                   { hstv.e= ec0; }
+		std::cout << "b hstv.e= " << hstv.e << std::endl;
                 hstv.sig= hstv.e * (hstv.eps - ept);
               }
             else
@@ -277,6 +279,10 @@ int XC::Concrete02::setTrialStrain(double trialStrain, double strainRate)
                 // corresponds to the tensile envelope curve shifted by ept 
                 const double epstmp= hstv.eps - ept;
                 this->Tens_Envlp(epstmp, hstv.sig, hstv.e);
+		std::cout << "c hstv.ecmin= " << hstv.ecmin << std::endl;
+		std::cout << "c ept= " << ept << std::endl;
+		std::cout << "c epn= " << epn << std::endl;
+		std::cout << "c hstv.e= " << hstv.e/1e9 << std::endl;
                 hstv.dept= hstv.eps - ept;
               }
           }
@@ -397,7 +403,7 @@ void XC::Concrete02::Tens_Envlp(double epsc, double &sigc, double &Ect)
       {
         if(epsc<=epsu)
 	  {
-            Ect= -Ets;
+            Ect= -Ets; // Softening: negative slope.
             sigc= ft-Ets*(epsc-eps0);
           }
 	else
@@ -407,7 +413,7 @@ void XC::Concrete02::Tens_Envlp(double epsc, double &sigc, double &Ect)
             sigc= 0.0;
           }
       }
-    return;
+    std::cout << "Tens_Envlp Ect= " << Ect/1e9 << std::endl;
   }
 
   

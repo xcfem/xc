@@ -23,8 +23,8 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
 # Units: kN, mm
-kN = 1
-mm = 1
+kN = 1e3
+mm = 1e-3
 GPa = kN/mm**2
 MPa = 0.001*GPa
 
@@ -122,6 +122,10 @@ solProc.setup()
 # Set the load control integrator with dt=0 so that the domain time doesn’t advance.
 solProc.integrator.dLambda1= 0.0  
 result= solProc.analysis.analyze(1)
+if(result!=0):
+    lmsg.error("Can't solve.")
+    exit(1)
+
 
 
 dt = 10 # days
@@ -133,6 +137,7 @@ modelSpace.setCreepOn() # Turn creep on
 
 t = 0
 while t < 10000:
+    print('t= ', t)
     ok = solProc.analysis.analyze(1)
     if(ok!=0):
         lmsg.error("Can't solve.")
@@ -159,23 +164,23 @@ avgSteelStress/=len(steelStresses)
 lastConcreteStress= concreteStresses[-1]
 lastSteelStress= steelStresses[-1]
 
-avgConcreteStressRef= 0.005974877488588469
+avgConcreteStressRef= 0.005974877488588469*MPa
 ratio1= abs(avgConcreteStress+avgConcreteStressRef)/avgConcreteStressRef
-avgSteelStressRef= 0.31414889483994685
+avgSteelStressRef= 0.31414889483994685*MPa
 ratio2= abs(avgSteelStress+avgSteelStressRef)/avgSteelStressRef
 
-'''
 print('time: ', ti)
 print('concrete stresses: ', concreteStresses)
 print('steel stresses: ', steelStresses)
 # print('Reactions= ', reactions)
-print(errorDt)
-print(errorForces)
+print('errorDt= ', errorDt)
+print('errorForces= ', errorForces)
 print('average concrete stress: ', avgConcreteStress, avgConcreteStressRef, ratio1)
 print('average steel stress: ', avgSteelStress, avgSteelStressRef, ratio2)
 print('time: ', modelSpace.getCurrentTime(), 'days')
 print('last concrete stress: ', lastConcreteStress*1e3, 'MPa')
 print('last steel stress: ', lastSteelStress*1e3, 'MPa')
+'''
 '''
 
 

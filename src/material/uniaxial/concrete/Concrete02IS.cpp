@@ -59,6 +59,7 @@ XC::Concrete02IS::Concrete02IS(int tag, double _E0, double _fc, double _epsc0,
 	       _Ets), E0(_E0)
   {}
 
+//! @brief Default constructor.
 XC::Concrete02IS::Concrete02IS(int tag, double _E0, double _fc, double _epsc0,
 			       double _fcu, double _epscu)
   : Concrete02(tag, MAT_TAG_Concrete02IS, _fc, _epsc0, _fcu, _epscu, 0.1,

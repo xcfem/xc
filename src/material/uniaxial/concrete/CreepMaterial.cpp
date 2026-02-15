@@ -187,8 +187,13 @@ double XC::CreepMaterial::getCurrentTime(void) const
 
 double XC::CreepMaterial::setCreepStrain(double time, double stress)
   {
-    const double _Ec= this->getInitialTangent();
-    const double retval= creepSteps.computePhi(*this, _Ec, time); 
+    const double _Ec= this->getTangent();
+    
+    const double retval= creepSteps.computePhi(*this, _Ec, time);
+    std::cout << "setCreepStrain time= " << time
+              << " stress= " << stress
+              << " Ec= " << _Ec/1e9
+	      << " retval= " << retval*1e3 << std::endl;
     phi_i= creepSteps.getLastPhi();
     return retval;    
   }
@@ -219,60 +224,68 @@ int XC::CreepMaterial::setTrialStrain(double trialStrain, double strainRate)
     // Check casting age:
     if (t-tcast<(2.0-0.0001))
       { //Assumed that concrete can only carry load once hardened at 2 days following casting
-	eps_cr= 0.0;
-	eps_sh= 0.0;
-	eps_m= 0.0;
-	eps_total= trialStrain;
+	eps_cr= 0.0; // Creep strain.
+	eps_sh= 0.0; // Shrinkage strain.
+	eps_m= 0.0; // Mechanical strain.
+	eps_total= trialStrain; // Total strain.
 	hstv.sig= 0.0;
       }
     else
       { // Concrete has hardened and is ready to accept load
 	// Initialize total strain:
-	eps_total= trialStrain;
+	eps_total= trialStrain; // Total strain.
     
 	// Calculate shrinkage Strain:
-	if (iter < 1)
+	if(this->iter < 1)
 	  { eps_sh= setShrink(t); }
     
 	// Calculate creep and mechanical strain, assuming stress remains constant in a time step:
+	UniaxialMaterial *mat= this->getMaterial();
 	if(creepSteps.isCreepOn())
 	  {
 	    if (fabs(t-creepSteps.getLastTime()) <= 0.0001)
 	      { //If t= t(i-1), use creep/shrinkage from last calculated time step
-		eps_cr= epsP_cr;
-		eps_sh= epsP_sh;
-		eps_m= eps_total - eps_cr - eps_sh;
+		eps_cr= epsP_cr; // Creep strain.
+		eps_sh= epsP_sh; // Shrinkage strain.
+		eps_m= eps_total - eps_cr - eps_sh; // Mechanical strain.
 		//hstv.sig= setStress(eps_m, e);
-		this->getMaterial()->setTrialStrain(eps_m, strainRate);
-		hstv.sig= this->getMaterial()->getStress();
-		hstv.e= this->getMaterial()->getTangent();
-        
+		mat->setTrialStrain(eps_m, strainRate);
+		hstv.sig= mat->getStress();
+		hstv.e= mat->getTangent();
+		std::cout << "A hstv.e= " << hstv.e/1e9 << std::endl;
 	      }
 	    else
 	      { // if the current calculation is a new time step
-		if (iter < 1)
+		if(this->iter < 1)
 		  {
-		    eps_cr= setCreepStrain(t,hstv.sig); 
+		    eps_cr= setCreepStrain(t,hstv.sig); // Creep strain.
 		  }
-		eps_m= eps_total - eps_cr - eps_sh;
+		eps_m= eps_total - eps_cr - eps_sh; // Mechanical strain.
+		std::cout << "CreepMaterial B eps_total= " << eps_total*1e3 << std::endl;
+		std::cout << "CreepMaterial B eps_cr= " << eps_cr*1e3 << std::endl;
+		std::cout << "CreepMaterial B eps_sh= " << eps_sh*1e3 << std::endl;
+		std::cout << "CreepMaterial B eps_m= " << eps_m*1e3 << std::endl;
 		//sig= setStress(eps_m, e);
-		this->getMaterial()->setTrialStrain(eps_m, strainRate);
-		hstv.sig= this->getMaterial()->getStress();
-		hstv.e= this->getMaterial()->getTangent();	
+		mat->setTrialStrain(eps_m, strainRate);
+		hstv.sig= mat->getStress();
+		std::cout << "CreepMaterial B hstv.sig= " << hstv.sig/1e6 << std::endl;
+		hstv.e= mat->getTangent();	
+		std::cout << "CreepMaterial B hstv.e= " << hstv.e/1e9 << std::endl;
 	      }
 	  }
 	else
 	  { //Static Analysis using previously converged time-dependent strains
-	    eps_cr= epsP_cr;
-	    eps_sh= epsP_sh;
-	    eps_m= eps_total-eps_cr-eps_sh;
+	    eps_cr= epsP_cr; // Creep strain.
+	    eps_sh= epsP_sh; // Shrinkage strain.
+	    eps_m= eps_total-eps_cr-eps_sh; // Mechanical strain.
 	    //sig= setStress(eps_m, e);
-	    this->getMaterial()->setTrialStrain(eps_m, strainRate);
-	    hstv.sig= this->getMaterial()->getStress();
-	    hstv.e= this->getMaterial()->getTangent();      
+	    mat->setTrialStrain(eps_m, strainRate);
+	    hstv.sig= mat->getStress();
+	    hstv.e= mat->getTangent();
 	  }
       }
     iter++;
+    std::cout << "Tangent E= " << hstv.e/1e9 << std::endl;
     return 0;
   }
 
@@ -302,7 +315,7 @@ double XC::CreepMaterial::getMech(void) const
 
 int  XC::CreepMaterial::commitState(void)
   {
-    iter= 0;
+    this->iter= 0;
     hstvP.ecmin= hstv.ecmin;
     hstvP.ecmax= hstv.ecmax;
     hstvP.dept= hstv.dept;
@@ -322,7 +335,7 @@ int  XC::CreepMaterial::commitState(void)
     //} else { //concrete is uncracked, DSIG= sig - sigP
     //	DSIG_i[count+1]= sig-sigP;
     //}
-    const double _Ec= this->getInitialTangent();
+    const double _Ec= this->getTangent();
     creepSteps.assignNextStep(this->hstv, this->hstvP, _Ec, this->eps_m, this->getCurrentTime());
   
     hstvP.e= hstv.e;
