@@ -49,6 +49,7 @@
 #define TDConcreteMC10Base_h
 
 #include "material/uniaxial/concrete/TDConcreteBase.h"
+#include "material/uniaxial/concrete/MC10CreepSteps.h"
 
 namespace XC {
   
@@ -83,13 +84,10 @@ class TDConcreteMC10Base : public TDConcreteBase
     double phib_i; //!< split into basic and drying creep (ntosic)
     double phid_i; //!< split into basic and drying creep (ntosic)
     
-    std::vector<float> PHIB_i; //!< split into basic and drying creep (ntosic)
-    std::vector<float> PHID_i; //!< split into basic and drying creep (ntosic)
-
+    MC10CreepSteps creepSteps;
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
-    size_t resize(void);
   public:
     TDConcreteMC10Base(int tag, int classTag);
     TDConcreteMC10Base(int tag, int classTag, double _fc, double _ft, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem);
@@ -123,12 +121,15 @@ class TDConcreteMC10Base : public TDConcreteBase
     double getPHID_i(void) const; //Added by AMK //ntosic: split into basic and drying creep
     double getCreepBasic(void) const; //Added by AMK //ntosic: split into basic and drying creep
     double getCreepDrying(void) const; //Added by AMK //ntosic: split into basic and drying creep
-    double setPhiBasic(double time, double tp); //Added by AMK //ntosic: split into basic and drying creep
-    double setPhiDrying(double time, double tp); //Added by AMK //ntosic: split into basic and drying creep
+    double setPhiBasic(double time, double tp) const; //Added by AMK //ntosic: split into basic and drying creep
+    double setPhiDrying(double time, double tp) const; //Added by AMK //ntosic: split into basic and drying creep
     double setShrinkBasic(double time); //Added by AMK //ntosic: split into basic and drying shrinkage
     double setShrinkDrying(double time); //Added by AMK //ntosic: split into basic and drying shrinkage
     double getShrinkBasic(void) const; //Added by AMK //ntosic: split into basic and drying
     double getShrinkDrying(void) const; //Added by AMK //ntosic: split into basic and drying
+    
+    double setCreepBasicStrain(double time, double stress); //Added by AMK //ntosic: split into basic and drying creep
+    double setCreepDryingStrain(double time, double stress); //Added by AMK //ntosic: split into basic and drying creep
     
     int revertToLastCommit(void);    
     int revertToStart(void);        

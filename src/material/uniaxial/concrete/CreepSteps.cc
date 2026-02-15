@@ -26,6 +26,7 @@
 //----------------------------------------------------------------------------
 
 #include "material/uniaxial/concrete/CreepSteps.h" //Changed by AMK
+#include "material/uniaxial/concrete/ConcreteHistoryVars.h"
 
 int XC::CreepSteps::creepControl= 0;
 double XC::CreepSteps::creepDt= 0.0;
@@ -33,28 +34,30 @@ double XC::CreepSteps::creepDt= 0.0;
 //! @brief Resize the vectors that store the creep history.
 std::size_t XC::CreepSteps::resize(void)
   {
-    std::size_t newSize= 10;
-    if(count<2) // restart.
+    const size_t currentSize= E_i.size();
+    if(this->count<2) // restart.
       {
+	const std::size_t newSize= 10;
 	E_i.resize(newSize);
 	DSIG_i.resize(newSize);
-	dsig_i.resize(newSize);
+	// dsig_i.resize(newSize);
 	TIME_i.resize(newSize);
 	DTIME_i.resize(newSize);
       }
     else
-      { 
-	if(static_cast<std::size_t>(count+1)>=E_i.size())
+      {
+	const size_t minSize= static_cast<std::size_t>(this->count+1);
+	if(minSize>=currentSize)
 	  {
-            newSize= 2*(count+1);
+            const size_t newSize= 2*(count+1);
 	    E_i.resize(newSize);
 	    DSIG_i.resize(newSize);
-	    dsig_i.resize(newSize);
+	    // dsig_i.resize(newSize);
 	    TIME_i.resize(newSize);
 	    DTIME_i.resize(newSize);
 	  }
       }
-    return newSize;
+    return E_i.size();
   }
 
 //! @brief Constructor.
@@ -64,6 +67,21 @@ XC::CreepSteps::CreepSteps(void)
     resize();
   }
 
+//! @brief Assign the values of the next step and resize the vectors if needed.
+//| @param hstv: Concrete history variables current step.
+//! @param hstvP: Concrete history variables last committed step.
+//! @param Ec: concrete stiffness.
+//! @param eps_m: concrete mechanical strain.
+void XC::CreepSteps::assignNextStep(const CreepConcreteHistoryVars &hstv, const CreepConcreteHistoryVars &hstvP, const double &Ec, const double &eps_m, const double &currentTime)
+  {
+    // dsig_i[count]=hstv.sig-hstvP.sig; NOT USED
+    DSIG_i[count+1] = hstv.sig-hstvP.sig;
+
+    //Secant stiffness for determination of creep strain:
+    E_i[count+1]= hstv.getSecantStiffness(Ec, eps_m);
+    
+    TIME_i[count+1]= currentTime;
+  }
 void XC::CreepSteps::setCreepOn(void)
   { creepControl= 1; }
 

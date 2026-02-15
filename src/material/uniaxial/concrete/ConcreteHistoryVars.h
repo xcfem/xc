@@ -28,6 +28,9 @@
 #ifndef ConcreteHistoryVars_h
 #define ConcreteHistoryVars_h
 
+#include <iostream>
+#include <cmath>
+
 namespace XC {
 
 //! @ingroup MatUnx
@@ -55,6 +58,20 @@ struct ConcreteHistoryVars
       { return sig; }
     inline double getTangent(void) const
       { return e; }
+
+    //! @brief Return the wecant stiffness for determination of creep strain.
+    //! @param Ec: concrete stiffness.
+    //! @param eps_m: concrete mechanical strain.
+    double getSecantStiffness(const double &Ec, const double &eps_m) const
+      {
+	double retval= Ec;
+	if(std::abs(eps_m/this->sig)<=Ec)
+	  { retval = std::abs(this->sig/eps_m); } //ADDED 7/22
+
+	if(std::isnan(retval))
+	  { retval = Ec; }
+        return retval;
+      }
     void cutStress(const double &sigmin,const double &sigmax,const double &er)
       {
         if(sig <= sigmin)

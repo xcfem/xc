@@ -76,7 +76,6 @@ class TDConcreteBase : public RawConcrete
     CreepConcreteHistoryVars hstv; //!< = values at current step (trial values)
 	
     //Added by AMK:
-    int count;
     double epsInit;
     double sigInit;
     double eps_m; // Mechanical strain.
@@ -90,21 +89,10 @@ class TDConcreteBase : public RawConcrete
     int crackP_flag;
     int iter; //Iteration number
     
-    std::vector<float> E_i;
-    std::vector<float> DSIG_i;
-    std::vector<float> dsig_i;
-    std::vector<float> TIME_i; //Time from the previous time step
-    std::vector<float> DTIME_i;
-
-    static int creepControl; //!< Controls creep calculation (see setTrialStrain).
-    static double creepDt; 
-
-    void Compr_Envlp (double epsc, double &sigc, double &Ect);    
+    void Compr_Envlp(double epsc, double &sigc, double &Ect);    
   protected:
     int sendData(Communicator &);
-    int recvData(const Communicator &);
-    size_t resize(void);
-    
+    int recvData(const Communicator &);    
   public:
     TDConcreteBase(int tag, int classTag);
     TDConcreteBase(int tag, int classTag, double _fc, double _ft, double _Ec, double _beta, double _age, double _tcast);
@@ -143,25 +131,7 @@ class TDConcreteBase : public RawConcrete
     //Added by AMK for recording Creep and Mechanical Strain:
     Response *setResponse(const std::vector<std::string> &, Information &);
 
-    static void setCreepOn(void);
-    static void setCreepOff(void);
-    static bool isCreepOn(void);
-    static void setCreepDt(const double &);
-    static double getCreepDt(void);
   };
-
-  inline void set_creep_on(void)
-    { TDConcreteBase::setCreepOn(); }
-  inline void set_creep_off(void)
-    { TDConcreteBase::setCreepOff(); }
-  inline bool is_creep_on(void)
-    { return TDConcreteBase::isCreepOn(); }
-  inline bool is_creep_off(void)
-    { return !is_creep_on(); }
-  inline void set_creep_dt(const double &d)
-    { TDConcreteBase::setCreepDt(d); }
-  inline double get_creep_dt(void)
-    { return TDConcreteBase::getCreepDt(); }
 
 } // end of XC namespace
 

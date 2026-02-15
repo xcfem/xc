@@ -35,6 +35,8 @@
 
 namespace XC {
 
+class CreepConcreteHistoryVars;
+
 class CreepSteps
   {
   protected:
@@ -43,18 +45,36 @@ class CreepSteps
     
     std::vector<float> E_i;
     std::vector<float> DSIG_i;
-    std::vector<float> dsig_i;
+    // std::vector<float> dsig_i; // NOT USED.
     std::vector<float> TIME_i; //Time from the previous time step
     std::vector<float> DTIME_i;
 
     static int creepControl; //!< Controls creep calculation (see setTrialStrain).
     static double creepDt; 
 
-  protected:
-    std::size_t resize(void);
+    virtual std::size_t resize(void);
     
   public:
     CreepSteps(void);
+
+    const int &getCount(void) const
+      { return this->count;}
+    const int &next(void)
+      {
+        this->count++;
+	this->resize();
+	return count;
+      }
+
+    const float &getLastTime(void) const
+      { return this->TIME_i[this->count]; }
+    void initTime(const float &time)
+      { this->TIME_i[0]= time; }
+
+    void setCreepDt(void)
+      { this->DTIME_i[this->count]= creepDt; }
+    
+    void assignNextStep(const CreepConcreteHistoryVars &hstv, const CreepConcreteHistoryVars &hstvP, const double &Ec, const double &eps_m, const double &currentTime);
 
     static void setCreepOn(void);
     static void setCreepOff(void);

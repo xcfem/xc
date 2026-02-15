@@ -93,9 +93,6 @@
 #include "domain/mesh/element/Element.h"
 #include "utility/utils/misc_utils/colormod.h"
 
-int XC::TDConcreteBase::creepControl= 0;
-double XC::TDConcreteBase::creepDt= 0.0;
-
 //! @brief Sets initial values for the concrete parameters.
 void XC::TDConcreteBase::setup_parameters(void)
   {
@@ -108,8 +105,6 @@ void XC::TDConcreteBase::setup_parameters(void)
     hstv.setup_parameters(Ec);
     
     Et= Ec;
-    count= 0; //Added by AMK
-    resize();
     epsInit= 0.0; //Added by AMK
     sigInit= 0.0; //Added by AMK
     eps_total= 0.0; //Added by AMK
@@ -124,33 +119,6 @@ void XC::TDConcreteBase::setup_parameters(void)
         
     //Change inputs into the proper sign convention:
     fpc= -fabs(fpc); 
-  }
-
-//! @brief Resize the vectors that store the creep history.
-size_t XC::TDConcreteBase::resize(void)
-  {
-    size_t newSize= 10;
-    if(count<2) // restart.
-      {
-	E_i.resize(newSize);
-	DSIG_i.resize(newSize);
-	dsig_i.resize(newSize);
-	TIME_i.resize(newSize);
-	DTIME_i.resize(newSize);
-      }
-    else
-      { 
-	if(static_cast<size_t>(count+1)>=E_i.size())
-	  {
-            newSize= 2*(count+1);
-	    E_i.resize(newSize);
-	    DSIG_i.resize(newSize);
-	    dsig_i.resize(newSize);
-	    TIME_i.resize(newSize);
-	    DTIME_i.resize(newSize);
-	  }
-      }
-    return newSize;
   }
 
 //! @brief Constructor.
@@ -271,21 +239,6 @@ void XC::TDConcreteBase::setTCast(const double &d)
 double XC::TDConcreteBase::getTCast(void) const
   { return tcast; }
 
-
-void XC::TDConcreteBase::setCreepOn(void)
-  { creepControl= 1; }
-
-void XC::TDConcreteBase::setCreepOff(void)
-  { creepControl= 0; }
-
-bool XC::TDConcreteBase::isCreepOn(void)
-  { return (creepControl==1); }
-
-void XC::TDConcreteBase::setCreepDt(const double &d)
-  { creepDt= d; }
-
-double XC::TDConcreteBase::getCreepDt(void)
-  { return creepDt; }
 
 //! @brief Send object members through the communicator argument.
 int XC::TDConcreteBase::sendData(Communicator &comm)

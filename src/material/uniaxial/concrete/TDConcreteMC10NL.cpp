@@ -125,47 +125,9 @@ double XC::TDConcreteMC10NL::getFcu(void) const
 void XC::TDConcreteMC10NL::setFcu(const double &d)
   { fcu= d; }
 
-//ntosic
-double XC::TDConcreteMC10NL::setCreepBasicStrain(double time, double stress)
-  {
-    double creepBasic;
-    double runSum = 0.0;
-    
-    DTIME_i[count] = creepDt;
- 
-	for(int i = 1; i<=count; i++)
-	  {
-                PHIB_i[i] = setPhiBasic(time,TIME_i[i]); //Determine PHI //ntosic: PHIB
-                runSum += PHIB_i[i]*DSIG_i[i]/Ecm; //CONSTANT STRESS within Time interval //ntosic: changed to Ecm from Ec (according to Model Code formulation of phi basic)
-      }
-    
-    phib_i = PHIB_i[count];
-    creepBasic = runSum;
-    return creepBasic;  
-  }
-
-//ntosic
-double XC::TDConcreteMC10NL::setCreepDryingStrain(double time, double stress)
-  {
-	double creepDrying;
-	double runSum = 0.0;
-
-	DTIME_i[count] = creepDt;
-
-	for (int i = 1; i <= count; i++) {
-		PHID_i[i] = setPhiDrying(time, TIME_i[i]); //Determine PHI //ntosic: PHID
-		runSum += PHID_i[i] * DSIG_i[i] / Ecm; //CONSTANT STRESS within Time interval //ntosic: changed to Ecm from Ec (according to Model Code formulation of phi drying)
-	}
-
-	phid_i = PHID_i[count];
-	creepDrying = runSum;
-	return creepDrying;
-
-  }
-
 int XC::TDConcreteMC10NL::setTrialStrain(double trialStrain, double strainRate)
   {
-    double t = getCurrentTime();
+    const double t= this->getCurrentTime();
     //double tol = 1.e-4; // 9/13
     //double test = 10.0; // 9/13
     //double sigI = 0.0;  // 9/13
@@ -182,73 +144,84 @@ int XC::TDConcreteMC10NL::setTrialStrain(double trialStrain, double strainRate)
     resize(count);
     */
 	
-	// Check casting age:
-	if (t-tcast<(2.0-0.0001)) { //Assumed that concrete can only carry load once hardened at 2 days following casting
-		eps_crb = 0.0; //ntosic
-		eps_crd = 0.0; //ntosic
-		eps_shb = 0.0; //ntosic
-		eps_shd = 0.0; //ntosic
-		eps_m = 0.0;
-		eps_total = trialStrain;
-		hstv.sig = 0.0;
-	} else { // Concrete has hardened and is ready to accept load
-		// Initialize total strain:
-        	eps_total = trialStrain;
+    // Check casting age:
+    if (t-tcast<(2.0-0.0001))
+      { //Assumed that concrete can only carry load once hardened at 2 days following casting
+	eps_crb = 0.0; //ntosic
+	eps_crd = 0.0; //ntosic
+	eps_shb = 0.0; //ntosic
+	eps_shd = 0.0; //ntosic
+	eps_m = 0.0;
+	eps_total = trialStrain;
+	hstv.sig = 0.0;
+      }
+    else
+      { // Concrete has hardened and is ready to accept load
+	// Initialize total strain:
+	eps_total = trialStrain;
 	
-		// Calculate shrinkage Strain:
-            if (iter < 1) {
-                eps_shb = setShrinkBasic(t); //ntosic
-				eps_shd = setShrinkDrying(t); //ntosic
-            }
+	// Calculate shrinkage Strain:
+	if (iter < 1)
+	  {
+	    eps_shb = setShrinkBasic(t); //ntosic
+	    eps_shd = setShrinkDrying(t); //ntosic
+	  }
 
     	// Calculate creep and mechanical strain, assuming stress remains constant in a time step:
-    	if (creepControl == 1) {
-        	if (fabs(t-TIME_i[count]) <= 0.0001) { //If t = t(i-1), use creep/shrinkage from last calculated time step
-            	eps_crb = epsP_crb; //ntosic
-				eps_crd = epsP_crd; //ntosic
-            	eps_shb = epsP_shb; //ntosic
-				eps_shd = epsP_shd; //ntosic
-            	eps_m = eps_total - eps_crb - eps_crd - eps_shb - eps_shd; //ntosic
-            	hstv.sig = setStress(eps_m, hstv.e);
+	if(creepSteps.isCreepOn())
+	  {
+	    if (fabs(t-creepSteps.getLastTime()) <= 0.0001)
+	      { //If t = t(i-1), use creep/shrinkage from last calculated time step
+	      eps_crb = epsP_crb; //ntosic
+	      eps_crd = epsP_crd; //ntosic
+	      eps_shb = epsP_shb; //ntosic
+	      eps_shd = epsP_shd; //ntosic
+	      eps_m = eps_total - eps_crb - eps_crd - eps_shb - eps_shd; //ntosic
+	      hstv.sig = setStress(eps_m, hstv.e);
             
-        	} else { // if the current calculation is a new time step
-        		//if (crackP_flag == 1 && hstv.sig >= 0.0) { //if cracking occurs and previous stress is positive, 
-        		// creep strain should not increase
-        		//	eps_cr = epsP_cr;
-        		//} else {
-        		//	eps_cr = setCreepStrain(t,hstv.sig);
-        		//}
-        		//if (t < tcast) {
-        		//std::cerr << "\nWARNING: TDConcrete loaded before tcast, creep and shrinkage not calculated" << std::endl;
-        		//	eps_sh = epsP_sh;
-        		//	eps_cr = epsP_cr;
-        		//	eps_m = eps_total - eps_cr - eps_sh;
-        		//	hstv.sig = setStress(eps_m, hstv.e);
-        		//} else {
-				if (iter < 1) {
+	      }
+	    else
+	      { // if the current calculation is a new time step
+		//if (crackP_flag == 1 && hstv.sig >= 0.0) { //if cracking occurs and previous stress is positive, 
+		// creep strain should not increase
+		//	eps_cr = epsP_cr;
+		//} else {
+		//	eps_cr = setCreepStrain(t,hstv.sig);
+		//}
+		//if (t < tcast) {
+		//std::cerr << "\nWARNING: TDConcrete loaded before tcast, creep and shrinkage not calculated" << std::endl;
+		//	eps_sh = epsP_sh;
+		//	eps_cr = epsP_cr;
+		//	eps_m = eps_total - eps_cr - eps_sh;
+		//	hstv.sig = setStress(eps_m, hstv.e);
+		//} else {
+		if (iter < 1)
+		  {
                     eps_crb = setCreepBasicStrain(t,hstv.sig); 
-					eps_crd = setCreepDryingStrain(t, hstv.sig);
-				}
-        		eps_m = eps_total - eps_crb - eps_crd - eps_shb - eps_shd; //ntosic
-        		hstv.sig = setStress(eps_m, hstv.e);
+		    eps_crd = setCreepDryingStrain(t, hstv.sig);
+		  }
+		eps_m = eps_total - eps_crb - eps_crd - eps_shb - eps_shd; //ntosic
+		hstv.sig = setStress(eps_m, hstv.e);
 				//}
-        	}
-    	} else { //Static Analysis using previously converged time-dependent strains
-        	    eps_crb = epsP_crb; //ntosic
-				eps_crd = epsP_crd; //ntosic
-            	eps_shb = epsP_shb; //ntosic
-				eps_shd = epsP_shd; //ntosic
-            	eps_m = eps_total - eps_crb - eps_crd - eps_shb - eps_shd; //ntosic
-    	        hstv.sig = setStress(eps_m, hstv.e);
-    	}
-		//
-		//std::cerr<<"\n   eps_cr = "<<eps_cr;
-		//std::cerr<<"\n   eps_sh = "<<eps_sh;
-		//std::cerr<<"\n   eps_m = "<<eps_m;
-		//std::cerr<<"\n   sig = "<<hstv.sig;
-	}
+	      }
+	  }
+	else
+	  { //Static Analysis using previously converged time-dependent strains
+	    eps_crb = epsP_crb; //ntosic
+	    eps_crd = epsP_crd; //ntosic
+	    eps_shb = epsP_shb; //ntosic
+	    eps_shd = epsP_shd; //ntosic
+	    eps_m = eps_total - eps_crb - eps_crd - eps_shb - eps_shd; //ntosic
+	    hstv.sig = setStress(eps_m, hstv.e);
+	  }
+	//
+	//std::cerr<<"\n   eps_cr = "<<eps_cr;
+	//std::cerr<<"\n   eps_sh = "<<eps_sh;
+	//std::cerr<<"\n   eps_m = "<<eps_m;
+	//std::cerr<<"\n   sig = "<<hstv.sig;
+      }
     iter ++;
-	return 0;
+    return 0;
   }
 
 double XC::TDConcreteMC10NL::setStress(double strain, double &stiff)
@@ -312,7 +285,7 @@ int XC::TDConcreteMC10NL::commitState(void)
     hstvP.ecmax= hstv.ecmax;
     hstvP.dept= hstv.dept;
 
-    dsig_i[count]= hstv.sig- hstvP.sig;
+    // dsig_i[count]= hstv.sig- hstvP.sig; NOT USED.
     /* 5/8/2013: commented the following lines so that the DSIG_i[count+1]=sig-hstvP.sig;*/
     //if (crack_flag == 1) {// DSIG_i will be different depending on how the fiber is cracked
     //	if (sig < 0 && hstvP.sig > 0) { //if current step puts concrete from tension to compression, DSIG_i will be only the comp. stress
@@ -327,75 +300,62 @@ int XC::TDConcreteMC10NL::commitState(void)
     //} else { //concrete is uncracked, DSIG = hstv.sig - hstvP.sig
     //	DSIG_i[count+1] = hstv.sig-hstvP.sig;
     //}
-    DSIG_i[count+1] = hstv.sig-hstvP.sig;
-
-    //Secant Stiffness for determination of creep strain:
-	if (fabs(eps_m/hstv.sig)>Ec) {  //ntosic: originally was eps_m/hstv.sig
-	    E_i[count+1] = Ec;
-	} else {
-	    E_i[count+1] = fabs(hstv.sig/eps_m); //ADDED 7/22
-	}
-
-	if (isnan(E_i[count+1])) {
-	    E_i[count+1] = Ec;
-	}
-
-
-    TIME_i[count+1] = getCurrentTime();
+    creepSteps.assignNextStep(this->hstv, this->hstvP, this->Ec, this->eps_m, this->getCurrentTime());
 
     hstvP.e= hstv.e;
     hstvP.sig= hstv.sig;
     hstvP.eps= hstv.eps;
 
    //Added by AMK:
-	  epsP_total = eps_total; //Added by AMK;
-      epsP_shb = eps_shb; //ntosic
-	  epsP_shd = eps_shd; //ntosic
-	  epsP_crb = eps_crb; //ntosic
-	  epsP_crd = eps_crd; //ntosic
-	  epsP_m = eps_m;
-	  //ntosic: strain compression limit changed to 0.4fpc/Ec; Include nonlinear creep coefficient?
-      if (eps_m < 0 && fabs(eps_m)>0.40*fabs(fpc/Ec)) {
-	  double s = fabs(eps_m/fpc)*Ec;
-	  s = 0.4*fabs(fpc/Ec);
-	  std::cerr << "Strain Compression Limit Exceeded: " << eps_m << ' ' << -s << std::endl;
+    epsP_total = eps_total; //Added by AMK;
+    epsP_shb = eps_shb; //ntosic
+    epsP_shd = eps_shd; //ntosic
+    epsP_crb = eps_crb; //ntosic
+    epsP_crd = eps_crd; //ntosic
+    epsP_m = eps_m;
+    //ntosic: strain compression limit changed to 0.4fpc/Ec; Include nonlinear creep coefficient?
+    if(eps_m < 0 && fabs(eps_m)>0.40*fabs(fpc/Ec))
+      {
+	double s = fabs(eps_m/fpc)*Ec;
+	s = 0.4*fabs(fpc/Ec);
+	std::cerr << "Strain Compression Limit Exceeded: " << eps_m << ' ' << -s << std::endl;
       }
-		  //Cracking flags:
-		  crackP_flag = crack_flag;
+    //Cracking flags:
+    crackP_flag = crack_flag;
 
-	  //cracked reloading/unloading stiffness:
-	  if (crackP_flag==1) {
-		  if (hstv.sig/eps_m<Et) {
-			  Et = hstv.sig/eps_m;
-		  }
+    //cracked reloading/unloading stiffness:
+    if (crackP_flag==1)
+      {
+	if(hstv.sig/eps_m<Et)
+	  {
+	    Et = hstv.sig/eps_m;
 	  }
+      }
 
-	  if(count==0)
-	    {
-		  epsInit = epsP_total;
-		  sigInit = hstvP.sig;
-	    }
+    if(creepSteps.getCount()==0)
+      {
+	epsInit = epsP_total;
+	sigInit = hstvP.sig;
+      }
 
-	  if (sigInit<0.0 && t_load<0.0)
-	    {
-	      t_load = getCurrentTime();
-	      sigInit = hstvP.sig;
-	      epsInit = epsP_m;
-	    }
-	  else if(sigInit>0.0 && hstvP.sig<0.0 && t_load<0.0)
-	    {
-	      t_load = getCurrentTime();
-	      sigInit = hstvP.sig;
-	      epsInit = epsP_m;
-	    }
+    if (sigInit<0.0 && t_load<0.0)
+      {
+	t_load = getCurrentTime();
+	sigInit = hstvP.sig;
+	epsInit = epsP_m;
+      }
+    else if(sigInit>0.0 && hstvP.sig<0.0 && t_load<0.0)
+      {
+	t_load = getCurrentTime();
+	sigInit = hstvP.sig;
+	epsInit = epsP_m;
+      }
 	  
-	  //if (creepControl==1) {
-	  //	count++;
-	  //    resize()
-	  //}
-	  count++;
-	  resize();
-
+    //if (creepControl==1) {
+    //	count++;
+    //    resize()
+    //}
+    creepSteps.next();
     return 0;
   }
 

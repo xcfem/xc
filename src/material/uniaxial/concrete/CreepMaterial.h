@@ -70,6 +70,7 @@
 #include "material/uniaxial/EncapsulatedUniaxialMaterial.h"
 #include "material/uniaxial/concrete/ConcreteHistoryVars.h"
 #include "material/uniaxial/concrete/CreepShrinkageParameters.h"
+#include "material/uniaxial/concrete/ACICreepSteps.h"
 
 namespace XC {
 
@@ -96,7 +97,6 @@ class CreepMaterial: public EncapsulatedUniaxialMaterial
     CreepConcreteHistoryVars hstv; //!< = values at current step (trial values)
 
     //Added by AMK:
-    int count;
     double epsInit;
     double sigInit;
     
@@ -120,16 +120,8 @@ class CreepMaterial: public EncapsulatedUniaxialMaterial
     int crackP_flag;
     int iter; //!< Iteration number
 
-    enum{startSize=500, growSize=200};
-    int maxSize;
+    ACICreepSteps creepSteps;
 
-    std::vector<float> PHI_i;
-    std::vector<float> E_i;
-    std::vector<float> DSIG_i;
-    std::vector<float> TIME_i;
-    std::vector<float> DTIME_i;
-
-    size_t resize(void);
 
     const RawConcrete *_get_concrete_material(void) const;
   protected:
@@ -156,7 +148,7 @@ class CreepMaterial: public EncapsulatedUniaxialMaterial
     double getTangent(void) const;
     double getCreep(void) const; //Added by AMK
     double getMech(void) const; //Added by AMK
-    double setPhi(double time, double tp); //Added by AMK
+    double setPhi(double time, double tp) const; //Added by AMK
     double setShrink(double time); //Added by AMK
     double getShrink(void) const; //Added by AMK
 

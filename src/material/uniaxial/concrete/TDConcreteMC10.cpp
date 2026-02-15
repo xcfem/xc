@@ -126,43 +126,6 @@ XC::TDConcreteMC10::~TDConcreteMC10(void)
 XC::UniaxialMaterial *XC::TDConcreteMC10::getCopy(void) const
   { return new TDConcreteMC10(*this); }
 
-//ntosic
-//! @brief Return the creep occurring in a sealed (no drying) specimen,
-//! driven by internal moisture movement.
-double XC::TDConcreteMC10::setCreepBasicStrain(double time, double stress)
-  {
-    double creepBasic= 0.0;
-    
-    DTIME_i[count] = creepDt;
- 
-    for(int i = 1; i<=count; i++)
-      {
-	PHIB_i[i]= setPhiBasic(time,TIME_i[i]); //Determine PHI //ntosic: PHIB
-	creepBasic+= PHIB_i[i]*DSIG_i[i]/Ecm; //CONSTANT STRESS within Time interval //ntosic: changed to Ecm from Ec (according to Model Code formulation of phi basic)
-      }
-    
-    phib_i = PHIB_i[count];
-    return creepBasic;
-  }
-
-//ntosic
-double XC::TDConcreteMC10::setCreepDryingStrain(double time, double stress)
-  {
-	double creepDrying;
-	double runSum = 0.0;
-
-	DTIME_i[count]= creepDt;
-
-	for (int i = 1; i <= count; i++) {
-		PHID_i[i] = setPhiDrying(time, TIME_i[i]); //Determine PHI //ntosic: PHID
-		runSum += PHID_i[i] * DSIG_i[i] / Ecm; //CONSTANT STRESS within Time interval //ntosic: changed to Ecm from Ec (according to Model Code formulation of phi drying)
-	}
-
-	phid_i = PHID_i[count];
-	creepDrying = runSum;
-	return creepDrying;
-
-  }
 
 int XC::TDConcreteMC10::setTrialStrain(double trialStrain, double strainRate)
   {
@@ -206,9 +169,9 @@ int XC::TDConcreteMC10::setTrialStrain(double trialStrain, double strainRate)
 	  }
 
     	// Calculate creep and mechanical strain, assuming stress remains constant in a time step:
-    	if(creepControl == 1)
+    	if(creepSteps.isCreepOn())
 	  {
-	    if (fabs(t-TIME_i[count]) <= 0.0001)
+	    if (fabs(t-creepSteps.getLastTime()) <= 0.0001)
 	      { //If t = t(i-1), use creep/shrinkage from last calculated time step
             	eps_crb = epsP_crb; //ntosic
 		eps_crd = epsP_crd; //ntosic
@@ -323,7 +286,7 @@ int XC::TDConcreteMC10::commitState(void)
     hstvP.ecmax= hstv.ecmax;
     hstvP.dept= hstv.dept;
 
-    dsig_i[count]= hstv.sig-hstvP.sig;
+    // dsig_i[count]= hstv.sig-hstvP.sig; NOT USED.
     /* 5/8/2013: commented the following lines so that the DSIG_i[count+1]=sig-hstvP.sig;*/
     //if (crack_flag == 1) {// DSIG_i will be different depending on how the fiber is cracked
     //	if (sig < 0 && hstvP.sig > 0) { //if current step puts concrete from tension to compression, DSIG_i will be only the comp. stress
@@ -338,24 +301,8 @@ int XC::TDConcreteMC10::commitState(void)
     //} else { //concrete is uncracked, DSIG = sig - hstvP.sig
     //	DSIG_i[count+1] = sig-hstvP.sig;
     //}
-    DSIG_i[count+1] = hstv.sig-hstvP.sig;
-
-    //Secant Stiffness for determination of creep strain:
-    if(fabs(eps_m/hstv.sig)>Ec)
-      { //ntosic: originally was eps_m/sig
-	E_i[count+1] = Ec;
-      }
-    else
-      {
-	E_i[count+1] = fabs(hstv.sig/eps_m); //ADDED 7/22
-      }
-
-    if(isnan(E_i[count+1]))
-      { E_i[count+1] = Ec; }
-
-
-    TIME_i[count+1] = getCurrentTime();
-
+    creepSteps.assignNextStep(this->hstv, this->hstvP, this->Ec, this->eps_m, this->getCurrentTime());
+    
     hstvP.e= hstv.e;
     hstvP.sig= hstv.sig;
     hstvP.eps = hstv.eps;
@@ -388,7 +335,7 @@ int XC::TDConcreteMC10::commitState(void)
 	  { Et = hstv.sig/eps_m; }
       }
 
-    if(count==0)
+    if(creepSteps.getCount()==0)
       {
 	epsInit = epsP_total;
 	sigInit = hstvP.sig;
@@ -411,8 +358,7 @@ int XC::TDConcreteMC10::commitState(void)
 	  //	count++;
 	  //    resize();
 	  //}
-    count++;
-    resize();
+    creepSteps.next();
     return 0;
   }
 

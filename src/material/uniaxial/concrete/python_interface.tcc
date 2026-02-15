@@ -54,11 +54,11 @@ class_<XC::TDConcreteBase, bases<XC::RawConcrete>, boost::noncopyable >("TDConcr
   .add_property("age", &XC::TDConcreteBase::getAge,  &XC::TDConcreteBase::setAge, "concrete age.")
   .add_property("beta", &XC::TDConcreteBase::getBeta,  &XC::TDConcreteBase::setBeta,"concrete beta parameter.")
   .add_property("tcast", &XC::TDConcreteBase::getTCast,  &XC::TDConcreteBase::setTCast,"tcast.")
-  .def("setCreepOn", &XC::TDConcreteBase::setCreepOn,"Activate creep.").staticmethod("setCreepOn")
-  .def("setCreepOff", &XC::TDConcreteBase::setCreepOff,"Deactivate creep.").staticmethod("setCreepOff")
-  .def("isCreepOn", &XC::TDConcreteBase::isCreepOn,"Return true if creep is activen.").staticmethod("isCreepOn")
-  .def("getCreepDt", &XC::TDConcreteBase::getCreepDt,"Get time increment for creep.").staticmethod("getCreepDt")
-  .def("setCreepDt", &XC::TDConcreteBase::setCreepDt,"Set time increment for creep.").staticmethod("setCreepDt")
+  // .def("setCreepOn", &XC::TDConcreteBase::setCreepOn,"Activate creep.").staticmethod("setCreepOn")
+  // .def("setCreepOff", &XC::TDConcreteBase::setCreepOff,"Deactivate creep.").staticmethod("setCreepOff")
+  // .def("isCreepOn", &XC::TDConcreteBase::isCreepOn,"Return true if creep is activen.").staticmethod("isCreepOn")
+  // .def("getCreepDt", &XC::TDConcreteBase::getCreepDt,"Get time increment for creep.").staticmethod("getCreepDt")
+  // .def("setCreepDt", &XC::TDConcreteBase::setCreepDt,"Set time increment for creep.").staticmethod("setCreepDt")
   ;
 
 class_<XC::CreepShrinkageParameters, bases<CommandEntity> >("CreepShrinkageParameters")
