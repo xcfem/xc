@@ -4,9 +4,6 @@
 Based on the example: https://portwooddigital.com/2023/05/28/minimal-creep-and-shrinkage-example/
 '''
 
-from __future__ import print_function
-
-
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2026, LCPT and AOO"
 __license__= "GPL"
@@ -28,8 +25,6 @@ mm = 1
 GPa = kN/mm**2
 MPa = 0.001*GPa
  
-Ec = 25*GPa # concrete modulus of elasticity
-fc = -28*MPa # concrete compressive strength (compression is negative)
 ft = 3*MPa # concrete tensile strength (tension is positive)
 beta = 0.4 # Recommended value for the tension softening parameter (tension softening exponent).
 tDry = 14 # days

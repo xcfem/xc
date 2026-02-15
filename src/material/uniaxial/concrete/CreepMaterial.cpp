@@ -71,18 +71,41 @@ const XC::RawConcrete *XC::CreepMaterial::_get_concrete_material(void) const
   }
 
 //! @brief Resize the vectors that store the creep history.
-void XC::CreepMaterial::resize()
+size_t XC::CreepMaterial::resize(void)
   {
-    if(count+1 >= maxSize)
+    size_t newSize= 10;
+    if(count<2) // restart.
       {
-	maxSize+= growSize;
-	PHI_i.resize(maxSize);
-	E_i.resize(maxSize);
-	DSIG_i.resize(maxSize);
-	TIME_i.resize(maxSize);
-	DTIME_i.resize(maxSize);
+	PHI_i.resize(newSize);
+	E_i.resize(newSize);
+	DSIG_i.resize(newSize);
+	TIME_i.resize(newSize);
+	DTIME_i.resize(newSize);
       }
+    else
+      { 
+	if(static_cast<size_t>(count+1)>=E_i.size())
+	  {
+            newSize= 2*(count+1);
+	    PHI_i.resize(newSize);
+	    E_i.resize(newSize);
+	    DSIG_i.resize(newSize);
+	    TIME_i.resize(newSize);
+	    DTIME_i.resize(newSize);
+	  }
+      }
+    return newSize;
   }
+
+XC::CreepMaterial::CreepMaterial(int tag)
+  : EncapsulatedUniaxialMaterial(tag, MAT_TAG_CreepMaterial),
+    age(0.0), beta(0.0), tcast(0.0),
+    count(0), epsInit(0.0), sigInit(0.0),
+    eps_cr(0.0), eps_sh(0.0), eps_m(0.0), epsP_cr(00), epsP_sh(0.0), epsP_m(0.0),
+    eps_total(0.0), epsP_total(0.0), t(0.0), t_load(-1.0),
+    crack_flag(0), crackP_flag(0), iter(0),
+    maxSize(startSize)
+  {}
 
 XC::CreepMaterial::CreepMaterial(int tag, double _fc, double _fcu, double _epscu, double _ft, double _Ec, double _beta, double _age, double _tcast, const CreepShrinkageParameters &_csParameters)
   : EncapsulatedUniaxialMaterial(tag, MAT_TAG_CreepMaterial),
@@ -123,7 +146,7 @@ XC::CreepMaterial::CreepMaterial(int tag, UniaxialMaterial &matl, double _age, d
     maxSize(startSize)
     
   {
-    // Set initial tangent
+    // Get initial tangent
     const double &_Ec= this->getMaterial()->getInitialTangent();
     
     //sigCr= fabs(sigCr);
@@ -140,16 +163,6 @@ XC::CreepMaterial::CreepMaterial(int tag, UniaxialMaterial &matl, double _age, d
     TIME_i[0]= getCurrentTime();
   }
 
-XC::CreepMaterial::CreepMaterial(int tag)
-  : EncapsulatedUniaxialMaterial(tag, MAT_TAG_CreepMaterial),
-    age(0.0), beta(0.0), tcast(0.0),
-    count(0), epsInit(0.0), sigInit(0.0),
-    eps_cr(0.0), eps_sh(0.0), eps_m(0.0), epsP_cr(00), epsP_sh(0.0), epsP_m(0.0),
-    eps_total(0.0), epsP_total(0.0), t(0.0), t_load(-1.0),
-    crack_flag(0), crackP_flag(0), iter(0),
-    maxSize(startSize)
-  {}
-
 //! @brief Sets initial values for the concrete parameters.
 void XC::CreepMaterial::setup_parameters(void)
   {    
@@ -159,7 +172,28 @@ void XC::CreepMaterial::setup_parameters(void)
     epsP_sh = 0.0; 
     epsP_m = 0.0;
 
+    // Get initial tangent
+    const double &_Ec= this->getMaterial()->getInitialTangent();
+    
+    //sigCr= fabs(sigCr);
+    hstvP.setup_parameters(_Ec);
+    hstv.setup_parameters(_Ec);
+
+    this->Et= _Ec;
+    this->count= 0; //Added by AMK
+    this->resize();
+    this->epsInit= 0.0; //Added by AMK
+    this->sigInit= 0.0; //Added by AMK
+    this->eps_total= 0.0; //Added by AMK
+    this->epsP_total= 0.0; //Added by AMK
+    
+    this->t_load= -1.0; //Added by AMK
+    this->crack_flag= 0;
+    this->crackP_flag= 0; // Added by LP
+    this->iter= 0;
+    
     creepShrinkageParameters.setup_parameters();
+    TIME_i[0]= getCurrentTime();
   }
 
 //! @brief Virtual constructor.

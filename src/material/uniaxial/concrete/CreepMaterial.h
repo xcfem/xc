@@ -129,7 +129,7 @@ class CreepMaterial: public EncapsulatedUniaxialMaterial
     std::vector<float> TIME_i;
     std::vector<float> DTIME_i;
 
-    void resize();
+    size_t resize(void);
 
     const RawConcrete *_get_concrete_material(void) const;
   protected:
