@@ -225,19 +225,19 @@ int XC::TDConcrete::setTrialStrain(double trialStrain, double strainRate)
                   }
 		else
 		  { // if the current calculation is a new time step
-                        //if(crackP_flag == 1 && hstvP.sig >= 0.0) { //if cracking occurs and previous stress is positive, 
-                        // creep strain should not increase
-                        //        eps_cr = epsP_cr;
-                        //} else {
-                        //        eps_cr = setCreepStrain(t,hstv.sig);
-                        //}
-                        //if(t < tcast) {
-                        //std::cerr << "\nWARNING: TDConcrete loaded before tcast, creep and shrinkage not calculated" << std::endl;
-                        //        eps_sh = epsP_sh;
-                        //        eps_cr = epsP_cr;
-                        //        eps_m = eps_total - eps_cr - eps_sh;
-                        //        sig = setStress(eps_m, e);
-                        //} else {        
+		    //if(crackP_flag == 1 && hstvP.sig >= 0.0) { //if cracking occurs and previous stress is positive, 
+		    // creep strain should not increase
+		    //        eps_cr = epsP_cr;
+		    //} else {
+		    //        eps_cr = setCreepStrain(t,hstv.sig);
+		    //}
+		    //if(t < tcast) {
+		    //std::cerr << "\nWARNING: TDConcrete loaded before tcast, creep and shrinkage not calculated" << std::endl;
+		    //        eps_sh = epsP_sh;
+		    //        eps_cr = epsP_cr;
+		    //        eps_m = eps_total - eps_cr - eps_sh;
+		    //        sig = setStress(eps_m, e);
+		    //} else {        
                     if(iter < 1)
 		      { eps_cr = setCreepStrain(t,hstv.sig); }
                     eps_m = eps_total - eps_cr - eps_sh;
