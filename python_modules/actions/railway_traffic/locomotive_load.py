@@ -128,14 +128,14 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
                 lmsg.warning(className+'.'+methodName+warningMsg)
         return retval
 
-    def getTwist(self, ref, xcSet, length= 3.0, removeGeometricalTwist= False):
+    def getTwist(self, ref, xcSet, length= 3.0, removeGeometricTwist= False):
         ''' Computes the deck twist fromn the displacements of the nodes
             under the wheels.
 
         :param ref: reference system at the center of the locomotive.
         :param xcSet: set to search the nodes on.
         :param length: length to measure the twist over.
-        :param removeGeometricalTwist: remove the twist due to the mesh geometry.
+        :param removeGeometricTwist: remove the twist due to the mesh geometry.
         '''
         wheelsDisplacements= self.getDisplacementsUnderWheels(ref= ref, xcSet= xcSet)
         axisStep= math.ceil(length/self.xSpacing)
@@ -144,7 +144,7 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
         numberOfComputedTwists= int(nAxes/axisStep)
         retval= list()
         if(numberOfComputedTwists>0):
-            if(removeGeometricalTwist):
+            if(removeGeometricTwist):
                 for i in range(0, numberOfComputedTwists):
                     p0= wheelsDisplacements[i][0]
                     p1= wheelsDisplacements[i+nAxes][0]

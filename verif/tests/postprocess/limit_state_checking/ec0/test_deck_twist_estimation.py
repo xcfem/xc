@@ -167,8 +167,8 @@ for index, relativePosition in enumerate(relativePositions):
     #                   the axis).
     # xcSet: set to search the nodes on.
     # length: length to measure the twist over.
-    # removeGeometricalTwist: remove the twist due to the mesh geometry.
-    twists= trackAxis.getTwist(trainModel= trainLoadModel, relativePosition= relativePosition, xcSet= slabSet, length= 3.0, removeGeometricalTwist= False)
+    # removeGeometricTwist: remove the twist due to the mesh geometry.
+    twists= trackAxis.getTwist(trainModel= trainLoadModel, relativePosition= relativePosition, xcSet= slabSet, length= 3.0, removeGeometricTwist= False)
     if(twists):
         localMaxTwist= max(twists)
         if(localMaxTwist>maxTwist):

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Evaluation of several geometrical and mechanical properties of a 
+''' Evaluation of several geometric and mechanical properties of a 
 RC rectangular section under uniaxial bending moment.
 The data are taken from Example 7.3 of the manual «EC2-worked examples»
 titled «Evaluation of crack amplitude [EC2 clause 7.3.4]» 

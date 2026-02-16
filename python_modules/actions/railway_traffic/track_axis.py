@@ -104,7 +104,7 @@ class TrackAxis(object):
         ref= self.getReferenceAt(lmbdArcLength= relativePosition)
         return trainModel.getDisplacementsUnderWheels(ref= ref, xcSet= xcSet)
     
-    def getTwist(self, trainModel:tm.TrainLoadModel, relativePosition, xcSet, length= 3.0, removeGeometricalTwist= False):
+    def getTwist(self, trainModel:tm.TrainLoadModel, relativePosition, xcSet, length= 3.0, removeGeometricTwist= False):
         ''' Computes the deck twist fromn the displacements of the nodes
             under the locomotive wheels.
 
@@ -113,10 +113,10 @@ class TrackAxis(object):
                               the axis).
         :param xcSet: set to search the nodes on.
         :param length: length to measure the twist over.
-        :param removeGeometricalTwist: remove the twist due to the mesh geometry.
+        :param removeGeometricTwist: remove the twist due to the mesh geometry.
         '''
         ref= self.getReferenceAt(lmbdArcLength= relativePosition)
-        return trainModel.getTwist(ref= ref, xcSet= xcSet, length= length, removeGeometricalTwist= removeGeometricalTwist)
+        return trainModel.getTwist(ref= ref, xcSet= xcSet, length= length, removeGeometricTwist= removeGeometricTwist)
     
     def getWheelLoads(self, trainModel:tm.TrainLoadModel, relativePosition, loadFactor= 1.0, directionVector= xc.Vector([0,0,-1])):
         ''' Return the wheel loads of load model argument in the position
