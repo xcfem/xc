@@ -166,8 +166,11 @@ class NodeDict(dict):
             self.append(n.tag, pos.x, pos.y, pos.z)
         return len(self)
           
-    def writeDxf(self,drawing):
-        '''Write the node positions in dxf file.'''
+    def writeDxf(self, drawing):
+        '''Write the node positions in dxf file.
+
+        :param drawing: ezdxf drawing object.
+        '''
         layerName= self.getName()
         drawing.layers.new(name= layerName)
         for key in self:

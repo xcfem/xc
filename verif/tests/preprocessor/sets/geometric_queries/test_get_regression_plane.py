@@ -34,7 +34,7 @@ n8= nodes.newNodeXYZ(8,0,0)
 
 # Compute the regression plane of the node positions.
 xcTotalSet= modelSpace.getTotalSet()
-regressionPlane= xcTotalSet.nodes.getRegressionPlane(0.0)
+regressionPlane= xcTotalSet.nodes.getRegressionPlane(0.0) # 0.0 -> scale factor for the current position: 1.0 (curreentPosition= initialPosition+scaleFactor*nodeDisplacement).
 
 # Compute normal vector.
 normalVector= regressionPlane.getNormal()

@@ -126,7 +126,7 @@ pC= p9.getPos+columnWidth*columnStrongAxis+columnDepth*columnWeakAxis
 pD= p9.getPos-columnWidth*columnStrongAxis+columnDepth*columnWeakAxis
 columnContour= [pA, pB, pC, pD]
 ## Compute mid-plane of the slab
-slabMidPlane= slabSet.nodes.getRegressionPlane(1.0)
+slabMidPlane= slabSet.nodes.getRegressionPlane(1.0) # 1.0 -> scale factor for the current position: 1.0 (curreentPosition= initialPosition+scaleFactor*nodeDisplacement).
 ## Project the column contour on the mid-plane of the slab.
 projVertices= slabMidPlane.getProjection(columnContour)
 projColumnContour= geom.Polygon3d(projVertices)

@@ -161,7 +161,7 @@ Lf=  trackAxis.getLength() # influence length of the loaded part of curved track
 railCentrifugalLoadsPerMeter= trainLoadModel.getCentrifugalLoadPerMeter(v= v, Lf= Lf, r= r, trackCrossSection= trackCrossSection)
 loadComponents=  [0.0, -railCentrifugalLoadsPerMeter[0].x, -railCentrifugalLoadsPerMeter[0].y]
 centrifugalRailLoad= url.VariableDirectionRailLoad(railAxis= leftRailAxis, loadComponents= loadComponents, dynamicFactor= 1.0, classificationFactor= trainLoadModel.getClassificationFactor())
-deckMidplane= slabSet.nodes.getRegressionPlane(0.0)
+deckMidplane= slabSet.nodes.getRegressionPlane(0.0) # 0.0 -> scale factor for the current position: 1.0 (curreentPosition= initialPosition+scaleFactor*nodeDisplacement).
 
 ### Define load pattern.
 q1a= modelSpace.newLoadPattern(name= 'Q1a')
