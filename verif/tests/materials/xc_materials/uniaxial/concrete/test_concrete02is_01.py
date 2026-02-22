@@ -62,8 +62,9 @@ lp0= lPatterns.newLoadPattern("default","0")
 analysis= predefined_solutions.plain_static_modified_newton(feProblem)
 dom= preprocessor.getDomain
 
-strainData= [-1.55637e-3,-1.4037e-3,-1.28474e-3,-1.18796e-3,-1.09365e-3,-1.01316e-3,-0.93755e-3,-0.86304e-3,-0.796515e-3,-0.732951e-3,-0.672066e-3,-0.611906e-3,-0.556246e-3,-0.502408e-3,-0.450266e-3,-0.399699e-3,-0.3506e-3,-0.30244e-3,-0.25618e-3,-0.211025e-3,-0.166922e-3,-0.123819e-3,-0.0816646e-3,-0.0404e-3,0e-3,0.04e-3,0.06e-3,0.068e-3,0.0721905e-3]
-stressData= [-2.37699e7,-22.7776e6,-21.8025e6,-20.8787e6,-19.8658e6,-18.9134e6,-17.945e6,-16.9208e6,-15.9476e6,-14.9662e6,-13.9787e6,-12.9575e6,-11.9723e6,-10.9826e6,-9.98952e6,-8.99399e6,-7.99676e6,-6.98931e6,-5.99432e6,-4.9973e6,-3.99891e6,-2.99966e6,-1.99993e6,-0.999799e6,0e6,1e6,1.5e6,1.7e6,1.79499e6]
+strainData= [-0.0014517255054275048, -0.0012950647995898898, -0.0011771607360655028, -0.0010769605147439268, -0.000994164434068782, -0.0009152654474126228, -0.0008469605993237639, -0.0007803305574086666, -0.0007214112867197361, -0.0006653605008990896, -0.0006118455255762576, -0.000560558859581081, -0.0005104647548656792, -0.0004631570115009628, -0.00041717711637729796, -0.0003723706244344146, -0.00032858986556887407, -0.0002856946662170974, -0.00024355265797323854, -0.00020198019801980199, -0.0001610174880763116, -0.0001204304503786369, -8.012779552715656e-05, -4.0015993602558976e-05, 0.0, 3.9999999999999996e-05, 6e-05, 6.8e-05, 7.219053709429341e-05]
+stressData= [-23769526.89452975, -22811710.597085666, -21857123.845715567, -20871959.01879276, -19929673.314080067, -18919391.37806733, -17954190.160818744, -16930892.09817331, -15958893.497465627, -14976474.048593784, -13987102.85209974, -12993265.281878645, -11981125.618300915, -10989569.986983366, -9994572.202418111, -8997371.976836976, -7998835.473570751, -6999538.547498543, -5999841.947359786, -4998524.993595367, -3999513.72232689, -2999884.0598165416, -1999984.680959728, -999999.5203199998, -0.0, 999999.9999999999, 1500000.0, 1700000.0, 1794985.865939647]
+
 stressInput= [-24e6,-23e6,-22e6,-21e6,-20e6,-19e6,-18e6,-17e6,-16e6,-15e6,-14e6,-13e6,-12e6,-11e6,-10e6,-9e6,-8e6,-7e6,-6e6,-5e6,-4e6,-3e6,-2e6,-1e6,0.0,1e6,1.5e6,1.7e6,1.8e6]
 calculatedStresses= []
 calculatedStrains= []
@@ -84,25 +85,26 @@ residStrains= (np.array(calculatedStrains) - np.array(strainData))
 ratio1= np.linalg.norm(residStresses)/-concrAux.fmaxK()
 ratio2= np.linalg.norm(residStrains)/3.5e-3
 
-
-''' 
-print('E0= ', concr.getInitialTangent()/1e9, 2*concr.fpc/concr.epsc0/1e9)
-print('epsc0= ', concr.epsc0)
-print('fmaxK= ', concr.fpc/1e6)
-print('epscu= ', concr.epscu)
-print('ft= ', concr.ft/1e6)
-print('Ets= ', concr.Ets/1e9, concr.getInitialTangent()/19e9)
-print(calculatedStresses)
+'''
+print('E0= ', concrete.getInitialTangent()/1e9, 2*concrete.fpc/concrete.epsc0/1e9)
+print('epsc0= ', concrete.epsc0)
+print('fmaxK= ', concrete.fpc/1e6)
+print('epscu= ', concrete.epscu)
+print('ft= ', concrete.ft/1e6)
+print('Ets= ', concrete.Ets/1e9, concrete.getInitialTangent()/1e9)
+print('calculatedStresses= ', calculatedStresses)
 print('error in stress calculation: ', residStresses)
-print(calculatedStrains)
+print('calculatedStrains= ', calculatedStrains)
 print(residStrains)
 print("ratio1= ",ratio1)
 print("ratio2= ",ratio2)
+from postprocess.reports import graph_material
+import matplotlib.pyplot as plt
 retval= graph_material.UniaxialMaterialDiagramGraphic(epsMin=-0.0035,epsMax=0.0016,title=' concrete02 characteristic stress-strain diagram')
-retval.setupGraphic(plt,concr)
+retval.setupGraphic(plt,concrete)
 plt.plot(strainData, stressData, '-')
-retval.savefig(plt,'concrete02_diagram.jpeg')
-   '''
+retval.savefig(plt,'concrete02is_diagram.jpeg')
+'''
   
 import os
 from misc_utils import log_messages as lmsg
