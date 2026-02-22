@@ -57,8 +57,8 @@ tdConcrete= typical_materials.defTDConcrete(preprocessor= preprocessor, name= 't
 b = 300*mm
 h = 300*mm
 As = 1500*mm**2
-Ag = b*h
-Ac = Ag-As
+Ag = b*h # Gross area.
+Ac = Ag-As # Concrete area.
 
 # Define mesh
 nodes= preprocessor.getNodeHandler
@@ -151,9 +151,9 @@ avgSteelStress/=len(steelStresses)
 lastConcreteStress= concreteStresses[-1]
 lastSteelStress= steelStresses[-1]
 
-avgConcreteStressRef= 0.005974877488588469
+avgConcreteStressRef= 0.005974877488588469*kN/mm**2
 ratio1= abs(avgConcreteStress+avgConcreteStressRef)/avgConcreteStressRef
-avgSteelStressRef= 0.31414889483994685
+avgSteelStressRef= 0.31414889483994685*kN/mm**2
 ratio2= abs(avgSteelStress+avgSteelStressRef)/avgSteelStressRef
 
 '''
