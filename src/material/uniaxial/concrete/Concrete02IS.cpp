@@ -56,18 +56,20 @@ XC::Concrete02IS::Concrete02IS(int tag, double _E0, double _fc, double _epsc0,
 			       double _fcu, double _epscu, double _rat,
 			       double _ft, double _Ets)
   : Concrete02(tag, MAT_TAG_Concrete02IS, _fc, _epsc0, _fcu, _epscu, _rat, _ft,
-	       _Ets), E0(_E0)
+	       _Ets),
+    E0(_E0)
   {}
 
 //! @brief Default constructor.
 XC::Concrete02IS::Concrete02IS(int tag, double _E0, double _fc, double _epsc0,
 			       double _fcu, double _epscu)
   : Concrete02(tag, MAT_TAG_Concrete02IS, _fc, _epsc0, _fcu, _epscu, 0.1,
-	       0.1*_fc, 0.1*_fc/_epsc0), E0(_E0)
+	       0.1*_fc, 0.1*_fc/_epsc0),
+    E0(_E0)
   { }
 
 //! @brief Constructor.
-XC::UniaxialMaterial *XC::Concrete02IS::getCopy(void)
+XC::UniaxialMaterial *XC::Concrete02IS::getCopy(void) const
   { return new Concrete02IS(*this); }
 
 double XC::Concrete02IS::getInitialTangent(void) const
