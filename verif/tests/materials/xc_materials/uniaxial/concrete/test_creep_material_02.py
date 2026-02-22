@@ -53,11 +53,12 @@ csParameters= typical_materials.def_creep_and_shrinkage_parameters(tcr= Tcr, eps
 concrAux= EC2_materials.C25
 epsc0= concrAux.epsilon0()
 fpc= concrAux.fmaxK()
+# Ec0= 25*GPa
 Ec0= 2.0*fpc/epsc0
-concrete= typical_materials.defConcrete02IS(preprocessor=preprocessor,name='concrete', Ec0= Ec0, epsc0= epsc0, fpc= fpc, fpcu= 0.85*concrAux.fmaxK(), epscu= concrAux.epsilonU(), ratioSlope= 0.1, ft= ft, Ets= concrAux.E0()/19.0)
+concreteIs= typical_materials.defConcrete02IS(preprocessor=preprocessor,name='concrete', Ec0= Ec0, epsc0= epsc0, fpc= fpc, fpcu= 0.85*concrAux.fmaxK(), epscu= concrAux.epsilonU(), ratioSlope= 0.1, ft= ft, Ets= concrAux.E0()/19.0)
 
 ## Concrete able to creep.
-creepMaterial= typical_materials.defCreepMaterial(preprocessor= preprocessor, name= 'creepMaterial', encapsulatedConcrete= concrete, beta= beta, age= tDry, tcast= tcast, csParameters= csParameters)
+creepMaterial= typical_materials.defCreepMaterial(preprocessor= preprocessor, name= 'creepMaterial', encapsulatedConcrete= concreteIs, beta= beta, age= tDry, tcast= tcast, csParameters= csParameters)
 
 b = 300*mm
 h = 300*mm
@@ -120,7 +121,7 @@ modelSpace.setCurrentTime(Tcr)
 solProc= predefined_solutions.PlainNewtonRaphson(feProblem, printFlag= 0)
 solProc.setup()
 # Set the load control integrator with dt=0 so that the domain time doesn’t advance.
-solProc.integrator.dLambda1= 0.0  
+solProc.integrator.dLambda1= 0.0
 result= solProc.analysis.analyze(1)
 if(result!=0):
     lmsg.error("Can't solve.")
@@ -128,16 +129,15 @@ if(result!=0):
 
 
 
-dt = 10 # days
+dt= 10 # days
 solProc.integrator.dLambda1= dt # set new increment for the integrator.
-solProc.integrator.setNumIncr(10) # IMPORTANT! otherwise it got stuck.
+solProc.integrator.setNumIncr(dt) # IMPORTANT! otherwise it got stuck.
 
 modelSpace.setCreepOn() # Turn creep on
 #modelSpace.setCreepDt(10) # set time increment for creep.
 
 t = 0
 while t < 10000:
-    print('t= ', t)
     ok = solProc.analysis.analyze(1)
     if(ok!=0):
         lmsg.error("Can't solve.")
@@ -164,24 +164,24 @@ avgSteelStress/=len(steelStresses)
 lastConcreteStress= concreteStresses[-1]
 lastSteelStress= steelStresses[-1]
 
-avgConcreteStressRef= 0.005974877488588469*MPa
+avgConcreteStressRef= 6.088524195355687*MPa
 ratio1= abs(avgConcreteStress+avgConcreteStressRef)/avgConcreteStressRef
-avgSteelStressRef= 0.31414889483994685*MPa
+avgSteelStressRef= 307.44373914068086*MPa
 ratio2= abs(avgSteelStress+avgSteelStressRef)/avgSteelStressRef
 
-print('time: ', ti)
-print('concrete stresses: ', concreteStresses)
-print('steel stresses: ', steelStresses)
+# print('time: ', ti)
+# print('concrete stresses: ', concreteStresses)
+# print('steel stresses: ', steelStresses)
 # print('Reactions= ', reactions)
-print('errorDt= ', errorDt)
-print('errorForces= ', errorForces)
-print('average concrete stress: ', avgConcreteStress, avgConcreteStressRef, ratio1)
-print('average steel stress: ', avgSteelStress, avgSteelStressRef, ratio2)
-print('time: ', modelSpace.getCurrentTime(), 'days')
-print('last concrete stress: ', lastConcreteStress*1e3, 'MPa')
-print('last steel stress: ', lastSteelStress*1e3, 'MPa')
-'''
-'''
+# print('errorDt= ', errorDt)
+# print('errorForces= ', errorForces)
+# print('average concrete stress: ', avgConcreteStress/MPa, avgConcreteStressRef/MPa)
+# print('ratio1= ', ratio1)
+# print('average steel stress: ', avgSteelStress/MPa, avgSteelStressRef/MPa)
+# print('ratio2= ', ratio2)
+# print('time: ', modelSpace.getCurrentTime(), 'days')
+# print('last concrete stress: ', lastConcreteStress/MPa, 'MPa')
+# print('last steel stress: ', lastSteelStress/MPa, 'MPa')
 
 
 import os
