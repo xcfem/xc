@@ -105,38 +105,79 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
         '''
         retval= list()
         wheelsPositions= self.getWheelsGlobalPositions(ref= ref)
-        for wheelPos in wheelsPositions:
+        setPlane= xcSet.nodes.getRegressionPlane(0.0) # 0.0 -> scale factor for the current position: 1.0 (curreentPosition= initialPosition+scaleFactor*nodeDisplacement).
+        avgElementSize= xcSet.elements.getAverageSize(True)
+        avgElementSideLength= math.sqrt(avgElementSize)
+        tol= 0.7*avgElementSideLength# 0.25*self.xSpacing
+        for i, wheelPos in enumerate(wheelsPositions):
             nearestNode= xcSet.getNearestNode(wheelPos)
             nearestNodePos= nearestNode.getInitialPos3d
             nearestNodeDisp= nearestNode.getDisp
-            retval.append((nearestNodePos, nearestNodeDisp))
+            projWheelPos= setPlane.getProjection(wheelPos)
+            dist2d= projWheelPos.dist(setPlane.getProjection(nearestNodePos))
+            if(dist2d<tol):
+                retval.append((nearestNodePos, nearestNodeDisp))
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                warningMsg= '; wheel in position: '+str(wheelPos)
+                warningMsg+= ' too far ('+str(dist2d)
+                warningMsg+= ') from the nearest node in the bridge deck: '
+                warningMsg+= str(nearestNodePos)
+                warningMsg+= ' this wheel will be ignored.'
+                lmsg.warning(className+'.'+methodName+warningMsg)
         return retval
 
-    def getTwist(self, ref, xcSet, length= 3.0):
+    def getTwist(self, ref, xcSet, length= 3.0, removeGeometricTwist= False, outputDict= None):
         ''' Computes the deck twist fromn the displacements of the nodes
             under the wheels.
 
         :param ref: reference system at the center of the locomotive.
         :param xcSet: set to search the nodes on.
         :param length: length to measure the twist over.
+        :param removeGeometricTwist: remove the twist due to the mesh geometry.
+        :param outputDict: Python dictionary to store the displacement results. 
         '''
         wheelsDisplacements= self.getDisplacementsUnderWheels(ref= ref, xcSet= xcSet)
-        displacedPositions= list()
-        for (nodePos, nodeDisp) in wheelsDisplacements:
-        
-            displacedPositions.append(nodePos+geom.Vector3d(nodeDisp[0], nodeDisp[1], nodeDisp[2]))
         axisStep= math.ceil(length/self.xSpacing)
         factor= length/(self.xSpacing*axisStep)
-        numberOfComputedTwists= int(self.nAxes/axisStep)
+        nAxes= min(int(len(wheelsDisplacements)/2), self.nAxes)
+        numberOfComputedTwists= int(nAxes/axisStep)
         retval= list()
-        for i in range(0, numberOfComputedTwists):
-            p0= displacedPositions[i]
-            p1= displacedPositions[i+self.nAxes]
-            p2= displacedPositions[i+axisStep]
-            p3= displacedPositions[i+self.nAxes+axisStep]
-            plane= geom.Plane3d(p0, p1, p2)
-            twist= plane.dist(p3)*factor
-            retval.append(twist)
+        if(numberOfComputedTwists>0):
+            if(removeGeometricTwist):
+                for i in range(0, numberOfComputedTwists):
+                    p0= wheelsDisplacements[i][0]
+                    p1= wheelsDisplacements[i+nAxes][0]
+                    p2= wheelsDisplacements[i+axisStep][0]
+                    plane= geom.Plane3d(p0, p1, p2)
+                    # Make the third point coplanar.
+                    p3= plane.getProjection(wheelsDisplacements[i+nAxes+axisStep][0])
+                    wheelsDisplacements[i+nAxes+axisStep]= (p3, wheelsDisplacements[i+nAxes+axisStep][1])
+            displacedPositions= list()
+            for (nodePos, nodeDisp) in wheelsDisplacements:        
+                displacedPositions.append(nodePos+geom.Vector3d(nodeDisp[0], nodeDisp[1], nodeDisp[2]))
+            for i in range(0, numberOfComputedTwists):
+                p0= displacedPositions[i]
+                p1= displacedPositions[i+nAxes]
+                p2= displacedPositions[i+axisStep]
+                p3= displacedPositions[i+nAxes+axisStep]
+                plane= geom.Plane3d(p0, p1, p2)
+                twist= plane.dist(p3)*factor
+                retval.append(twist)
+                # Store computed displacements in the output dict.
+                if(outputDict is not None):
+                    twistResults= {'twist':twist, 'factor':factor}
+                    for j, k in enumerate([i, i+nAxes, i+axisStep, i+nAxes+axisStep]):
+                        wheelKey= 'wheel_position_'+str(j)
+                        wheelPos= wheelsDisplacements[k][0]
+                        twistResults[wheelKey]= (wheelPos.x, wheelPos.y, wheelPos.z)
+                        dispKey= 'wheel_displacement_'+str(j)
+                        wheelDisp= wheelsDisplacements[k][1]
+                        twistResults[dispKey]= list(wheelDisp)
+                    twistKey= 'twist_'+str(i)
+                    outputDict[twistKey]= twistResults
+                        
         return retval
     
     def getNosingLoadPositions(self):
@@ -215,7 +256,6 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
                 load3d= cl.x*centrifugalDirection+cl.y*ref.getKVector()
                 wheelLoad= load3d.getModulus()
                 directionVector= load3d.normalized()
-                print(wheelLoad, directionVector)
                 wl= wheel_load.WheelLoad(pos= pos3d, ld= wheelLoad, directionVector= directionVector)
                 wl.localCooSystem= geom.CooSysRect3d3d(ref.getIVector(), ref.getJVector())
                 wheelLoads.append(wl)

@@ -147,11 +147,12 @@ locomotiveLM1= EC1_rail_load_models.get_locomotive_LM1()
 trainLoadModel= tlm.TrainLoadModel(locomotive= locomotiveLM1, uniformLoad= 80e3, dynamicFactor= 1.0, classificationFactor= 1.21)
 
 ## Define load patterns
-relativePositions= [0.15, 0.249, 0.25, 0.251, 0.5, 0.75, 0.9]
+relativePositions= [0.15, 0.249, 0.25, 0.251,0.5 , 0.75, 0.9]
 loadNames= list()
 modelSpace.removeAllLoadPatternsFromDomain()
 maxTwist= 0.0
 maxTwistPos= 0.0
+twistResultsDict= dict()
 for index, relativePosition in enumerate(relativePositions):
     name= 'Q1a'+str(index+1)
 
@@ -162,11 +163,19 @@ for index, relativePosition in enumerate(relativePositions):
     modelSpace.addLoadCaseToDomain(cLC.name)
 
     modelSpace.analyze(calculateNodalReactions= True)
-    twists= trackAxis.getTwist(trainModel= trainLoadModel, relativePosition= relativePosition, xcSet= slabSet, length= 3.0)
-    localMaxTwist= max(twists)
-    if(localMaxTwist>maxTwist):
-        maxTwist= localMaxTwist
-        maxTwistPos= relativePosition
+    # trainModel: load model of the train (see TrainLoadModel class).
+    # relativePosition: parameter (0.0->start of the axis, 1.0->end of
+    #                   the axis).
+    # xcSet: set to search the nodes on.
+    # length: length to measure the twist over.
+    # removeGeometricTwist: remove the twist due to the mesh geometry.
+    # outputDict: (optional) Python dictionary to store the displacement results. 
+    twists= trackAxis.getTwist(trainModel= trainLoadModel, relativePosition= relativePosition, xcSet= slabSet, length= 3.0, removeGeometricTwist= False, outputDict= twistResultsDict)
+    if(twists):
+        localMaxTwist= max(twists)
+        if(localMaxTwist>maxTwist):
+            maxTwist= localMaxTwist
+            maxTwistPos= relativePosition
 
     modelSpace.removeLoadCaseFromDomain(cLC.name)
     modelSpace.revertToStart()
@@ -174,8 +183,11 @@ for index, relativePosition in enumerate(relativePositions):
 
 ratio= abs(maxTwist-0.0015422930703060144)/0.0015422930703060144
 testOK= (maxTwistPos==0.25) and abs(ratio)<1e-4
+testOK= testOK and (len(twistResultsDict)==len(relativePositions))
+
     
 # print(maxTwist*1e3, maxTwistPos)
+# print(len(twistResultsDict), len(relativePositions))
 
 import os
 from misc_utils import log_messages as lmsg
@@ -189,7 +201,7 @@ else:
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 # # oh.displayBlocks()
-# # qoh.displayFEMesh()
+# oh.displayFEMesh()
 # # oh.displayLocalAxes()
 # for loadName in loadNames:
 #     modelSpace.addLoadCaseToDomain(loadName)
@@ -200,3 +212,25 @@ else:
 # # oh.displayDispRot(itemToDisp='uX', defFScale= 10.0)
 # # oh.displayDispRot(itemToDisp='uY', defFScale= 10.0)
 # # oh.displayDispRot(itemToDisp='uZ', defFScale= 10.0)
+
+# # Export the FE model into a DXF file.
+# from import_export import mesh_entities
+# xcTotalSet= modelSpace.getTotalSet()
+# me= mesh_entities.MeshData()
+# numEntitiesRead= me.readFromXCSet(xcTotalSet)
+# ok1= (abs(numEntitiesRead-5)==0) # four nodes and one element.
+# import ezdxf
+# outputFileName= './'+fname.replace('.py', '.dxf')
+# me.writeDxfFile(outputFileName)
+
+# # Export the track axis to another DXF file
+# from geom_utils import dxf_document
+# doc = ezdxf.new("R2000") # Create DXF document.
+# dxfDocument= dxf_document.DXFDocument(ezdxfDoc= doc)
+
+# ## Get the axis geometry.
+# track_axis= trackAxis
+# dxfDocument.addPolyline3d(track_axis.trackAxis)
+
+# outputFileName= './track_axis.dxf'
+# doc.saveas(outputFileName)

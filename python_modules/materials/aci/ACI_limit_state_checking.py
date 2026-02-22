@@ -681,7 +681,7 @@ class AnchorBolt(object):
 
     def getANc(self):
         '''Return the projected concrete failure area of a single anchor 
-        that shall be approximated as the base of the rectilinear geometrical 
+        that shall be approximated as the base of the rectilinear geometric 
         figure that results from projecting the failure surface outward 1.5hef 
         from the centerlines of the anchor, or in the case of a group of 
         anchors, from a line through a row of adjacent anchors.
