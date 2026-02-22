@@ -367,34 +367,40 @@ void XC::TDConcreteMC10NL::Print(std::ostream &s, int flag)
 
 
 
+//! @brief Monotonic envelope of concrete in tension (positive envelope).
+//! @param epsc[in]: concrete strain.
+//! @param sigc[out]: concrete stress.
+//! @param Ect[out]: tangent concrete modulus.
 void XC::TDConcreteMC10NL::Tens_Envlp(double epsc, double &sigc, double &Ect)
   {
-/*-----------------------------------------------------------------------
-! monotonic envelope of concrete in tension (positive envelope)
-!
-!   ft    = concrete tensile strength
-!   Ec0   = initial tangent modulus of concrete 
-!   Ets   = tension softening modulus
-!   eps   = strain
-!
-!   returned variables
-!    sigc  = stress corresponding to eps
-!    Ect  = tangent concrete modulus
-!-----------------------------------------------------------------------*/
+    /*-----------------------------------------------------------------------
+    ! monotonic envelope of concrete in tension (positive envelope)
+    !
+    !   ft    = concrete tensile strength
+    !   Ec0   = initial tangent modulus of concrete 
+    !   Ets   = tension softening modulus
+    !   eps   = strain
+    !
+    !   returned variables
+    !    sigc  = stress corresponding to eps
+    !    Ect  = tangent concrete modulus
+    !-----------------------------------------------------------------------*/
   
-	double Ec0 = Ec;
-	double eps0 = ft / Ec0;
-	//double epsu = ft * (1.0 / Ets + 1.0 / Ec0);
-	double b = beta;
-	// USE THIS ONE
-	if (epsc <= eps0) {
-		sigc = epsc * Ec0;
-		Ect = Ec0;
-	}
-	else {
-		Ect = -b * eps0*ft / pow(epsc, 2)*pow(eps0 / epsc, b - 1.0); //original
-		sigc = ft * pow(eps0 / epsc, b);
-	}
+    const double Ec0= Ec;
+    const double eps0= ft / Ec0;
+    //double epsu = ft * (1.0 / Ets + 1.0 / Ec0);
+    const double b= beta;
+    // USE THIS ONE
+    if (epsc <= eps0)
+      {
+	sigc = epsc * Ec0;
+	Ect = Ec0;
+      }
+    else
+      {
+	Ect = -b * eps0*ft / pow(epsc, 2)*pow(eps0 / epsc, b - 1.0); //original
+	sigc = ft * pow(eps0 / epsc, b);
+      }
    
   //THiS IS FOR TESTING LINEAR
   //sigc = epsc*Ec0;

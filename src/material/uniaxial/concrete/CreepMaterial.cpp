@@ -74,7 +74,8 @@ XC::CreepMaterial::CreepMaterial(int tag)
   : EncapsulatedUniaxialMaterial(tag, MAT_TAG_CreepMaterial),
     age(0.0), beta(0.0), tcast(0.0),
     epsInit(0.0), sigInit(0.0),
-    eps_cr(0.0), eps_sh(0.0), eps_m(0.0), epsP_cr(00), epsP_sh(0.0), epsP_m(0.0),
+    eps_cr(0.0), eps_sh(0.0), eps_m(0.0),
+    epsP_cr(00), epsP_sh(0.0), epsP_m(0.0),
     eps_total(0.0), epsP_total(0.0), t(0.0), t_load(-1.0),
     crack_flag(0), crackP_flag(0), iter(0)
   {}
@@ -84,7 +85,8 @@ XC::CreepMaterial::CreepMaterial(int tag, double _fc, double _fcu, double _epscu
     age(_age), beta(_beta), tcast(_tcast),
     creepShrinkageParameters(_csParameters),
     epsInit(0.0), sigInit(0.0),
-    eps_cr(0.0), eps_sh(0.0), eps_m(0.0), epsP_cr(00), epsP_sh(0.0), epsP_m(0.0),
+    eps_cr(0.0), eps_sh(0.0), eps_m(0.0),
+    epsP_cr(0.0), epsP_sh(0.0), epsP_m(0.0),
     eps_total(0.0), epsP_total(0.0), t(0.0), t_load(-1.0), Et(_Ec),
     crack_flag(0), crackP_flag(0), iter(0)
   {
@@ -109,12 +111,13 @@ XC::CreepMaterial::CreepMaterial(int tag, UniaxialMaterial &matl, double _age, d
     age(_age), beta(0.0), tcast(_tcast),
     creepShrinkageParameters(_csParameters),
     epsInit(0.0), sigInit(0.0),
-    eps_cr(0.0), eps_sh(0.0), eps_m(0.0), epsP_cr(00), epsP_sh(0.0), epsP_m(0.0),
+    eps_cr(0.0), eps_sh(0.0), eps_m(0.0),
+    epsP_cr(0.0), epsP_sh(0.0), epsP_m(0.0),
     eps_total(0.0), epsP_total(0.0), t(0.0), t_load(-1.0),
     crack_flag(0), crackP_flag(0), iter(0)
   {
     // Get initial tangent
-    const double &_Ec= this->getMaterial()->getInitialTangent();
+    const double &_Ec= this->getInitialTangent();
     
     //sigCr= fabs(sigCr);
     hstvP.setup_parameters(_Ec);
@@ -130,15 +133,15 @@ XC::CreepMaterial::CreepMaterial(int tag, UniaxialMaterial &matl, double _age, d
 
 //! @brief Sets initial values for the concrete parameters.
 void XC::CreepMaterial::setup_parameters(void)
-  {    
-    eps_cr = 0.0;
-    eps_sh = 0.0;
-    epsP_cr = 0.0;
-    epsP_sh = 0.0; 
-    epsP_m = 0.0;
+  {
+    eps_cr= 0.0;
+    eps_sh= 0.0;
+    epsP_cr= 0.0;
+    epsP_sh= 0.0; 
+    epsP_m= 0.0;
 
     // Get initial tangent
-    const double &_Ec= this->getMaterial()->getInitialTangent();
+    const double &_Ec= this->getInitialTangent();
     
     //sigCr= fabs(sigCr);
     hstvP.setup_parameters(_Ec);
@@ -190,10 +193,6 @@ double XC::CreepMaterial::setCreepStrain(double time, double stress)
     const double _Ec= this->getTangent();
     
     const double retval= creepSteps.computePhi(*this, _Ec, time);
-    std::cout << "setCreepStrain time= " << time
-              << " stress= " << stress
-              << " Ec= " << _Ec/1e9
-	      << " retval= " << retval*1e3 << std::endl;
     phi_i= creepSteps.getLastPhi();
     return retval;    
   }
@@ -252,7 +251,6 @@ int XC::CreepMaterial::setTrialStrain(double trialStrain, double strainRate)
 		mat->setTrialStrain(eps_m, strainRate);
 		hstv.sig= mat->getStress();
 		hstv.e= mat->getTangent();
-		std::cout << "A hstv.e= " << hstv.e/1e9 << std::endl;
 	      }
 	    else
 	      { // if the current calculation is a new time step
@@ -261,16 +259,10 @@ int XC::CreepMaterial::setTrialStrain(double trialStrain, double strainRate)
 		    eps_cr= setCreepStrain(t,hstv.sig); // Creep strain.
 		  }
 		eps_m= eps_total - eps_cr - eps_sh; // Mechanical strain.
-		std::cout << "CreepMaterial B eps_total= " << eps_total*1e3 << std::endl;
-		std::cout << "CreepMaterial B eps_cr= " << eps_cr*1e3 << std::endl;
-		std::cout << "CreepMaterial B eps_sh= " << eps_sh*1e3 << std::endl;
-		std::cout << "CreepMaterial B eps_m= " << eps_m*1e3 << std::endl;
 		//sig= setStress(eps_m, e);
 		mat->setTrialStrain(eps_m, strainRate);
 		hstv.sig= mat->getStress();
-		std::cout << "CreepMaterial B hstv.sig= " << hstv.sig/1e6 << std::endl;
 		hstv.e= mat->getTangent();	
-		std::cout << "CreepMaterial B hstv.e= " << hstv.e/1e9 << std::endl;
 	      }
 	  }
 	else
@@ -285,7 +277,6 @@ int XC::CreepMaterial::setTrialStrain(double trialStrain, double strainRate)
 	  }
       }
     iter++;
-    std::cout << "Tangent E= " << hstv.e/1e9 << std::endl;
     return 0;
   }
 
@@ -344,8 +335,10 @@ int  XC::CreepMaterial::commitState(void)
 	
     //Added by AMK:
     epsP_total= eps_total; //Added by AMK;
+
     epsP_sh= eps_sh;
     epsP_cr= eps_cr;
+    
     epsP_m= eps_m;
     const RawConcrete *concrete= this->_get_concrete_material();
     if(concrete)
@@ -424,7 +417,7 @@ int XC::CreepMaterial::revertToLastCommit(void)
 
 int XC::CreepMaterial::revertToStart(void)
   {
-    const double &_Ec= this->getMaterial()->getInitialTangent();
+    const double &_Ec= this->getInitialTangent();
     hstvP.revertToStart(_Ec);
 
     hstv.setup_parameters(_Ec);

@@ -205,15 +205,15 @@ int XC::Concrete02::setTrialStrain(double trialStrain, double strainRate)
 
     if(fabs(deps) < DBL_EPSILON)
       return 0;
-    
+
     // if the current strain is less than the smallest previous strain 
     // call the monotonic envelope in compression and reset minimum strain 
-    if(hstv.eps < hstv.ecmin)
+    if(hstv.eps < hstv.ecmin) // more compression.
       {
         this->Compr_Envlp(hstv.eps, hstv.sig, hstv.e);
         hstv.ecmin= hstv.eps;
       }
-    else
+    else // less compression.
       {
         // else, if the current strain is between the minimum strain and ept 
         // (which corresponds to zero stress) the material is in the unloading- 
@@ -247,7 +247,6 @@ int XC::Concrete02::setTrialStrain(double trialStrain, double strainRate)
             const double sigmax= er * .5f * (hstv.eps - ept);
             hstv.sig= hstvP.sig + ec0 * deps;
             hstv.e= ec0;
-	    std::cout << "a hstv.e= " << hstv.e << std::endl;
 	    hstv.cutStress(sigmin,sigmax,er);
           }
         else
@@ -270,7 +269,6 @@ int XC::Concrete02::setTrialStrain(double trialStrain, double strainRate)
                   { hstv.e= sicn / hstv.dept; }
                 else
                   { hstv.e= ec0; }
-		std::cout << "b hstv.e= " << hstv.e << std::endl;
                 hstv.sig= hstv.e * (hstv.eps - ept);
               }
             else
@@ -279,10 +277,6 @@ int XC::Concrete02::setTrialStrain(double trialStrain, double strainRate)
                 // corresponds to the tensile envelope curve shifted by ept 
                 const double epstmp= hstv.eps - ept;
                 this->Tens_Envlp(epstmp, hstv.sig, hstv.e);
-		std::cout << "c hstv.ecmin= " << hstv.ecmin << std::endl;
-		std::cout << "c ept= " << ept << std::endl;
-		std::cout << "c epn= " << epn << std::endl;
-		std::cout << "c hstv.e= " << hstv.e/1e9 << std::endl;
                 hstv.dept= hstv.eps - ept;
               }
           }
@@ -374,7 +368,10 @@ void XC::Concrete02::Print(std::ostream &s, int flag) const
     hstv.Print(s);
   }
 
-
+//! @brief Monotonic envelope of concrete in tension (positive envelope).
+//! @param epsc[in]: concrete strain.
+//! @param sigc[out]: concrete stress.
+//! @param Ect[out]: tangent concrete modulus.
 void XC::Concrete02::Tens_Envlp(double epsc, double &sigc, double &Ect)
   {
     /*-----------------------------------------------------------------------
@@ -383,14 +380,14 @@ void XC::Concrete02::Tens_Envlp(double epsc, double &sigc, double &Ect)
     !   ft = concrete tensile strength
     !   Ec0= initial tangent modulus of concrete 
     !   Ets= tension softening modulus
-    !   hstv.eps= strain
+    !   epsc= concrete strain
     !
     !   returned variables
     !    sigc= stress corresponding to hstv.eps
     !    Ect= tangent concrete modulus
     !-----------------------------------------------------------------------*/
-  
-    const double Ec0= getInitialTangent();
+    
+    const double Ec0= this->getInitialTangent();
 
     const double eps0= ft/Ec0;
     const double epsu= ft*(1.0/Ets+1.0/Ec0);
@@ -413,7 +410,6 @@ void XC::Concrete02::Tens_Envlp(double epsc, double &sigc, double &Ect)
             sigc= 0.0;
           }
       }
-    std::cout << "Tens_Envlp Ect= " << Ect/1e9 << std::endl;
   }
 
   

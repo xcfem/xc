@@ -137,10 +137,6 @@ XC::UniaxialMaterial *XC::TDConcrete::getCopy(void) const
 double XC::TDConcrete::setCreepStrain(double time, double stress)
   {
     const double retval= creepSteps.computePhi(*this, this->Ec, time); 
-    std::cout << "setCreepStrain time= " << time
-              << " stress= " << stress
-              << " Ec= " << this->Ec/1e9
-	      << " retval= " << retval*1e3 << std::endl;
     phi_i= creepSteps.getLastPhi();
     return retval;    
   }
@@ -224,13 +220,7 @@ int XC::TDConcrete::setTrialStrain(double trialStrain, double strainRate)
 		if(this->iter < 1)
 		  { eps_cr = setCreepStrain(t,hstv.sig); } // Creep strain.
 		eps_m = eps_total - eps_cr - eps_sh;
-		std::cout << "TDConcrete B eps_total= " << eps_total*1e3 << std::endl;
-		std::cout << "TDConcrete B eps_cr= " << eps_cr*1e3 << std::endl;
-		std::cout << "TDConcrete B eps_sh= " << eps_sh*1e3 << std::endl;
-		std::cout << "TDConcrete B eps_m= " << eps_m*1e3 << std::endl;
 		hstv.sig= setStress(eps_m, hstv.e);
-		std::cout << "TDConcrete B hstv.sig= " << hstv.sig/1e6 << std::endl;
-		std::cout << "TDConcrete B hstv.e= " << hstv.e/1e9 << std::endl;
 		    //}
 	      }
 	  }
@@ -479,34 +469,40 @@ void XC::TDConcrete::Print(std::ostream &s, int flag) const
     s << "TDConcrete:(strain, stress, tangent) " << hstv.eps << " " << hstv.sig << " " << hstv.e << std::endl;
   }
 
+//! @brief Monotonic envelope of concrete in tension (positive envelope).
+//! @param epsc[in]: concrete strain.
+//! @param sigc[out]: concrete stress.
+//! @param Ect[out]: tangent concrete modulus.
 void XC::TDConcrete::Tens_Envlp (double epsc, double &sigc, double &Ect)
   {
-/*-----------------------------------------------------------------------
-! monotonic envelope of concrete in tension (positive envelope)
-!
-!   ft    = concrete tensile strength
-!   Ec0   = initial tangent modulus of concrete 
-!   Ets   = tension softening modulus
-!   eps   = strain
-!
-!   returned variables
-!    sigc  = stress corresponding to eps
-!    Ect  = tangent concrete modulus
-!-----------------------------------------------------------------------*/
+    /*-----------------------------------------------------------------------
+    ! monotonic envelope of concrete in tension (positive envelope)
+    !
+    !   ft    = concrete tensile strength
+    !   Ec0   = initial tangent modulus of concrete 
+    !   Ets   = tension softening modulus
+    !   eps   = strain
+    !
+    !   returned variables
+    !    sigc  = stress corresponding to eps
+    !    Ect  = tangent concrete modulus
+    !-----------------------------------------------------------------------*/
   
-  double Ec0 = Ec;
-  double eps0 = ft/Ec0;
-  //double epsu = ft*(1.0/Ets+1.0/Ec0);
-  double b = beta;
-  // USE THIS ONE
-  if(epsc<=eps0) {
-    sigc = epsc*Ec0;
-    Ect  = Ec0;
-  } else {
-    Ect = -b*eps0*ft/pow(epsc,2)*pow(eps0/epsc,b-1.0);
-    sigc = ft*pow(eps0/epsc,b);
-  }
-   
+    const double Ec0= Ec;
+    const double eps0= ft/Ec0;
+    //double epsu = ft*(1.0/Ets+1.0/Ec0);
+    double b = beta;
+    // USE THIS ONE
+    if(epsc<=eps0)
+      {
+	sigc = epsc*Ec0;
+	Ect  = Ec0;
+      }
+    else
+      {
+	Ect = -b*eps0*ft/pow(epsc,2)*pow(eps0/epsc,b-1.0);
+	sigc = ft*pow(eps0/epsc,b);
+      }
   
   //THiS IS FOR TESTING LINEAR
   //sigc = epsc*Ec0;
@@ -522,8 +518,8 @@ void XC::TDConcrete::Tens_Envlp (double epsc, double &sigc, double &Ect)
     }
     */
     
-  return;
-}
+    return;
+  }
 
   
 void XC::TDConcrete::Compr_Envlp(double epsc, double &sigc, double &Ect) 

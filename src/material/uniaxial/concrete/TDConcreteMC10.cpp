@@ -369,20 +369,24 @@ void XC::TDConcreteMC10::Print(std::ostream &s, int flag) const
   }
 
 
+//! @brief Monotonic envelope of concrete in tension (positive envelope).
+//! @param epsc[in]: concrete strain.
+//! @param sigc[out]: concrete stress.
+//! @param Ect[out]: tangent concrete modulus.
 void XC::TDConcreteMC10::Tens_Envlp(double epsc, double &sigc, double &Ect)
   {
-/*-----------------------------------------------------------------------
-! monotonic envelope of concrete in tension (positive envelope)
-!
-!   ft    = concrete tensile strength
-!   Ec0   = initial tangent modulus of concrete 
-!   Ets   = tension softening modulus
-!   eps   = strain
-!
-!   returned variables
-!    sigc  = stress corresponding to eps
-!    Ect  = tangent concrete modulus
-!-----------------------------------------------------------------------*/
+    /*-----------------------------------------------------------------------
+    ! monotonic envelope of concrete in tension (positive envelope)
+    !
+    !   ft    = concrete tensile strength
+    !   Ec0   = initial tangent modulus of concrete 
+    !   Ets   = tension softening modulus
+    !   eps   = strain
+    !
+    !   returned variables
+    !    sigc  = stress corresponding to eps
+    !    Ect  = tangent concrete modulus
+    !-----------------------------------------------------------------------*/
   
     const double Ec0= Ec;
     const double eps0= ft / Ec0;
