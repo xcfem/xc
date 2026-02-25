@@ -41,8 +41,8 @@ ba= steelShape.b() # Flange width.
 concrete= EC2_materials.EC2Concrete("C25/30", -25e6, 1.5)
 concrete.cemType='N'# class N cement
 RH= 70 # ambient relative humidity(%)
-ts= 1 # drying shrinkage begins at the age 1 day.
-t0= 1 # age of concrete at loading time.
+ts= 0 # drying shrinkage begins at the age 1 day.
+t0= 7 # age of concrete at loading time.
 rfSteel= EC2_materials.S500B
 
 # Actions

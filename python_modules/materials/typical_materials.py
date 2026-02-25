@@ -600,6 +600,24 @@ def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, epsba, eps
     :param cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 
                 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
     '''
+    print('XXX continue debugging here')
+    print('name= ', name)
+    print('fcm= ', fcm)
+    print('ft= ', ft)
+    print('Ec= ', Ec)
+    print('Ecm= ', Ecm)
+    print('beta= ', beta)
+    print('age= ', age)
+    print('epsba= ', epsba)
+    print('epsbb= ', epsbb)
+    print('epsda= ', epsda)
+    print('epsdb= ', epsdb)
+    print('phiba= ', phiba)
+    print('phibb= ', phibb)
+    print('phida= ', phida)
+    print('phidb= ', phidb)
+    print('tcast= ', tcast)
+    print('cem= ', cem)
     materialHandler= preprocessor.getMaterialHandler
     matName= name
     if(not matName):
