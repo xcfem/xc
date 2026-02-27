@@ -1042,9 +1042,12 @@ Polyline3d Polyline3d::getChunk(const Pos3d &p,const short int &sgn, const GEOM_
 	const_iterator nearestSegmentIter= getNearestSegmentIter(p);
 	const Segment3d nearestSegment= getSegment(nearestSegmentIter);
 	const GEOM_FT distToSegment= nearestSegment.dist(p);
-	if((distToSegment<distToVertex) and (sgn>0))
+	if(distToSegment<distToVertex) //Not close enough to a vertex.
 	  {
-	    i= nearestSegmentIter+1; // end point of the segment.
+	    if(sgn>0)
+	      i= nearestSegmentIter+1; // front point of the segment.
+	    else
+	      i= nearestSegmentIter; // rear point of the segment.
 	    nearestVertex= *i;
 	    distToVertex= p.dist(nearestVertex);
 	  }   
