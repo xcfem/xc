@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''Home made test. Verification of getLeftChunk method. There was an error
-   in the getChunkMethod that made the returned chunk to be even longer than
+   in the getChunk method that made the returned chunk to be even longer than
    the original polyline. This test controls that the error does not occur
    again.
 '''
