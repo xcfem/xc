@@ -869,7 +869,7 @@ GEOM_FT Polyline2d::Iz(void) const
 //! is not closer than tol. Otherwise do nothing.
 void Polyline2d::insertVertex(const Pos2d &p, const GEOM_FT &tol)
   {
-    const_iterator nearestVertexIter= getNearestPoint(p);
+    const_iterator nearestVertexIter= this->getNearestPoint(p);
     const Pos2d nearestVertex= *nearestVertexIter;
     const GEOM_FT distToVertex= p.dist(nearestVertex);
     if(distToVertex>tol) // No vertices close to p
@@ -902,12 +902,15 @@ Polyline2d Polyline2d::getChunk(const Pos2d &p,const short int &sgn, const GEOM_
 	const_iterator nearestSegmentIter= getNearestSegmentIter(p);
 	const Segment2d nearestSegment= getSegment(nearestSegmentIter);
 	const GEOM_FT distToSegment= nearestSegment.dist(p);
-	if((distToSegment<distToVertex) and (sgn>0))
+	if(distToSegment<distToVertex) //Not close enough to a vertex.
 	  {
-	    i= nearestSegmentIter+1; // end point of the segment.
+	    if(sgn>0)
+	      i= nearestSegmentIter+1; // front point of the segment.
+	    else
+	      i= nearestSegmentIter; // rear point of the segment.
 	    nearestVertex= *i;
 	    distToVertex= p.dist(nearestVertex);
-	  }   
+	  }
       }
     if(sgn < 0)
       {
@@ -920,7 +923,19 @@ Polyline2d Polyline2d::getChunk(const Pos2d &p,const short int &sgn, const GEOM_
         copy(i,end(),back_inserter(result));
 	if(distToVertex>tol)
 	  result.appendVertexLeft(p);
-      }	
+      }
+    const double length= this->getLength();
+    const double chunkLength= result.getLength();
+    if(chunkLength>(length+tol))
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; something went wrong, length of chunk ("
+		  << chunkLength
+		  << ") is greater than the length of the whole polyline ("
+		  << length << ")."
+		  << Color::def << std::endl;
+	exit(-1);
+      }
     return result;
   }
 

@@ -109,7 +109,7 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
         avgElementSize= xcSet.elements.getAverageSize(True)
         avgElementSideLength= math.sqrt(avgElementSize)
         tol= 0.7*avgElementSideLength# 0.25*self.xSpacing
-        for wheelPos in wheelsPositions:
+        for i, wheelPos in enumerate(wheelsPositions):
             nearestNode= xcSet.getNearestNode(wheelPos)
             nearestNodePos= nearestNode.getInitialPos3d
             nearestNodeDisp= nearestNode.getDisp
@@ -128,7 +128,7 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
                 lmsg.warning(className+'.'+methodName+warningMsg)
         return retval
 
-    def getTwist(self, ref, xcSet, length= 3.0, removeGeometricTwist= False):
+    def getTwist(self, ref, xcSet, length= 3.0, removeGeometricTwist= False, outputDict= None):
         ''' Computes the deck twist fromn the displacements of the nodes
             under the wheels.
 
@@ -136,6 +136,7 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
         :param xcSet: set to search the nodes on.
         :param length: length to measure the twist over.
         :param removeGeometricTwist: remove the twist due to the mesh geometry.
+        :param outputDict: Python dictionary to store the displacement results. 
         '''
         wheelsDisplacements= self.getDisplacementsUnderWheels(ref= ref, xcSet= xcSet)
         axisStep= math.ceil(length/self.xSpacing)
@@ -164,6 +165,19 @@ class LocomotiveLoad(dfl.DynamicFactorLoad):
                 plane= geom.Plane3d(p0, p1, p2)
                 twist= plane.dist(p3)*factor
                 retval.append(twist)
+                # Store computed displacements in the output dict.
+                if(outputDict is not None):
+                    twistResults= {'twist':twist, 'factor':factor}
+                    for j, k in enumerate([i, i+nAxes, i+axisStep, i+nAxes+axisStep]):
+                        wheelKey= 'wheel_position_'+str(j)
+                        wheelPos= wheelsDisplacements[k][0]
+                        twistResults[wheelKey]= (wheelPos.x, wheelPos.y, wheelPos.z)
+                        dispKey= 'wheel_displacement_'+str(j)
+                        wheelDisp= wheelsDisplacements[k][1]
+                        twistResults[dispKey]= list(wheelDisp)
+                    twistKey= 'twist_'+str(i)
+                    outputDict[twistKey]= twistResults
+                        
         return retval
     
     def getNosingLoadPositions(self):

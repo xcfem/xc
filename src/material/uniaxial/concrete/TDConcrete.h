@@ -89,6 +89,7 @@
 
 #include "material/uniaxial/concrete/TDConcreteBase.h"
 #include "material/uniaxial/concrete/CreepShrinkageParameters.h"
+#include "material/uniaxial/concrete/ACICreepSteps.h"
 
 namespace XC {
 
@@ -106,12 +107,11 @@ class TDConcrete : public TDConcreteBase
     double epsP_sh; //!< Commited shrinkage strain. 
     double phi_i;
     
-    std::vector<float> PHI_i;
+    ACICreepSteps creepSteps;
 
     void Tens_Envlp(double epsc, double &sigc, double &Ect);
     void Compr_Envlp(double epsc, double &sigc, double &Ect);    
   protected:
-    size_t resize(void);
     int sendData(Communicator &);
     int recvData(const Communicator &);
     
@@ -128,7 +128,7 @@ class TDConcrete : public TDConcreteBase
     double setStress(double strain, double &stiff); //Added by AMK
     double getPHI_i(void) const; //Added by AMK      
     double getCreep(void) const; //Added by AMK
-    double setPhi(double time, double tp); //Added by AMK
+    double setPhi(double time, double tp) const; //Added by AMK
     double setShrink(double time); //Added by AMK
     double getShrink(void) const; //Added by AMK
 

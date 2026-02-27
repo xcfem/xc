@@ -152,6 +152,7 @@ loadNames= list()
 modelSpace.removeAllLoadPatternsFromDomain()
 maxTwist= 0.0
 maxTwistPos= 0.0
+twistResultsDict= dict()
 for index, relativePosition in enumerate(relativePositions):
     name= 'Q1a'+str(index+1)
 
@@ -168,7 +169,8 @@ for index, relativePosition in enumerate(relativePositions):
     # xcSet: set to search the nodes on.
     # length: length to measure the twist over.
     # removeGeometricTwist: remove the twist due to the mesh geometry.
-    twists= trackAxis.getTwist(trainModel= trainLoadModel, relativePosition= relativePosition, xcSet= slabSet, length= 3.0, removeGeometricTwist= False)
+    # outputDict: (optional) Python dictionary to store the displacement results. 
+    twists= trackAxis.getTwist(trainModel= trainLoadModel, relativePosition= relativePosition, xcSet= slabSet, length= 3.0, removeGeometricTwist= False, outputDict= twistResultsDict)
     if(twists):
         localMaxTwist= max(twists)
         if(localMaxTwist>maxTwist):
@@ -181,8 +183,11 @@ for index, relativePosition in enumerate(relativePositions):
 
 ratio= abs(maxTwist-0.0015422930703060144)/0.0015422930703060144
 testOK= (maxTwistPos==0.25) and abs(ratio)<1e-4
+testOK= testOK and (len(twistResultsDict)==len(relativePositions))
+
     
 # print(maxTwist*1e3, maxTwistPos)
+# print(len(twistResultsDict), len(relativePositions))
 
 import os
 from misc_utils import log_messages as lmsg

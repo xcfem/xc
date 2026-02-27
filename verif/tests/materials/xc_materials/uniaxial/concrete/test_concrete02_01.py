@@ -96,11 +96,14 @@ print(calculatedStrains)
 print(residStrains)
 print("ratio1= ",ratio1)
 print("ratio2= ",ratio2)
+from postprocess.reports import graph_material
+import matplotlib.pyplot as plt
 retval= graph_material.UniaxialMaterialDiagramGraphic(epsMin=-0.0035,epsMax=0.0016,title=' concrete02 characteristic stress-strain diagram')
 retval.setupGraphic(plt,concr)
 plt.plot(strainData, stressData, '-')
 retval.savefig(plt,'concrete02_diagram.jpeg')
-   '''
+'''
+
   
 import os
 from misc_utils import log_messages as lmsg

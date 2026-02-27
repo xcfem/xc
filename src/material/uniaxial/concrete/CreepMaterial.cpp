@@ -70,29 +70,25 @@ const XC::RawConcrete *XC::CreepMaterial::_get_concrete_material(void) const
     return retval;
   }
 
-//! @brief Resize the vectors that store the creep history.
-void XC::CreepMaterial::resize()
-  {
-    if(count+1 >= maxSize)
-      {
-	maxSize+= growSize;
-	PHI_i.resize(maxSize);
-	E_i.resize(maxSize);
-	DSIG_i.resize(maxSize);
-	TIME_i.resize(maxSize);
-	DTIME_i.resize(maxSize);
-      }
-  }
+XC::CreepMaterial::CreepMaterial(int tag)
+  : EncapsulatedUniaxialMaterial(tag, MAT_TAG_CreepMaterial),
+    age(0.0), beta(0.0), tcast(0.0),
+    epsInit(0.0), sigInit(0.0),
+    eps_cr(0.0), eps_sh(0.0), eps_m(0.0),
+    epsP_cr(00), epsP_sh(0.0), epsP_m(0.0),
+    eps_total(0.0), epsP_total(0.0), t(0.0), t_load(-1.0),
+    crack_flag(0), crackP_flag(0), iter(0)
+  {}
 
 XC::CreepMaterial::CreepMaterial(int tag, double _fc, double _fcu, double _epscu, double _ft, double _Ec, double _beta, double _age, double _tcast, const CreepShrinkageParameters &_csParameters)
   : EncapsulatedUniaxialMaterial(tag, MAT_TAG_CreepMaterial),
     age(_age), beta(_beta), tcast(_tcast),
     creepShrinkageParameters(_csParameters),
-    count(0), epsInit(0.0), sigInit(0.0),
-    eps_cr(0.0), eps_sh(0.0), eps_m(0.0), epsP_cr(00), epsP_sh(0.0), epsP_m(0.0),
+    epsInit(0.0), sigInit(0.0),
+    eps_cr(0.0), eps_sh(0.0), eps_m(0.0),
+    epsP_cr(0.0), epsP_sh(0.0), epsP_m(0.0),
     eps_total(0.0), epsP_total(0.0), t(0.0), t_load(-1.0), Et(_Ec),
-    crack_flag(0), crackP_flag(0), iter(0),
-    maxSize(startSize)
+    crack_flag(0), crackP_flag(0), iter(0)
   {
       
     Concrete02IS wrappedMaterial(0,_Ec, _fc, 2*_fc/_Ec,_fcu,_epscu);
@@ -107,24 +103,21 @@ XC::CreepMaterial::CreepMaterial(int tag, double _fc, double _fcu, double _epscu
     //Change inputs into the proper sign convention:
     creepShrinkageParameters.setup_parameters();
 
-    this->resize();
-
-    TIME_i[0]= getCurrentTime();
+    creepSteps.initTime(getCurrentTime());
   }
 
 XC::CreepMaterial::CreepMaterial(int tag, UniaxialMaterial &matl, double _age, double _tcast, const CreepShrinkageParameters &_csParameters)
   : EncapsulatedUniaxialMaterial(tag, MAT_TAG_CreepMaterial, matl),
     age(_age), beta(0.0), tcast(_tcast),
     creepShrinkageParameters(_csParameters),
-    count(0), epsInit(0.0), sigInit(0.0),
-    eps_cr(0.0), eps_sh(0.0), eps_m(0.0), epsP_cr(00), epsP_sh(0.0), epsP_m(0.0),
+    epsInit(0.0), sigInit(0.0),
+    eps_cr(0.0), eps_sh(0.0), eps_m(0.0),
+    epsP_cr(0.0), epsP_sh(0.0), epsP_m(0.0),
     eps_total(0.0), epsP_total(0.0), t(0.0), t_load(-1.0),
-    crack_flag(0), crackP_flag(0), iter(0),
-    maxSize(startSize)
-    
+    crack_flag(0), crackP_flag(0), iter(0)
   {
-    // Set initial tangent
-    const double &_Ec= this->getMaterial()->getInitialTangent();
+    // Get initial tangent
+    const double &_Ec= this->getInitialTangent();
     
     //sigCr= fabs(sigCr);
     hstvP.setup_parameters(_Ec);
@@ -135,31 +128,38 @@ XC::CreepMaterial::CreepMaterial(int tag, UniaxialMaterial &matl, double _age, d
     //Change inputs into the proper sign convention:
     creepShrinkageParameters.setup_parameters();
 
-    this->resize();
-
-    TIME_i[0]= getCurrentTime();
+    creepSteps.initTime(getCurrentTime());
   }
-
-XC::CreepMaterial::CreepMaterial(int tag)
-  : EncapsulatedUniaxialMaterial(tag, MAT_TAG_CreepMaterial),
-    age(0.0), beta(0.0), tcast(0.0),
-    count(0), epsInit(0.0), sigInit(0.0),
-    eps_cr(0.0), eps_sh(0.0), eps_m(0.0), epsP_cr(00), epsP_sh(0.0), epsP_m(0.0),
-    eps_total(0.0), epsP_total(0.0), t(0.0), t_load(-1.0),
-    crack_flag(0), crackP_flag(0), iter(0),
-    maxSize(startSize)
-  {}
 
 //! @brief Sets initial values for the concrete parameters.
 void XC::CreepMaterial::setup_parameters(void)
-  {    
-    eps_cr = 0.0;
-    eps_sh = 0.0;
-    epsP_cr = 0.0;
-    epsP_sh = 0.0; 
-    epsP_m = 0.0;
+  {
+    eps_cr= 0.0;
+    eps_sh= 0.0;
+    epsP_cr= 0.0;
+    epsP_sh= 0.0; 
+    epsP_m= 0.0;
 
+    // Get initial tangent
+    const double &_Ec= this->getInitialTangent();
+    
+    //sigCr= fabs(sigCr);
+    hstvP.setup_parameters(_Ec);
+    hstv.setup_parameters(_Ec);
+
+    this->Et= _Ec;
+    this->epsInit= 0.0; //Added by AMK
+    this->sigInit= 0.0; //Added by AMK
+    this->eps_total= 0.0; //Added by AMK
+    this->epsP_total= 0.0; //Added by AMK
+    
+    this->t_load= -1.0; //Added by AMK
+    this->crack_flag= 0;
+    this->crackP_flag= 0; // Added by LP
+    this->iter= 0;
+    
     creepShrinkageParameters.setup_parameters();
+    creepSteps.initTime(getCurrentTime());
   }
 
 //! @brief Virtual constructor.
@@ -190,25 +190,14 @@ double XC::CreepMaterial::getCurrentTime(void) const
 
 double XC::CreepMaterial::setCreepStrain(double time, double stress)
   {
-    double creep;
-    double runSum= 0.0;
-  
-    DTIME_i[count]= get_creep_dt();
-
-    const double _Ec= this->getInitialTangent();
-  
-    for (int i= 1; i<=count; i++)
-      {
-	PHI_i[i]= setPhi(time,TIME_i[i]); //Determine PHI
-	runSum += PHI_i[i]*DSIG_i[i]/_Ec; //CONSTANT STRESS within Time interval
-      }
-  
-    phi_i= PHI_i[count];
-    creep= runSum;
-    return creep;
+    const double _Ec= this->getTangent();
+    
+    const double retval= creepSteps.computePhi(*this, _Ec, time);
+    phi_i= creepSteps.getLastPhi();
+    return retval;    
   }
 
-double XC::CreepMaterial::setPhi(double time, double tp)
+double XC::CreepMaterial::setPhi(double time, double tp) const
   {	
     // ACI Equation:
     //const double f1= pow((4+0.85*tp)/tp,0.5);
@@ -234,57 +223,57 @@ int XC::CreepMaterial::setTrialStrain(double trialStrain, double strainRate)
     // Check casting age:
     if (t-tcast<(2.0-0.0001))
       { //Assumed that concrete can only carry load once hardened at 2 days following casting
-	eps_cr= 0.0;
-	eps_sh= 0.0;
-	eps_m= 0.0;
-	eps_total= trialStrain;
+	eps_cr= 0.0; // Creep strain.
+	eps_sh= 0.0; // Shrinkage strain.
+	eps_m= 0.0; // Mechanical strain.
+	eps_total= trialStrain; // Total strain.
 	hstv.sig= 0.0;
       }
     else
       { // Concrete has hardened and is ready to accept load
 	// Initialize total strain:
-	eps_total= trialStrain;
+	eps_total= trialStrain; // Total strain.
     
 	// Calculate shrinkage Strain:
-	if (iter < 1)
+	if(this->iter < 1)
 	  { eps_sh= setShrink(t); }
     
 	// Calculate creep and mechanical strain, assuming stress remains constant in a time step:
-	if(is_creep_on())
+	UniaxialMaterial *mat= this->getMaterial();
+	if(creepSteps.isCreepOn())
 	  {
-	    if (fabs(t-TIME_i[count]) <= 0.0001)
+	    if (fabs(t-creepSteps.getLastTime()) <= 0.0001)
 	      { //If t= t(i-1), use creep/shrinkage from last calculated time step
-		eps_cr= epsP_cr;
-		eps_sh= epsP_sh;
-		eps_m= eps_total - eps_cr - eps_sh;
+		eps_cr= epsP_cr; // Creep strain.
+		eps_sh= epsP_sh; // Shrinkage strain.
+		eps_m= eps_total - eps_cr - eps_sh; // Mechanical strain.
 		//hstv.sig= setStress(eps_m, e);
-		this->getMaterial()->setTrialStrain(eps_m, strainRate);
-		hstv.sig= this->getMaterial()->getStress();
-		hstv.e= this->getMaterial()->getTangent();
-        
+		mat->setTrialStrain(eps_m, strainRate);
+		hstv.sig= mat->getStress();
+		hstv.e= mat->getTangent();
 	      }
 	    else
 	      { // if the current calculation is a new time step
-		if (iter < 1)
+		if(this->iter < 1)
 		  {
-		    eps_cr= setCreepStrain(t,hstv.sig); 
+		    eps_cr= setCreepStrain(t,hstv.sig); // Creep strain.
 		  }
-		eps_m= eps_total - eps_cr - eps_sh;
+		eps_m= eps_total - eps_cr - eps_sh; // Mechanical strain.
 		//sig= setStress(eps_m, e);
-		this->getMaterial()->setTrialStrain(eps_m, strainRate);
-		hstv.sig= this->getMaterial()->getStress();
-		hstv.e= this->getMaterial()->getTangent();	
+		mat->setTrialStrain(eps_m, strainRate);
+		hstv.sig= mat->getStress();
+		hstv.e= mat->getTangent();	
 	      }
 	  }
 	else
 	  { //Static Analysis using previously converged time-dependent strains
-	    eps_cr= epsP_cr;
-	    eps_sh= epsP_sh;
-	    eps_m= eps_total-eps_cr-eps_sh;
+	    eps_cr= epsP_cr; // Creep strain.
+	    eps_sh= epsP_sh; // Shrinkage strain.
+	    eps_m= eps_total-eps_cr-eps_sh; // Mechanical strain.
 	    //sig= setStress(eps_m, e);
-	    this->getMaterial()->setTrialStrain(eps_m, strainRate);
-	    hstv.sig= this->getMaterial()->getStress();
-	    hstv.e= this->getMaterial()->getTangent();      
+	    mat->setTrialStrain(eps_m, strainRate);
+	    hstv.sig= mat->getStress();
+	    hstv.e= mat->getTangent();
 	  }
       }
     iter++;
@@ -317,14 +306,11 @@ double XC::CreepMaterial::getMech(void) const
 
 int  XC::CreepMaterial::commitState(void)
   {
-    iter= 0;
+    this->iter= 0;
     hstvP.ecmin= hstv.ecmin;
     hstvP.ecmax= hstv.ecmax;
     hstvP.dept= hstv.dept;
 
-    // Make sure enough room to write into count+1 -- MHS
-    this->resize();
-    
     //dsig_i[count]=sig-sigP; // Unused -- MHS
     /* 5/8/2013: commented the following lines so that the DSIG_i[count+1]=sig-sigP;*/
     //if (crack_flag == 1) {// DSIG_i will be different depending on how the fiber is cracked
@@ -340,21 +326,8 @@ int  XC::CreepMaterial::commitState(void)
     //} else { //concrete is uncracked, DSIG= sig - sigP
     //	DSIG_i[count+1]= sig-sigP;
     //}
-
-    DSIG_i[count+1]= hstv.sig-hstvP.sig;
-  
-    //Secant Stiffness for determination of creep strain:
-    const double &_Ec= this->getMaterial()->getInitialTangent();
-    if(fabs(eps_m/hstv.sig)>_Ec)
-      { E_i[count+1]= _Ec; }
-    else
-      { E_i[count+1]= fabs(hstv.sig/eps_m); }//ADDED 7/22
-  
-    if(isnan(E_i[count+1]))
-      { E_i[count+1]= _Ec; }
-  
-  
-    TIME_i[count+1]= getCurrentTime();
+    const double _Ec= this->getTangent();
+    creepSteps.assignNextStep(this->hstv, this->hstvP, _Ec, this->eps_m, this->getCurrentTime());
   
     hstvP.e= hstv.e;
     hstvP.sig= hstv.sig;
@@ -362,8 +335,10 @@ int  XC::CreepMaterial::commitState(void)
 	
     //Added by AMK:
     epsP_total= eps_total; //Added by AMK;
+
     epsP_sh= eps_sh;
     epsP_cr= eps_cr;
+    
     epsP_m= eps_m;
     const RawConcrete *concrete= this->_get_concrete_material();
     if(concrete)
@@ -397,7 +372,7 @@ int  XC::CreepMaterial::commitState(void)
 	  { Et= hstv.sig/eps_m; }
       }
   
-    if(count==0)
+    if(creepSteps.getCount()==0)
       {
 	epsInit= epsP_total;
 	sigInit= hstvP.sig;
@@ -421,7 +396,7 @@ int  XC::CreepMaterial::commitState(void)
     //if (ops_Creep==1) {
     //	count++;
     //}
-    count++;
+    creepSteps.next();
   
     return 0;
   }
@@ -442,15 +417,12 @@ int XC::CreepMaterial::revertToLastCommit(void)
 
 int XC::CreepMaterial::revertToStart(void)
   {
-    const double &_Ec= this->getMaterial()->getInitialTangent();
+    const double &_Ec= this->getInitialTangent();
     hstvP.revertToStart(_Ec);
 
     hstv.setup_parameters(_Ec);
   
-    if(is_creep_off())
-      { count= 0; }
-    else
-      { count= 1; }
+    creepSteps.revertToStart();
 
     this->getMaterial()->revertToStart();
   
@@ -466,7 +438,7 @@ int XC::CreepMaterial::sendData(Communicator &comm)
     res+= comm.sendDoubles(hstvP.ecmin, hstvP.ecmax, hstvP.dept, hstvP.eps, hstvP.sig, hstvP.e, getDbTagData(),CommMetaData(6));
     res+= comm.sendDoubles(epsInit, sigInit, epsP_m, epsP_cr, epsP_sh, getDbTagData(),CommMetaData(7));
     res+= comm.sendDoubles(epsP_total, t, t_load, phi_i, Et, getDbTagData(),CommMetaData(7));
-    res+= comm.sendInts(count, crackP_flag, iter, maxSize, getDbTagData(),CommMetaData(8));
+    res+= comm.sendInts(crackP_flag, iter, getDbTagData(),CommMetaData(8));
     return res;
   }
 //! @brief Receives object members through the communicator argument.
@@ -478,7 +450,7 @@ int XC::CreepMaterial::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(hstvP.ecmin, hstvP.ecmax, hstvP.dept, hstvP.eps, hstvP.sig, hstvP.e, getDbTagData(),CommMetaData(6));
     res+= comm.receiveDoubles(epsInit, sigInit, epsP_m, epsP_cr, epsP_sh, getDbTagData(),CommMetaData(7));
     res+= comm.receiveDoubles(epsP_total, t, t_load, phi_i, Et, getDbTagData(),CommMetaData(7));
-    res+= comm.receiveInts(count, crackP_flag, iter, maxSize, getDbTagData(),CommMetaData(8));
+    res+= comm.receiveInts(crackP_flag, iter, getDbTagData(),CommMetaData(8));
     
     return res;
   }

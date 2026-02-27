@@ -590,12 +590,10 @@ void XC::MaterialHandler::removeMaterial(const std::string &cod_mat)
 //! @brief Defines a new material.
 XC::Material *XC::MaterialHandler::newMaterial(const std::string &mat_type,const std::string &cod_mat)
   {
-    
     std::string material_code= cod_mat;
     if((material_code.size()==0) || (material_code=="auto"))
       material_code= mat_type+'_'+std::to_string(tag_mat);
     Material *retval= load_material(tag_mat,mat_type,this);
-    
     if(retval)
       {
         retval->set_owner(this);
@@ -1106,13 +1104,13 @@ boost::python::list XC::MaterialHandler::getMaterialNamesPy(void) const
   }
 
 void XC::MaterialHandler::setCreepOn(void)
-  { TDConcrete::setCreepOn(); }
+  { CreepSteps::setCreepOn(); }
 
 void XC::MaterialHandler::setCreepOff(void)
-  { TDConcrete::setCreepOff(); }
+  { CreepSteps::setCreepOff(); }
 
 void XC::MaterialHandler::setCreepDt(const double &d)
-  { TDConcrete::setCreepDt(d); }
+  { CreepSteps::setCreepDt(d); }
 
 double XC::MaterialHandler::getCreepDt(void)
-  { return TDConcrete::getCreepDt(); }
+  { return CreepSteps::getCreepDt(); }

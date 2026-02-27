@@ -77,17 +77,6 @@ void XC::TDConcreteMC10Base::setup_parameters(void)
     phida = fabs(phida);
   }
 
-size_t XC::TDConcreteMC10Base::resize(void)
-  {
-    const size_t newSize= TDConcreteBase::resize();
-    if(newSize!=PHIB_i.size()) // restart.
-      {
-	PHIB_i.resize(newSize);
-    	PHID_i.resize(newSize);
-      }
-    return newSize;
-  }
-
 //! @brief Constructor.
 XC::TDConcreteMC10Base::TDConcreteMC10Base(int tag, int classTag)
   : TDConcreteBase(tag, classTag)
@@ -202,7 +191,7 @@ void XC::TDConcreteMC10Base::setCem(const double &d)
   { cem= d; }
 
 //ntosic
-double XC::TDConcreteMC10Base::setPhiBasic(double time, double tp)
+double XC::TDConcreteMC10Base::setPhiBasic(double time, double tp) const
   {	
     // ntosic: Model Code 2010 Equations
     const double tmtp= time - tp;
@@ -212,7 +201,7 @@ double XC::TDConcreteMC10Base::setPhiBasic(double time, double tp)
   }
 
 //ntosic
-double XC::TDConcreteMC10Base::setPhiDrying(double time, double tp)
+double XC::TDConcreteMC10Base::setPhiDrying(double time, double tp) const
   {
     // ntosic: Model Code 2010 Equations
     const double tmtp= time - tp;
@@ -263,6 +252,26 @@ double XC::TDConcreteMC10Base::getShrinkBasic(void) const
 double XC::TDConcreteMC10Base::getShrinkDrying(void) const
   { return eps_shd; }
 
+//ntosic
+//! @brief Return the creep occurring in a sealed (no drying) specimen,
+//! driven by internal moisture movement.
+double XC::TDConcreteMC10Base::setCreepBasicStrain(double time, double stress)
+  {
+    //ntosic: changed to Ecm from Ec (according to Model Code formulation of phi basic)
+    const double creepBasic= creepSteps.computeBasicPhi(*this, this->Ecm, time);
+    phib_i = creepSteps.getLastPhiB();
+    return creepBasic;
+  }
+
+//ntosic
+double XC::TDConcreteMC10Base::setCreepDryingStrain(double time, double stress)
+  {
+    //ntosic: changed to Ecm from Ec (according to Model Code formulation of phi basic)
+    const double creepDrying= creepSteps.computeDryingPhi(*this, this->Ecm, time);
+    phib_i = creepSteps.getLastPhiD();
+    return creepDrying;
+  }
+
 int XC::TDConcreteMC10Base::revertToLastCommit(void)
   {
     eps_total = epsP_total; //Added by AMK;
@@ -282,11 +291,8 @@ int XC::TDConcreteMC10Base::revertToStart(void)
 
     hstv.setup_parameters(Ec);
 
-    if(creepControl==0)
-      { count= 0; }
-    else
-      { count= 1; }
-    resize();
+    creepSteps.revertToStart();
+
     return 0;
   }
 

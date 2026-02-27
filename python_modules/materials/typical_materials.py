@@ -512,10 +512,13 @@ def defCreepMaterial(preprocessor, name, encapsulatedConcrete, beta, age, tcast,
 
     :param preprocessor: preprocessor of the finite element problem.
     :param name: name identifying the material (if None compute a suitable name)
-    :param encapsulatedConcrete: concrete material defining the concrete behaviour.
+    :param encapsulatedConcrete: concrete material defining the concrete 
+                                 behaviour.
     :param beta: tension softening parameter.
     :param age: analysis time at initiation of drying (in days).
-    :param tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
+    :param tcast: analysis time corresponding to concrete casting in days
+                  (note: concrete will not be able to take on loads until the 
+                  age of 2 days).
     :param csParameters: creep and shrinkage parameters.
     '''
     materialHandler= preprocessor.getMaterialHandler

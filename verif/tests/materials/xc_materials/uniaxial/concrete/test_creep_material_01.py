@@ -4,9 +4,6 @@
 Based on the example: https://portwooddigital.com/2023/05/28/minimal-creep-and-shrinkage-example/
 '''
 
-from __future__ import print_function
-
-
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2026, LCPT and AOO"
 __license__= "GPL"
@@ -28,8 +25,6 @@ mm = 1
 GPa = kN/mm**2
 MPa = 0.001*GPa
  
-Ec = 25*GPa # concrete modulus of elasticity
-fc = -28*MPa # concrete compressive strength (compression is negative)
 ft = 3*MPa # concrete tensile strength (tension is positive)
 beta = 0.4 # Recommended value for the tension softening parameter (tension softening exponent).
 tDry = 14 # days
@@ -48,7 +43,7 @@ csParameters= typical_materials.def_creep_and_shrinkage_parameters(tcr= Tcr, eps
 concrAux= EC2_materials.C25
 epsc0= concrAux.epsilon0()
 fpc= concrAux.fmaxK()
-Ec0= 2.0*fpc/epsc0
+Ec0= 30*GPa # Test that the initial stiffness is taken into account.
 concrete= typical_materials.defConcrete02IS(preprocessor=preprocessor,name='concrete', Ec0= Ec0, epsc0= epsc0, fpc= fpc, fpcu= 0.85*concrAux.fmaxK(), epscu= concrAux.epsilonU(), ratioSlope= 0.1, ft= ft, Ets= concrAux.E0()/19.0)
 
 ## Concrete able to creep.
@@ -56,7 +51,12 @@ creepMaterial= typical_materials.defCreepMaterial(preprocessor= preprocessor, na
 error= (creepMaterial.beta-beta)**2 # 1
 error+= (creepMaterial.age-tDry)**2 # 2
 error+= (creepMaterial.tcast-tcast)**2 # 3
+error+= (creepMaterial.getInitialTangent()-Ec0) # 4
 error= math.sqrt(error)
+
+# print('Ec0= ', Ec0/GPa, ' GPa')
+# print('Initial tangent: ', creepMaterial.getInitialTangent(), ' GPa')
+# print('error= ', error)
 
 import os
 from misc_utils import log_messages as lmsg

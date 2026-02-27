@@ -1,31 +1,32 @@
 # -*- coding: utf-8 -*-
-''' Trivial test of TDConcrete material constitutive model.  
+''' Trivial test of CreepMaterial constitutive model. The material needs to be
+    in the elastic range to perform well. In this example, if you reducd the
+    dimensions of the section to 300x300 mm the solver crashes.
 
 Based on the example: https://portwooddigital.com/2023/05/28/minimal-creep-and-shrinkage-example/
 '''
 
-from __future__ import print_function
-
-
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2023, LCPT and AOO"
+__copyright__= "Copyright 2026, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import math
 import xc
+from materials.ec2 import EC2_materials
 from materials import typical_materials
 from model import predefined_spaces
 from solution import predefined_solutions
+from misc_utils import log_messages as lmsg
 
 # Define FE problem.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
 # Units: kN, mm
-kN = 1
-mm = 1
+kN = 1e3
+mm = 1e-3
 GPa = kN/mm**2
 MPa = 0.001*GPa
 
@@ -36,7 +37,6 @@ Es = 200*GPa
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",Es)
  
 Ec = 25*GPa # concrete modulus of elasticity
-fc = -28*MPa # concrete compressive strength (compression is negative)
 ft = 3*MPa # concrete tensile strength (tension is positive)
 beta = 0.4 # Recommended value for the tension softening parameter (tension softening exponent).
 tDry = 14 # days
@@ -51,14 +51,23 @@ psicr1 = 1.0 # Recommended value
 psicr2 = 75.4218 # fitting parameter of the creep time evolution function as per ACI 209R-92. Based on section dimensions
 csParameters= typical_materials.def_creep_and_shrinkage_parameters(tcr= Tcr, epsshu= epsshu, epssha= psish, epscru= phiu, epscra= psicr1, epscrd= psicr2)
 
-## Concrete able to creep.
-tdConcrete= typical_materials.defTDConcrete(preprocessor= preprocessor, name= 'tdConcrete',fpc= fc,ft= ft, Ec= Ec, beta= beta, age= tDry, tcast= tcast, csParameters= csParameters)
+# Encapsulated concrete.
+concrAux= EC2_materials.C20
+epsc0= concrAux.epsilon0()
+fpc= concrAux.fmaxK()
+Ec0= 2.0*fpc/epsc0
+concreteIs= typical_materials.defConcrete02IS(preprocessor=preprocessor,name='concrete', Ec0= Ec0, epsc0= epsc0, fpc= fpc, fpcu= 0.85*concrAux.fmaxK(), epscu= concrAux.epsilonU(), ratioSlope= 0.1, ft= ft, Ets= concrAux.E0()/19.0)
 
-b = 300*mm
-h = 300*mm
+## Concrete able to creep.
+creepMaterial= typical_materials.defCreepMaterial(preprocessor= preprocessor, name= 'creepMaterial', encapsulatedConcrete= concreteIs, beta= beta, age= tDry, tcast= tcast, csParameters= csParameters)
+
+# Make the section bigger to keep the concrete material
+# in the elastic range.
+b = 310*mm
+h = 310*mm
 As = 1500*mm**2
-Ag = b*h # Gross area.
-Ac = Ag-As # Concrete area.
+Ag = b*h
+Ac = Ag-As
 
 # Define mesh
 nodes= preprocessor.getNodeHandler
@@ -75,7 +84,7 @@ modelSpace.fixNodeF00(n2.tag)
 ## Define fiber section.
 twoFibersSection= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","twoFibersSection")
 steelFiber= twoFibersSection.addFiber(elast.name, As, xc.Vector([0,0]))
-concreteFiber= twoFibersSection.addFiber(tdConcrete.name, Ac, xc.Vector([0,0]))
+concreteFiber= twoFibersSection.addFiber(creepMaterial.name, Ac, xc.Vector([0,0]))
 
 
 ## Create element.
@@ -115,13 +124,17 @@ modelSpace.setCurrentTime(Tcr)
 solProc= predefined_solutions.PlainNewtonRaphson(feProblem, printFlag= 0)
 solProc.setup()
 # Set the load control integrator with dt=0 so that the domain time doesn’t advance.
-solProc.integrator.dLambda1= 0.0  
+solProc.integrator.dLambda1= 0.0
 result= solProc.analysis.analyze(1)
+if(result!=0):
+    lmsg.error("Can't solve.")
+    exit(1)
 
 
-dt = 10 # days
+
+dt= 10 # days
 solProc.integrator.dLambda1= dt # set new increment for the integrator.
-solProc.integrator.setNumIncr(10) # IMPORTANT! otherwise it got stuck.
+solProc.integrator.setNumIncr(dt) # IMPORTANT! otherwise it got stuck.
 
 modelSpace.setCreepOn() # Turn creep on
 #modelSpace.setCreepDt(10) # set time increment for creep.
@@ -129,6 +142,9 @@ modelSpace.setCreepOn() # Turn creep on
 t = 0
 while t < 10000:
     ok = solProc.analysis.analyze(1)
+    if(ok!=0):
+        lmsg.error("Can't solve.")
+        exit(1)
     t+= dt
 errorDt= abs(solProc.integrator.dLambda1-dt)/dt # Make sure there is no modification of dLambda1
     
@@ -151,28 +167,26 @@ avgSteelStress/=len(steelStresses)
 lastConcreteStress= concreteStresses[-1]
 lastSteelStress= steelStresses[-1]
 
-avgConcreteStressRef= 0.005974877488588469*kN/mm**2
+avgConcreteStressRef= 5.565001274770306*MPa
 ratio1= abs(avgConcreteStress+avgConcreteStressRef)/avgConcreteStressRef
-avgSteelStressRef= 0.31414889483994685*kN/mm**2
+avgSteelStressRef= 315.70058627115253*MPa
 ratio2= abs(avgSteelStress+avgSteelStressRef)/avgSteelStressRef
 
-'''
-print('time: ', ti)
-print('concrete stresses: ', concreteStresses)
-print('steel stresses: ', steelStresses)
+# print('time: ', ti)
+# print('concrete stresses: ', concreteStresses)
+# print('steel stresses: ', steelStresses)
 # print('Reactions= ', reactions)
-print(errorDt)
-print(errorForces)
-print('average concrete stress: ', avgConcreteStress, avgConcreteStressRef, ratio1)
-print('average steel stress: ', avgSteelStress, avgSteelStressRef, ratio2)
-print('time: ', modelSpace.getCurrentTime(), 'days')
-print('last concrete stress: ', lastConcreteStress*1e3, 'MPa')
-print('last steel stress: ', lastSteelStress*1e3, 'MPa')
-'''
-
+# print('errorDt= ', errorDt)
+# print('errorForces= ', errorForces)
+# print('average concrete stress: ', avgConcreteStress/MPa, avgConcreteStressRef/MPa)
+# print('ratio1= ', ratio1)
+# print('average steel stress: ', avgSteelStress/MPa, avgSteelStressRef/MPa)
+# print('ratio2= ', ratio2)
+# print('time: ', modelSpace.getCurrentTime(), 'days')
+# print('last concrete stress: ', lastConcreteStress/MPa, 'MPa')
+# print('last steel stress: ', lastSteelStress/MPa, 'MPa')
 
 import os
-from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-9) & (abs(ratio2)<1e-9) & (errorForces<1e-6) & (errorDt<1e-12):
     print('test '+fname+': ok.')
