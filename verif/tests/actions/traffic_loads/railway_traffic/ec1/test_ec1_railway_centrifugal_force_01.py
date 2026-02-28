@@ -21,18 +21,20 @@ Lf=  5.0 # influence length of the loaded part of curved track on the bridge, wh
 # expression 6.19 of Eurocode 1 part 2 (clause 6.5.1 paragraph 8).
 f= EC1_rail_load_models.centrifugal_force_reduction_factor(v= v, Lf= Lf)
 
+classificationFactor= 1.21 # alpha
+dynamicFactor= 1.0 # Phi
 # characteristic value of the vertical concentrated load 
 # specified in clause 6.3 (alpha= 1.21)
-Qvk= 250e3*1.21 # per axis (3 axis on the bridge)
+Qvk= 250e3*classificationFactor # per axis (3 axis on the bridge)
 
 # characteristic value of the vertical distributed load 
 # specified in clause 6.3 (alpha= 1.21)
-qvk= 80e3*1.21 # per meter
+qvk= 80e3*classificationFactor # per meter
 
 r= 2200 # radius of curvature.
 
 # Compute centrifugal forces.
-(Qtk, qtk)= EC1_rail_load_models.get_centrifugal_forces(v= v, Lf= Lf, r= r, Qvk= Qvk, qvk= qvk)
+(Qtk, qtk)= EC1_rail_load_models.get_centrifugal_forces(v= v, Lf= Lf, r= r, Qvk= Qvk, qvk= qvk, alpha= classificationFactor)
 
 # Check results.
 ratio1= abs(f-0.8877655548578554)/0.8877655548578554

@@ -150,7 +150,8 @@ python tests/utility/geom/polylines/3d/polyline3d_test_10.py
 python tests/utility/geom/polylines/3d/polyline3d_test_11.py
 python tests/utility/geom/polylines/3d/polyline3d_test_12.py
 echo "$BLEU" "      plane 3D Polylines" "$NORMAL"
-python tests/utility/geom/polylines/plane_polyline3d_test_01.py
+python tests/utility/geom/polylines/plane_polyline3d/plane_polyline3d_test_01.py
+python tests/utility/geom/polylines/plane_polyline3d/test_compute_chunks_01.py
 echo "$BLEU" "    Polygons." "$NORMAL"
 echo "$BLEU" "      2D Polygons." "$NORMAL"
 python tests/utility/geom/polygons/2d/polygon2D_test_01.py
@@ -398,6 +399,7 @@ python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifu
 python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifugal_force_04.py
 python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifugal_force_05.py
 python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifugal_force_06.py
+python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifugal_force_07.py
 python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_traction_and_braking_force.py
 python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_line_load_design_situation_ii.py
 echo "$BLEU" "      IAPF traffic loads tests. Railway traffic." "$NORMAL"
@@ -1273,6 +1275,10 @@ python tests/materials/xc_materials/uniaxial/concrete/test_concrete01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_concrete02_01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_concrete02_02.py
 python tests/materials/xc_materials/uniaxial/concrete/test_concrete02is_01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_concrete02is_02.py
+python tests/materials/xc_materials/uniaxial/concrete/test_creep_material_01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_creep_material_02.py
+python tests/materials/xc_materials/uniaxial/concrete/test_creep_material_03.py
 python tests/materials/xc_materials/uniaxial/concrete/test_creep_shrinkage_parameters_01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_material_01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_material_02.py
@@ -1281,7 +1287,6 @@ python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10_mater
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10_material_03.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10nl_material_01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10nl_material_02.py
-python tests/materials/xc_materials/uniaxial/concrete/test_creep_material_01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_HA25_01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_HA25_02.py
 python tests/materials/xc_materials/uniaxial/concrete/test_HP45_01.py

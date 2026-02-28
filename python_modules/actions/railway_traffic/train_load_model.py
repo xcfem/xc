@@ -126,7 +126,7 @@ class TrainLoadModel(object):
         q= windPressure*self.rollingStockHeight # load per unit length.
         if(trackCrossSection):
             # Distribute the load
-            Q= [q,0,0] # Centrifugal load.
+            Q= [q,0,0] # Wind load.
             railLoads= trackCrossSection.getRailLoads(Q= Q, h= self.rollingStockHeight/2.0)
             leftRailLoad= geom.Vector2d(railLoads[0], railLoads[1])
             rightRailLoad= geom.Vector2d(railLoads[2], railLoads[3])

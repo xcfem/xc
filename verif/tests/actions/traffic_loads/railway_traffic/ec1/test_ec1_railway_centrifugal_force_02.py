@@ -33,6 +33,7 @@ err= math.sqrt(err)
 '''
 print('locomotive centrifugal loads: ', locomotiveCentrifugalLoads)
 print('reference value: ', refValue/1e3)
+print('error: ', err)
 '''
 
 import os
