@@ -325,7 +325,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             Ec= self.getEcmT(t= cp.age) # concrete modulus of elasticity at loading age.
             Ecm= self.Ecm() # 28-day modulus of elasticity.
             fcm= self.getFcm() # mean 28-day cylinder compressive strength.
-            fct= self.getFctmT(t= cp.age) # Tensile strength at loading age.
+            fct= self.getFctm() # the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
             retval= typical_materials.defTDConcreteMC10(preprocessor= preprocessor,name= name, fcm= fcm, ft= fct, Ec= Ec, Ecm= Ecm, beta= cp.beta, age= cp.age, epsba= cp.epsba, epsbb= cp.epsbb, epsda= cp.epsda, epsdb= cp.epsdb, phiba= cp.phiba, phibb= cp.phibb, phida= cp.phida, phidb= cp.phidb, tcast= cp.tcast, cem= cp.cem)
         else:
             className= type(self).__name__
