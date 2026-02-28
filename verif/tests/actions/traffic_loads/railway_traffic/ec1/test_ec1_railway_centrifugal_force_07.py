@@ -35,12 +35,12 @@ lm71= EC1_rail_load_models.TrainLoadModel(locomotive= locomotiveLM1, uniformLoad
 # Compute centrifugal forces using the get_centrifugal_forces function.
 # characteristic value of the vertical concentrated load 
 # specified in clause 6.3 (alpha= 1.21)
-Qvk= 250e3*classificationFactor*dynamicFactor # per axis (3 axis on the bridge)
+Qvk= 250e3*dynamicFactor # per axis (3 axis on the bridge)
 
 # characteristic value of the vertical distributed load 
 # specified in clause 6.3 (alpha= 1.21)
-qvk= 80e3*classificationFactor*dynamicFactor # per meter
-(Qtk2, qtk2)= EC1_rail_load_models.get_centrifugal_forces(v= v, Lf= Lf, r= r, Qvk= Qvk, qvk= qvk)
+qvk= 80e3*dynamicFactor # per meter
+(Qtk2, qtk2)= EC1_rail_load_models.get_centrifugal_forces(v= v, Lf= Lf, r= r, Qvk= Qvk, qvk= qvk, alpha= classificationFactor)
 
 # Check results.
 qtk_ratio= abs(qtk2-qtk1)/qtk1

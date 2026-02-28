@@ -26,7 +26,7 @@ centrifugalLoadPerWheel= locomotiveLoad.getCentrifugalLoadPerWheel(v= v, Lf= Lf,
 
 # Check values.
 err= 0.0
-refValue= 18.138889200369118e3
+refValue= 14.990817520966214e3
 ratio1= abs(centrifugalLoadPerWheel-refValue)/refValue
 
 '''

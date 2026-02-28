@@ -69,7 +69,7 @@ def centrifugal_force_reduction_factor(v, Lf):
     coefF= min(max(coefF,0.35), 1.0)
     return coefF
 
-def get_centrifugal_forces(v, Lf, r, Qvk, qvk):
+def get_centrifugal_forces(v, Lf, r, Qvk, qvk, alpha):
     ''' Compute the characteristic values of the concentrated (Qtk) and 
         distributed (qtk) centrifugal forces according to equations (6.17) and
         (6.18) of  Eurocode 1 part 2 (clause 6.5.1 paragraph 8).
@@ -85,13 +85,14 @@ def get_centrifugal_forces(v, Lf, r, Qvk, qvk):
     :param qvk: characteristic value of the vertical distributed load 
                 specified in clause 6.3 (excluding any enhancement for 
                 dynamic effects).
+    :param alpha: classification factor.
     '''
     cfrf= centrifugal_force_reduction_factor(v= v, Lf= Lf) # eq. (6.19)
     inertiaFactor= v*v/constants.g/r # eq. (6.18)
-    ff= inertiaFactor*cfrf
-    if(v>v120): # 6.5.1 (7) table 6.8 
+    ff= inertiaFactor*cfrf # 6.5.1 (7) b
+    if(v>v120): 
         inertiaFactor120= sqr_v120/constants.g/r # eq. (6.18)
-        f120= inertiaFactor120 # 6.5.1 (7) a
+        f120= inertiaFactor120*alpha # 6.5.1 (7) a
         if(ff<f120):
             ff= f120
     Qtk= ff*Qvk
@@ -130,11 +131,11 @@ class LocomotiveLoad(ll.LocomotiveLoad):
         if(v>v120): # 6.5.1 (7) table 6.8 
             inertiaFactor120= sqr_v120/constants.g/r # eq. (6.18)
             f1= inertiaFactor*cfrf # 6.5.1 (7) b
-            f2= inertiaFactor120 # 6.5.1 (7) a
+            f2= inertiaFactor120*self.classificationFactor # 6.5.1 (7) a
             retval= max(f1, f2)
         else:
             retval= inertiaFactor
-        retval*= self.getDynamicWheelLoad()
+        retval*= self.dynamicFactor*self.getWheelLoad()
         return retval
                                    
     def getCentrifugalWheelLoads(self, v, Lf, r, trackCrossSection= None, h= 1.8):
@@ -211,11 +212,11 @@ class TrainLoadModel(tlm.TrainLoadModel):
         if(v>v120): # 6.5.1 (7) table 6.8 
             inertiaFactor120= sqr_v120/constants.g/r # eq. (6.18)
             f1= inertiaFactor*cfrf # 6.5.1 (7) b 
-            f2= inertiaFactor120 # 6.5.1 (7) a
+            f2= inertiaFactor120*self.getClassificationFactor() # 6.5.1 (7) a
             retval= max(f1, f2)
         else:
             retval= inertiaFactor
-        retval*= self.getDynamicUniformLoad()
+        retval*= self.getDynamicFactor()*self.uniformLoad
         return retval
 
     def getCentrifugalLoadPerMeter(self, v, Lf, r, trackCrossSection):
