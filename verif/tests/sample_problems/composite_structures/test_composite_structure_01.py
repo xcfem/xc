@@ -30,6 +30,7 @@ from materials.sections.fiber_section import def_simple_RC_section
 L= 10.0 # span.
 b= 2.5 # beam spacing.
 hc= 0.12 # deck slab thickness.
+Ac= b*hc # Concrete slab area per m width.
 
 # Materials.
 ## Steel beams.
@@ -43,10 +44,10 @@ concrete.cemType='N'# class N cement
 RH= 70 # ambient relative humidity(%)
 ts= 0 # drying shrinkage begins at the age 1 day.
 t0= 7 # age of concrete at loading time.
+beta= 0.4 # 
 rfSteel= EC2_materials.S500B
 
 # Actions
-Ac= 2.5*hc # Concrete slab area per m width.
 gk1= Ac*25e3 # Concrete self weight.
 gk2= steelShape.getRho()*g # Steel beam self weigth per unit length.
 gk3= 3.75e3 # Floor finishes dead load.
@@ -121,7 +122,7 @@ supportDeckSection.negatvRebarRows= def_simple_RC_section.LongReinfLayers([suppo
 creepOnDeck= True
 
 if(creepOnDeck):
-    concrete.defTDConcreteParameters(beta= 0.4, cement= '42.5R', h0= h0, T= 21, RH= RH, ts= ts, t0= t0)
+    concrete.defTDConcreteParameters(beta= beta, cement= '42.5R', h0= h0, T= 21, RH= RH, ts= ts, t0= t0)
     
     midSpanDeckSection.defRCSection2d(preprocessor, matDiagType= 'td')
     # midSpanDeckSection.pdfReport()
@@ -305,7 +306,7 @@ if(creepOnDeck):
     modelSpace.setCreepOn() # Turn creep on
     
 # Compute solution
-dt= 100 # time increment in days
+dt= 10 # time increment in days
 solProc.integrator.dLambda1= dt # set new increment for the integrator.
 solProc.integrator.setNumIncr(dt) # IMPORTANT! otherwise it got stuck.
 
