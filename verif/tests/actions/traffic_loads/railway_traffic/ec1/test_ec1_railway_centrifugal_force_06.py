@@ -27,7 +27,7 @@ centrifugalUniformLoad= trainLoadModel.getCentrifugalUniformLoad(v= v, Lf= Lf, r
 
 # Check values.
 err= 0.0
-refValue= 9.594123213418376e3
+refValue= 11.608889088236236e3
 ratio1= abs(centrifugalUniformLoad-refValue)/refValue
 
 '''

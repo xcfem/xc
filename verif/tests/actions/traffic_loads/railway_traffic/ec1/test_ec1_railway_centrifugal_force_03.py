@@ -33,8 +33,8 @@ cs= tcs.TrackCrossSection(s= s, u= u)
 locomotiveLM1= ec1.get_locomotive_LM1()
 locomotiveCentrifugalLoads= locomotiveLM1.getCentrifugalWheelLoads(v= v, Lf= Lf, r= r, trackCrossSection= cs, h= h)
 
-refLeft= geom.Vector2d(19573.94959931504, -37357.10088082801)
-refRight= geom.Vector2d(12176.5038803392, -refLeft.y)
+refLeft= geom.Vector2d(23684.479015171197, -45202.092065801895)
+refRight= geom.Vector2d(14733.56969521043, -refLeft.y)
 refValues= 4*[refLeft]+4*[refRight]
 
 # Check values.
@@ -47,8 +47,8 @@ err= math.sqrt(err)
 print(locomotiveCentrifugalLoads)
 for r in locomotiveCentrifugalLoads:
     print(r[0], r[1])
-print(refValues)
-print(err)
+print('refValues= ', refValues)
+print('err= ', err)
 '''
 
 import os

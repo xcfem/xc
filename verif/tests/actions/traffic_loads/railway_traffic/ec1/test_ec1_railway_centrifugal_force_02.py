@@ -25,7 +25,7 @@ locomotiveCentrifugalLoads= locomotiveLM1.getCentrifugalWheelLoads(v= v, Lf= Lf,
 
 # Check values.
 err= 0.0
-refValue= 15.87522673982712e3
+refValue= 19.209024355190813e3
 for load in locomotiveCentrifugalLoads:
     err+= (load-refValue)**2
 err= math.sqrt(err)
@@ -33,6 +33,7 @@ err= math.sqrt(err)
 '''
 print('locomotive centrifugal loads: ', locomotiveCentrifugalLoads)
 print('reference value: ', refValue/1e3)
+print('error: ', error/1e3)
 '''
 
 import os
