@@ -24,7 +24,7 @@ from materials.ec2 import EC2_materials
 from materials.ec3 import EC3_materials
 from materials.sections.fiber_section import def_simple_RC_section
 
-# XXX: Test does not work yet.
+# XXX: This test does not work yet.
 
 # Geometry
 L= 10.0 # span.
@@ -118,6 +118,7 @@ supportRebarRow= def_simple_RC_section.ReinfRow(areaRebar= rebarArea, width= b_e
 supportDeckSection= def_simple_RC_section.RCRectangularSection(name= 'support_creep_deck_section', width= b_eff_supp, depth= hc, concrType= concrete, reinfSteelType= rfSteel)
 supportDeckSection.positvRebarRows= def_simple_RC_section.LongReinfLayers([supportRebarRow])
 supportDeckSection.negatvRebarRows= def_simple_RC_section.LongReinfLayers([supportRebarRow])
+
 ### Creep
 creepOnDeck= True
 

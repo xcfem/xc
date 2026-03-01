@@ -834,6 +834,7 @@ int XC::ForceBeamColumn2d::update(void)
 		  << " (dW: " << dW
 		  << ", dW0: " << dW0
 	          << ", N= " << (this->getN1()+this->getN2())/2.0
+	          << ", M= " << (this->getM1()+this->getM2())/2.0
 		  << ", tol: " << tol << ")"
 	          << Color::def << std::endl;
         retval= -1;

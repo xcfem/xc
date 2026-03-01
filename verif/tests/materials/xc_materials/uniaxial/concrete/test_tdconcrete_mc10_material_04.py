@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 ''' Trivial test of TDConcreteMC10 material constitutive model. 
 
-This test uses the concrete defined in he example A3 of the book:
+This test uses the concrete defined in the example A3 of the book:
 Dujmovic, Darko., Androic, Boris., Lukacevic, Ivan. Composite Structures According to Eurocode 4: Worked Examples. Germany: Wiley, 2015.
 ISBN 978-3-433-03107-0 
 '''
-
-from __future__ import print_function
-
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2026, LCPT and AOO"
