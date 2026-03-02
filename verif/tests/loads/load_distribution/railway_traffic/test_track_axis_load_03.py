@@ -165,8 +165,11 @@ totalLoadNormRef= math.sqrt((loadComponents[1])**2+(loadComponents[2])**2)*total
 err1= abs(totalLoadNorm-totalLoadNormRef)/totalLoadNormRef
 err2= abs(totalLoad[0]/totalLoadNormRef)
 err3= abs(totalLoad[2]/totalLoadNormRef)
-testOK= (totalLoadNorm>=totalLoadNormRef) # greater or equal the ref. value.
-testOK= testOK and (err1<.05) # but not too big.
+# LP 02/03/2026
+# After fixing the error in the computation of the rail chunks
+# (see commit Fri Feb 27 11:59:15 2026) the result is much closer
+# to the reference value but not necessarily larger.
+testOK= (err1<.01) # almost equal to the reference load.
 testOK= testOK and (err2<1e-3) # x component almost zero (simmetry).
 testOK= testOK and (err3<1e-2) # z component almost zero (equilibrium).
 
