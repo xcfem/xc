@@ -179,6 +179,24 @@ def get_locomotive_LM1(nAxes= 4, axleLoad= 250e3, xSpacing= 1.6, ySpacing= 1.435
     '''
     return LocomotiveLoad(nAxes= nAxes, axleLoad= axleLoad, xSpacing= xSpacing, ySpacing= ySpacing)
 
+def get_phantom_locomotive_SW0(nAxes= 4, axleLoad= 0, xSpacing= 5.3/4.0, ySpacing= 1.435):
+    ''' Returns a locomotive model corresponding to load model SW/0 of 
+        Eurocode 1. Axle loads are null because this model has not this type
+        of charge. Nevertheless, the Python locomotive object is used to store
+        the dynamic and classification factors and to create the gap between
+        the uniform loads. That's why it is called «phantom».
+    '''
+    return LocomotiveLoad(nAxes= nAxes, axleLoad= axleLoad, xSpacing= xSpacing, ySpacing= ySpacing)
+
+def get_phantom_locomotive_SW2(nAxes= 4, axleLoad= 0, xSpacing= 7.0/4.0, ySpacing= 1.435):
+    ''' Returns a locomotive model corresponding to load model SW/0 of 
+        Eurocode 1. Axle loads are null because this model has not this type
+        of charge. Nevertheless, the Python locomotive object is used to store
+        the dynamic and classification factors and to create the gap between
+        the uniform loads. That's why it is called «phantom».
+    '''
+    return LocomotiveLoad(nAxes= nAxes, axleLoad= axleLoad, xSpacing= xSpacing, ySpacing= ySpacing)
+
 class TrainLoadModel(tlm.TrainLoadModel):
     ''' Model for the loads of a according to EC-1.'''
     
