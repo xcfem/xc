@@ -472,8 +472,9 @@ def defConcrete02IS(preprocessor,name,epsc0,fpc,fpcu,epscu, Ec0, ratioSlope= 0.1
     :param Ec0: concrete initial stiffness.
     :param ratioSlope: ratio between unloading slope at epscu and initial slope (defaults to 0.1).
     :param ft: tensile strength (defaults to None in which case the value is set to -0.1*fpc)
-    :param Ets: tension softening stiffness (absolute value) (slope of the linear tension softening branch) (defaults to None in which case the value is set to 0.1*fpc/epsc0)
-
+    :param Ets: tension softening stiffness (absolute value) (slope of the 
+                linear tension softening branch) (defaults to None in 
+                which case the value is set to 0.1*fpc/epsc0).
     '''
     retval= _def_concrete_02(preprocessor= preprocessor,
                              className= "concrete02is_material",
@@ -535,7 +536,7 @@ def defCreepMaterial(preprocessor, name, encapsulatedConcrete, beta, age, tcast,
     return retval
 
 # TDConcrete.
-def defTDConcrete(preprocessor, name, fpc, ft, Ec, beta, age, tcast, csParameters):
+def defTDConcrete(preprocessor, name, fpc, ft, Ec, beta, age, tcast, csParameters, Ets= None):
     ''''Constructs an uniaxial concrete material concrete is linear in 
         compression with nonlinear tension softening; creep and shrinkage ç
         evolution equations are based on ACI 209R-92 models.
@@ -557,6 +558,11 @@ def defTDConcrete(preprocessor, name, fpc, ft, Ec, beta, age, tcast, csParameter
     retval= materialHandler.newMaterial("tdconcrete_material", matName)
     retval.fpc= fpc # concrete compressive strength at 28 days (compression is negative)
     retval.ft= ft # concrete tensile strength.
+    if(Ets):
+        retval.Ets= Ets
+    else:
+        epsc0= ft/Ec
+        retval.Ets= 0.1*fpc/epsc0
     retval.Ec= Ec # concrete stiffness.
     retval.beta= beta # beta parameter.
     retval.age= age # concrete age at first loading.
@@ -565,9 +571,8 @@ def defTDConcrete(preprocessor, name, fpc, ft, Ec, beta, age, tcast, csParameter
     retval.setup()
     return retval
 
-def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, epsba, epsbb, epsda, epsdb, phiba, phibb, phida, phidb, tcast, cem):
-    '''
-    Defines a TDConcreteMC10 uniaxial material.
+def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, epsba, epsbb, epsda, epsdb, phiba, phibb, phida, phidb, tcast, cem, Ets= None):
+    ''' Defines a TDConcreteMC10 uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
     :param name: name identifying the new material
@@ -599,6 +604,9 @@ def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, epsba, eps
                   age of 2 days).
     :param cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 
                 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
+    :param Ets: tension softening stiffness (absolute value) (slope of the 
+                linear tension softening branch) (defaults to None in 
+                which case the value is set to 0.1*fpc/epsc0).
     '''
     print('XXX continue debugging here')
     print('name= ', name)
@@ -625,6 +633,11 @@ def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, epsba, eps
     retval= materialHandler.newMaterial("tdconcrete_mc10_material", matName)
     retval.fpc= fcm # mean concrete compressive strength at 28 days (compression is negative)
     retval.ft= ft # concrete tensile strength.
+    if(Ets):
+        retval.Ets= Ets
+    else:
+        epsc0= ft/Ec        
+        retval.Ets= 0.1*fcm/epsc0
     retval.Ec= Ec # concrete stiffness.
     retval.Ecm= Ecm # 28-day modulus, necessary for normalizing creep coefficient.
     retval.beta= beta # beta parameter.
@@ -643,7 +656,7 @@ def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, epsba, eps
     retval.setup()
     return retval
 
-def defTDConcreteMC10NL(preprocessor,name, fcm, fcu, epscu, ft, Ec, Ecm, beta, age, epsba, epsbb, epsda, epsdb, phiba, phibb, phida, phidb, tcast, cem):
+def defTDConcreteMC10NL(preprocessor,name, fcm, fcu, epscu, ft, Ec, Ecm, beta, age, epsba, epsbb, epsda, epsdb, phiba, phibb, phida, phidb, tcast, cem, Ets= None):
     '''
     :param preprocessor: preprocessor of the finite element problem.
     :param name: name identifying the new material.
@@ -677,6 +690,9 @@ def defTDConcreteMC10NL(preprocessor,name, fcm, fcu, epscu, ft, Ec, Ecm, beta, a
                   age of 2 days).
     :param cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 
                 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
+    :param Ets: tension softening stiffness (absolute value) (slope of the 
+                linear tension softening branch) (defaults to None in 
+                which case the value is set to 0.1*fpc/epsc0).
     '''
     materialHandler= preprocessor.getMaterialHandler
     matName= name
@@ -687,6 +703,11 @@ def defTDConcreteMC10NL(preprocessor,name, fcm, fcu, epscu, ft, Ec, Ecm, beta, a
     retval.fcu= fcu # stress at ultimate (crushing) strain.
     retval.epscu= epscu # strain at crushing strength.
     retval.ft= ft # concrete tensile strength.
+    if(Ets):
+        retval.Ets= Ets
+    else:
+        epsc0= ft/Ec
+        retval.Ets= 0.1*fcm/epsc0    
     retval.Ec= Ec # concrete stiffness.
     retval.Ecm= Ecm # 28-day modulus, necessary for normalizing creep coefficient.
     retval.beta= beta # beta parameter.

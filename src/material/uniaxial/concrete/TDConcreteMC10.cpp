@@ -100,6 +100,7 @@ XC::TDConcreteMC10::TDConcreteMC10(int tag)
 //! @brief Constructor.
 //! @param _fc: cylinder compressive strength (this is a dummy parameter since compression behavior is linear).
 //! @param _ft: the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
+//! @param _Ets : tension softening stiffness (absolute value) (slope of the linear tension softening branch).
 //! @param _Ec: modulus of elasticity (preferably at time of loading if there is a single loading age).
 //! @param _Ecm: 28-day modulus, necessary for normalizing creep coefficient.
 //! @param _beta: tension softening parameter.
@@ -114,8 +115,8 @@ XC::TDConcreteMC10::TDConcreteMC10(int tag)
 //! @param _phidb: fitting constant within the drying creep time evolution function as per Model Code 2010.
 //! @param _tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
 //! @param _cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
-XC::TDConcreteMC10::TDConcreteMC10(int tag, double _fc, double _ft, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem)
-  : TDConcreteMC10Base(tag, MAT_TAG_TDConcreteMC10, _fc, _ft, _Ec, _Ecm, _beta, _age, _epsba, _epsbb, _epsda, _epsdb, _phiba, _phibb, _phida, _phidb, _tcast, _cem)
+XC::TDConcreteMC10::TDConcreteMC10(int tag, double _fc, double _ft, double _Ets, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem)
+  : TDConcreteMC10Base(tag, MAT_TAG_TDConcreteMC10, _fc, _ft, _Ets, _Ec, _Ecm, _beta, _age, _epsba, _epsbb, _epsda, _epsdb, _phiba, _phibb, _phida, _phidb, _tcast, _cem)
   {}
 
 XC::TDConcreteMC10::~TDConcreteMC10(void)
@@ -389,8 +390,8 @@ void XC::TDConcreteMC10::Tens_Envlp(double epsc, double &sigc, double &Ect)
     !-----------------------------------------------------------------------*/
   
     const double Ec0= Ec;
-    const double eps0= ft / Ec0;
-    const double epsu = ft * (1.0 / Ets + 1.0 / Ec0);
+    const double eps0= ft / Ec0; // concrete strain at maximum strength.
+    const double epsu = ft * (1.0 / Ets + 1.0 / Ec0); // concrete strain at crushing strength.
 
     // USE THIS ONE
     if(epsc <= eps0)
@@ -413,6 +414,7 @@ void XC::TDConcreteMC10::Tens_Envlp(double epsc, double &sigc, double &Ect)
           }
       }
     std::cout << "eps0= " << eps0*1e3
+              << " epsu= " << epsu*1e3
               << " epsc= " << epsc*1e3
 	      << " sgc= " << sigc/1e6
 	      << std::endl;

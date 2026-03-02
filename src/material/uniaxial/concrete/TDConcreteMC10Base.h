@@ -90,7 +90,7 @@ class TDConcreteMC10Base : public TDConcreteBase
     int recvData(const Communicator &);
   public:
     TDConcreteMC10Base(int tag, int classTag);
-    TDConcreteMC10Base(int tag, int classTag, double _fc, double _ft, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem);
+    TDConcreteMC10Base(int tag, int classTag, double _fc, double _ft, double _Ets, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem);
     void setup_parameters(void);
 
     double getEcm(void) const;

@@ -87,6 +87,7 @@ XC::TDConcreteMC10Base::TDConcreteMC10Base(int tag, int classTag)
 //! @brief Constructor.
 //! @param _fc: cylinder compressive strength (this is a dummy parameter since compression behavior is linear).
 //! @param _ft: the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
+//! @param _Ets : tension softening stiffness (absolute value) (slope of the linear tension softening branch).
 //! @param _Ec: modulus of elasticity (preferably at time of loading if there is a single loading age).
 //! @param _Ecm: 28-day modulus, necessary for normalizing creep coefficient.
 //! @param _beta: tension softening parameter.
@@ -101,8 +102,8 @@ XC::TDConcreteMC10Base::TDConcreteMC10Base(int tag, int classTag)
 //! @param _phidb: fitting constant within the drying creep time evolution function as per Model Code 2010.
 //! @param _tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
 //! @param _cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
-XC::TDConcreteMC10Base::TDConcreteMC10Base(int tag, int classTag, double _fc, double _ft, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem)
-  : TDConcreteBase(tag, classTag, _fc, _ft, _Ec, _beta, _age, _tcast),
+XC::TDConcreteMC10Base::TDConcreteMC10Base(int tag, int classTag, double _fc, double _ft, double _Ets, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem)
+  : TDConcreteBase(tag, classTag, _fc, _ft, _Ets, _Ec, _beta, _age, _tcast),
   Ecm(_Ecm), epsba(_epsba), epsbb(_epsbb), epsda(_epsda), epsdb(_epsdb), phiba(_phiba), phibb(_phibb), phida(_phida), phidb(_phidb), cem(_cem)
   {
     setup_parameters();

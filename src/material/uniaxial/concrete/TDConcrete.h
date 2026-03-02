@@ -117,7 +117,7 @@ class TDConcrete : public TDConcreteBase
     
   public:
     TDConcrete(int tag= 0);
-    TDConcrete(int tag, double _fc, double _ft, double _Ec, double _beta, double _age, double _tcast, const CreepShrinkageParameters &);
+    TDConcrete(int tag, double _fc, double _ft, double _Ets, double _Ec, double _beta, double _age, double _tcast, const CreepShrinkageParameters &);
     virtual ~TDConcrete(void);
     void setup_parameters(void);
 

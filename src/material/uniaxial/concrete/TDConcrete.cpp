@@ -114,13 +114,14 @@ XC::TDConcrete::TDConcrete(int tag)
 //! @brief Constructor.
 //! @param _fpc: cylinder compressive strength (this is a dummy parameter since compression behavior is linear).
 //! @param _ft: the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
+//! @param _Ets : tension softening stiffness (absolute value) (slope of the linear tension softening branch).
 //! @param _Ec: modulus of elasticity (preferably at time of loading if there is a single loading age).
 //! @param _beta: tension softening parameter.
 //! @param _age: analysis time at initiation of drying (in days).
 //! @param _csParameters: creep and shrinkage parameters.
 //! @param _tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
-XC::TDConcrete::TDConcrete(int tag, double _fpc, double _ft, double _Ec, double _beta, double _age, double _tcast, const CreepShrinkageParameters &_csParameters)
-  : TDConcreteBase(tag, MAT_TAG_TDConcrete, _fpc, _ft, _Ec, _beta, _age, _tcast),
+XC::TDConcrete::TDConcrete(int tag, double _fpc, double _ft, double _Ets, double _Ec, double _beta, double _age, double _tcast, const CreepShrinkageParameters &_csParameters)
+  : TDConcreteBase(tag, MAT_TAG_TDConcrete, _fpc, _ft, _Ets, _Ec, _beta, _age, _tcast),
     creepShrinkageParameters(_csParameters)
   {
     setup_parameters();
