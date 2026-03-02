@@ -20,6 +20,16 @@ from actions.railway_traffic import load_model_base as lmb
 v120= 120/3.6 # 120 km/h
 sqr_v120= v120**2
 
+lm71_uniform_load= 80e3 # (kN/m) Uniform load for the LM71 defined in
+                        # clause 6.3.2 of Eurocode 1.
+sw0_uniform_load= 133e3 # (kN/m) Uniform load for the SW/0 load model defined in
+                        # clause 6.3.3 of Eurocode 1.
+sw2_uniform_load= 150e3 # (kN/m) Uniform load for the SW/0 load model defined in
+                        # clause 6.3.3 of Eurocode 1.
+unloaded_train_uniform_load= 10e3 # (kN/m) Uniform load for the "unloaded train"
+                                  # load model defined in clause 6.3.4 of
+                                  # Eurocode 1.
+                        
 def get_traction_force(Lab:float):
     ''' Return the traction force according to expression (6.20) of 
         Eurocode 1 part 2 (clause 6.5.3 paragraph 2).
@@ -196,6 +206,17 @@ def get_phantom_locomotive_SW2(nAxes= 4, axleLoad= 0, xSpacing= 7.0/4.0, ySpacin
         the uniform loads. That's why it is called «phantom».
     '''
     return LocomotiveLoad(nAxes= nAxes, axleLoad= axleLoad, xSpacing= xSpacing, ySpacing= ySpacing)
+
+def get_phantom_locomotive_unloaded_train(nAxes= 2, axleLoad= 0, xSpacing= 0.1, ySpacing= 1.435):
+    ''' Returns a locomotive model corresponding to the "unloaded train"
+        defined in clause 6.3.5 of Eurocode 1. Axle loads are null because 
+        this model has not this type of charge. Nevertheless, the Python 
+        locomotive object is used to store the dynamic and classification 
+        factors and to narrow the gap between the uniform loads. That's why it 
+        is called «phantom».
+    '''
+    return LocomotiveLoad(nAxes= nAxes, axleLoad= axleLoad, xSpacing= xSpacing, ySpacing= ySpacing)
+
 
 class TrainLoadModel(tlm.TrainLoadModel):
     ''' Model for the loads of a according to EC-1.'''
