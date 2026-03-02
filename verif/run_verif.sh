@@ -352,6 +352,7 @@ python tests/actions/wind/ec1/test_ec1_longitudinal_wind_reduction_factor.py
 python tests/actions/wind/ec1/test_ec1_bridge_deck_vertical_force_coefficient.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_without_traffic_01.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_without_traffic_02.py
+python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_without_traffic_03.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_with_traffic_01.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_with_traffic_02.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_free_standing_wall.py
