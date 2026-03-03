@@ -284,7 +284,9 @@ python tests/utility/geom/trf/rotation2d_test_02.py
 python tests/utility/geom/trf/rotation3d_test_01.py
 python tests/utility/geom/trf/rotation3d_test_02.py
 echo "$BLEU" "    Mechanical properties." "$NORMAL"
-python tests/utility/geom/principal_axes_of_inertia_2d_test_01.py
+python tests/utility/geom/mass_properties/test_centroid_01.py
+python tests/utility/geom/mass_properties/test_steiner_01.py
+python tests/utility/geom/mass_properties/principal_axes_of_inertia_2d_test_01.py
 echo "$BLEU" "    DXF reading/writing." "$NORMAL"
 python tests/utility/geom/dxf/ezdxf_test_01.py
 python tests/utility/geom/dxf/dxf_export_test_01.py
