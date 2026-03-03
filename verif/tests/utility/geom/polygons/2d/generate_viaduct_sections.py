@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-''' Generate viaduct variable depth concrete box cross-sections given its depth.
+''' Generate viaduct variable depth concrete box cross-sections and compute
+their area and moments of inertia.
+
 '''
 
 import os
