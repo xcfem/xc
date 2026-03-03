@@ -183,6 +183,7 @@ python tests/utility/geom/polygons/2d/quadrilateral2D_test_02.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_03.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_04.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_05.py
+python tests/utility/geom/polygons/2d/generate_viaduct_sections.py
 echo "$BLEU" "      3D Polygons." "$NORMAL"
 python tests/utility/geom/polygons/3d/polygon3D_test_01.py
 python tests/utility/geom/polygons/3d/polygon3D_test_02.py
