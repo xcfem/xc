@@ -18,7 +18,6 @@ __email__= "ana.ortega@xcengineering.xyz"
 
 
 import numpy as np
-from scipy import interpolate
 from scipy.spatial import distance
 import math
 from materials.prestressing import prestressed_concrete as presconc
