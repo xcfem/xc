@@ -312,6 +312,54 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         '''Fctk095: tensile strength [Pa][+] 95% fractile (table 3.1 EC2).'''
         return 1.3*self.getFctm()
 
+    def getEts(self, concrMat, reinfMat, reinfRatio, diagType, fct_exp, Ec_exp, fy_exp, Es_exp, regressionLine= True):
+        ''' Return the concrete tension stiffness.
+
+        :param concrMat: concrete material of the RC section
+        :param reinfMat: reinforcing steel material of the RC section 
+        :param reinfRatio: section reinforcement ratio, obtained as:
+            -ro=As/Ac for members subjected to direct tension.
+            -roef=As/Acef for members under bending, where Acef is the effective
+            area, that corresponds to the tensile zone in the member section.
+            Aef can be obtained as (see CEB-FIP MC-90) 
+            Aef = 2.5b(h-d) < b(h-x)/3, where x is 
+            the neutral axis depth. Aef can be estimated as Aef~=bh/4 
+        :param nPoints: number of (strain,stress) pairs of values to 
+                        approximate the exponential decay curve adopted for 
+                        the post-cracking range (defaults to 50).
+        :param diagType: type of diagram: 'K' or 'k' for characteristic, 'D' 
+                         or 'd' for design (defaults to characteristic).
+        :param fct_exp: concrete strength obtained from experimental data.
+        :param Ec_exp: concrete elastic modulus obtained from experimental 
+                       data.
+        :param fy_exp: reinforcing steel yield strength obtained from 
+                       experimental data.
+        :param Es_exp: reinforcing steel elastic modulus obtained from 
+                       experimental data.
+        :param regressionLine: if true compute the tension stiffness using
+                               the regression line method of the 
+                               paramTensStiffness object, otherwise, compute
+                               it as: Etsdiag= ftdiag/(eydiag-ectdiag)
+        '''
+        # Parameters for tension stiffening of concrete
+        paramTS= paramTensStiffness(concrMat= concrMat, reinfMat= reinfMat, reinfRatio= reinfRatio, diagType= diagType)
+        paramTS.E_c= Ec_exp  # concrete elastic modulus
+        paramTS.f_ct= fct_exp  # concrete tensile strength 
+        paramTS.E_ct= Ec_exp # concrete elastic modulus in the tensile linear-elastic range
+        paramTS.E_s=Es_exp 
+        paramTS.eps_y= fy_exp/Es_exp
+
+        #regression line type 1
+        ftdiag= paramTS.pointOnsetCracking()['ft']
+        ectdiag= paramTS.pointOnsetCracking()['eps_ct']
+        eydiag= paramTS.eps_y
+        if(regressionLine):
+            Etsdiag= paramTS.regresLine()['slope']
+        else:
+            Etsdiag=ftdiag/(eydiag-ectdiag)
+        return Etsdiag, ftdiag
+        
+
     def defTDConcreteMC10(self, preprocessor):
         ''' Defines a TDConcreteMC10 uniaxial material.
 
@@ -1131,7 +1179,24 @@ class paramTensStiffness(object):
       (defaults to reinfMat.eyd() or reinfMat.eyk())
     '''
 
-    def __init__(self,concrMat,reinfMat,reinfRatio,diagType):
+    def __init__(self, concrMat, reinfMat, reinfRatio, diagType):
+        ''' Constructor.
+
+        :param concrMat: concrete material of the RC section
+        :param reinfMat: reinforcing steel material of the RC section 
+        :param reinfRatio: section reinforcement ratio, obtained as:
+            -ro=As/Ac for members subjected to direct tension.
+            -roef=As/Acef for members under bending, where Acef is the effective
+            area, that corresponds to the tensile zone in the member section.
+            Aef can be obtained as (see CEB-FIP MC-90) 
+            Aef = 2.5b(h-d) < b(h-x)/3, where x is 
+            the neutral axis depth. Aef can be estimated as Aef~=bh/4 
+        :param nPoints: number of (strain,stress) pairs of values to 
+                        approximate the exponential decay curve adopted for 
+                        the post-cracking range (defaults to 50).
+        :param diagType: type of diagram: 'K' or 'k' for characteristic, 'D' 
+                         or 'd' for design (defaults to characteristic).
+        '''
         self.concrMat=concrMat
         self.reinfMat=reinfMat
         self.ro=reinfRatio

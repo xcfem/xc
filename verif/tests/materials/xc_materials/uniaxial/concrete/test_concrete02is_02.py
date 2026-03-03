@@ -40,25 +40,11 @@ rfSteel=concrete_base.ReinforcingSteel(steelName='rfSteel', fyk=fy_exp, emax=0.0
 rfSteel.Es=Es_exp
 steelDiagram= rfSteel.defDiagK(preprocessor) #Definition of steel stress-strain diagram in XC. 
 
-#Parameters for tension stiffening of concrete
-paramTS=concrete_base.paramTensStiffness(concrMat=concrAux,reinfMat=rfSteel,reinfRatio=ro_exp,diagType='K')
-paramTS.E_c=Ec_exp  #concrete elastic modulus
-paramTS.f_ct=fct_exp  #concrete tensile strength 
-paramTS.E_ct=Ec_exp #concrete elastic modulus in the tensile linear-elastic range
-paramTS.E_s=Es_exp 
-paramTS.eps_y=fy_exp/Es_exp
-
-
-#regression line type 1
-ftdiag=paramTS.pointOnsetCracking()['ft']
-ectdiag=paramTS.pointOnsetCracking()['eps_ct']
-eydiag=paramTS.eps_y
-######Etsdiag=ftdiag/(eydiag-ectdiag)
-Etsdiag=paramTS.regresLine()['slope']
 #Material for making concrete fibers: concrete02 with tension stiffening
 epsc0= concrAux.epsilon0()
 fpc= concrAux.fmaxK()
 Ec0= 2.0*fpc/epsc0
+Etsdiag, ftdiag= concrAux.getEts(concrMat= concrAux, reinfMat=rfSteel, reinfRatio=ro_exp,diagType='K', fct_exp= fct_exp, Ec_exp= Ec_exp, fy_exp= fy_exp, Es_exp= Es_exp)
 concr= typical_materials.defConcrete02IS(preprocessor=preprocessor, name='concr', Ec0= Ec0, epsc0=epsc0, fpc= fpc, fpcu=0.85*concrAux.fmaxK(), epscu=concrAux.epsilonU(), ratioSlope=0.1, ft=ftdiag, Ets=abs(Etsdiag))
 
 #regression line passing through point (optional approximation)
