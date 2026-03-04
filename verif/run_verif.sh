@@ -1982,10 +1982,12 @@ python tests/postprocess/limit_state_checking/ec0/test_deck_twist_estimation.py
 echo "$BLEU" "    EC2 limit state checking." "$NORMAL"
 echo "$BLEU" "      EC2 limit state checking: bending." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec2/test_2D_bending_uls_checking_01.py
+python tests/postprocess/limit_state_checking/ec2/test_pile_normal_stresses_uls_check.py
 echo "$BLEU" "      EC2 limit state checking: shear." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_01.py
 python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_05.py
 python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_06.py
+python tests/postprocess/limit_state_checking/ec2/test_pile_shear_uls_check.py
 echo "$BLEU" "      EC2 limit state checking: crack control." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec2/test_crack_control_sls_checking_EC2_01.py
 python tests/postprocess/limit_state_checking/ec2/test_crack_control_sls_checking_EC2_02.py
