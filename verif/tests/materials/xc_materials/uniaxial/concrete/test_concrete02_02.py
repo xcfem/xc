@@ -40,7 +40,7 @@ rfSteel=concrete_base.ReinforcingSteel(steelName='rfSteel', fyk=fy_exp, emax=0.0
 rfSteel.Es=Es_exp
 steelDiagram= rfSteel.defDiagK(preprocessor) #Definition of steel stress-strain diagram in XC. 
 
-Etsdiag, ftdiag= concrAux.getEts(concrMat= concrAux, reinfMat=rfSteel, reinfRatio=ro_exp,diagType='K', fct_exp= fct_exp, Ec_exp= Ec_exp, fy_exp= fy_exp, Es_exp= Es_exp)
+Etsdiag, ftdiag= concrAux.getAccurateEts(concrMat= concrAux, reinfMat=rfSteel, reinfRatio=ro_exp,diagType='K', fct_exp= fct_exp, Ec_exp= Ec_exp, fy_exp= fy_exp, Es_exp= Es_exp)
 #Material for making concrete fibers: concrete02 with tension stiffening
 concr= typical_materials.defConcrete02(preprocessor=preprocessor,name='concr',epsc0=concrAux.epsilon0(),fpc=concrAux.fmaxK(),fpcu=0.85*concrAux.fmaxK(),epscu=concrAux.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=abs(Etsdiag))
 

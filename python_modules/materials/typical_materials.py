@@ -564,6 +564,8 @@ def defTDConcrete(preprocessor, name, fpc, ft, Ec, beta, age, tcast, csParameter
     else:
         epsc0= ft/Ec
         retval.Ets= abs(0.1*fpc/epsc0)
+    print('TDConcrete Ec= ', Ec/1e9)
+    print('TDConcrete retval.ft= ', retval.ft/1e6)
     print('TDConcrete retval.Ets= ', retval.Ets/1e9)
     retval.Ec= Ec # concrete stiffness.
     retval.beta= beta # beta parameter.
@@ -639,7 +641,8 @@ def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, epsba, eps
         retval.Ets= Ets
     else:
         epsc0= ft/Ec        
-        retval.Ets= 0.1*fcm/epsc0
+        retval.Ets= abs(0.1*fcm/epsc0)
+    print('TDConcreteMC10 retval.ft= ', retval.ft/1e6)
     print('TDConcreteMC10 retval.Ets= ', retval.Ets/1e9)
     retval.Ec= Ec # concrete stiffness.
     retval.Ecm= Ecm # 28-day modulus, necessary for normalizing creep coefficient.

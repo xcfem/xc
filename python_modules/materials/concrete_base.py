@@ -312,7 +312,20 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         '''Fctk095: tensile strength [Pa][+] 95% fractile (table 3.1 EC2).'''
         return 1.3*self.getFctm()
 
-    def getEts(self, concrMat, reinfMat, reinfRatio, diagType, fct_exp, Ec_exp, fy_exp, Es_exp, regressionLine= True):
+    def getApproximateEts(self):
+        ''' Return the an approximate value of the concrete tension stiffness.
+        '''
+        ftdiag= self.fctk()/10.
+        # self.ft=ftdiag
+        ectdiag= ftdiag/self.E0()
+        # self.epsct0=ectdiag
+        # eydiag=self.tensionStiffparam.eps_y() # reinforcing steel strain at yield point
+        Etsdiag= ftdiag/(5*ectdiag)
+        # self.Ets=Etsdiag
+        # self.epsctu=ectdiag+ftdiag/Etsdiag
+        return Etsdiag, ftdiag
+
+    def getAccurateEts(self, concrMat, reinfMat, reinfRatio, diagType, fct_exp, Ec_exp, fy_exp, Es_exp, regressionLine= True):
         ''' Return the concrete tension stiffness.
 
         :param concrMat: concrete material of the RC section
@@ -358,7 +371,6 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         else:
             Etsdiag=ftdiag/(eydiag-ectdiag)
         return Etsdiag, ftdiag
-        
 
     def defTDConcreteMC10(self, preprocessor):
         ''' Defines a TDConcreteMC10 uniaxial material.
@@ -445,14 +457,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             # Etsdiag=-self.tensionStiffparam.slopeRegresLineFixedPoint()
             # self.materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
         elif(self.initTensStiff):
-            ftdiag=self.fctk()/10.
-#            self.ft=ftdiag
-            ectdiag=ftdiag/self.E0()
-#            self.epsct0=ectdiag
-            #eydiag=self.tensionStiffparam.eps_y()                          #reinforcing steel strain at yield point
-            Etsdiag=ftdiag/(5*ectdiag)
-#            self.Ets=Etsdiag
-#            self.epsctu=ectdiag+ftdiag/Etsdiag
+            Etsdiag, fctdiag= self.getApproximateEts()
             self.materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
 #            self.materialDiagramK.epsct0=ectdiag
 #            self.materialDiagramK.epsctu=ectdiag+ftdiag/Etsdiag

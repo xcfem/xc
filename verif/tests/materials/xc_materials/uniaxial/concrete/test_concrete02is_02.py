@@ -44,7 +44,7 @@ steelDiagram= rfSteel.defDiagK(preprocessor) #Definition of steel stress-strain 
 epsc0= concrAux.epsilon0()
 fpc= concrAux.fmaxK()
 Ec0= 2.0*fpc/epsc0
-Etsdiag, ftdiag= concrAux.getEts(concrMat= concrAux, reinfMat=rfSteel, reinfRatio=ro_exp,diagType='K', fct_exp= fct_exp, Ec_exp= Ec_exp, fy_exp= fy_exp, Es_exp= Es_exp)
+Etsdiag, ftdiag= concrAux.getAccurateEts(concrMat= concrAux, reinfMat=rfSteel, reinfRatio=ro_exp,diagType='K', fct_exp= fct_exp, Ec_exp= Ec_exp, fy_exp= fy_exp, Es_exp= Es_exp)
 concr= typical_materials.defConcrete02IS(preprocessor=preprocessor, name='concr', Ec0= Ec0, epsc0=epsc0, fpc= fpc, fpcu=0.85*concrAux.fmaxK(), epscu=concrAux.epsilonU(), ratioSlope=0.1, ft=ftdiag, Ets=abs(Etsdiag))
 
 #regression line passing through point (optional approximation)
