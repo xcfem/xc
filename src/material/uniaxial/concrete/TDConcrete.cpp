@@ -474,7 +474,7 @@ void XC::TDConcrete::Print(std::ostream &s, int flag) const
 //! @param epsc[in]: concrete strain.
 //! @param sigc[out]: concrete stress.
 //! @param Ect[out]: tangent concrete modulus.
-void XC::TDConcrete::Tens_Envlp (double epsc, double &sigc, double &Ect)
+void XC::TDConcrete::Tens_Envlp(double epsc, double &sigc, double &Ect)
   {
     /*-----------------------------------------------------------------------
     ! monotonic envelope of concrete in tension (positive envelope)
