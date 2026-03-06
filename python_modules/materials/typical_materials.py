@@ -425,7 +425,6 @@ def _def_concrete_02(preprocessor, className, matName, epsc0, fpc, fpcu, epscu, 
         retval.Ets= Ets
     else:
         retval.Ets= abs(0.1*fpc/epsc0)
-    print('Concrete02 retval.Ets= ', retval.Ets/1e9)
     if(fpc==fpcu):
         lmsg.warning("concrete02 compressive strength fpc is equal to crushing strength fpcu => the solver can return wrong stresses or have convergence problems ")
     return retval
@@ -564,9 +563,6 @@ def defTDConcrete(preprocessor, name, fpc, ft, Ec, beta, age, tcast, csParameter
     else:
         epsc0= ft/Ec
         retval.Ets= abs(0.1*fpc/epsc0)
-    print('TDConcrete Ec= ', Ec/1e9)
-    print('TDConcrete retval.ft= ', retval.ft/1e6)
-    print('TDConcrete retval.Ets= ', retval.Ets/1e9)
     retval.Ec= Ec # concrete stiffness.
     retval.beta= beta # beta parameter.
     retval.age= age # concrete age at first loading.
@@ -612,24 +608,6 @@ def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, epsba, eps
                 linear tension softening branch) (defaults to None in 
                 which case the value is set to 0.1*fpc/epsc0).
     '''
-    print('XXX continue debugging here')
-    print('name= ', name)
-    print('fcm= ', fcm)
-    print('ft= ', ft)
-    print('Ec= ', Ec)
-    print('Ecm= ', Ecm)
-    print('beta= ', beta)
-    print('age= ', age)
-    print('epsba= ', epsba)
-    print('epsbb= ', epsbb)
-    print('epsda= ', epsda)
-    print('epsdb= ', epsdb)
-    print('phiba= ', phiba)
-    print('phibb= ', phibb)
-    print('phida= ', phida)
-    print('phidb= ', phidb)
-    print('tcast= ', tcast)
-    print('cem= ', cem)
     materialHandler= preprocessor.getMaterialHandler
     matName= name
     if(not matName):
@@ -642,8 +620,6 @@ def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, epsba, eps
     else:
         epsc0= ft/Ec        
         retval.Ets= abs(0.1*fcm/epsc0)
-    print('TDConcreteMC10 retval.ft= ', retval.ft/1e6)
-    print('TDConcreteMC10 retval.Ets= ', retval.Ets/1e9)
     retval.Ec= Ec # concrete stiffness.
     retval.Ecm= Ecm # 28-day modulus, necessary for normalizing creep coefficient.
     retval.beta= beta # beta parameter.
