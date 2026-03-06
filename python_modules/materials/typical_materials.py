@@ -689,7 +689,7 @@ def defTDConcreteMC10NL(preprocessor,name, fcm, fcu, epscu, ft, Ec, Ecm, beta, a
         retval.Ets= Ets
     else:
         epsc0= ft/Ec
-        retval.Ets= 0.1*fcm/epsc0    
+        retval.Ets= 0.1*abs(fcm/epsc0)    
     retval.Ec= Ec # concrete stiffness.
     retval.Ecm= Ecm # 28-day modulus, necessary for normalizing creep coefficient.
     retval.beta= beta # beta parameter.
