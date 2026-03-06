@@ -388,10 +388,8 @@ void XC::TDConcreteMC10::Tens_Envlp(double epsc, double &sigc, double &Ect)
     !    sigc  = stress corresponding to eps
     !    Ect  = tangent concrete modulus
     !-----------------------------------------------------------------------*/
-  
     const double Ec0= Ec;
     const double eps0= ft / Ec0; // concrete strain at maximum strength.
-    const double epsu = ft * (1.0 / Ets + 1.0 / Ec0); // concrete strain at crushing strength.
 
     // USE THIS ONE
     if(epsc <= eps0)
@@ -401,23 +399,10 @@ void XC::TDConcreteMC10::Tens_Envlp(double epsc, double &sigc, double &Ect)
       }
     else
       {
-       if(epsc<=epsu)
-	  {
-	    Ect= -beta * eps0*ft / pow(epsc, 2)*pow(eps0 / epsc, beta - 1.0);
-	    sigc= ft * pow(eps0 / epsc, beta);
-	  }
-	else
-	  {
-            // Ect= 0.0
-            Ect= 1.0e-10;
-            sigc= 0.0;
-          }
+	Ect= -beta * eps0*ft / pow(epsc, 2)*pow(eps0 / epsc, beta - 1.0);
+	sigc= ft * pow(eps0 / epsc, beta);
       }
-    std::cout << "eps0= " << eps0*1e3
-              << " epsu= " << epsu*1e3
-              << " epsc= " << epsc*1e3
-	      << " sgc= " << sigc/1e6
-	      << std::endl;
+        
     //THiS IS FOR TESTING LINEAR
     //sigc = epsc*Ec0;
     //Ect = Ec0;
