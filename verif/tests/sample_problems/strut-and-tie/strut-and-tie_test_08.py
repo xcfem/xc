@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Generation of a strut-and-tie model for a threee-pile pile cap that 
-    transfer loads from the piles to the piles. 
+    transfer loads from the pier to the piles. 
 
     Compute the angles of the radial struts and set its area according
     to this angle.

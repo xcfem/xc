@@ -37,7 +37,6 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
-from scipy.interpolate import interp1d
 from scipy.integrate import trapz
 from misc_utils import log_messages as lmsg
 

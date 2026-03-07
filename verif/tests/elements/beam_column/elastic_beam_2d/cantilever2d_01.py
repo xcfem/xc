@@ -31,6 +31,7 @@ L= 1.5 # Bar length (m)
 # Load
 F= 1.5e3 # Load magnitude (kN)
 
+# Define FE Problem.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler

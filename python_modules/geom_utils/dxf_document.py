@@ -103,6 +103,20 @@ class DXFDocument(object):
         retval= self.msp.add_lwpolyline(pts)
         DXFDocument._set_attributes(entity= retval, layerName= layerName, color= color, lineType= lineType, transparency= transparency, lineWeight= lineWeight)
         return retval
+
+    def addPolygon2d(self, polygon2d:geom.Polygon2d, layerName= None, color= None, lineType= None, transparency= None, lineWeight= None):
+        ''' Add a 2D polygon to the DXF document.
+
+        :param msp: ezdxf model space.
+        :param polygon2d: 2D polygon.
+        :param color: color of the new entity.
+        :param lineType: line type of the new entity.
+        :param transparenciy: transparency of the new entity.
+        :param lineWeight: line weight of the new entity.
+        '''
+        vertices= polygon2d.getVertexList()
+        vertices.append(vertices[0])
+        return self.addPolyline2d(polyline2d= geom.Polyline2d(vertices), layerName= layerName, color= color, lineType= lineType, transparency= transparency, lineWeight= lineWeight)
         
     def addPolyline3d(self, polyline3d:geom.Polyline3d, layerName= None, color= None, lineType= None, transparency= None, lineWeight= None):
         ''' Add a 3D polyline to the DXF document.
@@ -120,3 +134,16 @@ class DXFDocument(object):
         DXFDocument._set_attributes(entity= retval, layerName= layerName, color= color, lineType= lineType, transparency= transparency, lineWeight= lineWeight)
         return retval
         
+    def addPolygon3d(self, polygon3d:geom.Polygon3d, layerName= None, color= None, lineType= None, transparency= None, lineWeight= None):
+        ''' Add a 3D polygon to the DXF document.
+
+        :param msp: ezdxf model space.
+        :param polygon3d: 3D polygon.
+        :param color: color of the new entity.
+        :param lineType: line type of the new entity.
+        :param transparenciy: transparency of the new entity.
+        :param lineWeight: line weight of the new entity.
+        '''
+        vertices= polygon3d.getVertexList()
+        vertices.append(vertices[0])
+        return self.addPolyline3d(polyline3d= geom.Polyline3d(vertices), layerName= layerName, color= color, lineType= lineType, transparency= transparency, lineWeight= lineWeight)

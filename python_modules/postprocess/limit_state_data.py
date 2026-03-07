@@ -293,6 +293,23 @@ class LimitStateData(object):
         '''Return the output file name without extension.'''
         return self.getFullVerifPath()+self.outputDataBaseFileName
     
+    def getOutputDataBaseDict(self):
+        '''Return a Python dictionary contaning the data corresponding to the
+           performes limit state verification.'''
+        retval= None
+        resultsDataFileName= self.getOutputDataBaseFileName() + '.json'
+        if(os.path.isfile(resultsDataFileName)):
+            with open(resultsDataFileName, 'r') as f:
+                retval= json.load(f)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= '; file: '+resultsDataFileName+' not found.'
+            errorMsg+= ' Have you performed the limit state checking?'
+            lmsg.error(className+'.'+methodName+errorMsg)
+            exit(1)
+        return retval
+    
     def getOutputDataFileName(self):
         '''Return the Python executable file name.'''
         return self.getOutputDataBaseFileName() + '.py'

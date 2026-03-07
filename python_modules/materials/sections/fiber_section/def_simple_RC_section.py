@@ -1092,7 +1092,6 @@ class RCSectionBase(object):
         retval= materialHandler.getSectionGeometry(geomSectionName)
         return retval
             
-    
     def getConcreteType(self):
         ''' returns the concrete type of this sections.'''
         return self.fiberSectionParameters.concrType
@@ -2501,6 +2500,18 @@ class RCRectangularSection(BasicRectangularRCSection):
             posPoints.append((p1,p2))
         return negPoints, posPoints
 
+    def getMainReinforcementArea(self):
+        ''' Return the total area of the main reinforcement.'''
+        retval= 0.0
+        if(hasattr(self, 'geomSection')):
+           retval= self.geomSection.getReinfLayers.getAreaGrossSection()
+        else:
+            if(self.negatvRebarRows):
+                retval+= self.negatvRebarRows.getAs()
+            if(self.positvRebarRows):
+                retval+= self.positvRebarRows.getAs()
+        return retval
+            
     def defSectionGeometry(self, preprocessor, matDiagType):
         '''
         Define the XC section geometry object for a reinforced concrete section 
