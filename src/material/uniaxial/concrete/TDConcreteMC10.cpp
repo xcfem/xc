@@ -413,11 +413,6 @@ void XC::TDConcreteMC10::Tens_Envlp(double epsc, double &sigc, double &Ect)
             sigc= 0.0;
           }
       }
-    std::cout << "eps0= " << eps0*1e3
-              << " epsu= " << epsu*1e3
-              << " epsc= " << epsc*1e3
-	      << " sgc= " << sigc/1e6
-	      << std::endl;
     //THiS IS FOR TESTING LINEAR
     //sigc = epsc*Ec0;
     //Ect = Ec0;
