@@ -1527,6 +1527,63 @@ class GenericSection2D(SectionProperties):
     def alphaY(self):
         '''Return shear shape factor with respect to local y-axis'''
         return self.alph
+    
+    def getWarpingConstant(self):
+        ''' Return the value of the section warping constant.
+        '''
+        # This method is defined to allow this class to be used as a
+        # particular case of a 3D section in some contexts. For example, 
+        # when creating an elastic shear section in the method 
+        # defElasticShearSection2d of SectionProperties.
+    
+        # An alternative solution is to particularize the SectionProperties
+        # methods that create the different XC materials ElasticSection2d
+        # and ElasticShearSection2d.
+    
+        # For the time being, the previous solution makes no harm.
+        return 0.0 # No warping constant for a 2D section.
+    
+    def Iy(self):
+        '''Return second moment of area about the local z-axis'''
+        # This method is defined to allow this class to be used as a
+        # particular case of a 3D section in some contexts. For example, 
+        # when creating an elastic shear section in the method 
+        # defElasticShearSection2d of SectionProperties.
+    
+        # An alternative solution is to particularize the SectionProperties
+        # methods that create the different XC materials ElasticSection2d
+        # and ElasticShearSection2d.
+    
+        # For the time being, the previous solution makes no harm.
+        return 0.0 # No Iy for a 2D section.
+    
+    def J(self):
+        '''Return second moment of area about the local z-axis'''
+        # This method is defined to allow this class to be used as a
+        # particular case of a 3D section in some contexts. For example, 
+        # when creating an elastic shear section in the method 
+        # defElasticShearSection2d of SectionProperties.
+    
+        # An alternative solution is to particularize the SectionProperties
+        # methods that create the different XC materials ElasticSection2d
+        # and ElasticShearSection2d.
+    
+        # For the time being, the previous solution makes no harm.
+        return 0.0 # No torsional inertia for a 2D section.
+    
+    def alphaZ(self):
+        '''Return second moment of area about the local z-axis'''
+        # This method is defined to allow this class to be used as a
+        # particular case of a 3D section in some contexts. For example, 
+        # when creating an elastic shear section in the method 
+        # defElasticShearSection2d of SectionProperties.
+    
+        # An alternative solution is to particularize the SectionProperties
+        # methods that create the different XC materials ElasticSection2d
+        # and ElasticShearSection2d.
+    
+        # For the time being, the previous solution makes no harm.
+        return 0.0 # No alphaZ for a 2D section.
 
 class GenericSection(SectionProperties):
     '''Mechanical properties of generic section 

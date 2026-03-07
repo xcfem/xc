@@ -402,7 +402,7 @@ void XC::TDConcreteMC10::Tens_Envlp(double epsc, double &sigc, double &Ect)
 	Ect= -beta * eps0*ft / pow(epsc, 2)*pow(eps0 / epsc, beta - 1.0);
 	sigc= ft * pow(eps0 / epsc, beta);
       }
-        
+
     //THiS IS FOR TESTING LINEAR
     //sigc = epsc*Ec0;
     //Ect = Ec0;

@@ -41,6 +41,11 @@ class DynamicFactorLoad(object):
         '''
         self.dynamicFactor= dynamicFactor
 
+    def getDynamicFactor(self):
+        ''' Get the dynamic factor for the load.
+        '''
+        return self.dynamicFactor
+
     def setClassificationFactor(self, classificationFactor):
         ''' Set the classification factor for the load.
 
@@ -49,3 +54,9 @@ class DynamicFactorLoad(object):
                                      than normal rail traffic).
         '''
         self.classificationFactor= classificationFactor
+
+    def getClassificationFactor(self):
+        ''' Get the classification factor for the load.
+        '''
+        return self.classificationFactor
+        

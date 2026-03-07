@@ -4,7 +4,6 @@
 
 import numpy as np
 import scipy.integrate
-from scipy import interpolate
 from rough_calculations import ng_beam as b
 from rough_calculations import ng_simple_beam as sb
 import geom

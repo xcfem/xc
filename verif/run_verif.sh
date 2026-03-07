@@ -183,6 +183,7 @@ python tests/utility/geom/polygons/2d/quadrilateral2D_test_02.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_03.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_04.py
 python tests/utility/geom/polygons/2d/quadrilateral2D_test_05.py
+python tests/utility/geom/polygons/2d/generate_viaduct_sections.py
 echo "$BLEU" "      3D Polygons." "$NORMAL"
 python tests/utility/geom/polygons/3d/polygon3D_test_01.py
 python tests/utility/geom/polygons/3d/polygon3D_test_02.py
@@ -284,7 +285,9 @@ python tests/utility/geom/trf/rotation2d_test_02.py
 python tests/utility/geom/trf/rotation3d_test_01.py
 python tests/utility/geom/trf/rotation3d_test_02.py
 echo "$BLEU" "    Mechanical properties." "$NORMAL"
-python tests/utility/geom/principal_axes_of_inertia_2d_test_01.py
+python tests/utility/geom/mass_properties/test_centroid_01.py
+python tests/utility/geom/mass_properties/test_steiner_01.py
+python tests/utility/geom/mass_properties/principal_axes_of_inertia_2d_test_01.py
 echo "$BLEU" "    DXF reading/writing." "$NORMAL"
 python tests/utility/geom/dxf/ezdxf_test_01.py
 python tests/utility/geom/dxf/dxf_export_test_01.py
@@ -352,6 +355,7 @@ python tests/actions/wind/ec1/test_ec1_longitudinal_wind_reduction_factor.py
 python tests/actions/wind/ec1/test_ec1_bridge_deck_vertical_force_coefficient.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_without_traffic_01.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_without_traffic_02.py
+python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_without_traffic_03.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_with_traffic_01.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_with_traffic_02.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_free_standing_wall.py
@@ -400,6 +404,7 @@ python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifu
 python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifugal_force_05.py
 python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifugal_force_06.py
 python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifugal_force_07.py
+python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_railway_centrifugal_force_08.py
 python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_traction_and_braking_force.py
 python tests/actions/traffic_loads/railway_traffic/ec1/test_ec1_line_load_design_situation_ii.py
 echo "$BLEU" "      IAPF traffic loads tests. Railway traffic." "$NORMAL"
@@ -1572,6 +1577,7 @@ echo "$BLEU" "    EC2 misc. tests." "$NORMAL"
 python tests/materials/ec2/test_anchorage_length_01.py
 python tests/materials/ec2/test_EC2_max_min_reinforcement_area_01.py
 python tests/materials/ec2/test_EC2_max_min_reinforcement_area_02.py
+python tests/materials/ec2/test_ec2_minimum_pile_reinforcement_area.py
 python tests/materials/ec2/test_lap_length_01.py
 python tests/materials/ec2/test_ec2_concrete_01.py
 python tests/materials/ec2/test_ec2_concrete_02.py
@@ -1980,10 +1986,12 @@ python tests/postprocess/limit_state_checking/ec0/test_deck_twist_estimation.py
 echo "$BLEU" "    EC2 limit state checking." "$NORMAL"
 echo "$BLEU" "      EC2 limit state checking: bending." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec2/test_2D_bending_uls_checking_01.py
+python tests/postprocess/limit_state_checking/ec2/test_pile_normal_stresses_uls_check.py
 echo "$BLEU" "      EC2 limit state checking: shear." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_01.py
 python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_05.py
 python tests/postprocess/limit_state_checking/ec2/test_shear_uls_checking_06.py
+python tests/postprocess/limit_state_checking/ec2/test_pile_shear_uls_check.py
 echo "$BLEU" "      EC2 limit state checking: crack control." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec2/test_crack_control_sls_checking_EC2_01.py
 python tests/postprocess/limit_state_checking/ec2/test_crack_control_sls_checking_EC2_02.py

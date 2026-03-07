@@ -103,7 +103,7 @@ if(creepOnDeck):
     concrete.defTDConcreteParameters(beta= beta, cement= '42.5R', h0= h0, T= 21, RH= RH, ts= ts, t0= t0)
     
     deckSection.defRCSection2d(preprocessor, matDiagType= 'td')
-    deckSection.pdfReport()
+    # deckSection.pdfReport()
     xcDeckSection= deckSection.fiberSection
 else:
     deckSection.defRCSection2d(preprocessor, matDiagType= 'd')
@@ -129,7 +129,8 @@ lp0.newNodalLoad(n2.tag, xc.Vector([N, 0, M]))
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution.
-solProc= predefined_solutions.PlainNewtonRaphson(feProblem, convergenceTestTol= 1e-2, printFlag= 1)
+# 20260306 LP; THIS DOES NOT WORK: solProc= predefined_solutions.PlainNewtonRaphson(feProblem, convergenceTestTol= 1e-2, maxNumIter= 150, printFlag= 1)
+solProc= predefined_solutions.PlainStaticModifiedNewton(feProblem, convergenceTestTol= 1e-3, maxNumIter= 300, printFlag= 0)
 solProc.setup()
 
 if(creepOnDeck):
@@ -142,9 +143,9 @@ if(creepOnDeck):
         lmsg.error("Can't solve for the initial state.")
         exit(1)
     modelSpace.setCreepOn() # Turn creep on
-    
+
 # Compute solution
-dt= 2 # time increment in days
+dt= 150 # time increment in days
 solProc.integrator.dLambda1= dt # set new increment for the integrator.
 solProc.integrator.setNumIncr(dt) # IMPORTANT! otherwise it got stuck.
 
@@ -153,10 +154,11 @@ t= 0
 if(creepOnDeck):
     t= Tcr
 while t < lastT:
-    print('solve for time: '+str(t)+' days.', flush= True)
+    # print('solve for time: '+str(t)+' days.', flush= True)
     ok = solProc.analysis.analyze(1)
     t+= dt
     if(ok!=0):
+        lmsg.error("Can't solve for time: "+str(t)+' days.')
         exit(1)
         
 # # Output stuff.

@@ -291,7 +291,8 @@ modelSpace.addNewLoadCaseToDomain(loadCaseName= 'Ed', loadCaseExpression= e_d, r
 
 # Compute solution.
 if(creepOnDeck):
-    solProc= predefined_solutions.PlainKrylovNewton(prb= feProblem, convergenceTestTol= 1e-2, convTestType= 'energy_incr_conv_test', maxNumIter= 50, printFlag= 1)
+    solProc= predefined_solutions.PlainStaticModifiedNewton(feProblem, convergenceTestTol= 1e-3, maxNumIter= 300, printFlag= 1)
+    # solProc= predefined_solutions.PlainKrylovNewton(prb= feProblem, convergenceTestTol= 1e-2, convTestType= 'energy_incr_conv_test', maxNumIter= 50, printFlag= 1)
 else:
     solProc= predefined_solutions.PlainNewtonRaphson(prb= feProblem, convergenceTestTol= 1e-3, printFlag= 1)
 
@@ -304,10 +305,11 @@ if(creepOnDeck):
     # Set the load control integrator with dt=0 so that the domain time doesn’t advance.
     solProc.integrator.dLambda1= 0.0  
     result= solProc.analysis.analyze(1)
+    print('Solution found for initial state.')
     modelSpace.setCreepOn() # Turn creep on
     
 # Compute solution
-dt= 10 # time increment in days
+dt= 5 # time increment in days
 solProc.integrator.dLambda1= dt # set new increment for the integrator.
 solProc.integrator.setNumIncr(dt) # IMPORTANT! otherwise it got stuck.
 
