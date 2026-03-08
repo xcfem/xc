@@ -1,4 +1,14 @@
-Uniaxial materials for concrete modelization.
+# Uniaxial materials for concrete modelization.
+
+## Creep related parameters.
+
+- `age`: concrete age at first loading. The age of concrete at first loading significantly impacts creep, with younger concrete (e.g., 1–14 days) exhibiting substantially higher creep strain than, for instance, 28-day old concrete.
+- `beta`: tension softening parameter. Higher beta means more softening (tending towards brittle cracking). The value recommended by Tamai et al. is 0.4.
+- `tcast`: is the analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
+- `eps_m`: mechanical strain.
+- `epsP_m`: commited mechanical strain. 
+- `eps_total`: total strain.
+- `epsP_total`: commited total strain. 
 
 ## References
 
@@ -15,3 +25,4 @@ Uniaxial materials for concrete modelization.
  - [Eurocode 2](https://eurocodes.jrc.ec.europa.eu/showpage.php?id=132)
  - [ACI concrete codes](https://www.concrete.org/store/productdetail.aspx?ItemID=COLOL&Format=SUBSCRIPTION&Language=English&Units=US_Units)
  - [EHE](https://www.mitma.gob.es/organos-colegiados/mas-organos-colegiados/comision-permanente-del-hormigon/cph/instrucciones/ehe-08-version-en-ingles)
+
