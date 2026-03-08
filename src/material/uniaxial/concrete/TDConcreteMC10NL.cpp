@@ -351,24 +351,7 @@ int XC::TDConcreteMC10NL::commitState(void)
 	  }
       }
 
-    if(creepSteps.getCount()==0)
-      {
-	epsInit = epsP_total;
-	sigInit = hstvP.sig;
-      }
-
-    if (sigInit<0.0 && t_load<0.0)
-      {
-	t_load = getCurrentTime();
-	sigInit = hstvP.sig;
-	epsInit = epsP_m;
-      }
-    else if(sigInit>0.0 && hstvP.sig<0.0 && t_load<0.0)
-      {
-	t_load = getCurrentTime();
-	sigInit = hstvP.sig;
-	epsInit = epsP_m;
-      }
+    commit_eps_and_sig_init(creepSteps.getCount());
 	  
     //if (creepControl==1) {
     //	count++;

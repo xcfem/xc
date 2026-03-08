@@ -66,7 +66,7 @@ class TDConcreteBase : public RawConcrete
     // double EcT; //Time dependent stiffness
     double age; //!< concrete age at first loading, Added by AMK
     //double sigCr; //!< stress that creep curve is based on
-    double beta; //!< tension softening parameter
+    double beta; //!< tension softening parameter.
     double tcast; //!< the analysis time corresponding to concrete casting in days
 
     // hstvP : Concerete HISTORY VARIABLES last committed step
@@ -76,21 +76,22 @@ class TDConcreteBase : public RawConcrete
     CreepConcreteHistoryVars hstv; //!< = values at current step (trial values)
 	
     //Added by AMK:
+    double t_load; //loaded time
     double epsInit;
     double sigInit;
-    double eps_m; // Mechanical strain.
-    double epsP_m; // Commited mechanical strain.
+    double eps_m; //!< Mechanical strain.
+    double epsP_m; //!< Commited mechanical strain.
     double eps_total; // Total strain.
     double epsP_total; // Commited total strain.
     double t; //Time
-    double t_load; //loaded time
     double Et;
     int crack_flag;
     int crackP_flag;
     int iter; //Iteration number
     
-    void Compr_Envlp(double epsc, double &sigc, double &Ect);    
+    void Compr_Envlp(double epsc, double &sigc, double &Ect);
   protected:
+    void commit_eps_and_sig_init(int creep_steps_count);
     int sendData(Communicator &);
     int recvData(const Communicator &);    
   public:

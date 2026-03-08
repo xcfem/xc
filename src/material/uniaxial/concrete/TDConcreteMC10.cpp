@@ -336,29 +336,12 @@ int XC::TDConcreteMC10::commitState(void)
 	  { Et = hstv.sig/eps_m; }
       }
 
-    if(creepSteps.getCount()==0)
-      {
-	epsInit = epsP_total;
-	sigInit = hstvP.sig;
-      }
+    commit_eps_and_sig_init(creepSteps.getCount());
 
-    if(sigInit<0.0 && t_load<0.0)
-      {
-	t_load = getCurrentTime();
-	sigInit = hstvP.sig;
-	epsInit = epsP_m;
-      }
-    else if (sigInit>0.0 && hstvP.sig<0.0 && t_load<0.0)
-      {
-	t_load = getCurrentTime();
-	sigInit = hstvP.sig;
-	epsInit = epsP_m;
-      }
-
-	  //if (creepControl==1) {
-	  //	count++;
-	  //    resize();
-	  //}
+    //if (creepControl==1) {
+    //	count++;
+    //    resize();
+    //}
     creepSteps.next();
     return 0;
   }

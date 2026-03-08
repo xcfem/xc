@@ -105,6 +105,7 @@ void XC::TDConcreteBase::setup_parameters(void)
     hstv.setup_parameters(Ec);
     
     Et= Ec;
+    t_load= -1.0; //Added by AMK
     epsInit= 0.0; //Added by AMK
     sigInit= 0.0; //Added by AMK
     eps_total= 0.0; //Added by AMK
@@ -112,7 +113,6 @@ void XC::TDConcreteBase::setup_parameters(void)
 
     eps_m= 0.0; //Added by AMK
 
-    t_load= -1.0; //Added by AMK
     crack_flag= 0;
     crackP_flag= 0; // Added by LP
     iter= 0;
@@ -124,7 +124,7 @@ void XC::TDConcreteBase::setup_parameters(void)
 //! @brief Constructor.
 XC::TDConcreteBase::TDConcreteBase(int tag, int classTag)
   : RawConcrete(tag, classTag),
-    ft(0.0), Ets(0.0), Ec(0.0), age(0.0), beta(0.0), tcast(0.0)
+    ft(0.0), Ets(0.0), Ec(0.0), age(0.0), beta(0.4), tcast(0.0)
     {}
 
 //! @brief Constructor.
@@ -329,6 +329,31 @@ void XC::TDConcreteBase::Compr_Envlp(double epsc, double &sigc, double &Ect)
     sigc= Ect*epsc;
   }
 
+void XC::TDConcreteBase::commit_eps_and_sig_init(int creep_steps_count)
+  {
+    if(creep_steps_count==0)
+      {
+	epsInit = epsP_total;
+	sigInit = hstvP.sig;
+      }
+
+    if(t_load<0.0) // if t_load not initialized yet.
+      {
+	if(sigInit<0.0) // if compression.
+	  {
+	    t_load = getCurrentTime();
+	    sigInit = hstvP.sig;
+	    epsInit = epsP_m;
+	  }
+	else if (sigInit>0.0 && hstvP.sig<0.0) // if tension after compression.
+	  {
+	    t_load = getCurrentTime();
+	    sigInit = hstvP.sig;
+	    epsInit = epsP_m;
+	  }
+      }
+  }
+
 int XC::TDConcreteBase::getVariable(const std::string &varName, Information &theInfo) const
   {
     if(varName=="ec")
@@ -364,20 +389,20 @@ XC::Response *XC::TDConcreteBase::setResponse(const std::vector<std::string> &ar
       }
 
     // strain
-    else if(argv[0]=="strain") {
+    else if(argv[0]=="strain")
+      {
             //theOutput.tag("ResponseType", "eps11");
             theResponse =  new MaterialResponse(this, 3, this->getStrain());
-    }
-
+      }
     // strain
     else if((argv[0]=="stressStrain") || 
                      (argv[0]=="stressANDstrain") ||
-                     (argv[0]=="stressAndStrain")) {
+                     (argv[0]=="stressAndStrain"))
+      {
             //theOutput.tag("ResponseType", "sig11");
             //theOutput.tag("ResponseType", "eps11");
             theResponse =  new MaterialResponse(this, 4, Vector(2));
-    }
-
+      }
     else if(argv[0]=="CreepStressStrainTangent")
       {
             //theOutput.tag("ResponseType", "sig11");

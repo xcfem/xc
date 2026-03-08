@@ -86,16 +86,8 @@ class CreepMaterial: public EncapsulatedUniaxialMaterial
     // matpar : Concrete FIXED PROPERTIES
     //	double fcT;  //Time Dependent Strength
     double age; //!< concrete age at first loading, Added by AMK
-    double beta; //!< tension softening parameter
+    double beta; //!< tension softening parameter.
     double tcast; //!< the analysis time corresponding to concrete casting in days.
-    CreepShrinkageParameters creepShrinkageParameters; //!< Creep and shrinkage parameters.
-
-    // hstvP : Concerete HISTORY VARIABLES last committed step
-    CreepConcreteHistoryVars hstvP; //!< = values at previous converged step
-
-    // hstv : Concerete HISTORY VARIABLES  current step
-    CreepConcreteHistoryVars hstv; //!< = values at current step (trial values)
-
     //Added by AMK:
     double epsInit;
     double sigInit;
@@ -120,11 +112,19 @@ class CreepMaterial: public EncapsulatedUniaxialMaterial
     int crackP_flag;
     int iter; //!< Iteration number
 
-    ACICreepSteps creepSteps;
+    CreepShrinkageParameters creepShrinkageParameters; //!< Creep and shrinkage parameters.
 
+    // hstvP : Concerete HISTORY VARIABLES last committed step
+    CreepConcreteHistoryVars hstvP; //!< = values at previous converged step
+
+    // hstv : Concerete HISTORY VARIABLES  current step
+    CreepConcreteHistoryVars hstv; //!< = values at current step (trial values)
+    
+    ACICreepSteps creepSteps;
 
     const RawConcrete *_get_concrete_material(void) const;
   protected:
+    void commit_eps_and_sig_init(void);
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:

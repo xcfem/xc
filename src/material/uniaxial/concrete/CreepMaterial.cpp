@@ -72,7 +72,7 @@ const XC::RawConcrete *XC::CreepMaterial::_get_concrete_material(void) const
 
 XC::CreepMaterial::CreepMaterial(int tag)
   : EncapsulatedUniaxialMaterial(tag, MAT_TAG_CreepMaterial),
-    age(0.0), beta(0.0), tcast(0.0),
+    age(0.0), beta(0.4), tcast(0.0),
     epsInit(0.0), sigInit(0.0),
     eps_cr(0.0), eps_sh(0.0), eps_m(0.0),
     epsP_cr(00), epsP_sh(0.0), epsP_m(0.0),
@@ -83,12 +83,12 @@ XC::CreepMaterial::CreepMaterial(int tag)
 XC::CreepMaterial::CreepMaterial(int tag, double _fc, double _fcu, double _epscu, double _ft, double _Ec, double _beta, double _age, double _tcast, const CreepShrinkageParameters &_csParameters)
   : EncapsulatedUniaxialMaterial(tag, MAT_TAG_CreepMaterial),
     age(_age), beta(_beta), tcast(_tcast),
-    creepShrinkageParameters(_csParameters),
     epsInit(0.0), sigInit(0.0),
     eps_cr(0.0), eps_sh(0.0), eps_m(0.0),
     epsP_cr(0.0), epsP_sh(0.0), epsP_m(0.0),
     eps_total(0.0), epsP_total(0.0), t(0.0), t_load(-1.0), Et(_Ec),
-    crack_flag(0), crackP_flag(0), iter(0)
+    crack_flag(0), crackP_flag(0), iter(0),
+    creepShrinkageParameters(_csParameters)
   {
       
     Concrete02IS wrappedMaterial(0,_Ec, _fc, 2*_fc/_Ec,_fcu,_epscu);
@@ -109,12 +109,12 @@ XC::CreepMaterial::CreepMaterial(int tag, double _fc, double _fcu, double _epscu
 XC::CreepMaterial::CreepMaterial(int tag, UniaxialMaterial &matl, double _age, double _tcast, const CreepShrinkageParameters &_csParameters)
   : EncapsulatedUniaxialMaterial(tag, MAT_TAG_CreepMaterial, matl),
     age(_age), beta(0.0), tcast(_tcast),
-    creepShrinkageParameters(_csParameters),
     epsInit(0.0), sigInit(0.0),
     eps_cr(0.0), eps_sh(0.0), eps_m(0.0),
     epsP_cr(0.0), epsP_sh(0.0), epsP_m(0.0),
     eps_total(0.0), epsP_total(0.0), t(0.0), t_load(-1.0),
-    crack_flag(0), crackP_flag(0), iter(0)
+    crack_flag(0), crackP_flag(0), iter(0),
+    creepShrinkageParameters(_csParameters)
   {
     // Get initial tangent
     const double &_Ec= this->getInitialTangent();
@@ -304,7 +304,32 @@ double XC::CreepMaterial::getShrink(void) const
 double XC::CreepMaterial::getMech(void) const
   { return eps_m; }
 
-int  XC::CreepMaterial::commitState(void)
+void XC::CreepMaterial::commit_eps_and_sig_init(void)
+  {
+    if(creepSteps.getCount()==0)
+      {
+	epsInit= epsP_total;
+	sigInit= hstvP.sig;
+      }
+
+    if(t_load<0.0) // if t_load not initialized yet.
+      {
+	if(sigInit<0.0) // if compression
+	  {
+	    t_load= getCurrentTime();
+	    sigInit= hstvP.sig;
+	    epsInit= epsP_m;
+	  }
+	else if(sigInit>0.0 && hstvP.sig<0.0) // if tension after compression.
+	  {
+	    t_load= getCurrentTime();
+	    sigInit= hstvP.sig;
+	    epsInit= epsP_m;
+	  }
+      }
+  }
+
+int XC::CreepMaterial::commitState(void)
   {
     this->iter= 0;
     hstvP.ecmin= hstv.ecmin;
@@ -372,25 +397,8 @@ int  XC::CreepMaterial::commitState(void)
 	  { Et= hstv.sig/eps_m; }
       }
   
-    if(creepSteps.getCount()==0)
-      {
-	epsInit= epsP_total;
-	sigInit= hstvP.sig;
-      }
-  
-    if(sigInit<0.0 && t_load<0.0)
-      {
-	t_load= getCurrentTime();
-	sigInit= hstvP.sig;
-	epsInit= epsP_m;
-      }
-    else if(sigInit>0.0 && hstvP.sig<0.0 && t_load<0.0)
-      {
-	t_load= getCurrentTime();
-	sigInit= hstvP.sig;
-	epsInit= epsP_m;
-      }
-
+    this->commit_eps_and_sig_init();
+    
     this->getMaterial()->commitState();
   
     //if (ops_Creep==1) {
