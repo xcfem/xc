@@ -2119,7 +2119,8 @@ python tests/postprocess/vtk/display_limit_state_results/strut_and_tie/test_disp
 echo "$BLEU" "  Report output." "$NORMAL"
 python tests/postprocess/report/test_report_loads_01.py
 python tests/postprocess/report/test_report_check_01.py
-python tests/postprocess/report/test_report_rc_section.py
+python tests/postprocess/report/test_latex_report_rc_section.py
+python tests/postprocess/report/test_pdf_report_rc_section.py
 python tests/postprocess/report/test_rc_section_report_generator.py
 python tests/postprocess/report/test_pot_bearing_report_01.py
 
