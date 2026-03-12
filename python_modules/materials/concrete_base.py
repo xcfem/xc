@@ -386,7 +386,8 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             Ecm= self.Ecm() # 28-day modulus of elasticity.
             fcm= self.getFcm() # mean 28-day cylinder compressive strength.
             fct= self.getFctm() # the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
-            retval= typical_materials.defTDConcreteMC10(preprocessor= preprocessor,name= name, fcm= fcm, ft= fct, Ec= Ec, Ecm= Ecm, beta= cp.beta, age= cp.age, epsba= cp.epsba, epsbb= cp.epsbb, epsda= cp.epsda, epsdb= cp.epsdb, phiba= cp.phiba, phibb= cp.phibb, phida= cp.phida, phidb= cp.phidb, tcast= cp.tcast, cem= cp.cem)
+            mc10CreepShrinkageParameters= self.tdConcreteParameters.creepShrinkageParameters
+            retval= typical_materials.defTDConcreteMC10(preprocessor= preprocessor,name= name, fcm= fcm, ft= fct, Ec= Ec, Ecm= Ecm, beta= cp.beta, age= cp.age, mc10CSParameters= mc10CreepShrinkageParameters, tcast= cp.tcast)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -1287,49 +1288,24 @@ class TDConcreteParameters(object):
 
     :ivar beta: tension softening parameter.
     :ivar age: analysis time at initiation of drying (in days).
-    :ivar epsba: ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010.
-    :ivar epsbb: fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-    :ivar epsda: product of εcds,0 and βRH, as per Model Code 2010.
-    :ivar epsdb: fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-    :ivar phiba: parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
-    :ivar phibb: fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-    :ivar phida: product of βdc(fcm) and β(RH), as per Model Code 2010.
-    :ivar phidb: fitting constant within the drying creep time evolution function as per Model Code 2010.
+    :ivar csParameters: creep and shrinkage parameters according to
+                        ACI or Model Code 2010.
     :ivar tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
-    :ivar cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
     '''
-    def __init__(self,  beta, age, epsba, epsbb, epsda, epsdb, phiba, phibb, phida, phidb, tcast, cem):
+    def __init__(self,  beta, age, csParameters, tcast):
         '''
         Constructor.
 
         :param beta: tension softening parameter.
         :param age: analysis time at initiation of drying (in days).
-        :param epsba: ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010.
-        :param epsbb: fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-        :param epsda: product of εcds,0 and βRH, as per Model Code 2010.
-        :param epsdb: fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-        :param phiba: parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
-        :param phibb: fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-        :param phida: product of βdc(fcm) and β(RH), as per Model Code 2010.
-        :param phidb: fitting constant within the drying creep time evolution function as per Model Code 2010.
+        :param csParameters: creep and shrinkage parameters according to
+                             ACI or Model Code 2010.
         :param tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
-        :param cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
         '''
         self.beta= beta # tension softening parameter.
         self.age= age # analysis time at initiation of drying (in days).
-        
-        self.epsba= epsba # ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010.
-        self.epsbb= epsbb # fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-        self.epsda= epsda # product of εcds,0 and βRH, as per Model Code 2010.
-        self.epsdb= epsdb # fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-        
-        self.phiba= phiba # parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
-        self.phibb= phibb # fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-        self.phida= phida # product of βdc(fcm) and β(RH), as per Model Code 2010.
-        self.phidb= phidb # fitting constant within the drying creep time evolution function as per Model Code 2010.
-        
+        self.creepShrinkageParameters= csParameters
         self.tcast= tcast # analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
-        self.cem= cem # coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
 
 def get_mc10_td_concrete_parameters(beta, concrete, cement, h0, T, RH, ts, t0, rca= 0.0, xi_cbs_2= 1.0, xi_cds_2= 1.0, xi_cb_2= 1.0, xi_cd_2= 1.0):
     ''' Create a TDConcreteParameters object from the given arguments.
@@ -1354,21 +1330,9 @@ def get_mc10_td_concrete_parameters(beta, concrete, cement, h0, T, RH, ts, t0, r
                     default value is 1.0.
     '''
     shrinkageAndCreepParameters= MC10_td_concrete.ShrinkageAndCreepParameters(concrete= concrete, cement= cement, h0= h0, T= T, RH= RH, ts= ts, t0= t0, rca= rca, xi_cbs_2= xi_cbs_2, xi_cds_2= xi_cds_2, xi_cb_2= xi_cb_2, xi_cd_2= xi_cd_2)
-    epsba= shrinkageAndCreepParameters.get_opensees_epsba() # ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010. Row 21 column F in the TDCI_input spreadsheet.
-    epsbb= shrinkageAndCreepParameters.get_opensees_epsbb() # fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017. Row 22 column F in the TDCI_input spreadsheet.
-    epsda= shrinkageAndCreepParameters.get_opensees_epsda() # product of εcds,0 and βRH, as per Model Code 2010. Row 23 column F in the TDCI_input spreadsheet.
-    epsdb= shrinkageAndCreepParameters.get_opensees_epsdb() # fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017. Row 24 column F in the TDCI_input spreadsheet.
+    csParameters= shrinkageAndCreepParameters.getMC10CreepShrinkageParameters()
 
-    ## Creep
-    phiba= shrinkageAndCreepParameters.get_opensees_phiba() # parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010. Row 20 column M in the TDCI_input spreadsheet.
-    phibb= shrinkageAndCreepParameters.get_opensees_phibb() # fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017. Row 21 column M in the TDCI_input spreadsheet.
-    phida= shrinkageAndCreepParameters.get_opensees_phida() # product of βdc(fcm) and β(RH), as per Model Code 2010. Row 22 column M in the TDCI_input spreadsheet.
-    phidb= shrinkageAndCreepParameters.get_opensees_phidb() # fitting constant within the drying creep time evolution function as per Model Code 2010. Row 23 column M in the TDCI_input spreadsheet.
-
-    ## Cement type
-    cem= shrinkageAndCreepParameters.get_opensees_cem() # coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
-
-    return TDConcreteParameters(beta= beta, age= t0, epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, tcast= ts, cem= cem)
+    return TDConcreteParameters(beta= beta, age= t0, csParameters= csParameters, tcast= ts)
     
 def defDiagKConcrete(preprocessor, concreteRecord):
     ''' Define concrete stress-strain characteristic diagram.

@@ -105,8 +105,8 @@ class CreepMaterial: public EncapsulatedUniaxialMaterial
     
     double t; //!< Time.
     double t_load; //!< Loaded time.
-    double phi_i;
-    double Et;
+    double phi_i; //!< Creep coefficient.
+    double Et; //!< Stiffness at time t.
     
     int crack_flag;
     int crackP_flag;

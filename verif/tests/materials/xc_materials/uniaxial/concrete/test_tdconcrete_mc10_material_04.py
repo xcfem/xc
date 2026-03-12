@@ -45,7 +45,7 @@ ba= 0.18 # Steel beam flange width.
 u= 2*2.5 - ba # Perimeter of the concrete part which is exposed to drying, u
 h0= 2*Ag/u  # notional size of the member h0.
 
-tdConcrete= MC10_td_concrete.get_TDConcrete_mc10(preprocessor= preprocessor, name= 'tdConcrete', concrete= concrete, cement= concrete.cemType, h0= h0, T= 21, RH= RH, beta= beta, ts= ts, age= age)
+tdConcrete= MC10_td_concrete.get_TDConcrete_mc10(preprocessor= preprocessor, name= 'tdConcrete', concrete= concrete, cement= concrete.cemType, h0= h0, T= 21, RH= RH, beta= beta, tcast= 0, ts= ts, age= age)
 
 As = 2262e-6
 Ac = Ag-As

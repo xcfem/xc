@@ -65,13 +65,30 @@ class_<XC::TDConcreteBase, bases<XC::RawConcrete>, boost::noncopyable >("TDConcr
 class_<XC::CreepShrinkageParameters, bases<CommandEntity> >("CreepShrinkageParameters")
   .def(init<const double &, const double &, const double &,const double &, const double &, const double &>())
   .def(init<XC::CreepShrinkageParameters>())
-  .def("setup", &XC::CreepShrinkageParameters::setup_parameters,"Sets initial values for the concrete parameters; call after modifying any of the material properties.")
+  .def("setup", &XC::CreepShrinkageParameters::setup_parameters,"Sets initial values for the creep and shrinkage parameters; call after modifying any of the material properties.")
   .add_property("tcr", &XC::CreepShrinkageParameters::getCreepRelationshipAge,  &XC::CreepShrinkageParameters::setCreepRelationshipAge,"creep relationship age.")
   .add_property("epsshu", &XC::CreepShrinkageParameters::getUltimateShrinkage,  &XC::CreepShrinkageParameters::setUltimateShrinkage,"ultimate shrinkage.")
   .add_property("epssha", &XC::CreepShrinkageParameters::getShrinkageParameter,  &XC::CreepShrinkageParameters::setShrinkageParameter,"shrinkage parameter.")
   .add_property("epscru", &XC::CreepShrinkageParameters::getUltimateConcreteCreep,  &XC::CreepShrinkageParameters::setUltimateConcreteCreep,"ultimate concrete creep.")
   .add_property("epscra", &XC::CreepShrinkageParameters::getCreepExponentParameter,  &XC::CreepShrinkageParameters::setCreepExponentParameter,"creep exponent parameter.")
   .add_property("epscrd", &XC::CreepShrinkageParameters::getCreepDParameter,  &XC::CreepShrinkageParameters::setCreepDParameter,"creep d parameter.")
+  ;
+
+class_<XC::MC10CreepShrinkageParameters, bases<CommandEntity> >("MC10CreepShrinkageParameters")
+  .def(init<const double &, const double &, const double &, const double &, const double &, const double &, const double &, const double &, const double &>())
+  .def(init<XC::MC10CreepShrinkageParameters>())
+  .def("setup", &XC::MC10CreepShrinkageParameters::setup_parameters,"Sets initial values for the concrete parameters; call after modifying any of the material properties.")
+  .add_property("epsba", &XC::MC10CreepShrinkageParameters::getEpsba, &XC::MC10CreepShrinkageParameters::setEpsba, "ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010")
+  .add_property("epsbb", &XC::MC10CreepShrinkageParameters::getEpsbb, &XC::MC10CreepShrinkageParameters::setEpsbb, "fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.")
+  .add_property("epsda", &XC::MC10CreepShrinkageParameters::getEpsda, &XC::MC10CreepShrinkageParameters::setEpsda, "product of εcds,0 and βRH, as per Model Code 2010.")
+  .add_property("epsdb", &XC::MC10CreepShrinkageParameters::getEpsdb, &XC::MC10CreepShrinkageParameters::setEpsdb, "fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.")
+
+  .add_property("phiba", &XC::MC10CreepShrinkageParameters::getPhiba, &XC::MC10CreepShrinkageParameters::setPhiba, "parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.")
+  .add_property("phibb", &XC::MC10CreepShrinkageParameters::getPhibb, &XC::MC10CreepShrinkageParameters::setPhibb, "fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.")
+  .add_property("phida", &XC::MC10CreepShrinkageParameters::getPhida, &XC::MC10CreepShrinkageParameters::setPhida, "product of βdc(fcm) and β(RH), as per Model Code 2010.")
+  .add_property("phidb", &XC::MC10CreepShrinkageParameters::getPhidb, &XC::MC10CreepShrinkageParameters::setPhidb, "fitting constant within the drying creep time evolution function as per Model Code 2010.")
+
+  .add_property("cem", &XC::MC10CreepShrinkageParameters::getCem, &XC::MC10CreepShrinkageParameters::setCem, "coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.")
   ;
 
 class_<XC::TDConcrete, bases<XC::TDConcreteBase>, boost::noncopyable >("TDConcrete", no_init)
@@ -83,18 +100,8 @@ class_<XC::TDConcrete, bases<XC::TDConcreteBase>, boost::noncopyable >("TDConcre
 
 class_<XC::TDConcreteMC10Base, bases<XC::TDConcreteBase>, boost::noncopyable >("TDConcreteMC10Base", no_init)
   .add_property("Ecm", &XC::TDConcreteMC10Base::getEcm, &XC::TDConcreteMC10Base::setEcm, "28-day modulus, necessary for normalizing creep coefficient.")
-
-  .add_property("epsba", &XC::TDConcreteMC10Base::getEpsba, &XC::TDConcreteMC10Base::setEpsba, "ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010")
-  .add_property("epsbb", &XC::TDConcreteMC10Base::getEpsbb, &XC::TDConcreteMC10Base::setEpsbb, "fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.")
-  .add_property("epsda", &XC::TDConcreteMC10Base::getEpsda, &XC::TDConcreteMC10Base::setEpsda, "product of εcds,0 and βRH, as per Model Code 2010.")
-  .add_property("epsdb", &XC::TDConcreteMC10Base::getEpsdb, &XC::TDConcreteMC10Base::setEpsdb, "fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.")
-
-  .add_property("phiba", &XC::TDConcreteMC10Base::getPhiba, &XC::TDConcreteMC10Base::setPhiba, "parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.")
-  .add_property("phibb", &XC::TDConcreteMC10Base::getPhibb, &XC::TDConcreteMC10Base::setPhibb, "fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.")
-  .add_property("phida", &XC::TDConcreteMC10Base::getPhida, &XC::TDConcreteMC10Base::setPhida, "product of βdc(fcm) and β(RH), as per Model Code 2010.")
-  .add_property("phidb", &XC::TDConcreteMC10Base::getPhidb, &XC::TDConcreteMC10Base::setPhidb, "fitting constant within the drying creep time evolution function as per Model Code 2010.")
-
-  .add_property("cem", &XC::TDConcreteMC10Base::getCem, &XC::TDConcreteMC10Base::setCem, "coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.")
+  .def("getCreepShrinkageParameters", make_function(&XC::TDConcreteMC10Base::getCreepShrinkageParameters, return_internal_reference<>()))
+  .def("setCreepShrinkageParameters",&XC::TDConcreteMC10Base::setCreepShrinkageParameters)
   ;
 
 class_<XC::TDConcreteMC10, bases<XC::TDConcreteMC10Base>, boost::noncopyable >("TDConcreteMC10", no_init)

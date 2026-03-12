@@ -374,8 +374,13 @@ class ShrinkageAndCreepParameters(object):
     
     def get_opensees_cem(self):
         return self.get_alpha()
+
+    def getMC10CreepShrinkageParameters(self):
+        '''Return Model Code 2010 shrinkage and creep parameters object.
+        '''
+        return typical_materials.def_mc10_creep_and_shrinkage_parameters(epsba= self.get_opensees_epsba(), epsbb= self.get_opensees_epsbb(), epsda= self.get_opensees_epsda(), epsdb= self.get_opensees_epsdb(), phiba= self.get_opensees_phiba(), phibb= self.get_opensees_phibb(), phida= self.get_opensees_phida(), phidb= self.get_opensees_phidb(), cem= self.get_opensees_cem())
     
-def get_TDConcrete_mc10(preprocessor, name, concrete, cement, h0, T, RH, ts, age, beta, rca= 0.0, xi_cbs_2= 1.0, xi_cds_2= 1.0, xi_cb_2= 1.0, xi_cd_2= 1.0):
+def get_TDConcrete_mc10(preprocessor, name, concrete, cement, h0, T, RH, ts, age, beta, tcast, rca= 0.0, xi_cbs_2= 1.0, xi_cds_2= 1.0, xi_cb_2= 1.0, xi_cd_2= 1.0):
     '''
     Defines a TDConcreteMC10 uniaxial material.
 
@@ -389,6 +394,9 @@ def get_TDConcrete_mc10(preprocessor, name, concrete, cement, h0, T, RH, ts, age
     :param ts: time at start of drying (days).
     :param age: concrete age at first loading.
     :param beta: tension softening parameter.
+    :param tcast: analysis time corresponding to concrete casting in days
+                  (note: concrete will not be able to take on loads until the 
+                  age of 2 days).
     :param rca: percentage of coarse recycled aggregate concrete in the 
                 mixture.
     :param xi_cbs_2: this is a free fitting shrinkage parameter; its 
@@ -409,17 +417,9 @@ def get_TDConcrete_mc10(preprocessor, name, concrete, cement, h0, T, RH, ts, age
     # shrinkage and creep parameters.
     ## Shrinkage
     shrinkageAndCreepParameters= ShrinkageAndCreepParameters(concrete= concrete, cement= cement, h0= h0, T= T, RH= RH, ts= ts, t0= age)
-    epsba= shrinkageAndCreepParameters.get_opensees_epsba() # ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010. Row 21 column F in the TDCI_input spreadsheet.
-    epsbb= shrinkageAndCreepParameters.get_opensees_epsbb() # fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017. Row 22 column F in the TDCI_input spreadsheet.
-    epsda= shrinkageAndCreepParameters.get_opensees_epsda() # product of εcds,0 and βRH, as per Model Code 2010. Row 23 column F in the TDCI_input spreadsheet.
-    epsdb= shrinkageAndCreepParameters.get_opensees_epsdb() # fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017. Row 24 column F in the TDCI_input spreadsheet.
 
-    ## Creep
-    phiba= shrinkageAndCreepParameters.get_opensees_phiba() # parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010. Row 20 column M in the TDCI_input spreadsheet.
-    phibb= shrinkageAndCreepParameters.get_opensees_phibb() # fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017. Row 21 column M in the TDCI_input spreadsheet.
-    phida= shrinkageAndCreepParameters.get_opensees_phida() # product of βdc(fcm) and β(RH), as per Model Code 2010. Row 22 column M in the TDCI_input spreadsheet.
-    phidb= shrinkageAndCreepParameters.get_opensees_phidb() # fitting constant within the drying creep time evolution function as per Model Code 2010. Row 23 column M in the TDCI_input spreadsheet.
+    ## Model Code 2010 shrinkage and creep parameters.
+    mc10CreepShrinkageParameters= shrinkageAndCreepParameters.getMC10CreepShrinkageParameters()
 
-    ## Cement type
-    cem= shrinkageAndCreepParameters.get_opensees_cem() # coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
-    return typical_materials.defTDConcreteMC10(preprocessor= preprocessor, name= 'tdConcrete', fcm= fcm, ft= ft, Ec= Ec, Ecm= Ecm, beta= beta, age= age, epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, tcast= 0.0, cem= cem)
+    ## Model Code 2010 TD concrete.
+    return typical_materials.defTDConcreteMC10(preprocessor= preprocessor, name= 'tdConcrete', fcm= fcm, ft= ft, Ec= Ec, Ecm= Ecm, beta= beta, age= age, mc10CSParameters= mc10CreepShrinkageParameters, tcast= tcast)

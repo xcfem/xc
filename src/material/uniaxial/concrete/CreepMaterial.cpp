@@ -360,11 +360,10 @@ int XC::CreepMaterial::commitState(void)
 	
     //Added by AMK:
     epsP_total= eps_total; //Added by AMK;
-
     epsP_sh= eps_sh;
     epsP_cr= eps_cr;
-    
     epsP_m= eps_m;
+    
     const RawConcrete *concrete= this->_get_concrete_material();
     if(concrete)
       {
@@ -388,10 +387,10 @@ int XC::CreepMaterial::commitState(void)
 	exit(-1);
       }
     //Cracking flags:
-    crackP_flag= crack_flag;
+    crackP_flag= crack_flag; // Commit crack flag.
   
     //cracked reloading/unloading stiffness:
-    if (crackP_flag==1)
+    if(crackP_flag==1)
       {
 	if(hstv.sig/eps_m<Et)
 	  { Et= hstv.sig/eps_m; }

@@ -162,7 +162,7 @@ int XC::CreepShrinkageParameters::sendSelf(Communicator &comm)
 //! @brief Receives object through the communicator argument.
 int XC::CreepShrinkageParameters::recvSelf(const Communicator &comm)
   {
-    inicComm(1);
+    inicComm(2);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 

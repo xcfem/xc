@@ -105,18 +105,10 @@ XC::TDConcreteMC10::TDConcreteMC10(int tag)
 //! @param _Ecm: 28-day modulus, necessary for normalizing creep coefficient.
 //! @param _beta: tension softening parameter.
 //! @param _age: analysis time at initiation of drying (in days).
-//! @param _epsba: ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010.
-//! @param _epsbb: fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-//! @param _epsda: product of εcds,0 and βRH, as per Model Code 2010.
-//! @param _epsdb: fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-//! @param _phiba: parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
-//! @param _phibb: fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-//! @param _phida: product of βdc(fcm) and β(RH), as per Model Code 2010.
-//! @param _phidb: fitting constant within the drying creep time evolution function as per Model Code 2010.
 //! @param _tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
-//! @param _cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
-XC::TDConcreteMC10::TDConcreteMC10(int tag, double _fc, double _ft, double _Ets, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem)
-  : TDConcreteMC10Base(tag, MAT_TAG_TDConcreteMC10, _fc, _ft, _Ets, _Ec, _Ecm, _beta, _age, _epsba, _epsbb, _epsda, _epsdb, _phiba, _phibb, _phida, _phidb, _tcast, _cem)
+//! @param csp: concrete shrinkage parameters according to Model Code 10.
+XC::TDConcreteMC10::TDConcreteMC10(int tag, double _fc, double _ft, double _Ets, double _Ec, double _Ecm, double _beta, double _age, double _tcast, const MC10CreepShrinkageParameters &csp)
+  : TDConcreteMC10Base(tag, MAT_TAG_TDConcreteMC10, _fc, _ft, _Ets, _Ec, _Ecm, _beta, _age, _tcast, csp)
   {}
 
 XC::TDConcreteMC10::~TDConcreteMC10(void)

@@ -494,7 +494,7 @@ def defConcrete02IS(preprocessor,name,epsc0,fpc,fpcu,epscu, Ec0, ratioSlope= 0.1
 
 # Creep materials.
 def def_creep_and_shrinkage_parameters(tcr, epsshu, epssha, epscru, epscra, epscrd):
-    ''' Constructor.
+    ''' Define an MC10CreepShrinkageParameters object.
 
     :param tcr: creep model age in days.
     :param epsshu: ultimate shrinkage strain εsh,u, as per ACI 209R-92.
@@ -548,7 +548,9 @@ def defTDConcrete(preprocessor, name, fpc, ft, Ec, beta, age, tcast, csParameter
     :param Ec: modulus of elasticity (preferably at time of loading if there is a single loading age).
     :param beta: tension softening parameter.
     :param age: analysis time at initiation of drying (in days).
-    :param tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
+    :param tcast: analysis time corresponding to concrete casting in days
+                  (note: concrete will not be able to take on loads until 
+                  the age of 2 days).
     :param csParameters: creep and shrinkage parameters.
     '''
     materialHandler= preprocessor.getMaterialHandler
@@ -571,7 +573,22 @@ def defTDConcrete(preprocessor, name, fpc, ft, Ec, beta, age, tcast, csParameter
     retval.setup()
     return retval
 
-def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, epsba, epsbb, epsda, epsdb, phiba, phibb, phida, phidb, tcast, cem, Ets= None):
+def def_mc10_creep_and_shrinkage_parameters(epsba, epsbb, epsda, epsdb, phiba, phibb, phida, phidb, cem):
+    ''' Define an MC10CreepShrinkageParameters object.
+
+    :param epsba: ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010.
+    :param epsbb: fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+    :param epsda: product of εcds,0 and βRH, as per Model Code 2010.
+    :param epsdb: fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+    :param phiba: parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
+    :param phibb: fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+    :param phida: product of βdc(fcm) and β(RH), as per Model Code 2010.
+    :param phidb: fitting constant within the drying creep time evolution function as per Model Code 2010.
+    :param cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
+    '''
+    return xc.MC10CreepShrinkageParameters(epsba, epsbb, epsda, epsdb, phiba, phibb, phida, phidb, cem)
+
+def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, tcast, mc10CSParameters, Ets= None):
     ''' Defines a TDConcreteMC10 uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
@@ -585,25 +602,11 @@ def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, epsba, eps
     :param Ecm: 28-day modulus, necessary for normalizing creep coefficient.
     :param beta: tension softening parameter.
     :param age: concrete age at first loading.
-    :param epsba: ultimate basic shrinkage strain, εcbs,0, as per Model Code 
-                  2010.
-    :param epsbb: fitting parameter within the basic shrinkage time evolution 
-                  function as per Model Code 2010 and prEN1992-1-1:2017.
-    :param epsda: product of εcds,0 and βRH, as per Model Code 2010.
-    :param epsdb: fitting parameter within the drying shrinkage time evolution 
-                  function as per Model Code 2010 and prEN1992-1-1:2017.
-    :param phiba: parameter for the effect of compressive strength on basic 
-                  creep βbc(fcm), as per Model Code 2010.
-    :param phibb: fitting parameter within the basic creep time evolution 
-                  function as per Model Code 2010 and prEN1992-1-1:2017.
-    :param phida: product of βdc(fcm) and β(RH), as per Model Code 2010.
-    :param phidb: fitting constant within the drying creep time evolution 
-                  function as per Model Code 2010.
     :param tcast: analysis time corresponding to concrete casting in days 
                   (note: concrete will not be able to take on loads until the 
                   age of 2 days).
-    :param cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 
-                for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
+    :param mc10CSParameters: creep and shrinkage parameters according to
+                             Model Code 2010.
     :param Ets: tension softening stiffness (absolute value) (slope of the 
                 linear tension softening branch) (defaults to None in 
                 which case the value is set to 0.1*fpc/epsc0).
@@ -624,21 +627,13 @@ def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, epsba, eps
     retval.Ecm= Ecm # 28-day modulus, necessary for normalizing creep coefficient.
     retval.beta= beta # beta parameter.
     retval.age= age # concrete age at first loading.
-    retval.epsba= epsba # ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010.
-    retval.epsbb= epsbb # fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-    retval.epsda= epsda # product of εcds,0 and βRH, as per Model Code 2010.
-    retval.epsdb= epsdb # fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
+    retval.setCreepShrinkageParameters(mc10CSParameters)
     
-    retval.phiba= phiba # parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
-    retval.phibb= phibb # fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-    retval.phida= phida # product of βdc(fcm) and β(RH), as per Model Code 2010.
-    retval.phidb= phidb # fitting constant within the drying creep time evolution function as per Model Code 2010.
     retval.tcast= tcast # analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
-    retval.cem= cem # coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
     retval.setup()
     return retval
 
-def defTDConcreteMC10NL(preprocessor,name, fcm, fcu, epscu, ft, Ec, Ecm, beta, age, epsba, epsbb, epsda, epsdb, phiba, phibb, phida, phidb, tcast, cem, Ets= None):
+def defTDConcreteMC10NL(preprocessor,name, fcm, fcu, epscu, ft, Ec, Ecm, beta, age, tcast, mc10CSParameters, Ets= None):
     '''
     :param preprocessor: preprocessor of the finite element problem.
     :param name: name identifying the new material.
@@ -653,25 +648,11 @@ def defTDConcreteMC10NL(preprocessor,name, fcm, fcu, epscu, ft, Ec, Ecm, beta, a
     :param Ecm: 28-day modulus, necessary for normalizing creep coefficient.
     :param beta: tension softening parameter.
     :param age: analysis time at initiation of drying (in days).
-    :param epsba: ultimate basic shrinkage strain, εcbs,0, as per Model Code 
-                  2010.
-    :param epsbb: fitting parameter within the basic shrinkage time evolution 
-                  function as per Model Code 2010 and prEN1992-1-1:2017.
-    :param epsda: product of εcds,0 and βRH, as per Model Code 2010.
-    :param epsdb: fitting parameter within the drying shrinkage time evolution
-                  function as per Model Code 2010 and prEN1992-1-1:2017.
-    :param phiba: parameter for the effect of compressive strength on basic 
-                  creep βbc(fcm), as per Model Code 2010.
-    :param phibb: fitting parameter within the basic creep time evolution 
-                  function as per Model Code 2010 and prEN1992-1-1:2017.
-    :param phida: product of βdc(fcm) and β(RH), as per Model Code 2010.
-    :param phidb: fitting constant within the drying creep time evolution 
-                  function as per Model Code 2010.
+    :param mc10CSParameters: creep and shrinkage parameters according to
+                             Model Code 2010.
     :param tcast: analysis time corresponding to concrete casting in days
                   (note: concrete will not be able to take on loads until the 
                   age of 2 days).
-    :param cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 
-                for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
     :param Ets: tension softening stiffness (absolute value) (slope of the 
                 linear tension softening branch) (defaults to None in 
                 which case the value is set to 0.1*fpc/epsc0).
@@ -694,21 +675,13 @@ def defTDConcreteMC10NL(preprocessor,name, fcm, fcu, epscu, ft, Ec, Ecm, beta, a
     retval.Ecm= Ecm # 28-day modulus, necessary for normalizing creep coefficient.
     retval.beta= beta # beta parameter.
     retval.age= age # concrete age at first loading.
-    retval.epsba= epsba # ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010.
-    retval.epsbb= epsbb # fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-    retval.epsda= epsda # product of εcds,0 and βRH, as per Model Code 2010.
-    retval.epsdb= epsdb # fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-    
-    retval.phiba= phiba # parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
-    retval.phibb= phibb # fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-    retval.phida= phida # product of βdc(fcm) and β(RH), as per Model Code 2010.
-    retval.phidb= phidb # fitting constant within the drying creep time evolution function as per Model Code 2010.
+    retval.setCreepShrinkageParameters(mc10CSParameters)
+
     retval.tcast= tcast # analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
-    retval.cem= cem # coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
     retval.setup()
     return retval
 
-#Elastic section 1d.
+# Elastic section 1d.
 def defElasticSection1d(preprocessor, name, A, E, linearRho= 0.0, Iw= 0.0):
     '''Constructs an elastic section appropriate for 1D beam analysis.
 
@@ -730,7 +703,7 @@ def defElasticSection1d(preprocessor, name, A, E, linearRho= 0.0, Iw= 0.0):
     retval.sectionProperties.linearRho= linearRho
     return retval
 
-#Elastic section 2d.
+# Elastic section 2d.
 def defElasticSection2d(preprocessor,name,A,E,I, linearRho= 0.0, Iw= 0.0):
     '''Constructs an elastic section appropriate for 2D beam analysis.
 
@@ -754,7 +727,7 @@ def defElasticSection2d(preprocessor,name,A,E,I, linearRho= 0.0, Iw= 0.0):
     retval.sectionProperties.linearRho= linearRho
     return retval
 
-#Elastic shear section 2d.
+# Elastic shear section 2d.
 def defElasticShearSection2d(preprocessor,name,A,E,G,I,alpha, linearRho= 0.0, Iw= 0.0):
     '''Constructs an elastic section appropriate for 2D beam analysis, 
     including shear deformations.
@@ -834,7 +807,7 @@ def defElasticShearSectionFromMechProp2d(preprocessor, name, mechProp2d, overrid
     retval= defElasticShearSection2d(preprocessor,name= name, A= mechProp2d.A, Iw= mechProp2d.Iw, E= mechProp2d.E, G= mechProp2d.G, I= mechProp2d.I, alpha= mechProp2d.Alpha, linearRho= rho)
     return retval
 
-#Elastic section 3d.
+# Elastic section 3d.
 def defElasticSection3d(preprocessor,name, A, E, G, Iz, Iy, J, linearRho= 0.0, Iw= 0.0):
     '''Constructs an elastic section appropriate for 3D beam analysis
 
@@ -896,7 +869,7 @@ def defElasticShearSectionFromMechProp3d(preprocessor, name, mechProp3d, overrid
         rho= overrideRho
     return defElasticShearSection3d(preprocessor, name= name, A= mechProp3d.A, Iw= mechProp3d.Iw, E= mechProp3d.E, G= mechProp3d.G, Iz= mechProp3d.Iz, Iy= mechProp3d.Iy, J= mechProp3d.J, alpha_y= mechProp3d.AlphaY, alpha_z= mechProp3d.AlphaZ, linearRho= rho)
 
-#Elastic shear section 3d.
+# Elastic shear section 3d.
 def defElasticShearSection3d(preprocessor, name, A, E, G, Iz, Iy, J, alpha_y, alpha_z, linearRho= 0.0, Iw= 0.0):
     '''Constructs an elastic section appropriate for 3D beam analysis, 
     including shear deformations.
@@ -932,7 +905,7 @@ def defElasticShearSection3d(preprocessor, name, A, E, G, Iz, Iy, J, alpha_y, al
     return retval
 
 
-#Linear elastic isotropic plane strain material.
+# Linear elastic isotropic plane strain material.
 def defElasticIsotropicPlaneStrain(preprocessor,name,E,nu, rho= 0.0):
     '''Constructs an linear elastic isotropic plane-strain material.
 
@@ -952,7 +925,7 @@ def defElasticIsotropicPlaneStrain(preprocessor,name,E,nu, rho= 0.0):
     retval.rho= rho
     return retval
 
-#Linear elastic isotropic plane stress material.
+# Linear elastic isotropic plane stress material.
 def defElasticIsotropicPlaneStress(preprocessor,name,E,nu, rho= 0.0):
     '''Constructs an linear elastic isotropic plane-stress material.
 
@@ -992,7 +965,7 @@ def defElasticIsotropic3d(preprocessor, name, E, nu, rho= 0.0):
     retval.rho= rho
     return retval
 
-#Elastic plate section.
+# Elastic plate section.
 def defElasticPlateSection(preprocessor,name,E,nu,rho,h):
     '''Constructs an elastic isotropic section material appropriate 
        for plate analysis.
@@ -1015,7 +988,7 @@ def defElasticPlateSection(preprocessor,name,E,nu,rho,h):
     retval.h= h
     return retval
 
-#Elastic plate section.
+# Elastic plate section.
 def defJ2PlateFibre(preprocessor, name, E, nu, fy, alpha= .01, rho= 0.0, fyn= None):
     '''Constructs a J2 (Von Mises) material with a linear-strain
        hardening rule appropriate for plate analysis.
@@ -1047,7 +1020,7 @@ def defJ2PlateFibre(preprocessor, name, E, nu, fy, alpha= .01, rho= 0.0, fyn= No
     retval.fyn= fyn
     return retval
 
-#Elastic membrane plate section.
+# Elastic membrane plate section.
 def defElasticMembranePlateSection(preprocessor, name:str, E:float, nu:float, rho:float, h:float):
     '''Constructs an elastic isotropic section material appropriate 
        for plate and shell analysis.
@@ -1072,7 +1045,7 @@ def defElasticMembranePlateSection(preprocessor, name:str, E:float, nu:float, rh
     retval.h= h
     return retval
 
-#Elastic membrane plate section.
+# Elastic membrane plate section.
 def defMembranePlateFiberSection(preprocessor, name:str, nDMaterial, h:float):
     '''Constructs a membrane plate fiber section appropriate 
        for plate and shell analysis.

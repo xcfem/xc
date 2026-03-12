@@ -50,6 +50,7 @@
 
 #include "material/uniaxial/concrete/TDConcreteBase.h"
 #include "material/uniaxial/concrete/MC10CreepSteps.h"
+#include "material/uniaxial/concrete/MC10CreepShrinkageParameters.h"
 
 namespace XC {
   
@@ -58,64 +59,38 @@ class TDConcreteMC10Base : public TDConcreteBase
   protected:
     // matpar : Concrete FIXED PROPERTIES
     double Ecm; //! 28-day modulus, necessary for normalizing creep coefficient.
-    double epsba; //!< ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010
-    double epsbb; //!< fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-    double epsda; //!< product of εcds,0 and βRH, as per Model Code 2010.
-    double epsdb; //!< fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-    double phiba; //!< parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
-    double phibb; //!< fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-    double phida; //!< product of βdc(fcm) and β(RH), as per Model Code 2010.
-    double phidb; //!< fitting constant within the drying creep time evolution function as per Model Code 2010.
-    double cem; //!< coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
 
     // hstv : Concrete HISTORY VARIABLES  current step
 	
     //Added by AMK:
-    double eps_crb; //!< split into basic and drying creep (ntosic)
-    double eps_crd; //!< split into basic and drying creep (ntosic)
-    double eps_shb; //!< split into basic and drying shrinkage (ntosic)
-    double eps_shd; //!< split into basic and drying shrinkage (ntosic)
+    double eps_crb; //!< trial basic creep strain (ntosic).
+    double eps_crd; //!< trial drying creep strain (ntosic).
+    double eps_shb; //!< trial basic shrinkage strain (ntosic).
+    double eps_shd; //!< trial drying shrinkage strain (ntosic).
     
-    double epsP_crb; //!< split into basic and drying creep (ntosic)
-    double epsP_crd; //!< split into basic and drying creep (ntosic)
-    double epsP_shb; //!< split into basic and drying shrinkage (ntosic)
-    double epsP_shd; //!< split into basic and drying shrinkage (ntosic)
+    double epsP_crb; //!< commited basic creep strain (ntosic).
+    double epsP_crd; //!< commited drying creep strain (ntosic).
+    double epsP_shb; //!< commited basic shrinkage strain (ntosic).
+    double epsP_shd; //!< commited drying shrinkage strain (ntosic).
     
-    double phib_i; //!< split into basic and drying creep (ntosic)
-    double phid_i; //!< split into basic and drying creep (ntosic)
+    double phib_i; //!< basic phi coefficient (ntosic).
+    double phid_i; //!< drying phi coefficient (ntosic).
     
+    MC10CreepShrinkageParameters creepShrinkageParameters; //!< Creep and shrinkage parameters according to Model Code 10.
     MC10CreepSteps creepSteps;
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
     TDConcreteMC10Base(int tag, int classTag);
-    TDConcreteMC10Base(int tag, int classTag, double _fc, double _ft, double _Ets, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem);
+    TDConcreteMC10Base(int tag, int classTag, double _fc, double _ft, double _Ets, double _Ec, double _Ecm, double _beta, double _age, double _tcast, const MC10CreepShrinkageParameters &);
     void setup_parameters(void);
 
     double getEcm(void) const;
     void setEcm(const double &);
 
-    double getEpsba(void) const;
-    void setEpsba(const double &);
-    double getEpsbb(void) const;
-    void setEpsbb(const double &);
-    double getEpsda(void) const;
-    void setEpsda(const double &);
-    double getEpsdb(void) const;
-    void setEpsdb(const double &);
-
-    double getPhiba(void) const;
-    void setPhiba(const double &);
-    double getPhibb(void) const;
-    void setPhibb(const double &);
-    double getPhida(void) const;
-    void setPhida(const double &);
-    double getPhidb(void) const;
-    void setPhidb(const double &);
-
-    double getCem(void) const;
-    void setCem(const double &);
+    void setCreepShrinkageParameters(const MC10CreepShrinkageParameters &);
+    const MC10CreepShrinkageParameters &getCreepShrinkageParameters(void) const;
     
     double getPHIB_i(void) const; //Added by AMK //ntosic: split into basic and drying creep
     double getPHID_i(void) const; //Added by AMK //ntosic: split into basic and drying creep
