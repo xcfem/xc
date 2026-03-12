@@ -47,8 +47,8 @@ err= math.sqrt(err)
 print(locomotiveCentrifugalLoads)
 for r in locomotiveCentrifugalLoads:
     print(r[0], r[1])
-print(refValues)
-print(err)
+print('refValues= ', refValues)
+print('err= ', err)
 '''
 
 import os

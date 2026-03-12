@@ -24,12 +24,13 @@ from materials.ec2 import EC2_materials
 from materials.ec3 import EC3_materials
 from materials.sections.fiber_section import def_simple_RC_section
 
-# XXX: Test does not work yet.
+# XXX: This test does not work yet.
 
 # Geometry
 L= 10.0 # span.
 b= 2.5 # beam spacing.
 hc= 0.12 # deck slab thickness.
+Ac= b*hc # Concrete slab area per m width.
 
 # Materials.
 ## Steel beams.
@@ -41,12 +42,12 @@ ba= steelShape.b() # Flange width.
 concrete= EC2_materials.EC2Concrete("C25/30", -25e6, 1.5)
 concrete.cemType='N'# class N cement
 RH= 70 # ambient relative humidity(%)
-ts= 1 # drying shrinkage begins at the age 1 day.
-t0= 1 # age of concrete at loading time.
+ts= 0 # drying shrinkage begins at the age 1 day.
+t0= 7 # age of concrete at loading time.
+beta= 0.4 # 
 rfSteel= EC2_materials.S500B
 
 # Actions
-Ac= 2.5*hc # Concrete slab area per m width.
 gk1= Ac*25e3 # Concrete self weight.
 gk2= steelShape.getRho()*g # Steel beam self weigth per unit length.
 gk3= 3.75e3 # Floor finishes dead load.
@@ -117,11 +118,12 @@ supportRebarRow= def_simple_RC_section.ReinfRow(areaRebar= rebarArea, width= b_e
 supportDeckSection= def_simple_RC_section.RCRectangularSection(name= 'support_creep_deck_section', width= b_eff_supp, depth= hc, concrType= concrete, reinfSteelType= rfSteel)
 supportDeckSection.positvRebarRows= def_simple_RC_section.LongReinfLayers([supportRebarRow])
 supportDeckSection.negatvRebarRows= def_simple_RC_section.LongReinfLayers([supportRebarRow])
+
 ### Creep
 creepOnDeck= True
 
 if(creepOnDeck):
-    concrete.defTDConcreteParameters(beta= 0.4, cement= '42.5R', h0= h0, T= 21, RH= RH, ts= ts, t0= t0)
+    concrete.defTDConcreteParameters(beta= beta, cement= '42.5R', h0= h0, T= 21, RH= RH, ts= ts, t0= t0)
     
     midSpanDeckSection.defRCSection2d(preprocessor, matDiagType= 'td')
     # midSpanDeckSection.pdfReport()
@@ -289,7 +291,8 @@ modelSpace.addNewLoadCaseToDomain(loadCaseName= 'Ed', loadCaseExpression= e_d, r
 
 # Compute solution.
 if(creepOnDeck):
-    solProc= predefined_solutions.PlainKrylovNewton(prb= feProblem, convergenceTestTol= 1e-2, convTestType= 'energy_incr_conv_test', maxNumIter= 50, printFlag= 1)
+    solProc= predefined_solutions.PlainStaticModifiedNewton(feProblem, convergenceTestTol= 1e-3, maxNumIter= 300, printFlag= 1)
+    # solProc= predefined_solutions.PlainKrylovNewton(prb= feProblem, convergenceTestTol= 1e-2, convTestType= 'energy_incr_conv_test', maxNumIter= 50, printFlag= 1)
 else:
     solProc= predefined_solutions.PlainNewtonRaphson(prb= feProblem, convergenceTestTol= 1e-3, printFlag= 1)
 
@@ -302,10 +305,11 @@ if(creepOnDeck):
     # Set the load control integrator with dt=0 so that the domain time doesn’t advance.
     solProc.integrator.dLambda1= 0.0  
     result= solProc.analysis.analyze(1)
+    print('Solution found for initial state.')
     modelSpace.setCreepOn() # Turn creep on
     
 # Compute solution
-dt= 100 # time increment in days
+dt= 5 # time increment in days
 solProc.integrator.dLambda1= dt # set new increment for the integrator.
 solProc.integrator.setNumIncr(dt) # IMPORTANT! otherwise it got stuck.
 

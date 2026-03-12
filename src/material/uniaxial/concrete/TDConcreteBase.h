@@ -95,7 +95,7 @@ class TDConcreteBase : public RawConcrete
     int recvData(const Communicator &);    
   public:
     TDConcreteBase(int tag, int classTag);
-    TDConcreteBase(int tag, int classTag, double _fc, double _ft, double _Ec, double _beta, double _age, double _tcast);
+    TDConcreteBase(int tag, int classTag, double _fc, double _ft, double _Ets, double _Ec, double _beta, double _age, double _tcast);
     void setup_parameters(void);
 
     double getInitialTangent(void) const;
@@ -109,6 +109,8 @@ class TDConcreteBase : public RawConcrete
     double getMech(void) const; //Added by AMK
     void setFt(const double &);
     double getFt(void) const;
+    void setEts(const double &);
+    double getEts(void) const;
     void setEc(const double &);
     double getEc(void) const;
     void setEt(const double &);

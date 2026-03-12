@@ -123,18 +123,20 @@ void XC::TDConcreteBase::setup_parameters(void)
 
 //! @brief Constructor.
 XC::TDConcreteBase::TDConcreteBase(int tag, int classTag)
-  : RawConcrete(tag, classTag) {}
+  : RawConcrete(tag, classTag),
+    ft(0.0), Ets(0.0), Ec(0.0), age(0.0), beta(0.0), tcast(0.0)
+    {}
 
 //! @brief Constructor.
 //! @param _fpc: cylinder compressive strength (this is a dummy parameter since compression behavior is linear).
 //! @param _ft: the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
-//! @param _Ec: modulus of elasticity (preferably at time of loading if there is a single loading age).
+//! @param _Ets : tension softening stiffness (absolute value) (slope of the lin//! @param _Ec: modulus of elasticity (preferably at time of loading if there is a single loading age).
 //! @param _beta: tension softening parameter.
 //! @param _age: analysis time at initiation of drying (in days).
 //! @param _tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
-XC::TDConcreteBase::TDConcreteBase(int tag, int classTag, double _fpc, double _ft, double _Ec, double _beta, double _age, double _tcast): 
+XC::TDConcreteBase::TDConcreteBase(int tag, int classTag, double _fpc, double _ft, double _Ets, double _Ec, double _beta, double _age, double _tcast): 
   RawConcrete(tag, classTag, _fpc, 0.0, 0.0),
-  ft(_ft), Ec(_Ec), age(_age), beta(_beta), tcast(_tcast)
+  ft(_ft), Ets(_Ets), Ec(_Ec), age(_age), beta(_beta), tcast(_tcast)
   {
     // setup_parameters(); Called in the constructors of derived classes.
   }
@@ -194,6 +196,23 @@ void XC::TDConcreteBase::setFt(const double &d)
 		  << Color::def << std::endl;
       }
   }
+
+//! @brief Set the tension softening stiffness (absolute value) (slope of the linear tension softening branch).
+void XC::TDConcreteBase::setEts(const double &d)
+  {
+    this->Ets= d;
+    if(Ets < 0.0)
+      {
+        Ets= -Ets;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; warning!, tensile softening stiffness must be positive (absolute value)."
+		  << std::endl;
+      }
+  }
+
+//! @brief Returns the tension softening stiffness (absolute value) (slope of the linear tension softening branch).
+double XC::TDConcreteBase::getEts(void) const
+  { return Ets; }
 
 //! @brief Returns concrete tensile strength.
 double XC::TDConcreteBase::getFt(void) const

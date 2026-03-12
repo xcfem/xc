@@ -164,8 +164,7 @@ void XC::Concrete02::setFt(const double &d)
 double XC::Concrete02::getFt(void) const
   { return ft; }
 
-
-//! @brief tension softening stiffness (absolute value) (slope of the linear tension softening branch).
+//! @brief Set the tension softening stiffness (absolute value) (slope of the linear tension softening branch).
 void XC::Concrete02::setEts(const double &d)
   {
     Ets= d;
@@ -178,7 +177,7 @@ void XC::Concrete02::setEts(const double &d)
       }
   }
 
-//! @brief Returns concrete tensile strength.
+//! @brief Returns the tension softening stiffness (absolute value) (slope of the linear tension softening branch).
 double XC::Concrete02::getEts(void) const
   { return Ets; }
 

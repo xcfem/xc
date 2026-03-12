@@ -96,7 +96,7 @@ class TDConcreteMC10 : public TDConcreteMC10Base
     void Tens_Envlp(double epsc, double &sigc, double &Ect);
   public:
     TDConcreteMC10(int tag= 0);
-    TDConcreteMC10(int tag, double _fc, double _ft, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem);
+    TDConcreteMC10(int tag, double _fc, double _ft, double _Ets, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem);
     virtual ~TDConcreteMC10(void);
 
     UniaxialMaterial *getCopy(void) const;

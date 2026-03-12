@@ -54,6 +54,7 @@ csParameters= typical_materials.def_creep_and_shrinkage_parameters(tcr= Tcr, eps
 ## Concrete able to creep.
 tdConcrete= typical_materials.defTDConcrete(preprocessor= preprocessor, name= 'tdConcrete',fpc= fc,ft= ft, Ec= Ec, beta= beta, age= tDry, tcast= tcast, csParameters= csParameters)
 
+# Cross-section geometry
 b = 300*mm
 h = 300*mm
 As = 1500*mm**2
@@ -77,12 +78,12 @@ twoFibersSection= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d"
 steelFiber= twoFibersSection.addFiber(elast.name, As, xc.Vector([0,0]))
 concreteFiber= twoFibersSection.addFiber(tdConcrete.name, Ac, xc.Vector([0,0]))
 
-
 ## Create element.
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= twoFibersSection.name
 elements.dimElem= 1 # Dimension of element space
 zl= elements.newElement("ZeroLengthSection",xc.ID([n1.tag, n2.tag]))
+## Get the fibers «inside» the zero length element.
 concreteFiber= zl.getMaterial().getFibers().findFiber(concreteFiber.tag)
 steelFiber= zl.getMaterial().getFibers().findFiber(steelFiber.tag)
 

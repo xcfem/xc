@@ -49,6 +49,7 @@ class_<XC::Concrete04, bases<XC::ConcreteBase>, boost::noncopyable >("Concrete04
 
 class_<XC::TDConcreteBase, bases<XC::RawConcrete>, boost::noncopyable >("TDConcreteBase", no_init)
   .add_property("ft", &XC::TDConcreteBase::getFt,  &XC::TDConcreteBase::setFt,"tensile strength.")
+  .add_property("Ets", &XC::TDConcreteBase::getEts,  &XC::TDConcreteBase::setEts,"tension softening stiffness (absolute value) (slope of the linear tension softening branch).")
   .add_property("Ec", &XC::TDConcreteBase::getEc,  &XC::TDConcreteBase::setEc,"concrete stiffness.")
   .add_property("Et", &XC::TDConcreteBase::getEt,  &XC::TDConcreteBase::setEt,"concrete current stiffness.")
   .add_property("age", &XC::TDConcreteBase::getAge,  &XC::TDConcreteBase::setAge, "concrete age.")

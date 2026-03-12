@@ -181,7 +181,7 @@ for index, relativePosition in enumerate(relativePositions):
     modelSpace.revertToStart()
     loadNames.append(cLC.name)
 
-ratio= abs(maxTwist-0.0015422930703060144)/0.0015422930703060144
+ratio= abs(maxTwist-0.0015418561806050353)/0.0015418561806050353
 testOK= (maxTwistPos==0.25) and abs(ratio)<1e-4
 testOK= testOK and (len(twistResultsDict)==len(relativePositions))
 

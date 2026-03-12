@@ -304,6 +304,16 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; hollow sections not implemented yet. Internal contour ignored.')
         return vertices
+    
+    def getMainReinforcementArea(self):
+        ''' Return the total area of the main reinforcement.'''
+        retval= 0.0
+        if(hasattr(self, 'geomSection')):
+           retval= self.geomSection.getReinfLayers.getAreaGrossSection()
+        else:
+            if(self.mainReinf):
+                retval+= self.mainReinf.getAs()
+        return retval
         
     def defSectionGeometry(self, preprocessor, matDiagType):
         '''

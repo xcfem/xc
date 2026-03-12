@@ -252,6 +252,66 @@ def s_r_max(k1,k2,k3,k4,cover,fiReinf,ro_eff):
     retval= k3*cover + k1*k2*k4*fiReinf/ro_eff
     return retval
 
+def get_bored_piles_minimum_longitudinal_reinforcement(Ac, nationalAnnex, concrete= None, steel= None):
+    ''' Return the recommended minimum longitudinal reinforcement area in 
+        cast·in-place bored piles according to paragraph (3) of clause
+        9.8.5 of EN 1992-1-1.
+
+    :param Ac: pile cross-section area expressed in square meters.
+    :param nationalAnnex: identifier of the national annex.
+    :param concrete: concrete type.
+    :param steel: reinforcing steel material.
+    '''
+    if(Ac<=0.5):
+        retval= .005*Ac
+    elif(Ac<=1.0):
+        retval= 25e-4
+    else:
+        retval= .0025*Ac
+    if(nationalAnnex is not None):
+        if(nationalAnnex=='Spain'): # 9.8.5 (3)
+            if(concrete):
+                fcd= concrete.fcd()
+            else:
+                methodName= sys._getframe(0).f_code.co_name
+                errMsg= methodName+"; when using the spanish annex, "
+                errMsg+= "concrete cannot be None."
+                lmsg.error(errMsg)
+                exit(1)
+            if(steel):
+                fyd= steel.fyd()
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errMsg= methodName+"; when using the spanish annex, "
+                errMsg+= "steel cannot be None."
+                lmsg.error(errMsg)
+                exit(1)
+            spanishAnnexArea= 0.1*Ac*abs(fcd/fyd)
+            retval= max(retval, spanishAnnexArea)
+        else:
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= methodName+"; national annex: "+str(nationalAnnex)
+            errMsg+= " not implemented yet."
+            lmsg.error(errMsg)
+            exit(1)
+    return retval
+
+def check_bored_piles_minimum_longitudinal_reinforcement(pileSection, nationalAnnex):
+    ''' Return the recommended minimum longitudinal reinforcement area in 
+        cast·in-place bored piles according to paragraph (3) of clause
+        9.8.5 of EN 1992-1-1.
+
+    :param pileSection: pile cross-section.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    As= pileSection.getMainReinforcementArea()
+
+    as_min= get_bored_piles_minimum_longitudinal_reinforcement(Ac= pileSection.getAc(), nationalAnnex= nationalAnnex, concrete= pileSection.getConcreteType(), steel= pileSection.getReinfSteelType())
+    eff= as_min/As # Efficiency.
+    return eff, as_min
+
+
 class CrackController(lscb.LimitStateControllerBase):
     '''Object that verifies the cracking serviceability limit state according 
     to EC2.
@@ -678,9 +738,12 @@ class EC2RebarFamily(rf.RebarFamily):
         return RebarController(concreteCover= self.concreteCover, spacing= self.spacing)
     
     def getBasicAnchorageLength(self,concrete):
-      ''' Return the basic anchorage length of the bars.'''
-      rebarController= self.getRebarController()
-      return rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel)
+        ''' Return the basic anchorage length of the bars.
+
+        :param concrete: concrete material.
+        '''
+        rebarController= self.getRebarController()
+        return rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel)
   
     def getMinReinfAreaInBending(self, concrete, thickness, b= 1.0, steelStressLimit= 450e6, memberType= None, sigmaC= 0.0, effectiveCover= 45e-3):
         '''Return the minimun amount of bonded reinforcement to control cracking

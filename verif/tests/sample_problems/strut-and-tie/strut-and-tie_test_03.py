@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Generation of a simple linear elastic pile cap model that transfer the
-    loads from the piles to the piles. This example tries to show how the
+    loads from the piers to the piles. This example tries to show how the
     PileCap2Piles object can be used inside a bigger model.
 
     When analyzing the pile cap itself we create the strut-and-tie model by

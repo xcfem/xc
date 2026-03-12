@@ -239,8 +239,8 @@ GEOM_FT PolygonalSurface2d::getMoment(const int &p,const int &q) const
     return retval;
   }
 
-//! @brief Calcula el moment of inertia with respect to an axis parallel to the
-//! x axis que pasa por the center of mass of the surface.
+//! @brief Compute the moment of inertia with respect to an axis parallel to the
+//! x axis through the center of mass of the surface.
 //! Ix = Integral y^2 dA
 GEOM_FT PolygonalSurface2d::Ix(void) const
   { 
@@ -248,8 +248,8 @@ GEOM_FT PolygonalSurface2d::Ix(void) const
     return Ixo-getArea()*sqr(getCenterOfMass().y()); //Teorema de Steiner.
   }
 
-//! @brief Calcula el moment of inertia with respect to an axis parallel to the
-//! y axis that passes through the polygon centroid.
+//! @brief Compute the moment of inertia with respect to an axis parallel to the
+//! y axis through the center of mass of the surface.
 //! Iy = Integral x^2 dA
 GEOM_FT PolygonalSurface2d::Iy(void) const
   { 
