@@ -26,11 +26,11 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 
-#include "material/uniaxial/concrete/CreepShrinkageParameters.h"
+#include "material/uniaxial/concrete/ACICreepShrinkageParameters.h"
 #include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Default constructor.
-XC::CreepShrinkageParameters::CreepShrinkageParameters(void)
+XC::ACICreepShrinkageParameters::ACICreepShrinkageParameters(void)
   : CommandEntity(), MovableObject(0),
     tcr(0.0),
     epsshu(0.0), epssha(0.0), epscra(0.0), epscru(0.0),
@@ -44,7 +44,7 @@ XC::CreepShrinkageParameters::CreepShrinkageParameters(void)
 //! @param _epscru: ultimate creep coefficient φu, as per ACI 209R-92.
 //! @param _epscra: fitting constant within the creep time evolution function as per ACI 209R-92.
 //! @param _epscrd: fitting constant within the creep time evolution function as per ACI 209R-92.
-XC::CreepShrinkageParameters::CreepShrinkageParameters(const double &_tcr, const double &_epsshu, const double &_epssha, const double &_epscru, const double &_epscra, const double &_epscrd)
+XC::ACICreepShrinkageParameters::ACICreepShrinkageParameters(const double &_tcr, const double &_epsshu, const double &_epssha, const double &_epscru, const double &_epscra, const double &_epscrd)
   : CommandEntity(), MovableObject(0),
     tcr(_tcr),
     epsshu(_epsshu), epssha(_epssha), epscra(_epscra), epscru(_epscru),
@@ -58,7 +58,7 @@ XC::CreepShrinkageParameters::CreepShrinkageParameters(const double &_tcr, const
   }
 
 //! @brief Sets initial values for the concrete parameters.
-void XC::CreepShrinkageParameters::setup_parameters(void)
+void XC::ACICreepShrinkageParameters::setup_parameters(void)
   {
     //Change inputs into the proper sign convention:
     epsshu= -std::abs(epsshu);
@@ -66,14 +66,14 @@ void XC::CreepShrinkageParameters::setup_parameters(void)
   }
 
 //! @brief Return the f2 value used in setPhi method of creep materials.
-double XC::CreepShrinkageParameters::getF2(const double &time, const double &tp) const
+double XC::ACICreepShrinkageParameters::getF2(const double &time, const double &tp) const
   {	
     // ACI Equation:
     const double tmtp= time-tp;
     return pow(tmtp,epscra)/(epscrd+pow(tmtp,epscra))*epscru;
   }
 
-double XC::CreepShrinkageParameters::getShrink(const double &age, const double &time) const
+double XC::ACICreepShrinkageParameters::getShrink(const double &age, const double &time) const
   {
     const double shrinkTime= time-age; // Time from initiation of drying.
     double retval= 0.0;
@@ -83,68 +83,68 @@ double XC::CreepShrinkageParameters::getShrink(const double &age, const double &
   }
 
 //! @brief Assigns ultimate shrinkage.
-void XC::CreepShrinkageParameters::setUltimateShrinkage(const double &d)
+void XC::ACICreepShrinkageParameters::setUltimateShrinkage(const double &d)
   { epsshu= d; }
 
 //! @brief Return ultimate shrinkage.
-double XC::CreepShrinkageParameters::getUltimateShrinkage(void) const
+double XC::ACICreepShrinkageParameters::getUltimateShrinkage(void) const
   { return epsshu; }
 
 //! @brief Assigns shrinkage parameter.
-void XC::CreepShrinkageParameters::setShrinkageParameter(const double &d)
+void XC::ACICreepShrinkageParameters::setShrinkageParameter(const double &d)
   { epssha= d; }
 
 //! @brief Return shrinkage parameter.
-double XC::CreepShrinkageParameters::getShrinkageParameter(void) const
+double XC::ACICreepShrinkageParameters::getShrinkageParameter(void) const
   { return epssha; }
 
 //! @brief Assigns creep relationship age.
-void XC::CreepShrinkageParameters::setCreepRelationshipAge(const double &d)
+void XC::ACICreepShrinkageParameters::setCreepRelationshipAge(const double &d)
   { tcr= d; }
 
 //! @brief Return creep relationship age.
-double XC::CreepShrinkageParameters::getCreepRelationshipAge(void) const
+double XC::ACICreepShrinkageParameters::getCreepRelationshipAge(void) const
   { return tcr; }
 
 //! @brief Assigns creep exponent parameter.
-void XC::CreepShrinkageParameters::setUltimateConcreteCreep(const double &d)
+void XC::ACICreepShrinkageParameters::setUltimateConcreteCreep(const double &d)
   { epscru= d; }
 
 //! @brief Return creep exponent parameter.
-double XC::CreepShrinkageParameters::getUltimateConcreteCreep(void) const
+double XC::ACICreepShrinkageParameters::getUltimateConcreteCreep(void) const
   { return epscru; }
 
 //! @brief Assigns creep exponent parameter.
-void XC::CreepShrinkageParameters::setCreepExponentParameter(const double &d)
+void XC::ACICreepShrinkageParameters::setCreepExponentParameter(const double &d)
   { epscra= d; }
 
 //! @brief Return creep exponent parameter.
-double XC::CreepShrinkageParameters::getCreepExponentParameter(void) const
+double XC::ACICreepShrinkageParameters::getCreepExponentParameter(void) const
   { return epscra; }
 
 //! @brief Assigns creep exponent parameter.
-void XC::CreepShrinkageParameters::setCreepDParameter(const double &d)
+void XC::ACICreepShrinkageParameters::setCreepDParameter(const double &d)
   { epscrd= d; }
 
 //! @brief Return creep exponent parameter.
-double XC::CreepShrinkageParameters::getCreepDParameter(void) const
+double XC::ACICreepShrinkageParameters::getCreepDParameter(void) const
   { return epscrd; }
 
 //! @brief Send object members through the communicator argument.
-int XC::CreepShrinkageParameters::sendData(Communicator &comm)
+int XC::ACICreepShrinkageParameters::sendData(Communicator &comm)
   {
     const int res= comm.sendDoubles(tcr, epsshu, epssha, epscra, epscru, epscrd, getDbTagData(),CommMetaData(1));
     return res;
   }
 //! @brief Receives object members through the communicator argument.
-int XC::CreepShrinkageParameters::recvData(const Communicator &comm)
+int XC::ACICreepShrinkageParameters::recvData(const Communicator &comm)
   {
     const int res= comm.receiveDoubles(tcr, epsshu, epssha, epscra, epscru, epscrd, getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Sends object through the communicator argument.
-int XC::CreepShrinkageParameters::sendSelf(Communicator &comm)
+int XC::ACICreepShrinkageParameters::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
@@ -160,7 +160,7 @@ int XC::CreepShrinkageParameters::sendSelf(Communicator &comm)
   }
 
 //! @brief Receives object through the communicator argument.
-int XC::CreepShrinkageParameters::recvSelf(const Communicator &comm)
+int XC::ACICreepShrinkageParameters::recvSelf(const Communicator &comm)
   {
     inicComm(2);
     const int dataTag= getDbTag();
@@ -182,9 +182,9 @@ int XC::CreepShrinkageParameters::recvSelf(const Communicator &comm)
     return res;
   }
 
-void XC::CreepShrinkageParameters::Print(std::ostream &s, int flag) const
+void XC::ACICreepShrinkageParameters::Print(std::ostream &s, int flag) const
   {
-    s << "CreepShrinkageParameters: "
+    s << "ACICreepShrinkageParameters: "
       << tcr << " "
       << epsshu << " " << epssha
       << epscru << " " << epscra

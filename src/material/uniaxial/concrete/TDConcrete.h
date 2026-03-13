@@ -88,7 +88,7 @@
 #define TDConcrete_h
 
 #include "material/uniaxial/concrete/TDConcreteBase.h"
-#include "material/uniaxial/concrete/CreepShrinkageParameters.h"
+#include "material/uniaxial/concrete/ACICreepShrinkageParameters.h"
 #include "material/uniaxial/concrete/ACICreepSteps.h"
 
 namespace XC {
@@ -98,7 +98,7 @@ class TDConcrete : public TDConcreteBase
   private:
     // matpar : Concrete FIXED PROPERTIES
     //	double fcT; // Time Dependent Strength
-    CreepShrinkageParameters creepShrinkageParameters; //!< Creep and shrinkage parameters.
+    ACICreepShrinkageParameters creepShrinkageParameters; //!< Creep and shrinkage parameters.
     
     //Added by AMK:
     double eps_cr; //!< Creep strain.
@@ -117,7 +117,7 @@ class TDConcrete : public TDConcreteBase
     
   public:
     TDConcrete(int tag= 0);
-    TDConcrete(int tag, double _fc, double _ft, double _Ets, double _Ec, double _beta, double _age, double _tcast, const CreepShrinkageParameters &);
+    TDConcrete(int tag, double _fc, double _ft, double _Ets, double _Ec, double _beta, double _age, double _tcast, const ACICreepShrinkageParameters &);
     virtual ~TDConcrete(void);
     void setup_parameters(void);
 
@@ -132,8 +132,8 @@ class TDConcrete : public TDConcreteBase
     double setShrink(double time); //Added by AMK
     double getShrink(void) const; //Added by AMK
 
-    void setCreepShrinkageParameters(const CreepShrinkageParameters &);
-    const CreepShrinkageParameters &getCreepShrinkageParameters(void) const;
+    void setCreepShrinkageParameters(const ACICreepShrinkageParameters &);
+    const ACICreepShrinkageParameters &getCreepShrinkageParameters(void) const;
     
     int commitState(void);
     int revertToLastCommit(void);    

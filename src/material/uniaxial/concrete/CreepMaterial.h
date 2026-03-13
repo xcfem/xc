@@ -69,7 +69,7 @@
 
 #include "material/uniaxial/EncapsulatedUniaxialMaterial.h"
 #include "material/uniaxial/concrete/ConcreteHistoryVars.h"
-#include "material/uniaxial/concrete/CreepShrinkageParameters.h"
+#include "material/uniaxial/concrete/ACICreepShrinkageParameters.h"
 #include "material/uniaxial/concrete/ACICreepSteps.h"
 
 namespace XC {
@@ -112,7 +112,7 @@ class CreepMaterial: public EncapsulatedUniaxialMaterial
     int crackP_flag;
     int iter; //!< Iteration number
 
-    CreepShrinkageParameters creepShrinkageParameters; //!< Creep and shrinkage parameters.
+    ACICreepShrinkageParameters creepShrinkageParameters; //!< Creep and shrinkage parameters.
 
     // hstvP : Concerete HISTORY VARIABLES last committed step
     CreepConcreteHistoryVars hstvP; //!< = values at previous converged step
@@ -129,15 +129,15 @@ class CreepMaterial: public EncapsulatedUniaxialMaterial
     int recvData(const Communicator &);
   public:
     CreepMaterial(int tag= 0);
-    CreepMaterial(int tag, double _fc, double _fcu, double _epscu, double _ft, double _Ec, double _beta, double _age, double _tcast, const CreepShrinkageParameters &);
-    CreepMaterial(int tag, UniaxialMaterial &matl, double _age, double _tcast, const CreepShrinkageParameters &);
+    CreepMaterial(int tag, double _fc, double _fcu, double _epscu, double _ft, double _Ec, double _beta, double _age, double _tcast, const ACICreepShrinkageParameters &);
+    CreepMaterial(int tag, UniaxialMaterial &matl, double _age, double _tcast, const ACICreepShrinkageParameters &);
     void setup_parameters(void);
 
     double getInitialTangent(void) const;
     UniaxialMaterial *getCopy(void) const;
     
-    void setCreepShrinkageParameters(const CreepShrinkageParameters &);
-    const CreepShrinkageParameters &getCreepShrinkageParameters(void) const;
+    void setCreepShrinkageParameters(const ACICreepShrinkageParameters &);
+    const ACICreepShrinkageParameters &getCreepShrinkageParameters(void) const;
 
     int setTrialStrain(double strain, double strainRate = 0.0); 
     double setCreepStrain(double time, double stress); //Added by AMK

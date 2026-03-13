@@ -120,7 +120,7 @@ XC::TDConcrete::TDConcrete(int tag)
 //! @param _age: analysis time at initiation of drying (in days).
 //! @param _csParameters: creep and shrinkage parameters.
 //! @param _tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
-XC::TDConcrete::TDConcrete(int tag, double _fpc, double _ft, double _Ets, double _Ec, double _beta, double _age, double _tcast, const CreepShrinkageParameters &_csParameters)
+XC::TDConcrete::TDConcrete(int tag, double _fpc, double _ft, double _Ets, double _Ec, double _beta, double _age, double _tcast, const ACICreepShrinkageParameters &_csParameters)
   : TDConcreteBase(tag, MAT_TAG_TDConcrete, _fpc, _ft, _Ets, _Ec, _beta, _age, _tcast),
     creepShrinkageParameters(_csParameters)
   {
@@ -311,10 +311,10 @@ double XC::TDConcrete::getShrink(void) const
     return eps_sh;
   }
 
-void XC::TDConcrete::setCreepShrinkageParameters(const CreepShrinkageParameters &csParameters)
+void XC::TDConcrete::setCreepShrinkageParameters(const ACICreepShrinkageParameters &csParameters)
   { this->creepShrinkageParameters= csParameters; }
 
-const XC::CreepShrinkageParameters &XC::TDConcrete::getCreepShrinkageParameters(void) const
+const XC::ACICreepShrinkageParameters &XC::TDConcrete::getCreepShrinkageParameters(void) const
   { return this->creepShrinkageParameters; }
 
 int XC::TDConcrete::commitState(void)

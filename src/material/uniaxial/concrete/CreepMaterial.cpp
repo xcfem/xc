@@ -80,7 +80,7 @@ XC::CreepMaterial::CreepMaterial(int tag)
     crack_flag(0), crackP_flag(0), iter(0)
   {}
 
-XC::CreepMaterial::CreepMaterial(int tag, double _fc, double _fcu, double _epscu, double _ft, double _Ec, double _beta, double _age, double _tcast, const CreepShrinkageParameters &_csParameters)
+XC::CreepMaterial::CreepMaterial(int tag, double _fc, double _fcu, double _epscu, double _ft, double _Ec, double _beta, double _age, double _tcast, const ACICreepShrinkageParameters &_csParameters)
   : EncapsulatedUniaxialMaterial(tag, MAT_TAG_CreepMaterial),
     age(_age), beta(_beta), tcast(_tcast),
     epsInit(0.0), sigInit(0.0),
@@ -106,7 +106,7 @@ XC::CreepMaterial::CreepMaterial(int tag, double _fc, double _fcu, double _epscu
     creepSteps.initTime(getCurrentTime());
   }
 
-XC::CreepMaterial::CreepMaterial(int tag, UniaxialMaterial &matl, double _age, double _tcast, const CreepShrinkageParameters &_csParameters)
+XC::CreepMaterial::CreepMaterial(int tag, UniaxialMaterial &matl, double _age, double _tcast, const ACICreepShrinkageParameters &_csParameters)
   : EncapsulatedUniaxialMaterial(tag, MAT_TAG_CreepMaterial, matl),
     age(_age), beta(0.0), tcast(_tcast),
     epsInit(0.0), sigInit(0.0),
@@ -166,10 +166,10 @@ void XC::CreepMaterial::setup_parameters(void)
 XC::UniaxialMaterial *XC::CreepMaterial::getCopy(void) const
   { return new CreepMaterial(*this); }
 
-void XC::CreepMaterial::setCreepShrinkageParameters(const CreepShrinkageParameters &csParameters)
+void XC::CreepMaterial::setCreepShrinkageParameters(const ACICreepShrinkageParameters &csParameters)
   { this->creepShrinkageParameters= csParameters; }
 
-const XC::CreepShrinkageParameters &XC::CreepMaterial::getCreepShrinkageParameters(void) const
+const XC::ACICreepShrinkageParameters &XC::CreepMaterial::getCreepShrinkageParameters(void) const
   { return this->creepShrinkageParameters; }
 
 double XC::CreepMaterial::getInitialTangent(void) const

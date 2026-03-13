@@ -62,16 +62,16 @@ class_<XC::TDConcreteBase, bases<XC::RawConcrete>, boost::noncopyable >("TDConcr
   // .def("setCreepDt", &XC::TDConcreteBase::setCreepDt,"Set time increment for creep.").staticmethod("setCreepDt")
   ;
 
-class_<XC::CreepShrinkageParameters, bases<CommandEntity> >("CreepShrinkageParameters")
+class_<XC::ACICreepShrinkageParameters, bases<CommandEntity> >("ACICreepShrinkageParameters")
   .def(init<const double &, const double &, const double &,const double &, const double &, const double &>())
-  .def(init<XC::CreepShrinkageParameters>())
-  .def("setup", &XC::CreepShrinkageParameters::setup_parameters,"Sets initial values for the creep and shrinkage parameters; call after modifying any of the material properties.")
-  .add_property("tcr", &XC::CreepShrinkageParameters::getCreepRelationshipAge,  &XC::CreepShrinkageParameters::setCreepRelationshipAge,"creep relationship age.")
-  .add_property("epsshu", &XC::CreepShrinkageParameters::getUltimateShrinkage,  &XC::CreepShrinkageParameters::setUltimateShrinkage,"ultimate shrinkage.")
-  .add_property("epssha", &XC::CreepShrinkageParameters::getShrinkageParameter,  &XC::CreepShrinkageParameters::setShrinkageParameter,"shrinkage parameter.")
-  .add_property("epscru", &XC::CreepShrinkageParameters::getUltimateConcreteCreep,  &XC::CreepShrinkageParameters::setUltimateConcreteCreep,"ultimate concrete creep.")
-  .add_property("epscra", &XC::CreepShrinkageParameters::getCreepExponentParameter,  &XC::CreepShrinkageParameters::setCreepExponentParameter,"creep exponent parameter.")
-  .add_property("epscrd", &XC::CreepShrinkageParameters::getCreepDParameter,  &XC::CreepShrinkageParameters::setCreepDParameter,"creep d parameter.")
+  .def(init<XC::ACICreepShrinkageParameters>())
+  .def("setup", &XC::ACICreepShrinkageParameters::setup_parameters,"Sets initial values for the creep and shrinkage parameters; call after modifying any of the material properties.")
+  .add_property("tcr", &XC::ACICreepShrinkageParameters::getCreepRelationshipAge,  &XC::ACICreepShrinkageParameters::setCreepRelationshipAge,"creep relationship age.")
+  .add_property("epsshu", &XC::ACICreepShrinkageParameters::getUltimateShrinkage,  &XC::ACICreepShrinkageParameters::setUltimateShrinkage,"ultimate shrinkage.")
+  .add_property("epssha", &XC::ACICreepShrinkageParameters::getShrinkageParameter,  &XC::ACICreepShrinkageParameters::setShrinkageParameter,"shrinkage parameter.")
+  .add_property("epscru", &XC::ACICreepShrinkageParameters::getUltimateConcreteCreep,  &XC::ACICreepShrinkageParameters::setUltimateConcreteCreep,"ultimate concrete creep.")
+  .add_property("epscra", &XC::ACICreepShrinkageParameters::getCreepExponentParameter,  &XC::ACICreepShrinkageParameters::setCreepExponentParameter,"creep exponent parameter.")
+  .add_property("epscrd", &XC::ACICreepShrinkageParameters::getCreepDParameter,  &XC::ACICreepShrinkageParameters::setCreepDParameter,"creep d parameter.")
   ;
 
 class_<XC::MC10CreepShrinkageParameters, bases<CommandEntity> >("MC10CreepShrinkageParameters")

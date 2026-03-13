@@ -494,7 +494,7 @@ def defConcrete02IS(preprocessor,name,epsc0,fpc,fpcu,epscu, Ec0, ratioSlope= 0.1
 
 # Creep materials.
 def def_creep_and_shrinkage_parameters(tcr, epsshu, epssha, epscru, epscra, epscrd):
-    ''' Define an MC10CreepShrinkageParameters object.
+    ''' Define an ACICreepShrinkageParameters object.
 
     :param tcr: creep model age in days.
     :param epsshu: ultimate shrinkage strain εsh,u, as per ACI 209R-92.
@@ -503,7 +503,7 @@ def def_creep_and_shrinkage_parameters(tcr, epsshu, epssha, epscru, epscra, epsc
     :param epscra: fitting constant within the creep time evolution function as per ACI 209R-92.
     :param epscrd: fitting constant within the creep time evolution function as per ACI 209R-92.
     '''
-    return xc.CreepShrinkageParameters(tcr, epsshu, epssha, epscru, epscra, epscrd)
+    return xc.ACICreepShrinkageParameters(tcr, epsshu, epssha, epscru, epscra, epscrd)
     
 # Creep material.
 def defCreepMaterial(preprocessor, name, encapsulatedConcrete, beta, age, tcast, csParameters):
