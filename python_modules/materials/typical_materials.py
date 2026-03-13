@@ -50,17 +50,30 @@ class BasicElasticMaterial(object):
         :param initStrain: initial strain.
         '''        
         materialHandler= preprocessor.getMaterialHandler
+        retval= None
         matName= name
         if(not matName):
             matName= uuid.uuid1().hex
-        retval= materialHandler.newMaterial("elastic_material",matName)
-        retval.E= self.E
         matRho= self.rho
         if(overrideRho):
             matRho= overrideRho
-        retval.rho= matRho
-        if(initStrain!=0.0):
-            retval.initialStrain= initStrain
+        alreadyDefined= False
+        if(materialHandler.materialExists(matName)):
+           existingMat= materialHandler.getMaterial(matName)
+           if(existingMat.tipo()=='XC::ElasticMaterial'): # Same type.
+               if(existingMat.E==self.E): # Same stiffness.
+                   if(existingMat.rho==matRho): # Same rho
+                       if(existingMat.initialStrain==initStrain): # Same initial strain.
+                           alreadyDefined= True
+
+        if(alreadyDefined):
+            retval= existingMat
+        else:
+            retval= materialHandler.newMaterial("elastic_material", matName)
+            retval.E= self.E
+            retval.rho= matRho
+            if(initStrain!=0.0):
+                retval.initialStrain= initStrain
         return retval
     
     def defElasticIsotropic3d(self, preprocessor, name= None, overrideRho= None):
@@ -238,12 +251,22 @@ def defElastNoTensMaterial(preprocessor,name, E, a= 0.0, b= 1.0, overrideRho= No
     matName= name
     if(not matName):
         matName= uuid.uuid1().hex
-    retval= materialHandler.newMaterial("elastic_no_traction_material", matName)
-    retval.E= E
-    retval.a= a
-    retval.b= b
-    if(overrideRho):
-        retval.rho= overrideRho
+    alreadyDefined= False
+    if(materialHandler.materialExists(matName)):
+        existingMat= materialHandler.getMaterial(matName)
+        if(existingMat.tipo()=='XC::ENTMaterial'): # Same type.
+            alreadyDefined= (existingMat.E== E) and (existingMat.a==a) and (existingMat.b==b)
+            if(overrideRho is not None):
+                alreadyDefined= alreadyDefined and (existingMat.rho==overrideRho)
+    if(alreadyDefined):
+        retval= existingMat
+    else:
+        retval= materialHandler.newMaterial("elastic_no_traction_material", matName)
+        retval.E= E
+        retval.a= a
+        retval.b= b
+        if(overrideRho):
+            retval.rho= overrideRho
     return retval
 
 def defElastNoCompressionMaterial(preprocessor, name, E, a= 0.0, b= 1.0, overrideRho= None):
@@ -266,12 +289,22 @@ def defElastNoCompressionMaterial(preprocessor, name, E, a= 0.0, b= 1.0, overrid
     matName= name
     if(not matName):
         matName= uuid.uuid1().hex
-    retval= materialHandler.newMaterial("elastic_no_compression_material", matName)
-    retval.E= E
-    retval.a= a
-    retval.b= b
-    if(overrideRho):
-        retval.rho= overrideRho
+    alreadyDefined= False
+    if(materialHandler.materialExists(matName)):
+        existingMat= materialHandler.getMaterial(matName)
+        if(existingMat.tipo()=='XC::ENCMaterial'): # Same type.
+            alreadyDefined= (existingMat.E== E) and (existingMat.a==a) and (existingMat.b==b)
+            if(overrideRho is not None):
+                alreadyDefined= alreadyDefined and (existingMat.rho==overrideRho)
+    if(alreadyDefined):
+        retval= existingMat
+    else:
+        retval= materialHandler.newMaterial("elastic_no_compression_material", matName)
+        retval.E= E
+        retval.a= a
+        retval.b= b
+        if(overrideRho):
+            retval.rho= overrideRho
     return retval
 
 #Cable material.

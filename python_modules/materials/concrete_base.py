@@ -1670,14 +1670,26 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         matName= name
         if(not matName):
             matName= self.materialName+'_elastic'
-        retval= materialHandler.newMaterial("elastic_material", matName)
-        retval.E= self.Es
         matRho= self.rho
         if(overrideRho):
             matRho= overrideRho
-        retval.rho= matRho
-        if(initStrain!=0.0):
-            retval.initialStrain= initStrain
+        alreadyDefined= False
+        if(materialHandler.materialExists(matName)):
+           existingMat= materialHandler.getMaterial(matName)
+           if(existingMat.tipo()=='XC::ElasticMaterial'): # Same type.
+               if(existingMat.E==self.Es): # Same stiffness.
+                   if(existingMat.rho==matRho): # Same rho
+                       if(existingMat.initialStrain==initStrain): # Same initial strain.
+                           alreadyDefined= True
+
+        if(alreadyDefined):
+            retval= existingMat
+        else:
+            retval= materialHandler.newMaterial("elastic_material", matName)
+            retval.E= self.Es
+            retval.rho= matRho
+            if(initStrain!=0.0):
+                retval.initialStrain= initStrain
         return retval
     
     def defElasticNoCompressionMaterial(self, preprocessor, name:str= None, a= 0.0, b= 1.0):
