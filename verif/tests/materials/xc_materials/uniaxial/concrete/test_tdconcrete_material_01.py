@@ -41,7 +41,7 @@ psish = 75.4218 # Based on section dimensions
 phiu = 3.0 # ultimate creep coefficient as per ACI 209R-92
 psicr1 = 1.0 # Recommended value
 psicr2 = 75.4218 # fitting parameter of the creep time evolution function as per ACI 209R-92. Based on section dimensions
-csParameters= typical_materials.def_creep_and_shrinkage_parameters(tcr= Tcr, epsshu= epsshu, epssha= psish, epscru= phiu, epscra= psicr1, epscrd= psicr2)
+csParameters= typical_materials.def_aci_creep_and_shrinkage_parameters(tcr= Tcr, epsshu= epsshu, epssha= psish, epscru= phiu, epscra= psicr1, epscrd= psicr2)
 
 ## Concrete able to creep.
 tdConcrete= typical_materials.defTDConcrete(preprocessor= preprocessor, name= 'tdConcrete',fpc= fc,ft= ft, Ec= Ec, beta= beta, age= tDry, tcast= tcast, csParameters= csParameters)
