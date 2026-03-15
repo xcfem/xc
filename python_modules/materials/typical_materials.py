@@ -493,7 +493,7 @@ def defConcrete02IS(preprocessor,name,epsc0,fpc,fpcu,epscu, Ec0, ratioSlope= 0.1
     return retval
 
 # Creep materials.
-def def_creep_and_shrinkage_parameters(tcr, epsshu, epssha, epscru, epscra, epscrd):
+def def_aci_creep_and_shrinkage_parameters(tcr, epsshu, epssha, epscru, epscra, epscrd):
     ''' Define an ACICreepShrinkageParameters object.
 
     :param tcr: creep model age in days.

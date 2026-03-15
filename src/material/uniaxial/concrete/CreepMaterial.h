@@ -71,6 +71,7 @@
 #include "material/uniaxial/concrete/ConcreteHistoryVars.h"
 #include "material/uniaxial/concrete/ACICreepShrinkageParameters.h"
 #include "material/uniaxial/concrete/ACICreepSteps.h"
+#include "material/uniaxial/concrete/ACICreepShrinkageStrains.h"
 
 namespace XC {
 
@@ -85,31 +86,11 @@ class CreepMaterial: public EncapsulatedUniaxialMaterial
 
     // matpar : Concrete FIXED PROPERTIES
     //	double fcT;  //Time Dependent Strength
-    double age; //!< concrete age at first loading, Added by AMK
     double beta; //!< tension softening parameter.
-    double tcast; //!< the analysis time corresponding to concrete casting in days.
-    //Added by AMK:
-    double epsInit;
-    double sigInit;
+    ACICreepShrinkageStrains creepShrinkageStrains;
     
-    double eps_cr; //!< Creep strain.
-    double eps_sh; //!< Shrinkage strain.
-    double eps_m; //!< Mechanical strain.
-    
-    double epsP_cr; //!< Commited creep strain.
-    double epsP_sh; //!< Commited shrinkage strain.
-    double epsP_m; //!< Commited mechanical strain.
-    
-    double eps_total; //!< Total strain.
-    double epsP_total; //!< Commited total strain.
-    
-    double t; //!< Time.
-    double t_load; //!< Loaded time.
     double phi_i; //!< Creep coefficient.
-    double Et; //!< Stiffness at time t.
-    
-    int crack_flag;
-    int crackP_flag;
+
     int iter; //!< Iteration number
 
     ACICreepShrinkageParameters creepShrinkageParameters; //!< Creep and shrinkage parameters.
@@ -124,7 +105,6 @@ class CreepMaterial: public EncapsulatedUniaxialMaterial
 
     const RawConcrete *_get_concrete_material(void) const;
   protected:
-    void commit_eps_and_sig_init(void);
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
