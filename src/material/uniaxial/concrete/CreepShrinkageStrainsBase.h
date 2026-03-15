@@ -34,9 +34,9 @@
 namespace XC {
 
 
+//! @brief Base class that groups the variables that keep track of the
+//! creep and shrinkage strains.
 //! @ingroup MatUnx
-//
-//! @brief Creep material.
 class CreepShrinkageStrainsBase: public CommandEntity, public MovableObject
   {
   protected:

@@ -33,9 +33,8 @@
 #include "utility/actor/actor/MovableObject.h"
 namespace XC {
 
-//! @ingroup MatUnx
-//
-//! @brief Creep material.
+//! @brief Parameters that define creep and shrinkage behaviour according
+//! to Model Code 2010.
 class MC10CreepShrinkageParameters: public CommandEntity, public MovableObject
   {
   private:

@@ -33,7 +33,8 @@
 
 namespace XC {
 
-//! @brief Creep material.
+//! @brief Class that groups the variables that keep track of the
+//! creep and shrinkage strains according to the ACI code.
 //! @ingroup MatUnx
 class ACICreepShrinkageStrains: public CreepShrinkageStrainsBase
   {
