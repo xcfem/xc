@@ -374,15 +374,15 @@ double XC::SectionForceDeformation::getStressResultant(const int &defID) const
 double XC::SectionForceDeformation::getStressResultantByName(const std::string &cod) const
   {
     double retval= 0.0;
-    if(cod == "n1") //Axial force axil per unit length, parallel to the axis 1.
+    if(cod == "n1") // Axial force axil per unit length, parallel to the axis 1.
       retval= getStressResultant(MEMBRANE_RESPONSE_n1);
-    else if(cod == "n2") //Axial force per unit length, parallel to the axis 2.
+    else if(cod == "n2") // Axial force per unit length, parallel to the axis 2.
       retval= getStressResultant(MEMBRANE_RESPONSE_n2);
-    else if(cod == "n12")
+    else if(cod == "n12") // In-plane shear per unit length.
       retval= getStressResultant(MEMBRANE_RESPONSE_n12);
-    else if(cod == "m1") //Flector per unit length, around the axis 1.
+    else if(cod == "m1") // Flector per unit length, around the axis 1.
       retval= getStressResultant(PLATE_RESPONSE_m1);
-    else if(cod == "m2") //Flector per unit length, around the axis 2.
+    else if(cod == "m2") // Flector per unit length, around the axis 2.
       retval= getStressResultant(PLATE_RESPONSE_m2);
     else if(cod == "m12")
       retval= getStressResultant(PLATE_RESPONSE_m12);
@@ -390,17 +390,17 @@ double XC::SectionForceDeformation::getStressResultantByName(const std::string &
       retval= getStressResultant(PLATE_RESPONSE_q13);
     else if(cod == "q23")
       retval= getStressResultant(PLATE_RESPONSE_q23);
-    else if(cod == "P" || cod == "N") //Esfuerzo axil (barra prinsmatica).
+    else if(cod == "P" || cod == "N") // Axial force (prismatic bar).
       retval= getStressResultant(SECTION_RESPONSE_P);
-    else if(cod == "Mz") //Bending around the z axis.
+    else if(cod == "Mz") // Bending around the z axis.
       retval= getStressResultant(SECTION_RESPONSE_MZ);
-    else if(cod == "My") //Bending around the y axis.
+    else if(cod == "My") // Bending around the y axis.
       retval= getStressResultant(SECTION_RESPONSE_MY);
-    else if(cod == "Vz")
+    else if(cod == "Vz") // Shear along z axis.
       retval= getStressResultant(SECTION_RESPONSE_VZ);
-    else if(cod == "Vy")
+    else if(cod == "Vy") // Shear along y axis.
       retval= getStressResultant(SECTION_RESPONSE_VY);
-    else if(cod == "T" || cod == "Mx")
+    else if(cod == "T" || cod == "Mx") // Torque.
       retval= getStressResultant(SECTION_RESPONSE_T);
 
     return retval;
