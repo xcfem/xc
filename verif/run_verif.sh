@@ -1456,6 +1456,7 @@ echo "$BLEU" "          2D Beam fiber section tests." "$NORMAL"
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/2d/test_fiber_section2d_01.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/2d/test_fiber_section2d_02.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/2d/test_fiber_section_shear2d_01.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/2d/test_tdconcrete_mc10_fiber_section2d_01.py
 echo "$BLEU" "          3D Beam fiber section tests." "$NORMAL"
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section3d_01.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section3d_02.py

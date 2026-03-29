@@ -22,8 +22,6 @@ from materials.sections.fiber_section import def_simple_RC_section
 from solution import predefined_solutions
 from misc_utils import log_messages as lmsg
 
-# XXX: This test does not work yet.
-
 # Geometry
 b= 2.5 # beam spacing.
 hc= 0.12 # deck slab thickness.
@@ -138,7 +136,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution.
 # 20260306 LP; THIS DOES NOT WORK: solProc= predefined_solutions.PlainNewtonRaphson(feProblem, convergenceTestTol= 1e-2, maxNumIter= 150, printFlag= 1)
-solProc= predefined_solutions.PlainStaticModifiedNewton(feProblem, convergenceTestTol= 1e-3, maxNumIter= 300, printFlag= 0)
+solProc= predefined_solutions.PlainStaticModifiedNewton(feProblem, convergenceTestTol= 1e-5, maxNumIter= 300, printFlag= 0)
 solProc.setup()
 
 if(creepOnDeck):
@@ -168,6 +166,43 @@ while t < lastT:
     if(ok!=0):
         lmsg.error("Can't solve for time: "+str(t)+' days.')
         exit(1)
+
+# Check results.
+scc= zl.getSection()
+sccN= scc.getStressResultantComponent("N")
+ratio1= abs(sccN-N)/N
+sccM= scc.getStressResultantComponent("Mz")
+ratio2= abs(sccM-M)/M
+if(creepOnDeck):
+    refEps= -0.2053459192836649e-3
+    refKappa= -0.1912957988362976e-3
+else:
+    refEps= 1.844605790435137e-3
+    refKappa= -3.75208962163216e-3
+eps= scc.getSectionDeformationByName('defN')
+ratio3= abs(eps-refEps)/refEps
+kappa= scc.getSectionDeformationByName('defMz')
+ratio4= abs(kappa-refKappa)/refKappa
+
+'''
+print('N= ', sccN/1e3, 'kN')
+print('ratio1= ', ratio1)
+print('M= ', sccM/1e3, 'kN.m')
+print('ratio2= ', ratio2)
+print('eps= ', eps*1e3, '‰')
+print('ratio3= ', ratio3)
+print('kappa= ', kappa*1e3, '‰')
+print('ratio4= ', ratio4)
+'''
+
+import os
+from misc_utils import log_messages as lmsg
+fname= os.path.basename(__file__)
+if (abs(ratio1)<1e-3) & (abs(ratio2)<1e-2) & (abs(ratio3)<1e-6) & (abs(ratio4)<1e-6):
+    print('test '+fname+': ok.')
+else:
+    lmsg.error(fname+' ERROR.')
+
         
 # # Output stuff.
 # from postprocess import output_handler
