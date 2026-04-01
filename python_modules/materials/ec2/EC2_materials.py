@@ -879,6 +879,77 @@ class Rebar(rebar_family.Rebar):
         fck= abs(concrete.fck)
         return k1*math.sqrt(fck/1e6)*pow(hEf*1e3,1.5)
 
+    @staticmethod
+    def get_k8(hEf):
+        ''' Return the value of the k8 factor that introduces the influence of 
+            the effective embedment in expressions (7.39a) to (7.39d) of 
+            paragraph (2) of clause 7.2.2.4 of EN 1992-4. The value is computed
+            according to ETAG 001, Annex C – clause 5.2.3.3.
+
+        :param hEf: effective embedment depth (according to figures 3.1 to 3.3
+                    of EN 1992-4:2018) (m).
+        '''
+        retval= 1.0
+        if(hEf>=60e-3):
+            retval= 2.0
+        return retval
+            
+    def getCharacteristicResistancePryOutFailure(self, concrete, k1, hEf, supplementaryReinforcement= False):
+        ''' Return the cone failure characteristic resistance of a single 
+            cast-in fastener not influenced by adjacent fasteners or edges 
+            of the concrete member according to expression 7.2 in clause
+            7.2.1.4 of EN 1992-4:2018.
+
+        :param concrete: concrete material.
+        :param k1: 8.9 for cast-in headed fasteners in cracked concrete 
+                   and 11.0 for cast-in headed fasteners in non-cracked 
+                   concrete.
+        :param hEf: effective embedment depth (according to figures 3.1 to 3.3
+                    of EN 1992-4:2018) (m).
+        :param supplementaryReinforcement: if True use the (7.39d) formula,
+                                           otherwise use the (7.39c)
+        '''
+        k8= self.get_k8(hEf)
+        NRkc= self.getAxialInitialResistanceConeFailure(concrete= concrete, k1= k1, hEf= hEf)
+        return k8*NRkc
+
+    def getDesignResistancePryOutFailure(self, concrete, k1, hEf, supplementaryReinforcement= False):
+        ''' Return the cone failure design resistance of a single cast-in
+            fastener not influenced by adjacent fasteners or edges  of the
+            concrete member according to expression 7.2 in clause 7.2.1.4 of
+            EN 1992-4:2018.
+
+        :param concrete: concrete material.
+        :param k1: 8.9 for cast-in headed fasteners in cracked concrete 
+                   and 11.0 for cast-in headed fasteners in non-cracked 
+                   concrete.
+        :param hEf: effective embedment depth (according to figures 3.1 to 3.3
+                    of EN 1992-4:2018) (m).
+        :param supplementaryReinforcement: if True use the (7.39d) formula,
+                                           otherwise use the (7.39c)
+        '''
+        VRkc= self.getCharacteristicResistancePryOutFailure(concrete= concrete, k1= k1, hEf= hEf, supplementaryReinforcement= supplementaryReinforcement)
+        return VRkc/concrete.gmmC #  (EN 1992-4 – Table 4.1, $\gamma_{inst} = 1.0 for shear loading)
+
+    def getPryOutFailureEfficiency(self, Qd, concrete, k1, hEf, supplementaryReinforcement= False):
+        ''' Return the cone failure design resistance of a single cast-in
+            fastener not influenced by adjacent fasteners or edges  of the
+            concrete member according to expression 7.2 in clause 7.2.1.4 of
+            EN 1992-4:2018.
+
+        :param concrete: concrete material.
+        :param k1: 8.9 for cast-in headed fasteners in cracked concrete 
+                   and 11.0 for cast-in headed fasteners in non-cracked 
+                   concrete.
+        :param hEf: effective embedment depth (according to figures 3.1 to 3.3
+                    of EN 1992-4:2018) (m).
+        :param supplementaryReinforcement: if True use the (7.39d) formula,
+                                           otherwise use the (7.39c)
+        '''
+        pryOutResistance= self.getDesignResistancePryOutFailure(concrete= concrete, k1= k1, hEf= hEf, supplementaryReinforcement= supplementaryReinforcement)
+        pryOutCF= Qd/pryOutResistance
+        return pryOutCF, pryOutResistance
+
     def getScrN(self, hEf):
         ''' Return the side length of the reference projected ($S_{cr,N}$) area
             for headed and post-installed fasteners according to the NOTE in
@@ -1135,7 +1206,136 @@ class Rebar(rebar_family.Rebar):
         FvRd= self.getUltimateShearStrength(alpha_v= alpha_v, gamma_M2= gamma_M2)
         retval= Qd/FvRd+Td/(1.4*FtRd)
         return retval
-        
+    
+    @staticmethod
+    def getPsi_s_v(c1, c2):
+        ''' Return the factor that takes account of the disturbance of the
+            distribution of stresses in the concrete due to further edges of the
+            concrete member on the shear resistance. The factor is computed
+            according to formula (7.45) of paragraph (9) of clause 7.2.2.5 of
+            EN 1992-4. 
+
+        :param c1: edge distance in direction 1; in case of fasteners close to 
+                   an edge loaded in shear $c_1$ is the edge distance in 
+                   direction of the shear load (see Figure 7.14 of EN 1992-4).
+        :param c2: edge distance in direction 2; direction 2 is perpendicular
+                   to direction 1. For fastenings with two edges parallel to 
+                   the direction of loading (e.g. in a narrow concrete member)
+                   the smaller value of these edge distances shall be used for 
+                   c2.
+        '''
+        return min((0.7+0.2*c2/c1),1.0)
+    
+    @staticmethod
+    def getPsi_h_v(h, c1):
+        '''Return the value of the factor that is used to introduce in the 
+           calculation the lack of proportionality between the reduction of 
+           edge resistance and the decrease of the part thickness as is 
+           assumed in the quotient $A_{cv}/A_{c,v}^0 (see figure 7.14 b of
+           EN 1992-4). The factor is computed according to the xpression (7.46)
+           of paragraph (10) of clause 7.2.2.5 of EN 1992-4. 
+
+        :param h: Concrete part thickness.
+        :param c1: edge distance in direction 1; in case of anchorages close to
+                   an edge loaded in shear $c_1$ is the edge distance in 
+                   direction of the shear load (see Figure 7.14 of EN 1992-4).
+        '''
+        return max(math.sqrt(1.5*c1/h),1.0)
+
+    @staticmethod
+    def getPsi_ec_v(ev, c1):
+        ''' Return the factor that takes account of a group effect when different           shear loads are  acting on the individual fasteners of a group, 
+            computed according to  expression (7.47) of paragraph (11) of 
+            clause 7.2.2.5 of EN 1992-4.
+
+         :param ev: Eccentricity of the shear forces resultant with respect to 
+                    the group centroid.
+         :param c1: edge distance in direction 1; in case of anchorages close 
+                    to an edge loaded in shear $c_1$ is the edge distance in 
+                    direction of the shear load (see Figure 7.15 of EN 1992-4).
+        '''
+        return min(1/(1+2*ev/3/c1),1.0)
+  
+    @classmethod
+    def getPsi_alpha_v(cls, alpha_v):
+        '''
+        Return the value of the factor that takes account of the influence of
+        a sear load inclined to the edge under consideration on the concrete
+        edge resistance according to paragraph (12) of of clause 7.2.2.5 of 
+        EN 1992-4.
+
+        :param alphaV: angle between the design shear load and the direction 
+                       perpendicular to the free edge of the concrete member
+                       being verified.
+        '''
+        if(alpha_v>(math.pi/2.0)):
+            className= cls.__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= "; angle must be smaller than 90 degrees (see paragraph (12) of of clause 7.2.2.5 of EN 1992-4)."
+            lmsg.error(className+'.'+methodName+errMsg)
+            exit(1)
+        return max(math.sqrt(1.0/(math.cos(alpha_v)**2+(0.5*math.sin(alpha_v))**2)),1.0)
+
+    @staticmethod
+    def getPsi_re_v(edgeReinforcement= False):
+        '''
+        Return the value of the $\psi_{re,V}$ factor that takes account of the 
+        effect of the reinforcement loacated on the edge according to paragraph
+        (13) of clause 7.2.2.5 of EN 1992-4.
+
+        :param edgeReinforcement: if true return the value corresponding to
+                                  fastening in craked concrete with edge 
+                                  reinforcement (according to figure 7.10 of
+                                  EN 1992-4) and closely spaced stirrups or 
+                                  wire mesh with a spacing 
+                                  $a \leq min(100\ mm, 2 c_1)$.
+
+                                  Otherwise return the value corresponding to
+                                  fastening in uncracked concrete or fastening
+                                  in cracked concrete without edge reinforcement
+                                  stirrups.
+        '''
+        retval= 1.0
+        if(edgeReinforcement):
+            retval= 1.4
+        return retval
+
+    @staticmethod
+    def get_k9(cracked):
+        ''' Return the value of the k9 factor that introduces the influence of 
+            the concrete cracking in expression (7.41) of paragraph (6) of 
+            clause 7.2.2.5 of EN 1992-4.
+
+        :param cracked: True if the fastener is placed on cracked concrete.
+        '''
+        retval= 1.7
+        if(not cracked):
+            retval= 2.4
+        return retval
+
+    def getVRkC0(self, concrete, hEf, c1, cracked):
+        ''' Return the initial value of the characteristic resistance of a 
+            fastener placed in cracked or non-cracked concrete and loaded 
+            perpendicular to the edge according to expression (7.41) of 
+            paragraph (6) of clause 7.2.2.5 of EN 1992-4.
+
+        :param hEf: effective anchorage depth.
+        :param c1: edge distance in direction 1; in case of anchorages close to
+                   an edge loaded in shear c1 is the edge distance in direction
+                   of the shear load  (see Figure 7.15 of EN 1992-4).
+        :param cracked: True if the fastener is placed on cracked concrete.
+        '''
+        k1=  Rebar.get_k9(cracked)
+        alpha= 0.1*math.pow(hEf/c1,0.5)
+        d= self.diam
+        beta= 0.1*math.pow(d/c1,0.2)
+        fck= -concrete.fck
+        lEf= hEf
+        if(d<=24e-3):
+            lEf= min(lEf, 12*d)
+        else:
+            lEf= min(lEf, max(8*d, 0.3))
+        return k1*pow(d*1e3,alpha)*pow(lEf*1e3,beta)*math.sqrt(fck/1e6)*pow(c1*1000,1.5)
     
 rebar04_S400B= Rebar(diam= 4e-3, steel= S400B) 
 rebar06_S400B= Rebar(diam= 6e-3, steel= S400B) 
