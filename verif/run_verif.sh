@@ -1633,12 +1633,14 @@ python tests/materials/ec2/test_ec2_punching_shear_02.py
 python tests/materials/ec2/test_ec2_punching_shear_03.py
 python tests/materials/ec2/test_ec2_punching_shear_04.py
 python tests/materials/ec2/test_ec2_punching_shear_05.py
-
 echo "$BLEU" "    EC2 prestressing." "$NORMAL"
 python tests/materials/ec2/test_ec2_prestressing_01.py
 python tests/materials/ec2/test_ec2_prestressing_02.py
 python tests/materials/ec2/test_ec2_prestressing_03.py
 python tests/materials/ec2/test_ec2_prestressing_04.py
+echo "$BLEU" "    EC2 part 4 fastener resistance." "$NORMAL"
+python tests/materials/ec2/test_fastener_check_01.py
+
 echo "$BLEU" "    MC10 tests." "$NORMAL"
 python tests/materials/mc10/test_mc10_shrinkage_and_creep_parameters_01.py
 python tests/materials/mc10/test_mc10_shrinkage_and_creep_parameters_02.py
