@@ -11,6 +11,7 @@ Once the analyst has defined the model, the next step is to define the analysis 
  - [See the Convergence](https://portwooddigital.com/2022/01/24/see-the-convergence/)
  - [Don’t Invert the Matrix](https://portwooddigital.com/2022/11/18/dont-invert-the-matrix/)
  - [How to Profile an OpenSeesPy Analysis](https://portwooddigital.com/2024/12/22/how-to-profile-an-openseespy-analysis/)
+ - [Empty spaces](https://portwooddigital.com/2026/01/13/empty-spaces/)
  
 ### Ill conditioning
 

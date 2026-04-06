@@ -17,6 +17,7 @@ This folder contains the code that deals with the solution of the finite element
  - [Negative Feedback Loop](https://portwooddigital.com/2022/07/17/negative-feedback-loop/)
  - [Don’t Invert the Matrix](https://portwooddigital.com/2022/11/18/dont-invert-the-matrix/)
  - [A Load at a Fixed DOF](https://portwooddigital.com/2024/11/04/a-load-at-a-fixed-dof/)
+ - [Empty spaces](https://portwooddigital.com/2026/01/13/empty-spaces/)
 
 ### Equation numberer
 - [Reverse Engineering the Equation Numberer](https://portwooddigital.com/2026/01/06/reverse-engineering-the-equation-numberer/)
