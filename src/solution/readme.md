@@ -18,8 +18,10 @@ This folder contains the code that deals with the solution of the finite element
  - [Don’t Invert the Matrix](https://portwooddigital.com/2022/11/18/dont-invert-the-matrix/)
  - [A Load at a Fixed DOF](https://portwooddigital.com/2024/11/04/a-load-at-a-fixed-dof/)
 
-
-
+### Equation numberer
+- [Reverse Engineering the Equation Numberer](https://portwooddigital.com/2026/01/06/reverse-engineering-the-equation-numberer/)
+- [Inside the equation numbers](https://portwooddigital.com/2026/02/24/inside-the-equation-numbers/)
+- [Stop Cargo Culting BandGeneral and Plain Numberer](https://portwooddigital.com/2026/02/17/stop-cargo-culting-bandgeneral-and-plain-numberer/)
 
 
 ### Failure to solve

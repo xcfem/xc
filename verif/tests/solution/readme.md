@@ -56,3 +56,5 @@
 
 # Equation numberer
 - [Reverse Engineering the Equation Numberer](https://portwooddigital.com/2026/01/06/reverse-engineering-the-equation-numberer/)
+- [Inside the equation numbers](https://portwooddigital.com/2026/02/24/inside-the-equation-numbers/)
+- [Stop Cargo Culting BandGeneral and Plain Numberer](https://portwooddigital.com/2026/02/17/stop-cargo-culting-bandgeneral-and-plain-numberer/)
