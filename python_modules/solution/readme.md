@@ -52,7 +52,8 @@ Once the analyst has defined the model, the next step is to define the analysis 
 - [A Simple Base-Isolated Model](https://portwooddigital.com/2024/11/26/a-simple-base-isolated-model/)
 - [Minimal Damper Example](https://portwooddigital.com/2025/01/12/minimal-damper-example/)
 - [Minimal Random Process Example](https://portwooddigital.com/2025/09/28/minimal-random-process-example/)
-
+- [Double Inverted Pendulum](https://portwooddigital.com/2025/09/08/double-inverted-pendulum/)
+- [Celestial OpenSeesing](https://portwooddigital.com/2025/09/14/celestial-openseesing/)
 
 ### Eigenvalue analysis
  - [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)

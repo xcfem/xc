@@ -19,3 +19,5 @@ This directory contains the different types of times series available:
 - [OpenSees Time Series command](https://opensees.github.io/OpenSeesDocumentation/user/manual/model/timeSeries.html)
 - [Pseudo-Time Is Not the Load Factor](https://portwooddigital.com/2022/11/07/pseudo-time-is-not-the-load-factor/)
 - [Earthquake Engineering Experts Hate Me for This One Weird Trick](https://portwooddigital.com/2024/06/10/earthquake-engineering-experts-hate-me-for-this-one-weird-trick/)
+### Random processes
+- [Minimal Random Process Example](https://portwooddigital.com/2025/09/28/minimal-random-process-example/)
