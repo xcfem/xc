@@ -59,3 +59,4 @@ Classes that implement the different types of analysis:
  - [One Way to Get Bad Eigenvalues](https://portwooddigital.com/2022/11/10/one-way-to-get-bad-eigenvalues/)
  - [Another Way to Get Bad Eigenvalues](https://portwooddigital.com/2022/11/11/another-way-to-get-bad-eigenvalues/)
  - [Quick (and Dirty) Modal Damping](https://portwooddigital.com/2022/11/08/quick-and-dirty-modal-damping/)
+ - [Why Your Eigenvalue Analysis Failed](https://portwooddigital.com/2026/01/27/why-your-eigenvalue-analysis-failed/)

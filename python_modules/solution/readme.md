@@ -69,7 +69,8 @@ Once the analyst has defined the model, the next step is to define the analysis 
  - [Eigenvalues of the Stiffness Matrix](https://portwooddigital.com/2023/01/16/eigenvalues-of-the-stiffness-matrix/)
  - [Spectra. C++ Library For Large Scale Eigenvalue Problems](https://spectralib.org/)
  - [Eigen Almost Hear You Sigh](https://portwooddigital.com/2025/12/30/eigen-almost-hear-you-sigh/)
-
+ - [Why Your Eigenvalue Analysis Failed](https://portwooddigital.com/2026/01/27/why-your-eigenvalue-analysis-failed/)
+ 
 #### Linear buckling analysis.
 - [Buckling](https://en.wikipedia.org/wiki/Buckling)
 - [Linear buckling in plain language!](https://enterfea.com/linear-buckling-explained/)
