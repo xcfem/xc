@@ -590,7 +590,7 @@ int XC::PolygonalFace::create_elements_from_gmsh(const std::map<int, const XC::N
 	    int order= 0;
 	    int numNodes= 0;
 	    std::vector<double> localNodeCoord;
-#if GMSH_API_VERSION_MINOR < 5	    
+#if (GMSH_API_VERSION_MINOR < 5) && (GMSH_API_VERSION_MAJOR <= 4)	    
 	    gmsh::model::mesh::getElementProperties(elementTypes[i], elementName, dim, order, numNodes, localNodeCoord);
 #else
 	    int numPrimaryNodes= 0;
