@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Checks the computation of the interaction diagram.
-   Home made test.'''
+''' Trivial test concering ReinfRow class: reinforcement row.'''
+
 from __future__ import division
 from __future__ import print_function
 

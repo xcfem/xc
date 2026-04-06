@@ -69,8 +69,9 @@
 
 #include "material/uniaxial/EncapsulatedUniaxialMaterial.h"
 #include "material/uniaxial/concrete/ConcreteHistoryVars.h"
-#include "material/uniaxial/concrete/CreepShrinkageParameters.h"
+#include "material/uniaxial/concrete/ACICreepShrinkageParameters.h"
 #include "material/uniaxial/concrete/ACICreepSteps.h"
+#include "material/uniaxial/concrete/ACICreepShrinkageState.h"
 
 namespace XC {
 
@@ -85,43 +86,22 @@ class CreepMaterial: public EncapsulatedUniaxialMaterial
 
     // matpar : Concrete FIXED PROPERTIES
     //	double fcT;  //Time Dependent Strength
-    double age; //!< concrete age at first loading, Added by AMK
-    double beta; //!< tension softening parameter
-    double tcast; //!< the analysis time corresponding to concrete casting in days.
-    CreepShrinkageParameters creepShrinkageParameters; //!< Creep and shrinkage parameters.
+    double beta; //!< tension softening parameter.
+    ACICreepShrinkageState creepShrinkageState;
+    
+    double phi_i; //!< Creep coefficient.
+
+    int iter; //!< Iteration number
+
+    ACICreepShrinkageParameters creepShrinkageParameters; //!< Creep and shrinkage parameters.
 
     // hstvP : Concerete HISTORY VARIABLES last committed step
     CreepConcreteHistoryVars hstvP; //!< = values at previous converged step
 
     // hstv : Concerete HISTORY VARIABLES  current step
     CreepConcreteHistoryVars hstv; //!< = values at current step (trial values)
-
-    //Added by AMK:
-    double epsInit;
-    double sigInit;
     
-    double eps_cr; //!< Creep strain.
-    double eps_sh; //!< Shrinkage strain.
-    double eps_m; //!< Mechanical strain.
-    
-    double epsP_cr; //!< Commited creep strain.
-    double epsP_sh; //!< Commited shrinkage strain.
-    double epsP_m; //!< Commited mechanical strain.
-    
-    double eps_total; //!< Total strain.
-    double epsP_total; //!< Commited total strain.
-    
-    double t; //!< Time.
-    double t_load; //!< Loaded time.
-    double phi_i;
-    double Et;
-    
-    int crack_flag;
-    int crackP_flag;
-    int iter; //!< Iteration number
-
     ACICreepSteps creepSteps;
-
 
     const RawConcrete *_get_concrete_material(void) const;
   protected:
@@ -129,15 +109,15 @@ class CreepMaterial: public EncapsulatedUniaxialMaterial
     int recvData(const Communicator &);
   public:
     CreepMaterial(int tag= 0);
-    CreepMaterial(int tag, double _fc, double _fcu, double _epscu, double _ft, double _Ec, double _beta, double _age, double _tcast, const CreepShrinkageParameters &);
-    CreepMaterial(int tag, UniaxialMaterial &matl, double _age, double _tcast, const CreepShrinkageParameters &);
+    CreepMaterial(int tag, double _fc, double _fcu, double _epscu, double _ft, double _Ec, double _beta, double _age, double _tcast, const ACICreepShrinkageParameters &);
+    CreepMaterial(int tag, UniaxialMaterial &matl, double _age, double _tcast, const ACICreepShrinkageParameters &);
     void setup_parameters(void);
 
     double getInitialTangent(void) const;
     UniaxialMaterial *getCopy(void) const;
     
-    void setCreepShrinkageParameters(const CreepShrinkageParameters &);
-    const CreepShrinkageParameters &getCreepShrinkageParameters(void) const;
+    void setCreepShrinkageParameters(const ACICreepShrinkageParameters &);
+    const ACICreepShrinkageParameters &getCreepShrinkageParameters(void) const;
 
     int setTrialStrain(double strain, double strainRate = 0.0); 
     double setCreepStrain(double time, double stress); //Added by AMK

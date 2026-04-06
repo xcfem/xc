@@ -11,6 +11,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es"
 
+import math
 import os
 from materials.sections.fiber_section import def_simple_RC_section
 from materials.ec2 import EC2_materials
@@ -29,19 +30,19 @@ from misc_utils import log_messages as lmsg
 
 # Geometry of the reinforcement.
 spacing= 0.15 # spacing of reinforcement.
+barDiameter= 25e-3 # Diameter of the reinforcement bar.
 nBarsA= 10 # number of bars.
 cover= 0.035 # concrete cover.
 lateralCover= cover # concrete cover for the bars at the extremities of the row.
-width= (nBarsA-1)*spacing+2.0*lateralCover
+width= (nBarsA-1)*spacing+2.0*lateralCover+barDiameter
 
 ## First row
-barDiameter= 25e-3 # Diameter of the reinforcement bar.
 ### Reinforcement row.
 rowA= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, rebarsSpacing= spacing, width= width, nominalCover= cover, nominalLatCover= lateralCover)
 
 ## Second row
 ### Reinforcement row.
-rowB= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, rebarsSpacing= spacing, width= width-spacing, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
+rowB= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, rebarsSpacing= spacing, width= width, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
 
 ## Define reinforcement layers.
 reinfLayers= def_simple_RC_section.LongReinfLayers([rowA, rowB])
@@ -75,7 +76,14 @@ else:
     rcSection.defRCSection2d(preprocessor,matDiagType= 'k') # Fiber-section material.
     beamSection= rcSection
     elementType= "ForceBeamColumn2d"
-    
+
+# beamSection.pdfReport(showPDF= True, preprocessor= preprocessor)
+# fibers= beamSection.fiberSection.getFibers()
+# print('Iz= ', fibers.getIz(1.0, 0.0))
+# print('Iy= ', fibers.getIy(1.0, 0.0))
+# for f in fibers:
+#     print(f.getPos(), f.getMaterial(), f.getArea())
+
 ## Create mesh.
 ### Create nodes.
 span= 5
@@ -114,7 +122,6 @@ modelSpace.fixNodeF0F(nB.tag) # Last node pinned.
 lp0= modelSpace.newLoadPattern(name= '0')
 modelSpace.setCurrentLoadPattern(lp0.name)
 q= -20e3
-#q= 20e3
 loadVector= xc.Vector([0.0, q])
 for e in beamElements:
     e.vector2dUniformLoadGlobal(loadVector)
@@ -122,7 +129,9 @@ for e in beamElements:
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution procedure
+# feProblem.setVerbosityLevel(1)
 analysis= predefined_solutions.plain_newton_raphson(feProblem, maxNumIter= 20, convergenceTestTol= 1e-6)
+# analysis= predefined_solutions.plain_static_modified_newton(feProblem, maxNumIter= 30, convergenceTestTol= 1e-7)
 result= analysis.analyze(1)
 if(result!=0):
     fname= os.path.basename(__file__)
@@ -139,6 +148,26 @@ vDisp= xc.Vector([nC.getDisp[0],nC.getDisp[1]])
 vReacA= xc.Vector([nA.getReaction[0],nA.getReaction[1]])
 vReacB= xc.Vector([nB.getReaction[0],nB.getReaction[1]])
 
+# Get steel stresses.
+centralElements= nC.connectedElements
+avgStress= 0.0
+avgM= 0.0
+count= 0
+for e in centralElements:
+    avgM+= (e.getM1+e.getM2)/2.0
+    for i in [0, 1]:
+        material= e.getSection(i)
+        fibers= material.getFibers()
+        for f in fibers:
+            fiberType= f.getMaterial().tipo()
+            if('Steel' in fiberType):
+                count+= 1
+                avgStress+= f.getStress()
+avgStress/= count
+avgM/= len(centralElements)
+nBars= rowA.nRebars+rowB.nRebars
+force= nBars*math.pi*(barDiameter/2.0)**2*avgStress
+leverArm= avgM/force
 
 # Check results
 ## Check that node C is at mid-span.
@@ -149,7 +178,9 @@ ratio2= abs(vReacA[0]+vReacB[0])
 ## Check vertical reactions.
 ratio3= abs(vReacA[1]+vReacB[1]+q*span)
 ## Check deflection.
-ratio4= abs(vDisp[1]+12.687263541949143e-3)/12.687263541949143e-3
+ratio4= abs(vDisp[1]+11.87424004934246e-3)/11.87424004934246e-3
+## Check average steel stress.
+ratio5= abs(avgStress-54.53436573908043e6)/54.53436573908043e6
 
 '''
 print('span l= ', span, ' m')
@@ -162,11 +193,15 @@ print('ratio2= ', ratio2)
 print('ratio3= ', ratio3)
 print('deflection = ', vDisp[1]*1e3, 'mm')
 print('ratio4= ', ratio4)
+print('average steel stress at mid span: ', avgStress/1e6, ' MPa')
+print('steel force at mid span: ', force/1e3, ' kN')
+print('average bending moment at mid span: ', avgM/1e3, ' kN.m')
+print('lever arm at mid span: ', leverArm, ' m')
 '''
 
 import os
 fname= os.path.basename(__file__)
-if (ratio1<1e-6) and (ratio2<1e-6) and (ratio3<1e-6) and (ratio4<1e-6):
+if (ratio1<1e-6) and (ratio2<1e-6) and (ratio3<1e-6) and (ratio4<1e-6) and (ratio5<1e-3):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
@@ -181,10 +216,10 @@ else:
 # #oh.displayFEMesh()
 
 # ## Uncomment to display the element axes
-# oh.displayLocalAxes()
+# # oh.displayLocalAxes()
 
 # ## Uncomment to display the loads
-# #oh.displayLoads()
+# oh.displayLoads()
 
 # ## Uncomment to display the vertical displacement
 # #oh.displayDispRot(itemToDisp='uY')
@@ -194,6 +229,6 @@ else:
 # #oh.displayReactions()
 
 # ## Uncomment to display the internal force
-# #oh.displayIntForcDiag('Mz')
+# oh.displayIntForcDiag('Mz')
 # #oh.displayIntForcDiag('Vy')
 

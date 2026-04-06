@@ -37,16 +37,16 @@ spacing= 0.15 # spacing of reinforcement.
 nBarsA= 10 # number of bars.
 cover= 0.035 # concrete cover.
 lateralCover= cover # concrete cover for the bars at the extremities of the row.
-width= (nBarsA-1)*spacing+2.0*lateralCover
+barDiameter= 25e-3 # Diameter of the reinforcement bar.
+width= (nBarsA-1)*spacing+2.0*lateralCover+barDiameter
 
 ## First row.
-barDiameter= 25e-3 # Diameter of the reinforcement bar.
 ### Reinforcement row.
 rowA= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, rebarsSpacing= spacing, width= width, nominalCover= cover, nominalLatCover= lateralCover)
 
 ## Second row.
 ### Reinforcement row.
-rowB= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, rebarsSpacing= spacing, width= width-spacing, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
+rowB= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, rebarsSpacing= spacing, width= width, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
 
 ## Concrete geometry.
 ## Materials.
@@ -178,6 +178,10 @@ vReacB= xc.Vector([nB.getReaction[0],nB.getReaction[1]])
 
 
 # Check results
+# (22/03/2026): Update the reference values after last changes in
+# the code: fixed error in main reinforcement layers definition:
+#   old value: vDisp[1]= -14.187242585506766e-3
+
 ## Check that node C is at mid-span.
 halfSpan= span/2.0
 ratio1= abs(nC.getCoo[0]-halfSpan)/(halfSpan)
@@ -186,7 +190,7 @@ ratio2= abs(vReacA[0]+vReacB[0])
 ## Check vertical reactions.
 ratio3= abs(vReacA[1]+vReacB[1]+q*span)
 ## Check deflection.
-ratio4= abs(vDisp[1]+14.187242585506766e-3)/14.187242585506766e-3
+ratio4= abs(vDisp[1]+13.247973152821409e-3)/13.247973152821409e-3
 
 '''
 print('span l= ', span, ' m')
@@ -207,6 +211,9 @@ if (ratio1<1e-6) and (ratio2<1e-6) and (ratio3<1e-6) and (ratio4<1e-6):
 else:
     lmsg.error(fname+' ERROR.')
 
+# # Report sections.
+# for rcSection in rcSections:
+#     rcSection.pdfReport(preprocessor= preprocessor, showPDF= True, keepPDF= False)
 
 # #########################################################
 # # Graphic stuff.

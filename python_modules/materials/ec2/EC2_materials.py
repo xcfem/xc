@@ -11,6 +11,7 @@ Ductility grades:
 
 import sys
 import math
+import geom
 from materials import concrete_base
 from materials.sections import rebar_family
 from misc_utils import log_messages as lmsg
@@ -571,6 +572,37 @@ class ReinforcingSteel(concrete_base.ReinforcingSteel):
     ''' Reinforcing steel as defined in EC2:2004.
 
     '''
+    def getDuctilityClass(self):
+        ''' Return the ductility class of the steel.'''
+        return self.name[-1] # Return the last character of its name.
+
+    def getDuctilityFactor(self):
+        ''' Return the value of the ductility factor k of the steel according
+            to table table C.1 of EC2:2004.
+        '''
+        ductilityClass= self.getDuctilityClass()
+        if(ductilityClass=='A'):
+            retval= 1.05
+        elif(ductilityClass=='B'):
+            retval= 1.08
+        elif(ductilityClass=='C'):
+            retval= 1.15 # Conservative value.
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= "; ductility class: '"+str(ductilityClass)+"' unknown."
+            lmsg.error(className+'.'+methodName+errMsg)
+            retval= 1.0
+            exit(1)
+        return retval
+    
+    def fud(self):
+        ''' Return the value of the ultimate design stress according to clause
+            3.2.7 of EC2:2004.
+
+        '''
+        return self.k*self.fyd()
+    
     def getBasicAnchorageLength(self, concrete, rebarDiameter, eta1= 0.7, steelEfficiency= 1.0):
         '''Returns basic required anchorage length in tension according to 
            clause 8.4.3 of EC2:2004 (expression 8.3).
@@ -745,32 +777,589 @@ for item in rebarsEC2:
     bar= rebarsEC2[item]
     bar['r']= bar['d']/2.0
     bar['area']= math.pi*bar['r']*bar['r']
+
+class Rebar(rebar_family.Rebar):
+    ''' Reinforcement bar.'''
     
-rebar04_S400B= rebar_family.Rebar(diam= 4e-3, steel= S400B) 
-rebar06_S400B= rebar_family.Rebar(diam= 6e-3, steel= S400B) 
-rebar08_S400B= rebar_family.Rebar(diam= 8e-3, steel= S400B) 
-rebar10_S400B= rebar_family.Rebar(diam= 10e-3, steel= S400B) 
-rebar12_S400B= rebar_family.Rebar(diam= 12e-3, steel= S400B) 
-rebar16_S400B= rebar_family.Rebar(diam= 16e-3, steel= S400B) 
-rebar20_S400B= rebar_family.Rebar(diam= 20e-3, steel= S400B) 
-rebar25_S400B= rebar_family.Rebar(diam= 25e-3, steel= S400B) 
-rebar32_S400B= rebar_family.Rebar(diam= 32e-3, steel= S400B) 
-rebar40_S400B= rebar_family.Rebar(diam= 40e-3, steel= S400B) 
-rebar50_S400B= rebar_family.Rebar(diam= 50e-3, steel= S400B) 
+    def getBasicAnchorageLength(self, concrete, eta1= 0.7, steelEfficiency= 1.0):
+        '''Returns basic required anchorage length in tension according to 
+           clause 8.4.3 of EC2:2004 (expression 8.3).
 
-rebar04_S500B= rebar_family.Rebar(diam= 4e-3, steel= S500B) 
-rebar06_S500B= rebar_family.Rebar(diam= 6e-3, steel= S500B) 
-rebar08_S500B= rebar_family.Rebar(diam= 8e-3, steel= S500B) 
-rebar10_S500B= rebar_family.Rebar(diam= 10e-3, steel= S500B) 
-rebar12_S500B= rebar_family.Rebar(diam= 12e-3, steel= S500B) 
-rebar16_S500B= rebar_family.Rebar(diam= 16e-3, steel= S500B) 
-rebar20_S500B= rebar_family.Rebar(diam= 20e-3, steel= S500B) 
-rebar25_S500B= rebar_family.Rebar(diam= 25e-3, steel= S500B) 
-rebar32_S500B= rebar_family.Rebar(diam= 32e-3, steel= S500B) 
-rebar40_S500B= rebar_family.Rebar(diam= 40e-3, steel= S500B) 
-rebar50_S500B= rebar_family.Rebar(diam= 50e-3, steel= S500B) 
+        :param concrete: concrete material.
+        :param eta1: coefficient related to the quality of the bond condition 
+                     and the position of the bar during concreting.
+                     eta1= 1,0 when 'good' conditions are obtained and
+                     eta1= 0,7 for all other cases.
+        :param steelEfficiency: working stress of the reinforcement that it is 
+                                intended to anchor, on the most unfavourable 
+                                load hypothesis, in the section from which 
+                                the anchorage length will be determined divided
+                                by the steel design yield 
+                                strength: (sigma_sd/fyd).
+        '''
+        return self.steel.getBasicAnchorageLength(concrete= concrete, rebarDiameter= self.diam, eta1= eta1, steelEfficiency= steelEfficiency)
+    
+    def getMinimumAnchorageLength(self, lb_rqd, compression= True):
+        ''' Return the minimum anchorage length according to expressions
+            8.6 and 8.7 of EC2:2004 clause 8.4.4.
 
+        :param lb_rqd: basic required anchorage length in tension according to 
+                       clause 8.4.3 of EC2:2004 (expression 8.3).
+        :param compression: if true return the minimum anchorage length for
+                            anchorages in compression.
+        '''
+        return self.steel.getMinimumAnchorageLength(lb_rqd= lb_rqd, rebarDiameter= self.diam, compression= compression)
+    
+    def getDesignAnchorageLength(self, concrete, eta1= 0.7, steelEfficiency= 1.0, compression= True, alpha_1= 1.0, alpha_2= 1.0, alpha_3= 1.0, alpha_4= 1.0, alpha_5= 1.0):
+        '''Returns design  anchorage length according to clause 8.4.4
+           of EC2:2004 (expression 8.4).
 
+        :param concrete: concrete material.
+        :param eta1: coefficient related to the quality of the bond condition 
+                     and the position of the bar during concreting.
+                     eta1= 1,0 when 'good' conditions are obtained and
+                     eta1= 0,7 for all other cases.
+        :param steelEfficiency: working stress of the reinforcement that it is 
+                                intended to anchor, on the most unfavourable 
+                                load hypothesis, in the section from which 
+                                the anchorage length will be determined divided
+                                by the steel design yield 
+                                strength: (sigma_sd/fyd).
+        :param compression: if true return the minimum anchorage length for
+                            anchorages in compression.
+        :param alpha_1: effect of the form of the bars assuming adequate cover.
+        :param alpha_2: effect of concrete minimum cover.
+        :param alpha_3: effect of confinement by transverse reinforcement.
+        :param alpha_4: influence of one or more welded transverse bars along 
+                        the design anchorage length.
+        :param alpha_5: effect of the pressure transverse to the plane of 
+                        splitting along the design anchorage length.
+        '''
+        return self.steel.getDesignAnchorageLength(concrete= concrete, rebarDiameter= self.diam, eta1= eta1, steelEfficiency= steelEfficiency, compression= compression, alpha_1= alpha_1, alpha_2= alpha_2, alpha_3= alpha_3, alpha_4= alpha_4, alpha_5= alpha_5)
+
+    def getLapLength(self, concrete, eta1= 0.7, steelEfficiency= 1.0, ratioOfOverlapedTensionBars= 1.0, alpha_1= 1.0, alpha_2= 1.0, alpha_3= 1.0, alpha_5= 1.0):
+        '''Returns the value of the design lap length according to clause
+           8.7.3 of EC2:2004 (expression 8.10).
+
+        :param concrete: concrete material.
+        :param eta1: coefficient related to the quality of the bond condition 
+                     and the position of the bar during concreting.
+                     eta1= 1,0 when 'good' conditions are obtained and
+                     eta1= 0,7 for all other cases.
+        :param steelEfficiency: working stress of the reinforcement that it is 
+                                intended to anchor, on the most unfavourable 
+                                load hypothesis, in the section from which 
+                                the anchorage length will be determined divided
+                                by the steel design yield 
+                                strength: (sigma_sd/fyd).
+        :param ratioOfOverlapedTensionBars: ratio of overlapped tension bars 
+                                            in relation to the total steel
+                                            section.
+        :param alpha_1: effect of the form of the bars assuming adequate cover.
+        :param alpha_2: effect of concrete minimum cover.
+        :param alpha_3: effect of confinement by transverse reinforcement.
+        :param alpha_5: effect of the pressure transverse to the plane of 
+                        splitting along the design anchorage length.
+        '''
+        return self.steel.getLapLength(concrete= concrete, rebarDiameter= self.diam, eta1= eta1, steelEfficiency= steelEfficiency, ratioOfOverlapedTensionBars= ratioOfOverlapedTensionBars, alpha_1= alpha_1, alpha_2= alpha_2, alpha_3= alpha_3, alpha_5= alpha_5)
+
+    def getAxialInitialResistanceConeFailure(self, concrete, k1, hEf):
+        ''' Return the cone failure characteristic resistance of a single 
+            cast-in fastener not influenced by adjacent fasteners or edges 
+            of the concrete member according to expression 7.2 in clause
+            7.2.1.4 of EN 1992-4:2018.
+
+        :param concrete: concrete material.
+        :param k1: 8.9 for cast-in headed fasteners in cracked concrete 
+                   and 11.0 for cast-in headed fasteners in non-cracked 
+                   concrete.
+        :param hEf: effective embedment depth (according to figures 3.1 to 3.3
+                    of EN 1992-4:2018) (m).
+        '''
+        fck= abs(concrete.fck)
+        return k1*math.sqrt(fck/1e6)*pow(hEf*1e3,1.5)
+
+    @staticmethod
+    def get_k8(hEf):
+        ''' Return the value of the k8 factor that introduces the influence of 
+            the effective embedment in expressions (7.39a) to (7.39d) of 
+            paragraph (2) of clause 7.2.2.4 of EN 1992-4. The value is computed
+            according to ETAG 001, Annex C – clause 5.2.3.3.
+
+        :param hEf: effective embedment depth (according to figures 3.1 to 3.3
+                    of EN 1992-4:2018) (m).
+        '''
+        retval= 1.0
+        if(hEf>=60e-3):
+            retval= 2.0
+        return retval
+            
+    def getCharacteristicResistancePryOutFailure(self, concrete, k1, hEf, supplementaryReinforcement= False):
+        ''' Return the cone failure characteristic resistance of a single 
+            cast-in fastener not influenced by adjacent fasteners or edges 
+            of the concrete member according to expression 7.2 in clause
+            7.2.1.4 of EN 1992-4:2018.
+
+        :param concrete: concrete material.
+        :param k1: 8.9 for cast-in headed fasteners in cracked concrete 
+                   and 11.0 for cast-in headed fasteners in non-cracked 
+                   concrete.
+        :param hEf: effective embedment depth (according to figures 3.1 to 3.3
+                    of EN 1992-4:2018) (m).
+        :param supplementaryReinforcement: if True use the (7.39d) formula,
+                                           otherwise use the (7.39c)
+        '''
+        k8= self.get_k8(hEf)
+        NRkc= self.getAxialInitialResistanceConeFailure(concrete= concrete, k1= k1, hEf= hEf)
+        return k8*NRkc
+
+    def getDesignResistancePryOutFailure(self, concrete, k1, hEf, supplementaryReinforcement= False):
+        ''' Return the cone failure design resistance of a single cast-in
+            fastener not influenced by adjacent fasteners or edges  of the
+            concrete member according to expression 7.2 in clause 7.2.1.4 of
+            EN 1992-4:2018.
+
+        :param concrete: concrete material.
+        :param k1: 8.9 for cast-in headed fasteners in cracked concrete 
+                   and 11.0 for cast-in headed fasteners in non-cracked 
+                   concrete.
+        :param hEf: effective embedment depth (according to figures 3.1 to 3.3
+                    of EN 1992-4:2018) (m).
+        :param supplementaryReinforcement: if True use the (7.39d) formula,
+                                           otherwise use the (7.39c)
+        '''
+        VRkc= self.getCharacteristicResistancePryOutFailure(concrete= concrete, k1= k1, hEf= hEf, supplementaryReinforcement= supplementaryReinforcement)
+        return VRkc/concrete.gmmC #  (EN 1992-4 – Table 4.1, $\gamma_{inst} = 1.0 for shear loading)
+
+    def getPryOutFailureEfficiency(self, Qd, concrete, k1, hEf, supplementaryReinforcement= False):
+        ''' Return the cone failure design resistance of a single cast-in
+            fastener not influenced by adjacent fasteners or edges  of the
+            concrete member according to expression 7.2 in clause 7.2.1.4 of
+            EN 1992-4:2018.
+
+        :param concrete: concrete material.
+        :param k1: 8.9 for cast-in headed fasteners in cracked concrete 
+                   and 11.0 for cast-in headed fasteners in non-cracked 
+                   concrete.
+        :param hEf: effective embedment depth (according to figures 3.1 to 3.3
+                    of EN 1992-4:2018) (m).
+        :param supplementaryReinforcement: if True use the (7.39d) formula,
+                                           otherwise use the (7.39c)
+        '''
+        pryOutResistance= self.getDesignResistancePryOutFailure(concrete= concrete, k1= k1, hEf= hEf, supplementaryReinforcement= supplementaryReinforcement)
+        pryOutCF= Qd/pryOutResistance
+        return pryOutCF, pryOutResistance
+
+    def getScrN(self, hEf):
+        ''' Return the side length of the reference projected ($S_{cr,N}$) area
+            for headed and post-installed fasteners according to the NOTE in
+            the paragraph (3) of the clause 7.2.1.4 of EN 1992-4:2018.
+
+        :param hEf: effective embedment depth (according to figures 3.1 to 3.3
+                    of EN 1992-4:2018) (m).
+        '''
+        return 3.0*hEf
+
+    def getC_cr_N(self, hEf):
+        ''' Return the characteristic edge distance for ensuring the 
+            transmission of the characteristic resistance of  an anchor in 
+            case of concrete break-out under tension loading according to the
+            NOTE in the paragraph (3) of the clause 7.2.1.4 of EN 1992-4:2018.
+
+        :param hEf: effective embedment depth (according to figures 3.1 to 3.3
+                    of EN 1992-4:2018) (m).
+        '''
+        return 3.0*hEf/2.0
+        
+    def getReferenceProjectedAreaContour(self, anchorPosition, hEf):
+        ''' Return the contour of the reference projected area according to the
+            expression (7.3) of EN 1992-4:2018 paragraph (3).
+
+         :param anchorPosition: Posición del del perno.
+         :param hEf: effective anchorage depth (m).
+        '''
+        side= self.getScrN(hEf)
+        halfSide= side/2.0
+        retval= geom.Polygon2d()
+        retval.appendVertex(geom.Pos2d(anchorPosition.x-halfSide,anchorPosition.y-halfSide))
+        retval.appendVertex(geom.Pos2d(anchorPosition.x+halfSide,anchorPosition.y-halfSide))
+        retval.appendVertex(geom.Pos2d(anchorPosition.x+halfSide,anchorPosition.y+halfSide))
+        retval.appendVertex(geom.Pos2d(anchorPosition.x-halfSide,anchorPosition.y+halfSide))
+        return retval
+
+    def getPsi_s_N_factor(self, c, hEf):
+        ''' Return the value of the $\psi_{s,N}$ factor according to the
+            expression (7.4) of EN 1992-4:2018 paragraph (4). This factor takes
+            account of the disturbance of the distribution of stresses in the
+            concrete due to the proximity of an edge of the concrete member.
+
+        :param c: distance from the fastener to the nearest edge (m).
+        :param hEf: effective anchorage depth (m).
+        '''
+        c_cr_N= self.getC_cr_N(hEf)
+        retval= min(0.7+0.3*c/c_cr_N, 1)
+        return retval
+
+    def getPsi_re_N_factor(self, hEf, spacing= 0.15, reinfDiameter= 10e-3):
+        ''' Return the value of the shell spalling factor ($\psi_{re,N}$) 
+            according to the expression (7.5) of EN 1992-4:2018 paragraph
+            (5). This factor accounts for the effect of dense reinforcement
+            between which the fastener is installed.
+
+        :param hEf: effective anchorage depth (m).
+        :param spacing: spacing of the reinforcement around the fastener.
+        :param reinfDiameter: diameter of the reinforcement around the fastener.
+        '''
+        
+        aCondition= (spacing>=0.15) # a) condition.
+        bCondition= (spacing>=0.1) and (reinfDiameter<=10e-3)
+        if(aCondition or bCondition):
+            retval= 1.0
+        else:
+            retval= min(0.5+hEf/0.2, 1.0)
+        return retval
+
+    def getPsi_ec_N_factor(self, hEf, eNx, eNy):
+        ''' Return the value of the ($\psi_{ec,N}$) factor according to the 
+            expression (7.6) of EN 1992-4:2018 paragraph (6). This factor 
+            accounts for the effect of different tension loads acting on
+            the individual fasteners of a group.
+
+        :param hEf: effective anchorage depth (m).
+        :param eNx: eccentricity of resultant tension force of tensioned 
+                    fasteners in respect to the y axis passing through the 
+                    center of gravity of the tensioned fasteners.
+        :param eNy: eccentricity of resultant tension force of tensioned 
+                    fasteners in respect to the y axis passing through the 
+                    center of gravity of the tensioned fasteners.
+        '''
+        s_cr_N= self.getScrN(hEf)
+        retval= 1.0
+        if(abs(eNx)>0): # Eccentricity on x.
+            denom_x= 1+2*abs(eNx)/s_cr_N
+            retval*= min(1/denom_x, 1.0)
+        if(abs(eNy)>0): # Eccentricity on y.
+            denom_y= 1+2*abs(eNy)/s_cr_N
+            retval*= min(1/denom_y, 1.0)
+        return retval
+    
+    def getPsi_M_N_factor(self, c, hEf, CEd, NEd, z):
+        ''' Return the value of the ($\psi_{M,N}$) factor according to the 
+            expression (7.7) of EN 1992-4:2018 paragraph (7). This factor 
+            accounts for the effect of a compression force between fixture 
+            and concrete in cases of bending moments with or without axial
+            force.
+
+        :param c: distance from the fastener to the nearest edge (m).
+        :param hEf: effective anchorage depth (m).
+        :param CEd: absolute value of the resultant compression force between
+                    fixture and concrete (including the compression due to 
+                    bending). 
+        :param NEd: resultant tension force of the tensioned fasteners.
+        :param z: internal lever arm of a fastening calculated according to the
+                  theory of elasticity (see figure 6.2 and formula 7.7 of 
+                  EN 1992-4:2018).
+        '''
+        retval= 1.0
+        threshold= 1.5*hEf
+        cond1= (c<threshold)
+        cond2= (c>=threshold) and (CEd/NEd<0.8)
+        cond3= (z>=threshold)
+        if (not (cond1 or cond2 or cond3)):
+            retval= max(2-z/threshold, 1.0) # formula (7.7)
+        return retval
+
+    def getPullOutResistance(self, lb, concrete, eta1= 1.0, steelEfficiency= 1.0, alpha_1= 1.0, alpha_2= 1.0, alpha_3= 1.0, alpha_4= 1.0, alpha_5= 1.0, plainFastener= False):
+        ''' Return the pull-out resistance for cast-in anchors with hook 
+            according to clause 8.4.4 of EN 1992-1-1.
+
+        :param lb: anchor length embedded in concrete.
+        :param concrete: concrete material.
+        :param eta1: coefficient related to the quality of the bond condition 
+                     and the position of the bar during concreting.
+                     eta1= 1,0 when 'good' conditions are obtained and
+                     eta1= 0,7 for all other cases.
+        :param steelEfficiency: working stress of the reinforcement that it is 
+                                intended to anchor, on the most unfavourable 
+                                load hypothesis, in the section from which 
+                                the anchorage length will be determined divided
+                                by the steel design yield 
+                                strength: (sigma_sd/fyd).
+        :param alpha_1: effect of the form of the bars assuming adequate cover.
+        :param alpha_2: effect of concrete minimum cover.
+        :param alpha_3: effect of confinement by transverse reinforcement.
+        :param alpha_4: influence of one or more welded transverse bars along 
+                        the design anchorage length.
+        :param alpha_5: effect of the pressure transverse to the plane of 
+                        splitting along the design anchorage length.
+        :param plainFastener: true if the fastener has a plain surface (instead
+                              of a ribbed one).
+        '''
+        area= self.getArea()
+        fyd= self.steel.fyd()
+        lbd= self.getDesignAnchorageLength(concrete= concrete, eta1= eta1, steelEfficiency= steelEfficiency, compression= False, alpha_1= alpha_1, alpha_2= alpha_2, alpha_3= alpha_3, alpha_4= alpha_4, alpha_5= alpha_5)
+        return area*fyd*lb/lbd
+    
+    def getPullOutEfficiency(self, Td, lb, concrete, eta1= 1.0, steelEfficiency= 1.0, alpha_1= 1.0, alpha_2= 1.0, alpha_3= 1.0, alpha_4= 1.0, alpha_5= 1.0, plainFastener= False):
+        ''' Return the pull-out efficiency for cast-in anchors with hook 
+            according to clause 8.4.4 of EN 1992-1-1.
+
+        :param Td: tensile force in the anchor.
+        :param lb: anchor length embedded in concrete.
+        :param concrete: concrete material.
+        :param eta1: coefficient related to the quality of the bond condition 
+                     and the position of the bar during concreting.
+                     eta1= 1,0 when 'good' conditions are obtained and
+                     eta1= 0,7 for all other cases.
+        :param steelEfficiency: working stress of the reinforcement that it is 
+                                intended to anchor, on the most unfavourable 
+                                load hypothesis, in the section from which 
+                                the anchorage length will be determined divided
+                                by the steel design yield 
+                                strength: (sigma_sd/fyd).
+        :param alpha_1: effect of the form of the bars assuming adequate cover.
+        :param alpha_2: effect of concrete minimum cover.
+        :param alpha_3: effect of confinement by transverse reinforcement.
+        :param alpha_4: influence of one or more welded transverse bars along 
+                        the design anchorage length.
+        :param alpha_5: effect of the pressure transverse to the plane of 
+                        splitting along the design anchorage length.
+        :param plainFastener: true if the fastener has a plain surface (instead
+                              of a ribbed one).
+        '''
+        pullOutResistance= self.getPullOutResistance(lb= lb, concrete= concrete, eta1= eta1, steelEfficiency= steelEfficiency, alpha_1= alpha_1, alpha_2= alpha_2, alpha_3= alpha_3, alpha_4= alpha_4, alpha_5= alpha_5, plainFastener= plainFastener)
+        pullOutCF= Td/pullOutResistance
+        return pullOutCF, pullOutResistance
+        
+    def getUltimateTensileStrength(self):
+        ''' Return the value of the ultimate tensile strength according to 
+            clause 3.2.7 of EC2:2004.
+        '''
+        return self.steel.fud()*self.getArea()
+
+    def getUltimateTensileStrengthEfficiency(self, Td):
+        ''' Return the value of the ultimate tensile strength efficiency 
+            according to clause 3.2.7 of EC2:2004.
+
+        :param Td: tensile force in the anchor.
+        '''
+        if(Td<0.0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            warningMsg= '; a positive tension force was expected.'
+            lmsg.warning(className+'.'+methodName+warningMsg)
+        FtRd= self.getUltimateTensileStrength()
+        retval= Td/FtRd
+        return retval, FtRd
+    
+    def getUltimateShearStrength(self, alpha_v= 0.5, gamma_M2= 1.25):
+        ''' Return the value of the ultimate shear strength according to 
+            table 3.4 of EN 1993-1-8.
+
+        :param alpha_v: coefficient that takes the value 0.6 when the shear
+                        plane passes through the unthreaded portion of the
+                        bar. When the shear plane passes through the threaded 
+                        portion of the bolt this coefficient is 0.6 for classes
+                        4.6~ 5.6 and 8.8 and 0.5 for classes 4.8, 5.8, 6.8 
+                        and 10.9. See table 3.4 of EN 1993-1-8 for more details.
+        :param gamma_M2: partial safety factor of the steel material according
+                         to paragraph (2) of clause 2.2 of EN 1993-1-8.
+        '''
+        if(gamma_M2 is None):
+            gamma_M2= self.steel.gamma_s
+        fub= self.steel.k*self.steel.fyk
+        return alpha_v*fub*self.getArea()/gamma_M2
+    
+    def getUltimateShearStrengthEfficiency(self, Qd, alpha_v= 0.5, gamma_M2= 1.25):
+        ''' Return the value of the ultimate shear strength efficiency according
+            to table 3.4 of EN 1993-1-8.
+
+        :param Qd: shear force in the anchor.
+        :param alpha_v: coefficient that takes the value 0.6 when the shear
+                        plane passes through the unthreaded portion of the
+                        bar. When the shear plane passes through the threaded 
+                        portion of the bolt this coefficient is 0.6 for classes
+                        4.6~ 5.6 and 8.8 and 0.5 for classes 4.8, 5.8, 6.8 
+                        and 10.9. See table 3.4 of EN 1993-1-8 for more details.
+        :param gamma_M2: partial safety factor of the steel material according
+                         to paragraph (2) of clause 2.2 of EN 1993-1-8.
+        '''
+        FvRd= self.getUltimateShearStrength(alpha_v= alpha_v, gamma_M2= gamma_M2)
+        retval= Qd/FvRd
+        return retval, FvRd
+
+    def getCombinedShearAndTensionEfficiency(self, Td, Qd, alpha_v= 0.5, gamma_M2= 1.25):
+        ''' Return the value of the ultimate shear strength efficiency according
+            to table 3.4 of EN 1993-1-8.
+
+        :param Qd: shear force in the anchor.
+        :param alpha_v: coefficient that takes the value 0.6 when the shear
+                        plane passes through the unthreaded portion of the
+                        bar. When the shear plane passes through the threaded 
+                        portion of the bolt this coefficient is 0.6 for classes
+                        4.6~ 5.6 and 8.8 and 0.5 for classes 4.8, 5.8, 6.8 
+                        and 10.9. See table 3.4 of EN 1993-1-8 for more details.
+        :param gamma_M2: partial safety factor of the steel material according
+                         to paragraph (2) of clause 2.2 of EN 1993-1-8.
+        '''
+        FtRd= self.getUltimateTensileStrength()
+        FvRd= self.getUltimateShearStrength(alpha_v= alpha_v, gamma_M2= gamma_M2)
+        retval= Qd/FvRd+Td/(1.4*FtRd)
+        return retval
+    
+    @staticmethod
+    def getPsi_s_v(c1, c2):
+        ''' Return the factor that takes account of the disturbance of the
+            distribution of stresses in the concrete due to further edges of the
+            concrete member on the shear resistance. The factor is computed
+            according to formula (7.45) of paragraph (9) of clause 7.2.2.5 of
+            EN 1992-4. 
+
+        :param c1: edge distance in direction 1; in case of fasteners close to 
+                   an edge loaded in shear $c_1$ is the edge distance in 
+                   direction of the shear load (see Figure 7.14 of EN 1992-4).
+        :param c2: edge distance in direction 2; direction 2 is perpendicular
+                   to direction 1. For fastenings with two edges parallel to 
+                   the direction of loading (e.g. in a narrow concrete member)
+                   the smaller value of these edge distances shall be used for 
+                   c2.
+        '''
+        return min((0.7+0.2*c2/c1),1.0)
+    
+    @staticmethod
+    def getPsi_h_v(h, c1):
+        '''Return the value of the factor that is used to introduce in the 
+           calculation the lack of proportionality between the reduction of 
+           edge resistance and the decrease of the part thickness as is 
+           assumed in the quotient $A_{cv}/A_{c,v}^0 (see figure 7.14 b of
+           EN 1992-4). The factor is computed according to the xpression (7.46)
+           of paragraph (10) of clause 7.2.2.5 of EN 1992-4. 
+
+        :param h: Concrete part thickness.
+        :param c1: edge distance in direction 1; in case of anchorages close to
+                   an edge loaded in shear $c_1$ is the edge distance in 
+                   direction of the shear load (see Figure 7.14 of EN 1992-4).
+        '''
+        return max(math.sqrt(1.5*c1/h),1.0)
+
+    @staticmethod
+    def getPsi_ec_v(ev, c1):
+        ''' Return the factor that takes account of a group effect when different           shear loads are  acting on the individual fasteners of a group, 
+            computed according to  expression (7.47) of paragraph (11) of 
+            clause 7.2.2.5 of EN 1992-4.
+
+         :param ev: Eccentricity of the shear forces resultant with respect to 
+                    the group centroid.
+         :param c1: edge distance in direction 1; in case of anchorages close 
+                    to an edge loaded in shear $c_1$ is the edge distance in 
+                    direction of the shear load (see Figure 7.15 of EN 1992-4).
+        '''
+        return min(1/(1+2*ev/3/c1),1.0)
+  
+    @classmethod
+    def getPsi_alpha_v(cls, alpha_v):
+        '''
+        Return the value of the factor that takes account of the influence of
+        a sear load inclined to the edge under consideration on the concrete
+        edge resistance according to paragraph (12) of of clause 7.2.2.5 of 
+        EN 1992-4.
+
+        :param alphaV: angle between the design shear load and the direction 
+                       perpendicular to the free edge of the concrete member
+                       being verified.
+        '''
+        if(alpha_v>(math.pi/2.0)):
+            className= cls.__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= "; angle must be smaller than 90 degrees (see paragraph (12) of of clause 7.2.2.5 of EN 1992-4)."
+            lmsg.error(className+'.'+methodName+errMsg)
+            exit(1)
+        return max(math.sqrt(1.0/(math.cos(alpha_v)**2+(0.5*math.sin(alpha_v))**2)),1.0)
+
+    @staticmethod
+    def getPsi_re_v(edgeReinforcement= False):
+        '''
+        Return the value of the $\psi_{re,V}$ factor that takes account of the 
+        effect of the reinforcement loacated on the edge according to paragraph
+        (13) of clause 7.2.2.5 of EN 1992-4.
+
+        :param edgeReinforcement: if true return the value corresponding to
+                                  fastening in craked concrete with edge 
+                                  reinforcement (according to figure 7.10 of
+                                  EN 1992-4) and closely spaced stirrups or 
+                                  wire mesh with a spacing 
+                                  $a \leq min(100\ mm, 2 c_1)$.
+
+                                  Otherwise return the value corresponding to
+                                  fastening in uncracked concrete or fastening
+                                  in cracked concrete without edge reinforcement
+                                  stirrups.
+        '''
+        retval= 1.0
+        if(edgeReinforcement):
+            retval= 1.4
+        return retval
+
+    @staticmethod
+    def get_k9(cracked):
+        ''' Return the value of the k9 factor that introduces the influence of 
+            the concrete cracking in expression (7.41) of paragraph (6) of 
+            clause 7.2.2.5 of EN 1992-4.
+
+        :param cracked: True if the fastener is placed on cracked concrete.
+        '''
+        retval= 1.7
+        if(not cracked):
+            retval= 2.4
+        return retval
+
+    def getVRkC0(self, concrete, hEf, c1, cracked):
+        ''' Return the initial value of the characteristic resistance of a 
+            fastener placed in cracked or non-cracked concrete and loaded 
+            perpendicular to the edge according to expression (7.41) of 
+            paragraph (6) of clause 7.2.2.5 of EN 1992-4.
+
+        :param hEf: effective anchorage depth.
+        :param c1: edge distance in direction 1; in case of anchorages close to
+                   an edge loaded in shear c1 is the edge distance in direction
+                   of the shear load  (see Figure 7.15 of EN 1992-4).
+        :param cracked: True if the fastener is placed on cracked concrete.
+        '''
+        k1=  Rebar.get_k9(cracked)
+        alpha= 0.1*math.pow(hEf/c1,0.5)
+        d= self.diam
+        beta= 0.1*math.pow(d/c1,0.2)
+        fck= -concrete.fck
+        lEf= hEf
+        if(d<=24e-3):
+            lEf= min(lEf, 12*d)
+        else:
+            lEf= min(lEf, max(8*d, 0.3))
+        return k1*pow(d*1e3,alpha)*pow(lEf*1e3,beta)*math.sqrt(fck/1e6)*pow(c1*1000,1.5)
+    
+rebar04_S400B= Rebar(diam= 4e-3, steel= S400B) 
+rebar06_S400B= Rebar(diam= 6e-3, steel= S400B) 
+rebar08_S400B= Rebar(diam= 8e-3, steel= S400B) 
+rebar10_S400B= Rebar(diam= 10e-3, steel= S400B) 
+rebar12_S400B= Rebar(diam= 12e-3, steel= S400B) 
+rebar16_S400B= Rebar(diam= 16e-3, steel= S400B) 
+rebar20_S400B= Rebar(diam= 20e-3, steel= S400B) 
+rebar25_S400B= Rebar(diam= 25e-3, steel= S400B) 
+rebar32_S400B= Rebar(diam= 32e-3, steel= S400B) 
+rebar40_S400B= Rebar(diam= 40e-3, steel= S400B) 
+rebar50_S400B= Rebar(diam= 50e-3, steel= S400B) 
+
+rebar04_S500B= Rebar(diam= 4e-3, steel= S500B) 
+rebar06_S500B= Rebar(diam= 6e-3, steel= S500B) 
+rebar08_S500B= Rebar(diam= 8e-3, steel= S500B) 
+rebar10_S500B= Rebar(diam= 10e-3, steel= S500B) 
+rebar12_S500B= Rebar(diam= 12e-3, steel= S500B) 
+rebar16_S500B= Rebar(diam= 16e-3, steel= S500B) 
+rebar20_S500B= Rebar(diam= 20e-3, steel= S500B) 
+rebar25_S500B= Rebar(diam= 25e-3, steel= S500B) 
+rebar32_S500B= Rebar(diam= 32e-3, steel= S500B) 
+rebar40_S500B= Rebar(diam= 40e-3, steel= S500B) 
+rebar50_S500B= Rebar(diam= 50e-3, steel= S500B) 
 
 #       ___            _                 _           
 #      | _ \_ _ ___ __| |_ _ _ ___ _____(_)_ _  __ _ 

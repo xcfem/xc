@@ -76,10 +76,11 @@ XC::SteelBase0103::SteelBase0103(int classTag)
 
 int XC::SteelBase0103::setTrialStrain(double strain, double strainRate)
   {
-    if(fabs(strain)>fabs(10.0*getEpsy()))
-      std::clog << getClassName() << "::" << __FUNCTION__
-	        << "; Warning: the strain is very big: "
-                << strain << std::endl;
+    if(verbosity>1)
+      if(fabs(strain)>fabs(10.0*getEpsy()))
+	std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; Warning: the strain is very big: "
+		  << strain << std::endl;
     if(ezero!=0.0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; ERROR: initial strain not supported yet."

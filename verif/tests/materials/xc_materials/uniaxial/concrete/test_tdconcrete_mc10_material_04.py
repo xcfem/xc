@@ -45,7 +45,7 @@ ba= 0.18 # Steel beam flange width.
 u= 2*2.5 - ba # Perimeter of the concrete part which is exposed to drying, u
 h0= 2*Ag/u  # notional size of the member h0.
 
-tdConcrete= MC10_td_concrete.get_TDConcrete_mc10(preprocessor= preprocessor, name= 'tdConcrete', concrete= concrete, cement= concrete.cemType, h0= h0, T= 21, RH= RH, beta= beta, ts= ts, age= age)
+tdConcrete= MC10_td_concrete.get_TDConcrete_mc10(preprocessor= preprocessor, name= 'tdConcrete', concrete= concrete, cement= concrete.cemType, h0= h0, T= 21, RH= RH, beta= beta, tcast= 0, ts= ts, age= age)
 
 As = 2262e-6
 Ac = Ag-As
@@ -108,7 +108,9 @@ solProc.setup()
 # Set the load control integrator with dt=0 so that the domain time doesn’t advance.
 solProc.integrator.dLambda1= 0.0  
 result= solProc.analysis.analyze(1)
-
+if(result!=0):
+    lmsg.error("Can't solve for the initial state.")
+    exit(1)
 
 dt = 10 # days
 solProc.integrator.dLambda1= dt # set new increment for the integrator.
@@ -120,6 +122,9 @@ modelSpace.setCreepOn() # Turn creep on
 t = 0
 while t < 10000:
     ok = solProc.analysis.analyze(1)
+    if(ok!=0):
+        lmsg.error("Can't solve for time: "+str(t)+' days.')
+        exit(1)
     t+= dt
 errorDt= abs(solProc.integrator.dLambda1-dt)/dt # Make sure there is no modification of dLambda1
     

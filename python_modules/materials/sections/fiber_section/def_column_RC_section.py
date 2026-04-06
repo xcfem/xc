@@ -64,17 +64,18 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
         return retval
         
 
-    def defSectionGeometry(self, preprocessor, matDiagType):
+    def defSectionGeometry(self, preprocessor, matDiagType, twoDimensional= False):
         '''Returns a reinforced concrete section with reinforcement 
         symmetric in both directions (as usual in columns)
 
         :param preprocessor: XC preprocessor for the finite element problem.
         :param matDiagType: type of stress-strain diagram (="k" for characteristic diagram, ="d" for design diagram)
+        :param twoDimensional: if true set only one division on IJ direction.
         '''
         self.defDiagrams(preprocessor, matDiagType)
 
         self.geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
-        self.defConcreteRegion()
+        self.defConcreteRegion(twoDimensional= twoDimensional)
 
         reinforcement= self.geomSection.getReinfLayers
 
@@ -274,7 +275,17 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         '''Material for modeling Z shear response of section'''
         return section_properties.CircularSection.getRespVz(self,preprocessor,self.getConcreteType().Gcm())
         
-    def defConcreteRegion(self):
+    def defConcreteRegion(self, twoDimensional= False):
+        ''' Define a circular region filled with concrete.
+
+        :param twoDimensional: MUST be False.
+        '''
+        if(twoDimensional):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= '; cannot define two dimensional circular regions.'
+            errMsg+= ' Option twoDimensional ignored.'
+            lmsg.error(className+'.'+methodName+errMsg)            
         regions= self.geomSection.getRegions
         rg= regions.newCircularRegion(self.fiberSectionParameters.concrDiagName)
         rg.nDivCirc= self.fiberSectionParameters.nDivCirc()
@@ -315,17 +326,24 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
                 retval+= self.mainReinf.getAs()
         return retval
         
-    def defSectionGeometry(self, preprocessor, matDiagType):
+    def defSectionGeometry(self, preprocessor, matDiagType, twoDimensional= False):
         '''
         Define the XC section geometry object for this reinforced concrete section 
 
         :param preprocessor: XC preprocessor for the finite element problem.
         :param matDiagType: type of stress-strain diagram 
                      ("k" for characteristic diagram, "d" for design diagram)
+        :param twoDimensional: if true set only one division on IJ direction.
         '''
+        if(twoDimensional):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= '; cannot define two dimensional circular regions.'
+            errMsg+= ' Option twoDimensional ignored.'
+            lmsg.error(className+'.'+methodName+errMsg)            
         self.defDiagrams(preprocessor= preprocessor, matDiagType= matDiagType)
         self.geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
-        self.defConcreteRegion()
+        self.defConcreteRegion(twoDimensional= twoDimensional)
         reinforcement= self.geomSection.getReinfLayers
         self.mainReinf.defCircularLayers(reinforcement, "reinf", self.fiberSectionParameters.reinfDiagName, self.Rext)
 

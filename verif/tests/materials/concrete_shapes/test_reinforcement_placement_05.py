@@ -110,21 +110,21 @@ limitState.analyzeLoadCombinations(combContainer,xcTotalSet)
 #
 
 # Geometry of the reinforcement.
-nBarsA= 7 # number of bars.
+nBarsA= 6 # number of bars.
+mainBarDiameter= 25e-3 # Diameter of the reinforcement bar.
 cover= 0.035 # concrete cover.
 lateralCover= cover # concrete cover for the bars at the extremities of the row.
-spacing= (rcSection.b-2.0*lateralCover)/(nBarsA-1)
+spacing= (rcSection.b-2.0*lateralCover-mainBarDiameter)/(nBarsA-1)
 
 ## First row.
-mainBarDiameter= 25e-3 # Diameter of the reinforcement bar.
 rowA= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover)
 
 ## Second row.
-rowB= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, rebarsSpacing= spacing, width= rcSection.b-spacing, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
+rowB= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
 
 ## Third row.
 smallBarDiameter= 4e-3
-rowC= def_simple_RC_section.ReinfRow(rebarsDiam= smallBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
+rowC= def_simple_RC_section.ReinfRow(rebarsDiam= smallBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover)
 
 ## Define reinforcement directions.
 reinforcementUpVector= geom.Vector3d(0,-1,0) # Y- this vector defines the meaning
@@ -185,8 +185,12 @@ meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDist
 feProblem.errFileName= "cerr" # From now on display errors if any.
 feProblem.logFileName= "clog" # From now on display warnings if any.
 
-ratio1= abs(meanCFs[0]-0.49950728265667205)/0.49950728265667205
-ratio2= abs(meanCFs[1]-0.5151243799585318)/0.5151243799585318
+# Check results (22/03/2026): Update the capacity factors after last changes in
+# the code: fixed error in main reinforcement layers definition:
+#   old value: meanCFs[0]= 0.49950728265667205
+#   old value: meanCFs[1]= 0.5151243799585318
+ratio1= abs(meanCFs[0]-0.49950728427051616)/0.49950728427051616
+ratio2= abs(meanCFs[1]-0.5151243799217966)/0.5151243799217966
 
 '''
 print('meanCFs= ', meanCFs)

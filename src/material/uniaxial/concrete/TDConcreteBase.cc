@@ -104,17 +104,6 @@ void XC::TDConcreteBase::setup_parameters(void)
     hstvP.setup_parameters(Ec);
     hstv.setup_parameters(Ec);
     
-    Et= Ec;
-    epsInit= 0.0; //Added by AMK
-    sigInit= 0.0; //Added by AMK
-    eps_total= 0.0; //Added by AMK
-    epsP_total= 0.0; //Added by AMK
-
-    eps_m= 0.0; //Added by AMK
-
-    t_load= -1.0; //Added by AMK
-    crack_flag= 0;
-    crackP_flag= 0; // Added by LP
     iter= 0;
         
     //Change inputs into the proper sign convention:
@@ -124,7 +113,8 @@ void XC::TDConcreteBase::setup_parameters(void)
 //! @brief Constructor.
 XC::TDConcreteBase::TDConcreteBase(int tag, int classTag)
   : RawConcrete(tag, classTag),
-    ft(0.0), Ets(0.0), Ec(0.0), age(0.0), beta(0.0), tcast(0.0)
+    ft(0.0), Ets(0.0), Ec(0.0),
+    beta(0.4), iter(0)
     {}
 
 //! @brief Constructor.
@@ -132,11 +122,10 @@ XC::TDConcreteBase::TDConcreteBase(int tag, int classTag)
 //! @param _ft: the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
 //! @param _Ets : tension softening stiffness (absolute value) (slope of the lin//! @param _Ec: modulus of elasticity (preferably at time of loading if there is a single loading age).
 //! @param _beta: tension softening parameter.
-//! @param _age: analysis time at initiation of drying (in days).
-//! @param _tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
-XC::TDConcreteBase::TDConcreteBase(int tag, int classTag, double _fpc, double _ft, double _Ets, double _Ec, double _beta, double _age, double _tcast): 
-  RawConcrete(tag, classTag, _fpc, 0.0, 0.0),
-  ft(_ft), Ets(_Ets), Ec(_Ec), age(_age), beta(_beta), tcast(_tcast)
+XC::TDConcreteBase::TDConcreteBase(int tag, int classTag, double _fpc, double _ft, double _Ets, double _Ec, double _beta)
+  : RawConcrete(tag, classTag, _fpc, 0.0, 0.0),
+    ft(_ft), Ets(_Ets), Ec(_Ec),
+    beta(_beta), iter(0)
   {
     // setup_parameters(); Called in the constructors of derived classes.
   }
@@ -163,12 +152,6 @@ double XC::TDConcreteBase::getCurrentTime(void) const
     return currentTime;
   }    
 
-double XC::TDConcreteBase::getStrain(void) const
-  {
-    return eps_total; //Added by AMK
-  //return eps;
-  }
-
 double XC::TDConcreteBase::getStress(void) const
   {
     return hstv.getStress();
@@ -177,11 +160,6 @@ double XC::TDConcreteBase::getStress(void) const
 double XC::TDConcreteBase::getTangent(void) const
   {
     return hstv.getTangent();
-  }
-
-double XC::TDConcreteBase::getMech(void) const
-  {
-    return eps_m;
   }
 
 //! @brief Assigns concrete tensile strength.
@@ -226,14 +204,6 @@ void XC::TDConcreteBase::setEc(const double &d)
 double XC::TDConcreteBase::getEc(void) const
   { return Ec; }
 
-//! @brief Assign current concrete stiffness.
-void XC::TDConcreteBase::setEt(const double &d)
-  { Et= d; }
-
-//! @brief Returns current concrete stiffness.
-double XC::TDConcreteBase::getEt(void) const
-  { return Et; }
-
 //! @brief Assigns beta.
 void XC::TDConcreteBase::setBeta(const double &d)
   { beta= d; }
@@ -242,28 +212,11 @@ void XC::TDConcreteBase::setBeta(const double &d)
 double XC::TDConcreteBase::getBeta(void) const
   { return beta; }
 
-//! @brief Assigns age.
-void XC::TDConcreteBase::setAge(const double &d)
-  { age= d; }
-
-//! @brief Returns age.
-double XC::TDConcreteBase::getAge(void) const
-  { return age; }
-
-//! @brief Assign tcast.
-void XC::TDConcreteBase::setTCast(const double &d)
-  { tcast= d; }
-
-//! @brief Return tcast.
-double XC::TDConcreteBase::getTCast(void) const
-  { return tcast; }
-
-
 //! @brief Send object members through the communicator argument.
 int XC::TDConcreteBase::sendData(Communicator &comm)
   {
     int res= RawConcrete::sendData(comm);
-    res+= comm.sendDoubles(ft, Ec, beta, age, getDbTagData(), CommMetaData(2));
+    res+= comm.sendDoubles(ft, Ec, beta, getDbTagData(), CommMetaData(2));
     res+= comm.sendDoubles(hstvP.ecmin, hstvP.ecmax, hstvP.dept, hstvP.eps, hstvP.sig, hstvP.e, getDbTagData(),CommMetaData(3));
     return res;
   }
@@ -272,7 +225,7 @@ int XC::TDConcreteBase::sendData(Communicator &comm)
 int XC::TDConcreteBase::recvData(const Communicator &comm)
   {
     int res= RawConcrete::recvData(comm);
-    res+= comm.receiveDoubles(ft, Ec, beta, age, getDbTagData(),CommMetaData(2));
+    res+= comm.receiveDoubles(ft, Ec, beta, getDbTagData(),CommMetaData(2));
     res+= comm.receiveDoubles(hstvP.ecmin, hstvP.ecmax, hstvP.dept, hstvP.eps, hstvP.sig, hstvP.e, getDbTagData(),CommMetaData(3));
     return res;
   }
@@ -364,20 +317,20 @@ XC::Response *XC::TDConcreteBase::setResponse(const std::vector<std::string> &ar
       }
 
     // strain
-    else if(argv[0]=="strain") {
+    else if(argv[0]=="strain")
+      {
             //theOutput.tag("ResponseType", "eps11");
             theResponse =  new MaterialResponse(this, 3, this->getStrain());
-    }
-
+      }
     // strain
     else if((argv[0]=="stressStrain") || 
                      (argv[0]=="stressANDstrain") ||
-                     (argv[0]=="stressAndStrain")) {
+                     (argv[0]=="stressAndStrain"))
+      {
             //theOutput.tag("ResponseType", "sig11");
             //theOutput.tag("ResponseType", "eps11");
             theResponse =  new MaterialResponse(this, 4, Vector(2));
-    }
-
+      }
     else if(argv[0]=="CreepStressStrainTangent")
       {
             //theOutput.tag("ResponseType", "sig11");

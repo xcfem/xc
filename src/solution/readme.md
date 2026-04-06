@@ -18,6 +18,10 @@ This folder contains the code that deals with the solution of the finite element
  - [Don’t Invert the Matrix](https://portwooddigital.com/2022/11/18/dont-invert-the-matrix/)
  - [A Load at a Fixed DOF](https://portwooddigital.com/2024/11/04/a-load-at-a-fixed-dof/)
 
+
+
+
+
 ### Failure to solve
  - [Ill-conditioning in structural finite element models](https://github.com/xcfem/xc/blob/master/verif/tests/solution/ill_conditioning/readme.md)
  - [Failure to Solve](https://portwooddigital.com/2021/09/12/failure-to-solve)
@@ -40,6 +44,9 @@ This folder contains the code that deals with the solution of the finite element
 - [Newmark method](https://opensees.github.io/OpenSeesDocumentation/user/manual/analysis/Newmark.html)
 - [Newmark method](https://opensees.berkeley.edu/wiki/index.php/Newmark_Method)
 - [Newmark-beta method](https://en.wikipedia.org/wiki/Newmark-beta_method)
+
+### Commit, revert to last commit and revert to start.
+- [You Have to Make the Analysis Fail](https://portwooddigital.com/2026/03/29/you-have-to-make-the-analysis-fail/)
 
 ### Eigenvalue analysis
  - [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)

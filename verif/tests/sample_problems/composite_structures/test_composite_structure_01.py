@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Composite structure verification test.
+'''Composite structure verification test. Single span version.
 
 Inspired on the example A3 of the book:
 Dujmovic, Darko., Androic, Boris., Lukacevic, Ivan. Composite Structures According to Eurocode 4: Worked Examples. Germany: Wiley, 2015.
@@ -23,8 +23,6 @@ from materials import typical_materials
 from materials.ec2 import EC2_materials
 from materials.ec3 import EC3_materials
 from materials.sections.fiber_section import def_simple_RC_section
-
-# XXX: This test does not work yet.
 
 # Geometry
 L= 10.0 # span.
@@ -257,13 +255,17 @@ for tp in sorted_by_x[1:]:
 modelSpace.fixNode("00", p0.getNode().tag)
 modelSpace.fixNode("F0", p2.getNode().tag)
 
-# Locate offending elements.
-offendingElementTags= [218] # 527, 537, 538, 542, 543, 548, 549, 550, 551, 552, 553, 558, 559, 560, 564, 572, 579, 591, 592, 596, 597, 599]
-for tag in offendingElementTags:
-    elem= modelSpace.getElement(tag)
-    centroid= elem.getPosCentroid(True)
-    material= elem.getSection(0)
-    print(tag, centroid, material.name)
+# # Locate offending elements.
+# offendingElementTags= [192]
+# offendingElements= list()
+# for tag in offendingElementTags:
+#     elem= modelSpace.getElement(tag)
+#     centroid= elem.getPosCentroid(True)
+#     material= elem.getSection(0)
+#     fibers= material.getFibers()
+#     for f in fibers:
+#         print(f.getPos(), f.getMaterial())
+#     print(tag, centroid, material.name, fibers.getNumFibers())
 
 # Loads.
 loads= list()
@@ -291,10 +293,11 @@ modelSpace.addNewLoadCaseToDomain(loadCaseName= 'Ed', loadCaseExpression= e_d, r
 
 # Compute solution.
 if(creepOnDeck):
-    solProc= predefined_solutions.PlainStaticModifiedNewton(feProblem, convergenceTestTol= 1e-3, maxNumIter= 300, printFlag= 1)
-    # solProc= predefined_solutions.PlainKrylovNewton(prb= feProblem, convergenceTestTol= 1e-2, convTestType= 'energy_incr_conv_test', maxNumIter= 50, printFlag= 1)
+    # solProc= predefined_solutions.PlainStaticModifiedNewton(feProblem, convergenceTestTol= 1e-3, maxNumIter= 20, printFlag= 0)
+    # solProc= predefined_solutions.PlainNewtonRaphson(feProblem, convergenceTestTol= 1e-3, maxNumIter= 20, printFlag= 0)
+    solProc= predefined_solutions.PlainKrylovNewton(prb= feProblem, convergenceTestTol= 1e-2, convTestType= 'energy_incr_conv_test', maxNumIter= 20, printFlag= 0)
 else:
-    solProc= predefined_solutions.PlainNewtonRaphson(prb= feProblem, convergenceTestTol= 1e-3, printFlag= 1)
+    solProc= predefined_solutions.PlainNewtonRaphson(prb= feProblem, convergenceTestTol= 1e-3, printFlag= 0)
 
 solProc.setup()
 analysis= solProc.analysis
@@ -305,11 +308,10 @@ if(creepOnDeck):
     # Set the load control integrator with dt=0 so that the domain time doesn’t advance.
     solProc.integrator.dLambda1= 0.0  
     result= solProc.analysis.analyze(1)
-    print('Solution found for initial state.')
     modelSpace.setCreepOn() # Turn creep on
     
 # Compute solution
-dt= 5 # time increment in days
+dt= 150 # time increment in days
 solProc.integrator.dLambda1= dt # set new increment for the integrator.
 solProc.integrator.setNumIncr(dt) # IMPORTANT! otherwise it got stuck.
 
@@ -318,14 +320,26 @@ t= 0
 if(creepOnDeck):
     t= Tcr
 while t < lastT:
-    print('solve for time: '+str(t)+' days.')
+    # print('solve for time: '+str(t)+' days.')
     ok = solProc.analysis.analyze(1)
     t+= dt
     if(ok!=0):
         exit(1)
 
+# Compute minimum vertical displacement.
+xcTotalSet= modelSpace.getTotalSet()
+minVDisp= 6.023e23
+for n in xcTotalSet.nodes:
+    vDisp= n.getDisp[1]
+    if(vDisp<minVDisp):
+        minVDisp= vDisp
+
+minVDispRef= -10.413162893724394e-3
+ratio1= abs(minVDisp-minVDispRef)/-minVDispRef
+
 # print(t)
 
+'''
 print('Loads.')
 print('  Concrete self weigth per unit length: gk1= ', gk1/1e3, 'kN/m')
 print('  Steel beam self weigth per unit length: gk2= ', gk2/1e3, 'kN/m')
@@ -344,16 +358,28 @@ print('    Total shrinkage strain at t= inf: ', Epscs_inf)
 print('Effective width of the concrete flange.')
 print('  At mid-span: b_eff_mid= ', b_eff_mid, ' m')
 print('  At mid-span: b_eff_supp= ', b_eff_supp, ' m')
+print('\nMinimum vertical displacement (computed value): ', minVDisp*1e3, ' mm')
+print('Minimum vertical displacement (reference value): ', minVDispRef*1e3, ' mm')
+print('ratio1= ', ratio1)
+'''
 
-# # Output stuff.
-from postprocess import output_handler
-oh= output_handler.OutputHandler(modelSpace)
-# Uncomment to display the mesh
-# oh.displayBlocks()
-# oh.displayFEMesh()
-# for load in loads:
-#     modelSpace.addLoadCaseToDomain(load.name)
-#     oh.displayLoads()
-#     modelSpace.removeLoadCaseFromDomain(load.name)
-# oh.displayReactions()
-oh.displayDispRot(itemToDisp='uY', defFScale= 100.0)
+import os
+from misc_utils import log_messages as lmsg
+fname= os.path.basename(__file__)
+if (abs(ratio1)<1e-6):
+    print('test '+fname+': ok.')
+else:
+    lmsg.error(fname+' ERROR.')
+
+# # # Output stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # Uncomment to display the mesh
+# # oh.displayBlocks()
+# # oh.displayFEMesh()
+# # for load in loads:
+# #     modelSpace.addLoadCaseToDomain(load.name)
+# #     oh.displayLoads()
+# #     modelSpace.removeLoadCaseFromDomain(load.name)
+# # oh.displayReactions()
+# oh.displayDispRot(itemToDisp='uY', defFScale= 100.0)

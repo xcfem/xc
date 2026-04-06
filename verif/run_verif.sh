@@ -694,6 +694,8 @@ python tests/sample_problems/soil_subgrade_reaction/test_quasi_winkler.py
 python tests/sample_problems/soil_subgrade_reaction/test_foundation_slab.py
 echo "$BLEU" "  Earth retaining." "$NORMAL"
 python tests/sample_problems/earth_retaining/test_rail_retaining_wall.py
+echo "$BLEU" "  Strut-and-tie tests." "$NORMAL"
+python tests/sample_problems/composite_structures/test_composite_structure_01.py
 
 echo "$BLEU" "Solution tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py
@@ -1293,6 +1295,8 @@ python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10_mater
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10_material_03.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10_material_04.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10_material_05.py
+python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10_material_06.py
+python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10_material_07.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10nl_material_01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_tdconcrete_mc10nl_material_02.py
 python tests/materials/xc_materials/uniaxial/concrete/test_HA25_01.py
@@ -1492,6 +1496,7 @@ python tests/materials/concrete_shapes/test_mass_properties_rc_section_01.py
 python tests/materials/concrete_shapes/test_mass_properties_rc_section_02.py
 python tests/materials/concrete_shapes/test_reinf_row_01.py
 python tests/materials/concrete_shapes/test_reinf_row_02.py
+python tests/materials/concrete_shapes/test_reinf_row_03.py
 python tests/materials/concrete_shapes/test_reinf_layers_01.py
 python tests/materials/concrete_shapes/test_rc_section_01.py
 python tests/materials/concrete_shapes/test_rc_section_02.py
@@ -1628,12 +1633,14 @@ python tests/materials/ec2/test_ec2_punching_shear_02.py
 python tests/materials/ec2/test_ec2_punching_shear_03.py
 python tests/materials/ec2/test_ec2_punching_shear_04.py
 python tests/materials/ec2/test_ec2_punching_shear_05.py
-
 echo "$BLEU" "    EC2 prestressing." "$NORMAL"
 python tests/materials/ec2/test_ec2_prestressing_01.py
 python tests/materials/ec2/test_ec2_prestressing_02.py
 python tests/materials/ec2/test_ec2_prestressing_03.py
 python tests/materials/ec2/test_ec2_prestressing_04.py
+echo "$BLEU" "    EC2 part 4 fastener resistance." "$NORMAL"
+python tests/materials/ec2/test_fastener_check_01.py
+
 echo "$BLEU" "    MC10 tests." "$NORMAL"
 python tests/materials/mc10/test_mc10_shrinkage_and_creep_parameters_01.py
 python tests/materials/mc10/test_mc10_shrinkage_and_creep_parameters_02.py

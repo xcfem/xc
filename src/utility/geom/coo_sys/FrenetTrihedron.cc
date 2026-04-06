@@ -229,6 +229,19 @@ Rect3d3dCooSys FrenetTrihedron::getCooSys(const double &s) const
     return Rect3d3dCooSys(t, n, b);
   }
 
+
+//! @brief Return a reference system corresponding to the
+//! given arc length and whose XY plane is parpendigular to the given vector.
+//! @param s: arc length.
+//! @param vertical: vector in the vertical direction.
+Rect3d3dCooSys FrenetTrihedron::getHorizontalCooSys(const double &s, const Vector3d &vertical) const
+  {
+    const Vector3d i= this->getTangent(s);
+    const Vector3d j= vertical.getCross(i);
+    const Vector3d &k= vertical;
+    return Rect3d3dCooSys(i, j, k);
+  }
+
 //! @brief Return the coordinate reference system corresponding to the
 //! given arc length.
 //! @param s: arc length.
@@ -236,6 +249,16 @@ Ref3d3d FrenetTrihedron::getRefSys(const double &s) const
   {
     const Pos3d org= path.getPointAtLength(s);
     return Ref3d3d(org,this->getCooSys(s));
+  }
+
+//! @brief Return a reference system corresponding to the
+//! given arc length and whose XY plane is parpendigular to the given vector.
+//! @param s: arc length.
+//! @param vertical: vector in the vertical direction.
+Ref3d3d FrenetTrihedron::getHorizontalRefSys(const double &s, const Vector3d &vertical) const
+  {
+    const Pos3d org= path.getPointAtLength(s);
+    return Ref3d3d(org,this->getHorizontalCooSys(s, vertical));
   }
 
 //! @brief Prints the matrix.

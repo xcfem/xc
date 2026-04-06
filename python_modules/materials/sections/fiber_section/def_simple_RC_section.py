@@ -319,7 +319,7 @@ class ReinfRow(object):
         if nRebars:
             self.setNumberOfBars(nRebars= nRebars, width= width, nominalLatCover= nominalLatCover)
         if rebarsSpacing:
-            self.setSpacing(rebarsSpacing= rebarsSpacing, width= width)
+            self.setSpacing(rebarsSpacing= rebarsSpacing, width= width, nominalLatCover= nominalLatCover)
             
         self.cover= nominalCover+self.rebarsDiam/2.0
         self.centerRebars(width)
@@ -418,15 +418,19 @@ class ReinfRow(object):
         :param nominalLatCover: nominal lateral cover.
         '''
         self.nRebars= nRebars
-        self.rebarsSpacing= (width-2*nominalLatCover-self.rebarsDiam)/(nRebars-1)
-    def setSpacing(self, rebarsSpacing:float, width:float):
+        availableWidth= width-2*nominalLatCover-self.rebarsDiam
+        self.rebarsSpacing= availableWidth/(nRebars-1)
+        
+    def setSpacing(self, rebarsSpacing:float, width:float, nominalLatCover:float):
         ''' Set the space between rebar axes.
 
         :param rebarsSpacing: spacing between bars.
         :param width: width occupied by the rebars.
+        :param nominalLatCover: nominal lateral cover.
         '''
         self.rebarsSpacing= rebarsSpacing
-        nRebarsTeor= width/rebarsSpacing
+        availableWidth= width-2*nominalLatCover-self.rebarsDiam
+        nRebarsTeor= availableWidth/rebarsSpacing+1
         self.nRebars= int(math.floor(nRebarsTeor))
         
     def getCopy(self):
@@ -456,9 +460,13 @@ class ReinfRow(object):
             centers.'''
         return self.nRebars*math.pi*(self.rebarsDiam/2.0)**4/4.0
       
-    def centerRebars(self,width):
-        '''center the row of rebars in the width of the section'''
-        self.latCover= (width-(self.nRebars-1)*self.rebarsSpacing)/2.0
+    def centerRebars(self, sectionWidth):
+        '''center the row of rebars in the width of the section
+
+        :param sectionWidth: section width.
+        '''
+        rowWidth= (self.nRebars-1)*self.rebarsSpacing
+        self.latCover= (sectionWidth-rowWidth)/2.0
 
     def defStraightLayer(self, reinforcement, layerCode, diagramName, p1, p2):
         '''Definition of a straight reinforcement layer in the XC section 
@@ -689,9 +697,10 @@ class LongReinfLayers(object):
         :param diagramName: name of the strain-stress diagram of the steel.
         :param pointPairs: end points for each row.
         '''
-        for rbRow, pts in zip(self.rebarRows, pointPairs):
+        for i, (rbRow, pts) in enumerate(zip(self.rebarRows, pointPairs)):
             p1= pts[0]; p2= pts[1]
-            self.reinfLayers.append(rbRow.defStraightLayer(reinforcement,layerCode,diagramName,p1,p2))
+            rowLayerCode= layerCode+'_'+str(i)
+            self.reinfLayers.append(rbRow.defStraightLayer(reinforcement= reinforcement, layerCode= rowLayerCode, diagramName= diagramName, p1= p1, p2= p2))
             
     def defCircularLayers(self, reinforcement, code, diagramName, extRad, anglePairs= None):
         '''
@@ -1235,7 +1244,7 @@ class RCSectionBase(object):
                     ("k" for characteristic diagram, "d" for design diagram)
          '''
         self.defShearResponse2d(preprocessor)
-        self.defSectionGeometry(preprocessor,matDiagType)
+        self.defSectionGeometry(preprocessor,matDiagType, twoDimensional= True)
         return self.defFiberSection2d(preprocessor)
 
     def defFiberSection(self, preprocessor):
@@ -1270,7 +1279,7 @@ class RCSectionBase(object):
                     ("k" for characteristic diagram, "d" for design diagram)
         '''
         self.defShearResponse(preprocessor= preprocessor)
-        self.defSectionGeometry(preprocessor= preprocessor, matDiagType= matDiagType)
+        self.defSectionGeometry(preprocessor= preprocessor, matDiagType= matDiagType, twoDimensional= False)
         return self.defFiberSection(preprocessor= preprocessor)
         
     def clearRCSection(self):
@@ -1894,12 +1903,17 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         vertices= [pMin, geom.Pos2d(pMax.x, pMin.y), pMax, geom.Pos2d(pMin.x, pMax.y), pMin]
         return vertices
 
-    def defConcreteRegion(self):
+    def defConcreteRegion(self, twoDimensional= False):
         ''' Define a rectangular region filled with concrete.
+
+        :param twoDimensional: if true set only one division on IJ direction.
         '''
         regions= self.geomSection.getRegions
         rg= regions.newQuadRegion(self.fiberSectionParameters.concrDiagName)
-        rg.nDivIJ= self.fiberSectionParameters.nDivIJ
+        if(twoDimensional):
+            rg.nDivIJ= 1
+        else:
+            rg.nDivIJ= self.fiberSectionParameters.nDivIJ
         rg.nDivJK= self.fiberSectionParameters.nDivJK
         rg.pMin= geom.Pos2d(-self.b/2,-self.h/2)
         rg.pMax= geom.Pos2d(self.b/2,self.h/2)
@@ -2465,7 +2479,8 @@ class RCRectangularSection(BasicRectangularRCSection):
         return retval
 
     def computeRebarPositions(self):
-        ''' Compute the positions of the reinforcement.'''
+        ''' Compute the positions of the reinforcement.
+        '''
         # Placement of the negative reinforcement.
         negPoints= list()
         halfDepth= self.h/2.0
@@ -2512,17 +2527,18 @@ class RCRectangularSection(BasicRectangularRCSection):
                 retval+= self.positvRebarRows.getAs()
         return retval
             
-    def defSectionGeometry(self, preprocessor, matDiagType):
+    def defSectionGeometry(self, preprocessor, matDiagType, twoDimensional= False):
         '''
         Define the XC section geometry object for a reinforced concrete section 
 
         :param preprocessor: preprocessor of the finite element problem.
         :param matDiagType: type of stress-strain diagram 
                             ("k" for characteristic diagram, "d" for design diagram)
+        :param twoDimensional: if true set only one division on IJ direction.
         '''
         self.defDiagrams(preprocessor, matDiagType)
         self.geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
-        self.defConcreteRegion()
+        self.defConcreteRegion(twoDimensional= twoDimensional)
         reinforcement= self.geomSection.getReinfLayers
         # Placement of the negative reinforcement.
         ## Compute positions.

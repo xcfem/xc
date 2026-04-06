@@ -118,11 +118,11 @@ combContainer.ULS.perm.add('ULS01','1.35*G1+1.35*G2+1.5*Q')
 nBarsA= 4 # number of bars.
 cover= 0.030 # concrete cover.
 lateralCover= 0.125 # concrete cover for the bars at the extremities of the row.
-spacingI= (rcSection.b-2.0*lateralCover)/(nBarsA-1)
+mainBarDiameter= 12e-3 # Diameter of the reinforcement bar.
+spacingI= (rcSection.b-2.0*lateralCover-mainBarDiameter)/(nBarsA-1)
 
 
 ## Bottom reinforcement I.
-mainBarDiameter= 12e-3 # Diameter of the reinforcement bar.
 bottomReinfI= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, rebarsSpacing= spacingI, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover)
 
 ## BottomReinforcement II.
@@ -206,7 +206,10 @@ for e in xcTotalSet.elements:
     controlVarsSect2= e.getProp(limitState.label+'Sect2')
     maxCF= max(maxCF,controlVarsSect2.CF)
 
-ratio1= abs(maxCF-0.9135590413756935)/0.9135590413756935
+# Check results (22/03/2026): update the capacity factor after last changes in
+# the code: fixed error in main reinforcement layers definition:
+#   old value: maxCF= 0.9135590413756935
+ratio1= abs(maxCF-0.9101327415997643)/0.9101327415997643
 
 '''
 print(maxCF)

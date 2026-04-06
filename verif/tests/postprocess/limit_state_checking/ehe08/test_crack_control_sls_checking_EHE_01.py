@@ -106,18 +106,17 @@ limitState.analyzeLoadCombinations(combContainer,xcTotalSet)
 #
 
 # Geometry of the reinforcement.
-nBarsA= 7 # number of bars.
+nBarsA= 6 # number of bars.
 cover= 0.035 # concrete cover.
 lateralCover= cover # concrete cover for the bars at the extremities of the row.
-spacing= (rcSection.b-2.0*lateralCover)/(nBarsA-1)
-
-## First row.
 mainBarDiameter= 25e-3 # Diameter of the reinforcement bar.
+spacing= (rcSection.b-2.0*lateralCover-mainBarDiameter)/(nBarsA-1)
+## First row.
 rowA= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover)
 
 ## Third row.
 smallBarDiameter= 4e-3
-rowC= def_simple_RC_section.ReinfRow(rebarsDiam= smallBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
+rowC= def_simple_RC_section.ReinfRow(rebarsDiam= smallBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover)
 for e in s.elements:
     e.setProp("baseSection", rcSection)
     e.setProp("reinforcementUpVector", geom.Vector3d(0,0,1)) # Z+
@@ -143,10 +142,18 @@ meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDist
 # has been tested against the results obtained for the same data
 # with this calculation tool: https://web.archive.org/web/20241008065525/http://calculocivil.com/es/ehe08/fisura/calculo
 # see the readme.md file for more details.
-ratio1= abs(meanCFs[0]-0.8347613436179578)/0.8347613436179578
-ratio2= abs(meanCFs[1]-0.24227419443071926)/0.24227419443071926
+# 22/03/2026: Update the capacity factors after last changes in
+# the code: fixed error in main reinforcement layers definition:
+#   old value: meanCFs[0]= 0.8347613436179578
+#   old value: meanCFs[1]= 0.24227419443071926
+ratio1= abs(meanCFs[0]-0.8642442722993481)/0.8642442722993481
+ratio2= abs(meanCFs[1]-0.24227520668745772)/0.24227520668745772
 
-# print(meanCFs, ratio1, ratio2)
+'''
+print('meanCFs= ',meanCFs)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+'''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)

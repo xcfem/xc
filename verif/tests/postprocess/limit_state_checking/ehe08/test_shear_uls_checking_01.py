@@ -108,7 +108,7 @@ sections= reinfConcreteSectionDistribution.sectionDefinition # get the sections 
 #value overrides the rebarsSpacing
 barArea= 4e-4
 
-reinfLayer= def_simple_RC_section.ReinfRow(areaRebar= barArea,rebarsSpacing=0.075,width=0.25,nominalCover=0.050)
+reinfLayer= def_simple_RC_section.ReinfRow(areaRebar= barArea,rebarsSpacing= 0.075, width=0.25, nominalCover=0.050)
 
 #instances of element_section_map.RCSlabBeamSection that defines the
 #variables that make up THE TWO reinforced concrete sections in the two

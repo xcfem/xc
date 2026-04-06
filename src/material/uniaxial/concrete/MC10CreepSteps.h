@@ -35,11 +35,20 @@ namespace XC {
   
 class MC10CreepSteps: public CreepSteps
   {
+  private:
+    //! @brief Return the mechanical strain at step i assuming a constant
+    //! stress within the step.
+    //! @param Ec: concrete elastic modulus.
+    //! @param i: index of the step.
+    double get_mech_strain(const double &Ec, int i)
+      {
+	return this->DSIG_i[i]/Ec; // CONSTANT STRESS within Time interval.
+      }
+    
   protected:
     std::vector<float> PHIB_i; //!< split into basic and drying creep (ntosic)
     std::vector<float> PHID_i; //!< split into basic and drying creep (ntosic)
 
-  protected:
     std::size_t resize(void);
   public:
     MC10CreepSteps(void);
@@ -48,6 +57,7 @@ class MC10CreepSteps: public CreepSteps
       { return this->PHIB_i[this->count]; }
     double getLastPhiD(void) const
       { return this->PHID_i[this->count]; }
+
     
     template <class CreepConcrete>
     double computeBasicPhi(const CreepConcrete &concrete, const double &Ec, const double &time)
@@ -58,7 +68,7 @@ class MC10CreepSteps: public CreepSteps
 	for(int i = 1; i<=count; i++)
 	  {
 	    this->PHIB_i[i] = concrete.setPhiBasic(time,this->TIME_i[i]); // Determine PHI
-	    retval+= this->PHIB_i[i]*this->DSIG_i[i]/Ec; // CONSTANT STRESS within Time interval
+	    retval+= this->PHIB_i[i]*this->get_mech_strain(Ec, i);  // CONSTANT STRESS within Time interval.
 	  }
 
 	return retval;
@@ -73,7 +83,7 @@ class MC10CreepSteps: public CreepSteps
 	for(int i = 1; i<=count; i++)
 	  {
 	    this->PHID_i[i] = concrete.setPhiDrying(time,this->TIME_i[i]); // Determine PHI
-	    retval+= this->PHID_i[i]*this->DSIG_i[i]/Ec; // CONSTANT STRESS within Time interval
+	    retval+= this->PHID_i[i]*this->get_mech_strain(Ec, i); // CONSTANT STRESS within Time interval.
 	  }
 
 	return retval;

@@ -27,17 +27,17 @@ spacing= 0.15 # spacing of reinforcement.
 nBarsA= 10 # number of bars.
 cover= 0.035 # concrete cover.
 lateralCover= cover # concrete cover for the bars at the extremities of the row.
-width= nBarsA*spacing+2.0*lateralCover
+barDiameter= 25e-3 # Diameter of the reinforcement bar.
+width= nBarsA*spacing+2.0*lateralCover+barDiameter
 
 ## First row
-barDiameter= 25e-3 # Diameter of the reinforcement bar.
 ### Reinforcement row.
 rowA= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, rebarsSpacing= spacing, width= width, nominalCover= cover, nominalLatCover= lateralCover)
 areaA= rowA.getAs()
 
 ## Second row
 ### Reinforcement row.
-rowB= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, rebarsSpacing= spacing, width= width-spacing, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
+rowB= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, rebarsSpacing= spacing, width= width, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
 areaB= rowB.getAs()
 area= areaA+areaB
 
@@ -108,3 +108,8 @@ if (ratio1==0 and (abs(ratio2)<1e-12) and (abs(ratio3)<1e-12) and (abs(ratio4)<1
 else:
     lmsg.error(fname+' ERROR.')
 
+# # Report section.
+# import xc
+# feProblem= xc.FEProblem()
+# preprocessor=  feProblem.getPreprocessor
+# rcSection.pdfReport(preprocessor= preprocessor, showPDF= True, keepPDF= False)

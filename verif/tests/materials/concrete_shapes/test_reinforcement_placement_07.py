@@ -108,16 +108,16 @@ limitState.analyzeLoadCombinations(combContainer,xcTotalSet)
 
 # Geometry of the reinforcement.
 nBarsA= 7 # number of bars.
+mainBarDiameter= 25e-3 # Diameter of the reinforcement bar.
 cover= 0.035 # concrete cover.
 lateralCover= cover # concrete cover for the bars at the extremities of the row.
-spacing= (rcSection.b-2.0*lateralCover)/(nBarsA-1)
+spacing= (rcSection.b-2.0*lateralCover-mainBarDiameter)/(nBarsA-1)
 
 ## First row.
-mainBarDiameter= 25e-3 # Diameter of the reinforcement bar.
 rowA= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover)
 
 ## Second row.
-rowB= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, rebarsSpacing= spacing, width= rcSection.b-spacing, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
+rowB= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
 
 ## Third row.
 smallBarDiameter= 10e-3
@@ -213,13 +213,13 @@ feProblem.errFileName= "cerr" # From now on display errors if any.
 feProblem.logFileName= "clog" # From now on display warnings if any.
 
 relError= list() # Relative errors.
-refMeanCFs= [0.08848053233910935, 0.3610025152145464] # 20/07/2025 those values
-                                                      # have been updated
-                                                      # due to the limitation
-                                                      # of the design yield
-                                                      # stress of the shear
-                                                      # reinforcement to 400
-                                                      # MPa.
+refMeanCFs= [0.08848053233910935, 0.360956107976494] # 20/07/2025 those values
+                                                     # have been updated
+                                                     # due to the limitation
+                                                     # of the design yield
+                                                     # stress of the shear
+                                                     # reinforcement to 400
+                                                     # MPa.
 for meanCF, refMeanCF in zip(meanCFs, refMeanCFs):
     relError.append(abs(meanCF-refMeanCF)/refMeanCF)
 

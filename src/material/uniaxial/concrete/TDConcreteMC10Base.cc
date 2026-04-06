@@ -60,21 +60,10 @@ void XC::TDConcreteMC10Base::setup_parameters(void)
     TDConcreteBase::setup_parameters();
 
     //ntosic: SPLIT INTO BASIC AND DRYING!
-    eps_crb = 0.0; //Added by ntosic
-    eps_crd = 0.0; //Added by ntosic
-    eps_shb = 0.0; //Added by ntosic
-    eps_shd = 0.0; //Added by ntosic
-    epsP_crb = 0.0; //Added by ntosic
-    epsP_crd = 0.0; //Added by ntosic
-    epsP_shb = 0.0; //Added by ntosic
-    epsP_shd = 0.0; //Added by ntosic
-    epsP_m = 0.0; //Added by AMK
+    creepShrinkageState.setup_parameters(this->Ec); //Added by AMK
 	
     //Change inputs into the proper sign convention: ntosic: changed
-    epsba = -fabs(epsba);
-    epsda = -fabs(epsda);
-    phiba = fabs(phiba);
-    phida = fabs(phida);
+    creepShrinkageParameters.setup_parameters();
   }
 
 //! @brief Constructor.
@@ -92,19 +81,12 @@ XC::TDConcreteMC10Base::TDConcreteMC10Base(int tag, int classTag)
 //! @param _Ecm: 28-day modulus, necessary for normalizing creep coefficient.
 //! @param _beta: tension softening parameter.
 //! @param _age: analysis time at initiation of drying (in days).
-//! @param _epsba: ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010.
-//! @param _epsbb: fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-//! @param _epsda: product of εcds,0 and βRH, as per Model Code 2010.
-//! @param _epsdb: fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-//! @param _phiba: parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
-//! @param _phibb: fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-//! @param _phida: product of βdc(fcm) and β(RH), as per Model Code 2010.
-//! @param _phidb: fitting constant within the drying creep time evolution function as per Model Code 2010.
 //! @param _tcast: analysis time corresponding to concrete casting in days (note: concrete will not be able to take on loads until the age of 2 days).
-//! @param _cem: coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
-XC::TDConcreteMC10Base::TDConcreteMC10Base(int tag, int classTag, double _fc, double _ft, double _Ets, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem)
-  : TDConcreteBase(tag, classTag, _fc, _ft, _Ets, _Ec, _beta, _age, _tcast),
-  Ecm(_Ecm), epsba(_epsba), epsbb(_epsbb), epsda(_epsda), epsdb(_epsdb), phiba(_phiba), phibb(_phibb), phida(_phida), phidb(_phidb), cem(_cem)
+XC::TDConcreteMC10Base::TDConcreteMC10Base(int tag, int classTag, double _fc, double _ft, double _Ets, double _Ec, double _Ecm, double _beta, double _age, double _tcast, const MC10CreepShrinkageParameters &csp)
+  : TDConcreteBase(tag, classTag, _fc, _ft, _Ets, _Ec, _beta),
+    Ecm(_Ecm), 
+    creepShrinkageState(_age, _tcast, _Ec),
+    creepShrinkageParameters(csp)
   {
     setup_parameters();
   }
@@ -117,120 +99,29 @@ double XC::TDConcreteMC10Base::getEcm(void) const
 void XC::TDConcreteMC10Base::setEcm(const double &d)
   { Ecm= d; }
 
+//! @brief Assign the values of the creep and shrinkage parameters.
+void XC::TDConcreteMC10Base::setCreepShrinkageParameters(const MC10CreepShrinkageParameters &csParameters)
+  { this->creepShrinkageParameters= csParameters; }
 
-//! @brief Get ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010
-double XC::TDConcreteMC10Base::getEpsba(void) const
-  { return epsba; }
-
-//! @brief Set ultimate basic shrinkage strain, εcbs,0, as per Model Code 2010
-void XC::TDConcreteMC10Base::setEpsba(const double &d)
-  { epsba= d; }
-
-//! @brief Get fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-double XC::TDConcreteMC10Base::getEpsbb(void) const
-  { return epsbb; }
-
-//! @brief Set fitting parameter within the basic shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-void XC::TDConcreteMC10Base::setEpsbb(const double &d)
-  { epsbb= d; }
-
-//! @brief Get the value of epsda: product of εcds,0 and βRH, as per Model Code 2010.
-double XC::TDConcreteMC10Base::getEpsda(void) const
-  { return epsda; }
-
-//! @brief Set the value of epsda: product of εcds,0 and βRH, as per Model Code 2010.
-void XC::TDConcreteMC10Base::setEpsda(const double &d)
-  { epsda= d; }
-
-//! @brief Get fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-double XC::TDConcreteMC10Base::getEpsdb(void) const
-  { return epsdb; }
-
-//! @brief Set fitting parameter within the drying shrinkage time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-void XC::TDConcreteMC10Base::setEpsdb(const double &d)
-  { epsdb= d; }
-
-
-//! @brief Get parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
-double XC::TDConcreteMC10Base::getPhiba(void) const
-  { return phiba; }
-
-//! @brief Set parameter for the effect of compressive strength on basic creep βbc(fcm), as per Model Code 2010.
-void XC::TDConcreteMC10Base::setPhiba(const double &d)
-  { phiba= d; }
-
-//! @brief Get fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-double XC::TDConcreteMC10Base::getPhibb(void) const
-  { return phibb; }
-
-//! @brief Set fitting parameter within the basic creep time evolution function as per Model Code 2010 and prEN1992-1-1:2017.
-void XC::TDConcreteMC10Base::setPhibb(const double &d)
-  { phibb= d; }
-
-//! @brief Get product of βdc(fcm) and β(RH), as per Model Code 2010
-double XC::TDConcreteMC10Base::getPhida(void) const
-  { return phida; }
-
-//! @brief Set product of βdc(fcm) and β(RH), as per Model Code 2010
-void XC::TDConcreteMC10Base::setPhida(const double &d)
-  { phida= d; }
-
-//! @brief Get fitting constant within the drying creep time evolution function as per Model Code 2010.
-double XC::TDConcreteMC10Base::getPhidb(void) const
-  { return phidb; }
-
-//! @brief Set fitting constant within the drying creep time evolution function as per Model Code 2010.
-void XC::TDConcreteMC10Base::setPhidb(const double &d)
-  { phidb= d; }
-
-//! @brief Get coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
-double XC::TDConcreteMC10Base::getCem(void) const
-  { return cem; }
-
-//! @brief Set coefficient dependent on the type of cement: –1 for 32.5N, 0 for 32.5R and 42.5N and 1 for 42.5R, 52.5N and 52.5R.
-void XC::TDConcreteMC10Base::setCem(const double &d)
-  { cem= d; }
+//! @brief Retrieve the values of the creep and shrinkage parameters.
+const XC::MC10CreepShrinkageParameters &XC::TDConcreteMC10Base::getCreepShrinkageParameters(void) const
+  { return this->creepShrinkageParameters; }
 
 //ntosic
 double XC::TDConcreteMC10Base::setPhiBasic(double time, double tp) const
-  {	
-    // ntosic: Model Code 2010 Equations
-    const double tmtp= time - tp;
-    const double tpa = tp * pow(9.0 / (2.0 + pow(tp, 1.2)) + 1.0, cem);
-    const double phiBasic= phiba * log(pow(30.0 / tpa + 0.035, 2.0) * (tmtp / phibb) + 1.0);
-    return phiBasic;
-  }
+  { return creepShrinkageParameters.getPhiBasic(time, tp); }
 
 //ntosic
 double XC::TDConcreteMC10Base::setPhiDrying(double time, double tp) const
-  {
-    // ntosic: Model Code 2010 Equations
-    const double tmtp= time - tp;
-    const double tpa= tp * pow(9.0 / (2.0 + pow(tp, 1.2)) + 1.0, cem);
-    const double phiDrying = phida / (0.1 + pow(tpa,0.2)) * pow(tmtp, 1.0 / (2.3 + 3.5 / pow(tpa, 0.5))) / pow(phidb + tmtp, 1.0 / (2.3 + 3.5/pow(tpa,0.5)));
-    return phiDrying;
-  }
+  { return creepShrinkageParameters.getPhiDrying(time, tp); }
 
 //ntosic
 double XC::TDConcreteMC10Base::setShrinkBasic(double time)
-  {
-    double shrinkBasic = epsba * (1 - exp(-0.2* epsbb * pow(time, 0.5))); //ntosic: Model Code 2010 Equations
-	return shrinkBasic;
-  }
+  { return creepShrinkageParameters.getShrinkBasic(time); }
 
 //ntosic
 double XC::TDConcreteMC10Base::setShrinkDrying(double time)
-  {
-	double tD = age; //Age at initiation of drying
-	double shrinkDrying = 0.0; //ntosic
-	if (time - (tD) < 0) {
-		shrinkDrying = 0.0;
-	}
-	else {
-		shrinkDrying = epsda * pow(time - (tD), 0.5) / pow(epsdb + time - (tD), 0.5); //ntosic: Model Code 2010 Equations
-	}
-	return shrinkDrying;
-  }
+  { return creepShrinkageParameters.getShrinkDrying(this->creepShrinkageState.getAge(), time); }
 
 //ntosic
 double XC::TDConcreteMC10Base::getPHIB_i(void) const
@@ -239,19 +130,6 @@ double XC::TDConcreteMC10Base::getPHIB_i(void) const
 double XC::TDConcreteMC10Base::getPHID_i(void) const
   { return phid_i; }
 
-
-//ntosic
-double XC::TDConcreteMC10Base::getCreepBasic(void) const
-  { return eps_crb; }
-//ntosic
-double XC::TDConcreteMC10Base::getCreepDrying(void) const
-  { return eps_crd; }
-//ntosic
-double XC::TDConcreteMC10Base::getShrinkBasic(void) const
-  { return eps_shb; }
-//ntosic
-double XC::TDConcreteMC10Base::getShrinkDrying(void) const
-  { return eps_shd; }
 
 //ntosic
 //! @brief Return the creep occurring in a sealed (no drying) specimen,
@@ -275,12 +153,7 @@ double XC::TDConcreteMC10Base::setCreepDryingStrain(double time, double stress)
 
 int XC::TDConcreteMC10Base::revertToLastCommit(void)
   {
-    eps_total = epsP_total; //Added by AMK;
-    eps_shb = epsP_shb; //ntosic
-    eps_shd = epsP_shd; //ntosic
-    eps_crb = epsP_crb; //ntosic
-    eps_crd = epsP_crd; //ntosic
-    eps_m = epsP_m;  
+    this->creepShrinkageState.revert_to_last_commit();
 
     hstv= hstvP;
     return 0;
@@ -288,6 +161,8 @@ int XC::TDConcreteMC10Base::revertToLastCommit(void)
 
 int XC::TDConcreteMC10Base::revertToStart(void)
   {
+    this->creepShrinkageState.revert_to_start(this->Ec);
+    
     hstvP.revertToStart(Ec);
 
     hstv.setup_parameters(Ec);
@@ -301,8 +176,9 @@ int XC::TDConcreteMC10Base::revertToStart(void)
 int XC::TDConcreteMC10Base::sendData(Communicator &comm)
   {
     int res= TDConcreteBase::sendData(comm);
-    res+= comm.sendDoubles(Ecm, epsba, epsbb, epsda, epsdb,getDbTagData(),CommMetaData(4));
-    res+= comm.sendDoubles(phiba, phibb, phida, phidb, cem, getDbTagData(),CommMetaData(5));
+    res+= comm.sendDouble(Ecm,getDbTagData(),CommMetaData(4));
+    res+= comm.sendMovable(creepShrinkageParameters, getDbTagData(),CommMetaData(5));
+    res+= comm.sendMovable(creepShrinkageState, getDbTagData(),CommMetaData(6));
     return res;
   }
 
@@ -310,8 +186,9 @@ int XC::TDConcreteMC10Base::sendData(Communicator &comm)
 int XC::TDConcreteMC10Base::recvData(const Communicator &comm)
   {
     int res= TDConcreteBase::recvData(comm);
-    res+= comm.receiveDoubles(Ecm, epsba, epsbb, epsda, epsdb,getDbTagData(),CommMetaData(4));
-    res+= comm.receiveDoubles(phiba, phibb, phida, phidb, cem, getDbTagData(),CommMetaData(5));
+    res+= comm.receiveDouble(Ecm,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveMovable(creepShrinkageParameters, getDbTagData(),CommMetaData(5));
+    res+= comm.receiveMovable(creepShrinkageState, getDbTagData(),CommMetaData(6));
     return res;
   }
 

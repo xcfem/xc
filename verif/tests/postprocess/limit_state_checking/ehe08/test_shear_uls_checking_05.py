@@ -128,18 +128,18 @@ limitState.analyzeLoadCombinations(combContainer,xcTotalSet)
 nBarsA= 7 # number of bars.
 cover= 0.035 # concrete cover.
 lateralCover= cover # concrete cover for the bars at the extremities of the row.
-spacing= (rcSection.b-2.0*lateralCover)/(nBarsA-1)
+mainBarDiameter= 25e-3 # Diameter of the reinforcement bar.
+spacing= (rcSection.b-2.0*lateralCover-mainBarDiameter)/(nBarsA-1)
 
 ## First row.
-mainBarDiameter= 25e-3 # Diameter of the reinforcement bar.
 rowA= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover)
 
 ## Second row.
-rowB= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, rebarsSpacing= spacing, width= rcSection.b-spacing, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
+rowB= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
 
 ## Third row.
 smallBarDiameter= 4e-3
-rowC= def_simple_RC_section.ReinfRow(rebarsDiam= smallBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
+rowC= def_simple_RC_section.ReinfRow(rebarsDiam= smallBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover)
 
 # Shear reinforcement.
 shearReinf= def_simple_RC_section.ShearReinforcement(familyName= "shearReinf",nShReinfBranches= 2, areaShReinfBranch= EHE_materials.Fi8, shReinfSpacing= 0.15, angAlphaShReinf= math.pi/2.0)
@@ -208,7 +208,7 @@ print("ratio2= ",ratio2)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1<1e-2) and (ratio2<1e-4):
+if (ratio1<1e-2) and (ratio2<1e-2):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

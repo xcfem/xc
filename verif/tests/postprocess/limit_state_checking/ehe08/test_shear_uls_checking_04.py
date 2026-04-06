@@ -106,21 +106,21 @@ limitState.analyzeLoadCombinations(combContainer,xcTotalSet)
 #
 
 # Geometry of the reinforcement.
-nBarsA= 7 # number of bars.
+nBarsA= 6 # number of bars (22/03/2026)
 cover= 0.035 # concrete cover.
 lateralCover= cover # concrete cover for the bars at the extremities of the row.
-spacing= (rcSection.b-2.0*lateralCover)/(nBarsA-1)
+mainBarDiameter= 25e-3 # Diameter of the reinforcement bar.
+spacing= (rcSection.b-2.0*lateralCover-mainBarDiameter)/(nBarsA-1)
 
 ## First row.
-mainBarDiameter= 25e-3 # Diameter of the reinforcement bar.
 rowA= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover)
 
 ## Second row.
-rowB= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, rebarsSpacing= spacing, width= rcSection.b-spacing, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
+rowB= def_simple_RC_section.ReinfRow(rebarsDiam= mainBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
 
 ## Third row.
 smallBarDiameter= 4e-3
-rowC= def_simple_RC_section.ReinfRow(rebarsDiam= smallBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover+spacing/2.0)
+rowC= def_simple_RC_section.ReinfRow(rebarsDiam= smallBarDiameter, rebarsSpacing= spacing, width= rcSection.b, nominalCover= cover, nominalLatCover= lateralCover)
 
 ## Store element reinforcement. Assign to each element the properties
 # that will be used to define its reinforcement on each direction:
@@ -168,8 +168,12 @@ controller.verbose= False # Don't display log messages.
 meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y', threeDim= False, controller= controller)
 
 # Check results.
+# Check results (22/03/2026: Update the capacity factors after last changes in
+# the code: fixed error in main reinforcement layers definition:
+#   old value: meanCFs[0]= 0.21519099666067198
+#   old value: meanCFs[1]= 0.025500051449439672
 ratio1= abs(meanCFs[0]-0.21519099666067198)/0.21519099666067198
-ratio2= abs(meanCFs[1]-0.025500051449439672)/0.025500051449439672
+ratio2= abs(meanCFs[1]-0.025500051449439676)/0.025500051449439676
 
 '''
 print('meanCFs= ',meanCFs)

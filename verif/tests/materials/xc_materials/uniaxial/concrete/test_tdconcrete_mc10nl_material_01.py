@@ -42,12 +42,25 @@ phidb= 1782.0
 
 cem = 1.0
 
+## Model Code 2010 shrinkage and creep parameters.
+mc10CreepShrinkageParameters= typical_materials.def_mc10_creep_and_shrinkage_parameters(epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, cem= cem)
+
+error= (mc10CreepShrinkageParameters.epsba-epsba)**2 # 9
+error+= (mc10CreepShrinkageParameters.epsbb-epsbb)**2 # 10
+error+= (mc10CreepShrinkageParameters.epsda-epsda)**2 # 11
+error+= (mc10CreepShrinkageParameters.epsdb-epsdb)**2 # 12
+error+= (mc10CreepShrinkageParameters.phiba-phiba)**2 # 13
+error+= (mc10CreepShrinkageParameters.phibb-phibb)**2 # 14
+error+= (mc10CreepShrinkageParameters.phida-phida)**2 # 15
+error+= (mc10CreepShrinkageParameters.phidb-phidb)**2 # 16
+error+= (mc10CreepShrinkageParameters.cem-cem)**2 # 18
+
 # Other Input Parameters:
 tDry = 14.0
 beta = 0.7 # can be changed (softening parameter)
 
 ## Concrete able to creep.
-tdConcrete= typical_materials.defTDConcreteMC10NL(preprocessor= preprocessor, name= 'tdConcrete', fcm= fc, fcu= fcu, epscu= epscu, ft= fct, Ec= Ec, Ecm= Ecm, beta= beta, age= tDry, epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, tcast= 0.0, cem= cem)
+tdConcrete= typical_materials.defTDConcreteMC10NL(preprocessor= preprocessor, name= 'tdConcrete', fcm= fc, fcu= fcu, epscu= epscu, ft= fct, Ec= Ec, Ecm= Ecm, beta= beta, age= tDry, mc10CSParameters= mc10CreepShrinkageParameters, tcast= 0.0)
 
 error= (tdConcrete.fpc-fc)**2 # 1
 error+= (tdConcrete.fcu-fcu)**2 # 2
@@ -57,16 +70,7 @@ error+= (tdConcrete.Ec-Ec)**2 # 5
 error+= (tdConcrete.Ecm-Ecm)**2 # 6
 error+= (tdConcrete.beta-beta)**2 # 7
 error+= (tdConcrete.age-tDry)**2 # 8
-error+= (tdConcrete.epsba-epsba)**2 # 9
-error+= (tdConcrete.epsbb-epsbb)**2 # 10
-error+= (tdConcrete.epsda-epsda)**2 # 11
-error+= (tdConcrete.epsdb-epsdb)**2 # 12
-error+= (tdConcrete.phiba-phiba)**2 # 13
-error+= (tdConcrete.phibb-phibb)**2 # 14
-error+= (tdConcrete.phida-phida)**2 # 15
-error+= (tdConcrete.phidb-phidb)**2 # 16
 error+= (tdConcrete.tcast)**2 # 17
-error+= (tdConcrete.cem-cem)**2 # 18
 error= math.sqrt(error)
 
 # Check Et value.

@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+''' Verify shear ULS checking according to EHE-08 using rectangular equivalent
+    section.
+'''
 
 from __future__ import division
 from __future__ import print_function
@@ -30,28 +33,28 @@ piersDiameter=1.0
 lRectEqPier=round(math.pi**0.5*piersDiameter/2.,3)
 concrete= EHE_materials.HA30
 reinfSteel= EHE_materials.B500S
-nomCover=35 # nominal cover 
+nomCover= 35 # nominal cover 
 
 #   *** Pier reinforcement ***
-pierLongReinf=[16,50]  # Longitudinal reinforcement on each side of the pile.
+pierLongReinf= [16,50]  # Longitudinal reinforcement on each side of the pile.
 # Stirrups
-nlegs_m=3 # number of legs on each direction
-shearReinfDiameter=12
-shearReinfSpacing=250
+nlegs_m= 3 # number of legs on each direction
+shearReinfDiameter= 12
+shearReinfSpacing= 250
 pierStirrups= [shearReinfDiameter,nlegs_m,shearReinfSpacing]
-piersRCSects= element_section_map.RCSlabBeamSection(name='piersRCSects',sectionDescr='piers',concrType=concrete, reinfSteelType=reinfSteel,width=lRectEqPier,depth=lRectEqPier)
+piersRCSects= element_section_map.RCSlabBeamSection(name='piersRCSects',sectionDescr='piers', concrType=concrete, reinfSteelType=reinfSteel, width=lRectEqPier, depth=lRectEqPier)
 
-piersRCSects.dir1PositvRebarRows= rcs.LongReinfLayers([rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)])
-piersRCSects.dir1NegatvRebarRows= rcs.LongReinfLayers([rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)])
-piersRCSects.dir2PositvRebarRows= rcs.LongReinfLayers([rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)])
-piersRCSects.dir2NegatvRebarRows= rcs.LongReinfLayers([rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)])
+piersRCSects.dir1PositvRebarRows= rcs.LongReinfLayers([rcs.rebLayer_mm(pierLongReinf[0], pierLongReinf[1], nomCover)])
+piersRCSects.dir1NegatvRebarRows= rcs.LongReinfLayers([rcs.rebLayer_mm(pierLongReinf[0], pierLongReinf[1], nomCover)])
+piersRCSects.dir2PositvRebarRows= rcs.LongReinfLayers([rcs.rebLayer_mm(pierLongReinf[0], pierLongReinf[1], nomCover)])
+piersRCSects.dir2NegatvRebarRows= rcs.LongReinfLayers([rcs.rebLayer_mm(pierLongReinf[0], pierLongReinf[1], nomCover)])
 
 # Shear reinforcement.
-piersRCSects.dir1ShReinfZ=rcs.ShearReinforcement(familyName= "sh",nShReinfBranches=pierStirrups[1],areaShReinfBranch= math.pi*(pierStirrups[0]*1e-3)**2/4.,shReinfSpacing=pierStirrups[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
-piersRCSects.dir2ShReinfZ=rcs.ShearReinforcement(familyName= "sh",nShReinfBranches=pierStirrups[1],areaShReinfBranch= math.pi*(pierStirrups[0]*1e-3)**2/4.,shReinfSpacing=pierStirrups[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
+piersRCSects.dir1ShReinfZ= rcs.ShearReinforcement(familyName= "sh",nShReinfBranches=pierStirrups[1],areaShReinfBranch= math.pi*(pierStirrups[0]*1e-3)**2/4.,shReinfSpacing=pierStirrups[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
+piersRCSects.dir2ShReinfZ= rcs.ShearReinforcement(familyName= "sh",nShReinfBranches=pierStirrups[1],areaShReinfBranch= math.pi*(pierStirrups[0]*1e-3)**2/4.,shReinfSpacing=pierStirrups[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
 
-piersRCSects.dir1ShReinfY=rcs.ShearReinforcement(familyName= "sh",nShReinfBranches=pierStirrups[1],areaShReinfBranch= math.pi*(pierStirrups[0]*1e-3)**2/4.,shReinfSpacing=pierStirrups[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
-piersRCSects.dir2ShReinfY=rcs.ShearReinforcement(familyName= "sh",nShReinfBranches=pierStirrups[1],areaShReinfBranch= math.pi*(pierStirrups[0]*1e-3)**2/4.,shReinfSpacing=pierStirrups[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
+piersRCSects.dir1ShReinfY= rcs.ShearReinforcement(familyName= "sh",nShReinfBranches=pierStirrups[1],areaShReinfBranch= math.pi*(pierStirrups[0]*1e-3)**2/4.,shReinfSpacing=pierStirrups[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
+piersRCSects.dir2ShReinfY= rcs.ShearReinforcement(familyName= "sh",nShReinfBranches=pierStirrups[1],areaShReinfBranch= math.pi*(pierStirrups[0]*1e-3)**2/4.,shReinfSpacing=pierStirrups[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
 
 # All this is made only to allow the
 # creation of the RCMaterialDistribution
@@ -92,7 +95,7 @@ import os
 pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
-  pth= "."
+    pth= "."
 
 cfg= default_config.get_temporary_env_config()
 cfg.projectDirTree.createTree() # To allow copying existing internal force data into.
@@ -111,8 +114,14 @@ meanCFs= limitState.check(setCalc= None, listFile='N',calcMeanCF='Y', controller
 
 # Check results (21/06/2025: update values after fixing error in the EHE08
 # shear controller).
-ratio1= abs(meanCFs[0]-0.519223902491736)/0.519223902491736
-ratio2= abs(meanCFs[1]-0.42377459585998756)/0.42377459585998756
+#   old value: meanCFs[0]= 0.36664102827984885
+#   old value: meanCFs[1]= 0.31946661434667833
+# Check results (22/03/2026: Update the capacity factors after last changes in
+# the code: fixed error in main reinforcement layers definition:
+#   old value: meanCFs[0]= 0.519223902491736
+#   old value: meanCFs[1]= 0.42377459585998756
+ratio1= abs(meanCFs[0]-0.38255123463147317)/0.38255123463147317
+ratio2= abs(meanCFs[1]-0.4558093619308588)/0.4558093619308588
 
 '''
 print('meanCFs= ',meanCFs)

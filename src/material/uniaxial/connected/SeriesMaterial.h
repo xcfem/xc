@@ -84,6 +84,11 @@ class SeriesMaterial: public ConnectedMaterial
     std::vector<double> flex;
     std::vector<double> strain;
 
+    // Values from last commited state.
+    std::vector<double> stress_n;
+    std::vector<double> tangent_n;
+    std::vector<double> strain_n;
+
     bool initialFlag;
 
   protected:

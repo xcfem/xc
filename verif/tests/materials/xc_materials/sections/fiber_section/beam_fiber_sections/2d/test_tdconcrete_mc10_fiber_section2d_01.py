@@ -121,6 +121,14 @@ modelSpace.fixNode000(n1.tag)
 modelSpace.setDefaultMaterial(xcDeckSection)
 zl= modelSpace.newElement("ZeroLengthSection", [n1.tag, n2.tag])
 
+# material= zl.getSection()
+# fibers= material.getFibers()
+# print('Iz= ', fibers.getIz(1.0, 0.0))
+# print('Iy= ', fibers.getIy(1.0, 0.0))
+# for f in fibers:
+#     print(f.getPos(), f.getMaterial(), f.getArea())
+# print(zl.tag, material.name, fibers.getNumFibers())
+
 # Loads.
 loads= list()
 lp0= modelSpace.newLoadPattern(name= 'lp0', setCurrent= True)

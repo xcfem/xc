@@ -23,16 +23,16 @@ from materials.sections.fiber_section import def_simple_RC_section
 spacing= 0.15 # spacing of reinforcement.
 nBarsA= 10 # number of bars.
 lateralCover= 0.035 # concrete cover for the bars at the extremities of the row.
-width= nBarsA*spacing+2.0*lateralCover
+barDiameterB= 20e-3 # Diameter of the reinforcement bar.
+width= nBarsA*spacing+2.0*lateralCover+barDiameterB
 
 # First row
-barDiameterA= 10e-3 # Diameter of the reinforcement bar.
 ## Reinforcement row.
+barDiameterA= 10e-3 # Diameter of the reinforcement bar.
 rowA= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameterA, rebarsSpacing= spacing, width= width, nominalCover= 0.035, nominalLatCover= lateralCover)
 areaA= rowA.getAs()
 
 # Second row
-barDiameterB= 20e-3 # Diameter of the reinforcement bar.
 ## Reinforcement row.
 rowB= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameterB, rebarsSpacing= spacing, width= width-spacing, nominalCover= 0.035, nominalLatCover= lateralCover+spacing/2.0)
 areaB= rowB.getAs()

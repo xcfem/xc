@@ -57,7 +57,9 @@ class FrenetTrihedron: public ProtoGeom
     Vector3d getNormal(const double &) const;
     Vector3d getBinormal(const double &) const;
     Rect3d3dCooSys getCooSys(const double &) const;
+    Rect3d3dCooSys getHorizontalCooSys(const double &, const Vector3d &) const;
     Ref3d3d getRefSys(const double &) const;    
+    Ref3d3d getHorizontalRefSys(const double &, const Vector3d &) const;
     
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);

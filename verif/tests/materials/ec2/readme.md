@@ -13,6 +13,9 @@ Verification test for the checkings made according to Eurocode 2.
  - [The Concrete Center. Eurocode 2. Detailing](https://www.concretecentre.com/Codes/Eurocode-2/Detailing.aspx)
  - [Table of reinforcement anchorage length and lap length](https://eurocodeapplied.com/design/en1992/anchorage-and-lap-length-table)
  - [EC2: Lap length of reinforcements](https://web.archive.org/web/20241008065525/http://calculocivil.com/eu/ec2/lap/calc)
+ - [Code-check of anchors (EN)](https://www.ideastatica.com/support-center/check-of-anchors-according-to-eurocode)
+ - [Concrete cone failure](https://en.wikipedia.org/wiki/Concrete_cone_failure)
+
 ### Shrinkage and creep.
  - [SOFiSTiK 2020 | Benchmark No. 21; Real Creep and Shrinkage Calculation of a T-Beam Prestressed CS](https://docs.sofistik.com/2020/en/verification/_static/verification/pdf/dce-en21.pdf)
  - [midas Civil , Creep Analysis](https://www.midasoft.com/bridge-library/expert-tip-creep-analysis-next-steps)

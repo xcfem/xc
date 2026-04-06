@@ -125,10 +125,10 @@ if(creepOnDeck):
     concrete.defTDConcreteParameters(beta= 0.4, cement= '42.5R', h0= h0, T= 21, RH= RH, ts= ts, t0= t0)
     
     midSpanDeckSection.defRCSection2d(preprocessor, matDiagType= 'td')
-    midSpanDeckSection.pdfReport()
+    # midSpanDeckSection.pdfReport()
     xcMidSpanDeckSection= midSpanDeckSection.fiberSection
     supportDeckSection.defRCSection2d(preprocessor, matDiagType= 'td')
-    supportDeckSection.pdfReport()
+    # supportDeckSection.pdfReport()
     xcSupportDeckSection= supportDeckSection.fiberSection
 else:
     midSpanDeckSection.defRCSection2d(preprocessor, matDiagType= 'd')

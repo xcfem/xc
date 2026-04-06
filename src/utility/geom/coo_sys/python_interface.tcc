@@ -97,7 +97,10 @@ class_<FrenetTrihedron, bases<ProtoGeom> >("FrenetTrihedron")
   .def("getTangent",&FrenetTrihedron::getTangent, "Return the tangent vector at te given arc length.")
   .def("getNormal",&FrenetTrihedron::getNormal, "Return the normal vector at te given arc length.")
   .def("getBinormal",&FrenetTrihedron::getBinormal, "Return the binormal vector at te given arc length.")
-  .def("getCooSys", &FrenetTrihedron::getCooSys, "Return the coordinate system at te given arc length.")
-  .def("getRefSys", &FrenetTrihedron::getRefSys, "Return the reference system at te given arc length.")
+  .def("getCooSys", &FrenetTrihedron::getCooSys, "Return the coordinate system at the given arc length.")
+  .def("getRefSys", &FrenetTrihedron::getRefSys, "Return the reference system at the given arc length.")
+  .def("getHorizontalCooSys", &FrenetTrihedron::getHorizontalCooSys, "Return a coordinate system at the given arc length with the XY plane normal to the given vector.")
+  .def("getRefSys", &FrenetTrihedron::getRefSys, "Return the reference system at the given arc length.")
+  .def("getHorizontalRefSys", &FrenetTrihedron::getHorizontalRefSys, "Return a reference system at the given arc length with the XY plane normal to the given vector.")
   ;
 

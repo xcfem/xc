@@ -99,7 +99,7 @@ class TDConcreteMC10NL : public TDConcreteMC10Base
     void Compr_Envlp (double epsc, double &sigc, double &Ect);
   public:
     TDConcreteMC10NL(int tag= 0);
-    TDConcreteMC10NL(int tag, double _fc, double _fcu, double _espcu, double _ft, double _Ets, double _Ec, double _Ecm, double _beta, double _age, double _epsba, double _epsbb, double _epsda, double _epsdb, double _phiba, double _phibb, double _phida, double _phidb, double _tcast, double _cem);
+    TDConcreteMC10NL(int tag, double _fc, double _fcu, double _espcu, double _ft, double _Ets, double _Ec, double _Ecm, double _beta, double _age, double _tcast, const MC10CreepShrinkageParameters &);
     void setup_parameters(void);
 
     virtual ~TDConcreteMC10NL(void);

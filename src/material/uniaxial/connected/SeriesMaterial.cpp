@@ -70,13 +70,19 @@ void XC::SeriesMaterial::setup(void)
   {
     const size_t numMaterials= getNumMaterials();
     strain.resize(numMaterials);
+    strain_n.resize(numMaterials);
     stress.resize(numMaterials);
+    stress_n.resize(numMaterials);
     flex.resize(numMaterials);
+    tangent_n.resize(numMaterials);
     for(size_t i = 0; i < numMaterials; i++)
       {
         strain[i]= 0.0;
+	strain_n[i]= 0.0;
         stress[i]= 0.0;
+	stress_n[i]= 0.0;
         flex[i]= 0.0;
+	tangent_n[i]= 0.0;
       }
     Ttangent= this->getInitialTangent();
     Ctangent= Ttangent;
@@ -94,7 +100,9 @@ XC::SeriesMaterial::SeriesMaterial(int tag,const DqUniaxialMaterial &theMaterial
   : ConnectedMaterial(tag,MAT_TAG_SeriesMaterial,theMaterialModels),
    Tstrain(0.0), Cstrain(0.0), Tstress(0.0), Cstress(0.0),
    Ttangent(0.0), Ctangent(0.0), maxIterations(maxIter), tolerance(tol),
-   stress(theMaterialModels.size()), flex(theMaterialModels.size()), strain(theMaterialModels.size()), initialFlag(false)
+   stress(theMaterialModels.size()), flex(theMaterialModels.size()), strain(theMaterialModels.size()),
+    stress_n(theMaterialModels.size()), tangent_n(theMaterialModels.size()), strain_n(theMaterialModels.size()),
+    initialFlag(false)
   { setup(); }
 
 XC::SeriesMaterial::SeriesMaterial(int tag)
@@ -102,7 +110,9 @@ XC::SeriesMaterial::SeriesMaterial(int tag)
    Tstrain(0.0), Cstrain(0.0), Tstress(0.0), Cstress(0.0),
    Ttangent(0.0), Ctangent(0.0), 
    maxIterations(0), tolerance(0.0),
-   stress(0), flex(0), strain(0), initialFlag(false)
+   stress(0), flex(0), strain(0),
+   stress_n(0), tangent_n(0), strain_n(0),
+   initialFlag(false)
   {}
 
 int XC::SeriesMaterial::setTrialStrain(double newStrain, double strainRate)
@@ -173,9 +183,11 @@ int XC::SeriesMaterial::setTrialStrain(double newStrain, double strainRate)
     return 0;
   }
 
+//! @brief Return the material strain.
 double XC::SeriesMaterial::getStrain(void) const
   { return Tstrain; }
 
+//! @brief Return the material stress.
 double XC::SeriesMaterial::getStress(void) const
   { return Tstress; }
 
@@ -206,7 +218,6 @@ double XC::SeriesMaterial::getInitialTangent(void) const
     return kf;
   }
 
-
 //! @brief Commit the state of the material.
 int XC::SeriesMaterial::commitState(void)
   {
@@ -215,6 +226,15 @@ int XC::SeriesMaterial::commitState(void)
     Ctangent = Ttangent;
 
     int err= theModels.commitState();
+    
+    const size_t numMaterials= theModels.size();
+    for(size_t i=1; i<numMaterials; i++)
+      {
+	stress_n[i] = stress[i]; // Cstress; // or get from material?
+	tangent_n[i] = theModels[i]->getTangent();
+	strain_n[i] = strain[i]; // theModels[i]->getStrain(); // or get from strain[i]?
+      }
+     
     // Commented out for the same reason it was taken
     // out of the NLBeamColumn commitState() -- MHS
     //initialFlag = false;
@@ -231,9 +251,12 @@ int XC::SeriesMaterial::revertToLastCommit(void)
     const size_t numMaterials= theModels.size();
     for(size_t i = 0;i<numMaterials; i++)
       {
-        strain[i] = theModels[i]->getStrain();
-        stress[i] = theModels[i]->getStress();
-        flex[i] = theModels[i]->getTangent();
+        // strain[i] = theModels[i]->getStrain();
+        // stress[i] = theModels[i]->getStress();
+        // flex[i] = theModels[i]->getTangent();
+	strain[i]= strain_n[i];
+	stress[i]= stress_n[i];
+	flex[i]= tangent_n[i];
         if(fabs(flex[i]) > 1.0e-12)
           flex[i] = 1.0/flex[i];
         else
@@ -256,13 +279,20 @@ int XC::SeriesMaterial::revertToStart(void)
       {
          strain[i] = 0.0;
          stress[i] = 0.0;
-         flex[i] = 0.0;
+	 strain_n[i] = 0.0;
+	 stress_n[i] = 0.0;
+	 tangent_n[i] = theModels[i]->getInitialTangent();
+	 flex[i] = tangent_n[i];
+	 
+	 if(fabs(flex[i]) > 1.0e-12)
+	   flex[i] = 1.0/flex[i];
+	 else
+	   flex[i] = (flex[i] < 0.0) ? -1.0e12 : 1.0e12;
       }
     return err;    
   }
 
-
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::SeriesMaterial::getCopy(void) const
   { return new SeriesMaterial(*this); }
 

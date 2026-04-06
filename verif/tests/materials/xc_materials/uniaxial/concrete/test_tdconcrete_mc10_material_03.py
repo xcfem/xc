@@ -40,7 +40,8 @@ beta = 0.4 # Recommended value for the tension softening parameter (tension soft
 ts= 14 # time at start of drying
 age= 7 # concrete age at first loading.
 
-tdConcrete= MC10_td_concrete.get_TDConcrete_mc10(preprocessor= preprocessor, name= 'tdConcrete', concrete= concrete, cement= '42.5R', h0= 0.15, T= 21, RH= 50, beta= beta, ts= ts, age= age)
+## Model Code 2010 TD concrete.
+tdConcrete= MC10_td_concrete.get_TDConcrete_mc10(preprocessor= preprocessor, name= 'tdConcrete', concrete= concrete, cement= '42.5R', h0= 0.15, T= 21, RH= 50, beta= beta, tcast= 0, ts= ts, age= age)
 
 b= 0.3
 h= 0.3

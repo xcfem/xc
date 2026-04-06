@@ -140,8 +140,8 @@ def getScrN(hEf):
     return 3*hEf
 
 def getA0cN(anchorPosition, hEf):
-    '''
-    Polígono que representa el influence area of an individual anchor according to clause 5.2.2.4 b) (figura 5.4a) of EOTA TR029.
+    ''' Polígon that represents the influence area of an individual anchor 
+        according to clause 5.2.2.4 b) (figura 5.4a) of EOTA TR029.
 
     :param anchorPosition: anchor position.
     :param hEf: effective anchorage depth (m).
@@ -259,7 +259,7 @@ def shearResistanceConcretePryOut(NRkp, NRkc, hEf):
 
 def psiReVFactor(descr):
     '''
-    Return the value of the psi_{re,V} factor that takes account of the 
+    Return the value of the $\psi_{re,V}$ factor that takes account of the 
     effect of the type of reinforcement used in cracked concrete, according
     to expression 5.8 of EOTA TR029, computed according to section g) of 
     clause 5.2.3.4 of EOTA TR029.
@@ -272,18 +272,18 @@ def psiReVFactor(descr):
     return 1+(descr-1)*0.2
 
 def psiEcVFactor(ev, c1):
-  '''
-  Factor that takes account of a group effect when different shear loads are 
-  acting on the individual anchors of a group, computed according to 
-  expression 5.8h del section f) of clause 5.2.3.4 of EOTA TR029.
+    '''
+    Factor that takes account of a group effect when different shear loads are 
+    acting on the individual anchors of a group, computed according to 
+    expression 5.8h del section f) of clause 5.2.3.4 of EOTA TR029.
 
-   :param ev: Eccentricity of the shear forces resultant with respect to the 
-              group centroid.
-   :param c1: edge distance in direction 1; in case of anchorages close to an 
-              edge loaded in shear c 1 is the edge distance in direction of 
-              the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
-  '''
-  return min(1/(1+2*ev/3/c1),1.0)
+     :param ev: Eccentricity of the shear forces resultant with respect to the 
+                group centroid.
+     :param c1: edge distance in direction 1; in case of anchorages close to an 
+                edge loaded in shear c 1 is the edge distance in direction of 
+                the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
+    '''
+    return min(1/(1+2*ev/3/c1),1.0)
 
 def psiAlphaVFactor(alphaV):
     '''
@@ -293,7 +293,7 @@ def psiAlphaVFactor(alphaV):
     '''
     if(alphaV>(math.pi/2.0)):
         lmsg.error('angle must be smaller than 90 degrees (see section f of clause 5.2.3.4 of EOTA TR029).')
-    return max(math.sqrt(1.0/(math.cos(alphaV)^2+(math.sin(alphaV)/2.5)^2)),1.0)
+    return max(math.sqrt(1.0/(math.cos(alphaV)**2+(math.sin(alphaV)/2.5)**2)),1.0)
 
 def psiHVFactor(h, c1):
     '''
@@ -339,30 +339,30 @@ def areaAcV0(h, c1):
     return 3*c1*min(1.5*c1,h)
 
 def AcV2Pernos(h, c1, s2):
-  '''
-  Area del cono de anclaje para dos pernos. see figure 5.7 b of EOTA TR029.
+    '''
+    Area del cono de anclaje para dos pernos. see figure 5.7 b of EOTA TR029.
 
-  :param c1: edge distance in direction 1; in case of anchorages close to an 
-             edge loaded in shear c 1 is the edge distance in direction of 
-             the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
-  :param h: Concrete part thickness.
-  :param s2: Distance between the bolts.
-  '''
-  return (3*c1+min(s2,3*c1))*min(1.5*c1,h)
+    :param c1: edge distance in direction 1; in case of anchorages close to an 
+               edge loaded in shear c 1 is the edge distance in direction of 
+               the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
+    :param h: Concrete part thickness.
+    :param s2: Distance between the bolts.
+    '''
+    return (3*c1+min(s2,3*c1))*min(1.5*c1,h)
 
 def AcV2PernosC2(h, c1, c2, s2):
-  '''
-  Area del cono de anclaje para dos pernos junto a un borde libre. see figure 5.7 b y c of EOTA TR029.
+    '''
+    Area del cono de anclaje para dos pernos junto a un borde libre. see figure 5.7 b y c of EOTA TR029.
 
-  :param c1: edge distance in direction 1; in case of anchorages close to an 
-             edge loaded in shear c 1 is the edge distance in direction of 
-             the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
-  :param c2: edge distance in direction 2; direction 2 is perpendicular to 
-             direction 1.
-  :param h: Concrete part thickness.
-  :param s2: Distance between the bolts.
-  '''
-  return (1.5*c1+c2+min(s2,3*c1))*min(1.5*c1,h)
+    :param c1: edge distance in direction 1; in case of anchorages close to an 
+               edge loaded in shear c 1 is the edge distance in direction of 
+               the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
+    :param c2: edge distance in direction 2; direction 2 is perpendicular to 
+               direction 1.
+    :param h: Concrete part thickness.
+    :param s2: Distance between the bolts.
+    '''
+    return (1.5*c1+c2+min(s2,3*c1))*min(1.5*c1,h)
 
 def k1Expr58A(cracked):
     '''

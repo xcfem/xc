@@ -55,8 +55,8 @@ fcELU13= diag.getCapacityFactor(geom.Pos2d(136.78e3,24.71e3))
 fcELU14= diag.getCapacityFactor(geom.Pos2d(1197.13e3,65.98e3))
 
 ''' Test to be replaced LCPT 02/10/2015'''
-ratio1= abs(fcELU13-0.777283365776)
-ratio2= abs(fcELU14-4.4411488676)
+ratio1= abs(fcELU13-0.7127400568778961)
+ratio2= abs(fcELU14-4.0646183563603575)
 
 '''
 sccData.plot(preprocessor) # Display section geometry

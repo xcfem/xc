@@ -34,13 +34,13 @@ from misc_utils import log_messages as lmsg
 
 # Geometry of the reinforcement.
 spacing= 0.1 # spacing of reinforcement.
-nBarsA= 3 # number of bars.
+nBarsA= 2 # number of bars (LP 22/03/2025).
 cover= 0.035 # concrete cover.
 lateralCover= cover # concrete cover for the bars at the extremities of the row.
-width= (nBarsA-1)*spacing+2.0*lateralCover
+barDiameter= 25e-3 # Diameter of the reinforcement bar.
+width= (nBarsA-1)*spacing+2.0*lateralCover+barDiameter
 
 ## First row
-barDiameter= 25e-3 # Diameter of the reinforcement bar.
 ### Reinforcement row.
 rowA= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter, rebarsSpacing= spacing, width= width, nominalCover= cover, nominalLatCover= lateralCover)
 
@@ -114,7 +114,7 @@ modelSpace.fixNodeF0F(nB.tag) # Last node pinned.
 ## Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 modelSpace.setCurrentLoadPattern(lp0.name)
-q= -55e3
+q= -53.53e3 # (LP 22/03/2025)
 loadVector= xc.Vector([0.0, q])
 for e in beamElements:
     e.vector2dUniformLoadGlobal(loadVector)
@@ -193,12 +193,16 @@ for e in xcTotalSet.elements:
     ULS_normalStressesResistanceSect2= e.getProp('ULS_normalStressesResistanceSect2')
     maxCF= max(maxCF,ULS_normalStressesResistanceSect2.CF)
 
-ratio1= abs(maxCF-0.9983882615059927)/0.9983882615059927
-
+# Check results (22/03/2026): Update the capacity factor after last changes in
+# the code: fixed error in main reinforcement layers definition:
+#   old value: refMaxCFs= 0.9983882615059927
+refMaxCF= 0.9983773299214459
+ratio1= abs(maxCF-refMaxCF)/refMaxCF
 
 '''
-print(maxCF)
-print(ratio1)
+print('maxCF= ', maxCF)
+print('refMaxCf= ', refMaxCF)
+print('ratio1= ', ratio1)
 '''
 
 fname= os.path.basename(__file__)

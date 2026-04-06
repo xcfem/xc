@@ -26,17 +26,17 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 
-#ifndef CreepShrinkageParameters_h
-#define CreepShrinkageParameters_h
+#ifndef ACICreepShrinkageParameters_h
+#define ACICreepShrinkageParameters_h
 
 #include "utility/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableObject.h"
 namespace XC {
 
+//! @brief Parameters that define creep and shrinkage behaviour according
+//! to the ACI code.
 //! @ingroup MatUnx
-//
-//! @brief Creep material.
-class CreepShrinkageParameters: public CommandEntity, public MovableObject
+class ACICreepShrinkageParameters: public CommandEntity, public MovableObject
   {
   private:
     double tcr; //!< creep relationship age.
@@ -51,8 +51,8 @@ class CreepShrinkageParameters: public CommandEntity, public MovableObject
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    CreepShrinkageParameters(void);
-    CreepShrinkageParameters(const double &_tcr, const double &_epsshu, const double &_epssha, const double &_epscru, const double &_epscra, const double &_epscrd);
+    ACICreepShrinkageParameters(void);
+    ACICreepShrinkageParameters(const double &_tcr, const double &_epsshu, const double &_epssha, const double &_epscru, const double &_epscra, const double &_epscrd);
 
     void setup_parameters(void);
     

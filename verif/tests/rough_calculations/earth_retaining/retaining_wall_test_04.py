@@ -224,14 +224,14 @@ for e in wall.wallSet.elements:
     ULS_normalStressesResistanceSect2= e.getProp('ULS_normalStressesResistanceSect2')
     maxCF= max(maxCF,ULS_normalStressesResistanceSect2.CF)
 
-ratio3= abs(maxCF-0.28555840533609295)/0.28555840533609295
+ratio3= abs(maxCF-0.24571792661378805)/0.24571792661378805
 
 '''
 print('top footing design bending moment (reference value): ', topFootingDesignBendingMomentRef/1e3,'kN.m/m')
 print('top footing design bending moment (computed value): ',topFootingDesignBendingMoment/1e3,'kN.m/m')
 print('ratio1= ', ratio1)
 print('top footing design shear (reference value): ', topFootingDesignShearRef/1e3,'kN/m')
-print('top footing design shear (reference value): ', topFootingDesignShear/1e3,'kN/m')
+print('top footing design shear (computed value): ', topFootingDesignShear/1e3,'kN/m')
 print('ratio2= ', ratio2)
 print('maximum efficiency: ', maxCF)
 print('ratio3= ', ratio3)

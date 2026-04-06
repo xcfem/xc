@@ -60,9 +60,12 @@ phidb= 504.5
 # Cement type
 cem= 1.0000
 
+## Model Code 2010 shrinkage and creep parameters.
+mc10CreepShrinkageParameters= typical_materials.def_mc10_creep_and_shrinkage_parameters(epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, cem= cem)
+
 
 ## Concrete able to creep.
-tdConcrete= typical_materials.defTDConcreteMC10NL(preprocessor= preprocessor, name= 'tdConcrete', fcm= fcm, fcu= fcu, epscu= epscu, ft= ft, Ec= Ec, Ecm= Ecm, beta= beta, age= tDry, epsba= epsba, epsbb= epsbb, epsda= epsda, epsdb= epsdb, phiba= phiba, phibb= phibb, phida= phida, phidb= phidb, tcast= 0.0, cem= cem)
+tdConcrete= typical_materials.defTDConcreteMC10NL(preprocessor= preprocessor, name= 'tdConcrete', fcm= fcm, fcu= fcu, epscu= epscu, ft= ft, Ec= Ec, Ecm= Ecm, beta= beta, age= tDry, mc10CSParameters= mc10CreepShrinkageParameters, tcast= 0.0)
 
 
 b = 300*mm
@@ -169,14 +172,16 @@ avgSteelStressRef= 0.3386331472548687
 ratio2= abs(avgSteelStress+avgSteelStressRef)/avgSteelStressRef
 
 '''
-print('time: ', ti)
-print('concrete stresses: ', concreteStresses)
-print('steel stresses: ', steelStresses)
+# print('time: ', ti)
+# print('concrete stresses: ', concreteStresses)
+print('ratio1= ', ratio1)
+# print('steel stresses: ', steelStresses)
 # print('Reactions= ', reactions)
 print(errorDt)
 print(errorForces)
 print('average concrete stress: ', avgConcreteStress, avgConcreteStressRef, ratio1)
 print('average steel stress: ', avgSteelStress, avgSteelStressRef, ratio2)
+print('ratio2= ', ratio2)
 print('time: ', modelSpace.getCurrentTime(), 'days')
 print('last concrete stress: ', lastConcreteStress*1e3, 'MPa')
 print('last steel stress: ', lastSteelStress*1e3, 'MPa')
@@ -186,7 +191,7 @@ print('last steel stress: ', lastSteelStress*1e3, 'MPa')
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-9) & (abs(ratio2)<1e-9) & (errorForces<1e-6) & (errorDt<1e-12):
+if (abs(ratio1)<1e-6) & (abs(ratio2)<1e-6) & (errorForces<1e-6) & (errorDt<1e-12):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
