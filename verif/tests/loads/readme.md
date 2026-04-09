@@ -10,3 +10,4 @@ The tests that verify the python code that generates loads due to earth pressure
 - [Get the Accel Out](https://portwooddigital.com/2022/06/08/get-the-accel-out/)
 - [Making a Point Load](https://portwooddigital.com/2023/11/27/making-a-point-load/)
 - [Distributed Moments](https://portwooddigital.com/2025/08/17/distributed-moments/)
+- [Partial-Span Uniform Loads](https://portwooddigital.com/2026/01/20/partial-span-uniform-loads)

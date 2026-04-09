@@ -21,3 +21,5 @@ Transient dynamic analysis (also known as time-history analysis) aims at finding
 - [Sequential Ground Motions](https://portwooddigital.com/2024/11/18/sequential-ground-motions/)
 - [Minimal Damper Example](https://portwooddigital.com/2025/01/12/minimal-damper-example/)
 - [Minimal Random Process Example](https://portwooddigital.com/2025/09/28/minimal-random-process-example/)
+- [Double Inverted Pendulum](https://portwooddigital.com/2025/09/08/double-inverted-pendulum/)
+- [Celestial OpenSeesing](https://portwooddigital.com/2025/09/14/celestial-openseesing/)
