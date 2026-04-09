@@ -152,10 +152,12 @@ def set_bolt_check_resprop_current_LC(ULS,boltSets2Check,meanShearProc):
                 e.setProp('CF',CF);e.setProp('LS',ULS);e.setProp('N',N);e.setProp('V',V)
 
 def set_welds_check_resprop_current_LC(ULS,singlWelds,baseMetal,Phi=0.75):
+    print('aquí singlWelds:',singlWelds)
     for i in range(len(singlWelds)):
         weld=singlWelds[i][0]
         CFinit=singlWelds[i][1][-1]
         CF=weld.getCF_AISCverif(baseMetal,Phi)
+        print('aquí CF=', CF)
         if CF>CFinit:
             LS=ULS
 #            Rd=0.75*weld.getWeldDesignStrength(Fpar,Fperp)
