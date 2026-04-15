@@ -554,6 +554,7 @@ class FilletWeld(BaseWeld):
         '''
         sumCF=0
         for weldEl in self.weldSet.elements:
+            weldEl.getResistingForce()
             Fpar= weldEl.getVz()
             Fperp1= weldEl.getN()
             Fperp2= weldEl.getVy()
