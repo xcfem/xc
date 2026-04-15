@@ -5,3 +5,6 @@
 - [Pseudo-Time Is Not the Load Factor](https://portwooddigital.com/2022/11/07/pseudo-time-is-not-the-load-factor/)
 - [How to Apply a Pulse Ground Motion](https://portwooddigital.com/2023/11/01/how-to-apply-a-pulse-ground-motion/)
 - [Sequential Ground Motions](https://portwooddigital.com/2024/11/18/sequential-ground-motions/)
+
+### Random processes
+- [Minimal Random Process Example](https://portwooddigital.com/2025/09/28/minimal-random-process-example/)

@@ -11,6 +11,7 @@
 - [OpenSees Spy](https://portwooddigital.com/2022/03/13/opensees-spy)
 - [Non-Convergence Is Not Structural Collapse](https://portwooddigital.com/2022/03/20/non-convergence-is-not-structural-collapse/)
  - [Don’t Invert the Matrix](https://portwooddigital.com/2022/11/18/dont-invert-the-matrix/)
+ - [Empty spaces](https://portwooddigital.com/2026/01/13/empty-spaces/)
 
 ### Modal analysis
 - [Modal analysis of rigid multy-storey frames](https://structville.com/2016/04/on-modal-analysis-of-rigid-multi-storey-frames.html)
@@ -56,3 +57,5 @@
 
 # Equation numberer
 - [Reverse Engineering the Equation Numberer](https://portwooddigital.com/2026/01/06/reverse-engineering-the-equation-numberer/)
+- [Inside the equation numbers](https://portwooddigital.com/2026/02/24/inside-the-equation-numbers/)
+- [Stop Cargo Culting BandGeneral and Plain Numberer](https://portwooddigital.com/2026/02/17/stop-cargo-culting-bandgeneral-and-plain-numberer/)

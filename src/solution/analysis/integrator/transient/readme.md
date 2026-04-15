@@ -26,3 +26,5 @@ Determing the next time step for an analysis including inertial effects can be d
 - [All About Making that ZPA](https://portwooddigital.com/2024/10/06/all-about-making-that-zpa/)
 - [A Simple Base-Isolated Model](https://portwooddigital.com/2024/11/26/a-simple-base-isolated-model/)
 - [Damping Is a Sensitive Subject](https://portwooddigital.com/2025/02/09/damping-is-a-sensitive-subject/)
+- [Double Inverted Pendulum](https://portwooddigital.com/2025/09/08/double-inverted-pendulum/)
+- [Celestial OpenSeesing](https://portwooddigital.com/2025/09/14/celestial-openseesing/)
