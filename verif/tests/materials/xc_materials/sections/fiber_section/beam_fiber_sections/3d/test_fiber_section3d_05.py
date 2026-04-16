@@ -35,8 +35,8 @@ dgDB500S= EHE_materials.B500S.getDiagD(preprocessor)
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-sys.path.append(pth+"/../../../../../../aux/")
-import barsSectionGeometry as bsg
+sys.path.append(pth+"/../../../../../../aux/sections/")
+import bars_section_geometry as bsg
 
 barsSectionGeometry, reinforcementInf, reinforcementSup= bsg.define_section(preprocessor, leverArm, barDiam)
 

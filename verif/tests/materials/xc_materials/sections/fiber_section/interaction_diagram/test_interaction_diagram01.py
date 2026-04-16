@@ -53,6 +53,7 @@ reinforcementSup.barArea= areaFi16 # bar area.
 reinforcementSup.p1= geom.Pos2d(depth/2.0-cover,width/2.0-cover) # top layer.
 reinforcementSup.p2= geom.Pos2d(depth/2.0-cover,cover-width/2.0)
 
+# Create fiber section.
 materialHandler= preprocessor.getMaterialHandler
 secHA= materialHandler.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
@@ -60,6 +61,7 @@ fiberSectionRepr.setGeomNamed(geomSecHA.name)
 secHA.setupFibers()
 fibras= secHA.getFibers()
 
+# Create interaction diagram.
 param= xc.InteractionDiagramParameters()
 param.concreteTag= EHE_materials.HA25.matTagD
 param.reinforcementTag= EHE_materials.B500S.matTagD

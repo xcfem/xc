@@ -33,7 +33,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-auxModulePath= pth+"/../../../../../aux"
+auxModulePath= pth+"/../../../../../aux/sections/"
 sys.path.append(auxModulePath)
 import four_fiber_section
 fourFibersSection= four_fiber_section.build_four_fiber_section(preprocessor, epsilon1, epsilon2, epsilon3, epsilon4)
