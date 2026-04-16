@@ -19,7 +19,6 @@ from model import predefined_spaces
 from solution import predefined_solutions
 
 barDiam= 16e-3 # Rebar diameter.
-areaFi16= 2.01e-4 # Rebar area expressed in square meters.
 leverArm= 0.5 # Rebar lever arm with respect to section axis.
 
 MzDato= 15e3
@@ -36,7 +35,7 @@ if(not pth):
 sys.path.append(pth+"/../../../../../../aux/")
 import barsSectionGeometry as bsg
 
-barsSectionGeometry, reinforcementInf, reinforcementSup= bsg.define_section(preprocessor, leverArm, barDiam, areaFi16)
+barsSectionGeometry, reinforcementInf, reinforcementSup= bsg.define_section(preprocessor, leverArm, barDiam)
 
 barsSection= preprocessor.getMaterialHandler.newMaterial("fiber_section_GJ","barsSection")
 fiberSectionRepr= barsSection.getFiberSectionRepr()
