@@ -73,7 +73,7 @@
 
 //! @brief Constructor.
 XC::ReinfLayer::ReinfLayer(ListReinfLayer *owr,Material *m)
-  : DiscretBase(m), nReinfBars(0), barDiam(0.0),area(0.0) 
+  : DiscretBase(m), nReinfBars(0), barDiam(0.0), area(0.0) 
   { set_owner(owr); }
 
 //! @brief Constructor.
@@ -160,21 +160,37 @@ int XC::ReinfLayer::getNumReinfBars(void) const
 //! @brief Sets bars diameter.
 void XC::ReinfLayer::setReinfBarDiameter(double reinfBarDiameter)
   {
-    barDiam = reinfBarDiameter;
-    area = M_PI * barDiam*barDiam/4.0;
+    this->barDiam = reinfBarDiameter;
+    this->computeBarAreaFromBarDiameter();
   }
 
 //! @brief Sets the bars area.
 void XC::ReinfLayer::setReinfBarArea(double reinfBarArea)
-  { area = reinfBarArea; }
+  {
+    area = reinfBarArea;
+    this->computeBarDiameterFromBarArea();
+  }
 
 //! @brief Returns the bars diameter.
 const double &XC::ReinfLayer::getReinfBarDiameter(void) const
-  { return barDiam; }
+  { return this->barDiam; }
 
 //! @brief Returns the bars area.
 const double &XC::ReinfLayer::getReinfBarArea(void) const
-  { return area; }
+  { return this->area; }
+
+//! @brief Compute the area of the bar.
+double XC::ReinfLayer::computeBarAreaFromBarDiameter(void)
+  {
+    this->area=  M_PI * this->barDiam*this->barDiam/4.0;
+    return this->area;
+  }
+
+double XC::ReinfLayer::computeBarDiameterFromBarArea(void)
+  {
+    this->barDiam= sqrt(4*this->area/M_PI);
+    return this->barDiam;
+  }
 
 //! @brief Imprime.
 void XC::ReinfLayer::Print(std::ostream &s, int flag) const

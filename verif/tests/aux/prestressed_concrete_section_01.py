@@ -32,7 +32,6 @@ def gmSecHP01(preprocessor, nmbGeomSecc, concrDiagName, prestressingSteelDiagram
     reinforcementInf.p2= geom.Pos2d(cover-depth/2.0,width/2.0-cover)
     reinforcementSup= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
     reinforcementSup.numReinfBars= 2
-    reinforcementSup.barDiam= 16e-3
     reinforcementSup.barArea= strandsArea
     reinforcementSup.p1= geom.Pos2d(depth/2.0-cover,cover-width/2.0)
     reinforcementSup.p2= geom.Pos2d(depth/2.0-cover,width/2.0-cover)
