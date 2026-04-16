@@ -21,14 +21,14 @@ preprocessor=  feProblem.getPreprocessor
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",1.0)
 sectionGeometryTest= preprocessor.getMaterialHandler.newSectionGeometry("sectionGeometryTest")
 regions= sectionGeometryTest.getRegions
-elast= regions.newQuadRegion(elast.name)
-elast.pMin= geom.Pos2d(0.0,0.0)
-elast.pMax= geom.Pos2d(sideLength,sideLength)
-area= elast.getArea()
-G= elast.getCenterOfMass()
-Iy= elast.getIy()
-Iz= elast.getIz()
-Pyz= elast.getPyz()
+quadRegion= regions.newQuadRegion(elast.name)
+quadRegion.pMin= geom.Pos2d(0.0,0.0)
+quadRegion.pMax= geom.Pos2d(sideLength,sideLength)
+area= quadRegion.getArea()
+G= quadRegion.getCenterOfMass()
+Iy= quadRegion.getIy()
+Iz= quadRegion.getIz()
+Pyz= quadRegion.getPyz()
 
 areaTeor= sideLength*sideLength
 yGTeor= sideLength/2.0
@@ -62,3 +62,11 @@ if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & (abs(ratio3)<1e-15) & (abs(ratio4
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# import matplotlib.pyplot as plt
+# from materials.sections.fiber_section import plot_fiber_section as pfs
+# fig = plt.figure()
+# ax= fig.add_subplot(111)
+# pfs.mplot_section_geometry(ax, sectionGeometry= sectionGeometryTest, rotate= True)
+# plt.show()

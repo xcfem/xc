@@ -27,15 +27,15 @@ preprocessor=  feProblem.getPreprocessor
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",1.0)
 sectionGeometryTest= preprocessor.getMaterialHandler.newSectionGeometry("sectionGeometryTest")
 regions= sectionGeometryTest.getRegions
-elast= regions.newCircularRegion("elast")
-elast.nDivRad= n1
-elast.nDivCirc= n2
-elast.center= geom.Pos2d(0,0)
-elast.extRad= R
-elast.intRad= r
-elast.initAngle= math.pi/2.0-alpha
-elast.finalAngle= math.pi/2.0+alpha
-grid= elast.genGrid()
+newRegion= regions.newCircularRegion("elast")
+newRegion.nDivRad= n1
+newRegion.nDivCirc= n2
+newRegion.center= geom.Pos2d(0,0)
+newRegion.extRad= R
+newRegion.intRad= r
+newRegion.initAngle= math.pi/2.0-alpha
+newRegion.finalAngle= math.pi/2.0+alpha
+grid= newRegion.genGrid()
 points= grid.getPoints()
 numFilas= points.nRow
 numCols= points.nCol
@@ -49,19 +49,6 @@ Pyz= points.Pxy()
 deltaX= points.getX(1,2)-points.getX(1,1)
 deltaY= points.getY(2,2)-points.getY(1,1)
 
-
-''' 
-for i in range(1,i+1):
-  for j in range(1,j+1):
-                                 \bucle
-
-                                      print("x(",i,",",j,")= ",x(i,j)
-                                      print(" y(",i,",",j,")= ",y(i,j)
-
-
-
-
-'''
 
 numQuadsTeor= n1*n2
 numFilasTeor= n2+1
@@ -120,3 +107,10 @@ if((abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & (abs(ratio3)<1e-15) & (abs(ratio4
 else:
     lmsg.error(fname+' ERROR.')
 
+# # Graphic stuff.
+# import matplotlib.pyplot as plt
+# from materials.sections.fiber_section import plot_fiber_section as pfs
+# fig = plt.figure()
+# ax= fig.add_subplot(111)
+# pfs.mplot_section_geometry(ax, sectionGeometry= sectionGeometryTest, rotate= True)
+# plt.show()

@@ -50,3 +50,11 @@ if (abs(ratio1)<1e-12) & (abs(ratio2)<1e-12) & (abs(ratio3)<1e-12):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# import matplotlib.pyplot as plt
+# from materials.sections.fiber_section import plot_fiber_section as pfs
+# fig = plt.figure()
+# ax= fig.add_subplot(111)
+# pfs.mplot_section_geometry(ax, sectionGeometry= sectionGeometryTest, rotate= True)
+# plt.show()

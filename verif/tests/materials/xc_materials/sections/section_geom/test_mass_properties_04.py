@@ -42,7 +42,7 @@ web.pMin= geom.Pos2d(0.0,b/2-bw/2)
 web.pMax= geom.Pos2d(d-hf,b/2+bw/2)
 
 reinforcement= sectionGeometryTest.getReinfLayers
-reinforcementA= reinforcement.newStraightReinfLayer("steel")
+reinforcementA= reinforcement.newStraightReinfLayer(steel.name)
 reinforcementA.numReinfBars= 5
 reinforcementA.barArea= areaBar
 reinforcementA.p1= geom.Pos2d(0.0,b/2-bw/2+0.05)
@@ -82,3 +82,11 @@ if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-4) & (abs(ratio3)<1e-2) :
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+
+# # Graphic stuff.
+# import matplotlib.pyplot as plt
+# from materials.sections.fiber_section import plot_fiber_section as pfs
+# fig = plt.figure()
+# ax= fig.add_subplot(111)
+# pfs.mplot_section_geometry(ax, sectionGeometry= sectionGeometryTest, rotate= True)
+# plt.show()
