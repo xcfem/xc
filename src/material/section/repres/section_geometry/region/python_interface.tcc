@@ -29,6 +29,7 @@ class_<XC::SectRegion, XC::SectRegion *, bases<XC::DiscretBase>, boost::noncopya
   .def("getIz",&XC::SectRegion::Iz, "Return the moment of inertia with respect to the z axis.")
   .def("getPyz",&XC::SectRegion::Pyz, "Return the product of inertia with respect to the y and z axes.")
   .def("getCenterOfMass", make_function(&XC::SectRegion::getCenterOfMass,return_internal_reference<>()), "Return the center of mass of the section.")
+  .def("swap",&XC::SectRegion::swap, "Reverse the orientation of the region.")
   ;
 
 
@@ -61,7 +62,6 @@ class_<XC::QuadSectRegion, bases<XC::QuadCellRegion> >("QuadSectRegion")
   .def("setTileSizeIJ",&XC::QuadSectRegion::setTileSizeIJ,"Sets numbers of divisions to get a tile IJ side smaller than size.")
   .def("setTileSizeJK",&XC::QuadSectRegion::setTileSizeJK,"Sets numbers of divisions to get a tile JK side smaller than size.")
   .def("setTileSize",&XC::QuadSectRegion::setTileSize,"Sets numbers of divisions to get tile sizes smaller than sizeIJ and sizeJK.")
-  .def("swap",&XC::QuadSectRegion::swap)
 .def("setVertices", &XC::QuadSectRegion::setVertices, "setVertices(pI, pJ, pK, pL), assigns the quad region vertices.")
   .def("getPolygon",&XC::QuadSectRegion::getPolygon, "return a polygon with the same vertices of the region.")
   .def("setPolygon",&XC::QuadSectRegion::setPolygon, "assigns the quad region vertices from those in the given polygon.")

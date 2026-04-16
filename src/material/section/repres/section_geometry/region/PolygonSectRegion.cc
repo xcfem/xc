@@ -57,6 +57,10 @@ double XC::PolygonSectRegion::getMinZ(void) const
 Polygon2d XC::PolygonSectRegion::getPolygon(void) const
   { return plg; }
 
+//! @brief Reverse the orientation of the region.
+void XC::PolygonSectRegion::swap(void)
+  { plg.swap(); }
+
 const Grid2d &XC::PolygonSectRegion::getMesh(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
