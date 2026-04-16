@@ -284,6 +284,7 @@ python tests/utility/geom/trf/rotation2d_test_01.py
 python tests/utility/geom/trf/rotation2d_test_02.py
 python tests/utility/geom/trf/rotation3d_test_01.py
 python tests/utility/geom/trf/rotation3d_test_02.py
+python tests/utility/geom/trf/reflection2d_test_01.py
 echo "$BLEU" "    Mechanical properties." "$NORMAL"
 python tests/utility/geom/mass_properties/test_centroid_01.py
 python tests/utility/geom/mass_properties/test_steiner_01.py
