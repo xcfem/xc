@@ -253,6 +253,14 @@ double XC::SectionGeometry::DistSpots(const size_t &i,const size_t &j) const
     return retval;
   }
 
+//! @brief Return the contours of the regions.
+std::list<Polygon2d> XC::SectionGeometry::getRegionsContours(void) const
+  { return regions.getContours(); }
+
+//! @brief Return the contours of the regions in a Python list.
+boost::python::list XC::SectionGeometry::getRegionsContoursPy(void) const
+  { return regions.getRegionsContoursPy(); }
+
 //! @brief Return the contour of the regions.
 Polygon2d XC::SectionGeometry::getRegionsContour(void) const
   {

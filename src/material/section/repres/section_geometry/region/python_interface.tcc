@@ -22,13 +22,13 @@
 //python_interface.tcc
 
 class_<XC::SectRegion, XC::SectRegion *, bases<XC::DiscretBase>, boost::noncopyable >("SectRegion", no_init)
-  .def("getNumCells",&XC::SectRegion::getNumCells)
-  .def("getPolygon",&XC::SectRegion::getPolygon)
-  .def("getArea",&XC::SectRegion::getArea)
-  .def("getIy",&XC::SectRegion::Iy)
-  .def("getIz",&XC::SectRegion::Iz)
-  .def("getPyz",&XC::SectRegion::Pyz)
-  .def("getCenterOfMass",make_function(&XC::SectRegion::getCenterOfMass,return_internal_reference<>()))
+  .def("getNumCells",&XC::SectRegion::getNumCells, "Return the number of cells.")
+  .def("getPolygon",&XC::SectRegion::getPolygon, "Return the section contour")
+  .def("getArea",&XC::SectRegion::getArea, "Return the section area." )
+  .def("getIy",&XC::SectRegion::Iy, "Return the moment of inertia with respect to the y axis." )
+  .def("getIz",&XC::SectRegion::Iz, "Return the moment of inertia with respect to the z axis.")
+  .def("getPyz",&XC::SectRegion::Pyz, "Return the product of inertia with respect to the y and z axes.")
+  .def("getCenterOfMass", make_function(&XC::SectRegion::getCenterOfMass,return_internal_reference<>()), "Return the center of mass of the section.")
   ;
 
 
@@ -78,9 +78,12 @@ class_<XC::PolygonSectRegion, bases<XC::QuadCellRegion>, boost::noncopyable >("P
 
 class_<XC::RegionContainer, bases<XC::SectionMassProperties>, boost::noncopyable >("RegionContainer", no_init)
   .def("__iter__", boost::python::iterator<XC::RegionContainer >())
+  .add_property("size", &XC::RegionContainer::size)
+  .def("__len__", &XC::RegionContainer::size)
   .add_property("getBnd",&XC::RegionContainer::getBnd, "Returns regions boundary.")
   .def("newQuadRegion",make_function(&XC::RegionContainer::newQuadRegion,return_internal_reference<>()), "newQuadRegion(regionName) creates a new quadrilateral region named with the string argument.")
   .def("newCircularRegion",make_function(&XC::RegionContainer::newCircularRegion,return_internal_reference<>()), "newQuadRegion(regionName) creates a new circular region named with the string argument.")
   .def("clear", &XC::RegionContainer::clear, "Removes previously defined regions from the container.")
+  .def("getRegionsContours",&XC::RegionContainer::getRegionsContoursPy,"Return a Python list containing the contour of each region.")
    ;
 

@@ -90,6 +90,7 @@ class RegionContainer: protected std::list<SectRegion *>, public SectionMassProp
 
     size_t getNumCells(void) const;
 
+    boost::python::list getRegionsContoursPy(void) const;
     std::list<Polygon2d> getRegionsContours(void) const;
     std::list<Polygon2d> getContours(void) const;
     BND2d getBnd(void) const;

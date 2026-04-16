@@ -146,6 +146,17 @@ size_t XC::RegionContainer::getNumCells(void) const
     return ncells;
   }
 
+//! @brief Return the contours of the regions in a Python list.
+boost::python::list XC::RegionContainer::getRegionsContoursPy(void) const
+  {
+    boost::python::list retval;
+    std::list<Polygon2d> tmp= this->getRegionsContours();
+    std::list<Polygon2d>::const_iterator i= tmp.begin();
+    for(;i!=tmp.end();i++)
+      retval.append(*i);
+    return retval;
+  }
+
 //! @brief Returns a list with the regions contours.
 std::list<Polygon2d> XC::RegionContainer::getRegionsContours(void) const
   {

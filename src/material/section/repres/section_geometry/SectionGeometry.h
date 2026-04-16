@@ -125,6 +125,8 @@ class SectionGeometry: public SectionMassProperties
     
     // Section inquiring functions
     double DistSpots(const size_t &i,const size_t &j) const;
+    std::list<Polygon2d> getRegionsContours(void) const;
+    boost::python::list getRegionsContoursPy(void) const;
     Polygon2d getRegionsContour(void) const;
     Polygon2d getCompressedZoneContour(const HalfPlane2d &) const;
     double getCutLength(const Line2d &r) const;
