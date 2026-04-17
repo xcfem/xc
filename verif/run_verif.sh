@@ -1484,6 +1484,7 @@ python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/t
 python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_interaction_diagram04.py
 python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_interaction_diagram05.py
 python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_interaction_diagram06.py
+python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_interaction_diagram07.py
 python tests/materials/xc_materials/sections/fiber_section/plastic_hinge_on_IPE200.py
 echo "$BLEU" "        Membrane plate fiber section tests." "$NORMAL"
 python tests/materials/xc_materials/sections/fiber_section/membrane_plate/test_membrane_plate_fiber_material_01.py
