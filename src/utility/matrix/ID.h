@@ -118,10 +118,10 @@ class ID: public CommandEntity, public std::vector<int>
     void Zero(void);
     //! @brief Returns a const pointer to the vector data.
     inline const int *getDataPtr(void) const
-      { return &(*this)[0]; }
+      { return this->data(); }
     //! @brief Returns a const pointer to the vector data.
     inline int *getDataPtr(void)
-      { return &(*this)[0]; }
+      { return this->data(); }
     //! @brief Returns true if the vector is empty.
     inline bool isEmpty(void) const
       { return empty(); }
