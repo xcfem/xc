@@ -2085,7 +2085,7 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
         self.matTagD= self.materialDiagramD.tag
         return self.materialDiagramD
     
-    def defDiagD(self,preprocessor,initialStress):
+    def defDiagD(self,preprocessor, initialStress):
         '''Design stress-strain diagram.
 
         :param preprocessor: pre-processor for the finite element problem.
@@ -2110,7 +2110,7 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
                     else:
                         retval= self.materialDiagramD
         else:
-            retval= self._define_design_diagram(preprocessor)
+            retval= self._define_design_diagram(preprocessor, initialStress)
         return retval
 
 
