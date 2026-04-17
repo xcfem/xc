@@ -85,6 +85,7 @@ class_<XC::RegionContainer, bases<XC::SectionMassProperties>, boost::noncopyable
   .def("newCircularRegion",make_function(&XC::RegionContainer::newCircularRegion,return_internal_reference<>()), "newQuadRegion(regionName) creates a new circular region named with the string argument.")
   .def("clear", &XC::RegionContainer::clear, "Removes previously defined regions from the container.")
   .def("getRegionsContours",&XC::RegionContainer::getRegionsContoursPy, "Return a Python list containing the contour of each region.")
+  .def("getMaterials",&XC::RegionContainer::getMaterialsPy, "Return a Python list containing the different materials of the regions.")
    ;
 
 

@@ -64,6 +64,8 @@ class_<XC::SectionGeometry, XC::SectionGeometry *, bases<XC::SectionMassProperti
   .def("newSegment",make_function(&XC::SectionGeometry::newSegment,return_internal_reference<>()))
   .add_property("name", make_function( &XC::SectionGeometry::Name, return_value_policy<copy_const_reference>()),"returns object name.")
   .def("clear", &XC::SectionGeometry::clear,"Clear the containers of this object.")
+  .def("getReinforcementMaterials",&XC::SectionGeometry::getReinforcementMaterialsPy, "Return a Python list containing the different materials of the reinforcement.")
+  .def("getRegionMaterials",&XC::SectionGeometry::getRegionMaterialsPy, "Return a Python list containing the different materials of the reinforcement.")
   ;
 
 

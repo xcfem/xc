@@ -20,7 +20,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //python_interface.tcc
-class_<XC::Material, bases<XC::MovableObject,XC::TaggedObject>, boost::noncopyable >("Material", no_init)
+class_<XC::Material, XC::Material *, bases<XC::MovableObject,XC::TaggedObject>, boost::noncopyable >("Material", no_init)
   .def("commitState", &XC::Material::commitState,"Commit material's state.")
   .def("revertToLastCommit", &XC::Material::revertToLastCommit,"Return the material to the last committed state.")
   .def("revertToStart", &XC::Material::revertToStart,"Return the material to its initial state.")

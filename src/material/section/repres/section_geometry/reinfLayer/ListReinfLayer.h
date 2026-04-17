@@ -30,6 +30,7 @@
 #ifndef ListReinfLayer_h 
 #define ListReinfLayer_h 
 
+#include <set>
 #include <list>
 #include "material/section/repres/SectionMassProperties.h"
 
@@ -38,7 +39,7 @@ class Polygon2d;
 class HalfPlane2d;
 
 namespace XC {
-
+class Material;
 class ReinfLayer;
 class CircReinfLayer;
 class StraightReinfLayer;
@@ -87,6 +88,10 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SectionMassProperti
 
 
     size_t getNumReinfBars(void) const;
+
+    std::set<const Material *>getMaterials(void) const;
+    std::set<Material *>getMaterials(void);
+    boost::python::list getMaterialsPy(void);
 
     void getBarrasIn(const Polygon2d &,ListReinfLayer &,bool );
     void getBarrasIn(const HalfPlane2d &,ListReinfLayer &,bool );

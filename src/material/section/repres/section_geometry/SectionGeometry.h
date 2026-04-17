@@ -152,6 +152,31 @@ class SectionGeometry: public SectionMassProperties
     SectionGeometry getCrackedSection(const HalfPlane2d &) const;
     size_t getNumFiberData(void) const;
 
+    //! @brief Return a list of const pointers to the different reinforcing
+    //! layers materials.
+    std::set<const Material *>getReinforcementMaterials(void) const
+      { return this->reinforcement_layers.getMaterials(); }
+    //! @brief Return a list of pointers to the different reinforcing
+    //! layers materials.
+    std::set<Material *>getReinforcementMaterials(void)
+      { return this->reinforcement_layers.getMaterials(); }
+    //! @brief Return a list of const pointers to the different reinforcing
+    //! layers materials.
+    boost::python::list getReinforcementMaterialsPy(void)
+      { return this->reinforcement_layers.getMaterialsPy(); }
+
+    //! @brief Return a list of const pointers to the different region
+    //! materials.
+    std::set<const Material *>getRegionMaterials(void) const
+      { return this->regions.getMaterials(); }
+    //! @brief Return a list of pointers to the different region materials.
+    std::set<Material *>getRegionMaterials(void)
+      { return this->regions.getMaterials(); }
+    //! @brief Return a python list of pointers to the different region
+    //! materials.
+    boost::python::list getRegionMaterialsPy(void)
+      { return this->regions.getMaterialsPy(); }
+
     double getAreaGrossSection(void) const;
     Vector getCenterOfMassGrossSection(void) const;
     double getIyGrossSection(void) const;
