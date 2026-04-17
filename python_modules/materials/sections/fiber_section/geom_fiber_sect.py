@@ -7,8 +7,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
 
-import geom
 import sys
+import geom
+import xc
 from misc_utils import log_messages as lmsg
 
 def gmSquareSection(geomSection, fiberMatName, ld, nD):
@@ -88,3 +89,60 @@ def reflect_straight_reinf_layer(reinforcement, reinfLayer, symAxis):
     retval.p1= reflection2d.getTransformed(reinfLayer.p1)
     retval.p2= reflection2d.getTransformed(reinfLayer.p2)
     return retval
+
+def create_fiber_section(materialHandler, sectionGeometry, fiberSectionType= "fiber_section_3d"):
+    ''' Create fiber section from the given geometry.
+
+    :param materialHandler: material handler of the FE problem.
+    :param sectionGeometry: geometry of the material distribution in the
+                            cross-section.
+    '''
+    fiberSectionName= sectionGeometry.name+"_"+fiberSectionType
+    retval= materialHandler.newMaterial(fiberSectionType, fiberSectionName)
+    fiberSectionRepr= retval.getFiberSectionRepr()
+    fiberSectionRepr.setGeomNamed(sectionGeometry.name)
+    retval.setupFibers()
+    return retval
+
+def get_interaction_diagram_parameters(fiberSection):
+    ''' Return the interaction diagram parameters for the given fiber section.
+
+    :param fiberSection: fiber section to compute the interaction diagram for.
+    '''
+    retval= xc.InteractionDiagramParameters()
+    sectionGeometry= fiberSection.getSectionGeometry
+    baseMaterials= sectionGeometry.getRegionMaterials()
+    sz= len(baseMaterials)
+    if(sz==1):
+        retval.concreteTag= baseMaterials[0].tag
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        if(sz==0):
+            errMsg= '; the list of base materials is empty.'
+        elif(sz>1):
+            errMsg= '; not implemented for many base materials.'
+        lmsg.error(methodName+errMsg)
+        exit(1)
+    reinforcementMaterials= sectionGeometry.getReinforcementMaterials()
+    sz= len(reinforcementMaterials)
+    if(sz==1):
+        retval.reinforcementTag= reinforcementMaterials[0].tag
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        if(sz==0):
+            errMsg= '; the list of reinforcement materials is empty.'
+        elif(sz>1):
+            errMsg= '; not implemented for many reinforcement materials.'
+        lmsg.error(methodName+errMsg)
+        exit(1)
+    return retval
+    
+        
+def compute_interaction_diagram(materialHandler, fiberSection):
+    ''' Compute the interaction diagram for the given fiber section.
+
+    :param materialHandler: material handler of the FE problem.
+    :param fiberSection: fiber section to compute the interaction diagram for.
+    '''
+    param= get_interaction_diagram_parameters(fiberSection)
+    return materialHandler.calcInteractionDiagram(fiberSection.name,param)
