@@ -17,6 +17,7 @@ import geom
 import xc
 from materials.sections import section_properties
 from materials.sections import stress_calc as sc
+from materials.sections.fiber_section import geom_fiber_sect as gfs
 from materials.sections.fiber_section import plot_fiber_section as pfs
 from misc_utils import log_messages as lmsg
 import matplotlib.pyplot as plt
@@ -916,8 +917,8 @@ class RCFiberSectionParameters(object):
         '''Stress-strain diagrams definition.
 
         :param preprocessor: preprocessor of the finite element problem.
-        :param matDiagType: type of stress-strain diagram 
-                    ("k" for characteristic diagram, "d" for design diagram)
+        :param matDiagType: type of stress-strain diagram ("k" for 
+                            characteristic diagram, "d" for design diagram).
         '''
         self.diagType= matDiagType
         if(self.diagType=="d"): # design diagram.
@@ -980,13 +981,17 @@ class RCFiberSectionParameters(object):
 
          :param preprocessor: preprocessor of the finite element problem.
         '''
-        self.idParams= xc.InteractionDiagramParameters()
-        if(self.diagType=="d"):
-            self.idParams.concreteTag= self.concrType.matTagD
-            self.idParams.reinforcementTag= self.reinfSteelType.matTagD
-        elif(self.diagType=="k"):
-            self.idParams.concreteTag= self.concrType.matTagK
-            self.idParams.reinforcementTag= self.reinfSteelType.matTagK
+        if(hasattr(self,'fiberSection')):
+           if(self.fiberSection):
+               self.idParams= gfs.get_interaction_diagram_parameters(self.fiberSection)
+        else:
+            self.idParams= xc.InteractionDiagramParameters()
+            if(self.diagType=="d"):
+                self.idParams.concreteTag= self.concrType.matTagD
+                self.idParams.reinforcementTag= self.reinfSteelType.matTagD
+            elif(self.diagType=="k"):
+                self.idParams.concreteTag= self.concrType.matTagK
+                self.idParams.reinforcementTag= self.reinfSteelType.matTagK
         return self.idParams
     
     def report(self, os= sys.stdout, indentation= ''):
