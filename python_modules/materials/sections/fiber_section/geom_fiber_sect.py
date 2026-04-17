@@ -11,6 +11,7 @@ import sys
 import geom
 import xc
 from misc_utils import log_messages as lmsg
+from materials.sections.fiber_section import fiber_sets
 
 def gmSquareSection(geomSection, fiberMatName, ld, nD):
     '''returns a square section of fibers of the same material
@@ -104,17 +105,17 @@ def create_fiber_section(materialHandler, sectionGeometry, fiberSectionType= "fi
     retval.setupFibers()
     return retval
 
-def get_interaction_diagram_parameters(fiberSection):
-    ''' Return the interaction diagram parameters for the given fiber section.
+def get_fiber_section_concrete_and_steel(fiberSection):
+    ''' Return the concrete and steel materials used in a fiber section.
 
-    :param fiberSection: fiber section to compute the interaction diagram for.
+    :param fiberSection: fiber section to return the materials from.
     '''
-    retval= xc.InteractionDiagramParameters()
     sectionGeometry= fiberSection.getSectionGeometry
+    concrete= None
     baseMaterials= sectionGeometry.getRegionMaterials()
     sz= len(baseMaterials)
     if(sz==1):
-        retval.concreteTag= baseMaterials[0].tag
+        concrete= baseMaterials[0]
     else:
         methodName= sys._getframe(0).f_code.co_name
         if(sz==0):
@@ -124,9 +125,10 @@ def get_interaction_diagram_parameters(fiberSection):
         lmsg.error(methodName+errMsg)
         exit(1)
     reinforcementMaterials= sectionGeometry.getReinforcementMaterials()
+    steel= None
     sz= len(reinforcementMaterials)
     if(sz==1):
-        retval.reinforcementTag= reinforcementMaterials[0].tag
+        steel= reinforcementMaterials[0]
     else:
         methodName= sys._getframe(0).f_code.co_name
         if(sz==0):
@@ -135,6 +137,17 @@ def get_interaction_diagram_parameters(fiberSection):
             errMsg= '; not implemented for many reinforcement materials.'
         lmsg.error(methodName+errMsg)
         exit(1)
+    return concrete, steel
+
+def get_interaction_diagram_parameters(fiberSection):
+    ''' Return the interaction diagram parameters for the given fiber section.
+
+    :param fiberSection: fiber section to compute the interaction diagram for.
+    '''
+    retval= xc.InteractionDiagramParameters()
+    concrete, steel= get_fiber_section_concrete_and_steel(fiberSection)
+    retval.concreteTag= concrete.tag
+    retval.reinforcementTag= steel.tag
     return retval
     
         
@@ -146,3 +159,17 @@ def compute_interaction_diagram(materialHandler, fiberSection):
     '''
     param= get_interaction_diagram_parameters(fiberSection)
     return materialHandler.calcInteractionDiagram(fiberSection.name,param)
+
+def get_section_fiber_sets(fiberSection):
+    ''' Return the fiber sets conrresponding to the section concrete and 
+        reinforcement fibers.
+
+    :param fiberSection: fiber section to compute the interaction diagram for.
+    '''
+    concrete, steel= get_fiber_section_concrete_and_steel(fiberSection)
+    retval= None
+    if(concrete and steel):
+        concreteFibersSetName= fiberSection.name+'_concrete_fiber_set'
+        steelFibersSetName= fiberSection.name+'_steel_fiber_set'
+        retval= fiber_sets.fiberSectionSetupRCSets(scc= fiberSection, concrMatTag= concrete.tag, concrSetName="concrSetFbEl1",reinfMatTag= steel.tag, reinfSetName= steelFibersSetName)
+    return retval
