@@ -62,8 +62,8 @@ nodes= preprocessor.getNodeHandler     # nodes container
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)  # Defines the dimension of nodes  three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 
 
-n1= nodes.newNodeXYZ(1.0,0,0)     # node 1 defined by its (x,y,z) global coordinates
-n2= nodes.newNodeXYZ(1.0+l,0,0)   # node 2 defined by its (x,y,z) global coordinates
+n1= modelSpace.newNode(1.0,0,0)     # node 1 defined by its (x,y,z) global coordinates
+n2= modelSpace.newNode(1.0+l,0,0)   # node 2 defined by its (x,y,z) global coordinates
 
 # Materials definition
 concrete=EC2_materials.EC2Concrete("C33",-33e6,1.5) # concrete according to EC2 fck=33 MPa      
@@ -129,7 +129,7 @@ pointLoad=xc.Vector([0,0,0,0,M_y,0])
 lp0.newNodalLoad(n2.tag, pointLoad)    # applies the point load on node 2 
 
 # We add the load case to domain.
-modelSpace.addLoadCaseToDomain(lp0.name)           # reads load pattern "0" and adds it to the domain
+modelSpace.addLoadCaseToDomain(lp0.name) # reads load pattern "0" and adds it to the domain
 
 # Solve
 # analysis= predefined_solutions.plain_newton_raphson(problem)
@@ -162,11 +162,11 @@ print('Rnode2= (',n2.getReaction[0],',',n2.getReaction[1],',',n2.getReaction[2],
 # section of element 1: it's the copy of the material section 'sctFibers' assigned
 # to element 1 and specific of this element. It has the tensional state of the element
 sccEl1= elem.getSection()         
-fibersSccEl1= sccEl1.getFibers()
 
 # Creation of two separate sets of fibers: concrete and reinforcement steel 
 setsRCEl1= fiber_sets.fiberSectionSetupRCSets(scc=sccEl1,concrMatTag=concrete.matTagK,concrSetName="concrSetFbEl1",reinfMatTag=rfSteel.matTagK,reinfSetName="reinfSetFbEl1")
 
+fibersSccEl1= sccEl1.getFibers()
 sumAreas= fibersSccEl1.getArea(1.0)  # total sum of the fibers area
                                     # that sum is multiplied by the coefficient
                                     # passed as a parameter
