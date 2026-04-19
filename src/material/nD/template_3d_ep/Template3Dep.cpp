@@ -621,7 +621,8 @@ XC::BJtensor XC::Template3Dep::ElasticStiffnessTensor(void) const
     if(theElasticMat->setTrialStrain( this->EPS.getElasticStrain() ) < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-                  << "; setTrialStrain failed in material with strain.";
+                  << "; setTrialStrain failed in material with strain."
+	          << std::endl;
       return -1;
     }
 

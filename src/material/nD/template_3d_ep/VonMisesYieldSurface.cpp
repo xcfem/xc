@@ -70,44 +70,69 @@ XC::YieldSurface *XC::VonMisesYieldSurface::getCopy(void) const
 //  c.f. pp.274 XC::W.F.Chen Plasticity for Structure Engineers
 //================================================================================
 
-double XC::VonMisesYieldSurface::f(const XC::EPState *EPS) const
+double XC::VonMisesYieldSurface::f(const EPState *EPS) const
   {
-    //deviatoric stress BJtensor
-    int nod = EPS->getNTensorVar();
-    stresstensor alpha;
+    std::cout << "Enters VonMisesYieldSurfmace::f" << std::endl;
+    double retval= 0.0;
+    if(EPS)
+      {
+	stresstensor sigma = EPS->getStress();
+	//deviatoric stress BJtensor
+	const int nod= EPS->getNTensorVar();
+	std::cout << "nod= " << nod << std::endl;
+	stresstensor alpha;
+	if(nod >=1) //May not have kinematic hardening
+	  alpha = EPS->getTensorVar(1);
+	std::cout << "alpha= " << alpha << std::endl;
 
-    stresstensor sigma = EPS->getStress();
-    if ( nod >=1 ) //May not have kinematic hardening
-      alpha = EPS->getTensorVar(1);
+	stresstensor sigma_bar = sigma - alpha;   
+	std::cout << "sigma_bar= " << sigma_bar << std::endl;
+	std::cout << "** sigma_bar dim= ";
+	for(size_t i= sigma_bar.rank(); i>0; i--)
+	  std::cout << sigma_bar.dim(i) << ' ';
+	std::cout << std::endl;
+	stresstensor s_bar = sigma_bar.deviator();
+	std::cout << "s_bar= " << s_bar << std::endl;
+	for(size_t i= s_bar.dim().size(); i>0; i--)
+	  std::cout << s_bar.dim(i) << ' ';
+	std::cout << std::endl;
 
-    stresstensor sigma_bar = sigma - alpha;   
-    stresstensor s_bar = sigma_bar.deviator();
 
-
-    double k = EPS->getScalarVar(1);
-    double k2 = k * k;
+	const double k= EPS->getScalarVar(1);
+	std::cout << "k= " << k << std::endl;
+	const double k2= k*k;
     
-    stresstensor temp1(s_bar("ij") * s_bar("ij"));
-    double temp = temp1.trace();
-    temp = temp * 3.0 / 2.0;
-
-    double f   = temp - k2;
-
-    return f;
-}
+	std::cout << "k2= " << k2 << std::endl;
+	const stresstensor temp1(s_bar("ij") * s_bar("ij"));
+	std::cout << "temp1= " << std::endl
+		  << temp1 << std::endl;
+	std::cout << std::endl;
+	const double temp = temp1.trace() * 3.0 / 2.0;
+	std::cout << "temp= " << temp << std::endl;
+	retval= temp - k2;
+      }
+    else
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; null pointer to elastoplastic state."
+	          << std::endl;
+      }
+    std::cout << "Exits VonMisesYieldSurface::f" << std::endl;
+    return retval;
+  }
 
 
 //================================================================================
 // BJtensor dF/dsigma_ij = 3*( S_ij - alpha_ij )
 //================================================================================
 
- XC::BJtensor XC::VonMisesYieldSurface::dFods(const EPState *EPS) const {
-
-    int nod = EPS->getNTensorVar();
+XC::BJtensor XC::VonMisesYieldSurface::dFods(const EPState *EPS) const
+  {
+    const int nod = EPS->getNTensorVar();
 
     stresstensor sigma = EPS->getStress();
     stresstensor alpha;
-    if ( nod >=1 ) //May not have kinematic hardening
+    if( nod >=1 ) //May not have kinematic hardening
       alpha = EPS->getTensorVar(1);
 
     stresstensor sigma_bar = sigma - alpha;   
@@ -115,7 +140,7 @@ double XC::VonMisesYieldSurface::f(const XC::EPState *EPS) const
     BJtensor dFods = s_bar * 3.0;
     
     return dFods;
-}
+  }
 
 //! @brief double xi1 = dF/dk = 2.0*k  Derivative in terms of first scalar var.
 //! Redefine 1st derivative of F over first scalar internal variable
