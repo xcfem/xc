@@ -66,7 +66,6 @@ XC::PotentialSurface * XC::VonMisesPotentialSurface::getCopy(void) const
 //! @brief BJtensor dQ/dsigma_ij = 3*( S_ij )        c.f. pp.274 W.F.Chen
 XC::BJtensor XC::VonMisesPotentialSurface::dQods(const EPState *EPS) const
   {  
-    std::cout << "Enters VonMisesPotentialSurface::dQods" << std::endl;
     // Deviatoric stress XC::BJtensor of sigma - alpha
     stresstensor sigma = EPS->getStress();
     int nod = EPS->getNTensorVar();
@@ -83,8 +82,6 @@ XC::BJtensor XC::VonMisesPotentialSurface::dQods(const EPState *EPS) const
     BJtensor dQods = s_bar * 3.0;
     dQods.null_indices();
 
-    std::cout << "retval= " << dQods << std::endl;
-    std::cout << "Exits VonMisesPotentialSurface::dQods" << std::endl;
     return dQods;
   }
 

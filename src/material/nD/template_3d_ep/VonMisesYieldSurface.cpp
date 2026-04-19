@@ -72,43 +72,25 @@ XC::YieldSurface *XC::VonMisesYieldSurface::getCopy(void) const
 
 double XC::VonMisesYieldSurface::f(const EPState *EPS) const
   {
-    std::cout << "Enters VonMisesYieldSurfmace::f" << std::endl;
     double retval= 0.0;
     if(EPS)
       {
 	stresstensor sigma = EPS->getStress();
 	//deviatoric stress BJtensor
 	const int nod= EPS->getNTensorVar();
-	std::cout << "nod= " << nod << std::endl;
 	stresstensor alpha;
 	if(nod >=1) //May not have kinematic hardening
 	  alpha = EPS->getTensorVar(1);
-	std::cout << "alpha= " << alpha << std::endl;
 
 	stresstensor sigma_bar = sigma - alpha;   
-	std::cout << "sigma_bar= " << sigma_bar << std::endl;
-	std::cout << "** sigma_bar dim= ";
-	for(size_t i= sigma_bar.rank(); i>0; i--)
-	  std::cout << sigma_bar.dim(i) << ' ';
-	std::cout << std::endl;
 	stresstensor s_bar = sigma_bar.deviator();
-	std::cout << "s_bar= " << s_bar << std::endl;
-	for(size_t i= s_bar.dim().size(); i>0; i--)
-	  std::cout << s_bar.dim(i) << ' ';
-	std::cout << std::endl;
 
 
 	const double k= EPS->getScalarVar(1);
-	std::cout << "k= " << k << std::endl;
 	const double k2= k*k;
     
-	std::cout << "k2= " << k2 << std::endl;
 	const stresstensor temp1(s_bar("ij") * s_bar("ij"));
-	std::cout << "temp1= " << std::endl
-		  << temp1 << std::endl;
-	std::cout << std::endl;
 	const double temp = temp1.trace() * 3.0 / 2.0;
-	std::cout << "temp= " << temp << std::endl;
 	retval= temp - k2;
       }
     else
@@ -117,7 +99,6 @@ double XC::VonMisesYieldSurface::f(const EPState *EPS) const
                   << "; null pointer to elastoplastic state."
 	          << std::endl;
       }
-    std::cout << "Exits VonMisesYieldSurface::f" << std::endl;
     return retval;
   }
 
