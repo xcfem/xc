@@ -135,8 +135,8 @@ result= analysis.analyze(16)
 diff_x= list()
 diff_y= list()
 def subtract(x,y): return x-y
-diff_x= map(subtract,x,x_modelo)
-diff_y= map(subtract,y,y_modelo)
+diff_x= list(map(subtract,x,x_modelo))
+diff_y= list(map(subtract,y,y_modelo))
 
 ratio1= 0
 for d in diff_x:
@@ -147,7 +147,6 @@ for d in diff_y:
     ratio2= ratio2+d**2
 ratio2= math.sqrt(ratio2)
 
-'''
 print("ratio1= ",ratio1)
 print("x= ",x)
 print("diff_x= ",diff_x)
@@ -155,6 +154,7 @@ print("ratio2= ",ratio2)
 print("y= ",y)
 print("y_modelo= ",y_modelo)
 print("diff_y= ",diff_y)
+'''
 '''
 
 import os

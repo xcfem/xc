@@ -34,21 +34,31 @@ es1= xc.EvolutionLaw_L_Eeq(1.10)
 a= es1.a
 ratio1= abs(a-1.1)/1.1
 
+print('B', flush= True)
 # Initial stress.
 sts= xc.stresstensor([0, 0, 0,0, 0, 0, 0, 0, 0]) # no initial stress.
 
 #________________po
 epState= xc.EPState()
 epState.stress= sts # Set trial stress.
+print('B1', flush= True)
 epState.scalarVars= [20] # scalar variables.
+print('B2', flush= True)
 epState.tensorVars= [] # tensorial variables.
+print('B3', flush= True)
 
 # Make some tests.
 f= vonMisesYieldSurface.f(epState)
+print('C1', flush= True)
 ratio2= abs(f+400)/400
+print('C2', flush= True)
 dQods= vonMisesPotentialSurface.dQods(epState)
+print(dqOds)
+print('C3', flush= True)
 dQodsNorm= dQods.frobeniusNorm()
+print('C4', flush= True)
 ratio3= dQodsNorm
+print('C3', flush= True)
 
 
 # von Mises material
