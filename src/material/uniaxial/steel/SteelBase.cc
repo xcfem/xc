@@ -34,10 +34,14 @@
 
 //! @brief Constructor.
 XC::SteelBase::SteelBase(int tag,int classTag,const double &Fy,const double &e0,const double &B,const double &A1,const double &A2,const double &A3,const double &A4, const double &initialStrain)
-  : UniaxialMaterial(tag,classTag), fy(Fy),E0(e0),b(B),a1(A1),a2(A2),a3(A3),a4(A4), ezero(initialStrain) {}
+  : UniaxialMaterial(tag,classTag), fy(Fy),E0(e0), b(B),
+    a1(A1),a2(A2),a3(A3),a4(A4),
+    ezero(initialStrain) {}
 
 XC::SteelBase::SteelBase(int tag,int classTag)
-  :UniaxialMaterial(tag,classTag), fy(0.0),E0(0.0),b(0.0),a1(0.0), a2(0.0), a3(0.0), a4(0.0), ezero(0.0) {}
+  :UniaxialMaterial(tag,classTag), fy(0.0),E0(0.0),b(0.0),
+   a1(0.0), a2(0.0), a3(0.0), a4(0.0),
+   ezero(0.0) {}
 
 //! @brief Sets initial strain.
 //! @param strain: strain value.
