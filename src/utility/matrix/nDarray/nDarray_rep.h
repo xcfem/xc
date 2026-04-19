@@ -89,183 +89,160 @@
 //#############################################################################
 //*/
 
-#ifndef NDARRAY_HH
-#define NDARRAY_HH
+#ifndef NDARRAY_REP_HH
+#define NDARRAY_REP_HH
 
-#include "utility/matrix/nDarray/nDarray_rep.h"
-#include <string>
-#include <iostream>
+#include "utility/matrix/nDarray/basics.h"
 #include <boost/python.hpp>
-#include "tmpl_operators.h"
-#include <initializer_list>
+#include <iostream>
 
 // forward reference
 namespace XC {
+class BJtensor;
+class BJmatrix;
+class BJvector;
 
-//! @brief n-dimensional array.
+
+class stresstensor;
+class straintensor;
+
+
+//! @brief Storage of n-dimensional array data.
 //! @ingroup Matrix
-class nDarray
+class nDarray_rep
   {
-  protected:
-    nDarray_rep pc_nDarray_rep;
-
-    const double *data(void) const;
-    const std::vector<double> &vector_data(void) const;
-    void set_dim(const std::vector<int> &);
-    void rank(int);
-  private:
-//  int rank(void) const;
-    size_t total_number(void) const;
-    void total_number(size_t );
-    void clear_dim(void);
-    void clear_data(void);
-    void clear_dim_data(void);
-    const int &get_dim_pointer(void) const;
-    //    int dim(int which) const;
-    
   public:
-    nDarray(int rank_of_nDarray=1, const double &initval=0.0);// default constructor
-    nDarray(const std::vector<int> &pdim, const double *values);
-    nDarray(const std::vector<int> &pdim, const std::vector<double> &);
-    nDarray(const std::vector<int> &pdim, const boost::python::list &);
-    nDarray(const boost::python::list &, const boost::python::list &);
-    nDarray(const std::vector<int> &pdim, double initvalue);
+    friend class nDarray;
+    friend class BJtensor;
+    friend class BJmatrix;
+//    friend class skyBJmatrix;
+    friend class stiffness_matrix;
+    friend class BJvector;
+    friend class stressstraintensor;
+    friend class stresstensor;
+    friend class straintensor;
 
-    // special case for BJmatrix and BJvector . . .
-    nDarray(int rows, int cols, double *values);
-    nDarray(int rows, int cols, const std::vector<double> &values);
-    nDarray(int rows, int cols, const boost::python::list &);
-    nDarray(int rows, int cols, double initvalue);
+    friend class Cosseratstresstensor;
+    friend class Cosseratstraintensor;
 
-// special case when I don't want any initialization at all##
-    explicit nDarray(const std::string &){}
-
-    nDarray(const std::string &flag, const std::vector<int> &pdim); // create a unit nDarray
-    inline virtual ~nDarray(void){};
-
-//##############################################################################
-// copy only data because everything else has already been defined
-// WATCH OUT IT HAS TO BE DEFINED BEFORE THIS FUNCTIONS IS CALLED
-// use "from" and initialize already allocated nDarray from "from" values
-    void Initialize(const nDarray &from );  // initialize data only
-    void Initialize_all(const nDarray &from);// initialize and allocate all
-                                               // ( dimensions, rank and data )
-                                               // for BJtensor
-
-    void Reset_to(const double &value);  // reset data to "value"
-
-    const std::vector<int> &dim(void) const;
-    boost::python::list dimPy(void) const;
+  private:
+    std::vector<double> pd_nDdata;  // nD array as 1D array
+    size_t total_numb; // total number of elements in nDarray
+    std::vector<int> dim; //  array of dimensions in each rank direction
+                          //  for example, if get_get_nDarray_rank() = 3 :
+                          //      dim[0] = dimension in direction 1
+                          //      dim[1] = dimension in direction 2
+                          //      dim[2] = dimension in direction 3  */
     
+    inline int get_nDarray_rank(void) const ///*  nDarray rank :
+      { return dim.size(); }                //     0  ->  scalar
+                                            //     1  ->  BJvector
+                                            //     2  ->  BJmatrix
+                                            //     *  ->  ********   */
+    inline size_t get_index(int first, int second) const
+      {
+        //assert(get_nDarray_rank()==3);
+        return (first - 1)*dim[1]+second - 1;
+      }
+    inline size_t get_index(int first, int second, int third) const
+      {
+        //assert(get_nDarray_rank()==3);
+        return ((first - 1)*dim[1]+second - 1)*dim[2]+third - 1;
+      }
+    inline size_t get_index(int first, int second, int third, int fourth) const
+      {
+        //assert(get_nDarray_rank()==4);
+        return (((first - 1)*dim[1]+second - 1)*dim[2]+third - 1)*dim[3]+fourth - 1;
+      }
+  public:
+    nDarray_rep(void)
+      : pd_nDdata(), total_numb(), dim() {}
+    void init_dim(const size_t &, const int &default_dim= 1);
+    void init_dim(const std::vector<int> &pdim);
+    inline void clear_dim(void)
+      { dim.clear(); }
+    inline bool equal_dim(const std::vector<int> &rval) const
+      { return (dim==rval); }
+    void init_data(void);
+    void init_data(const double &);
+    void init_data(const double *);
+    void init_data(const std::vector<double> &);
+    void init_data(const boost::python::list &);
+    void reset_data_to(const double &);
+    inline const std::vector<double> &get_data(void) const
+      { return pd_nDdata; }
+    inline std::vector<double> &get_data(void)
+      { return pd_nDdata; }
+    inline double *get_data_ptr(void)
+      { return pd_nDdata.data(); }
+    inline const double *get_data_ptr(void) const
+      { return pd_nDdata.data(); }
+    bool equal_data(const std::vector<double> &other_data) const;
+    inline const double &val(const size_t &where) const
+      { return pd_nDdata[where]; }
+    inline double &val(const size_t &where)
+      { return pd_nDdata[where]; }
+    inline void clear_data(void)
+      { pd_nDdata.clear(); }
+
+    inline void clear(void)
+      {
+	clear_data();
+	clear_dim();
+      }
+    void sum_data(const std::vector<double> &);
+    void substract_data(const std::vector<double> &);
+    void neg(void);
+    double sum(void) const;
+    bool operator==(const nDarray_rep &rval) const;
     inline const double &operator()(int first) const
-      { return pc_nDarray_rep(first); }
-    
+      {
+	if(get_nDarray_rank()==0)
+	  return (pd_nDdata[0]);
+	return val(static_cast<size_t>(first - 1));
+      }
     inline double &operator()(int first)
       {
-	nDarray *this_no_const= const_cast<nDarray *>(this);
-	return this_no_const->operator()(first);
+	if(get_nDarray_rank()==0)
+	  return (pd_nDdata[0]);
+	return val(static_cast<size_t>(first - 1));
       }
-    
     inline const double &operator()(int first, int second) const
-      { return pc_nDarray_rep(first, second); }
-
+      {
+        const size_t i= get_index(first, second);
+	return val(i);
+      }
     inline double &operator()(int first, int second)
       {
-	nDarray *this_no_const= const_cast<nDarray *>(this);
-	return this_no_const->operator()(first, second);
+        const size_t i= get_index(first, second);
+	return val(i);
       }
-    
     inline const double &operator()(int first, int second, int third) const
-      { return pc_nDarray_rep(first, second, third); }
-
+      {
+        //assert(get_nDarray_rank()==3);
+        const size_t i= get_index(first, second, third);
+	return val(i);
+      }
     inline double &operator()(int first, int second, int third)
       {
-	nDarray *this_no_const= const_cast<nDarray *>(this);
-	return this_no_const->operator()(first, second, third);
+        const size_t i= get_index(first, second, third);
+	return val(i);
       }
     inline const double &operator()(int first, int second, int third, int fourth) const
-      { return pc_nDarray_rep(first, second, third, fourth); }
-    
+      {
+        //assert(get_nDarray_rank()==4);
+        const size_t i= get_index(first, second, third, fourth);
+	return val(i);
+      }
     inline double &operator()(int first, int second, int third, int fourth)
       {
-	return pc_nDarray_rep(first, second, third, fourth);
+        const size_t i= get_index(first, second, third, fourth);
+	return val(i);
       }
-
-    const double &val(int subscript, ...) const;
-    double &val(int subscript, ...);
-    const double &val4(int first, int second, int third, int fourth) const;  // overloaded for FOUR arguments for operator * for two tensors
-    double &val4(int first, int second, int third, int fourth);  // overloaded for FOUR arguments for operator * for two tensors
-
-    //const double &cval(int subscript, ...) const;
-    const double &_cval(const std::vector<int> &) const;
-    template<class...nums>
-    const double &cval(nums...args) const
-      {
-	std::vector<int> vec = {args...};
-	return _cval(vec);
-      }
-
-//..
-
-
-
-//++    nDarray operator+( nDarray & rval); // nDarray addition
-//....// This is from JOOP May/June 1990 after ARKoenig
-    nDarray& operator+=(const nDarray &); // nDarray addition
-
-
-//++    nDarray operator-( nDarray & rval); // nDarray subtraction
-//....// This is from JOOP May/June 1990 after ARKoenig
-    nDarray &operator-=(const nDarray & ); // nDarray subtraction
-
-    nDarray operator+(const double &rval);  // scalar addition
-    nDarray operator-(const double &rval);  // scalar subtraction
-    nDarray &operator*=(const double &rval); // scalar multiplication
-    nDarray operator*(const double &rval) const; // scalar multiplication
-
-    nDarray operator-();  // Unary minus
-
-    double sum(void) const;    // summ of all the elements
-    double trace(void) const;            // trace of a 2-nd BJtensor, BJmatrix
-
-    bool operator==(const nDarray &rval) const;
-
-// prebacen u nDarray 14 oktobra 1996
-  public:
-    nDarray eigenvalues(void);
-    nDarray eigenvectors(void);
-
-
-    double Frobenius_norm( void ); // return the Frobenius norm of
-                                   // BJmatrix, BJtensor, BJvector
-    double General_norm( double p ); // return the General p-th norm of
-                                     // BJmatrix, BJtensor, BJvector
-  public:
-    int rank(void) const;
-    int dim(int which) const;
-    
-    void output(std::ostream &os) const;
-    void outputshort(std::ostream &os) const;
-    void print(const std::string &name = "t",const std::string &msg = "Hi there#", std::ostream &os= std::cout) const;
-    void printshort(std::ostream &os, const std::string &msg = "Hi there#") const;
-    void mathprint(std::ostream &os) const;
-    friend std::string to_string(const nDarray &);
-    inline std::string toString(void) const
-      { return to_string(*this); }
-
-// from Numerical recipes in C
-  private:
-    static void tqli(std::vector<double> &d, std::vector<double> &, int n, std::vector<std::vector<double> > &z);
-    static void tred2(std::vector<std::vector<double> > &a, int n, std::vector<double> &d, std::vector<double> &e);
-    static void eigsrt(std::vector<double> &d, std::vector<std::vector<double> > &v, int n);
-
+    void print(std::ostream &os) const;
   };
   
-template nDarray operator*(const double & , const nDarray & );
-template nDarray operator+(const nDarray & , const nDarray & );
-template nDarray operator-(const nDarray & , const nDarray & );
-std::ostream& operator<<(std::ostream &, const nDarray &);
-std::string to_string(const  nDarray &);
+std::ostream& operator<<(std::ostream &, const nDarray_rep &);
 
 } // end of XC namespace
 

@@ -128,7 +128,7 @@ XC::BJtensor::BJtensor(const std::vector<int> &pdim,const double &initvalue)
 
 //! @brief Constructor
 XC::BJtensor::BJtensor(const std::string &flag, const std::vector<int> &pdim)
-  : nDarray( flag, pdim), indices1(""), indices2("") {}
+  : nDarray(flag, pdim), indices1(""), indices2("") {}
 
 
 //! @brief Constructor
@@ -140,14 +140,15 @@ XC::BJtensor::BJtensor(const std::string &flag)
 //ZhaoOct2005 re-wrote the copy constructor 
 //##############################################################################
 XC::BJtensor::BJtensor(const BJtensor & x)
-  : nDarray(x), indices1(x.indices1), indices2(x.indices2) {}
+  : nDarray(x), indices1(x.indices1), indices2(x.indices2)
+  {}
 
 
 //##############################################################################
 XC::BJtensor::BJtensor(const nDarray &x)
   : nDarray(x), indices1(""), indices2("") {} // copy-initializer
-                  // DO NOT delete ( nullptr ) indices because return
-                  // from operator*( BJtensor & arg ) this one
+                  // DO NOT delete (nullptr ) indices because return
+                  // from operator*(BJtensor & arg ) this one
                   // is invoked and so I need this indices.
 
 
@@ -159,11 +160,13 @@ XC::BJtensor &XC::BJtensor::operator=(const BJtensor & rval)
   {
     if(&rval == this) // if assign an BJtensor to itself
       return *this;
-    
-    nDarray::operator=(rval);
-    this->null_indices();
-    this->indices1= rval.indices1;
-    this->indices2= rval.indices2;
+    else
+      {
+	nDarray::operator=(rval);
+	this->null_indices();
+	this->indices1= rval.indices1;
+	this->indices2= rval.indices2;
+      }
     return *this;
   }
 
@@ -188,19 +191,18 @@ XC::BJtensor &XC::BJtensor::operator-=(const BJtensor &rval)
 //! on when operations like single contraction (.), double contraction (:),
 //! dyadic product (otimes) are performed the object can choose the right
 //! operator.
-//! Also when multiplying XC::BJtensor by itself ( like for example:
+//! Also when multiplying BJtensor by itself (like for example:
 //!               D("ij")*D("kl")
-//! the other string indices2 is defined to take the other array of
-//! indices
+//! the other string indices2 is defined to take the other array of indices
 //! so that mulitplication will be O.K.
-//! Since only two BJtensors can be multiplied at the time ( binary operation )
+//! Since only two BJtensors can be multiplied at the time (binary operation )
 //! only indices1 and indices2 are needed.
 const XC::BJtensor &XC::BJtensor::operator()(const std::string &indices_from_user) const
   {
     if(indices1.empty())
-      indices1= indices_from_user;
+      this->indices1= indices_from_user;
     else
-      indices2= indices_from_user;
+      this->indices2= indices_from_user;
     return *this;
   }
 
@@ -209,8 +211,8 @@ const XC::BJtensor &XC::BJtensor::operator()(const std::string &indices_from_use
 //##############################################################################
 void XC::BJtensor::null_indices(void) const
   {
-    indices1= "";
-    indices2= "";
+    indices1.clear();
+    indices2.clear();
   }
 
 
@@ -257,9 +259,9 @@ XC::BJtensor XC::BJtensor::operator*(const double &rval) const // Added const he
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
   {
-
+    std::cout << "Enters operator*" << std::endl;
     //   const int MAX_TENS_ORD = 8;
-    const int MAX_TENS_ORD = 4;
+    const int MAX_TENS_ORD= 4;
     //....   int results_rank = 0;
 
     // space for CONTRACTED indices
@@ -289,7 +291,7 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
        this_indices= this->indices2; // this is changed because
        arg_indices= arg.indices1;  // it reads indices from
                                     // right so "in" indices1 are
-                                   // the right ( arg ) and "in"
+                                   // the right (arg ) and "in"
                                   // indices2 are the
                                  // left indices
 // WATCH OUT THIS IS NOT STANDRAD AS YOU CANNOT QUARANTY THE ORDER OF EXECUTION!!!!
@@ -316,7 +318,7 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
        ::exit(1);
      }
 
-   if( arg_indices_number != arg.rank() )
+   if(arg_indices_number != arg.rank() )
      {
        std::cerr << "\a\n 'arg' has more/less indices than expected:\n"
                  << "arg_indices_number= " << arg_indices_number << std::endl
@@ -324,8 +326,7 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
                  << "arg->rank()= " << arg.rank() << std::endl;
        ::exit(1);
      }
-
-// counter for contracted indices
+   // counter for contracted indices
    const int contr_counter = contracted_ind(this_indices,
                                       arg_indices,
                                       this_contr,
@@ -333,11 +334,11 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
                                       this_indices_number,
                                       arg_indices_number  );
 
-   const int this_uni_count = uncontracted_ind( this_uncontr,
+   const int this_uni_count = uncontracted_ind(this_uncontr,
                                           this_contr,
                                           this_indices_number);
 
-   const int arg_uni_count = uncontracted_ind( arg_uncontr,
+   const int arg_uni_count = uncontracted_ind(arg_uncontr,
                                          arg_contr,
                                          arg_indices_number);
 
@@ -345,7 +346,7 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
    const int uncontr_counter= this_uni_count + arg_uni_count;
 
 //TEMP  this is just the test because right now only up to order = 4
-   if ( uncontr_counter > MAX_TENS_ORD )
+   if (uncontr_counter > MAX_TENS_ORD )
      {
        std::cerr << "\a\a\n\n  OOOPS product of multiplication has order "
                  << uncontr_counter << std::endl;
@@ -355,19 +356,21 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
    // let's make result BJtensor
    std::vector<int> results_dims(MAX_TENS_ORD,1);
    int t= 0;
+   int a= 0;
    for(t=0 ; t < this_uni_count ; t++ )
      results_dims[t]=this->dim()[this_uncontr[t]-1];
-   for(int a=0 ; a < arg_uni_count ; a++ )
-     results_dims[a+t]=arg.dim()[arg_uncontr[a]-1];
-
-   // Indices  pa sada indeksi ( index )
+   for(a=0 ; a < arg_uni_count ; a++ )
+     results_dims[a+t]= arg.dim()[arg_uncontr[a]-1];
+   // do kraja (till the end) . . .
+   for( ; a < MAX_TENS_ORD-t ; a++ )
+     results_dims[a+t]=1;
+   
+   // Indices  pa sada indeksi (index )
    std::string results_indices; //(uncontr_counter+1, '\0');
    for(int t=0 ; t < this_uni_count ; t++ )
      results_indices+= this_indices[this_uncontr[t]-1];
    for(int a=0 ; a < arg_uni_count ; a++ )
      results_indices+= arg_indices[arg_uncontr[a]-1];
-// the last one . . .
-   //results_indices[uncontr_counter]= '\0';
 
    BJtensor result(results_dims, 0.0);
    result(results_indices);  // initialize indices in result
@@ -376,7 +379,7 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 //////////////////////////////////////////////////
 // check dimensions in each BJtensor order
    for(int t=0 ; t<contr_counter ; t++ )
-     if( this->dim()[this_contr[t]-1] != arg.dim()[arg_contr[t]-1] )
+     if(this->dim()[this_contr[t]-1] != arg.dim()[arg_contr[t]-1] )
        {
          std::cerr << "\a\a\n t = " << t << std::endl
                    << "this_contr[t]-1= " << this_contr[t]-1 << std::endl
@@ -385,7 +388,6 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
                    << "arg.dim()[" << arg_contr[t]-1 << "]= " << arg.dim()[arg_contr[t]-1] << std::endl;
          ::exit(1);
        }
-
    std::vector<int> inerr_dims(MAX_TENS_ORD, 1);
    for(int t=0 ; t<contr_counter ; t++ )
      {
@@ -400,65 +402,58 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
    std::vector<int> resd(MAX_TENS_ORD, 1);
 
    double inerr=0.0;
-// obrnuti red zbog brzeg izvrsenja ( rd[0] ide do najveceg broja . . . )
-//  for ( rd[7]=1 ; rd[7]<=results_dims[7] ; rd[7]++ )
-//   for ( rd[6]=1 ; rd[6]<=results_dims[6] ; rd[6]++ )
-//    for ( rd[5]=1 ; rd[5]<=results_dims[5] ; rd[5]++ )
-//     for ( rd[4]=1 ; rd[4]<=results_dims[4] ; rd[4]++ )
-      for ( rd[3]=1 ; rd[3]<=results_dims[3] ; rd[3]++ )
+// obrnuti red zbog brzeg izvrsenja (rd[0] ide do najveceg broja . . . )
+//  for(rd[7]=1 ; rd[7]<=results_dims[7] ; rd[7]++ )
+//   for(rd[6]=1 ; rd[6]<=results_dims[6] ; rd[6]++ )
+//    for(rd[5]=1 ; rd[5]<=results_dims[5] ; rd[5]++ )
+//     for(rd[4]=1 ; rd[4]<=results_dims[4] ; rd[4]++ )
+      for(rd[3]=1 ; rd[3]<=results_dims[3] ; rd[3]++ )
 	{
-	  for ( rd[2]=1 ; rd[2]<=results_dims[2] ; rd[2]++ )
+	  for(rd[2]=1 ; rd[2]<=results_dims[2] ; rd[2]++ )
 	    {
-	      for ( rd[1]=1 ; rd[1]<=results_dims[1] ; rd[1]++ )
+	      for(rd[1]=1 ; rd[1]<=results_dims[1] ; rd[1]++ )
 		{
-		   for ( rd[0]=1 ; rd[0]<=results_dims[0] ; rd[0]++ )
+		   for(rd[0]=1 ; rd[0]<=results_dims[0] ; rd[0]++ )
 		    {
 		      inerr = 0.0;
-	  //            for ( cd[7]=1 ; cd[7]<=inerr_dims[7] ; cd[7]++ )
-	  //             for ( cd[6]=1 ; cd[6]<=inerr_dims[6] ; cd[6]++ )
-	  //              for ( cd[5]=1 ; cd[5]<=inerr_dims[5] ; cd[5]++ )
-	  //               for ( cd[4]=1 ; cd[4]<=inerr_dims[4] ; cd[4]++ )
-			  for ( cd[3]=1 ; cd[3]<=inerr_dims[3] ; cd[3]++ )
+	  //            for(cd[7]=1 ; cd[7]<=inerr_dims[7] ; cd[7]++ )
+	  //             for(cd[6]=1 ; cd[6]<=inerr_dims[6] ; cd[6]++ )
+	  //              for(cd[5]=1 ; cd[5]<=inerr_dims[5] ; cd[5]++ )
+	  //               for(cd[4]=1 ; cd[4]<=inerr_dims[4] ; cd[4]++ )
+			  for(cd[3]=1 ; cd[3]<=inerr_dims[3] ; cd[3]++ )
 			    {
-			       for ( cd[2]=1 ; cd[2]<=inerr_dims[2] ; cd[2]++ )
+			       for(cd[2]=1 ; cd[2]<=inerr_dims[2] ; cd[2]++ )
 				 {
-				    for ( cd[1]=1 ; cd[1]<=inerr_dims[1] ; cd[1]++ )
+				    for(cd[1]=1 ; cd[1]<=inerr_dims[1] ; cd[1]++ )
 				      {
-					for ( cd[0]=1 ; cd[0]<=inerr_dims[0] ; cd[0]++ )
+					for(cd[0]=1 ; cd[0]<=inerr_dims[0] ; cd[0]++ )
 					  {
 					    // contracted indices
-					    for ( t=0 ; t<contr_counter ; t++ )
-					      {
-						lid[ this_contr[t]-1 ]  = cd[t];
-					      }
-					    for ( t=0 ; t<contr_counter ; t++ )
-					      {
-						rid[ arg_contr[t]-1 ]  = cd[t];
-					      }
+					    for(t=0 ; t<contr_counter ; t++ )
+					      {	lid[ this_contr[t]-1 ]  = cd[t]; }
+					    for(t=0 ; t<contr_counter ; t++ )
+					      { rid[ arg_contr[t]-1 ]  = cd[t]; }
 
 					    // uncontracted indices
-					    for ( t=0 ; t<this_uni_count ; t++ )
-					      {
-						lid[ this_uncontr[t]-1 ]  = rd[t];
-					      }
-					    for ( ; t<(this_uni_count+arg_uni_count) ; t++ )
-					      {
-						rid[ arg_uncontr[t-this_uni_count]-1 ] = rd[t];
-					      }
-					    inerr = inerr +
-					      (*this)(lid[0],lid[1],lid[2],lid[3]) * arg(rid[0],rid[1],rid[2],rid[3]);
+					    for(t=0 ; t<this_uni_count ; t++ )
+					      { lid[ this_uncontr[t]-1 ]  = rd[t]; }
+					    for(; t<(this_uni_count+arg_uni_count) ; t++ )
+					      {	rid[ arg_uncontr[t-this_uni_count]-1 ] = rd[t]; }
+					    const double &left= this->val(lid[0],lid[1],lid[2],lid[3]);
+					    const double &right= arg.val(rid[0],rid[1],rid[2],rid[3]);
+					    inerr+=  left*right;
 					  } // for cd[0]
 				      } // for cd[1]
 				 } // for cd[2]
 			    } // for cd[3]
 
 		      // might be optimized 
-		      for ( t=0 ; t<this_uni_count ; t++ )           // put first on in second
+		      for(t=0 ; t<this_uni_count ; t++ )           // put first on in second
 			{                                            // loop TS
 	  //..                resd[ this_uncontr[t]-1 ] = rd[t];
 			  resd[t] = rd[t];
 			}
-		      for ( ; t<(this_uni_count+arg_uni_count) ; t++ )
+		      for(; t<(this_uni_count+arg_uni_count) ; t++ )
 			{
 	  //..                resd[ arg_uncontr[t]-1 ] = rd[t];
 			  resd[t] = rd[t];
@@ -468,10 +463,12 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 		} // for rd[1]
 	    } // for rd[2]
 	} // for rd[3]
-
+ 
     // nullification of indices
     null_indices();
     arg.null_indices();
+    std::cout << "result= " << result << std::endl;
+    std::cout << "Exits operator*" << std::endl;
 
     return result;
   }
@@ -506,17 +503,17 @@ int XC::BJtensor::contracted_ind(const std::string &argleft_indices,
     int argleft_i_count = 0;
     int argright_i_count  = 0;
 
-    for( int argleft_indices_counter = 1 ;
+    for(int argleft_indices_counter = 1 ;
           argleft_indices_counter<=argleft_ind_numb ;
           argleft_indices_counter++ )
       {
         int t_i_c = argleft_indices_counter - 1;
-        for ( int argright_indices_counter = 1 ;
+        for(int argright_indices_counter = 1 ;
               argright_indices_counter<= argright_ind_numb ;
               argright_indices_counter++ )
           {
             int a_i_c = argright_indices_counter - 1;
-            if ( argleft_indices[t_i_c] ==
+            if (argleft_indices[t_i_c] ==
                  argright_indices[a_i_c] )
               {
                 argleft_contr[argleft_i_count] = argleft_indices_counter;
@@ -538,7 +535,7 @@ int XC::BJtensor::contracted_ind(const std::string &argleft_indices,
 //DEBUGprint     pthis_ic<(argleft->rank()+1) ;
 //DEBUGprint     pthis_ic++ )
 //DEBUGprint   ::printf("argleft_contr[%d]=%d\n",pthis_ic,argleft_contr[pthis_ic]);
-//DEBUGprint for( int parg_ic=0 ;
+//DEBUGprint for(int parg_ic=0 ;
 //DEBUGprint      parg_ic<(argright->rank()+1) ;
 //DEBUGprint      parg_ic++ )
 //DEBUGprint   ::printf("                 argright_contr[%d]=%d\n",
@@ -567,7 +564,7 @@ int XC::BJtensor::uncontracted_ind(std::vector<int> &tens_uncontr,
             const int t_i_c = tens_indices_counter - 1;
 //XC::DEBUGprint::printf("CHECK tens_uncontr[%d]=%d",tens_uni_count, tens_uncontr[tens_uni_count]);
 //XC::DEBUGprint::printf("  WITH tens_contr[%d]=%d\n", t_i_c,tens_contr[t_i_c]);
-            if ( tens_uncontr[tens_uni_count] == tens_contr[t_i_c] )
+            if (tens_uncontr[tens_uni_count] == tens_contr[t_i_c] )
               {
                 tens_uncontr[tens_uni_count] = 0;
                 tens_uni_count--;
@@ -587,7 +584,7 @@ XC::BJtensor XC::BJtensor::operator/(const BJtensor &rval) const
 // original one.
     BJtensor div(dim(), 0.0);
     double rvalDouble = rval.trace();
-    if ( rval.rank() != 1 ) ::printf("rval.rank() != 1 for XC::BJtensor XC::BJtensor::operator/( BJtensor & rval)\n");
+    if (rval.rank() != 1 ) ::printf("rval.rank() != 1 for XC::BJtensor XC::BJtensor::operator/(BJtensor & rval)\n");
 
     div.indices1 = this->indices1;
 
@@ -601,34 +598,34 @@ XC::BJtensor XC::BJtensor::operator/(const BJtensor &rval) const
 
         case 1:
           {
-            for ( int i1=1 ; i1<=3 ; i1++ )
+            for( int i1=1 ; i1<=3 ; i1++ )
               div(i1) = val(i1)/rvalDouble;
             break;
           }
 
         case 2:
           {
-            for ( int i2=1 ; i2<=3 ; i2++ )
-              for ( int j2=1 ; j2<=3 ; j2++ )
+            for( int i2=1 ; i2<=3 ; i2++ )
+              for( int j2=1 ; j2<=3 ; j2++ )
                 div(i2, j2) = val(i2, j2)/rvalDouble;
             break;
           }
 
         case 3:
           {
-            for ( int i3=1 ; i3<=3 ; i3++ )
-              for ( int j3=1 ; j3<=3 ; j3++ )
-                for ( int k3=1 ; k3<=3 ; k3++ )
+            for( int i3=1 ; i3<=3 ; i3++ )
+              for( int j3=1 ; j3<=3 ; j3++ )
+                for( int k3=1 ; k3<=3 ; k3++ )
                   div(i3, j3, k3) = val(i3, j3, k3)/rvalDouble;
             break;
           }
 
         case 4:
           {
-            for ( int i4=1 ; i4<=3 ; i4++ )
-              for ( int j4=1 ; j4<=3 ; j4++ )
-                for ( int k4=1 ; k4<=3 ; k4++ )
-                  for ( int l4=1 ; l4<=3 ; l4++ )
+            for( int i4=1 ; i4<=3 ; i4++ )
+              for( int j4=1 ; j4<=3 ; j4++ )
+                for( int k4=1 ; k4<=3 ; k4++ )
+                  for( int l4=1 ; l4<=3 ; l4++ )
                     div(i4,j4,k4,l4)=val(i4,j4,k4,l4)/rvalDouble;
             break;
           }
@@ -650,10 +647,10 @@ XC::BJtensor XC::BJtensor::transpose0110() const
 // original one and than transpose it.
    BJtensor trans1(dim(), 0.0);
 
-   for ( int i=1 ; i<=dim()[0] ; i++ )
-     for ( int j=1 ; j<=dim()[1] ; j++ )
-       for ( int k=1 ; k<=dim()[2] ; k++ )
-         for ( int l=1 ; l<=dim()[3] ; l++ )
+   for( int i=1 ; i<=dim()[0] ; i++ )
+     for( int j=1 ; j<=dim()[1] ; j++ )
+       for( int k=1 ; k<=dim()[2] ; k++ )
+         for( int l=1 ; l<=dim()[3] ; l++ )
            trans1(i, j, k, l) = (*this)(i, k, j, l);
 
     trans1.null_indices();
@@ -670,10 +667,10 @@ XC::BJtensor XC::BJtensor::transposeoverbar() const // same as transpose0110
 // original one and than transpose it.
    BJtensor trans1(dim(), 0.0);
 
-   for ( int i=1 ; i<=dim()[0] ; i++ )
-     for ( int j=1 ; j<=dim()[1] ; j++ )
-       for ( int k=1 ; k<=dim()[2] ; k++ )
-         for ( int l=1 ; l<=dim()[3] ; l++ )
+   for( int i=1 ; i<=dim()[0] ; i++ )
+     for( int j=1 ; j<=dim()[1] ; j++ )
+       for( int k=1 ; k<=dim()[2] ; k++ )
+         for( int l=1 ; l<=dim()[3] ; l++ )
            trans1(i, j, k, l) = (*this)(i, k, j, l);
 
     trans1.null_indices();
@@ -689,10 +686,10 @@ XC::BJtensor XC::BJtensor::transpose0101() const
 // original one and than transpose it.
    BJtensor trans1(dim(), 0.0);
 
-   for ( int i=1 ; i<=dim()[0] ; i++ )
-     for ( int j=1 ; j<=dim()[1] ; j++ )
-       for ( int k=1 ; k<=dim()[2] ; k++ )
-         for ( int l=1 ; l<=dim()[3] ; l++ )
+   for( int i=1 ; i<=dim()[0] ; i++ )
+     for( int j=1 ; j<=dim()[1] ; j++ )
+       for( int k=1 ; k<=dim()[2] ; k++ )
+         for( int l=1 ; l<=dim()[3] ; l++ )
            trans1(i, j, k, l) = (*this)(i, l, k, j);
 
     trans1.null_indices();
@@ -709,10 +706,10 @@ XC::BJtensor XC::BJtensor::transpose0111() const
 // original one and than transpose it.
    BJtensor trans1(dim(), 0.0);
 
-   for ( int i=1 ; i<=dim()[0] ; i++ )
-     for ( int j=1 ; j<=dim()[1] ; j++ )
-       for ( int k=1 ; k<=dim()[2] ; k++ )
-         for ( int l=1 ; l<=dim()[3] ; l++ )
+   for( int i=1 ; i<=dim()[0] ; i++ )
+     for( int j=1 ; j<=dim()[1] ; j++ )
+       for( int k=1 ; k<=dim()[2] ; k++ )
+         for( int l=1 ; l<=dim()[3] ; l++ )
            trans1(i, j, k, l) = (*this)(i, l, j, k);
 
     trans1.null_indices();
@@ -728,10 +725,10 @@ XC::BJtensor XC::BJtensor::transposeunderbar() const   // transpose0111()
 // original one and than transpose it.
    BJtensor trans1(dim(), 0.0);
 
-   for ( int i=1 ; i<=dim()[0] ; i++ )
-     for ( int j=1 ; j<=dim()[1] ; j++ )
-       for ( int k=1 ; k<=dim()[2] ; k++ )
-         for ( int l=1 ; l<=dim()[3] ; l++ )
+   for( int i=1 ; i<=dim()[0] ; i++ )
+     for( int j=1 ; j<=dim()[1] ; j++ )
+       for( int k=1 ; k<=dim()[2] ; k++ )
+         for( int l=1 ; l<=dim()[3] ; l++ )
            trans1(i, j, k, l) = (*this)(i, l, j, k);
 
     trans1.null_indices();
@@ -748,10 +745,10 @@ XC::BJtensor XC::BJtensor::transpose1100() const
 // original one and than transpose it.
    BJtensor trans1(dim(), 0.0);
 
-   for ( int i=1 ; i<=dim()[0] ; i++ )
-     for ( int j=1 ; j<=dim()[1] ; j++ )
-       for ( int k=1 ; k<=dim()[2] ; k++ )
-         for ( int l=1 ; l<=dim()[3] ; l++ )
+   for( int i=1 ; i<=dim()[0] ; i++ )
+     for( int j=1 ; j<=dim()[1] ; j++ )
+       for( int k=1 ; k<=dim()[2] ; k++ )
+         for( int l=1 ; l<=dim()[3] ; l++ )
            trans1(i, j, k, l) = (*this)(j, i, k, l);
 
     trans1.null_indices();
@@ -768,10 +765,10 @@ XC::BJtensor XC::BJtensor::transpose0011() const
 // original one and than transpose it.
    BJtensor trans1(dim(), 0.0);
 
-   for ( int i=1 ; i<=dim()[0] ; i++ )
-     for ( int j=1 ; j<=dim()[1] ; j++ )
-       for ( int k=1 ; k<=dim()[2] ; k++ )
-         for ( int l=1 ; l<=dim()[3] ; l++ )
+   for( int i=1 ; i<=dim()[0] ; i++ )
+     for( int j=1 ; j<=dim()[1] ; j++ )
+       for( int k=1 ; k<=dim()[2] ; k++ )
+         for( int l=1 ; l<=dim()[3] ; l++ )
            trans1(i, j, k, l) = (*this)(i, j, l, k);
 
     trans1.null_indices();
@@ -788,10 +785,10 @@ XC::BJtensor XC::BJtensor::transpose1001() const
 // original one and than transpose it.
    BJtensor trans1(dim(), 0.0);
 
-   for ( int i=1 ; i<=dim()[0] ; i++ )
-     for ( int j=1 ; j<=dim()[1] ; j++ )
-       for ( int k=1 ; k<=dim()[2] ; k++ )
-         for ( int l=1 ; l<=dim()[3] ; l++ )
+   for( int i=1 ; i<=dim()[0] ; i++ )
+     for( int j=1 ; j<=dim()[1] ; j++ )
+       for( int k=1 ; k<=dim()[2] ; k++ )
+         for( int l=1 ; l<=dim()[3] ; l++ )
            trans1(i, j, k, l) = (*this)(l, j, k, i);
 
     trans1.null_indices();
@@ -811,8 +808,8 @@ XC::BJtensor XC::BJtensor::transpose11() const
 // original one and than transpose it.
    BJtensor trans1(dim(), 0.0);
 
-   for ( int i=1 ; i<=dim()[0] ; i++ )
-     for ( int j=1 ; j<=dim()[1] ; j++ )
+   for( int i=1 ; i<=dim()[0] ; i++ )
+     for( int j=1 ; j<=dim()[1] ; j++ )
        trans1(i, j) = (*this)(j, i);
 
     trans1.null_indices();
@@ -894,7 +891,7 @@ XC::BJtensor XC::BJtensor::symmetrize11() const
 //--::printf("\a\nERROR in trace function : not a sqared 2nd-rank XC::BJtensor\n");
 //--::exit( 1 );
 //--              }
-//--            for ( int i2=1 ; i2<=dim()[0] ; i2++ )
+//--            for( int i2=1 ; i2<=dim()[0] ; i2++ )
 //--              tr += (*this)(i2, i2);
 //--            break;
 //--          }
@@ -908,7 +905,7 @@ XC::BJtensor XC::BJtensor::symmetrize11() const
 //--::printf("\a\nERROR in trace function : not a sqared 3nd-rank XC::BJtensor\n");
 //--::exit( 1 );
 //--              }
-//--            for ( int i3=1 ; i3<=dim()[0] ; i3++ )
+//--            for( int i3=1 ; i3<=dim()[0] ; i3++ )
 //--              tr += (*this)(i3, i3, i3);
 //--            break;
 //--          }
@@ -923,7 +920,7 @@ XC::BJtensor XC::BJtensor::symmetrize11() const
 //--::printf("\a\nERROR in trace function : not a sqared 4nd-rank XC::BJtensor\n");
 //--::exit( 1 );
 //--              }
-//--            for ( int i4=1 ; i4<=dim()[0] ; i4++ )
+//--            for( int i4=1 ; i4<=dim()[0] ; i4++ )
 //--              tr += (*this)(i4, i4, i4, i4);
 //--            break;
 //--          }
@@ -1022,16 +1019,16 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_1() const // convert XC::BJtensor o
 // filling out the converted XC::BJmatrix
     if ( BJtensor_order == 2 )
       {
-        for ( int c22=1 ; c22<=this->dim(2) ; c22++ )
-          for ( int c21=1 ; c21<=this->dim(1) ; c21++ )
+        for( int c22=1 ; c22<=this->dim(2) ; c22++ )
+          for( int c21=1 ; c21<=this->dim(1) ; c21++ )
             converted(c21,c22)=(*this)(c21,c22);
       }
     else if ( BJtensor_order == 4 )
       {
-        for ( int c44=1 ; c44<=this->dim(4) ; c44++ )
-          for ( int c43=1 ; c43<=this->dim(3) ; c43++ )
-            for ( int c42=1 ; c42<=this->dim(2) ; c42++ )
-              for ( int c41=1 ; c41<=this->dim(1) ; c41++ )
+        for( int c44=1 ; c44<=this->dim(4) ; c44++ )
+          for( int c43=1 ; c43<=this->dim(3) ; c43++ )
+            for( int c42=1 ; c42<=this->dim(2) ; c42++ )
+              for( int c41=1 ; c41<=this->dim(1) ; c41++ )
                 {
                   m41 = this->dim(1)*(c41-1)+c43;
                   m42 = this->dim(2)*(c42-1)+c44;
@@ -1084,16 +1081,16 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_2() const // convert XC::BJtensor o
 // filling out the converted XC::BJmatrix
     if ( BJtensor_order == 2 )
       {
-        for ( int c22=1 ; c22<=this->dim(2) ; c22++ )
-          for ( int c21=1 ; c21<=this->dim(1) ; c21++ )
+        for( int c22=1 ; c22<=this->dim(2) ; c22++ )
+          for( int c21=1 ; c21<=this->dim(1) ; c21++ )
             converted(c21,c22)=(*this)(c21,c22);
       }
     else if ( BJtensor_order == 4 )
       {
-        for ( int c44=1 ; c44<=this->dim(4) ; c44++ )
-          for ( int c43=1 ; c43<=this->dim(3) ; c43++ )
-            for ( int c42=1 ; c42<=this->dim(2) ; c42++ )
-              for ( int c41=1 ; c41<=this->dim(1) ; c41++ )
+        for( int c44=1 ; c44<=this->dim(4) ; c44++ )
+          for( int c43=1 ; c43<=this->dim(3) ; c43++ )
+            for( int c42=1 ; c42<=this->dim(2) ; c42++ )
+              for( int c41=1 ; c41<=this->dim(1) ; c41++ )
                 {
                   m41 = this->dim(1)*(c41-1)+c42;
                   m42 = this->dim(3)*(c43-1)+c44;
@@ -1148,16 +1145,16 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_2() const // convert XC::BJtensor o
 //~~~~// filling out the converted XC::BJmatrix
 //~~~~    if ( BJtensor_order == 2 )
 //~~~~      {
-//~~~~        for ( int c22=1 ; c22<=this->dim(2) ; c22++ )
-//~~~~          for ( int c21=1 ; c21<=this->dim(1) ; c21++ )
+//~~~~        for( int c22=1 ; c22<=this->dim(2) ; c22++ )
+//~~~~          for( int c21=1 ; c21<=this->dim(1) ; c21++ )
 //~~~~            converted(c21,c22)=(*this)(c21,c22);
 //~~~~      }
 //~~~~    else if ( BJtensor_order == 4 )
 //~~~~      {
-//~~~~        for ( int c44=1 ; c44<=this->dim(4) ; c44++ )
-//~~~~          for ( int c43=1 ; c43<=this->dim(3) ; c43++ )
-//~~~~            for ( int c42=1 ; c42<=this->dim(2) ; c42++ )
-//~~~~              for ( int c41=1 ; c41<=this->dim(1) ; c41++ )
+//~~~~        for( int c44=1 ; c44<=this->dim(4) ; c44++ )
+//~~~~          for( int c43=1 ; c43<=this->dim(3) ; c43++ )
+//~~~~            for( int c42=1 ; c42<=this->dim(2) ; c42++ )
+//~~~~              for( int c41=1 ; c41<=this->dim(1) ; c41++ )
 //~~~~                {
 //~~~~                  m41 = this->dim(1)*(c41-1)+c44;
 //~~~~                  m42 = this->dim(2)*(c42-1)+c43;
@@ -1211,16 +1208,16 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_2() const // convert XC::BJtensor o
 //..// filling out the converted XC::BJmatrix
 //..    if ( this->rank() == 2 )
 //..      {
-//..        for ( int c22=1 ; c22<=this->dim(2) ; c22++ )
-//..          for ( int c21=1 ; c21<=this->dim(1) ; c21++ )
+//..        for( int c22=1 ; c22<=this->dim(2) ; c22++ )
+//..          for( int c21=1 ; c21<=this->dim(1) ; c21++ )
 //..            converted(c21,c22)=(*this)(c21,c22);
 //..      }
 //..    else if ( this->rank() == 4 )
 //..      {
-//..        for ( int c44=1 ; c44<=this->dim(4) ; c44++ )
-//..          for ( int c43=1 ; c43<=this->dim(3) ; c43++ )
-//..            for ( int c42=1 ; c42<=this->dim(2) ; c42++ )
-//..              for ( int c41=1 ; c41<=this->dim(1) ; c41++ )
+//..        for( int c44=1 ; c44<=this->dim(4) ; c44++ )
+//..          for( int c43=1 ; c43<=this->dim(3) ; c43++ )
+//..            for( int c42=1 ; c42<=this->dim(2) ; c42++ )
+//..              for( int c41=1 ; c41<=this->dim(1) ; c41++ )
 //..                {
 //..                  m41 = this->dim(1)*(c41-1)+c42;
 //..                  m42 = this->dim(3)*(c43-1)+c44;
@@ -1243,16 +1240,16 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_2() const // convert XC::BJtensor o
 //..// filling back the inverted XC::BJmatrix to XC::BJtensor
 //..    if ( this->rank() == 2 )
 //..      {
-//..        for ( int c22=1 ; c22<=this->dim(2) ; c22++ )
-//..          for ( int c21=1 ; c21<=this->dim(1) ; c21++ )
+//..        for( int c22=1 ; c22<=this->dim(2) ; c22++ )
+//..          for( int c21=1 ; c21<=this->dim(1) ; c21++ )
 //..            result(c21,c22)=converted_inverse(c21,c22);
 //..      }
 //..    else if ( this->rank() == 4 )
 //..      {
-//..        for ( int c44=1 ; c44<=this->dim(4) ; c44++ )
-//..          for ( int c43=1 ; c43<=this->dim(3) ; c43++ )
-//..            for ( int c42=1 ; c42<=this->dim(2) ; c42++ )
-//..              for ( int c41=1 ; c41<=this->dim(1) ; c41++ )
+//..        for( int c44=1 ; c44<=this->dim(4) ; c44++ )
+//..          for( int c43=1 ; c43<=this->dim(3) ; c43++ )
+//..            for( int c42=1 ; c42<=this->dim(2) ; c42++ )
+//..              for( int c41=1 ; c41<=this->dim(1) ; c41++ )
 //..                {
 //..                  m41 = this->dim(1)*(c41-1)+c42;
 //..                  m42 = this->dim(3)*(c43-1)+c44;
