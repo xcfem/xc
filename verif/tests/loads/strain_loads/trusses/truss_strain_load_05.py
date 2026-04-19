@@ -66,8 +66,9 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 result= modelSpace.analyze(calculateNodalReactions= False)
 
 truss.getResistingForce()
-N= (-E*A*alpha*AT)
-ratio1= ((truss.getN()-N)/N)
+N= truss.getN()
+refN= (-E*A*alpha*AT)
+ratio1= ((N-refN)/refN)
 initStrain1= truss.getMaterial().initialStrain
 ratio2= abs(initStrain1-alpha*AT)/(alpha*AT)
 
@@ -81,6 +82,8 @@ initStress3= truss.getMaterial().initialStress
 ratio4= abs(initStrain3)
 
 '''
+print("N= ", N/1e3)
+print("refN= ", refN/1e3)
 print("ratio1= ",ratio1)
 print("initial strain 1: ", initStrain1)
 print("ratio2= ",ratio2)
