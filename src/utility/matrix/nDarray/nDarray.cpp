@@ -411,55 +411,55 @@ boost::python::list XC::nDarray::dimPy(void) const
     return retval;
   }
 
-const double &XC::nDarray::val(int subscript, ...) const
-  {
-    // if scalar get back
-    if(pc_nDarray_rep.get_nDarray_rank()==0)
-      return (pc_nDarray_rep.pd_nDdata[0]);
+// const double &XC::nDarray::val(int subscript, ...) const
+//   {
+//     // if scalar get back
+//     if(pc_nDarray_rep.get_nDarray_rank()==0)
+//       return (pc_nDarray_rep.pd_nDdata[0]);
     
-    // for all others proceed
-    va_list p_arg;
-    va_start(p_arg, subscript); // initialize p_arg
+//     // for all others proceed
+//     va_list p_arg;
+//     va_start(p_arg, subscript); // initialize p_arg
 
-    size_t first  = 0;
-    size_t second = 0;
+//     size_t first  = 0;
+//     size_t second = 0;
 
-    first = subscript; // first index
-    size_t where = first - 1;
-    for( int Dcount=1 ; Dcount<=pc_nDarray_rep.get_nDarray_rank()-1 ; Dcount++ )
-      {    // for all dimensions less then 1 this will be skipped
-        second = va_arg(p_arg, int);    // next
-        where = where*pc_nDarray_rep.dim[Dcount]+second - 1;
-        first = second;
-      }
-    va_end(p_arg);
-    //::printf("*w=%2ld ",where);
-    return pc_nDarray_rep.val(static_cast<size_t>(where));
-  }
+//     first = subscript; // first index
+//     size_t where = first - 1;
+//     for( int Dcount=1 ; Dcount<=pc_nDarray_rep.get_nDarray_rank()-1 ; Dcount++ )
+//       {    // for all dimensions less then 1 this will be skipped
+//         second = va_arg(p_arg, int);    // next
+//         where = where*pc_nDarray_rep.dim[Dcount]+second - 1;
+//         first = second;
+//       }
+//     va_end(p_arg);
+//     //::printf("*w=%2ld ",where);
+//     return pc_nDarray_rep.val(static_cast<size_t>(where));
+//   }
 
-double &XC::nDarray::val(int subscript, ...)
-  {    
-// if scalar get back
-    if(pc_nDarray_rep.get_nDarray_rank()==0) return (pc_nDarray_rep.pd_nDdata[0]);
-// for all others proceed
-    va_list p_arg;
-    va_start(p_arg, subscript); // initialize p_arg
+// double &XC::nDarray::val(int subscript, ...)
+//   {    
+// // if scalar get back
+//     if(pc_nDarray_rep.get_nDarray_rank()==0) return (pc_nDarray_rep.pd_nDdata[0]);
+// // for all others proceed
+//     va_list p_arg;
+//     va_start(p_arg, subscript); // initialize p_arg
 
-    size_t first  = 0;
-    size_t second = 0;
+//     size_t first  = 0;
+//     size_t second = 0;
 
-    first = subscript; // first index
-    size_t where = first - 1;
-    for( int Dcount=1 ; Dcount<=pc_nDarray_rep.get_nDarray_rank()-1 ; Dcount++ )
-      {    // for all dimensions less then 1 this will be skipped
-        second = va_arg(p_arg, int);    // next
-        where = where*pc_nDarray_rep.dim[Dcount]+second - 1;
-        first = second;
-      }
-    va_end(p_arg);
-//::printf("*w=%2ld ",where);
-    return pc_nDarray_rep.val(static_cast<size_t>(where));
-  }
+//     first = subscript; // first index
+//     size_t where = first - 1;
+//     for( int Dcount=1 ; Dcount<=pc_nDarray_rep.get_nDarray_rank()-1 ; Dcount++ )
+//       {    // for all dimensions less then 1 this will be skipped
+//         second = va_arg(p_arg, int);    // next
+//         where = where*pc_nDarray_rep.dim[Dcount]+second - 1;
+//         first = second;
+//       }
+//     va_end(p_arg);
+// //::printf("*w=%2ld ",where);
+//     return pc_nDarray_rep.val(static_cast<size_t>(where));
+//   }
 
 // another overloading of operator() . . .  // overloaded for FOUR arguments
 const double &XC::nDarray::val4(int first, int second, int third, int fourth) const
@@ -506,48 +506,39 @@ double &XC::nDarray::val4(int first, int second, int third, int fourth)
     return pc_nDarray_rep.val(static_cast<size_t>(where));
   }
 
-/*
-const double &XC::nDarray::cval(int subscript, ...)  const
+double &XC::nDarray::_val(const std::vector<int> &subscripts)
   {
-    std::cout << "Enters nDarray::cval" << std::endl;
     const int rank= this-> pc_nDarray_rep.get_nDarray_rank();
-    std::cout << "rank= " << rank << std::endl;
+    const int sz= subscripts.size();
     // if scalar get back
     if(rank==0)
       return pc_nDarray_rep.pd_nDdata[0];
-    else  // for all others proceed
+    else if(sz==0)
+      return pc_nDarray_rep.pd_nDdata[0];
+    else // for all others proceed
       {
-	va_list p_arg;
-	va_start(p_arg, subscript); // initialize p_arg
+	int first= subscripts[0]; //first index.
+	int next= 0;
 
-	int first  = 0;
-	int second = 0;
-
-	first = subscript; // first index
-	std::cout << "first= " << first << std::endl;
 	size_t where = first - 1;
 	for(int Dcount=1 ; Dcount<=rank-1 ; Dcount++ )
 	  {    // for all dimensions less then 2 this will be skipped
-	    second= va_arg(p_arg, int);    // next
-	    std::cout << "next= " << second << std::endl;
-	    where = where*pc_nDarray_rep.dim[Dcount]+second - 1;
-	    first = second;
+	    if(Dcount<sz)
+	      next= subscripts[Dcount];    // next
+	    else
+	      break;
+	    where = where*pc_nDarray_rep.dim[Dcount]+next - 1;
+	    first = next;
 	  }
-	va_end(p_arg);
 
-    //::printf("*w=%2ld ",where);
 	return pc_nDarray_rep.val(static_cast<size_t>(where));
       }
   }
-*/
 
 const double &XC::nDarray::_cval(const std::vector<int> &subscripts) const
   {
-    std::cout << "Enters nDarray::cval" << std::endl;
     const int rank= this-> pc_nDarray_rep.get_nDarray_rank();
-    std::cout << "rank= " << rank << std::endl;
     const int sz= subscripts.size();
-    std::cout << "sz= " << sz << std::endl;
     // if scalar get back
     if(rank==0)
       return pc_nDarray_rep.pd_nDdata[0];
@@ -558,7 +549,6 @@ const double &XC::nDarray::_cval(const std::vector<int> &subscripts) const
 	int first= subscripts[0]; //first index.
 	int next = 0;
 
-	std::cout << "first= " << first << std::endl;
 	size_t where = first - 1;
 	for(int Dcount=1 ; Dcount<=rank-1 ; Dcount++ )
 	  {    // for all dimensions less then 2 this will be skipped
@@ -566,13 +556,10 @@ const double &XC::nDarray::_cval(const std::vector<int> &subscripts) const
 	      next= subscripts[Dcount];    // next
 	    else
 	      break;
-	    std::cout << "next= " << next << std::endl;
 	    where = where*pc_nDarray_rep.dim[Dcount]+next - 1;
 	    first = next;
 	  }
 
-    //::printf("*w=%2ld ",where);
-	std::cout << "where= " << where << std::endl;
 	return pc_nDarray_rep.val(static_cast<size_t>(where));
       }
   }
@@ -772,7 +759,6 @@ bool XC::nDarray::operator==(const nDarray &rval) const
 void XC::nDarray::output(std::ostream &os) const
   {
     const int rank= pc_nDarray_rep.get_nDarray_rank();
-    std::cout << "rank= " << rank << std::endl;
     switch(rank)
       {
         case 0:

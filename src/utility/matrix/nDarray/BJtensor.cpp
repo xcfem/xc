@@ -259,7 +259,6 @@ XC::BJtensor XC::BJtensor::operator*(const double &rval) const // Added const he
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
   {
-    std::cout << "Enters operator*" << std::endl;
     //   const int MAX_TENS_ORD = 8;
     const int MAX_TENS_ORD= 4;
     //....   int results_rank = 0;
@@ -467,9 +466,6 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
     // nullification of indices
     null_indices();
     arg.null_indices();
-    std::cout << "result= " << result << std::endl;
-    std::cout << "Exits operator*" << std::endl;
-
     return result;
   }
 

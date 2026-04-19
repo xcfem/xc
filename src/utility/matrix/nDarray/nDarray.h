@@ -97,7 +97,6 @@
 #include <iostream>
 #include <boost/python.hpp>
 #include "tmpl_operators.h"
-#include <initializer_list>
 
 // forward reference
 namespace XC {
@@ -191,8 +190,24 @@ class nDarray
 	return pc_nDarray_rep(first, second, third, fourth);
       }
 
-    const double &val(int subscript, ...) const;
-    double &val(int subscript, ...);
+    //const double &val(int subscript, ...) const;
+    //double &val(int subscript, ...);
+    inline const double &_val(const std::vector<int> &subscripts) const
+      { return _cval(subscripts); }
+    double &_val(const std::vector<int> &);
+    template<class...nums>
+    const double &val(nums...args) const
+      {
+	const std::vector<int> vec = {args...};
+	return _val(vec);
+      }
+    template<class...nums>
+    double &val(nums...args)
+      {
+	const std::vector<int> vec = {args...};
+	return _val(vec);
+      }
+    
     const double &val4(int first, int second, int third, int fourth) const;  // overloaded for FOUR arguments for operator * for two tensors
     double &val4(int first, int second, int third, int fourth);  // overloaded for FOUR arguments for operator * for two tensors
 
