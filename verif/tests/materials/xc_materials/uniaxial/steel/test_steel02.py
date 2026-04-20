@@ -147,6 +147,7 @@ for d in diff_y:
     ratio2= ratio2+d**2
 ratio2= math.sqrt(ratio2)
 
+'''
 print("ratio1= ",ratio1)
 print("x= ",x)
 print("diff_x= ",diff_x)
@@ -154,7 +155,6 @@ print("ratio2= ",ratio2)
 print("y= ",y)
 print("y_modelo= ",y_modelo)
 print("diff_y= ",diff_y)
-'''
 '''
 
 import os
