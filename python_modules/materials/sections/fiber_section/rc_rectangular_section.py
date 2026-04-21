@@ -10,6 +10,7 @@ __email__= "l.pereztato@gmail.com"
 import os
 import sys
 import math
+import geom
 from misc_utils import log_messages as lmsg
 from materials.sections import stress_calc as sc
 from materials.sections.fiber_section import basic_rectangular_rc_section

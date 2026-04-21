@@ -9,6 +9,7 @@ __email__= "l.pereztato@gmail.com"
 
 import os
 import sys
+import xc
 from misc_utils import log_messages as lmsg
 from materials.sections.fiber_section import geom_fiber_sect as gfs
 
