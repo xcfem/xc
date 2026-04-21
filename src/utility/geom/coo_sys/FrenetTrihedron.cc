@@ -135,18 +135,29 @@ void FrenetTrihedron::compute_vectors(void)
 	    const Pos3d center= circle_center(A, B, C);
 	    const Vector3d normal= (center-*vi);
 	    Vector3d tangent= tangent_vectors[count];
-	    const Vector3d binormal= tangent.getCross(normal);
-	    tangent= normal.getCross(binormal);
-	    const double tangentNorm2= tangent.GetModulus2();
-	    if(tangentNorm2<tol2)
+	    if(tangent.notAVector())
 	      {
 		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			  << "; something went wrong, "
-		          << " tangent vector is too small: " << tangent
+			  << " tangent vector has NaN components: " << tangent
 			  << Color::def << std::endl;
 		exit(-1);
 	      }
-	    
+	    else
+	      {
+		const double tangentNorm2= tangent.GetModulus2();
+		if(tangentNorm2<tol2)
+		  {
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			      << "; something went wrong, "
+			      << " tangent vector is too small: " << tangent
+			      << Color::def << std::endl;
+		    exit(-1);
+		  }
+	      }
+	    const Vector3d binormal= tangent.getCross(normal);
+	    tangent= normal.getCross(binormal);
+	  
 	    normal_vectors[count]= normal.getNormalized();
 	    tangent_vectors[count]= tangent.getNormalized();
 	    binormal_vectors[count]= binormal.getNormalized();
