@@ -17,6 +17,7 @@ from materials.sections import section_properties
 from materials.sections.fiber_section import shear_reinforcement
 from materials.sections.fiber_section import torsion_reinforcement
 from materials.sections.fiber_section import main_reinforcement
+from materials.sections.fiber_section import column_main_reinforcement
 from materials.sections.fiber_section import rc_fiber_section_parameters
 from materials.sections.fiber_section import rc_section_base
 from materials.sections.fiber_section import basic_rectangular_rc_section
@@ -25,6 +26,7 @@ from materials.sections.fiber_section import plot_fiber_section as pfs
 from misc_utils import log_messages as lmsg
 
 # Classes defining reinforcement.
+ColumnMainReinforcement= column_main_reinforcement.ColumnMainReinforcement
 ShearReinforcement= shear_reinforcement.ShearReinforcement
 TorsionReinforcement= torsion_reinforcement.TorsionReinforcement
 ReinfRow= main_reinforcement.ReinfRow

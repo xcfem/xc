@@ -9,10 +9,11 @@ __email__= "l.pereztato@gmail.com"
 
 import sys
 import geom
-from materials.sections.fiber_section import def_simple_RC_section
+from materials.sections.fiber_section import basic_rectangular_rc_section
+from materials.sections.fiber_section import column_main_reinforcement
 from misc_utils import log_messages as lmsg
 
-class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection):
+class RCRectangularColumnSection(basic_rectangular_rc_section.BasicRectangularRCSection):
     '''Definition of the variables that make up a reinforced concrete section 
     with reinforcement symmetric in both directions (as usual in columns)
 
@@ -22,7 +23,7 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
 
     def __init__(self, sectionDescr= None):
       super(RCRectangularColumnSection,self).__init__(sectionDescr= sectionDescr)
-      self.mainBars= ColumnMainReinforcement()
+      self.mainBars= column_main_reinforcement.ColumnMainReinforcement()
 
     def __eq__(self, other):
         ''' Redefines equal operator.'''

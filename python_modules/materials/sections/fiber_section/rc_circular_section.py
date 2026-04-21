@@ -11,7 +11,9 @@ import os
 import math
 import sys
 import geom
-from materials.sections.fiber_section import def_simple_RC_section
+from materials.sections.fiber_section import rc_section_base
+from materials.sections.fiber_section import shear_reinforcement
+from materials.sections.fiber_section import main_reinforcement
 from materials.sections import section_properties
 from misc_utils import log_messages as lmsg
 
@@ -26,7 +28,7 @@ from misc_utils import log_messages as lmsg
 #             = o  o =
 #                ~~
         
-class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.CircularSection):
+class RCCircularSection(rc_section_base.RCSectionBase, section_properties.CircularSection):
     '''
     Circular reinforced concrete sections.
 
@@ -47,10 +49,10 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         section_properties.CircularSection.__init__(self,name,Rint= Rint,Rext= Rext)
 
         # Longitudinal reinforcement.
-        self.mainReinf= def_simple_RC_section.LongReinfLayers()  #list of ReinfRow data (positive face)
+        self.mainReinf= main_reinforcement.LongReinfLayers()  #list of ReinfRow data (positive face)
         
         # Transverse reinforcement.
-        self.shReinf= def_simple_RC_section.ShearReinforcement()
+        self.shReinf= shear_reinforcement.ShearReinforcement()
         self.shReinf.familyName= "V"
 
     def getDict(self):

@@ -12,6 +12,8 @@ import sys
 import geom
 from misc_utils import log_messages as lmsg
 from materials.sections.fiber_section import rc_section_base
+from materials.sections.fiber_section import shear_reinforcement
+from materials.sections.fiber_section import torsion_reinforcement
 from materials.sections import section_properties
 
 class BasicRectangularRCSection(rc_section_base.RCSectionBase, section_properties.RectangularSection):
@@ -37,25 +39,25 @@ class BasicRectangularRCSection(rc_section_base.RCSectionBase, section_propertie
         :param reinfSteelType: type of reinforcement steel.
         :param swapReinforcementAxes: if true, swap the axes of reinforcement so the positive and negative reinforcement rows are placed rotated 90 degrees.
         '''
-        RCSectionBase.__init__(self, sectionDescr= sectionDescr, concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK)
+        rc_section_base.RCSectionBase.__init__(self, sectionDescr= sectionDescr, concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK)
         section_properties.RectangularSection.__init__(self, name= name, b= width, h= depth)
 
             
         self.swapReinforcementAxes= swapReinforcementAxes
         # Transverse reinforcement (z direction)
-        self.shReinfZ= ShearReinforcement(familyName= 'Vz')        
+        self.shReinfZ= shear_reinforcement.ShearReinforcement(familyName= 'Vz')        
 
         # Transverse reinforcement (y direction)
-        self.shReinfY= ShearReinforcement(familyName= 'Vy')
+        self.shReinfY= shear_reinforcement.ShearReinforcement(familyName= 'Vy')
         # Torsion reinforcement.
-        self.torsionReinf= TorsionReinforcement(familyName= 'T')
+        self.torsionReinf= torsion_reinforcement.TorsionReinforcement(familyName= 'T')
     
     def getDict(self):
         ''' Put member values in a dictionary.'''
         # retval= super(BasicRectangularRCSection, self).getDict()
         # retval.update(section_properties.RectangularSection.getDict(self))
         retval= dict()
-        retval['rc_section_base']= RCSectionBase.getDict(self)
+        retval['rc_section_base']= rc_section_base.RCSectionBase.getDict(self)
         retval['section_properties']= section_properties.RectangularSection.getDict(self)
         retval['swap_reinforcement_axes']= self.swapReinforcementAxes
         retval['shear_reinforcement_z']= self.shReinfZ
@@ -70,7 +72,7 @@ class BasicRectangularRCSection(rc_section_base.RCSectionBase, section_propertie
         '''
         # super(BasicRectangularRCSection, self).setFromDict(dct)
         # section_properties.RectangularSection.setFromDict(self, dct)
-        RCSectionBase.setFromDict(self, dct['rc_section_base'])
+        rc_section_base.RCSectionBase.setFromDict(self, dct['rc_section_base'])
         section_properties.RectangularSection.setFromDict(self, dct['section_properties'])
         self.swapReinforcementAxes= dct['swap_reinforcement_axes']
         self.shReinfZ= dct['shear_reinforcement_z']
@@ -86,7 +88,7 @@ class BasicRectangularRCSection(rc_section_base.RCSectionBase, section_propertie
         self.shReinfZ= None
         self.torsionReinf.clear()
         self.torsionReinf= None
-        RCSectionBase.clear(self)
+        rc_section_base.RCSectionBase.clear(self)
         section_properties.clear(self)
                 
     def __eq__(self, other):

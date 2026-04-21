@@ -11,9 +11,10 @@ import os
 import sys
 import math
 from misc_utils import log_messages as lmsg
-from materials.sections.fiber_section import basic_rectangular_rc_section
 from materials.sections import stress_calc as sc
-from materials.sections.fiber_section.main_reinforcement import ReinfRow
+from materials.sections.fiber_section import basic_rectangular_rc_section
+from materials.sections.fiber_section import main_reinforcement
+from materials.sections.fiber_section import shear_reinforcement
 
 class RCRectangularSection(basic_rectangular_rc_section.BasicRectangularRCSection):
     ''' This class is used to define the variables that make up a reinforced 
@@ -42,8 +43,8 @@ class RCRectangularSection(basic_rectangular_rc_section.BasicRectangularRCSectio
             
         # Longitudinal reinforcement
         self.minCover= 0.0 
-        self.positvRebarRows= LongReinfLayers() # list of ReinfRow data (positive face)
-        self.negatvRebarRows= LongReinfLayers() # list of ReinfRow data (negative face)
+        self.positvRebarRows= main_reinforcement.LongReinfLayers() # list of ReinfRow data (positive face)
+        self.negatvRebarRows= main_reinforcement.LongReinfLayers() # list of ReinfRow data (negative face)
         
     def getDict(self):
         ''' Return a dictionary with the values of the object members.'''
@@ -107,7 +108,7 @@ class RCRectangularSection(basic_rectangular_rc_section.BasicRectangularRCSectio
         os.write(indentation+'Top reinforcement: \n')
         self.negatvRebarRows.report(os, indentation+'  ')
         
-    def appendRow(self, positiveReinf, rebarRow:ReinfRow):
+    def appendRow(self, positiveReinf, rebarRow:main_reinforcement.ReinfRow):
         ''' Constructs append the giver ReinfRow to the reinforcement in the 
             positive (positiveReinf==True) or negative side of the section.
 
@@ -120,7 +121,7 @@ class RCRectangularSection(basic_rectangular_rc_section.BasicRectangularRCSectio
         else:
             self.negatvRebarRows.append(rebarRow)
         
-    def appendPositiveRow(self, rebarRow:ReinfRow):
+    def appendPositiveRow(self, rebarRow:main_reinforcement.ReinfRow):
         ''' Constructs append the giver ReinfRow to the reinforcement in the 
             positive side of the section.
 
@@ -128,7 +129,7 @@ class RCRectangularSection(basic_rectangular_rc_section.BasicRectangularRCSectio
         '''
         self.appendRow(positiveReinf= True, rebarRow= rebarRow)
         
-    def appendNegativeRow(self, rebarRow:ReinfRow):
+    def appendNegativeRow(self, rebarRow:main_reinforcement.ReinfRow):
         ''' Constructs append the giver ReinfRow to the reinforcement in the 
             negative side of the section.
 
@@ -167,7 +168,7 @@ class RCRectangularSection(basic_rectangular_rc_section.BasicRectangularRCSectio
             rowWidth= self.h
         else:
             rowWidth= self.b
-        rr= ReinfRow(rebarsDiam= rebarsDiam, nRebars= nRebars, width= rowWidth, nominalCover= nominalCover, nominalLatCover= nominalLatCover)
+        rr= main_reinforcement.ReinfRow(rebarsDiam= rebarsDiam, nRebars= nRebars, width= rowWidth, nominalCover= nominalCover, nominalLatCover= nominalLatCover)
         self.appendRow(positiveReinf= positiveReinf, rebarRow= rr)
         return rr
     
@@ -599,9 +600,9 @@ class RCRectangularSection(basic_rectangular_rc_section.BasicRectangularRCSectio
         '''
         # Shear reinforcement.
         if(nShReinfBranchesY>0):
-            self.shReinfY= ShearReinforcement(familyName= "sh1uy", nShReinfBranches= nShReinfBranchesY, areaShReinfBranch= math.pi*(fiStirrY)**2/4., shReinfSpacing= spacingY, angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
+            self.shReinfY= shear_reinforcement.ShearReinforcement(familyName= "sh1uy", nShReinfBranches= nShReinfBranchesY, areaShReinfBranch= math.pi*(fiStirrY)**2/4., shReinfSpacing= spacingY, angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
         if(nShReinfBranchesZ>0):
-            self.shReinfZ= ShearReinforcement(familyName= "sh1z", nShReinfBranches= nShReinfBranchesZ, areaShReinfBranch= math.pi*(fiStirrZ)**2/4., shReinfSpacing= spacingZ, angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
+            self.shReinfZ= shear_reinforcement.ShearReinforcement(familyName= "sh1z", nShReinfBranches= nShReinfBranchesZ, areaShReinfBranch= math.pi*(fiStirrZ)**2/4., shReinfSpacing= spacingZ, angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
 
 def compute_element_reinforcement(element):
     ''' Return a list containing the reinforced concrete sections from the
