@@ -43,32 +43,6 @@ rebLayerByNumFi_mm= main_reinforcement.rebLayerByNumFi_mm
 rebLayer_m= main_reinforcement.rebLayer_m
 rebLayerByNumFi_m= main_reinforcement.rebLayerByNumFi_m
 
-def write_dxf(geomSection, modelSpace, concreteLayerName= 'concrete', reinforcementLayerName= 'reinforcement'):
-    ''' Writes the shape contour in the given DXF model space.
-
-    :param modelSpace: ezdxf model space to write into.
-    :param concretLayerName: DXF layer name for concrete material.
-    :param reinforcementLayerName: DXF layer name for steel material.
-    '''
-    regions= geomSection.getRegions
-    for r in regions:
-        vertices= r.getPolygon().getVertexList()
-        points= list()
-        for v in vertices:
-            points.append((v.x,v.y,0.0))
-        points.append(points[0]) # close region.
-        modelSpace.add_lwpolyline(points, dxfattribs={"layer": concreteLayerName})
-    # Draw reinforcement.
-    reinforcement= geomSection.getReinfLayers
-    for reinfLayer in reinforcement:
-        rebars= reinfLayer.getReinfBars
-        for b in rebars:
-            ptPlot= b.getPos2d
-            rPlot= b.diameter/2.0
-            #labelPlot= str(int(round(b.diameter*1e3)))
-            modelSpace.add_circle(center= (ptPlot.x, ptPlot.y), radius= rPlot, dxfattribs={"layer": reinforcementLayerName})
-    
-
 def compute_element_rc_sections(elements, propName= None):
     ''' Return a list containing the reinforced concrete sections computed
         from the values of the properties defined in the elements argument. 
