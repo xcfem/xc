@@ -140,18 +140,11 @@ class nDarray_rep
                                             //     2  ->  BJmatrix
                                             //     *  ->  ********   */
     inline size_t get_index(int first, int second) const
-      {
-        //assert(get_nDarray_rank()==3);
-        return (first - 1)*dim[1]+second - 1;
-      }
+      { return (first - 1)*dim[1]+second - 1; }
     inline size_t get_index(int first, int second, int third) const
-      {
-        //assert(get_nDarray_rank()==3);
-        return ((first - 1)*dim[1]+second - 1)*dim[2]+third - 1;
-      }
+      { return ((first - 1)*dim[1]+second - 1)*dim[2]+third - 1; }
     inline size_t get_index(int first, int second, int third, int fourth) const
       {
-        //assert(get_nDarray_rank()==4);
         return (((first - 1)*dim[1]+second - 1)*dim[2]+third - 1)*dim[3]+fourth - 1;
       }
   public:
