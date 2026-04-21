@@ -96,7 +96,7 @@ def compute_element_rc_sections(elements, propName= None):
     '''
     retval= list()
     for el in elements:
-        elementSections= compute_element_reinforcement(el)
+        elementSections= rc_rectangular_section.compute_element_reinforcement(el)
         # Assign elements to each section.
         for i, eSection in enumerate(elementSections):
             if(eSection not in retval):
