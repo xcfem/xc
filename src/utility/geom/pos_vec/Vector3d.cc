@@ -105,6 +105,10 @@ boost::python::list Vector3d::getPyList(void) const
 Dir3d Vector3d::getDirection(void) const
   { return Dir3d(*this); }
 
+//! @brief return true if one of the coordinate components is not a number.
+bool Vector3d::notAVector(void) const
+  { return (std::isnan(x()) || std::isnan(y()) || std::isnan(z()) ); }
+
 bool Vector3d::EsUnitario(const double &tol) const
   {
     const GEOM_FT md2= GetModulus2();

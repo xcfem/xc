@@ -74,6 +74,7 @@ class Vector3d: public ProtoGeom
       { return cgvct.z(); }
     FT_matrix getMatrix(void) const;
     boost::python::list getPyList(void) const;
+    bool notAVector(void) const;
     Dir3d getDirection(void) const;
     Vector3d &operator+=(const Vector3d &);
     Vector3d &operator-=(const Vector3d &);

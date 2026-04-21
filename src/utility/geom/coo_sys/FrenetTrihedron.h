@@ -52,6 +52,12 @@ class FrenetTrihedron: public ProtoGeom
     FrenetTrihedron(const Polyline3d &);
 
     const Polyline3d &getPath(void) const;
+    const std::vector<Vector3d> &getTangentVectorAtVertices(void) const;
+    boost::python::list getTangentVectorAtVerticesPy(void) const;
+    const std::vector<Vector3d> &getNormalVectorAtVertices(void) const;
+    boost::python::list getNormalVectorAtVerticesPy(void) const;
+    const std::vector<Vector3d> &getBinormalVectorAtVertices(void) const;
+    boost::python::list getBinormalVectorAtVerticesPy(void) const;
 
     Vector3d getTangent(const double &) const;
     Vector3d getNormal(const double &) const;

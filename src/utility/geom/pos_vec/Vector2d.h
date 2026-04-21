@@ -83,6 +83,7 @@ class Vector2d: public ProtoGeom
       { return Vector2d::operator()(2); }
     FT_matrix getMatrix(void) const;
     boost::python::list getPyList(void) const;
+    bool notAVector(void) const;
     Vector2d &operator+=(const Vector2d &);
     Vector2d &operator-=(const Vector2d &);
     Vector2d operator+(const Vector2d &) const;

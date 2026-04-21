@@ -108,6 +108,9 @@ void FrenetTrihedron::compute_vectors(void)
       }
     else // 3 vertex at least.
       {
+	const double length= path.getLength();
+	const double tol= length/1e6;
+	const double tol2= tol*tol;
 	size_t count= 0; // vertex iterator.
 	for(Polyline3d::const_iterator vi= path.begin(); vi!=path.end(); vi++, count++)
 	  {
@@ -134,11 +137,65 @@ void FrenetTrihedron::compute_vectors(void)
 	    Vector3d tangent= tangent_vectors[count];
 	    const Vector3d binormal= tangent.getCross(normal);
 	    tangent= normal.getCross(binormal);
+	    const double tangentNorm2= tangent.GetModulus2();
+	    if(tangentNorm2<tol2)
+	      {
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; something went wrong, "
+		          << " tangent vector is too small: " << tangent
+			  << Color::def << std::endl;
+		exit(-1);
+	      }
+	    
 	    normal_vectors[count]= normal.getNormalized();
 	    tangent_vectors[count]= tangent.getNormalized();
 	    binormal_vectors[count]= binormal.getNormalized();
 	  }
       }
+  }
+//! @brief Return a reference to the tangent vectors.
+const std::vector<Vector3d> &FrenetTrihedron::getTangentVectorAtVertices(void) const
+  { return this->tangent_vectors; }
+
+//! @brief Return a Python list containing the tangent vectors at each of the
+//! vertices.
+boost::python::list FrenetTrihedron::getTangentVectorAtVerticesPy(void) const
+  {
+    boost::python::list retval;
+    std::vector<Vector3d>::const_iterator i= this->tangent_vectors.begin();
+    for(;i!=this->tangent_vectors.end();i++)
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return a reference to the normal vectors.
+const std::vector<Vector3d> &FrenetTrihedron::getNormalVectorAtVertices(void) const
+  { return this->normal_vectors; }
+
+//! @brief Return a Python list containing the normal vectors at each of the
+//! vertices.
+boost::python::list FrenetTrihedron::getNormalVectorAtVerticesPy(void) const
+  {
+    boost::python::list retval;
+    std::vector<Vector3d>::const_iterator i= this->normal_vectors.begin();
+    for(;i!=this->normal_vectors.end();i++)
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return a oeference to the binormal vectors.
+const std::vector<Vector3d> &FrenetTrihedron::getBinormalVectorAtVertices(void) const
+  { return this->binormal_vectors; }
+
+//! @brief Return a Python list containing the normal vectors at each of the
+//! vertices.
+boost::python::list FrenetTrihedron::getBinormalVectorAtVerticesPy(void) const
+  {
+    boost::python::list retval;
+    std::vector<Vector3d>::const_iterator i= this->binormal_vectors.begin();
+    for(;i!=this->binormal_vectors.end();i++)
+      retval.append(*i);
+    return retval;
   }
 
 //! @brief Return the tangent vector corresponding to the given arc length.
@@ -151,19 +208,33 @@ Vector3d FrenetTrihedron::getTangent(const double &s) const
     const double s0= (*i0).first;
     const Pos3d v0= (*(*i0).second);
     const size_t j0= std::distance(path.begin(),(*i0).second);
-    if(j0<tangent_vectors.size())
+    const size_t sz= tangent_vectors.size();
+    if(j0<sz)
       {
 	const Vector3d t0= tangent_vectors[j0];
-	const double s1= (*i1).first;
-	const Pos3d v1= (*(*i1).second);
-	const size_t j1= j0+1; //std::distance(path.begin(),(*i1).second);
-	const Vector3d t1= tangent_vectors[j1];
-	retval= (t1-t0)/(s1-s0)*(s-s0)+t0;
+	retval= t0;
+	const size_t j1= j0+1;
+	if(j1<sz)
+	  {
+	    const double s1= (*i1).first;
+	    //const Pos3d v1= (*(*i1).second);
+	    const Vector3d t1= tangent_vectors[j1];
+	    std::cout << "j0= " << j0 << std::endl;
+	    std::cout << "j1= " << j1 << std::endl;
+	    std::cout << "sz= " << sz << std::endl;
+	    std::cout << "s0= " << s0 << std::endl;
+	    std::cout << "s= " << s << std::endl;
+	    std::cout << "s1= " << s1 << std::endl;
+	    std::cout << "t0= " << t0 << std::endl;
+	    std::cout << "t1= " << t1 << std::endl;
+	    retval+= (t1-t0)/(s1-s0)*(s-s0);
+	  }
       }
     else
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; index out of range."
 		<< Color::def << std::endl;
+    std::cout << "tangent(" << s << ")= " << retval << std::endl;
     return retval;
   }
 
