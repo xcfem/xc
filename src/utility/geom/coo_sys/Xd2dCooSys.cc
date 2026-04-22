@@ -72,7 +72,7 @@ FT_matrix Xd2dCooSys::getLocalCoordinates(const Xd2dCooSys::VGlobal &v) const
 //! @brief Hace que el vector básico 1 tenga la dirección
 //! y sentido del being passed as parameter. If the system has
 //! dimension 2 the basic vector is normal to the first one
-//! in couterclockwise sense.
+//! in coumterclockwise sense.
 void Xd2dCooSys::XAxisVector(const VGlobal &vX)
   {
     if(vX.Nulo())
