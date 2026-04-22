@@ -98,7 +98,7 @@ class PileFoundation(pile.CircularPile):
         '''Return the vertical stiffness of a single pile according to clause
            5.13.1.1 of the reference document (see the docstring of this file).
            The stiffness of the pile itself is already computed by the finite
-           element model, so it is ignorede here.
+           element model, so it is ignored here.
         '''
         # Lc= self.getCalcLength()
         # A= self.getCrossSectionArea()
