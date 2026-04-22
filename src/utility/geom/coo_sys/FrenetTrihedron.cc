@@ -108,9 +108,6 @@ void FrenetTrihedron::compute_vectors(void)
       }
     else // 3 vertex at least.
       {
-	const double length= path.getLength();
-	const double tol= length/1e6;
-	const double tol2= tol*tol;
 	size_t count= 0; // vertex iterator.
 	for(Polyline3d::const_iterator vi= path.begin(); vi!=path.end(); vi++, count++)
 	  {
@@ -123,7 +120,7 @@ void FrenetTrihedron::compute_vectors(void)
 		thisVertexIter= vi+1;
 		nextVertexIter= vi+2;
 	      }
-	    else if(thisVertexIter == path.end()) // No following vertex.
+	    else if(nextVertexIter == path.end()) // No following vertex.
 	      {
 		previousVertexIter= vi-2;
 		thisVertexIter= vi-1;
@@ -135,26 +132,6 @@ void FrenetTrihedron::compute_vectors(void)
 	    const Pos3d center= circle_center(A, B, C);
 	    const Vector3d normal= (center-*vi);
 	    Vector3d tangent= tangent_vectors[count];
-	    if(tangent.notAVector())
-	      {
-		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-			  << "; something went wrong, "
-			  << " tangent vector has NaN components: " << tangent
-			  << Color::def << std::endl;
-		exit(-1);
-	      }
-	    else
-	      {
-		const double tangentNorm2= tangent.GetModulus2();
-		if(tangentNorm2<tol2)
-		  {
-		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-			      << "; something went wrong, "
-			      << " tangent vector is too small: " << tangent
-			      << Color::def << std::endl;
-		    exit(-1);
-		  }
-	      }
 	    const Vector3d binormal= tangent.getCross(normal);
 	    tangent= normal.getCross(binormal);
 	  
@@ -230,14 +207,6 @@ Vector3d FrenetTrihedron::getTangent(const double &s) const
 	    const double s1= (*i1).first;
 	    //const Pos3d v1= (*(*i1).second);
 	    const Vector3d t1= tangent_vectors[j1];
-	    std::cout << "j0= " << j0 << std::endl;
-	    std::cout << "j1= " << j1 << std::endl;
-	    std::cout << "sz= " << sz << std::endl;
-	    std::cout << "s0= " << s0 << std::endl;
-	    std::cout << "s= " << s << std::endl;
-	    std::cout << "s1= " << s1 << std::endl;
-	    std::cout << "t0= " << t0 << std::endl;
-	    std::cout << "t1= " << t1 << std::endl;
 	    retval+= (t1-t0)/(s1-s0)*(s-s0);
 	  }
       }
@@ -245,7 +214,6 @@ Vector3d FrenetTrihedron::getTangent(const double &s) const
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; index out of range."
 		<< Color::def << std::endl;
-    std::cout << "tangent(" << s << ")= " << retval << std::endl;
     return retval;
   }
 
