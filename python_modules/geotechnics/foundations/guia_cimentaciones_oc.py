@@ -97,10 +97,13 @@ class PileFoundation(pile.CircularPile):
     def getVerticalStiffnessSinglePile(self):
         '''Return the vertical stiffness of a single pile according to clause
            5.13.1.1 of the reference document (see the docstring of this file).
+           The stiffness of the pile itself is already computed by the finite
+           element model, so it is ignorede here.
         '''
-        Lc= self.getCalcLength()
-        A= self.getCrossSectionArea()
-        Kv=1/(self.getDiameter()/40/self.pileBearingCapacity+Lc/A/self.E)
+        # Lc= self.getCalcLength()
+        # A= self.getCrossSectionArea()
+        # Kv= 1/(self.getDiameter()/40/self.pileBearingCapacity+Lc/A/self.E)
+        Kv=1/(self.getDiameter()/40/self.pileBearingCapacity)
         return Kv
 
     def getLinearSpringsConstants2D(self, alphaKh_x= 1.0, alphaKv_y= 1.0):
