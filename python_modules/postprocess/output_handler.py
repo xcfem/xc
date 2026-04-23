@@ -1098,33 +1098,38 @@ class OutputHandler(object):
         '''
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
-        if(fUnitConv is None):
-            unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
-        else:
-            unitConversionFactor= fUnitConv
-        LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
-        # Try to create a property diagram.
-        nodesHaveProperty= (prop_statistics.find_property(iterable= setToDisplay.nodes, propertyName= itemToDisp) is not None)
-        if(nodesHaveProperty):
-            diagram= npd.NodePropertyDiagram(scaleFactor= 1.0, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor,sets=[setToDisplay], propertyName= itemToDisp, defaultDirection= defaultDirection, defaultValue= defaultValue)
-            diagramAdded= diagram.addDiagram(defFScale= defFScale)
-        else: # itemToDisp is not a property of the nodes.
-            # Try to create an attribute diagram.
-            diagram= nad.NodeAttributeDiagram(scaleFactor= 1.0, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor, sets=[setToDisplay], attributeName= itemToDisp)
-            diagramAdded= diagram.addDiagram()
-        displaySettings= self.getDisplaySettingsFE()
-        grid= displaySettings.setupGrid(setToDisplay)
-        if __debug__:
-            if(not grid):
-                AssertionError('Can\'t setup grid.')
-        meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale,color=setToDisplay.color)
-        if(meshSceneOk):
-            displaySettings.appendDiagram(diagram) #Append diagram to the scene.
+        if(len(setToDisplay.nodes)>1):
+            if(fUnitConv is None):
+                unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
+            else:
+                unitConversionFactor= fUnitConv
+            LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
+            # Try to create a property diagram.
+            nodesHaveProperty= (prop_statistics.find_property(iterable= setToDisplay.nodes, propertyName= itemToDisp) is not None)
+            if(nodesHaveProperty):
+                diagram= npd.NodePropertyDiagram(scaleFactor= 1.0, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor,sets=[setToDisplay], propertyName= itemToDisp, defaultDirection= defaultDirection, defaultValue= defaultValue)
+                diagramAdded= diagram.addDiagram(defFScale= defFScale)
+            else: # itemToDisp is not a property of the nodes.
+                # Try to create an attribute diagram.
+                diagram= nad.NodeAttributeDiagram(scaleFactor= 1.0, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor, sets=[setToDisplay], attributeName= itemToDisp)
+                diagramAdded= diagram.addDiagram()
+            displaySettings= self.getDisplaySettingsFE()
+            grid= displaySettings.setupGrid(setToDisplay)
+            if __debug__:
+                if(not grid):
+                    AssertionError('Can\'t setup grid.')
+            meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale,color=setToDisplay.color)
+            if(meshSceneOk):
+                displaySettings.appendDiagram(diagram) #Append diagram to the scene.
 
-            loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
-            if(not caption):
-                caption= loadCaseName+' '+itemToDisp+' '+setToDisplay.description
-            displaySettings.displayScene(caption=caption, unitDescription= unitDescription, fileName= fileName)
+                loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
+                if(not caption):
+                    caption= loadCaseName+' '+itemToDisp+' '+setToDisplay.description
+                displaySettings.displayScene(caption=caption, unitDescription= unitDescription, fileName= fileName)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; the given set (named '+setToDisplay.name+') has: '+str(len(setToDisplay.nodes))+' nodes, so it cannot be displayed. Did you forget to call the fillDownwards() method?')
 
     def displayElementValueDiagram(self, itemToDisp, setToDisplay=None,caption= None,fileName=None,defFScale=0.0):
         '''displays the a displacement (uX,uY,...) or a property defined in 
@@ -1144,30 +1149,35 @@ class OutputHandler(object):
          '''
         if(setToDisplay is None):
             setToDisplay= self.modelSpace.getTotalSet()
-        unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
-        LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
-        # Try to create a property diagram.
-        elementsHaveProperty= (prop_statistics.find_property(iterable= setToDisplay.elements, propertyName= itemToDisp) is not None)
-        if(elementsHaveProperty):
-            diagram= epd.ElementPropertyDiagram(scaleFactor= 1.0, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor, sets=[setToDisplay], propertyName= itemToDisp)
-            diagramAdded= diagram.addDiagram()
-        else: # itemToDisp is not a property of the elements.
-            # Try to create an attribute diagram.
-            diagram= ead.ElementAttributeDiagram(scaleFactor= 1.0, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor, sets=[setToDisplay], attributeName= itemToDisp)
-            diagramAdded= diagram.addDiagram()
-        displaySettings= self.getDisplaySettingsFE()
-        grid= displaySettings.setupGrid(setToDisplay)
-        if __debug__:
-            if(not grid):
-                AssertionError('Can\'t setup grid.')
-        meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale,color=setToDisplay.color)
-        if(meshSceneOk):
-            displaySettings.appendDiagram(diagram) #Append diagram to the scene.
+        if(len(setToDisplay.elements)>0):  
+            unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
+            LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
+            # Try to create a property diagram.
+            elementsHaveProperty= (prop_statistics.find_property(iterable= setToDisplay.elements, propertyName= itemToDisp) is not None)
+            if(elementsHaveProperty):
+                diagram= epd.ElementPropertyDiagram(scaleFactor= 1.0, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor, sets=[setToDisplay], propertyName= itemToDisp)
+                diagramAdded= diagram.addDiagram()
+            else: # itemToDisp is not a property of the elements.
+                # Try to create an attribute diagram.
+                diagram= ead.ElementAttributeDiagram(scaleFactor= 1.0, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor, sets=[setToDisplay], attributeName= itemToDisp)
+                diagramAdded= diagram.addDiagram()
+            displaySettings= self.getDisplaySettingsFE()
+            grid= displaySettings.setupGrid(setToDisplay)
+            if __debug__:
+                if(not grid):
+                    AssertionError('Can\'t setup grid.')
+            meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale,color=setToDisplay.color)
+            if(meshSceneOk):
+                displaySettings.appendDiagram(diagram) #Append diagram to the scene.
 
-            loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
-            if(not caption):
-                caption= loadCaseName+' '+itemToDisp+' '+setToDisplay.description
-            displaySettings.displayScene(caption= caption, unitDescription= unitDescription, fileName=fileName)
+                loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
+                if(not caption):
+                    caption= loadCaseName+' '+itemToDisp+' '+setToDisplay.description
+                displaySettings.displayScene(caption= caption, unitDescription= unitDescription, fileName=fileName)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; the given set (named '+setToDisplay.name+') has: '+str(len(setToDisplay.elements))+' elements, so it cannot be displayed. Did you forget to call the fillDownwards() method?')
 
     def extractEigenvectorComponents(self, mode= 1, setToDisplay=None, defFScale=0.0, extractDispComponents= True, extractRotComponents= True):
         '''Displays the computed eigenvectors on the set argument.
