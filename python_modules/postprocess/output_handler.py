@@ -1068,7 +1068,7 @@ class OutputHandler(object):
             displaySettings.displayConstraints(setToDisplay= setToDisplay, scale= scaleConstr)
             displaySettings.displayScene(caption=caption, unitDescription= unitDescription, fileName=fileName)
     
-    def displayNodeValueDiagram(self, itemToDisp, setToDisplay=None,caption= None,fileName=None, defFScale=0.0, defaultDirection= 'J', defaultValue= 0.0, rgMinMax= None, fUnitConv= None, unitDescription= None):
+    def displayNodeValueDiagram(self, itemToDisp, setToDisplay=None, caption= None,fileName=None, defFScale=0.0, defaultDirection= 'J', defaultValue= 0.0, rgMinMax= None, fUnitConv= None, unitDescription= None):
         '''displays the a displacement (uX,uY,...) or a property defined in 
            nodes as a diagram over lines.
 
@@ -1104,7 +1104,7 @@ class OutputHandler(object):
             unitConversionFactor= fUnitConv
         LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
         # Try to create a property diagram.
-        nodesHaveProperty= (prop_statistics.find_property(iterable= setToDisplay.elements, propertyName= itemToDisp) is not None)
+        nodesHaveProperty= (prop_statistics.find_property(iterable= setToDisplay.nodes, propertyName= itemToDisp) is not None)
         if(nodesHaveProperty):
             diagram= npd.NodePropertyDiagram(scaleFactor= 1.0, lRefModSize= LrefModSize, fUnitConv= unitConversionFactor,sets=[setToDisplay], propertyName= itemToDisp, defaultDirection= defaultDirection, defaultValue= defaultValue)
             diagramAdded= diagram.addDiagram(defFScale= defFScale)
