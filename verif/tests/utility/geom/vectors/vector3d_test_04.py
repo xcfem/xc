@@ -13,7 +13,7 @@ import math
 import geom
 import numpy as np
 
-vec1= geom.Vector3d(1,0,0)
+vec1= geom.Vector2d(1,0)
 f64= np.float64(3.141592)
 productA= vec1*f64 # This works.
 productB= float(f64)*vec1 # This also works.
