@@ -96,7 +96,7 @@ class VectorFieldData(object):
              pushing: true: arrow ends in the point.
                       false: arrow starts in the point.
         '''
-        factor= fUnitConv*self.scaleFactor
+        factor= float(fUnitConv*self.scaleFactor)
         if(pushing):
           self.points.InsertNextPoint(px-vx*factor,py-vy*factor,pz-vz*factor)
         else:
