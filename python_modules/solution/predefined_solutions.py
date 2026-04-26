@@ -56,7 +56,6 @@ class SolutionProcedure(object):
     :ivar soeType: type of the system of equations object.
     :ivar solverType: type of the solver.
     :ivar maxNumIter: maximum number of iterations (defauts to 10)
-    :ivar numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
     :ivar solu:
     :ivar solCtrl:
     :ivar modelWrapper: model representation for the analysis.
@@ -467,7 +466,7 @@ class SimpleTransformationStaticLinear(SolutionProcedure):
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         :param integratorType: integrator type (see integratorSetup).
         '''
-        super(SimpleTransformationStaticLinear,self).__init__(name, 'transformation', maxNumIter, convergenceTestTol, printFlag, numSteps, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType, solutionAlgorithmType= 'linear_soln_algo')
+        super(SimpleTransformationStaticLinear,self).__init__(name= name, constraintHandlerType= 'transformation', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver', integratorType= integratorType, solutionAlgorithmType= 'linear_soln_algo')
         self.feProblem= prb
         
 ## Non-linear static analysis.
@@ -569,8 +568,22 @@ class TransformationNewtonRaphsonBandGen(SolutionProcedure):
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         :param integratorType: integrator type (see integratorSetup).
         '''
-        super(TransformationNewtonRaphsonBandGen,self).__init__(name, 'transformation', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', integratorType= integratorType, solutionAlgorithmType= 'newton_raphson_soln_algo')
+        super(TransformationNewtonRaphsonBandGen,self).__init__(name= name, constraintHandlerType= 'transformation', maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', integratorType= integratorType, solutionAlgorithmType= 'newton_raphson_soln_algo')
         self.feProblem= prb
+        
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super().setup()
+        if(self.numSteps!=1):
+            self.integrator.dLambda1= 1.0/self.numSteps
+        
+### Convenience function
+def transformation_newton_raphson_band_gen(prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'norm_unbalance_conv_test'):
+    solProc= TransformationNewtonRaphsonBandGen(prb, name= name, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType)
+    solProc.setup()
+    return solProc.analysis
         
 class PenaltyNewtonRaphsonBase(SolutionProcedure):
     ''' Base class for penalty Newton-Raphson solution aggregation.'''

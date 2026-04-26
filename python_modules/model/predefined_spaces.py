@@ -393,6 +393,28 @@ class PredefinedSpace(object):
         self.preprocessor.getElementHandler.dimElem= elementDimension
         self.preprocessor.getElementHandler.seedElemHandler.dimElem= elementDimension
 
+    def setNumSections(self, numSections:int):
+        ''' Set the number of sections for the new elements (when appropriate).
+
+        :param numSections: number of sections along the element.
+        '''
+        self.preprocessor.getElementHandler.numSections= numSections
+        
+    def setDefaultIntegrator(self, beamIntegration):
+        ''' Set the default integration scheme for the new elements (when
+            appropriate).
+
+        :param beamIntegrationName: name of the beam integration scheme for 
+                                    the new elements.
+        '''
+        self.preprocessor.getElementHandler.defaultIntegrator= beamIntegration.name
+
+    def getDefaultIntegrator(self):
+        ''' Return the name of the default integration scheme for the new 
+            elements.
+        '''
+        return self.preprocessor.getElementHandler.defaultIntegrator        
+
     def newElement(self, elementType:str, nodeTags):
         ''' Create a new element.
 
