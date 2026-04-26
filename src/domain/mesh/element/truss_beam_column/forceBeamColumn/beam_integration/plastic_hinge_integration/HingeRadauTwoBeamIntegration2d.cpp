@@ -56,15 +56,17 @@
 #include <domain/mesh/element/utils/Information.h>
 #include "domain/component/Parameter.h"
 
-XC::HingeRadauTwoBeamIntegration2d::HingeRadauTwoBeamIntegration2d(double e,
-                                                               double a,
-                                                               double i,
-                                                               double lpi,
-                                                               double lpj)
-  : HingeBeamIntegration2d(BEAM_INTEGRATION_TAG_HingeRadauTwo2d,e,a,i,lpi,lpj) {}
+XC::HingeRadauTwoBeamIntegration2d::HingeRadauTwoBeamIntegration2d(int tag)
+  : HingeBeamIntegration2d(tag, BEAM_INTEGRATION_TAG_HingeRadauTwo2d){}
 
-XC::HingeRadauTwoBeamIntegration2d::HingeRadauTwoBeamIntegration2d(void)
-  : HingeBeamIntegration2d(BEAM_INTEGRATION_TAG_HingeRadauTwo2d){}
+XC::HingeRadauTwoBeamIntegration2d::HingeRadauTwoBeamIntegration2d(int tag,
+								   double e,
+								   double a,
+								   double i,
+								   double lpi,
+								   double lpj)
+  : HingeBeamIntegration2d(tag, BEAM_INTEGRATION_TAG_HingeRadauTwo2d,e,a,i,lpi,lpj)
+    {}
 
 void XC::HingeRadauTwoBeamIntegration2d::getSectionLocations(int numSections, double L,double *xi) const
 {

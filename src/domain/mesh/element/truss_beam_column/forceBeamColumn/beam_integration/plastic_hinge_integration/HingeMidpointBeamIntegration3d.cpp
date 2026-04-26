@@ -55,12 +55,12 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <domain/mesh/element/utils/Information.h>
 
-XC::HingeMidpointBeamIntegration3d::HingeMidpointBeamIntegration3d(double e,double a,double iz,double iy,
+XC::HingeMidpointBeamIntegration3d::HingeMidpointBeamIntegration3d(int tag, double e,double a,double iz,double iy,
 							           double g,double j,double lpi,double lpj)
-  : HingeBeamIntegration3d(BEAM_INTEGRATION_TAG_HingeMidpoint3d,e,a,iz,iy,g,j,lpi,lpj) {}
+  : HingeBeamIntegration3d(tag, BEAM_INTEGRATION_TAG_HingeMidpoint3d,e,a,iz,iy,g,j,lpi,lpj) {}
 
-XC::HingeMidpointBeamIntegration3d::HingeMidpointBeamIntegration3d(const CrossSectionProperties3d &cts,const double &lpi,const double &lpj)
-  : HingeBeamIntegration3d(BEAM_INTEGRATION_TAG_HingeMidpoint3d,cts,lpi,lpj) {}
+XC::HingeMidpointBeamIntegration3d::HingeMidpointBeamIntegration3d(int tag, const CrossSectionProperties3d &cts,const double &lpi,const double &lpj)
+  : HingeBeamIntegration3d(tag, BEAM_INTEGRATION_TAG_HingeMidpoint3d,cts,lpi,lpj) {}
 
 XC::BeamIntegration *XC::HingeMidpointBeamIntegration3d::getCopy(void) const
   { return new HingeMidpointBeamIntegration3d(*this); }

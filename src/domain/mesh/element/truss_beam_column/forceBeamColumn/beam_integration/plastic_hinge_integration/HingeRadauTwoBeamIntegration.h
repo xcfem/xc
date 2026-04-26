@@ -68,8 +68,8 @@ class ElementalLoad;
 class HingeRadauTwoBeamIntegration: public PlasticLengthsBeamIntegration
   {
   public:
-    HingeRadauTwoBeamIntegration(double lpI, double lpJ);
-    HingeRadauTwoBeamIntegration(void);
+    HingeRadauTwoBeamIntegration(int tag);
+    HingeRadauTwoBeamIntegration(int tag, double lpI, double lpJ);
   
     void getSectionLocations(int numSections, double L, double *xi) const;
     void getSectionWeights(int numSections, double L, double *wt) const;

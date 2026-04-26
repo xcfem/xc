@@ -52,18 +52,20 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 
-XC::UserDefinedHingeIntegration::UserDefinedHingeIntegration(int npL,
-							 const XC::Vector &ptL,
-							 const XC::Vector &wtL,
-							 int npR,
-							 const XC::Vector &ptR,
-							 const XC::Vector &wtR):
-  UserDefinedHingeIntegrationBase(BEAM_INTEGRATION_TAG_UserHinge,ptL,wtL,ptR,wtR)
+XC::UserDefinedHingeIntegration::UserDefinedHingeIntegration(int tag)
+  : UserDefinedHingeIntegrationBase(tag, BEAM_INTEGRATION_TAG_UserHinge)
   {}
 
-XC::UserDefinedHingeIntegration::UserDefinedHingeIntegration():
-  UserDefinedHingeIntegrationBase(BEAM_INTEGRATION_TAG_UserHinge)
+XC::UserDefinedHingeIntegration::UserDefinedHingeIntegration(int tag,
+							     int npL,
+							     const Vector &ptL,
+							     const Vector &wtL,
+							     int npR,
+							     const Vector &ptR,
+							     const Vector &wtR)
+  : UserDefinedHingeIntegrationBase(tag, BEAM_INTEGRATION_TAG_UserHinge,ptL,wtL,ptR,wtR)
   {}
+
 
 XC::BeamIntegration* XC::UserDefinedHingeIntegration::getCopy(void) const
   { return new UserDefinedHingeIntegration(*this); }

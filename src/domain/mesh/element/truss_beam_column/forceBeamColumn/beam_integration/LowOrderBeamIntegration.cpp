@@ -56,8 +56,12 @@
 #include "domain/mesh/element/utils/Information.h"
 #include "domain/component/Parameter.h"
 
-XC::LowOrderBeamIntegration::LowOrderBeamIntegration(int nIP, const Vector &pt, int nc, const Vector &wc)
-  : ParameterIDBeamIntegration(BEAM_INTEGRATION_TAG_LowOrder,pt,wc), Nc(nc), computed(false)
+XC::LowOrderBeamIntegration::LowOrderBeamIntegration(int tag)
+  : ParameterIDBeamIntegration(tag, BEAM_INTEGRATION_TAG_LowOrder)
+  {}
+
+XC::LowOrderBeamIntegration::LowOrderBeamIntegration(int tag, int nIP, const Vector &pt, int nc, const Vector &wc)
+  : ParameterIDBeamIntegration(tag, BEAM_INTEGRATION_TAG_LowOrder,pt,wc), Nc(nc), computed(false)
   {
 
     const int nf = nIP-nc;
@@ -93,10 +97,6 @@ XC::LowOrderBeamIntegration::LowOrderBeamIntegration(int nIP, const Vector &pt, 
 
     computed = true;
   }
-
-XC::LowOrderBeamIntegration::LowOrderBeamIntegration()
-  : ParameterIDBeamIntegration(BEAM_INTEGRATION_TAG_LowOrder)
-  {}
 
 void XC::LowOrderBeamIntegration::getSectionLocations(int numSections, double L, double *xi)
   {

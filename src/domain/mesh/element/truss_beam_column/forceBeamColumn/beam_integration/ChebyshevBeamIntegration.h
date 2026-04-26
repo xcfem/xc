@@ -38,7 +38,7 @@ class ChebyshevBeamIntegration : public BeamIntegration
   private:
     int type;
   public:
-    ChebyshevBeamIntegration(int type = 1);
+    ChebyshevBeamIntegration(int tag, int type = 1);
 
     void getSectionLocations(int nIP, double L, double *xi) const;
     void getSectionWeights(int nIP, double L, double *wt) const;

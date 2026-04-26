@@ -53,11 +53,11 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 
-XC::HingeRadauTwoBeamIntegration::HingeRadauTwoBeamIntegration(double lpi,double lpj)
-  : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeRadauTwo,lpi,lpj) {}
+XC::HingeRadauTwoBeamIntegration::HingeRadauTwoBeamIntegration(int tag)
+  : PlasticLengthsBeamIntegration(tag, BEAM_INTEGRATION_TAG_HingeRadauTwo) {}
 
-XC::HingeRadauTwoBeamIntegration::HingeRadauTwoBeamIntegration()
-  : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeRadauTwo) {}
+XC::HingeRadauTwoBeamIntegration::HingeRadauTwoBeamIntegration(int tag, double lpi,double lpj)
+  : PlasticLengthsBeamIntegration(tag, BEAM_INTEGRATION_TAG_HingeRadauTwo,lpi,lpj) {}
 
 void XC::HingeRadauTwoBeamIntegration::getSectionLocations(int numSections, double L, double *xi) const
 {

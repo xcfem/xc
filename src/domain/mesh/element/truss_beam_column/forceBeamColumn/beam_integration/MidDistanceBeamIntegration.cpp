@@ -50,8 +50,11 @@
 
 #include "MidDistanceBeamIntegration.h"
 
-XC::MidDistanceBeamIntegration::MidDistanceBeamIntegration(int nIP,const Vector &pt)
-  : ParameterIDBeamIntegration(BEAM_INTEGRATION_TAG_MidDistance,pt)
+XC::MidDistanceBeamIntegration::MidDistanceBeamIntegration(int tag)
+  : ParameterIDBeamIntegration(tag, BEAM_INTEGRATION_TAG_MidDistance) {}
+
+XC::MidDistanceBeamIntegration::MidDistanceBeamIntegration(int tag, int nIP,const Vector &pt)
+  : ParameterIDBeamIntegration(tag, BEAM_INTEGRATION_TAG_MidDistance,pt)
   {
 
     for(int i = 0; i < nIP; i++)
@@ -83,8 +86,6 @@ XC::MidDistanceBeamIntegration::MidDistanceBeamIntegration(int nIP,const Vector 
       { wts(i) = mids(i)-mids(i-1); }
   }
 
-XC::MidDistanceBeamIntegration::MidDistanceBeamIntegration(void)
-  : ParameterIDBeamIntegration(BEAM_INTEGRATION_TAG_MidDistance) {}
 
 void XC::MidDistanceBeamIntegration::getSectionLocations(int numSections, double L, double *xi)
   {

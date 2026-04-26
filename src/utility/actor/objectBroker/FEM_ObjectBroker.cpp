@@ -499,55 +499,55 @@ XC::BeamIntegration *XC::FEM_ObjectBroker::getNewBeamIntegration(int classTag)
     switch(classTag)
       {
       case BEAM_INTEGRATION_TAG_Lobatto:
-	return new LobattoBeamIntegration();
+	return new LobattoBeamIntegration(0);
 
       case BEAM_INTEGRATION_TAG_Legendre:
-	return new LegendreBeamIntegration();
+	return new LegendreBeamIntegration(0);
 
       case BEAM_INTEGRATION_TAG_Radau:
-	  return new RadauBeamIntegration();
+	  return new RadauBeamIntegration(0);
 
       case BEAM_INTEGRATION_TAG_NewtonCotes:
-	return new NewtonCotesBeamIntegration();
+	return new NewtonCotesBeamIntegration(0);
 
       case BEAM_INTEGRATION_TAG_Trapezoidal:        
-        return new TrapezoidalBeamIntegration();
+        return new TrapezoidalBeamIntegration(0);
 
       case BEAM_INTEGRATION_TAG_UserDefined:        
-        return new UserDefinedBeamIntegration();
+        return new UserDefinedBeamIntegration(0);
 	
       case BEAM_INTEGRATION_TAG_FixedLocation:        
-        return new FixedLocationBeamIntegration();
+        return new FixedLocationBeamIntegration(0);
 	
       case BEAM_INTEGRATION_TAG_LowOrder:        
-        return new LowOrderBeamIntegration();
+        return new LowOrderBeamIntegration(0);
 
       case BEAM_INTEGRATION_TAG_MidDistance:        
-        return new MidDistanceBeamIntegration();
+        return new MidDistanceBeamIntegration(0);
 	
       case BEAM_INTEGRATION_TAG_CompositeSimpson:        
-        return new CompositeSimpsonBeamIntegration();
+        return new CompositeSimpsonBeamIntegration(0);
 
       case BEAM_INTEGRATION_TAG_HingeMidpoint:
-	return new HingeMidpointBeamIntegration();
+	return new HingeMidpointBeamIntegration(0);
 
       case BEAM_INTEGRATION_TAG_HingeRadau:
-	return new HingeRadauBeamIntegration();
+	return new HingeRadauBeamIntegration(0);
 
       case BEAM_INTEGRATION_TAG_HingeRadauTwo:
-	return new HingeRadauTwoBeamIntegration();
+	return new HingeRadauTwoBeamIntegration(0);
 
       case BEAM_INTEGRATION_TAG_HingeEndpoint:
-	return new HingeEndpointBeamIntegration();
+	return new HingeEndpointBeamIntegration(0);
 
       case BEAM_INTEGRATION_TAG_UserHinge:
-	return new UserDefinedHingeIntegration();
+	return new UserDefinedHingeIntegration(0);
 
       case BEAM_INTEGRATION_TAG_DistHinge:
-	return new DistHingeIntegration();
+	return new DistHingeIntegration(0);
 
       // case BEAM_INTEGRATION_TAG_RegularizedHinge:
-      // 	return new RegularizedHingeIntegration();
+      // 	return new RegularizedHingeIntegration(0);
 
       default:
 	std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__

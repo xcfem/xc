@@ -65,9 +65,9 @@ class ParameterIDBeamIntegration: public UserDefinedBeamIntegrationBase
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
   public:
-    ParameterIDBeamIntegration(int classTag, const Vector &, const Vector &);
-    ParameterIDBeamIntegration(int classTag, const Vector &);
-    ParameterIDBeamIntegration(int classTag);
+    ParameterIDBeamIntegration(int tag, int classTag);
+    ParameterIDBeamIntegration(int tag, int classTag, const Vector &);
+    ParameterIDBeamIntegration(int tag, int classTag, const Vector &, const Vector &);
   
 
     int setParameter(const std::vector<std::string> &argv, Parameter &param);

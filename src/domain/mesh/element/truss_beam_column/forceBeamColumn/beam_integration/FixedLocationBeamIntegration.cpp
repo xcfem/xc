@@ -28,8 +28,12 @@
 #include <utility/matrix/Vector.h>
 
 
-XC::FixedLocationBeamIntegration::FixedLocationBeamIntegration(const Vector &pt)
-  : ParameterIDBeamIntegration(BEAM_INTEGRATION_TAG_FixedLocation,pt)
+XC::FixedLocationBeamIntegration::FixedLocationBeamIntegration(int tag)
+  : ParameterIDBeamIntegration(tag, BEAM_INTEGRATION_TAG_FixedLocation)
+  {}
+
+XC::FixedLocationBeamIntegration::FixedLocationBeamIntegration(int tag, const Vector &pt)
+  : ParameterIDBeamIntegration(tag, BEAM_INTEGRATION_TAG_FixedLocation,pt)
   {
     const int nIP = pts.Size();
 
@@ -44,10 +48,6 @@ XC::FixedLocationBeamIntegration::FixedLocationBeamIntegration(const Vector &pt)
 
     J.Solve(R, wts);
   }
-
-XC::FixedLocationBeamIntegration::FixedLocationBeamIntegration(void)
-  : ParameterIDBeamIntegration(BEAM_INTEGRATION_TAG_FixedLocation)
-  {}
 
 
 XC::BeamIntegration *XC::FixedLocationBeamIntegration::getCopy(void) const

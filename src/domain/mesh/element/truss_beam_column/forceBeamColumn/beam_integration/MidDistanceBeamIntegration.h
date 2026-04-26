@@ -66,8 +66,8 @@ namespace XC {
 class MidDistanceBeamIntegration: public ParameterIDBeamIntegration
   {
   public:
-    MidDistanceBeamIntegration(int nIP, const Vector &pt);
-    MidDistanceBeamIntegration();
+    MidDistanceBeamIntegration(int tag);
+    MidDistanceBeamIntegration(int tag, int nIP, const Vector &pt);
   
     void getSectionLocations(int numSections, double L, double *xi);
     void getSectionWeights(int numSections, double L, double *wt);

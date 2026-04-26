@@ -54,11 +54,11 @@
 #include <utility/matrix/Vector.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
-XC::HingeEndpointBeamIntegration::HingeEndpointBeamIntegration(double lpi,double lpj)
-  : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeEndpoint,lpi,lpj) {}
+XC::HingeEndpointBeamIntegration::HingeEndpointBeamIntegration(int tag)
+  : PlasticLengthsBeamIntegration(tag, BEAM_INTEGRATION_TAG_HingeEndpoint) {}
 
-XC::HingeEndpointBeamIntegration::HingeEndpointBeamIntegration(void)
-  : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeEndpoint) {}
+XC::HingeEndpointBeamIntegration::HingeEndpointBeamIntegration(int tag, double lpi,double lpj)
+  : PlasticLengthsBeamIntegration(tag, BEAM_INTEGRATION_TAG_HingeEndpoint,lpi,lpj) {}
 
 void XC::HingeEndpointBeamIntegration::getSectionLocations(int numSections, double L,double *xi) const
   {

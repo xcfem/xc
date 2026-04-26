@@ -52,8 +52,8 @@
 #ifndef BeamIntegration_h
 #define BeamIntegration_h
 
-#include <utility/actor/actor/MovableObject.h>
-#include "utility/kernel/CommandEntity.h"
+#include "utility/tagged/TaggedObject.h"
+#include "utility/actor/actor/MovableObject.h"
 
 class ExprAlgebra;
 
@@ -64,6 +64,7 @@ class Information;
 class FVector;
 class CrdTransf;
 class Vector;
+class BeamIntegratorHandler;
 
 //! @ingroup BeamColumnElemGrpF
 //!
@@ -77,12 +78,16 @@ class Vector;
 //! OpenSees(XC) to represent distributed plasticity or non-prismatic
 //! section details in force-based beam-column elements, i.e.,
 //! across the entire element domain [0, L].
-class BeamIntegration: public MovableObject, public CommandEntity
+class BeamIntegration: public TaggedObject, public MovableObject
   {
   public:
-    BeamIntegration(int classTag);
+    BeamIntegration(int tag, int classTag);
     inline virtual ~BeamIntegration(void) {}
 
+    const BeamIntegratorHandler *getBeamIntegratorHandler(void) const;
+    BeamIntegratorHandler *getBeamIntegratorHandler(void);
+    std::string getName(void) const;
+    
     virtual void getSectionWeights(int nIP, double L, double *wt) const= 0;
     boost::python::list getSectionWeightsPy(int nIP, double L) const;
     const Vector &getIntegrPointWeights(int nIP, double L) const;

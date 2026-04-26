@@ -73,8 +73,8 @@ class LowOrderBeamIntegration: public ParameterIDBeamIntegration
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
   public:
-    LowOrderBeamIntegration(int nIP, const Vector &pt, int nc, const Vector &wt);
-    LowOrderBeamIntegration();
+    LowOrderBeamIntegration(int tag);
+    LowOrderBeamIntegration(int tag, int nIP, const Vector &pt, int nc, const Vector &wt);
   
     void getSectionLocations(int numSections, double L, double *xi);
     void getSectionWeights(int numSections, double L, double *wt);

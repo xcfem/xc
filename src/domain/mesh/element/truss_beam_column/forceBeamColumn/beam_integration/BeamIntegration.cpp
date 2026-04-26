@@ -52,12 +52,46 @@
 #include "utility/matrix/Matrix.h"
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
 #include "IntegrationPointsCoords.h"
+#include "preprocessor/prep_handlers/BeamIntegratorHandler.h"
 
 #include "utility/matrix/ID.h"
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
+#include "utility/utils/misc_utils/colormod.h"
 
-XC::BeamIntegration::BeamIntegration(int classTag)
-  : MovableObject(classTag), CommandEntity() {}
+XC::BeamIntegration::BeamIntegration(int tag, int classTag)
+  : TaggedObject(tag), MovableObject(classTag) {}
+
+//! @brief Returns (if possible) a pointer to the beam integration handler (owner).
+const XC::BeamIntegratorHandler *XC::BeamIntegration::getBeamIntegratorHandler(void) const
+  {
+    const BeamIntegratorHandler *retval= dynamic_cast<const BeamIntegratorHandler *>(Owner());
+    if(!retval)
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; beam integration handler not defined."
+		<< Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Returns a pointer to the beam integration handler (if possible).
+XC::BeamIntegratorHandler *XC::BeamIntegration::getBeamIntegratorHandler(void)
+  {
+    BeamIntegratorHandler *retval= dynamic_cast<BeamIntegratorHandler *>(Owner());
+    if(!retval)
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; beam integration handler not defined."
+		<< Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Returns the name of the material.
+std::string XC::BeamIntegration::getName(void) const
+  {
+    std::string retval;
+    const BeamIntegratorHandler *mhandler= getBeamIntegratorHandler();
+    if(mhandler)
+      retval= mhandler->getName(this->getTag());
+    return retval;
+  }
 
 int XC::BeamIntegration::setParameter(const std::vector<std::string> &argv, Parameter &param)
   { return 0; }

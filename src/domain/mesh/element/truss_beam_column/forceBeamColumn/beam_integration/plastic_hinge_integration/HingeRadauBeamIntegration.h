@@ -71,8 +71,8 @@ class HingeRadauBeamIntegration: public PlasticLengthsBeamIntegration
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    HingeRadauBeamIntegration(double lpI, double lpJ);
-    HingeRadauBeamIntegration(void);
+    HingeRadauBeamIntegration(int tag);
+    HingeRadauBeamIntegration(int tag, double lpI, double lpJ);
   
     void getSectionLocations(int numSections, double L, double *xi) const;
     void getSectionWeights(int numSections, double L, double *wt) const;

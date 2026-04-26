@@ -66,8 +66,8 @@ class FEM_ObjectBroker;
 class HingeRadauBeamIntegration2d: public HingeBeamIntegration2d
   {
   public:
-    HingeRadauBeamIntegration2d(double E, double A, double I,double lpI, double lpJ);
-    HingeRadauBeamIntegration2d();
+    HingeRadauBeamIntegration2d(int tag);
+    HingeRadauBeamIntegration2d(int tag, double E, double A, double I,double lpI, double lpJ);
   
     void getSectionLocations(int numSections, double L, double *xi) const;
     void getSectionWeights(int numSections, double L, double *wt) const;

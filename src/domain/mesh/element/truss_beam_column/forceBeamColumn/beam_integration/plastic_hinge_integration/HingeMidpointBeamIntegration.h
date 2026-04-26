@@ -67,8 +67,8 @@ namespace XC {
 class HingeMidpointBeamIntegration: public PlasticLengthsBeamIntegration
   {
   public:
-    HingeMidpointBeamIntegration(double lpI, double lpJ);
-    HingeMidpointBeamIntegration();
+    HingeMidpointBeamIntegration(int tag);
+    HingeMidpointBeamIntegration(int tag, double lpI, double lpJ);
   
     void getSectionLocations(int numSections, double L, double *xi) const;
     void getSectionWeights(int numSections, double L, double *wt) const;

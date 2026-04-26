@@ -46,9 +46,9 @@ class UserDefinedBeamIntegrationBase: public BeamIntegration
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
   public:
-    UserDefinedBeamIntegrationBase(int , const Vector &, const Vector &);
-    UserDefinedBeamIntegrationBase(int , const Vector &);
-    UserDefinedBeamIntegrationBase(int);
+    UserDefinedBeamIntegrationBase(int tag, int);
+    UserDefinedBeamIntegrationBase(int tag, int , const Vector &);
+    UserDefinedBeamIntegrationBase(int tag, int , const Vector &, const Vector &);
     
     void getSectionLocations(int nIP, double L, double *xi) const;
     void getSectionWeights(int nIP, double L, double *wt) const;
