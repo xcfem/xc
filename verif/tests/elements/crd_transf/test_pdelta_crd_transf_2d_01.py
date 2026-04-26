@@ -23,7 +23,7 @@ n1= nodes.newNodeXY(0,0)
 n2= nodes.newNodeXY(5,5)
 
 # Geometric transformations
-lin= modelSpace.newPDeltaCrdTransf("lin")
+pDelta= modelSpace.newPDeltaCrdTransf("pDelta")
 
 # Materials
 section= typical_materials.defElasticSection2d(preprocessor, "section",1,1,1)
@@ -31,7 +31,7 @@ section= typical_materials.defElasticSection2d(preprocessor, "section",1,1,1)
 # Elements definition
 elements= preprocessor.getElementHandler
 
-elements.defaultTransformation= lin.name
+elements.defaultTransformation= pDelta.name
 elements.defaultMaterial= section.name
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
 
