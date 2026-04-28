@@ -50,8 +50,8 @@
 
 #include "CompositeSimpsonBeamIntegration.h"
 
-XC::CompositeSimpsonBeamIntegration::CompositeSimpsonBeamIntegration():
-  BeamIntegration(BEAM_INTEGRATION_TAG_CompositeSimpson)
+XC::CompositeSimpsonBeamIntegration::CompositeSimpsonBeamIntegration(int tag)
+  : BeamIntegration(tag, BEAM_INTEGRATION_TAG_CompositeSimpson)
   {
     // Nothing to do
   }

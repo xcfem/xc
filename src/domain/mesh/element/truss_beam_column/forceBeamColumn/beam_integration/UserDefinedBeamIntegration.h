@@ -65,8 +65,8 @@ namespace XC {
 class UserDefinedBeamIntegration: public UserDefinedBeamIntegrationBase
  {
  public:
-   UserDefinedBeamIntegration(int nIP, const Vector &pt, const Vector &wt);
-   UserDefinedBeamIntegration(void);
+   UserDefinedBeamIntegration(int tag);
+   UserDefinedBeamIntegration(int tag, int nIP, const Vector &pt, const Vector &wt);
     
    BeamIntegration *getCopy(void) const;
   

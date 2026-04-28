@@ -66,8 +66,8 @@ class FEM_ObjectBroker;
 class HingeMidpointBeamIntegration2d: public HingeBeamIntegration2d
   {
   public:
-    HingeMidpointBeamIntegration2d(double E, double A, double I,double lpI, double lpJ);
-    HingeMidpointBeamIntegration2d();
+    HingeMidpointBeamIntegration2d(int tag);
+    HingeMidpointBeamIntegration2d(int tag, double E, double A, double I,double lpI, double lpJ);
   
     void getSectionLocations(int numSections, double L, double *xi) const;
     void getSectionWeights(int numSections, double L, double *wt) const;

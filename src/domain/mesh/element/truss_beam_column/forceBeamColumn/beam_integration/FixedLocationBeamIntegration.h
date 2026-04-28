@@ -68,8 +68,8 @@ class FixedLocationBeamIntegration: public ParameterIDBeamIntegration
   private:
     int parameterID;
   public:
-    FixedLocationBeamIntegration(const Vector &pt);
-    FixedLocationBeamIntegration();
+    FixedLocationBeamIntegration(int tag);
+    FixedLocationBeamIntegration(int tag, const Vector &pt);
   
     BeamIntegration *getCopy(void) const;
 

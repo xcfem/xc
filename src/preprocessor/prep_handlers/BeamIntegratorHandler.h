@@ -46,6 +46,7 @@ class BeamIntegratorHandler: public PrepHandler
     typedef map_beam_integrators::const_iterator const_iterator;
     typedef map_beam_integrators::iterator iterator;
   private:
+    int beam_int_tag; //!< Default beam integrator tag.
     map_beam_integrators beam_integrators;
     void free_mem(void);
     BeamIntegratorHandler(const BeamIntegratorHandler &);
@@ -59,6 +60,8 @@ class BeamIntegratorHandler: public PrepHandler
     const_iterator end(void) const;
     iterator begin(void);
     iterator end(void);
+    
+    std::string getName(const int &tag) const;
     const_iterator find(const std::string &str) const;
     iterator find(const std::string &str);
     BeamIntegration *find_ptr(const std::string &str);

@@ -73,13 +73,13 @@ void XC::DistHingeIntegration::copy(const BeamIntegration *bi)
   }
 
 
-XC::DistHingeIntegration::DistHingeIntegration(double lpi,double lpj,const BeamIntegration &bi)
-  : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeMidpoint,lpi,lpj), beamInt(nullptr)
-  { copy(&bi); }
-
-XC::DistHingeIntegration::DistHingeIntegration(void)
-  : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeMidpoint), beamInt(nullptr)
+XC::DistHingeIntegration::DistHingeIntegration(int tag)
+  : PlasticLengthsBeamIntegration(tag, BEAM_INTEGRATION_TAG_HingeMidpoint), beamInt(nullptr)
   {}
+
+XC::DistHingeIntegration::DistHingeIntegration(int tag, double lpi,double lpj,const BeamIntegration &bi)
+  : PlasticLengthsBeamIntegration(tag, BEAM_INTEGRATION_TAG_HingeMidpoint,lpi,lpj), beamInt(nullptr)
+  { copy(&bi); }
 
 XC::DistHingeIntegration::DistHingeIntegration(const DistHingeIntegration &other)
   : PlasticLengthsBeamIntegration(other), beamInt(nullptr)

@@ -49,16 +49,16 @@
 // $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/UserDefinedBeamIntegration.cpp,v $
 
 #include "UserDefinedBeamIntegration.h"
+#include "utility/matrix/Vector.h"
 
-#include <utility/matrix/Vector.h>
-
-XC::UserDefinedBeamIntegration::UserDefinedBeamIntegration(int nIP, const Vector &pt, const Vector &wt)
-  : UserDefinedBeamIntegrationBase(BEAM_INTEGRATION_TAG_UserDefined,pt,wt)
+XC::UserDefinedBeamIntegration::UserDefinedBeamIntegration(int tag)
+  : UserDefinedBeamIntegrationBase(tag, BEAM_INTEGRATION_TAG_UserDefined)
   {}
 
-XC::UserDefinedBeamIntegration::UserDefinedBeamIntegration()
-  : UserDefinedBeamIntegrationBase(BEAM_INTEGRATION_TAG_UserDefined)
+XC::UserDefinedBeamIntegration::UserDefinedBeamIntegration(int tag, int nIP, const Vector &pt, const Vector &wt)
+  : UserDefinedBeamIntegrationBase(tag, BEAM_INTEGRATION_TAG_UserDefined,pt,wt)
   {}
+
 
 XC::BeamIntegration *XC::UserDefinedBeamIntegration::getCopy(void) const
   { return new UserDefinedBeamIntegration(*this); }

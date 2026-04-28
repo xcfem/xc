@@ -67,14 +67,14 @@ class UserDefinedHingeIntegration3d: public UserDefinedHingeIntegrationBase
   protected:
     CrossSectionProperties3d ctes_scc; //Mechanical properties of the section E,A,Iy,...
   public:
-    UserDefinedHingeIntegration3d(int npL, const Vector &ptL, const Vector &wtL,
-				int npR, const Vector &ptR, const Vector &wtR,
-				double E, double A, double Iz,
-				double Iy, double G, double J);
-    UserDefinedHingeIntegration3d(int npL, const Vector &ptL, const Vector &wtL,
+    UserDefinedHingeIntegration3d(int tag, const CrossSectionProperties3d &cts= CrossSectionProperties3d());
+    UserDefinedHingeIntegration3d(int tag, int npL, const Vector &ptL, const Vector &wtL,
 				  int npR, const Vector &ptR, const Vector &wtR,
 				  const CrossSectionProperties3d &cts);
-    UserDefinedHingeIntegration3d(const CrossSectionProperties3d &cts= CrossSectionProperties3d());
+    UserDefinedHingeIntegration3d(int tag, int npL, const Vector &ptL, const Vector &wtL,
+				  int npR, const Vector &ptR, const Vector &wtR,
+				  double E, double A, double Iz,
+				  double Iy, double G, double J);
   
     void getSectionLocations(int numSections, double L, double *xi) const;
     void getSectionWeights(int numSections, double L, double *wt) const;

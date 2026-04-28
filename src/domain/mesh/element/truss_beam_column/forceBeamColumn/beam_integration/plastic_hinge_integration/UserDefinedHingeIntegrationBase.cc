@@ -31,8 +31,12 @@
 #include <utility/matrix/Vector.h>
 #include <domain/mesh/element/utils/Information.h>
 
-XC::UserDefinedHingeIntegrationBase::UserDefinedHingeIntegrationBase(int classTag, const Vector &ptL, const Vector &wtL, const Vector &ptR, const Vector &wtR)
-  : UserDefinedBeamIntegrationBase(classTag,ptL,wtL), ptsR(ptR), wtsR(wtR)
+XC::UserDefinedHingeIntegrationBase::UserDefinedHingeIntegrationBase(int tag, int classTag)
+  : UserDefinedBeamIntegrationBase(tag, classTag)
+  {}
+
+XC::UserDefinedHingeIntegrationBase::UserDefinedHingeIntegrationBase(int tag, int classTag, const Vector &ptL, const Vector &wtL, const Vector &ptR, const Vector &wtR)
+  : UserDefinedBeamIntegrationBase(tag, classTag,ptL,wtL), ptsR(ptR), wtsR(wtR)
   {
     const size_t sz= ptR.Size();
     for(size_t i= 0; i< sz; i++)
@@ -43,10 +47,6 @@ XC::UserDefinedHingeIntegrationBase::UserDefinedHingeIntegrationBase(int classTa
           std::cerr << "UserDefinedHingeIntegrationBase::UserDefinedHingeIntegrationBase -- weight lies outside [0,1]" << std::endl;
       }
   }
-
-XC::UserDefinedHingeIntegrationBase::UserDefinedHingeIntegrationBase(int classTag)
-  : UserDefinedBeamIntegrationBase(classTag)
-  {}
 
 void XC::UserDefinedHingeIntegrationBase::getSectionLocations(int numSections,double L, double *xi) const
   {

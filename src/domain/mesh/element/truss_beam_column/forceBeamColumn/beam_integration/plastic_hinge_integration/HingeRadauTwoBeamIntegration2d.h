@@ -62,8 +62,8 @@ namespace XC {
 class HingeRadauTwoBeamIntegration2d: public HingeBeamIntegration2d
   {
   public:
-    HingeRadauTwoBeamIntegration2d(double E, double A, double I,double lpI, double lpJ);
-    HingeRadauTwoBeamIntegration2d(void);
+    HingeRadauTwoBeamIntegration2d(int tag);
+    HingeRadauTwoBeamIntegration2d(int tag, double E, double A, double I,double lpI, double lpJ);
   
     void getSectionLocations(int numSections, double L, double *xi) const;
     void getSectionWeights(int numSections, double L, double *wt) const;

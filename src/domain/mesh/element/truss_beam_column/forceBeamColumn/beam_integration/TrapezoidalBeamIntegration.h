@@ -61,7 +61,7 @@ namespace XC {
 class TrapezoidalBeamIntegration: public BeamIntegration
   {
   public:
-    TrapezoidalBeamIntegration();
+    TrapezoidalBeamIntegration(int tag);
 
     void getSectionLocations(int nIP, double L, double *xi) const;
     void getSectionWeights(int nIP, double L, double *wt) const;

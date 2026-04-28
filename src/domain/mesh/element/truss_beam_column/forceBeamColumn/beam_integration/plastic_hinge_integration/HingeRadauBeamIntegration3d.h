@@ -62,10 +62,10 @@ namespace XC {
 class HingeRadauBeamIntegration3d: public HingeBeamIntegration3d
   {
   public:
-    HingeRadauBeamIntegration3d(double E, double A, double Iz,
-			      double Iy, double G, double J,
-			      double lpI, double lpJ);
-    HingeRadauBeamIntegration3d(const CrossSectionProperties3d &cts= CrossSectionProperties3d(),const double &lpi=0.0,const double &lpj=0.0);
+    HingeRadauBeamIntegration3d(int tag, const CrossSectionProperties3d &cts= CrossSectionProperties3d(),const double &lpi=0.0,const double &lpj=0.0);
+    HingeRadauBeamIntegration3d(int tag, double E, double A, double Iz,
+				double Iy, double G, double J,
+				double lpI, double lpJ);
   
     void getSectionLocations(int numSections, double L, double *xi) const;
     void getSectionWeights(int numSections, double L, double *wt) const;

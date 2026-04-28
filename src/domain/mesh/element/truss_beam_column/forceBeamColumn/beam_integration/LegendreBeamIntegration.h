@@ -52,7 +52,7 @@
 #ifndef LegendreBeamIntegration_h
 #define LegendreBeamIntegration_h
 
-#include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.h>
+#include "BeamIntegration.h"
 
 namespace XC {
 class Matrix;
@@ -71,7 +71,7 @@ class FEM_ObjectBroker;
 class LegendreBeamIntegration: public BeamIntegration
   {
   public:
-    LegendreBeamIntegration(void);
+    LegendreBeamIntegration(int tag);
 
     void getSectionLocations(int nIP, double L, double *xi) const;
     void getSectionWeights(int nIP, double L, double *wt) const;

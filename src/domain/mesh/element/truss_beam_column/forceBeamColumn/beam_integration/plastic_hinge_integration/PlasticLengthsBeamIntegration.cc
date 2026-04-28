@@ -34,12 +34,11 @@
 #include <domain/mesh/element/utils/Information.h>
 #include "domain/component/Parameter.h"
 
-XC::PlasticLengthsBeamIntegration::PlasticLengthsBeamIntegration(int classTag,double lpi,double lpj)
-  : BeamIntegration(classTag), lpI(lpi), lpJ(lpj), parameterID(0) {}
+XC::PlasticLengthsBeamIntegration::PlasticLengthsBeamIntegration(int tag, int classTag)
+  : BeamIntegration(tag, classTag), lpI(0.0), lpJ(0.0), parameterID(0) {}
 
-XC::PlasticLengthsBeamIntegration::PlasticLengthsBeamIntegration(int classTag)
-  : BeamIntegration(classTag), lpI(0.0), lpJ(0.0), parameterID(0) {}
-
+XC::PlasticLengthsBeamIntegration::PlasticLengthsBeamIntegration(int tag, int classTag,double lpi,double lpj)
+  : BeamIntegration(tag, classTag), lpI(lpi), lpJ(lpj), parameterID(0) {}
 
 //! @brief Send object members through the communicator argument.
 int XC::PlasticLengthsBeamIntegration::sendData(Communicator &comm)

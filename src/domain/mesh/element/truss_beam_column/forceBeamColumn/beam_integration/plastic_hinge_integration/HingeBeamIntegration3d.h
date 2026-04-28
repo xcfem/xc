@@ -48,8 +48,8 @@ class HingeBeamIntegration3d: public PlasticLengthsBeamIntegration
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    HingeBeamIntegration3d(int classTag, double E, double A, double Iz,double Iy, double G, double J,double lpI, double lpJ);
-    HingeBeamIntegration3d(int classTag, const CrossSectionProperties3d &cts= CrossSectionProperties3d(),const double &lpi=0.0,const double &lpj=0.0);
+    HingeBeamIntegration3d(int tag, int classTag, const CrossSectionProperties3d &cts= CrossSectionProperties3d(), const double &lpi=0.0,const double &lpj=0.0);
+    HingeBeamIntegration3d(int tag, int classTag, double E, double A, double Iz,double Iy, double G, double J,double lpI, double lpJ);
   
     void addElasticDeformations(ElementalLoad *,double loadFactor,double L,FVector &v0);
 

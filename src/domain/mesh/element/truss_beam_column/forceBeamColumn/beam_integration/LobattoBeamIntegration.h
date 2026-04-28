@@ -72,7 +72,7 @@ class FEM_ObjectBroker;
 class LobattoBeamIntegration: public BeamIntegration
   {
   public:
-    LobattoBeamIntegration(void);
+    LobattoBeamIntegration(int tag);
 
     void getSectionLocations(int nIP, double L, double *xi) const;
     void getSectionWeights(int nIP, double L, double *wt) const;

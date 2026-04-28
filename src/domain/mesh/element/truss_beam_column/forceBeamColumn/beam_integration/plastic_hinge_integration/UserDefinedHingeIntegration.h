@@ -64,9 +64,10 @@ class FEM_ObjectBroker;
 class UserDefinedHingeIntegration: public UserDefinedHingeIntegrationBase
   {
   public:
-    UserDefinedHingeIntegration(int npL, const Vector &ptL, const Vector &wtL,
-  			      int npR, const Vector &ptR, const Vector &wtR);
-    UserDefinedHingeIntegration();
+    UserDefinedHingeIntegration(int tag);
+    UserDefinedHingeIntegration(int tag,
+				int npL, const Vector &ptL, const Vector &wtL,
+				int npR, const Vector &ptR, const Vector &wtR);
     
     BeamIntegration *getCopy(void) const;
   
