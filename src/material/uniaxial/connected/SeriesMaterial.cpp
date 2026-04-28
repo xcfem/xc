@@ -306,6 +306,9 @@ int XC::SeriesMaterial::sendData(Communicator &comm)
     res+= comm.sendVector(stress,getDbTagData(),CommMetaData(6));
     res+= comm.sendVector(flex,getDbTagData(),CommMetaData(7));
     res+= comm.sendVector(strain,getDbTagData(),CommMetaData(8));
+    res+= comm.sendVector(stress_n,getDbTagData(),CommMetaData(9));
+    res+= comm.sendVector(tangent_n,getDbTagData(),CommMetaData(10));
+    res+= comm.sendVector(strain_n,getDbTagData(),CommMetaData(11));
     return res;
   }
 
@@ -321,6 +324,9 @@ int XC::SeriesMaterial::recvData(const Communicator &comm)
     res+= comm.receiveVector(stress,getDbTagData(),CommMetaData(6));
     res+= comm.receiveVector(flex,getDbTagData(),CommMetaData(7));
     res+= comm.receiveVector(strain,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveVector(stress_n,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveVector(tangent_n,getDbTagData(),CommMetaData(10));
+    res+= comm.receiveVector(strain_n,getDbTagData(),CommMetaData(11));
     return res;
   }
 
@@ -329,7 +335,7 @@ int XC::SeriesMaterial::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(9);
+    inicComm(12);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -341,7 +347,7 @@ int XC::SeriesMaterial::sendSelf(Communicator &comm)
 //! @brief Receives object through the communicator argument.
 int XC::SeriesMaterial::recvSelf(const Communicator &comm)
   {
-    inicComm(9);
+    inicComm(12);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
