@@ -49,7 +49,7 @@ class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", n
   .def("revertToLastCommit",&XC::Domain::revertToLastCommit)
   .def("revertToStart",&XC::Domain::revertToStart)  
   .def("setLoadConstant", set_load_constant,"Sets currents load patterns as constant in time.")  
-  .def("setLoadConstantT", set_load_constant_t,"Sets currents load patterns as constant in time, and the domain time to the given value.")  
+  .def("setLoadConstant", set_load_constant_t,"Sets currents load patterns as constant in time, and the domain time to the given value.")  
   .def("setTime",&XC::Domain::setTime,"sets the time on the time tracker.")
   .def("setRayleighDampingFactors",&XC::Domain::setRayleighDampingFactors,"sets the Rayleigh damping factors.")  
   .def("calculateNodalReactions",&XC::Domain::calculateNodalReactions,"triggers nodal reaction calculation.")  

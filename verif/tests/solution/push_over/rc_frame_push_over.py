@@ -24,7 +24,7 @@ import rc_frame_gravity
 modelSpace= rc_frame_gravity.modelSpace
 
 # Set the gravity loads to be constant & reset the time in the domain
-modelSpace.setLoadConstant(0.0)
+modelSpace.setLoadConstant(t= 0.0)
 print('XXX Continue here.')
 quit()
 
