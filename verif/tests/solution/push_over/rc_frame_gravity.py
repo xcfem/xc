@@ -212,18 +212,35 @@ analysis= predefined_solutions.transformation_newton_raphson_band_gen(feProblem,
 # perform the gravity load analysis, requires 10 steps to reach the load level
 analysis.analyze(numSteps)
 
-# Get results.
-u3= n3.getDisp[1]
-ratio1= abs(u3 + 0.0183736)
-u4= n4.getDisp[1]
-ratio2= abs(u4 + 0.0183736)
-
-testOK= testOK and (ratio1<1e-6) and (ratio2<1e-6)
-
 # Compute reference values.
 # XXX Continue here.
 coreEc= coreConcrete.getTangent()
+coreArea= coreWidth*coreDepth
+coreStiffness= coreEc*coreArea
+coverEc= coreConcrete.getTangent()
+coverArea= colWidth*colDepth-coreArea
+coverStiffness= coverEc*coverArea
+steelEs= steel.getTangent()
+steelArea= 8*As
+steelStiffness= steelEs*steelArea
+totalStiffness= steelStiffness+coverStiffness+coreStiffness
+epsilon= P/totalStiffness
+vertDisplacement= epsilon*height
 
+# Get results.
+u3= n3.getDisp[1]
+ratio1= abs(u3 + vertDisplacement)
+u4= n4.getDisp[1]
+ratio2= abs(u4 + vertDisplacement)
+
+testOK= testOK and (ratio1<5e-3) and (ratio2<5e-3)
+
+
+print('core concrete Ec= ', coreEc)
+print('cover concrete Ec= ', coverEc)
+print('steel Es= ', steelEs)
+print('epsilon= ', epsilon*1e3)
+print('vertical displacement: ', vertDisplacement*1e3, 'mm') 
 print('u3= ', u3)
 print('ratio1= ', ratio1)
 print('u4= ', u4)

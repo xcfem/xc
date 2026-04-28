@@ -1,23 +1,32 @@
-print("==========================")
-print("Start RCFramePushover Example")
+# -*- coding: utf-8 -*-
+''' Reinforced concrete frame pushover analysis example migrated from OpenSees.
+
+See https://openseespydoc.readthedocs.io/en/latest/src/RCFramePushOver.html
+'''
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2026, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 # Units: kips, in, sec  
 #
 # Written: GLF/MHS/fmk
 # Date: January 2001
-from openseespy.opensees import *
 
-wipe()
-# ----------------------------------------------------
-# Start of Model Generation & Initial Gravity Analysis
+# Import the FE model and gravity Analysis
 # ----------------------------------------------------
 
-# Do operations of Example3.1 by sourcing in the tcl file
-import RCFrameGravity
-print("Gravity Analysis Completed")
+# Import local modules.
+import rc_frame_gravity
+
+modelSpace= rc_frame_gravity.modelSpace
 
 # Set the gravity loads to be constant & reset the time in the domain
-loadConst('-time', 0.0)
+modelSpace.setLoadConstant(0.0)
+print('XXX Continue here.')
+quit()
 
 # ----------------------------------------------------
 # End of Model Generation & Initial Gravity Analysis

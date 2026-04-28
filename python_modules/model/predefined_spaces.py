@@ -1368,6 +1368,17 @@ class PredefinedSpace(object):
         '''
         combContainer.dumpCombinations(self.preprocessor)
 
+    def setLoadConstant(self, t= None):
+        ''' Set the current loads to be constant and (if t not None) reset
+            the time in the domain.
+
+        :param t: if not none, new time for the domain.
+        '''
+        if(t is not None):
+            self.preprocessor.getDomain.setLoadConstant(t)
+        else:
+            self.preprocessor.getDomain.setLoadConstant()
+
     def getLoadCaseNamed(self, loadCaseName: str):
         '''Return the load case argument (load pattern or combination) whose 
            name is passed as parameter.

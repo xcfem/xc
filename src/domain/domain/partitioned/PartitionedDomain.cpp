@@ -996,19 +996,38 @@ void XC::PartitionedDomain::setCommittedTime(double newTime)
 
 
 void XC::PartitionedDomain::setLoadConstant(void)
-{
+  {
     this->XC::Domain::setLoadConstant();
 
     // do the same for all the subdomains
-    if(theSubdomains != 0) {
+    if(theSubdomains != 0)
+      {
         ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
         TaggedObject *theObject;
-        while((theObject= theSubsIter()) != 0) {
+        while((theObject= theSubsIter()) != 0)
+	  {
             Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
             theSub->setLoadConstant();
-        }
-    }
-}
+	  }
+      }
+  }
+
+void XC::PartitionedDomain::setLoadConstant(const double &t)
+  {
+    this->XC::Domain::setLoadConstant(t);
+
+    // do the same for all the subdomains
+    if(theSubdomains != 0)
+      {
+        ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
+        TaggedObject *theObject;
+        while((theObject= theSubsIter()) != 0)
+	  {
+            Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
+            theSub->setLoadConstant(t);
+	  }
+      }
+  }
 
 
 int XC::PartitionedDomain::update(void)

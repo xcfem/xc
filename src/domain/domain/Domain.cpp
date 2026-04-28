@@ -1033,6 +1033,19 @@ void XC::Domain::applyLoad(double timeStep)
 void XC::Domain::setLoadConstant(void)
   { constraints.setLoadConstant(); }
 
+//! @brief Set all the loads as constant and set the time to the given value.
+//!
+//! To set the loads in the LoadPatterns to be constant. The domain
+//! achieves this by invoking setLoadConstant() on all the
+//! LoadPatterns which have been added to the domain. Note that
+//! LoadPatterns added after this method has been invoked will not be
+//! constant until this method is invoked again. 
+void XC::Domain::setLoadConstant(const double &t)
+  {
+    this->setLoadConstant();
+    this->setTime(t);
+  }
+
 //! @brief Initialize mesh.
 int XC::Domain::initialize(void)
   { return mesh.initialize(); }

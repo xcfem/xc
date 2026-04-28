@@ -34,6 +34,8 @@ XC::Preprocessor *(XC::Domain::*getPreprocessor)(void)= &XC::Domain::getPreproce
 XC::ConstrContainer &(XC::Domain::*getConstraintsRef)(void)= &XC::Domain::getConstraints;
 XC::Node *(XC::Domain::*getNode)(int)= &XC::Domain::getNode;
 XC::Element *(XC::Domain::*getElement)(int)= &XC::Domain::getElement;
+void (XC::Domain::*set_load_constant)(void)= &XC::Domain::setLoadConstant;
+void (XC::Domain::*set_load_constant_t)(const double &)= &XC::Domain::setLoadConstant;
 class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", no_init)
   .add_property("getPreprocessor", make_function( getPreprocessor, return_internal_reference<>() ),"returns preprocessor.")
   .add_property("getMesh", make_function( getMeshRef, return_internal_reference<>() ),"returns finite element mesh.")
@@ -46,7 +48,8 @@ class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", n
   .def("commit",&XC::Domain::commit)
   .def("revertToLastCommit",&XC::Domain::revertToLastCommit)
   .def("revertToStart",&XC::Domain::revertToStart)  
-  .def("setLoadConstant",&XC::Domain::setLoadConstant,"sets currents load patterns as constant in time.")  
+  .def("setLoadConstant", set_load_constant,"Sets currents load patterns as constant in time.")  
+  .def("setLoadConstantT", set_load_constant_t,"Sets currents load patterns as constant in time, and the domain time to the given value.")  
   .def("setTime",&XC::Domain::setTime,"sets the time on the time tracker.")
   .def("setRayleighDampingFactors",&XC::Domain::setRayleighDampingFactors,"sets the Rayleigh damping factors.")  
   .def("calculateNodalReactions",&XC::Domain::calculateNodalReactions,"triggers nodal reaction calculation.")  

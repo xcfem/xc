@@ -269,6 +269,7 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual void setTime(double newTime);
     virtual void applyLoad(double pseudoTime);
     virtual void setLoadConstant(void);
+    virtual void setLoadConstant(const double &);
     virtual int initialize(void);
     virtual int setRayleighDampingFactors(const RayleighDampingFactors &rF);
 

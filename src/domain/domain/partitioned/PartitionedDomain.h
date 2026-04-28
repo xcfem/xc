@@ -151,6 +151,7 @@ class PartitionedDomain: public Domain
     virtual  void setCommittedTime(double newTime);        
     virtual  void applyLoad(double pseudoTime);
     virtual  void setLoadConstant(void);    
+    virtual  void setLoadConstant(const double &);    
 
     virtual  int commit(void);    
     virtual  int revertToLastCommit(void);        
