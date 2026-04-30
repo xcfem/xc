@@ -207,6 +207,37 @@ class SolutionProcedure(object):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; integrator type: '+str(self.integratorType)+' unknown.')
 
+    def setDisplacementControlIntegrator(self, node, dof:int, increment:float, numIter:int= 1, dUmin:float= None, dUmax:float= None):
+        ''' This method is used to construct a DisplacementControl integrator 
+            object. In an analysis step with Displacement Control we seek to 
+            determine the time step that will result in a displacement 
+            increment for a particular degree-of-freedom at a node to be a 
+            prescribed value.
+
+        :param node: node whose response controls solution
+        :param dof: degree of freedom at the node.
+        :param increment: first displacement increment.
+        :param numIter: the number of iterations the user would like to occur 
+                        in the solution algorithm. Optional; default = 1.0.
+        :param dUmin: the min step size the user will allow. optional; default
+                      incr.
+	:param dUmax: the max step size the user will allow. optional: default
+                      incr. 
+        '''
+        self.integratorType= 'displacement_control_integrator' # Backwards compatibility
+        self.integrator= self.solutionStrategy.newIntegrator(self.integratorType, self.integratorParameters)
+        self.dispControlNode= node # Backwards compatibility
+        self.integrator.nodeTag= self.dispControlNode.tag
+        self.dispControlDof= dof # Backwards compatibility
+        self.integrator.dof= self.dispControlDof
+        self.dispControlIncrement= increment # Backwards compatibility
+        self.integrator.increment= self.dispControlIncrement
+        self.integrator.setNumIncr(numIter)
+        if(dUmin):
+            self.integrator.minIncrement= dUmin
+        if(dUmax):
+            self.integrator.maxIncrement= dUmax
+
     def getSolutionStrategyName(self):
         ''' Return the name for the model wrapper.'''
         if(self.solutionStrategy):

@@ -672,7 +672,7 @@ class PredefinedSpace(object):
         ''' Return the value of the committed pseudo-time.'''
         return self.preprocessor.getDomain.commitedTime
 
-    def newTimeSeries(self, name= 'ts', tsType= 'constant_ts'):
+    def newTimeSeries(self, name= 'ts', tsType= 'constant_ts', setCurrent= True):
         ''' Creates a times series -modulation of the load
             in time-.
 
@@ -680,10 +680,13 @@ class PredefinedSpace(object):
         :param tsType: type of the time series -constant_ts, linear_ts,
                        path-ts, pulse_ts, rectangular_ts, triangular_ts
                        or trig_ts-. Defaults to constant_ts.
+        :param setCurrent: if true set the newly created load pattern as the
+                           current load pattern.
         '''
         lPatterns= self.getLoadHandler().getLoadPatterns
         ts= lPatterns.newTimeSeries(tsType,name)
-        lPatterns.currentTimeSeries= name
+        if(setCurrent):
+            lPatterns.currentTimeSeries= name
         return ts
 
     def plotTimeSeries(self, timeSeries, timeIncrement= None, timeUnits= None):

@@ -10,6 +10,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import xc
+
 # Units: kips, in, sec  
 #
 # Written: GLF/MHS/fmk
@@ -22,75 +24,36 @@ __email__= "l.pereztato@gmail.com"
 import rc_frame_gravity
 
 modelSpace= rc_frame_gravity.modelSpace
+n3= rc_frame_gravity.n3
+n4= rc_frame_gravity.n4
 
 # Set the gravity loads to be constant & reset the time in the domain
 modelSpace.setLoadConstant(t= 0.0)
-print('XXX Continue here.')
-quit()
-
-# ----------------------------------------------------
-# End of Model Generation & Initial Gravity Analysis
-# ----------------------------------------------------
 
 
-# ----------------------------------------------------
 # Start of additional modelling for lateral loads
-# ----------------------------------------------------
 
-# Define lateral loads
-# --------------------
+## Define lateral loads
 
 # Set some parameters
 H = 10.0  # Reference lateral load
 
 # Set lateral load pattern with a Linear TimeSeries
-pattern('Plain', 2, 1)
+hLoad= modelSpace.newLoadPattern(name= 'hLoad', setCurrent= True)
 
 # Create nodal loads at nodes 3 & 4
 #    nd    FX  FY  MZ
-load(3, H, 0.0, 0.0)
-load(4, H, 0.0, 0.0)
+hLoad.newNodalLoad(n3.tag, xc.Vector([H, 0, 0]))
+hLoad.newNodalLoad(n4.tag, xc.Vector([H, 0, 0]))
 
-# ----------------------------------------------------
-# End of additional modelling for lateral loads
-# ----------------------------------------------------
-
-
-# ----------------------------------------------------
 # Start of modifications to analysis for push over
-# ----------------------------------------------------
 
 # Set some parameters
 dU = 0.1  # Displacement increment
 
-# Change the integration scheme to be displacement control
-#                             node dof init Jd min max
-integrator('DisplacementControl', 3, 1, dU, 1, dU, dU)
+solProc= rc_frame_gravity.solProc
+solProc.setDisplacementControlIntegrator(node= n3, dof= 1, increment= dU, numIter= 1, dUmin= dU, dUmax= dU)
 
-# ----------------------------------------------------
-# End of modifications to analysis for push over
-# ----------------------------------------------------
-
-
-# ------------------------------
-# Start of recorder generation
-# ------------------------------
-
-# Stop the old recorders by destroying them
-# remove recorders
-
-# Create a recorder to monitor nodal displacements
-# recorder Node -file node32.out -time -node 3 4 -dof 1 2 3 disp
-
-# Create a recorder to monitor element forces in columns
-# recorder EnvelopeElement -file ele32.out -time -ele 1 2 forces
-
-# --------------------------------
-# End of recorder generation
-# ---------------------------------
-
-
-# ------------------------------
 # Finally perform the analysis
 # ------------------------------
 
@@ -98,6 +61,8 @@ integrator('DisplacementControl', 3, 1, dU, 1, dU, dU)
 maxU = 15.0  # Max displacement
 currentDisp = 0.0
 ok = 0
+
+quit()
 
 test('NormDispIncr', 1.0e-12, 1000)
 algorithm('ModifiedNewton', '-initial')
@@ -137,4 +102,27 @@ results.close()
 # print node 3
 
 
-print("==========================")
+
+# Change the integration scheme to be displacement control
+#                             node dof init Jd min max
+integrator('DisplacementControl', 3, 1, dU, 1, dU, dU)
+
+# ------------------------------
+# Start of recorder generation
+# ------------------------------
+
+# Stop the old recorders by destroying them
+# remove recorders
+
+# Create a recorder to monitor nodal displacements
+# recorder Node -file node32.out -time -node 3 4 -dof 1 2 3 disp
+
+# Create a recorder to monitor element forces in columns
+# recorder EnvelopeElement -file ele32.out -time -ele 1 2 forces
+
+# --------------------------------
+# End of recorder generation
+# ---------------------------------
+
+
+# ------------------------------
