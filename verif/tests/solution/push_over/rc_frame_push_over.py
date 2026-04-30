@@ -61,7 +61,7 @@ solProc.setDisplacementControlIntegrator(node= n3, dof= 1, increment= dU, numIte
 maxU = 15.0  # Max displacement
 currentDisp = 0.0
 ok = 0
-
+print('XXX continue here')
 quit()
 
 test('NormDispIncr', 1.0e-12, 1000)
