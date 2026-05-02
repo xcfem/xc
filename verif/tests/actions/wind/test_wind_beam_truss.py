@@ -125,9 +125,8 @@ print(analysis)
 
 modelSpace.removeAllLoadPatternsFromDomain()
 modelSpace.addLoadCaseToDomain('LC1')
-print(analysis)
-A= 1
-result= analysis.analyze(A)
+
+result= analysis.analyze(1)
 result= modelSpace.analyze(calculateNodalReactions= True)
 R1a=nReac1.getReaction[1]
 R1b=nReac2.getReaction[1]

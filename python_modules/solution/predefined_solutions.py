@@ -38,17 +38,6 @@ class SolutionProcedure(sp.SolutionProcedure):
                    - determine the corrective step based on the displacement 
                      increment
     :ivar solutionAlgorithmType: type of the solution algorithm.
-    :ivar solAlgo: solution algorithm, which determines the sequence of steps
-          taken to solve the non-linear equation:
-
-                   - linear
-                   - Newton Raphson (the tangent is updated at each iteration)
-                   - Newton with Line Search
-                   - Modified Newton Raphson (the tangent is not updated at 
-                   each iteration)
-                   - Kyrlov-Newton
-                   - BFGS, for symetric systems
-                   - Broyden
     :ivar soe:       sparse system of equations: band general, band SPD, 
                      profile SPD, sparse general, umfPack, sparse SPD
     :ivar solver: solver for the system of equations.
@@ -751,7 +740,8 @@ class LineSearchBase(SolutionProcedure):
             problem object.
         '''
         super(LineSearchBase,self).setup()
-        self.solAlgo.setLineSearchMethod(self.lineSearchMethod)
+        solutionAlgorithm= self.getSolutionAlgorithm()
+        solutionAlgorithm.setLineSearchMethod(self.lineSearchMethod)
 
 class PenaltyNewtonLineSearchBase(LineSearchBase):
     ''' Base class for penalty Newton line search solution aggregation.'''
@@ -1019,8 +1009,10 @@ class PenaltyKrylovNewton(SolutionProcedure):
             problem object.
         '''
         super(PenaltyKrylovNewton,self).setup()
-        self.integrator.dLambda1= 1.0/self.numSteps
-        self.solAlgo.maxDimension= self.maxDim
+        integrator= self.getIntegrator()
+        integrator.dLambda1= 1.0/self.numSteps
+        solutionAlgorithm= self.getSolutionAlgorithm()
+        solutionAlgorithm.maxDimension= self.maxDim
 
 ## Dynamic analysis        
 class NewmarkBase(SolutionProcedure):
