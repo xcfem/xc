@@ -486,8 +486,9 @@ class SolutionProcedure(object):
                              'static_analysis', 
                              'variable_time_step_direct_integration_analysis'
         :param numModes: when appropriate, number of modes to compute.
-        '''
+        '''       
         soluProc= self.get_fe_solu_proc()
+        solutionStrategyName= self.getSolutionStrategyName()
         retval= soluProc.newAnalysis(analysisType, self.getSolutionStrategyName(),"")
         # Set the number of modes.
         if(numModes is not None):

@@ -296,20 +296,21 @@ else:
     solProc= predefined_solutions.PlainNewtonRaphson(prb= feProblem, convergenceTestTol= 1e-3, printFlag= 1)
 
 solProc.setup()
-analysis= solProc.analysis
+analysis= solProc.getAnalysis()
 
 if(creepOnDeck):
     Tcr = 28 # creep model age (in days)
     modelSpace.setCurrentTime(Tcr)
     # Set the load control integrator with dt=0 so that the domain time doesn’t advance.
-    solProc.integrator.dLambda1= 0.0  
-    result= solProc.analysis.analyze(1)
+    integrator= solProc.getIntegrator()
+    integrator.dLambda1= 0.0  
+    result= analysis.analyze(1)
     modelSpace.setCreepOn() # Turn creep on
     
 # Compute solution
 dt= 100 # time increment in days
-solProc.integrator.dLambda1= dt # set new increment for the integrator.
-solProc.integrator.setNumIncr(dt) # IMPORTANT! otherwise it got stuck.
+integrator.dLambda1= dt # set new increment for the integrator.
+integrator.setNumIncr(dt) # IMPORTANT! otherwise it got stuck.
 
 lastT= 10000 
 t= 0
@@ -317,7 +318,7 @@ if(creepOnDeck):
     t= Tcr
 while t < lastT:
     print('solve for time: '+str(t)+' days.')
-    ok = solProc.analysis.analyze(1)
+    ok = solProc.getAnalysis().analyze(1)
     t+= dt
     if(ok!=0):
         exit(1)

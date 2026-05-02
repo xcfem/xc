@@ -85,7 +85,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # solProc= predefined_solutions.PenaltyNewtonRaphson(feProblem, convergenceTestTol= 1e-7, convTestType= 'energy_incr_conv_test', printFlag= 0)
 # solProc.solveComb(lp0.name, calculateNodalReactions= True, reactionCheckTolerance= 1e-7)
 ### Static linear solver with with transformation constraint handler.
-solProc= predefined_solutions.SimpleTransformationStaticLinear(feProblem, printFlag= 0)
+solProc= predefined_solutions.SimpleTransformationStaticLinear(prb= feProblem, printFlag= 0)
 solProc.solveComb(lp0.name, calculateNodalReactions= True)
 
 # Compute reactions.

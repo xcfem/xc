@@ -63,10 +63,10 @@ modelSpace.addLoadCaseToDomain(lp1.name)
 # Solution procedure
 solProc= predefined_solutions.PenaltyModifiedNewton(test, maxNumIter= 10, convergenceTestTol= 1e-2, printFlag= 0)
 solProc.setup()
-modelSpace.analysis= solProc.analysis
+modelSpace.analysis= solProc.getAnalysis()
 
 
-convergenceTestType= solProc.ctest.type()
+convergenceTestType= solProc.getConvergenceTest().type()
 modelSpace.removeAllLoadPatternsFromDomain()
 modelSpace.addLoadCaseToDomain(lp0.name)
 result= modelSpace.analyze(calculateNodalReactions= False)

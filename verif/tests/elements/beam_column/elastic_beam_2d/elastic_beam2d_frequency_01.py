@@ -69,7 +69,7 @@ solProc= predefined_solutions.FrequencyAnalysis(feProblem,systemPrefix='full_gen
 if(solProc.solve()!=0):
     lmsg.error('Eigen analysis failed.')
     quit()
-eig0= solProc.analysis.getEigenvalue(1)
+eig0= solProc.getAnalysis().getEigenvalue(1)
 omega0= math.sqrt(eig0)
 T0= 2*math.pi/omega0
 f0calc= 1.0/T0

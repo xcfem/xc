@@ -99,7 +99,7 @@ modelSpace.addLoadCaseToDomain(pathLP.name)
 # Define analysis parameters
 solProc= predefined_solutions.PlainNewtonRaphson(prb= feProblem, printFlag= 0)
 solProc.setup()
-analysis= solProc.analysis
+analysis= solProc.getAnalysis()
 
 # Do one analysis for constant axial load
 result= analysis.analyze(10)

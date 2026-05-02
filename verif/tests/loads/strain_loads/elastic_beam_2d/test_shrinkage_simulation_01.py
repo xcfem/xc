@@ -95,16 +95,17 @@ recDFree.callbackRecord= "ti.append(self.getDomain.getTimeTracker.getCurrentTime
 # Define analysis parameters
 solProc= predefined_solutions.PlainNewtonRaphson(prb= feProblem, printFlag= 0)
 solProc.setup()
-analysis= solProc.analysis
+analysis= solProc.getAnalysis()
 
 dt = 10 # days
-solProc.integrator.dLambda1= dt # set new increment for the integrator.
-solProc.integrator.setNumIncr(10) # IMPORTANT! otherwise it got stuck.
+integrator= solProc.getIntegrator()
+integrator.dLambda1= dt # set new increment for the integrator.
+integrator.setNumIncr(10) # IMPORTANT! otherwise it got stuck.
 
 lastT= timeValues[-1] # Last time in timeValues.
 t = 0
 while t < lastT:
-    ok = solProc.analysis.analyze(1)
+    ok = analysis.analyze(1)
     t+= dt
 
 # Get displacement.

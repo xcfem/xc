@@ -147,35 +147,37 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 #solProc= predefined_solutions.PlainKrylovNewton(feProblem, convergenceTestTol= 1e-3, convTestType= 'norm_disp_incr_conv_test', maxNumIter= 50, printFlag= 1)
 solProc= predefined_solutions.PlainKrylovNewton(FEcase, convergenceTestTol= 1e-3, convTestType= 'norm_unbalance_conv_test', maxNumIter= 50, printFlag= 0)
 solProc.setup()
-solProc.integrator.dLambda1= 1
+integrator= solProc.getIntegrator()
+integrator.dLambda1= 1
+analysis= solProc.getAnalysis()
 #t=5
-result= solProc.analysis.analyze(5)
+result= analysis.analyze(5)
 modelSpace.calculateNodalReactions(True, 1e-4)
 N05Calc_beam1=e1.getN()
 
 # t=10
-result= solProc.analysis.analyze(5)
+result= analysis.analyze(5)
 modelSpace.calculateNodalReactions(True, 1e-4)
 N10Calc_beam1=e1.getN()
 
 # t=15
-result= solProc.analysis.analyze(5)
+result= analysis.analyze(5)
 N15Calc_beam1=e1.getN()
 
 modelSpace.addLoadCaseToDomain(lp1.name)
 
 # t=20
-result= solProc.analysis.analyze(5)
+result= analysis.analyze(5)
 N20Calc_beam1=e1.getN()
 N20Calc_beam2=e2.getN()
 
 #t=25 (the value of shrinkage for t=25 is not given in the time-series path, so it's interpolated between t=20 ad t=30) 
-result= solProc.analysis.analyze(5)
+result= analysis.analyze(5)
 N25Calc_beam1=e1.getN()
 N25Calc_beam2=e2.getN()
 
 # t=30
-result= solProc.analysis.analyze(5)
+result= analysis.analyze(5)
 N30Calc_beam1=e1.getN()
 N30Calc_beam2=e2.getN()
 

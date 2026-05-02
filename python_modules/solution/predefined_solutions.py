@@ -15,6 +15,14 @@ import xc
 from solution import solution_procedure as sp
 from misc_utils import log_messages as lmsg
 
+analysis_type_dict= {'XC::StaticAnalysis':'static_analysis',
+                     'XC::DirectIntegrationAnalysis':'direct_integration_analysis', 
+                     'XC::EigenAnalysis':'eigen_analysis', 
+                     'XC::ModalAnalysis':'modal_analysis', 
+                     'XC::LinearBucklingAnalysis':'linear_buckling_analysis', 
+                     'XC::IllConditioningAnalysis':'ill-conditioning_analysis', 
+                     'XC::VariableTimeStepDirectIntegrationAnalysis':'variable_time_step_direct_integration_analysis'}
+
 class SolutionProcedure(sp.SolutionProcedure):
     '''
     :ivar cHandler:  constraint handler. Determines how the constraint equations 
@@ -194,6 +202,17 @@ class SolutionProcedure(sp.SolutionProcedure):
         ''' Create the analysis object. '''
         return super().analysisSetup(analysisType= self.analysisType)
 
+    def setup_if_required(self):
+        ''' Triggers the setup method if required.'''
+        analysis= self.getAnalysis()
+        if(not analysis):
+            self.setup()
+        else:
+            currentAnalysisType= analysis_type_dict[analysis.tipo()]
+            if(currentAnalysisType!=self.analysisType):
+                self.setup()
+        return self.getAnalysis()
+
     def solve(self, calculateNodalReactions= False, includeInertia= False, reactionCheckTolerance= 1e-12):
         ''' Compute the solution (run the analysis).
 
@@ -203,9 +222,7 @@ class SolutionProcedure(sp.SolutionProcedure):
                                effects.
         :param reactionCheckTolerance: tolerance when checking reaction values.
         '''
-        analysis= self.getAnalysis()
-        if(not analysis):
-            self.setup()
+        analysis= self.setup_if_required()
         return super().solve(numSteps= self.numSteps, calculateNodalReactions= calculateNodalReactions, includeInertia= includeInertia, reactionCheckTolerance= reactionCheckTolerance)
         
     def solveComb(self, combName, calculateNodalReactions= False, includeInertia= False, reactionCheckTolerance= 1e-12):
@@ -218,6 +235,7 @@ class SolutionProcedure(sp.SolutionProcedure):
                                effects.
         :param reactionCheckTolerance: tolerance when checking reaction values.
         '''
+        analysis= self.setup_if_required()
         self.resetLoadCase() # Remove previous loads.
         preprocessor= self.get_fe_preprocessor()
         preprocessor.getLoadHandler.addToDomain(combName) # Add comb. loads.
@@ -953,7 +971,8 @@ class PlainKrylovNewton(SolutionProcedure):
             problem object.
         '''
         super(PlainKrylovNewton,self).setup()
-        self.solAlgo.maxDimension= self.maxDim
+        solutionAlgorithm= self.getSolutionAlgorithm()
+        solutionAlgorithm.maxDimension= self.maxDim
 
 ### Convenience function
 def plain_krylov_newton(prb, maxNumIter= 300, convergenceTestTol= 1e-9, printFlag= 0, maxDim= 6):
@@ -1045,10 +1064,7 @@ class NewmarkBase(SolutionProcedure):
                                effects.
         :param reactionCheckTolerance: tolerance when checking reaction values.
         '''
-        analysis= self.getAnalysis()
-        if(not analysis):
-            self.setup()
-            analysis= self.getAnalysis()
+        analysis= self.setup_if_required()
         result= analysis.analyze(self.numSteps, self.timeStep)
         if(calculateNodalReactions and (result==0)):
             nodeHandler= self.get_fe_preprocessor().getNodeHandler
@@ -1155,10 +1171,7 @@ class TRBDF2Base(SolutionProcedure):
                                effects.
         :param reactionCheckTolerance: tolerance when checking reaction values.
         '''
-        analysis= self.getAnalysis()
-        if(not analysis):
-            self.setup()
-            analysis= self.getAnalysis()
+        analysis= self.setup_if_required()
         result= analysis.analyze(self.numSteps, self.timeStep)
         if(calculateNodalReactions and (result==0)):
             nodeHandler= self.get_fe_preprocessor().getNodeHandler
@@ -1220,10 +1233,7 @@ class TRBDF3Base(SolutionProcedure):
                                effects.
         :param reactionCheckTolerance: tolerance when checking reaction values.
         '''
-        analysis= self.getAnalysis()
-        if(not analysis):
-            self.setup()
-            analysis= self.getAnalysis()
+        analysis= self.setup_if_required()
         result= analysis.analyze(self.numSteps, self.timeStep)
         if(calculateNodalReactions and (result==0)):
             nodeHandler= self.get_fe_preprocessor().getNodeHandler

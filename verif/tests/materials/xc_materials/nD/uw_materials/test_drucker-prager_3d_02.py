@@ -83,7 +83,7 @@ modelSpace.addLoadCaseToDomain(lp1.name)
 
 solProc= predefined_solutions.PlainNewtonRaphsonBandGen(feProblem, convergenceTestTol= 1e-3, convTestType= 'norm_disp_incr_conv_test')
 solProc.setup()
-solProc.analysis.analyze(1)
+solProc.getAnalysis().analyze(1)
 
 disp= n8.getDisp
 ratio1= abs(disp.Norm()-0.1485488162005314)/0.1485488162005314

@@ -95,9 +95,12 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # Compute solution.
 solProc= predefined_solutions.PlainNewtonRaphson(feProblem, maxNumIter= 150, convergenceTestTol= 1e-4*kN, printFlag= 0)
 solProc.setup()
+integrator= solProc.getIntegrator()
+analysis= solProc.getAnalysis()
+
 # Set the load control integrator with dt=0 so that the domain time doesn’t advance.
-solProc.integrator.dLambda1= 0.0  
-result= solProc.analysis.analyze(1)
+integrator.dLambda1= 0.0  
+result= analysis.analyze(1)
 
 # Define tension load.
 P1= 1.5*Ac*ft-P0 # axial load.
@@ -111,7 +114,7 @@ modelSpace.addLoadCaseToDomain(lp1.name)
 for i in range(0, 10):
     factor= float((i+1)/10.0)
     lp1.gammaF= factor # trick to get a pseudo time-history
-    result= solProc.analysis.analyze(1)
+    result= analysis.analyze(1)
 
 sigma_c= concreteFiber.getStress()
 sigma_s= steelFiber.getStress()

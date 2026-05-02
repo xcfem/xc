@@ -72,9 +72,9 @@ recRBase.callbackSetup= "self.getDomain.calculateNodalReactions(True,1e-4)"
 # Static analysis.
 solProc= predefined_solutions.TransformationNewtonRaphsonBandGen(feProblem, convergenceTestTol= 1e-5, convTestType= 'norm_disp_incr_conv_test', maxNumIter= 100, printFlag= 0)
 solProc.setup()
-solProc.integrator.dLambda1= 1
+solProc.getIntegrator().dLambda1= 1
 
-solProc.analysis.analyze(100)
+solProc.getAnalysis().analyze(100)
 
 # Extract results.
 ti= list()

@@ -286,3 +286,4 @@ XC::Analysis &XC::SolutionProcedure::getAnalysis(void)
       }
     return *theAnalysis;
   }
+

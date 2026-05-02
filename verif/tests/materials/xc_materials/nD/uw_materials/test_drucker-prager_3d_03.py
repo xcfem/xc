@@ -148,10 +148,10 @@ lPatterns.addToDomain(lp2.name)
 # Static analysis.
 solProc= predefined_solutions.TransformationNewtonRaphsonBandGen(feProblem, convergenceTestTol= 1e-5, convTestType= 'norm_disp_incr_conv_test', maxNumIter= 1000, printFlag= 0)
 solProc.setup()
-solProc.integrator.dLambda1= 0.1
+solProc.getIntegrator().dLambda1= 0.1
 
 #solProc.analysis.analyze(1000)
-solProc.analysis.analyze(950)
+solProc.getAnalysis().analyze(950)
 
 # Check last reaction
 R= reactions[-1][1][2]

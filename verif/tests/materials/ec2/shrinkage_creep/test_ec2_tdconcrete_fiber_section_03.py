@@ -107,8 +107,10 @@ modelSpace.setCurrentTime(Tcr)
 solProc= predefined_solutions.PlainNewtonRaphson(feProblem, convergenceTestTol= 1e-5, printFlag= 0)
 solProc.setup()
 # Set the load control integrator with dt=0 so that the domain time doesn’t advance.
-solProc.integrator.dLambda1= 0.0  
-result= solProc.analysis.analyze(1)
+analysis= solProc.getAnalysis()
+integrator= solProc.getIntegrator()
+integrator.dLambda1= 0.0  
+result= analysis.analyze(1)
 
 # Compute initial stresses.
 avgInitialConcreteStress= 0.0
@@ -122,16 +124,16 @@ avgInitialSteelStress/=len(steelFibers)
 
 
 dt = 100 # days
-solProc.integrator.dLambda1= dt # set new increment for the integrator.
-solProc.integrator.setNumIncr(10) # IMPORTANT! otherwise it got stuck.
+integrator.dLambda1= dt # set new increment for the integrator.
+integrator.setNumIncr(10) # IMPORTANT! otherwise it got stuck.
 
 modelSpace.setCreepOn() # Turn creep on
 
 t = 0
 while t < 10000:
-    ok = solProc.analysis.analyze(1)
+    ok = analysis.analyze(1)
     t+= dt
-errorDt= abs(solProc.integrator.dLambda1-dt)/dt # Make sure there is no modification of dLambda1
+errorDt= abs(integrator.dLambda1-dt)/dt # Make sure there is no modification of dLambda1
 
 # Compute final stresses.
 avgFinalConcreteStress= 0.0

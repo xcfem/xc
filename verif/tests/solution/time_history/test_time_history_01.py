@@ -139,7 +139,7 @@ solProc= predefined_solutions.FrequencyAnalysis(FEcase,systemPrefix='full_gen')
 if(solProc.solve()!=0):
     lmsg.error('Eigen analysis failed.')
     quit()
-eig1= solProc.analysis.getEigenvalue(1)
+eig1= solProc.getAnalysis().getEigenvalue(1)
 freq= math.sqrt(eig1)
 
 dampRatio= 0.02

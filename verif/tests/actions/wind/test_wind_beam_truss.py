@@ -12,6 +12,7 @@ __email__= "ana.ortega.ort@gmail.com l.pereztato@gmail.com"
 
 
 import xc
+from solution import predefined_solutions
 from model import predefined_spaces
 from model.mesh import finit_el_model as fem
 from model.geometry import grid_model as gm
@@ -119,12 +120,14 @@ LC3.addLstLoads([wind_diagonals])
 nReac1=gridGeom.getPntXYZ((0,0,0)).getNode()
 nReac2=gridGeom.getPntXYZ((4,0,0)).getNode()
 
-from solution import predefined_solutions
 analysis= predefined_solutions.simple_static_linear(FEcase)
+print(analysis)
 
 modelSpace.removeAllLoadPatternsFromDomain()
 modelSpace.addLoadCaseToDomain('LC1')
-result= analysis.analyze(1)
+print(analysis)
+A= 1
+result= analysis.analyze(A)
 result= modelSpace.analyze(calculateNodalReactions= True)
 R1a=nReac1.getReaction[1]
 R1b=nReac2.getReaction[1]

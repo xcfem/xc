@@ -141,12 +141,15 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 solProc= predefined_solutions.PlainStaticModifiedNewton(feProblem, convergenceTestTol= 1e-3, maxNumIter= 300, printFlag= 0)
 solProc.setup()
 
+analysis= solProc.getAnalysis()
+integrator= solProc.getIntegrator()
+
 if(creepOnDeck):
     Tcr = 28 # creep model age (in days)
     modelSpace.setCurrentTime(Tcr)
     # Set the load control integrator with dt=0 so that the domain time doesn’t advance.
-    solProc.integrator.dLambda1= 0.0  
-    result= solProc.analysis.analyze(1)
+    integrator.dLambda1= 0.0  
+    result= analysis.analyze(1)
     if(result!=0):
         lmsg.error("Can't solve for the initial state.")
         exit(1)
@@ -154,8 +157,8 @@ if(creepOnDeck):
 
 # Compute solution
 dt= 150 # time increment in days
-solProc.integrator.dLambda1= dt # set new increment for the integrator.
-solProc.integrator.setNumIncr(dt) # IMPORTANT! otherwise it got stuck.
+integrator.dLambda1= dt # set new increment for the integrator.
+integrator.setNumIncr(dt) # IMPORTANT! otherwise it got stuck.
 
 lastT= 10000 
 t= 0
@@ -163,7 +166,7 @@ if(creepOnDeck):
     t= Tcr
 while t < lastT:
     # print('solve for time: '+str(t)+' days.', flush= True)
-    ok = solProc.analysis.analyze(1)
+    ok = analysis.analyze(1)
     t+= dt
     if(ok!=0):
         lmsg.error("Can't solve for time: "+str(t)+' days.')
