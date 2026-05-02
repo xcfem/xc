@@ -70,10 +70,10 @@ class ModelWrapper: public CommandEntity
     bool alloc_constraint_handler(const std::string &);
     void copy_constraint_handler(const ConstraintHandler *);
 
-    bool setup_numerador(void);
-    void free_numerador(void);
-    bool alloc_numerador(const std::string &);
-    void copy_numerador(const DOF_Numberer *);
+    bool setup_dof_numberer(void);
+    void free_dof_numberer(void);
+    bool alloc_dof_numberer(const std::string &);
+    void copy_dof_numberer(const DOF_Numberer *);
 
     void copy(const ModelWrapper &);
     void free_mem(void);

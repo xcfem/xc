@@ -280,6 +280,9 @@ const XC::Analysis *XC::SolutionProcedure::getAnalysisPtr(void) const
 XC::Analysis &XC::SolutionProcedure::getAnalysis(void)
   {
     if(!theAnalysis)
-      std::cerr << "SolutionProcedure::getAnalysis; analysis object is not defined." << std::endl;
+      {
+        std::cerr << "SolutionProcedure::getAnalysis; analysis object is not defined." << std::endl;
+	exit(-1);
+      }
     return *theAnalysis;
   }

@@ -128,7 +128,7 @@ XC::ConstraintHandler &XC::ModelWrapper::newConstraintHandler(const std::string 
     return *theHandler;
   }
 
-void XC::ModelWrapper::free_numerador(void)
+void XC::ModelWrapper::free_dof_numberer(void)
   {
     if(theDOFNumberer)
       {
@@ -137,7 +137,7 @@ void XC::ModelWrapper::free_numerador(void)
       }
   }
 
-bool XC::ModelWrapper::setup_numerador(void)
+bool XC::ModelWrapper::setup_dof_numberer(void)
   {
     bool retval= false;
     if(theDOFNumberer)
@@ -152,9 +152,9 @@ bool XC::ModelWrapper::setup_numerador(void)
     return retval;
   }
 
-bool XC::ModelWrapper::alloc_numerador(const std::string &nmb)
+bool XC::ModelWrapper::alloc_dof_numberer(const std::string &nmb)
   {
-    free_numerador();
+    free_dof_numberer();
 
     if(nmb=="default_numberer")
       theDOFNumberer= new DOF_Numberer(this);
@@ -163,28 +163,28 @@ bool XC::ModelWrapper::alloc_numerador(const std::string &nmb)
     else if(nmb=="parallel_numberer")
       theDOFNumberer= new ParallelNumberer(this);
     else
-      std::cerr << "ModelWrapper::alloc_numerador. ERROR; can't interpret"
+      std::cerr << "ModelWrapper::alloc_dof_numberer. ERROR; can't interpret"
                 << " string: '" << nmb << "'\n";
-    return setup_numerador();
+    return setup_dof_numberer();
   }
 
-void XC::ModelWrapper::copy_numerador(const DOF_Numberer *dn)
+void XC::ModelWrapper::copy_dof_numberer(const DOF_Numberer *dn)
   {
     if(dn)
       {
-        free_numerador();
+        free_dof_numberer();
         theDOFNumberer= dn->getCopy();
         theDOFNumberer->set_owner(this);
-        setup_numerador();
+        setup_dof_numberer();
       }
     else
-     std::cerr << "ModelWrapper::copy_numerador; null pointer to DOF freedom." << std::endl;
+     std::cerr << "ModelWrapper::copy_dof_numberer; null pointer to DOF freedom." << std::endl;
   }
 
 //! @brief Creates a numberer of the type passed as parameter.
 XC::DOF_Numberer &XC::ModelWrapper::newNumberer(const std::string &nmb)
   {
-    alloc_numerador(nmb);
+    alloc_dof_numberer(nmb);
     assert(theDOFNumberer);
     return *theDOFNumberer;
   }
@@ -193,14 +193,14 @@ void XC::ModelWrapper::free_mem(void)
   {
     free_analysis_model();
     free_constraint_handler();
-    free_numerador();
+    free_dof_numberer();
   }
 
 void XC::ModelWrapper::copy(const ModelWrapper &other)
   {
     if(other.theModel) copy_analysis_model(other.theModel);
     if(other.theHandler) copy_constraint_handler(other.theHandler);
-    if(other.theDOFNumberer) copy_numerador(other.theDOFNumberer);
+    if(other.theDOFNumberer) copy_dof_numberer(other.theDOFNumberer);
   }
 
 //! @brief Return a pointer to the object owner.
@@ -307,7 +307,7 @@ void XC::ModelWrapper::brokeAnalysisModel(const Communicator &comm,const ID &dat
 //! @brief Set the numberer to be used in the analysis.
 int XC::ModelWrapper::setNumberer(DOF_Numberer &theNewNumberer) 
   {
-    copy_numerador(&theNewNumberer);
+    copy_dof_numberer(&theNewNumberer);
     return 0;
   }
 
