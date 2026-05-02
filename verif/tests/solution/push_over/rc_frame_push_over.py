@@ -52,40 +52,44 @@ hLoad.newNodalLoad(n4.tag, xc.Vector([H, 0, 0]))
 dU = 0.1  # Displacement increment
 
 solProc= rc_frame_gravity.solProc
-solProc.setDisplacementControlIntegrator(node= n3, dof= 1, increment= dU, numIter= 1, dUmin= dU, dUmax= dU)
+solProc.displacementControlIntegratorSetup(node= n3, dof= 1, increment= dU, numIter= 1, dUmin= dU, dUmax= dU)
 
 # Finally perform the analysis
 # ------------------------------
 
 # Set some parameters
 maxU = 15.0  # Max displacement
-currentDisp = 0.0
-ok = 0
-print('XXX continue here')
-quit()
+# Set convergence test.
+solProc.convTestType= 'norm_disp_incr_conv_test'
+solProc.convergenceTestTol= 1e-12
+solProc.maxNumIter= 1000
+solProc.printFlag= 0
+solProc.convergenceTestSetup()
+# Set solution algorithm.
+solProc.solutionAlgorithmType= 'modified_newton_soln_algo'
+solProc.solutionAlgorithmSetup()
 
-test('NormDispIncr', 1.0e-12, 1000)
-algorithm('ModifiedNewton', '-initial')
-
+ok= 0
+currentDisp= 0.0
+analysis= solProc.getAnalysis()
 while ok == 0 and currentDisp < maxU:
 
-    ok = analyze(1)
+    ok= analysis.analyze(1)
 
     # if the analysis fails try initial tangent iteration
     if ok != 0:
-        print("modified newton failed")
+        print("modified newton failed at disp: ", currentDisp)
         break
-    # print "regular newton failed .. lets try an initail stiffness for this step"
-    # test('NormDispIncr', 1.0e-12,  1000)
-    # # algorithm('ModifiedNewton', '-initial')
-    # ok = analyze(1)
-    # if ok == 0:
-    #     print "that worked .. back to regular newton"
+    else:
+        print("current disp: ", currentDisp)
 
-    # test('NormDispIncr', 1.0e-12,  10)
-    # algorithm('Newton')
+    currentDisp= n3.getDisp[0]
+    
+print('XXX continue here')
+quit()
 
-    currentDisp = nodeDisp(3, 1)
+# algorithm('ModifiedNewton', '-initial')
+
 
 results = open('results.out', 'a+')
 

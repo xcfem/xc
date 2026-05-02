@@ -68,6 +68,7 @@
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/ID.h>
 #include "solution/SolutionStrategy.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor
 XC::KrylovNewton::KrylovNewton(SolutionStrategy *owr,int theTangentToUse, int maxDim)
@@ -103,8 +104,16 @@ int XC::KrylovNewton::solveCurrentStep(void)
 
     if((theAnaModel == nullptr) || (theIntegrator == nullptr) || (theSOE == nullptr) || (theTest == nullptr))
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; undefined model, integrator or system of equations.\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << std::endl;
+	if(theAnaModel==nullptr)
+	  std::cerr << "  undefined model." << std::endl;
+	if(theIntegrator==nullptr)
+	  std::cerr << "  undefined integrator." << std::endl;
+	if(theSOE==nullptr)
+	  std::cerr << "  undefined system of equations." << std::endl;
+	if(theTest==nullptr)
+	  std::cerr << "  undefined convergence test." << std::endl;
+	std::cerr << Color::def;
         return -5;
       }
 
@@ -136,8 +145,9 @@ int XC::KrylovNewton::solveCurrentStep(void)
     // Evaluate system residual R(y_0)
     if(theIntegrator->formUnbalance() < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; the Integrator failed in formUnbalance()\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; the Integrator failed in formUnbalance()"
+	          << Color::def << std::endl;
         return -2;
       }
 
@@ -145,8 +155,9 @@ int XC::KrylovNewton::solveCurrentStep(void)
     theTest->set_owner(getSolutionStrategy());
     if(theTest->start() < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-                  << "; the ConvergenceTest object failed in start()\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                  << "; the ConvergenceTest object failed in start()"
+	          << Color::def << std::endl;
         return -3;
       }
 
@@ -154,8 +165,9 @@ int XC::KrylovNewton::solveCurrentStep(void)
     // Evaluate system Jacobian J = R'(y)|y_0
     if(theIntegrator->formTangent(tangent) < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-                  << "; the Integrator failed in formTangent()\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                  << "; the Integrator failed in formTangent()"
+	          << Color::def << std::endl;
         return -1;
       }
 
@@ -175,8 +187,10 @@ int XC::KrylovNewton::solveCurrentStep(void)
             dim = 0;
             if(theIntegrator->formTangent(tangent) < 0)
               {
-                std::cerr << getClassName() << "::" << __FUNCTION__
-                          << "; the Integrator failed to produce new_ formTangent()\n";
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                          << "; the Integrator failed to produce new_ formTangent()"
+			  << Color::def << std::endl;
+			     
                 return -1;
               }
           }
@@ -184,30 +198,34 @@ int XC::KrylovNewton::solveCurrentStep(void)
         // Solve for residual f(y_k) = J^{-1} R(y_k)
         if(theSOE->solve() < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-                      << "; the LinearSysOfEqn failed in solve()\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                      << "; the LinearSysOfEqn failed in solve()"
+		      << Color::def << std::endl;
             return -3;
           }
 
         // Solve least squares A w_{k+1} = r_k
         if(this->leastSquares(dim) < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-                      << "; the Integrator failed in leastSquares()\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                      << "; the Integrator failed in leastSquares()"
+		      << Color::def << std::endl;
             return -1;
           }
         // Update system with v_k
         if(theIntegrator->update(v[dim]) < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-                      << "; the Integrator failed in update()\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                      << "; the Integrator failed in update()"
+		      << Color::def << std::endl;
             return -4;
           }
         // Evaluate system residual R(y_k)
         if(theIntegrator->formUnbalance() < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-                      << "; the Integrator failed in formUnbalance()\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                      << "; the Integrator failed in formUnbalance()"
+		      << Color::def << std::endl;
             return -2;
           }
 
@@ -221,10 +239,11 @@ int XC::KrylovNewton::solveCurrentStep(void)
 
     if(result == -2)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                   << "the ConvergenceTest object failed in test()\n"
                   << "convergence test message: "
-                  << theTest->getStatusMsg(1) << std::endl;
+                  << theTest->getStatusMsg(1)
+		  << Color::def << std::endl;
         return -3;
       }
 
@@ -298,8 +317,10 @@ int XC::KrylovNewton::leastSquares(int k)
     // Check for error returned by subroutine
     if(info < 0)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "error code " << info << " returned by LAPACK dgels\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "error code " << info
+		  << " returned by LAPACK dgels."
+	          << Color::def << std::endl;
 	return info;
       }
 

@@ -210,7 +210,7 @@ modelSpace.addLoadCaseToDomain(glp.name)
 numSteps= 10
 solProc= predefined_solutions.TransformationNewtonRaphsonBandGen(feProblem, maxNumIter= 10, convergenceTestTol= 1e-12, printFlag= 0, numSteps= numSteps, numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test')
 solProc.setup()
-analysis= solProc.analysis
+analysis= solProc.getAnalysis()
 # perform the gravity load analysis, requires 10 steps to reach the load level
 analysis.analyze(numSteps)
 

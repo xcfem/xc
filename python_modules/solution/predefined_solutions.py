@@ -51,6 +51,8 @@ class SolutionProcedure(sp.SolutionProcedure):
     :ivar numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
     :ivar convTestType: convergence test type for non linear analysis (norm unbalance,...).
     :ivar integratorType: integrator type (see integratorSetup).
+    :ivar arcLength: arc length.
+    :ivar arcLengthAlpha: alpha value for the arc-length integrator.
     :ivar soeType: type of the system of equations object.
     :ivar solverType: type of the solver.
     :ivar maxNumIter: maximum number of iterations (defauts to 10)
@@ -59,7 +61,7 @@ class SolutionProcedure(sp.SolutionProcedure):
     :ivar modelWrapper: model representation for the analysis.
     :ivar shift: shift-and-invert mode (used with ARPACK).
     '''
-    def __init__(self, name= None, constraintHandlerType= 'plain', maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', dofNumbererType= 'default_numberer', convTestType= None, soeType:str= None, solverType:str = None, shift:float= None, integratorType:str= 'load_control_integrator', solutionAlgorithmType= 'linear_soln_algo', analysisType= 'static_analysis'):
+    def __init__(self, name= None, constraintHandlerType= 'plain', maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', dofNumbererType= 'default_numberer', convTestType= None, soeType:str= None, solverType:str = None, shift:float= None, integratorType:str= 'load_control_integrator', arcLength= None, arcLengthAlpha= 1.0, solutionAlgorithmType= 'linear_soln_algo', analysisType= 'static_analysis'):
         ''' Constructor.
 
         :param name: identifier for the solution procedure.
@@ -76,6 +78,8 @@ class SolutionProcedure(sp.SolutionProcedure):
         :param solverType: type of the solver.
         :param shift: shift-and-invert mode (used with ARPACK).
         :param integratorType: integrator type (see integratorSetup).
+        :param arcLength: arc length.
+        :param arcLengthAlpha: alpha value for the arc-length integrator.
         :param solutionAlgorithmType: type of the solution algorithm.
         :param analysisType: type of the analysis.
         '''
@@ -90,20 +94,14 @@ class SolutionProcedure(sp.SolutionProcedure):
         self.dofNumbererType= dofNumbererType
         self.convTestType= convTestType
         self.integratorType= integratorType
+        self.arcLength= arcLength
+        self.arcLengthAlpha= arcLengthAlpha
         self.soeType= soeType
         self.solverType= solverType
         self.shift= shift
         self.solutionAlgorithmType= solutionAlgorithmType
         self.analysisType= analysisType
         
-    def setArcLengthIntegratorParameters(self, arcLength, alpha= 1.0):
-        ''' Set the values of the Arc-Length integrator.
-
-        :param arcLength: radius of desired intersection with the equilibrium path.
-        :param alpha: scaling factor on the reference loads.
-        '''
-        self.integratorParameters= xc.Vector([arcLength, alpha])
-    
     def setup(self):
         ''' Defines the solution procedure in the finite element 
             problem object.
@@ -116,6 +114,7 @@ class SolutionProcedure(sp.SolutionProcedure):
         self.constraintHandlerSetup()
         solutionStrategyName= self.getSolutionStrategyName()
         self.solutionStrategySetup(solutionStrategyName)
+        self.convergenceTestSetup()
         self.solutionAlgorithmSetup()
         self.sysOfEqnSetup()
         self.analysisSetup()
@@ -139,11 +138,20 @@ class SolutionProcedure(sp.SolutionProcedure):
         if(self.integratorType=='newmark_integrator'):
             retval= super().integratorSetup(integratorType= self.integratorType,gamma= self.gamma, beta= self.beta)
         elif(self.integratorType=='displacement_control_integrator'):
-            retval= super().integratorSetup(integratorType= self.integratorType, node= self.dispControlNode, dof= elf.dispControlDof, increment= self.dispControlIncrement)
+            retval= super().integratorSetup(integratorType= self.integratorType, node= self.dispControlNode, dof= self.dispControlDof, increment= self.dispControlIncrement)
+        elif(self.integratorType in  ["arc-length_integrator", "arc-length1_integrator", "HS_constraint_integrator"]): # Arc-Length control.
+            retval= super().integratorSetup(integratorType= self.integratorType, arcLength= self.ArcLength, alpha= self.arcLengthAlpha)
         else:
             retval= super().integratorSetup(integratorType= self.integratorType)
         return retval
 
+    def convergenceTestSetup(self):
+        ''' Define the convergence test.'''
+        retval= None
+        if(self.convTestType):
+            retval= super().convergenceTestSetup(convergenceTestType= self.convTestType, convergenceTestTol= self.convergenceTestTol, maxNumIter= self.maxNumIter, printFlag= self.printFlag)
+        return retval
+        
     def solutionAlgorithmSetup(self):
         ''' Define the solution strategy.'''
         return super().solutionAlgorithmSetup(self.solutionAlgorithmType)
@@ -210,7 +218,12 @@ class SolutionProcedure(sp.SolutionProcedure):
                                effects.
         :param reactionCheckTolerance: tolerance when checking reaction values.
         '''
-        return super().solveComb(numSteps= self.numSteps, combName= combName, calculateNodalReactions= calculateNodalReactions, includeInertia= includeInertia, reactionCheckTolerance= reactionCheckTolerance)
+        self.resetLoadCase() # Remove previous loads.
+        preprocessor= self.get_fe_preprocessor()
+        preprocessor.getLoadHandler.addToDomain(combName) # Add comb. loads.
+        analOk= self.solve(calculateNodalReactions= calculateNodalReactions, includeInertia= includeInertia, reactionCheckTolerance= reactionCheckTolerance)
+        preprocessor.getLoadHandler.removeFromDomain(combName) # Remove comb.
+        return analOk
 
 #Typical solution procedures.
 
@@ -455,7 +468,8 @@ class TransformationNewtonRaphsonBandGen(SolutionProcedure):
         '''
         super().setup()
         if(self.numSteps!=1):
-            self.integrator.dLambda1= 1.0/self.numSteps
+            integrator= self.getIntegrator()
+            integrator.dLambda1= 1.0/self.numSteps
         
 ### Convenience function
 def transformation_newton_raphson_band_gen(prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'norm_unbalance_conv_test'):
@@ -1259,7 +1273,7 @@ def ordinary_eigenvalues(prb):
         of the model stiffness matrix.'''
     solProc= OrdinaryEigenvalues(prb)
     solProc.setup()
-    return solProc.analysis
+    return solProc.getAnalysis()
 
 
 class FrequencyAnalysis(SolutionProcedure):
@@ -1285,7 +1299,7 @@ def frequency_analysis(prb, systemPrefix= 'sym_band', shift:float= None):
         frequencies of the model.'''
     solProc= FrequencyAnalysis(prb, systemPrefix= systemPrefix, shift= shift)
     solProc.setup()
-    return solProc.analysis
+    return solProc.getAnalysis()
 
 class IllConditioningAnalysisBase(SolutionProcedure):
     ''' Base class for ill-conditioning
@@ -1325,7 +1339,7 @@ def zero_energy_modes(prb):
         energy modes of the model.'''
     solProc= ZeroEnergyModes(prb)
     solProc.setup()
-    return solProc.analysis        
+    return solProc.getAnalysis()        
 
 class IllConditioningAnalysis(IllConditioningAnalysisBase):
     ''' Procedure to obtain the modes
@@ -1349,7 +1363,7 @@ def ill_conditioning_analysis(prb):
         that correspond to ill-conditioned degrees of freedom.'''
     solProc= IllConditioningAnalysis(prb)
     solProc.setup()
-    return solProc.analysis
+    return solProc.getAnalysis()
 
 ## Utility functions
 
@@ -1476,13 +1490,18 @@ class LinearBucklingAnalysis(object):
 
     def staticPartSetup(self):
         ''' Create the static part of the linear buckling analysis.'''
-        self.staticPart= BucklingAnalysisStaticPart(prb= self.feProblem, constraintHandlerType= self.constraintHandlerType, numberingMethod= self.numberingMethod , convTestType= self.convTestType, convergenceTestTol= self.convergenceTestTol, maxNumIter= self.maxNumIter, soeType= self.soeType, solverType= self.solverType , solutionAlgorithmType= self.solutionAlgorithmType, printFlag= self.printFlag)
-        self.staticPart.setup()
+        retval= BucklingAnalysisStaticPart(prb= self.feProblem, constraintHandlerType= self.constraintHandlerType, numberingMethod= self.numberingMethod , convTestType= self.convTestType, convergenceTestTol= self.convergenceTestTol, maxNumIter= self.maxNumIter, soeType= self.soeType, solverType= self.solverType , solutionAlgorithmType= self.solutionAlgorithmType, printFlag= self.printFlag)
+        retval.setup()
+        return retval
 
-    def eigenPartSetup(self):
-        ''' Create the eigen part of the linear buckling analysis.'''
-        self.eigenPart= BucklingAnalysisEigenPart(prb= self.feProblem, staticAnalysisPart= self.staticPart, soeType= self.eigenSOEType, solverType= self.eigenSolverType, printFlag= self.printFlag)
-        self.eigenPart.setup()
+    def eigenPartSetup(self, staticPart):
+        ''' Create the eigen part of the linear buckling analysis.
+
+        :param staticPart: static part of the linear buckling analysis.
+        '''
+        retval= BucklingAnalysisEigenPart(prb= self.feProblem, staticAnalysisPart= staticPart, soeType= self.eigenSOEType, solverType= self.eigenSolverType, printFlag= self.printFlag)
+        retval.setup()
+        return retval
         
     def soluControlSetup(self):
         ''' Defines the solution control object.'''
@@ -1494,17 +1513,18 @@ class LinearBucklingAnalysis(object):
 
         :param analysisType: type of the analysis to perform.
         '''
-        self.analysis= self.eigenPart.solu.newAnalysis('linear_buckling_analysis', self.staticPart.getSolutionStrategyName(), self.eigenPart.getSolutionStrategyName())
-        self.analysis.numModes= self.numModes
+        retval= self.eigenPart.solu.newAnalysis('linear_buckling_analysis', self.staticPart.getSolutionStrategyName(), self.eigenPart.getSolutionStrategyName())
+        retval.numModes= self.numModes
+        return retval
         
     def setup(self):
         ''' Defines the solution procedure in the finite element 
             problem object.
         '''
-        self.staticPartSetup()
-        self.eigenPartSetup()
+        self.staticPart= self.staticPartSetup()
+        self.eigenPart= self.eigenPartSetup(staticPart= self.staticPart)
         self.soluControlSetup()
-        self.analysisSetup()
+        self.analysis= self.analysisSetup()
         self.eigenPart.integratorSetup()
         
     def solve(self):

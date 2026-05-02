@@ -52,15 +52,6 @@ class SolutionProcedure(object):
             self.modelWrapper= None
             self.solutionStrategy= None
 
-    def getArcLengthIntegratorParameters(self, arcLength, alpha= 1.0):
-        ''' Return the values of the Arc-Length integrator in a XC::Vector that
-            can be used as argument for this type of integrator.
-
-        :param arcLength: radius of desired intersection with the equilibrium path.
-        :param alpha: scaling factor on the reference loads.
-        '''
-        return xc.Vector([arcLength, alpha])
-
     def getModelWrapperName(self):
         ''' Return the name for the model wrapper.'''
         retval= 'sm_'+self.name
@@ -234,21 +225,27 @@ class SolutionProcedure(object):
         :param printFlag: if not zero print convergence results on each step.
         '''
         retval= None
-        if(self.solutionStrategy):
-            retval= self.solutionStrategy.newConvergenceTest(convergenceTestType)
-            if(retval):
-                retval.tol= convergenceTestTol
-                retval.maxNumIter= maxNumIter
-                retval.printFlag= printFlag
+        if(convergenceTestType):
+            if(self.solutionStrategy):
+                retval= self.solutionStrategy.newConvergenceTest(convergenceTestType)
+                if(retval):
+                    retval.tol= convergenceTestTol
+                    retval.maxNumIter= maxNumIter
+                    retval.printFlag= printFlag
+                else:
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    lmsg.error(className+'.'+methodName+'; something went wrong: '+str(sconvergenceTestType) + ' seems not to be valid convergence test type.')
+                    exit(1)
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
-                lmsg.error(className+'.'+methodName+'; something went wrong: '+str(sconvergenceTestType) + ' seems not to be valid convergence test type.')
+                lmsg.error(className+'.'+methodName+'; solution strategy not set.')
                 exit(1)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; solution strategy not set.')
+            lmsg.error(className+'.'+methodName+'; convergence test type cannot be None.')
             exit(1)
         return retval
         
@@ -330,7 +327,16 @@ class SolutionProcedure(object):
             exit(1)
         return retval
 
-    def arcLengthIntegratorSetup(self, integratorType):
+    def getArcLengthIntegratorParameters(self, arcLength, alpha= 1.0):
+        ''' Return the values of the Arc-Length integrator in a XC::Vector that
+            can be used as argument for this type of integrator.
+
+        :param arcLength: radius of desired intersection with the equilibrium path.
+        :param alpha: scaling factor on the reference loads.
+        '''
+        return xc.Vector([arcLength, alpha])
+
+    def arcLengthIntegratorSetup(self, integratorType, arcLength, alpha= 1.0):
         ''' Define a Newmark integrator.
 
         :param integratorType: type of arc-length integrator, available types
@@ -340,7 +346,7 @@ class SolutionProcedure(object):
         '''
         retval= None
         if(self.solutionStrategy):
-            integratorParameters= xc.Vector()
+            integratorParameters= xc.Vector([arcLength, alpha])
             retval= self.solutionStrategy.newIntegrator(integratorType, integratorParameters)
         else:
             className= type(self).__name__
@@ -349,7 +355,7 @@ class SolutionProcedure(object):
             exit(1)
         return retval
         
-    def integratorSetup(self, integratorType, gamma= None, beta= None, node= None, dof:int= -1, increment:float= None, numIter:int= 1, dUmin:float= None, dUmax:float= None):
+    def integratorSetup(self, integratorType, gamma= None, beta= None, node= None, dof:int= -1, increment:float= None, numIter:int= 1, dUmin:float= None, dUmax:float= None, arcLength= None, alpha= 1.0):
         ''' Define the type of integrator to use in the analysis.
 
 
@@ -377,11 +383,18 @@ class SolutionProcedure(object):
         elif(integratorType=='displacement_control_integrator'):
             retval= self.displacementControlIntegratorSetup(node= node, dof= dof, increment= increment, numIter= numIter, dUmin= dUmin, dUmax= dUmax)
         elif(integratorType in ["arc-length_integrator", "arc-length1_integrator", "HS_constraint_integrator"]): # Arc-Length control.
-            retval= self.integrator_setup(integratorType)
+            retval= self.arcLengthIntegratorSetup(integratorType, arcLength= arcLength, alpha= alpha)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; integrator type: '+str(integratorType)+' unknown.')
+        return retval
+
+    def getIntegrator(self):
+        ''' Return a reference to the integrator.'''
+        retval= None
+        if(self.solutionStrategy):
+            retval= self.solutionStrategy.getIntegrator
         return retval
             
     def solutionAlgorithmSetup(self, solutionAlgorithmType):
@@ -491,7 +504,7 @@ class SolutionProcedure(object):
         
     def resetLoadCase(self):
         ''' Remove previous load from the domain.'''
-        preprocessor= self.getPreprocessor()
+        preprocessor= self.get_fe_preprocessor()
         preprocessor.resetLoadCase() # Remove previous loads.
         preprocessor.getDomain.revertToStart() # Revert to initial state.
         
@@ -517,7 +530,7 @@ class SolutionProcedure(object):
                 exit(-1)
             else:
                 if(calculateNodalReactions):
-                    nodeHandler= self.getPreprocessor().getNodeHandler
+                    nodeHandler= self.get_fe_preprocessor().getNodeHandler
                     result= nodeHandler.calculateNodalReactions(includeInertia, reactionCheckTolerance)
         else:
             className= type(self).__name__
@@ -540,7 +553,7 @@ class SolutionProcedure(object):
         :param reactionCheckTolerance: tolerance when checking reaction values.
         '''
         self.resetLoadCase() # Remove previous loads.
-        preprocessor= self.getPreprocessor()
+        preprocessor= self.get_fe_preprocessor()
         preprocessor.getLoadHandler.addToDomain(combName) # Add comb. loads.
         analOk= self.solve(numSteps, calculateNodalReactions, includeInertia, reactionCheckTolerance)
         preprocessor.getLoadHandler.removeFromDomain(combName) # Remove comb.

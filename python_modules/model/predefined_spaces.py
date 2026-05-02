@@ -1508,7 +1508,7 @@ class PredefinedSpace(object):
             problem= self.getProblem()
             solProc= self.solutionProcedureType(problem)
             solProc.setup()
-            self.analysis= solProc.analysis
+            self.analysis= solProc.getAnalysis()
         
     def analyze(self, numSteps= 1, calculateNodalReactions= False, includeInertia= False, reactionCheckTolerance= 1e-7):
         ''' Triggers the analysis of the model with a simple static linear
