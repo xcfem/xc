@@ -811,9 +811,9 @@ class WallTopPlates(object):
         preprocessor.resetLoadCase()
         preprocessor.getLoadHandler.addToDomain(comb)
         # Solution
-        solution= predefined_solutions.SimpleStaticLinear(self.prb)
-        solution.setup()
-        analysis= solution.analysis
+        solProc= predefined_solutions.SimpleStaticLinear(self.prb)
+        solProc.setup()
+        analysis= solProc.getAnalysis()
         result= analysis.analyze(1)
         if(result!=0):
             className= type(self).__name__

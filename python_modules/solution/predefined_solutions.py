@@ -731,7 +731,7 @@ class LineSearchBase(SolutionProcedure):
         :param integratorType: integrator type (see integratorSetup).
         :param solutionAlgorithmType: type of the solution algorithm.
         '''
-        super(LineSearchBase,self).__init__(name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= soeType, solverType= solverType, integratorType= integratorType, solutionAlgorithmType= solutionAlgorithmType)
+        super(LineSearchBase,self).__init__(name= name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= integratorType, solutionAlgorithmType= solutionAlgorithmType)
         self.setFEProblem(prb)
         self.lineSearchMethod= lineSearchMethod
         

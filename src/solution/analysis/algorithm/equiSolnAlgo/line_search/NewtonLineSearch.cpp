@@ -71,6 +71,7 @@
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 #include <utility/matrix/ID.h>
 #include "solution/SolutionStrategy.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 //! @brief Null Constructor
@@ -122,7 +123,9 @@ void XC::NewtonLineSearch::copy(LineSearch *ptr)
         theLineSearch->set_owner(this);
       }
     else
-      std::cerr << "NewtonLineSearch::copy; pointer to line search is null." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; pointer to line search is null."
+		<< Color::def << std::endl;
   }
 
 XC::NewtonLineSearch::~NewtonLineSearch(void)
@@ -138,10 +141,10 @@ bool XC::NewtonLineSearch::setLineSearchMethod(const std::string &lineSearchMeth
   {
     bool retval= alloc(lineSearchMethod);
     if(!retval)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; can't set the line search method: '"
 	        << lineSearchMethod << "'"
-	        << std::endl;
+	        << Color::def << std::endl;
     return retval;
   }
 
@@ -157,10 +160,16 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
 
     if((!theAnaModel) || (!theIntegrator) || (!theSOE) || (!theTest))
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING setLinks() has"
-		  << "no se ha asignado modelo, integrator o system of equations."
-		  << std::endl;
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << std::endl;
+	if(theAnaModel==nullptr)
+	  std::cerr << "  undefined model." << std::endl;
+	if(theIntegrator==nullptr)
+	  std::cerr << "  undefined integrator." << std::endl;
+	if(theSOE==nullptr)
+	  std::cerr << "  undefined system of equations." << std::endl;
+	if(theTest==nullptr)
+	  std::cerr << "  undefined convergence test." << std::endl;
+	std::cerr << Color::def;
         return -5;
       }
 
@@ -170,15 +179,17 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
     theTest->set_owner(getSolutionStrategy());
     if(theTest->start() < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-        std::cerr << "the convergence test object failed in start()\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; the convergence test object failed in start()"
+	          << Color::def << std::endl;
         return -3;
       }
 
     if(theIntegrator->formUnbalance() < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-        std::cerr << "the integrator failed in formUnbalance()\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; the integrator failed in formUnbalance()"
+	          << Color::def << std::endl;
         return -2;
       }
 
@@ -191,16 +202,18 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
         //form the tangent
         if(theIntegrator->formTangent() < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-            std::cerr << "the integrator failed in formTangent()\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; the integrator failed in formTangent()."
+		      << Color::def << std::endl;
             return -1;
           }
 
         //solve
         if(theSOE->solve() < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; the LinearSysOfEqn failed in solve()\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; the LinearSysOfEqn failed in solve()."
+		      << Color::def << std::endl;
             return -3;
           }
 
@@ -212,15 +225,17 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
 
        if(theIntegrator->update(theSOE->getX()) < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-            std::cerr << "the integrator failed in update()\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; the integrator failed in update()."
+		      << Color::def << std::endl;
             return -4;
           }
 
         if(theIntegrator->formUnbalance() < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-            std::cerr << "the integrator failed in formUnbalance()\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; the integrator failed in formUnbalance()."
+		      << Color::def << std::endl;
             return -2;
           }
 
@@ -240,10 +255,11 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
 
     if(result == -2)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-        std::cerr << "the convergence test object failed in test()\n"
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; the convergence test object failed in test()\n"
                   << "convergence test message: "
-		  << theTest->getStatusMsg(1) << std::endl;
+		  << theTest->getStatusMsg(1)
+		  << Color::def << std::endl;
 
         return -3;
       }
@@ -261,7 +277,7 @@ int XC::NewtonLineSearch::recvSelf(const Communicator &comm)
 void XC::NewtonLineSearch::Print(std::ostream &s, int flag) const
   {
     if(flag == 0)
-      s << "NewtonLineSearch\n";
+      s << "NewtonLineSearch" << std::endl;
     if(theLineSearch)
       theLineSearch->Print(s, flag);
   }
