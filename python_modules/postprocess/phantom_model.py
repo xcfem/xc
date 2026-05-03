@@ -323,6 +323,7 @@ class PhantomModel(object):
         '''
         combs= self.preprocessor.getLoadHandler.getLoadPatterns #Here each load pattern represents a combination.
         elements= self.preprocessor.getSets.getSet("total").elements
+        controller.checkSolutionProcedureSetup()
         controller.checkSolverAdequacy()
         controller.preprocessor= self.preprocessor
         for key in combs.getKeys():

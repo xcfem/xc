@@ -150,7 +150,7 @@ solProc= predefined_solutions.TransformationNewtonRaphsonBandGen(feProblem, conv
 solProc.setup()
 solProc.getIntegrator().dLambda1= 0.1
 
-#solProc.analysis.analyze(1000)
+#solProc.getAnalysis().analyze(1000)
 solProc.getAnalysis().analyze(950)
 
 # Check last reaction

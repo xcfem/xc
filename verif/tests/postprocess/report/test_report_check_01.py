@@ -217,9 +217,7 @@ argsEl1D= ['CF','N','My','Mz']
 
 # Generate reports.
 report= report_generator.ReportGenerator(modelSpace= modelSpace, envConfig= cfg)
-
 fileNames= report.checksReport(limitStateLabel= limitState.label, setsShEl= setsEl2D, argsShEl= argsEl2D, setsBmEl= setsEl1D, argsBmEl= argsEl1D, rgMinMax=rgMinMax, defaultDiagramDirection= defaultDiagramDirection)
-
 ## Check results.
 refFileNames= ['totalCFSect1.jpg', 'totalCFSect2.jpg', 'totalNSect1.jpg', 'totalNSect2.jpg', 'totalMySect1.jpg', 'totalMySect2.jpg']
 

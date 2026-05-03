@@ -439,10 +439,10 @@ class SolutionProcedure(object):
     def linearSolutionAlgorithm(self):
         ''' Return true if the solution algorithm is linear, false otherwise.'''
         retval= False
-        solutionAlgorithm= self.getSolutionAlgoritm()
+        solutionAlgorithm= self.getSolutionAlgorithm()
         if(solutionAlgorithm):
-            solutionAlgoritmType= solutionAlgorithm.tipo()
-            if(solutionAlgorithmType=='Linear'):
+            solutionAlgorithmType= solutionAlgorithm.tipo()
+            if(solutionAlgorithmType=='XC::Linear'):
                 retval= True
         return retval
         

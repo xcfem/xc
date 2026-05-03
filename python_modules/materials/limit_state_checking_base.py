@@ -155,6 +155,13 @@ class LimitStateControllerBase(object):
         self.verbose= True # display log messages by default
         self.exhaustedSectionsThresholdCF= 1.0
 
+    def checkSolutionProcedureSetup(self):
+        ''' Check if the setup method of the solution procedure has been called.
+            If not so, call it.
+        '''
+        if(not self.solutionProcedure.solutionStrategy):
+            self.solutionProcedure.setup()
+            
     def checkSolverAdequacy(self):
         ''' Check if the solver is adequate for the materials.'''
         if(not self.fakeSection): # Will use fiber sections and probably non linear materials.

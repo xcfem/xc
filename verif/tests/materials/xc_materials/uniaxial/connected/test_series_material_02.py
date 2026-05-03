@@ -69,7 +69,7 @@ maxU= 0.0
 numSteps= 5
 solProc= predefined_solutions.SimpleNewtonRaphsonDisplacementControl(prb= feProblem, node= n2, dof= 0, increment= dispIncrement, numSteps= numSteps, maxNumIter= 100)
 solProc.setup()
-integrator= solProc.integrator
+integrator= solProc.getIntegrator()
 material= zl.getMaterials()[0]
 
 prevStrain= 0.0
