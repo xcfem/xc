@@ -83,6 +83,16 @@ coreLeftBottomCorner= geom.Pos2d(cover - y1, cover - z1)
 coreRightBottomCorner= coreLeftBottomCorner+coreWidthVector
 coreRightTopCorner= coreRightBottomCorner+coreDepthVector
 coreLeftTopCorner= coreRightTopCorner-coreWidthVector
+# # Rotate section
+# leftBottomCorner= geom.Pos2d(-leftBottomCorner.y, leftBottomCorner.x)
+# rightBottomCorner= geom.Pos2d(-rightBottomCorner.y, rightBottomCorner.x)
+# rightTopCorner= geom.Pos2d(-rightTopCorner.y, rightTopCorner.x)
+# leftTopCorner= geom.Pos2d(-leftTopCorner.y, leftTopCorner.x)
+# coreLeftBottomCorner= geom.Pos2d(-coreLeftBottomCorner.y, coreLeftBottomCorner.x)
+# coreRightBottomCorner= geom.Pos2d(-coreRightBottomCorner.y, coreRightBottomCorner.x)
+# coreRightTopCorner= geom.Pos2d(-coreRightTopCorner.y, coreRightTopCorner.x)
+# coreLeftTopCorner= geom.Pos2d(-coreLeftTopCorner.y, coreLeftTopCorner.x)
+
 # Contour of the section core.
 coreContour= geom.Polygon2d([coreLeftBottomCorner, coreRightBottomCorner, coreRightTopCorner, coreLeftTopCorner])
 # Contours of the section cover.
@@ -152,6 +162,19 @@ columnFiberSection= matHandler.newMaterial("fiber_section_2d","columnFiberSectio
 columnFiberSectionRepr= columnFiberSection.getFiberSectionRepr()
 columnFiberSectionRepr.setGeomNamed(columnSectionGeometry.name)
 columnFiberSection.setupFibers()
+
+# Check some cross-section values.
+fiberSectionArea= columnFiberSection.getArea()
+referenceArea= colWidth*colDepth+8*As
+ratio1= abs(fiberSectionArea-referenceArea)/referenceArea
+yG= columnFiberSection.getCenterOfMassY()
+
+print('fiber section area: ', fiberSectionArea)
+print('reference area: ', referenceArea)
+print('ratio1= ', ratio1)
+print('yG= ', yG)
+print('XXX continue here')
+quit()
 
 # Define column elements
 # ----------------------
