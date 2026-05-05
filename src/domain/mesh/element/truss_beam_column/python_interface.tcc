@@ -68,13 +68,37 @@ class_<XC::BeamColumnWithSectionFD, bases<XC::BeamColumn>, boost::noncopyable >(
 class_<XC::BeamColumnWithSectionFDTrf2d, bases<XC::BeamColumnWithSectionFD>, boost::noncopyable >("BeamColumnWithSectionFDTrf2d", no_init)
    ;
 
+XC::Vector (XC::BeamColumnWithSectionFDTrf3d::*get_vdir_strong_axis_local_coord_section)(const size_t &) const= &XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisLocalCoord;
+XC::Vector (XC::BeamColumnWithSectionFDTrf3d::*get_vdir_strong_axis_local_coord_average)(void) const= &XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisLocalCoord;
+XC::Vector (XC::BeamColumnWithSectionFDTrf3d::*get_vdir_weak_axis_local_coord_section)(const size_t &) const= &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisLocalCoord;
+XC::Vector (XC::BeamColumnWithSectionFDTrf3d::*get_vdir_weak_axis_local_coord_average)(const size_t &) const= &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisLocalCoord;
+
+double (XC::BeamColumnWithSectionFDTrf3d::*get_strong_axis_angle_section)(const size_t &i) const= &XC::BeamColumnWithSectionFDTrf3d::getStrongAxisAngle;
+double (XC::BeamColumnWithSectionFDTrf3d::*get_strong_axis_angle_average)(void) const= &XC::BeamColumnWithSectionFDTrf3d::getStrongAxisAngle;
+double (XC::BeamColumnWithSectionFDTrf3d::*get_weak_axis_angle_section)(const size_t &i) const= &XC::BeamColumnWithSectionFDTrf3d::getWeakAxisAngle;
+double (XC::BeamColumnWithSectionFDTrf3d::*get_weak_axis_angle_average)(void) const= &XC::BeamColumnWithSectionFDTrf3d::getWeakAxisAngle;
+
+const XC::Vector &(XC::BeamColumnWithSectionFDTrf3d::*get_vdir_strong_axis_global_coord_section)(const size_t &, bool) const= &XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisGlobalCoord;
+const XC::Vector &(XC::BeamColumnWithSectionFDTrf3d::*get_vdir_strong_axis_global_coord_average)(bool) const= &XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisGlobalCoord;
+const XC::Vector &(XC::BeamColumnWithSectionFDTrf3d::*get_vdir_weak_axis_global_coord_section)(const size_t &, bool) const= &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisGlobalCoord;
+const XC::Vector &(XC::BeamColumnWithSectionFDTrf3d::*get_vdir_weak_axis_global_coord_average)(bool) const= &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisGlobalCoord;
+
 class_<XC::BeamColumnWithSectionFDTrf3d, bases<XC::BeamColumnWithSectionFD>, boost::noncopyable >("BeamColumnWithSectionFDTrf3d", no_init)
-  .def("getVDirStrongAxisLocalCoord",&XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisLocalCoord)
-  .def("getVDirWeakAxisLocalCoord",&XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisLocalCoord)
-  .def("getStrongAxisAngle",&XC::BeamColumnWithSectionFDTrf3d::getStrongAxisAngle)
-  .def("getWeakAxisAngle",&XC::BeamColumnWithSectionFDTrf3d::getWeakAxisAngle)
-  .def("getVDirStrongAxisGlobalCoord",make_function(&XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisGlobalCoord, return_value_policy<copy_const_reference>()))
-  .def("getVDirWeakAxisGlobalCoord",make_function(&XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisGlobalCoord, return_value_policy<copy_const_reference>()))
+
+  .def("getVDirStrongAxisLocalCoord",get_vdir_strong_axis_local_coord_section,"Returns i-th cross section strong axis direction vector expressed in local coordinates.")
+  .def("getVDirStrongAxisLocalCoord",get_vdir_strong_axis_local_coord_average,"Returns the average cross section strong axis direction vector expressed in local coordinates.")
+  .def("getVDirWeakAxisLocalCoord",get_vdir_weak_axis_local_coord_section,"Returns i-th cross section weak axis direction vector expressed in local coordinates.")
+  .def("getVDirWeakAxisLocalCoord",get_vdir_weak_axis_local_coord_average,"Returns the average cross section weak axis direction vector expressed in local coordinates.")
+
+  .def("getStrongAxisAngle", get_strong_axis_angle_section, "Returns the angle between i-th cross section strong axis and the local XZ plane.")
+  .def("getStrongAxisAngle", get_strong_axis_angle_average, "Returns the angle between the average cross section strong axis and the local XZ plane.")
+  .def("getWeakAxisAngle", get_weak_axis_angle_section, "Returns the angle between i-th cross section weak axis and the local XZ plane.")
+  .def("getWeakAxisAngle", get_weak_axis_angle_average, "Returns the angle between the average cross section weak axis and the local XZ plane.")
+
+  .def("getVDirStrongAxisGlobalCoord", make_function(get_vdir_strong_axis_global_coord_section, return_value_policy<copy_const_reference>()), "Returns i-th cross section strong axis direction vector expressed in global coordinates.")
+  .def("getVDirStrongAxisGlobalCoord", make_function(get_vdir_strong_axis_global_coord_average, return_value_policy<copy_const_reference>()), "Returns the average cross section strong axis direction vector expressed in global coordinates.")
+  .def("getVDirWeakAxisGlobalCoord", make_function(get_vdir_weak_axis_global_coord_section, return_value_policy<copy_const_reference>()), "Returns i-th cross section weak axis direction vector expressed in global coordinates.")
+  .def("getVDirWeakAxisGlobalCoord", make_function(get_vdir_weak_axis_global_coord_average, return_value_policy<copy_const_reference>()), "Returns the average cross section weak axis direction vector expressed in global coordinates.")
    ;
 #include "beamWithHinges/python_interface.tcc"
 
