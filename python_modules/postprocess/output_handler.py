@@ -230,7 +230,7 @@ class OutputHandler(object):
         if(caption is None):
             caption= setToDisplay.name+' set; strong [red] and weak [blue] axes'
         displaySettings= self.getDisplaySettingsFE()
-        displaySettings.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor)
+        displaySettings.displayStrongWeakAxis(setToDisplay, caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor, fileName= fileName)
 
     def displayPropertyComponentAtNodes(self, propToDisp, component, fUnitConv, unitDescription, captionText, setToDisplay, fileName=None, defFScale=0.0, rgMinMax=None):
         '''displays the scalar property defined at the nodes of the set.
