@@ -74,12 +74,12 @@ y1= colDepth / 2.0
 z1= colWidth / 2.0
 
 # Column corners.
-leftBottomCorner= geom.Pos2d(-y1, -z1)
+leftBottomCorner= geom.Pos2d(-z1, -y1)
 rightBottomCorner= leftBottomCorner+widthVector
 rightTopCorner= rightBottomCorner+depthVector
 leftTopCorner= rightTopCorner-widthVector
 # Colum core corners.
-coreLeftBottomCorner= geom.Pos2d(cover - y1, cover - z1)
+coreLeftBottomCorner= geom.Pos2d(cover - z1, cover - y1)
 coreRightBottomCorner= coreLeftBottomCorner+coreWidthVector
 coreRightTopCorner= coreRightBottomCorner+coreDepthVector
 coreLeftTopCorner= coreRightTopCorner-coreWidthVector
@@ -100,17 +100,19 @@ coreContour= geom.Polygon2d([coreLeftBottomCorner, coreRightBottomCorner, coreRi
 bottomCoverContour= geom.Polygon2d([leftBottomCorner, rightBottomCorner, coreRightBottomCorner, coreLeftBottomCorner])
 ## Right cover
 rightCoverContour= geom.Polygon2d([coreRightBottomCorner, rightBottomCorner, rightTopCorner, coreRightTopCorner])
+print(rightCoverContour.getArea())
 ## Top cover
 topCoverContour= geom.Polygon2d([coreLeftTopCorner, coreRightTopCorner, rightTopCorner, leftTopCorner])
 ## Left cover.
 leftCoverContour= geom.Polygon2d([leftBottomCorner, coreLeftBottomCorner, coreLeftTopCorner, leftTopCorner])
+print(leftCoverContour.getArea())
 
 matHandler= preprocessor.getMaterialHandler
 columnSectionGeometry= matHandler.newSectionGeometry("columnSectionGeometry")
 columnSectionGeometryRegions= columnSectionGeometry.getRegions
 # Create the concrete core fibers
-nDivY= 10
-nDivZ= 1
+nDivY= 1
+nDivZ= 10
 coreRegion= columnSectionGeometryRegions.newQuadRegion(coreConcrete.name)
 coreRegion.setPolygon(coreContour)
 coreRegion.nDivIJ= nDivZ
@@ -130,11 +132,29 @@ topCoverRegion= columnSectionGeometryRegions.newQuadRegion(coverConcrete.name)
 topCoverRegion.setPolygon(topCoverContour)
 topCoverRegion.nDivIJ= nDivZ
 topCoverRegion.nDivJK= nDivY
-# # Left cover
+# Left cover
 leftCoverRegion= columnSectionGeometryRegions.newQuadRegion(coverConcrete.name)
 leftCoverRegion.setPolygon(leftCoverContour)
 leftCoverRegion.nDivIJ= nDivZ
 leftCoverRegion.nDivJK= nDivY
+
+regions_area= columnSectionGeometryRegions.getAreaGrossSection()
+regions_reference_area= colWidth*colDepth
+regions_G= columnSectionGeometryRegions.getCenterOfMassGrossSection()
+regions_yG= regions_G[1]
+regions_zG= regions_G[0]
+print('regions area: ', regions_area)
+print('regions reference area: ', regions_reference_area)
+print('regions yG= ', regions_yG)
+print('regions zG= ', regions_zG)
+
+for region in [coreRegion, leftCoverRegion, rightCoverRegion]:
+    print('number of fibers= ', region.getNumCells())
+    cells= region.getCells()
+    for i, cell in enumerate(cells):
+        print(i, cell.getArea(), cell.getCentroidPosition())
+print('XXX continue here')
+
 
 # Create the reinforcing fibers (left, middle, right)
 reinforcement= columnSectionGeometry.getReinfLayers
@@ -164,16 +184,18 @@ columnFiberSectionRepr.setGeomNamed(columnSectionGeometry.name)
 columnFiberSection.setupFibers()
 
 # Check some cross-section values.
-fiberSectionArea= columnFiberSection.getArea()
-referenceArea= colWidth*colDepth+8*As
-ratio1= abs(fiberSectionArea-referenceArea)/referenceArea
-yG= columnFiberSection.getCenterOfMassY()
+fiber_section_area= columnFiberSection.getArea()
+fiber_section_reference_area= colWidth*colDepth+8*As
+ratio1= abs(fiber_section_area-fiber_section_reference_area)/fiber_section_reference_area
+fiber_section_yG= columnFiberSection.getCenterOfMassY()
+fiber_section_zG= columnFiberSection.getCenterOfMassZ()
 
-print('fiber section area: ', fiberSectionArea)
-print('reference area: ', referenceArea)
+print('\nfiber section area: ', fiber_section_area)
+print('fiber section reference area: ', fiber_section_reference_area)
 print('ratio1= ', ratio1)
-print('yG= ', yG)
-print('XXX continue here')
+print('fiber section yG= ', fiber_section_yG)
+print('fiber section zG= ', fiber_section_zG)
+
 quit()
 
 # Define column elements

@@ -21,10 +21,21 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::Cell, boost::noncopyable >("Cell", no_init)
+class_<XC::Cell, XC::Cell *, boost::noncopyable >("Cell", no_init)
   .def("getArea",&XC::Cell::getArea,"Return the area of the cell.")
-;
+  .def("getCentroidPosition", make_function( &XC::Cell::getCentroidPosition, return_internal_reference<>() ), "Return the position of the cell centroid.")
+  ;
 
-class_<XC::QuadCell, bases<XC::Cell>, boost::noncopyable >("QuadCell", no_init);
+class_<XC::QuadCell, bases<XC::Cell>, boost::noncopyable >("QuadCell", no_init)
+  ;
 
-class_<XC::TriangCell, bases<XC::Cell>, boost::noncopyable >("TriangCell", no_init);
+class_<XC::TriangCell, bases<XC::Cell>, boost::noncopyable >("TriangCell", no_init)
+  ;
+
+typedef std::vector<XC::Cell *> vector_cell_ptrs;
+class_<vector_cell_ptrs, boost::noncopyable>("vector_cell_ptrs")
+  .def(vector_indexing_suite<vector_cell_ptrs>() )
+  ;
+
+class_<XC::VectorCells, bases<vector_cell_ptrs>, boost::noncopyable >("VectorCells", no_init)
+  ;

@@ -36,10 +36,10 @@
 namespace XC {
 class Cell;
 
-//! @ingroup MATSCCCell
-//
+
 //! @brief Cells vector
-class VectorCells: protected std::vector<Cell *>
+//! @ingroup MATSCCCell
+class VectorCells: public std::vector<Cell *>
   {
   public:
     typedef std::vector<Cell *> v_cell;

@@ -171,6 +171,7 @@ AnnulusSector2d &XC::CircularSectRegion::getSector(void) const
 const Grid2d &XC::CircularSectRegion::getMesh(void) const
   { return alloc(Grid2d(getSector().genMesh(nDivRad(),nDivCirc()))); }
 
+//! @brief Return a vector containing the cells of this region.
 const XC::VectorCells &XC::CircularSectRegion::getCells(void) const
   {
     if(nDivRad() > 0  && nDivCirc() > 0)
@@ -181,7 +182,7 @@ const XC::VectorCells &XC::CircularSectRegion::getCells(void) const
         cells.resize(numCells);
 
         int k= 0;
-        XC::Matrix cellVertCoord(4,2);
+        Matrix cellVertCoord(4,2);
         for(int j= 1;j<nDivRad()+1;j++)
           {
             for(int i= 1;i<nDivCirc()+1;i++)

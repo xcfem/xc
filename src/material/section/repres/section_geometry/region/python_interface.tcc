@@ -23,6 +23,7 @@
 
 class_<XC::SectRegion, XC::SectRegion *, bases<XC::DiscretBase>, boost::noncopyable >("SectRegion", no_init)
   .def("getNumCells",&XC::SectRegion::getNumCells, "Return the number of cells.")
+  .def("getCells", make_function(&XC::SectRegion::getCells, return_internal_reference<>() ), "Return a VectorCells object containing the cells of the region.")
   .def("getPolygon",&XC::SectRegion::getPolygon, "Return the section contour")
   .def("getArea",&XC::SectRegion::getArea, "Return the section area." )
   .def("getIy",&XC::SectRegion::Iy, "Return the moment of inertia with respect to the y axis." )
@@ -39,7 +40,6 @@ class_<XC::QuadCellRegion, bases<XC::SectRegion>, boost::noncopyable >("QuadCell
   .add_property("nDivJK",&XC::QuadCellRegion::getNDivJK,&XC::QuadCellRegion::setNDivJK,"Number of divisions of J->K side.")
   .add_property("nDivCirc",&XC::QuadCellRegion::getNDivIJ,&XC::QuadCellRegion::setNDivIJ,"Number of divisions of I->J side.")
   .add_property("nDivRad",&XC::QuadCellRegion::getNDivJK,&XC::QuadCellRegion::setNDivJK,"Number of divisions of J->K side.")
-  .add_property("getNumCells",&XC::QuadCellRegion::getNumCells)
   .def("genGrid",make_function(&XC::QuadCellRegion::getMesh,return_internal_reference<>()),"Generate mesh and return a reference to it.")
   .def("getCenterOfMassGrid",&XC::QuadCellRegion::getCenterOfMassGrid)
   .def("getVertCoords",&XC::QuadCellRegion::getVertCoords)

@@ -69,9 +69,8 @@ namespace XC {
 //!
 //! @defgroup MATSCCCell Cells for cross-section discretization.
 //
-//! @ingroup MATSCCCell
-//
 //! @brief Base class for cells (cross-section discretization).
+//! @ingroup MATSCCCell
 class Cell
   {
   protected:
