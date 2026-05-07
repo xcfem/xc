@@ -33,6 +33,7 @@
 #include "utility/utils/text/StringFormatter.h"
 #include "preprocessor/prep_handlers/LoadHandler.h"
 #include "boost/lexical_cast.hpp"
+#include <boost/tokenizer.hpp>
 
 #include "domain/load/pattern/MapLoadPatterns.h"
 #include "utility/matrix/ID.h"
@@ -210,6 +211,21 @@ void XC::LoadPatternCombination::add_component(const summand &sum)
           descomp.push_back(sum);
       }
   }
+//! @brief Split the load combination expression.
+//!
+//! @param str: text string to split.
+//! @param sp: separator characters.
+std::deque<std::string> split_combination(const std::string &str)
+  {
+    typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+    std::deque<std::string> retval;
+    retval.clear();
+    boost::char_separator<char> sep("", "+-");
+    tokenizer tokens(str, sep);
+    for(tokenizer::const_iterator tok_iter = tokens.begin();tok_iter != tokens.end(); ++tok_iter)
+      retval.push_back(*tok_iter);
+    return retval;
+  }
 
 //! @brief Computes the combination from the string being passed as parameter.
 //! returns true if the string is interpreted successfully.
@@ -217,14 +233,19 @@ bool XC::LoadPatternCombination::interpreta_descomp(const std::string &str_desco
   {
     bool retval= true;
     clear();
+    char sign= '+';
     typedef std::deque<std::string> dq_string;
-    dq_string str_summands= separa_cadena(str_descomp,"+-");
+    dq_string str_summands= split_combination(str_descomp);
     for(dq_string::iterator i= str_summands.begin();i!=str_summands.end();i++)
       {
         const std::string &str_sum_i= *i;
         dq_string str_prod= separa_cadena(str_sum_i,"*");
         const size_t sz= str_prod.size();
-        if(sz!=2)
+	if(sz==1)
+	  {
+	    sign= str_prod[0][0];
+	  } 
+        else if(sz!=2)
 	  {
 	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "Term: " << str_sum_i << " is incorrect."
@@ -233,7 +254,9 @@ bool XC::LoadPatternCombination::interpreta_descomp(const std::string &str_desco
 	  }
         else
           {
-            const float factor= boost::lexical_cast<float>(q_blancos(str_prod[0]));
+            float factor= boost::lexical_cast<float>(q_blancos(str_prod[0]));
+	    if(sign=='-')
+	      factor*= -1;
             const std::string hypothesis_name= q_blancos(str_prod[1]);
             if(handler)
               {
