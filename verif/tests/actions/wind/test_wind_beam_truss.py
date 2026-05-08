@@ -120,13 +120,9 @@ LC3.addLstLoads([wind_diagonals])
 nReac1=gridGeom.getPntXYZ((0,0,0)).getNode()
 nReac2=gridGeom.getPntXYZ((4,0,0)).getNode()
 
-analysis= predefined_solutions.simple_static_linear(FEcase)
-print(analysis)
-
 modelSpace.removeAllLoadPatternsFromDomain()
 modelSpace.addLoadCaseToDomain('LC1')
 
-result= analysis.analyze(1)
 result= modelSpace.analyze(calculateNodalReactions= True)
 R1a=nReac1.getReaction[1]
 R1b=nReac2.getReaction[1]
@@ -134,7 +130,6 @@ R1_comp=-1880.48
 
 modelSpace.removeAllLoadPatternsFromDomain()
 modelSpace.addLoadCaseToDomain('LC2')
-result= analysis.analyze(1)
 result= modelSpace.analyze(calculateNodalReactions= True)
 R2a=nReac1.getReaction[1]
 R2b=nReac2.getReaction[1]
@@ -142,7 +137,6 @@ R2_comp=-444.547
 
 modelSpace.removeAllLoadPatternsFromDomain()
 modelSpace.addLoadCaseToDomain('LC3')
-result= analysis.analyze(1)
 result= modelSpace.analyze(calculateNodalReactions= True)
 R3a=nReac1.getReaction[1]
 R3b=nReac2.getReaction[1]
