@@ -12,7 +12,6 @@ __email__= "ana.ortega.ort@gmail.com l.pereztato@gmail.com"
 
 
 import xc
-from solution import predefined_solutions
 from model import predefined_spaces
 from model.mesh import finit_el_model as fem
 from model.geometry import grid_model as gm
