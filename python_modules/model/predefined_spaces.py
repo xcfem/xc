@@ -1507,8 +1507,15 @@ class PredefinedSpace(object):
         if(not self.analysis):
             problem= self.getProblem()
             solProc= self.solutionProcedureType(problem)
-            solProc.setup()
             self.analysis= solProc.getAnalysis()
+            if(self.analysis):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                warningMsg= '; there is a solution procedure already in place for this problem. Using the analysis from it.'
+                lmsg.warning(className+'.'+methodName+warningMsg)
+            else:
+                solProc.setup()
+                self.analysis= solProc.getAnalysis()
         
     def analyze(self, numSteps= 1, calculateNodalReactions= False, includeInertia= False, reactionCheckTolerance= 1e-7):
         ''' Triggers the analysis of the model with a simple static linear
@@ -1525,7 +1532,8 @@ class PredefinedSpace(object):
             numSteps= 1
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; number of steps must be greater than zero. Setting numSteps= '+str(numSteps))
+            errorMsg= '; number of steps must be greater than zero. Setting numSteps= '+str(numSteps)+'.'
+            lmsg.error(className+'.'+methodName+errorMsg)
         result= 0
         if(not self.analysis):
             self.setupAnalysis()
