@@ -31,26 +31,37 @@
 #include "material/section/fiber_section/FiberSection2d.h"
 #include "material/section/fiber_section/FiberSection3d.h"
 #include "utility/geom/d2/2d_polygons/Polygon2d.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Allocates memory for each fiber material and for its data;
 //! two (yLoc,Area) for 2D sections (getOrder()= 2) and three (yLoc,zLoc,Area) for 3D sections (getOrder()= 3).
 void XC::FiberContainer::allocFibers(int numOfFibers,const Fiber *sample)
   {
     free_mem();
-    if(numOfFibers)
+    if(numOfFibers>0)
       {
-        resize(numOfFibers);
-        if(sample)
-          for(int i= 0;i<numOfFibers;i++)
-	    {
-              (*this)[i]= sample->getCopy();
-	      if((*this)[i]==nullptr)
+	if(numOfFibers<10000)
+	  {
+	    resize(numOfFibers);
+	    if(sample)
+	      for(int i= 0;i<numOfFibers;i++)
 		{
-		  std::cerr << getClassName() << "::" << __FUNCTION__
-		            << "; ailed to allocate Fiber pointers"
-		            << std::endl;
+		  (*this)[i]= sample->getCopy();
+		  if((*this)[i]==nullptr)
+		    {
+		      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+				<< "; failed to allocate Fiber pointers"
+				<< Color::def << std::endl;
+		    }
 		}
-	    }
+	  }
+	else
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; maximum number of fibers (10000) exceeded."
+		      << Color::def << std::endl;
+	    exit(-1);
+	  }
       }
   }
 
@@ -59,7 +70,7 @@ void XC::FiberContainer::copy_fibers(const FiberContainer &other)
   {
     free_mem();
     const size_t numFibers= other.getNumFibers();
-    if(numFibers)
+    if(numFibers>0)
       {
         allocFibers(numFibers);
         for( size_t i= 0;i<numFibers;i++)
@@ -67,9 +78,9 @@ void XC::FiberContainer::copy_fibers(const FiberContainer &other)
             (*this)[i]= other[i]->getCopy();
 	    if((*this)[i]==nullptr)
 	      {
-		std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; ailed to allocate Fiber pointers"
-			  << std::endl;
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; failed to allocate Fiber pointers"
+			  << Color::def << std::endl;
 	      }
 	  }
       }
@@ -116,8 +127,9 @@ void XC::FiberContainer::copy_fibers(const fiber_list &fibers)
         (*this)[i]= (*ifib)->getCopy();
         if(!(*this)[i])
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; failed to get copy of a Fiber.\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; failed to get copy of a Fiber."
+		      << Color::def << std::endl;
             exit(-1);
           }
       }
@@ -154,7 +166,16 @@ void XC::FiberContainer::setup(FiberSectionGJ &SectionGJ,const fiber_list &fiber
 XC::Fiber *XC::FiberContainer::insert(const Fiber &f)
   {
     Fiber *retval= f.getCopy();
-    push_back(retval);
+    const size_t numFibers= getNumFibers();
+    if(numFibers<1000)
+      push_back(retval);
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; maximum number of fibers (10000) exceeded."
+		  << Color::def << std::endl;
+	exit(-1);
+      }
     return retval;
   }
 
