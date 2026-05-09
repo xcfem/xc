@@ -50,7 +50,7 @@
 #include "utility/geom/d2/2d_polygons/Polygon2d.h"
 #include "utility/geom/d2/HalfPlane2d.h"
 #include "utility/geom/d1/Segment2d.h"
-
+#include "utility/geom/d2/BND2d.h"
 #include "boost/lexical_cast.hpp"
 #include "utility/utils/misc_utils/colormod.h"
 
@@ -446,6 +446,15 @@ double XC::SectionGeometry::getCover(const Pos2d &p) const
 		<< Color::def << std::endl;
     return retval;
   }
+
+//! @brief Return the regions boundary.
+BND2d XC::SectionGeometry::getBnd(void) const
+  {
+    BND2d retval= regions.getBnd();
+    retval+= reinforcement_layers.getBnd();
+    return retval;
+  }
+
 
 //! @brief Return the homogenized area of the regions.
 double XC::SectionGeometry::getAreaHomogenizedSection(const double &E0) const

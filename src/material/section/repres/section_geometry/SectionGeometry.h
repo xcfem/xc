@@ -41,6 +41,7 @@
 
 class HalfPlane2d;
 class Segment2d;
+class BND2d;
 
 namespace XC {
 class SectionReferenceFrame;
@@ -177,6 +178,8 @@ class SectionGeometry: public SectionMassProperties
     boost::python::list getRegionMaterialsPy(void)
       { return this->regions.getMaterialsPy(); }
 
+    BND2d getBnd(void) const;
+    
     double getAreaGrossSection(void) const;
     Vector getCenterOfMassGrossSection(void) const;
     double getIyGrossSection(void) const;

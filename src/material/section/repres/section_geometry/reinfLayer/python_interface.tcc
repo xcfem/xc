@@ -29,6 +29,7 @@ class_<XC::ReinfLayer,XC::ReinfLayer *, bases<XC::DiscretBase>, boost::noncopyab
   .def("getCover",&XC::ReinfLayer::getCover,"returns concrete cover of the bars.")
   .def("getCenterOfMass",&XC::ReinfLayer::getCenterOfMass,"Return the position of the centroid.")
   .def("getArea",&XC::ReinfLayer::getArea,"Return the reinforcement area.")
+  .def("getBnd",&XC::ReinfLayer::getBnd, "Returns reinforcement layer boundary.")
   ;
 
 class_<XC::SingleBar , bases<XC::ReinfLayer>, boost::noncopyable >("SingleBar", no_init);
@@ -69,4 +70,5 @@ class_<XC::ListReinfLayer, bases<XC::SectionMassProperties,list_ptr_reinf_layer>
   .add_property("getSectionGeometry",make_function(&XC::ListReinfLayer::getSectionGeometry,return_internal_reference<>()),"Returns the SectionGeometry object that owns this bars.")
   .def("getCover",&XC::ListReinfLayer::getCover,"returns concrete cover of the bars.")
   .def("getMaterials",&XC::ListReinfLayer::getMaterialsPy, "Return a Python list containing the different materials of the reinforcement.")
+  .def("getBnd",&XC::ListReinfLayer::getBnd, "Returns reinforcement layer boundary.")
   ;

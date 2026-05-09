@@ -57,8 +57,6 @@
 #include "material/section/repres/section_geometry/reinfLayer/ReinfLayer.h"
 #include "material/section/repres/section_geometry/reinfBar/VectorReinfBar.h"
 #include "material/section/repres/section_geometry/reinfBar/ReinfBar.h"
-
-
 #include "utility/matrices/m_double.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
@@ -67,8 +65,7 @@
 #include "utility/geom/pos_vec/Pos2d.h"
 #include "utility/geom/d2/2d_polygons/Polygon2d.h"
 #include "utility/geom/d2/HalfPlane2d.h"
-
-
+#include "utility/geom/d2/BND2d.h"
 #include "material/section/repres/section_geometry/SectionGeometry.h"
 
 //! @brief Constructor.
@@ -145,6 +142,21 @@ void XC::ReinfLayer::getBarrasIn(const HalfPlane2d &sp,ListReinfLayer &retval,bo
     for(;i!= barras.end();i++)
       if(sp.In((*i)->getPos2d()))
         retval.push_back(SingleBar(**i));
+  }
+
+//! @brief Return the reinforcement layer boundary.
+BND2d XC::ReinfLayer::getBnd(void) const
+  {
+    BND2d retval;
+    const VectorReinfBar &barras= getReinfBars();
+
+    VectorReinfBar::const_iterator i= barras.begin();
+    for(;i!= barras.end();i++)
+      {
+        const Pos2d &pos= (*i)->getPos2d();
+        retval+= pos;
+      }
+    return retval;
   }
 
 //! @brief Return a vector containing the bars of the layer.

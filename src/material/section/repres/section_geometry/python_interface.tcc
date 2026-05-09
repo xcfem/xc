@@ -53,6 +53,7 @@ XC::ListReinfLayer &(XC::SectionGeometry::*getReinfLayerContainer)(void)= &XC::S
 class_<XC::SectionGeometry, XC::SectionGeometry *, bases<XC::SectionMassProperties>, boost::noncopyable >("SectionGeometry", no_init)
   .add_property("getRegions",make_function(getRegionContainer,return_internal_reference<>()))
   .add_property("getReinfLayers",make_function(getReinfLayerContainer,return_internal_reference<>()))
+  .def("getBnd",&XC::SectionGeometry::getBnd, "Returns the section geometry boundary.")
   .def("getRegionsContour",&XC::SectionGeometry::getRegionsContour,"Return the contour of the regions.")
   .def("getRegionsContours",&XC::SectionGeometry::getRegionsContoursPy,"Return a Python list containing the contour of each region.")
   .def("getCompressedZoneContour",&XC::SectionGeometry::getCompressedZoneContour)

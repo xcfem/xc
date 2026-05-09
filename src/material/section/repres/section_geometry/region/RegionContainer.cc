@@ -37,9 +37,6 @@
 #include "utility/geom/pos_vec/Vector2d.h"
 #include "utility/geom/pos_vec/Pos2d.h"
 #include "utility/geom/coo_sys/ref_sys/Ref2d2d.h"
-
-
-
 #include "utility/geom/d2/BND2d.h"
 #include "utility/geom/d2/2d_polygons/Polygon2d.h"
 #include "utility/geom/d2/2d_polygons/polygon2d_bool_op.h"
@@ -218,6 +215,7 @@ std::list<Polygon2d> XC::RegionContainer::getContours(void) const
     return retval;
   }
 
+//! @brief Return the regions boundary-
 BND2d XC::RegionContainer::getBnd(void) const
   {
     BND2d retval;

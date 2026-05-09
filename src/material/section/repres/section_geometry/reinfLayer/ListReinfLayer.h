@@ -37,6 +37,7 @@
 class Pos2d;
 class Polygon2d;
 class HalfPlane2d;
+class BND2d;
 
 namespace XC {
 class Material;
@@ -96,6 +97,8 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SectionMassProperti
     void getBarrasIn(const Polygon2d &,ListReinfLayer &,bool );
     void getBarrasIn(const HalfPlane2d &,ListReinfLayer &,bool );
 
+    BND2d getBnd(void) const;
+ 
     double getAreaGrossSection(void) const;
     Vector getCenterOfMassGrossSection(void) const;
     double getIyGrossSection(void) const;

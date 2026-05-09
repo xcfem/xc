@@ -62,6 +62,7 @@
 
 class HalfPlane2d;
 class Polygon2d;
+class BND2d;
 
 namespace XC {
 class ReinfBar;
@@ -79,8 +80,6 @@ class ReinfLayer: public DiscretBase
     double area; //!< Bar area.
   protected:
     mutable VectorReinfBar reinfBars;
-
-
 
     friend class ListReinfLayer;
     ReinfLayer(ListReinfLayer *,Material *m);
@@ -103,6 +102,8 @@ class ReinfLayer: public DiscretBase
     void getBarrasIn(const Polygon2d &,ListReinfLayer &,bool );
     void getBarrasIn(const HalfPlane2d &,ListReinfLayer &,bool );
     
+    BND2d getBnd(void) const;
+
     const SectionGeometry *getSectionGeometry(void) const;
     double getCover(void) const;
     Vector getCenterOfMass(void) const;

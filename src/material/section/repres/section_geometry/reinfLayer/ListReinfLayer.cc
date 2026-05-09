@@ -38,7 +38,7 @@
 #include "utility/geom/pos_vec/Vector2d.h"
 #include "utility/geom/pos_vec/Pos2d.h"
 #include "utility/geom/coo_sys/ref_sys/Ref2d2d.h"
-
+#include "utility/geom/d2/BND2d.h"
 #include "material/section/repres/section_geometry/SectionGeometry.h"
 #include "utility/utils/misc_utils/colormod.h"
 
@@ -224,6 +224,21 @@ void XC::ListReinfLayer::getBarrasIn(const HalfPlane2d &sp,ListReinfLayer &retva
     const_iterator i= begin();
     for(;i!= end();i++)
       (*i)->getBarrasIn(sp,retval,false);
+  }
+
+//! @brief Return the reinforcement layers boundary.
+BND2d XC::ListReinfLayer::getBnd(void) const
+  {
+    BND2d retval;
+    const_iterator i= this->begin();
+    if(i!= this->end())
+      {
+        retval= (*i)->getBnd();
+        i++;
+      }
+    for(;i!= end();i++)
+      retval+= (*i)->getBnd();
+    return retval;
   }
 
 //! @brief Returns the homogenized area of the regions.
