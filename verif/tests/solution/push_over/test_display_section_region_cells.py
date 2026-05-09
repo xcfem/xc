@@ -11,6 +11,7 @@ __email__= "l.pereztato@gmail.com"
 import xc
 import geom
 from model import predefined_spaces
+from postprocess.reports import common_formats as cf
 
 # Import local modules.
 import rc_column_fiber_section
@@ -25,23 +26,24 @@ columnFiberSection= rc_column_fiber_section.def_rc_column_fiber_section(preproce
 sectionGeometry= columnFiberSection.getSectionGeometry
 regions= sectionGeometry.getRegions
 
-regionCellCenters= list()
-for region in regions:
-    cells= region.getCells()
-    tmp= list()
-    for i, cell in enumerate(cells):
-        tmp.append(cell.getCentroidPosition())
-    regionCellCenters.append(tmp)
-
-
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 colors= mcolors.TABLEAU_COLORS
-for color, cellCenters in zip(colors, regionCellCenters):
+for color, region in zip(colors, regions):
     xi= list()
     yi= list()
-    for pt in cellCenters:
-        xi.append(pt[0])
-        yi.append(pt[1])
-    plt.plot(xi, yi, 'ro')
+    regionCells= region.getCells()
+    regionMaterialName= region.getMaterial().name
+    for cell in regionCells:
+        centroid= cell.getCentroidPosition()
+        x= centroid[0]
+        y= centroid[1]
+        xi.append(x)
+        yi.append(y)
+        area= cell.getArea()
+        matName= regionMaterialName
+        plt.annotate(matName, (x, y + 0.2))
+        plt.annotate(cf.Area.format(area), (x, y - 0.2))
+    plt.plot(xi, yi, 'o', color= color)
+plt.axis('equal')
 plt.show()
