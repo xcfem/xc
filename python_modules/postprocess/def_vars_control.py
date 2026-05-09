@@ -75,7 +75,7 @@ def def_vars_control_mov_modulus(nodes: Iterable):
     return tags
 
 def def_envelope_vars(elems: Iterable, varNames: Iterable, initV= 6.023e23, nNodes= 2):
-    ''' Define variables for generalizez stress control.
+    ''' Define variables for generalized stress control.
 
     :param elems: elements to define the envelope variables for.
     :param varNames: variable names.
@@ -133,7 +133,6 @@ def get_reaction_var_names(dim, numDOFs):
         retval= list()
     return retval
 
-
 def def_reactions_envelope_vars(nodes):
     ''' Define variables to store the maximum and minimum on each DOF for the
         given nodes.
@@ -157,11 +156,13 @@ def def_reactions_envelope_vars(nodes):
         lmsg.warning(methodName+'; no nodes to process.')
     return varNames
 
-def update_reactions_envelope(nodes):
-    ''' Update the the maximum and minimum reactino on each DOF for the
+def update_reactions_envelope(nodes, loadCombinationName):
+    ''' Update the the maximum and minimum reactions on each DOF for the
         given nodes.
 
     :param nodes: nodes to update the reactions for.
+    :param loadCombinationName: name of the load combination to which the 
+                                envelope reactions correspond.
     '''
     if(len(nodes)>0):
         numDOFs= nodes[0].getNumberDOF
@@ -176,11 +177,15 @@ def update_reactions_envelope(nodes):
                     if(currentValue>maxValue):
                         maxValue= currentValue
                         n.setProp(maxValueLabel, maxValue)
+                        maxValueCombLabel= 'comb_'+maxValueLabel
+                        n.setProp(maxValueCombLabel, loadCombinationName)
                     minValueLabel= compName+'-'
                     minValue= n.getProp(minValueLabel)
                     if(currentValue<minValue):
                         minValue= currentValue
                         n.setProp(minValueLabel, minValue)
+                        minValueCombLabel= 'comb_'+minValueLabel
+                        n.setProp(minValueCombLabel, loadCombinationName)
         else:
             methodName= sys._getframe(0).f_code.co_name
             errMsg= methodName+'; not implemented for '+str(numDOFs)
