@@ -75,8 +75,7 @@ eleLoad.frontEndDeformationPlane= thermalDeformation
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
-analysis= predefined_solutions.simple_static_linear(feProblem)
-result= analysis.analyze(1)
+modelSpace.analyze(1)
 
 # Get internal forces.
 beam.getResistingForce()
