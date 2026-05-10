@@ -3,6 +3,7 @@
 import math
 import cairo
 from geom_utils import aux_cairo_plot
+from postprocess.reports import common_formats as cf
 
 import matplotlib as mpl
 mpl.rc('figure', max_open_warning = 0)
@@ -134,14 +135,56 @@ def plot_section_geometry(geomSection, path):
     ctx.show_page()
     surface.finish()
 
-def append_region_cells_to_plot(plt, sectionGeometry):
+def append_region_cells_to_plot(plt, sectionGeometry, colors):
     ''' Draws the cels of the section geometry geometry region in a 
         matplotlib canvas.
 
     :param plt: interface to matplotlib.
     :param geomSection: section geometry to draw.
+    :param colors: color for each of the region materials.
     '''
-    
+    diagonalLength= sectionGeometry.getBnd().diagonal.getModulus()
+    offset= diagonalLength/1e2
+    fontsize= 6
+    regions= sectionGeometry.getRegions
+    # Assign a color for each material.
+    materials= regions.getMaterials()
+    materialColor= dict()
+    for material, color in zip(materials,colors):
+        materialColor[material.name]= color
+    # Compute positions and areas.
+    materialPositions= dict()
+    for region in regions:
+        regionMaterialName= region.getMaterial().name
+        xi= list()
+        yi= list()
+        areas= list()
+        regionCells= region.getCells()
+        for cell in regionCells:
+            centroid= cell.getCentroidPosition()
+            x= centroid[0]
+            y= centroid[1]
+            xi.append(x)
+            yi.append(y)
+            areas.append(cell.getArea())
+        if(regionMaterialName in materialPositions):
+            materialPositions[regionMaterialName]['xi'].extend(xi)
+            materialPositions[regionMaterialName]['yi'].extend(yi)
+            materialPositions[regionMaterialName]['ai'].extend(areas)
+        else:
+            materialPositions[regionMaterialName]= {'xi':xi, 'yi':yi, 'ai': areas}
+
+    for regionMaterialName in materialPositions:
+        color= materialColor[regionMaterialName]
+        xi= materialPositions[regionMaterialName]['xi']
+        yi= materialPositions[regionMaterialName]['yi']
+        ai= materialPositions[regionMaterialName]['ai']
+        for x, y, area in zip(xi, yi, ai):
+            plt.annotate(cf.Area.format(area), (x, y - offset), fontsize= fontsize)
+        plt.plot(xi, yi, 'o', color= color, label= regionMaterialName)
+    plt.legend()
+    plt.axis('equal')
+
 
 class FibSectFeaturesToplot(object):
     '''Class to generate python plots of the selected features associated with 
