@@ -104,8 +104,8 @@ def def_rc_column_fiber_section(preprocessor, As):
     # Right cover
     rightCoverRegion= columnSectionGeometryRegions.newQuadRegion(coverConcrete.name)
     rightCoverRegion.setPolygon(rightCoverContour)
-    rightCoverRegion.nDivIJ= int(nDivZ/2.0)
-    rightCoverRegion.nDivJK= nDivY
+    rightCoverRegion.nDivIJ= nDivY
+    rightCoverRegion.nDivJK= nDivZ
     # Top cover
     topCoverRegion= columnSectionGeometryRegions.newQuadRegion(coverConcrete.name)
     topCoverRegion.setPolygon(topCoverContour)
@@ -114,8 +114,8 @@ def def_rc_column_fiber_section(preprocessor, As):
     # Left cover
     leftCoverRegion= columnSectionGeometryRegions.newQuadRegion(coverConcrete.name)
     leftCoverRegion.setPolygon(leftCoverContour)
-    leftCoverRegion.nDivIJ= int(nDivZ/2.0)
-    leftCoverRegion.nDivJK= nDivY
+    leftCoverRegion.nDivIJ= nDivY
+    leftCoverRegion.nDivJK= nDivZ
 
     regions_area= columnSectionGeometryRegions.getAreaGrossSection()
     regions_reference_area= colWidth*colDepth

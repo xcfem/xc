@@ -134,6 +134,15 @@ def plot_section_geometry(geomSection, path):
     ctx.show_page()
     surface.finish()
 
+def append_region_cells_to_plot(plt, sectionGeometry):
+    ''' Draws the cels of the section geometry geometry region in a 
+        matplotlib canvas.
+
+    :param plt: interface to matplotlib.
+    :param geomSection: section geometry to draw.
+    '''
+    
+
 class FibSectFeaturesToplot(object):
     '''Class to generate python plots of the selected features associated with 
     a fiber section.
