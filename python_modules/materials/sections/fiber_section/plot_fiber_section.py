@@ -119,7 +119,7 @@ def plot_section_geometry(geomSection, path):
     surface = cairo.PSSurface(path, WIDTH, HEIGHT)
     ctx = cairo.Context(surface)
     regions= geomSection.getRegions
-    bnd= regions.getBnd
+    bnd= regions.getBnd()
     trf= aux_cairo_plot.TransformParams(WIDTH, HEIGHT,aux_cairo_plot.Boundary(bnd.getXMin,bnd.getYMin,bnd.getXMax,bnd.getYMax))
     trf.applyTransform(ctx)# Normalizing the canvas
     ctx.set_line_width(trf.scale/100000)
