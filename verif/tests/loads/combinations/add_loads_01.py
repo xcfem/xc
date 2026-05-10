@@ -67,7 +67,7 @@ lp1.newNodalLoad(n2.tag,xc.Vector([0,0,0,M,0,0]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 # We add the load case to domain.
-modelSpace.addLoadCaseToDomain("1")
+modelSpace.addLoadCaseToDomain(lp1.name)
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-'''Cantilever load combination. Home made test'''
-
-from __future__ import print_function
+'''Check behaviour when the combination expression contains a minus sign. Home 
+   made test.
+'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__copyright__= "Copyright 2026, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
@@ -62,42 +62,48 @@ lPatterns= loadHandler.getLoadPatterns
 ts= lPatterns.newTimeSeries("constant_ts","ts")
 lPatterns.currentTimeSeries= "ts"
 lpA= lPatterns.newLoadPattern("default","A")
+lpAm= lPatterns.newLoadPattern("default","Am")
 lpB= lPatterns.newLoadPattern("default","B")
+lpBm= lPatterns.newLoadPattern("default","Bm")
 #\set_current_load_pattern{"A"}
 lpA.newNodalLoad(n2.tag,xc.Vector([1.0,0,0,0,0,0]))
-lpB.newNodalLoad(n2.tag,xc.Vector([1.0,0,0,0,0,0]))
+lpAm.newNodalLoad(n2.tag,xc.Vector([-1.0,0,0,0,0,0]))
+lpB.newNodalLoad(n2.tag,xc.Vector([2.0,0,0,0,0,0]))
+lpBm.newNodalLoad(n2.tag,xc.Vector([-2.0,0,0,0,0,0]))
 combs= loadHandler.getLoadCombinations
-comb= combs.newLoadCombination("COMB","1.33*A+1.5*B")
+comb1= combs.newLoadCombination("COMB1","1.33*A+1.5*B")
+comb2= combs.newLoadCombination("COMB2","-1.33*Am+1.5*B")
+comb3= combs.newLoadCombination("COMB3","1.33*A-1.5*Bm")
+comb4= combs.newLoadCombination("COMB4","-1.33*Am-1.5*Bm")
 
+reactions= list()
+ratios= list()
+for comb in [comb1, comb2, comb3, comb4]:
+    comb.addToDomain()
+    result= modelSpace.analyze(calculateNodalReactions= True)
+    reacx= n1.getReaction[0]
+    reacxTeor= -(1.33+1.5*2)
+    reactions.append(reacx)
+    ratios.append(abs(reacx-reacxTeor)/reacxTeor)
+    comb.removeFromDomain()
 
-# Add only the A component of the combination.
-comb.addToDomain(['A'])
-result= modelSpace.analyze(calculateNodalReactions= True)
-reacxA= n1.getReaction[0]
-reacxATeor= -1.33
-ratio1= abs(reacxA-reacxATeor)/reacxATeor
-
-# Add the rest of the combination.
-comb.addToDomain()
-result= modelSpace.analyze(calculateNodalReactions= True)
-reacx= n1.getReaction[0]
-reacxTeor= -(1.33+1.5)
-ratio2= abs(reacx-reacxTeor)/reacxTeor
+testOK= True
+for ratio in ratios:
+    if(abs(ratio)>1e-6):
+        testOK= False
+        break
 
 
 '''
-print("reacxA= ",reacxA)
-print("reacxATeor= ",reacxATeor)
-print("ratio1= ",ratio1)
-print("reacx= ",reacx)
-print("reacxTeor= ",reacxTeor)
-print("ratio2= ",ratio2)
+print("reactions= ", reactions)
+print("reacxTeor= ", reacxTeor)
+print("ratios= ", ratios)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-6) and (abs(ratio2)<1e-6):
+if testOK:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

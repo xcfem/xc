@@ -529,11 +529,10 @@ const std::deque<std::string> &separa_escaped_cadena(const std::string &str,cons
     return retval;
   }
 
-//! @brief Separa una cadena en subcadenas separadas por uno de los characters
-//! que se pasan en el parámetro sep.
+//! @brief Split the string using the given separators.
 //!
-//! @param str: text string a dividir.
-//! @param sp: Characters que separan campos.
+//! @param str: text string to split.
+//! @param sp: separator characters.
 const std::deque<std::string> &separa_cadena(const std::string &str,const std::string &sp)
   {
     typedef boost::tokenizer<boost::char_separator<char> >  tokenizer;
@@ -553,7 +552,7 @@ const std::deque<std::string> &separa_cadena(const std::string &str,const std::s
 //!
 //! @param str: text string a dividir.
 //! @param sp: Characters que separan campos.
-//! @param sz: Number of expected fieldsr (if zero don't check it).
+//! @param sz: Number of expected fields (if zero don't check it).
 const std::deque<std::string> &separa_cadena(const std::string &str,const std::string &sp,const size_t &sz)
   {
     static std::deque<std::string> retval;

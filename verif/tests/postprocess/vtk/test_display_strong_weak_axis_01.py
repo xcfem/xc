@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
-''' Home made test. Horizontal cantilever under tension load at its end.'''
+''' Home made test. Check displayStrongWeakAxis method. The test does not 
+verify the output contents, only that the method runs and the file is
+ created.
+'''
 
-from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__copyright__= "Copyright 2026, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
@@ -15,6 +17,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
+from misc_utils import log_messages as lmsg
 
 # Geometry
 width= .001
@@ -24,9 +27,6 @@ nDivJK= 2
 y0= 0
 z0= 0
 L= 1.5 # Bar length (m)
-
-# Load
-F= 1.5e3 # Load magnitude en N
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
@@ -49,7 +49,7 @@ pth= os.path.dirname(__file__)
 # print("pth= ", pth)
 if(not pth):
   pth= "."
-auxModulePath= pth+"/../../../aux"
+auxModulePath= pth+"/../../aux"
 sys.path.append(auxModulePath)
 import test_quad_region as tqr
 
@@ -62,11 +62,8 @@ testQuadRegion= tqr.get_test_quad_region(preprocessor, y0, z0, width, depth, nDi
 fiberSectionRepr.setGeomNamed(testQuadRegion.name) # We assign the geometry (regions and rebars)
                                                   # to the fiber section representation
                                                   # of 'quadFibers'
-quadFibers.setupFibers() # Create the fibers from the information contained in th
-                           # geometry.
-fibras= quadFibers.getFibers() # Get the fiber container from the object.
-A= fibras.getArea(1.0) # Get the sum of the fiber areas.
-
+quadFibers.setupFibers() # Create the fibers from the information contained in
+                         # the geometry.
 
 
 # Elements definition
@@ -78,55 +75,20 @@ beam3d= elements.newElement("ForceBeamColumn3d",xc.ID([n1.tag,n2.tag]))
 # Constraints
 modelSpace.fixNode000_000(n1.tag)
 
-# Load definition.
-lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(n2.tag, xc.Vector([F,0,0,0,0,0]))
-# We add the load case to domain.
-modelSpace.addLoadCaseToDomain(lp0.name)
-# Solution procedure
-analysis= predefined_solutions.plain_static_modified_newton(feProblem)
-result= analysis.analyze(10)
+# Graphic stuff.
+from postprocess import output_handler
+oh= output_handler.OutputHandler(modelSpace)
+# oh.displayStrongWeakAxis()
 
-delta= n2.getDisp[0]  # Node 2 xAxis displacement
-deltateor= (F*L/(E*A))
-ratio1= (abs((delta-deltateor)/deltateor))
-
-beam3d.getResistingForce()
-scc= beam3d.getSections()[0]
-
-N0= scc.getStressResultantComponent("N")
-
-ratio2= (abs((N0-F)/F))
-# Check getN1 and getN2 (LP 28/04/2024).
-N1= beam3d.getN1
-N2= beam3d.getN2
-ratio3= math.sqrt((F-N1)**2+(F-N2)**2)
-
-''' 
-print("delta: ",delta)
-print("deltaTeor: ",deltateor)
-print("ratio1= ",ratio1)
-print(N0)
-print("ratio2= ",ratio2)
-print('F= ', F/1e3, 'N1= ', N1/1e3, ' N2= ', N2/1e3, ' ratio3= ', ratio3)
-   '''
-
-import os
-from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio1)<1e-10 and abs(ratio2)<1e-10 and abs(ratio3)<1e-10:
+outputFileName= '/tmp/'+fname.replace('.py', '.jpeg')
+oh.displayStrongWeakAxis(fileName= outputFileName)
+
+# Check that file exists
+testOK= os.path.isfile(outputFileName)
+
+if testOK:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
-
-# # Graphic stuff.
-# from postprocess import output_handler
-# oh= output_handler.OutputHandler(modelSpace)
-# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
-# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
-# oh.displayStrongWeakAxis()
-# # oh.displayLocalAxes()
-# # oh.displayLoads()
-# # oh.displayIntForcDiag('N')
-# # oh.displayIntForcDiag('M')
-# # oh.displayLocalAxes()
+os.remove(outputFileName) # Clean after yourself.

@@ -117,6 +117,19 @@ XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisLocalCoord(const s
     return retval;
   }
 
+//! @brief Returns the average cross section weak axis direction vector expressed in local coordinates.
+XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisLocalCoord(void) const
+  {
+    Vector retval(3);
+    // Compute average direction vector.
+    const size_t numSections= theSections.size();
+    for(size_t i= 0; i<numSections; i++)
+      retval+= this->getVDirStrongAxisLocalCoord(i);
+    const double factor= 1.0/numSections;
+    retval*= factor;
+    return retval;
+  }
+
 //! @brief Returns i-th cross section weak axis direction vector expressed in local coordinates.
 XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisLocalCoord(const size_t &i) const
   {
@@ -138,6 +151,19 @@ XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisLocalCoord(const siz
     return retval;
   }
 
+//! @brief Returns the average cross section weak axis direction vector expressed in local coordinates.
+XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisLocalCoord(void) const
+  {
+    Vector retval(3);
+    // Compute average direction vector.
+    const size_t numSections= theSections.size();
+    for(size_t i= 0; i<numSections; i++)
+      retval+= this->getVDirWeakAxisLocalCoord(i);
+    const double factor= 1.0/numSections;
+    retval*= factor;
+    return retval;
+  }
+
 //! @brief Returns the angle between i-th cross section strong axis
 //! and the local XZ plane.
 double XC::BeamColumnWithSectionFDTrf3d::getStrongAxisAngle(const size_t &i) const
@@ -146,11 +172,27 @@ double XC::BeamColumnWithSectionFDTrf3d::getStrongAxisAngle(const size_t &i) con
     return atan2(eF(2),eF(1));
   }
 
+//! @brief Returns the angle between the average cross section strong axis
+//! and the local XZ plane.
+double XC::BeamColumnWithSectionFDTrf3d::getStrongAxisAngle(void) const
+  {
+    Vector eF= getVDirStrongAxisLocalCoord();
+    return atan2(eF(2),eF(1));
+  }
+
 //! @brief Returns the angle between i-th cross section weak axis
 //! and the local XZ plane.
 double XC::BeamColumnWithSectionFDTrf3d::getWeakAxisAngle(const size_t &i) const
   {
     Vector eD= getVDirWeakAxisLocalCoord(i);
+    return atan2(eD(2),eD(1));
+  }
+
+//! @brief Returns the angle between the average cross section weak axis
+//! and the local XZ plane.
+double XC::BeamColumnWithSectionFDTrf3d::getWeakAxisAngle(void) const
+  {
+    Vector eD= getVDirWeakAxisLocalCoord();
     return atan2(eD(2),eD(1));
   }
 
@@ -173,6 +215,25 @@ const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisGlobalCoord
       }
   }
 
+//! @brief Returns the average cross section strong axis direction vector expressed in global coordinates.
+const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisGlobalCoord(bool initialGeometry) const
+  {
+    if(!initialGeometry)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; not implemented for deformed geometry." << std::endl;
+    const CrdTransf *ct= checkCoordTransf();
+    if(ct)
+      {
+        const Vector eF= getVDirStrongAxisLocalCoord();
+        return theCoordTransf->getVectorGlobalCoordFromLocal(eF);
+      }
+    else
+      {
+        static Vector tmp(3);
+        return tmp;
+      }
+  }
+
 //! @brief Returns i-th cross section weak axis direction vector expressed in global coordinates.
 const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisGlobalCoord(const size_t &i, bool initialGeometry) const
   {
@@ -183,6 +244,25 @@ const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisGlobalCoord(c
     if(ct)
       {
         const Vector eD= getVDirWeakAxisLocalCoord(i);
+        return theCoordTransf->getVectorGlobalCoordFromLocal(eD);
+      }
+    else
+      {
+        static Vector tmp(3);
+        return tmp;
+      }
+  }
+
+//! @brief Returns the average cross section weak axis direction vector expressed in global coordinates.
+const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisGlobalCoord(bool initialGeometry) const
+  {
+    if(!initialGeometry)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; not implemented for deformed geometry." << std::endl;
+    const CrdTransf *ct= checkCoordTransf();
+    if(ct)
+      {
+        const Vector eD= getVDirWeakAxisLocalCoord();
         return theCoordTransf->getVectorGlobalCoordFromLocal(eD);
       }
     else
