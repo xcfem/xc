@@ -22,6 +22,8 @@
 //python_interface.tcc
 
 class_<XC::BeamIntegration, bases<CommandEntity>, boost::noncopyable >("BeamIntegration", no_init)
+  .add_property("name",&XC::BeamIntegration::getName,"Return the name of the beam integration scheme.")
+
   ;
 class_<XC::LegendreBeamIntegration, bases<XC::BeamIntegration>, boost::noncopyable >("LegendreBeamIntegration", no_init);
 

@@ -135,8 +135,8 @@ result= analysis.analyze(16)
 diff_x= list()
 diff_y= list()
 def subtract(x,y): return x-y
-diff_x= map(subtract,x,x_modelo)
-diff_y= map(subtract,y,y_modelo)
+diff_x= list(map(subtract,x,x_modelo))
+diff_y= list(map(subtract,y,y_modelo))
 
 ratio1= 0
 for d in diff_x:

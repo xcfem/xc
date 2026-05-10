@@ -50,6 +50,13 @@ Polygon2d XC::SectRegion::getPolygon(void) const
     return retval;
   }
 
+//! @brief Reverse the orientation of the region.
+void XC::SectRegion::swap(void)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented." << std::endl;
+  }
+
 //! @brief Return the intersection of the region with the half-plane
 //!
 //! @param sp: Half-plane to intersect width.

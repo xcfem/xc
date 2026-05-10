@@ -92,7 +92,7 @@
 #ifndef NDARRAY_HH
 #define NDARRAY_HH
 
-#include "utility/matrix/nDarray/basics.h"
+#include "utility/matrix/nDarray/nDarray_rep.h"
 #include <string>
 #include <iostream>
 #include <boost/python.hpp>
@@ -100,147 +100,18 @@
 
 // forward reference
 namespace XC {
-class BJtensor;
-class BJmatrix;
-class BJvector;
-
-
-class stresstensor;
-class straintensor;
-
-
-//! @brief Storage of n-dimensional array data.
-//! @ingroup Matrix
-class nDarray_rep
-  {
-  public:
-    friend class nDarray;
-    friend class BJtensor;
-    friend class BJmatrix;
-//    friend class skyBJmatrix;
-    friend class stiffness_matrix;
-    friend class BJvector;
-    friend class stressstraintensor;
-    friend class stresstensor;
-    friend class straintensor;
-
-    friend class Cosseratstresstensor;
-    friend class Cosseratstraintensor;
-
-  private:
-    std::vector<double> pd_nDdata;  // nD array as 1D array
-    int nDarray_rank;   ///*  nDarray rank :
-                        //     0  ->  scalar
-                        //     1  ->  BJvector
-                        //     2  ->  BJmatrix
-                        //     *  ->  ********   */
-    size_t total_numb; // total number of elements in nDarray
-    std::vector<int> dim; //  array of dimensions in each rank direction
-                          //  for example, if nDarray_rank = 3 :
-                          //      dim[0] = dimension in direction 1
-                          //      dim[1] = dimension in direction 2
-                          //      dim[2] = dimension in direction 3  */
-    
-    inline size_t get_index(int first, int second) const
-      {
-        //assert(nDarray_rank==3);
-        return (first - 1)*dim[1]+second - 1;
-      }
-    inline size_t get_index(int first, int second, int third) const
-      {
-        //assert(nDarray_rank==3);
-        return ((first - 1)*dim[1]+second - 1)*dim[2]+third - 1;
-      }
-    inline size_t get_index(int first, int second, int third, int fourth) const
-      {
-        //assert(nDarray_rank==4);
-        return (((first - 1)*dim[1]+second - 1)*dim[2]+third - 1)*dim[3]+fourth - 1;
-      }
-  public:
-    void init_dim(const size_t &, const int &default_dim= 1);
-    void init_dim(const std::vector<int> &pdim);
-    inline void clear_dim(void)
-      { dim.clear(); }
-    inline bool equal_dim(const std::vector<int> &rval) const
-      { return (dim==rval); }
-    void init_data(void);
-    void init_data(const double &);
-    void init_data(const double *);
-    void init_data(const std::vector<double> &);
-    void init_data(const boost::python::list &);
-    void reset_data_to(const double &);
-    inline double *get_data_ptr(void)
-      { return pd_nDdata.data(); }
-    inline const double *get_data_ptr(void) const
-      { return pd_nDdata.data(); }
-    bool equal_data(const std::vector<double> &other_data) const;
-    inline const double &val(const size_t &where) const
-      { return pd_nDdata[where]; }
-    inline double &val(const size_t &where)
-      { return pd_nDdata[where]; }
-    inline void clear_data(void)
-      { pd_nDdata.clear(); }
-
-    inline void clear(void)
-      {
-	clear_data();
-	clear_dim();
-      }
-    void sum_data(const std::vector<double> &);
-    void substract_data(const std::vector<double> &);
-    void neg(void);
-    double sum(void) const;
-    bool operator==(const nDarray_rep &rval) const;
-    inline const double &operator()(int first) const
-      {
-	if(nDarray_rank==0)
-	  return (pd_nDdata[0]);
-	return val(static_cast<size_t>(first - 1));
-      }
-    inline double &operator()(int first)
-      {
-	if(nDarray_rank==0)
-	  return (pd_nDdata[0]);
-	return val(static_cast<size_t>(first - 1));
-      }
-    inline const double &operator()(int first, int second) const
-      {
-        const size_t i= get_index(first, second);
-	return val(i);
-      }
-    inline double &operator()(int first, int second)
-      {
-        const size_t i= get_index(first, second);
-	return val(i);
-      }
-    inline const double &operator()(int first, int second, int third) const
-      {
-        //assert(nDarray_rank==3);
-        const size_t i= get_index(first, second, third);
-	return val(i);
-      }
-    inline double &operator()(int first, int second, int third)
-      {
-        const size_t i= get_index(first, second, third);
-	return val(i);
-      }
-    inline const double &operator()(int first, int second, int third, int fourth) const
-      {
-        //assert(nDarray_rank==4);
-        const size_t i= get_index(first, second, third, fourth);
-	return val(i);
-      }
-    inline double &operator()(int first, int second, int third, int fourth)
-      {
-        const size_t i= get_index(first, second, third, fourth);
-	return val(i);
-      }
-  };
 
 //! @brief n-dimensional array.
 //! @ingroup Matrix
 class nDarray
   {
+  protected:
+    nDarray_rep pc_nDarray_rep;
+
+    const double *data(void) const;
+    const std::vector<double> &vector_data(void) const;
+    void set_dim(const std::vector<int> &);
+    void rank(int);
   private:
 //  int rank(void) const;
     size_t total_number(void) const;
@@ -250,14 +121,7 @@ class nDarray
     void clear_dim_data(void);
     const int &get_dim_pointer(void) const;
     //    int dim(int which) const;
-
-  protected:
-    nDarray_rep pc_nDarray_rep;
-
-    const double *data(void) const;
-    void set_dim(const std::vector<int> &);
-    const std::vector<int> &dim(void) const;
-    void rank(int);
+    
   public:
     nDarray(int rank_of_nDarray=1, const double &initval=0.0);// default constructor
     nDarray(const std::vector<int> &pdim, const double *values);
@@ -273,7 +137,7 @@ class nDarray
     nDarray(int rows, int cols, double initvalue);
 
 // special case when I don't want any initialization at all##
-    explicit nDarray(const std::string &){};
+    explicit nDarray(const std::string &){}
 
     nDarray(const std::string &flag, const std::vector<int> &pdim); // create a unit nDarray
     inline virtual ~nDarray(void){};
@@ -288,6 +152,9 @@ class nDarray
                                                // for BJtensor
 
     void Reset_to(const double &value);  // reset data to "value"
+
+    const std::vector<int> &dim(void) const;
+    boost::python::list dimPy(void) const;
     
     inline const double &operator()(int first) const
       { return pc_nDarray_rep(first); }
@@ -323,12 +190,35 @@ class nDarray
 	return pc_nDarray_rep(first, second, third, fourth);
       }
 
-    const double &val(int subscript, ...) const;
-    double &val(int subscript, ...);
+    //const double &val(int subscript, ...) const;
+    //double &val(int subscript, ...);
+    inline const double &_val(const std::vector<int> &subscripts) const
+      { return _cval(subscripts); }
+    double &_val(const std::vector<int> &);
+    template<class...nums>
+    const double &val(nums...args) const
+      {
+	const std::vector<int> vec = {args...};
+	return _val(vec);
+      }
+    template<class...nums>
+    double &val(nums...args)
+      {
+	const std::vector<int> vec = {args...};
+	return _val(vec);
+      }
+    
     const double &val4(int first, int second, int third, int fourth) const;  // overloaded for FOUR arguments for operator * for two tensors
     double &val4(int first, int second, int third, int fourth);  // overloaded for FOUR arguments for operator * for two tensors
 
-    const double &cval(int subscript, ...) const; // const
+    //const double &cval(int subscript, ...) const;
+    const double &_cval(const std::vector<int> &) const;
+    template<class...nums>
+    const double &cval(nums...args) const
+      {
+	std::vector<int> vec = {args...};
+	return _cval(vec);
+      }
 
 //..
 

@@ -31,7 +31,7 @@ tag= EHE_materials.HP45.defDiagD(preprocessor)
 pth= os.path.dirname(__file__)
 if(not pth):
     pth= "."
-sys.path.append(pth+"/../../../../../../aux/")
+sys.path.append(pth+"/../../../../../../aux/sections/")
 import prestressed_concrete_section_01
 geomSecPret01= prestressed_concrete_section_01.gmSecHP01(preprocessor, "prestressedConcretSectionGeom01",EHE_materials.HP45.nmbDiagD,EHE_materials.Y1860S7.nmbDiagD)
 materialHandler= preprocessor.getMaterialHandler

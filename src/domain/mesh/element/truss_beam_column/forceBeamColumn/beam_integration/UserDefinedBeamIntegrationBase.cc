@@ -53,10 +53,32 @@
 #include <domain/mesh/element/utils/Information.h>
 #include "domain/component/Parameter.h"
 
-XC::UserDefinedBeamIntegrationBase::UserDefinedBeamIntegrationBase(int classTag,
-						       const Vector &pt,
-						       const Vector &wt)
-  : BeamIntegration(classTag), pts(pt), wts(wt)
+//! @brief Constructor.
+XC::UserDefinedBeamIntegrationBase::UserDefinedBeamIntegrationBase(int tag,
+								   int classTag)
+  : BeamIntegration(tag, classTag)
+  {}
+
+//! @brief Constructor.
+XC::UserDefinedBeamIntegrationBase::UserDefinedBeamIntegrationBase(int tag,
+								   int classTag,
+								   const Vector &pt)
+  : BeamIntegration(tag, classTag), pts(pt), wts(pt.Size())
+  {
+    const size_t sz= pt.Size();
+    for(size_t i= 0; i < sz; i++)
+      {
+        if(pt(i) < 0.0 || pt(i) > 1.0)
+          std::cerr << "UserDefinedBeamIntegrationBase::UserDefinedBeamIntegrationBase -- point lies outside [0,1]" << std::endl;
+      }
+  }
+
+//! @brief Constructor.
+XC::UserDefinedBeamIntegrationBase::UserDefinedBeamIntegrationBase(int tag,
+								   int classTag,
+								   const Vector &pt,
+								   const Vector &wt)
+  : BeamIntegration(tag, classTag), pts(pt), wts(wt)
   {
     const size_t sz= pt.Size();
     for(size_t i= 0; i < sz; i++)
@@ -68,21 +90,7 @@ XC::UserDefinedBeamIntegrationBase::UserDefinedBeamIntegrationBase(int classTag,
       }
   }
 
-XC::UserDefinedBeamIntegrationBase::UserDefinedBeamIntegrationBase(int classTag,
-						       const Vector &pt)
-  : BeamIntegration(classTag), pts(pt), wts(pt.Size())
-  {
-    const size_t sz= pt.Size();
-    for(size_t i= 0; i < sz; i++)
-      {
-        if(pt(i) < 0.0 || pt(i) > 1.0)
-          std::cerr << "UserDefinedBeamIntegrationBase::UserDefinedBeamIntegrationBase -- point lies outside [0,1]" << std::endl;
-      }
-  }
 
-XC::UserDefinedBeamIntegrationBase::UserDefinedBeamIntegrationBase(int classTag):
-  BeamIntegration(classTag)
-  {}
 
 void XC::UserDefinedBeamIntegrationBase::getSectionLocations(int numSections,double L, double *xi) const
   {

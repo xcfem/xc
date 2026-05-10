@@ -146,6 +146,62 @@ size_t XC::RegionContainer::getNumCells(void) const
     return ncells;
   }
 
+//! @brief Return a list of const pointers to the different region materials.
+std::set<const XC::Material *>XC::RegionContainer::getMaterials(void) const
+  {
+    std::set<const Material *> retval;
+    for(const_iterator i=begin();i!=end();i++)
+      {
+        const SectRegion *ptr= *i;
+	const Material *mat= ptr->getMaterialPtr();
+        if(mat)
+	  retval.insert(mat);
+      }
+    return retval;
+  }
+
+//! @brief Return a list of pointers to the different region materials.
+std::set<XC::Material *>XC::RegionContainer::getMaterials(void)
+  {
+    std::set<Material *> retval;
+    for(iterator i=begin();i!=end();i++)
+      {
+        SectRegion *ptr= *i;
+	Material *mat= ptr->getMaterialPtr();
+        if(mat)
+	  retval.insert(mat);
+      }
+    return retval;
+  }
+  
+//! @brief Return a Python list of pointers to the different region materials.
+boost::python::list XC::RegionContainer::getMaterialsPy(void)
+  {
+    boost::python::list retval;
+    std::set<Material *> tmp= this->getMaterials();
+    for(std::set<Material *>::const_iterator i= tmp.begin(); i!=tmp.end(); i++)
+      {
+	Material *mat= *i;
+	if(mat)
+	  {
+	    boost::python::object pyObj(boost::ref(*mat));
+	    retval.append(pyObj);
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the contours of the regions in a Python list.
+boost::python::list XC::RegionContainer::getRegionsContoursPy(void) const
+  {
+    boost::python::list retval;
+    std::list<Polygon2d> tmp= this->getRegionsContours();
+    std::list<Polygon2d>::const_iterator i= tmp.begin();
+    for(;i!=tmp.end();i++)
+      retval.append(*i);
+    return retval;
+  }
+
 //! @brief Returns a list with the regions contours.
 std::list<Polygon2d> XC::RegionContainer::getRegionsContours(void) const
   {

@@ -66,7 +66,7 @@ namespace XC {
 class NewtonCotesBeamIntegration: public BeamIntegration
   {
   public:
-    NewtonCotesBeamIntegration();
+    NewtonCotesBeamIntegration(int tag);
 
     void getSectionLocations(int nIP, double L, double *xi) const;
     void getSectionWeights(int nIP, double L, double *wt) const;

@@ -74,14 +74,14 @@ XC::BJtensor XC::VonMisesPotentialSurface::dQods(const EPState *EPS) const
     if ( nod >=1 ) //May not have kinematic hardening
       alpha = EPS->getTensorVar(1);
 
-    stresstensor sigma_bar = sigma - alpha;   
-    stresstensor s_bar = sigma_bar.deviator();
+    const stresstensor sigma_bar= sigma - alpha;   
+    const stresstensor s_bar= sigma_bar.deviator();
     //s_bar.null_indices();
     
     // XC::Tensor dQ/dsigma_ij 
     BJtensor dQods = s_bar * 3.0;
     dQods.null_indices();
-    
+
     return dQods;
   }
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' Section geometry related utilities '''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -6,7 +7,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
 
+import sys
 import geom
+import xc
+from misc_utils import log_messages as lmsg
+from materials.sections.fiber_section import fiber_sets
 
 def gmSquareSection(geomSection, fiberMatName, ld, nD):
     '''returns a square section of fibers of the same material
@@ -44,3 +49,127 @@ def gmRectangSection(geomSection,fiberMatName, h, b, nDIJ, nDIK):
     rg.pMin= geom.Pos2d(-b/2,-h/2)
     rg.pMax= geom.Pos2d(b/2,h/2)
     return rg
+
+def reflect_region(regions, region, symAxis):
+    ''' Define a region symmetric to the given one.
+
+    :param regions: region container
+    :param region: original region.
+    :param symAxis: symmetry axis.
+    '''
+    retval= None
+    vertices= region.getPolygon().getVertices()
+    reflection2d= geom.Reflection2d(symAxis)
+    sim_vertices= list()
+    for v in vertices:
+        sv= reflection2d.getTransformed(v)
+        sim_vertices.append(sv)
+    sim_vertices= list(reversed(sim_vertices))
+    if(len(sim_vertices)>4):
+        methodName= sys._getframe(0).f_code.co_name
+        errMsg= '; not implemented yet for regions with more than 4 vertices.'
+        lmsg.error(methodName+errMsg)
+        exit(1)
+    else:
+        retval= regions.newQuadRegion(region.getMaterial().name)
+        retval.setVertices(sim_vertices[0], sim_vertices[1], sim_vertices[2], sim_vertices[3])
+        retval.setDiscretization(region.nDivIJ, region.nDivJK)
+    return retval
+
+def reflect_straight_reinf_layer(reinforcement, reinfLayer, symAxis):
+    ''' Define a straight reinforcement layer symmetric to the given one.
+
+    :param reinforcement: reinforcement container
+    :param reinfLayer: original reinforcement layer.
+    :param symAxis: symmetry axis.
+    '''
+    retval= reinforcement.newStraightReinfLayer(reinfLayer.getMaterial().name)
+    retval.numReinfBars= reinfLayer.numReinfBars
+    retval.barDiameter= reinfLayer.barDiameter
+    reflection2d= geom.Reflection2d(symAxis)
+    retval.p1= reflection2d.getTransformed(reinfLayer.p1)
+    retval.p2= reflection2d.getTransformed(reinfLayer.p2)
+    return retval
+
+def create_fiber_section(materialHandler, sectionGeometry, fiberSectionType= "fiber_section_3d"):
+    ''' Create fiber section from the given geometry.
+
+    :param materialHandler: material handler of the FE problem.
+    :param sectionGeometry: geometry of the material distribution in the
+                            cross-section.
+    '''
+    fiberSectionName= sectionGeometry.name+"_"+fiberSectionType
+    retval= materialHandler.newMaterial(fiberSectionType, fiberSectionName)
+    fiberSectionRepr= retval.getFiberSectionRepr()
+    fiberSectionRepr.setGeomNamed(sectionGeometry.name)
+    retval.setupFibers()
+    return retval
+
+def get_fiber_section_concrete_and_steel(fiberSection):
+    ''' Return the concrete and steel materials used in a fiber section.
+
+    :param fiberSection: fiber section to return the materials from.
+    '''
+    sectionGeometry= fiberSection.getSectionGeometry
+    concrete= None
+    baseMaterials= sectionGeometry.getRegionMaterials()
+    sz= len(baseMaterials)
+    if(sz==1):
+        concrete= baseMaterials[0]
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        if(sz==0):
+            errMsg= '; the list of base materials is empty.'
+        elif(sz>1):
+            errMsg= '; not implemented for many base materials.'
+        lmsg.error(methodName+errMsg)
+        exit(1)
+    reinforcementMaterials= sectionGeometry.getReinforcementMaterials()
+    steel= None
+    sz= len(reinforcementMaterials)
+    if(sz==1):
+        steel= reinforcementMaterials[0]
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        if(sz==0):
+            errMsg= '; the list of reinforcement materials is empty.'
+        elif(sz>1):
+            errMsg= '; not implemented for many reinforcement materials.'
+        lmsg.error(methodName+errMsg)
+        exit(1)
+    return concrete, steel
+
+def get_interaction_diagram_parameters(fiberSection):
+    ''' Return the interaction diagram parameters for the given fiber section.
+
+    :param fiberSection: fiber section to compute the interaction diagram for.
+    '''
+    retval= xc.InteractionDiagramParameters()
+    concrete, steel= get_fiber_section_concrete_and_steel(fiberSection)
+    retval.concreteTag= concrete.tag
+    retval.reinforcementTag= steel.tag
+    return retval
+    
+        
+def compute_interaction_diagram(materialHandler, fiberSection):
+    ''' Compute the interaction diagram for the given fiber section.
+
+    :param materialHandler: material handler of the FE problem.
+    :param fiberSection: fiber section to compute the interaction diagram for.
+    '''
+    param= get_interaction_diagram_parameters(fiberSection)
+    return materialHandler.calcInteractionDiagram(fiberSection.name,param)
+
+def get_section_fiber_sets(fiberSection):
+    ''' Return the fiber sets conrresponding to the section concrete and 
+        reinforcement fibers.
+
+    :param fiberSection: fiber section to compute the interaction diagram for.
+    '''
+    concrete, steel= get_fiber_section_concrete_and_steel(fiberSection)
+    retval= None
+    if(concrete and steel):
+        concreteFibersSetName= fiberSection.name+'_concrete_fiber_set'
+        steelFibersSetName= fiberSection.name+'_steel_fiber_set'
+        retval= fiber_sets.fiberSectionSetupRCSets(scc= fiberSection, concrMatTag= concrete.tag, concrSetName="concrSetFbEl1",reinfMatTag= steel.tag, reinfSetName= steelFibersSetName)
+    return retval

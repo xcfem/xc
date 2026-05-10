@@ -31,7 +31,7 @@
 #include "material/section/repres/section_geometry/reinfLayer/StraightReinfLayer.h"
 #include "material/section/repres/section_geometry/reinfLayer/CircReinfLayer.h"
 #include "preprocessor/prep_handlers/MaterialHandler.h"
-
+#include "material/Material.h" 
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include "utility/geom/pos_vec/Dir2d.h"
@@ -154,6 +154,54 @@ size_t XC::ListReinfLayer::getNumReinfBars(void) const
     for(const_iterator i=begin();i!=end();i++)
       nbars+= (*i)->getNumReinfBars();
     return nbars;
+  }
+
+//! @brief Return a list of const pointers to the different reinforcing
+//! layers materials.
+std::set<const XC::Material *>XC::ListReinfLayer::getMaterials(void) const
+  {
+    std::set<const Material *> retval;
+    for(const_iterator i=begin();i!=end();i++)
+      {
+        const ReinfLayer *ptr= *i;
+	const Material *mat= ptr->getMaterialPtr();
+        if(mat)
+	  retval.insert(mat);
+      }
+    return retval;
+  }
+
+//! @brief Return a list of pointers to the different reinforcing layers
+//! materials.
+std::set<XC::Material *>XC::ListReinfLayer::getMaterials(void)
+  {
+    std::set<Material *> retval;
+    for(iterator i=begin();i!=end();i++)
+      {
+        ReinfLayer *ptr= *i;
+	Material *mat= ptr->getMaterialPtr();
+        if(mat)
+	  retval.insert(mat);
+      }
+    return retval;
+  }
+  
+//! @brief Return a Python list of pointers to the different reinforcing
+//! layers materials.
+boost::python::list XC::ListReinfLayer::getMaterialsPy(void)
+  {
+    boost::python::list retval;
+    std::set<Material *> tmp= this->getMaterials();
+    for(std::set<Material *>::const_iterator i= tmp.begin(); i!=tmp.end(); i++)
+      {
+	Material *mat= *i;
+	if(mat)
+	  {
+	    boost::python::object pyObj(boost::ref(*mat));
+	    retval.append(pyObj);
+	  }
+      }
+    return retval;
   }
 
 //! Returns the rebar subset which center lies inside the polygon.

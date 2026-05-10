@@ -11,6 +11,7 @@ Once the analyst has defined the model, the next step is to define the analysis 
  - [See the Convergence](https://portwooddigital.com/2022/01/24/see-the-convergence/)
  - [Don’t Invert the Matrix](https://portwooddigital.com/2022/11/18/dont-invert-the-matrix/)
  - [How to Profile an OpenSeesPy Analysis](https://portwooddigital.com/2024/12/22/how-to-profile-an-openseespy-analysis/)
+ - [Empty spaces](https://portwooddigital.com/2026/01/13/empty-spaces/)
  
 ### Ill conditioning
 
@@ -52,7 +53,8 @@ Once the analyst has defined the model, the next step is to define the analysis 
 - [A Simple Base-Isolated Model](https://portwooddigital.com/2024/11/26/a-simple-base-isolated-model/)
 - [Minimal Damper Example](https://portwooddigital.com/2025/01/12/minimal-damper-example/)
 - [Minimal Random Process Example](https://portwooddigital.com/2025/09/28/minimal-random-process-example/)
-
+- [Double Inverted Pendulum](https://portwooddigital.com/2025/09/08/double-inverted-pendulum/)
+- [Celestial OpenSeesing](https://portwooddigital.com/2025/09/14/celestial-openseesing/)
 
 ### Eigenvalue analysis
  - [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)
@@ -67,7 +69,8 @@ Once the analyst has defined the model, the next step is to define the analysis 
  - [Eigenvalues of the Stiffness Matrix](https://portwooddigital.com/2023/01/16/eigenvalues-of-the-stiffness-matrix/)
  - [Spectra. C++ Library For Large Scale Eigenvalue Problems](https://spectralib.org/)
  - [Eigen Almost Hear You Sigh](https://portwooddigital.com/2025/12/30/eigen-almost-hear-you-sigh/)
-
+ - [Why Your Eigenvalue Analysis Failed](https://portwooddigital.com/2026/01/27/why-your-eigenvalue-analysis-failed/)
+ 
 #### Linear buckling analysis.
 - [Buckling](https://en.wikipedia.org/wiki/Buckling)
 - [Linear buckling in plain language!](https://enterfea.com/linear-buckling-explained/)
@@ -91,5 +94,7 @@ Once the analyst has defined the model, the next step is to define the analysis 
 - [A Krylov Subspace Accelerated Newton Algorithm](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=49d46f2df3420b3689212a24ce7e09f609e4a26b)
 - [Secant accelerated Newton Algorithm](https://portwooddigital.com/2024/08/18/secant-accelerated-newton-algorithm)
 
-# Equation numberer
+### Equation numberer
 - [Reverse Engineering the Equation Numberer](https://portwooddigital.com/2026/01/06/reverse-engineering-the-equation-numberer/)
+- [Inside the equation numbers](https://portwooddigital.com/2026/02/24/inside-the-equation-numbers/)
+- [Stop Cargo Culting BandGeneral and Plain Numberer](https://portwooddigital.com/2026/02/17/stop-cargo-culting-bandgeneral-and-plain-numberer/)

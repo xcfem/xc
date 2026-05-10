@@ -26,6 +26,7 @@ class_<XC::ForceBeamColumn2d, bases<XC::NLForceBeamColumn2dBase>, boost::noncopy
   .add_property("subdivideFactor", &XC::ForceBeamColumn2d::getSubdivideFactor,&XC::ForceBeamColumn2d::setSubdivideFactor, "Get/set the factor to reduce newton scheme step size.")
   .def("getSectionLocations",&XC::ForceBeamColumn2d::getSectionLocationsPy,"Returns the positions of the sections along the element.")
   .def("getSectionWeights",&XC::ForceBeamColumn2d::getSectionWeightsPy,"Returns the weights corresponding to each of the element sections.")
+  .def("getIntegrator", &XC::ForceBeamColumn2d::getIntegratorPy,"Returns the integration scheme of the element.")
    ;
 
 class_<XC::ForceBeamColumn3d, bases<XC::NLForceBeamColumn3dBase>, boost::noncopyable >("ForceBeamColumn3d", no_init)
@@ -33,6 +34,7 @@ class_<XC::ForceBeamColumn3d, bases<XC::NLForceBeamColumn3dBase>, boost::noncopy
   .add_property("subdivideFactor", &XC::ForceBeamColumn3d::getSubdivideFactor,&XC::ForceBeamColumn3d::setSubdivideFactor, "Get/set the factor to reduce newton scheme step size.")
   .def("getSectionLocations",&XC::ForceBeamColumn3d::getSectionLocationsPy,"Returns the positions of the sections along the element.")
   .def("getSectionWeights",&XC::ForceBeamColumn3d::getSectionWeightsPy,"Returns the weights corresponding to each of the element sections.")
+  .def("getIntegrator", &XC::ForceBeamColumn3d::getIntegratorPy,"Returns the integration scheme of the element.")
    ;
 
 #include "beam_integration/python_interface.tcc"

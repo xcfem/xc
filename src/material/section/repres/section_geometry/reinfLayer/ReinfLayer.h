@@ -96,6 +96,8 @@ class ReinfLayer: public DiscretBase
     virtual const double &getReinfBarDiameter(void) const;
     virtual void setReinfBarArea(double reinfBarArea);
     virtual const double &getReinfBarArea(void) const;
+    double computeBarAreaFromBarDiameter(void);
+    double computeBarDiameterFromBarArea(void);
 
     // reinforcing layer inquiring functions
     void getBarrasIn(const Polygon2d &,ListReinfLayer &,bool );

@@ -167,6 +167,7 @@ Pos2d XC::QuadSectRegion::getLVertex(void) const
 Quadrilateral2d XC::QuadSectRegion::getQuad(void) const
   { return Quadrilateral2d( getIVertex(),getJVertex(), getKVertex(),getLVertex()); }
 
+//! @brief Reverse the orientation of the region.
 void XC::QuadSectRegion::swap(void)
   {
     Matrix tmp(vertCoord);

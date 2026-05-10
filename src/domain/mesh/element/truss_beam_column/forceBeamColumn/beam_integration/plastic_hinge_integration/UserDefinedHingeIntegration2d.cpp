@@ -55,20 +55,24 @@
 #include <domain/mesh/element/utils/Information.h>
 #include "domain/component/Parameter.h"
 
-XC::UserDefinedHingeIntegration2d::UserDefinedHingeIntegration2d(int npL,
-                                                             const XC::Vector &ptL,
-                                                             const XC::Vector &wtL,
-                                                             int npR,
-                                                             const XC::Vector &ptR,
-                                                             const XC::Vector &wtR,
-                                                             const double &ee,
-                                                             const double &aa,
-                                                             const double &ii):
-  UserDefinedHingeIntegrationBase(BEAM_INTEGRATION_TAG_UserHinge2d,ptL,wtL,ptR,wtR), ctes_scc(ee,aa,ii)
+XC::UserDefinedHingeIntegration2d::UserDefinedHingeIntegration2d(int tag)
+  : UserDefinedHingeIntegrationBase(tag, BEAM_INTEGRATION_TAG_UserHinge2d),
+    ctes_scc(0.0,0.0,0.0) {}
+
+XC::UserDefinedHingeIntegration2d::UserDefinedHingeIntegration2d(int tag,
+								 int npL,
+								 const Vector &ptL,
+								 const Vector &wtL,
+								 int npR,
+								 const Vector &ptR,
+								 const Vector &wtR,
+								 const double &ee,
+								 const double &aa,
+								 const double &ii):
+  UserDefinedHingeIntegrationBase(tag, BEAM_INTEGRATION_TAG_UserHinge2d,ptL,wtL,ptR,wtR),
+  ctes_scc(ee,aa,ii)
 {}
 
-XC::UserDefinedHingeIntegration2d::UserDefinedHingeIntegration2d()
-  : UserDefinedHingeIntegrationBase(BEAM_INTEGRATION_TAG_UserHinge2d), ctes_scc(0.0,0.0,0.0) {}
 
 void XC::UserDefinedHingeIntegration2d::getSectionLocations(int numSections,double L, double *xi) const
   {

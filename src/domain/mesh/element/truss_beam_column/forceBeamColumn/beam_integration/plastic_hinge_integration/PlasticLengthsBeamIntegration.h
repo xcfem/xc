@@ -50,8 +50,8 @@ class PlasticLengthsBeamIntegration: public BeamIntegration
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    PlasticLengthsBeamIntegration(int classTag,double lpI, double lpJ);
-    PlasticLengthsBeamIntegration(int classTag);
+    PlasticLengthsBeamIntegration(int tag, int classTag);
+    PlasticLengthsBeamIntegration(int tag, int classTag,double lpI, double lpJ);
 
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);

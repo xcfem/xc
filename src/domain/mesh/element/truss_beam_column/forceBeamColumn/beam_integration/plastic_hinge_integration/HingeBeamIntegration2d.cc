@@ -31,12 +31,11 @@
 #include "domain/load/beam_loads/BeamMecLoad.h"
 #include "material/section/repres/CrossSectionProperties2d.h"
 
-XC::HingeBeamIntegration2d::HingeBeamIntegration2d(int classTag,double e,double a,double i,double lpi,double lpj)
-  : PlasticLengthsBeamIntegration(classTag,lpi,lpj), E(e), A(a), I(i) {}
+XC::HingeBeamIntegration2d::HingeBeamIntegration2d(int tag, int classTag)
+  : PlasticLengthsBeamIntegration(tag, classTag), E(0.0), A(0.0), I(0.0) {}
 
-XC::HingeBeamIntegration2d::HingeBeamIntegration2d(int classTag)
-  : PlasticLengthsBeamIntegration(classTag), E(0.0), A(0.0), I(0.0) {}
-
+XC::HingeBeamIntegration2d::HingeBeamIntegration2d(int tag, int classTag,double e,double a,double i,double lpi,double lpj)
+  : PlasticLengthsBeamIntegration(tag, classTag,lpi,lpj), E(e), A(a), I(i) {}
 
 void XC::HingeBeamIntegration2d::addElasticDeformations(ElementalLoad *theLoad,double loadFactor,double L,FVector &v0)
   {

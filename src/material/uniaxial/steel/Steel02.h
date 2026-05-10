@@ -67,6 +67,8 @@
 #define Steel02_h
 
 #include "material/uniaxial/steel/SteelBase.h"
+#include "material/uniaxial/steel/steel02_state_variables.h"
+#include "material/uniaxial/steel/steel02_history_variables.h"
 
 namespace XC {
 //! @ingroup MatUnx
@@ -82,30 +84,14 @@ class Steel02: public SteelBase
     double cR1; //!<  = matpar(5)  : coefficient for changing R0 to R
     double cR2; //!<  = matpar(6)  : coefficient for changing R0 to R
     // hstvP : STEEL HISTORY VARIABLES
-    double epsminP; //!<  = hstvP(1) : max eps in compression
-    double epsmaxP; //!<  = hstvP(2) : max eps in tension
-    double epsplP;  //!<  = hstvP(3) : plastic excursion
-    double epss0P;  //!<  = hstvP(4) : eps at asymptotes intersection
-    double sigs0P;  //!<  = hstvP(5) : sig at asymptotes intersection
-    double epssrP;  //!<  = hstvP(6) : eps at last inversion point
-    double sigsrP;  //!<  = hstvP(7) : sig at last inversion point
-    int    konP;    //!<  = hstvP(8) : index for loading/unloading
+    steel02_history_variables hstvP;
     // hstv : STEEL HISTORY VARIABLES
-    double epsP;  //!<  = strain at previous converged step
-    double sigP;  //!<  = stress at previous converged step
-    double eP;    //!<   stiffness modulus at last converged step;
+    steel02_state_variables stvP;
 
-    double epsmin;
-    double epsmax;
-    double epspl;
-    double epss0;
-    double sigs0;
-    double epsr;
-    double sigr;
-    int kon; //!< index for loading/unloading
-    double sig;
-    double e;
-    double eps;   //!< strain at current step
+    steel02_history_variables hstv;
+
+    steel02_state_variables stv;
+
   protected:
     int setup_parameters(void);
     DbTagData &getDbTagData(void) const;

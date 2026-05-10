@@ -207,6 +207,10 @@ XC::ForceBeamColumn2d::~ForceBeamColumn2d(void)
 const XC::BeamIntegration *XC::ForceBeamColumn2d::getIntegrator(void) const
   { return this->beamIntegr; }
 
+//! @brief Return a Python object wrapping the the beam integrator object.
+boost::python::object XC::ForceBeamColumn2d::getIntegratorPy(void) const
+ { return boost::python::object(boost::ref(this->beamIntegr)); }
+
 //! @brief Returns the location of the sections along the element.
 boost::python::list XC::ForceBeamColumn2d::getSectionLocationsPy(void) const
   { return this->beamIntegr->getSectionLocationsPy(this->getNumSections(), this->theCoordTransf->getInitialLength()); }

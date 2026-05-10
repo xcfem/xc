@@ -43,7 +43,7 @@ pth= os.path.dirname(__file__)
 # print("pth= ", pth)
 if(not pth):
     pth= "."
-auxModulePath= pth+"/../../aux"
+auxModulePath= pth+"/../../aux/sections/"
 sys.path.append(auxModulePath)
 import four_fiber_section
 rcSection, staticParams, fibers= four_fiber_section.create_four_fiber_section(preprocessor) # Reinforced concrete fiber section.

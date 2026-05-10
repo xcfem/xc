@@ -64,9 +64,11 @@ echo "$BLEU" "  Geometry tests." "$NORMAL"
 echo "$BLEU" "    Vectors." "$NORMAL"
 python tests/utility/geom/vectors/vector2d_test_01.py
 python tests/utility/geom/vectors/vector2d_test_02.py
+python tests/utility/geom/vectors/vector2d_test_03.py
 python tests/utility/geom/vectors/vector3d_test_01.py
 python tests/utility/geom/vectors/vector3d_test_02.py
 python tests/utility/geom/vectors/vector3d_test_03.py
+python tests/utility/geom/vectors/vector3d_test_04.py
 python tests/utility/geom/vectors/vector3d_angle_test_01.py
 python tests/utility/geom/vectors/vector3d_angle_test_02.py
 echo "$BLEU" "    Points." "$NORMAL"
@@ -284,6 +286,7 @@ python tests/utility/geom/trf/rotation2d_test_01.py
 python tests/utility/geom/trf/rotation2d_test_02.py
 python tests/utility/geom/trf/rotation3d_test_01.py
 python tests/utility/geom/trf/rotation3d_test_02.py
+python tests/utility/geom/trf/reflection2d_test_01.py
 echo "$BLEU" "    Mechanical properties." "$NORMAL"
 python tests/utility/geom/mass_properties/test_centroid_01.py
 python tests/utility/geom/mass_properties/test_steiner_01.py
@@ -1391,6 +1394,7 @@ python tests/materials/xc_materials/sections/section_geom/test_mass_properties_0
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_03.py
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_04.py
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_05.py
+python tests/materials/xc_materials/sections/section_geom/test_mass_properties_06.py
 python tests/materials/xc_materials/sections/section_geom/test_modify_section_properties.py
 echo "$BLEU" "      Cross-sections region tests." "$NORMAL"
 python tests/materials/xc_materials/sections/section_geom/regions/quad_sect_region_test_01.py
@@ -1483,6 +1487,7 @@ python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/t
 python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_interaction_diagram04.py
 python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_interaction_diagram05.py
 python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_interaction_diagram06.py
+python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_interaction_diagram07.py
 python tests/materials/xc_materials/sections/fiber_section/plastic_hinge_on_IPE200.py
 echo "$BLEU" "        Membrane plate fiber section tests." "$NORMAL"
 python tests/materials/xc_materials/sections/fiber_section/membrane_plate/test_membrane_plate_fiber_material_01.py
@@ -1634,12 +1639,14 @@ python tests/materials/ec2/test_ec2_punching_shear_02.py
 python tests/materials/ec2/test_ec2_punching_shear_03.py
 python tests/materials/ec2/test_ec2_punching_shear_04.py
 python tests/materials/ec2/test_ec2_punching_shear_05.py
-
 echo "$BLEU" "    EC2 prestressing." "$NORMAL"
 python tests/materials/ec2/test_ec2_prestressing_01.py
 python tests/materials/ec2/test_ec2_prestressing_02.py
 python tests/materials/ec2/test_ec2_prestressing_03.py
 python tests/materials/ec2/test_ec2_prestressing_04.py
+echo "$BLEU" "    EC2 part 4 fastener resistance." "$NORMAL"
+python tests/materials/ec2/test_fastener_check_01.py
+
 echo "$BLEU" "    MC10 tests." "$NORMAL"
 python tests/materials/mc10/test_mc10_shrinkage_and_creep_parameters_01.py
 python tests/materials/mc10/test_mc10_shrinkage_and_creep_parameters_02.py

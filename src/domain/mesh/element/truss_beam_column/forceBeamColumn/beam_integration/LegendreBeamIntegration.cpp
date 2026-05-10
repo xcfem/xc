@@ -51,8 +51,9 @@
 #include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/LegendreBeamIntegration.h>
 #include <iostream>
 
-XC::LegendreBeamIntegration::LegendreBeamIntegration(void)
-  : BeamIntegration(BEAM_INTEGRATION_TAG_Legendre) {}
+XC::LegendreBeamIntegration::LegendreBeamIntegration(int tag)
+  : BeamIntegration(tag, BEAM_INTEGRATION_TAG_Legendre)
+  {}
 
 XC::BeamIntegration *XC::LegendreBeamIntegration::getCopy(void) const
   { return new LegendreBeamIntegration(*this); }

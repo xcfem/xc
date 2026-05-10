@@ -52,11 +52,9 @@
 #include <cmath>
 #include <iostream>
 
-XC::RadauBeamIntegration::RadauBeamIntegration():
-  BeamIntegration(BEAM_INTEGRATION_TAG_Radau)
-{
-  // Nothing to do
-}
+XC::RadauBeamIntegration::RadauBeamIntegration(int tag)
+  : BeamIntegration(tag, BEAM_INTEGRATION_TAG_Radau)
+  {}
 
 XC::BeamIntegration *XC::RadauBeamIntegration::getCopy(void) const
   { return new RadauBeamIntegration(*this); }

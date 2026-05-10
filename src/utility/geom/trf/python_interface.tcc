@@ -50,6 +50,7 @@ class_<Scaling2d, bases<Trf2d> >("Scaling2d")
   ;
 
 class_<Reflection2d, bases<Trf2d> >("Reflection2d")
+  .def(init<Pos2d, Vector2d>())
   .def(init<Line2d>())
   ;
 

@@ -170,27 +170,27 @@ XC::Vector XC::stressstraintensor::getVector(const size_t &dim) const
 //! Chen XC::W.F. "plasticity for Structural Engineers"
 double XC::stressstraintensor::Iinvariant1() const
   {
-    return ((*this)(1,1)+(*this)(2,2)+(*this)(3,3));
+    return (cval(1,1)+cval(2,2)+cval(3,3));
   }
 
 //##############################################################################
 double XC::stressstraintensor::Iinvariant2() const
   {
-    return ((*this)(2,2)*(*this)(3,3)-(*this)(3,2)*(*this)(2,3)+
-            (*this)(1,1)*(*this)(3,3)-(*this)(3,1)*(*this)(1,3)+
-            (*this)(1,1)*(*this)(2,2)-(*this)(2,1)*(*this)(1,2));
+    return (cval(2,2)*cval(3,3)-cval(3,2)*cval(2,3)+
+            cval(1,1)*cval(3,3)-cval(3,1)*cval(1,3)+
+            cval(1,1)*cval(2,2)-cval(2,1)*cval(1,2));
   }
 
 //##############################################################################
 double XC::stressstraintensor::Iinvariant3()  const
   {
 
-    double I3 = (*this)(1,1)*(*this)(2,2)*(*this)(3,3) +
-                (*this)(1,2)*(*this)(2,3)*(*this)(3,1) +
-                (*this)(1,3)*(*this)(2,1)*(*this)(3,2) -
-                (*this)(1,3)*(*this)(2,2)*(*this)(3,1) -
-                (*this)(1,2)*(*this)(2,1)*(*this)(3,3) -
-                (*this)(1,1)*(*this)(2,3)*(*this)(3,2) ;
+    double I3 = cval(1,1)*cval(2,2)*cval(3,3) +
+                cval(1,2)*cval(2,3)*cval(3,1) +
+                cval(1,3)*cval(2,1)*cval(3,2) -
+                cval(1,3)*cval(2,2)*cval(3,1) -
+                cval(1,2)*cval(2,1)*cval(3,3) -
+                cval(1,1)*cval(2,3)*cval(3,2) ;
 
     return I3;
 //    return ( this->determinant());
@@ -294,7 +294,7 @@ void XC::stressstraintensor::compute_principal(stressstraintensor &ret)  const
 //##############################################################################
 void XC::stressstraintensor::compute_deviator(stressstraintensor &st_dev) const
   {
-    BJtensor I2("I", def_dim_2); // Kronecker delta  \delta_{ij}
+    const BJtensor I2("I", def_dim_2); // Kronecker delta  \delta_{ij}
     stressstraintensor st_vol(I2 * (this->trace()*(1./3.)));
     st_dev= (*this) - st_vol;
   }
@@ -345,8 +345,8 @@ double XC::stressstraintensor::rho()  const                      // Chen XC::W.F
 
 //##############################################################################
 double XC::stressstraintensor::p_hydrostatic() const        // Desai "Constitutive Laws
-  {                                         // for Engineering Materials"
-    return( - (this->Iinvariant1())*ONEOVERTHREE );  // page 283
+  {                                                         // for Engineering Materials"
+    return( - (this->Iinvariant1())*ONEOVERTHREE );         // page 283
   }  //sign (-) because tension is positive
 
 

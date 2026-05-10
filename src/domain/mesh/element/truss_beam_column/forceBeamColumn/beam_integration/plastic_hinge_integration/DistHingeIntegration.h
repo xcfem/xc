@@ -67,8 +67,8 @@ class DistHingeIntegration: public PlasticLengthsBeamIntegration
     void free_mem(void);
     void copy(const BeamIntegration *bi);
   public:
-    DistHingeIntegration(double lpI, double lpJ,const BeamIntegration &bi);
-    DistHingeIntegration(void);
+    DistHingeIntegration(int tag);
+    DistHingeIntegration(int tag, double lpI, double lpJ,const BeamIntegration &bi);
     DistHingeIntegration(const DistHingeIntegration &);
     DistHingeIntegration &operator=(const DistHingeIntegration &);
     ~DistHingeIntegration();

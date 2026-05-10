@@ -141,6 +141,7 @@ class ForceBeamColumn3d: public NLForceBeamColumn3dBase
     const Vector &getResistingForceIncInertia(void) const;
 
     const BeamIntegration *getIntegrator(void) const;
+    boost::python::object getIntegratorPy(void) const;
     boost::python::list getSectionLocationsPy(void) const;
     boost::python::list getSectionWeightsPy(void) const;
   

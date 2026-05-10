@@ -24,3 +24,4 @@ The path to do this is as follows:
 
 - [Do It Your Self-Weight](https://portwooddigital.com/2023/11/05/do-it-your-self-weight/)
 - [Statically Equivalent Loads](https://portwooddigital.com/2025/04/14/statically-equivalent-loads/)
+- [Partial-Span Uniform Loads](https://portwooddigital.com/2026/01/20/partial-span-uniform-loads)

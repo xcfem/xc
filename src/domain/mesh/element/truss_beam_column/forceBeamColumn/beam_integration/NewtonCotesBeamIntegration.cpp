@@ -51,11 +51,9 @@
 #include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/NewtonCotesBeamIntegration.h>
 #include <iostream>
 
-XC::NewtonCotesBeamIntegration::NewtonCotesBeamIntegration():
-  BeamIntegration(BEAM_INTEGRATION_TAG_NewtonCotes)
-{
-  // Nothing to do
-}
+XC::NewtonCotesBeamIntegration::NewtonCotesBeamIntegration(int tag)
+  : BeamIntegration(tag, BEAM_INTEGRATION_TAG_NewtonCotes)
+  {}
 
 XC::BeamIntegration *XC::NewtonCotesBeamIntegration::getCopy(void) const
   { return new NewtonCotesBeamIntegration(*this); }

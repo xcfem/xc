@@ -62,8 +62,8 @@ namespace XC {
 class HingeMidpointBeamIntegration3d: public HingeBeamIntegration3d
   {
   public:
-    HingeMidpointBeamIntegration3d(double E, double A, double Iz,double Iy, double G, double J,double lpI, double lpJ);
-    HingeMidpointBeamIntegration3d(const CrossSectionProperties3d &cts= CrossSectionProperties3d(),const double &lpi=0.0,const double &lpj=0.0);
+    HingeMidpointBeamIntegration3d(int tag, double E, double A, double Iz,double Iy, double G, double J,double lpI, double lpJ);
+    HingeMidpointBeamIntegration3d(int tag, const CrossSectionProperties3d &cts= CrossSectionProperties3d(),const double &lpi=0.0,const double &lpj=0.0);
   
     void getSectionLocations(int numSections, double L, double *xi) const;
     void getSectionWeights(int numSections, double L, double *wt) const;

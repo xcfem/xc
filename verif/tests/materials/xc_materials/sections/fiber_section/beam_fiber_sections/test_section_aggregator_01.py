@@ -23,7 +23,7 @@ from materials import typical_materials
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-sys.path.append(pth+"/../../../../../aux/")
+sys.path.append(pth+"/../../../../../aux/sections/")
 import fiber_section_test_macros # fiber section convenience functions.
 
 # Define section geometry

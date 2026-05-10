@@ -394,7 +394,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             lmsg.warning(className+'.'+methodName+'; creep parameters are not defined. Command ignored.')
         return retval
     
-    def defDiagE(self, preprocessor, overrideRho= None):
+    def _define_elastic_diagram(self, preprocessor, overrideRho= None):
         ''' Returns and XC linear elastic uniaxial material.
 
         :param preprocessor: pre-processor for the finite element problem.
@@ -406,6 +406,32 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         self.matTagE= self.materialDiagramE.tag
         return self.materialDiagramE
 
+    def defDiagE(self, preprocessor, overrideRho= None):
+        ''' Returns and XC linear elastic uniaxial material.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        '''
+        retval= None
+        materialExists= preprocessor.getMaterialHandler.materialExists(self.nmbDiagE)
+        if(materialExists):
+            material= preprocessor.getMaterialHandler.getMaterial(self.nmbDiagE)
+            if(hasattr(self, 'materialDiagramE')):
+                if(self.materialDiagramE):
+                    thisTag= self.materialDiagramE.tag
+                    if(thisTag!=material.tag):
+                        # Issue an error message.
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        errorMsg= "; material: '"+str(self.nmbDiagE)
+                        errorMsg+= "' already exists and does not"
+                        errorMsg+= ' belong to this object.'
+                        lmsg.error(className+'.'+methodName+errorMsg)
+                        exit(1)
+                    else:
+                        retval= self.materialDiagramE
+        else:
+            retval= self._define_elastic_diagram(preprocessor)
+        return retval
     
     def clearDiagE(self):
         ''' Clear previously defined diagram.'''
@@ -413,7 +439,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             self.matTagE= -1
             self.materialDiagramE= None
             
-    def defDiagK(self,preprocessor):
+    def _define_characteristic_diagram(self, preprocessor):
         ''' Defines a uniaxial material to represent the characteristic stress-strain diagram
 
         - If tensionStiffparam is an instance of the class paramTensStiffness,          tension stiffness of concrete is considered in the constitutive model  
@@ -468,12 +494,98 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         self.matTagK= self.materialDiagramK.tag
         return self.materialDiagramK #30160925 was 'return self.matTagK'
     
+    def defDiagK(self, preprocessor):
+        ''' Defines a uniaxial material to represent the characteristic stress-strain diagram
+
+        - If tensionStiffparam is an instance of the class paramTensStiffness,          tension stiffness of concrete is considered in the constitutive model  
+        to take into account tensile capacity of the intact concrete between 
+        cracks. The stress strain relationship corresponds to a concrete02 
+        material (linear tension softening), based on the tension-stiffening  
+        constitutive model proposed by Stramandinoli & La Rovere (ref. article: 
+        Engineering Structures 30 (2008) 2069-2080)
+
+        -If initTensStiff==True a concrete02 material model 
+        is initialized with a tension capacity almost equal to 0 (equivalent to 
+        the concrete01 diagram). Defaults to False
+
+        -If tensionStiffparam is None and initTensStiff==False (default value)
+         no tensile strength is considered; the stress strain relationship  
+         corresponds to a concrete01 material (zero tensile strength).
+
+        :param preprocessor: pre-processor of the finite element problem.
+        '''
+        retval= None
+        materialExists= preprocessor.getMaterialHandler.materialExists(self.nmbDiagK)
+        if(materialExists):
+            material= preprocessor.getMaterialHandler.getMaterial(self.nmbDiagK)
+            if(hasattr(self, 'materialDiagramK')):
+                if(self.materialDiagramK):
+                    thisTag= self.materialDiagramK.tag
+                    if(thisTag!=material.tag):
+                        # Issue an error message.
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        errorMsg= "; material: '"+str(self.nmbDiagK)
+                        errorMsg+= "' already exists and does not"
+                        errorMsg+= ' belong to this object.'
+                        lmsg.error(className+'.'+methodName+errorMsg)
+                        exit(1)
+                    else:
+                        retval= self.materialDiagramK
+        else:
+            retval= self._define_characteristic_diagram(preprocessor)
+        return retval
+        
     def clearDiagK(self):
         ''' Clear previously defined diagram.'''
         if(self.materialDiagramK):
             self.matTagK= -1
             self.materialDiagramK= None
 
+    def _define_design_diagram(self, preprocessor):
+        ''' Defines a uniaxial material to represent the design stress-strain 
+        diagram
+
+        - If tensionStiffparam is an instance of the class paramTensStiffness,          tension stiffness of concrete is considered in the constitutive model  
+        to take into account tensile capacity of the intact concrete between 
+        cracks. The stress strain relationship corresponds to a concrete02 
+        material (linear tension softening), based on the tension-stiffening  
+        constitutive model proposed by Stramandinoli & La Rovere (ref. article: 
+        Engineering Structures 30 (2008) 2069-2080)
+
+        -If initTensStiff==True a concrete02 material model 
+        is initialized with a tension capacity almost equal to 0 (equivalent to 
+        the concrete01 diagram). Defaults to False
+
+        -If tensionStiffparam is None and initTensStiff==False (default values)
+         no tensile strength is considered; the stress strain relationship  
+         corresponds to a concrete01 material (zero tensile strength).
+
+        :param preprocessor: pre-processor of the finite element problem.
+        '''
+        if self.tensionStiffparam:
+            self.tensionStiffparam.diagType='D'
+            ftdiag=self.tensionStiffparam.pointOnsetCracking()['ft']
+            self.ft=ftdiag
+            ectdiag=self.tensionStiffparam.pointOnsetCracking()['eps_ct']
+            self.epsct0=ectdiag
+            # eydiag= self.tensionStiffparam.eps_y()
+            Etsdiag=abs(self.tensionStiffparam.regresLine()['slope'])
+            self.Ets=Etsdiag
+            self.epsctu=ectdiag+ftdiag/Etsdiag
+            self.materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=0.85*self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
+            self.materialDiagramD.epsct0=ectdiag
+            self.materialDiagramD.epsctu=ectdiag+ftdiag/Etsdiag
+        elif(self.initTensStiff):
+            ftdiag= self.fctk()/10.
+            ectdiag= ftdiag/self.E0()
+            Etsdiag= ftdiag/(5*ectdiag)
+            self.materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=0.85*self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
+        else:
+            self.materialDiagramD= typical_materials.defConcrete01(preprocessor=preprocessor,name= self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=self.fmaxD(),epscu=self.epsilonU())
+        self.matTagD= self.materialDiagramD.tag
+        return self.materialDiagramD
+    
     def defDiagD(self,preprocessor):
         ''' Defines a uniaxial material to represent the design stress-strain 
         diagram
@@ -492,29 +604,30 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         -If tensionStiffparam is None and initTensStiff==False (default values)
          no tensile strength is considered; the stress strain relationship  
          corresponds to a concrete01 material (zero tensile strength).
+
+        :param preprocessor: pre-processor of the finite element problem.
         '''
-        if self.tensionStiffparam:
-            self.tensionStiffparam.diagType='D'
-            ftdiag=self.tensionStiffparam.pointOnsetCracking()['ft']
-            self.ft=ftdiag
-            ectdiag=self.tensionStiffparam.pointOnsetCracking()['eps_ct']
-            self.epsct0=ectdiag
-            # eydiag= self.tensionStiffparam.eps_y()
-            Etsdiag=abs(self.tensionStiffparam.regresLine()['slope'])
-            self.Ets=Etsdiag
-            self.epsctu=ectdiag+ftdiag/Etsdiag
-            self.materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=0.85*self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
-            self.materialDiagramD.epsct0=ectdiag
-            self.materialDiagramD.epsctu=ectdiag+ftdiag/Etsdiag
-        elif(self.initTensStiff):
-            ftdiag=self.fctk()/10.
-            ectdiag=ftdiag/self.E0()
-            Etsdiag=ftdiag/(5*ectdiag)
-            self.materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=0.85*self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
+        retval= None
+        materialExists= preprocessor.getMaterialHandler.materialExists(self.nmbDiagD)
+        if(materialExists):
+            material= preprocessor.getMaterialHandler.getMaterial(self.nmbDiagD)
+            if(hasattr(self, 'materialDiagramD')):
+                if(self.materialDiagramD):
+                    thisTag= self.materialDiagramD.tag
+                    if(thisTag!=material.tag):
+                        # Issue an error message.
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        errorMsg= "; material: '"+str(self.nmbDiagD)
+                        errorMsg+= "' already exists and does not"
+                        errorMsg+= ' belong to this object.'
+                        lmsg.error(className+'.'+methodName+errorMsg)
+                        exit(1)
+                    else:
+                        retval= self.materialDiagramD
         else:
-            self.materialDiagramD= typical_materials.defConcrete01(preprocessor=preprocessor,name= self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=self.fmaxD(),epscu=self.epsilonU())
-        self.matTagD= self.materialDiagramD.tag
-        return self.materialDiagramD #30160925 was 'return self.matTagD'
+            retval= self._define_design_diagram(preprocessor)
+        return retval
     
     def clearDiagD(self):
         ''' Clear previously defined diagram.'''
@@ -522,7 +635,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             self.matTagD= -1
             self.materialDiagramD= None
             
-    def defDiagTD(self, preprocessor):
+    def _define_td_diagram(self, preprocessor):
         ''' Returns and XC TDConcreteMC10 uniaxial material.
 
         :param preprocessor: pre-processor for the finite element problem.
@@ -530,6 +643,33 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         self.materialDiagramTD= self.defTDConcreteMC10(preprocessor= preprocessor)
         self.matTagTD= self.materialDiagramTD.tag
         return self.materialDiagramTD
+    
+    def defDiagTD(self, preprocessor):
+        ''' Returns and XC TDConcreteMC10 uniaxial material.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        '''
+        retval= None
+        materialExists= preprocessor.getMaterialHandler.materialExists(self.nmbDiagTD)
+        if(materialExists):
+            material= preprocessor.getMaterialHandler.getMaterial(self.nmbDiagTD)
+            if(hasattr(self, 'materialDiagramTD')):
+                if(self.materialDiagramTD):
+                    thisTag= self.materialDiagramTD.tag
+                    if(thisTag!=material.tag):
+                        # Issue an error message.
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        errorMsg= "; material: '"+str(self.nmbDiagTD)
+                        errorMsg+= "' already exists and does not"
+                        errorMsg+= ' belong to this object.'
+                        lmsg.error(className+'.'+methodName+errorMsg)
+                        exit(1)
+                    else:
+                        retval= self.materialDiagramTD
+        else:
+            retval= self._define_td_diagram(preprocessor)
+        return retval
     
     def clearDiagTD(self):
         ''' Clear previously defined diagram.
@@ -1519,7 +1659,7 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         '''
         return sigmas(eps, fy= self.fyd(), ey= self.eyd(), Es= self.Es, Esh= self.Esh())
     
-    def defDiagK(self, preprocessor):
+    def _define_characteristic_diagram(self, preprocessor):
         ''' Returns an XC uniaxial material  corresponding to the characteristic
             values of the stress-strain diagram of the reinforcing steel.
 
@@ -1529,13 +1669,41 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         self.matTagK= self.materialDiagramK.tag
         return self.materialDiagramK #30160925 was 'return self.matTagK'
     
+    def defDiagK(self, preprocessor):
+        ''' Returns an XC uniaxial material  corresponding to the characteristic
+            values of the stress-strain diagram of the reinforcing steel.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        '''
+        retval= None
+        materialExists= preprocessor.getMaterialHandler.materialExists(self.nmbDiagK)
+        if(materialExists):
+            material= preprocessor.getMaterialHandler.getMaterial(self.nmbDiagK)
+            if(hasattr(self, 'materialDiagramK')):
+                if(self.materialDiagramK):
+                    thisTag= self.materialDiagramK.tag
+                    if(thisTag!=material.tag):
+                        # Issue an error message.
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        errorMsg= "; material: '"+str(self.nmbDiagK)
+                        errorMsg+= "' already exists and does not"
+                        errorMsg+= ' belong to this object.'
+                        lmsg.error(className+'.'+methodName+errorMsg)
+                        exit(1)
+                    else:
+                        retval= self.materialDiagramK
+        else:
+            retval= self._define_characteristic_diagram(preprocessor)
+        return retval
+    
     def clearDiagK(self):
         ''' Clear previously defined diagram.'''
         if(self.materialDiagramK):
             self.matTagK= -1
             self.materialDiagramK= None
 
-    def defDiagD(self, preprocessor):
+    def _define_design_diagram(self, preprocessor):
         ''' Returns and XC uniaxial material corresponding to the design values
             of the stress-strain diagram of the reinforcing steel.
 
@@ -1545,14 +1713,42 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         self.matTagD= self.materialDiagramD.tag
         return self.materialDiagramD #30160925 was 'return self.matTagD'
     
+    def defDiagD(self, preprocessor):
+        ''' Returns and XC uniaxial material corresponding to the design values
+            of the stress-strain diagram of the reinforcing steel.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        '''
+        retval= None
+        materialExists= preprocessor.getMaterialHandler.materialExists(self.nmbDiagD)
+        if(materialExists): # already exists.
+            material= preprocessor.getMaterialHandler.getMaterial(self.nmbDiagD)
+            if(hasattr(self, 'materialDiagramD')):
+                if(self.materialDiagramD):
+                    thisTag= self.materialDiagramD.tag
+                    if(thisTag!=material.tag):
+                        # Issue an error message.
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        errorMsg= "; material: '"+str(self.nmbDiagD)
+                        errorMsg+= "' already exists and does not"
+                        errorMsg+= ' belong to this object.'
+                        lmsg.error(className+'.'+methodName+errorMsg)
+                        exit(1)
+                    else:
+                        retval= self.materialDiagramD
+        else: # new material.
+            retval= self._define_design_diagram(preprocessor)
+        return retval
+    
     def clearDiagD(self):
         ''' Clear previously defined diagram.'''
         if(self.materialDiagramD):
             self.matTagD= -1
             self.materialDiagramD= None
 
-    def defDiagE(self, preprocessor):
-        ''' Returns and XC linear elastic uniaxial material.
+    def _define_elastic_diagram(self, preprocessor):
+        ''' Returns an XC linear elastic uniaxial material.
 
         :param preprocessor: pre-processor for the finite element problem.
         '''
@@ -1560,6 +1756,33 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         self.matTagE= self.materialDiagramE.tag
         return self.materialDiagramE
     
+    def defDiagE(self, preprocessor):
+        ''' Returns and XC linear elastic uniaxial material.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        '''
+        retval= None
+        materialExists= preprocessor.getMaterialHandler.materialExists(self.nmbDiagE)
+        if(materialExists):
+            material= preprocessor.getMaterialHandler.getMaterial(self.nmbDiagE)
+            if(hasattr(self, 'materialDiagramE')):
+                if(self.materialDiagramE):
+                    thisTag= self.materialDiagramE.tag
+                    if(thisTag!=material.tag):
+                        # Issue an error message.
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        errorMsg= "; material: '"+str(self.nmbDiagE)
+                        errorMsg+= "' already exists and does not"
+                        errorMsg+= ' belong to this object.'
+                        lmsg.error(className+'.'+methodName+errorMsg)
+                        exit(1)
+                    else:
+                        retval= self.materialDiagramE
+        else:
+            retval= self._define_elastic_diagram(preprocessor)
+        return retval
+        
     def clearDiagE(self):
         ''' Clear previously defined diagram.'''
         if(self.materialDiagramE):
@@ -1814,17 +2037,81 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
         ''' Return the desing value of the steel ultimate stress.'''
         return self.fmax/self.gammaS
     
-    def defDiagK(self,preprocessor,initialStress):
-        '''Characteristic stress-strain diagram.'''
+    def _define_characteristic_diagram(self, preprocessor, initialStress):
+        '''Characteristic stress-strain diagram.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        :param initialStress: value of the initial stress.
+        '''
         self.materialDiagramK= typical_materials.defSteel02(preprocessor,self.nmbDiagK,self.Es,self.fpk,self.bsh,initialStress)
         self.matTagK= self.materialDiagramK.tag
         return self.materialDiagramK
+        
+    def defDiagK(self, preprocessor, initialStress):
+        '''Characteristic stress-strain diagram.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        :param initialStress: value of the initial stress.
+        '''
+        retval= None
+        materialExists= preprocessor.getMaterialHandler.materialExists(self.nmbDiagK)
+        if(materialExists):
+            material= preprocessor.getMaterialHandler.getMaterial(self.nmbDiagK)
+            if(hasattr(self, 'materialDiagramK')):
+                if(self.materialDiagramK):
+                    thisTag= self.materialDiagramK.tag
+                    if(thisTag!=material.tag):
+                        # Issue an error message.
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        errorMsg= "; material: '"+str(self.nmbDiagK)
+                        errorMsg+= "' already exists and does not"
+                        errorMsg+= ' belong to this object.'
+                        lmsg.error(className+'.'+methodName+errorMsg)
+                        exit(1)
+                    else:
+                        retval= self.materialDiagramK
+        else:
+            retval= self._define_characteristic_diagram(preprocessor, initialStress)
+        return retval
   
-    def defDiagD(self,preprocessor,initialStress):
-        '''Design stress-strain diagram.'''
+    def _define_design_diagram(self, preprocessor, initialStress):
+        '''Design stress-strain diagram.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        :param initialStress: value of the initial stress.
+        '''
         self.materialDiagramD= typical_materials.defSteel02(preprocessor,self.nmbDiagD,self.Es,self.fpd(),self.bsh,initialStress)
         self.matTagD= self.materialDiagramD.tag
         return self.materialDiagramD
+    
+    def defDiagD(self,preprocessor, initialStress):
+        '''Design stress-strain diagram.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        :param initialStress: value of the initial stress.
+        '''
+        retval= None
+        materialExists= preprocessor.getMaterialHandler.materialExists(self.nmbDiagD)
+        if(materialExists):
+            material= preprocessor.getMaterialHandler.getMaterial(self.nmbDiagD)
+            if(hasattr(self, 'materialDiagramD')):
+                if(self.materialDiagramD):
+                    thisTag= self.materialDiagramD.tag
+                    if(thisTag!=material.tag):
+                        # Issue an error message.
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        errorMsg= "; material: '"+str(self.nmbDiagD)
+                        errorMsg+= "' already exists and does not"
+                        errorMsg+= ' belong to this object.'
+                        lmsg.error(className+'.'+methodName+errorMsg)
+                        exit(1)
+                    else:
+                        retval= self.materialDiagramD
+        else:
+            retval= self._define_design_diagram(preprocessor, initialStress)
+        return retval
 
 
 class CEB_EHE_PrestressingSteel(PrestressingSteel):

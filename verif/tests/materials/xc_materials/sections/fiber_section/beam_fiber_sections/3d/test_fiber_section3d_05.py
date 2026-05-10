@@ -21,7 +21,6 @@ from model import predefined_spaces
 from materials.ehe import EHE_materials
 
 barDiam= 16e-3
-areaFi16= 2.01e-4 # Rebar area expressed in square meters.
 leverArm= 0.5 # Rebar lever arm with respect to the section axis.
 
 MzDato= 10e3
@@ -36,10 +35,10 @@ dgDB500S= EHE_materials.B500S.getDiagD(preprocessor)
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-sys.path.append(pth+"/../../../../../../aux/")
-import barsSectionGeometry as bsg
+sys.path.append(pth+"/../../../../../../aux/sections/")
+import bars_section_geometry as bsg
 
-barsSectionGeometry, reinforcementInf, reinforcementSup= bsg.define_section(preprocessor, leverArm, barDiam, areaFi16)
+barsSectionGeometry, reinforcementInf, reinforcementSup= bsg.define_section(preprocessor, leverArm, barDiam)
 
 
 barsSection= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","barsSection")

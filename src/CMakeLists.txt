@@ -278,7 +278,7 @@ SET(remote utility/remote/remote.c)
 
 SET(tagged utility/tagged/storage/TaggedObjectStorage.cc utility/tagged/storage/ArrayOfTaggedObjects.cpp utility/tagged/storage/ArrayOfTaggedObjectsIter.cpp utility/tagged/storage/MapOfTaggedObjects.cpp utility/tagged/storage/MapOfTaggedObjectsIter.cpp utility/tagged/TaggedObject.cpp)
 
-SET(nDarray utility/matrix/nDarray/basics.cpp utility/matrix/nDarray/BJtensor.cpp utility/matrix/nDarray/Cosseratstresst.cpp utility/matrix/nDarray/stress_strain_tensor.cc utility/matrix/nDarray/stresst.cpp utility/matrix/nDarray/BJvector.cpp utility/matrix/nDarray/nDarray.cpp utility/matrix/nDarray/BJmatrix.cpp utility/matrix/nDarray/Cosseratstraint.cpp utility/matrix/nDarray/straint.cpp)
+SET(nDarray utility/matrix/nDarray/basics.cpp utility/matrix/nDarray/BJtensor.cpp utility/matrix/nDarray/Cosseratstresst.cpp utility/matrix/nDarray/stress_strain_tensor.cc utility/matrix/nDarray/stresst.cpp utility/matrix/nDarray/BJvector.cpp utility/matrix/nDarray/nDarray_rep.cc utility/matrix/nDarray/nDarray.cpp utility/matrix/nDarray/BJmatrix.cpp utility/matrix/nDarray/Cosseratstraint.cpp utility/matrix/nDarray/straint.cpp)
 
 SET(matrix utility/matrix/ID.cpp utility/matrix/IDVarSize.cc utility/matrix/IntPtrWrapper.cc utility/matrix/AuxMatrix.cc utility/matrix/Matrix.cpp utility/matrix/DqMatrices.cc utility/matrix/Vector.cpp utility/matrix/DqVectors.cc utility/matrix/util_matrix.cc ${nDarray})
 

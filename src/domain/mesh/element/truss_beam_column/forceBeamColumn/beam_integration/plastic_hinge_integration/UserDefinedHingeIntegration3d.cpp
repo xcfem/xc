@@ -53,31 +53,35 @@
 #include "UserDefinedHingeIntegration3d.h"
 #include <domain/mesh/element/utils/Information.h>
 
-XC::UserDefinedHingeIntegration3d::UserDefinedHingeIntegration3d(int npL,
-                                                             const XC::Vector &ptL,
-                                                             const XC::Vector &wtL,
-                                                             int npR,
-                                                             const XC::Vector &ptR,
-                                                             const XC::Vector &wtR,
-                                                             double ee,
-                                                             double aa,
-                                                             double iiz,
-                                                             double iiy,
-                                                             double gg,
-                                                             double jj)
-  : UserDefinedHingeIntegrationBase(BEAM_INTEGRATION_TAG_UserHinge3d,ptL,wtL,ptR,wtR), ctes_scc(ee,aa,iiz,iiy,gg,jj)
+XC::UserDefinedHingeIntegration3d::UserDefinedHingeIntegration3d(int tag, const CrossSectionProperties3d &cts)
+  : UserDefinedHingeIntegrationBase(tag, BEAM_INTEGRATION_TAG_UserHinge3d),
+    ctes_scc(cts) {}
+
+XC::UserDefinedHingeIntegration3d::UserDefinedHingeIntegration3d(int tag,
+								 int npL,
+								 const Vector &ptL,
+								 const Vector &wtL,
+								 int npR,
+								 const Vector &ptR,
+								 const Vector &wtR,
+								 double ee,
+								 double aa,
+								 double iiz,
+								 double iiy,
+								 double gg,
+								 double jj)
+  : UserDefinedHingeIntegrationBase(tag, BEAM_INTEGRATION_TAG_UserHinge3d,ptL,wtL,ptR,wtR), ctes_scc(ee,aa,iiz,iiy,gg,jj)
   {}
-XC::UserDefinedHingeIntegration3d::UserDefinedHingeIntegration3d(int npL,
-                                                             const XC::Vector &ptL,
-                                                             const XC::Vector &wtL,
-                                                             int npR,
-                                                             const XC::Vector &ptR,
-                                                             const XC::Vector &wtR,
-                                                             const CrossSectionProperties3d &cc)
-  : UserDefinedHingeIntegrationBase(BEAM_INTEGRATION_TAG_UserHinge3d,ptL,wtL,ptR,wtR), ctes_scc(cc)
+XC::UserDefinedHingeIntegration3d::UserDefinedHingeIntegration3d(int tag,
+								 int npL,
+								 const Vector &ptL,
+								 const Vector &wtL,
+								 int npR,
+								 const Vector &ptR,
+								 const Vector &wtR,
+								 const CrossSectionProperties3d &cc)
+  : UserDefinedHingeIntegrationBase(tag, BEAM_INTEGRATION_TAG_UserHinge3d,ptL,wtL,ptR,wtR), ctes_scc(cc)
   {}
-XC::UserDefinedHingeIntegration3d::UserDefinedHingeIntegration3d(const CrossSectionProperties3d &cts)
-  : UserDefinedHingeIntegrationBase(BEAM_INTEGRATION_TAG_UserHinge3d), ctes_scc(cts) {}
 
 void XC::UserDefinedHingeIntegration3d::getSectionLocations(int numSections,double L, double *xi) const
   {

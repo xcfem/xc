@@ -74,6 +74,7 @@ class Vector3d: public ProtoGeom
       { return cgvct.z(); }
     FT_matrix getMatrix(void) const;
     boost::python::list getPyList(void) const;
+    bool notAVector(void) const;
     Dir3d getDirection(void) const;
     Vector3d &operator+=(const Vector3d &);
     Vector3d &operator-=(const Vector3d &);
@@ -123,6 +124,26 @@ class Vector3d: public ProtoGeom
     void setPyDict(const boost::python::dict &);
 
     inline virtual ~Vector3d(void) {}
+
+    struct iterator : boost::iterator_facade<iterator, int, boost::single_pass_traversal_tag, GEOM_FT>
+      {
+      private:
+	const Vector3d *v_ptr;
+        int current_;
+      public:
+        iterator(const Vector3d *v, int i)
+	  : v_ptr(v), current_(i) {}
+
+        bool equal(iterator const& other) const
+	  { return ((v_ptr==other.v_ptr) && (current_ == other.current_)); }
+        GEOM_FT dereference() const
+	  { return v_ptr->at(current_); }
+        void increment()
+	  { ++current_; }
+    };
+
+    iterator begin() { return iterator(this, 0); }
+    iterator end()   { return iterator(this, 2); }
   };
 
 inline Vector3d operator-(const Vector3d &d)

@@ -73,6 +73,7 @@ class SectRegion: public DiscretBase
     virtual SectRegion *getCopy(void) const= 0;
 
     virtual Polygon2d getPolygon(void) const;
+    virtual void swap(void);
     PolygonSectRegion Intersection(const HalfPlane2d &sp) const;
     const Vector &getCenterOfMass(void) const;
     double getLength(void) const;

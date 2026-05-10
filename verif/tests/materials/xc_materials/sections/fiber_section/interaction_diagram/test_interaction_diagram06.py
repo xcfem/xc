@@ -43,13 +43,14 @@ sccData.positvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_se
 
 
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/erase.log" # Don't print(warnings.)
-feProblem.errFileName= "/tmp/erase.err" # Don't print(errors.)
 
 preprocessor=  feProblem.getPreprocessor
 sccData.defRCSection(preprocessor, 'd')
 param= xc.InteractionDiagramParameters()
+
+feProblem.errFileName= "/tmp/erase.err" # Don't print(errors.)
 diag= sccData.defInteractionDiagramNMy(preprocessor)
+feProblem.errFileName= "cerr" # Display errors if any.
 
 fcELU13= diag.getCapacityFactor(geom.Pos2d(136.78e3,24.71e3))
 fcELU14= diag.getCapacityFactor(geom.Pos2d(1197.13e3,65.98e3))
@@ -67,7 +68,6 @@ print("ratio2= ", ratio2)
 '''
 
 
-feProblem.errFileName= "cerr" # Display errors if any.
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)

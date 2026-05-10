@@ -35,11 +35,11 @@
 #include <domain/mesh/element/utils/Information.h>
 #include "utility/matrix/ID.h"
 
-XC::HingeBeamIntegration3d::HingeBeamIntegration3d(int classTag,double e,double a,double iz,double iy,double g,double j,double lpi,double lpj)
-  : PlasticLengthsBeamIntegration(classTag,lpi,lpj),ctes_scc(e,a,iz,iy,g,j) {}
+XC::HingeBeamIntegration3d::HingeBeamIntegration3d(int tag, int classTag, const CrossSectionProperties3d &cts,const double &lpi,const double &lpj)
+  : PlasticLengthsBeamIntegration(tag, classTag,lpi,lpj), ctes_scc(cts) {}
 
-XC::HingeBeamIntegration3d::HingeBeamIntegration3d(int classTag, const CrossSectionProperties3d &cts,const double &lpi,const double &lpj)
-  : PlasticLengthsBeamIntegration(classTag,lpi,lpj), ctes_scc(cts) {}
+XC::HingeBeamIntegration3d::HingeBeamIntegration3d(int tag, int classTag,double e,double a,double iz,double iy,double g,double j,double lpi,double lpj)
+  : PlasticLengthsBeamIntegration(tag, classTag,lpi,lpj),ctes_scc(e,a,iz,iy,g,j) {}
 
 void XC::HingeBeamIntegration3d::addElasticDeformations(ElementalLoad *theLoad,double loadFactor,double L,FVector &v0)
   {

@@ -45,7 +45,7 @@ z1= -widthOverZ/2.0
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-sys.path.append(pth+"/../../../../aux/")
+sys.path.append(pth+"/../../../../aux/sections/")
 import elastic_section_2d
 elasticSection2d, N0, My0, Mz0, RR, R0, DD, D0, N0S, My0S, Mz0S, sigma= elastic_section_2d.compute_internal_forces(preprocessor, A, E, Iz, y1, z1, epsilon, epsilon1, epsilon2, epsilon3, epsilon4)
 

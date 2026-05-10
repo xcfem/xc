@@ -92,9 +92,9 @@ int XC::UmfpackGenLinSolver::solve(void)
     if(n == 0 || nnz==0)
       return 0;
     
-    int *Ap= &(theSOE->Ap[0]);
-    int *Ai= &(theSOE->Ai[0]);
-    double *Ax = &(theSOE->Ax[0]);
+    int *Ap= theSOE->Ap.data();
+    int *Ai= theSOE->Ai.data();
+    double *Ax = theSOE->Ax.data();
     double *X = theSOE->X.getDataPtr();
     double *B = theSOE->B.getDataPtr();
 
@@ -102,19 +102,21 @@ int XC::UmfpackGenLinSolver::solve(void)
     if(!Symbolic)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING: setSize has not been called.\n";
+		  << "; WARNING: setSize has not been called."
+	          << std::endl;
 	return -1;
       }
     
     // numerical analysis
     void *Numeric= nullptr;
-    int status = umfpack_di_numeric(Ap,Ai,Ax,Symbolic,&Numeric,Control,Info);
+    int status= umfpack_di_numeric(Ap,Ai,Ax,Symbolic,&Numeric,Control,Info);
 
     // check error
     if(status!=UMFPACK_OK)
       {
 	std::cerr  << getClassName() << "::" << __FUNCTION__
-		   <<"; WARNING: numeric analysis returns "<< status
+		   <<"; WARNING: numeric analysis returns "
+		   << static_cast<int>(status)
 		   << std::endl;
 	if(status==UMFPACK_WARNING_singular_matrix)
 	  std::cerr << " Singular matrix. Numeric factorization was successful, but the matrix is singular." << std::endl;
@@ -140,7 +142,8 @@ int XC::UmfpackGenLinSolver::solve(void)
     if(status!=UMFPACK_OK)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING: solving returns "<< status
+		  << "; WARNING: solving returns "
+		  << static_cast<int>(status)
 		  << std::endl;
 	this->setPyProp("info", boost::python::object(status));
 	return -1;

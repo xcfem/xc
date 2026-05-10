@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Reinforced concrete section verification test.
    Home made test. '''
+
+from __future__ import print_function
 
 
 import geom
 import xc
 
-nmbHorm= "HA25"
 from materials.ehe import EHE_materials
 from materials import concrete_base
 
@@ -61,12 +61,12 @@ dgDB500S= EHE_materials.B500S.getDiagD(preprocessor)
 #Es= dgDB500S.getTangent
 
 # Section geometry
-#creation
+## creation
 geomSecHA= preprocessor.getMaterialHandler.newSectionGeometry("geomSecHA")
-#filling with regions
+## filling with regions
 regions= geomSecHA.getRegions
-#generation of a quadrilateral region of the specified sizes and number of
-#divisions for the cells (fibers) generation
+## generation of a quadrilateral region of the specified sizes and number of
+## divisions for the cells (fibers) generation
 rg= regions.newQuadRegion(EHE_materials.HA25.nmbDiagD)  #name of the quadrilateral region ==(EHE_materials.HA25.nmbDiagD
 rg.nDivIJ= 10
 rg.nDivJK= 10
@@ -77,14 +77,12 @@ rg.pMax= geom.Pos2d(depth/2,width/2)
 reinforcement= geomSecHA.getReinfLayers
 reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementInf.numReinfBars= 2
-reinforcementInf.barDiam= 16e-3
-reinforcementInf.barArea= areaFi16
+reinforcementInf.barDiameter= 16e-3
 reinforcementInf.p1= geom.Pos2d(cover-depth/2,width/2-cover) # bottom layer.
 reinforcementInf.p2= geom.Pos2d(cover-depth/2,cover-width/2)
 reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementSup.numReinfBars= 2
-reinforcementSup.barDiam= 16e-3
-reinforcementSup.barArea= areaFi16
+reinforcementSup.barDiameter= 16e-3
 reinforcementSup.p1= geom.Pos2d(depth/2-cover,width/2-cover) # top layer.
 reinforcementSup.p2= geom.Pos2d(depth/2-cover,cover-width/2)
 

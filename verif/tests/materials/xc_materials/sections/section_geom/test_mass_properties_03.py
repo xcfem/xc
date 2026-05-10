@@ -90,3 +90,10 @@ if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-4) & (abs(ratio3)<1e-2) & (abs(ratio4)<
 else:
     lmsg.error(fname+' ERROR.')
 
+# # Graphic stuff.
+# import matplotlib.pyplot as plt
+# from materials.sections.fiber_section import plot_fiber_section as pfs
+# fig = plt.figure()
+# ax= fig.add_subplot(111)
+# pfs.mplot_section_geometry(ax, sectionGeometry= sectionGeometryTest, rotate= True)
+# plt.show()

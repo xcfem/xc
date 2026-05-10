@@ -50,8 +50,8 @@ class HingeBeamIntegration2d: public PlasticLengthsBeamIntegration
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    HingeBeamIntegration2d(int classTag,double E, double A, double I,double lpI, double lpJ);
-    HingeBeamIntegration2d(int classTag);
+    HingeBeamIntegration2d(int tag, int classTag);
+    HingeBeamIntegration2d(int tag, int classTag,double E, double A, double I,double lpI, double lpJ);
   
     void addElasticDeformations(ElementalLoad *, double loadFactor,double L,FVector &v0);
     void Print(std::ostream &s, int flag = 0) const;

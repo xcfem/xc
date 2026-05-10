@@ -231,6 +231,9 @@ GEOM_FT Vector2d::XAxisAngle(void) const
 GEOM_FT Vector2d::YAxisAngle(void) const
   { return M_PI/2.0-XAxisAngle(); }
 
+//! @brief Return true if one of the coordinate components is not a number.
+bool Vector2d::notAVector(void) const
+  { return (std::isnan(x()) || std::isnan(y())); }
 
 bool Vector2d::EsUnitario(const double &tol) const
   {

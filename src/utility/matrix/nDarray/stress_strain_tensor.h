@@ -36,9 +36,8 @@ namespace XC {
 class Vector;
 
 
-//! @ingroup Matrix
-//!
 //! @brief Base class for strain and stress tensors.
+//! @ingroup Matrix
 class stressstraintensor: public BJtensor
   {
   public:

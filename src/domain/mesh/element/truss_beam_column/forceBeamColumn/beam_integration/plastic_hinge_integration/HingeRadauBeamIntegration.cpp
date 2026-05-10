@@ -56,11 +56,11 @@
 #include <domain/mesh/element/utils/Information.h>
 #include "domain/component/Parameter.h"
 
-XC::HingeRadauBeamIntegration::HingeRadauBeamIntegration(double lpi,double lpj)
-  : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeRadau,lpi,lpj) {}
+XC::HingeRadauBeamIntegration::HingeRadauBeamIntegration(int tag)
+  : PlasticLengthsBeamIntegration(tag, BEAM_INTEGRATION_TAG_HingeRadau) {}
 
-XC::HingeRadauBeamIntegration::HingeRadauBeamIntegration(void)
-  : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeRadau) {}
+XC::HingeRadauBeamIntegration::HingeRadauBeamIntegration(int tag, double lpi,double lpj)
+  : PlasticLengthsBeamIntegration(tag, BEAM_INTEGRATION_TAG_HingeRadau,lpi,lpj) {}
 
 void XC::HingeRadauBeamIntegration::getSectionLocations(int numSections, double L,double *xi) const
   {

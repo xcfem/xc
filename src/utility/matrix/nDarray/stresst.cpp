@@ -72,33 +72,33 @@
 //#############################################################################
 
 ///*
-//################################################################################
-//# COPY-YES  (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite XC::Element Program                    #
-//# PURPOSE:           stress XC::BJtensor with all necessary functions                #
-//# CLASS:             stresstensor                                              #
-//#                                                                              #
-//# VERSION:                                                                     #
-//# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# DESIGNER(S):       Boris Jeremic                                             #
-//# PROGRAMMER(S):     Boris Jeremic                                             #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              July 22 '93                                               #
-//# UPDATE HISTORY:    December 15 '93 replaced polynomial root solver for       #
-//#                    principal stresses with explicit formula                  #
-//#                    August 22-29 '94 choped to separate files and worked on   #
-//#                                   const and & issues                         #
-//#                    August 30-31 '94 added use_def_dim to full the CC         #
-//#                                   resolved problem with temoraries for       #
-//#                                   operators + and - ( +=, -= )               #
-//#                    13 septembar '96 added reportAnim  :)                     #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
+//##############################################################################
+//# COPY-YES  (C):     :-))                                                    #
+//# PROJECT:           Object Oriented Finite XC::Element Program              #
+//# PURPOSE:           stress XC::BJtensor with all necessary functions        #
+//# CLASS:             stresstensor                                            #
+//#                                                                            #
+//# VERSION:                                                                   #
+//# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )#
+//# TARGET OS:         DOS || UNIX || . . .                                    #
+//# DESIGNER(S):       Boris Jeremic                                           #
+//# PROGRAMMER(S):     Boris Jeremic                                           #
+//#                                                                            #
+//#                                                                            #
+//# DATE:              July 22 '93                                             #
+//# UPDATE HISTORY:    December 15 '93 replaced polynomial root solver for     #
+//#                    principal stresses with explicit formula                #
+//#                    August 22-29 '94 choped to separate files and worked on #
+//#                                   const and & issues                       #
+//#                    August 30-31 '94 added use_def_dim to full the CC       #
+//#                                   resolved problem with temoraries for     #
+//#                                   operators + and - ( +=, -= )             #
+//#                    13 septembar '96 added reportAnim  :)                   #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
 //################################################################################
 //*/
 
@@ -756,20 +756,11 @@ void XC::stresstensor::reportTensor(const std::string &msg) const
 
 //##############################################################################
 std::ostream &XC::operator<<(std::ostream &os, const XC::stresstensor & rhs)
-//ostream& operator<<(ostream &os, const stresstensor & rhs)
   {
-        os.precision(4);
-        os.width(10);
-
-    	os.width(10);
-
-    	os << " "<< rhs.p_hydrostatic();
-    	os.width(10);
-
-    	os << " " << rhs.q_deviatoric();
-    	os.width(10);
-	return os;
-   }
+    os << rhs.p_hydrostatic()
+       << " " << rhs.q_deviatoric();
+    return os;
+  }
 
 XC::BJtensor XC::operator+(const BJtensor &lval, const stresstensor &rval)
   { return XC::operator+(lval,static_cast<const BJtensor &>(rval)); }

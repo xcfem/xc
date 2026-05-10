@@ -20,3 +20,4 @@ Geometrically, an eigenvector, corresponding to a real nonzero eigenvalue, point
  - [Eigenvalues of the Stiffness Matrix](https://portwooddigital.com/2023/01/16/eigenvalues-of-the-stiffness-matrix/)
  - [Minimal Plate Buckling Example](https://portwooddigital.com/2025/05/24/minimal-plate-buckling-example/)
  - [Buckling of Restrained Plates](https://portwooddigital.com/2025/05/31/buckling-of-restrained-plates/)
+ - [Why Your Eigenvalue Analysis Failed](https://portwooddigital.com/2026/01/27/why-your-eigenvalue-analysis-failed/)

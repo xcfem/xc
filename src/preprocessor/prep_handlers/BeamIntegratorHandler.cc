@@ -56,11 +56,12 @@ void XC::BeamIntegratorHandler::free_mem(void)
     for(iterator i= begin();i!= end();i++)
       delete (*i).second;
     beam_integrators.erase(begin(),end());
+    beam_int_tag= 0;
   }
 
 //! @brief Default constructor.
 XC::BeamIntegratorHandler::BeamIntegratorHandler(Preprocessor *owr)
-  : PrepHandler(owr)
+  : PrepHandler(owr), beam_int_tag(0)
   {
     //Default integrators.
     newBI("Lobatto","Lobatto");
@@ -101,6 +102,20 @@ XC::BeamIntegratorHandler::iterator XC::BeamIntegratorHandler::begin(void)
 XC::BeamIntegratorHandler::iterator XC::BeamIntegratorHandler::end(void)
   { return beam_integrators.end(); }
 
+//! @brief Returns the name that corresponds to the given tag.
+std::string XC::BeamIntegratorHandler::getName(const int &tag) const
+  {
+    std::string retval= "";
+    const_iterator i= begin();
+    for(;i!= end();i++)
+      if((*i).second->getTag() == tag)
+        {
+          retval= (*i).first;
+          break;
+        }
+    return retval;
+  }
+
 //! @brief Si encuentra el BeamIntegrator which name is being passed as parameter returns an iterator which points to mismo.
 XC::BeamIntegratorHandler::const_iterator XC::BeamIntegratorHandler::find(const std::string &nmb) const
   { return beam_integrators.find(nmb); }
@@ -131,39 +146,39 @@ const XC::BeamIntegration *XC::BeamIntegratorHandler::find_ptr(const std::string
       return nullptr; 
   }
 
-XC::BeamIntegration *load_beam_integration(const std::string &cmd)
+XC::BeamIntegration *load_beam_integration(int tag, const std::string &cmd)
   {
     XC::BeamIntegration *retval= nullptr;
     if(cmd == "Lobatto")
-      retval= new XC::LobattoBeamIntegration();
+      retval= new XC::LobattoBeamIntegration(tag);
     else if(cmd == "Legendre")
-      retval= new XC::LegendreBeamIntegration();
+      retval= new XC::LegendreBeamIntegration(tag);
     else if(cmd == "Radau")
-      retval= new XC::RadauBeamIntegration();
+      retval= new XC::RadauBeamIntegration(tag);
     else if(cmd == "NewtonCotes")
-      retval= new XC::NewtonCotesBeamIntegration();
+      retval= new XC::NewtonCotesBeamIntegration(tag);
     else if(cmd == "Trapezoidal")
-      retval= new XC::TrapezoidalBeamIntegration();
+      retval= new XC::TrapezoidalBeamIntegration(tag);
     else if(cmd == "Chebyshev")
-      retval= new XC::ChebyshevBeamIntegration();
+      retval= new XC::ChebyshevBeamIntegration(tag);
     else if(cmd == "CompositeSimpson")
-      retval= new XC::CompositeSimpsonBeamIntegration();
+      retval= new XC::CompositeSimpsonBeamIntegration(tag);
     else if(cmd == "UserDefined")
-      retval= new XC::UserDefinedBeamIntegration();
+      retval= new XC::UserDefinedBeamIntegration(tag);
     else if(cmd == "FixedLocation")
-      retval= new XC::FixedLocationBeamIntegration();
+      retval= new XC::FixedLocationBeamIntegration(tag);
     else if(cmd == "LowOrder")
-      retval= new XC::LowOrderBeamIntegration();
+      retval= new XC::LowOrderBeamIntegration(tag);
     else if(cmd == "MidDistance")
-      retval= new XC::MidDistanceBeamIntegration();
+      retval= new XC::MidDistanceBeamIntegration(tag);
     else if(cmd == "HingeMidpoint")
-      retval= new XC::HingeMidpointBeamIntegration();
+      retval= new XC::HingeMidpointBeamIntegration(tag);
     else if(cmd == "HingeRadau")
-      retval= new XC::HingeRadauBeamIntegration();
+      retval= new XC::HingeRadauBeamIntegration(tag);
     else if(cmd == "HingeRadauTwo")
-      retval= new XC::HingeRadauTwoBeamIntegration();
+      retval= new XC::HingeRadauTwoBeamIntegration(tag);
     else if(cmd == "HingeEndpoint")
-      retval= new XC::HingeEndpointBeamIntegration();
+      retval= new XC::HingeEndpointBeamIntegration(tag);
     else
       std::cerr << "Unknown integration type: " << cmd << std::endl;
     return retval;
@@ -172,7 +187,7 @@ XC::BeamIntegration *load_beam_integration(const std::string &cmd)
 //! @brief Defines a new beam integrator framework.
 XC::BeamIntegration *XC::BeamIntegratorHandler::newBI(const std::string &cmd,const std::string &cod)
   {
-    XC::BeamIntegration *retval= load_beam_integration(cmd);
+    XC::BeamIntegration *retval= load_beam_integration(beam_int_tag, cmd);
     if(retval)
       {
         retval->set_owner(this);
@@ -184,6 +199,7 @@ XC::BeamIntegration *XC::BeamIntegratorHandler::newBI(const std::string &cmd,con
           }
         beam_integrators[cod]= retval;
       }
+    beam_int_tag++;
     return retval;
 
     if(!retval)

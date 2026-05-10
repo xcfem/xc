@@ -53,7 +53,8 @@ XC::ListReinfLayer &(XC::SectionGeometry::*getReinfLayerContainer)(void)= &XC::S
 class_<XC::SectionGeometry, XC::SectionGeometry *, bases<XC::SectionMassProperties>, boost::noncopyable >("SectionGeometry", no_init)
   .add_property("getRegions",make_function(getRegionContainer,return_internal_reference<>()))
   .add_property("getReinfLayers",make_function(getReinfLayerContainer,return_internal_reference<>()))
-  .def("getRegionsContour",&XC::SectionGeometry::getRegionsContour)
+  .def("getRegionsContour",&XC::SectionGeometry::getRegionsContour,"Return the contour of the regions.")
+  .def("getRegionsContours",&XC::SectionGeometry::getRegionsContoursPy,"Return a Python list containing the contour of each region.")
   .def("getCompressedZoneContour",&XC::SectionGeometry::getCompressedZoneContour)
   .def("getCover",&XC::SectionGeometry::getCover,"return the concrete cover of the reinforcement.")
   .add_property("tagSpot",&XC::SectionGeometry::getTagSpot,&XC::SectionGeometry::setTagSpot)
@@ -63,6 +64,8 @@ class_<XC::SectionGeometry, XC::SectionGeometry *, bases<XC::SectionMassProperti
   .def("newSegment",make_function(&XC::SectionGeometry::newSegment,return_internal_reference<>()))
   .add_property("name", make_function( &XC::SectionGeometry::Name, return_value_policy<copy_const_reference>()),"returns object name.")
   .def("clear", &XC::SectionGeometry::clear,"Clear the containers of this object.")
+  .def("getReinforcementMaterials",&XC::SectionGeometry::getReinforcementMaterialsPy, "Return a Python list containing the different materials of the reinforcement.")
+  .def("getRegionMaterials",&XC::SectionGeometry::getRegionMaterialsPy, "Return a Python list containing the different materials of the reinforcement.")
   ;
 
 

@@ -34,11 +34,12 @@ def eps2png(inputFileName, outputFileName= None):
     eps_image.save(outputFileName)
     
 
-def mplot_section_reinforcement(ax, reinforcement):
+def mplot_section_reinforcement(ax, reinforcement, rotate= False):
     ''' Plot the geometry of the section using matplotlib.
 
     :param ax: matplotlib subplot.
     :param reinforcement: reinforcement layers to draw.
+    :param rotate: if true rotate the plot 90 degrees counterclockwise.
     '''
     # Plot reinforcement.
     reinfLayersColors= ['black', 'blue', 'darkblue', 'red', 'darkred', 'darkgreen', 'purple']
@@ -48,30 +49,44 @@ def mplot_section_reinforcement(ax, reinforcement):
         rebarColor= reinfLayersColors[idx % numColors]
         for b in rebars:
             ptPlot= b.getPos2d # bar position.
+            x= ptPlot.x
+            y= ptPlot.y
+            if(rotate):
+                x, y= -y, x
             rPlot= b.diameter/2.0 # bar radius.
             labelPlot= str(int(round(b.diameter*1e3))) # bar label.
-            circle= plt.Circle((ptPlot.x, ptPlot.y), rPlot, color= rebarColor)
+            circle= plt.Circle((x, y), rPlot, color= rebarColor)
             ax.add_patch(circle)
-            ax.annotate(labelPlot, (ptPlot.x+rPlot, ptPlot.y+rPlot))
+            ax.annotate(labelPlot, (x+rPlot, y+rPlot))
     
-def mplot_section_geometry(ax, sectionGeometry):
+def mplot_section_geometry(ax, sectionGeometry, rotate= False):
     ''' Plot the geometry of the section using matplotlib.
 
     :param ax: matplotlib subplot.
     :param sectionGeometry: geometry of the RC section.
+    :param rotate: if true rotate the plot 90 degrees counterclockwise.
     '''
     ax.axis('equal')
     ax.set_title('Section: '+sectionGeometry.name)
     ax.grid(visible= True, linestyle='dotted')
     # Plot contour.
-    contour= sectionGeometry.getRegionsContour()
-    x= list(); y= list()
-    for p in contour.getVertices():
-        x.append(p.x)
-        y.append(p.y)
-    ax.fill(x,y,'tab:gray')
+    regions= sectionGeometry.getRegions
+    if(len(regions)>1):
+        contours= regions.getRegionsContours()
+    else:
+        contours= [sectionGeometry.getRegionsContour()]
+    for contour in contours:
+        x= list(); y= list()
+        for p in contour.getVertices():
+            if(rotate):
+                x.append(-p.y)
+                y.append(p.x)
+            else:
+                x.append(p.x)
+                y.append(p.y)
+        ax.fill(x,y,'tab:gray')
     # Plot reinforcement.
-    mplot_section_reinforcement(ax, sectionGeometry.getReinfLayers)    
+    mplot_section_reinforcement(ax, sectionGeometry.getReinfLayers, rotate= rotate)    
 
 def plot_reinforcement(reinforcement, ctx):
     '''draw section rebars in a postcript file.

@@ -69,7 +69,7 @@ class FiberSectionBase: public PrismaticBarCrossSection
     void alloc_section_repres(const FiberSectionRepr *);
   protected:
     CrossSectionKR kr; //!< Stiffness and internal forces resultant on the section.
-    FiberContainer fibers; //!< Pointers to fibers container.
+    FiberContainer fibers; //!< Fiber container.
     int fiberTag; //!< Tag for next fiber.
     FiberSets fiber_sets;//!< Fibers sets.
     friend class FiberPtrDeque;

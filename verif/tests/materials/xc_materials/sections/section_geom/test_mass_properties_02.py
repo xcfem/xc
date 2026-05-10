@@ -27,15 +27,13 @@ steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
 
 sectionGeometryTest= preprocessor.getMaterialHandler.newSectionGeometry("sectionGeometryTest")
 reinforcement= sectionGeometryTest.getReinfLayers
-reinforcementA= reinforcement.newStraightReinfLayer("steel")
+reinforcementA= reinforcement.newStraightReinfLayer(steel.name)
 reinforcementA.numReinfBars= 2
-reinforcementA.barDiam= 16e-3
 reinforcementA.barArea= areaFi16
 reinforcementA.p1= geom.Pos2d(0.05,0.95) # bottom layer.
 reinforcementA.p2= geom.Pos2d(0.05,0.05)
-reinforcementB= reinforcement.newStraightReinfLayer("steel")
+reinforcementB= reinforcement.newStraightReinfLayer(steel.name)
 reinforcementB.numReinfBars= 2
-reinforcementB.barDiam= 16e-3
 reinforcementB.barArea= areaFi16
 reinforcementB.p1= geom.Pos2d(0.95,0.95) # bottom layer.
 reinforcementB.p2= geom.Pos2d(0.95,0.05)
@@ -78,6 +76,14 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & (abs(ratio3)<1e-15) & (abs(ratio4)<1e-7) & (abs(ratio5)<1e-7) & (abs(ratio6)<1e-17) :
-    print("test_geom_caract_mec_02: ok.")
+    print('test '+fname+': ok.')
 else:
-    print("test_geom_caract_mec_02: ERROR.")
+    lmsg.error(fname+' ERROR.')
+
+# # Graphic stuff.
+# import matplotlib.pyplot as plt
+# from materials.sections.fiber_section import plot_fiber_section as pfs
+# fig = plt.figure()
+# ax= fig.add_subplot(111)
+# pfs.mplot_section_geometry(ax, sectionGeometry= sectionGeometryTest, rotate= True)
+# plt.show()

@@ -77,8 +77,8 @@ class UserDefinedHingeIntegrationBase: public UserDefinedBeamIntegrationBase
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
   public:
-    UserDefinedHingeIntegrationBase(int classTag, const Vector &, const Vector &, const Vector &, const Vector &);
-    UserDefinedHingeIntegrationBase(int classTag);
+    UserDefinedHingeIntegrationBase(int tag, int classTag);
+    UserDefinedHingeIntegrationBase(int tag, int classTag, const Vector &, const Vector &, const Vector &, const Vector &);
     
     void getSectionLocations(int numSections, double L, double *xi) const;
     void getSectionWeights(int numSections, double L, double *wt) const;

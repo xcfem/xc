@@ -34,7 +34,7 @@ scc10x20.nDivJK= 32 # number of cells in JK direction
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-sys.path.append(pth+"/../../../../../../aux/")
+sys.path.append(pth+"/../../../../../../aux/sections/")
 import fiber_section_test_macros
 
 fy= 2600 # Yield stress of the material expressed in kp/cm2.

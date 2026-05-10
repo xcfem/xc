@@ -60,7 +60,7 @@ class PolygonSectRegion: public QuadCellRegion
     double getMinY(void) const;
     double getMinZ(void) const;
     Polygon2d getPolygon(void) const;
-
+    void swap(void);
 
     void Print(std::ostream &s, int flag =0) const;   
     friend std::ostream &operator<<(std::ostream &, PolygonSectRegion &);    

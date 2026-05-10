@@ -65,10 +65,11 @@ class UserDefinedHingeIntegration2d: public UserDefinedHingeIntegrationBase
   private:
     CrossSectionProperties2d ctes_scc; //Mechanical properties of the section E,A,Iy,...
   public:
-    UserDefinedHingeIntegration2d(int npL, const Vector &ptL, const Vector &wtL,
-  				int npR, const Vector &ptR, const Vector &wtR,
-  				const double &E, const double &A, const double &I);
-    UserDefinedHingeIntegration2d();
+    UserDefinedHingeIntegration2d(int tag);
+    UserDefinedHingeIntegration2d(int tag, int npL, const Vector &ptL,
+				  const Vector &wtL,
+				  int npR, const Vector &ptR, const Vector &wtR,
+				  const double &E, const double &A, const double &I);
     
     void getSectionLocations(int numSections, double L, double *xi) const;
     void getSectionWeights(int numSections, double L, double *wt) const;

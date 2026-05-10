@@ -50,8 +50,8 @@
 
 #include "TrapezoidalBeamIntegration.h"
 
-XC::TrapezoidalBeamIntegration::TrapezoidalBeamIntegration()
-  : BeamIntegration(BEAM_INTEGRATION_TAG_Trapezoidal)
+XC::TrapezoidalBeamIntegration::TrapezoidalBeamIntegration(int tag)
+  : BeamIntegration(tag, BEAM_INTEGRATION_TAG_Trapezoidal)
   {
     // Nothing to do
   }

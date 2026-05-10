@@ -52,8 +52,8 @@
 #include <iostream>
 
 //! @brief Default constructor.
-XC::LobattoBeamIntegration::LobattoBeamIntegration(void)
-  : BeamIntegration(BEAM_INTEGRATION_TAG_Lobatto) {}
+XC::LobattoBeamIntegration::LobattoBeamIntegration(int tag)
+  : BeamIntegration(tag, BEAM_INTEGRATION_TAG_Lobatto) {}
 
 XC::BeamIntegration *XC::LobattoBeamIntegration::getCopy(void) const
   { return new LobattoBeamIntegration(*this); }

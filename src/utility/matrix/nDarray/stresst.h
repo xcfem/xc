@@ -26,32 +26,32 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 ///*
-//################################################################################
-//# COPYRIGHT (C):     :-))                                                   #
-//# PROJECT:           Object Oriented Finite Element Program                 #
-//# PURPOSE:           stress tensor with all necessary functions             #
-//# CLASS:             stresstensor                                           #
-//#                                                                           #
-//# VERSION:                                                                  #
-//# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                   #
-//# DESIGNER(S):       Boris Jeremic                                          #
-//# PROGRAMMER(S):     Boris Jeremic                                          #
-//#                                                                           #
-//#                                                                           #
-//# DATE:              July 22 '93                                            #
-//# UPDATE HISTORY:    August 22-29 '94 choped to separate files and worked on#
-//#                                   const and & issues                      #
-//#                    August 30-31 '94 added use_def_dim to full the CC      #
-//#                                   resolved problem with temoraries for    #
-//#                                   operators + and - ( +=, -= )            #
-//#                    13 septembar '96 added reportAnim  :)                  #
-//#                                                                           #
-//#                                                                           #
-//#                                                                           #
-//#                                                                           #
-//#                                                                           #
-//#############################################################################
+//##############################################################################
+//# COPYRIGHT (C):   :-))                                                      #
+//# PROJECT:         Object Oriented Finite Element Program                    #
+//# PURPOSE:         stress tensor with all necessary functions                #
+//# CLASS:           stresstensor                                              #
+//#                                                                            #
+//# VERSION:                                                                   #
+//# LANGUAGE:        C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
+//# TARGET OS:       DOS || UNIX || . . .                                      #
+//# DESIGNER(S):     Boris Jeremic                                             #
+//# PROGRAMMER(S):   Boris Jeremic                                             #
+//#                                                                            #
+//#                                                                            #
+//# DATE:            July 22 '93                                               #
+//# UPDATE HISTORY:  August 22-29 '94 choped to separate files and worked on   #
+//#                                 const and & issues                         #
+//#                  August 30-31 '94 added use_def_dim to full the CC         #
+//#                                 resolved problem with temoraries for       #
+//#                                 operators + and - ( +=, -= )               #
+//#                  13 septembar '96 added reportAnim  :)                     #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
+//##############################################################################
 //*/
 
 #ifndef STRESSTENSOR_H

@@ -81,8 +81,9 @@ class ColoredDiagram(vtk_lut_field.LUTField):
         :param valDest: Value of the field at the front end.
         :param dirVector: direction vector of the diagram.
         '''
-        org2= org+(valOrg*self.scaleFactor)*dirVector
-        dest2= dest+(valDest*self.scaleFactor)*dirVector
+        # If needed, convert to numpy.float64 to regular Python float.
+        org2= org+float(valOrg*self.scaleFactor)*dirVector
+        dest2= dest+float(valDest*self.scaleFactor)*dirVector
         self.points.InsertPoint(offset,org.x,org.y,org.z)
         self.points.InsertPoint(offset+1,org2.x,org2.y,org2.z)
         self.points.InsertPoint(offset+2,dest2.x,dest2.y,dest2.z)
@@ -127,8 +128,9 @@ class ColoredDiagram(vtk_lut_field.LUTField):
         :param valDest: Value of the field at the front end.
         :param dirVector: direction vector of the diagram.
         '''
-        org2= org+(valOrg*self.scaleFactor)*dirVector
-        dest2= dest+(valDest*self.scaleFactor)*dirVector
+        # If needed, convert to numpy.float64 to regular Python float.
+        org2= org+float(valOrg*self.scaleFactor)*dirVector
+        dest2= dest+float(valDest*self.scaleFactor)*dirVector
         ptoRaiz= self.getDiagramIntervalRoot(org,valOrg,dest,valDest)
 
         self.points.InsertPoint(offset,org.x,org.y,org.z)
@@ -166,8 +168,9 @@ class ColoredDiagram(vtk_lut_field.LUTField):
         :param valDest: Valor del campo escalar en el extremo frontal.
         :param dirVector: direction vector of the diagram.
         '''
-        vOrg= valOrg*self.fUnitConv
-        vDest= valDest*self.fUnitConv
+        # If needed, convert to numpy.float64 to regular Python float.
+        vOrg= float(valOrg*self.fUnitConv)
+        vDest= float(valDest*self.fUnitConv)
         if(self.rgMinMax):
             self.updateMinMaxWithinRange(value= vOrg, rg= self.rgMinMax)
             self.updateMinMaxWithinRange(value= vDest, rg= self.rgMinMax)

@@ -30,18 +30,18 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 
-
-XC::ParameterIDBeamIntegration::ParameterIDBeamIntegration(int classTag, const Vector &pt, const Vector &wt)
-  : UserDefinedBeamIntegrationBase(classTag,pt,wt), parameterID(0)
+XC::ParameterIDBeamIntegration::ParameterIDBeamIntegration(int tag, int classTag)
+  : UserDefinedBeamIntegrationBase(tag, classTag), parameterID(0)
   {}
 
-XC::ParameterIDBeamIntegration::ParameterIDBeamIntegration(int classTag, const Vector &pt)
-  : UserDefinedBeamIntegrationBase(classTag,pt), parameterID(0)
+XC::ParameterIDBeamIntegration::ParameterIDBeamIntegration(int tag, int classTag, const Vector &pt)
+  : UserDefinedBeamIntegrationBase(tag, classTag,pt), parameterID(0)
   {}
 
-XC::ParameterIDBeamIntegration::ParameterIDBeamIntegration(int classTag)
-  : UserDefinedBeamIntegrationBase(classTag), parameterID(0)
+XC::ParameterIDBeamIntegration::ParameterIDBeamIntegration(int tag, int classTag, const Vector &pt, const Vector &wt)
+  : UserDefinedBeamIntegrationBase(tag, classTag,pt,wt), parameterID(0)
   {}
+
 
 
 int XC::ParameterIDBeamIntegration::setParameter(const std::vector<std::string> &argv, Parameter &param)

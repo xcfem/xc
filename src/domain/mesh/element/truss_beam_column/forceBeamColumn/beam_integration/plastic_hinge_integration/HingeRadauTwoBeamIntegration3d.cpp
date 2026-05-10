@@ -56,19 +56,21 @@
 #include <domain/mesh/element/utils/Information.h>
 
 //! @brief Constructor.
-XC::HingeRadauTwoBeamIntegration3d::HingeRadauTwoBeamIntegration3d(double e,
-							 double a,
-							 double iz,
-							 double iy,
-							 double g,
-							 double j,
-							 double lpi,
-							 double lpj)
-  : HingeBeamIntegration3d(BEAM_INTEGRATION_TAG_HingeRadauTwo3d,e,a,iz,iy,g,j,lpi,lpj) {}
+XC::HingeRadauTwoBeamIntegration3d::HingeRadauTwoBeamIntegration3d(int tag, const CrossSectionProperties3d &cts,const double &lpi,const double &lpj)
+  : HingeBeamIntegration3d(tag, BEAM_INTEGRATION_TAG_HingeRadauTwo3d,cts,lpi,lpj) {}
 
 //! @brief Constructor.
-XC::HingeRadauTwoBeamIntegration3d::HingeRadauTwoBeamIntegration3d(const CrossSectionProperties3d &cts,const double &lpi,const double &lpj)
-  : HingeBeamIntegration3d(BEAM_INTEGRATION_TAG_HingeRadauTwo3d,cts,lpi,lpj) {}
+XC::HingeRadauTwoBeamIntegration3d::HingeRadauTwoBeamIntegration3d(int tag,
+								   double e,
+								   double a,
+								   double iz,
+								   double iy,
+								   double g,
+								   double j,
+								   double lpi,
+								   double lpj)
+  : HingeBeamIntegration3d(tag, BEAM_INTEGRATION_TAG_HingeRadauTwo3d,e,a,iz,iy,g,j,lpi,lpj) {}
+
 
 //! @brief Returns the abcissae of the sections in the xi vector.
 void XC::HingeRadauTwoBeamIntegration3d::getSectionLocations(int numSections, double L, double *xi) const
