@@ -53,8 +53,8 @@ preprocessor=  feProblem.getPreprocessor
 # Define section geometry
 b= 0.4
 h= 0.8
-nDivIJ= 100
-nDivJK= 100
+nDivIJ= 40
+nDivJK= 40
 y0= 0
 z0= 0
 
