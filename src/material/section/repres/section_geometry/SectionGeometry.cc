@@ -33,6 +33,7 @@
 #include <material/section/repres/section_geometry/Spot.h>
 #include <material/section/repres/section_geometry/Segment.h>
 
+#include "material/Material.h" 
 #include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "material/section/repres/CrossSectionProperties3d.h"
 #include "material/section/repres/CrossSectionProperties2d.h"
@@ -455,6 +456,38 @@ BND2d XC::SectionGeometry::getBnd(void) const
     return retval;
   }
 
+//! @brief Return a list of const pointers to the different section materials.
+std::set<const XC::Material *>XC::SectionGeometry::getMaterials(void) const
+  {
+    std::set<const Material *> retval= this->getRegionMaterials();
+    retval.merge(this->getReinforcementMaterials());
+    return retval;
+  }
+
+//! @brief Return a list of pointers to the different section materials.
+std::set<XC::Material *>XC::SectionGeometry::getMaterials(void)
+  {
+    std::set<Material *> retval= this->getRegionMaterials();
+    retval.merge(this->getReinforcementMaterials());
+    return retval;
+  }
+  
+//! @brief Return a Python list of pointers to the different section materials.
+boost::python::list XC::SectionGeometry::getMaterialsPy(void)
+  {
+    boost::python::list retval;
+    std::set<Material *> tmp= this->getMaterials();
+    for(std::set<Material *>::const_iterator i= tmp.begin(); i!=tmp.end(); i++)
+      {
+	Material *mat= *i;
+	if(mat)
+	  {
+	    boost::python::object pyObj(boost::ref(*mat));
+	    retval.append(pyObj);
+	  }
+      }
+    return retval;
+  }
 
 //! @brief Return the homogenized area of the regions.
 double XC::SectionGeometry::getAreaHomogenizedSection(const double &E0) const

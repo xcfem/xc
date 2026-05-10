@@ -67,6 +67,7 @@ class_<XC::SectionGeometry, XC::SectionGeometry *, bases<XC::SectionMassProperti
   .def("clear", &XC::SectionGeometry::clear,"Clear the containers of this object.")
   .def("getReinforcementMaterials",&XC::SectionGeometry::getReinforcementMaterialsPy, "Return a Python list containing the different materials of the reinforcement.")
   .def("getRegionMaterials",&XC::SectionGeometry::getRegionMaterialsPy, "Return a Python list containing the different materials of the reinforcement.")
+  .def("getMaterials",&XC::SectionGeometry::getMaterialsPy, "Return a Python list containing the different materials of the reinforcement.")
   ;
 
 

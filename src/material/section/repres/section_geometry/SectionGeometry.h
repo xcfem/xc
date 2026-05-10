@@ -177,6 +177,10 @@ class SectionGeometry: public SectionMassProperties
     //! materials.
     boost::python::list getRegionMaterialsPy(void)
       { return this->regions.getMaterialsPy(); }
+    
+    std::set<const Material *>getMaterials(void) const;
+    std::set<Material *>getMaterials(void);
+    boost::python::list getMaterialsPy(void);
 
     BND2d getBnd(void) const;
     
