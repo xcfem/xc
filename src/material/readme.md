@@ -11,3 +11,4 @@ It contains also the damage models.
 
 ## References
 - [Un-MATLAB Your OpenSees](https://portwooddigital.com/2022/09/04/un-matlab-your-opensees/)
+- [You Have to Make the Analysis Fail](https://portwooddigital.com/2026/03/29/you-have-to-make-the-analysis-fail/)

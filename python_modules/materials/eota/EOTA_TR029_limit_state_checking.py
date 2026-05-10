@@ -140,8 +140,8 @@ def getScrN(hEf):
     return 3*hEf
 
 def getA0cN(anchorPosition, hEf):
-    '''
-    Polígono que representa el influence area of an individual anchor according to clause 5.2.2.4 b) (figura 5.4a) of EOTA TR029.
+    ''' Polígon that represents the influence area of an individual anchor 
+        according to clause 5.2.2.4 b) (figura 5.4a) of EOTA TR029.
 
     :param anchorPosition: anchor position.
     :param hEf: effective anchorage depth (m).
