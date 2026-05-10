@@ -15,9 +15,12 @@ import xc
 import geom
 from materials import typical_materials
 
-def def_rc_column_fiber_section(preprocessor, As):
+def def_rc_column_fiber_section(preprocessor, colWidth, colDepth, cover, As):
     ''' Define rectangular RC section for push-over test on RC frame.
 
+    :param colWidth: column width.
+    :param colDepth: column depth.
+    :param cover: concrete cover.
     :param As: area of each rebar.
     ''' 
     # Define materials for nonlinear columns
@@ -36,11 +39,6 @@ def def_rc_column_fiber_section(preprocessor, As):
     # Define cross-section for nonlinear columns
     # ------------------------------------------
 
-    #  some parameters
-    colWidth= 15
-    colDepth= 24
-
-    cover= 1.5
 
     # some variables derived from the parameters
     widthVector= geom.Vector2d(colWidth, 0)
@@ -62,15 +60,15 @@ def def_rc_column_fiber_section(preprocessor, As):
     coreRightBottomCorner= coreLeftBottomCorner+coreWidthVector
     coreRightTopCorner= coreRightBottomCorner+coreDepthVector
     coreLeftTopCorner= coreRightTopCorner-coreWidthVector
-    # # Rotate section
-    # leftBottomCorner= geom.Pos2d(-leftBottomCorner.y, leftBottomCorner.x)
-    # rightBottomCorner= geom.Pos2d(-rightBottomCorner.y, rightBottomCorner.x)
-    # rightTopCorner= geom.Pos2d(-rightTopCorner.y, rightTopCorner.x)
-    # leftTopCorner= geom.Pos2d(-leftTopCorner.y, leftTopCorner.x)
-    # coreLeftBottomCorner= geom.Pos2d(-coreLeftBottomCorner.y, coreLeftBottomCorner.x)
-    # coreRightBottomCorner= geom.Pos2d(-coreRightBottomCorner.y, coreRightBottomCorner.x)
-    # coreRightTopCorner= geom.Pos2d(-coreRightTopCorner.y, coreRightTopCorner.x)
-    # coreLeftTopCorner= geom.Pos2d(-coreLeftTopCorner.y, coreLeftTopCorner.x)
+    # Rotate section
+    leftBottomCorner= geom.Pos2d(-leftBottomCorner.y, leftBottomCorner.x)
+    rightBottomCorner= geom.Pos2d(-rightBottomCorner.y, rightBottomCorner.x)
+    rightTopCorner= geom.Pos2d(-rightTopCorner.y, rightTopCorner.x)
+    leftTopCorner= geom.Pos2d(-leftTopCorner.y, leftTopCorner.x)
+    coreLeftBottomCorner= geom.Pos2d(-coreLeftBottomCorner.y, coreLeftBottomCorner.x)
+    coreRightBottomCorner= geom.Pos2d(-coreRightBottomCorner.y, coreRightBottomCorner.x)
+    coreRightTopCorner= geom.Pos2d(-coreRightTopCorner.y, coreRightTopCorner.x)
+    coreLeftTopCorner= geom.Pos2d(-coreLeftTopCorner.y, coreLeftTopCorner.x)
 
     # Contour of the section core.
     coreContour= geom.Polygon2d([coreLeftBottomCorner, coreRightBottomCorner, coreRightTopCorner, coreLeftTopCorner])
@@ -79,12 +77,10 @@ def def_rc_column_fiber_section(preprocessor, As):
     bottomCoverContour= geom.Polygon2d([leftBottomCorner, rightBottomCorner, coreRightBottomCorner, coreLeftBottomCorner])
     ## Right cover
     rightCoverContour= geom.Polygon2d([coreRightBottomCorner, rightBottomCorner, rightTopCorner, coreRightTopCorner])
-    print(rightCoverContour.getArea())
     ## Top cover
     topCoverContour= geom.Polygon2d([coreLeftTopCorner, coreRightTopCorner, rightTopCorner, leftTopCorner])
     ## Left cover.
     leftCoverContour= geom.Polygon2d([leftBottomCorner, coreLeftBottomCorner, coreLeftTopCorner, leftTopCorner])
-    print(leftCoverContour.getArea())
 
     matHandler= preprocessor.getMaterialHandler
     columnSectionGeometry= matHandler.newSectionGeometry("columnSectionGeometry")
@@ -117,17 +113,6 @@ def def_rc_column_fiber_section(preprocessor, As):
     leftCoverRegion.nDivIJ= nDivY
     leftCoverRegion.nDivJK= nDivZ
 
-    regions_area= columnSectionGeometryRegions.getAreaGrossSection()
-    regions_reference_area= colWidth*colDepth
-    regions_G= columnSectionGeometryRegions.getCenterOfMassGrossSection()
-    regions_yG= regions_G[1]
-    regions_zG= regions_G[0]
-    print('regions area: ', regions_area)
-    print('regions reference area: ', regions_reference_area)
-    print('regions yG= ', regions_yG)
-    print('regions zG= ', regions_zG)
-
-
     # Create the reinforcing fibers (left, middle, right)
     reinforcement= columnSectionGeometry.getReinfLayers
     ## Left reinforcement.
@@ -155,18 +140,6 @@ def def_rc_column_fiber_section(preprocessor, As):
     columnFiberSectionRepr.setGeomNamed(columnSectionGeometry.name)
     columnFiberSection.setupFibers()
 
-    # Check some cross-section values.
-    fiber_section_area= columnFiberSection.getArea()
-    fiber_section_reference_area= colWidth*colDepth+8*As
-    ratio1= abs(fiber_section_area-fiber_section_reference_area)/fiber_section_reference_area
-    fiber_section_yG= columnFiberSection.getCenterOfMassY()
-    fiber_section_zG= columnFiberSection.getCenterOfMassZ()
-
-    print('\nfiber section area: ', fiber_section_area)
-    print('fiber section reference area: ', fiber_section_reference_area)
-    print('ratio1= ', ratio1)
-    print('fiber section yG= ', fiber_section_yG)
-    print('fiber section zG= ', fiber_section_zG)
-
+ 
     return columnFiberSection
 

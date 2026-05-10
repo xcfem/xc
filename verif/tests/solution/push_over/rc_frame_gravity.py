@@ -43,8 +43,12 @@ n4= modelSpace.newNode(width, height)
 for n in [n1, n2]:
     modelSpace.fixNode('000', n.tag)
     
+# Some parameters
+colWidth= 15
+colDepth= 24
+cover= 1.5
 As= 0.60  # area of no. 7 bars    
-columnFiberSection= rc_column_fiber_section.def_rc_column_fiber_section(preprocessor, As= As)
+columnFiberSection= rc_column_fiber_section.def_rc_column_fiber_section(preprocessor, colWidth= colWidth, colDepth= colDepth, cover= cover, As= As)
 
 # Extract concrete materials.
 sectionGeometry= columnFiberSection.getSectionGeometry
@@ -64,7 +68,6 @@ for r in regions:
 # Extract steel material.
 reinforcement= sectionGeometry.getReinfLayers
 steel= reinforcement.getMaterials()[0]
-print(steel)
 
 
 # Define column elements
