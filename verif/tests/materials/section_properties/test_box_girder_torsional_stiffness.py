@@ -10,6 +10,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
+from materials.sections import torsional_stiffness
+
 ##
 ##                        bs
 ##             |----------------------|
@@ -32,9 +34,8 @@ ts= .56 # ts: Upper deck thickness.
 ti= .48 # ti: Lower deck thickness.
 td= 1 # td: Thickness of the webs.
 
-from materials.sections import section_properties
 
-J= section_properties.getInerciaTorsionCajonMonocelular(bs,bi,h,ts,ti,td)
+J= torsional_stiffness.get_box_girder_torsional_modulus(bs,bi,h,ts,ti,td)
 ratio1= abs(J-656.6)/656.6
 
 ''' 
