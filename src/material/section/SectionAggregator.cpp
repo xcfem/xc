@@ -72,6 +72,7 @@
 #include "material/ResponseId.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 const size_t maxOrder= 10;
 
@@ -85,9 +86,10 @@ void XC::SectionAggregator::resize(void)
     const size_t order= getOrder();
     if(order > maxOrder)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; order too big, need to modify the maxOrder value"
-	          << " in SectionAggregator to: " << order << std::endl;
+	          << " in SectionAggregator to: " << order
+		  << Color::def << std::endl;
         exit(-1);
       }
     //theCode= new ResponseId(codeArea, order); Not sharing area anymore
@@ -102,8 +104,9 @@ void XC::SectionAggregator::resize(void)
         fs= Matrix(&workArea[maxOrder*(maxOrder+2)], order, order);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; 0 or negative order; order= " << order << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; 0 or negative order; order= " << order
+		<< Color::def << std::endl;
   }
 
 //! @brief Free memory.
@@ -132,15 +135,17 @@ void XC::SectionAggregator::copy_section(const SectionForceDeformation *theSec)
             theSection= dynamic_cast<PrismaticBarCrossSection *>(tmp);
             if(!theSection)
               {
-                std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; not a suitable material.\n";
+                std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; not a suitable material."
+		          << Color::def << std::endl;
                 delete(tmp);
                 exit(-1);
               }
           }
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; failed to get copy of section.\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; failed to get copy of section."
+		    << Color::def << std::endl;
       }
   }
 
@@ -215,15 +220,17 @@ void XC::SectionAggregator::setSection(const std::string &sectionName)
         if(tmp)
 	  theSection= dynamic_cast<PrismaticBarCrossSection *>(tmp->getCopy());
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                     << "; material identified by: '" << sectionName
-                    << "' is not a prismatic bar cross-section material.\n";
+                    << "' is not a prismatic bar cross-section material."
+		    << Color::def << std::endl;
         resize();
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; material identified by: '" << sectionName
-                << "' not found.\n";
+                << "' not found."
+		<< Color::def << std::endl;
   }
 
 void XC::SectionAggregator::setAdditions(const std::vector<std::string> &responseCodes,const std::vector<std::string> &nmbMats)
@@ -232,10 +239,11 @@ void XC::SectionAggregator::setAdditions(const std::vector<std::string> &respons
     theAdditions.putMatCodes(codes);
     const size_t n= nmbMats.size();
     if(n!= responseCodes.size())
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; error in number of materials: index number: "
 		<< responseCodes.size()
-                << " number of materials: " << n << std::endl;
+                << " number of materials: " << n
+		<< Color::def << std::endl;
     for(size_t i= 0;i<n;i++)
       {
         const Material *ptr_mat= material_handler->find_ptr(nmbMats[i]);
@@ -245,14 +253,16 @@ void XC::SectionAggregator::setAdditions(const std::vector<std::string> &respons
             if(tmp)
               theAdditions.push_back(tmp);
             else
-              std::cerr << getClassName() << "::" << __FUNCTION__
+              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                         << "; material with code: '" << nmbMats[i]
-                        << "' is not an uniaxial material.\n";
+                        << "' is not an uniaxial material."
+			<< Color::def << std::endl;
           }
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                     << "; material: '" << nmbMats[i]
-                    << "' not found.\n";
+                    << "' not found."
+		    << Color::def << std::endl;
       }
     resize();
   }
@@ -268,6 +278,92 @@ XC::SectionAggregator::~SectionAggregator(void)
 //! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::SectionAggregator::getCopy(void) const
   { return new SectionAggregator(*this); }
+
+//! @brief Returns the section axial stiffness.
+const double &XC::SectionAggregator::EA(void) const
+  {
+    if(this->theSection)
+      return this->theSection->EA();
+    else
+      {
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                  << "; null pointer to section."
+                  << Color::def << std::endl;
+	exit(-1);	
+      }
+  }
+//! @brief Returns the bending stiffness of the cross-section en torno the z axis.
+const double &XC::SectionAggregator::EIz(void) const
+  {
+    if(this->theSection)
+      return this->theSection->EIz();
+    else
+      {
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                  << "; null pointer to section."
+                  << Color::def << std::endl;
+	exit(-1);	
+      }
+  }
+
+//! @brief Returns the bending stiffness of the cross-section with respect to eht y axis.
+const double &XC::SectionAggregator::EIy(void) const
+  {
+    if(this->theSection)
+      return this->theSection->EIy();
+    else
+      {
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                  << "; null pointer to section."
+                  << Color::def << std::endl;
+	exit(-1);	
+      }
+  }
+
+//! @brief Returns the product of inertia multiplied by the Young modulus.
+const double &XC::SectionAggregator::EIyz(void) const
+  {
+    if(this->theSection)
+      return this->theSection->EIyz();
+    else
+      {
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                  << "; null pointer to section."
+                  << Color::def << std::endl;
+	exit(-1);	
+      }
+  }
+
+//! @brief Returns the shear stiffness along y axis.
+const double &XC::SectionAggregator::GAy(void) const
+  {
+    static double retval= 0.0;
+    const UniaxialMaterial *respVy= this->theAdditions.getResponseComponent(SECTION_RESPONSE_VY);
+    if(respVy)
+      retval= respVy->getTangent();
+    return retval;
+  }
+  
+//! @brief Returns the shear stiffness along z axis.
+const double &XC::SectionAggregator::GAz(void) const
+  {
+    static double retval= 0.0;
+    const UniaxialMaterial *respVy= this->theAdditions.getResponseComponent(SECTION_RESPONSE_VZ);
+    if(respVy)
+      retval= respVy->getTangent();
+    return retval;
+  }
+
+//! @brief Returns the torsional stiffness.
+const double &XC::SectionAggregator::GJ(void) const
+  {
+    static double retval= 0.0;
+    const UniaxialMaterial *respVy= this->theAdditions.getResponseComponent(SECTION_RESPONSE_T);
+    if(respVy)
+      retval= respVy->getTangent();
+    return retval;
+  }
+
 
 //! @brief Sets initial strain.
 int XC::SectionAggregator::setInitialSectionDeformation(const Vector &def)
@@ -549,8 +645,9 @@ int XC::SectionAggregator::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data"
+		<< Color::def << std::endl;
     return res;
   }
 
@@ -563,15 +660,17 @@ int XC::SectionAggregator::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids."
+		<< Color::def << std::endl;
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data."
+		    << Color::def << std::endl;
       }
     return res;
   }
