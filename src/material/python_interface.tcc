@@ -32,11 +32,14 @@ class_<XC::Material, XC::Material *, bases<XC::MovableObject,XC::TaggedObject>, 
   .def("needsUpdate", &XC::Material::needsUpdate, "Return true if the material needs to update its internal state even if the trial strains have not changed. This is the case when the material deforms without load or under constant load, for example by shrinkage or creep.")
    ;
 
+bool (XC::ResponseId::*has_response_int)(const int &) const= &XC::ResponseId::hasResponse;
+bool (XC::ResponseId::*has_response_str)(const std::string &) const= &XC::ResponseId::hasResponse;
 boost::python::list (XC::ResponseId::*getComponentIndexesFromCodePy_string)(const std::string &) const= &XC::ResponseId::getComponentIndexesFromCodePy;
 boost::python::list (XC::ResponseId::*getComponentIndexesFromCodePy_int)(const int &) const= &XC::ResponseId::getComponentIndexesFromCodePy;
 class_<XC::ResponseId, bases<XC::ID> >("ResponseId")
   .def(init<boost::python::list &>())
-  .def("hasResponse", &XC::ResponseId::hasResponse, "Return true if the given response identifier is found in this object.")
+  .def("hasResponse", has_response_int, "Return true if the given response identifier is found in this object.")
+  .def("hasResponse", has_response_str, "Return true if the given response identifier is found in this object.")
   .def("getString", &XC::ResponseId::getString, "Return the response identifiers in text form as comma separated values in a string.")
   .def("getStringIdentifiers", &XC::ResponseId::getStringIdentifiers, "Return a Python list with the response identifiers in text form.")
   .def("getIdentifiers", &XC::ResponseId::getIdentifiers, "Return a Python list with the response identifiers.")
