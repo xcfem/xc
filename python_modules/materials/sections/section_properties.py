@@ -14,6 +14,7 @@ import sys
 import math
 import uuid
 from materials import typical_materials
+from materials.sections import torsional_stiffness
 from misc_utils import log_messages as lmsg
 import numpy as np
 import matplotlib.pyplot as plt
@@ -1124,7 +1125,7 @@ class RectangularHollowSection(RectangularSection):
             # with the formula for bridges gives better results
             # see est_rectangular_hollow_section_03.py verification
             # test.
-            retval+= getInerciaTorsionCajonMonocelular(bs,bi,h,ts,ti,td)
+            retval+= torsional_stiffness.get_box_girder_torsional_modulus(bs,bi,h,ts,ti,td)
             retval/= 2.0
         return retval
   
