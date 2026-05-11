@@ -32,13 +32,58 @@
 #include "utility/geom/pos_vec/Pos2dList.h"
 #include "utility/utils/misc_utils/colormod.h"
 
-//! @brief Return los vertices of the polygon.
-GeomObj::list_Pos2d PolygonalSurface2d::getVertices(void) const
+//! @brief Return the vertices of the polygon.
+GeomObj::list_Pos2d PolygonalSurface2d::getVertexList(void) const
   {
     unsigned int nv= getNumVertices();
     GeomObj::list_Pos2d lv;
     for(size_t i= 1; i <= nv; i++) lv.push_back(Vertice(i));
     return lv;
+  }
+
+//! @brief Return a Python list containing the positions
+//! of the polygon vertices.
+boost::python::list PolygonalSurface2d::getVertexListPy(void) const
+  {
+    boost::python::list retval;
+    GeomObj::list_Pos2d lst= getVertexList();
+    GeomObj::list_Pos2d::const_iterator i= lst.begin();
+    for(;i!=lst.end();i++)
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return the edges of the polygon.
+const std::list<Segment2d> PolygonalSurface2d::getEdgeList(void) const
+  {
+    std::list<Segment2d> retval;
+    GeomObj::list_Pos2d lst= getVertexList();
+    const size_t sz= lst.size();
+    if(sz>1)
+      {
+	GeomObj::list_Pos2d::const_iterator i0= lst.begin();
+	GeomObj::list_Pos2d::const_iterator i1= i0+1;
+	for(;i1!=lst.end();i1++)
+	  {
+	    const Segment2d s(*i0, *i1);
+	    retval.push_back(s);
+	    i0= i1;
+	  }
+	const Segment2d s(*i0, *lst.begin());
+	retval.push_back(s);
+      }
+    return retval;
+  }
+
+//! @brief Return the edges of the polygon in a python list.
+boost::python::list PolygonalSurface2d::getEdgeListPy(void) const
+  {
+    boost::python::list retval;
+    const std::list<Segment2d> lst= getEdgeList();
+    std::list<Segment2d>::const_iterator i= lst.begin();
+    for(;i!=lst.end();i++)
+      retval.append(*i);
+    return retval;
   }
 
 //! @brief Return la normal al lado of the polygon.

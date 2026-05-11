@@ -67,7 +67,10 @@ class PolygonalSurface2d: public Surface2d
     Segment2d getNearestEdge(const Pos2d &) const;
     Pos2d Projection(const Pos2d &) const;
     
-    GeomObj::list_Pos2d getVertices(void) const;
+    GeomObj::list_Pos2d getVertexList(void) const;
+    boost::python::list getVertexListPy(void) const;
+    const std::list<Segment2d> getEdgeList(void) const;
+    boost::python::list getEdgeListPy(void) const;
     Vector2d getLado0Normal(const size_t i) const;
     Vector2d getVertex0Normal(const size_t i) const;
     int getIndexOfDistalEdge(const Pos2d &) const;

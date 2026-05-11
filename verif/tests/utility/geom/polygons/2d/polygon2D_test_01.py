@@ -7,6 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
+import math
 import geom
 
 pol1=geom.Polygon2d([geom.Pos2d(0,0), geom.Pos2d(1,0), geom.Pos2d(1,1), geom.Pos2d(0,1)])
@@ -27,10 +28,18 @@ ratio5= (IxPol-(1/12.0))/(1/12.0)
 ratio6= (IyPol-(1/12.0))/(1/12.0)
 ratio7= PxyPol
 
+err= 0.0
+edges= pol1.getEdgeList()
+for edge in edges:
+    err+= (edge.getLength()-1)**2
+err= math.sqrt(err)
+
+# print(err)
+
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio1)<1e-10 and abs(ratio2)<1e-10 and abs(ratio3)<1e-10 and abs(ratio4)<1e-10 and abs(ratio5)<1e-10 and abs(ratio6)<1e-10 and abs(ratio7)<1e-10:
+if abs(ratio1)<1e-10 and abs(ratio2)<1e-10 and abs(ratio3)<1e-10 and abs(ratio4)<1e-10 and abs(ratio5)<1e-10 and abs(ratio6)<1e-10 and abs(ratio7)<1e-10 and (err<1e-10):
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')

@@ -161,7 +161,6 @@ class Polygon2d: public PolygonalSurface2d
     inline Pos2d Vertice0(unsigned int j) const
       { return Pos2d(cgpol.vertex(j)); }
     GeomObj::list_Pos2d getVertexList(void) const;
-    boost::python::list getVertexListPy(void) const;
 
     void Transform(const Trf2d &trf2d);
 

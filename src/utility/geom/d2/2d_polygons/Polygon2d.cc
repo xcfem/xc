@@ -351,18 +351,6 @@ GeomObj::list_Pos2d Polygon2d::getVertexList(void) const
     return lv;
   }
 
-//! @brief Return a Python list containing the positions
-//! of the polygon vertices.
-boost::python::list Polygon2d::getVertexListPy(void) const
-  {
-    boost::python::list retval;
-    GeomObj::list_Pos2d lst= getVertexList();
-    GeomObj::list_Pos2d::const_iterator i= lst.begin();
-    for(;i!=lst.end();i++)
-      retval.append(*i);
-    return retval;
-  }
-
 //! @brief Aplica a los vértices la transformación que se pasa como parámetro.
 void Polygon2d::Transform(const Trf2d &trf2d)
   { trf2d.Transform(cgpol.vertices_begin(),cgpol.vertices_end()); }
