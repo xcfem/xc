@@ -105,7 +105,6 @@ class ReportGenerator(oh.OutputHandler):
                 fullgrFileNm= fullPath+suffix
                 rltvgrFileNm= rltvPath+suffix
                 fullgrFileNmAndExt= fullPath+bitmapFileName
-                print(fullgrFileNmAndExt)
                 self.displayDiagram(attributeName=limitStateLabel, component=arg, setToDispRes=st, setToDisplay=st, caption=capt, fUnitConv= None, unitDescription= '', scaleFactor= 1.0, fileName= fullgrFileNmAndExt, defFScale= 0.0,orientScbar=1,titleScbar=None, defaultDirection= defaultDiagramDirection)
                 label= limitStateLabel+suffix
                 oh.append_graphic_to_tex_file(texFile=report, graphicFileName= rltvgrFileNm, graphicWidth= cfg.grWidth, captionText= capt, label= label)
@@ -132,7 +131,10 @@ class ReportGenerator(oh.OutputHandler):
                 for xcSet in setsToDisplay:
                     if(xcSet is None):
                         xcSet= self.modelSpace.getTotalSet()
-                    caption= lcName+' on set: '+xcSet.name
+                    if xcSet.description:
+                        caption= lcName+' loads on set: '+xcSet.description
+                    else:
+                        caption= lcName+' loads on set: '+xcSet.name
                     fLabel= lcName+xcSet.name
                     bitmapFileName= fLabel+'.png'
                     outputFileName= outputPath+bitmapFileName
