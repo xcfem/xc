@@ -68,9 +68,16 @@ XC::ResponseId::ResponseId(const ID &other)
 bool XC::ResponseId::hasResponse(const int &ri) const
   {
     const int i= this->getLocation(ri);
-    return (i>0);
+    return (i>=0);
   }
 
+//! @brief Return true if the given response identifier is found in this
+//! object.
+bool XC::ResponseId::hasResponse(const std::string &s) const
+  {
+    const int ri= this->getComponentIdFromString(s);
+    return this->hasResponse(ri);
+  }
 //! @brief Return the response identifiers in text form as comma separated
 //! values in a string.
 std::string XC::ResponseId::getString(void) const

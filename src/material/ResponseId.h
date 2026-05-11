@@ -74,7 +74,8 @@ class ResponseId: public ID
     explicit ResponseId(const boost::python::list &);
     //ResponseId(int *, int size, bool cleanIt = false);
     explicit ResponseId(const ID &);
-    bool hasResponse(const int &ri) const;
+    bool hasResponse(const int &) const;
+    bool hasResponse(const std::string &) const;
     virtual int getComponentIdFromString(const std::string &str) const;
     virtual std::string getStringFromComponentId(const int &ri) const;
     std::string getString(void) const;
