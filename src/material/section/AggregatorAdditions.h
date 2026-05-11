@@ -58,6 +58,10 @@ class AggregatorAdditions: public DqUniaxialMaterial
     inline bool check_ptrs(void) const
       { return !matCodes.isEmpty(); }
 
+    const UniaxialMaterial *getResponseComponent(const int &) const;
+    UniaxialMaterial *getResponseComponent(const int &);
+    const UniaxialMaterial *getResponseComponent(const std::string &) const;
+    UniaxialMaterial *getResponseComponent(const std::string &);
     void putMatCodes(const ResponseId &codes);
 
     void getResponseType(ResponseId &retval,const size_t &offset) const;

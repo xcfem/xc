@@ -58,6 +58,41 @@ XC::AggregatorAdditions::AggregatorAdditions(const AggregatorAdditions &other,Se
 XC::AggregatorAdditions::~AggregatorAdditions(void)
   {}
 
+//! @brief Return the uniaxial material that corresponds to the given response
+//! identifier.
+const XC::UniaxialMaterial *XC::AggregatorAdditions::getResponseComponent(const int &id) const
+  {
+    const UniaxialMaterial *retval= nullptr;
+    const int i= matCodes.getLocation(id);
+    if(i>=0)
+      retval= DqUniaxialMaterial::operator[](i);
+    return retval;  
+  }
+
+//! @brief Return the uniaxial material that corresponds to the given response
+//! identifier.
+XC::UniaxialMaterial *XC::AggregatorAdditions::getResponseComponent(const int &id)
+  {
+    UniaxialMaterial *retval= nullptr;
+    const int i= matCodes.getLocation(id);
+    if(i>=0)
+      retval= DqUniaxialMaterial::operator[](i);
+    return retval;  
+  }
+
+//! @brief Return the uniaxial material that corresponds to the given response
+//! identifier.
+const XC::UniaxialMaterial *XC::AggregatorAdditions::getResponseComponent(const std::string &s) const
+  {
+    return this->getResponseComponent(matCodes.getComponentIdFromString(s));
+  }
+
+//! @brief Return the uniaxial material that corresponds to the given response
+//! identifier.
+XC::UniaxialMaterial *XC::AggregatorAdditions::getResponseComponent(const std::string &s)
+  {
+    return this->getResponseComponent(matCodes.getComponentIdFromString(s));
+  }
 
 void XC::AggregatorAdditions::putMatCodes(const ResponseId &codes)
   { matCodes= codes; }
