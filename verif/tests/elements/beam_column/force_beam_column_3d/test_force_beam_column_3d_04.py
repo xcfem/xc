@@ -16,6 +16,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
+from materials.sections import def_secc_aggregation
 
 # Geometry
 width= .05
@@ -50,9 +51,6 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 fy= 275e6 # Yield stress of the steel.
 steel= typical_materials.defSteel01(preprocessor, "steel",E,fy,0.001)
 
-respT= typical_materials.defElasticMaterial(preprocessor, "respT",G*J) # Torsion response.
-respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e9) # Shear response in y direction.
-respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Shear response in z direction.
 # Sections
 import os
 pth= os.path.dirname(__file__)
@@ -71,12 +69,16 @@ fiberSectionRepr.setGeomNamed(testQuadRegion.name)
 quadFibers.setupFibers()
 A= quadFibers.getFibers().getArea
 
-agg= materialHandler.newMaterial("section_aggregator","agg")
-agg.setSection("quadFibers")
-agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
- # Torsion and shear responses.
-
-
+# Set the torsion and shear responses of the section.
+respT= typical_materials.defElasticMaterial(preprocessor, "respT",G*J) # Torsion response.
+respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e9) # Shear response in y direction.
+respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Shear response in z direction.
+## Create the aggregated section.
+agg= def_secc_aggregation.def_fiber_section_aggregation3d(preprocessor= preprocessor,
+                                                          fiberSection3d= quadFibers,
+                                                          respT= respT,
+                                                          respVy= respVy,
+                                                          respVz= respVz)
 
 # Elements definition
 elements= preprocessor.getElementHandler

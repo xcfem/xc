@@ -60,7 +60,7 @@ lp0.newNodalLoad(n1.tag,xc.Vector([0,-F,0]))
 modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution procedure
 analysis= predefined_solutions.plain_static_modified_newton(feProblem)
-result= analysis.analyze(10)
+result= analysis.analyze(1)
 
 
 nodes.calculateNodalReactions(True,1e-7) 
