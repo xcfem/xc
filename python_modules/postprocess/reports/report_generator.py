@@ -36,19 +36,25 @@ class ReportGenerator(oh.OutputHandler):
         cfg= self.getEnvConfig()
         return cfg.projectDirTree.getReportFile(limitStateLabel)
 
-    def checksReport(self, limitStateLabel, setsShEl, argsShEl, setsBmEl=[], argsBmEl=[], rgMinMax=None, defaultDiagramDirection= 'J'):
+    def checksReport(self, limitStateLabel, setsShEl=[], argsShEl=[], setsBmEl=[], argsBmEl=[], setsTrussEl=[],argsTrussEl=[],rgMinMax=None, defaultDiagramDirection= 'J'):
         '''Create a LaTeX report including the desired graphical results 
         obtained in the verification of a limit state.
 
         :param limitStateLabel: label that identifies the limit state.
-        :param setsShEl: Ordered list of sets of 2D elements to be
+        :param setsShEl: Ordered list of sets of shell elements to be
                          included in the report.
         :param argsShEl: Ordered list of arguments to be included in the 
-                         report for 2D elements
-        :param setsBmView: Ordered list of set of 1D elements to be included 
+                         report for shell elements
+        :param setsBmEl: Ordered list of set of beam elements to be included 
                            in the report. 
-        :param argsBmElScale: Ordered list of arguments to be included in the 
-                              report for 1D elements
+        :param argsBmEl: Ordered list of arguments to be included in the 
+                              report for beam elements
+        :param setsTrussEl: Ordered list of set of trusselements to be included 
+                           in the report. 
+        :param argsTrussEl: Ordered list of arguments to be included in the 
+                              report for beam elements
+        :param rgMinMax: rnnge or values to display
+        
         :param defaultDiagramDirection: default direction of the diagrams in
                                         1D elements (J: element local j vector 
                                         or K: element local K vector).
@@ -90,6 +96,18 @@ class ReportGenerator(oh.OutputHandler):
                 self.displayBeamResult(attributeName=limitStateLabel,itemToDisp=argS,beamSetDispRes=stV,setToDisplay=stV,caption=capt,fileName= fullgrFileNmAndExt, defaultDirection= defaultDiagramDirection)
                 label= limitStateLabel+suffix
                 oh.append_graphic_to_tex_file(texFile=report, graphicFileName= rltvgrFileNm, graphicWidth= cfg.grWidth, captionText= capt, label= label)
+        for st in setsTrussEl:
+            for arg in argsTrussEl:
+                capt= cfg.capTexts[limitStateLabel]  + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg]
+                suffix= st.name+arg
+                bitmapFileName=suffix+'.jpg'
+                retval.append(bitmapFileName)
+                fullgrFileNm= fullPath+suffix
+                rltvgrFileNm= rltvPath+suffix
+                fullgrFileNmAndExt= fullPath+bitmapFileName
+                self.displayDiagram(attributeName=limitStateLabel, component=arg, setToDispRes=st, setToDisplay=st, caption=capt, fUnitConv= None, unitDescription= '', scaleFactor= 1.0, fileName= fullgrFileNmAndExt, defFScale= 0.0,orientScbar=1,titleScbar=None, defaultDirection= defaultDiagramDirection)
+                label= limitStateLabel+suffix
+                oh.append_graphic_to_tex_file(texFile=report, graphicFileName= rltvgrFileNm, graphicWidth= cfg.grWidth, captionText= capt, label= label)
         report.close()
         return retval
 
@@ -113,7 +131,10 @@ class ReportGenerator(oh.OutputHandler):
                 for xcSet in setsToDisplay:
                     if(xcSet is None):
                         xcSet= self.modelSpace.getTotalSet()
-                    caption= lcName+' on set: '+xcSet.name
+                    if xcSet.description:
+                        caption= lcName+' loads on set: '+xcSet.description
+                    else:
+                        caption= lcName+' loads on set: '+xcSet.name
                     fLabel= lcName+xcSet.name
                     bitmapFileName= fLabel+'.png'
                     outputFileName= outputPath+bitmapFileName

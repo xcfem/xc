@@ -317,6 +317,7 @@ class ProjectDirTree(object):
         ''' Return the path of the normal stresses verification
             report file.'''
         return self.getFullTextReportPath()+fn.normalStressesVerificationReportFile+'.tex'
+
     
     def getReportNormStrGrPath(self):
         ''' Return the path for the normal stresses verification
@@ -411,6 +412,22 @@ class ProjectDirTree(object):
         ''' Return the path for the VonMisesStress verification
             graphics files.'''
         return self.getRltvGraphicsPath()+fn.vonMisesStressesDirectory
+
+    # Strut and tie verificarion
+    def getReportStrutAndTieFile(self):
+        ''' Return the path of the strut and tie stresses verification
+            report file.'''
+        return self.getFullTextReportPath()+fn.strutAndTieVerificationReportFile+'.tex'
+
+    def getReportStrutAndTieGrPath(self):
+        ''' Return the path for the normal stresses verification
+            graphics files.'''
+        return self.getFullGraphicsPath()+fn.strutAndTieDirectory
+        
+    def getRltvReportStrutAndTieGrPath(self):
+        ''' Return the path for the normal stresses verification
+            graphics files.'''
+        return self.getRltvGraphicsPath()+fn.strutAndTieDirectory
 
     # Cracking. Rare loads.
     def getVerifCrackRareFile(self):
@@ -525,6 +542,8 @@ class ProjectDirTree(object):
             return self.getVerifFatigueFile()
         elif(limitStateLabel=='ULS_VonMisesStressResistance'):
             return self.getVerifVonMisesStressFile()
+        elif(limitStateLabel=='ULS_StrutAndTie'):
+            return self.getVerifStrutAndTieFile()
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -555,6 +574,8 @@ class ProjectDirTree(object):
             return self.getReportFatigueFile()
         elif(limitStateLabel=='ULS_VonMisesStressResistance'):
             return self.getReportVonMisesStressFile()
+        elif(limitStateLabel=='ULS_StrutAndTie'):
+             return self.getReportStrutAndTieFile()
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -585,6 +606,8 @@ class ProjectDirTree(object):
             return self.getReportFatigueGrPath()
         elif(limitStateLabel=='ULS_VonMisesStressResistance'):
             return self.getReportVonMisesStressGrPath()
+        elif(limitStateLabel=='ULS_StrutAndTie'):
+            return self.getReportStrutAndTieGrPath()
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -615,6 +638,8 @@ class ProjectDirTree(object):
             return self.getRltvReportFatigueGrPath()
         elif(limitStateLabel=='ULS_VonMisesStressResistanc'):
             return self.getRltvReportVonMisesStressResistancGrPath()
+        elif(limitStateLabel=='ULS_StrutAndTie'):
+            return self.getRltvReportStrutAndTieGrPath()
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
