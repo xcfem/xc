@@ -43,14 +43,15 @@ def def_secc_aggregation2d(preprocessor, defSecc, defMat):
     #agg.setAddition("Vy",nmbRigVy)
 
 def def_fiber_section_aggregation3d(preprocessor, fiberSection3d, respT, respVy, respVz):
-    ''' Retuyrn a section aggregation with the bending response of the given
+    ''' Return a section aggregation with the bending response of the given
         fiber section and the torsional and shear respones of the given
         materials.
 
     :param preprocessor: preprocessor of the FE problem.
-    :param defSecc:  object with the mechanical properties of the 
-                     section (A, Iy, Iz, ...)
-    :param defMat:   object with the properties of the material (E, G)  
+    :param fiberSection3d: 3D fiber section.
+    :param respT: uniaxial material defining torsional response.
+    :param respVy: uniaxial material defining shear response along y axis.
+    :param respVz: uniaxial material defining shear response along z axis.
     '''
     aggregationName= fiberSection3d.name+'_'+respT.name+'_'+respVy.name+'_'+respVz.name
     materialHandler= preprocessor.getMaterialHandler
