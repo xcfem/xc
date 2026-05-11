@@ -2106,54 +2106,77 @@ class SolidMechanics2D(PredefinedSpace):
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: uX, uY')
         return retval
 
+    def _get_generalized_strain_component_index_from_name(self, compName):
+        '''Return the component index from the generalized strain component
+           name.
+
+        :param compName: generalized strain component name.
+        '''
+        if((compName == 'epsilon_xx') or (compName == 'epsilon_11')):
+            retval= self.epsilon_11
+        elif((compName == 'epsilon_yy') or (compName == 'epsilon_22')):
+            retval= self.epsilon_22
+        elif((compName == 'epsilon_xy') or (compName == 'epsilon_12')
+             or (compName == 'epsilon_yx') or (compName == 'epsilon_21')):
+            retval= self.epsilon_12
+        return retval
+
     def getStrainComponentIndexFromName(self, compName: str, responseId= None):
-        '''Return the component index from the
-           strain component name.
+        '''Return the component index from the train component name.
 
         :param compName: strain component name.
         :param responseId: response identifiers of the material.
         '''
         retval= None
         if(responseId is None):
-            if((compName == 'epsilon_xx') or (compName == 'epsilon_11')):
-                retval= self.epsilon_11
-            elif((compName == 'epsilon_yy') or (compName == 'epsilon_22')):
-                retval= self.epsilon_22
-            elif((compName == 'epsilon_xy') or (compName == 'epsilon_12')
-                 or (compName == 'epsilon_yx') or (compName == 'epsilon_21')):
-                retval= self.epsilon_12
+            retval= self._get_generalized_strain_component_index_from_name(compName)
         else:
-            rId= responseId.getComponentIdFromString(compName)
-            retval= responseId.index(rId)
-            if(retval==-1):
-                retval= None
+            if(responseId.hasResponse(compName)):
+                rId= responseId.getComponentIdFromString(compName)
+                retval= responseId.index(rId)
+                if(retval==-1):
+                    retval= None
+            else:
+                retval= self._get_generalized_strain_component_index_from_name(compName)
         if(retval is None):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: epsilon_11, epsilon_22, epsilon_12')
         return retval
 
+    def _get_generalized_stress_component_index_from_name(self, compName):
+        '''Return the component index from the generalized stress component
+           name.
+
+        :param compName: generalized stress component name.
+        '''
+        if((compName == 'sigma_xx') or (compName == 'sigma_11')):
+            retval= self.sigma_11
+        elif((compName == 'sigma_yy') or (compName == 'sigma_22')):
+            retval= self.sigma_22
+        elif((compName == 'sigma_xy') or (compName == 'sigma_12')
+             or (compName == 'sigma_yx') or (compName == 'sigma_21')):
+            retval= self.sigma_12
+        return retval
+    
     def getStressComponentIndexFromName(self, compName: str, responseId= None):
         '''Return the component index from the
            stress component name.
 
-        :param compName: strain component name.
+        :param compName: stress component name.
         :param responseId: response identifiers of the material.
         '''
         retval= None
         if(responseId is None):
-            if((compName == 'sigma_xx') or (compName == 'sigma_11')):
-                retval= self.sigma_11
-            elif((compName == 'sigma_yy') or (compName == 'sigma_22')):
-                retval= self.sigma_22
-            elif((compName == 'sigma_xy') or (compName == 'sigma_12')
-                 or (compName == 'sigma_yx') or (compName == 'sigma_21')):
-                retval= self.sigma_12
+            retval= self._get_generalized_stress_component_index_from_name(compName)
         else:
-            rId= responseId.getComponentIdFromString(compName)
-            retval= responseId.index(rId)
-            if(retval==-1):
-                retval= None
+            if(responseId.hasResponse(compName)):
+                rId= responseId.getComponentIdFromString(compName)
+                retval= responseId.index(rId)
+                if(retval==-1):
+                    retval= None
+            else:
+                retval= self._get_generalized_stress_component_index_from_name(compName)   
         if(retval is None):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -2372,6 +2395,20 @@ class StructuralMechanics2D(StructuralMechanics):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: uX, uY, rotZ')
         return retval
+    
+    def _get_generalized_strain_component_index_from_name(self, compName):
+        '''Return the component index from the generalized strain component
+           name.
+
+        :param compName: generalized strain component name.
+        '''
+        if(compName == 'epsilon'): # axial
+            retval= self.epsilon
+        elif(compName == 'kappa'): # bending
+            retval= self.kappa
+        elif(compName == 'gamma'): # shear
+            retval= self.gamma
+        return retval
 
     def getStrainComponentIndexFromName(self, compName, responseId= None):
         '''Return the component index from the
@@ -2383,23 +2420,36 @@ class StructuralMechanics2D(StructuralMechanics):
         retval= None
         if(compName in ['epsilon', 'kappa', 'gamma']):
             if(responseId is None):
-                if(compName == 'epsilon'): # axial
-                    retval= self.epsilon
-                elif(compName == 'kappa'): # bending
-                    retval= self.kappa
-                elif(compName == 'gamma'): # shear
-                    retval= self.gamma
+                retval= self._get_generalized_strain_component_index_from_name(compName)
             else:
-                rId= responseId.getComponentIdFromString(compName)
-                retval= responseId.index(rId)
-                if(retval==-1):
-                    retval= None
+                if(responseId.hasResponse(compName)):
+                    rId= responseId.getComponentIdFromString(compName)
+                    retval= responseId.index(rId)
+                    if(retval==-1):
+                        retval= None
+                else:
+                    retval= self._get_generalized_strain_component_index_from_name(compName)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: epsilon, kappa, gamma')
         return retval
 
+    def _get_generalized_stress_component_index_from_name(self, compName):
+        '''Return the component index from the generalized stress component
+           name.
+
+        :param compName: generalized stress component name.
+        '''
+        if(responseId is None):
+            if((compName == 'N') or (compName == 'P')): # axial
+                retval= self.N
+            elif(compName == 'M'): # bending
+                retval= self.M
+            elif((compName == 'Q') or (compName == 'V')): # shear
+                retval= self.Q
+        return retval
+    
     def getStressComponentIndexFromName(self, compName, responseId= None):
         '''Return the component index from the
            stress name.
@@ -2410,17 +2460,15 @@ class StructuralMechanics2D(StructuralMechanics):
         retval= 0
         if(compName in ['N', 'P', 'M', 'Q', 'V']):
             if(responseId is None):
-                if((compName == 'N') or (compName == 'P')): # axial
-                    retval= self.N
-                elif(compName == 'M'): # bending
-                    retval= self.M
-                elif((compName == 'Q') or (compName == 'V')): # shear
-                    retval= self.Q
+                retval= self._get_generalized_stress_component_index_from_name(compName)
             else:
-                rId= responseId.getComponentIdFromString(compName)
-                retval= responseId.index(rId)
-                if(retval==-1):
-                    retval= None
+                if(responseId.hasResponse(compName)):
+                    rId= responseId.getComponentIdFromString(compName)
+                    retval= responseId.index(rId)
+                    if(retval==-1):
+                        retval= None
+                else:
+                    retval= self._get_generalized_stress_component_index_from_name(compName)   
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -2654,6 +2702,29 @@ class SolidMechanics3D(PredefinedSpace):
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: uX, uY, uZ')
         return retval
     
+    def _get_generalized_strain_component_index_from_name(self, compName):
+        '''Return the component index from the generalized strain component
+           name.
+
+        :param compName: generalized strain component name.
+        '''
+        if((compName == 'epsilon_xx') or (compName == 'epsilon_11')):
+            retval= self.epsilon_11
+        elif((compName == 'epsilon_yy') or (compName == 'epsilon_22')):
+            retval= self.epsilon_22
+        elif((compName == 'epsilon_zz') or (compName == 'epsilon_33')):
+            retval= self.epsilon_33
+        elif((compName == 'epsilon_xy') or (compName == 'epsilon_12')
+             or (compName == 'epsilon_yx') or (compName == 'epsilon_21')):
+            retval= self.epsilon_12
+        elif((compName == 'epsilon_xz') or (compName == 'epsilon_13')
+             or (compName == 'epsilon_zx') or (compName == 'epsilon_31')):
+            retval= self.epsilon_13
+        elif((compName == 'epsilon_yz') or (compName == 'epsilon_23')
+             or (compName == 'epsilon_zy') or (compName == 'epsilon_32')):
+            retval= self.epsilon_23
+        return retval
+    
     def getStrainComponentIndexFromName(self, compName, responseId= None):
         '''Return the component index from the
            strain name.
@@ -2663,30 +2734,42 @@ class SolidMechanics3D(PredefinedSpace):
         '''
         retval= None
         if(responseId is None):
-            if((compName == 'epsilon_xx') or (compName == 'epsilon_11')):
-                retval= self.epsilon_11
-            elif((compName == 'epsilon_yy') or (compName == 'epsilon_22')):
-                retval= self.epsilon_22
-            elif((compName == 'epsilon_zz') or (compName == 'epsilon_33')):
-                retval= self.epsilon_33
-            elif((compName == 'epsilon_xy') or (compName == 'epsilon_12')
-                 or (compName == 'epsilon_yx') or (compName == 'epsilon_21')):
-                retval= self.epsilon_12
-            elif((compName == 'epsilon_xz') or (compName == 'epsilon_13')
-                 or (compName == 'epsilon_zx') or (compName == 'epsilon_31')):
-                retval= self.epsilon_13
-            elif((compName == 'epsilon_yz') or (compName == 'epsilon_23')
-                 or (compName == 'epsilon_zy') or (compName == 'epsilon_32')):
-                retval= self.epsilon_23
+            retval= self._get_generalized_strain_component_index_from_name(compName)
         else:
-            rId= responseId.getComponentIdFromString(compName)
-            retval= responseId.index(rId)
-            if(retval==-1):
-                retval= None
+            if(responseId.hasResponse(compName)):
+                rId= responseId.getComponentIdFromString(compName)
+                retval= responseId.index(rId)
+                if(retval==-1):
+                    retval= None
+            else:
+                retval= self._get_generalized_strain_component_index_from_name(compName)
         if(retval is None):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: epsilon_11, epsilon_22, epsilon_33, epsilon_12, epsilon_13, epsilon_23')
+        return retval
+
+    def _get_generalized_stress_component_index_from_name(self, compName):
+        '''Return the component index from the generalized stress component
+           name.
+
+        :param compName: generalized stress component name.
+        '''
+        if((compName == 'sigma_xx') or (compName == 'sigma_11')):
+            retval= self.sigma_11
+        elif((compName == 'sigma_yy') or (compName == 'sigma_22')):
+            retval= self.sigma_22
+        elif((compName == 'sigma_zz') or (compName == 'sigma_33')):
+            retval= self.sigma_33
+        elif((compName == 'sigma_xy') or (compName == 'sigma_12')
+             or (compName == 'sigma_yx') or (compName == 'sigma_21')):
+            retval= self.sigma_12
+        elif((compName == 'sigma_xz') or (compName == 'sigma_13')
+             or (compName == 'sigma_zx') or (compName == 'sigma_31')):
+            retval= self.sigma_13
+        elif((compName == 'sigma_yz') or (compName == 'sigma_23')
+             or (compName == 'sigma_zy') or (compName == 'sigma_32')):
+            retval= self.sigma_23
         return retval
 
     def getStressComponentIndexFromName(self, compName, responseId= None):
@@ -2698,26 +2781,15 @@ class SolidMechanics3D(PredefinedSpace):
         '''
         retval= 0
         if(responseId is None):
-            if((compName == 'sigma_xx') or (compName == 'sigma_11')):
-                retval= self.sigma_11
-            elif((compName == 'sigma_yy') or (compName == 'sigma_22')):
-                retval= self.sigma_22
-            elif((compName == 'sigma_zz') or (compName == 'sigma_33')):
-                retval= self.sigma_33
-            elif((compName == 'sigma_xy') or (compName == 'sigma_12')
-                 or (compName == 'sigma_yx') or (compName == 'sigma_21')):
-                retval= self.sigma_12
-            elif((compName == 'sigma_xz') or (compName == 'sigma_13')
-                 or (compName == 'sigma_zx') or (compName == 'sigma_31')):
-                retval= self.sigma_13
-            elif((compName == 'sigma_yz') or (compName == 'sigma_23')
-                 or (compName == 'sigma_zy') or (compName == 'sigma_32')):
-                retval= self.sigma_23
-            else:
+            retval= self._get_generalized_stress_component_index_from_name(compName)
+        else:
+            if(responseId.hasResponse(compName)):
                 rId= responseId.getComponentIdFromString(compName)
                 retval= responseId.index(rId)
                 if(retval==-1):
-                    retval= None                
+                    retval= None
+            else:
+                retval= self._get_generalized_stress_component_index_from_name(compName)   
         if(retval is None):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -2852,6 +2924,26 @@ class StructuralMechanics3D(StructuralMechanics):
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: uX, uY, uZ, rotX, rotY, rotZ')
         return retval
     
+    def _get_generalized_strain_component_index_from_name(self, compName):
+        '''Return the component index from the generalized strain name.
+
+        :param compName: generalized strain component name.
+        '''
+        retval= None
+        if((compName == 'epsilon') or (compName == 'epsilon_1')): # axial
+            retval= self.epsilon
+        elif((compName == 'kappa_z') or (compName == 'kappa_1')): # bending about local z axis
+            retval= self.kappa_z
+        elif(compName == 'gamma_y'): # shear along y-axis.
+            retval= self.gamma_y
+        elif(compName == 'kappa_y'): # bending about local y axis
+            retval= self.kappa_y
+        elif(compName == 'gamma_z'): # shear along z-axis.
+            retval= self.gamma_z
+        elif(compName == 'theta'): # torsion along x-axis.
+            retval= self.theta
+        return retval
+ 
     def getStrainComponentIndexFromName(self, compName, responseId):
         '''Return the component index from the
            generalized strain name.
@@ -2864,28 +2956,22 @@ class StructuralMechanics3D(StructuralMechanics):
         if(compName in availableStrainComponents):
             if(responseId is None):
                 # Beam generalized strains.
-                if((compName == 'epsilon') or (compName == 'epsilon_1')): # axial
-                    retval= self.epsilon
-                elif((compName == 'kappa_z') or (compName == 'kappa_1')): # bending about local z axis
-                    retval= self.kappa_z
-                elif(compName == 'gamma_y'): # shear along y-axis.
-                    retval= self.gamma_y
-                elif(compName == 'kappa_y'): # bending about local y axis
-                    retval= self.kappa_y
-                elif(compName == 'gamma_z'): # shear along z-axis.
-                    retval= self.gamma_z
-                elif(compName == 'theta'): # torsion along x-axis.
-                    retval= self.theta
+                retval= self._get_generalized_strain_component_index_from_name(compName)
                 # Shell generalized strains.
                 if(retval is None):
                     shellResp= xc.RespShellMaterial()
                     rId= shellResp.getComponentIdFromString(compName)
                     retval= shellResp.index(rId)
+                    if(retval==-1):
+                        retval= None
             else:
-                rId= responseId.getComponentIdFromString(compName)
-                retval= responseId.index(rId)
-                if(retval==-1):
-                    retval= None
+                if(responseId.hasResponse(compName)):
+                    rId= responseId.getComponentIdFromString(compName)
+                    retval= responseId.index(rId)
+                    if(retval==-1):
+                        retval= None
+                else:
+                    retval= self._get_generalized_strain_component_index_from_name(compName)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -2893,6 +2979,26 @@ class StructuralMechanics3D(StructuralMechanics):
             errMsg+= ' is not a valid component. Available components are: '
             errMsg+= str(availableStrainComponents)
             lmsg.error(className+'.'+methodName+'; item '+str(compName) + errMsg)
+        return retval
+    
+    def _get_generalized_stress_component_index_from_name(self, compName):
+        '''Return the component index from the generalized stress name.
+
+        :param compName: generalized stress component name.
+        '''
+        retval= None
+        if((compName == 'N') or (compName == 'P')): # axial
+            retval= self.N
+        elif(compName == 'Mz'): # bending about local z axis
+            retval= self.Mz
+        elif((compName == 'Qy') or (compName == 'Vy')): # shear along y-axis.
+            retval= self.Qy
+        elif(compName == 'My'): # bending about local y axis
+            retval= self.My
+        elif((compName == 'Qz') or (compName == 'Vz')):  # shear along z-axis.
+            retval= self.Qz
+        elif(compName == 'T'): # torsion along x-axis.
+            retval= self.Mx
         return retval
     
     def getStressComponentIndexFromName(self, compName, responseId= None):
@@ -2908,28 +3014,22 @@ class StructuralMechanics3D(StructuralMechanics):
         if(compName in availableStressComponents):
             if(responseId is None):
                 # Beam generalized stresses.
-                if((compName == 'N') or (compName == 'P')): # axial
-                    retval= self.N
-                elif(compName == 'Mz'): # bending about local z axis
-                    retval= self.Mz
-                elif((compName == 'Qy') or (compName == 'Vy')): # shear along y-axis.
-                    retval= self.Qy
-                elif(compName == 'My'): # bending about local y axis
-                    retval= self.My
-                elif((compName == 'Qz') or (compName == 'Vz')):  # shear along z-axis.
-                    retval= self.Qz
-                elif(compName == 'T'): # torsion along x-axis.
-                    retval= self.Qz
+                retval= self._get_generalized_stress_component_index_from_name(compName)
                 # Shell generalized stresses.
                 if(retval is None):
                     shellResp= xc.RespShellMaterial()
                     rId= shellResp.getComponentIdFromString(compName)
                     retval= shellResp.index(rId)
+                    if(retval==-1):
+                        retval= None
             else:
-                rId= responseId.getComponentIdFromString(compName)
-                retval= responseId.index(rId)
-                if(retval==-1):
-                    retval= None
+                if(responseId.hasResponse(compName)):
+                    rId= responseId.getComponentIdFromString(compName)
+                    retval= responseId.index(rId)
+                    if(retval==-1):
+                        retval= None
+                else:
+                    retval= self._get_generalized_stress_component_index_from_name(compName)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
