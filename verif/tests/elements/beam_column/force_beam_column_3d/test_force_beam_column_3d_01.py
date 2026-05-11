@@ -42,28 +42,31 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 # Materials definition
 fy= 275e6 # Yield stress of the steel
 E= 210e9 # Young modulus of the steel.
-steel= typical_materials.defSteel01(preprocessor, "steel",E,fy,0.001)
+steel= typical_materials.defSteel01(preprocessor, "steel", E, fy, 0.001)
 
 import os
 pth= os.path.dirname(__file__)
 # print("pth= ", pth)
 if(not pth):
-  pth= "."
+    pth= "."
 auxModulePath= pth+"/../../../aux"
 sys.path.append(auxModulePath)
 import test_quad_region as tqr
 
 # Definition of a new empty fiber section named 'quadFibers' and stored in a
-# Python variable of the same name (surprisingly enough).
+# Python variable of the same name.
 quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","quadFibers")
-fiberSectionRepr= quadFibers.getFiberSectionRepr() # Fiber section representation
-                                                     # of 'quadFibers'
+fiberSectionRepr= quadFibers.getFiberSectionRepr() # Fiber section
+                                                   # representation of
+                                                   # 'quadFibers'
 testQuadRegion= tqr.get_test_quad_region(preprocessor, y0, z0, width, depth, nDivIJ, nDivJK)
-fiberSectionRepr.setGeomNamed(testQuadRegion.name) # We assign the geometry (regions and rebars)
-                                                  # to the fiber section representation
-                                                  # of 'quadFibers'
-quadFibers.setupFibers() # Create the fibers from the information contained in th
-                           # geometry.
+fiberSectionRepr.setGeomNamed(testQuadRegion.name) # We assign the geometry
+                                                   # (regions and rebars)
+                                                   # to the fiber section
+                                                   # representation
+                                                    # of 'quadFibers'
+quadFibers.setupFibers() # Create the fibers from the information contained
+                         # in the geometry object.
 fibras= quadFibers.getFibers() # Get the fiber container from the object.
 A= fibras.getArea(1.0) # Get the sum of the fiber areas.
 
@@ -72,8 +75,9 @@ A= fibras.getArea(1.0) # Get the sum of the fiber areas.
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
-elements.defaultMaterial= quadFibers.name # Material name for the element (the fiber section).
-beam3d= elements.newElement("ForceBeamColumn3d",xc.ID([n1.tag,n2.tag]))
+elements.defaultMaterial= quadFibers.name # Material name for the element
+                                          # (the fiber section).
+beam3d= elements.newElement("ForceBeamColumn3d", xc.ID([n1.tag,n2.tag]))
 
 # Constraints
 modelSpace.fixNode000_000(n1.tag)
@@ -83,12 +87,15 @@ lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(n2.tag, xc.Vector([F,0,0,0,0,0]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
+
 # Solution procedure
 analysis= predefined_solutions.plain_static_modified_newton(feProblem)
-result= analysis.analyze(10)
+## Solve.
+result= analysis.analyze(1)
 
+# Check results.
 delta= n2.getDisp[0]  # Node 2 xAxis displacement
-deltateor= (F*L/(E*A))
+deltateor= (F*L/(E*A)) # Reference value.
 ratio1= (abs((delta-deltateor)/deltateor))
 
 beam3d.getResistingForce()

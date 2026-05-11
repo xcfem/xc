@@ -14,6 +14,7 @@ import sys
 import math
 import uuid
 from materials import typical_materials
+from materials.sections import torsional_stiffness
 from misc_utils import log_messages as lmsg
 import numpy as np
 import matplotlib.pyplot as plt
@@ -1124,7 +1125,7 @@ class RectangularHollowSection(RectangularSection):
             # with the formula for bridges gives better results
             # see est_rectangular_hollow_section_03.py verification
             # test.
-            retval+= getInerciaTorsionCajonMonocelular(bs,bi,h,ts,ti,td)
+            retval+= torsional_stiffness.get_box_girder_torsional_modulus(bs,bi,h,ts,ti,td)
             retval/= 2.0
         return retval
   
@@ -2058,37 +2059,6 @@ class TSection(PolygonalSection):
         contour.appendVertex(geom.Pos2d(-self.webWidth/2.0, 0.0))
         return contour
 
-##   Return the torsion constant of a box 
-##   according to the book "Puentes (apuntes para su diseño
-##   y construcción)" by Javier Manterola Armisén (section 5.2.3 page 251)
-##
-##                        bs
-##             |----------------------|
-##
-##                        ts
-##    -    ---------------------------------
-##    |         \                    /
-##    |h         \td                /
-##    |           \       ti       /
-##    -            ----------------
-##
-##                        bi
-##                 |--------------|
-##
-
-def getInerciaTorsionCajonMonocelular(bs,bi,h,ts,ti,td):
-    '''
-    Return torsional section modulus of the section.
-
-    :param bs: Upper deck width (without the overhangs)
-    :param bi: Lower deck width.
-    :param ts: Upper deck thickness.
-    :param ti: Lower deck thickness.
-    :param td: Thickness of the webs.
-    :param h: Box depth (between mid-planes).
-    '''
-    longAlma=math.sqrt(h**2+((bs-bi)/2)**2)
-    return (bs+bi)**2*h**2/(bs/ts+2*longAlma/td+bi/ti)
 
 def solicitationType(epsCMin, epsSMax):
     ''' Solicitation type from maximum and minimum strain.

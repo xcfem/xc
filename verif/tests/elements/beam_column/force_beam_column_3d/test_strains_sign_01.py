@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
-''' Home made test.'''
+''' Check ForceBeamColum3d element sign criteria. Home made test.'''
 
 from __future__ import print_function
+from __future__ import division
 
-# ForceBeamColum3d element sign criteria.
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 #     Axial and shear forces have the same direction and sense that
 #     the local axes.
@@ -24,17 +29,10 @@ from __future__ import print_function
 #       o 4         o 1
 # 
 
-from __future__ import division
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
-__copyright__= "Copyright 2015, LCPT and AO_O"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 # Material properties
 E= 2.1e6 # Elastic modulus (Pa)

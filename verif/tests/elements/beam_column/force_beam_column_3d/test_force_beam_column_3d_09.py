@@ -17,6 +17,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
+from materials.sections import def_secc_aggregation
 
 # Auxiliary modules.
 pth= os.path.dirname(__file__)
@@ -60,10 +61,6 @@ fy= 275e6 # Yield stress of the steel.
 E= 210e9 # Young modulus of the steel.
 steel= typical_materials.defSteel01(preprocessor, "steel",E,fy,0.001)
 
-### Define torsion and shear responses. 
-respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Torsion response.
-respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e9) # Shear response in y direction.
-respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Shear response in z direction.
 ### Define fiber section.
 materialHandler= preprocessor.getMaterialHandler
 quadFibers= materialHandler.newMaterial("fiber_section_3d","quadFibers")
@@ -72,10 +69,17 @@ testQuadRegion= tqr.get_test_quad_region(preprocessor, y0, z0, width, depth, nDi
 fiberSectionRepr.setGeomNamed(testQuadRegion.name)
 quadFibers.setupFibers()
 # A= quadFibers.getFibers().getArea
+
 ### Define section aggregation. 
-agg= materialHandler.newMaterial("section_aggregator","agg") # create section aggregator.
-agg.setSection("quadFibers") # assign section.
-agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"]) # assign responses.
+#### Define torsion and shear responses. 
+respT= typical_materials.defElasticMaterial(preprocessor, "respT", E= 1e10) # Torsion response.
+respVy= typical_materials.defElasticMaterial(preprocessor, "respVy", E= 1e9) # Shear response in y direction.
+respVz= typical_materials.defElasticMaterial(preprocessor, "respVz", E= 1e9) # Shear response in z direction.
+agg= def_secc_aggregation.def_fiber_section_aggregation3d(preprocessor= preprocessor,
+                                                          fiberSection3d= quadFibers,
+                                                          respT= respT,
+                                                          respVy= respVy,
+                                                          respVz= respVz)
 
 ## Define element.
 elements= preprocessor.getElementHandler
