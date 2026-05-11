@@ -168,6 +168,7 @@ const double &XC::PrismaticBarCrossSection::EIy(void) const
     exit(-1);
     return retval;
   }
+
 //! @brief Returns the product of inertia multiplied by the Young modulus.
 const double &XC::PrismaticBarCrossSection::EIyz(void) const
   {
