@@ -31,6 +31,7 @@
 #include <domain/mesh/node/Node.h>
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/ID.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Default constructor
 XC::SmallDispCrdTransf3d::SmallDispCrdTransf3d(int tag, int classTag)
@@ -79,7 +80,9 @@ int XC::SmallDispCrdTransf3d::computeElemtLengthAndOrient(void) const
     
     if(L==0.0)
       {
-        std::cerr << "SmallDispCrdTransf3d::computeElemtLengthAndOrien: 0 length." << std::endl;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; 0 length."
+		  << Color::def << std::endl;
         return -2;  
       }
     
@@ -98,24 +101,55 @@ int XC::SmallDispCrdTransf3d::computeLocalAxis(void) const
     // Note: v(i) is stored in R(2,i)
     static Vector vAxis(3);
     vAxis(0)= R(2,0); vAxis(1)= R(2,1); vAxis(2)= R(2,2);
+    const double norm= vAxis.Norm();    
+    if(norm == 0)
+      {
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; in coordinate transformation: '" << getName()
+	          << "' xz_vector has zero norm."
+		  << Color::def << std::endl;
+        return -3;
+      }
     
     vectorI(0) = R(0,0); vectorI(1) = R(0,1); vectorI(2) = R(0,2);
+    const double xnorm= vectorI.Norm();
+    
+    if(xnorm == 0)
+      {
+	// Compute a vector normal to vAxis.
+	if(nodeJPtr and nodeIPtr)
+	  {
+	    vectorI= nodeJPtr->getCrds() - nodeIPtr->getCrds();
+	    vectorI.Normalize();
+	  }
+	else
+	  {
+	    vectorI= get_normal_vector_3d(vAxis);
+	    std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
+		      << "; in coordinate transformation: '" << getName()
+		      << "' pointers to nodes have not been assigned yet."
+		      << Color::def << std::endl;
+	  }
+      }
     
     vectorJ(0) = vAxis(1)*vectorI(2) - vAxis(2)*vectorI(1);
     vectorJ(1) = vAxis(2)*vectorI(0) - vAxis(0)*vectorI(2);
     vectorJ(2) = vAxis(0)*vectorI(1) - vAxis(1)*vectorI(0);
     
-    double ynorm = vectorJ.Norm();
+    const double ynorm = vectorJ.Norm();
     
     if(ynorm == 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; in coordinate transformation: '" << getName()
-	          << "' vector v that defines plane xz is parallel to x axis." << std::endl;
+	          << "' vector v= " << vAxis
+		  << " that defines plane xz is parallel to element x axis:"
+	          << vectorI
+		  << Color::def << std::endl;
         return -3;
       }
     
-    vectorJ /= ynorm;
+    vectorJ/= ynorm;
     
     
     // Compute z = x cross y
@@ -474,8 +508,9 @@ int XC::SmallDispCrdTransf3d::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send data." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data."
+		<< Color::def << std::endl;
     return res;
   }
 
@@ -488,15 +523,17 @@ int XC::SmallDispCrdTransf3d::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to receive ids." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids."
+		<< Color::def << std::endl;
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << __FUNCTION__
-		    << "; failed to receive data." << std::endl;
+          std::cerr << Color::red << getClassName() << __FUNCTION__
+		    << "; failed to receive data."
+		    << Color::def << std::endl;
       }
     return res;
   }

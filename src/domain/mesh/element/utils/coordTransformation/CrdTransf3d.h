@@ -131,6 +131,8 @@ class CrdTransf3d: public CrdTransf
 
     void gira(const double &);
   };
+
+  Vector get_normal_vector_3d(const Vector &);
 } // end of XC namespace
 
 #endif

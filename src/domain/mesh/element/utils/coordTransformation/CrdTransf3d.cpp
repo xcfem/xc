@@ -514,3 +514,44 @@ int XC::CrdTransf3d::recvData(const Communicator &comm)
     return res;    
   }
 
+//! @brief Return a vector normal to the given one.
+XC::Vector XC::get_normal_vector_3d(const Vector &v)
+  {
+    Vector retval;
+    // Compute a vector normal to v.
+    const double a= v(0);
+    const double b= v(1);
+    const double c= v(2);
+    const double abs_a= std::abs(a);
+    const double abs_b= std::abs(b);
+    const double abs_c= std::abs(c);
+    const double abs_mx= std::max(abs_a,std::max(abs_b,abs_c));
+    if(abs_mx==0.0)
+      std::cerr << Color::red << __FUNCTION__
+		<< "; the xc_vector is null : "
+		<< v << "; it has no perpendicular."
+		<< " Null vector returned."
+		<< Color::def << std::endl;
+    else if(abs_a==abs_mx) // a is maximum.
+      {
+	if(abs_b>abs_c)
+	  retval= Vector({-b, a, 0});
+	else
+	  retval= Vector({-c, 0, a});
+      }
+    else if(abs_b==abs_mx) // b is maximum.
+      {
+	if(abs_a>abs_c)
+	  retval= Vector({-b, a, 0});
+	else
+	  retval= Vector({0, -c, b});
+      }
+    else // c is maximum.
+      {
+	if(abs_a>abs_b)
+	  retval= Vector({-c, 0, a});
+	else
+	  retval= Vector({0, -c, b});
+      }
+    return retval;
+  }
