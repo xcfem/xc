@@ -121,7 +121,7 @@ const XC::Material *XC::ProtoElementHandler::get_ptr_material(void) const
     Material *retval= nullptr;
     MaterialHandler::const_iterator imat= get_iter_material();
     if(imat!= get_material_handler().end())
-      retval= imat->second;
+      { retval= imat->second; }
     else
       {
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
