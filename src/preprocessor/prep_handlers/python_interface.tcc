@@ -100,15 +100,17 @@ class_<XC::ProtoElementHandler, bases<XC::PrepHandler>, boost::noncopyable >("Pr
 
 XC::Element *(XC::ElementHandler::SeedElemHandler::*newElementTags)(const std::string &, const XC::ID &)= &XC::ElementHandler::SeedElemHandler::newElement;
 XC::Element *(XC::ElementHandler::SeedElemHandler::*newElementNoTags)(const std::string &)= &XC::ElementHandler::SeedElemHandler::newElement;
+XC::Element *(XC::ElementHandler::SeedElemHandler::*get_seed_element)(void)= &XC::ElementHandler::SeedElemHandler::getSeedElement;
 class_<XC::ElementHandler::SeedElemHandler, bases<XC::ProtoElementHandler>, boost::noncopyable >("SeedElementHandler", no_init)
   .def("newElement", newElementNoTags,return_internal_reference<>(),"\n newElement(type,iNodes): Create a new element of type 'type' from the nodes passed as parameter with the XC.ID object 'iNodes'. \n" "Parameters:\n""-type: type of element. Available types:'truss','truss_section','corot_truss','corot_truss_section','muelle', 'spring', 'beam2d_02', 'beam2d_03',  'beam2d_04', 'beam3d_01', 'beam3d_02', 'elastic_beam2d', 'elastic_beam3d', 'beam_with_hinges_2d', 'beam_with_hinges_3d', 'nl_beam_column_2d', 'nl_beam_column_3d','force_beam_column_2d', 'force_beam_column_3d', 'shell_mitc4', ' shell_nl', 'quad4n', 'tri31', 'brick', 'zero_length', 'zero_length_contact_2d', 'zero_length_contact_3d', 'zero_length_section'. \n")
   .def("newElement", newElementTags,return_internal_reference<>(),"\n DEPRECATED. Remove node tags parameter.")
+  .def("getSeedElement",  get_seed_element,return_internal_reference<>(),"Return the seed element.")
    ;
 
 
 class_<XC::ElementHandler, bases<XC::ProtoElementHandler>, boost::noncopyable >("ElementHandler", no_init)
   .add_property("seedElemHandler", make_function( &XC::ElementHandler::getSeedElemHandler, return_internal_reference<>() ))
-  .def("getElement", &XC::ElementHandler::getElement,return_internal_reference<>(),"Returns the element identified by the parameter.")
+  .def("getElement", &XC::ElementHandler::getElement, return_internal_reference<>(),"Returns the element identified by the given tag.")
   .add_property("defaultTag", &XC::ElementHandler::getDefaultTag, &XC::ElementHandler::setDefaultTag,"Starting ID number to apply to the next creation of an element.")
    ;
 
@@ -155,7 +157,8 @@ class_<XC::LoadHandler, bases<XC::PrepHandler>, boost::noncopyable >("LoadHandle
   .def("copyLoads",copyElementalLoads, "Copy the loads on the first element to the second one.") 
     ;
 
-XC::CrdTransf *(XC::TransfCooHandler::*getCoordTransf)(const std::string &)= &XC::TransfCooHandler::find_ptr;
+XC::CrdTransf *(XC::TransfCooHandler::*get_coord_transf_name)(const std::string &)= &XC::TransfCooHandler::find_ptr;
+XC::CrdTransf *(XC::TransfCooHandler::*get_coord_transf_tag)(const int &)= &XC::TransfCooHandler::find_ptr;
 class_<XC::TransfCooHandler, bases<XC::PrepHandler>, boost::noncopyable >("TransfCooHandler", no_init)
   .def("newLinearCrdTransf2d", &XC::TransfCooHandler::newLinearCrdTransf2d,return_internal_reference<>(),"New linear 2d coordinate transformation.")
   .def("newLinearCrdTransf3d", &XC::TransfCooHandler::newLinearCrdTransf3d,return_internal_reference<>(),"New linear 3d coordinate transformation.")
@@ -164,5 +167,6 @@ class_<XC::TransfCooHandler, bases<XC::PrepHandler>, boost::noncopyable >("Trans
   .def("newCorotCrdTransf2d", &XC::TransfCooHandler::newCorotCrdTransf2d,return_internal_reference<>(),"New corotational 2d coordinate transformation.")
   .def("newCorotCrdTransf3d", &XC::TransfCooHandler::newCorotCrdTransf3d,return_internal_reference<>(),"New corotational 3d coordinate transformation.")
   .def("getName",&XC::TransfCooHandler::getName,"Returns the name that corresponds to the identifier.")
-  .def("getCoordTransf", make_function(getCoordTransf, return_internal_reference<>() ),"Return the coordinate transformation from its name.")
+  .def("getCoordTransf", make_function(get_coord_transf_name, return_internal_reference<>() ),"Return the coordinate transformation from its name.")
+  .def("getCoordTransf", make_function(get_coord_transf_tag, return_internal_reference<>() ),"Return the coordinate transformation from its tag.")
   ;
