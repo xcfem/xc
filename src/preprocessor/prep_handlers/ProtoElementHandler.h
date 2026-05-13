@@ -77,13 +77,13 @@ class ProtoElementHandler: public PrepHandler
 
     virtual void setDefaultMaterial(const std::string &);
     const std::string &getDefaultMaterial(void) const;
-    void setNumSections(const int &);
+    virtual void setNumSections(const int &);
     int getNumSections(void) const;
-    void setDimElem(const int &);
+    virtual void setDimElem(const int &);
     int getDimElem(void) const;
-    void setDefaultTransf(const std::string &);
+    virtual void setDefaultTransf(const std::string &);
     const std::string &getDefaultTransf(void) const;
-    void setDefaultIntegrator(const std::string &);
+    virtual void setDefaultIntegrator(const std::string &);
     const std::string &getDefaultIntegrator(void) const;
 
     Element *newElement(const std::string &,const ID &);

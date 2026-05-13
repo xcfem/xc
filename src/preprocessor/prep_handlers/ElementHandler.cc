@@ -85,7 +85,9 @@ XC::ElementHandler::SeedElemHandler::~SeedElemHandler(void)
   { clearAll(); }
 
 //! @brief Sets the default material name for new elements.
-//! @param name: name of the material.
+//! @param name: name of the material. If there is a seed element already
+//! defined with the old number of sections it will be deleted here, and
+//! created again when requested.
 void XC::ElementHandler::SeedElemHandler::setDefaultMaterial(const std::string &name)
   {
     if(name!=this->getDefaultMaterial()) // If really changes.
@@ -98,6 +100,85 @@ void XC::ElementHandler::SeedElemHandler::setDefaultMaterial(const std::string &
 	  }
 	ProtoElementHandler::setDefaultMaterial(name); //update the material name-
       }
+  }
+
+//! @brief Sets the default number of sections for new elements
+//! (when applicable). If there is a seed element already defined with the old
+//! number of sections it will be deleted here, and created again when
+//! requested. 
+//! @param numSections: number of sections for the new elements.
+void XC::ElementHandler::SeedElemHandler::setNumSections(const int &numSections)
+  {
+    if(numSections!=this->getNumSections()) // If really changes.
+      {
+	if(this->seed) // If we have a seed element already
+	  {
+	    // The seed could be no longer valid with the new material so
+	    // we remove it and it will be create in getSeedElement if needed.
+	    this->free();
+	  }
+	//update the number of sections.
+	ProtoElementHandler::setNumSections(numSections); 
+      }    
+  }
+
+//! @brief Sets the dimension for new elements (when applicable). If there is
+//! a seed element already defined with the old dimension it will be deleted
+//! here, and created again when requested.
+//! @param dim: dimension for the new elements.
+void XC::ElementHandler::SeedElemHandler::setDimElem(const int &newDim)
+  {
+    if(newDim!=this->getDimElem()) // If really changes.
+      {
+	if(this->seed) // If we have a seed element already
+	  {
+	    // The seed could be no longer valid with the new material so
+	    // we remove it and it will be create in getSeedElement if needed.
+	    this->free();
+	  }
+	//update the number of sections.
+	ProtoElementHandler::setDimElem(newDim); 
+      } 
+  }
+
+//! @brief Sets the default coordinate transformation for new elements (when
+//! applicable). If there is a seed element already defined with the old
+//! coordintate transformation it will be deleted here, and created again
+//! when requested.
+//! @param newCrdTransfName: name of the new coordinate transformation.
+void XC::ElementHandler::SeedElemHandler::setDefaultTransf(const std::string &newCrdTransfName)
+  {
+    if(newCrdTransfName!=this->getDefaultTransf()) // If really changes.
+      {
+	if(this->seed) // If we have a seed element already
+	  {
+	    // The seed could be no longer valid with the new material so
+	    // we remove it and it will be create in getSeedElement if needed.
+	    this->free();
+	  }
+	//update the number of sections.
+	ProtoElementHandler::setDefaultTransf(newCrdTransfName); 
+      }    
+  }
+
+//! @brief Sets the default integrator name for new elements (when
+//! applicable). If there is a seed element already defined with the old
+//! coordintate transformation it will be deleted here, and created again
+//! when requested.
+//! @param newIntegratorName: name of the new integrator.
+void XC::ElementHandler::SeedElemHandler::setDefaultIntegrator(const std::string &newIntegratorName)
+  {
+    if(newIntegratorName!=this->getDefaultIntegrator()) // If really changes.
+      {
+	if(this->seed) // If we have a seed element already
+	  {
+	    // The seed could be no longer valid with the new material so
+	    // we remove it and it will be create in getSeedElement if needed.
+	    this->free();
+	  }
+	//update the number of sections.
+	ProtoElementHandler::setDefaultIntegrator(newIntegratorName); 
+      }    
   }
 
 void XC::ElementHandler::SeedElemHandler::clearAll(void)

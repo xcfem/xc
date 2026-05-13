@@ -54,7 +54,13 @@ class ElementHandler: public ProtoElementHandler
       public:
         SeedElemHandler(Preprocessor *preprocessor);
         ~SeedElemHandler(void);
+	
         virtual void setDefaultMaterial(const std::string &);
+	virtual void setNumSections(const int &);
+	virtual void setDimElem(const int &);
+	virtual void setDefaultTransf(const std::string &);
+	virtual void setDefaultIntegrator(const std::string &);
+	
 	Element *getSeedElement(void);
 	const Element *getSeedElement(void) const;
         int getDefaultTag(void) const;
