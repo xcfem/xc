@@ -28,6 +28,7 @@
 
 #include <domain/mesh/element/truss_beam_column/BeamColumnWithSectionFDTrf2d.h>
 #include <domain/mesh/element/utils/coordTransformation/CrdTransf2d.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 
 //! @brief Asigna la coordinate transformation.
@@ -45,12 +46,16 @@ void XC::BeamColumnWithSectionFDTrf2d::set_transf(const CrdTransf *trf)
           theCoordTransf = tmp->getCopy();
         else
           {
-            std::cerr << "XC::BeamColumnWithSectionFDTrf2d::set_transf -- failed to get copy of coordinate transformation\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; failed to get copy of coordinate transformation"
+	              << Color::def << std::endl;
             exit(1);
           }
       }
     else
-      std::cerr << "BeamColumnWithSectionFDTrf3d::set_transf; pointer to coordinate transformation is null." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; pointer to coordinate transformation is null."
+		<< Color::def << std::endl;
   }
 
 XC::BeamColumnWithSectionFDTrf2d::BeamColumnWithSectionFDTrf2d(int tag, int classTag,int numSec)
@@ -74,8 +79,9 @@ XC::BeamColumnWithSectionFDTrf2d &XC::BeamColumnWithSectionFDTrf2d::operator=(co
   {
     //BeamColumnWithSectionFD::operator=(other);
     //set_transf(other.theCoordTransf);
-    std::cerr << getClassName()
-	      << "; assignment operator not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; assignment operator not implemented."
+	      << Color::def << std::endl;
     return *this;
   }
 
@@ -97,6 +103,30 @@ const XC::CrdTransf *XC::BeamColumnWithSectionFDTrf2d::getCoordTransf(void) cons
 //! @brief Assigns the coordinate transformation.
 void XC::BeamColumnWithSectionFDTrf2d::setCoordTransf(const CrdTransf &trf)
   { this->set_transf(&trf); }
+
+//! @brief Creates the inertia load that corresponds to the
+//! acceleration argument.
+XC::ElementalLoad *XC::BeamColumnWithSectionFDTrf2d::createInertiaLoad(const Vector &accel)
+  {
+    ElementalLoad *retval= nullptr;
+    const double &linearRho= this->getRho();
+    if(linearRho>0.0)
+      {
+	const Vector load= -accel*getRho();
+	const double norm= load.Norm2();
+	if(norm>0.0)
+	  retval= this->vector2dUniformLoadGlobal(load); //Put the load in the current load pattern.
+      }
+    else
+      {
+	std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+	          << "; element linear density of element "
+	          << this->getTag() << " is zero."
+	          << Color::def << std::endl;
+      }
+    return retval;
+  }
+
 
 //! @brief Send members through the communicator argument.
 int XC::BeamColumnWithSectionFDTrf2d::sendData(Communicator &comm)

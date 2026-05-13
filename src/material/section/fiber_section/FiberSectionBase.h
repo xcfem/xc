@@ -174,6 +174,7 @@ class FiberSectionBase: public PrismaticBarCrossSection
     inline virtual double getCenterOfMassY(void) const
       { return fibers.getCenterOfMassY(); }
     double getArea(void) const;
+    virtual double getLinearRho(void) const;
 
     InteractionDiagram GetInteractionDiagram(const InteractionDiagramData &);
     InteractionDiagram2d GetInteractionDiagramForPlane(const InteractionDiagramData &,const double &);

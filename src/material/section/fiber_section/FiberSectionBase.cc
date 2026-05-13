@@ -1002,6 +1002,10 @@ double XC::FiberSectionBase::getEffectiveDepth(void) const
 double XC::FiberSectionBase::getArea(void) const
   { return fibers.getArea(); }
 
+//! @brief Return linear density.
+double XC::FiberSectionBase::getLinearRho(void) const
+  { return fibers.getLinearRho(); }
+
 //! @brief Moment of inertia relative to bending axis.
 double XC::FiberSectionBase::getHomogenizedI(const double &E0) const
   {

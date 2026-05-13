@@ -87,7 +87,6 @@ void XC::FiberPtrDeque::push_back(Fiber *f)
 bool XC::FiberPtrDeque::needsUpdate(void) const
   {
     bool retval= false;
-    const Fiber *fiberPtr= nullptr;
     std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if((*i)->needsUpdate())
@@ -367,6 +366,21 @@ double XC::FiberPtrDeque::getArea(const double &factor) const
     return factor*retval;
   }
 
+//! @brief Return linear density.
+double XC::FiberPtrDeque::getLinearRho(void) const
+  { 
+    double retval= 0.0;
+    const size_t numFibers= getNumFibers();
+    for( size_t i=0;i<numFibers;i++)
+      {
+	const Fiber *fiber= (*this)[i];
+	const double &fiberArea= fiber->getArea();
+	const UniaxialMaterial *fiberMaterial= fiber->getMaterial();
+	const double &fiberRho= fiberMaterial->getRho();
+        retval+= fiberRho*fiberArea;
+      }
+    return retval;
+  }
 //! @brief Return the moment of inertia with respect to an axis parallel
 //! the z axis at a distance y0 from the origin.
 double XC::FiberPtrDeque::getIz(const double &factor,const double &y0) const

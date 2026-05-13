@@ -91,6 +91,7 @@ class PrismaticBarCrossSection: public SectionForceDeformation
     Vector2d getVDirStrongAxis(void) const;
     Vector2d getAxis2VDir(void) const;
     Vector2d getVDirWeakAxis(void) const;
+    virtual double getLinearRho(void) const;
 
     bool hayAxil(const double &tol=1e-4) const;
     bool isSubjectedToShear(const double &tol=1e-4) const;

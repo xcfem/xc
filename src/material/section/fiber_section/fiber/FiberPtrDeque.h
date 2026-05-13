@@ -264,6 +264,7 @@ class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>, public Mo
     //! parallel to y through the centroid.
     inline double getiy(const double factor= 1.0) const
       { return getIy(factor,zCenterOfMass)/getArea(factor); }
+    virtual double getLinearRho(void) const;
 
     void Print(std::ostream &s,const int &flag) const;
     int sendSelf(Communicator &);

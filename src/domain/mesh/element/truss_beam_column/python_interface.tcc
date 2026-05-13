@@ -72,6 +72,9 @@ class_<XC::BeamColumnWithSectionFD, bases<XC::BeamColumn>, boost::noncopyable >(
   .def("getSections",make_function(&XC::BeamColumnWithSectionFD::getSections, return_internal_reference<>() ),"Returns element's sections.")
   .def("setMaterial", bcwsfd_set_material_ref, "Assigns the given material to the element.")
   .def("setMaterial", bcwsfd_set_material_name, "Assigns the material with the given name to the element.")
+  .add_property("rho", &XC::BeamColumnWithSectionFD::getRho,&XC::BeamColumnWithSectionFD::setRho, "Get/set the element density per unit length.")
+  .def("setLinearRho", &XC::BeamColumnWithSectionFD::setRho, "Set the element density per unit length.")
+  .def("getLinearRho", &XC::BeamColumnWithSectionFD::getRho, "Get the element density per unit length.")
   ;
 
 class_<XC::BeamColumnWithSectionFDTrf2d, bases<XC::BeamColumnWithSectionFD>, boost::noncopyable >("BeamColumnWithSectionFDTrf2d", no_init)
@@ -113,7 +116,6 @@ class_<XC::BeamColumnWithSectionFDTrf3d, bases<XC::BeamColumnWithSectionFD>, boo
 #include "beamWithHinges/python_interface.tcc"
 
 class_<XC::NLForceBeamColumn2dBase, bases<XC::BeamColumnWithSectionFDTrf2d>, boost::noncopyable >("NLForceBeamColumn2dBase", no_init)
-  .add_property("rho", &XC::NLForceBeamColumn2dBase::getRho,&XC::NLForceBeamColumn2dBase::setRho, "Get/set the element density.")
   .add_property("tol", &XC::NLForceBeamColumn2dBase::getTol,&XC::NLForceBeamColumn2dBase::setTol, "Get/set the tolerance for relative energy norm.")
   .def("getV", &XC::NLForceBeamColumn2dBase::getV, "Mean shear force.")
   .add_property("getV1", &XC::NLForceBeamColumn2dBase::getV1, "Internal shear force at back end.")

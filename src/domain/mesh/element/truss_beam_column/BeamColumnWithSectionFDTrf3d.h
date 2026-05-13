@@ -96,6 +96,8 @@ class BeamColumnWithSectionFDTrf3d: public BeamColumnWithSectionFD
     const Vector &getVDirStrongAxisGlobalCoord(bool initialGeometry) const;
     const Vector &getVDirWeakAxisGlobalCoord(const size_t &i, bool initialGeometry) const;
     const Vector &getVDirWeakAxisGlobalCoord(bool initialGeometry) const;
+    
+    virtual ElementalLoad *createInertiaLoad(const Vector &);
   };
 } // end of XC namespace
 

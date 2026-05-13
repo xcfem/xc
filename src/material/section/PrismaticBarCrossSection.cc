@@ -227,6 +227,14 @@ double XC::PrismaticBarCrossSection::getEI1(void) const
 double XC::PrismaticBarCrossSection::getEI2(void) const
   { return I2_inertia(EIy(),EIz(),EIyz()); }
 
+double XC::PrismaticBarCrossSection::getLinearRho(void) const
+  {
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "not implemented yet."
+              << Color::def << std::endl;
+    return 0.0;
+  }
+
 //! @brief Returns the principal axes of inertia of the cross-section.
 PrincipalAxes2D XC::PrismaticBarCrossSection::getInertiaAxes(void) const
   { return PrincipalAxes2D(getCenterOfMass(),EIy(),EIz(),EIyz());  }

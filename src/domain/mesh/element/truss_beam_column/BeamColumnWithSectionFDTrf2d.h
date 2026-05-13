@@ -62,6 +62,8 @@ class BeamColumnWithSectionFDTrf2d: public BeamColumnWithSectionFD
     virtual CrdTransf *getCoordTransf(void);
     virtual const CrdTransf *getCoordTransf(void) const;
     void setCoordTransf(const CrdTransf &);
+    
+    virtual ElementalLoad *createInertiaLoad(const Vector &);
 
   };
 } // end of XC namespace

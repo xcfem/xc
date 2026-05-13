@@ -287,6 +287,29 @@ const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisGlobalCoord(b
       }
   }
 
+//! @brief Creates the inertia load that corresponds to the
+//! acceleration argument.
+XC::ElementalLoad *XC::BeamColumnWithSectionFDTrf3d::createInertiaLoad(const Vector &accel)
+  {
+    ElementalLoad *retval= nullptr;
+    const double &linearRho= this->getRho();
+    if(linearRho>0.0)
+      {
+	const Vector load= -accel*getRho();
+	const double norm= load.Norm2();
+	if(norm>0.0)
+	  retval= this->vector3dUniformLoadGlobal(load); //Put the load in the current load pattern.
+      }
+    else
+      {
+	std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+	          << "; element linear density of element "
+	          << this->getTag() << " is zero."
+	          << Color::def << std::endl;
+      }      
+    return retval;
+  }
+
 //! @brief Send members through the communicator argument.
 int XC::BeamColumnWithSectionFDTrf3d::sendData(Communicator &comm)
   {
