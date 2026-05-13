@@ -514,7 +514,7 @@ class OutputHandler(object):
             if(modM3d>threshold):
                 p=n.getCurrentPos3d(defFScale)
                 momentPairs.append(([p.x,p.y,p.z],[m3d.x,m3d.y,m3d.z]))
-            modR= max(modF3d,modF3d)
+            modR= max(modF3d,modM3d)
             if(modR>maxAbs):
                 maxAbs=modR
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
