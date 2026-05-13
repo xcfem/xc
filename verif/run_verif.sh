@@ -471,6 +471,7 @@ python tests/elements/crd_transf/test_pdelta_crd_transf_2d_01.py
 python tests/elements/crd_transf/test_corot_crd_transf_2d_01.py
 python tests/elements/crd_transf/test_linear_crd_transf_3d_01.py
 python tests/elements/crd_transf/test_linear_crd_transf_3d_02.py
+python tests/elements/crd_transf/test_linear_crd_transf_3d_03.py
 python tests/elements/crd_transf/test_pdelta_crd_transf_3d_01.py
 python tests/elements/crd_transf/test_corot_crd_transf_3d_01.py
 python tests/elements/crd_transf/test_corot_crd_transf_3d_02.py
@@ -481,7 +482,8 @@ python tests/elements/crd_transf/test_element_point_01.py
 python tests/elements/crd_transf/test_crd_transf2d_01.py
 python tests/elements/crd_transf/test_crd_transf3d_01.py
 echo "$BLEU" "  Change element material tests." "$NORMAL"
-python tests/elements/change_material_properties/test_change_element_material.py
+python tests/elements/change_material_properties/test_change_element_material_01.py
+python tests/elements/change_material_properties/test_change_element_material_02.py
 python tests/elements/change_material_properties/test_change_element_material_properties_01.py
 python tests/elements/change_material_properties/test_change_element_material_properties_02.py
 python tests/elements/change_material_properties/test_change_element_material_properties_03.py
