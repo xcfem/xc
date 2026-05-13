@@ -339,6 +339,37 @@ class PredefinedSpace(object):
     def getTransfCooHandler(self):
         ''' Return the coordinate transformation handler.'''
         return self.preprocessor.getTransfCooHandler
+
+    def getCoordTransf(self, name= None, tag= None):
+        ''' Return the coordinate transformation with the given identifier
+            (its name or its tag, but not both).
+
+        :param name: name of the coordinate transformation to retrieve.
+        :param tag: tag of the coordinate transformation to retrieve.
+        '''
+        retval= None
+        if((name is None) and (tag is None)):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= '; you must specify the name or the tag of the desired coordinate transformation.'
+            lmsg.error(className+'.'+methodName+errMsg)
+        else:
+            trfCooHandler= self.getTransfCooHandler()
+            if(name is not None):
+                retval=  trfCooHandler.getCoordTransf(name)
+                if(tag is not None):
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    errorMsg= '; you can specify the name or the tag of the desired coordinate transformation, but not both.'
+                    lmsg.error(className+'.'+methodName+errMsg)
+            elif(tag is not None):
+                retval=  trfCooHandler.getCoordTransf(tag)
+                if(name is not None):
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    errorMsg= '; you can specify the name or the tag of the desired coordinate transformation, but not both.'
+                    lmsg.error(className+'.'+methodName+errMsg)
+        return retval
     
     def getElementHandler(self):
         ''' Return the element handler for this model.'''
@@ -355,14 +386,17 @@ class PredefinedSpace(object):
         '''
         self.preprocessor.getNodeHandler.numDOFs= nDOFs
         
+
     def setDefaultMaterial(self, material):
-        ''' Assigns the material to be used when creating new elements.
+        ''' Assigns the material to be used when creating new elements. The
+        seed element will be created again when appropriate to take account
+        of the new material.
 
         :param material: default material.
         '''
         self.preprocessor.getElementHandler.defaultMaterial= material.name
         self.preprocessor.getElementHandler.seedElemHandler.defaultMaterial= material.name
-
+        
     def getDefaultMaterials(self):
         ''' Return the default materials for the element handler and the seed element handler.'''
         return [self.preprocessor.getElementHandler.defaultMaterial, self.preprocessor.getElementHandler.seedElemHandler.defaultMaterial]
@@ -374,11 +408,13 @@ class PredefinedSpace(object):
                          handler, materials[1]-> seed element handler).
         '''
         self.preprocessor.getElementHandler.defaultMaterial= materials[0]
-        self.preprocessor.getElementHandler.seedElemHandler.defaultMaterial= materials[1]
+        self.preprocessor.getElementHandler.seedElemHandler.defaultMaterial= materials[1]        
 
     def setDefaultCoordTransf(self, coordinateTransformation):
         ''' Assigns the coordinate transformation to be used when creating 
-            new elements.
+            new elements. If there is a seed element already defined with the
+            old coordinate transformation it will be delented by the seed
+            element handler and created again when requested.
 
         :param coordinateTransformation: default coordinate transfomation.
         '''
@@ -393,7 +429,10 @@ class PredefinedSpace(object):
         return [self.preprocessor.getElementHandler.defaultTransformation, self.preprocessor.getElementHandler.seedElemHandler.defaultTransformation]
 
     def setElementDimension(self, elementDimension):
-        ''' Set the dimension for the new elements (when appropriate).
+        ''' Set the dimension for the new elements (when appropriate). If 
+            there is a seed element already defined with the old dimension 
+            value it will be delented by the seed element handler and created 
+            again when requested.
 
         :param elementDimension: dimension for the new elements (1, 2 or 3).
         '''
@@ -402,19 +441,26 @@ class PredefinedSpace(object):
 
     def setNumSections(self, numSections:int):
         ''' Set the number of sections for the new elements (when appropriate).
+            If there is a seed element already defined with the old number of 
+            sections it will be delented by the seed element handler and 
+            created again when requested.
 
         :param numSections: number of sections along the element.
         '''
         self.preprocessor.getElementHandler.numSections= numSections
+        self.preprocessor.getElementHandler.seedElemHandler.numSections= numSections
         
     def setDefaultIntegrator(self, beamIntegration):
         ''' Set the default integration scheme for the new elements (when
-            appropriate).
+            appropriate). If there is a seed element already defined with the
+            old integrator it will be delented by the seed element handler and 
+            created again when requested.
 
-        :param beamIntegrationName: name of the beam integration scheme for 
-                                    the new elements.
+        :param beamIntegrationName: beam integration scheme for the new 
+                                    elements.
         '''
         self.preprocessor.getElementHandler.defaultIntegrator= beamIntegration.name
+        self.preprocessor.getElementHandler.seedElemHandler.defaultIntegrator= beamIntegration.name
 
     def getDefaultIntegrator(self):
         ''' Return the name of the default integration scheme for the new 
@@ -437,6 +483,10 @@ class PredefinedSpace(object):
         :param nodeTags: list of the identifiers of the element nodes.
         '''
         return self.preprocessor.getElementHandler.seedElemHandler.newElement(elementType)
+
+    def getSeedElement(self):
+        ''' Return the current seed element.'''
+        return self.preprocessor.getElementHandler.seedElemHandler.getSeedElement()
 
     def removeElement(self, element):
         ''' Remove the given element from the FE problem.
