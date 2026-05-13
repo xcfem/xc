@@ -62,6 +62,7 @@ class BeamColumnWithSectionFD: public BeamColumn
 
     void setTrialSectionDeformations(const std::vector<Vector> &vs);
 
+    void setMaterial(const Material &);    
     void setMaterial(const std::string &);    
     virtual void setSection(const PrismaticBarCrossSection *sccModel);
     bool setSections(const std::vector<PrismaticBarCrossSection *> &sectionPtrs);

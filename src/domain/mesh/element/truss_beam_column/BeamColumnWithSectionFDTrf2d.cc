@@ -94,6 +94,10 @@ XC::CrdTransf *XC::BeamColumnWithSectionFDTrf2d::getCoordTransf(void)
 const XC::CrdTransf *XC::BeamColumnWithSectionFDTrf2d::getCoordTransf(void) const
   { return theCoordTransf; }
 
+//! @brief Assigns the coordinate transformation.
+void XC::BeamColumnWithSectionFDTrf2d::setCoordTransf(const CrdTransf &trf)
+  { this->set_transf(&trf); }
+
 //! @brief Send members through the communicator argument.
 int XC::BeamColumnWithSectionFDTrf2d::sendData(Communicator &comm)
   {

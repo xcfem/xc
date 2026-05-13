@@ -24,21 +24,27 @@
 //Elasticity.
 
 XC::SolidMech2D &(ElemWithMaterial4N_Mech2D::*getMech2DPhysicalProp)(void)= &ElemWithMaterial4N_Mech2D::getPhysicalProperties;
+void (ElemWithMaterial4N_Mech2D::*ewm4n_mech2d_set_material_ref)(const XC::Material &)= &ElemWithMaterial4N_Mech2D::setMaterial;
+void (ElemWithMaterial4N_Mech2D::*ewm4n_mech2d_set_material_name)(const std::string &)= &ElemWithMaterial4N_Mech2D::setMaterial;
 class_<ElemWithMaterial4N_Mech2D, bases<ElementBase4N >, boost::noncopyable >("ElemWithMaterial4N_Mech2D", no_init)
   .add_property("physicalProperties", make_function(getMech2DPhysicalProp, return_internal_reference<>() ),"Returns materials at integration points (gauss points).")
   .add_property("getPhysicalProperties", make_function(getMech2DPhysicalProp, return_internal_reference<>() ),"TO DEPRECATE: use physicalProperties. Returns materials at integration points (gauss points).")
   .add_property("extrapolationMatrix",make_function(&ElemWithMaterial4N_Mech2D::getExtrapolationMatrix,return_internal_reference<>() ),"Returns the element extrapolation matrix.")
   .def("getExtrapolatedValues", &ElemWithMaterial4N_Mech2D::getExtrapolatedValues,"Return the values at nodes from the values at the Gauss points.")
-  .def("setMaterial", &ElemWithMaterial4N_Mech2D::setMaterial,"Set the element material.")
+  .def("setMaterial", ewm4n_mech2d_set_material_ref, "Assigns the given material to the element.")
+  .def("setMaterial", ewm4n_mech2d_set_material_name, "Assigns the material with the given name to the element.")
   .def("copyMaterialFrom", &ElemWithMaterial4N_Mech2D::copyMaterialFrom, "Copy the material from the given element.")
    ;
 
+void (PlaneElement4N_Mech2D::*plne4n_mech2d_set_material_ref)(const XC::Material &)= &PlaneElement4N_Mech2D::setMaterial;
+void (PlaneElement4N_Mech2D::*plne4n_mech2d_set_material_name)(const std::string &)= &PlaneElement4N_Mech2D::setMaterial;
 class_<PlaneElement4N_Mech2D, bases<ElemWithMaterial4N_Mech2D>, boost::noncopyable >("PlaneElement4N_Mech2D", no_init)
   .def("getPerimeter", &PlaneElement4N_Mech2D::getPerimeter, "Returns element's perimeter.")
   .def("getSide", &PlaneElement4N_Mech2D::getSide, "getSide(i, initialGeometry): the i-th side of the element.")
   .def("getMaximumCornerAngle", &PlaneElement4N_Mech2D::getMaximumCornerAngle, "getMaximumCornerAngle(initialGeometry): return the maximum corner angle quality parameter. If intialGeometry is True the returned value corresponds to its undeformed geometry.")
   .def("orientation", &PlaneElement4N_Mech2D::orientation, "orientation(initialGeometry) return the orientation of the element.")
-  .def("setMaterial", &PlaneElement4N_Mech2D::setMaterial,"Set the element material.")
+  .def("setMaterial", plne4n_mech2d_set_material_ref, "Assigns the given material to the element.")
+  .def("setMaterial", plne4n_mech2d_set_material_name, "Assigns the material with the given name to the element.")
    ;
 
 class_<QuadBase4N_Mech2D, bases<PlaneElement4N_Mech2D>, boost::noncopyable >("QuadBase4N_Mech2D", no_init)
@@ -55,10 +61,13 @@ class_<XC::SolidMech4N, bases<QuadBase4N_Mech2D>, boost::noncopyable >("SolidMec
 #include "fourNodeQuad/python_interface.tcc"
 
 XC::SolidMech2D &(ElemWithMaterial3N_Mech2D::*getMech2D3NPhysicalProp)(void)= &ElemWithMaterial3N_Mech2D::getPhysicalProperties;
+void (ElemWithMaterial3N_Mech2D::*ewm3n_mech2d_set_material_ref)(const XC::Material &)= &ElemWithMaterial3N_Mech2D::setMaterial;
+void (ElemWithMaterial3N_Mech2D::*ewm3n_mech2d_set_material_name)(const std::string &)= &ElemWithMaterial3N_Mech2D::setMaterial;
 class_<ElemWithMaterial3N_Mech2D, bases<XC::ElementBase<3> >, boost::noncopyable >("ElemWithMaterial3N_Mech2D", no_init)
   .add_property("physicalProperties", make_function(getMech2D3NPhysicalProp, return_internal_reference<>() ),"returns materials at integration points (gauss points).")
   .add_property("getPhysicalProperties", make_function(getMech2D3NPhysicalProp, return_internal_reference<>() ),"TO DEPRECATE: use physicalProperties. Returns materials at integration points (gauss points).")
-  .def("setMaterial", &ElemWithMaterial3N_Mech2D::setMaterial,"Set the element material.")
+  .def("setMaterial", ewm3n_mech2d_set_material_ref, "Assigns the given material to the element.")
+  .def("setMaterial", ewm3n_mech2d_set_material_name, "Assigns the material with the given name to the element.")
    ;
 
 class_<PlaneElement3N_Mech2D, bases<ElemWithMaterial3N_Mech2D>, boost::noncopyable >("PlaneElement3N_Mech2D", no_init)
@@ -74,10 +83,13 @@ class_<TriBase3N_Mech2D, bases<PlaneElement3N_Mech2D>, boost::noncopyable >("Tri
 #include "triangle/python_interface.tcc"
 
 XC::SectionFDPhysicalProperties &(ElemWithMaterial4N_SFD::*getSectionFDPhysicalProp)(void)= &ElemWithMaterial4N_SFD::getPhysicalProperties;
+void (ElemWithMaterial4N_SFD::*ewm4n_sfd_set_material_ref)(const XC::Material &)= &ElemWithMaterial4N_SFD::setMaterial;
+void (ElemWithMaterial4N_SFD::*ewm4n_sfd_set_material_name)(const std::string &)= &ElemWithMaterial4N_SFD::setMaterial;
 class_<ElemWithMaterial4N_SFD, bases<ElementBase4N >, boost::noncopyable >("ElemWithMaterial4N_SFD", no_init)
   .add_property("physicalProperties", make_function(getSectionFDPhysicalProp, return_internal_reference<>() ),"returns materials at integration points (gauss points).")
   .add_property("getPhysicalProperties", make_function(getSectionFDPhysicalProp, return_internal_reference<>() ),"TO DEPRECATE: use physicalProperties. Returns materials at integration points (gauss points).")
-  .def("setMaterial", &ElemWithMaterial4N_SFD::setMaterial,"Set the element material.")
+  .def("setMaterial", ewm4n_sfd_set_material_ref, "Assigns the given material to the element.")
+  .def("setMaterial", ewm4n_sfd_set_material_name, "Assigns the material with the given name to the element.")
   .def("copyMaterialFrom", &ElemWithMaterial4N_SFD::copyMaterialFrom, "Copy the material from the given element.")
   .add_property("extrapolationMatrix",make_function(&ElemWithMaterial4N_SFD::getExtrapolationMatrix,return_internal_reference<>() ),"Returns the element extrapolation matrix.")
   .def("getExtrapolatedValues", &ElemWithMaterial4N_SFD::getExtrapolatedValues,"Return the values at nodes from the values at the Gauss points.")
@@ -90,10 +102,13 @@ class_<PlaneElement4N_SFD, bases<ElemWithMaterial4N_SFD>, boost::noncopyable >("
   .def("orientation", &PlaneElement4N_SFD::orientation, "orientation(initialGeometry) return the orientation of the element.")
    ;
 
+void (ElemWithMaterial9N_SFD::*ewm9n_sfd_set_material_ref)(const XC::Material &)= &ElemWithMaterial9N_SFD::setMaterial;
+void (ElemWithMaterial9N_SFD::*ewm9n_sfd_set_material_name)(const std::string &)= &ElemWithMaterial9N_SFD::setMaterial;
 class_<ElemWithMaterial9N_SFD, bases<ElementBase9N >, boost::noncopyable >("ElemWithMaterial9N_SFD", no_init)
   .add_property("physicalProperties", make_function(getSectionFDPhysicalProp, return_internal_reference<>() ),"returns materials at integration points (gauss points).")
   .add_property("getPhysicalProperties", make_function(getSectionFDPhysicalProp, return_internal_reference<>() ),"TO DEPRECATE: use physicalProperties. Returns materials at integration points (gauss points).")
-  .def("setMaterial", &ElemWithMaterial9N_SFD::setMaterial,"Set the element material.")
+  .def("setMaterial", ewm9n_sfd_set_material_ref, "Assigns the given material to the element.")
+  .def("setMaterial", ewm9n_sfd_set_material_name, "Assigns the material with the given name to the element.")
    ;
 
 class_<PlaneElement9N_SFD, bases<ElemWithMaterial9N_SFD>, boost::noncopyable >("PlaneElement9N_SFD", no_init)
@@ -105,11 +120,14 @@ class_<PlaneElement9N_SFD, bases<ElemWithMaterial9N_SFD>, boost::noncopyable >("
 
 // 9 nodes solid mechanics plane element.
 XC::SolidMech2D &(ElemWithMaterial9N_Mech2D::*getMech2D9NPhysicalProp)(void)= &ElemWithMaterial9N_Mech2D::getPhysicalProperties;
+void (ElemWithMaterial9N_Mech2D::*ewm9n_mech2d_set_material_ref)(const XC::Material &)= &ElemWithMaterial9N_Mech2D::setMaterial;
+void (ElemWithMaterial9N_Mech2D::*ewm9n_mech2d_set_material_name)(const std::string &)= &ElemWithMaterial9N_Mech2D::setMaterial;
 class_<ElemWithMaterial9N_Mech2D, bases<ElementBase9N >, boost::noncopyable >("ElemWithMaterial9N_Mech2D", no_init)
   .add_property("physicalProperties", make_function(getMech2D9NPhysicalProp, return_internal_reference<>() ),"Returns materials at integration points (gauss points).")
 //  .add_property("extrapolationMatrix",make_function(&ElemWithMaterial9N_Mech2D::getExtrapolationMatrix,return_internal_reference<>() ),"Returns the element extrapolation matrix.")
 //  .def("getExtrapolatedValues", &ElemWithMaterial9N_Mech2D::getExtrapolatedValues,"Return the values at nodes from the values at the Gauss points.")
-  .def("setMaterial", &ElemWithMaterial9N_Mech2D::setMaterial,"Set the element material.")
+  .def("setMaterial", ewm9n_mech2d_set_material_ref, "Assigns the given material to the element.")
+  .def("setMaterial", ewm9n_mech2d_set_material_name, "Assigns the material with the given name to the element.")
    ;
 
 #include "UP-ucsd/python_interface.tcc"

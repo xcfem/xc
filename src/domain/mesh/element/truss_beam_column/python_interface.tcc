@@ -31,12 +31,15 @@ class_<XC::BeamColumn, bases<XC::Element1D>, boost::noncopyable >("BeamColumn", 
 
 XC::ElasticSection2dPhysicalProperties &(XC::ProtoBeam2d::*getElasticSection2dPhysicalProp)(void)= &XC::ProtoBeam2d::getPhysicalProperties;
 XC::CrossSectionProperties2d &(XC::ProtoBeam2d::*getCrossSectionProperties2d)(void)= &XC::ProtoBeam2d::getSectionProperties;
+void (XC::ProtoBeam2d::*pbeam2d_set_material_ref)(const XC::Material &)= &XC::ProtoBeam2d::setMaterial;
+void (XC::ProtoBeam2d::*pbeam2d_set_material_name)(const std::string &)= &XC::ProtoBeam2d::setMaterial;
 class_<XC::ProtoBeam2d, bases<XC::BeamColumn>, boost::noncopyable >("ProtoBeam2d", no_init)
   .add_property("sectionProperties", make_function(getCrossSectionProperties2d, return_internal_reference<>()), &XC::ProtoBeam2d::setSectionProperties,"Access to section properties.")
   .add_property("physicalProperties", make_function(getElasticSection2dPhysicalProp, return_internal_reference<>() ),"Returns materials at integration points (gauss points).")
   .add_property("getPhysicalProperties", make_function(getElasticSection2dPhysicalProp, return_internal_reference<>() ),"TO DEPRECATE: use physicalProperties. Returns materials at integration points (gauss points).")
   .def("setSectionProperties",&XC::ProtoBeam2d::setSectionProperties,"Set cross section properties.")
-  .def("setMaterial", &XC::ProtoBeam2d::setMaterial,"Assigns a different material to the element.")
+  .def("setMaterial", pbeam2d_set_material_ref, "Assigns the given material to the element.")
+  .def("setMaterial", pbeam2d_set_material_name, "Assigns the material with the given name to the element.")
   .def("getVDirStrongAxisLocalCoord",&XC::ProtoBeam2d::getVDirStrongAxisLocalCoord,"Returns the direction vector of element strong axis expressed in the local coordinate system.")
   .def("getVDirWeakAxisLocalCoord",&XC::ProtoBeam2d::getVDirWeakAxisLocalCoord,"Returns the direction vector of element weak axis expressed in the local coordinate system.")
   .def("getStrongAxisAngle",&XC::ProtoBeam2d::getStrongAxisAngle,"Returns the angle between element strong axis and local XZ plane.")
@@ -45,12 +48,15 @@ class_<XC::ProtoBeam2d, bases<XC::BeamColumn>, boost::noncopyable >("ProtoBeam2d
 
 XC::ElasticSection3dPhysicalProperties &(XC::ProtoBeam3d::*getElasticSection3dPhysicalProp)(void)= &XC::ProtoBeam3d::getPhysicalProperties;
 XC::CrossSectionProperties3d &(XC::ProtoBeam3d::*getCrossSectionProperties3d)(void)= &XC::ProtoBeam3d::getSectionProperties;
+void (XC::ProtoBeam3d::*pbeam3d_set_material_ref)(const XC::Material &)= &XC::ProtoBeam3d::setMaterial;
+void (XC::ProtoBeam3d::*pbeam3d_set_material_name)(const std::string &)= &XC::ProtoBeam3d::setMaterial;
 class_<XC::ProtoBeam3d, bases<XC::BeamColumn>, boost::noncopyable >("ProtoBeam3d", no_init)
   .add_property("sectionProperties", make_function(getCrossSectionProperties3d, return_internal_reference<>()), &XC::ProtoBeam3d::setSectionProperties,"Access to section properties.")
   .add_property("physicalProperties", make_function(getElasticSection3dPhysicalProp, return_internal_reference<>() ),"Returns materials at integration points (gauss points).")
   .add_property("getPhysicalProperties", make_function(getElasticSection3dPhysicalProp, return_internal_reference<>() ),"TO DEPRECATE: use physicalProperties. Returns materials at integration points (gauss points).")
   .def("setSectionProperties",&XC::ProtoBeam3d::setSectionProperties,"Set cross section properties.")
-  .def("setMaterial", &XC::ProtoBeam3d::setMaterial,"Assigns a different material to the element.")
+  .def("setMaterial", pbeam3d_set_material_ref, "Assigns the given material to the element.")
+  .def("setMaterial", pbeam3d_set_material_name, "Assigns the material with the given name to the element.")
   .def("getVDirStrongAxisLocalCoord",&XC::ProtoBeam3d::getVDirStrongAxisLocalCoord,"Returns the direction vector of element strong axis expressed in the local coordinate system.")
   .def("getVDirWeakAxisLocalCoord",&XC::ProtoBeam3d::getVDirWeakAxisLocalCoord,"Returns the direction vector of element weak axis expressed in the local coordinate system.")
   .def("getStrongAxisAngle",&XC::ProtoBeam3d::getStrongAxisAngle,"Returns the angle between element strong axis and local XZ plane.")
@@ -59,13 +65,17 @@ class_<XC::ProtoBeam3d, bases<XC::BeamColumn>, boost::noncopyable >("ProtoBeam3d
 
 #include "elasticBeamColumn/python_interface.tcc"
 
+void (XC::BeamColumnWithSectionFD::*bcwsfd_set_material_ref)(const XC::Material &)= &XC::BeamColumnWithSectionFD::setMaterial;
+void (XC::BeamColumnWithSectionFD::*bcwsfd_set_material_name)(const std::string &)= &XC::BeamColumnWithSectionFD::setMaterial;
 class_<XC::BeamColumnWithSectionFD, bases<XC::BeamColumn>, boost::noncopyable >("BeamColumnWithSectionFD", no_init)
   .def("getNumSections",&XC::BeamColumnWithSectionFD::getNumSections)
   .def("getSections",make_function(&XC::BeamColumnWithSectionFD::getSections, return_internal_reference<>() ),"Returns element's sections.")
-  .def("setMaterial", &XC::BeamColumnWithSectionFD::setMaterial,"Assigns a different material to the element.")
-   ;
+  .def("setMaterial", bcwsfd_set_material_ref, "Assigns the given material to the element.")
+  .def("setMaterial", bcwsfd_set_material_name, "Assigns the material with the given name to the element.")
+  ;
 
 class_<XC::BeamColumnWithSectionFDTrf2d, bases<XC::BeamColumnWithSectionFD>, boost::noncopyable >("BeamColumnWithSectionFDTrf2d", no_init)
+  .def("setCoordTransf", &XC::BeamColumnWithSectionFDTrf2d::setCoordTransf, "Assigns the coordinate transformation.")
    ;
 
 XC::Vector (XC::BeamColumnWithSectionFDTrf3d::*get_vdir_strong_axis_local_coord_section)(const size_t &) const= &XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisLocalCoord;
@@ -84,7 +94,7 @@ const XC::Vector &(XC::BeamColumnWithSectionFDTrf3d::*get_vdir_weak_axis_global_
 const XC::Vector &(XC::BeamColumnWithSectionFDTrf3d::*get_vdir_weak_axis_global_coord_average)(bool) const= &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisGlobalCoord;
 
 class_<XC::BeamColumnWithSectionFDTrf3d, bases<XC::BeamColumnWithSectionFD>, boost::noncopyable >("BeamColumnWithSectionFDTrf3d", no_init)
-
+  .def("setCoordTransf", &XC::BeamColumnWithSectionFDTrf3d::setCoordTransf, "Assigns the coordinate transformation.")
   .def("getVDirStrongAxisLocalCoord",get_vdir_strong_axis_local_coord_section,"Returns i-th cross section strong axis direction vector expressed in local coordinates.")
   .def("getVDirStrongAxisLocalCoord",get_vdir_strong_axis_local_coord_average,"Returns the average cross section strong axis direction vector expressed in local coordinates.")
   .def("getVDirWeakAxisLocalCoord",get_vdir_weak_axis_local_coord_section,"Returns i-th cross section weak axis direction vector expressed in local coordinates.")

@@ -29,11 +29,10 @@
 #include <domain/mesh/element/truss_beam_column/BeamColumnWithSectionFDTrf3d.h>
 #include <domain/mesh/element/utils/coordTransformation/CrdTransf3d.h>
 #include "material/section/PrismaticBarCrossSection.h"
-
-
 #include "utility/geom/pos_vec/Vector2d.h"
+#include "utility/utils/misc_utils/colormod.h"
 
-
+//! @brief Assings the coordinate transformation.
 void XC::BeamColumnWithSectionFDTrf3d::set_transf(const CrdTransf *trf)
   {
     if(theCoordTransf)
@@ -48,12 +47,16 @@ void XC::BeamColumnWithSectionFDTrf3d::set_transf(const CrdTransf *trf)
           theCoordTransf = tmp->getCopy();
         else
           {
-            std::cerr << "BeamColumnWithSectionFDTrf3d::set_transf -- failed to get copy of coordinate transformation\n";
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; failed to get copy of coordinate transformation"
+	              << Color::def << std::endl;
             exit(1);
           }
       }
     else
-      std::cerr << "BeamColumnWithSectionFDTrf3d::set_transf; pointer to coordinate transformation is null." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; pointer to coordinate transformation is null."
+		<< Color::def << std::endl;
   }
 
 XC::BeamColumnWithSectionFDTrf3d::BeamColumnWithSectionFDTrf3d(int tag, int classTag,int numSec)
@@ -78,7 +81,9 @@ XC::BeamColumnWithSectionFDTrf3d &XC::BeamColumnWithSectionFDTrf3d::operator=(co
   {
     //BeamColumnWithSectionFD::operator=(other);
     //set_transf(other.theCoordTransf);
-    std::cerr << "BeamColumnWithSectionFDTrf3d; assignment operator not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; assignment operator not implemented."
+	      << Color::def << std::endl;
     return *this;
   }
 
@@ -97,6 +102,10 @@ XC::CrdTransf *XC::BeamColumnWithSectionFDTrf3d::getCoordTransf(void)
 const XC::CrdTransf *XC::BeamColumnWithSectionFDTrf3d::getCoordTransf(void) const
   { return theCoordTransf; }
 
+//! @brief Assigns the coordinate transformation.
+void XC::BeamColumnWithSectionFDTrf3d::setCoordTransf(const CrdTransf &trf)
+  { this->set_transf(&trf); }
+
 //! @brief Returns i-th cross section strong axis direction vector expressed in local coordinates.
 XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisLocalCoord(const size_t &i) const
   {
@@ -110,9 +119,10 @@ XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisLocalCoord(const s
       }
     else
       {
-        std::cerr << getClassName() << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; section: "
-                  << i << " doesn't returns principal axes." << std::endl;
+                  << i << " doesn't returns principal axes."
+		  << Color::def << std::endl;
       }
     return retval;
   }
@@ -143,9 +153,10 @@ XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisLocalCoord(const siz
       }
     else
       {
-        std::cerr << getClassName() << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; section: "
-                  << i << " doesn't returns principal axes." << std::endl;
+                  << i << " doesn't returns principal axes."
+		  << Color::def << std::endl;
         return retval;
       }
     return retval;
@@ -200,8 +211,9 @@ double XC::BeamColumnWithSectionFDTrf3d::getWeakAxisAngle(void) const
 const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisGlobalCoord(const size_t &i, bool initialGeometry) const
   {
     if(!initialGeometry)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; not implemented for deformed geometry." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; not implemented for deformed geometry."
+		<< Color::def << std::endl;
     const CrdTransf *ct= checkCoordTransf();
     if(ct)
       {
@@ -219,8 +231,9 @@ const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisGlobalCoord
 const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisGlobalCoord(bool initialGeometry) const
   {
     if(!initialGeometry)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; not implemented for deformed geometry." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << "; not implemented for deformed geometry."
+		<< Color::def << std::endl;
     const CrdTransf *ct= checkCoordTransf();
     if(ct)
       {
@@ -238,8 +251,9 @@ const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisGlobalCoord
 const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisGlobalCoord(const size_t &i, bool initialGeometry) const
   {
     if(!initialGeometry)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; not implemented for deformed geometry." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << "; not implemented for deformed geometry."
+		<< Color::def << std::endl;
     const CrdTransf *ct= checkCoordTransf();
     if(ct)
       {
@@ -257,8 +271,9 @@ const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisGlobalCoord(c
 const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisGlobalCoord(bool initialGeometry) const
   {
     if(!initialGeometry)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; not implemented for deformed geometry." << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << "; not implemented for deformed geometry."
+		<< Color::def << std::endl;
     const CrdTransf *ct= checkCoordTransf();
     if(ct)
       {

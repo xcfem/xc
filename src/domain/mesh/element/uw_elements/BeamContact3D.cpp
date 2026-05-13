@@ -281,6 +281,10 @@ int XC::BeamContact3D::getNumDOF(void) const
     return BC3D_NUM_DOF;
   }
 
+//! @brief Assigns the coordinate transformation.
+void XC::BeamContact3D::setCoordTransf(const CrdTransf &trf)
+  { this->set_transf(&trf); }
+
 
 void XC::BeamContact3D::setDomain(Domain *theDomain)
   {

@@ -33,7 +33,6 @@
 #include <domain/mesh/element/truss_beam_column/ProtoBeam2d.h>
 
 namespace XC {
-class CrdTransf2d;
 
 //! @ingroup BeamColumnElemGrp
 //

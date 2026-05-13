@@ -24,11 +24,14 @@ typedef XC::ElementBase<8> element_base_8n;
 class_<element_base_8n, bases<XC::Element>, boost::noncopyable >("element_base_8n", no_init);
 
 typedef XC::ElemWithMaterial<8,XC::NDMaterialPhysicalProperties> brick_base_8n;
+void (brick_base_8n::*bb8n_set_material_ref)(const XC::Material &)= &brick_base_8n::setMaterial;
+void (brick_base_8n::*bb8n_set_material_name)(const std::string &)= &brick_base_8n::setMaterial;
 class_<brick_base_8n, bases<element_base_8n>, boost::noncopyable >("brick_base_8n", no_init)
   .add_property("extrapolationMatrix",make_function(&brick_base_8n::getExtrapolationMatrix,return_internal_reference<>() ),"Returns the element extrapolation matrix.")
   .def("getExtrapolatedValues", &brick_base_8n::getExtrapolatedValues,"Return the values at nodes from the values at the Gauss points.")
-  .def("setMaterial", &brick_base_8n::setMaterial,"Set the element material.")
-  ;
+  .def("setMaterial", bb8n_set_material_ref, "Assigns the given material to the element.")
+  .def("setMaterial", bb8n_set_material_name, "Assigns the material with the given name to the element.")
+ ;
 
 XC::NDMaterialPhysicalProperties &(XC::BrickBase::*getBrickPhysicalPropertiesPtr)(void) = &brick_base_8n::getPhysicalProperties;
 class_<XC::BrickBase , bases<brick_base_8n>, boost::noncopyable >("BrickBase", no_init)
@@ -39,8 +42,11 @@ typedef XC::ElementBase<20> element_base_20n;
 class_<element_base_20n, bases<XC::Element>, boost::noncopyable >("element_base_20n", no_init);
 
 typedef XC::ElemWithMaterial<20,XC::NDMaterialPhysicalProperties> twenty_node_brick_elem;
+void (twenty_node_brick_elem::*brk20n_set_material_ref)(const XC::Material &)= &twenty_node_brick_elem::setMaterial;
+void (twenty_node_brick_elem::*brk20n_set_material_name)(const std::string &)= &twenty_node_brick_elem::setMaterial;
 class_<twenty_node_brick_elem, bases<element_base_20n>, boost::noncopyable >("twenty_node_brick_elem", no_init)
-  .def("setMaterial", &twenty_node_brick_elem::setMaterial,"Set the element material.")
+  .def("setMaterial", brk20n_set_material_ref, "Assigns the given material to the element.")
+  .def("setMaterial", brk20n_set_material_name, "Assigns the material with the given name to the element.")
   ;
 
 typedef XC::ElementBase<27> element_base_27n;

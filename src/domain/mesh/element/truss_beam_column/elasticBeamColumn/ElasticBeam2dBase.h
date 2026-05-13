@@ -67,6 +67,7 @@ class ElasticBeam2dBase: public ProtoBeam2d
     
     virtual CrdTransf *getCoordTransf(void);
     virtual const CrdTransf *getCoordTransf(void) const;
+    void setCoordTransf(const CrdTransf &);
     
     //! @brief Internal shear force at the back end.   
     virtual double getV1(void) const= 0;

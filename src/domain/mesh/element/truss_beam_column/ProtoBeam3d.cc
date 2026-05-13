@@ -162,6 +162,12 @@ const XC::PrismaticBarCrossSection *XC::ProtoBeam3d::getSectionPtr(const size_t 
   }
 
 //! @brief Set the element material.
+void XC::ProtoBeam3d::setMaterial(const Material &mat)
+  {
+    this->set_material(&mat);
+  }
+
+//! @brief Set the element material.
 void XC::ProtoBeam3d::setMaterial(const std::string &matName)
   {
     const Material *ptr_mat= get_material_ptr(matName);

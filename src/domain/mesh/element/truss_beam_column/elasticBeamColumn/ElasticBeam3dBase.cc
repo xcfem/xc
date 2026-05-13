@@ -181,6 +181,10 @@ XC::CrdTransf *XC::ElasticBeam3dBase::getCoordTransf(void)
 const XC::CrdTransf *XC::ElasticBeam3dBase::getCoordTransf(void) const
   { return theCoordTransf; }
 
+//! @brief Assigns the coordinate transformation.
+void XC::ElasticBeam3dBase::setCoordTransf(const CrdTransf &trf)
+  { this->set_transf(&trf); }
+
 void XC::ElasticBeam3dBase::setDomain(Domain *theDomain)
   {
     ProtoBeam3d::setDomain(theDomain);

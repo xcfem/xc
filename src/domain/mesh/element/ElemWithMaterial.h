@@ -49,6 +49,7 @@ class ElemWithMaterial: public ElementBase<NNODOS>
   protected:
     PhysProp physicalProperties; //!< pointers to the material objects and physical properties.
 
+    bool set_material_ptr(const Material *);
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
@@ -63,6 +64,7 @@ class ElemWithMaterial: public ElementBase<NNODOS>
 
     virtual void zeroInitialGeneralizedStrains(void);
     
+    void setMaterial(const Material &);
     void setMaterial(const std::string &);
     inline PhysProp &getPhysicalProperties(void)
       { return physicalProperties; }
@@ -91,18 +93,43 @@ ElemWithMaterial<NNODOS,PhysProp>::ElemWithMaterial(int tag, int classTag,const 
 
 //! @brief Set the element material.
 template <int NNODOS,class PhysProp>
-void ElemWithMaterial<NNODOS, PhysProp>::setMaterial(const std::string &matName)
+bool ElemWithMaterial<NNODOS, PhysProp>::set_material_ptr(const Material *ptr_mat)
   {
-    const Material *ptr_mat= this->get_material_ptr(matName);
+    bool retval= false;
     if(ptr_mat)
       {
 	const material_type *tmp= dynamic_cast<const material_type *>(ptr_mat);
 	if(tmp)
-	  physicalProperties.setMaterial(tmp);
+	  {
+	    physicalProperties.setMaterial(tmp);
+	    retval= true;
+	  }
 	else
 	  std::cerr << this->getClassName() << "::" << __FUNCTION__ << "; "
-		    << "material identified by: '" << matName
+		    << "material with tag: " << ptr_mat->getTag()
+	            << " with type: '" << ptr_mat->getClassName()
 		    << "' is not a suitable material.\n";
+      }
+    return retval;
+  }
+  
+//! @brief Set the element material.
+template <int NNODOS,class PhysProp>
+void ElemWithMaterial<NNODOS, PhysProp>::setMaterial(const Material &mat)
+  { this->set_material_ptr(&mat); }
+
+//! @brief Set the element material.
+template <int NNODOS,class PhysProp>
+void ElemWithMaterial<NNODOS, PhysProp>::setMaterial(const std::string &matName)
+  {
+    const Material *ptr_mat= this->get_material_ptr(matName);
+    const bool ok= this->set_material_ptr(ptr_mat);
+    if(!ok)
+      {
+	std::cerr << this->getClassName() << "::" << __FUNCTION__
+		  << "; "
+		  << "material identified by: '" << matName
+		  << "' is not a suitable material.\n";
       }
   }
 

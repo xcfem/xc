@@ -65,7 +65,8 @@ class ProtoBeam3d: public BeamColumn
     CrossSectionProperties3d &getSectionProperties(void);
     void setSectionProperties(const CrossSectionProperties3d &);  
     const PrismaticBarCrossSection *getSectionPtr(const size_t &) const;
-    void setMaterial(const std::string &);
+    void setMaterial(const Material &);    
+    void setMaterial(const std::string &);    
     
     double getRho(void) const;
     void setRho(const double &);

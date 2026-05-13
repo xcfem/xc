@@ -111,6 +111,13 @@ void XC::BeamColumnWithSectionFD::set_material(const Material *m)
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; pointer to material is null." << std::endl;
   }
+
+//! @brief Set the element material.
+void XC::BeamColumnWithSectionFD::setMaterial(const Material &mat)
+  {
+    this->set_material(&mat);
+  }
+
 //! @brief Set the element material.
 void XC::BeamColumnWithSectionFD::setMaterial(const std::string &matName)
   {

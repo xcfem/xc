@@ -39,6 +39,8 @@ class_<XC::ElasticBeam2dBase, bases<XC::ProtoBeam2d>, boost::noncopyable >("Elas
   .add_property("getMz2", &XC::ElasticBeam2dBase::getM2, "Internal bending moment at front end.")
   .add_property("getMz", &XC::ElasticBeam2dBase::getM,"Average Z bending moment  (Mz1+Mz2)/2 (call 'calc_resisting_force' before).")
   .add_property("getM", &XC::ElasticBeam2dBase::getM,"Average Z bending moment (M1+M2)/2  (call 'calc_resisting_force' before).")
+
+  .def("setCoordTransf", &XC::ElasticBeam2dBase::setCoordTransf, "Assigns the coordinate transformation.")
   ;
 
 class_<XC::ElasticBeam2d, bases<XC::ElasticBeam2dBase>, boost::noncopyable >("ElasticBeam2d", no_init)
@@ -78,6 +80,8 @@ class_<XC::ElasticBeam3dBase, bases<XC::ProtoBeam3d>, boost::noncopyable >("Elas
   .add_property("getT1", &XC::ElasticBeam3dBase::getT1,"Torque at the back end of the element (call 'calc_resisting_force' before).")
   .add_property("getT2", &XC::ElasticBeam3dBase::getT2,"Torque at the front end of the element (call 'calc_resisting_force' before).")
   .def("getT", &XC::ElasticBeam3dBase::getT,"Average torque at the element (T1+T2)/2 (call 'calc_resisting_force' before).")
+
+  .def("setCoordTransf", &XC::ElasticBeam3dBase::setCoordTransf, "Assigns the coordinate transformation.")
   ;
 
 class_<XC::ElasticBeam3d, bases<XC::ElasticBeam3dBase>, boost::noncopyable >("ElasticBeam3d", no_init)

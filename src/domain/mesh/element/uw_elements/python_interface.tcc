@@ -48,4 +48,5 @@ class_<beam_contact_3d_base_4n, bases<beam_contact_element_base_4n>, boost::nonc
 
 class_<XC::BeamContact3D, bases<beam_contact_3d_base_4n>, boost::noncopyable >("BeamContact3D", no_init)
 //.add_property("width", &XC::BeamContact3D::getWidth, &XC::BeamContact3D::setWidth, "Get/set the width of the wall represented by the beam element in plane strain.")
+  .def("setCoordTransf", &XC::BeamContact3D::setCoordTransf, "Assigns the coordinate transformation.")
    ;

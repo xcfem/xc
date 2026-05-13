@@ -146,6 +146,10 @@ XC::CrdTransf *XC::ElasticBeam2dBase::getCoordTransf(void)
 const XC::CrdTransf *XC::ElasticBeam2dBase::getCoordTransf(void) const
   { return theCoordTransf; }
 
+//! @brief Assigns the coordinate transformation.
+void XC::ElasticBeam2dBase::setCoordTransf(const CrdTransf &trf)
+  { this->set_transf(&trf); }
+
 //! @brief Set the element domain.
 void XC::ElasticBeam2dBase::setDomain(Domain *theDomain)
   {

@@ -63,6 +63,7 @@ class ElasticBeam3dBase: public ProtoBeam3d
     
     virtual CrdTransf *getCoordTransf(void);
     virtual const CrdTransf *getCoordTransf(void) const;
+    void setCoordTransf(const CrdTransf &);
 
     const Vector &getVDirStrongAxisGlobalCoord(bool initialGeometry) const;
     const Vector &getVDirWeakAxisGlobalCoord(bool initialGeometry) const;    

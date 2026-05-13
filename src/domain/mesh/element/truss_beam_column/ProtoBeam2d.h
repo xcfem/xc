@@ -70,6 +70,7 @@ class ProtoBeam2d: public BeamColumn
     CrossSectionProperties2d &getSectionProperties(void);
     void setSectionProperties(const CrossSectionProperties2d &);
     const PrismaticBarCrossSection *getSectionPtr(const size_t &) const;
+    void setMaterial(const Material &);    
     void setMaterial(const std::string &);    
     
     double getRho(void) const;

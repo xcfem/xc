@@ -158,6 +158,7 @@ class BeamContact3D : public ElemWithMaterial<BC3D_NUM_NODE, Contact3D>
       { return crdTransf; }
     inline const CrdTransf3d *getCoordTransf(void) const
       { return crdTransf; }
+    void setCoordTransf(const CrdTransf &);
 
     // public methods to set the state of the element    
     int commitState(void);
