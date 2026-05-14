@@ -119,12 +119,14 @@ class Concrete01: public ConcreteBase
     void setFpcu(const double &d);
     double getFpcu(void) const;
 
+    inline void setupParameters(void)
+       { this->setup_parameters(); }
     int commitState(void);
     int revertToLastCommit(void);    
-    int revertToStart(void);        
+    int revertToStart(void);
 
     UniaxialMaterial *getCopy(void) const;
-    
+
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);
     

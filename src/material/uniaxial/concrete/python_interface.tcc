@@ -32,6 +32,7 @@ class_<XC::ConcreteBase, bases<XC::RawConcrete>, boost::noncopyable >("ConcreteB
 
 class_<XC::Concrete01, bases<XC::ConcreteBase>, boost::noncopyable >("Concrete01", no_init)
   .add_property("fpcu", &XC::Concrete01::getFpcu,  &XC::Concrete01::setFpcu,"crushing strength.")
+  .def("setup", &XC::Concrete01::setupParameters,"Set the initial values for the initial stiffnesses using the values of the concrete parameters (epsc0, epscu, fpc and fpcu).")
   ;
 
 class_<XC::Concrete02, bases<XC::RawConcrete>, boost::noncopyable >("Concrete02", no_init)

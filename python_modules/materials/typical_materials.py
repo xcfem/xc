@@ -417,6 +417,9 @@ def defConcrete01(preprocessor,name,epsc0,fpc,fpcu,epscu):
     retval.fpc= fpc
     retval.fpcu= fpcu
     retval.epscu= epscu
+    retval.setup() # Set the initial values for the initial stiffnesses
+                   # using the values of the concrete parameters
+                   # (epsc0, epscu, fpc and fpcu).
     return retval
 
 
