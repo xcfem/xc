@@ -27,8 +27,8 @@ modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 # Create nodes
 ## Set parameters for overall model geometry
-width = 360.0
-height = 144.0
+width = 144.0 # 360.0
+height = 360.0 # 144.0
 
 # Create nodes
 #    tag, X, Y

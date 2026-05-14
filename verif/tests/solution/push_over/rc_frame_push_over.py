@@ -30,7 +30,6 @@ n4= rc_frame_gravity.n4
 # Set the gravity loads to be constant & reset the time in the domain
 modelSpace.setLoadConstant(t= 0.0)
 
-
 # Start of additional modelling for lateral loads
 
 ## Define lateral loads
@@ -52,7 +51,7 @@ hLoad.newNodalLoad(n4.tag, xc.Vector([H, 0, 0]))
 dU = 0.1  # Displacement increment
 
 solProc= rc_frame_gravity.solProc
-solProc.displacementControlIntegratorSetup(node= n3, dof= 1, increment= dU, numIter= 1, dUmin= dU, dUmax= dU)
+solProc.displacementControlIntegratorSetup(node= n3, dof= 0, increment= dU, numIter= 1, dUmin= dU, dUmax= dU)
 
 # Finally perform the analysis
 # ------------------------------
@@ -70,6 +69,7 @@ solProc.solutionAlgorithmType= 'modified_newton_soln_algo'
 solProc.solutionAlgorithmSetup()
 
 ok= 0
+displacements= list()
 currentDisp= 0.0
 analysis= solProc.getAnalysis()
 while ok == 0 and currentDisp < maxU:
@@ -81,52 +81,14 @@ while ok == 0 and currentDisp < maxU:
         print("modified newton failed at disp: ", currentDisp)
         break
     else:
-        print("current disp: ", currentDisp)
+        displacements.append(currentDisp)
 
     currentDisp= n3.getDisp[0]
+
+print(displacements)
+print('XXX continue here.')
+
     
-print('XXX continue here')
-quit()
-
-# algorithm('ModifiedNewton', '-initial')
-
-
-results = open('results.out', 'a+')
-
-if ok == 0:
-    results.write('PASSED : RCFramePushover.py\n')
-    print("Passed!")
-else:
-    results.write('FAILED : RCFramePushover.py\n')
-    print("Failed!")
-
-results.close()
-
-# Print the state at node 3
-# print node 3
 
 
 
-# Change the integration scheme to be displacement control
-#                             node dof init Jd min max
-integrator('DisplacementControl', 3, 1, dU, 1, dU, dU)
-
-# ------------------------------
-# Start of recorder generation
-# ------------------------------
-
-# Stop the old recorders by destroying them
-# remove recorders
-
-# Create a recorder to monitor nodal displacements
-# recorder Node -file node32.out -time -node 3 4 -dof 1 2 3 disp
-
-# Create a recorder to monitor element forces in columns
-# recorder EnvelopeElement -file ele32.out -time -ele 1 2 forces
-
-# --------------------------------
-# End of recorder generation
-# ---------------------------------
-
-
-# ------------------------------
