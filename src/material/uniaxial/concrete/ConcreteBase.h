@@ -51,33 +51,39 @@ class ConcreteBase: public RawConcrete
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    void commit_to_trial_history(void);
-    void commit_to_trial_state(void);
-    void commit_to_trial(void);
+    void revert_to_commited_history(void);
+    void revert_to_commited_state(void);
+    void revert_to_commited(void);
   public:
     ConcreteBase(int tag, int classTag, double fpc, double eco, double ecu);
     ConcreteBase(int tag, int classTag);
 
-    double getStrain(void) const;      
-    double getStress(void) const;
-    double getTangent(void) const;
+    //! @brief Returns material strain.
+    inline double getStrain(void) const
+      { return trialState.getStrain(); }
+    //! @brief Returns the material stress.
+    double getStress(void) const
+      { return trialState.getStress(); }
+    //! @brief Returns the tangent to stress-strain diagram.
+    double getTangent(void) const
+      { return trialState.getTangent(); }
   };
 
 //! @brief Reset trial history variables to last committed state
-inline void ConcreteBase::commit_to_trial_history(void)
+inline void ConcreteBase::revert_to_commited_history(void)
   { trialHistory= convergedHistory; }
 
-//! @brief Reset trial state variables to last committed state
-inline void ConcreteBase::commit_to_trial_state(void)
+//! @brief Reset trial staquete variables to last committed state
+inline void ConcreteBase::revert_to_commited_state(void)
   { trialState= convergedState; }
 
 //! @brief Reset trial state and history variables to last committed state
-inline void ConcreteBase::commit_to_trial(void)
+inline void ConcreteBase::revert_to_commited(void)
   {
     // Reset trial history variables to last committed state
-    commit_to_trial_history();
+    revert_to_commited_history();
     // Reset trial state variables to last committed state
-    commit_to_trial_state();
+    revert_to_commited_state();
   }
 
 } // end of XC namespace

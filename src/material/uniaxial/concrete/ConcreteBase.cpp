@@ -43,18 +43,6 @@ XC::ConcreteBase::ConcreteBase(int tag, int classTag, double FPC, double EPSC0, 
 XC::ConcreteBase::ConcreteBase(int tag, int classTag)
   :RawConcrete(tag, classTag) {}
 
-//! @brief Returns the material stress.
-double XC::ConcreteBase::getStress(void) const
-  { return trialState.getStress(); }
-
-//! @brief Returns material strain.
-double XC::ConcreteBase::getStrain(void) const
-  { return trialState.getStrain(); }
-
-//! @brief Returns the tangent to stress-strain diagram.
-double XC::ConcreteBase::getTangent(void) const
-  { return trialState.getTangent(); }
-
 //! @brief Send object members through the communicator argument.
 int XC::ConcreteBase::sendData(Communicator &comm)
   {
