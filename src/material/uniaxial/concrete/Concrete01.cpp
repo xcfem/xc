@@ -149,22 +149,22 @@ void XC::Concrete01::compute_trial_state(const double &dStrain)
   {
     trialHistory.UnloadSlope()= convergedHistory.getUnloadSlope(); //Reset unload slope.
   
-    const double unloadStress= convergedState.getStress() + trialHistory.getUnloadSlope()*dStrain; //Stress when unloading.
+    const double tempStress= convergedState.getStress() + trialHistory.getUnloadSlope()*dStrain; //Stress when unloading.
   
     if(dStrain <= 0.0) // Material goes further into compression
       {
         trialHistory.MinStrain()= convergedHistory.getMinStrain(); //Reset min strain.
         trialHistory.EndStrain()= convergedHistory.getEndStrain(); //Reset end strain.
         reload();
-        if(unloadStress > trialState.getStress() )
+        if(tempStress > trialState.getStress() )
           {
-            trialState.Stress()= unloadStress;
+            trialState.Stress()= tempStress;
             trialState.Tangent()= trialHistory.getUnloadSlope();
           }
       }
-    else if(unloadStress <= 0.0) // Material goes TOWARD tension (dStrain>0 and unloadStress<0.0)
+    else if(tempStress <= 0.0) // Material goes TOWARD tension (dStrain>0 and tempStress<0.0)
       {
-        trialState.Stress()= unloadStress;
+        trialState.Stress()= tempStress;
         trialState.Tangent()= trialHistory.getUnloadSlope();
       }
     else // Made it into tension
@@ -176,8 +176,8 @@ void XC::Concrete01::compute_trial_state(const double &dStrain)
 //! @brief Sets the trial strain value.
 int XC::Concrete01::setTrialStrain(double strain, double strainRate)
   {
-    // Reset trial state variables to last committed state
-    commit_to_trial_state();
+    // Reset trial history and state variables to last committed state
+    this->revert_to_commited();
 
     // Determine change in strain from last converged state
     const double dStrain= strain - convergedState.getStrain();
@@ -205,8 +205,8 @@ int XC::Concrete01::setTrialStrain(double strain, double strainRate)
 //@ brief Set trial values.
 int XC::Concrete01::setTrial(double strain, double &stress, double &tangent, double strainRate)
   {
-    // Reset trial state variables to last committed state
-    commit_to_trial_state();
+    // Reset trial hystory and state variables to last committed state
+    this->revert_to_commited();
 
     // Determine change in strain from last converged state
     const double dStrain= strain - convergedState.getStrain();
@@ -235,6 +235,7 @@ int XC::Concrete01::setTrial(double strain, double &stress, double &tangent, dou
     // Calculate the trial state given the change in strain
     // determineTrialState (dStrain);
     compute_trial_state(dStrain);
+    
     stress= trialState.getStress();
     tangent=  trialState.getTangent();
     return 0;
@@ -316,8 +317,7 @@ void XC::Concrete01::envelope(void)
 //! @brief ??
 void XC::Concrete01::unload(void)
   {
-    double tempStrain= trialHistory.getMinStrain();
-    if(tempStrain < epscu) tempStrain= epscu;
+    const double tempStrain= std::max(trialHistory.getMinStrain(), epscu);
 
     const double eta= tempStrain/epsc0;
     double ratio= 0.707*(eta-2.0) + 0.834;
@@ -355,7 +355,7 @@ int XC::Concrete01::commitState(void)
 //! @brief Returns to the last committed state.
 int XC::Concrete01::revertToLastCommit(void)
   {
-    commit_to_trial();
+    revert_to_commited();
     return 0;
   }
 
@@ -368,7 +368,7 @@ int XC::Concrete01::revertToStart(void)
     convergedState.revertToStart(Ec0);// State variables
 
     // Reset trial variables and state
-    revertToLastCommit();
+    this->revertToLastCommit();
 
     return retval;
   }
