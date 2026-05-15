@@ -3523,9 +3523,11 @@ class StructuralMechanics3D(StructuralMechanics):
             beamMaterial= beamElement.physicalProperties.getVectorMaterials[0]
             # Read stiffnesses from element material
             tangent= beamMaterial.getInitialTangentStiffness()
-            if(tangent.noRows!=4):
+            # Get the number of stiffness factors.
+            sz= len(stiffnessFactors)
+            if((tangent.noRows!=4) and (sz>6)):
                 lmsg.warning('release of shear stifnesses not implemented yet.')
-            if(len(stiffnessFactors)!=6):
+            if(sz!=6):
                 lmsg.error('6 stifness factors expected.')                
             KX= tangent(0,0)*stiffnessFactors[0]
             KY= 1e9*stiffnessFactors[1] # Shear not implemented yet. 
