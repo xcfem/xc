@@ -706,8 +706,14 @@ XC::SectionForceDeformation *XC::FEM_ObjectBroker::getNewSection(int classTag)
       case SEC_TAG_Elastic2d:
 	retval= new ElasticSection2d();
 	break;
+      case SEC_TAG_ElasticShear2d:
+	retval= new ElasticShearSection2d();
+	break;
       case SEC_TAG_Elastic3d:
 	retval= new ElasticSection3d();
+	break;
+      case SEC_TAG_ElasticShear3d:
+	retval= new ElasticShearSection3d();
 	break;
       case SEC_TAG_Generic1d:
 	retval= new GenericSection1d();
