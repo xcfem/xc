@@ -46,7 +46,7 @@ void XC::ProtoBeam2d::set_material(const Material *m)
         const BaseElasticSection2d *scc= dynamic_cast<const BaseElasticSection2d *>(m);
         if(scc)
 	  {
-            physicalProperties.set(scc->getCrossSectionProperties());
+            physicalProperties.setMaterial(scc);
 	    physicalProperties.copyPropsFrom(scc);
 	  }
         else
@@ -244,7 +244,7 @@ int XC::ProtoBeam2d::update(void)
     const Vector strain= this->computeCurrentStrain();
     const CrdTransf *crdTransf= this->getCoordTransf();
     const double oneOverL= 1.0/crdTransf->getInitialLength();  
-    ElasticShearSection2d *section= physicalProperties[0];
+    BaseElasticSection2d *section= physicalProperties[0];
     const int order= section->getOrder();
     const ResponseId &code= section->getResponseType();
     Vector localStrain(order);

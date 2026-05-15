@@ -29,14 +29,14 @@ class_<XC::BeamColumn, bases<XC::Element1D>, boost::noncopyable >("BeamColumn", 
   .def("getExtrapolatedValues", &XC::BeamColumn::getExtrapolatedValues,"Return the values at nodes from the values at the Gauss points.")
   ;
 
-XC::ElasticShearSection2dPhysicalProperties &(XC::ProtoBeam2d::*getElasticShearSection2dPhysicalProp)(void)= &XC::ProtoBeam2d::getPhysicalProperties;
+XC::ElasticSection2dPhysicalProperties &(XC::ProtoBeam2d::*getElasticSection2dPhysicalProp)(void)= &XC::ProtoBeam2d::getPhysicalProperties;
 XC::CrossSectionProperties2d &(XC::ProtoBeam2d::*getCrossSectionProperties2d)(void)= &XC::ProtoBeam2d::getSectionProperties;
 void (XC::ProtoBeam2d::*pbeam2d_set_material_ref)(const XC::Material &)= &XC::ProtoBeam2d::setMaterial;
 void (XC::ProtoBeam2d::*pbeam2d_set_material_name)(const std::string &)= &XC::ProtoBeam2d::setMaterial;
 class_<XC::ProtoBeam2d, bases<XC::BeamColumn>, boost::noncopyable >("ProtoBeam2d", no_init)
   .add_property("sectionProperties", make_function(getCrossSectionProperties2d, return_internal_reference<>()), &XC::ProtoBeam2d::setSectionProperties,"Access to section properties.")
-  .add_property("physicalProperties", make_function(getElasticShearSection2dPhysicalProp, return_internal_reference<>() ),"Returns materials at integration points (gauss points).")
-  .add_property("getPhysicalProperties", make_function(getElasticShearSection2dPhysicalProp, return_internal_reference<>() ),"TO DEPRECATE: use physicalProperties. Returns materials at integration points (gauss points).")
+  .add_property("physicalProperties", make_function(getElasticSection2dPhysicalProp, return_internal_reference<>() ),"Returns materials at integration points (gauss points).")
+  .add_property("getPhysicalProperties", make_function(getElasticSection2dPhysicalProp, return_internal_reference<>() ),"TO DEPRECATE: use physicalProperties. Returns materials at integration points (gauss points).")
   .def("setSectionProperties",&XC::ProtoBeam2d::setSectionProperties,"Set cross section properties.")
   .def("setMaterial", pbeam2d_set_material_ref, "Assigns the given material to the element.")
   .def("setMaterial", pbeam2d_set_material_name, "Assigns the material with the given name to the element.")
@@ -46,14 +46,14 @@ class_<XC::ProtoBeam2d, bases<XC::BeamColumn>, boost::noncopyable >("ProtoBeam2d
   .def("getWeakAxisAngle",&XC::ProtoBeam2d::getWeakAxisAngle,"Returns the angle between element weak axis and local XZ plane.")
    ;
 
-XC::ElasticShearSection3dPhysicalProperties &(XC::ProtoBeam3d::*getElasticShearSection3dPhysicalProp)(void)= &XC::ProtoBeam3d::getPhysicalProperties;
+XC::ElasticSection3dPhysicalProperties &(XC::ProtoBeam3d::*getElasticSection3dPhysicalProp)(void)= &XC::ProtoBeam3d::getPhysicalProperties;
 XC::CrossSectionProperties3d &(XC::ProtoBeam3d::*getCrossSectionProperties3d)(void)= &XC::ProtoBeam3d::getSectionProperties;
 void (XC::ProtoBeam3d::*pbeam3d_set_material_ref)(const XC::Material &)= &XC::ProtoBeam3d::setMaterial;
 void (XC::ProtoBeam3d::*pbeam3d_set_material_name)(const std::string &)= &XC::ProtoBeam3d::setMaterial;
 class_<XC::ProtoBeam3d, bases<XC::BeamColumn>, boost::noncopyable >("ProtoBeam3d", no_init)
   .add_property("sectionProperties", make_function(getCrossSectionProperties3d, return_internal_reference<>()), &XC::ProtoBeam3d::setSectionProperties,"Access to section properties.")
-  .add_property("physicalProperties", make_function(getElasticShearSection3dPhysicalProp, return_internal_reference<>() ),"Returns materials at integration points (gauss points).")
-  .add_property("getPhysicalProperties", make_function(getElasticShearSection3dPhysicalProp, return_internal_reference<>() ),"TO DEPRECATE: use physicalProperties. Returns materials at integration points (gauss points).")
+  .add_property("physicalProperties", make_function(getElasticSection3dPhysicalProp, return_internal_reference<>() ),"Returns materials at integration points (gauss points).")
+  .add_property("getPhysicalProperties", make_function(getElasticSection3dPhysicalProp, return_internal_reference<>() ),"TO DEPRECATE: use physicalProperties. Returns materials at integration points (gauss points).")
   .def("setSectionProperties",&XC::ProtoBeam3d::setSectionProperties,"Set cross section properties.")
   .def("setMaterial", pbeam3d_set_material_ref, "Assigns the given material to the element.")
   .def("setMaterial", pbeam3d_set_material_name, "Assigns the material with the given name to the element.")

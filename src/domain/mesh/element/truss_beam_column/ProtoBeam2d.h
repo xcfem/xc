@@ -31,7 +31,7 @@
 #define ProtoBeam2d_h
 
 #include "domain/mesh/element/truss_beam_column/BeamColumn.h"
-#include "domain/mesh/element/utils/physical_properties/ElasticShearSection2dPhysicalProperties.h"
+#include "domain/mesh/element/utils/physical_properties/ElasticSection2dPhysicalProperties.h"
 
 namespace XC {
 class CrdTransf2d;
@@ -46,7 +46,7 @@ class CrdTransf2d;
 class ProtoBeam2d: public BeamColumn
   {
   public:
-    typedef ElasticShearSection2dPhysicalProperties PhysProp;
+    typedef ElasticSection2dPhysicalProperties PhysProp;
   protected:
     static Matrix extrapolation_matrix; //!< Extrapolation matrix.
     

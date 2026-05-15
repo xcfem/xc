@@ -31,7 +31,7 @@
 #define ProtoBeam3d_h
 
 #include "domain/mesh/element/truss_beam_column/BeamColumn.h"
-#include "domain/mesh/element/utils/physical_properties/ElasticShearSection3dPhysicalProperties.h"
+#include "domain/mesh/element/utils/physical_properties/ElasticSection3dPhysicalProperties.h"
 
 namespace XC {
 //! @ingroup BeamColumnElemGrp
@@ -40,7 +40,7 @@ namespace XC {
 class ProtoBeam3d: public BeamColumn
   {
   public:
-    typedef ElasticShearSection3dPhysicalProperties PhysProp;
+    typedef ElasticSection3dPhysicalProperties PhysProp;
   protected:
     static Matrix extrapolation_matrix; //!< Extrapolation matrix.
     
