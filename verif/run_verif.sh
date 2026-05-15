@@ -505,6 +505,7 @@ python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_sign_criteria_0
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_sign_criteria_03.py
 python tests/elements/beam_column/elastic_beam_2d/modify_section_properties.py
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_test1.py
+python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_get_section_test_01.py
 python tests/elements/beam_column/elastic_beam_2d/test_frame_01.py
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_deformation_plane_01.py
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_deformation_plane_02.py
@@ -531,6 +532,7 @@ python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_sign_criteria_0
 python tests/elements/beam_column/elastic_beam_3d/test_beam3d_sections_axes_orientation.py
 python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_test1.py
 python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_test2.py
+python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_get_section_test_01.py
 python tests/elements/beam_column/elastic_beam_3d/test_crdTransf_rotation_01.py
 python tests/elements/beam_column/elastic_beam_3d/test_torsion_01.py
 python tests/elements/beam_column/elastic_beam_3d/test_torsion_02.py
