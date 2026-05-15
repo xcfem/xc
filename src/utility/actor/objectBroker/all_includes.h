@@ -214,9 +214,7 @@
 #include "domain/mesh/element/utils/physical_properties/UniaxialMatPhysicalProperties.h"
 #include "domain/mesh/element/utils/physical_properties/ElasticSection1dPhysicalProperties.h"
 #include "domain/mesh/element/utils/physical_properties/ElasticSection2dPhysicalProperties.h"
-#include "domain/mesh/element/utils/physical_properties/ElasticShearSection2dPhysicalProperties.h"
 #include "domain/mesh/element/utils/physical_properties/ElasticSection3dPhysicalProperties.h"
-#include "domain/mesh/element/utils/physical_properties/ElasticShearSection3dPhysicalProperties.h"
 
 // surface pressures
 #include "domain/mesh/element/plane/surface_pressures/QuadSurfaceLoad.h"
