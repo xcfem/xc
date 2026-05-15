@@ -58,47 +58,30 @@ class_<XC::ElasticSection3d, XC::ElasticSection3d*, bases<XC::BaseElasticSection
 class_<XC::ElasticShearSection3d, XC::ElasticShearSection3d*, bases<XC::BaseElasticSection3d>, boost::noncopyable >("ElasticShearSection3d")
   ;
 
-// std::vector<XC::ElasticSection2d>
-typedef std::vector<XC::ElasticSection1d *> vectorElasticSection1dMaterial;
-class_<vectorElasticSection1dMaterial,boost::noncopyable>("vectorElasticSection1dMaterial")
-  .def(vector_indexing_suite<vectorElasticSection1dMaterial>() )
+// std::vector<XC::BaseElasticSection2d>
+typedef std::vector<XC::BaseElasticSection1d *> vectorBaseElasticSection1dMaterial;
+class_<vectorBaseElasticSection1dMaterial,boost::noncopyable>("vectorBaseElasticSection1dMaterial")
+  .def(vector_indexing_suite<vectorBaseElasticSection1dMaterial>() )
   ;
 
-class_<material_vector_ElasticSection1d,bases<vectorElasticSection1dMaterial,CommandEntity>,boost::noncopyable>("MaterialVectorElasticSection1d", no_init)
+class_<material_vector_BaseElasticSection1d,bases<vectorBaseElasticSection1dMaterial,CommandEntity>,boost::noncopyable>("MaterialVectorBaseElasticSection1d", no_init)
   ;
 
-// std::vector<XC::ElasticSection2d>
-typedef std::vector<XC::ElasticSection2d *> vectorElasticSection2dMaterial;
-class_<vectorElasticSection2dMaterial,boost::noncopyable>("vectorElasticSection2dMaterial")
-  .def(vector_indexing_suite<vectorElasticSection2dMaterial>() )
+// std::vector<XC::BaseElasticSection2d>
+typedef std::vector<XC::BaseElasticSection2d *> vectorBaseElasticSection2dMaterial;
+class_<vectorBaseElasticSection2dMaterial,boost::noncopyable>("vectorBaseElasticSection2dMaterial")
+  .def(vector_indexing_suite<vectorBaseElasticSection2dMaterial>() )
   ;
 
-class_<material_vector_ElasticSection2d,bases<vectorElasticSection2dMaterial,CommandEntity>,boost::noncopyable>("MaterialVectorElasticSection2d", no_init)
+class_<material_vector_BaseElasticSection2d,bases<vectorBaseElasticSection2dMaterial,CommandEntity>,boost::noncopyable>("MaterialVectorBaseElasticSection2d", no_init)
   ;
 
-// std::vector<XC::ElasticShearSection2d>
-typedef std::vector<XC::ElasticShearSection2d *> vectorElasticShearSection2dMaterial;
-class_<vectorElasticShearSection2dMaterial,boost::noncopyable>("vectorElasticShearSection2dMaterial")
-  .def(vector_indexing_suite<vectorElasticShearSection2dMaterial>() )
+// std::vector<XC::BaseElasticSection3d>
+typedef std::vector<XC::BaseElasticSection3d *> vectorBaseElasticSection3dMaterial;
+class_<vectorBaseElasticSection3dMaterial,boost::noncopyable>("vectorBaseElasticSection3dMaterial")
+  .def(vector_indexing_suite<vectorBaseElasticSection3dMaterial>() )
   ;
 
-class_<material_vector_ElasticShearSection2d,bases<vectorElasticShearSection2dMaterial, CommandEntity>,boost::noncopyable>("MaterialVectorElasticShearSection2d", no_init)
+class_<material_vector_BaseElasticSection3d,bases<vectorBaseElasticSection3dMaterial,CommandEntity>,boost::noncopyable>("MaterialVectorBaseElasticSection3d", no_init)
   ;
 
-// std::vector<XC::ElasticSection3d>
-typedef std::vector<XC::ElasticSection3d *> vectorElasticSection3dMaterial;
-class_<vectorElasticSection3dMaterial,boost::noncopyable>("vectorElasticSection3dMaterial")
-  .def(vector_indexing_suite<vectorElasticSection3dMaterial>() )
-  ;
-
-class_<material_vector_ElasticSection3d,bases<vectorElasticSection3dMaterial,CommandEntity>,boost::noncopyable>("MaterialVectorElasticSection3d", no_init)
-  ;
-
-// std::vector<XC::ElasticShearSection3d>
-typedef std::vector<XC::ElasticShearSection3d *> vectorElasticShearSection3dMaterial;
-class_<vectorElasticShearSection3dMaterial,boost::noncopyable>("vectorElasticShearSection3dMaterial")
-  .def(vector_indexing_suite<vectorElasticShearSection3dMaterial>() )
-  ;
-
-class_<material_vector_ElasticShearSection3d,bases<vectorElasticShearSection3dMaterial, CommandEntity>,boost::noncopyable>("MaterialVectorElasticShearSection3d", no_init)
-  ;
