@@ -261,6 +261,7 @@ MAT *Communicator::getBrokedMaterial(MAT* &ptr,DbTagData &dbTagData, const Broke
                 delete tmp;
                 std::cerr << "Communicator::getBrokedMaterial "
                           << " wrong material class."
+		          << " classTag= " << classTag
                           << std::endl;
               }
           }
