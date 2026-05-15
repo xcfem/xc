@@ -52,7 +52,7 @@ XC::Vector XC::ElasticSection2dPhysicalProperties::getGeneralizedStressAtGaussPo
     Vector retval(nMat);
     for(size_t i= 0; i<nMat; i++)
       {
-	const ElasticSection2d *section= dynamic_cast<const ElasticSection2d *>(theMaterial[i]);
+	const BaseElasticSection2d *section= dynamic_cast<const BaseElasticSection2d *>(theMaterial[i]);
 	const Vector R= section->getStressResultant();
 	if(cod == "N") // Internal axial force.
 	  retval[i]= R[0];
@@ -74,7 +74,7 @@ XC::Vector XC::ElasticSection2dPhysicalProperties::getGeneralizedStrainAtGaussPo
     Vector retval(nMat);
     for(size_t i= 0; i<nMat; i++)
       {
-	const ElasticSection2d *section= dynamic_cast<const ElasticSection2d *>(theMaterial[i]);
+	const BaseElasticSection2d *section= dynamic_cast<const BaseElasticSection2d *>(theMaterial[i]);
 	const Vector e= section->getSectionDeformation();
 	if(cod == "N") // axial strain.
 	  retval[i]= e[0];

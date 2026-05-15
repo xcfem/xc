@@ -38,11 +38,11 @@ namespace XC {
 //! @ingroup PhysicalProperties
 //
 //! @brief Three-dimensional elastic section physical properties.
-class ElasticSection2dPhysicalProperties: public ElasticSectionPhysicalProperties<ElasticSection2d>
+class ElasticSection2dPhysicalProperties: public ElasticSectionPhysicalProperties<BaseElasticSection2d>
   {
   public:
     inline ElasticSection2dPhysicalProperties(const size_t &nMat= 0)
-      : ElasticSectionPhysicalProperties<ElasticSection2d>(nMat) {}
+      : ElasticSectionPhysicalProperties<BaseElasticSection2d>(nMat) {}
     void set(const size_t &i, const CrossSectionProperties2d &);
     void set(const CrossSectionProperties2d &);
 

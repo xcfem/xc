@@ -86,63 +86,39 @@ class_<XC::UniaxialMatPhysicalProperties, bases<PhysicalProperties_UMat>, boost:
 class_<XC::Joint2DPhysicalProperties, bases<XC::UniaxialMatPhysicalProperties>, boost::noncopyable  >("Joint2DPhysicalProperties", no_init)
   ;
 
-material_vector_ElasticSection1d &(PhysicalProperties_ElasticSection1d::*getElasticSection1dVector)(void) = &PhysicalProperties_ElasticSection1d::getMaterialsVector;
-class_<PhysicalProperties_ElasticSection1d, bases<CommandEntity,XC::MovableObject>, boost::noncopyable  >("PhysicalProperties_ElasticSection1d", no_init)
-  .add_property("getVectorMaterials",make_function(getElasticSection1dVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
+material_vector_BaseElasticSection1d &(PhysicalProperties_BaseElasticSection1d::*getBaseElasticSection1dVector)(void) = &PhysicalProperties_BaseElasticSection1d::getMaterialsVector;
+class_<PhysicalProperties_BaseElasticSection1d, bases<CommandEntity,XC::MovableObject>, boost::noncopyable  >("PhysicalProperties_BaseElasticSection1d", no_init)
+  .add_property("getVectorMaterials",make_function(getBaseElasticSection1dVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
   ;
 
-class_<ElasticSectionPhysicalProperties_ElasticSection1d, bases<PhysicalProperties_ElasticSection1d>, boost::noncopyable  >("ElasticSectionPhysicalProperties_ElasticSection1d", no_init)
+class_<ElasticSectionPhysicalProperties_BaseElasticSection1d, bases<PhysicalProperties_BaseElasticSection1d>, boost::noncopyable  >("ElasticSectionPhysicalProperties_BaseElasticSection1d", no_init)
   ;
 
-class_<XC::ElasticSection1dPhysicalProperties, bases<ElasticSectionPhysicalProperties_ElasticSection1d>, boost::noncopyable  >("ElasticSection1dPhysicalProperties", no_init)
+class_<XC::ElasticSection1dPhysicalProperties, bases<ElasticSectionPhysicalProperties_BaseElasticSection1d>, boost::noncopyable  >("ElasticSection1dPhysicalProperties", no_init)
   ;
 
-// ElasticSection2d
-material_vector_ElasticSection2d &(PhysicalProperties_ElasticSection2d::*getElasticSection2dVector)(void) = &PhysicalProperties_ElasticSection2d::getMaterialsVector;
-class_<PhysicalProperties_ElasticSection2d, bases<CommandEntity,XC::MovableObject>, boost::noncopyable  >("PhysicalProperties_ElasticSection2d", no_init)
-  .add_property("getVectorMaterials",make_function(getElasticSection2dVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
+// BaseElasticSection2d
+material_vector_BaseElasticSection2d &(PhysicalProperties_BaseElasticSection2d::*getBaseElasticSection2dVector)(void) = &PhysicalProperties_BaseElasticSection2d::getMaterialsVector;
+class_<PhysicalProperties_BaseElasticSection2d, bases<CommandEntity,XC::MovableObject>, boost::noncopyable  >("PhysicalProperties_BaseElasticSection2d", no_init)
+  .add_property("getVectorMaterials",make_function(getBaseElasticSection2dVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
   ;
 
-class_<ElasticSectionPhysicalProperties_ElasticSection2d, bases<PhysicalProperties_ElasticSection2d>, boost::noncopyable  >("ElasticSectionPhysicalProperties_ElasticSection2d", no_init)
+class_<ElasticSectionPhysicalProperties_BaseElasticSection2d, bases<PhysicalProperties_BaseElasticSection2d>, boost::noncopyable  >("ElasticSectionPhysicalProperties_BaseElasticSection2d", no_init)
   ;
 
-class_<XC::ElasticSection2dPhysicalProperties, bases<ElasticSectionPhysicalProperties_ElasticSection2d>, boost::noncopyable  >("ElasticSection2dPhysicalProperties", no_init)
+class_<XC::ElasticSection2dPhysicalProperties, bases<ElasticSectionPhysicalProperties_BaseElasticSection2d>, boost::noncopyable  >("ElasticSection2dPhysicalProperties", no_init)
   ;
 
-// ElasticShearSection2d
-material_vector_ElasticShearSection2d &(PhysicalProperties_ElasticShearSection2d::*getElasticShearSection2dVector)(void) = &PhysicalProperties_ElasticShearSection2d::getMaterialsVector;
-class_<PhysicalProperties_ElasticShearSection2d, bases<CommandEntity,XC::MovableObject>, boost::noncopyable  >("PhysicalProperties_ElasticShearSection2d", no_init)
-  .add_property("getVectorMaterials",make_function(getElasticShearSection2dVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
+// BaseElasticSection3d
+material_vector_BaseElasticSection3d &(PhysicalProperties_BaseElasticSection3d::*getBaseElasticSection3dVector)(void) = &PhysicalProperties_BaseElasticSection3d::getMaterialsVector;
+class_<PhysicalProperties_BaseElasticSection3d, bases<CommandEntity,XC::MovableObject>, boost::noncopyable  >("PhysicalProperties_BaseElasticSection3d", no_init)
+  .add_property("getVectorMaterials",make_function(getBaseElasticSection3dVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
   ;
 
-class_<ElasticSectionPhysicalProperties_ElasticShearSection2d, bases<PhysicalProperties_ElasticShearSection2d>, boost::noncopyable  >("ElasticSectionPhysicalProperties_ElasticShearSection2d", no_init)
+class_<ElasticSectionPhysicalProperties_BaseElasticSection3d, bases<PhysicalProperties_BaseElasticSection3d>, boost::noncopyable  >("ElasticSectionPhysicalProperties_BaseElasticSection3d", no_init)
   ;
 
-class_<XC::ElasticShearSection2dPhysicalProperties, bases<ElasticSectionPhysicalProperties_ElasticShearSection2d>, boost::noncopyable  >("ElasticShearSection2dPhysicalProperties", no_init)
-  ;
-
-// ElasticSection3d
-material_vector_ElasticSection3d &(PhysicalProperties_ElasticSection3d::*getElasticSection3dVector)(void) = &PhysicalProperties_ElasticSection3d::getMaterialsVector;
-class_<PhysicalProperties_ElasticSection3d, bases<CommandEntity,XC::MovableObject>, boost::noncopyable  >("PhysicalProperties_ElasticSection3d", no_init)
-  .add_property("getVectorMaterials",make_function(getElasticSection3dVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
-  ;
-
-class_<ElasticSectionPhysicalProperties_ElasticSection3d, bases<PhysicalProperties_ElasticSection3d>, boost::noncopyable  >("ElasticSectionPhysicalProperties_ElasticSection3d", no_init)
-  ;
-
-class_<XC::ElasticSection3dPhysicalProperties, bases<ElasticSectionPhysicalProperties_ElasticSection3d>, boost::noncopyable  >("ElasticSection3dPhysicalProperties", no_init)
-  ;
-
-// ElasticShearSection3d
-material_vector_ElasticShearSection3d &(PhysicalProperties_ElasticShearSection3d::*getElasticShearSection3dVector)(void) = &PhysicalProperties_ElasticShearSection3d::getMaterialsVector;
-class_<PhysicalProperties_ElasticShearSection3d, bases<CommandEntity,XC::MovableObject>, boost::noncopyable  >("PhysicalProperties_ElasticShearSection3d", no_init)
-  .add_property("getVectorMaterials",make_function(getElasticShearSection3dVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
-  ;
-
-class_<ElasticSectionPhysicalProperties_ElasticShearSection3d, bases<PhysicalProperties_ElasticShearSection3d>, boost::noncopyable  >("ElasticSectionPhysicalProperties_ElasticShearSection3d", no_init)
-  ;
-
-class_<XC::ElasticShearSection3dPhysicalProperties, bases<ElasticSectionPhysicalProperties_ElasticShearSection3d>, boost::noncopyable  >("ElasticShearSection3dPhysicalProperties", no_init)
+class_<XC::ElasticSection3dPhysicalProperties, bases<ElasticSectionPhysicalProperties_BaseElasticSection3d>, boost::noncopyable  >("ElasticSection3dPhysicalProperties", no_init)
   ;
 
 // class_<XC::Joint3DPhysicalProperties, bases<XC::UniaxialMatPhysicalProperties>, boost::noncopyable  >("Joint3DPhysicalProperties", no_init)

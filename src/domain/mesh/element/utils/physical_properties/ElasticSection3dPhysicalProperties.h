@@ -31,18 +31,18 @@
 #define ElasticSection3dPhysicalProperties_h
 
 #include "ElasticSectionPhysicalProperties.h"
-#include "material/section/elastic_section/ElasticSection3d.h"
+#include "material/section/elastic_section/BaseElasticSection3d.h"
 
 namespace XC {
 
 //! @ingroup PhysicalProperties
 //
 //! @brief Three-dimensional elastic section physical properties.
-class ElasticSection3dPhysicalProperties: public ElasticSectionPhysicalProperties<ElasticSection3d>
+class ElasticSection3dPhysicalProperties: public ElasticSectionPhysicalProperties<BaseElasticSection3d>
   {
   public:
     inline ElasticSection3dPhysicalProperties(const size_t &nMat= 0)
-      : ElasticSectionPhysicalProperties<ElasticSection3d>(nMat) {}
+      : ElasticSectionPhysicalProperties<BaseElasticSection3d>(nMat) {}
     void set(const size_t &i, const CrossSectionProperties3d &);
     void set(const CrossSectionProperties3d &);
 

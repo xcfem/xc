@@ -38,11 +38,11 @@ namespace XC {
 //! @ingroup PhysicalProperties
 //
 //! @brief Three-dimensional elastic section physical properties.
-class ElasticSection1dPhysicalProperties: public ElasticSectionPhysicalProperties<ElasticSection1d>
+class ElasticSection1dPhysicalProperties: public ElasticSectionPhysicalProperties<BaseElasticSection1d>
   {
   public:
     inline ElasticSection1dPhysicalProperties(const size_t &nMat= 0)
-      : ElasticSectionPhysicalProperties<ElasticSection1d>(nMat) {}
+      : ElasticSectionPhysicalProperties<BaseElasticSection1d>(nMat) {}
     void set(const size_t &i, const CrossSectionProperties1d &);
 
     Vector getGeneralizedStrainAtGaussPointsByName(const std::string &) const;
