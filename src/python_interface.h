@@ -66,13 +66,25 @@ typedef XC::PhysicalProperties<XC::ElasticSection1d> PhysicalProperties_ElasticS
 typedef PhysicalProperties_ElasticSection1d::material_vector material_vector_ElasticSection1d;
 typedef XC::ElasticSectionPhysicalProperties<XC::ElasticSection1d> ElasticSectionPhysicalProperties_ElasticSection1d;
 
+// ElasticSection2d.
 typedef XC::PhysicalProperties<XC::ElasticSection2d> PhysicalProperties_ElasticSection2d;
 typedef PhysicalProperties_ElasticSection2d::material_vector material_vector_ElasticSection2d;
 typedef XC::ElasticSectionPhysicalProperties<XC::ElasticSection2d> ElasticSectionPhysicalProperties_ElasticSection2d;
 
+// ElasticShearSection2d.
+typedef XC::PhysicalProperties<XC::ElasticShearSection2d> PhysicalProperties_ElasticShearSection2d;
+typedef PhysicalProperties_ElasticShearSection2d::material_vector material_vector_ElasticShearSection2d;
+typedef XC::ElasticSectionPhysicalProperties<XC::ElasticShearSection2d> ElasticSectionPhysicalProperties_ElasticShearSection2d;
+
+// ElasticSection3d.
 typedef XC::PhysicalProperties<XC::ElasticSection3d> PhysicalProperties_ElasticSection3d;
 typedef PhysicalProperties_ElasticSection3d::material_vector material_vector_ElasticSection3d;
 typedef XC::ElasticSectionPhysicalProperties<XC::ElasticSection3d> ElasticSectionPhysicalProperties_ElasticSection3d;
+
+// ElasticShearSection3d.
+typedef XC::PhysicalProperties<XC::ElasticShearSection3d> PhysicalProperties_ElasticShearSection3d;
+typedef PhysicalProperties_ElasticShearSection3d::material_vector material_vector_ElasticShearSection3d;
+typedef XC::ElasticSectionPhysicalProperties<XC::ElasticShearSection3d> ElasticSectionPhysicalProperties_ElasticShearSection3d;
 
 typedef XC::PhysicalProperties<XC::NDMaterial> PhysicalProperties_NDMat;
 typedef PhysicalProperties_NDMat::material_vector material_vector_NDMat;
