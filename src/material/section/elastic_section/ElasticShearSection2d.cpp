@@ -111,7 +111,7 @@ const double &XC::ElasticShearSection2d::GAy(void) const
 int XC::ElasticShearSection2d::sendData(Communicator &comm)
   {
     int res= BaseElasticSection2d::sendData(comm);
-    setDbTagDataPos(9,parameterID);
+    res+= comm.sendInt(parameterID,getDbTagData(),CommMetaData(7));
     return res;
   }
 
@@ -119,15 +119,24 @@ int XC::ElasticShearSection2d::sendData(Communicator &comm)
 int XC::ElasticShearSection2d::recvData(const Communicator &comm)
   {
     int res= BaseElasticSection2d::recvData(comm);
-    parameterID= getDbTagDataPos(9);
+    res+= comm.receiveInt(parameterID, getDbTagData(),CommMetaData(7));
     return res;
+  }
+
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
+XC::DbTagData &XC::ElasticShearSection2d::getDbTagData(void) const
+  {
+    static DbTagData retval(8);
+    return retval;
   }
 
 int XC::ElasticShearSection2d::sendSelf(Communicator &comm)
   {
+    const DbTagData &dbTagData= getDbTagData();
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(3);
+    inicComm(dbTagData.Size());
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -138,18 +147,21 @@ int XC::ElasticShearSection2d::sendSelf(Communicator &comm)
 
 int XC::ElasticShearSection2d::recvSelf(const Communicator &comm)
   {
-    inicComm(3);
+    DbTagData &dbTagData= getDbTagData();
+    inicComm(dbTagData.Size());
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }

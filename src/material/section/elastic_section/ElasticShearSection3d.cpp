@@ -153,22 +153,6 @@ const XC::ResponseId &XC::ElasticShearSection3d::getResponseType(void) const
 int XC::ElasticShearSection3d::getOrder(void) const
   { return 6; }
 
-//! @brief Send object members through the communicator argument.
-int XC::ElasticShearSection3d::sendData(Communicator &comm)
-  {
-    int res= BaseElasticSection3d::sendData(comm);
-    setDbTagDataPos(9,parameterID);
-    return res;
-  }
-
-//! @brief Receives object members through the communicator argument.
-int XC::ElasticShearSection3d::recvData(const Communicator &comm)
-  {
-    int res= BaseElasticSection3d::recvData(comm);
-    parameterID= getDbTagDataPos(9);
-    return res;
-  }
-
 //! @brief Return a Python dictionary with the object members values.
 boost::python::dict XC::ElasticShearSection3d::getPyDict(void) const
   {
@@ -184,14 +168,39 @@ void XC::ElasticShearSection3d::setPyDict(const boost::python::dict &d)
     this->parameterID= boost::python::extract<int>(d["parameterID"]);
   }
 
+//! @brief Send object members through the communicator argument.
+int XC::ElasticShearSection3d::sendData(Communicator &comm)
+  {
+    int res= BaseElasticSection3d::sendData(comm);
+    res+= comm.sendInt(parameterID,getDbTagData(),CommMetaData(7));
+    return res;
+  }
+
+//! @brief Receives object members through the communicator argument.
+int XC::ElasticShearSection3d::recvData(const Communicator &comm)
+  {
+    int res= BaseElasticSection3d::recvData(comm);
+    res+= comm.receiveInt(parameterID, getDbTagData(),CommMetaData(7));
+    return res;
+  }
+
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
+XC::DbTagData &XC::ElasticShearSection3d::getDbTagData(void) const
+  {
+    static DbTagData retval(8);
+    return retval;
+  }
+
 int XC::ElasticShearSection3d::sendSelf(Communicator &comm)
   {
+    const DbTagData &dbTagData= getDbTagData();
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(3);
+    inicComm(dbTagData.Size());
     int res= sendData(comm);
 
-    res+= comm.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(dbTagData,dataTag);
     if(res < 0)
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data."
@@ -201,9 +210,10 @@ int XC::ElasticShearSection3d::sendSelf(Communicator &comm)
 
 int XC::ElasticShearSection3d::recvSelf(const Communicator &comm)
   {
-    inicComm(3);
+    DbTagData &dbTagData= getDbTagData();
+    inicComm(dbTagData.Size());
     const int dataTag= getDbTag();
-    int res= comm.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(dbTagData, dataTag);
 
     if(res<0)
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
