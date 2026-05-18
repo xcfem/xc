@@ -85,8 +85,8 @@ while ok == 0 and currentDisp < maxU:
         break
     else:
         displacements.append(currentDisp)
-        # # Compute reactions
-        # modelSpace.calculateNodalReactions()
+        # Compute reactions
+        modelSpace.calculateNodalReactions()
         # # Get base shear
         # Rx= n1.getReaction[0]+n2.getReaction[0]
         # baseShear.append(-Rx)
