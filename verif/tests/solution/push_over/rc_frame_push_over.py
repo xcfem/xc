@@ -62,7 +62,7 @@ solProc.displacementControlIntegratorSetup(node= n3, dof= 0, increment= dU, numI
 maxU = 15.0  # Max displacement
 # Set convergence test.
 solProc.convTestType= 'norm_disp_incr_conv_test'
-solProc.convergenceTestTol= 1e-13
+solProc.convergenceTestTol= 1e-12
 solProc.maxNumIter= 1000
 solProc.printFlag= 0
 solProc.convergenceTestSetup()
