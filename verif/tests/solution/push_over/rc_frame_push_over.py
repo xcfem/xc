@@ -24,6 +24,8 @@ import xc
 import rc_frame_gravity
 
 modelSpace= rc_frame_gravity.modelSpace
+n1= rc_frame_gravity.n1
+n2= rc_frame_gravity.n2
 n3= rc_frame_gravity.n3
 n4= rc_frame_gravity.n4
 
@@ -60,7 +62,7 @@ solProc.displacementControlIntegratorSetup(node= n3, dof= 0, increment= dU, numI
 maxU = 15.0  # Max displacement
 # Set convergence test.
 solProc.convTestType= 'norm_disp_incr_conv_test'
-solProc.convergenceTestTol= 1e-12
+solProc.convergenceTestTol= 1e-13
 solProc.maxNumIter= 1000
 solProc.printFlag= 0
 solProc.convergenceTestSetup()
@@ -70,6 +72,7 @@ solProc.solutionAlgorithmSetup()
 
 ok= 0
 displacements= list()
+baseShear= list()
 currentDisp= 0.0
 analysis= solProc.getAnalysis()
 while ok == 0 and currentDisp < maxU:
@@ -82,10 +85,16 @@ while ok == 0 and currentDisp < maxU:
         break
     else:
         displacements.append(currentDisp)
+        # # Compute reactions
+        # modelSpace.calculateNodalReactions()
+        # # Get base shear
+        # Rx= n1.getReaction[0]+n2.getReaction[0]
+        # baseShear.append(-Rx)
 
     currentDisp= n3.getDisp[0]
 
 print(displacements)
+print(baseShear)
 print('XXX continue here.')
 
     

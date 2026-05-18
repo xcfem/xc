@@ -50,13 +50,15 @@ cover= 1.5
 As= 0.60  # area of no. 7 bars    
 columnFiberSection= rc_column_fiber_section.def_rc_column_fiber_section(preprocessor, colWidth= colWidth, colDepth= colDepth, cover= cover, As= As)
 
-# Extract concrete materials.
+# Extract concrete materials and check concrete area.
 sectionGeometry= columnFiberSection.getSectionGeometry
 regions= sectionGeometry.getRegions
 coreConcrete= None
 coverConcrete= None
+steel= None
 coreArea= 0.0
 coverArea= 0.0
+steelArea= 0.0
 for r in regions:
     area= r.getArea()
     if(area>100.0):
@@ -65,6 +67,27 @@ for r in regions:
     else:
         coverConcrete= r.getMaterial()
         coverArea+= area
+reinforcementLayers= sectionGeometry.getReinfLayers
+for reinfLayer in reinforcementLayers:
+    for bar in reinfLayer.getReinfBars:
+        steel= bar.getMaterial()
+        steelArea+= bar.area
+testOK= abs(coreArea+coverArea-(colWidth*colDepth))<1e-6
+testOK= testOK and abs(steelArea-8*As)<1e-6
+# Extract fibers and check concrete and steel areas.
+steelEs= steel.getTangent()
+fibers= columnFiberSection.getFibers()
+concreteFibersArea= 0.0
+steelFibersArea= 0.0
+for f in fibers:
+    mat= f.getMaterial()
+    E= mat.getTangent()
+    if(E<0.9*steelEs): # Concrete.
+        concreteFibersArea+= f.getArea()
+    else:
+        steelFibersArea+= f.getArea()
+testOK= testOK and abs(concreteFibersArea-(colWidth*colDepth))<1e-6
+testOK= testOK and abs(steelFibersArea-8*As)<1e-6
 # Extract steel material.
 reinforcement= sectionGeometry.getReinfLayers
 steel= reinforcement.getMaterials()[0]
@@ -92,7 +115,7 @@ weights1= column1.getSectionWeights()
 weights2= column1.getSectionWeights()
 integratorType1= str(type(column1.getIntegrator()))
 integratorType2= str(type(column2.getIntegrator()))
-testOK= ('LobattoBeamIntegration' in integratorType1)
+testOK= testOK and ('LobattoBeamIntegration' in integratorType1)
 testOK= testOK and (len(weights1)== 5)
 testOK= testOK and ('LobattoBeamIntegration' in integratorType2)
 testOK= testOK and (len(weights2)== 5)
@@ -135,9 +158,8 @@ analysis.analyze(numSteps)
 # XXX Continue here.
 coreEc= coreConcrete.getTangent()
 coreStiffness= coreEc*coreArea
-coverEc= coreConcrete.getTangent()
+coverEc= coverConcrete.getTangent()
 coverStiffness= coverEc*coverArea
-steelEs= steel.getTangent()
 steelArea= 8*As
 steelStiffness= steelEs*steelArea
 totalStiffness= steelStiffness+coverStiffness+coreStiffness
@@ -152,15 +174,16 @@ ratio2= abs(u4 + vertDisplacement)
 
 testOK= testOK and (ratio1<5e-3) and (ratio2<5e-3)
 
-
+print('cover area: ', coverArea)
+print('core area: ', coreArea)
 print('core concrete Ec= ', coreEc)
 print('cover concrete Ec= ', coverEc)
 print('steel Es= ', steelEs)
 print('epsilon= ', epsilon*1e3)
-print('vertical displacement: ', vertDisplacement*1e3, 'mm') 
-print('u3= ', u3)
+print('vertical displacement: ', vertDisplacement*1e3) 
+print('u3= ', u3*1e3)
 print('ratio1= ', ratio1)
-print('u4= ', u4)
+print('u4= ', u4*1e3)
 print('ratio2= ', ratio2)
 
 import os
