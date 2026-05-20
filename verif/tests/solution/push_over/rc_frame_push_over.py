@@ -46,6 +46,7 @@ hLoad= modelSpace.newLoadPattern(name= 'hLoad', setCurrent= True)
 #    nd    FX  FY  MZ
 hLoad.newNodalLoad(n3.tag, xc.Vector([H, 0, 0]))
 hLoad.newNodalLoad(n4.tag, xc.Vector([H, 0, 0]))
+modelSpace.addLoadCaseToDomain(hLoad.name)
 
 # Start of modifications to analysis for push over
 
