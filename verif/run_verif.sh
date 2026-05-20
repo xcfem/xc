@@ -355,17 +355,19 @@ python tests/actions/wind/ec1/test_ec1_monopitch_canopy_overall_force_coefficien
 python tests/actions/wind/ec1/test_ec1_duopitch_canopy_overall_force_coefficients_01.py
 python tests/actions/wind/ec1/test_ec1_duopitch_canopy_overall_force_coefficients_02.py
 python tests/actions/wind/ec1/test_ec1_longitudinal_wind_reduction_factor.py 
-python tests/actions/wind/ec1/test_ec1_bridge_deck_vertical_force_coefficient.py
-python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_without_traffic_01.py
-python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_without_traffic_02.py
-python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_without_traffic_03.py
-python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_with_traffic_01.py
-python tests/actions/wind/ec1/test_ec1_wind_action_on_bridge_deck_with_traffic_02.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_free_standing_wall.py
-python tests/actions/wind/ec1/test_ec1_wind_action_on_squat_rectangular_pier.py
-python tests/actions/wind/ec1/test_ec1_wind_action_on_high_circular_cylindrical_pier.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_duopitch_canopy.py
 python tests/actions/wind/ec1/test_ec1_wind_action_on_monopitch_canopy.py
+echo "$BLEU" "    EC1 wind action on bridges tests." "$NORMAL"
+python tests/actions/wind/ec1/bridges/test_ec1_wind_action_on_squat_rectangular_pier.py
+python tests/actions/wind/ec1/bridges/test_ec1_wind_action_on_bridge_deck_without_traffic_01.py
+python tests/actions/wind/ec1/bridges/test_ec1_wind_action_on_bridge_deck_without_traffic_02.py
+python tests/actions/wind/ec1/bridges/test_ec1_wind_action_on_bridge_deck_without_traffic_03.py
+python tests/actions/wind/ec1/bridges/test_ec1_wind_action_on_bridge_deck_with_traffic_01.py
+python tests/actions/wind/ec1/bridges/test_ec1_wind_action_on_bridge_deck_with_traffic_02.py
+python tests/actions/wind/ec1/bridges/test_ec1_bridge_deck_vertical_force_coefficient.py
+python tests/actions/wind/ec1//bridges/test_ec1_wind_action_on_high_circular_cylindrical_pier.py
+
 echo "$BLEU" "    IAP wind action tests." "$NORMAL"
 python tests/actions/wind/iap/test_iap_wind_load_01.py
 python tests/actions/wind/iap/test_iap_wind_load_02.py
