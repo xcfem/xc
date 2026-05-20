@@ -155,7 +155,6 @@ analysis= solProc.getAnalysis()
 analysis.analyze(numSteps)
 
 # Compute reference values.
-# XXX Continue here.
 coreEc= coreConcrete.getTangent()
 coreStiffness= coreEc*coreArea
 coverEc= coverConcrete.getTangent()
