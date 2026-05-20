@@ -58,6 +58,7 @@ elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
 
+# Define constraints.
 modelSpace.fixNode000(n1.tag)
 
 # Load definition.
