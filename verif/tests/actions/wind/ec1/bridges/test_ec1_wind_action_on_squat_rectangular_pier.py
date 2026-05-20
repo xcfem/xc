@@ -42,13 +42,13 @@ qpRef= 1071.7931242585819
 ratio1= abs(qp-qpRef)/qpRef
 
 # Compute the force coefficient.
-d= 5.0 # pier length.
-b= 2.5 # pier width.
+d= 5.0 # pier length (parallel to wind direction).
+b= 2.5 # pier width (perpendicular to wind direction).
 cf0= ec1_wind.get_rectangular_section_force_coefficient_without_free_end_flow(d= d, b= b)
 ratio2= abs(cf0-1.65)/1.65
 
 # reduction factor for a square cross-section with rounded corners
-r= 0.0
+r= 0.0 # radius of the corners.
 psi_r= ec1_wind.get_square_section_round_corners_reduction_factor(b= b, r= r)
 ratio3= abs(psi_r-1)
 

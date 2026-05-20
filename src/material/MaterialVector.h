@@ -50,6 +50,8 @@ class MaterialVector: public std::vector<MAT *>, public CommandEntity, public Mo
   {
   protected:
     void clearAll(void);
+    static MAT *get_material_copy(const MAT *, const std::string &type);
+    static MAT *get_material_copy(const MAT *);
     void alloc(const std::vector<MAT *> &mats);
 
 
@@ -71,7 +73,7 @@ class MaterialVector: public std::vector<MAT *>, public CommandEntity, public Mo
 
     void clearMaterials(void);
     void setMaterial(const MAT *);
-    void setMaterial(size_t i,MAT *);
+    void setMaterial(size_t i, const MAT *);
     void setMaterial(size_t i, const MAT &);
     void setMaterial(const MAT *,const std::string &);
     void copyPropsFrom(const EntityWithProperties *);
@@ -124,11 +126,9 @@ MaterialVector<MAT>::MaterialVector(const size_t &nMat,const MAT *matModel)
       {
         for(iterator i= mat_vector::begin();i!=mat_vector::end();i++)
           {
-            (*i)= dynamic_cast<MAT *>(matModel->getCopy());
-            if(!(*i))
-              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		        << "; failed allocate material model pointer"
-			<< Color::def << std::endl;
+	    MAT *tmp= MaterialVector<MAT>::get_material_copy(matModel);
+	    if(tmp)
+	      { (*i)= tmp; }
           }
       }
   }
@@ -144,11 +144,9 @@ void MaterialVector<MAT>::alloc(const std::vector<MAT *> &mats)
       {
         if(mats[i])
           {
-            (*this)[i]= dynamic_cast<MAT *>(mats[i]->getCopy());
-            if(!(*this)[i])
-              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		        << "; failed allocate material model pointer"
-			<< Color::def << std::endl;
+	    MAT *tmp= MaterialVector<MAT>::get_material_copy(mats[i]);
+	    if(tmp)
+	      { (*this)[i]= tmp; }
           }
       }
   }
@@ -168,6 +166,68 @@ MaterialVector<MAT> &MaterialVector<MAT>::operator=(const MaterialVector<MAT> &o
   }
 
 template <class MAT>
+MAT *MaterialVector<MAT>::get_material_copy(const MAT *new_mat)
+  {
+    MAT *retval= nullptr;
+    if(new_mat)
+      {
+	Material *copy_ptr= new_mat->getCopy();
+	if(copy_ptr)
+	  {
+	    retval= dynamic_cast<MAT *>(copy_ptr);
+	    if(!retval)
+	      {
+		std::cerr << Color::red << "MaterialVector::" << __FUNCTION__
+			  << "; the type of the given material: "
+			  << new_mat->getClassName()
+			  << " cannot be converted to a "
+			  << typeid(MAT).name()
+			  << " material."
+			  << Color::def << std::endl;
+		delete copy_ptr;
+		copy_ptr= nullptr;
+	      }
+	  }
+	else
+	  std::cerr << Color::red << "MaterialVector::" << __FUNCTION__
+		    << "; failed allocate material model pointer."
+		    << Color::def << std::endl;
+      }
+    return retval;
+  }
+  
+template <class MAT>
+MAT *MaterialVector<MAT>::get_material_copy(const MAT *new_mat, const std::string &type)
+  {
+    MAT *retval= nullptr;
+    if(new_mat)
+      {
+	Material *copy_ptr= new_mat->getCopy(type.c_str());
+	if(copy_ptr)
+	  {
+	    retval= dynamic_cast<MAT *>(copy_ptr);
+	    if(!retval)
+	      {
+		std::cerr << Color::red << "MaterialVector::" << __FUNCTION__
+			  << "; the type of the given material: "
+			  << new_mat->getClassName()
+			  << " cannot be converted to a "
+			  << typeid(MAT).name()
+			  << " material."
+			  << Color::def << std::endl;
+		delete copy_ptr;
+		copy_ptr= nullptr;
+	      }
+	  }
+	else
+	  std::cerr << Color::red << "MaterialVector::" << __FUNCTION__
+		    << "; failed allocate material model pointer."
+		    << Color::def << std::endl;
+      }
+    return retval;
+  }
+  
+template <class MAT>
 void MaterialVector<MAT>::setMaterial(const MAT *new_mat)
   {
     clearMaterials();
@@ -175,11 +235,9 @@ void MaterialVector<MAT>::setMaterial(const MAT *new_mat)
       {
         for(iterator i= mat_vector::begin();i!=mat_vector::end();i++)
           {
-            (*i)= new_mat->getCopy();
-            if(!(*i))
-              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		        << "; failed allocate material model pointer"
-			<< Color::def << std::endl;
+	    MAT *tmp= MaterialVector<MAT>::get_material_copy(new_mat);
+	    if(tmp)
+	      { (*i)= tmp; }
           }
       }
   }
@@ -192,26 +250,25 @@ void MaterialVector<MAT>::setMaterial(const MAT *new_mat, const std::string &typ
       {
         for(iterator i= mat_vector::begin();i!=mat_vector::end();i++)
           {
-            (*i)= new_mat->getCopy(type.c_str());
-            if(!(*i))
-              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		        << "; failed allocate material model pointer"
-			<< Color::def << std::endl;
+            MAT *tmp= MaterialVector<MAT>::get_material_copy(new_mat, type);
+	    if(tmp)
+	      { (*i)= tmp; }
           }
       }
   }
 
 template <class MAT>
-void MaterialVector<MAT>::setMaterial(size_t i,MAT *new_mat)
+void MaterialVector<MAT>::setMaterial(size_t i, const MAT *new_mat)
   {
     if((*this)[i])
       delete (*this)[i];
-    (*this)[i]= new_mat;
+    MAT *tmp= MaterialVector<MAT>::get_material_copy(new_mat);
+    (*this)[i]= tmp;
   }
 
 template <class MAT>
 void MaterialVector<MAT>::setMaterial(size_t i, const MAT &new_mat)
-  { setMaterial(i, new_mat.getCopy()); }
+  { setMaterial(i, &new_mat); }
 
 //! @brief copy the user defined properties of the given object on each of
 //! the materials.  

@@ -35,3 +35,6 @@ To capture the P-little delta effecs in beam elements you need to use at least s
 ### Force-based elements
 - [Force-Based Element Moment Release](https://portwooddigital.com/2022/10/16/force-based-element-moment-release/)
 - [Is It Close Enough?](https://portwooddigital.com/2024/11/05/is-it-close-enough/)
+- [A Tale of Two Element Formulations](https://portwooddigital.com/2020/02/23/a-tale-of-two-element-formulations/)
+- [Force-based Element vs. Displacement-based Element](https://opensees.berkeley.edu/wiki/images/c/c5/FBEvsDBE.pdf)
+- [Evaluation of Nonlinear Frame Finite-Element Models](https://www.researchgate.net/publication/245304083_Evaluation_of_Nonlinear_Frame_Finite-Element_Models)

@@ -96,6 +96,7 @@ class ElasticShearSection3d: public BaseElasticSection3d
     const ResponseId &getResponseType(void) const;
     int getOrder(void) const;
   
+    virtual DbTagData &getDbTagData(void) const;
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
     boost::python::dict getPyDict(void) const;

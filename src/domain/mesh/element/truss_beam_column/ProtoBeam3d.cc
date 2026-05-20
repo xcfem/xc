@@ -47,7 +47,7 @@ void XC::ProtoBeam3d::set_material(const Material *m)
 	
         if(scc)
 	  {
-            physicalProperties.set(scc->getCrossSectionProperties());
+	    physicalProperties.setMaterial(scc);
 	    physicalProperties.copyPropsFrom(scc);
 	  }
         else
@@ -157,7 +157,7 @@ const XC::PrismaticBarCrossSection *XC::ProtoBeam3d::getSectionPtr(const size_t 
   {
     const PrismaticBarCrossSection *retval(nullptr);
     if(physicalProperties.size()>0)
-      retval= physicalProperties[i];
+      {	retval= physicalProperties[i]; }
     return retval;
   }
 
@@ -282,9 +282,9 @@ int XC::ProtoBeam3d::update(void)
     int retval= BeamColumn::update();
     // determine the current strain given trial displacements at nodes
     const Vector strain= this->computeCurrentStrain();
-    const XC::CrdTransf *crdTransf= this->getCoordTransf();
+    const CrdTransf *crdTransf= this->getCoordTransf();
     const double oneOverL= 1.0/crdTransf->getInitialLength();  
-    ElasticSection3d *section= physicalProperties[0];
+    BaseElasticSection3d *section= physicalProperties[0];
     const int order= section->getOrder();
     const ResponseId &code= section->getResponseType();
     Vector localStrain(order);

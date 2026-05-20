@@ -41,7 +41,7 @@ template<class ElasticSection>
 class ElasticSectionPhysicalProperties: public PhysicalProperties<ElasticSection>
   {
   public:
-    ElasticSectionPhysicalProperties(const size_t &nMat= 0);
+    ElasticSectionPhysicalProperties(const size_t &nMat= 0, const ElasticSection *sectionPtr= nullptr);
     
     bool haveRho(void) const;
     Vector getRhoi(void) const;
@@ -51,13 +51,9 @@ class ElasticSectionPhysicalProperties: public PhysicalProperties<ElasticSection
 
 //! @brief Constructor
 template<class ElasticSection>
-XC::ElasticSectionPhysicalProperties<ElasticSection>::ElasticSectionPhysicalProperties(const size_t &nMat)
-  : PhysicalProperties<ElasticSection>(nMat,nullptr)
-  {
-    const ElasticSection section;
-    for(size_t i= 0;i<nMat;i++)
-      this->theMaterial[i]= dynamic_cast<ElasticSection *>(section.getCopy());
-  }
+XC::ElasticSectionPhysicalProperties<ElasticSection>::ElasticSectionPhysicalProperties(const size_t &nMat, const ElasticSection *sectionPtr)
+  : PhysicalProperties<ElasticSection>(nMat, sectionPtr)
+  {}
 
 //! @brief check to see if have mass
 template <class ElasticSection>

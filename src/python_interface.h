@@ -62,18 +62,21 @@ typedef PhysicalProperties_UMat::material_vector material_vector_UMat;
 typedef XC::PhysicalProperties<XC::SectionForceDeformation> PhysicalProperties_SectionFDMat;
 typedef PhysicalProperties_SectionFDMat::material_vector material_vector_SectionFDMat;
 
-typedef XC::PhysicalProperties<XC::ElasticSection1d> PhysicalProperties_ElasticSection1d;
-typedef PhysicalProperties_ElasticSection1d::material_vector material_vector_ElasticSection1d;
-typedef XC::ElasticSectionPhysicalProperties<XC::ElasticSection1d> ElasticSectionPhysicalProperties_ElasticSection1d;
+typedef XC::PhysicalProperties<XC::ElasticSection1d> PhysicalProperties_BaseElasticSection1d;
+typedef PhysicalProperties_BaseElasticSection1d::material_vector material_vector_BaseElasticSection1d;
+typedef XC::ElasticSectionPhysicalProperties<XC::BaseElasticSection1d> ElasticSectionPhysicalProperties_BaseElasticSection1d;
 
-typedef XC::PhysicalProperties<XC::ElasticSection2d> PhysicalProperties_ElasticSection2d;
-typedef PhysicalProperties_ElasticSection2d::material_vector material_vector_ElasticSection2d;
-typedef XC::ElasticSectionPhysicalProperties<XC::ElasticSection2d> ElasticSectionPhysicalProperties_ElasticSection2d;
+// BaseElasticSection2d.
+typedef XC::PhysicalProperties<XC::BaseElasticSection2d> PhysicalProperties_BaseElasticSection2d;
+typedef PhysicalProperties_BaseElasticSection2d::material_vector material_vector_BaseElasticSection2d;
+typedef XC::ElasticSectionPhysicalProperties<XC::BaseElasticSection2d> ElasticSectionPhysicalProperties_BaseElasticSection2d;
 
-typedef XC::PhysicalProperties<XC::ElasticSection3d> PhysicalProperties_ElasticSection3d;
-typedef PhysicalProperties_ElasticSection3d::material_vector material_vector_ElasticSection3d;
-typedef XC::ElasticSectionPhysicalProperties<XC::ElasticSection3d> ElasticSectionPhysicalProperties_ElasticSection3d;
+// BaseElasticSection3d.
+typedef XC::PhysicalProperties<XC::BaseElasticSection3d> PhysicalProperties_BaseElasticSection3d;
+typedef PhysicalProperties_BaseElasticSection3d::material_vector material_vector_BaseElasticSection3d;
+typedef XC::ElasticSectionPhysicalProperties<XC::BaseElasticSection3d> ElasticSectionPhysicalProperties_BaseElasticSection3d;
 
+// NDMaterial.
 typedef XC::PhysicalProperties<XC::NDMaterial> PhysicalProperties_NDMat;
 typedef PhysicalProperties_NDMat::material_vector material_vector_NDMat;
 
