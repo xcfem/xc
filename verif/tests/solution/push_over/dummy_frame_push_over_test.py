@@ -73,7 +73,8 @@ glp.newNodalLoad(n1.tag, xc.Vector([0,-P,0]))
 modelSpace.addLoadCaseToDomain(glp.name)
 
 # Solve
-solProc= predefined_solutions.TransformationNewtonRaphsonBandGen(feProblem, maxNumIter= 10, convergenceTestTol= 1e-12, printFlag= 0, numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test')
+convergenceTestTol= 1e-10
+solProc= predefined_solutions.TransformationNewtonRaphsonBandGen(feProblem, maxNumIter= 10, convergenceTestTol= convergenceTestTol, printFlag= 0, numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test')
 solProc.setup()
 analysis= solProc.getAnalysis()
 # perform the gravity load analysis.
@@ -95,7 +96,7 @@ ratio1= abs(u2 + vertDisplacement)
 modelSpace.setLoadConstant(t= 0.0)
 
 # Set some parameters
-H = 10.0e3  # Reference lateral load
+H= 10.0e3  # Reference lateral load
 
 # Create a Plain load pattern with a Linear TimeSeries
 lts= modelSpace.newTimeSeries(name= 'lts', tsType= 'linear_ts')
@@ -117,8 +118,9 @@ solProc.displacementControlIntegratorSetup(node= n2, dof= 0, increment= dU, numI
 # Set some parameters
 maxU = 15.0  # Max displacement
 # Set convergence test.
-solProc.convTestType= 'norm_disp_incr_conv_test'
-solProc.convergenceTestTol= 1e-12
+# solProc.convTestType= 'norm_disp_incr_conv_test'
+solProc.convTestType= 'norm_unbalance_conv_test'
+solProc.convergenceTestTol= convergenceTestTol
 solProc.maxNumIter= 1000
 solProc.printFlag= 0
 solProc.convergenceTestSetup()
@@ -148,11 +150,24 @@ while ok == 0 and currentDisp < maxU:
         baseShear.append(-Rx)
 
     currentDisp= n2.getDisp[0]
+    
+Ry= n1.getReaction[1]
+ratio0= (Ry-P)/P
 
-print(displacements)
-print(baseShear)
-quit()
-testOK= (ratio1<5e-3)
+disp0= displacements[0]
+shear0= baseShear[0]
+error= 0.0
+for disp, shear in zip(displacements[2:], baseShear[2:]):
+    incX= disp-disp0
+    incShear= shear-shear0
+    k= incShear/incDisp
+    print('XXX continue here.')
+    error= (k-k0)**2
+    shear0= shear
+    disp0= disp
+error= math.sqrt(error)
+    
+testOK= (ratio0<1e-6) and (ratio1<1e-3)
 
 import os
 from misc_utils import log_messages as lmsg
@@ -161,3 +176,12 @@ if testOK:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+
+# Create a simple line plot
+import matplotlib.pyplot as plt
+plt.plot(displacements, baseShear)
+plt.xlabel('displacements')
+plt.ylabel('base shear')
+plt.title('Dummy push over analysis')
+plt.show()
