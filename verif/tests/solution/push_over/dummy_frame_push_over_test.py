@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
-''' Home made test.  Horizontal cantilever under tension load at its end..'''
+''' Dummy push over analysis test to check that all goes as intended with
+respect to the analysis procedure. The analysis is made over a linear model
+so the results are meaningless.
+'''
 
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__copyright__= "Copyright 2026, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
@@ -140,12 +143,15 @@ while ok == 0 and currentDisp < maxU:
         displacements.append(currentDisp)
         # Compute reactions
         modelSpace.calculateNodalReactions()
-        # # Get base shear
-        # Rx= n1.getReaction[0]+n2.getReaction[0]
-        # baseShear.append(-Rx)
+        # Get base shear
+        Rx= n1.getReaction[0]
+        baseShear.append(-Rx)
 
     currentDisp= n2.getDisp[0]
-    
+
+print(displacements)
+print(baseShear)
+quit()
 testOK= (ratio1<5e-3)
 
 import os
