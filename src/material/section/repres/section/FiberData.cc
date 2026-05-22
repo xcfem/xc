@@ -39,7 +39,7 @@
 #include "material/section/fiber_section/fiber/UniaxialFiber2d.h"
 #include "material/section/fiber_section/fiber/UniaxialFiber3d.h"
 #include "material/section/repres/section_geometry/SectionGeometry.h"
-
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 XC::FiberData::FiberData(const int &sz)
@@ -141,33 +141,37 @@ void XC::FiberData::get2DFibers(fiber_list &retval) const
             material= dynamic_cast<UniaxialMaterial *>(tmp_material);
             if(!material)
               {
-                std::cerr << "FiberData::" << __FUNCTION__
+                std::cerr << Color::red << "FiberData::" << __FUNCTION__
 			  << ";WARNING invalid material ID: "
 			  << tmp_material->getTag()
-                          << " for region.\n";
+                          << " for region."
+		          << Color::def << std::endl;
                 return;
               }
             if(Area(k)<=0)
-              std::cerr << "FiberData::" << __FUNCTION__
+              std::cerr << Color::red << "FiberData::" << __FUNCTION__
 			<< "ERROR, zero or negative area"
 		        << " for the fiber in position: (" 
                         << Position(0,k) << "," << Position(1,k)
-			<< ")." << std::endl;
+			<< ")."
+			<< Color::def << std::endl;
             tmp_fiber = new UniaxialFiber2d(k,*material,Area(k),Position(1,k));
             if(!tmp_fiber)
               {
-                std::cerr << "FiberData::" << __FUNCTION__
+                std::cerr << Color::red << "FiberData::" << __FUNCTION__
 			  << "WARNING unable to allocate fiber: "
-			  << k << std::endl;
+			  << k
+			  << Color::def << std::endl;
                 return;
               }
             else
               retval.push_back(tmp_fiber);
           }
         else
-	  std::cerr << "FiberData::" << __FUNCTION__
+	  std::cerr << Color::red << "FiberData::" << __FUNCTION__
 		    << "; material for fiber: "
-		    << k << " is not defined." << std::endl;
+		    << k << " is not defined."
+		    << Color::def << std::endl;
       }
   }
 
@@ -187,35 +191,39 @@ void XC::FiberData::get3DFibers(fiber_list &retval) const
             material = dynamic_cast<UniaxialMaterial *>(tmp_material);
             if(!material)
               {
-                std::cerr << "FiberData::" << __FUNCTION__
+                std::cerr << Color::red << "FiberData::" << __FUNCTION__
 			  <<  "WARNING invalid material ID: "
 			  << tmp_material->getTag() 
-                          << "for region.\n";
+                          << "for region."
+		          << Color::def << std::endl;
                 return;
               }
             fiberPosition(0)= Position(0,k);
             fiberPosition(1)= Position(1,k);
             if(Area(k)<=0)
-              std::cerr << "FiberData::" << __FUNCTION__
+              std::cerr << Color::red << "FiberData::" << __FUNCTION__
 			<< "ERROR, zero or negative area for"
                         << " the fiber in position: (" 
                         << fiberPosition(0) << "," << fiberPosition(1)
-			<< ")." << std::endl;
+			<< ")."
+			<< Color::def << std::endl;
             tmp_fiber= new UniaxialFiber3d(k, *material, Area(k), fiberPosition);
             if(!tmp_fiber)
               {
-                std::cerr << "FiberData::" << __FUNCTION__
+                std::cerr << Color::red << "FiberData::" << __FUNCTION__
 			  <<  "WARNING unable to allocate fiber: "
-			  << k << std::endl;
+			  << k
+			  << Color::def << std::endl;
                 return;
               }
             else
               retval.push_back(tmp_fiber);
           }
         else
-	  std::cerr << "FiberData::" << __FUNCTION__
+	  std::cerr << Color::red << "FiberData::" << __FUNCTION__
 		    << "; material for fiber: " << k
-		    << " is not defined." << std::endl;
+		    << " is not defined."
+		    << Color::def << std::endl;
         //std::cerr << *retval[k];
       }
   }
