@@ -99,9 +99,9 @@ class RCMaterialDistribution(object):
     def assign(self, elemSet, setRCSects):
         '''Assigns the sections names to the elements of the set.
 
-           :param elemSet: set of elements that receive the section name property.
-           :param setRCSects: RC section definition, name, concrete type,
-                              rebar positions,...
+        :param elemSet: set of elements that receive the section name property.
+        :param setRCSects: RC section definition, name, concrete type,
+                           rebar positions,...
         '''
         retval= self.sectionDistribution.assign(elemSet, setRCSects)
         self.elementSetNames.append(elemSet.owner.name)
@@ -131,7 +131,7 @@ class RCMaterialDistribution(object):
         return retval
 
     def getMasterElementDimension(self, tagElem):
-        ''' Return the dimension (1, 2 or 3) of the element whose tag is being passed
+        ''' Return the dimension (1, 2 or 3) of the given element.
            as a parameter.
 
         :param tagElem: master element identifier.

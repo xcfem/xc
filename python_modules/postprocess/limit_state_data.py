@@ -448,7 +448,7 @@ class LimitStateData(object):
         solutionProcedure= solutionProcedureType(feProblem)
         preprocessor= feProblem.getPreprocessor
         loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
-        #Putting combinations inside XC.
+        # Putting combinations inside XC.
         loadCombinations= self.dumpCombinations(combContainer,loadCombinations)
         
         verbosityLevel= preprocessor.getVerbosityLevel()
