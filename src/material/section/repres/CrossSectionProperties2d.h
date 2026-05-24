@@ -68,7 +68,7 @@ class CrossSectionProperties2d: public CrossSectionProperties1d
   public:
     CrossSectionProperties2d(double E, double A, double I, double G= 0.0,double alpha= 0.0, double rho= 0.0);
     CrossSectionProperties2d(double EA, double EI);
-    CrossSectionProperties2d(const SectionForceDeformation &);
+    explicit CrossSectionProperties2d(const SectionForceDeformation &, const double &e= 1.0, const double &iw= 0.0, const double &g= 1.0, const double &alpha= 0.0);
     CrossSectionProperties2d(void); 
     bool check_values(void);
     inline int getDimension(void)

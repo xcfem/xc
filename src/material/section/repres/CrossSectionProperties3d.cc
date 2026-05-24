@@ -87,8 +87,8 @@ XC::CrossSectionProperties3d::CrossSectionProperties3d(double EA_in, double EIz_
   { check_values(); }
 
 //! @brief Constructor.
-XC::CrossSectionProperties3d::CrossSectionProperties3d(const SectionForceDeformation &section)
-  : CrossSectionProperties2d(section), iy(0.0), iyz(0.0), j(0.0), alpha_z(0)
+XC::CrossSectionProperties3d::CrossSectionProperties3d(const SectionForceDeformation &section, const double &e, const double &iw, const double &g, const double &alpha_y, const double &alpha_z)
+  : CrossSectionProperties2d(section, e, iw, g, alpha_y), iy(0.0), iyz(0.0), j(0.0), alpha_z(alpha_z)
   {
     const Matrix &sectTangent= section.getInitialTangent();
     const ResponseId &sectCode= section.getResponseType();
@@ -98,10 +98,10 @@ XC::CrossSectionProperties3d::CrossSectionProperties3d(const SectionForceDeforma
 	switch(code)
 	  {
 	  case SECTION_RESPONSE_MY:
-	    iy= sectTangent(i,i);
+	    this->iy= sectTangent(i,i)/this->E();
 	    break;
 	  case SECTION_RESPONSE_T:
-	    j= sectTangent(i,i);
+	    this->j= sectTangent(i,i)/this->G();
 	    break;
 	  default:
 	    break;

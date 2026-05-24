@@ -77,8 +77,8 @@ XC::CrossSectionProperties1d::CrossSectionProperties1d(double EA_in)
   { check_values(); }
 
 //! @brief Constructor.
-XC::CrossSectionProperties1d::CrossSectionProperties1d(const SectionForceDeformation &section)
-  : CommandEntity(), MovableObject(0), e(1.0), a(0.0), rho(0), iw(0)
+XC::CrossSectionProperties1d::CrossSectionProperties1d(const SectionForceDeformation &section, const double &ee, const double &iiw)
+  : CommandEntity(), MovableObject(0), e(ee), a(0.0), rho(0), iw(iiw)
   {
     const Matrix &sectTangent= section.getInitialTangent();
     const ResponseId &sectCode= section.getResponseType();
@@ -88,17 +88,18 @@ XC::CrossSectionProperties1d::CrossSectionProperties1d(const SectionForceDeforma
 	switch(code)
 	  {
 	  case SECTION_RESPONSE_P:
-	    a = sectTangent(i,i);
+	    this->a = sectTangent(i,i)/this->e;
 	    break;
 	  default:
 	    break;
 	  }
       }
+    this->rho= section.getRho();
   }
 
 //! @brief Constructor (1D cross sections).
-XC::CrossSectionProperties1d::CrossSectionProperties1d(double E_in, double A_in, double r)
-  : CommandEntity(), MovableObject(0), e(E_in), a(A_in), rho(r)
+XC::CrossSectionProperties1d::CrossSectionProperties1d(double E_in, double A_in, double r, double i)
+  : CommandEntity(), MovableObject(0), e(E_in), a(A_in), rho(r), iw(i)
   { check_values(); }
 
 //! @brief Returns the tangent stiffness matrix.
