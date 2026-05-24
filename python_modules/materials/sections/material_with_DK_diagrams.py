@@ -8,22 +8,19 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
+import sys
+from misc_utils import log_messages as lmsg
+
 class MaterialWithDKDiagrams(object):
     """Base class for materials with characteristic (K) and design (D) diagrams 
 
       :ivar materialName: name of the material.
 
       :ivar nmbDiagK: name of the characteristic diagram.
-      :ivar matTagK:  tag of the uniaxial material in the characteristic diagram.
-      :ivar materialDiagramK: characteristic stress-strain diagram.
 
       :ivar nmbDiagD: name of the design diagram.
-      :ivar matTagD: tag of the uniaxial material in the design diagram.
-      :ivar materialDiagramD: design stress-strain diagram.
 
       :ivar nmbDiagE: name of the elastic diagram.
-      :ivar matTagE: tag of the uniaxial material in the elastic diagram.
-      :ivar materialDiagramE: elastic stress-strain diagram.
     """
     def __init__(self, matName):
         ''' Constructor.
@@ -73,29 +70,207 @@ class MaterialWithDKDiagrams(object):
         self.materialName= matName # Name identifying the material.
         if(matName):
             # Characteristic stress-strain diagram.
-            self.nmbDiagK= "dgK"+self.materialName # Name identifying the characteristic stress-strain diagram.
-            self.matTagK= -1 # Tag of the uniaxial material with the characteristic stress-strain diagram.
-            self.materialDiagramK= None # Characteristic stress-strain diagram.
-
+            self.nmbDiagK= "dgK_"+self.materialName # Name identifying the characteristic stress-strain diagram.
             # Design stress-strain diagram.
-            self.nmbDiagD= "dgD"+self.materialName # Name identifying the design stress-strain diagram.
-            self.matTagD= -1 # Tag of the uniaxial material with the design stress-strain diagram .
-            self.materialDiagramD= None # Design stress-strain diagram.
-
+            self.nmbDiagD= "dgD_"+self.materialName # Name identifying the design stress-strain diagram.
+            # TD stress-strain diagram.
+            self.nmbDiagTD= "dgTD_"+self.materialName # Name identifying the TD stress-strain diagram.
             # Linear elastic stress-strain diagram.
-            self.nmbDiagE= "dgE"+self.materialName # Name identifying the linear elastic stress-strain diagram.
-            self.matTagE= -1 # Tag of the uniaxial material with the design stress-strain diagram .
-            self.materialDiagramE= None # Design stress-strain diagram.
+            self.nmbDiagE= "dgE_"+self.materialName # Name identifying the linear elastic stress-strain diagram.
 
     def __repr__(self):
         return self.materialName
 
-    def getDiagK(self,preprocessor):
+    def getDiagK(self, preprocessor):
+        ''' Return the uniaxila material corresponding to the characteristic 
+            stress-strain diagram of this material.
+
+        :param preprocessor: finite element preprocessor.
+        '''
         return preprocessor.getMaterialHandler.getMaterial(self.nmbDiagK)
     
-    def getDiagD(self,preprocessor):
+    def diagKExists(self, preprocessor):
+        ''' Return true if the  uniaxial material corresponding to the 
+            characteristic stress-strain diagram of this material is already
+            create.
+
+        :param preprocessor: pre-processor of the FE problem at hand.
+        '''
+        return preprocessor.getMaterialHandler.materialExists(self.nmbDiagK)
+
+    def getMaterialDiagramK(self):
+        ''' Return the uniaxial material corresponding to the characteristic 
+            stress-strain diagram of this object.'''
+        retval= None
+        if(hasattr(self,'preprocessor')):
+            if(self.preprocessor):
+                retval= self.getDiagK(self.preprocessor)
+        return retval
+            
+    def getMatTagK(self, preprocessor= None):
+        ''' Return the identifier of the uniaxial material corresponding to
+            the characteristic stress-strain diagram.
+
+        :param preprocessor: finite element preprocessor. If none assume the
+                             preprocessor is always the same.
+        '''
+        retval= -1
+        if(preprocessor):
+            tmp= self.getDiagK(preprocessor)
+        else:
+            tmp= self.getMaterialDiagramK()
+        if(tmp):
+            retval= tmp.tag
+        return retval
+           
+    def getDiagD(self, preprocessor):
+        ''' Return the uniaxila material corresponding to the design 
+            stress-strain diagram of this material.
+
+        :param preprocessor: finite element preprocessor.
+        '''
         return preprocessor.getMaterialHandler.getMaterial(self.nmbDiagD)
 
+    def diagDExists(self, preprocessor):
+        ''' Return true if the  uniaxial material corresponding to the design
+            stress-strain diagram of this material is already create.
+
+        :param preprocessor: pre-processor of the FE problem at hand.
+        '''
+        return preprocessor.getMaterialHandler.materialExists(self.nmbDiagD)
+
+    def getMaterialDiagramD(self):
+        ''' Return the uniaxial material corresponding to the design
+            stress-strain diagram of this object.'''
+        retval= None
+        if(hasattr(self,'preprocessor')):
+            if(self.preprocessor):
+                retval= self.getDiagD(self.preprocessor)
+        return retval
+    
+    def getMatTagD(self, preprocessor= None):
+        ''' Return the identifier of the uniaxial material corresponding to
+            the design stress-strain diagram.
+
+        :param preprocessor: finite element preprocessor. If none assume the
+                             preprocessor is always the same.
+        '''
+        retval= -1
+        if(preprocessor):
+            tmp= self.getDiagD(preprocessor)
+        else:
+            tmp= self.getMaterialDiagramD()
+        if(tmp):
+            retval= tmp.tag
+        return retval
+       
+    def getDiagTD(self, preprocessor):
+        ''' Return the uniaxila material corresponding to the TD stress-strain
+            diagram of this material.
+
+        :param preprocessor: finite element preprocessor.
+        '''
+        return preprocessor.getMaterialHandler.getMaterial(self.nmbDiagTD)
+    
+    def diagTDExists(self, preprocessor):
+        ''' Return true if the  uniaxial material corresponding to the 
+            characteristic stress-strain diagram of this material is already
+            create.
+
+        :param preprocessor: pre-processor of the FE problem at hand.
+        '''
+        return preprocessor.getMaterialHandler.materialExists(self.nmbDiagTD)
+    
+    def getMaterialDiagramTD(self):
+        ''' Return the uniaxial material corresponding to the TD stress-strain
+            diagram of this object.'''
+        retval= None
+        if(hasattr(self,'preprocessor')):
+            if(self.preprocessor):
+                retval= self.getDiagTD(self.preprocessor)
+        return retval
+    
+    def getMatTagTD(self, preprocessor= None):
+        ''' Return the identifier of the uniaxial material corresponding to
+            the TD stress-strain diagram.
+
+        :param preprocessor: finite element preprocessor. If none assume the
+                             preprocessor is always the same.
+        '''
+        retval= -1
+        if(preprocessor):
+            tmp= self.getDiagTD(preprocessor)
+        else:
+            tmp= self.getMaterialDiagramTD()
+        if(tmp):
+            retval= tmp.tag
+        return retval
+       
+    def getDiagE(self, preprocessor):
+        ''' Return the uniaxila material corresponding to the linear elastic
+            stress-strain diagram of this material.
+
+        :param preprocessor: finite element preprocessor.
+        '''
+        return preprocessor.getMaterialHandler.getMaterial(self.nmbDiagE)
+    
+    def diagEExists(self, preprocessor):
+        ''' Return true if the  uniaxial material corresponding to the 
+            characteristic stress-strain diagram of this material is already
+            create.
+
+        :param preprocessor: pre-processor of the FE problem at hand.
+        '''
+        return preprocessor.getMaterialHandler.materialExists(self.nmbDiagE)
+    
+    def getMaterialDiagramE(self):
+        ''' Return the uniaxial material corresponding to the linear elastic
+            stress-strain diagram of this object.'''
+        retval= None
+        if(hasattr(self,'preprocessor')):
+            if(self.preprocessor):
+                retval= self.getDiagE(self.preprocessor)
+        return retval
+    
+    def getMatTagE(self, preprocessor= None):
+        ''' Return the identifier of the uniaxial material corresponding to
+            the linear elastic stress-strain diagram.
+
+        :param preprocessor: finite element preprocessor. If none assume the
+                             preprocessor is always the same.
+        '''
+        retval= -1
+        if(preprocessor):
+            tmp= self.getDiagE(preprocessor)
+        else:
+            tmp= self.getMaterialDiagramE()
+        if(tmp):
+            retval= tmp.tag
+        return retval
+
+    def _set_preprocessor(self, preprocessor):
+        ''' Store the preprocessor that has been used to create the uniaxial
+            material corresponding to a stress-strain diagram of this material.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        '''
+        # Check if this diagram has already been created with another
+        # preprocessor.
+        if(hasattr(self,'preprocessor')):
+            if(id(self.preprocessor)!=id(preprocessor)):
+                # # Issue an warning message.
+                # className= type(self).__name__
+                # methodName= sys._getframe(0).f_code.co_name
+                # warningMsg= "; material: '"+str(self.nmbDiagK)
+                # warningMsg+= "' already exists but does not"
+                # warningMsg+= ' belong to the given preprocessor.'
+                # lmsg.warning(className+'.'+methodName+warningMsg)
+                self.preprocessor= preprocessor
+            else:
+                pass # No need of doing anything.
+        else:
+            self.preprocessor= preprocessor
+           
     def getDesignStressStrainDiagramFileName(self, path= '', withExtension= True):
         ''' Return the file name for the design stress strain diagram.
 
@@ -110,7 +285,7 @@ class MaterialWithDKDiagrams(object):
         if(withExtension):
             retval+= '.png'
         return retval
-    
+
     def getDesignStressStrainDiagramTitle(self):
         ''' Return the title for the design stress strain diagram.'''
         return self.materialName + ' design stress-strain diagram'

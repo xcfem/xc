@@ -283,8 +283,8 @@ class FibSectLSProperties(object):
         self.sctProp= sct.getProp('sectionData')
         concreteType= self.sctProp.getConcreteType()
         steelType= self.sctProp.getReinfSteelType()
-        self.concrTagK= concreteType.matTagK
-        self.rsteelTagK= steelType.matTagK
+        self.concrTagK= concreteType.getMatTagK()
+        self.rsteelTagK= steelType.getMatTagK()
         self.concrName= str(concreteType)
         self.rsteelName= str(steelType)
         self.cover=0 #init concrete cover
@@ -588,12 +588,12 @@ class ShearControllerBase(LimitStateControllerBase):
          :param concrete: parameters to modelize concrete.
          :param reinfSteel: parameters to modelize reinforcement steel.
         '''
-        self.concreteMatTag= concrete.matTagD
+        self.concreteMatTag= concrete.getMatTagD()
         self.fckH= abs(concrete.fck)
         self.fcdH= abs(concrete.fcd())
         self.fctdH= concrete.fctd()
         self.gammaC= concrete.gmmC
-        self.reinfSteelMaterialTag= reinfSteel.matTagD
+        self.reinfSteelMaterialTag= reinfSteel.getMatTagD()
         self.fydS= reinfSteel.fyd()
         if(not scc.hasProp("rcSets")):
             scc.setProp("rcSets", fiber_sets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName))

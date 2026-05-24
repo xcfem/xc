@@ -141,6 +141,7 @@ class SectionContainer(object):
         for s in self.sections: # for each section definition.
             for rcs in s.lstRCSects: # for each list of reinforced concrete
                                      # fiber-sections defined in s.
+                print('  here: ', retval, type(rcs))
                 rcs.defRCSection(preprocessor= preprocessor, matDiagType= matDiagType)
                 retval+= 1
         return retval

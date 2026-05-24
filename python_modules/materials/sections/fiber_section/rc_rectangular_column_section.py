@@ -54,12 +54,12 @@ class RCRectangularColumnSection(basic_rectangular_rc_section.BasicRectangularRC
 
         reinforcement= self.geomSection.getReinfLayers
 
-        self.reinforcementInf= reinforcement.newStraightReinfLayer(self.fiberSectionParameters.reinfDiagName)
+        self.reinforcementInf= reinforcement.newStraightReinfLayer(self.fiberSectionParametersgetReinforcementDiagName())
         self.reinforcementInf.code= "infWidth"
         self.reinforcementInf.numReinfBars= self.mainBars.nRebarsWidth
         self.reinforcementInf.barArea= self.mainBars.areaRebarWidth
 
-        self.reinforcementSup= reinforcement.newStraightReinfLayer(self.fiberSectionParameters.reinfDiagName)
+        self.reinforcementSup= reinforcement.newStraightReinfLayer(self.fiberSectionParametersgetReinforcementDiagName())
         self.reinforcementSup.code= "supWidth"
         self.reinforcementSup.numReinfBars= self.mainBars.nRebarsWidth
         self.reinforcementSup.barArea= self.mainBars.areaRebarWidth
@@ -71,14 +71,14 @@ class RCRectangularColumnSection(basic_rectangular_rc_section.BasicRectangularRC
 
         rebarsSpacingCanto= (depth-2*cover)/(self.mainBars.nRebarsDepth+1)
 
-        self.reinforcementCIzq= reinforcement.newStraightReinfLayer(self.fiberSectionParameters.reinfDiagName)
+        self.reinforcementCIzq= reinforcement.newStraightReinfLayer(self.fiberSectionParametersgetReinforcementDiagName())
         self.reinforcementCIzq.code= "leftDepth"
         self.reinforcementCIzq.numReinfBars= self.mainBars.nRebarsDepth
         self.reinforcementCIzq.barArea= self.mainBars.areaRebarDepth
         self.reinforcementCIzq.p1= geom.Pos2d(-width/2+cover,-depth/2+cover+rebarsSpacingCanto) # Left side reinforcement.
         self.reinforcementCIzq.p2= geom.Pos2d(-width/2+cover,depth/2-cover-rebarsSpacingCanto)
 
-        self.reinforcementCDer= reinforcement.newStraightReinfLayer(self.fiberSectionParameters.reinfDiagName)
+        self.reinforcementCDer= reinforcement.newStraightReinfLayer(self.fiberSectionParametersgetReinforcementDiagName())
         self.reinforcementCDer.code= "rightDepth"
         self.reinforcementCDer.numReinfBars= self.mainBars.nRebarsDepth
         self.reinforcementCDer.barArea= self.mainBars.areaRebarDepth

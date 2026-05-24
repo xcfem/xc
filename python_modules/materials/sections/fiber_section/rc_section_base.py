@@ -284,7 +284,7 @@ class RCSectionBase(object):
         self.fiberSection.setRespVzByName(self.respVzName())
         self.fiberSection.setRespTByName(self.respTName())
         self.fiberSection.setProp('sectionData',self)
-        return fiberSectionName
+        return self.fiberSection
         
     def clearFiberSection(self):
         '''Clear the previously defined fiber section.'''
@@ -303,7 +303,8 @@ class RCSectionBase(object):
         '''
         self.defShearResponse(preprocessor= preprocessor)
         self.defSectionGeometry(preprocessor= preprocessor, matDiagType= matDiagType, twoDimensional= False)
-        return self.defFiberSection(preprocessor= preprocessor)
+        retval= self.defFiberSection(preprocessor= preprocessor)
+        return retval
         
     def clearRCSection(self):
         ''' Clear a previously defined XC reinforced concrete section (possibly

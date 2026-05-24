@@ -192,7 +192,7 @@ class RCCircularSection(rc_section_base.RCSectionBase, section_properties.Circul
             errMsg+= ' Option twoDimensional ignored.'
             lmsg.error(className+'.'+methodName+errMsg)            
         regions= self.geomSection.getRegions
-        rg= regions.newCircularRegion(self.fiberSectionParameters.concrDiagName)
+        rg= regions.newCircularRegion(self.fiberSectionParameters.getConcreteDiagName())
         rg.nDivCirc= self.fiberSectionParameters.nDivCirc()
         rg.nDivRad= self.fiberSectionParameters.nDivRad()
         rg.extRad= self.Rext
@@ -250,7 +250,7 @@ class RCCircularSection(rc_section_base.RCSectionBase, section_properties.Circul
         self.geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
         self.defConcreteRegion(twoDimensional= twoDimensional)
         reinforcement= self.geomSection.getReinfLayers
-        self.mainReinf.defCircularLayers(reinforcement, "reinf", self.fiberSectionParameters.reinfDiagName, self.Rext)
+        self.mainReinf.defCircularLayers(reinforcement, "reinf", self.fiberSectionParameters.getReinforcementDiagName(), self.Rext)
 
         self.minCover= self.getMinCover()
         

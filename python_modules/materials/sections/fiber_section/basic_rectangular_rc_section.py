@@ -223,7 +223,7 @@ class BasicRectangularRCSection(rc_section_base.RCSectionBase, section_propertie
         :param twoDimensional: if true set only one division on IJ direction.
         '''
         regions= self.geomSection.getRegions
-        rg= regions.newQuadRegion(self.fiberSectionParameters.concrDiagName)
+        rg= regions.newQuadRegion(self.fiberSectionParameters.getConcreteDiagName())
         if(twoDimensional):
             rg.nDivIJ= 1
         else:
