@@ -127,6 +127,15 @@ class RCFiberSectionParameters(object):
                 retval= self.concrType.nmbDiagD
             elif(self.diagType=="k"): # characteristic diagram
                 retval= self.concrType.nmbDiagK
+            elif(self.diagType=="td"): # TD diagram
+                retval= self.concrType.nmbDiagTD
+            elif(self.diagType=="elastic"): # elastic diagram
+                retval= self.concrType.nmbDiagE
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+"; diagram type: '"+self.diagType+"' unknown.\n")
+                exit(1)
         return retval
 
     def getReinforcementDiagName(self):
@@ -139,6 +148,15 @@ class RCFiberSectionParameters(object):
                 retval= self.reinfSteelType.nmbDiagD
             elif(self.diagType=="k"): # characteristic diagram
                 retval= self.reinfSteelType.nmbDiagK
+            elif(self.diagType=="elastic"): # elastic diagram
+                retval= self.reinfSteelType.nmbDiagE
+            elif(self.diagType=="td"): # elastic diagram for TD concrete models.
+                retval= self.reinfSteelType.nmbDiagE
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+"; diagram type: '"+self.diagType+"' unknown.\n")
+                exit(1)
         return retval
 
     def defDiagrams(self, preprocessor, matDiagType):

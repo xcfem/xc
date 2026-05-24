@@ -1611,7 +1611,7 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
 
         :param preprocessor: pre-processor for the finite element problem.
         '''
-        return defElasticMaterial(preprocessor= preprocessor, name= self.nmbDiagE, E= self.Es, rho= self.rho)
+        return typical_materials.defElasticMaterial(preprocessor= preprocessor, name= self.nmbDiagE, E= self.Es, rho= self.rho)
     
     def defDiagE(self, preprocessor):
         ''' Returns and XC linear elastic uniaxial material.
@@ -1621,7 +1621,7 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
         retval= None
         materialExists= self.diagEExists(preprocessor)
         if(materialExists):
-            retval= self.getDiagD(preprocessor)
+            retval= self.getDiagE(preprocessor)
         else:
             retval= self._define_elastic_diagram(preprocessor)
         self._set_preprocessor(preprocessor)
@@ -1655,6 +1655,12 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
                 retval= tmp
             else: # if not defined yet, do it now.
                 retval= self.defDiagE(preprocessor)
+        elif(matDiagType=='td'):
+            tmp= self.getDiagTD(preprocessor)
+            if(tmp): # if already defined.
+                retval= tmp
+            else: # if not defined yet, do it now.
+                retval= self.defDiagTD(preprocessor)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
