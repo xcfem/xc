@@ -524,8 +524,8 @@ class RCRectangularSection(basic_rectangular_rc_section.BasicRectangularRCSectio
         ## Compute positions.
         negPoints, posPoints= self.computeRebarPositions()
         ## Create reinforcement layers.
-        self.negatvRebarRows.defStraightLayers(reinforcement,"neg",self.fiberSectionParametersgetReinforcementDiagName(),negPoints)
-        self.positvRebarRows.defStraightLayers(reinforcement,"pos",self.fiberSectionParametersgetReinforcementDiagName(),posPoints)
+        self.negatvRebarRows.defStraightLayers(reinforcement,"neg",self.fiberSectionParameters.getReinforcementDiagName(),negPoints)
+        self.positvRebarRows.defStraightLayers(reinforcement,"pos",self.fiberSectionParameters.getReinforcementDiagName(),posPoints)
         self.minCover= self.getMinCover()
 
     def clearSectionGeometry(self):
