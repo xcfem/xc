@@ -80,8 +80,8 @@ class FiberData
 
     size_t PutCells(const size_t &,const RegionContainer &);
     size_t putReinforcementLayers(const size_t &,const ListReinfLayer &);
-    void get2DFibers(fiber_list &) const;
-    void get3DFibers(fiber_list &) const;
+    int get2DFibers(fiber_list &) const;
+    int get3DFibers(fiber_list &) const;
   };
 
 } // end of XC namespace
