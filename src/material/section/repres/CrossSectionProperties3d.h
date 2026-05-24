@@ -54,7 +54,7 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
   public:
     CrossSectionProperties3d(double E, double A, double Iz, double Iy, double G, double J, double alpha_y= 0.0, double alpha_z= 0.0, double rho= 0.0);
     CrossSectionProperties3d(double EA, double EIz, double EIy, double GJ);
-    explicit CrossSectionProperties3d(const SectionForceDeformation &, const double &e= 1.0, const double &iw= 0.0, const double &g= 1.0, const double &alpha_y= 0.0, const double &alpha_z= 0.0);
+    explicit CrossSectionProperties3d(const SectionForceDeformation &, const double &e= 1.0, const double &iw= 0.0, const double &g= 1.0);
     CrossSectionProperties3d(void);
 
     bool check_values(void);
