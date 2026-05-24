@@ -47,10 +47,10 @@ section1.shReinf= def_simple_RC_section.ShearReinforcement(familyName= "sh",nShR
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Create the fiber section material
-fiberSectionName= section1.defRCSection(preprocessor, matDiagType= 'd')
+fiberSection= section1.defRCSection(preprocessor, matDiagType= 'd')
 
 # Create ZeroLength element and assign the section to it.
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSectionName)
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSection.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

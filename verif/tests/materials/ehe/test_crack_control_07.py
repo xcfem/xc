@@ -55,8 +55,8 @@ preprocessor=  feProblem.getPreprocessor
 materialHandler= preprocessor.getMaterialHandler
 
 # Section geometry
-fiberSectionName= section.defRCSection(preprocessor,matDiagType= 'k')
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSectionName)
+fiberSection= section.defRCSection(preprocessor,matDiagType= 'k')
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSection.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
@@ -89,7 +89,7 @@ if(analOk<0):
 secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')
 
 scc= zlElement.getSection()
-secHAParamsFis.computeWk(scc,concr.matTagK,steel.matTagK,concr.fctm())
+secHAParamsFis.computeWk(scc,concr.getMatTagK(),steel.getMatTagK(),concr.fctm())
 ratio1= ((secHAParamsFis.Wk-0.3540443136789274e-3)/0.3540443136789274e-3)
 
 

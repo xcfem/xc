@@ -58,7 +58,7 @@ sa.setRespVyByName("respVy")
 sa.setRespVzByName("respVz")
 sa.setRespTByName("respT")
 
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, "sa")
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, sa.name)
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(nodA.tag)

@@ -48,10 +48,10 @@ rcSection.negatvRebarRows= def_simple_RC_section.LongReinfLayers([topRow])
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Create the section material
-fiberSectionName= rcSection.defRCSection(preprocessor, matDiagType= 'd')
+fiberSection= rcSection.defRCSection(preprocessor, matDiagType= 'd')
 
 # Create ZeroLength element and assign the section to it.
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSectionName)
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSection.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

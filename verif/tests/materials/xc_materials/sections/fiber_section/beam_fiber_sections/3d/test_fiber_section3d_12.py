@@ -40,7 +40,7 @@ fiberSectionRepr= secHP.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed(geomSecPret01.name)
 secHP.setupFibers()
 
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, "secHP")
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, secHP.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
@@ -74,12 +74,12 @@ esfMy= scc.getStressResultantComponent("My")
 esfMz= scc.getStressResultantComponent("Mz")
 defMz= scc.getSectionDeformationByName("defMz")
 defN= scc.getSectionDeformationByName("defN")
-concrFibers= fiber_sets.FiberSet(scc,'concrete',EHE_materials.HP45.matTagD)
+concrFibers= fiber_sets.FiberSet(scc,'concrete',EHE_materials.HP45.getMatTagD())
 fibraCEpsMin= concrFibers.getFiberWithMinStrain()
 epsCMin= fibraCEpsMin.getMaterial().getStrain() # Minimum concrete strain.
 fibraCEpsMax= concrFibers.getFiberWithMaxStrain()
 epsCMax= fibraCEpsMax.getMaterial().getStrain() # Maximum concrete strain.
-reinfFibers= fiber_sets.FiberSet(scc,"reinforcement",EHE_materials.Y1860S7.matTagD)
+reinfFibers= fiber_sets.FiberSet(scc,"reinforcement",EHE_materials.Y1860S7.getMatTagD())
 fibraSEpsMax= reinfFibers.getFiberWithMaxStrain()
 epsSMax= fibraSEpsMax.getMaterial().getStrain() # Maximum steel strain.
 

@@ -62,9 +62,9 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 modelSpace= predefined_spaces.StructuralMechanics3D(preprocessor.getNodeHandler)
 ## Fiber-section material.
-fiberSectionName= sectionTemplate.defRCSection(preprocessor, matDiagType= 'd')
+fiberSection= sectionTemplate.defRCSection(preprocessor, matDiagType= 'd')
 ## Zero-length element.
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSectionName)
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSection.name)
 ## Constraints
 modelSpace.fixNode000_000(nodA.tag)
 modelSpace.fixNodeF00_0FF(nodB.tag)
@@ -85,7 +85,7 @@ fiberSection= zlElement.getSection()
 My= fiberSection.getMy()
 
 ## Concrete strains.
-concrFibers= fiber_sets.FiberSet(fiberSection,'concrete',concrete.matTagD)
+concrFibers= fiber_sets.FiberSet(fiberSection,'concrete',concrete.getMatTagD())
 fibraCEpsMin= concrFibers.getFiberWithMinStrain()
 epsCMin= fibraCEpsMin.getMaterial().getStrain() # Minimum concrete strain.
 checkConcreteStrain= okString if(-epsCMin<=3.5e-3) else koString
@@ -93,7 +93,7 @@ checkConcreteStrain= okString if(-epsCMin<=3.5e-3) else koString
 fibraCEpsMax= concrFibers.getFiberWithMaxStrain()
 epsCMax= fibraCEpsMax.getMaterial().getStrain() # Maximum concrete strain.
 ## Steel strains.
-reinfFibers= fiber_sets.FiberSet(fiberSection,"reinforcement",steel.matTagD)
+reinfFibers= fiber_sets.FiberSet(fiberSection,"reinforcement",steel.getMatTagD())
 fibraSEpsMax= reinfFibers.getFiberWithMaxStrain()
 epsSMax= fibraSEpsMax.getMaterial().getStrain() # Maximum steel strain
 checkSteelStrain= okString if(epsSMax<=10e-3) else koString

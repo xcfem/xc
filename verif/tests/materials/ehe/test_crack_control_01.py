@@ -46,9 +46,9 @@ section.negatvRebarRows= def_simple_RC_section.LongReinfLayers([])
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 ## Fiber-section material.
-fiberSectionName= section.defRCSection(preprocessor,matDiagType= 'k')
+fiberSection= section.defRCSection(preprocessor,matDiagType= 'k')
 ## Zero-length element.
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSectionName)
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSection.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
@@ -70,7 +70,7 @@ secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')
 
 elements= preprocessor.getElementHandler
 scc= zlElement.getSection()
-secHAParamsFis.computeWk(scc,concr.matTagK,steel.matTagK,concr.fctm())
+secHAParamsFis.computeWk(scc,concr.getMatTagK(),steel.getMatTagK(),concr.fctm())
 
 wkReference= 0.226250241526506e-3 # Avg of computed values in different computers.
 ratio1= (abs(secHAParamsFis.Wk-wkReference)/wkReference)

@@ -42,7 +42,7 @@ fiberSectionRepr= barsSection.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed(barsSectionGeometry.name)
 barsSection.setupFibers()
 
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, "barsSection")
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, barsSection.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

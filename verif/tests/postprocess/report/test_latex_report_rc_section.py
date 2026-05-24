@@ -15,7 +15,6 @@ __email__= "l.pereztato@gmail.com"
 import os
 import xc
 
-from misc import scc3d_testing_bench
 from solution import predefined_solutions # Solution procedure
 from materials.sections.fiber_section import def_simple_RC_section
 

@@ -54,9 +54,9 @@ preprocessor=  feProblem.getPreprocessor
 # reinfSteelMaterialTag= SIA262_materials.B500S.defDiagK(preprocessor)
 
 
-fiberSectionName= datosScc1LosC.defRCSection(preprocessor, "k")
+fiberSection= datosScc1LosC.defRCSection(preprocessor, "k")
 
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSectionName)
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSection.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

@@ -24,7 +24,6 @@ from misc import scc3d_testing_bench
 from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
-from misc import scc3d_testing_bench
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -61,7 +60,7 @@ fiberSectionRepr.setGeomNamed(geomRectang.name)
 rectang.setupFibers()
 fiber_section_test_macros.extractFiberSectionProperties(rectang,scc10x20, fy)
 
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, "rectang")
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, rectang.name)
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(nodA.tag)

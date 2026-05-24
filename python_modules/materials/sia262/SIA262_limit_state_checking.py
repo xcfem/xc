@@ -378,8 +378,8 @@ class CrackControlSIA262(lsc.CrackControlBaseParameters):
     def calcRebarStress(self, scc):
         '''Returns average stress in rebars.'''
         section= scc.getProp('sectionData')
-        concreteTag= section.getConcreteType().matTagK
-        reinfMatTag= section.getReinfSteelType().matTagK
+        concreteTag= section.getConcreteType().getMatTagK()
+        reinfMatTag= section.getReinfSteelType().getMatTagK()
         if(not scc.hasProp("rcSets")):
           scc.setProp("rcSets", fiber_sets.fiberSectionSetupRC3Sets(scc,concreteTag,self.concreteFibersSetName,reinfMatTag,self.rebarFibersSetName))
         rcSets= scc.getProp("rcSets")

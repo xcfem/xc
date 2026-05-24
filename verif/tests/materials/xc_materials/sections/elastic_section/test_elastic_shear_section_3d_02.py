@@ -6,7 +6,6 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 from materials.sections import section_properties
-from misc import scc3d_testing_bench
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"

@@ -57,7 +57,7 @@ fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed(concreteSectionGeom01.name)
 secHA.setupFibers()
 
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, "secHA")
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, secHA.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
@@ -106,7 +106,7 @@ defN= scc.getSectionDeformationByName("defN")
 x= scc.getNeutralAxisDepth()
 Resul= scc.getStressResultant()
 Deform= scc.getSectionDeformation()
-setsRC= fiber_sets.fiberSectionSetupRCSets(scc,EHE_materials.HA25.matTagD,'concrete',EHE_materials.B500S.matTagD,"reinforcement")
+setsRC= fiber_sets.fiberSectionSetupRCSets(scc,EHE_materials.HA25.getMatTagD(),'concrete',EHE_materials.B500S.getMatTagD(),"reinforcement")
 
 
 fibraCEpsMin= -1

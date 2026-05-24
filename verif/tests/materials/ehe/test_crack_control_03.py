@@ -63,7 +63,7 @@ fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed(geomSecHA.name)
 secHA.setupFibers()
 
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, "secHA")
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, secHA.name)
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(nodA.tag)
@@ -85,7 +85,7 @@ secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')
 
 
 scc= zlElement.getSection()
-secHAParamsFis.computeWk(scc,concr.matTagK,EHE_materials.B500S.matTagK,concr.fctm())
+secHAParamsFis.computeWk(scc,concr.getMatTagK(),EHE_materials.B500S.getMatTagK(),concr.fctm())
 
 # wkcomp changed from 0.550225e-3 to 0.55189e-3 after considering fmaxK=fck instead of 0.85fck
 

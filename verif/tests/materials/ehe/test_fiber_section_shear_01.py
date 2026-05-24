@@ -53,8 +53,8 @@ section.positvRebarRows= def_simple_RC_section.LongReinfLayers([lowerRow])
 section.negatvRebarRows= def_simple_RC_section.LongReinfLayers([upperRow])
 # section.shReinfY= shearReinf
 
-fiberSectionName= section.defRCSection(preprocessor, matDiagType= 'd')
-zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSectionName)
+fiberSection= section.defRCSection(preprocessor, matDiagType= 'd')
+zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, fiberSection.name)
 
 
 # Constraints
