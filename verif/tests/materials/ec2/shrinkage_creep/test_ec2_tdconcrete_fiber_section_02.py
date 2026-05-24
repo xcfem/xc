@@ -87,7 +87,7 @@ steelFibers= list()
 concreteFibers= list()
 for fiber in fibers:
     material= fiber.getMaterial()
-    if(material.name=='dgES500B'):
+    if(material.name=='dgE_S500B'):
         steelFibers.append(fiber)
     else:
         concreteFibers.append(fiber)
