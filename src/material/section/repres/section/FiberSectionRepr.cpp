@@ -55,15 +55,13 @@
 
 #include <material/section/repres/section/FiberSectionRepr.h>
 #include <material/section/repres/section/FiberData.h>
-
 #include "material/section/fiber_section/fiber/Fiber.h"
-
 #include "material/section/fiber_section/FiberSection2d.h"
 #include "material/section/fiber_section/FiberSection3d.h"
 #include "material/section/fiber_section/FiberSectionGJ.h"
-
-
+#include "material/section/repres/section_geometry/SectionGeometry.h"
 #include "utility/geom/d2/2d_polygons/Polygon2d.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 void XC::FiberSectionRepr::clear_fibers(void)
   {
@@ -153,8 +151,9 @@ XC::fiber_list XC::FiberSectionRepr::get2DFibers(void) const
     fiber_list retval;
     if(!material_handler)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; material handler not defined.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; material handler not defined."
+	          << Color::def << std::endl;
         return retval;
       }
     
@@ -164,8 +163,16 @@ XC::fiber_list XC::FiberSectionRepr::get2DFibers(void) const
 
     // Append the UniaxialFiber2d objects defined by regions.
     FiberData fiberData= getFiberData();
-    fiberData.get2DFibers(retval);
-    
+    const int result= fiberData.get2DFibers(retval);
+    if(result<0)
+      {
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; something went wrong during creation of 2d fibers"
+	          << " for section: " << this->getTag();
+	if(this->gmSecc)
+	  std::cerr << " with geometry named: " << this->gmSecc->Name();
+	std::cerr << Color::def << std::endl;
+      }    
     return retval;
   }
 
@@ -175,8 +182,9 @@ XC::fiber_list XC::FiberSectionRepr::get3DFibers(void) const
     fiber_list retval;
     if(!material_handler)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; material handler not defined.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; material handler not defined."
+	          << Color::def << std::endl;
         return retval;
       }
     // Append the isolated fibers.
@@ -185,8 +193,16 @@ XC::fiber_list XC::FiberSectionRepr::get3DFibers(void) const
 
     // Append the UniaxialFiber2d objects defined by regions.
     FiberData fiberData= getFiberData();
-    fiberData.get3DFibers(retval);
-    
+    int result= fiberData.get3DFibers(retval);
+    if(result<0)
+      {
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; something went wrong during creation of 3d fibers"
+	          << " for section: " << this->getTag();
+	if(this->gmSecc)
+	  std::cerr << " with geometry named: " << this->gmSecc->Name();
+	std::cerr << Color::def << std::endl;
+      }    
     return retval;
   }
 
