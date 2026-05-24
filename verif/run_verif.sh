@@ -803,6 +803,11 @@ python tests/solution/time_history/test_pseudo_time_history.py
 echo "$BLEU" "  Convergence tests." "$NORMAL"
 python tests/solution/convergence_test/relative_total_norm_disp_incr_test_01.py
 
+## Two FE problems tests.
+echo "$BLEU" "  Two FE problems tests." "$NORMAL"
+python tests/solution/two_fe_problems/test_concrete01_in_two_problems.py
+python tests/solution/two_fe_problems/test_rc_section_in_two_problems.py
+
 #Preprocessor tests
 echo "$BLEU" "Preprocessor tests." "$NORMAL"
 echo "$BLEU" "  Simpson rule tests." "$NORMAL"
