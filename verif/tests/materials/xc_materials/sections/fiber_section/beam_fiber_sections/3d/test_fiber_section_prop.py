@@ -180,7 +180,7 @@ sccEl1= ele1.getSection()
 fibersSccEl1= sccEl1.getFibers()
 
 # Creation of two separate sets of fibers: concrete and reinforcement steel 
-setsRCEl1= fiber_sets.fiberSectionSetupRCSets(scc=sccEl1,concrMatTag=concrete.matTagK,concrSetName="concrSetFbEl1",reinfMatTag=rfSteel.matTagK,reinfSetName="reinfSetFbEl1")
+setsRCEl1= fiber_sets.fiberSectionSetupRCSets(scc=sccEl1,concrMatTag=concrete.getMatTagK(),concrSetName="concrSetFbEl1",reinfMatTag=rfSteel.getMatTagK(),reinfSetName="reinfSetFbEl1")
 
 # Equilibrium.
 RNA= nodA.getReaction[0]

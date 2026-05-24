@@ -128,7 +128,7 @@ lPatterns= loadHandler.getLoadPatterns
 sccEl1= elem.getSection()         
 fibersSccEl1= sccEl1.getFibers()
 
-setsRCEl1= fiber_sets.fiberSectionSetupRCSets(scc=sccEl1,concrMatTag=concr.tag,concrSetName="concrSetFbEl1",reinfMatTag=rfSteel.matTagK,reinfSetName="reinfSetFbEl1")
+setsRCEl1= fiber_sets.fiberSectionSetupRCSets(scc=sccEl1,concrMatTag=concr.tag,concrSetName="concrSetFbEl1",reinfMatTag=rfSteel.getMatTagK(),reinfSetName="reinfSetFbEl1")
 
 #Load modulation.
 ts= lPatterns.newTimeSeries("constant_ts","ts")

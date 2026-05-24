@@ -164,7 +164,7 @@ print('Rnode2= (',n2.getReaction[0],',',n2.getReaction[1],',',n2.getReaction[2],
 sccEl1= elem.getSection()         
 
 # Creation of two separate sets of fibers: concrete and reinforcement steel 
-setsRCEl1= fiber_sets.fiberSectionSetupRCSets(scc=sccEl1,concrMatTag=concrete.matTagK,concrSetName="concrSetFbEl1",reinfMatTag=rfSteel.matTagK,reinfSetName="reinfSetFbEl1")
+setsRCEl1= fiber_sets.fiberSectionSetupRCSets(scc=sccEl1,concrMatTag=concrete.getMatTagK(),concrSetName="concrSetFbEl1",reinfMatTag=rfSteel.getMatTagK(),reinfSetName="reinfSetFbEl1")
 
 fibersSccEl1= sccEl1.getFibers()
 sumAreas= fibersSccEl1.getArea(1.0)  # total sum of the fibers area
