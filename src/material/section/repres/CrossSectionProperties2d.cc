@@ -93,7 +93,7 @@ XC::CrossSectionProperties2d::CrossSectionProperties2d(const SectionForceDeforma
 	    this->i = sectTangent(i,i)/this->E();
 	    break;
 	  case SECTION_RESPONSE_VY:
-	    this->alpha = sectTangent(i,i)/this->G();
+	    this->alpha = sectTangent(i,i)/(this->G()*this->A());
 	    break;
 	  default:
 	    break;

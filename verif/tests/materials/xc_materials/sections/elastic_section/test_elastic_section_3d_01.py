@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 '''Elastic 3D section verification test.'''
+
+from __future__ import print_function
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import xc
 from model import predefined_spaces
@@ -8,12 +15,6 @@ from model import predefined_spaces
 from materials import typical_materials
 from materials.sections import section_properties
 from misc import scc3d_testing_bench
-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 feProblem= xc.FEProblem()
 feProblem.logFileName= "/tmp/erase.log" # Ignore warning messages

@@ -235,6 +235,25 @@ double XC::PrismaticBarCrossSection::getLinearRho(void) const
     return 0.0;
   }
 
+//! @brief Return the 1D properties of the this cross-section.
+XC::CrossSectionProperties1d XC::PrismaticBarCrossSection::getCrossSectionProperties1d(const double &e, const double &iw) const
+  {
+    return CrossSectionProperties1d(*this, e, iw);
+  }
+
+//! @brief Return the 2D properties of the this cross-section.
+XC::CrossSectionProperties2d XC::PrismaticBarCrossSection::getCrossSectionProperties2d(const double &e, const double &iw, const double &g) const
+  {
+    return CrossSectionProperties2d(*this, e, iw, g);
+  }
+
+//! @brief Return the 3D properties of the this cross-section.
+XC::CrossSectionProperties3d XC::PrismaticBarCrossSection::getCrossSectionProperties3d(const double &e, const double &iw, const double &g) const
+  {
+    return CrossSectionProperties3d(*this, e, iw, g);
+  }
+
+
 //! @brief Returns the principal axes of inertia of the cross-section.
 PrincipalAxes2D XC::PrismaticBarCrossSection::getInertiaAxes(void) const
   { return PrincipalAxes2D(getCenterOfMass(),EIy(),EIz(),EIyz());  }

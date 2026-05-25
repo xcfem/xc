@@ -34,6 +34,9 @@
 class PrincipalAxes2D;
 
 #include "material/section/SectionForceDeformation.h"
+#include "material/section/repres/CrossSectionProperties1d.h"
+#include "material/section/repres/CrossSectionProperties2d.h"
+#include "material/section/repres/CrossSectionProperties3d.h"
 
 class HalfPlane2d;
 class Line2d;
@@ -92,6 +95,10 @@ class PrismaticBarCrossSection: public SectionForceDeformation
     Vector2d getAxis2VDir(void) const;
     Vector2d getVDirWeakAxis(void) const;
     virtual double getLinearRho(void) const;
+    CrossSectionProperties1d getCrossSectionProperties1d(const double &e= 1.0, const double &iw= 0.0) const;
+    CrossSectionProperties2d getCrossSectionProperties2d(const double &e= 1.0, const double &iw= 0.0, const double &g= 1.0) const;
+    CrossSectionProperties3d getCrossSectionProperties3d(const double &e= 1.0, const double &iw= 0.0, const double &g= 1.0) const;
+    
 
     bool hayAxil(const double &tol=1e-4) const;
     bool isSubjectedToShear(const double &tol=1e-4) const;

@@ -101,7 +101,7 @@ XC::CrossSectionProperties3d::CrossSectionProperties3d(const SectionForceDeforma
 	    this->iy= sectTangent(i,i)/this->E();
 	    break;
 	  case SECTION_RESPONSE_VZ:
-	    this->alpha_z = sectTangent(i,i)/this->G();
+	    this->alpha_z = sectTangent(i,i)/(this->G()*this->A());
 	    break;
 	  case SECTION_RESPONSE_T:
 	    this->j= sectTangent(i,i)/this->G();
