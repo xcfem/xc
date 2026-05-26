@@ -2085,6 +2085,7 @@ echo "$BLEU" "    generic limit state tools." "$NORMAL"
 python tests/postprocess/limit_state_checking/generic/test_select_critical_combs.py 
 python tests/postprocess/limit_state_checking/generic/test_internal_forces_envelope_truss.py 
 python tests/postprocess/limit_state_checking/generic/test_internal_forces_envelope_elastic_beam_2d.py 
+python tests/postprocess/limit_state_checking/generic/test_internal_forces_envelope_elastic_beam_3d.py 
 python tests/postprocess/limit_state_checking/generic/test_compute_maximum_deflection.py
 python tests/postprocess/limit_state_checking/generic/test_calculate_internal_forces_envelope_from_results.py
 # Graphic output tests
