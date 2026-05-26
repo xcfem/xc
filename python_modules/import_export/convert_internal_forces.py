@@ -11,6 +11,94 @@ __email__= "l.pereztato@ciccp.es"
 import json
 import csv
 
+def get_internal_forces_dict_element_types(internal_forces_dict):
+    ''' Get the element identifiers in the given dictionary classified by
+        type.
+
+    :param internal_forces_dict: Python dictionary containing the internal
+           forces data.
+    '''
+    retval= dict()
+    for combName in internal_forces_dict: # for each load combination.
+        element_data= internal_forces_dict[combName]
+        for elementId in element_data: # for each element.
+            elementTag= int(elementId)
+            elementType= element_data[elementId]['type']
+            if(elementType in retval):
+                retval[elementType].add(elementTag)
+            else:
+                retval[elementType]= {elementTag}
+    return retval
+
+def initialize_envelope_vars(internal_forces_dict, initV= 6.023e23):
+    ''' Define envelope variables for each element in the internal forces
+        dictionary.
+
+    :param internal_forces_dict: Python dictionary containing the internal
+           forces data.
+    :param initV: initial value.
+    '''
+    retval= dict()
+    for combName in internal_forces_dict: # for each load combination.
+        element_data= internal_forces_dict[combName]
+        for elementId in element_data: # for each element.
+            elementTag= int(elementId)
+            if(not elementTag in retval):
+                retval[elementTag]= dict()
+                elementResults= element_data[elementId]
+                elementInternalForces= elementResults['internalForces']
+                for posId in elementInternalForces: # for each position in the element.
+                    posTag= int(posId)
+                    posInternalForces= elementInternalForces[posId]
+                    varNames= list(posInternalForces.keys())
+                    envelopeVars= dict()
+                    for vName in varNames:
+                        value= posInternalForces[vName]
+                        # Positive value of envelope:
+                        envelopeVars[vName+'+']= value
+                        # Combination that gives the maximum value:
+                        envelopeVars['comb_'+vName+'+']= combName 
+                        # Negative value of envelope:          
+                        envelopeVars[vName+'-']= value
+                        # Combination that gives the minimum value:
+                        envelopeVars['comb_'+vName+'-']= combName
+                    retval[elementTag][posTag]= envelopeVars
+    return retval
+
+def compute_internal_forces_envelope(internal_forces_dict):
+    ''' Compute the envelope values for each element in the internal forces
+        dictionary.
+
+    :param internal_forces_dict: Python dictionary containing the internal
+           forces data.
+    :param initV: initial value.
+    '''
+    retval= initialize_envelope_vars(internal_forces_dict)
+    for combName in internal_forces_dict: # for each load combination.
+        element_data= internal_forces_dict[combName]
+        for elementId in element_data: # for each element.
+            elementTag= int(elementId)
+            elementResults= element_data[elementId]
+            elementInternalForces= elementResults['internalForces']
+            for posId in elementInternalForces: # for each position in the element.
+                posTag= int(posId)
+                posInternalForces= elementInternalForces[posId]
+                varNames= list(posInternalForces.keys())
+                envelopeValues= retval[elementTag][posTag] 
+                for vName in varNames:
+                    value= posInternalForces[vName]
+                    if(value>envelopeValues[vName+'+']):
+                        # Update positive value of envelope:
+                        envelopeValues[vName+'+']= value
+                        # Update combination that gives the maximum value:
+                        envelopeValues['comb_'+vName+'+']= combName
+                    if(value<envelopeValues[vName+'-']):
+                        # Update negative value of envelope:          
+                        envelopeValues[vName+'-']= value
+                        # Update combination that gives the minimum value:
+                        envelopeValues['comb_'+vName+'-']= combName
+    return retval
+    
 csv_header= ['load_combination', 'element', 'element_type', 'position', 'N', 'Vy', 'Vz', 'T', 'My' , 'Mz']
 
 def get_internal_forces_dict_rows(internal_forces_dict, unitConversionFactor= 1.0):
