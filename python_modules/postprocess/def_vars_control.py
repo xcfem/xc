@@ -376,68 +376,68 @@ def update_envelope_internal_forces_beam_elem_3d(beamElem, loadCombinationName):
         minNcomb[0]= loadCombinationName
     if(My1>maxMy[0]):
         maxMy[0]= My1
-        minMycomb[0]= loadCombinationName
+        maxMycomb[0]= loadCombinationName
     if(My1<minMy[0]):
         minMy[0]= My1
         minMycomb[0]= loadCombinationName
     if(Mz1>maxMz[0]):
         maxMz[0]= Mz1
-        minMzcomb[0]= loadCombinationName
+        maxMzcomb[0]= loadCombinationName
     if(Mz1<minMz[0]):
         minMz[0]= Mz1
         minMzcomb[0]= loadCombinationName
     if(Vy1>maxVy[0]):
         maxVy[0]= Vy1
-        minVycomb[0]= loadCombinationName
+        maxVycomb[0]= loadCombinationName
     if(Vy1<minVy[0]):
         minVy[0]= Vy1
         minVycomb[0]= loadCombinationName
     if(Vz1>maxVz[0]):
         maxVz[0]= Vz1
-        minVzcomb[0]= loadCombinationName
+        maxVzcomb[0]= loadCombinationName
     if(Vz1<minVz[0]):
         minVz[0]= Vz1
         minVzcomb[0]= loadCombinationName
     if(T1>maxT[0]):
         maxT[0]= T1
-        minTcomb[0]= loadCombinationName
+        maxTcomb[0]= loadCombinationName
     if(T1<minT[0]):
         minT[0]= T1
         minTcomb[0]= loadCombinationName
-    # Front end node.  
+    # Front end node.
     if(N2>maxN[1]):
         maxN[1]= N2
-        minNcomb[1]= loadCombinationName
+        maxNcomb[1]= loadCombinationName
     if(N2<minN[1]):
         minN[1]= N2
         minNcomb[1]= loadCombinationName
     if(My2>maxMy[1]):
         maxMy[1]= My2
-        minMycomb[1]= loadCombinationName
+        maxMycomb[1]= loadCombinationName
     if(My2<minMy[1]):
         minMy[1]= My2
         minMycomb[1]= loadCombinationName
     if(Mz2>maxMz[1]):
         maxMz[1]= Mz2
-        minMzcomb[1]= loadCombinationName
+        maxMzcomb[1]= loadCombinationName
     if(Mz2<minMz[1]):
         minMz[1]= Mz2
         minMzcomb[1]= loadCombinationName
     if(Vy2>maxVy[1]):
         maxVy[1]= Vy2
-        minVycomb[1]= loadCombinationName
+        maxVycomb[1]= loadCombinationName
     if(Vy2<minVy[1]):
         minVy[1]= Vy2
         minVycomb[1]= loadCombinationName
     if(Vz2>maxVz[1]):
         maxVz[1]= Vz2
-        minVzcomb[1]= loadCombinationName
+        maxVzcomb[1]= loadCombinationName
     if(Vz2<minVz[1]):
         minVz[1]= Vz2
         minVzcomb[1]= loadCombinationName
     if(T2>maxT[1]):
         maxT[1]= T2
-        minTcomb[1]= loadCombinationName
+        maxTcomb[1]= loadCombinationName
     if(T2<minT[1]):
         minT[1]= T2
         minTcomb[1]= loadCombinationName
