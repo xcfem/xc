@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Define cross-section for concrete frame pushover analysis. 
+''' Define reinforced concrete cross-section with cover an core concrete
+materials. Used in concrete frame pushover analysis. 
 
 Example based on the OpenSees one:
 See https://openseespydoc.readthedocs.io/en/latest/src/RCFramePushOver.html
@@ -15,7 +16,7 @@ import xc
 import geom
 from materials import typical_materials
 
-def def_rc_column_fiber_section(preprocessor, colWidth, colDepth, cover, As):
+def def_core_cover_rc_section(preprocessor, colWidth, colDepth, cover, As):
     ''' Define rectangular RC section for push-over test on RC frame.
 
     :param colWidth: column width.

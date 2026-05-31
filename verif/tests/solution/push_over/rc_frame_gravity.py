@@ -17,7 +17,7 @@ from model import predefined_spaces
 from materials import typical_materials
 
 # Import local modules.
-import rc_column_fiber_section
+import core_cover_rc_section
 
 # Define problem type
 feProblem= xc.FEProblem()
@@ -48,7 +48,7 @@ colWidth= 15
 colDepth= 24
 cover= 1.5
 As= 0.60  # area of no. 7 bars    
-columnFiberSection= rc_column_fiber_section.def_rc_column_fiber_section(preprocessor, colWidth= colWidth, colDepth= colDepth, cover= cover, As= As)
+columnFiberSection= core_cover_rc_section.def_core_cover_rc_section(preprocessor, colWidth= colWidth, colDepth= colDepth, cover= cover, As= As)
 
 # Extract concrete materials and check concrete area.
 sectionGeometry= columnFiberSection.getSectionGeometry
