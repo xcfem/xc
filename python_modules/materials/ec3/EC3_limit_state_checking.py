@@ -286,16 +286,18 @@ class MomentGradientFactorC1(object):
            of the reference [1].'''
         return (self.Mi[0]+2*self.Mi[1]+3*self.Mi[2]+2*self.Mi[3]+self.Mi[4])/(9*self.getExtremeMoment())
 
-    def getA1(self,beamSupportCoefs):
+    def getA1(self, beamSupportCoefs):
         '''Return the value for the A1 coefficient according to equation 10
            of the reference [1].
            
-        :param k1: warping AND lateral bending coefficient at left end
-                                   k1= 1.0 => free warping AND lateral bending
-                                   k1= 0.5 => prevented warp. AND lateral bending
-        :param k2: warping AND lateral bending coefficient at right end
-                                   k2= 1.0 => free warping AND lateral bending
-                                   k2= 0.5 => prevented warp. AND lateral bending'''
+        :param beamSupportCoefs: instance of EC3_limit_state_checking.BeamSupportCoefficients
+                             that wraps the support coefficients: ky, kw, k1 
+                             and k2; where ky is the lateral bending 
+                             coefficient, kw the warping coefficient,  k1 and 
+                             the warping AND lateral bending coefficients at first
+                             and last ends respectively (1.0 => free, 0.5 => prevented). 
+                             (Defaults to ky= 1.0, kw= 1.0, k1= 1.0, k2= 1.0)
+        '''
         ai= beamSupportCoefs.getAlphaI()
         Mmax2= self.getExtremeMoment()**2
         return (Mmax2+ai[0]*self.Mi[0]**2+ai[1]*self.Mi[1]**2+ai[2]*self.Mi[2]**2+ai[3]*self.Mi[3]**2+ai[4]*self.Mi[4]**2)/((1+ai[0]+ai[1]+ai[2]+ai[3]+ai[4])*Mmax2)
@@ -313,13 +315,17 @@ class MomentGradientFactorC1(object):
                              (Defaults to ky= 1.0, kw= 1.0, k1= 1.0, k2= 1.0)
         '''
 
-
-        k= math.sqrt(beamSupportCoefs.k1*beamSupportCoefs.k2) # equation 9
-        A1= self.getA1(beamSupportCoefs)
-        A2= self.getA2()
-        rootK= math.sqrt(k) 
-        B1= rootK*A1+((1-rootK)/2.0*A2)**2
-        return (math.sqrt(B1)+(1-rootK)/2.0*A2)/A1 # equation 8
+        Mmax= self.getExtremeMoment()
+        if(abs(Mmax)<1e-15): # No bending moments along the member.
+            retval= 1.0 # Conservative assumption anyway.
+        else:
+            k= math.sqrt(beamSupportCoefs.k1*beamSupportCoefs.k2) # equation 9
+            A1= self.getA1(beamSupportCoefs)
+            A2= self.getA2()
+            rootK= math.sqrt(k) 
+            B1= rootK*A1+((1-rootK)/2.0*A2)**2
+            retval= (math.sqrt(B1)+(1-rootK)/2.0*A2)/A1 # equation 8
+        return retval
 
 class Member(steel_member_base.BucklingMember):
     '''Steel beam defined by an arbitrary name, a cross-section shape, 
