@@ -144,3 +144,39 @@ def def_core_cover_rc_section(preprocessor, colWidth, colDepth, cover, As):
  
     return columnFiberSection
 
+def get_core_cover_rc_section_stiffness(coreCoverRCSection, As):
+    ''' Return the stiffness of the given section.
+
+    :param coreCoverRCSection: fiber section created by def_core_cover_rc_section.
+    :param As: area of the steel reinforcement rebars.
+    '''
+    # Extract concrete materials and check concrete area.
+    sectionGeometry= coreCoverRCSection.getSectionGeometry
+    regions= sectionGeometry.getRegions
+    coreConcrete= None
+    coverConcrete= None
+    steel= None
+    coreArea= 0.0
+    coverArea= 0.0
+    steelArea= 0.0
+    for r in regions:
+        area= r.getArea()
+        if(area>100.0): # core region.
+            coreConcrete= r.getMaterial()
+            coreArea= area
+        else: # cover region.
+            coverConcrete= r.getMaterial()
+            coverArea+= area
+    # Extract steel material.
+    reinforcement= sectionGeometry.getReinfLayers
+    steel= reinforcement.getMaterials()[0]
+    steelEs= steel.getTangent()
+
+    # Compute reference values.
+    coreEc= coreConcrete.getTangent()
+    coreStiffness= coreEc*coreArea
+    coverEc= coverConcrete.getTangent()
+    coverStiffness= coverEc*coverArea
+    steelArea= 8*As
+    steelStiffness= steelEs*steelArea
+    return steelStiffness+coverStiffness+coreStiffness
