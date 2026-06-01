@@ -268,8 +268,22 @@ class MomentGradientFactorC1(object):
     in: A. López, D. J. Yong, M. A. Serna,
     Lateral-torsional buckling of steel beams: a general expression for
     the moment gradient factor.
-    (Lisbon, Portugal: Stability and ductility of steel structures, 2006). '''
+    (Lisbon, Portugal: Stability and ductility of steel structures, 2006).
+
+    :ivar Mi: bending moments along the member. Mi[0] and Mi[4] are the bending
+              moments at the extremities and Mi[2], Mi[3] and Mi[4] are the 
+              values of the moment at L/4, L/2 and 3L/4 of the length 
+              respectively.
+    '''
+    
     def __init__(self,Mi):
+        ''' Constructor.
+ 
+        :param Mi: bending moments along the member. Mi[0] and Mi[4] are the
+                   bending moments at the extremities and Mi[2], Mi[3] and 
+                   Mi[4] are the values of the moment at L/4, L/2 and 3L/4 of 
+                   the length respectively.
+        '''
         self.Mi= Mi
   
     def getExtremeMoment(self):
@@ -317,6 +331,10 @@ class MomentGradientFactorC1(object):
 
         Mmax= self.getExtremeMoment()
         if(abs(Mmax)<1e-15): # No bending moments along the member.
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            warningMsg= className+'.'+methodName+"; bending moments around the strong axis along the member are zero. Maybe you need to change the member orientation."
+            lmsg.warning(warningMsg)
             retval= 1.0 # Conservative assumption anyway.
         else:
             k= math.sqrt(beamSupportCoefs.k1*beamSupportCoefs.k2) # equation 9
