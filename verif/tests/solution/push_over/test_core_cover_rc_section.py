@@ -62,6 +62,49 @@ ratio_rg_3= math.sqrt((regions_Iz-regions_reference_Iz)**2+(regions_Iy-regions_r
 testOK= testOK and (ratio_rg_1<1e-6) and (ratio_rg_2<1e-6) and (ratio_rg_3<1e-6)
 
 
+# Extract concrete materials and check concrete area.
+coreConcrete= None
+coverConcrete= None
+steel= None
+coreArea= 0.0
+coverArea= 0.0
+steelArea= 0.0
+for r in regions:
+    area= r.getArea()
+    if(area>100.0): # core region.
+        coreConcrete= r.getMaterial()
+        coreArea+= area
+    else: # cover region.
+        coverConcrete= r.getMaterial()
+        coverArea+= area
+reinforcementLayers= sectionGeometry.getReinfLayers
+for reinfLayer in reinforcementLayers:
+    for bar in reinfLayer.getReinfBars:
+        steel= bar.getMaterial()
+        steelArea+= bar.area
+totalRegionsArea= coreArea+coverArea
+refArea= colWidth*colDepth
+testOK= abs(totalRegionsArea-refArea)<1e-6
+
+testOK= testOK and abs(steelArea-8*As)<1e-6
+# Extract fibers and check concrete and steel areas.
+steelEs= steel.getTangent()
+fibers= columnFiberSection.getFibers()
+concreteFibersArea= 0.0
+steelFibersArea= 0.0
+for f in fibers:
+    mat= f.getMaterial()
+    E= mat.getTangent()
+    if(E<0.9*steelEs): # Concrete.
+        concreteFibersArea+= f.getArea()
+    else:
+        steelFibersArea+= f.getArea()
+testOK= testOK and abs(concreteFibersArea-(colWidth*colDepth))<1e-6
+testOK= testOK and abs(steelFibersArea-8*As)<1e-6
+
+
+print('cover area: ', coverArea)
+print('core area: ', coreArea)
 print('fiber section area: ', fiber_section_area)
 print('fiber section reference area: ', fiber_section_reference_area)
 print('ratio_fs_1= ', ratio_fs_1)
