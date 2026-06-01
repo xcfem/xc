@@ -60,8 +60,6 @@ modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 xcSection= shape.defElasticShearSection2d(preprocessor)
 
 # Model geometry
-# We use a set of small lines to simulate the lateral restraint
-# of the upper flange.
 ## Points.
 p1= modelSpace.newKPoint(0,0,0)
 p2= modelSpace.newKPoint(beamSpan, 0, 0)
