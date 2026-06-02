@@ -1834,9 +1834,9 @@ def get_element_data_dict(controlVarsDict, controlVarName):
         if(sz>1): # Many records for each element.
             for index in elementControlVars:
                 controlVar= elementControlVars[index]
-                sectionName= 'Sect'+str(index)
-                propName= controlVarName+sectionName
-                retval[eTag][propName]= controlVar.getStrConstructor()
+                # sectionName= 'Sect'+str(index)
+                # propName= controlVarName+sectionName
+                retval[eTag][index]= controlVar.getStrConstructor()
         else: # One record for each element.
             index= next(iter(elementControlVars))
             controlVar= elementControlVars[index]
