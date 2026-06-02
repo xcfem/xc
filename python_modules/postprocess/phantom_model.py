@@ -339,14 +339,15 @@ class PhantomModel(object):
         '''
         controlVarName= outputCfg.controller.limitStateLabel
         elements= self.preprocessor.getSets['total'].elements # all the elements in the phantom model.
-        retval= dict()
+        retval= {controlVarName:dict()}
+        elementValues= retval[controlVarName]
         for e in elements:
             eTag= e.getProp("idElem")
             index= e.getProp('dir')
             controlVar= e.getProp(controlVarName)
-            if not eTag in retval:
-                retval[eTag]= dict()
-            retval[eTag][index]= controlVar
+            if not eTag in elementValues:
+                elementValues[eTag]= dict()
+            elementValues[eTag][index]= controlVar
         return retval
 
     def runChecking(self, intForcItems, outputCfg):

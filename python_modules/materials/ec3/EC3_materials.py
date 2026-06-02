@@ -559,6 +559,7 @@ class EC3Shape(object):
             McRdy= self.getMcRdy()*bendingFactor # No bending for this axis anyway.
             return (CF, NcRd, McRdy, McRdz, MvRdz, MbRdz)
         else:
+            className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+': not implemented for cross section class greater than 2.')
             return None
@@ -623,23 +624,56 @@ class EC3Shape(object):
             CF= math.sqrt(nCF**2+mCF**2)
             return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
         else:
+            className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+': not implemented for cross section class greater than 2.')
             return None
 
-    def setupULSControlVars(self, elems, chiN= 1.0, chiLT=1.0):
-        '''For each element creates the variables
-           needed to check ultimate limit state criterion to be satisfied.
+    def setupULSControlVars(self, elems, chiN= 1.0, chiLT=1.0, force= False):
+        '''For each element creates the variables needed to check ultimate 
+           limit state criterion to be satisfied.
 
         :param elems: elements to define properties on.
         :param chiN: flexural buckling reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
+        :param force: if true assign the properties even if they exist already
+                      in the element.
         '''
         super(EC3Shape,self).setupULSControlVars(elems)
-        for e in elems:
-            e.setProp('chiN', chiN) # Flexural buckling reduction factor.
-            e.setProp('chiLT',chiLT) # Lateral torsional buckling reduction factor.
-            e.setProp('crossSection',self)
+        if(force):
+            for e in elems:
+               e.setProp('chiN', chiN) # Flexural buckling reduction factor.
+               e.setProp('chiLT',chiLT) # Lateral torsional buckling reduction factor.
+               e.setProp('crossSection',self) # Element cross-section.
+        else:    
+            for e in elems:
+                if(e.hasProp('chiN')):
+                   className= type(self).__name__
+                   methodName= sys._getframe(0).f_code.co_name
+                   warningMsg= "; element: "+str(e.tag)
+                   warningMsg+= " already has a 'chiN' property."
+                   warningMsg+= " use 'force= True' parameter to reset it."
+                   lmsg.warning(className+'.'+methodName+warningMsg)
+                else:
+                   e.setProp('chiN', chiN) # Flexural buckling reduction factor.
+                if(e.hasProp('chiLT')):
+                   className= type(self).__name__
+                   methodName= sys._getframe(0).f_code.co_name
+                   warningMsg= "; element: "+str(e.tag)
+                   warningMsg+= " already has a 'chiLT' property."
+                   warningMsg+= " use 'force= True' parameter to reset it."
+                   lmsg.warning(className+'.'+methodName+warningMsg)
+                else:
+                   e.setProp('chiLT',chiLT) # Lateral torsional buckling reduction factor.
+                if(e.hasProp('crossSection')):
+                   className= type(self).__name__
+                   methodName= sys._getframe(0).f_code.co_name
+                   warningMsg= "; element: "+str(e.tag)
+                   warningMsg+= " already has a 'crossSection' property."
+                   warningMsg+= " use 'force= True' parameter to reset it."
+                   lmsg.warning(className+'.'+methodName+warningMsg)
+                else:
+                   e.setProp('crossSection',self)
 
     def installULSControlRecorder(self, recorderType, elems, chiN= 1.0, chiLT=1.0, calcSet= None):
         '''Installs recorder for verification of ULS criterion. Preprocessor obtained from the set of elements.
