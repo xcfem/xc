@@ -2140,6 +2140,9 @@ python tests/postprocess/vtk/display_limit_state_results/ec2/test_display_shear_
 echo "$BLEU" "      Eurocode 3." "$NORMAL"
 python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_bending_uls_cf_on_beams_01.py
 python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_bending_uls_cf_on_beams_02.py
+python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_normal_stresses_control_vars.py
+python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_shear_control_vars.py
+
 echo "$BLEU" "      Generic." "$NORMAL"
 python tests/postprocess/vtk/display_limit_state_results/generic/test_display_disp_max_on_nodes.py
 python tests/postprocess/vtk/display_limit_state_results/generic/test_display_internal_forces_envelope_01.py

@@ -9,9 +9,6 @@ Klemann, B. W. (Author). 31 Jan 2010
 http://https://research.tue.nl/en/studentTheses/comparison-of-global-analysis-methods-and-design-rules-for-steel-
 '''
 
-from __future__ import division
-from __future__ import print_function
-
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2020, AO_O and LCPT"
 __license__= "GPL"
@@ -30,6 +27,7 @@ from actions import combinations as combs
 from postprocess import limit_state_data as lsd
 from postprocess.config import default_config
 from solution import predefined_solutions
+import shutil
 
 #Materials
 ## Steel material
@@ -168,6 +166,17 @@ err= (average[0]-1)**2
 err+= (average[1]-1)**2
 err= math.sqrt(err)
 
+# Get the file containing the values of the control variables so it can be used
+# to test displaying them in an independent script.
+normalStressesControlVars= cfg.projectDirTree.getVerifNormStrFile()
+fname= os.path.basename(__file__)
+pth= os.path.dirname(__file__)
+if(not pth):
+  pth= "."
+auxModulePath= pth+"/../../../aux/internal_forces/"
+destFileName= auxModulePath+fname.replace('.py', '_normal_stresses_control_vars.json')
+shutil.copyfile(normalStressesControlVars, destFileName)
+
 '''
 print('Iy= ', shape.Iy(), 'm4')
 print('Iz= ', shape.Iz(), 'm4')
@@ -183,8 +192,6 @@ print(average)
 print(err)
 '''
 
-
-cfg.cleandirs() # Clean after yourself.
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(err<1e-4):
@@ -192,12 +199,14 @@ if(err<1e-4):
 else:
     lmsg.error(fname+' ERROR.')
 
-# # #########################################################
-# # # Graphic stuff.
+
+# #########################################################
+# # Graphic stuff.
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 # # oh.displayFEMesh()
 
 # # oh.displayElementValueDiagram('chiN', setToDisplay= aiscCalcSet)
-
 # oh.displayBeamResult(attributeName= limitState.label, itemToDisp='CF', beamSetDispRes=ec3CalcSet, setToDisplay=xcTotalSet)
+
+cfg.cleandirs() # Clean after yourself.
