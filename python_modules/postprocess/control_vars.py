@@ -1817,7 +1817,10 @@ def get_control_vars_dict(elements, controlVarName, sections):
         if not eTag in elementValues:
             elementValues[eTag]= dict()
         for s in sections:
-            index= int(s.removeprefix('Sect'))
+            if(len(s)>0):
+                index= int(s.removeprefix('Sect'))
+            else:
+                index= 0
             propName= controlVarName+s
             controlVar= e.getProp(propName)        
             elementValues[eTag][index]= controlVar

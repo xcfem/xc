@@ -766,32 +766,34 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
         dct= self.eheBucklingParametersDict['element_parameters']
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         controlVarsDict= crossSections.check(limitStateData= self, matDiagType= "d", outputCfg= outputCfg, threeDim= threeDim)
-        for eTag in controlVarsDict:
-            elementControlVars= controlVarsDict[eTag]
-            extendedData= dct[eTag]
-            Leffi= extendedData['Leffi']
-            mechLambdai= extendedData['mechLambdai']
-            Efi= extendedData['Efi']
-            strongAxisBucklingPercent= extendedData['strongAxisBucklingPercent']
-            alpha_cr_i= extendedData['alpha_cr_i']
-            for index in elementControlVars:
-                controlVar= elementControlVars[index]
-                loadCombinationName= controlVar.combName
-                mode= int(loadCombinationName.split('_')[-1])
-                if(mode<=len(Leffi)):
-                    mode0= mode-1
-                    Leff= Leffi[mode0]
-                    mechLambda= mechLambdai[mode0]
-                    (EfZ, EfY)= Efi[mode0]
-                    alpha_cr= alpha_cr_i[mode0]
-                    dotProduct= strongAxisBucklingPercent[mode0]
-                    controlVar.setBucklingParameters(Leff= Leff, mechLambda= mechLambda, efZ= EfZ, efY= EfY, mode= mode, alpha_cr= alpha_cr, strongAxisBucklingPercent= dotProduct)
-                else:
-                    className= type(self).__name__
-                    methodName= sys._getframe(0).f_code.co_name
-                    lmsg.error(className+'.'+methodName+"; can't get item: "+str(mode)+' from list: '+str(Leffi))
-                    exit(1)
-                    
+        for controlVarName in controlVarsDict:
+            elementValues= controlVarsDict[controlVarName]
+            for eTag in elementValues:
+                elementControlVars= elementValues[eTag]
+                extendedData= dct[eTag]
+                Leffi= extendedData['Leffi']
+                mechLambdai= extendedData['mechLambdai']
+                Efi= extendedData['Efi']
+                strongAxisBucklingPercent= extendedData['strongAxisBucklingPercent']
+                alpha_cr_i= extendedData['alpha_cr_i']
+                for index in elementControlVars:
+                    controlVar= elementControlVars[index]
+                    loadCombinationName= controlVar.combName
+                    mode= int(loadCombinationName.split('_')[-1])
+                    if(mode<=len(Leffi)):
+                        mode0= mode-1
+                        Leff= Leffi[mode0]
+                        mechLambda= mechLambdai[mode0]
+                        (EfZ, EfY)= Efi[mode0]
+                        alpha_cr= alpha_cr_i[mode0]
+                        dotProduct= strongAxisBucklingPercent[mode0]
+                        controlVar.setBucklingParameters(Leff= Leff, mechLambda= mechLambda, efZ= EfZ, efY= EfY, mode= mode, alpha_cr= alpha_cr, strongAxisBucklingPercent= dotProduct)
+                    else:
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        lmsg.error(className+'.'+methodName+"; can't get item: "+str(mode)+' from list: '+str(Leffi))
+                        exit(1)
+
         retval= cv.write_control_vars_from_phantom_elements(controlVarsDict= controlVarsDict, outputCfg= outputCfg)
         return retval
     
