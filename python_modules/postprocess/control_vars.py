@@ -1773,29 +1773,33 @@ def read_control_vars(preprocessor, inputFileName):
     except IOError:
         lmsg.error("can't read from file: "+str(inputFileName))
         return retval
-    if 'elementData' in dataDict: # Control variables on elements.
+    if('elementData' in dataDict): # Control variables on elements.
         elementData= dataDict['elementData']
         elementHandler= preprocessor.getElementHandler
-        for eKey in elementData: # iterate on elements.
-            elementTag= int(eKey)
-            element= elementHandler.getElement(elementTag)
-            elementControlVars= elementData[eKey]
-            for propKey in elementControlVars: # iterate on element control vars.
-                expression= elementControlVars[propKey]
-                propValue= eval(expression)
-                element.setProp(propKey, propValue)
-                retval+= 1
-    if 'nodeData' in dataDict: # Control variables on nodes.
+        for controlVarName in elementData: # iterate on limit states.
+            propName= controlVarName+'Sect'
+            for eKey in elementData[controlVarName]: # iterate on elements.
+                elementTag= int(eKey)
+                element= elementHandler.getElement(elementTag)
+                elementControlVars= elementData[controlVarName][eKey]
+                for propKey in elementControlVars: # iterate on element control vars.
+                    expression= elementControlVars[propKey]
+                    propValue= eval(expression)
+                    element.setProp(propName+propKey, propValue)
+                    retval+= 1
+    if('nodeData' in dataDict): # Control variables on nodes.
         nodeData= dataDict['nodeData']
         nodeHandler= preprocessor.getNodeHandler
-        for eKey in nodeData: # iterate on nodes.
-            nodeTag= int(eKey)
-            node= nodeHandler.getNode(nodeTag)
-            nodeControlVars= nodeData[eKey]
-            for propKey in nodeControlVars: # iterate on node control vars.
-                propValue= eval(nodeControlVars[propKey])
-                node.setProp(propKey, propValue)
-                retval+= 1
+        for controlVarName in elementData: # iterate on limit states.
+            propName= controlVarName+'Sect'
+            for eKey in nodeData: # iterate on nodes.
+                nodeTag= int(eKey)
+                node= nodeHandler.getNode(nodeTag)
+                nodeControlVars= nodeData[eKey]
+                for propKey in nodeControlVars: # iterate on node control vars.
+                    propValue= eval(nodeControlVars[propKey])
+                    node.setProp(propName+propKey, propValue)
+                    retval+= 1
     return retval
 
 def get_control_vars_dict(elements, controlVarName, sections):
@@ -1806,15 +1810,17 @@ def get_control_vars_dict(elements, controlVarName, sections):
     :param controlVarName: name of the control var to populate the dictionary with.
     :param sections: names of the sections of each element.
     '''
-    retval= dict()
+    retval= {controlVarName:dict()}
+    elementValues= retval[controlVarName]
     for e in elements:
         eTag= e.tag
-        if not eTag in retval:
-            retval[eTag]= dict()
+        if not eTag in elementValues:
+            elementValues[eTag]= dict()
         for s in sections:
+            index= int(s.removeprefix('Sect'))
             propName= controlVarName+s
             controlVar= e.getProp(propName)        
-            retval[eTag][propName]= controlVar
+            elementValues[eTag][index]= controlVar
     return retval            
     
 def get_element_data_dict(controlVarsDict, controlVarName):
@@ -1825,23 +1831,23 @@ def get_element_data_dict(controlVarsDict, controlVarName):
     :param controlVarName: name of the control var to populate the dictionary 
                            with.
     '''
-    retval= dict()
-    for eTag in controlVarsDict:
-        elementControlVars= controlVarsDict[eTag]
-        if not eTag in retval:
-            retval[eTag]= dict()
+    elementValues= controlVarsDict[controlVarName]
+    retval= {controlVarName:dict()}
+    for eTag in elementValues:
+        elementControlVars= elementValues[eTag]
+        if not eTag in retval[controlVarName]:
+            retval[controlVarName][eTag]= dict()
         sz= len(elementControlVars)
         if(sz>1): # Many records for each element.
             for index in elementControlVars:
                 controlVar= elementControlVars[index]
                 # sectionName= 'Sect'+str(index)
                 # propName= controlVarName+sectionName
-                retval[eTag][index]= controlVar.getStrConstructor()
+                retval[controlVarName][eTag][index]= controlVar.getStrConstructor()
         else: # One record for each element.
             index= next(iter(elementControlVars))
             controlVar= elementControlVars[index]
-            propName= controlVarName
-            retval[eTag][propName]= controlVar.getStrConstructor()
+            retval[controlVarName][eTag]= controlVar.getStrConstructor()
     return retval
 
 def write_latex_control_vars(outputFile, controlVarsDict):
@@ -1852,19 +1858,21 @@ def write_latex_control_vars(outputFile, controlVarsDict):
                             variables for each element.
     '''
     sectionLines= dict()
-    for eTag in controlVarsDict:
-        elementControlVars= controlVarsDict[eTag]
-        for index in elementControlVars:
-            controlVar= elementControlVars[index]
-            if not index in sectionLines:
-                sectionLines[index]= list()
-            outStr= controlVar.getLaTeXString(eTag,1e-3)
-            sectionLines[index].append(outStr)
-    for index in sectionLines:
-        header= 'Section '+str(index)+'\n'
-        outputFile.write(header)
-        for string in sectionLines[index]:
-            outputFile.write(string)
+    for controlVarName in controlVarsDict:
+        elementControlVars= controlVarsDict[controlVarName]
+        for eTag in elementControlVars:
+            elementControlVars= elementControlVars[eTag]
+            for index in elementControlVars:
+                controlVar= elementControlVars[index]
+                if not index in sectionLines:
+                    sectionLines[index]= list()
+                outStr= controlVar.getLaTeXString(eTag,1e-3)
+                sectionLines[index].append(outStr)
+        for index in sectionLines:
+            header= 'Section '+str(index)+'\n'
+            outputFile.write(header)
+            for string in sectionLines[index]:
+                outputFile.write(string)
             
 def get_capacity_factors_from_control_vars(controlVarsDict):
     ''' Return the capacity factors from the given control vars.
@@ -1873,13 +1881,16 @@ def get_capacity_factors_from_control_vars(controlVarsDict):
                             variables for each element.
     '''
     retval= dict()
-    for eTag in controlVarsDict:
-        elementControlVars= controlVarsDict[eTag]
-        for index in elementControlVars:
-            controlVar= elementControlVars[index]
-            if not index in retval:
-                retval[index]= list()
-            retval[index].append(controlVar.getCF())
+    for controlVarName in controlVarsDict:
+        retval[controlVarName]= dict()
+        elementValues= controlVarsDict[controlVarName]
+        for eTag in elementValues:
+            elementControlVars= elementValues[eTag]
+            for index in elementControlVars:
+                controlVar= elementControlVars[index]
+                if not index in retval[controlVarName]:
+                    retval[controlVarName][index]= list()
+                retval[controlVarName][index].append(controlVar.getCF())
     return retval
             
 def write_control_vars_from_phantom_elements(controlVarsDict, outputCfg):
@@ -1920,7 +1931,7 @@ def write_control_vars_from_phantom_elements(controlVarsDict, outputCfg):
         texOutput.close()
     retval=None
     if outputCfg.calcMeanCF.lower()[0]=='y':
-        capacityFactors= get_capacity_factors_from_control_vars(controlVarsDict= controlVarsDict)
+        capacityFactors= get_capacity_factors_from_control_vars(controlVarsDict= controlVarsDict)[controlVarName]
         retval= list()
         for key in capacityFactors:
             retval.append(scipy.mean(capacityFactors[key]))
@@ -2007,7 +2018,7 @@ def write_control_vars_from_elements(preprocessor, controlVarsDict, outputCfg, s
         texOutput.close()
     retval=None
     if outputCfg.calcMeanCF.lower()[0]=='y':
-        capacityFactors= get_capacity_factors_from_control_vars(controlVarsDict= controlVarsDict)
+        capacityFactors= get_capacity_factors_from_control_vars(controlVarsDict= controlVarsDict)[controlVarName]
         retval= list()
         for key in capacityFactors:
             retval.append(scipy.mean(capacityFactors[key]))
