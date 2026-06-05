@@ -30,10 +30,10 @@
 #include "YieldSurfaceSection2d.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
-#include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/matrixutil/MatrixUtil.h>
 #include <cstdlib>
 #include "material/ResponseId.h"
 #include "material/yieldSurface/yieldSurfaceBC/YieldSurface_BC.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 #define SEC_TAG_YS2d -1
 
@@ -54,7 +54,9 @@ XC::YieldSurfaceSection2d::YieldSurfaceSection2d(int tag, int classtag, YieldSur
   {
     if(ptrys==0)
       {
-        std::cerr << "WARNING - InelasticYS2DGNL(): ys1 = 0" << std::endl;
+        std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - InelasticYS2DGNL(): ys1 = 0"
+		  << Color::def << std::endl;
       }
     else
       {
@@ -142,7 +144,9 @@ int XC::YieldSurfaceSection2d::setTrialSectionDeformation(const XC::Vector &def)
       }
     else // driftOld outside - bug or bad constraints or continued from not converged state
       {
-        std::cerr << "WARNING: XC::YieldSurfaceSection2d::setTrialSectionDeformation, driftOld outside [" << getTag()<<"]\n";
+        std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: driftOld outside [" << getTag()<<"]"
+	          << Color::def << std::endl;
       }
   
     double dF_in0 = s(0) - surfaceForce(0);
@@ -224,8 +228,16 @@ const XC::Matrix &XC::YieldSurfaceSection2d::getSectionTangent(void) const
 
 const XC::Matrix &XC::YieldSurfaceSection2d::getSectionFlexibility(void) const
   {
-    static XC::Matrix fs(2,2);
-    invert2by2Matrix(ks, fs);
+    static Matrix fs(2,2);
+    const int ok= ks.Invert(fs);
+    if(ok<0)
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; failed to invert section stiffness matrix, "
+		  << " error code: " << ok
+		  << " section tag: " << this->getTag()
+		  << Color::def << std::endl;
+      }
     return fs;
   }
 

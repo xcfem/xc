@@ -68,6 +68,7 @@
 #include <classTags.h>
 #include <cstring>
 #include "material/ResponseId.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::Vector XC::GenericSection1d::s(1);
 XC::Matrix XC::GenericSection1d::ks(1,1);
@@ -80,8 +81,9 @@ void XC::GenericSection1d::alloc(const UniaxialMaterial &m)
     theModel= m.getCopy();
     if(!theModel)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; failed to get copy of material model.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; failed to get copy of material model."
+	          << Color::def << std::endl;;
         exit(-1);
       }
   }
@@ -199,19 +201,32 @@ const XC::Matrix &XC::GenericSection1d::getInitialTangent(void) const
 //! returns \f$fsec\f$.
 const XC::Matrix &XC::GenericSection1d::getSectionFlexibility(void) const
   {
-    double tangent = theModel->getTangent();
+    const double tangent = theModel->getTangent();
     if(tangent != 0.0)
       ks(0,0) = 1.0/tangent;
     else
-      ks(0,0) = 1.0e12;
+      {
+        ks(0,0)= 1.0e12;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; stiffness matrix is singular."
+	          << Color::def << std::endl;
+      }
     return ks;
   }
 
 //! @brief Returns the initial value of the flexibility matrix.
 const XC::Matrix &XC::GenericSection1d::getInitialFlexibility(void) const
   {
-    double tangent = theModel->getInitialTangent();
-    ks(0,0) = 1.0/tangent;
+    const double tangent = theModel->getInitialTangent();
+    if(tangent != 0.0)
+      ks(0,0) = 1.0/tangent;
+    else
+      {
+        ks(0,0)= 1.0e12;
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; stiffness matrix is singular."
+	          << Color::def << std::endl;
+      }
     return ks;
   }
 
@@ -276,8 +291,9 @@ int XC::GenericSection1d::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data"
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -289,15 +305,17 @@ int XC::GenericSection1d::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids."
+		<< Color::def << std::endl;
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data."
+	            << Color::def << std::endl;
       }
     return res;
   }

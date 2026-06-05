@@ -37,6 +37,7 @@
 #include "domain/component/Parameter.h"
 #include "material/section/SectionForceDeformation.h"
 #include "material/ResponseId.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::Matrix XC::CrossSectionProperties3d::ks4(4,4);
 XC::Matrix XC::CrossSectionProperties3d::ks6(6,6);
@@ -47,22 +48,25 @@ bool XC::CrossSectionProperties3d::check_values(void)
     bool retval= true;
     if(iy <= 0.0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; Input Iy <= 0.0 ... setting Iy to 1.0\n";
+        std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		  << "; Input Iy <= 0.0 ... setting Iy to 1.0."
+	          << Color::def << std::endl;
         iy= 1.0;
         retval= false;
       }
     if(j <= 0.0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; Input J <= 0.0 ... setting J to 1.0\n";
+        std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		  << "; Input J <= 0.0 ... setting J to 1.0."
+	          << Color::def << std::endl;
         j= 1.0;
         retval= false;
       }
     if(alpha_z <= 0.0)
       {
-        std::clog << getClassName() << "::" << __FUNCTION__
-		  << "; Input alpha_z <= 0.0 ... setting alpha_z to 1.0\n";
+        std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		  << "; Input alpha_z <= 0.0 ... setting alpha_z to 1.0."
+	          << Color::def << std::endl;
         alpha_z= 1.0;
         retval= false;
       }
@@ -170,16 +174,48 @@ const XC::Matrix &XC::CrossSectionProperties3d::getInitialTangent4x4(void) const
 //! @brief Returns the flexibility matrix.
 const XC::Matrix &XC::CrossSectionProperties3d::getSectionFlexibility4x4(void) const
   {
-    const double eiyz= EIyz();
-    const double eimax= std::max(EIz(),EIy());
-    if(std::abs(eiyz/eimax)<1e-5) //product of inertia nulo.
+    const double &eiy= this->EIy();
+    const double &eiz= this->EIz();
+    const double &eiyz= this->EIyz();
+    const double eimax= std::max(eiz,eiy);
+    if(std::abs(eiyz/eimax)<1e-5) // product of inertia is zero.
       {
-        ks4(0,0)= 1.0/(EA());
-        ks4(1,1)= 1.0/EIz();
-        ks4(2,2)= 1.0/(EIy());
-        ks4(3,3)= 1.0/(GJ());
+	const double &ea= this->EA();
+	const double &gj= this->GJ();
+	if(ea==0.0)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; axial stiffness is zero, "
+		      << Color::def << std::endl;
+	    exit(-1);
+	  }
+	if(eiy==0.0)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; bending stiffness around y axis is zero, "
+		      << Color::def << std::endl;
+	    exit(-1);
+	  }	
+	if(eiz==0.0)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; bending stiffness around z axis is zero, "
+		      << Color::def << std::endl;
+	    exit(-1);
+	  }	
+	if(gj==0.0)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; torsional stiffness is zero, "
+		      << Color::def << std::endl;
+	    exit(-1);
+	  }
+        ks4(0,0)= 1.0/ea;
+        ks4(1,1)= 1.0/eiz;
+        ks4(2,2)= 1.0/eiy;
+        ks4(3,3)= 1.0/gj;
       }
-    else //product of inertia NO nulo.
+    else //product of inertia not zero.
       {
         getSectionTangent4x4();
         ks4(0,0)= 1.0/ks4(0,0);
@@ -220,23 +256,70 @@ const XC::Matrix &XC::CrossSectionProperties3d::getInitialTangent6x6(void) const
 //! @brief Returns the flexibility matrix.
 const XC::Matrix &XC::CrossSectionProperties3d::getSectionFlexibility6x6(void) const
   {
-    const double eiyz= EIyz();
+    const double &eiy= this->EIy();
+    const double &eiz= this->EIz();
+    const double &eiyz= this->EIyz();
     const double eimax= std::max(EIz(),EIy());
     if(std::abs(eiyz/eimax)<1e-5) // null product of inertia.
       {
-        ks6(0,0)= 1.0/(EA());
-        ks6(1,1)= 1.0/EIz();
-        ks6(3,3)= 1.0/(EIy());
-        ks6(5,5)= 1.0/(GJ());
-  
+	const double &ea= this->EA();
+	const double &gj= this->GJ();
         const double GAY= 1.0/GAAlphaY();
-        ks6(2,2)= 1/GAY;
         const double GAZ= 1.0/GAAlphaZ();
+	
+	if(ea==0.0)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; axial stiffness is zero, "
+		      << Color::def << std::endl;
+	    exit(-1);
+	  }
+	if(GAY==0.0)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; shear stiffness along y axis is zero, "
+		      << Color::def << std::endl;
+	    exit(-1);
+	  }	
+	if(GAZ==0.0)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; shear stiffness along z axis is zero, "
+		      << Color::def << std::endl;
+	    exit(-1);
+	  }	
+	if(gj==0.0)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; torsional stiffness is zero, "
+		      << Color::def << std::endl;
+	    exit(-1);
+	  }
+	if(eiy==0.0)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; bending stiffness around y axis is zero, "
+		      << Color::def << std::endl;
+	    exit(-1);
+	  }	
+	if(eiz==0.0)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; bending stiffness around z axis is zero, "
+		      << Color::def << std::endl;
+	    exit(-1);
+	  }	
+        ks6(0,0)= 1.0/ea;
+        ks6(1,1)= 1.0/eiz;
+        ks6(3,3)= 1.0/eiy;
+        ks6(5,5)= 1.0/gj;
+  
+        ks6(2,2)= 1/GAY;
         ks6(4,4)= 1/GAZ;
       }
     else //product of inertia NO nulo.
       {
-        getSectionTangent6x6();
+        this->getSectionTangent6x6();
         ks6(0,0)= 1.0/ks6(0,0);
         const double a= ks6(1,1); const double b= ks6(1,3);
         const double c= ks6(3,3);
@@ -374,8 +457,9 @@ int XC::CrossSectionProperties3d::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -387,15 +471,17 @@ int XC::CrossSectionProperties3d::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids."
+	        << Color::def << std::endl;
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data."
+		    << Color::def << std::endl;
       }
     return res;
   }
