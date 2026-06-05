@@ -17,6 +17,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es"
 
+import os
 import math
 import geom
 import xc
@@ -27,6 +28,7 @@ from actions import load_cases
 from actions import combinations as combs
 from postprocess import limit_state_data as lsd
 from postprocess.config import default_config
+import shutil
 
 # Geometry
 beamSpan= 4.0
@@ -60,8 +62,6 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 xcSection= shape.defElasticShearSection3d(preprocessor)
 
 # Model geometry
-# We use a set of small lines to simulate the lateral restraint
-# of the upper flange.
 ## Points.
 p1= modelSpace.newKPoint(0,0,0)
 p2= modelSpace.newKPoint(beamSpan, 0, 0)
@@ -190,6 +190,17 @@ ratio1= abs(maxBendingCF-1.783045394470495)/1.783045394470495
 ## Maximum shear capacity factor.
 ratio2= abs(maxShearCF-0.12044200463987757)/0.12044200463987757
 
+# Get the file containing the values of the shear control variables so it can
+# be used to test displaying them in an independent script.
+shearControlVars= cfg.projectDirTree.getVerifShearFile()
+fname= os.path.basename(__file__)
+pth= os.path.dirname(__file__)
+if(not pth):
+  pth= "."
+auxModulePath= pth+"/../../../aux/internal_forces/"
+destFileName= auxModulePath+fname.replace('.py', '_shear_control_vars.json')
+shutil.copyfile(shearControlVars, destFileName)
+
 '''
 print('Lateral torsional buckling reduction factor: ', chiLT, ratio0)
 print('Maximum bending capacity factor:', maxBendingCF, ratio1)
@@ -198,7 +209,6 @@ print('Maximum shear capacity factor:', maxShearCF, ratio2)
 
 cfg.cleandirs() # Clean after yourself.
 from misc_utils import log_messages as lmsg
-import os
 fname= os.path.basename(__file__)
 if(ratio0<1e-8 and ratio1<1e-8 and ratio2<1e-8):
     print('test '+fname+': ok.')

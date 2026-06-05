@@ -188,7 +188,6 @@ for fName in outputFileNames:
 
 # print(testOK)
 
-import os
 from misc_utils import log_messages as lmsg
 if testOK:
     print('test '+fname+': ok.')

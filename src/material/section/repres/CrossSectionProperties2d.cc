@@ -38,6 +38,7 @@
 #include "domain/mesh/element/utils/Information.h"
 #include "domain/component/Parameter.h"
 #include "material/section/SectionForceDeformation.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::Matrix XC::CrossSectionProperties2d::ks2(2,2);
 XC::Matrix XC::CrossSectionProperties2d::ks3(3,3);
@@ -47,22 +48,25 @@ bool XC::CrossSectionProperties2d::check_values(void)
     bool retval= CrossSectionProperties1d::check_values();
     if(g <= 0.0)
       {
-        std::clog << getClassName() << "::" << __FUNCTION__
-		  << "; Input G <= 0.0 ... setting G to 1.0\n";
+        std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		  << "; Input G <= 0.0 ... setting G to 1.0"
+	          << Color::def << std::endl;
         g= 1.0;
         retval= false;
       }
     if(i <= 0.0)
       {
-        std::clog << getClassName() << "::" << __FUNCTION__
-		  << "; Input I <= 0.0 ... setting I to 1.0\n";
+        std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		  << "; Input I <= 0.0 ... setting I to 1.0"
+	          << Color::def << std::endl;
         i= 1.0;
         retval= false;
       }
     if(alpha <= 0.0)
       {
-        std::clog << getClassName() << "::" << __FUNCTION__
-		  << "; Input alpha <= 0.0 ... setting alpha to 1.0\n";
+        std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		  << "; Input alpha <= 0.0 ... setting alpha to 1.0"
+	          << Color::def << std::endl;
         alpha= 1.0;
         retval= false;
       }
@@ -157,8 +161,24 @@ const XC::Matrix &XC::CrossSectionProperties2d::getInitialTangent2x2(void) const
 //! @brief Returns the flexibility matrix.
 const XC::Matrix &XC::CrossSectionProperties2d::getSectionFlexibility2x2(void) const
   {
-    ks2(0,0)= 1.0/(EA());
-    ks2(1,1)= 1.0/(EI());
+    const double &ea= this->EA();
+    const double &ei= this->EI();
+    if(ea==0.0)
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; axial stiffness is zero, "
+		  << Color::def << std::endl;
+	exit(-1);
+      }
+    if(ei==0.0)
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; bending stiffness is zero, "
+		  << Color::def << std::endl;
+	exit(-1);
+      }
+    ks2(0,0)= 1.0/ea;
+    ks2(1,1)= 1.0/ei;
     return ks2;
   }
 
@@ -290,8 +310,9 @@ int XC::CrossSectionProperties2d::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data."
+		<< Color::def << std::endl;
     return res;
   }
 
@@ -303,15 +324,17 @@ int XC::CrossSectionProperties2d::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids."
+		<< Color::def << std::endl;
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data."
+		    << Color::def << std::endl;
       }
     return res;
   }

@@ -147,5 +147,7 @@ if(testOK):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
-
-os.remove(outputFileName) # Clean after yourself.
+    
+# Clean after yourself.
+for fName in outputFileNames:
+    os.remove(fName)
