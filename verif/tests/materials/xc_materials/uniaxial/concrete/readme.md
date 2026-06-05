@@ -6,6 +6,7 @@ Verifications tests for XC uniaxial material objects.
 ## References
 - [Concrete Zero](https://portwooddigital.com/2023/07/09/concrete-zero/)
 - [Concrete01 material behavior](https://opensees.berkeley.edu/OpenSees/manuals/comparisonManual/2487.htm)
+- [Numerical Model for Material Behavior](https://opensees.berkeley.edu/OpenSees/manuals/comparisonManual/2612.htm)
  
 ### Creep and shrinkage
 - [Minimal Creep and Shrinkage Example](https://portwooddigital.com/2023/05/28/minimal-creep-and-shrinkage-example/)
