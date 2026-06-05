@@ -116,7 +116,6 @@ for targetDisp in targetDisplacements:
         if(newDispIncrement):
             dispIncrement= newDispIncrement
             solProc.displacementControlIntegratorSetup(node= n2, dof= 0, increment= dispIncrement, numIter= 1, dUmin= dispIncrement, dUmax= dispIncrement)
-            print('dispIncrement= ', dispIncrement)
           
     while proceed(ok, currentDisp, targetDisp, numStep):
         ok= analysis.analyze(1)
@@ -135,7 +134,6 @@ for targetDisp in targetDisplacements:
             concStress= concTrussMaterial.getStress()
             concNormalizedStress= concStress/absFc1C
             concreteNormalizedStresses.append(concNormalizedStress)
-            print(numStep, concStrain, concNormalizedStress, targetDisp)
 
         currentDisp= n2.getDisp[0]
         numStep+= 1
