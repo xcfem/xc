@@ -61,11 +61,11 @@
 
 #include <deque>
 #include <regex>
-#include <material/section/SectionForceDeformation.h>
+#include "material/section/SectionForceDeformation.h"
 #include "material/ResponseId.h"
 #include <domain/mesh/element/utils/Information.h>
-#include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/matrixutil/MatrixUtil.h>
-#include <utility/matrix/Vector.h>
+#include "utility/matrix/Vector.h"
+#include "utility/matrix/Matrix.h"
 #include <utility/recorder/response/MaterialResponse.h>
 #include "utility/actor/actor/MovableMatrix.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
@@ -131,14 +131,16 @@ const XC::Matrix &XC::SectionForceDeformation::getSectionFlexibility(void) const
         if(k(0,0) != 0.0)
           fDefault(0,0)= 1.0/k(0,0);
         break;
-      case 2:
-        invert2by2Matrix(k,fDefault);
-        break;
-      case 3:
-        invert3by3Matrix(k,fDefault);
-        break;
       default:
-        invertMatrix(order,k,fDefault);
+        const int ok= k.Invert(fDefault);
+	if(ok<0)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; failed to invert section stiffness matrix, "
+		      << " error code: " << ok
+		      << " section tag: " << this->getTag()
+		      << Color::def << std::endl;
+	  }
         break;
       }
     return fDefault;
@@ -157,14 +159,16 @@ const XC::Matrix &XC::SectionForceDeformation::getInitialFlexibility(void) const
         if(k(0,0) != 0.0)
           fDefault(0,0)= 1.0/k(0,0);
         break;
-      case 2:
-        invert2by2Matrix(k,fDefault);
-        break;
-      case 3:
-        invert3by3Matrix(k,fDefault);
-        break;
       default:
-        invertMatrix(order,k,fDefault);
+        const int ok= k.Invert(fDefault);
+	if(ok<0)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; failed to invert section stiffness matrix, "
+		      << " error code: " << ok
+		      << " section tag: " << this->getTag()
+		      << Color::def << std::endl;
+	  }
         break;
       }
     return fDefault;

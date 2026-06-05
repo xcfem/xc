@@ -501,7 +501,7 @@ const XC::Matrix &XC::SectionAggregator::getSectionFlexibility(void) const
 
     if(theSection)
       {
-        const XC::Matrix &fSec= theSection->getSectionFlexibility();
+        const Matrix &fSec= theSection->getSectionFlexibility();
         theSectionOrder= theSection->getOrder();
         for(int i= 0; i < theSectionOrder; i++)
           for(int j= 0; j < theSectionOrder; j++)

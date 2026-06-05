@@ -37,6 +37,7 @@
 #include "domain/mesh/element/utils/Information.h"
 #include "domain/component/Parameter.h"
 #include "material/section/SectionForceDeformation.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::Matrix XC::CrossSectionProperties1d::ks(1,1);
 
@@ -45,22 +46,25 @@ bool XC::CrossSectionProperties1d::check_values(void)
     bool retval= true;
     if(e <= 0.0)
       {
-        std::clog << getClassName() << "::" << __FUNCTION__
-		  << "; Input E <= 0.0 ... setting E to 1.0\n";
+        std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
+		  << "; Input E <= 0.0 ... setting E to 1.0"
+	          << Color::def << std::endl;
         e= 1.0;
         retval= false;
       }
     if(a <= 0.0)
       {
-        std::clog << getClassName() << "::" << __FUNCTION__
-		  << "; Input A <= 0.0 ... setting A to 1.0\n";
+        std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
+		  << "; Input A <= 0.0 ... setting A to 1.0"
+	          << Color::def << std::endl;
         a= 1.0;
         retval= false;
       }
     if(iw < 0.0)
       {
-        std::clog << getClassName() << "::" << __FUNCTION__
-		  << "; Input Iw <= 0.0 ... setting Iw to 0.0\n";
+        std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
+		  << "; Input Iw <= 0.0 ... setting Iw to 0.0"
+	          << Color::def << std::endl;
         iw= 0.0;
         retval= false;
       }
@@ -116,7 +120,15 @@ const XC::Matrix &XC::CrossSectionProperties1d::getInitialTangent1x1(void) const
 //! @brief Returns the flexibility matrix.
 const XC::Matrix &XC::CrossSectionProperties1d::getSectionFlexibility1x1(void) const
   {
-    ks(0,0) = 1.0/(EA());
+    const double &ea= this->EA();
+    if(ea==0.0)
+      {
+	std::cerr << Color::red <<Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; axial stiffness matrix is zero."
+		  << Color::def << std::endl;
+	exit(-1);
+      }
+    ks(0,0) = 1.0/ea;
     return ks;
   }
 
@@ -130,8 +142,9 @@ void XC::CrossSectionProperties1d::setLinearRho(const double &lr)
     if(a!=0.0)
       rho= lr/a;
     else if(lr!=0.0)
-      std::clog << getClassName() << "::" << __FUNCTION__
-		<< "; WARNING null section area. No changes made.\n";      
+      std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; WARNING null section area. No changes made."
+		<< Color::def << std::endl;      
   }
 
 int XC::CrossSectionProperties1d::setParameter(const std::vector<std::string> &argv,Parameter &param,SectionForceDeformation *scc)
@@ -222,8 +235,9 @@ int XC::CrossSectionProperties1d::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data."
+		<< Color::def << std::endl;
     return res;
   }
 
@@ -235,15 +249,17 @@ int XC::CrossSectionProperties1d::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids."
+		<< Color::def << std::endl;
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data."
+		    << Color::def << std::endl;
       }
     return res;
   }
