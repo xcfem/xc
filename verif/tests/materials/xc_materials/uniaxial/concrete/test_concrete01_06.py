@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ''' Test based on the material comparison described in the following page:
 
-https://opensees.berkeley.edu/OpenSees/manuals/comparisonManual/2622.html
+https://opensees.berkeley.edu/OpenSees/manuals/comparisonManual/2622.htm
 '''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -134,6 +134,10 @@ for targetDisp in targetDisplacements:
             concStress= concTrussMaterial.getStress()
             concNormalizedStress= concStress/absFc1C
             concreteNormalizedStresses.append(concNormalizedStress)
+<<<<<<< HEAD
+=======
+            print(numStep, concStrain, concNormalizedStress, targetDisp)
+>>>>>>> bff7a09b9ad4884fc1b250ac751eac5cf169d64b
 
         currentDisp= n2.getDisp[0]
         numStep+= 1
