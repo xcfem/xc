@@ -70,6 +70,7 @@ solProc.convergenceTestSetup()
 # Set solution algorithm.
 solProc.solutionAlgorithmType= 'modified_newton_soln_algo'
 solProc.solutionAlgorithmSetup()
+solProc.getSolutionAlgorithm().useInitialTangent()
 
 ok= 0
 displacements= list()
