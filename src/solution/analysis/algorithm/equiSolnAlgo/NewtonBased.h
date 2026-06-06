@@ -34,23 +34,25 @@
 #include "solution/analysis/integrator/IncrementalIntegrator.h"
 
 namespace XC {
-class ConvergenceTest;
 
-//! @ingroup EQSolAlgo
 //
 //! @brief Base class for algorithms based on Newton method.
-//
-//! Those method use  the tangent stiffness matrix on each
+//!
+//! Those methods use the tangent stiffness matrix on each
 //! iteration (with or without updating) until convergence is achieved.
+//! @ingroup EQSolAlgo
 class NewtonBased: public EquiSolnAlgo
   {
   protected:
-    int tangent;
+    int tangent; //!< Tangent updating method.
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
     NewtonBased(SolutionStrategy *,int classTag,int tangent = CURRENT_TANGENT);
   public:
+    int getTangentUpdatingMethod(void);
+    void useInitialTangent(void);
+    void useCurrentTangent(void);
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
   };

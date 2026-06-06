@@ -76,6 +76,8 @@ class Integrator;
 class SystemOfEqn;
 class Recorder;
 class SolutionStrategy;
+  
+extern int SOLUTION_ALGORITHM_tangentFlag;
 
 //! @ingroup Analysis
 //!

@@ -65,6 +65,7 @@
 // #include <utility/recorder/PatternRecorder.h>
 #include <solution/analysis/model/AnalysisModel.h>
 
+int XC::SOLUTION_ALGORITHM_tangentFlag= 0;
 
 //! @brief Constructor.
 XC::SolutionAlgorithm::SolutionAlgorithm(SolutionStrategy *owr,int clasTag)

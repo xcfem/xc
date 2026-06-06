@@ -46,75 +46,64 @@
 ** ****************************************************************** */
                                                                         
 // $Revision: 1.5 $
-// $Date: 2005/11/29 22:42:41 $
-// $Source: /usr/local/cvs/OpenSees/SRC/analysis/algorithm/equiSolnAlgo/ModifiedNewton.h,v $
+// $Date: 2005/11/29 22:42:42 $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/algorithm/equiSolnAlgo/HallFactorsNewton.h,v $
                                                                         
                                                                         
-#ifndef ModifiedNewton_h
-#define ModifiedNewton_h
+#ifndef HallFactorsNewton_h
+#define HallFactorsNewton_h
 
-// File: ~/OOP/analysis/algorithm/ModifiedNewton.h 
-// 
-// Written: fmk 
-// Created: 11/96 
-// Revision: A 
-//
-// Description: This file contains the class definition for 
-// ModifiedNewton. ModifiedNewton is a class which performs a modified 
-// Newton-Raphson  solution algorithm in solving the equations.
-// No member functions are declared as virtual as 
-// it is not expected that this class will be subclassed.
-// 
-// What: "@(#)ModifiedNewton.h, revA"
-
-#include <solution/analysis/algorithm/equiSolnAlgo/HallFactorsNewton.h>
+#include <solution/analysis/algorithm/equiSolnAlgo/NewtonBased.h>
 
 namespace XC {
 
-//! @brief Modified Newton-Raphson algorithm. Uses the tangent stiffness
-//! matrix computed in the first iteration until convergence is achieved.
+//! @brief Base class for algorithms based on Newton method that have
+//! Hall factors (cFactor and iFactor).
 //!
-//! The ModifiedNewton class is an algorithmic class which obtains a
-//! solution to a non-linear system using the modified Newton-Raphson iteration
-//! scheme. The Newton-Rapson iteration scheme is based on a Taylor expansion
-//! of the non-linear system of equations \f$R(U) = 0\f$ about an approximate
-//! solution \f$U{(i)}\f$:
-//! \begin{equation} 
-//! R(U) = 
-//! R(U^{(i)}) +
-//! \left[ {\frac{\partial R}{\partial U} \vert}_{U^{(i)}}\right]
-//! \left( U - U^{(i)} \right) 
-//! \end{equation}
-//!
-//! \noindent which can be expressed as:
-//! \begin{equation}
-//! K^{(i)}  \Delta U{(i)} = R(U^{(i)})
-//! \end{equation}
-//! which is solved for \f$\Delta U^{(i)}\f$ to give approximation for
-//! \f$U^{(i+1)} = U^{(i)} + \Delta U^{(i)}\f$. To start the
-//! iteration \f$U^{(1)} = U_{trial}\f$, i.e. the current trial
-//! response quantities are chosen as initial response quantities.
-//!
-//! in the modified version the tangent is formed only once, i.e
-//! \begin{equation}
-//! K^{(1)}  \Delta U^{(i)} = R(U^{(i)})
-//! \end{equation}
-//!
-//! To stop the iteration, a test must be performed to see if convergence
-//! has been achieved at each iteration. Each NewtonRaphson object is
-//! associated with a ConvergenceTest object. It is this object which
-//! determines if convergence has been achieved.
 //! @ingroup EQSolAlgo
-class ModifiedNewton: public HallFactorsNewton
+class HallFactorsNewton: public NewtonBased
   {
-    friend class SolutionStrategy;
-    friend class FEM_ObjectBroker;
-    ModifiedNewton(SolutionStrategy *,int tangent = CURRENT_TANGENT, double iFactor = 0.0, double cFactor = 1.0, int factOnce=0);
-    virtual SolutionAlgorithm *getCopy(void) const;
+  protected:
+    int numIterations;
+    int factorOnce;
+
+    double iFactor;
+    double cFactor;
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
+    
+    HallFactorsNewton(SolutionStrategy *, int classTag, int tangent= CURRENT_TANGENT, double iFactor= 0.0, double cFactor= 1.0, int factOnce= 0);
   public:
-    int domainChanged(void);
-    int solveCurrentStep(void);    
-    void Print(std::ostream &s, int flag =0) const;    
+
+    void useInitialTangent(void);
+    void useSecantTangent(int factOnce= 0);
+    void useHallTangent(double iFactor= 0.1, double cFactor= 0.9, int factOnce= 0);
+    void useCurrentTangent(int factOnce= 0);
+    
+    inline int getNumIterations(void) const
+      { return numIterations; }
+    inline void setNumIterations(const int &ni)
+      { this->numIterations= ni; }
+    
+    inline int getFactorOnce(void) const
+      { return factorOnce; }
+    inline void setFactorOnce(const int &fo)
+      { this->factorOnce= fo; }
+    
+    inline int getIFactor(void) const
+      { return this->iFactor; }
+    inline void setIFactor(const double &i_factor)
+      { this->iFactor= i_factor; }
+    
+    inline int getCFactor(void) const
+      { return this->cFactor; }
+    inline void setCFactor(const double &c_factor)
+      { this->cFactor= c_factor; }
+    
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
+    
+    void Print(std::ostream &, int) const;
   };
 
 } // end of XC namespace

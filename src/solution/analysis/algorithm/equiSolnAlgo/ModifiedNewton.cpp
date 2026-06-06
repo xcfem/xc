@@ -76,12 +76,20 @@
 //! @brief Constructor
 //!
 //! @param SolutionStrategy: object that owns this one.
-XC::ModifiedNewton::ModifiedNewton(SolutionStrategy *owr,int theTangentToUse)
-  :NewtonBased(owr,EquiALGORITHM_TAGS_ModifiedNewton,theTangentToUse) {}
+XC::ModifiedNewton::ModifiedNewton(SolutionStrategy *owr, int theTangentToUse, double iFactor, double cFactor, int factOnce)
+  :HallFactorsNewton(owr,EquiALGORITHM_TAGS_ModifiedNewton, theTangentToUse, iFactor, cFactor, factOnce) {}
 
 //! @brief Virtual constructor.
 XC::SolutionAlgorithm *XC::ModifiedNewton::getCopy(void) const
   { return new ModifiedNewton(*this); }
+
+//! @brief Domain change: cached factorization invalid after setSize - reform tangent next solve.
+int XC::ModifiedNewton::domainChanged(void)
+  {
+    if(factorOnce == 2)
+      factorOnce = 1;
+    return 0;
+  }
 
 //! @brief Solves for the current analysis step.
 //!
@@ -134,13 +142,19 @@ int XC::ModifiedNewton::solveCurrentStep(void)
       }
 
 
-    if(theIncIntegratorr->formTangent(tangent) < 0)
+    SOLUTION_ALGORITHM_tangentFlag = this->tangent;
+    if(factorOnce!=2)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-                  << "; the Integrator failed in formTangent()\n";
-        return -1;
-      }
-
+	if(theIncIntegratorr->formTangent(this->tangent, this->iFactor, this->cFactor) < 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; the Integrator failed in formTangent()"
+	              << std::endl;
+	    return -1;
+	  }	
+	if (factorOnce==1)
+	  { factorOnce =2; }
+      }	    
 
     // set itself as the ConvergenceTest objects EquiSolnAlgo
     theTest->set_owner(getSolutionStrategy());
@@ -153,7 +167,7 @@ int XC::ModifiedNewton::solveCurrentStep(void)
 
     // repeat until convergence is obtained or reach max num iterations
     int result = -1;
-    int count = 0;
+    this->numIterations= 0;
     do
       {
         //Timer timer2;
@@ -176,11 +190,12 @@ int XC::ModifiedNewton::solveCurrentStep(void)
         if(theIncIntegratorr->formUnbalance() < 0)
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; the Integrator failed in formUnbalance()\n";
+		      << "; the Integrator failed in formUnbalance()"
+	              << std::endl;
             return -2;
           }
 
-        record(count++); //Calls record(...) method for all defined recorders.
+        this->record(this->numIterations++); //Calls record(...) method for all defined recorders.
         result = theTest->test();
       }
     while(result == -1);
@@ -193,7 +208,8 @@ int XC::ModifiedNewton::solveCurrentStep(void)
                   << "the ConvergenceTest object failed in test()." << std::endl
                   << "convergence test message: "
                   << theTest->getStatusMsg(1) << std::endl;
-
+      if(factorOnce ==2)
+	{ factorOnce = 1; }
         return -3;
       }
 

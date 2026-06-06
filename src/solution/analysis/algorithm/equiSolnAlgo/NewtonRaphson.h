@@ -68,7 +68,7 @@
 // 
 // What: "@(#)NewtonRaphson.h, revA"
 
-#include <solution/analysis/algorithm/equiSolnAlgo/NewtonBased.h>
+#include <solution/analysis/algorithm/equiSolnAlgo/HallFactorsNewton.h>
 
 namespace XC {
 
@@ -101,14 +101,17 @@ namespace XC {
 //! has been achieved at each iteration. Each NewtonRaphson object is
 //! associated with a ConvergenceTest object. It is this object which
 //! determines if convergence has been achieved.
-class NewtonRaphson: public NewtonBased
+class NewtonRaphson: public HallFactorsNewton
   {
   protected:
     friend class SolutionStrategy;
     friend class FEM_ObjectBroker;
-    NewtonRaphson(SolutionStrategy *,int tangent = CURRENT_TANGENT);    
+    NewtonRaphson(SolutionStrategy *,int tangent = CURRENT_TANGENT, double iFactor = 0.0, double cFactor = 1.0, int factorOnce = 0);    
     virtual SolutionAlgorithm *getCopy(void) const;
   public:
+    void useInitialThenCurrentTangent(int factOnce= 0);
+    
+    int domainChanged(void);
     int solveCurrentStep(void);    
     
     void Print(std::ostream &s, int flag =0) const;    

@@ -37,15 +37,27 @@ class_<XC::KrylovNewton, bases<XC::EquiSolnAlgo>, boost::noncopyable >("KrylovNe
 
 class_<XC::Linear, bases<XC::EquiSolnAlgo>, boost::noncopyable >("Linear", no_init);
 
-class_<XC::NewtonBased, bases<XC::EquiSolnAlgo>, boost::noncopyable >("NewtonBased", no_init);
+class_<XC::NewtonBased, bases<XC::EquiSolnAlgo>, boost::noncopyable >("NewtonBased", no_init)  
+  ;
 
-class_<XC::ModifiedNewton, bases<XC::NewtonBased>, boost::noncopyable >("ModifiedNewton", no_init);
+class_<XC::HallFactorsNewton, bases<XC::NewtonBased>, boost::noncopyable >("HallFactorsNewton", no_init)
+  .def("useInitialTangent", &XC::HallFactorsNewton::useInitialTangent, "Instruct the solver to use the model’s initial stiffness matrix for every iteration within every time step.")
+ .def("useSecantTangent", &XC::HallFactorsNewton::useSecantTangent, "Instruct the solver to use the model’s secant stiffness matrix for every iteration within every time step.")
+  .def("useHallTangent", &XC::HallFactorsNewton::useHallTangent, "Instruct the solver to use the model’s Hall stiffness matrix for every iteration within every time step.")
+  .def("useCurrentTangent", &XC::HallFactorsNewton::useCurrentTangent, "Instruct the solver to use the model’s current stiffness matrix for every iteration within every time step.")
+  ;
+
+
+class_<XC::ModifiedNewton, bases<XC::HallFactorsNewton>, boost::noncopyable >("ModifiedNewton", no_init);
+
+class_<XC::NewtonRaphson, bases<XC::HallFactorsNewton>, boost::noncopyable >("NewtonRaphson", no_init)
+  .def("useInitialThenCurrentTangent", &XC::HallFactorsNewton::useCurrentTangent, "Instruct the solver to use the model’s initial stiffness on first step and then current on subsequent steps.")
+  ;
 
 class_<XC::NewtonLineSearch, bases<XC::EquiSolnAlgo>, boost::noncopyable >("NewtonLineSearch", no_init)
   .def("setLineSearchMethod", &XC::NewtonLineSearch::setLineSearchMethod, "set the line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search)")
   ;
 
-class_<XC::NewtonRaphson, bases<XC::NewtonBased>, boost::noncopyable >("NewtonRaphson", no_init);
 
 class_<XC::PeriodicNewton, bases<XC::NewtonBased>, boost::noncopyable >("PeriodicNewton", no_init);
 

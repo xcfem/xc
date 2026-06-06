@@ -32,6 +32,21 @@
 XC::NewtonBased::NewtonBased(SolutionStrategy *owr,int classTag,int theTangentToUse)
   :EquiSolnAlgo(owr,classTag), tangent(theTangentToUse) {}
 
+//! @brief Return the tangent updating method (CURRENT_TANGENT or
+//! INITIAL_TANGENT)
+int XC::NewtonBased::getTangentUpdatingMethod(void)
+  { return this->tangent; }
+
+//! @brief Instruct the solver to use the model’s initial stiffness matrix for
+//! every iteration within every time step.
+void XC::NewtonBased::useInitialTangent(void)
+  { this->tangent = INITIAL_TANGENT; }
+  
+//! @brief Instruct the solver to use the model’s current stiffness matrix for
+//! every iteration within every time step.
+void XC::NewtonBased::useCurrentTangent(void)
+  { this->tangent = CURRENT_TANGENT; }
+
 //! @brief Send object members through the communicator argument.
 int XC::NewtonBased::sendData(Communicator &comm)
   {

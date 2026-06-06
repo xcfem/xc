@@ -78,12 +78,30 @@
 //! @param SolutionStrategy: object the object which is used to access the
 //! object that compound the analysis and that, at the end of each iteration,
 //! are used to determine if convergence has been obtained.
-XC::NewtonRaphson::NewtonRaphson(SolutionStrategy *owr,int theTangentToUse)
-  :NewtonBased(owr,EquiALGORITHM_TAGS_NewtonRaphson,theTangentToUse) {}
+XC::NewtonRaphson::NewtonRaphson(SolutionStrategy *owr,int theTangentToUse, double iFact, double cFact, int factOnce)
+  :HallFactorsNewton(owr,EquiALGORITHM_TAGS_NewtonRaphson, theTangentToUse, iFact, cFact, factOnce) {}
 
 //! @brief Virtual constructor.
 XC::SolutionAlgorithm *XC::NewtonRaphson::getCopy(void) const
   { return new NewtonRaphson(*this); }
+
+//! @brief Instruct the solver to use use initial stiffness on first step
+//! and then current on subsequent steps. 
+void XC::NewtonRaphson::useInitialThenCurrentTangent(int factOnce)
+  {
+    this->tangent= INITIAL_THEN_CURRENT_TANGENT;
+    this->factorOnce= factOnce;
+    this->iFactor= 0;
+    this->cFactor= 1;
+  }
+
+//! @brief Domain change: cached factorization invalid after setSize - reform tangent next solve.
+int XC::NewtonRaphson::domainChanged(void)
+  {
+    if(factorOnce == 2)
+      factorOnce = 1;
+    return 0;
+  }
 
 //! @brief Performs the Newton-Raphson iteration algorithm.
 //!
@@ -123,19 +141,21 @@ int XC::NewtonRaphson::solveCurrentStep(void)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; - setLinks() has"
-                  << "undefined model, integrator or system of equations.\n";
+                  << "undefined model, integrator or system of equations."
+	          << std::endl;
         return -5;
       }
-
+    
     if(theIntegrator->formUnbalance() < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-                  << "; the Integrator failed in formUnbalance().\n";
+                  << "; the Integrator failed in formUnbalance()."
+	          << std::endl;
         return -2;
       }
-
+    
     // set itself as the ConvergenceTest objects EquiSolnAlgo
-    theTest->set_owner(getSolutionStrategy());
+    theTest->set_owner(this->getSolutionStrategy());
     if(theTest->start() < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -144,14 +164,15 @@ int XC::NewtonRaphson::solveCurrentStep(void)
       }
 
     int result = -1;
-    int count = 0;
+    this->numIterations= 0;
     do
       {
-
         if(tangent == INITIAL_THEN_CURRENT_TANGENT)
           {
-            if(count == 0)
+	    // Alternating tangents per iteration - factorOnce not used here.
+            if(this->numIterations == 0)
               {
+		SOLUTION_ALGORITHM_tangentFlag = INITIAL_TANGENT;
                 if(theIntegrator->formTangent(INITIAL_TANGENT) < 0)
                   {
                     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -161,6 +182,7 @@ int XC::NewtonRaphson::solveCurrentStep(void)
               }
             else
               {
+		SOLUTION_ALGORITHM_tangentFlag = CURRENT_TANGENT;
                 if(theIntegrator->formTangent(CURRENT_TANGENT) < 0)
                   {
                     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -171,12 +193,19 @@ int XC::NewtonRaphson::solveCurrentStep(void)
           }
         else
           {
-            if(theIntegrator->formTangent(tangent) < 0)
-              {
-                std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; the Integrator failed in formTangent()\n";
-                return -1;
-              }
+	    if(factorOnce != 2)
+	      {
+		SOLUTION_ALGORITHM_tangentFlag = this->tangent;
+		if(theIntegrator->formTangent(this->tangent, this->iFactor, this->cFactor) < 0)
+		  {
+		    std::cerr << getClassName() << "::" << __FUNCTION__
+			      << "; the Integrator failed in formTangent()"
+		              << std::endl;
+		    return -1;
+		  }
+		if(factorOnce == 1)
+		  factorOnce = 2;
+	      }
           }
         if(theSOE->solve() < 0)
           {
@@ -199,7 +228,7 @@ int XC::NewtonRaphson::solveCurrentStep(void)
           }
 
         result = theTest->test();
-        this->record(count++); //Call the record(...) method of all recorders.
+        this->record(this->numIterations++); //Call the record(...) method of all recorders.
       }
     while(result == -1);
 
@@ -212,8 +241,8 @@ int XC::NewtonRaphson::solveCurrentStep(void)
         return -3;
       }
 
-    // note - if positive result we are returning what the convergence test returned
-    // which should be the number of iterations
+    // note - if positive result we are returning what the convergence
+    // test returned which should be the number of iterations
     return result;
   }
 
