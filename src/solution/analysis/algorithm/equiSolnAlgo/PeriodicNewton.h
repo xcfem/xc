@@ -64,7 +64,6 @@
 #include <solution/analysis/algorithm/equiSolnAlgo/NewtonBased.h>
 
 namespace XC {
-class ConvergenceTest;
 
 //! @ingroup EQSolAlgo
 //
