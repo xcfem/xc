@@ -140,7 +140,7 @@ limitState= limitStates[0]
 controller= limitState.getController()
 # controller= NBE_EA95_limit_state_checking.VonMisesStressController(limitState.label)
 #### Perform checking.
-average= limitState.check(setCalc=xcTotalSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)
+average= limitState.check(setCalc=xcTotalSet, appendToResFile=False, listFile=False, calcMeanCF=True, controller= controller)
 
 # Check results.
 ratio= ((average[0]-0.2645798938853426)/0.2645798938853426)**2

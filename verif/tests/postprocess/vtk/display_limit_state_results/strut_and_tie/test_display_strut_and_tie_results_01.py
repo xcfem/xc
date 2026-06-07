@@ -98,7 +98,7 @@ limitStateToCheck= st_ls.strutAndTieLimitState
 # Analyze load combinations.
 limitStateToCheck.analyzeLoadCombinations(combContainer,setCalc)
 # Perform checking.
-limitStateToCheck.check(setCalc= setCalc, concrete= concrete, steel= reinfSteel, appendToResFile='N',listFile='N',calcMeanCF='N')
+limitStateToCheck.check(setCalc= setCalc, concrete= concrete, steel= reinfSteel, appendToResFile=False,listFile=False,calcMeanCF=False)
 
 
 # #########################################################
@@ -131,5 +131,5 @@ os.remove(outputFileName)
 # ## Display results.
 # setCalc.fillDownwards()
 # oh.displayDiagram(attributeName=limitStateToCheck.label, component= 'CF', setToDispRes= setCalc, setToDisplay= setCalc, caption= 'Capacity factor')
-# oh.displayDiagram(attributeName=limitStateToCheck.label, component= 'N', setToDispRes= setCalc, setToDisplay= setCalc, caption= 'Axial load.')
+# oh.displayDiagram(attributeName=limitStateToCheck.label, component= False, setToDispRes= setCalc, setToDisplay= setCalc, caption= 'Axial load.')
 # oh.displayDiagram(attributeName=limitStateToCheck.label, component= 'inverted', setToDispRes= setCalc, setToDisplay= setCalc, caption= 'Inverted.')

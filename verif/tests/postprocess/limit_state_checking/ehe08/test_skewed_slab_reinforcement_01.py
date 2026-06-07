@@ -153,7 +153,7 @@ limitState.analyzeLoadCombinations(combContainer= combContainer, setCalc= setCal
 controller= limitState.getController(biaxialBending= True)
 ## Perform checking.
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSections, listFile='N', calcMeanCF='Y', threeDim= False, controller= controller)
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSections, listFile=False, calcMeanCF=True, threeDim= False, controller= controller)
 feProblem.errFileName= "cerr" # From now on display errors if any.
 
 # Check results.

@@ -239,7 +239,16 @@ class BracingXcross(object):
               
 def get_Nd(cfg,setCalc,boltedPlate):
         limit_state_data.LimitStateData.envConfig= cfg 
-        outCfg= limit_state_data.VerifOutVars(setCalc,appendToResFile='N',listFile='N',calcMeanCF='Y')
+        outCfg= limit_state_data.VerifOutVars(setCalc,appendToResFile=False,listFile=False,calcMeanCF=True)
+        if appendToResFile not in [True,False]:
+            lmsg.error("Argument 'appendToResFile' must be True or False")
+            exit(1)
+        if listFile not in [True,False]:
+            lmsg.error("Argument 'listFile' must be True or False")
+            exit(1)
+        if calcMeanCF not in [True,False]:
+            lmsg.error("Argument 'calcMeanCF' must be True or False")
+            exit(1)
         limitState= limit_state_data.normalStressesResistance
         intForcesFileName= limitState.getInternalForcesFileName()
         outCfg.controller= connection_design.BoltedPlateController(boltedPlate)

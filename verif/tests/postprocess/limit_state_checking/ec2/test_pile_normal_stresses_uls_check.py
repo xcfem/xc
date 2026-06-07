@@ -105,7 +105,7 @@ limitState= EC2_limit_state_checking.normalStressesResistance
 controller= limitState.getController()
 controller.verbose= False # Don't display log messages.
 ## Perform checking.
-meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y', controller= controller,threeDim= True)
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile=False,calcMeanCF=True, controller= controller,threeDim= True)
 
 # Check results.
 ## The result from the calculation report was CF=0.28 but it was obtained with

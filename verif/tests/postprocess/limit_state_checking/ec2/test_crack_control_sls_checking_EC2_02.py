@@ -126,13 +126,13 @@ controller.verbose= True #False # Don't display log messages.
 ### setCalc: set of elements to be checked.
 ### crossSections: cross sections for each element.
 ### controller: object that controls the limit state checking.
-### appendToResFile:  'Yes','Y','y',.., if results are appended to 
-###                   existing file of results (defaults to 'N')
-### listFile: 'Yes','Y','y',.., if latex listing file of results 
-###           is desired to be generated (defaults to 'N')
-### calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-###               meant to be calculated (defaults to 'N')
-meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution,listFile='N',calcMeanCF='Y', controller= controller)
+### appendToResFile:  True if results are appended to 
+###                   existing file of results (defaults to False)
+### listFile: True if latex listing file of results 
+###           is desired to be generated (defaults to False)
+### calcMeanCF: True if average capacity factor is
+###               meant to be calculated (defaults to False)
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution,listFile=False,calcMeanCF=True, controller= controller)
 
 ratio1= abs(meanCFs[0]-1.0000530846623346)/1.0000530846623346
 ratio2= abs(meanCFs[1]-1.0000530846614253)/1.0000530846614253
@@ -158,7 +158,7 @@ else:
 # #Load properties to display:
 # from postprocess.control_vars import *
 # modelSpace.readControlVars(inputFileName= cfg.projectDirTree.getVerifCrackFreqFile())
-# arguments= ['wk', 'CF', 'N', 'My', 'Mz'] # Possible arguments: 'CF','wk', 's_rmax', 'N', 'My'
+# arguments= ['wk', 'CF', False, 'My', 'Mz'] # Possible arguments: 'CF','wk', 's_rmax', False, 'My'
 # for arg in arguments:
 #     oh.displayBeamResult(attributeName= limitState.label, itemToDisp= arg, setToDisplay= xcTotalSet, beamSetDispRes= xcTotalSet, fileName=None, defFScale=0.0)
 

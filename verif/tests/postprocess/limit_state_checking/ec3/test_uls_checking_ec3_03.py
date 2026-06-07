@@ -159,7 +159,7 @@ limitState= limitStates[0]
 controller= limitState.getController(biaxialBending= True)
 
 ## Perform checking.
-average= limitState.check(setCalc=ec3CalcSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)
+average= limitState.check(setCalc=ec3CalcSet, appendToResFile=False, listFile=False, calcMeanCF=True, controller= controller)
 
 # Check results.
 err= (average[0]-1)**2

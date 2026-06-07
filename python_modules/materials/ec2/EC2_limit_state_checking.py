@@ -1856,26 +1856,35 @@ class Ec2InPlaneStressLimitStateData(lsd.ULS_LimitStateData):
         :param outputCfg: instance of class 'VerifOutVars' which defines the 
                variables that control the output of the checking (set of 
                elements to be analyzed, append or not the results to the 
-               result file [defatults to 'N'], generation or not
-               of list file [defatults to 'N', ...)
+               result file [defatults to False], generation or not
+               of list file [defatults to False, ...)
         '''
         retval= super(Ec2InPlaneStressLimitStateData,self).runChecking(outputCfg, sections= [''])
         return retval
     
-    def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
+    def check(self, setCalc, controller, appendToResFile=False, listFile=False, calcMeanCF=False):
         ''' Perform limit state checking.
 
         :param setCalc: set of elements to be checked (defaults to 'None' which 
                means that all the elements in the file of internal forces
                results are analyzed) 
         :param controller: object that controls the limit state checking.
-        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
-               existing file of results (defaults to 'N')
-        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
-               is desired to be generated (defaults to 'N')
-        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-               meant to be calculated (defaults to 'N')
+        :param appendToResFile:  True if results are appended to 
+               existing file of results (defaults to False)
+        :param listFile: True if latex listing file of results 
+               is desired to be generated (defaults to False)
+        :param calcMeanCF: True if average capacity factor is
+               meant to be calculated (defaults to False)
         '''
+        if appendToResFile not in [True,False]:
+            lmsg.error("Argument 'appendToResFile' must be True or False")
+            exit(1)
+        if listFile not in [True,False]:
+            lmsg.error("Argument 'listFile' must be True or False")
+            exit(1)
+        if calcMeanCF not in [True,False]:
+            lmsg.error("Argument 'calcMeanCF' must be True or False")
+            exit(1)
         outputCfg= lsd.VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return self.runChecking(outputCfg= outputCfg)
 

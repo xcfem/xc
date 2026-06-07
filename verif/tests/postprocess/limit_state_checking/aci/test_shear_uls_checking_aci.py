@@ -133,7 +133,7 @@ controller= limitState.getController()
 limitState.outputDataBaseFileName= 'resVerif'
 ## Perform checking.
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y',threeDim= True, controller= controller)
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile=False,calcMeanCF=True,threeDim= True, controller= controller)
 feProblem.errFileName= "cerr" # From now on display errors if any.
 
 # Check results.

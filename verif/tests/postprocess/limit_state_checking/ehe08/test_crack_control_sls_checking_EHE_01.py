@@ -135,7 +135,7 @@ reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet
 controller= limitState.getController()
 controller.verbose= False #False # Don't display log messages.
 ## Perform checking.
-meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y', controller= controller, threeDim= False)
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile=False,calcMeanCF=True, controller= controller, threeDim= False)
 
 # Check results.
 # The value obtained for the 87th element of the phantom model

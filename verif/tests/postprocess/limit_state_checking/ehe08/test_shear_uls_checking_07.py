@@ -98,7 +98,7 @@ controller= limitState.getController(solutionProcedureType= CustomNewtonRaphson)
 controller.verbose= False # Don't display log messages.
 ## Perform checking.
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y', controller= controller,threeDim= True)
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile=False,calcMeanCF=True, controller= controller,threeDim= True)
 feProblem.errFileName= "cerr" # From now on display errors if any.
 
 # Check results (21/06/2025: update values after fixing error in the EHE08

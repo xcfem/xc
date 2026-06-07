@@ -185,15 +185,15 @@ controller= limitState.getController(biaxialBending= True)
 ### setCalc: set of elements to be checked.
 ### crossSections: cross sections for each element.
 ### controller: object that controls the limit state checking.
-### appendToResFile:  'Yes','Y','y',.., if results are appended to 
-###                   existing file of results (defaults to 'N')
-### listFile: 'Yes','Y','y',.., if latex listing file of results 
-###           is desired to be generated (defaults to 'N')
-### calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-###               meant to be calculated (defaults to 'N')
+### appendToResFile:  True if results are appended to 
+###                   existing file of results (defaults to False)
+### listFile: True if latex listing file of results 
+###           is desired to be generated (defaults to False)
+### calcMeanCF: True if average capacity factor is
+###               meant to be calculated (defaults to False)
 ### threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
 ###           false if it's 2D (Fx,Fy,Mz).
-limitState.check(setCalc= setCalc, crossSections= reinfConcreteSectionDistribution,appendToResFile='N',listFile='N',calcMeanCF='N', controller= controller, threeDim= False)
+limitState.check(setCalc= setCalc, crossSections= reinfConcreteSectionDistribution,appendToResFile=False,listFile=False,calcMeanCF=False, controller= controller, threeDim= False)
 
 ## Check results.
 ### Read the control variables.

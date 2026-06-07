@@ -176,7 +176,7 @@ controller.verbose= False # Don't display log messages.
 ## Perform the checking.
 feProblem.logFileName= "/tmp/erase.log" # Ignore warning messagess about computation of the interaction diagram.
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, controller= controller, listFile='N',calcMeanCF='Y', threeDim= True)
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, controller= controller, listFile=False,calcMeanCF=True, threeDim= True)
 feProblem.errFileName= "cerr" # From now on display errors if any.
 feProblem.logFileName= "clog" # From now on display warnings if any.
 

@@ -163,7 +163,7 @@ class StrutAndTieStressesLimitStateData(lsd.ULS_LimitStateData):
         '''
         return modelSpace.readControlVars(inputFileName= self.envConfig.projectDirTree.getVerifStrutAndTieFile())
     
-    def check(self, setCalc, concrete, steel, appendToResFile='N', listFile='N', calcMeanCF='N'):
+    def check(self, setCalc, concrete, steel, appendToResFile=False, listFile=False, calcMeanCF=False):
         ''' Perform limit state checking.
 
         :param setCalc: set of elements to be checked (defaults to 'None' which 
@@ -171,13 +171,22 @@ class StrutAndTieStressesLimitStateData(lsd.ULS_LimitStateData):
                results are analyzed) 
         :param concrete: strut concrete material.
         :param steel: tie steel material.
-        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
-               existing file of results (defaults to 'N')
-        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
-               is desired to be generated (defaults to 'N')
-        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-               meant to be calculated (defaults to 'N')
+        :param appendToResFile:  True if results are appended to 
+               existing file of results (defaults to False)
+        :param listFile: True if latex listing file of results 
+               is desired to be generated (defaults to False)
+        :param calcMeanCF: True if average capacity factor is
+               meant to be calculated (defaults to False)
         '''
+        if appendToResFile not in [True,False]:
+            lmsg.error("Argument 'appendToResFile' must be True or False")
+            exit(1)
+        if listFile not in [True,False]:
+            lmsg.error("Argument 'listFile' must be True or False")
+            exit(1)
+        if calcMeanCF not in [True,False]:
+            lmsg.error("Argument 'calcMeanCF' must be True or False")
+            exit(1)
         controller= self.getController(concrete= concrete, steel= steel)
         controller._classify_strut_and_tie_elements_(setCalc.elements)
         outputCfg= lsd.VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())

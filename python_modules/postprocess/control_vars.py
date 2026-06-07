@@ -1910,7 +1910,7 @@ def write_control_vars_from_phantom_elements(controlVarsDict, outputCfg):
     controlVarName= outputCfg.controller.limitStateLabel
     dataDict= None
     jsonFileName= outputFileName+'.json'
-    if outputCfg.appendToResFile.lower()[0]=='y':
+    if outputCfg.appendToResFile:
         try:
             with open(jsonFileName) as f:
                dataDict= json.load(f)
@@ -1925,15 +1925,15 @@ def write_control_vars_from_phantom_elements(controlVarsDict, outputCfg):
     with open(jsonFileName, 'w') as f:
         json.dump(dataDict, f)       
 
-    if outputCfg.listFile.lower()[0]=='y':
-        if outputCfg.appendToResFile.lower()[0]=='y':
+    if outputCfg.listFile:
+        if outputCfg.appendToResFile:
             texOutput= open(outputFileName+".tex","a+")
         else:
             texOutput= open(outputFileName+".tex","w+")
         write_latex_control_vars(outputFile= texOutput, controlVarsDict= controlVarsDict)
         texOutput.close()
     retval=None
-    if outputCfg.calcMeanCF.lower()[0]=='y':
+    if outputCfg.calcMeanCF:
         capacityFactors= get_capacity_factors_from_control_vars(controlVarsDict= controlVarsDict)[controlVarName]
         retval= list()
         for key in capacityFactors:
@@ -1981,10 +1981,11 @@ def write_control_vars_from_elements(preprocessor, controlVarsDict, outputCfg, s
     dataDict= None
     outputFileName= outputCfg.outputDataBaseFileName # name for the .json and .tex files.
     jsonFileName= outputFileName+'.json'
-    if(outputCfg.appendToResFile.lower()[0]=='y' and os.path.isfile(jsonFileName)):
+    if(outputCfg.appendToResFile and os.path.isfile(jsonFileName)):
         try:
             with open(jsonFileName) as f:
                dataDict= json.load(f)
+               #print(dataDict)
         except IOError:
             lmsg.error("can't read from file: "+str(jsonFileName)+". Are you sure you need to read previous results?")
             quit()
@@ -1994,6 +1995,7 @@ def write_control_vars_from_elements(preprocessor, controlVarsDict, outputCfg, s
     importString= getControlVarImportModuleStr(preprocessor, outputCfg, sections)
     dataDict['importString']= importString
     elementDataDict= get_element_data_dict(controlVarsDict= controlVarsDict, controlVarName= controlVarName)
+    ###### AQUÍ HABRÍA QUE HACER UN UPDATE DEL DICCIONARIO si appendToResFile está definido como True
     dataDict['elementData']= elementDataDict
     # for e in elems:
     #     elementDataDict[e.tag]= dict()
@@ -2005,8 +2007,8 @@ def write_control_vars_from_elements(preprocessor, controlVarsDict, outputCfg, s
         json.dump(dataDict, f)
     
     # Write report in LaTeX format.
-    if outputCfg.listFile.lower()[0]=='y':
-        if outputCfg.appendToResFile.lower()[0]=='y':
+    if outputCfg.listFile:
+        if outputCfg.appendToResFile:
             texOutput= open(outputFileName+".tex","a+")
         else:
             texOutput= open(outputFileName+".tex","w+")
@@ -2020,7 +2022,7 @@ def write_control_vars_from_elements(preprocessor, controlVarsDict, outputCfg, s
         #         texOutput.write(outStr)
         texOutput.close()
     retval=None
-    if outputCfg.calcMeanCF.lower()[0]=='y':
+    if outputCfg.calcMeanCF:
         capacityFactors= get_capacity_factors_from_control_vars(controlVarsDict= controlVarsDict)[controlVarName]
         retval= list()
         for key in capacityFactors:
