@@ -99,7 +99,7 @@ def proceed(analyzeOk, currenDisp, targetDisp, numStep):
     else:
         retval= (ok == 0 and currentDisp > targetDisp and numStep<maxNumSteps)
     if(numStep>=maxNumSteps):
-        print('Maximum number of steps reached: ', numStep)
+        lmsg.error('Maximum number of steps reached: '+str(numStep))
     return retval
 
 for targetDisp in targetDisplacements:
@@ -122,7 +122,7 @@ for targetDisp in targetDisplacements:
 
         # if the analysis fails try initial tangent iteration
         if ok != 0:
-            print("modified newton failed at disp: ", currentDisp)
+            lmsg.error("modified newton failed at disp: "+str(currentDisp))
             break
         else:
             # Compute strain.
@@ -140,16 +140,7 @@ for targetDisp in targetDisplacements:
     lastTargetDisp= targetDisp
 
 # # Check results.
-# ## Check that the target strain is reached.
-# targetStrain= minU/l
-# testOK= (abs(strains[-1]-minU)/-minU)<1e-2
-# ## Check the maximum stresses.
-# minConcreteNormalizedStress= min(concreteNormalizedStresses)
-# minConcreteNormalizedStressRef= fc1C/fc
-# minConcreteNormalizedStressErr= abs(minConcreteNormalizedStress+minConcreteNormalizedStressRef)/minConcreteNormalizedStressRef
-# testOK= testOK and (abs(minConcreteNormalizedStressErr)<1e-3)
-
-# # print(minConcreteNormalizedStress, minConcreteNormalizedStressErr)
+print('XXX Continue here.')
     
 # import os
 # from misc_utils import log_messages as lmsg

@@ -1293,7 +1293,10 @@ echo "$BLEU" "      Elastic perfectly plastic material tests." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/elastic_pp_material/test_elasticpp_material_01.py
 python tests/materials/xc_materials/uniaxial/elastic_pp_material/test_elasticpp_material_02.py
 echo "$BLEU" "      Uniaxial concrete materials tests." "$NORMAL"
-python tests/materials/xc_materials/uniaxial/concrete/test_concrete01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_concrete01_01.py
+python tests/materials/xc_materials/uniaxial/concrete/test_concrete01_02.py
+python tests/materials/xc_materials/uniaxial/concrete/test_concrete01_03.py
+python tests/materials/xc_materials/uniaxial/concrete/test_concrete01_04.py
 python tests/materials/xc_materials/uniaxial/concrete/test_concrete02_01.py
 python tests/materials/xc_materials/uniaxial/concrete/test_concrete02_02.py
 python tests/materials/xc_materials/uniaxial/concrete/test_concrete02is_01.py

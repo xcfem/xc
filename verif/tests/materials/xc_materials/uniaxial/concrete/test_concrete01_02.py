@@ -17,8 +17,8 @@ from materials import typical_materials
 fc= -250 # Concrete compressive strength.
 l= 1 # Distance between nodes
 epsc0= -2e-3 # Maximum compressive strain for section in compression.
-fcu= fc/1.2 # Strain under concrete compressive stress.
-epsU= -3.5e-3 # Maximum compressive strain in concrete.
+fcu= fc/1.2 # Maximum compressive strain in concrete.
+epsU= -3.5e-3 # Strain under concrete compressive stress.
 F= 1e2 # Force to apply.
 
 # Points of the stress-strain function

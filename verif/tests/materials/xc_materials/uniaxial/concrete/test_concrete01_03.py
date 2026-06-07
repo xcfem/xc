@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ''' Test based on the material comparison described in the following page:
 
-https://opensees.berkeley.edu/OpenSees/manuals/comparisonManual/2622.html
+https://opensees.berkeley.edu/OpenSees/manuals/comparisonManual/2622.htm
 '''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -70,7 +70,8 @@ lp= modelSpace.newLoadPattern(name= 'lp', setCurrent= True)
 lp.newNodalLoad(n2.tag, xc.Vector([1,0]))
 modelSpace.addLoadCaseToDomain(lp.name)
 
-
+# Run 1 Unidirectional incremental strain in tension.
+# See https://opensees.berkeley.edu/OpenSees/manuals/comparisonManual/2462.htm
 dispIncrement= .01 # Displacement increment.
 maxU = 0.02  # Max displacement.
 solProc= predefined_solutions.SimpleNewtonRaphsonDisplacementControl(prb= feProblem, node= n2, dof= 0, increment= dispIncrement, numSteps= 1, maxNumIter= 100, printFlag= 0)
@@ -107,7 +108,7 @@ while ok == 0 and currentDisp < maxU:
     currentDisp= n2.getDisp[0]
 
 refStrains= [0, dispIncrement, 2*dispIncrement]
-refConcreteNormalizedStresses= numSteps*[0.0]
+refConcreteNormalizedStresses= numSteps*[0.0] # Concrete01 has zero tensile strength.
 
 # Check results.
 ## Strains.

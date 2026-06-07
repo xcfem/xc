@@ -70,6 +70,9 @@ lp= modelSpace.newLoadPattern(name= 'lp', setCurrent= True)
 lp.newNodalLoad(n2.tag, xc.Vector([1,0]))
 modelSpace.addLoadCaseToDomain(lp.name)
 
+# Run 4. Three cycles of compression and tension to a low maximum-strain
+# level (Compression first).
+# See https://opensees.berkeley.edu/OpenSees/manuals/comparisonManual/2462.htm
 dispIncrement= -.00001 # Displacement increment.
 # targetDisplacements= [-0.005, 0.005, 0.0]  # Target displacements.
 targetDisplacements= [-0.002, 0.002, 0.0]  # Target displacements.
@@ -122,7 +125,7 @@ for targetDisp in targetDisplacements:
 
         # if the analysis fails try initial tangent iteration
         if ok != 0:
-            print("modified newton failed at disp: ", currentDisp)
+            lmsg.error("Modified newton failed at disp: "+str(currentDisp))
             break
         else:
             # Compute strain.
@@ -134,34 +137,12 @@ for targetDisp in targetDisplacements:
             concStress= concTrussMaterial.getStress()
             concNormalizedStress= concStress/absFc1C
             concreteNormalizedStresses.append(concNormalizedStress)
-<<<<<<< HEAD
-=======
-            print(numStep, concStrain, concNormalizedStress, targetDisp)
->>>>>>> bff7a09b9ad4884fc1b250ac751eac5cf169d64b
-
         currentDisp= n2.getDisp[0]
         numStep+= 1
     lastTargetDisp= targetDisp
 
 # # Check results.
-# ## Check that the target strain is reached.
-# targetStrain= minU/l
-# testOK= (abs(strains[-1]-minU)/-minU)<1e-2
-# ## Check the maximum stresses.
-# minConcreteNormalizedStress= min(concreteNormalizedStresses)
-# minConcreteNormalizedStressRef= fc1C/fc
-# minConcreteNormalizedStressErr= abs(minConcreteNormalizedStress+minConcreteNormalizedStressRef)/minConcreteNormalizedStressRef
-# testOK= testOK and (abs(minConcreteNormalizedStressErr)<1e-3)
-
-# # print(minConcreteNormalizedStress, minConcreteNormalizedStressErr)
-    
-# import os
-# from misc_utils import log_messages as lmsg
-# fname= os.path.basename(__file__)
-# if testOK:
-#     print('test '+fname+': ok.')
-# else:
-#     lmsg.error(fname+' ERROR.')
+print('XXX Continue here.')
 
 
 import matplotlib.pyplot as plt

@@ -15,6 +15,7 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
+from misc_utils import log_messages as lmsg
 
 # Material properties
 # See here: https://opensees.berkeley.edu/OpenSees/manuals/comparisonManual/2622.htm
@@ -70,6 +71,9 @@ lp= modelSpace.newLoadPattern(name= 'lp', setCurrent= True)
 lp.newNodalLoad(n2.tag, xc.Vector([1,0]))
 modelSpace.addLoadCaseToDomain(lp.name)
 
+# Run 3. Three cycles of tension and compression to a low maximum-strain
+# level (Tension first).
+# See https://opensees.berkeley.edu/OpenSees/manuals/comparisonManual/2462.htm
 dispIncrement= .00001 # Displacement increment.
 # targetDisplacements= [0.005, -0.005, 0.0]  # Target displacements.
 targetDisplacements= [0.002, -0.002, 0.0]  # Target displacements.
@@ -99,7 +103,7 @@ def proceed(analyzeOk, currenDisp, targetDisp, numStep):
     else:
         retval= (ok == 0 and currentDisp > targetDisp and numStep<maxNumSteps)
     if(numStep>=maxNumSteps):
-        print('Maximum number of steps reached: ', numStep)
+        lmsg.error('Maximum number of steps reached: '+str(numStep))
     return retval
 
 for targetDisp in targetDisplacements:
@@ -116,14 +120,13 @@ for targetDisp in targetDisplacements:
         if(newDispIncrement):
             dispIncrement= newDispIncrement
             solProc.displacementControlIntegratorSetup(node= n2, dof= 0, increment= dispIncrement, numIter= 1, dUmin= dispIncrement, dUmax= dispIncrement)
-            print('dispIncrement= ', dispIncrement)
           
     while proceed(ok, currentDisp, targetDisp, numStep):
         ok= analysis.analyze(1)
 
         # if the analysis fails try initial tangent iteration
         if ok != 0:
-            print("modified newton failed at disp: ", currentDisp)
+            lmsg.error("Modified newton failed at disp: "+str(currentDisp))
             break
         else:
             # Compute strain.
@@ -135,26 +138,16 @@ for targetDisp in targetDisplacements:
             concStress= concTrussMaterial.getStress()
             concNormalizedStress= concStress/absFc1C
             concreteNormalizedStresses.append(concNormalizedStress)
-            print(numStep, concStrain, concNormalizedStress, targetDisp)
 
         currentDisp= n2.getDisp[0]
         numStep+= 1
     lastTargetDisp= targetDisp
 
 # # Check results.
-# ## Check that the target strain is reached.
-# targetStrain= minU/l
-# testOK= (abs(strains[-1]-minU)/-minU)<1e-2
-# ## Check the maximum stresses.
-# minConcreteNormalizedStress= min(concreteNormalizedStresses)
-# minConcreteNormalizedStressRef= fc1C/fc
-# minConcreteNormalizedStressErr= abs(minConcreteNormalizedStress+minConcreteNormalizedStressRef)/minConcreteNormalizedStressRef
-# testOK= testOK and (abs(minConcreteNormalizedStressErr)<1e-3)
+print('XXX Continue here.')
 
-# # print(minConcreteNormalizedStress, minConcreteNormalizedStressErr)
     
 # import os
-# from misc_utils import log_messages as lmsg
 # fname= os.path.basename(__file__)
 # if testOK:
 #     print('test '+fname+': ok.')

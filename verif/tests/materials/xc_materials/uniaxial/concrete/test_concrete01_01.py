@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Home made test.'''
-
-from __future__ import print_function
+''' Trivial Concrete01 material test.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -32,6 +30,7 @@ Eref= 2*fc/epsc0
 ratio0= abs(E-Eref)/Eref
 ratio1= abs(E0-Eref)/Eref
 
+''' 
 print("fpc= ",fc)
 print("epsc0= ",epsc0)
 print("fpcu= ",fcu)
@@ -41,9 +40,14 @@ print("E0= ", E0)
 print("Eref= ", Eref)
 print('ratio0= ', ratio0)
 print('ratio1= ', ratio1)
-
-
-''' 
  '''
+
+import os
+from misc_utils import log_messages as lmsg
+fname= os.path.basename(__file__)
+if((ratio0<1e-17) & (ratio1<1e-8)):
+    print('test '+fname+': ok.')
+else:
+    lmsg.error(fname+' ERROR.')
 
 
