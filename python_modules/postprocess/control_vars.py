@@ -786,7 +786,7 @@ class UniaxialBendingStrengthControlVars(UniaxialBendingControlVars):
     :ivar chiLT: reduction factor for lateral-torsional buckling (defaults to 1)
     :ivar chiN:  reduction factor for compressive strength (defaults to 1)
     '''
-    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0, N= 0.0, Mz= 0.0,Ncrd=0.0, McRdz=0.0,chiLT=1.0, chiN= 1.0):
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0, N= 0.0, Mz= 0.0,Ncrd=0.0, McRdz=0.0, chiLT=1.0, chiN= 1.0):
         '''
         Constructor.
 
@@ -809,6 +809,7 @@ class UniaxialBendingStrengthControlVars(UniaxialBendingControlVars):
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
         retval= super(UniaxialBendingStrengthControlVars,self).getDict()
+        retval['Mz']= retval.pop('My') # My <-> Mz
         retval.update({'Ncrd':self.Ncrd, 'McRdz':self.McRdz, 'chiLT':self.chiLT, 'chiN':self.chiN})
         return retval
        
@@ -817,7 +818,8 @@ class UniaxialBendingStrengthControlVars(UniaxialBendingControlVars):
 
         :param dct: dictionary containing the values of the object members.
         '''
-        super(BiaxialBendingStrengthControlVars,self).setFromDict(dct)
+        dct['My']= dct.pop('Mz') # Mz <-> My
+        super(UniaxialBendingStrengthControlVars,self).setFromDict(dct)
         self.Ncrd= dct['Ncrd']
         self.McRdz= dct['McRdz']
         self.chiLT= dct['chiLT']
@@ -1981,22 +1983,32 @@ def write_control_vars_from_elements(preprocessor, controlVarsDict, outputCfg, s
     dataDict= None
     outputFileName= outputCfg.outputDataBaseFileName # name for the .json and .tex files.
     jsonFileName= outputFileName+'.json'
+    # Get the existing data dictionary if required.
     if(outputCfg.appendToResFile and os.path.isfile(jsonFileName)):
         try:
             with open(jsonFileName) as f:
                dataDict= json.load(f)
-               #print(dataDict)
         except IOError:
             lmsg.error("can't read from file: "+str(jsonFileName)+". Are you sure you need to read previous results?")
             quit()
     else:
         dataDict= dict()
-    # Write report in JSON format.
+    # Write results in JSON format.
     importString= getControlVarImportModuleStr(preprocessor, outputCfg, sections)
-    dataDict['importString']= importString
+    if('importStrings' in dataDict):
+        dataDict['importStrings'].append(importString)
+    else:
+        dataDict['importStrings']= [importString]
     elementDataDict= get_element_data_dict(controlVarsDict= controlVarsDict, controlVarName= controlVarName)
-    ###### AQUÍ HABRÍA QUE HACER UN UPDATE DEL DICCIONARIO si appendToResFile está definido como True
-    dataDict['elementData']= elementDataDict
+    if('elementData' in dataDict):
+        limitStateData= dataDict['elementData']
+        for controlVarKey in elementDataDict:
+            if(controlVarKey in limitStateData):
+                limitStateData[controlVarKey].update(elementDataDict[controlVarKey])
+            else:
+                limitStateData[controlVarKey]= elementDataDict[controlVarKey]
+    else:
+        dataDict['elementData']= elementDataDict
     # for e in elems:
     #     elementDataDict[e.tag]= dict()
     #     for s in sections:
@@ -2005,7 +2017,6 @@ def write_control_vars_from_elements(preprocessor, controlVarsDict, outputCfg, s
     #         elementDataDict[e.tag][propName]= controlVar.getStrConstructor()
     with open(jsonFileName, 'w') as f:
         json.dump(dataDict, f)
-    
     # Write report in LaTeX format.
     if outputCfg.listFile:
         if outputCfg.appendToResFile:

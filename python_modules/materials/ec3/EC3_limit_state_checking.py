@@ -377,7 +377,7 @@ class Member(steel_member_base.BucklingMember):
         '''
         super(Member,self).__init__(name, ec3Shape, lstLines= lstLines, lstPoints= lstPoints)
         self.beamSupportCoefs= beamSupportCoefs
-        self.typo=typo
+        self.typo= typo
 
     def getLateralBucklingReductionFactor(self):
         ''' Return lateral torsional buckling reduction factor value
@@ -389,7 +389,7 @@ class Member(steel_member_base.BucklingMember):
         '''Update the value of the lateral buckling reduction factor.'''
         chiLT= self.getLateralBucklingReductionFactor()
         for e in self.elemSet:
-            e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
+            e.setProp('chiLT', chiLT) #Lateral torsional buckling reduction factor.
     def updateReductionFactors(self):
         '''Update the value of the appropriate reduction factors.'''
         self.updateLateralBucklingReductionFactor()
@@ -410,16 +410,19 @@ class Member(steel_member_base.BucklingMember):
 
         return self.shape.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, Vyd= Vyd, chiN= lrfN, chiLT= lrfLT)
 
-    def installULSControlRecorder(self,recorderType, chiLT=1.0, calcSet= None):
+    def installULSControlRecorder(self, recorderType, chiLT=1.0, calcSet= None, silent= True):
         '''Install recorder for verification of ULS criterion.
 
         :param recorderType: type of the recorder to install.
+        :param chiLT: lateral buckling reduction factor (default= 1.0).
         :param calcSet: set of elements to be checked (defaults to 'None' which 
                         means that this set will be created elsewhere). In not
                         'None' the member elements will be appended to this set.
+        :param silent: if true, don't issue a warning when the property is 
+                       already defined. Keep the current value and continue.
         '''
         recorder= self.createRecorder(recorderType, calcSet)
-        self.shape.setupULSControlVars(self.elemSet, chiLT= chiLT)
+        self.shape.setupULSControlVars(self.elemSet, chiLT= chiLT, silent= silent)
         nodHndlr= self.getPreprocessor().getNodeHandler        
         if(nodHndlr.numDOFs==3):
             recorder.callbackRecord= controlULSCriterion2D()

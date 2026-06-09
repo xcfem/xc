@@ -15,6 +15,7 @@ import sys
 import scipy.interpolate
 from materials import steel_base
 from materials import typical_materials
+from postprocess import def_vars_control
 from materials.ec3 import EC3_limit_state_checking as EC3lsc
 from misc_utils import log_messages as lmsg
 from connections.steel_connections import bolts
@@ -629,7 +630,7 @@ class EC3Shape(object):
             lmsg.warning(className+'.'+methodName+': not implemented for cross section class greater than 2.')
             return None
 
-    def setupULSControlVars(self, elems, chiN= 1.0, chiLT=1.0, force= False):
+    def setupULSControlVars(self, elems, chiN= 1.0, chiLT=1.0, force= False, silent= False):
         '''For each element creates the variables needed to check ultimate 
            limit state criterion to be satisfied.
 
@@ -638,42 +639,11 @@ class EC3Shape(object):
         :param chiLT: lateral buckling reduction factor (default= 1.0).
         :param force: if true assign the properties even if they exist already
                       in the element.
+        :param silent: if true, don't issue a warning when the property is 
+                       already defined. Keep the current value and continue.
         '''
         super(EC3Shape,self).setupULSControlVars(elems)
-        if(force):
-            for e in elems:
-               e.setProp('chiN', chiN) # Flexural buckling reduction factor.
-               e.setProp('chiLT',chiLT) # Lateral torsional buckling reduction factor.
-               e.setProp('crossSection',self) # Element cross-section.
-        else:    
-            for e in elems:
-                if(e.hasProp('chiN')):
-                   className= type(self).__name__
-                   methodName= sys._getframe(0).f_code.co_name
-                   warningMsg= "; element: "+str(e.tag)
-                   warningMsg+= " already has a 'chiN' property."
-                   warningMsg+= " use 'force= True' parameter to reset it."
-                   lmsg.warning(className+'.'+methodName+warningMsg)
-                else:
-                   e.setProp('chiN', chiN) # Flexural buckling reduction factor.
-                if(e.hasProp('chiLT')):
-                   className= type(self).__name__
-                   methodName= sys._getframe(0).f_code.co_name
-                   warningMsg= "; element: "+str(e.tag)
-                   warningMsg+= " already has a 'chiLT' property."
-                   warningMsg+= " use 'force= True' parameter to reset it."
-                   lmsg.warning(className+'.'+methodName+warningMsg)
-                else:
-                   e.setProp('chiLT',chiLT) # Lateral torsional buckling reduction factor.
-                if(e.hasProp('crossSection')):
-                   className= type(self).__name__
-                   methodName= sys._getframe(0).f_code.co_name
-                   warningMsg= "; element: "+str(e.tag)
-                   warningMsg+= " already has a 'crossSection' property."
-                   warningMsg+= " use 'force= True' parameter to reset it."
-                   lmsg.warning(className+'.'+methodName+warningMsg)
-                else:
-                   e.setProp('crossSection',self)
+        def_vars_control.def_structural_steel_shape_control_vars(steelShape= self, elems= elems, chiN= chiN, chiLT= chiLT, force= force, silent= silent)
 
     def installULSControlRecorder(self, recorderType, elems, chiN= 1.0, chiLT=1.0, calcSet= None):
         '''Installs recorder for verification of ULS criterion. Preprocessor obtained from the set of elements.
