@@ -220,7 +220,7 @@ else:
 # oh= output_handler.OutputHandler(modelSpace)
 
 # # oh.displayFEMesh()
-# #Load properties to display:
+# # Display capacity factors on beam.
 # argument= 'CF' #Possible arguments: 'CF', False, 'Mz'
 # oh.displayBeamResult(attributeName= limitState.label, itemToDisp= argument, beamSetDispRes= xcTotalSet, setToDisplay= xcTotalSet)
 
