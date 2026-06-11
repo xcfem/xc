@@ -35,9 +35,6 @@ section.negatvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_se
 section.positvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam= 25e-3, nRebars= 4, nominalCover= cover)])
 ## Torsion reinforcement.
 angThetaConcrStruts= math.radians(21.802) # Concrete strut angle.
-torsionLongitudinalReinforcementArea= 1788e-6 
-torsionReinfSpacing= 0.2
-section.torsionReinf= def_simple_RC_section.TorsionReinforcement(familyName= "torsionReinf", A1= torsionLongitudinalReinforcementArea, nShReinfBranches= 2, areaShReinfBranch= 188e-6/2.0, shReinfSpacing= torsionReinfSpacing, angThetaConcrStruts= angThetaConcrStruts)
 ## Shear reinforcement
 shearReinfDiam= 4e-3
 shearReinfArea= math.pi*(shearReinfDiam/2.0)**2
@@ -131,6 +128,7 @@ Asw_req= EC2_limit_state_checking.TorsionController.getAsw_req(rcSection= sectio
 Asw_req_ref= 188e-6
 ratio13= abs(Asw_req-Asw_req_ref)/Asw_req_ref
 
+'''
 print('NEd= ', NEd)
 print('TEd_max=', TEd_max/1e3)
 print('VEd_max= ', VEd_max/1e3)
@@ -147,6 +145,7 @@ print('VRdc= ', VRdc/1e3, 'ratio10= ', ratio10)
 print('cf1= ', cf1, 'ratio11= ', ratio11)
 print('Asl_req= ', Asl_req, 'ratio12= ', ratio12)
 print('Asw_req= ', Asw_req, 'ratio13= ', ratio13)
+'''
 
 fname= os.path.basename(__file__)
 from misc_utils import log_messages as lmsg
