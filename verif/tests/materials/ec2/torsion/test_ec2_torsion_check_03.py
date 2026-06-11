@@ -147,7 +147,7 @@ print('TRdc= ', TRdc/1e3, 'kN, ratio9= ', ratio9)
 print('VRdc= ', VRdc/1e3, 'kN, ratio10= ', ratio10)
 print('cf1= ', cf1, 'ratio11= ', ratio11)
 print('Asl_req= ', Asl_req*1e6, 'mm2, ratio12= ', ratio12)
-print('Asw_req= ', Asw_req*1e6, 'mm2, ratio13= ', ratio13)
+print('Asw_req= ', Asw_req*1e6, 'mm2/m, ratio13= ', ratio13)
 print('Asw_max_spacing= ', Asw_max_spacing*1e3, 'mm, ratio14= ', ratio14)
 '''
 
