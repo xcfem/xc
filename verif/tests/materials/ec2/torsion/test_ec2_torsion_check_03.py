@@ -39,7 +39,7 @@ angThetaConcrStruts= math.radians(21.802) # Concrete strut angle.
 shearReinfDiam= 4e-3
 shearReinfArea= math.pi*(shearReinfDiam/2.0)**2
 nBranches= 2
-section.shReinf= def_simple_RC_section.ShearReinforcement(familyName= "sh", nShReinfBranches= nBranches, areaShReinfBranch= shearReinfArea, shReinfSpacing= 0.3, angAlphaShReinf= math.pi/2.0, angThetaConcrStruts= angThetaConcrStruts)
+section.shReinfY= def_simple_RC_section.ShearReinforcement(familyName= "sh", nShReinfBranches= nBranches, areaShReinfBranch= shearReinfArea, shReinfSpacing= 0.3, angAlphaShReinf= math.pi/2.0, angThetaConcrStruts= angThetaConcrStruts)
 
 # Design forces.
 NEd= 0.0
@@ -127,6 +127,9 @@ ratio12= abs(Asl_req-Asl_req_ref)/Asl_req_ref
 Asw_req= EC2_limit_state_checking.TorsionController.getAsw_req(rcSection= section, TEd= TEd_max, Ak= Ak, limitMaxStress= None)
 Asw_req_ref= 188e-6
 ratio13= abs(Asw_req-Asw_req_ref)/Asw_req_ref
+Asw_max_spacing= EC2_limit_state_checking.TorsionController.getAsw_max_spacing(rcSection= section, uk= uk)
+Asw_max_spacing_ref= min(uk/8.0, 0.6, 0.4)
+ratio14= abs(Asw_max_spacing-Asw_max_spacing_ref)/Asw_max_spacing_ref
 
 '''
 print('NEd= ', NEd)
@@ -145,11 +148,12 @@ print('VRdc= ', VRdc/1e3, 'ratio10= ', ratio10)
 print('cf1= ', cf1, 'ratio11= ', ratio11)
 print('Asl_req= ', Asl_req, 'ratio12= ', ratio12)
 print('Asw_req= ', Asw_req, 'ratio13= ', ratio13)
+print('Asw_max_spacing= ', Asw_max_spacing, 'ratio14= ', ratio14)
 '''
 
 fname= os.path.basename(__file__)
 from misc_utils import log_messages as lmsg
-if ((abs(ratio1)<1e-12) and (abs(ratio2)<1e-12) and (abs(ratio3)<1e-12) and (abs(ratio4)<1e-12) and (abs(ratio5)<1e-12) and (abs(ratio6)<1e-4) and (abs(ratio7)<1e-12) and (abs(ratio8)<1e-3) and (abs(ratio9)<1e-12)and (abs(ratio10)<1e-12) and (abs(ratio11)<1e-2) and (abs(ratio12)<1e-3) and (abs(ratio13)<1e-2)):
+if ((abs(ratio1)<1e-12) and (abs(ratio2)<1e-12) and (abs(ratio3)<1e-12) and (abs(ratio4)<1e-12) and (abs(ratio5)<1e-12) and (abs(ratio6)<1e-4) and (abs(ratio7)<1e-12) and (abs(ratio8)<1e-3) and (abs(ratio9)<1e-12) and (abs(ratio10)<1e-12) and (abs(ratio11)<1e-2) and (abs(ratio12)<1e-3) and (abs(ratio13)<1e-2) and (abs(ratio14)<1e-12)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
