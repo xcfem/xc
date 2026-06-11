@@ -231,12 +231,14 @@ class SectionProperties(object):
         lmsg.error(className+'.'+methodName+'; not implemented yet.')
         return 0.0
   
-    def getPlasticMomentY(self,fy):
+    def getPlasticMomentY(self, fy):
         '''Return section plastic moment around Y axis.
 
            Computes the plastic moment of the section assuming that plastic
            neutral axis passes through section centroid (which is true
            whenever the rectangular section is homogeneous).
+ 
+        :param fy: material yield stress.
         '''
         return 2*self.getPlasticSectionModulusY()*fy
   
@@ -245,22 +247,59 @@ class SectionProperties(object):
 
            Computes the plastic section modulus assuming that plastic neutral 
            axis passes through section centroid (which is true whenever the 
-           rectangular section is homogeneous).
+           rectangular section is homogeneous). 
         '''
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
         lmsg.error(className+'.'+methodName+'; not implemented yet.')
         return 0.0
   
+    def getPlasticSectionModulus(self, majorAxis):
+        '''Returns the plastic section modulus around the major of minor
+           axis.
+
+           Computes the plastic section modulus assuming that plastic neutral 
+           axis passes through section centroid (which is true whenever the 
+           rectangular section is homogeneous). 
+        '''
+        Smax= self.getPlasticSectionModulusZ()
+        Smin= self.getPlasticSectionModulusY()
+        if(Smin>Smax): # swap values
+            Smax, Smin= Smin, Smax            
+        if(majorAxis):
+            return Smax
+        else:
+            return Smin
+    
     def getPlasticMomentZ(self,fy):
         '''Return section plastic moment around Z axis.
 
            Computes the plastic moment of the section assuming that plastic
            neutral axis passes through section centroid (which is true
            whenever the rectangular section is homogeneous).
+ 
+        :param fy: material yield stress.
         '''
         return 2*self.getPlasticSectionModulusZ()*fy
-  
+
+    def getPlasticMoment(self, majorAxis, fy):
+        '''Return the section plastic moment around its major axis.
+
+           Computes the plastic moment of the section assuming that plastic
+           neutral axis passes through section centroid (which is true
+           whenever the rectangular section is homogeneous).
+ 
+        :param fy: material yield stress.
+        '''        
+        Smax= self.getPlasticMomentZ(fy= fy)
+        Smin= self.getPlasticMomentY(fy= fy)
+        if(Smin>Smax): # swap values
+            Smax, Smin= Smin, Smax            
+        if(majorAxis):
+            return Smax
+        else:
+            return Smin
+        
     def respTName(self):
         ''' returns a name to identify the torsional response of the section'''
         return self.name+"RespT"
