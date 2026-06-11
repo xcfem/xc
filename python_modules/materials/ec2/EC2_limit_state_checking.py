@@ -2319,8 +2319,9 @@ class TorsionController(lscb.ShearControllerBase):
         '''
         concrete= rcSection.getConcreteType()
         Ac= rcSection.A()
-        shearReinfAngle= rcSection.shReinf.angAlphaShReinf
-        webStrutAngle= rcSection.shReinf.angThetaConcrStruts
+        shReinf= rcSection.getShearReinfY()
+        shearReinfAngle= shReinf.angAlphaShReinf
+        webStrutAngle= shReinf.angThetaConcrStruts
         return getMaximumShearWebStrutCrushing(concrete= concrete, NEd= NEd, Ac= Ac, bw= bw, z= z, shearReinfAngle= shearReinfAngle, webStrutAngle= webStrutAngle, nationalAnnex= nationalAnnex)
 
     @staticmethod
@@ -2373,7 +2374,8 @@ class TorsionController(lscb.ShearControllerBase):
         :param limitMaxStress: if not None, limit the maximum stress to the 
                                given value.
         '''
-        webStrutAngle= rcSection.shReinf.angThetaConcrStruts
+        shReinf= rcSection.getShearReinfY()
+        webStrutAngle= shReinf.angThetaConcrStruts
         fyd= rcSection.getReinfSteelType().fyd()
         if(limitMaxStress is not None):
             fyd= min(fyd, limitMaxStress)
@@ -2392,12 +2394,25 @@ class TorsionController(lscb.ShearControllerBase):
         :param limitMaxStress: if not None, limit the maximum stress to the 
                                given value.
         '''
-        webStrutAngle= rcSection.shReinf.angThetaConcrStruts
+        shReinf= rcSection.getShearReinfY()
+        webStrutAngle= shReinf.angThetaConcrStruts
         fyd= rcSection.getReinfSteelType().fyd()
         if(limitMaxStress is not None):
             fyd= min(fyd, limitMaxStress)
         cotgTheta= 1/math.tan(webStrutAngle)
         return TEd/(2*Ak*fyd*cotgTheta)
+
+    @staticmethod
+    def getAsw_max_spacing(rcSection, uk:float):
+        ''' Compute the maximum spacing for torsion shear reinforcement.
+
+        :param rcSection: reinforced concrete section.
+        :param limitMaxStress: if not None, limit the maximum stress to the 
+                               given value.
+        '''
+        b= rcSection.b
+        h= rcSection.h
+        return min(uk/8.0, b, h)
         
     @staticmethod       
     def calcTasl_max(rcSection, Ak:float, uk:float):
