@@ -49,7 +49,7 @@ torsionParameters= EC2_limit_state_checking.compute_effective_hollow_section_par
 # Check values of torsion parameters.
 ## Get effetive thickness
 tef= torsionParameters.tef() # effective thickness of the wall of the design section.
-tef_ref= 0.12 # See spreadshee with the same file name in this folder.
+tef_ref= 0.12 # See spreadsheet with the same file name in this folder.
 ratio1= abs(tef-tef_ref)/tef_ref
 Ac= torsionParameters.A() # Concrete area.
 Ak= torsionParameters.Ak() # Area enclosed by the middle line of the design effective hollow section (figure 6.11 of EC2).
@@ -60,19 +60,19 @@ torsionController= limitState.getController()
 
 # Design torsional resistance moment according to expression (6.30) of EC2.
 TRd_max= torsionController.calcTRd_max(rcSection= section, NEd= 0.0, Ac= Ac, Ak= Ak, tef= tef)
-TRD_max_ref= 94.0242742234122e3 # See spreadshee with the same file name in this
+TRD_max_ref= 94.0242742234122e3 # See spreadsheet with the same file name in this
                                 # folder.
 ratio2= abs(TRd_max-TRD_max_ref)/TRD_max_ref
 
 # Maximum torsional resist moment with no shear reinf. – cl.6.3.2(5)
 Trdc= torsionController.calcTrdc(rcSection= section, Ak= Ak, tef= tef)
-Trdc_ref= 41.6399852502584e3 # See spreadshee with the same file name in this
+Trdc_ref= 41.6399852502584e3 # See spreadsheet with the same file name in this
                              # folder.
 ratio3= abs(Trdc-Trdc_ref)/Trdc_ref
 
 # Maximum torsional resist moment due to longitudinal reinforcement
 Tasl_max= torsionController.calcTasl_max(rcSection= section, Ak= Ak, uk= uk)
-Tasl_max_ref= 50.5873803219522e3 # See spreadshee with the same file name in
+Tasl_max_ref= 50.5873803219522e3 # See spreadsheet with the same file name in
                                  # this folder.
 ratio4= abs(Tasl_max-Tasl_max_ref)/Tasl_max_ref
 
@@ -80,7 +80,7 @@ ratio4= abs(Tasl_max-Tasl_max_ref)/Tasl_max_ref
 Asw= section.torsionReinf.getAs()
 a_sw= Asw/section.torsionReinf.shReinfSpacing
 Tasw_max= torsionController.calcTasw_max(rcSection= section, Ak= Ak)
-Tasw_max_ref= 50.5380053718561e3 # See spreadshee with the same file name in
+Tasw_max_ref= 50.5380053718561e3 # See spreadsheet with the same file name in
                                  # this folder.
 ratio5= abs(Tasw_max-Tasw_max_ref)/Tasw_max_ref
 
