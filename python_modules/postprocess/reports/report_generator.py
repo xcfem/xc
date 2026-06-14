@@ -36,7 +36,7 @@ class ReportGenerator(oh.OutputHandler):
         cfg= self.getEnvConfig()
         return cfg.projectDirTree.getReportFile(limitStateLabel)
 
-    def checksReport(self, limitStateLabel, setsShEl=[], argsShEl=[], setsBmEl=[], argsBmEl=[], setsTrussEl=[],argsTrussEl=[],rgMinMax=None, defaultDiagramDirection= 'J'):
+    def checksReport(self, limitStateLabel, setsShEl=[], argsShEl=[], pairs_setsBmEl_argsBmEl=[], setsTrussEl=[],argsTrussEl=[],rgMinMax=None, defaultDiagramDirection= 'J'):
         '''Create a LaTeX report including the desired graphical results 
         obtained in the verification of a limit state.
 
@@ -45,10 +45,8 @@ class ReportGenerator(oh.OutputHandler):
                          included in the report.
         :param argsShEl: Ordered list of arguments to be included in the 
                          report for shell elements
-        :param setsBmEl: Ordered list of set of beam elements to be included 
-                           in the report. 
-        :param argsBmEl: Ordered list of arguments to be included in the 
-                              report for beam elements
+        :param pairs_setsBmEl_argsBmEl: pairs of [ordered list of set of beam elements
+                         to be included  in the report,Ordered list of argument for those sets]. 
         :param setsTrussEl: Ordered list of set of trusselements to be included 
                            in the report. 
         :param argsTrussEl: Ordered list of arguments to be included in the 
@@ -69,7 +67,10 @@ class ReportGenerator(oh.OutputHandler):
         for st in setsShEl:
             for arg in argsShEl:
                 for idSection in [1, 2]:
-                    capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'dir. '+str(idSection)
+                    if len(st.description)>0:
+                        capt=cfg.capTexts[limitStateLabel] + '. '+ st.description[0].upper() + st.description[1:]+', ' + cfg.capTexts[arg] + ', ' + 'dir. '+str(idSection)
+                    else:
+                        capt=cfg.capTexts[limitStateLabel] +', ' + cfg.capTexts[arg] + ', ' + 'dir. '+str(idSection)
                     sectionName= 'Sect'+str(idSection)
                     suffix= st.name+arg+sectionName # set name + argument identifier + section name
                     bitmapFileName= suffix+'.jpg'
@@ -84,21 +85,32 @@ class ReportGenerator(oh.OutputHandler):
                         lmsg.error(className+'.'+methodName+'; something went wrong, file: '+str(fullgrFileNmAndExt) + ' doesn\'t exist.')
                     label= limitStateLabel+suffix
                     oh.append_graphic_to_tex_file(texFile=report,  graphicFileName= rltvgrFileNm, graphicWidth= cfg.grWidth, captionText= capt, label= label)
+                    
+        for pair in pairs_setsBmEl_argsBmEl:
+            print(pair)
+            setsBmEl=pair[0]
+            argsBmEl=pair[1]
+            for st in setsBmEl:
+                for argS in argsBmEl:
+                    if len(st.description)>0:
+                        capt= cfg.capTexts[limitStateLabel]  + '. '+ st.description[0].upper() + st.description[1:] + ', ' + cfg.capTexts[argS]
+                    else:
+                        capt= cfg.capTexts[limitStateLabel]  + ', ' + cfg.capTexts[argS]
+                    suffix= st.name+argS # set name + argument identifier.
+                    bitmapFileName= suffix+'.jpg'
+                    fullgrFileNm= fullPath+suffix
+                    rltvgrFileNm= rltvPath+suffix
+                    fullgrFileNmAndExt= fullPath+bitmapFileName
+                    self.displayBeamResult(attributeName=limitStateLabel,itemToDisp=argS,beamSetDispRes=st,setToDisplay=st,caption=capt,fileName= fullgrFileNmAndExt, defaultDirection= defaultDiagramDirection)
+                    label= limitStateLabel+suffix
+                    oh.append_graphic_to_tex_file(texFile=report, graphicFileName= rltvgrFileNm, graphicWidth= cfg.grWidth, captionText= capt, label= label)
                 
-        for stV in setsBmEl:
-            for argS in argsBmEl:
-                capt= cfg.capTexts[limitStateLabel]  + '. '+ stV.description.capitalize() + ', ' + cfg.capTexts[argS]
-                suffix= stV.name+argS # set name + argument identifier.
-                bitmapFileName= suffix+'.jpg'
-                fullgrFileNm= fullPath+suffix
-                rltvgrFileNm= rltvPath+suffix
-                fullgrFileNmAndExt= fullPath+bitmapFileName
-                self.displayBeamResult(attributeName=limitStateLabel,itemToDisp=argS,beamSetDispRes=stV,setToDisplay=stV,caption=capt,fileName= fullgrFileNmAndExt, defaultDirection= defaultDiagramDirection)
-                label= limitStateLabel+suffix
-                oh.append_graphic_to_tex_file(texFile=report, graphicFileName= rltvgrFileNm, graphicWidth= cfg.grWidth, captionText= capt, label= label)
         for st in setsTrussEl:
             for arg in argsTrussEl:
-                capt= cfg.capTexts[limitStateLabel]  + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg]
+                if len(st.description)>0:
+                    capt= cfg.capTexts[limitStateLabel]  + '. '+ st.description[0].upper() + st.description[1:] + ', ' + cfg.capTexts[arg]
+                else:
+                    capt= cfg.capTexts[limitStateLabel]  + ', ' + cfg.capTexts[arg]
                 suffix= st.name+arg
                 bitmapFileName=suffix+'.jpg'
                 retval.append(bitmapFileName)
