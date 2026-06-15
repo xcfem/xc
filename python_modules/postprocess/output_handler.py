@@ -1523,7 +1523,7 @@ class OutputHandler(object):
         field.display(displaySettings, caption= caption, fileName= fileName, unitDescription= unitDescription)
         return retval
         
-def append_graphic_to_tex_file(texFile, graphicFileName, graphicWidth, captionText, label=''):
+def append_graphic_to_tex_file(texFile, graphicFileName, graphicWidth, captionText, label=None,multicolEnv=False):
     '''Include a graphic in a LaTeX file.
 
     :param texFile:    laTex file where to include the graphics 
@@ -1533,17 +1533,25 @@ def append_graphic_to_tex_file(texFile, graphicFileName, graphicWidth, captionTe
     :param graphicWidth: width of the graphic in the LaTeX file.
     :param captionText:  text for the caption
     :param label: label indentifying the figure in the LaTeX file
+    :param multicolEnv: True for multicol environment (defaults to False)
     '''
-    texFile.write('\\begin{figure}[ht]\n')
-    texFile.write('\\begin{center}\n')
-    texFile.write('\\includegraphics[width='+graphicWidth+']{'+graphicFileName+'}\n')
-    texFile.write('\\caption{'+captionText+'}')
-    if(label!=''):
-        texFile.write('\\label{'+label+'}\n')
+    if  multicolEnv:
+        texFile.write('\\begin{Figure}\n')
+        
     else:
-        texFile.write('\n')
-    texFile.write('\\end{center}\n')
-    texFile.write('\\end{figure}\n')
+        texFile.write('\\begin{figure}[ht]\n')
+    texFile.write('\\centering\n')
+    texFile.write('\\includegraphics[width='+graphicWidth+']{'+graphicFileName+'}\n')
+    if  multicolEnv:
+        texFile.write('\\captionof{figure}{'+captionText+'}')
+    else:
+        texFile.write('\\caption{'+captionText+'}')
+    if label:
+        texFile.write('\\label{'+label+'}\n')
+    if  multicolEnv:    
+        texFile.write('\\end{Figure}\n')
+    else:
+        texFile.write('\\end{figure}\n')
         
 def insertGrInTex(texFile, grFileNm, grWdt, capText, labl=''):
     '''Include a graphic in a LaTeX file.

@@ -314,7 +314,7 @@ class LoadCaseDispParameters(RecordDisp):
         capt+= ', '  + unitsDescr
         return capt
 
-    def writeLoadReport(self, modelSpace, texFile, cfg):
+    def writeLoadReport(self, modelSpace, texFile, cfg,multicolEnv=False):
         '''Creates the graphics files of loads for the load case and insert
            them in a LaTex file
 
@@ -323,6 +323,7 @@ class LoadCaseDispParameters(RecordDisp):
         :param texFile:    laTex file where to include the graphics 
                            (e.g.:'text/report_loads.tex')
         :param cfg: instance of EnvConfig class with config parameters
+        :param multicolEnv: True for multicol environment (defaults to False)
         '''
         fullPath=cfg.projectDirTree.getReportLoadsGrPath()
         cfg.makedirs(fullPath) # Create directory if needed.
@@ -347,7 +348,7 @@ class LoadCaseDispParameters(RecordDisp):
             grFileName= fullgrfname+'.png'
             outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= grFileName)  # changed 22/06/2020
             #outputHandler.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
-            output_handler.append_graphic_to_tex_file(texFile= texFile, graphicFileName= rltvgrfname, graphicWidth= cfg.grWidth, captionText= capt, label= labl)
+            output_handler.append_graphic_to_tex_file(texFile= texFile, graphicFileName= rltvgrfname, graphicWidth= cfg.grWidth, captionText= capt, label= labl,multicolEnv=multicolEnv)
         for st in self.setsToDispBeamLoads:
             fullgrfname= fullPath+self.loadCaseName+st.name
             rltvgrfname= rltvPath+self.loadCaseName+st.name
@@ -355,7 +356,7 @@ class LoadCaseDispParameters(RecordDisp):
             labl= getLabelText(capt)
             grFileName= fullgrfname+'.png'
             outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= grFileName)  # changed 22/06/2020
-            output_handler.append_graphic_to_tex_file(texFile= texFile, graphicFileName= rltvgrfname, graphicWidth= cfg.grWidth, captionText= capt, label= labl)
+            output_handler.append_graphic_to_tex_file(texFile= texFile, graphicFileName= rltvgrfname, graphicWidth= cfg.grWidth, captionText= capt, label= labl,multicolEnv=multicolEnv)
 
     def loadReports(self,FEcase,texFile,cfg):
         '''Creates the graphics files of loads for the load case and insert 
@@ -380,7 +381,7 @@ class LoadCaseDispParameters(RecordDisp):
         modelSpace.analyze()
          
 
-    def writeSimpleLoadCaseReport(self, modelSpace, texFile, cfg):
+    def writeSimpleLoadCaseReport(self, modelSpace, texFile, cfg,multicolEnv=False):
         '''Creates the graphics files of displacements and internal forces 
          calculated for a simple load case and insert them in a LaTex file
 
@@ -388,6 +389,7 @@ class LoadCaseDispParameters(RecordDisp):
         :param texFile:    laTex file where to include the graphics 
                            (e.g.:'text/report_loads.tex')
         :param cfg:        instance of EnvConfig class with config parameters
+        :param multicolEnv: True for multicol environment (defaults to False)
         '''
         fullPath= cfg.projectDirTree.getReportSimplLCGrPath()
         cfg.makedirs(fullPath) # Create directory if needed.
@@ -407,7 +409,7 @@ class LoadCaseDispParameters(RecordDisp):
                 # else:
                 #     unDesc=cfg.getRotationUnitsDescription()
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= unDesc)
-                output_handler.append_graphic_to_tex_file(texFile=texFile, graphicFileName= rltvgrfname, graphicWidth= cfg.grWidth, captionText= capt)
+                output_handler.append_graphic_to_tex_file(texFile=texFile, graphicFileName= rltvgrfname, graphicWidth= cfg.grWidth, captionText= capt,multicolEnv=multicolEnv)
                 
         # The disctinction between beam elements and the rest of elements
         # is to deprecate. The idea is to specify the type of output for all
@@ -420,7 +422,7 @@ class LoadCaseDispParameters(RecordDisp):
                 grFileName= fullgrfname+'.png'
                 outputHandler.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= grFileName)
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= cfg.getForceUnitsDescription())
-                output_handler.append_graphic_to_tex_file(texFile=texFile, graphicFileName= rltvgrfname, graphicWidth= cfg.grWidth, captionText= capt)
+                output_handler.append_graphic_to_tex_file(texFile=texFile, graphicFileName= rltvgrfname, graphicWidth= cfg.grWidth, captionText= capt,multicolEnv=multicolEnv)
         #Internal forces displays on sets of «beam» elements
         for st in self.setsToDispBeamIntForc:
             for arg in self.listBeamIntForc:
@@ -429,7 +431,7 @@ class LoadCaseDispParameters(RecordDisp):
                 grFileName= fullgrfname+'.png'
                 outputHandler.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= grFileName,orientScbar=1,titleScbar=None)
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= cfg.getForceUnitsDescription())
-                output_handler.append_graphic_to_tex_file(texFile=texFile, graphicFileName= rltvgrfname, graphicWidth= cfg.grWidth, captionText= capt)
+                output_handler.append_graphic_to_tex_file(texFile=texFile, graphicFileName= rltvgrfname, graphicWidth= cfg.grWidth, captionText= capt,multicolEnv=multicolEnv)
         texFile.write('\\cleardoublepage\n')
         
     def simplLCReports(self,FEproblem,texFile,cfg):

@@ -36,7 +36,7 @@ class ReportGenerator(oh.OutputHandler):
         cfg= self.getEnvConfig()
         return cfg.projectDirTree.getReportFile(limitStateLabel)
 
-    def checksReport(self, limitStateLabel, setsShEl=[], argsShEl=[], pairs_setsBmEl_argsBmEl=[], setsTrussEl=[],argsTrussEl=[],rgMinMax=None, defaultDiagramDirection= 'J'):
+    def checksReport(self, limitStateLabel, setsShEl=[], argsShEl=[], pairs_setsBmEl_argsBmEl=[], setsTrussEl=[],argsTrussEl=[],rgMinMax=None, defaultDiagramDirection= 'J',multicolEnv=False):
         '''Create a LaTeX report including the desired graphical results 
         obtained in the verification of a limit state.
 
@@ -56,6 +56,7 @@ class ReportGenerator(oh.OutputHandler):
         :param defaultDiagramDirection: default direction of the diagrams in
                                         1D elements (J: element local j vector 
                                         or K: element local K vector).
+        :param multicolEnv: True for multicol environment (defaults to False)
         '''
         retval= list()
         cfg= self.getEnvConfig()
@@ -84,10 +85,9 @@ class ReportGenerator(oh.OutputHandler):
                         methodName= sys._getframe(0).f_code.co_name
                         lmsg.error(className+'.'+methodName+'; something went wrong, file: '+str(fullgrFileNmAndExt) + ' doesn\'t exist.')
                     label= limitStateLabel+suffix
-                    oh.append_graphic_to_tex_file(texFile=report,  graphicFileName= rltvgrFileNm, graphicWidth= cfg.grWidth, captionText= capt, label= label)
+                    oh.append_graphic_to_tex_file(texFile=report,  graphicFileName= rltvgrFileNm, graphicWidth= cfg.grWidth, captionText= capt, label= label,multicolEnv=multicolEnv)
                     
         for pair in pairs_setsBmEl_argsBmEl:
-            print(pair)
             setsBmEl=pair[0]
             argsBmEl=pair[1]
             for st in setsBmEl:
@@ -103,7 +103,7 @@ class ReportGenerator(oh.OutputHandler):
                     fullgrFileNmAndExt= fullPath+bitmapFileName
                     self.displayBeamResult(attributeName=limitStateLabel,itemToDisp=argS,beamSetDispRes=st,setToDisplay=st,caption=capt,fileName= fullgrFileNmAndExt, defaultDirection= defaultDiagramDirection)
                     label= limitStateLabel+suffix
-                    oh.append_graphic_to_tex_file(texFile=report, graphicFileName= rltvgrFileNm, graphicWidth= cfg.grWidth, captionText= capt, label= label)
+                    oh.append_graphic_to_tex_file(texFile=report, graphicFileName= rltvgrFileNm, graphicWidth= cfg.grWidth, captionText= capt, label= label,multicolEnv=multicolEnv)
                 
         for st in setsTrussEl:
             for arg in argsTrussEl:
@@ -119,17 +119,18 @@ class ReportGenerator(oh.OutputHandler):
                 fullgrFileNmAndExt= fullPath+bitmapFileName
                 self.displayDiagram(attributeName=limitStateLabel, component=arg, setToDispRes=st, setToDisplay=st, caption=capt, fUnitConv= None, unitDescription= '', scaleFactor= 1.0, fileName= fullgrFileNmAndExt, defFScale= 0.0,orientScbar=1,titleScbar=None, defaultDirection= defaultDiagramDirection)
                 label= limitStateLabel+suffix
-                oh.append_graphic_to_tex_file(texFile=report, graphicFileName= rltvgrFileNm, graphicWidth= cfg.grWidth, captionText= capt, label= label)
+                oh.append_graphic_to_tex_file(texFile=report, graphicFileName= rltvgrFileNm, graphicWidth= cfg.grWidth, captionText= capt, label= label,multicolEnv=multicolEnv)
         report.close()
         return retval
 
-    def loadsReport(self, loadCasesAndSets:dict):
+    def loadsReport(self, loadCasesAndSets:dict,multicolEnv=False):
         ''' Create a report of the given loads.
 
         :param loadCasesAndSets: dictionary whose keys are the names of the
                                  load cases to represent and the associated
                                  values are lists of sets to represent the
                                  load case on.
+        :param multicolEnv: True for multicol environment (defaults to False)
         '''
         cfg= self.getEnvConfig()
         texReportFileName= cfg.projectDirTree.getReportLoadsFile() # laTex file where the graphics will be included.
@@ -151,7 +152,7 @@ class ReportGenerator(oh.OutputHandler):
                     bitmapFileName= fLabel+'.png'
                     outputFileName= outputPath+bitmapFileName
                     self.displayLoads(setToDisplay= xcSet, fileName= outputFileName, caption= caption)
-                    oh.append_graphic_to_tex_file(texFile= latexOutputFile,  graphicFileName=  outputFileName, graphicWidth= cfg.grWidth, captionText= caption, label= fLabel)
+                    oh.append_graphic_to_tex_file(texFile= latexOutputFile,  graphicFileName=  outputFileName, graphicWidth= cfg.grWidth, captionText= caption, label= fLabel,multicolEnv=multicolEnv)
                     retval.append(bitmapFileName)
                 self.modelSpace.removeLoadCaseFromDomain(lcName)
         return retval
