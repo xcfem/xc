@@ -6,6 +6,7 @@ Modules that perform code checks according to [Eurocode 3](https://eurocodes.jrc
  - [Eurocode 3](https://eurocodes.jrc.ec.europa.eu/showpage.php?id=133)
  - [Eurocode applied. Design of Steel Structures](https://eurocodeapplied.com/design/en1993)
  - [SDC Eurocode 3 Benchmarks](https://sdcverifier.com/benchmarks/eurocode3-design-examples)
+ - [EN 10210-2](https://knowledge.bsigroup.com/products/hot-finished-steel-structural-hollow-sections-tolerances-dimensions-and-sectional-properties)
 ### Cross-section classification.
  - [Classification of cross sections](https://www.steelconstruction.info/Member_design#Classification_of_cross_sections)
  - [Lecture 7.2: Cross-Section Classification](https://fgg-web.fgg.uni-lj.si/~/pmoze/esdep/master/wg07/l0200.htm)
