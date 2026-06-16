@@ -1773,7 +1773,9 @@ def read_control_vars(preprocessor, inputFileName):
         with open(inputFileName) as f:
             dataDict= json.load(f)
     except IOError:
-        lmsg.error("can't read from file: "+str(inputFileName))
+        methodName= sys._getframe(0).f_code.co_name
+        errorMsg= "; can't read from file: "+str(inputFileName)
+        lmsg.error(methodName+errorMsg)
         return retval
     if('elementData' in dataDict): # Control variables on elements.
         elementData= dataDict['elementData']
@@ -1912,12 +1914,14 @@ def write_control_vars_from_phantom_elements(controlVarsDict, outputCfg):
     controlVarName= outputCfg.controller.limitStateLabel
     dataDict= None
     jsonFileName= outputFileName+'.json'
-    if outputCfg.appendToResFile:
+    if(outputCfg.appendToResFile and os.path.isfile(jsonFileName)):
         try:
             with open(jsonFileName) as f:
                dataDict= json.load(f)
         except IOError:
-            lmsg.error("can't read from file: "+str(outputFileName))
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= "; can't read from file: "+str(outputFileName)
+            lmsg.error(methodName+errorMsg)
     else:
         dataDict= dict()
     elementDataDict= get_element_data_dict(controlVarsDict= controlVarsDict, controlVarName= controlVarName)
@@ -1963,7 +1967,9 @@ def getControlVarImportModuleStr(preprocessor, outputCfg, sections):
         controlVar= e0.getProp(propName)
         retval= controlVar.getModuleImportString()
     else:
-        lmsg.error('element set is empty.')
+        methodName= sys._getframe(0).f_code.co_name
+        errorMsg= "; element set is empty."
+        lmsg.error(methodName+errorMsg)
     return retval
 
 def write_control_vars_from_elements(preprocessor, controlVarsDict, outputCfg, sections):
@@ -1989,8 +1995,12 @@ def write_control_vars_from_elements(preprocessor, controlVarsDict, outputCfg, s
             with open(jsonFileName) as f:
                dataDict= json.load(f)
         except IOError:
-            lmsg.error("can't read from file: "+str(jsonFileName)+". Are you sure you need to read previous results?")
-            quit()
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= "can't read from file: "
+            errorMsg+= str(jsonFileName)
+            errorMsg+= ". Are you sure you need to read previous results?"
+            lmsg.error(methodName+errorMsg)
+            exit(1)
     else:
         dataDict= dict()
     # Write results in JSON format.
