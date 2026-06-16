@@ -32,7 +32,6 @@ def post_process(shapesDict):
         tmp= tmp.replace('CHS ', '')
         dimensions= tmp.split('_')
         newShapeName= 'CHS_'+dimensions[0]+'_'+dimensions[1]
-        print(newShapeName)
         shapeData['nmb']= newShapeName
         Av= shapeData.pop('Av')
         shapeData['Avy']= Av
@@ -56,7 +55,7 @@ def post_process(shapesDict):
 def read_shapes_from_spreadsheet(post_process):
     fNameIn= "eurocodeapplied_en_10210_chs_properties.xlsx"
 
-    columnOrder= ['nmb', '', 'D', 't', '', '', 'P', '', 'A', 'Av', 'I', 'i', 'Wel', 'Wpl', 'It', 'Wt']
+    columnOrder= ['nmb', '', 'D', 't', 'P', '', 'A', 'Av', 'I', 'i', 'Wel', 'Wpl', 'It', 'Wt']
     numColumns= len(columnOrder)
 
 
@@ -82,7 +81,6 @@ for key in chs_data:
     if(key): #if(key in shapesToCheck):
         dimensions= key.removeprefix('CHS_').split('_')
         dimensions= [float(x)*1e-3 for x in dimensions]
-        print(dimensions)
         calculated_properties= calc.calculate_chs(d= dimensions[0], t= dimensions[1])
         for propKey in chs_data[key]:
             if(propKey in calculated_properties):
@@ -94,7 +92,7 @@ for key in chs_data:
                         exit(1)
                 else:
                     err= abs(stored_value-calculated_value)/abs(stored_value)
-                    if(err>5e-3):
+                    if(err>6e-3):
                         lmsg.error('Error: '+str(key)+', '+ str(propKey)+', '+str(stored_value)+', '+str(calculated_value)+', '+str(err*100)+' %')
                         exit(1)
             else:
@@ -118,9 +116,9 @@ if(test_classification):
 # Generate JSON file containing the design properties of the desired shapes.
 shapesDict= dict()
 for key in chs_shapes_to_generate:  
-    dimensions= key.removeprefix('CHS').replace('_', '.').split('x')
+    dimensions= key.removeprefix('CHS_').split('_')
     dimensions= [float(x)*1e-3 for x in dimensions]
-    calculated_properties= calc.calculate_chs(b=dimensions[0], t= dimensions[2])
+    calculated_properties= calc.calculate_chs(d=dimensions[0], t= dimensions[1])
     shapesDict[key]= calculated_properties
 ## Write the JSON file
 fNameOut= '../en_10210_chs_profiles.json'

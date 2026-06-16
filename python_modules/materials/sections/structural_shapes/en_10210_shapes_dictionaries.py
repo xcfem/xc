@@ -43,3 +43,9 @@ SHS= None
 with importlib.resources.open_text("materials.sections.structural_shapes.aux", "en_10210_shs_profiles.json") as file:
     SHS= json.load(file)
 en_10210_shapes['SHS']= SHS
+
+# Circular hollow tubes.
+CHS= None
+with importlib.resources.open_text("materials.sections.structural_shapes.aux", "en_10210_chs_profiles.json") as file:
+    CHS= json.load(file)
+en_10210_shapes['CHS']= CHS

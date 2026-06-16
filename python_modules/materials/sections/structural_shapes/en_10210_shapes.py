@@ -64,3 +64,39 @@ class SHSShape(structural_steel.QHShape):
         ''' Return the web thickness (used in Eurocode 3
             shearBucklingVerificationNeeded).'''
         return self.get('e')
+
+CHS= en_10210_shapes_dictionaries.CHS
+
+class CHSShape(structural_steel.CHShape):
+    ''' Circular hollow section.'''
+    def __init__(self,steel,name):
+        ''' Constructor.
+
+        :param steel: steel type.
+        :param name: name of the steel shape in the shapes dictionary.
+        '''
+        super(CHSShape,self).__init__(steel,name,CHS)
+            
+    def getOutsideDiameter(self):
+        ''' Returns the external diameter of the section. '''
+        return self.get('D')
+    
+    def t(self):
+        '''Return HSS nominal wall thickess'''
+        return self.get('t')
+    
+    def getSlendernessRatio(self):
+        ''' Return the slenderness ratio.'''
+        return self.getOutsideDiameter()/self.t()
+    
+    def getRho(self):
+        ''' Returns mass per unit length. '''
+        return self.get('P')
+    
+    def alphaY(self):
+        '''Return shear shape factor with respect to local y-axis'''
+        return 1.0/2.0 #Shear distortion constant. See E. Oñate book page 122.
+    
+    def alphaZ(self):
+        '''Return shear shape factor with respect to local z-axis'''
+        return self.alphaY()

@@ -284,19 +284,6 @@ for item in AU:
 # (strong axis parallel to z axis) in other words: values for Y and Z axis 
 # are swapped with respect to those in the catalog.
 
-# Tata steel circular hollow tubes.
-
-CHS= arcelor_shapes_dictionaries.CHS
-for item in CHS:
-    shape= CHS[item]
-    A= shape['A']
-    E= shape['E']
-    nu= shape['nu']
-    shape['alpha']= 1.0/2.0
-    shape['G']= E/(2*(1+nu))
-    shape['AreaQy']= 0.5*A
-    shape['AreaQz']= 0.5*A
-  
 # ARCELOR's hot rolled round steel bars.
 
 R= arcelor_shapes_dictionaries.R
@@ -441,39 +428,6 @@ class RShape(structural_steel.SteelShape):
         ''' Return the value of the section warping constant.'''
         return self.get('Iw')
 
-class CHSShape(structural_steel.CHShape):
-    ''' Circular hollow section.'''
-    def __init__(self,steel,name):
-        ''' Constructor.
-
-        :param steel: steel type.
-        :param name: name of the steel shape in the shapes dictionary.
-        '''
-        super(CHSShape,self).__init__(steel,name,CHS)
-            
-    def getOutsideDiameter(self):
-        ''' Returns the external diameter of the section. '''
-        return self.get('D')
-    
-    def t(self):
-        '''Return HSS nominal wall thickess'''
-        return self.get('t')
-    
-    def getSlendernessRatio(self):
-        ''' Return the slenderness ratio.'''
-        return self.getOutsideDiameter()/self.t()
-    
-    def getRho(self):
-        ''' Returns mass per unit length. '''
-        return self.get('P')
-    def alphaY(self):
-        '''Return shear shape factor with respect to local y-axis'''
-        return 1.0/2.0 #Shear distortion constant. See E. Oñate book page 122.
-    def alphaZ(self):
-        '''Return shear shape factor with respect to local z-axis'''
-        return self.alphaY()
-        
-        
 class UCShape(structural_steel.IShape):
     def __init__(self,steel,name):
         super(UCShape,self).__init__(steel,name,UC)

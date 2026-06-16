@@ -981,7 +981,7 @@ class AUShape(EC3Shape, arcelor_metric_shapes.AUShape):
         super(AUShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.AUShape.__init__(self,steel,name)
 
-class CHSShape(EC3Shape, arcelor_metric_shapes.CHSShape):
+class CHSShape(EC3Shape, en_10210_shapes.CHSShape):
     """CHS shape with Eurocode 3 verification routines."""
     def __init__(self,steel,name):
         ''' Constructor.
@@ -990,7 +990,7 @@ class CHSShape(EC3Shape, arcelor_metric_shapes.CHSShape):
         :param name: shape name (i.e. AU_23)
         '''
         super(CHSShape, self).__init__(name= name, typo='rolled')
-        arcelor_metric_shapes.CHSShape.__init__(self,steel,name)
+        en_10210_shapes.__init__(self,steel,name)
 
     def isCircular(self):
         ''' Return true if it is a circular section.'''

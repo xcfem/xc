@@ -315,9 +315,15 @@ class CHSSHSectionCalculator(RHSSHSectionCalculator):
         c_t = 2*Wyel
 
         t_mm= t*1e3
-        thickness_str= str(round(t_mm,1))
+        if(t_mm.is_integer()):
+            thickness_str= str(int(t_mm))
+        else:
+            thickness_str= str(round(t_mm,1))
         d_mm= d*1e3
-        diameter_str= str(round(d_mm,1))
+        if(d_mm.is_integer()):
+            diameter_str= str(int(d_mm))
+        else:
+            diameter_str= str(round(d_mm,1))
         shape_name= 'CHS_'+diameter_str+'_'+thickness_str
         nu= 0.3
         E= 210e9

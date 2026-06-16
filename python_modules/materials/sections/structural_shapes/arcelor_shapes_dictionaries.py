@@ -271,13 +271,6 @@ TODO: Check shear distortion constants
    alpha-> alphaZ,alphaY
 '''
 
-# Tata profiles
-
-# Tata steel circular hollow tubes.
-CHS= None
-with importlib.resources.open_text("materials.sections.structural_shapes.aux", "arcelor_chs_profiles.json") as file:
-    CHS= json.load(file)
-arcelor_shapes['CHS']= CHS
 
 
 # ARCELOR's hot rolled round steel bars.
