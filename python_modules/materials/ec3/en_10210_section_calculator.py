@@ -261,3 +261,96 @@ class SHSSHSectionCalculator(RHSSHSectionCalculator):
         retval['nmb']= name.replace('RHS', 'SHS')
         return retval
 
+class CHSSHSectionCalculator(RHSSHSectionCalculator):
+    
+    def classify_chs(self, d: float, t: float, fy: float) -> dict:
+        """
+        Calculates geometric properties (EN 10210-2) and classifies the section (EN 1993-1-1).
+        
+        :param d: diameter (m)
+        :parm t: Wall thickness (m)
+        :param fy : Yield strength of the steel grade (MPa or N/mm²), e.g., 235, 275, 355
+        """
+        pass
+
+        
+    def calculate_chs(self, d: float, t: float) -> dict:
+        """
+        Circular Hollow Sections (CHS) - Annex A.3
+
+        :param d: diameter (m)
+        :param t: Wall thickness (m)
+        """
+        # 1. Determine inside diameter.
+        d_in= d-2*t
+        
+        # 3. Cross-sectional Area (cm2)
+        a= math.pi*(d**2-d_in**2)/4.0
+        if(a<0.0):
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= "; negative area for diameter: d= "+str(d)
+            errorMsg+= " and thickness: t= "+str(t)
+            lmsg.error(methodName+errorMsg)
+            exit(1)
+        
+        # 4. Mass per unit length (kg/m)
+        m = self.rho * a
+        
+        # 6. Second Moment of Area Calculations (cm4)
+        i_yy= math.pi*(d**4-d_in**4)/64.0
+        i_zz= i_yy
+
+        # Elastic modulus.
+        Wyel= 2*i_yy/d
+        Wzel= Wyel
+
+        # Plastic modulus.
+        Wypl= (d**3-d_in**3)/6.0
+        Wzpl= Wypl
+        
+        # Torsional Inertia Constant (It) [cm4]
+        i_t = 2*i_yy
+        
+        # Torsional Modulus Constant (Ct) [cm3]
+        c_t = 2*Wyel
+
+        t_mm= t*1e3
+        thickness_str= str(round(t_mm,1))
+        d_mm= d*1e3
+        diameter_str= str(round(d_mm,1))
+        shape_name= 'CHS_'+diameter_str+'_'+thickness_str
+        nu= 0.3
+        E= 210e9
+        G= E/(2*(1+nu))
+        Avy= 2*a/math.pi
+        Avz= Avy
+        Iz= i_yy # Major axis.
+        assert(Iz>0.0)
+        iz= math.sqrt(Iz/a)
+        Iy= i_zz # Major axis.
+        assert(Iy>0.0)
+        iy= iz
+        retval= {'nmb':shape_name,
+                 'D': d,
+                 't': t,
+                 'P': m,
+                 'A': a,
+                 'Iz': Iz, # Major axis.
+                 'iz': iz,
+                 'Wzel': Wzel,
+                 'Wzpl': Wypl,
+                 'Iy': Iy, # Minor axis.
+                 'iy': iy,
+                 'Wyel': Wyel,
+                 'Wypl': Wzpl,
+                 'It': i_t,
+                 'Wt': c_t,
+                 'nu': nu,
+                 'E': E,
+                 'G': G,
+                 'Avy': Avy,
+                 'Avz': Avz,
+                 'alpha': 1.0,
+                 }
+        return retval
+

@@ -37,7 +37,6 @@ def post_process(shapesDict):
 
 def read_shapes_from_spreadsheet(post_process):
     fNameIn= "eurocodeapplied_en_10210_rhs_properties.xlsx"
-    fNameOut= '../bs_en_10210_hfshs_profiles.json'
 
     columnOrder= ['nmb', '', 'h', 'b', 'e', '', '', 'P', '', 'A', 'Avy', 'Avz', 'Iz', 'iz', 'Wzel', 'Wzpl', 'Iy', 'iy', 'Wyel', 'Wypl' , 'It', 'Wt']
     numColumns= len(columnOrder)
