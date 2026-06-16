@@ -208,16 +208,16 @@ setsEl2D= [xcTotalSet] # Ordered list of 2D element sets to be included
 argsEl2D= ['CF','N', 'My'] ; rgMinMax=None
 
 ## 1D elements (truss, beam, ...)
+# pairs of ordered list of sets of beam elements, ordered list of argument for those sets]
 defaultDiagramDirection= 'K' # Default local axis to align the diagrams in 1D elements.
-setsEl1D= [] # Ordered list of 1D element sets to be included
-             # in the report.
-### Ordered list of arguments to be included in the report
-### Possible arguments: 'CF', 'N', 'My', 'Mz'
-argsEl1D= ['CF','N','My','Mz']
+pairs_setsBmEl_argsBmEl=[
+    [[],['CF', 'N', 'My', 'Mz']],
+    ]
 
 # Generate reports.
 report= report_generator.ReportGenerator(modelSpace= modelSpace, envConfig= cfg)
-fileNames= report.checksReport(limitStateLabel= limitState.label, setsShEl= setsEl2D, argsShEl= argsEl2D, setsBmEl= setsEl1D, argsBmEl= argsEl1D, rgMinMax=rgMinMax, defaultDiagramDirection= defaultDiagramDirection)
+
+fileNames= report.checksReport(limitStateLabel= limitState.label, setsShEl= setsEl2D, argsShEl= argsEl2D, pairs_setsBmEl_argsBmEl=pairs_setsBmEl_argsBmEl, rgMinMax=rgMinMax, defaultDiagramDirection= defaultDiagramDirection)
 ## Check results.
 refFileNames= ['totalCFSect1.jpg', 'totalCFSect2.jpg', 'totalNSect1.jpg', 'totalNSect2.jpg', 'totalMySect1.jpg', 'totalMySect2.jpg']
 
