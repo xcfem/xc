@@ -38,3 +38,8 @@ RHS= None
 with importlib.resources.open_text("materials.sections.structural_shapes.aux", "en_10210_rhs_profiles.json") as file:
     RHS= json.load(file)
 en_10210_shapes['RHS']= RHS
+
+SHS= None
+with importlib.resources.open_text("materials.sections.structural_shapes.aux", "en_10210_shs_profiles.json") as file:
+    SHS= json.load(file)
+en_10210_shapes['SHS']= SHS

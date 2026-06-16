@@ -265,10 +265,6 @@ arcelor_shapes['AU']= AU
 # values are identical: no need to exchange.
 
 
-SHS= None
-with importlib.resources.open_text("materials.sections.structural_shapes.aux", "arcelor_shs_profiles.json") as file:
-    SHS= json.load(file)
-arcelor_shapes['SHS']= SHS
 
 '''
 TODO: Check shear distortion constants

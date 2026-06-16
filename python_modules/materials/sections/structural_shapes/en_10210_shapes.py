@@ -47,3 +47,20 @@ class RHSShape(structural_steel.QHShape):
         ''' Return the web thickness (used in Eurocode 3
             shearBucklingVerificationNeeded).'''
         return self.get('e')
+    
+SHS= en_10210_shapes_dictionaries.SHS
+    
+class SHSShape(structural_steel.QHShape):
+    ''' Square hollow structural section.
+    '''
+    def __init__(self,steel,name):
+        super(SHSShape,self).__init__(steel,name,SHS)
+        
+    def t(self):
+        '''Return the wall thickness'''
+        return self.get('e')    
+
+    def tw(self):
+        ''' Return the web thickness (used in Eurocode 3
+            shearBucklingVerificationNeeded).'''
+        return self.get('e')

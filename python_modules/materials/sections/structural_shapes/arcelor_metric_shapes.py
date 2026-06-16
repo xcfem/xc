@@ -284,25 +284,6 @@ for item in AU:
 # (strong axis parallel to z axis) in other words: values for Y and Z axis 
 # are swapped with respect to those in the catalog.
 
-# In this case the inertia tensor is cylindrical so, in its plane, both
-# values are identical: no need to exchange.
-
-SHS= arcelor_shapes_dictionaries.SHS
-for item in SHS:
-    shape= SHS[item]
-    A= shape['A']
-    E= shape['E']
-    nu= shape['nu']
-    b= shape['b']
-    h= shape['h']
-    e= shape['e']
-    shape['alpha']= 0.5*5/6.0
-    shape['G']= E/(2*(1+nu))
-    shape['AreaQy']= 2*0.7*h*e
-    shape['AreaQz']= 2*0.7*b*e
-    shape['Wyel']= shape['Wzel']
-    shape['Wypl']= shape['Wzpl']
-
 # Tata steel circular hollow tubes.
 
 CHS= arcelor_shapes_dictionaries.CHS
@@ -429,21 +410,6 @@ class HEShape(structural_steel.IShape):
         ''' Return the value of the section warping constant.'''
         return self.get('Iw')
         
-class SHSShape(structural_steel.QHShape):
-    ''' Square hollow structural section.
-    '''
-    def __init__(self,steel,name):
-        super(SHSShape,self).__init__(steel,name,SHS)
-        
-    def t(self):
-        '''Return the wall thickness'''
-        return self.get('e')    
-
-    def tw(self):
-        ''' Return the web thickness (used in Eurocode 3
-            shearBucklingVerificationNeeded).'''
-        return self.get('e')
-
 class UPNShape(structural_steel.UShape):
     def __init__(self,steel,name):
         super(UPNShape,self).__init__(steel,name,UPN)
