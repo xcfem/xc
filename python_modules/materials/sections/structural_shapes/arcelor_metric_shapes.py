@@ -10,7 +10,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
 from materials.sections.structural_shapes import arcelor_shapes_dictionaries
-import re
+from materials.sections.structural_shapes import steel_shapes_utils as utils
 
 
 # European I beams
@@ -303,22 +303,6 @@ for item in SHS:
     shape['Wyel']= shape['Wzel']
     shape['Wypl']= shape['Wzpl']
 
-# Arcelor rectangular hollow tubes.
-
-RHS= arcelor_shapes_dictionaries.RHS
-for item in RHS:
-    shape= RHS[item]
-    A= shape['A']
-    E= shape['E']
-    nu= shape['nu']
-    b= shape['b']
-    h= shape['h']
-    e= shape['e']
-    shape['alpha']= 0.5*5/6.0
-    shape['G']= E/(2*(1+nu))
-    shape['AreaQy']= 2*0.7*h*e
-    shape['AreaQz']= 2*0.7*b*e
-
 # Tata steel circular hollow tubes.
 
 CHS= arcelor_shapes_dictionaries.CHS
@@ -379,73 +363,27 @@ for item in UB:
   
 from materials.sections import structural_steel
 
-def common_prefix(a:str, b:str):
-    ''' Return the common prefix of both strings.
-
-    :param a: first string.
-    :param b: second string.
-    '''
-    retval= ''
-    for ch1, ch2 in zip(a,b):
-        if(ch1==ch2):
-            retval+=ch1
-        else:
-            break
-    return retval
-
-def findNearestSteelShapeByDepth(namePattern:str, depth:float):
+def find_nearest_steel_shape_by_depth(namePattern:str, depth:float):
     ''' Return the steel shape whose name matches the pattern argument
         and whose depth is the nearest to the argument.
 
     :param namePattern: regular expression to match.
     :param depth: depth of the steel shape.
     '''
-    # Find the dictionary to search in.
-    retval= None
-    regex= re.compile(namePattern)
     arcelorDict= arcelor_shapes_dictionaries.arcelor_shapes
-    for tableKey in arcelorDict:
-        c_prefix= common_prefix(namePattern, tableKey)
-        if(c_prefix==tableKey):
-            shapeDict= arcelorDict[tableKey]
-            # initial values.
-            retval= None
-            diff= 6.023e23
-            # iterate through dictionary
-            for shapeKey in shapeDict:
-                if(regex.match(shapeKey)):
-                    shape= shapeDict[shapeKey]
-                    tmp= abs(depth-shape['h'])
-                    if(tmp<diff):
-                        diff= tmp
-                        retval= shape
-                        if(diff==0.0): break;
-        if(retval): break;
-    return retval
+    return utils.find_nearest_steel_shape_by_depth(shapeDict= arcelorDict, namePattern= namePattern, depth= depth)
 
-def getSteelShapeDepthRange(namePattern:str, minDepth:float, maxDepth):
+def get_steel_shape_depth_range(namePattern:str, minDepth:float, maxDepth: float):
     ''' Return the steel shapes whose name matches the pattern argument
         and whose depth is belongs to the range (minDepth, maxDepth)
 
     :param namePattern: regular expression to match.
-    :param depth: depth of the steel shape.
+    :param minDepth: minimum depth of the steel shape.
+    :param maxDepth: maximum depth of the steel shape.
     '''
     # Find the dictionary to search in.
-    retval= list()
-    regex= re.compile(namePattern)
     arcelorDict= arcelor_shapes_dictionaries.arcelor_shapes
-    for tableKey in arcelorDict:
-        c_prefix= common_prefix(namePattern, tableKey)
-        if(c_prefix==tableKey):
-            shapeDict= arcelorDict[tableKey]
-            # iterate through dictionary
-            for shapeKey in shapeDict:
-                if(regex.match(shapeKey)):
-                    shape= shapeDict[shapeKey]
-                    depth= shape['h']
-                    if((depth>=minDepth) and (depth<=maxDepth)):
-                        retval.append(shape)
-    return retval
+    return utils.get_steel_shape_depth_range(shapeDict= arcelorDict, namePattern= namePattern, minDepth= minDepth, maxDepth= maxDepth)
 
 
 class IPNShape(structural_steel.IShape):
@@ -491,21 +429,6 @@ class HEShape(structural_steel.IShape):
         ''' Return the value of the section warping constant.'''
         return self.get('Iw')
         
-class RHSShape(structural_steel.QHShape):
-    ''' Rectangular hollow structural section.
-    '''
-    def __init__(self,steel,name):
-        super(RHSShape,self).__init__(steel,name,RHS)
-
-    def t(self):
-        '''Return the wall thickness'''
-        return self.get('e')
-
-    def tw(self):
-        ''' Return the web thickness (used in Eurocode 3
-            shearBucklingVerificationNeeded).'''
-        return self.get('e')
-                
 class SHSShape(structural_steel.QHShape):
     ''' Square hollow structural section.
     '''
