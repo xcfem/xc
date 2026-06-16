@@ -14,8 +14,8 @@ from materials.sections.structural_shapes import en_10210_shapes
 shapes= list()
 test= list()
 
-# shapes.append(en_10210_shapes.find_nearest_steel_shape_by_depth('SHS.*', 80e-3))
-# test.append((shapes[-1]['nmb']=='SHS80x80x2'))
+shapes.append(en_10210_shapes.find_nearest_steel_shape_by_depth('SHS.*', 80e-3))
+test.append((shapes[-1]['nmb']=='SHS80x80x2'))
 shapes.append(en_10210_shapes.find_nearest_steel_shape_by_depth('RHS.*', 80e-3))
 test.append((shapes[-1]['nmb']=='RHS80x40x2'))
 #shapes.append(en_10210_shapes.find_nearest_steel_shape_by_depth('CHS.*', 80e-3))

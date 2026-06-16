@@ -30,8 +30,6 @@ shapes.append(arcelor_metric_shapes.find_nearest_steel_shape_by_depth('L.*', 41e
 test.append((shapes[-1]['nmb']=='L40x40x4'))
 shapes.append(arcelor_metric_shapes.find_nearest_steel_shape_by_depth('AU.*', 442e-3))
 test.append((shapes[-1]['nmb']=='AU_18'))
-shapes.append(arcelor_metric_shapes.find_nearest_steel_shape_by_depth('SHS.*', 80e-3))
-test.append((shapes[-1]['nmb']=='SHS80x80x2'))
 
 cumple= True
 for sh, t in zip(shapes,test):
