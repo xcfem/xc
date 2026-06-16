@@ -40,9 +40,10 @@ beta_HE300_comp=5*Nd/2643750.0
 
 SHS175= EC3_materials.SHSShape(steel=S235JR,name='SHS175x175x8')
 SHS175.sectionClass= sctClass
+refNcRd= 1239701.9418874884 # 1246205.0
 alpha_SHS175,beta_SHS175=SHS175.getBiaxBendCoeffs(Nd,SHS175.getNcRd())
-alpha_SHS175_comp=1.66/(1-1.13*(Nd/1246205.0)**2)
-beta_SHS175_comp=1.66/(1-1.13*(Nd/1246205.0)**2)
+alpha_SHS175_comp=1.66/(1-1.13*(Nd/refNcRd)**2)
+beta_SHS175_comp=1.66/(1-1.13*(Nd/refNcRd)**2)
 
 RHS250= EC3_materials.RHSShape(steel=S235JR,name='RHS250x150x16')
 RHS250.sectionClass= sctClass
