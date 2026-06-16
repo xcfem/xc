@@ -893,7 +893,7 @@ class HollowBoxShape(EC3Shape):
             lmsg.warning(className+'.'+methodName+': not implemented for cross section class greater than 2.')
             return None
     
-class SHSShape(HollowBoxShape, arcelor_metric_shapes.SHSShape):
+class SHSShape(HollowBoxShape, en_10210_shapes.SHSShape):
     """SHS shape with Eurocode 3 verification routines."""
     def __init__(self,steel,name):
         ''' Constructor.
@@ -902,7 +902,7 @@ class SHSShape(HollowBoxShape, arcelor_metric_shapes.SHSShape):
         :param name: shape name (i.e. 'SHS175x175x8')
         '''
         super(SHSShape, self).__init__(name= name, typo= 'rolled')
-        arcelor_metric_shapes.SHSShape.__init__(self,steel,name)
+        en_10210_shapes.SHSShape.__init__(self, steel, name)
         
     def getBucklingCurve(self, majorAxis= False):
         ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 

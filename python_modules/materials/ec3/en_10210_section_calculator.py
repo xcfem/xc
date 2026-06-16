@@ -11,7 +11,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
+import sys
 import math
+from misc_utils import log_messages as lmsg
 
 # Section axis: 
 
@@ -67,9 +69,9 @@ class RHSSHSectionCalculator(object):
         """
         Calculates geometric properties (EN 10210-2) and Classifies the section (EN 1993-1-1).
         
-        :param h: Outside depth of longer side (mm)
-        :param b: Outside width of shorter side (mm)
-        :parm t: Wall thickness (mm)
+        :param h: Outside depth of longer side (m)
+        :param b: Outside width of shorter side (m)
+        :parm t: Wall thickness (m)
         :param fy : Yield strength of the steel grade (MPa or N/mm²), e.g., 235, 275, 355
         """
         # 1. Radius calculations
@@ -130,15 +132,21 @@ class RHSSHSectionCalculator(object):
     def calculate_rhs(self, h: float, b: float, t: float) -> dict:
         """
         Rectangular/Square Hollow Sections (RHS/SHS) - Annex A.3
-        h: Outside depth of longer side (mm)
-        b: Outside width of shorter side (mm)
-        t: Wall thickness (mm)
+        h: Outside depth of longer side (m)
+        b: Outside width of shorter side (m)
+        t: Wall thickness (m)
         """
-        # 1. Determine corner radii (mm)
+        # 1. Determine corner radii (m)
         r_out, r_in = self._get_rhs_radii(t)
         
         # 3. Cross-sectional Area (cm2)
         a= 2*t * (b + h - 2*t) - (4-math.pi) * (r_out**2 - r_in**2)
+        if(a<0.0):
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= "; negative area for dimensions: b= "+str(b)
+            errorMsg+= ", h= "+str(h)+", t= "+str(t)
+            lmsg.error(methodName+errorMsg)
+            exit(1)
         
         # 4. Mass per unit length (kg/m)
         m = self.rho * a
@@ -197,9 +205,11 @@ class RHSSHSectionCalculator(object):
         Avy= a*h/b_plus_h
         Avz= a*b/b_plus_h
         Iz= i_yy # Major axis.
+        assert(Iz>0.0)
         iz= math.sqrt(Iz/a)
         Wzel= 2*Iz/h
         Iy= i_zz # Major axis.
+        assert(Iy>0.0)
         iy= math.sqrt(Iy/a)
         Wyel= 2*Iy/b
         retval= {'nmb':shape_name,
@@ -226,3 +236,28 @@ class RHSSHSectionCalculator(object):
                  'alpha': 1.0,
                  }
         return retval
+
+class SHSSHSectionCalculator(RHSSHSectionCalculator):
+    
+    def classify_shs(self, b: float, t: float, fy: float) -> dict:
+        """
+        Calculates geometric properties (EN 10210-2) and Classifies the section (EN 1993-1-1).
+        
+        :param b: Side dimension (m)
+        :parm t: Wall thickness (m)
+        :param fy : Yield strength of the steel grade (MPa or N/mm²), e.g., 235, 275, 355
+        """
+        return super().calculate_rhs(h= b, b= b, t= t, fy= fy)
+        
+    def calculate_shs(self, b: float, t: float) -> dict:
+        """
+        Rectangular/Square Hollow Sections (RHS/SHS) - Annex A.3
+
+        :param b: Side dimension (m)
+        :param t: Wall thickness (m)
+        """
+        retval= super().calculate_rhs(h= b, b= b, t= t)
+        name= retval['nmb']
+        retval['nmb']= name.replace('RHS', 'SHS')
+        return retval
+
