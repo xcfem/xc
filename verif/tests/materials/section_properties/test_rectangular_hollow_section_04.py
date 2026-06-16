@@ -46,8 +46,9 @@ print('Deflection with shape '+section2.name+ ':'+str(f2*1e3)+' mm')
 print('weightRatio= ', weightRatio)
 print('deflectionRatio= ', deflectionRatio)
 '''
-
-testOK= ((abs(weightRatio-1.9095015576323988)/1.9095015576323988)<1e-4 and (abs(deflectionRatio-0.9956172658517105)/0.9956172658517105)<1e-4)
+refWeightRatio= 1.8990076383981507 # 1.9095015576323988
+refDeflectionRatio= 0.9983666189066721 # 0.9956172658517105
+testOK= ((abs(weightRatio-refWeightRatio)/refWeightRatio)<1e-4 and (abs(deflectionRatio-refDeflectionRatio)/refDeflectionRatio)<1e-4)
 
 import os
 from misc_utils import log_messages as lmsg

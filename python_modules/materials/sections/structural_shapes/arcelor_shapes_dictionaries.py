@@ -275,13 +275,6 @@ TODO: Check shear distortion constants
    alpha-> alphaZ,alphaY
 '''
 
-# Arcelor rectangular hollow tubes.
-
-RHS= None
-with importlib.resources.open_text("materials.sections.structural_shapes.aux", "arcelor_rhs_profiles.json") as file:
-    RHS= json.load(file)
-arcelor_shapes['RHS']= RHS
-
 # Tata profiles
 
 # Tata steel circular hollow tubes.

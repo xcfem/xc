@@ -694,6 +694,7 @@ So:
 '''
 
 from materials.sections.structural_shapes import arcelor_metric_shapes
+from materials.sections.structural_shapes import en_10210_shapes
 
 
 def getIShapedRolledSectionBucklingCurve(shape, majorAxis):
@@ -1036,16 +1037,17 @@ class CHSShape(EC3Shape, arcelor_metric_shapes.CHSShape):
         '''
         return 2*self.A()/math.pi
         
-class RHSShape(EC3Shape,arcelor_metric_shapes.RHSShape):
-    """RHS shape with Eurocode 3 verification routines."""
-    def __init__(self,steel,name):
+class RHSShape(EC3Shape, en_10210_shapes.RHSShape):
+    """Hot finished rectangular hollow sections with Eurocode 3 verification 
+       routines."""
+    def __init__(self, steel, name):
         ''' Constructor.
 
         :param steel: steel material.
         :param name: shape name (i.e. AU_23)
         '''
         super(RHSShape, self).__init__(name= name, typo= 'rolled')
-        arcelor_metric_shapes.RHSShape.__init__(self,steel,name)
+        en_10210_shapes.RHSShape.__init__(self, steel, name)
         
     def getBucklingCurve(self, majorAxis= False):
         ''' Return the buckling curve  (a0,a,b,c or d) for this cross-section 
