@@ -71,12 +71,12 @@ for key in rhs_data:
                 calculated_value= calculated_properties[propKey]
                 if(isinstance(stored_value, str)):
                     if(stored_value!=calculated_value):
-                        lmsg.error('Error: '+str(key)+', ', str(propKey)+', '+str(stored_value)+', '+str(calculated_value))
+                        lmsg.error('Error: '+str(key)+', '+ str(propKey)+', '+str(stored_value)+', '+str(calculated_value))
                         exit(1)
                 else:
                     err= abs(stored_value-calculated_value)/abs(stored_value)
                     if(err>5e-3):
-                        lmsg.error('Error: '+str(key)+', ', str(propKey)+', '+str(stored_value)+', '+str(calculated_value)+', '+str(err*100)+' %')
+                        lmsg.error('Error: '+str(key)+', '+ str(propKey)+', '+str(stored_value)+', '+str(calculated_value)+', '+str(err*100)+' %')
                         exit(1)
             else:
                 lmsg.error('Missing property: '+str(propKey))
