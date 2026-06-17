@@ -792,7 +792,7 @@ def defElasticShearSection2d(preprocessor,name,A,E,G,I,alpha, linearRho= 0.0, Iw
     retval.sectionProperties.linearRho= linearRho
     return retval
 
-def defElasticSectionFromMechProp1d(preprocessor,name, mechProp1d, overrideRho= None):
+def defElasticSectionFromMechProp1d(preprocessor, name, mechProp1d, overrideRho= None):
     '''Constructs an elastic section appropriate for 1D beam analysis, 
     taking mechanical properties of the section form a MechProp1d object.
 
@@ -823,7 +823,7 @@ def defElasticSectionFromMechProp2d(preprocessor, name, mechProp2d, overrideRho=
     rho= mechProp2d.linearRho
     if(overrideRho):
         rho= overrideRho
-    retval= defElasticSection2d(preprocessor,name= name, A= mechProp2d.A, Iw= mechProp2d.Iw, E= mechProp2d.E, I= mechProp2d.I, linearRho= rho)
+    retval= defElasticSection2d(preprocessor, name= name, A= mechProp2d.A, Iw= mechProp2d.Iw, E= mechProp2d.E, I= mechProp2d.I, linearRho= rho)
     return retval
 
 def defElasticShearSectionFromMechProp2d(preprocessor, name, mechProp2d, overrideRho= None):
@@ -844,7 +844,7 @@ def defElasticShearSectionFromMechProp2d(preprocessor, name, mechProp2d, overrid
     return retval
 
 # Elastic section 3d.
-def defElasticSection3d(preprocessor,name, A, E, G, Iz, Iy, J, linearRho= 0.0, Iw= 0.0):
+def defElasticSection3d(preprocessor, name, A, E, G, Iz, Iy, J, linearRho= 0.0, Iw= 0.0):
     '''Constructs an elastic section appropriate for 3D beam analysis
 
     :param preprocessor: preprocessor of the finite element problem.
@@ -887,7 +887,7 @@ def defElasticSectionFromMechProp3d(preprocessor, name, mechProp3d, overrideRho=
     rho= mechProp3d.linearRho
     if(overrideRho):
         rho= overrideRho
-    return defElasticSection3d(preprocessor,name= name, A= mechProp3d.A, Iw= mechProp3d.Iw, E= mechProp3d.E, G= mechProp3d.G, Iz= mechProp3d.Iz, Iy= mechProp3d.Iy, J= mechProp3d.J, linearRho= rho)
+    return defElasticSection3d(preprocessor, name= name, A= mechProp3d.A, Iw= mechProp3d.Iw, E= mechProp3d.E, G= mechProp3d.G, Iz= mechProp3d.Iz, Iy= mechProp3d.Iy, J= mechProp3d.J, linearRho= rho)
 
 def defElasticShearSectionFromMechProp3d(preprocessor, name, mechProp3d, overrideRho= None):
     '''Constructs an elastic section appropriate for 3D beam analysis, 
