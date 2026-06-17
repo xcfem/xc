@@ -22,7 +22,7 @@ preprocessor= mainBeam.getPreprocessor
 #Materials
 S355JR= EC3_materials.S355JR
 S355JR.gammaM= 1.00
-chsSection= EC3_materials.CHSShape(S355JR,'CHS_48.3_5.0') 
+chsSection= EC3_materials.CHSShape(S355JR,'CHS_48.3_5') 
 
 #              ^ Y                    
 #              |
