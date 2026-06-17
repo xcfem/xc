@@ -46,18 +46,20 @@ yCenter= compoundSection.yCenterOfMass()
 zCenter= compoundSection.zCenterOfMass()
 alphaY= compoundSection.alphaY()
 ratio1= (alphaY-0.5)/0.5
-ratio2= compoundSection.A()-8.0*chsSection.A()
-ratio3= (compoundSection.Iy()-0.001361296)/0.001361296
-ratio4= (compoundSection.Iz()-0.000708496)/0.000708496
-
+ratio2= compoundSection.A()-len(positions)*chsSection.A()
+refIy= 0.0013616018383254059 # 0.001361296
+ratio3= (compoundSection.Iy()-refIy)/refIy
+refIz= 0.0007086532212033031 # 0.000708496
+ratio4= (compoundSection.Iz()-refIz)/refIz
 
 '''
 print(yCenter, zCenter)
+print('ratio1= ', ratio1)
 print('compound A= ', compoundSection.A())
 print('ratio2= ', ratio2)
-print('compound Iz= ', compoundSection.Iz())
-print('ratio3= ', ratio3)
 print('compound Iy= ', compoundSection.Iy())
+print('ratio3= ', ratio3)
+print('compound Iz= ', compoundSection.Iz())
 print('ratio4= ', ratio4)
 print(compoundSection.alphaY())
 '''
