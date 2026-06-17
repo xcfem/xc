@@ -1703,7 +1703,7 @@ python tests/materials/steel_shapes/test_en_10210_shapes_01.py
 python tests/materials/steel_shapes/test_en_13674_1_rail_shapes_01.py
 python tests/materials/steel_shapes/test_en_13674_1_rail_shapes_02.py
 echo "$BLEU" "    EC3 tests." "$NORMAL"
-echo "$BLEU" "      EC3 member dssign tests." "$NORMAL"
+echo "$BLEU" "      EC3 member design tests." "$NORMAL"
 python tests/materials/ec3/member_design/compare_mech_properties.py
 python tests/materials/ec3/member_design/test_cross_section_verification_01.py
 python tests/materials/ec3/member_design/test_cross_section_verification_02.py
