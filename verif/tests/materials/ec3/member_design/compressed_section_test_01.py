@@ -37,7 +37,7 @@ NEd= 839e3
 
 ## Design resistance of the cross-section for uniform compression
 NcRd= section.getNcRd()
-refNcRd= 65.70e-4*355e6
+refNcRd= 65.69070238656254e-4*355e6
 
 err= abs(NcRd-refNcRd)/refNcRd
 
