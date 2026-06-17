@@ -959,7 +959,7 @@ class HEShape(EC3Shape, arcelor_metric_shapes.HEShape):
         '''
         return getIShapedRolledSectionBucklingCurve(self, majorAxis)
 
-class UPNShape(EC3Shape,arcelor_metric_shapes.UPNShape):
+class UPNShape(EC3Shape, arcelor_metric_shapes.UPNShape):
     """UPN shape with Eurocode 3 verification routines."""
     def __init__(self,steel,name):
         ''' Constructor.
@@ -1202,9 +1202,20 @@ class CFCHSShape(EC3Shape, bs_en_10219_shapes.CFCHSShape):
         :param majorAxis: has no meaning here (circular section).
         '''
         return 2*self.A()/math.pi
+    
+class LShape(EC3Shape, arcelor_metric_shapes.LShape):
+    """L shape with Eurocode 3 verification routines."""
+    def __init__(self,steel,name):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. L_320)
+        '''
+        super(LShape, self).__init__(name= name, typo= 'rolled')
+        arcelor_metric_shapes.LShape.__init__(self,steel,name)
 
 class RShape(EC3Shape, arcelor_metric_shapes.RShape):
-    """AU shape with Eurocode 3 verification routines."""
+    """R shape with Eurocode 3 verification routines."""
     def __init__(self, steel, name):
         ''' Constructor.
 

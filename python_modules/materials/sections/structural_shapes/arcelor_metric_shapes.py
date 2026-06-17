@@ -415,6 +415,14 @@ class AUShape(structural_steel.SteelShape):
     def getWarpingConstant(self):
         ''' Return the value of the section warping constant.'''
         return self.get('Iw')
+        
+class LShape(structural_steel.UShape):
+    def __init__(self,steel,name):
+        super(LShape,self).__init__(steel,name,L)
+        
+    def getWarpingConstant(self):
+        ''' Return the value of the section warping constant.'''
+        return self.get('Iw')
 
 class RShape(structural_steel.SteelShape):
     def __init__(self, steel, name):
