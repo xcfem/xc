@@ -51,7 +51,7 @@ alpha_RHS250,beta_RHS250=RHS250.getBiaxBendCoeffs(Nd/2.,RHS250.getNcRd())
 alpha_RHS250_comp=1.66/(1-1.13*(0.5*Nd/2702500.0)**2)
 beta_RHS250_comp=1.66/(1-1.13*(0.5*Nd/2702500.0)**2)
 
-CHS193= EC3_materials.CHSShape(steel=S235JR,name='CHS_193.7_11.0')
+CHS193= EC3_materials.CHSShape(steel=S235JR,name='CHS_193.7_11')
 CHS193.sectionClass= sctClass
 alpha_CHS193,beta_CHS193=CHS193.getBiaxBendCoeffs(Nd,CHS193.getNcRd())
 alpha_CHS193_comp=2
