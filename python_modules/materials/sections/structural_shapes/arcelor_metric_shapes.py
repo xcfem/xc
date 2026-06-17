@@ -8,6 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
+import sys
 import math
 from materials.sections.structural_shapes import arcelor_shapes_dictionaries
 from materials.sections.structural_shapes import steel_shapes_utils as utils
@@ -416,13 +417,24 @@ class AUShape(structural_steel.SteelShape):
         ''' Return the value of the section warping constant.'''
         return self.get('Iw')
         
-class LShape(structural_steel.UShape):
+class LShape(structural_steel.SteelShape):
     def __init__(self,steel,name):
-        super(LShape,self).__init__(steel,name,L)
+        super(LShape,self).__init__(steel, name, L)
         
     def getWarpingConstant(self):
-        ''' Return the value of the section warping constant.'''
-        return self.get('Iw')
+        ''' Return the value of the section warping constant according to 
+            expression (21) of the article: Geometric Properties of Hot-Rolled
+            Steel Angles Including the Effects of Toe Radii and Fillet.
+            SESHU MADHAVA RAO ADLURI and MURTY K. S. MADUGULA
+            ENGINEERING JOURNAL / AMERICAN INSTITUTE OF STEEL CONSTRUCTION
+            SECOND QUARTER /1994.
+        '''
+        b= self.get('b')
+        h= self.get('h')
+        t= self.get('t')
+        half_t= t/2.0
+        retval= t**3/36*((b-half_t)**3+(h-half_t)**3)
+        return retval
 
 class RShape(structural_steel.SteelShape):
     def __init__(self, steel, name):
