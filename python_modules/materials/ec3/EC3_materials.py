@@ -990,7 +990,7 @@ class CHSShape(EC3Shape, en_10210_shapes.CHSShape):
         :param name: shape name (i.e. AU_23)
         '''
         super(CHSShape, self).__init__(name= name, typo='rolled')
-        en_10210_shapes.__init__(self,steel,name)
+        en_10210_shapes.CHSShape.__init__(self,steel,name)
 
     def isCircular(self):
         ''' Return true if it is a circular section.'''
