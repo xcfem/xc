@@ -55,7 +55,7 @@ preprocessor= steelBeam.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-#Materials
+# Materials
 ## Profile geometry
 xcSection= shape.defElasticShearSection2d(preprocessor)
 
