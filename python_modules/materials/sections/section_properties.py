@@ -371,7 +371,8 @@ class SectionProperties(object):
                 E= csp.E
                 if(reductionFactor!= 1.0):
                     E/= reductionFactor
-                self.xc_material= typical_materials.defElasticSection3d(preprocessor,self.name, A= csp.A,E= E, G= csp.G, Iz= csp.Iz, Iy= csp.Iy, J= csp.J, Iw= csp.Iw, linearRho= rho)
+                name3d= self.name+'_3d'
+                self.xc_material= typical_materials.defElasticSection3d(preprocessor, name= name3d, A= csp.A,E= E, G= csp.G, Iz= csp.Iz, Iy= csp.Iy, J= csp.J, Iw= csp.Iw, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -438,7 +439,7 @@ class SectionProperties(object):
                 lmsg.warning(className+'.'+methodName+'; section: '+self.name+' already defined.')
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
-                csp= self.getCrossSectionProperties2D(material)
+                csp= self.getCrossSectionProperties1D(material)
                 if(overrideRho!=None):
                     rho= overrideRho
                 else:
@@ -450,7 +451,8 @@ class SectionProperties(object):
                 E= csp.E
                 if(reductionFactor!= 1.0):
                     E/= reductionFactor
-                self.xc_material= typical_materials.defElasticSection1d(preprocessor,self.name,A= csp.A, Iw= csp.Iw, E= E, linearRho= rho)
+                name1d= self.name+'_1d'
+                self.xc_material= typical_materials.defElasticSection1d(preprocessor, name= name1d, A= csp.A, Iw= csp.Iw, E= E, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -493,7 +495,8 @@ class SectionProperties(object):
                 E= csp.E
                 if(reductionFactor!= 1.0):
                     E/= reductionFactor
-                self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.name,csp.A, Iw= csp.Iw,E= E, I= I, linearRho= rho)
+                name2d= self.name+'_2d'
+                self.xc_material= typical_materials.defElasticSection2d(preprocessor, name= name2d, A= csp.A, Iw= csp.Iw,E= E, I= I, linearRho= rho)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -542,6 +545,18 @@ class SectionProperties(object):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; material: '+self.name+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
+        
+    def getCrossSectionProperties1D(self, material):
+        '''Return a CrossSectionProperties object with the 1D properties of 
+           the section.'''
+        retval= xc.CrossSectionProperties1d()
+        if(hasattr(material, 'E')):
+            retval.E= material.E
+        else: # Concrete material.
+            retval.E= material.Ecm()
+        retval.A= self.A()
+        retval.Iw= self.getWarpingConstant()
+        return retval
         
     def getCrossSectionProperties2D(self, material):
         '''Return a CrossSectionProperties object with the 2D properties of 
