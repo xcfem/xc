@@ -1854,7 +1854,7 @@ def get_element_data_dict(controlVarsDict, controlVarName):
         else: # One record for each element.
             index= next(iter(elementControlVars))
             controlVar= elementControlVars[index]
-            retval[controlVarName][eTag]= controlVar.getStrConstructor()
+            retval[controlVarName][eTag][index]= controlVar.getStrConstructor()
     return retval
 
 def write_latex_control_vars(outputFile, controlVarsDict):
@@ -1899,6 +1899,69 @@ def get_capacity_factors_from_control_vars(controlVarsDict):
                     retval[controlVarName][index]= list()
                 retval[controlVarName][index].append(controlVar.getCF())
     return retval
+
+def convert_json_keys_to_int(obj):
+    '''Recursively convert dictionary keys that are integer strings to integers.
+
+    :param obj: dictionary to change whose keys will be converted to integers.
+    '''
+    if isinstance(obj, dict):
+        new_dict = {}
+        for key, value in obj.items():
+            try:
+                new_key = int(key)
+            except (ValueError, TypeError):
+                # Leave non-integer keys unchanged
+                new_key = key
+            new_dict[new_key] = convert_json_keys_to_int(value)
+        return new_dict
+
+    elif isinstance(obj, list):
+        return [convert_json_keys_to_int(item) for item in obj]
+
+    else:
+        return obj
+
+def read_existing_control_vars_dict(inputFileName):
+    ''' Read the values of the contral variables that are already written
+        in a results file.
+
+    :param inputFileName: name of the input file to read from.
+    '''
+    tmp= dict()
+    if(os.path.isfile(inputFileName)):
+        try:
+            with open(inputFileName, 'r') as f:
+               tmp= json.load(f)
+        except IOError:
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= "can't read from file: "
+            errorMsg+= str(inputFileName)
+            errorMsg+= ". Are you sure you need to read previous results?"
+            lmsg.error(methodName+errorMsg)
+            exit(1)
+    else:
+        tmp= dict()
+    # Convert keys to integers.
+    retval= convert_json_keys_to_int(tmp)
+    return retval
+
+def update_control_vars_dict(dataDict, newResults):
+    ''' Update the given dictionary with the given results.
+
+    :param dataDict: dictionary to update.
+    :param newResults: result to update the dictionary with.
+    '''
+    if('elementData' in dataDict):
+        limitStateData= dataDict['elementData']
+        for controlVarKey in newResults:
+            if(controlVarKey in limitStateData):
+                limitStateData[controlVarKey].update(newResults[controlVarKey])
+            else:
+                limitStateData[controlVarKey]= newResults[controlVarKey]
+    else:
+        dataDict['elementData']= newResults
+    
             
 def write_control_vars_from_phantom_elements(controlVarsDict, outputCfg):
     '''Writes to file the control-variable values calculated for
@@ -1914,18 +1977,12 @@ def write_control_vars_from_phantom_elements(controlVarsDict, outputCfg):
     controlVarName= outputCfg.controller.limitStateLabel
     dataDict= None
     jsonFileName= outputFileName+'.json'
-    if(outputCfg.appendToResFile and os.path.isfile(jsonFileName)):
-        try:
-            with open(jsonFileName) as f:
-               dataDict= json.load(f)
-        except IOError:
-            methodName= sys._getframe(0).f_code.co_name
-            errorMsg= "; can't read from file: "+str(outputFileName)
-            lmsg.error(methodName+errorMsg)
+    if(outputCfg.appendToResFile):
+        dataDict= read_existing_control_vars_dict(jsonFileName)
     else:
         dataDict= dict()
     elementDataDict= get_element_data_dict(controlVarsDict= controlVarsDict, controlVarName= controlVarName)
-    dataDict['elementData']= elementDataDict
+    update_control_vars_dict(dataDict= dataDict, newResults= elementDataDict)
 
     # Write the dictionary in a JSON file.
     with open(jsonFileName, 'w') as f:
@@ -1990,35 +2047,21 @@ def write_control_vars_from_elements(preprocessor, controlVarsDict, outputCfg, s
     outputFileName= outputCfg.outputDataBaseFileName # name for the .json and .tex files.
     jsonFileName= outputFileName+'.json'
     # Get the existing data dictionary if required.
-    if(outputCfg.appendToResFile and os.path.isfile(jsonFileName)):
-        try:
-            with open(jsonFileName) as f:
-               dataDict= json.load(f)
-        except IOError:
-            methodName= sys._getframe(0).f_code.co_name
-            errorMsg= "can't read from file: "
-            errorMsg+= str(jsonFileName)
-            errorMsg+= ". Are you sure you need to read previous results?"
-            lmsg.error(methodName+errorMsg)
-            exit(1)
+    if(outputCfg.appendToResFile):
+        dataDict= read_existing_control_vars_dict(jsonFileName)
     else:
         dataDict= dict()
     # Write results in JSON format.
     importString= getControlVarImportModuleStr(preprocessor, outputCfg, sections)
     if('importStrings' in dataDict):
-        dataDict['importStrings'].append(importString)
+        importStringsList= dataDict['importStrings']
+        if(importString not in importStringsList):
+            importStringsList.append(importString)
     else:
-        dataDict['importStrings']= [importString]
+        importStringsList=[importString]
+    dataDict['importStrings']= importStringsList
     elementDataDict= get_element_data_dict(controlVarsDict= controlVarsDict, controlVarName= controlVarName)
-    if('elementData' in dataDict):
-        limitStateData= dataDict['elementData']
-        for controlVarKey in elementDataDict:
-            if(controlVarKey in limitStateData):
-                limitStateData[controlVarKey].update(elementDataDict[controlVarKey])
-            else:
-                limitStateData[controlVarKey]= elementDataDict[controlVarKey]
-    else:
-        dataDict['elementData']= elementDataDict
+    update_control_vars_dict(dataDict= dataDict, newResults= elementDataDict)
     # for e in elems:
     #     elementDataDict[e.tag]= dict()
     #     for s in sections:
