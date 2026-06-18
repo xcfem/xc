@@ -10,7 +10,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# from misc_utils import log_messages as lmsg
+import sys
+from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import direction_field_data as dfd
 
 class LocalAxesVectorField(object):
@@ -110,22 +111,30 @@ class StrongWeakAxisVectorField(object):
     def dumpPair(self,element):
         ''' collect the weak and strong axis into the graphic.
 
-          :param element: element to compute weak and strong axis from.
+        :param element: element to compute weak and strong axis from.
         '''
-        p= element.getPosCentroid(True)
-        strongAxis= element.getVDirStrongAxisGlobalCoord(True) # initialGeometry= True
-        vx= 1.2*strongAxis[0]; vy= 1.2*strongAxis[1]; vz= 1.2*strongAxis[2]
-        self.strongAxis.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
-        self.strongAxis.insertNextVector(vx,vy,vz)
-        weakAxis= element.getVDirWeakAxisGlobalCoord(True) # initialGeometry= True
-        vx= 0.8*weakAxis[0]; vy= 0.8*weakAxis[1]; vz= 0.8*weakAxis[2]
-        self.weakAxis.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
-        self.weakAxis.insertNextVector(vx,vy,vz)
+        if(hasattr(element, 'getVDirStrongAxisGlobalCoord')):
+            p= element.getPosCentroid(True)
+            strongAxis= element.getVDirStrongAxisGlobalCoord(True) # initialGeometry= True
+            vx= 1.2*strongAxis[0]; vy= 1.2*strongAxis[1]; vz= 1.2*strongAxis[2]
+            self.strongAxis.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
+            self.strongAxis.insertNextVector(vx,vy,vz)
+            weakAxis= element.getVDirWeakAxisGlobalCoord(True) # initialGeometry= True
+            vx= 0.8*weakAxis[0]; vy= 0.8*weakAxis[1]; vz= 0.8*weakAxis[2]
+            self.weakAxis.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
+            self.weakAxis.insertNextVector(vx,vy,vz)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            warningMsg= '; element: '+str(element.tag)+ ' of type: '
+            warningMsg+= str(element.tipo())
+            warningMsg+= ' has no strong or weak axes.'
+            lmsg.warning(className+'.'+methodName+warningMsg)
 
     def dumpVectors(self,xcSet):
         ''' Iterate over the elements and collect its strong and weak axes.
 
-          :param xcSet: set which elements will draw its axes.
+        :param xcSet: set which elements will draw its axes.
         '''
         elemSet= xcSet.elements
         for e in elemSet:
