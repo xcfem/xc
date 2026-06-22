@@ -189,9 +189,10 @@ class CameraParameters(object):
         cameraDist= 100
         if(self.modelBNDDiagonal):
             diagonalLength= self.modelBNDDiagonal.getModulus()
-            order= int(math.log10(diagonalLength))
-            factor= 10**order
-            cameraDist= max(cameraDist, math.ceil(diagonalLength/factor)*factor)
+            if(diagonalLength>0.0):
+                order= int(math.log10(diagonalLength))
+                factor= 10**order
+                cameraDist= max(cameraDist, math.ceil(diagonalLength/factor)*factor)
             
         if(self.viewName.lower()=="zpos"):
           self.viewUpVc= [0,1,0]
