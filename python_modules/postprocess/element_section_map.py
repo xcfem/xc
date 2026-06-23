@@ -226,6 +226,11 @@ class ElementSections(object):
                         section= self.lstRCSects[idx]
                         section.subplot(axs[r,c], preprocessor, matDiagType)
             plt.show()
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= "; no section representation for section: '"+self.name+"'. Can't create report. Have you called defRCSection (or defRCSection2d) method?"
+            lmsg.error(className+'.'+methodName+errMsg)
             
     def pdfReport(self, graphicWidth='70mm', showPDF= False, keepPDF= True, preprocessor= None, matDiagType= 'k'):
         ''' Get a drawing of the sections using matplotlib.
