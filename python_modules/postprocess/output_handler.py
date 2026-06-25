@@ -533,14 +533,13 @@ class OutputHandler(object):
         displaySettings.setupGrid(setToDisplay)
         meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale,color= setToDisplay.color)
         if(meshSceneOk):
-            scOrient=1 # scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
+            scaleBarOrientation= 1 # scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
             if(len(forcePairs)>0):
                 vFieldFTitle= 'Forces ('+ self.getOutputForceUnitSym() +')'
-                vFieldF.addToDisplay(displaySettings, orientation=scOrient, title=vFieldFTitle)
-                scOrient+=1
+                scaleBarOrientation= vFieldF.addToDisplay(displaySettings, scaleBarOrientation= scaleBarOrientation, title=vFieldFTitle)
             if(len(momentPairs)>0):
                 vFieldMTitle= 'Moments (' + self.getOutputForceUnitSym() + self.getOutputLengthUnitSym() +')'
-                vFieldM.addToDisplay(displaySettings, orientation= scOrient, title= vFieldMTitle)
+                vFieldM.addToDisplay(displaySettings, scaleBarOrientation= scaleBarOrientation, title= vFieldMTitle)
             displaySettings.displayScene(caption= captionText, unitDescription= unitDescription, fileName= fileName)
         
     def displayReactionsOnSets(self, setsToDisplayReactions, fileName=None, defFScale=0.0, inclInertia= False, reactionCheckTolerance= 1e-7):
@@ -562,7 +561,7 @@ class OutputHandler(object):
         for st in setsToDisplayReactions:
             self.displayReactions(setToDisplay= st, fileName= fileName, defFScale= defFScale, inclInertia= inclInertia, reactionCheckTolerance= reactionCheckTolerance)
             
-    def displayDiagram(self, attributeName, component, setToDispRes, setToDisplay, caption, fUnitConv= None, unitDescription= '', scaleFactor= 1.0, fileName= None, defFScale= 0.0,orientScbar=1,titleScbar=None, defaultDirection= 'J'):
+    def displayDiagram(self, attributeName, component, setToDispRes, setToDisplay, caption, fUnitConv= None, unitDescription= '', scaleFactor= 1.0, fileName= None, defFScale= 0.0, scaleBarOrientation= 1, titleScbar=None, defaultDirection= 'J'):
         '''Auxiliary function to display results on linear elements.
 
         :param attributeName: attribute name(e.g. 'ULS_normalStressesResistance')
@@ -581,7 +580,10 @@ class OutputHandler(object):
 			  the initial position plus its displacement 
 			  multiplied by this factor. (Defaults to 0.0, i.e. 
 			  display the initial/undeformed shape).
-        :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
+        :param scaleBarOrientation: 1 for horizontal bar, 
+                                    2 for left-vertical bar and
+                                    3 for right-vertical bar(defaults 
+                                    to horizontal).
         :param titleScbar: title for the scalar bar (defaults to None)
         :param defaultDirection: default direction of the diagram (J: element 
                                  local j vector or K: element local K vector).
@@ -597,10 +599,10 @@ class OutputHandler(object):
         displaySettings.setupGrid(setToDisplay)
         meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale,color=setToDisplay.color)
         if(meshSceneOk):
-            displaySettings.appendDiagram(diagram,orientScbar,titleScbar) #Append diagram to the scene.
+            scaleBarOrientation= displaySettings.appendDiagram(diagram, scaleBarOrientation, titleScbar) #Append diagram to the scene.
             displaySettings.displayScene(caption= caption, unitDescription= unitDescription, fileName=fileName)
 
-    def displayIntForcDiag(self, itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0, overrideScaleFactor= None,orientScbar=1, titleScbar=None, defaultDirection= 'J',captionText=None):
+    def displayIntForcDiag(self, itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0, overrideScaleFactor= None, scaleBarOrientation= 1, titleScbar=None, defaultDirection= 'J',captionText=None):
         '''displays the component of internal forces in the set of entities as
            a diagram over lines (i.e. appropriated for beam elements).
 
@@ -617,7 +619,10 @@ class OutputHandler(object):
 			  multiplied by this factor. (Defaults to 0.0, i.e. 
 			  display the initial/undeformed shape).
         :param overrideScaleFactor: if not none, override the scale factor in outputStyle.
-        :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
+        :param scaleBarOrientation: 1 for horizontal bar, 
+                                    2 for left-vertical bar and
+                                    3 for right-vertical bar(defaults 
+                                    to horizontal).
         :param titleScbar: title for the scalar bar (defaults to None)
         :param defaultDirection: default direction of the diagram (J: element 
                                  local j vector or K: element local K vector).
@@ -642,7 +647,7 @@ class OutputHandler(object):
         displaySettings.setupGrid(setToDisplay)
         meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale,color= setToDisplay.color)
         if(meshSceneOk):
-            displaySettings.appendDiagram(diagram,orientScbar,titleScbar) #Append diagram to the scene.
+            scaleBarOrientation= displaySettings.appendDiagram(diagram, scaleBarOrientation, titleScbar) #Append diagram to the scene.
             displaySettings.displayScene(caption= captionText, unitDescription= unitDescription, fileName= fileName)
         
     def displayIntForc(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None, captionText=None):
@@ -812,7 +817,7 @@ class OutputHandler(object):
                 retval= None
         return retval
 
-    def _display_elemental_force_loads(self, displaySettings, setToDisplay, elLoadComp, forceComponents, vectorScale, scalarBarOrientation, lRefModSize, defFScale):
+    def _display_elemental_force_loads(self, displaySettings, setToDisplay, elLoadComp, forceComponents, vectorScale, scaleBarOrientation, lRefModSize, defFScale):
         '''Display the force loads currently applied on elements.
 
         :param displaySettings: DisplaySettingsFE object that will show
@@ -829,7 +834,7 @@ class OutputHandler(object):
         :param forceComponents: indexes of the components to be considered 
                                 when displaying force vectors.
         :param vectorScale: scale for the displayed vectors.
-        :param scalarBarOrientation: scalar bar orientation (1 horiz., 
+        :param scaleBarOrientation: scalar bar orientation (1 horiz., 
                                      2 left-vert, 3 right-vert)
         :param lRefModSize: representative length of set size (to auto-scale).
 	:param defFScale: deformation scale factor. Factor to apply to the
@@ -839,7 +844,7 @@ class OutputHandler(object):
 			  multiplied by this factor. (Defaults to 0.0, i.e. 
 			  display the initial/undeformed shape).
         '''
-        retval= scalarBarOrientation
+        retval= scaleBarOrientation
         elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         # Display diagrams on 1D elements.
@@ -851,19 +856,17 @@ class OutputHandler(object):
             diagram.addDiagram(preprocessor)
             if(diagram.rangeIsValid()):
                 titleScBar= 'Linear loads ('+self.getOutputForceUnitSym()+'/'+ self.getOutputLengthUnitSym()+')'
-                displaySettings.appendDiagram(diagram, orientScbar= scalarBarOrientation, titleScbar= titleScBar)
-                retval= scalarBarOrientation+1
+                scaleBarOrientation= displaySettings.appendDiagram(diagram, scaleBarOrientation= scaleBarOrientation, titleScbar= titleScBar)
         # Display vectors on 2D and 3D elements.
         loadCaseName= preprocessor.getDomain.currentCombinationName
         vFieldEl= lvf.LoadVectorField(name= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing, multiplyByElementSize= self.outputStyle.multLoadsByElemSize, components= forceComponents)
         count= vFieldEl.dumpElementalLoads(preprocessor, defFScale= defFScale)
         if(count >0):
             vFieldElTitle= 'Body/Surface loads ('+self.getOutputForceUnitSym()+'/'+self.getOutputLengthUnitSym()+'2)'
-            vFieldEl.addToDisplay(displaySettings, orientation= scalarBarOrientation, title= vFieldElTitle)
-            retval= scalarBarOrientation+1
-        return retval
+            scaleBarOrientation= vFieldEl.addToDisplay(displaySettings, scaleBarOrientation= scaleBarOrientation, title= vFieldElTitle)
+        return scaleBarOrientation
 
-    def _display_elemental_strain_loads(self, displaySettings, setToDisplay, elLoadComp, strainLoadsField, scalarBarOrientation, lRefModSize, defFScale):
+    def _display_elemental_strain_loads(self, displaySettings, setToDisplay, elLoadComp, strainLoadsField, scaleBarOrientation, lRefModSize, defFScale):
         ''' Display the strain loads currently applied on elements.
 
         :param displaySettings: DisplaySettingsFE object that will show
@@ -879,7 +882,7 @@ class OutputHandler(object):
                            'epsilon_yz']
         :param strainLoadsField: strain load field which will compute the
                                 values of the strain loads in the model.
-        :param scalarBarOrientation: scalar bar orientation (1 horiz., 
+        :param scaleBarOrientation: scalar bar orientation (1 horiz., 
                                      2 left-vert, 3 right-vert)
         :param lRefModSize: representative length of set size (to auto-scale).
 	:param defFScale: deformation scale factor. Factor to apply to the
@@ -889,7 +892,7 @@ class OutputHandler(object):
 			  multiplied by this factor. (Defaults to 0.0, i.e. 
 			  display the initial/undeformed shape).
         '''
-        retval= scalarBarOrientation
+        retval= scaleBarOrientation
         preprocessor= self.modelSpace.preprocessor
         loadCaseName= preprocessor.getDomain.currentCombinationName
         unitConversionFactor= self.outputStyle.getStrainUnitsScaleFactor()
@@ -907,11 +910,10 @@ class OutputHandler(object):
             if(diagram.rangeIsValid()):
                 unicodeSymbol= latex_utils.get_unicode_symbol_from_name(elLoadComp)
                 titleScBar= 'Strain loads ('+unicodeSymbol+' '+self.getOutputStrainUnitSym()+')'
-                displaySettings.appendDiagram(diagram, orientScbar= scalarBarOrientation, titleScbar= titleScBar)
-                retval= scalarBarOrientation+1
-        return retval
+                scaleBarOrientation= displaySettings.appendDiagram(diagram, scaleBarOrientation= scaleBarOrientation, titleScbar= titleScBar)
+        return scaleBarOrientation
     
-    def _display_elemental_loads(self, displaySettings, setToDisplay, elLoadComp, forceComponents, vectorScale, loadRepresentationType, strainLoadsField, scalarBarOrientation, lRefModSize, defFScale):
+    def _display_elemental_loads(self, displaySettings, setToDisplay, elLoadComp, forceComponents, vectorScale, loadRepresentationType, strainLoadsField, scaleBarOrientation, lRefModSize, defFScale):
         '''Display the loads currently applied on elements.
 
         :param displaySettings: DisplaySettingsFE object that will show
@@ -934,7 +936,7 @@ class OutputHandler(object):
                                        patterns.
         :param strainLoadsField: strain load field which will compute the
                                  values of the strain loads in the model.
-        :param scalarBarOrientation: scalar bar orientation (1 horiz., 
+        :param scaleBarOrientation: scalar bar orientation (1 horiz., 
                                      2 left-vert, 3 right-vert)
         :param lRefModSize: representative length of set size (to auto-scale).
 	:param defFScale: deformation scale factor. Factor to apply to the
@@ -947,9 +949,9 @@ class OutputHandler(object):
         # Display diagrams on linear elements.
         loadRepresentationType= self.getLoadRepresentationType()
         if(loadRepresentationType=='force'):
-            scalarBarOrientation= self._display_elemental_force_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, elLoadComp= elLoadComp, forceComponents= forceComponents, vectorScale=vectorScale, scalarBarOrientation= scalarBarOrientation, lRefModSize= lRefModSize, defFScale= defFScale)
+            scaleBarOrientation= self._display_elemental_force_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, elLoadComp= elLoadComp, forceComponents= forceComponents, vectorScale=vectorScale, scaleBarOrientation= scaleBarOrientation, lRefModSize= lRefModSize, defFScale= defFScale)
         elif(loadRepresentationType=='strain'):
-            scalarBarOrientation= self._display_elemental_strain_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, strainLoadsField= strainLoadsField, elLoadComp= elLoadComp, scalarBarOrientation= scalarBarOrientation, lRefModSize= lRefModSize, defFScale= defFScale)
+            scaleBarOrientation= self._display_elemental_strain_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, strainLoadsField= strainLoadsField, elLoadComp= elLoadComp, scaleBarOrientation= scaleBarOrientation, lRefModSize= lRefModSize, defFScale= defFScale)
         elif(loadRepresentationType is not None): # mixed of anyone else.
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -957,9 +959,9 @@ class OutputHandler(object):
             loadCaseName= preprocessor.getDomain.currentCombinationName
             errorMsg= '; load case: '+str(loadCaseName)+' requires '+str(loadRepresentationType)+' which is not implemented yet.'
             lmsg.error(className+'.'+methodName+errorMsg)
-        return scalarBarOrientation
+        return scaleBarOrientation
         
-    def _display_nodal_loads(self, displaySettings, setToDisplay, forceComponents, vectorScale, scalarBarOrientation, defFScale):
+    def _display_nodal_loads(self, displaySettings, setToDisplay, forceComponents, vectorScale, scaleBarOrientation, defFScale):
         ''' Display the loads applied on nodes.
 
         :param displaySettings: DisplaySettingsFE object that will show
@@ -969,7 +971,7 @@ class OutputHandler(object):
         :param forceComponents: indexes of the components to be considered 
                                 when displaying force vectors.
         :param vectorScale: scale for the displayed vectors.
-        :param scalarBarOrientation: scalar bar orientation (1 horiz., 
+        :param scaleBarOrientation: scalar bar orientation (1 horiz., 
                                      2 left-vert, 3 right-vert)
 	:param defFScale: deformation scale factor. Factor to apply to the
 			  current displacement of the nodes so that the 
@@ -978,7 +980,7 @@ class OutputHandler(object):
 			  multiplied by this factor. (Defaults to 0.0, i.e. 
 			  display the initial/undeformed shape).
         '''
-        #retval= scalarBarOrientation
+        #retval= scaleBarOrientation
         preprocessor= self.modelSpace.preprocessor
         loadCaseName= preprocessor.getDomain.currentCombinationName
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
@@ -986,8 +988,7 @@ class OutputHandler(object):
         numNodalForces= vFieldFNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
         if(numNodalForces>0):
             vFieldFNodTitle= 'Nodal loads ('+self.getOutputForceUnitSym()+')'
-            vFieldFNod.addToDisplay(displaySettings,orientation= scalarBarOrientation, title= vFieldFNodTitle)
-            retval= scalarBarOrientation+1
+            scaleBarOrientation= vFieldFNod.addToDisplay(displaySettings, scaleBarOrientation= scaleBarOrientation, title= vFieldFNodTitle)
         momentComponents= self.modelSpace.getMomentComponents()
         ## moments on nodes.
         numNodalMoments= 0
@@ -996,9 +997,8 @@ class OutputHandler(object):
             numNodalMoments= vFieldMNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
         if(numNodalMoments>0):
             vFieldMNodTitle= 'Nodal moments ('+self.getOutputForceUnitSym()+')'
-            vFieldMNod.addToDisplay(displaySettings,orientation= scalarBarOrientation, title= vFieldMNodTitle)
-            retval= scalarBarOrientation+1
-        return scalarBarOrientation
+            scaleBarOrientation= vFieldMNod.addToDisplay(displaySettings, scaleBarOrientation= scaleBarOrientation, title= vFieldMNodTitle)
+        return scaleBarOrientation
         
     def displayLoads(self, setToDisplay=None, elLoadComp='xyzComponents', fUnitConv=1, caption= None, fileName=None, defFScale=0.0, scaleConstr= 0.2):
         '''Display the loads applied on beam elements and nodes for the domain
@@ -1033,7 +1033,7 @@ class OutputHandler(object):
         unitDescription= self.outputStyle.getForceUnitsDescription()
         loadRepresentationType= self.getLoadRepresentationType()
         displaySettings= self.getDisplaySettingsFE()
-        scalarBarOrientation= 1 # scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
+        scaleBarOrientation= 1 # scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
         # Check if strainLoadField is needed.
         strainLoadsField= None
         if(loadRepresentationType=='strain'): # display strain loads.
@@ -1045,7 +1045,7 @@ class OutputHandler(object):
                 unicodeSymbol= latex_utils.get_unicode_symbol_from_name(elLoadComp)
                 strainLoadsField.setScalarBarTitle('Strain loads ('+unicodeSymbol+' '+self.getOutputStrainUnitSym()+')')
                 displaySettings.setField(strainLoadsField)
-                scalarBarOrientation+= 1
+                scaleBarOrientation+= 1
         grid= displaySettings.setupGrid(setToDisplay)
         if __debug__:
             if(not grid):
@@ -1058,10 +1058,10 @@ class OutputHandler(object):
             vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.
             # elemental loads
             forceComponents= self.modelSpace.getForceComponents()
-            scalarBarOrientation= self._display_elemental_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, elLoadComp= elLoadComp, loadRepresentationType= loadRepresentationType, strainLoadsField= strainLoadsField, vectorScale= vectorScale, scalarBarOrientation= scalarBarOrientation, lRefModSize= LrefModSize, defFScale= defFScale, forceComponents= forceComponents)
+            scaleBarOrientation= self._display_elemental_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, elLoadComp= elLoadComp, loadRepresentationType= loadRepresentationType, strainLoadsField= strainLoadsField, vectorScale= vectorScale, scaleBarOrientation= scaleBarOrientation, lRefModSize= LrefModSize, defFScale= defFScale, forceComponents= forceComponents)
             # nodal loads
             ## forces on nodes.
-            scalarBarOrientation= self._display_nodal_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, forceComponents= forceComponents, vectorScale= vectorScale, scalarBarOrientation= scalarBarOrientation, defFScale= defFScale)
+            scaleBarOrientation= self._display_nodal_loads(displaySettings= displaySettings, setToDisplay= setToDisplay, forceComponents= forceComponents, vectorScale= vectorScale, scaleBarOrientation= scaleBarOrientation, defFScale= defFScale)
             ## Display scene.
             if(not caption):
                 caption= 'load case: ' + loadCaseName +' '+elLoadComp + ', set: ' + setToDisplay.name + ', '  + unitDescription
@@ -1289,12 +1289,11 @@ class OutputHandler(object):
         displaySettings.setupGrid(setToDisplay)
         meshSceneOk= displaySettings.defineMeshScene(defFScale= defFScale, color= setToDisplay.color)
         if(meshSceneOk):
-            scOrient= 1 # scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
+            scaleBarOrientation= 1 # scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
             if(vFieldD):
-                vFieldD.addToDisplay(displaySettings, orientation= scOrient, title= 'Displacement')
-                scOrient+=1
+                scaleBarOrientation= vFieldD.addToDisplay(displaySettings, scaleBarOrientation= scaleBarOrientation, title= 'Displacement')
             if(vFieldR):
-                vFieldR.addToDisplay(displaySettings, orientation= scOrient, title= 'Rotation')
+                scaleBarOrientation= vFieldR.addToDisplay(displaySettings, scaleBarOrientation= scaleBarOrientation, title= 'Rotation')
             displaySettings.displayScene(caption= caption, unitDescription= '', fileName= fileName)
         else:
             className= type(self).__name__

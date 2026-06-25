@@ -167,7 +167,7 @@ class RecordDisp(OuputUnits):
             for arg in self.listDspRot:
                 outputHandler.displayDispRot(itemToDisp=arg,setToDisplay=st,fileName= fileName)
 
-    def displayIntForcDiag(self, itemToDisp, fileName=None, defFScale=0.0, orientScbar=1, overrideScaleFactor= None, titleScbar=None):
+    def displayIntForcDiag(self, itemToDisp, fileName=None, defFScale=0.0, scaleBarOrientation= 1, overrideScaleFactor= None, titleScbar=None):
         '''displays the component of internal forces as a 
          diagram over lines (i.e. appropriated for beam elements).
 
@@ -184,12 +184,15 @@ class RecordDisp(OuputUnits):
 			  display the initial/undeformed shape).
         :param overrideScaleFactor: if not none, override the scale factor 
                                     in outputStyle.
-        :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
+        :param scaleBarOrientation: 1 for horizontal bar, 
+                                    2 for left-vertical bar and
+                                    3 for right-vertical bar(defaults 
+                                    to horizontal).
         :param titleScbar: title for the scalar bar (defaults to None)
         '''
         outputHandler= self.getOutputHandler(self.setsToDispDspRot)
         for st in self.setsToDispIntForc:
-            outputHandler.displayIntForcDiag(itemToDisp= itemToDisp,setToDisplay= st,fileName= fileName, defFScale= defFScale, overrideScaleFactor= overrideScaleFactor, orientScbar=orientScbar,titleScbar=titleScbar)
+            outputHandler.displayIntForcDiag(itemToDisp= itemToDisp,setToDisplay= st,fileName= fileName, defFScale= defFScale, overrideScaleFactor= overrideScaleFactor, scaleBarOrientation= scaleBarOrientation, titleScbar=titleScbar)
 
     def dispLoadCaseBeamEl(self, setToDisplay,caption= None,fileName=None,defFScale=0.0):
         '''Display the loads applied on beam elements and nodes for a given load case
@@ -429,7 +432,7 @@ class LoadCaseDispParameters(RecordDisp):
                 fullgrfname=fullPath+self.loadCaseName+st.name+arg
                 rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
                 grFileName= fullgrfname+'.png'
-                outputHandler.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= grFileName,orientScbar=1,titleScbar=None)
+                outputHandler.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= grFileName, scaleBarOrientation= 1,titleScbar=None)
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= cfg.getForceUnitsDescription())
                 output_handler.append_graphic_to_tex_file(texFile=texFile, graphicFileName= rltvgrfname, graphicWidth= cfg.grWidth, captionText= capt,multicolEnv=multicolEnv)
         texFile.write('\\cleardoublepage\n')

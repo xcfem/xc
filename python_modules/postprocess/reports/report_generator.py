@@ -117,7 +117,7 @@ class ReportGenerator(oh.OutputHandler):
                 fullgrFileNm= fullPath+suffix
                 rltvgrFileNm= rltvPath+suffix
                 fullgrFileNmAndExt= fullPath+bitmapFileName
-                self.displayDiagram(attributeName=limitStateLabel, component=arg, setToDispRes=st, setToDisplay=st, caption=capt, fUnitConv= None, unitDescription= '', scaleFactor= 1.0, fileName= fullgrFileNmAndExt, defFScale= 0.0,orientScbar=1,titleScbar=None, defaultDirection= defaultDiagramDirection)
+                self.displayDiagram(attributeName=limitStateLabel, component=arg, setToDispRes=st, setToDisplay=st, caption=capt, fUnitConv= None, unitDescription= '', scaleFactor= 1.0, fileName= fullgrFileNmAndExt, defFScale= 0.0, scaleBarOrientation= 1,titleScbar=None, defaultDirection= defaultDiagramDirection)
                 label= limitStateLabel+suffix
                 oh.append_graphic_to_tex_file(texFile=report, graphicFileName= rltvgrFileNm, graphicWidth= cfg.grWidth, captionText= capt, label= label,multicolEnv=multicolEnv)
         report.close()
