@@ -388,7 +388,7 @@ class OutputHandler(object):
             captionText= self.getCaptionText(itemToDisp, setToDisplay, includeLoadCaseName= True)
         self.displayScalarPropertyAtNodes(propToDisp= propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax=rgMinMax)
         
-    def displayVonMisesStresses(self, vMisesCode= 'von_mises_stress', setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None,captionText=None):
+    def displayVonMisesStresses(self, vMisesCode= 'von_mises_stress', setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None, captionText=None):
         '''display the stresses on the elements.
 
         :param vMisesCode: string that will be passed to the element
@@ -449,7 +449,35 @@ class OutputHandler(object):
 
         captionText= self.getCaptionText(itemToDisp, setToDisplay, includeLoadCaseName= True)
         self.displayScalarPropertyAtNodes(propToDisp= propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
-        
+
+    def displayElementThickness(self, setToDisplay= None, fileName=None, defFScale=0.0, rgMinMax= None, captionText= None):
+        '''displays the strains on the elements.
+
+        :param setToDisplay: set of entities to be represented.
+        :param fileName: name of the file to plot the graphic. Defaults to 
+                         None, in that case an screen display is generated
+        :param defFScale: deformation scale factor. Factor to apply to the
+                          current displacement of the nodes so that the 
+                          displayed position of each node equals to
+                          the initial position plus its displacement 
+                          multiplied by this factor. (Defaults to 0.0, i.e. 
+                          display the initial/undeformed shape).
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+                         of the field to be represented (in units of 
+                         calculation, not units of display). All the values 
+                         less than vmin are displayed in blue and those 
+                         greater than vmax in red (defaults to None).
+        :param captionText: caption text. Defaults to None, in which case the
+                            default caption text (thickness +  units + set
+                            name) is created.
+        '''
+        propertyName= self.modelSpace.setNodePropertyFromElements(compName= None, xcSet= setToDisplay, function= None, propToDefine= 'thickness', transformToLocalCoord= False)
+        unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters('thickness')
+        if not captionText:
+            captionText= setToDisplay.name+' element thickness '
+            captionText+= unitDescription+'.'
+        self.displayScalarPropertyAtNodes(propToDisp= propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
+
     def displayEnvelopeComponent(self, envelopeComponent, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None, captionText= None):
         '''displays the component of the displacement or rotations in the 
         set of entities.

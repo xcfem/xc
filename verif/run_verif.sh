@@ -2103,8 +2103,10 @@ python tests/postprocess/vtk/test_display_zero_length_local_axes_01.py
 python tests/postprocess/vtk/test_display_zero_length_local_axes_02.py
 python tests/postprocess/vtk/test_display_reactions_01.py
 python tests/postprocess/vtk/test_display_eigenvectors_01.py
-python tests/postprocess/vtk/test_display_truss_areas.py
 python tests/postprocess/vtk/test_display_strong_weak_axis_01.py
+echo "$BLEU" "    Graphic output. Element properties." "$NORMAL"
+python tests/postprocess/vtk/element_properties/test_display_truss_areas.py
+python tests/postprocess/vtk/element_properties/test_display_element_thickness.py
 echo "$BLEU" "    Graphic output. Loads." "$NORMAL"
 python tests/postprocess/vtk/display_loads/test_display_loads_01.py
 python tests/postprocess/vtk/display_loads/test_display_loads_02.py

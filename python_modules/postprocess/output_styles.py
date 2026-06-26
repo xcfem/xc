@@ -223,6 +223,9 @@ class OutputStyle(object):
         elif(itemToDisp=='sectionArea'):
             fConvUnits= 1e4
             unitDescription= 'cm2'
+        elif(itemToDisp=='thickness'):
+            fConvUnits= 1e3
+            unitDescription= '[mm]'
         elif(itemToDisp=='strongAxisBucklingPercent'):
             fConvUnits= 1.0
             unitDescription= 'Dot product (projection) of the buckling eigenvector over the strong axis.'
