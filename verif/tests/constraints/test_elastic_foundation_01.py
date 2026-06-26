@@ -76,22 +76,37 @@ result= analysis.analyze(1)
 
 maxPressure, maxPressureNode, minPressure, minPressureNode, avgPressure= elasticFoundation.getMaxMinAvgPressure(component= 2)
 
+
 refValue= 2500*0.6*g
 ratio1= abs(maxPressure-refValue)/refValue
 ratio2= abs(minPressure-refValue)/refValue
 ratio3= abs(avgPressure-refValue)/refValue
+
+modelSpace.calculateNodalReactions()
+reaction= elasticFoundation.getReaction()
+Rx= reaction[0]
+ratio4= abs(Rx)
+Ry= reaction[1]
+ratio5= abs(Ry)
+Rz= reaction[2]
+refRz= refValue*foundationWidth*foundationLength
+ratio6= abs(Rz-refRz)/refRz
+
 
 '''
 print('refValue= ', refValue/1e3, 'kPa')
 print('maxPressure= ', maxPressure/1e3, 'kPa', ratio1)
 print('minPressure= ', minPressure/1e3, 'kPa', ratio2)
 print('avgPressure= ', avgPressure/1e3, 'kPa', ratio3)
+print(Rx, ratio4)
+print(Ry, ratio5)
+print(Rz, ratio6)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-6) & (abs(ratio2)<1e-6) & (abs(ratio3)<1e-6):
+if (abs(ratio1)<1e-6) & (abs(ratio2)<1e-6) & (abs(ratio3)<1e-6) & (abs(ratio4)<1e-6) & (abs(ratio5)<1e-6) & (abs(ratio6)<1e-6):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
