@@ -101,8 +101,11 @@ class MRMFreedom_Constraint: public MFreedom_ConstraintBase
     int getNumRetainedDofs(void) const;           
     int getNumConstrainedDofs(void) const;           
     int getNumLagrangeDofs(void) const;
+    
     bool affectsNode(int ) const;
     bool affectsNodeAndDOF(int , int ) const;
+    virtual std::map<int, std::list<int> > getAffectedDOFs(void) const;
+    
     virtual int applyConstraint(double pseudoTime);
     const std::vector<Vector> &getRetainedDOFsInitialDisplacements(void) const;
     virtual const Vector &getRetainedDOFsInitialDisplacement(const size_t &) const;

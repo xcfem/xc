@@ -3006,12 +3006,76 @@ bool XC::Node::checkReactionForce(const double &tol) const
 	    else
 	      {
 		const size_t sz= reaction.Size();
-                for(size_t nDOF= 0;nDOF<sz;nDOF++)
+                for(size_t nDOF= 0; nDOF<sz; nDOF++)
 		  {
 		    const double r= fabs(reaction[nDOF]);
 		    if(r>tol)
 		      {
 			const bool affectedDOF= cc.isDOFAffectedByConstraints(nTag,nDOF);
+			if(!affectedDOF)
+			  {
+			    std::clog << Color::yellow << errHeader
+				      << "; the node: " << getTag()
+		                      << " at position: "
+				      << this->getInitialPosition3d()
+				      << " has not constraints on DOF: "
+				      << nDOF << " and, however,"
+				      << " it has a reaction with value: "
+				      << r 
+				      << " on this degree of freedom, it seems "
+				      << "that the solution method and/or "
+				      << "tolerances are not well suited"
+				      << " to the problem."
+				      << " (tol= " << tol << ")."
+				      << Color::def << std::endl;
+			    retval= false;
+			  }
+		      }
+		  }// for nDOF
+	      }
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Checks that reactions on the node correspond to constrained degrees
+//! of freedom using the help of the given .
+bool XC::Node::checkReactionForceWithHelpers(const double &tol, const std::map<int, std::list<int> > &dofsAffectedByConstraints) const
+  {
+    bool retval= true;
+    const double norm= this->reaction.Norm();
+    if(norm>tol)
+      {
+	const std::string errHeader= getClassName() + "::" + __FUNCTION__;
+	if(!isFrozen())
+	  {
+	    const int nTag= getTag();
+	    if(!dofsAffectedByConstraints.count(nTag))
+	      {
+		std::clog << Color::yellow << errHeader
+			  << "; the node: " << this->getTag()
+		          << " at position: " << this->getInitialPosition3d()
+			  << " has not constraints and however"
+			  << " it has a reaction with value: " << reaction 
+			  << " and norm: " << norm
+			  << " it seems that the solution method"
+			  << " is not well suited to the problem."
+			  << " (tol= " << tol << ")."
+			  << Color::def << std::endl;
+		retval= false;
+	      }
+	    else
+	      {
+		const size_t sz= this->reaction.Size();
+                for(size_t nDOF= 0; nDOF<sz; nDOF++)
+		  {
+		    const double r= fabs(reaction[nDOF]);
+		    if(r>tol)
+		      {			
+			bool affectedDOF= false;
+			const std::list<int> &dof_lst= dofsAffectedByConstraints.at(nTag);
+			if(std::find(dof_lst.begin(), dof_lst.end(), nDOF)!=dof_lst.end())
+			  affectedDOF= true;
 			if(!affectedDOF)
 			  {
 			    std::clog << Color::yellow << errHeader

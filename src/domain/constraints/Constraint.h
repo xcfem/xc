@@ -31,7 +31,7 @@
 #define Constraint_h
 
 #include "domain/component/ContinuaReprComponent.h"
-
+#include <list>
 
 namespace XC {
 //!
@@ -66,6 +66,7 @@ class Constraint: public ContinuaReprComponent
     virtual int applyConstraint(double loadFactor)= 0;    
     virtual bool affectsNode(int ) const;
     virtual bool affectsNodeAndDOF(int , int ) const;
+    virtual std::map<int, std::list<int> > getAffectedDOFs(void) const;
 
     void setDomain(Domain *);
 

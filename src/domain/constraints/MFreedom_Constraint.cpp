@@ -192,6 +192,19 @@ bool XC::MFreedom_Constraint::affectsNodeAndDOF(int nodeTag, int theDOF) const
     return retval;
   }
 
+//! @brief Return the DOFs affected by the constraint.
+std::map<int, std::list<int> > XC::MFreedom_Constraint::getAffectedDOFs(void) const
+  {
+    std::map<int, std::list<int> > retval= MFreedom_ConstraintBase::getAffectedDOFs();
+    const ID &retainedDOFs= retainDOF;    
+    const size_t sz= retainedDOFs.Size();
+    std::list<int> c_dofs;
+    for(size_t i= 0; i<sz; i++)
+      { c_dofs.push_back(retainedDOFs[i]);}
+    retval[this->getNodeRetained()]= c_dofs;
+    return retval;
+  }
+
 //! @brief Returns the identifiers of the retained degrees of freedom.
 const XC::ID &XC::MFreedom_Constraint::getRetainedDOFs(void) const
   {

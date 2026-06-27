@@ -927,7 +927,7 @@ std::deque<int> XC::ConstrContainer::getTagsSPsNode(int nodeTag, int theDOF) con
   }
 
 //! @brief Search on the container all the single freedom constraints that
-//! affect the node whose tag is given.
+//! affect the node identified by the given node tag.
 std::deque<int> XC::ConstrContainer::getTagsSPsNode(int nodeTag) const
   {
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
@@ -935,7 +935,7 @@ std::deque<int> XC::ConstrContainer::getTagsSPsNode(int nodeTag) const
   }
 
 //! @brief Search on the container all the multi-freedom constraints that
-//! affect the node and degree of freedom given.
+//! affect the node and degree of freedom identified by the given tags.
 std::deque<int> XC::ConstrContainer::getTagsMPsNode(int nodeTag, int theDOF) const
   {
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
@@ -943,7 +943,7 @@ std::deque<int> XC::ConstrContainer::getTagsMPsNode(int nodeTag, int theDOF) con
   }
 
 //! @brief Search on the container all the multi-freedom constraints that
-//! affect the node whose tag is given.
+//! affect the node identified by the given tag.
 std::deque<int> XC::ConstrContainer::getTagsMPsNode(int nodeTag) const
   {
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
@@ -951,8 +951,8 @@ std::deque<int> XC::ConstrContainer::getTagsMPsNode(int nodeTag) const
   }
 
 //! @brief Search on the container all the multi retained multi-freedom
-//! constraints that affect the node and degree of freedom being passed
-//! as parameter.
+//! constraints that affect the node and degree of freedom identified by
+//! the given tags.
 std::deque<int> XC::ConstrContainer::getTagsMRMPsNode(int nodeTag, int theDOF) const
   {
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
@@ -960,14 +960,15 @@ std::deque<int> XC::ConstrContainer::getTagsMRMPsNode(int nodeTag, int theDOF) c
   }
 
 //! @brief Search on the container all the multi retained multi-freedom
-//! constraints that affect the node whose tag is given.
+//! constraints that affect the node identified by the given tag.
 std::deque<int> XC::ConstrContainer::getTagsMRMPsNode(int nodeTag) const
   {
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
     return this_no_const->getMRMPs().searchAll(nodeTag); 
   }
 
-//! @brief Loop over all the load patterns that are currently added to the domain getting their tag.
+//! @brief Loop over all the load patterns that are currently added to the
+//! domain getting their tags.
 std::deque<int> XC::ConstrContainer::getTagsLPs(void) const
   {
     std::deque<int> retval;   
@@ -977,7 +978,8 @@ std::deque<int> XC::ConstrContainer::getTagsLPs(void) const
     return retval;
   }
 
-//! @brief Loop over all the load patterns that are currently added to the domain getting their names.
+//! @brief Loop over all the load patterns that are currently added to the
+//! domain getting their names.
 std::string XC::ConstrContainer::getLoadPatternsNames(void) const
   {
     std::string retval;
@@ -1007,7 +1009,8 @@ std::string XC::ConstrContainer::getLoadPatternsNames(void) const
     return retval;
   }
 
-//! @brief Loop over all the load patterns that are currently added to the domain getting their tag.
+//! @brief Loop over all the load patterns that are currently added to the
+//! domain getting their tag.
 std::deque<int> XC::ConstrContainer::getTagsNLs(void) const
   {
     // loop over all the node lockers that are currently added to the domain
@@ -1036,6 +1039,22 @@ bool XC::ConstrContainer::nodeAffectedBySPs(int nodeTag) const
     return retval;
   }
 
+//! @brief Returns the tags of the nodes for whose DOFs are constrained by one
+//! or more single freedom constraints.
+std::set<int> XC::ConstrContainer::getTagsNodesAffectedBySPs(int theDOF) const
+  {
+    std::set<int> retval;
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
+    SFreedom_ConstraintIter &theSPs= this_no_const->getDomainAndLoadPatternSPs();
+    SFreedom_Constraint *theSP= nullptr;
+    while((theSP= theSPs()) != 0)
+      {
+	if(theSP->getDOF_Number() == theDOF)
+	  retval.insert(theSP->getNodeTag());
+      }
+    return retval;
+  }
+
 //! @brief Returns true if the DOF is affected by one or more single freedom
 //! constraints.
 bool XC::ConstrContainer::isDOFAffectedBySPs(int nodeTag, int theDOF) const
@@ -1053,18 +1072,38 @@ bool XC::ConstrContainer::isDOFAffectedBySPs(int nodeTag, int theDOF) const
     return retval;
   }
 
-//! @brief Returns the tags of the nodes that are which theDOF
-//! constrained by one or more single freedom constraints.
-std::set<int> XC::ConstrContainer::getTagsNodesffectedBySPs(int theDOF) const
+//! @brief Returns the DOFs of the nodes whose DOFs are constrained by one or
+//! more single freedom constraints.
+std::map<int, std::list<int> > XC::ConstrContainer::getDOFsAffectedBySPs(void) const
   {
-    std::set<int> retval;
+    std::map<int, std::list<int> > retval;
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
     SFreedom_ConstraintIter &theSPs= this_no_const->getDomainAndLoadPatternSPs();
     SFreedom_Constraint *theSP= nullptr;
     while((theSP= theSPs()) != 0)
       {
-	if(theSP->getDOF_Number() == theDOF)
-	  retval.insert(theSP->getNodeTag());
+	const std::map<int, std::list<int> > &tmp= theSP->getAffectedDOFs();
+	for(std::map<int, std::list<int> >::const_iterator i= tmp.begin();
+	    i!= tmp.end();
+	    i++)
+	  {
+	    const int nTag= (*i).first;
+	    const std::list<int> &source_list= (*i).second;
+	    if(retval.count(nTag)>0) // already exists.
+	      {
+		std::list<int> &dof_lst= retval.at(nTag);
+		for(std::list<int>::const_iterator j= source_list.begin();
+		    j!= source_list.end();
+		    j++)
+		  {
+		    const int DOF= *j;
+		    if(std::find(dof_lst.begin(), dof_lst.end(), DOF)== dof_lst.end())
+		      dof_lst.push_back(DOF);
+		  }
+	      }
+	    else // new.
+	      { retval[nTag]= source_list; }
+	  }
       }
     return retval;
   }
@@ -1076,7 +1115,7 @@ bool XC::ConstrContainer::nodeAffectedByMPs(int nodeTag) const
     bool retval= false;
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
     MFreedom_ConstraintIter &theMPs= this_no_const->getMPs();
-    MFreedom_Constraint *theMP;
+    MFreedom_Constraint *theMP= nullptr;
     while((theMP= theMPs()) != 0)
       if(theMP->affectsNode(nodeTag))
         {
@@ -1101,6 +1140,43 @@ bool XC::ConstrContainer::isDOFAffectedByMPs(int nodeTag, int theDOF) const
             retval= true;
             break;
           }
+      }
+    return retval;
+  }
+
+//! @brief Returns the DOFs of the nodes that are constrained by one or more
+//! multi-freedom constraints.
+std::map<int, std::list<int> > XC::ConstrContainer::getDOFsAffectedByMPs(void) const
+  {
+    std::map<int, std::list<int> > retval;
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
+    MFreedom_ConstraintIter &theMPs= this_no_const->getMPs();
+    MFreedom_Constraint *theMP= nullptr;
+    
+    while((theMP= theMPs()) != 0)
+      {
+	const std::map<int, std::list<int> > &tmp= theMP->getAffectedDOFs();
+	for(std::map<int, std::list<int> >::const_iterator i= tmp.begin();
+	    i!= tmp.end();
+	    i++)
+	  {
+	    const int nTag= (*i).first;
+	    const std::list<int> &source_list= (*i).second;
+	    if(retval.count(nTag)>0) // already exists.
+	      {
+		std::list<int> &dof_lst= retval.at(nTag);
+		for(std::list<int>::const_iterator j= source_list.begin();
+		    j!= source_list.end();
+		    j++)
+		  {
+		    const int DOF= *j;
+		    if(std::find(dof_lst.begin(), dof_lst.end(), DOF)== dof_lst.end())
+		      dof_lst.push_back(DOF);
+		  }
+	      }
+	    else
+	      { retval[nTag]= source_list; }
+	  }
       }
     return retval;
   }
@@ -1139,6 +1215,44 @@ bool XC::ConstrContainer::isDOFAffectedByMRMPs(int nodeTag, int theDOF) const
     return retval;
   }
 
+//! @brief Returns the DOFs of the nodes that are affected by one or more
+//! multi-row multi-freedom constraints.
+std::map<int, std::list<int> > XC::ConstrContainer::getDOFsAffectedByMRMPs(void) const
+  {
+    std::map<int, std::list<int> > retval;
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
+    MRMFreedom_ConstraintIter &theMRMPs= this_no_const->getMRMPs();
+    MRMFreedom_Constraint *theMRMP= nullptr;
+    
+    while((theMRMP= theMRMPs()) != 0)
+      {
+	const std::map<int, std::list<int> > &tmp= theMRMP->getAffectedDOFs();
+	for(std::map<int, std::list<int> >::const_iterator i= tmp.begin();
+	    i!= tmp.end();
+	    i++)
+	  {
+	    const int nTag= (*i).first;
+	    const std::list<int> &source_list= (*i).second;
+	    if(retval.count(nTag)>0) // already exists.
+	      {
+		std::list<int> &dof_lst= retval.at(nTag);
+		for(std::list<int>::const_iterator j= source_list.begin();
+		    j!= source_list.end();
+		    j++)
+		  {
+		    const int DOF= *j;
+		    if(std::find(dof_lst.begin(), dof_lst.end(), DOF)== dof_lst.end())
+		      dof_lst.push_back(DOF);
+		  }
+	      }
+	    else
+	      { retval[nTag]= source_list; }
+	  }
+      }
+    return retval;
+    
+  }
+
 //! @brief Returns true if the node is affected by any constraint.
 bool XC::ConstrContainer::nodeAffectedByConstraints(int nodeTag) const
   {
@@ -1161,6 +1275,56 @@ bool XC::ConstrContainer::isDOFAffectedByConstraints(int nodeTag, int theDOF) co
     return retval;
   }
 
+//! @brief Returns the DOFs affected by any constraint.
+std::map<int, std::list<int> > XC::ConstrContainer::getDOFsAffectedByConstraints(void) const
+  { 
+    std::map<int, std::list<int> > retval= this->getDOFsAffectedBySPs();
+    const std::map<int, std::list<int> > &mp_affected= this->getDOFsAffectedByMPs();
+    for(std::map<int, std::list<int> >::const_iterator i= mp_affected.begin();
+	i!=mp_affected.end(); i++)
+      {
+	const int nTag= (*i).first;
+	const std::list<int> &source_list= (*i).second;
+	if(retval.count(nTag)>0) // already exists.
+	  {
+	    std::list<int> &dof_lst= retval.at(nTag);
+	    for(std::list<int>::const_iterator j= source_list.begin();
+		j!= source_list.end();
+		j++)
+	      {
+		const int DOF= *j;
+		if(std::find(dof_lst.begin(), dof_lst.end(), DOF)== dof_lst.end())
+		  dof_lst.push_back(DOF);
+	      }
+	  }
+	else // new.
+	  { retval[nTag]= source_list; }
+      }
+    const std::map<int, std::list<int> > &mrmp_affected= this->getDOFsAffectedByMRMPs();
+    for(std::map<int, std::list<int> >::const_iterator i= mrmp_affected.begin();
+	i!=mrmp_affected.end(); i++)
+      {
+	const int nTag= (*i).first;
+	const std::list<int> &source_list= (*i).second;
+	if(retval.count(nTag)>0) // already exists.
+	  {
+	    std::list<int> &dof_lst= retval.at(nTag);
+	    for(std::list<int>::const_iterator j= source_list.begin();
+		j!= source_list.end();
+		j++)
+	      {
+		const int DOF= *j;
+		if(std::find(dof_lst.begin(), dof_lst.end(), DOF)== dof_lst.end())
+		  dof_lst.push_back(DOF);
+	      }
+	  }
+	else // new.
+	  { retval[nTag]= source_list; }
+      }
+    return retval;
+  }
+
+
 //! @brief Set as constant all the active load patterns (used in pushover analysis).
 void XC::ConstrContainer::setLoadConstant(void)
   {
@@ -1171,11 +1335,14 @@ void XC::ConstrContainer::setLoadConstant(void)
 //! @brief Reactions due to constraints.
 int XC::ConstrContainer::calculateNodalReactions(bool inclInertia, const double &tol)
   {
+    // Add multi-freedom constraints resisting forces to reactions.
     MFreedom_ConstraintIter &theMPs= this->getMPs();
     MFreedom_Constraint *theMP;
     while((theMP= theMPs()) != 0)
       theMP->addResistingForceToNodalReaction(inclInertia);
 
+
+    // Add multi-row multi-freedom constraints resisting forces to reactions.
     MRMFreedom_ConstraintIter &theMRMPs= this->getMRMPs();
     MRMFreedom_Constraint *theMRMP;
     while((theMRMP= theMRMPs()) != 0)
@@ -1212,7 +1379,7 @@ int XC::ConstrContainer::sendLPatternsTags(const int &posFlag,const int &posDbTa
     return res;
   }
 
-//! Set the tags of the active load patterns.
+//! @brief Set the tags of the active load patterns.
 void XC::ConstrContainer::setTagsLPs(const ID &loadPatternsTags)
   {
     Domain *dom= getDomain();

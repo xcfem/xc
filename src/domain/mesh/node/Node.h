@@ -382,6 +382,7 @@ class Node: public MeshComponent
     virtual int addReactionForce(const Vector &, double factor);
     virtual int resetReactionForce(bool inclInertia);
     bool checkReactionForce(const double &) const;
+    bool checkReactionForceWithHelpers(const double &, const std::map<int, std::list<int> > &dofsAffectedByConstraints) const;
     Matrix getTangentStiff(const ElementConstPtrSet &) const;
     Matrix getInitialStiff(const ElementConstPtrSet &) const;
 
