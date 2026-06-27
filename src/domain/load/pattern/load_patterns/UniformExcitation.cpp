@@ -104,7 +104,7 @@ void XC::UniformExcitation::setDomain(Domain *theDomain)
     // for those nodes not fixed in the dirn!
     if(vel0 != 0.0)
       {
-	std::set<int> constrainedNodes= theDomain->getConstraints().getTagsNodesffectedBySPs(theDof);
+	std::set<int> constrainedNodes= theDomain->getConstraints().getTagsNodesAffectedBySPs(theDof);
 
         NodeIter &theNodes = theDomain->getNodes();
         Node *theNode= nullptr;
