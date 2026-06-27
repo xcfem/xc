@@ -283,7 +283,21 @@ std::map<int, std::list<int> > XC::MRMFreedom_Constraint::getAffectedDOFs(void) 
 	std::list<int> c_dofs;
 	for(size_t j= 0; j<dofs_sz; j++)
 	  { c_dofs.push_back(retainedDOFs[j]);}
-	retval[rNodes[i]]= c_dofs;
+	const int &retainedNodeTag= rNodes[i];
+	if(retval.count(retainedNodeTag)>0) // already exists.
+	  {
+	    std::list<int> &dof_lst= retval[retainedNodeTag];
+	    for(std::list<int>::const_iterator i= c_dofs.begin();
+		i!= c_dofs.end();
+		i++)
+	      {
+		const int &DOF= *i;
+		if(std::find(dof_lst.begin(), dof_lst.end(), DOF)==dof_lst.end()) // not found.
+		  dof_lst.push_back(DOF);
+	      }
+	  }
+	else // new.
+	  retval[rNodes[i]]= c_dofs;
       }
     return retval;
   }
