@@ -62,18 +62,19 @@ class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
             cad_mesh.vtk_define_kpoint_actor(self.gridRecord,self.renderer,0.02)
             cad_mesh.vtk_define_cells_actor(gridRecord= self.gridRecord, renderer= self.renderer, reprType= "surface")
             self.renderer.ResetCamera()
-            return True
+            retval= True
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+"; error when drawing set: '"+setToDraw.name+"', it has no key points so I can't get set geometry (use fillDownwards?)")
-            return False
+            retval= False
 
         #Implement drawing of labels.
         # if(entToLabel=="cells"):
         #   postprocess.xcVtk.cad_mesh.VtkDibujaIdsCells(self.gridRecord,setToDraw,cellTypeName,renderer)
         # elif(entToLabel=="points"):
         #   postprocess.xcVtk.cad_mesh.VtkDibujaIdsKPts(self.gridRecord,setToDraw,renderer)
+        return retval
 
     def displayBlockEntities(self, setToDisplay, caption, displayCellTypes, fileName= None):
         ''' Display geometric entities (points, lines, surfaces and volumes)
@@ -87,6 +88,7 @@ class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
         meshSceneOk= self.defineMeshScene(displayCellTypes= displayCellTypes)
         if(meshSceneOk):
             self.displayScene(caption= caption, unitDescription= '', fileName= fileName)
+        
 
     def displayLocalAxes(self, setToDisplay, caption, displayCellTypes, fileName= None):
         '''Display the element local axes.

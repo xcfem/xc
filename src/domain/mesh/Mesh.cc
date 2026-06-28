@@ -1332,12 +1332,14 @@ bool XC::Mesh::checkNodalReactions(const double &relTol)
     const double tol= relTol*max_reaction_norm;
     if(max_reaction_norm>reactionValueThreshold) //If reactions are not extremely small.
       {
+	const ConstrContainer &cc= getDomain()->getConstraints();
+	const std::map<int, std::list<int> > &tagsNodesAffectedByConstraints= cc.getDOFsAffectedByConstraints();
 	theNode= nullptr;
 	NodeIter &theNodes2 = this->getNodes();
 	while((theNode = theNodes2()) != 0)
 	  if(theNode->getTag()!=tagNodeCheckReactionException)
 	    {
-	      const bool tmp= theNode->checkReactionForce(tol);
+	      const bool tmp= theNode->checkReactionForceWithHelpers(tol, tagsNodesAffectedByConstraints);
 	      if(retval) //if it's already false there is no need to check.
 		retval= tmp;
 	    }

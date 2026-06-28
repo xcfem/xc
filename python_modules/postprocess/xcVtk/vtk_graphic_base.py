@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 ''' Display nice images of the model. '''
 
-from __future__ import print_function
-import math
-
-
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
+
+import math
 
 import sys
 from vtk.vtkRenderingCore import (
@@ -157,7 +155,17 @@ class CameraParameters(object):
         self.zoom= zoom # zoom.
         self.hCamFct= hCamF
         self.focalPoint= [0, 0, 0] # focal point of the camera.
+        self.modelBNDDiagonal= None # Size of the model boundary.
         self.defineViewParametersFromViewName()
+
+    def setModelBoundaryDiagonal(self, diagonal):
+        ''' Set the vector that goes from the boundary corner with the
+            minimun values of the coordintates (xmin, ymin, zmin) to the
+            corner with the maximum ones.
+
+        :param diagonalVector: diagonal vector of the model boundary.
+        '''
+        self.modelBNDDiagonal= diagonal
 
     def defineViewParametersFromViewName(self):
         '''Sets the values of the view parameters
@@ -178,48 +186,56 @@ class CameraParameters(object):
         -X-Y+Z: View from point (-1,-1,1)
         XYZNeg or -X-Y-Z: View from point (-1,-1,-1)
         '''
+        cameraDist= 100
+        if(self.modelBNDDiagonal):
+            diagonalLength= self.modelBNDDiagonal.getModulus()
+            if(diagonalLength>0.0):
+                order= int(math.log10(diagonalLength))
+                factor= 10**order
+                cameraDist= max(cameraDist, math.ceil(diagonalLength/factor)*factor)
+            
         if(self.viewName.lower()=="zpos"):
           self.viewUpVc= [0,1,0]
-          self.posCVc= [0,0,100]
+          self.posCVc= [0,0,cameraDist]
         elif(self.viewName.lower()=="zneg"):
           self.viewUpVc= [0,1,0]
-          self.posCVc= [0,0,-100]
+          self.posCVc= [0,0,-cameraDist]
         elif(self.viewName.lower()=="ypos"):
           self.viewUpVc= [0,0,1]
-          self.posCVc= [0,100,0]
+          self.posCVc= [0,cameraDist,0]
         elif(self.viewName.lower()=="yneg"):
           self.viewUpVc= [0,0,1]
-          self.posCVc= [0,-100,0]
+          self.posCVc= [0,-cameraDist,0]
         elif(self.viewName.lower()=="xpos"):
           self.viewUpVc= [0,0,1]
-          self.posCVc= [100,0,0]
+          self.posCVc= [cameraDist,0,0]
         elif(self.viewName.lower()=="xneg"):
           self.viewUpVc= [0,0,1]
-          self.posCVc= [-100,0,0]
+          self.posCVc= [-cameraDist,0,0]
         elif(self.viewName.lower()=="xyzpos" or self.viewName.lower()=="+x+y+z"):
           self.viewUpVc= [-1,-1,1]
-          self.posCVc= [100,100,self.hCamFct*100]
+          self.posCVc= [cameraDist,cameraDist,self.hCamFct*cameraDist]
         elif(self.viewName.lower()=="+x+y-z"):
           self.viewUpVc= [1,1,1]
-          self.posCVc= [100,100,-1*self.hCamFct*100]
+          self.posCVc= [cameraDist,cameraDist,-1*self.hCamFct*cameraDist]
         elif(self.viewName.lower()=="+x-y+z"):
           self.viewUpVc= [-1,1,1]
-          self.posCVc= [100,-100,self.hCamFct*100]
+          self.posCVc= [cameraDist,-cameraDist,self.hCamFct*cameraDist]
         elif(self.viewName.lower()=="+x-y-z"):
           self.viewUpVc= [1,-1,1]
-          self.posCVc= [100,-100,-1*self.hCamFct*100]
+          self.posCVc= [cameraDist,-cameraDist,-1*self.hCamFct*cameraDist]
         elif(self.viewName.lower()=="-x+y+z"):
           self.viewUpVc= [1,-1,1]
-          self.posCVc= [-100,100,self.hCamFct*100]
+          self.posCVc= [-cameraDist,cameraDist,self.hCamFct*cameraDist]
         elif(self.viewName.lower()=="-x+y-z"):
           self.viewUpVc= [-1,+1,1]
-          self.posCVc= [-100,100,-1*self.hCamFct*100]
+          self.posCVc= [-cameraDist,cameraDist,-1*self.hCamFct*cameraDist]
         elif(self.viewName.lower()=="-x-y+z"):
           self.viewUpVc= [1,1,1]
-          self.posCVc= [-100,-100,self.hCamFct*100]
+          self.posCVc= [-cameraDist,-cameraDist,self.hCamFct*cameraDist]
         elif(self.viewName.lower()=="xyzneg" or self.viewName.lower()=="-x-y-z"):
           self.viewUpVc= [-1,-1,1]
-          self.posCVc= [-100,-100,-1*self.hCamFct*100]
+          self.posCVc= [-cameraDist,-cameraDist,-1*self.hCamFct*cameraDist]
         elif(self.viewName!="Custom"):
           sys.stderr.write("View name: '"+self.viewName+"' unknown.")
 
@@ -301,6 +317,21 @@ class DisplaySettings(object):
     def getLineWidth(self):
         ''' Return the value of the width for the displayed lines.'''
         return self.lineWidth
+
+    def getNumberOfActors(self):
+        ''' Return the number of actors in the renderer.'''
+        return self.renderer.GetActors().GetNumberOfItems()
+
+    def getNearClippingPlaneTolerance(self):
+        ''' Get the tolerance for the near clipping plane in VTK.'''
+        return self.renderer.GetNearClippingPlaneTolerance()
+
+    def setNearClippingPlaneTolerance(self, tol):
+        ''' Set the tolerance for the near clipping plane in VTK.
+
+        :param tol: tolerance for the near clipping plane.
+        '''
+        return self.renderer.SetNearClippingPlaneTolerance(tol)
   
     def setView(self):
         '''Sets the view'''
@@ -401,8 +432,9 @@ class DisplaySettings(object):
             self.closeWindow(iren)
 
     def setupGrid(self, xcSet):
-        ''' Parameters:
-           xcSet:     set to be represented
+        ''' Create the grid corresponding to the given set.
+
+        :param xcSet: set to be represented.
         '''
         self.gridRecord= RecordDefGrid()
         self.gridRecord.setupSet(xcSet)
@@ -411,6 +443,8 @@ class DisplaySettings(object):
         # Compute focal point.
         center= bnd.getCenterOfMass()
         self.cameraParameters.setFocalPoint([center.x, center.y, center.z])
+        # Set the «size» of the model.
+        self.cameraParameters.setModelBoundaryDiagonal(bnd.diagonal)
         return self.gridRecord
 
     def plot(self,fileName):

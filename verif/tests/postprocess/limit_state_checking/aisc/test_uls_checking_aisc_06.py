@@ -140,7 +140,7 @@ limitState= limitStates[0]
 ## Build controller.
 controller= limitState.getController()
 ## Perform checking.
-average= limitState.check(setCalc=aiscCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y', controller= controller)
+average= limitState.check(setCalc=aiscCalcSet, appendToResFile=True, listFile=False, calcMeanCF=True, controller= controller)
 
 # Check results.
 ratio= ((average[0]-0.7956490774322746)/0.7956490774322746)**2 # back end section
@@ -168,6 +168,6 @@ else:
 #oh.displayElementValueDiagram('chiLT', setToDisplay= aiscCalcSet)
 
 # oh.displayBeamResult(attributeName= limitState.label, itemToDisp='CF', beamSetDispRes=aiscCalcSet, setToDisplay=xcTotalSet)
-# oh.displayBeamResult(attributeName= limitState.label, itemToDisp='N', beamSetDispRes=aiscCalcSet, setToDisplay=xcTotalSet)
+# oh.displayBeamResult(attributeName= limitState.label, itemToDisp=False, beamSetDispRes=aiscCalcSet, setToDisplay=xcTotalSet)
 # oh.displayBeamResult(attributeName= limitState.label, itemToDisp='My', beamSetDispRes=aiscCalcSet, setToDisplay=xcTotalSet)
 # oh.displayBeamResult(attributeName= limitState.label, itemToDisp='Mz', beamSetDispRes=aiscCalcSet, setToDisplay=xcTotalSet)

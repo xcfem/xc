@@ -107,6 +107,7 @@ class SFreedom_Constraint: public Constraint
 
     virtual int getDOF_Number(void) const;
     virtual bool affectsNodeAndDOF(int , int ) const;
+    virtual std::map<int, std::list<int> > getAffectedDOFs(void) const;
     virtual int applyConstraint(double loadFactor);    
     virtual double getValue(void) const;
     virtual double getInitialValue(void);

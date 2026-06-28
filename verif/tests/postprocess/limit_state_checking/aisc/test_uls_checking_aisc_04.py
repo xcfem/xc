@@ -135,7 +135,7 @@ limitState= limitStates[0]
 ## Build controller.
 controller= limitState.getController()
 ## Perform checking.
-average= limitState.check(setCalc=aiscCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y', controller= controller)
+average= limitState.check(setCalc=aiscCalcSet, appendToResFile=True, listFile=False, calcMeanCF=True, controller= controller)
 
 # Check results.
 ratio= ((average[0]-1.0067001969482556)/1.0067001969482556)**2

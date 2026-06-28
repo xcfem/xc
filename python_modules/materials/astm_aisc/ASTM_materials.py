@@ -23,6 +23,7 @@ from geom_utils import closest_pair_of_points as cpp
 from materials import steel_base
 from misc_utils import log_messages as lmsg
 from materials import member_base
+from postprocess import def_vars_control
 from import_export import block_topology_entities as bte
 from connections.steel_connections import bolts
 from connections.steel_connections import square_plate_washer as swp
@@ -1536,19 +1537,20 @@ class ASTMShape(object):
             CF= ratioN/2.0+(ratioMz+ratioMy) # equation H1-1b
         return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
 
-    def setupULSControlVars(self, elems, chiN=1.0, chiLT=1.0):
+    def setupULSControlVars(self, elems, chiN=1.0, chiLT=1.0, force= False, silent= False):
         '''For each element creates the variables
            needed to check ultimate limit state criterion to be satisfied.
 
         :param elems: elements to define properties on.
         :param chiN: axial load reduction reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
+        :param force: if true assign the properties even if they exist already
+                      in the element.
+        :param silent: if true, don't issue a warning when the property is 
+                       already defined. Keep the current value and continue.
         '''
         super(ASTMShape,self).setupULSControlVars(elems)
-        for e in elems:
-            e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
-            e.setProp('chiN',chiN) # Axial strength reduction factor.
-            e.setProp('crossSection',self)
+        def_vars_control.def_structural_steel_shape_control_vars(steelShape= self, elems= elems, chiN= chiN, chiLT= chiLT, force= force, silent= silent)
 
     def getProbableMaxMomentAtPlasticHinge(self, majorAxis):
         ''' Return the probable maximum moment at plastic hinge according

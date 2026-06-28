@@ -11,8 +11,6 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 import importlib.resources
 import json
 
-bs_en_10210_shapes= dict()
-
 # Section axis: 
 
 #  EN 10219           XC

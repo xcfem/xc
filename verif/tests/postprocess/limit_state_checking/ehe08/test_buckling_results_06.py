@@ -138,17 +138,17 @@ controller= bucklingParametersLSD.getController()
 ### setCalc: set of elements to be checked.
 ### crossSections: cross sections for each element.
 ### controller: object that controls the limit state checking.
-### appendToResFile:  'Yes','Y','y',.., if results are appended to 
-###                   existing file of results (defaults to 'N')
-### listFile: 'Yes','Y','y',.., if latex listing file of results 
-###           is desired to be generated (defaults to 'N')
-### calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-###               meant to be calculated (defaults to 'N')
+### appendToResFile:  True if results are appended to 
+###                   existing file of results (defaults to False)
+### listFile: True if latex listing file of results 
+###           is desired to be generated (defaults to False)
+### calcMeanCF: True if average capacity factor is
+###               meant to be calculated (defaults to False)
 ### threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
 ###           false if it's 2D (Fx,Fy,Mz).
 
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-meanCFs= bucklingParametersLSD.check(setCalc= calcSet, crossSections= reinfConcreteSectionDistribution,appendToResFile='N',listFile='N',calcMeanCF='Y', controller= controller, threeDim= True)
+meanCFs= bucklingParametersLSD.check(setCalc= calcSet, crossSections= reinfConcreteSectionDistribution,appendToResFile=False,listFile=False,calcMeanCF=True, controller= controller, threeDim= True)
 feProblem.errFileName= "cerr" # From now on display errors if any.
 
 # Check results. The reference values doesn't come from a benchmark test,

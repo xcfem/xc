@@ -67,7 +67,7 @@ class PlateBase: public SectionForceDeformation
     virtual void setRho(const double &);
     virtual double getArealRho(void) const;
     virtual void setArealRho(const double &);
-    XC::Matrix getValues(const std::string &, bool silent) const;
+    Matrix getValues(const std::string &, bool silent) const;
   };
 } // end of XC namespace
 

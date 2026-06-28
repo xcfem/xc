@@ -565,3 +565,63 @@ def def_vars_control_tens_elastic_range_2d(elems):
 def def_vars_control_tens_elastic_range_3d(elems):
     varNames= [("Sg", 0.0), ("SgMax", 0.0), ("SgMin", 0.0), ("NCP", 0.0), ("MyCP", 0.0), ("MzCP", 0.0), ("FCTN", 0.0), ("FCTNCP", 0.0), ("HIPCPTN", ""), ("Tau", 0.0), ("TauMax", 0.0), ("VyCP", 0.0), ("VzCP", 0.0), ("FCV", 0.0), ("FCVCP", 0.0), ("HIPCPV","")]
     def_vars_generalized_stress_control(elems,varNames) 
+
+def def_structural_steel_shape_control_vars(steelShape, elems, chiN= 1.0, chiLT=1.0, force= False, silent= False):
+    '''For each element creates the variables needed to check ultimate 
+       limit state criterion to be satisfied.
+
+    :param steelShape: steel shape defining the cross-sectionof the elements.
+    :param elems: elements to define properties on.
+    :param chiN: flexural buckling reduction factor (default= 1.0).
+    :param chiLT: lateral buckling reduction factor (default= 1.0).
+    :param force: if true assign the properties even if they exist already
+                  in the element.
+    :param silent: if true, don't issue a warning when the property is already
+                   defined. Keep the current value and continue.
+    '''
+    if(force):
+        for e in elems:
+           e.setProp('chiN', chiN) # Flexural buckling reduction factor.
+           e.setProp('chiLT',chiLT) # Lateral torsional buckling reduction factor.
+           e.setProp('crossSection',steelShape) # Element cross-section.
+    else:
+        for e in elems:
+            if(e.hasProp('chiN')):
+                currentChiN= e.getProp('chiN')
+                if(currentChiN!=chiN):
+                    if(not silent):
+                        methodName= sys._getframe(0).f_code.co_name
+                        warningMsg= "; element: "+str(e.tag)
+                        warningMsg+= " already has a 'chiN' property."
+                        warningMsg+= " with a different value: "
+                        warningMsg+= str(currentChiN)
+                        warningMsg+= " use 'force= True' parameter to reset it."
+                        lmsg.warning(methodName+warningMsg)
+            else:
+                e.setProp('chiN', chiN) # Flexural buckling reduction factor.
+            if(e.hasProp('chiLT')):
+                currentChiLT= e.getProp('chiLT')
+                if(currentChiLT!=chiLT):
+                    if(not silent):
+                        methodName= sys._getframe(0).f_code.co_name
+                        warningMsg= "; element: "+str(e.tag)
+                        warningMsg+= " already has a 'chiLT' property."
+                        warningMsg+= " with a different value: "
+                        warningMsg+= str(currentChiLT)
+                        warningMsg+= " use 'force= True' parameter to reset it."
+                        lmsg.warning(methodName+warningMsg)
+            else:
+                e.setProp('chiLT',chiLT) # Lateral torsional buckling reduction factor.
+            if(e.hasProp('crossSection')):
+                currentSection= e.getProp('currentSection')
+                if(currentSection!=steelShape):
+                    if(not silent):
+                        methodName= sys._getframe(0).f_code.co_name
+                        warningMsg= "; element: "+str(e.tag)
+                        warningMsg+= " already has a 'crossSection' property."
+                        warningMsg+= " with a different value: "
+                        warningMsg+= str(currentSection.name)
+                        warningMsg+= " use 'force= True' parameter to reset it."
+                        lmsg.warning(methodName+warningMsg)
+            else:
+               e.setProp('crossSection',steelShape)

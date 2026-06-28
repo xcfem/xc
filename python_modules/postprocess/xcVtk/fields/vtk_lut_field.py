@@ -13,8 +13,10 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 
+import sys
 from vtk.vtkCommonCore import vtkLookupTable
 from vtk.vtkRenderingAnnotation import vtkScalarBarActor
+from misc_utils import log_messages as lmsg
 
 class LUTField(object):
     '''Provides de variables involved in the drawing of a
@@ -114,12 +116,14 @@ class LUTField(object):
         ''' Return the title of the field scale bar.'''
         return self.scalarBarTitle
 
-    def creaColorScaleBar(self, orientation=1, title=None):
+    def newColorScaleBar(self, scaleBarOrientation= 1, title=None):
         '''Creates the scalar bar that indicates to the viewer the correspondence
         between color values and data values
 
-        :param orientation: 1 for horizontal bar, 2 for left-vertical bar 
-                             3 for right-vertical bar(defaults to horizontal)
+        :param scaleBarOrientation: 1 for horizontal bar, 
+                                    2 for left-vertical bar and
+                                    3 for right-vertical bar(defaults 
+                                    to horizontal).
         :param title: title of the new scale bar.
         '''
         if(title is not None):
@@ -129,15 +133,21 @@ class LUTField(object):
         
         pos= self.scalarBar.GetPositionCoordinate()
         pos.SetCoordinateSystemToNormalizedViewport()
-        if orientation>1: #vertical
+        if(scaleBarOrientation>3):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= '; scaleBarOrientation ('+str(scaleBarOrientation)
+            errorMsg+= ') not valid. Must be between 1 and 3.'
+            lmsg.error(className+'.'+methodName+errMsg)
+        if scaleBarOrientation>1: # vertical
             self.scalarBar.SetOrientationToVertical()
             self.scalarBar.SetWidth(0.075)
             self.scalarBar.SetHeight(0.7)
-            pos.SetValue(0.04,0.20) if orientation==2 else pos.SetValue(0.87,0.20)
+            pos.SetValue(0.04,0.20) if scaleBarOrientation==2 else pos.SetValue(0.87,0.20)
             if scalarBarTitle:
                 scalarBarTitle= scalarBarTitle.replace(' ',' \n ')
                 self.scalarBar.SetTitle(scalarBarTitle)
-        else: #horizontal
+        else: # horizontal
             self.scalarBar.SetOrientationToHorizontal()
             self.scalarBar.SetWidth(0.8)
             self.scalarBar.SetHeight(0.055)
@@ -150,7 +160,7 @@ class LUTField(object):
         #self.scalarBar.SetLabelFormat("%.2f")
         labelTextProperty=  self.scalarBar.GetLabelTextProperty()
         labelTextProperty.ItalicOff()
-        return self.scalarBar
+        return (scaleBarOrientation+1)
 
     def creaVertColorScaleBar(self):
         '''Creates the scalar bar that indicates to the viewer the correspondence

@@ -37,8 +37,7 @@ section.positvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_se
 torsionLongitudinalReinforcementArea= 4*math.pi*(12e-3/2.0)**2
 section.torsionReinf= def_simple_RC_section.TorsionReinforcement(familyName= "torsionReinf", A1= torsionLongitudinalReinforcementArea, nShReinfBranches= 2, areaShReinfBranch= math.pi*(12e-3/2)**2, shReinfSpacing= 0.30, angThetaConcrStruts= math.radians(26.56))
 
-## Compute section geometry
-### XC problem.
+### XC FE problem.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 ### Compute section geometry.
@@ -50,7 +49,7 @@ torsionParameters= EC2_limit_state_checking.compute_effective_hollow_section_par
 # Check values of torsion parameters.
 ## Get effetive thickness
 tef= torsionParameters.tef() # effective thickness of the wall of the design section.
-tef_ref= 0.09375  # See spreadshee with the same file name in this folder.
+tef_ref= 0.09375  # See spreadsheet with the same file name in this folder.
 ratio1= abs(tef-tef_ref)/tef_ref
 Ac= torsionParameters.A() # Concrete area.
 Ak= torsionParameters.Ak() # Area enclosed by the middle line of the design effective hollow section (figure 6.11 of EC2).
@@ -60,8 +59,8 @@ limitState= EC2_limit_state_checking.torsionResistance # Torsion strength limit 
 torsionController= limitState.getController()
 
 TRd_max= torsionController.calcTRd_max(rcSection= section, NEd= 0.0, Ac= Ac, Ak= Ak, tef= tef)
-TRD_max_ref= 56.3993367912455e3 # See spreadshee with the same file name in this
-                                # folder.
+TRD_max_ref= 56.3993367912455e3 # See spreadsheet with the same file name in
+                                # this folder.
 ratio2= abs(TRd_max-TRD_max_ref)/TRD_max_ref
 
 '''

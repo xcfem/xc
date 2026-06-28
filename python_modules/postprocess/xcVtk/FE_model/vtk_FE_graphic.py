@@ -99,9 +99,11 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+"; Representation type: '"+ reprType+ "' unknown.")
         self.renderer.AddActor(elemActor)
+        retval= 0
         if(self.field):
-            self.field.creaColorScaleBar()
+            retval= self.field.newColorScaleBar()
             self.renderer.AddActor2D(self.field.scalarBar)
+        return retval
 
     def _vtk_define_nodes_actor(self, radius):
         '''Define the actor to display nodes.
@@ -524,14 +526,17 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self.displayElementalLoads(preprocessor, loadPattern, clrVectores, fScaleVectores)
         self.displayNodalLoads(preprocessor, loadPattern, clrVectores,fScaleVectores)
 
-    def appendDiagram(self, diagram, orientScbar=1, titleScbar=None):
+    def appendDiagram(self, diagram, scaleBarOrientation= 1, titleScbar=None):
         ''' Add the diagrams to the actors to display.
 
         :param diagram: diagram to append.
-        :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
+        :param scaleBarOrientation: 1 for horizontal bar, 
+                                    2 for left-vertical bar and
+                                    3 for right-vertical bar(defaults 
+                                    to horizontal).
         :param titleScbar: title for the scalar bar (defaults to None)
         '''
-        diagram.addDiagramToScene(self, orientScbar, titleScbar)
+        return diagram.addDiagramToScene(self, scaleBarOrientation, titleScbar)
 
     def getSingleFreedomConstraintsData(self, preprocessor, nodsInSet):
         ''' Return the data to define the symbols of the single-fredom

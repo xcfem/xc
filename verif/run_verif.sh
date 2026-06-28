@@ -1651,6 +1651,7 @@ python tests/materials/ec2/torsion/test_geom_params_torsion_ec2_01.py
 python tests/materials/ec2/torsion/test_geom_params_torsion_ec2_02.py
 python tests/materials/ec2/torsion/test_ec2_torsion_check_01.py
 python tests/materials/ec2/torsion/test_ec2_torsion_check_02.py
+python tests/materials/ec2/torsion/test_ec2_torsion_check_03.py
 echo "$BLEU" "    EC2 punching shear resistance determination tests." "$NORMAL"
 python tests/materials/ec2/test_ec2_punching_shear_01.py
 python tests/materials/ec2/test_ec2_punching_shear_02.py
@@ -1701,10 +1702,11 @@ python tests/materials/steel_shapes/test_arcelor_metric_shapes_01.py
 python tests/materials/steel_shapes/test_arcelor_metric_shapes_02.py
 python tests/materials/steel_shapes/test_arcelor_metric_shapes_03.py
 python tests/materials/steel_shapes/test_arcelor_metric_shapes_04.py
+python tests/materials/steel_shapes/test_en_10210_shapes_01.py
 python tests/materials/steel_shapes/test_en_13674_1_rail_shapes_01.py
 python tests/materials/steel_shapes/test_en_13674_1_rail_shapes_02.py
 echo "$BLEU" "    EC3 tests." "$NORMAL"
-echo "$BLEU" "      EC3 member dssign tests." "$NORMAL"
+echo "$BLEU" "      EC3 member design tests." "$NORMAL"
 python tests/materials/ec3/member_design/compare_mech_properties.py
 python tests/materials/ec3/member_design/test_cross_section_verification_01.py
 python tests/materials/ec3/member_design/test_cross_section_verification_02.py
@@ -2039,6 +2041,8 @@ python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_03.py
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_04.py
 python tests/postprocess/limit_state_checking/ec3/test_uls_checking_ec3_05.py
 python tests/postprocess/limit_state_checking/ec3/test_simply_supported_fully_restrained_beam.py
+echo "$BLEU" "    Mixed EC2 and EC3 limit state checking." "$NORMAL"
+python tests/postprocess/limit_state_checking/ec2_ec3/test_ec2_ec3_results_01.py
 echo "$BLEU" "    EHE limit state checking." "$NORMAL"
 echo "$BLEU" "      EHE limit state checking: shear." "$NORMAL"
 python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_01.py
@@ -2102,8 +2106,10 @@ python tests/postprocess/vtk/test_display_zero_length_local_axes_01.py
 python tests/postprocess/vtk/test_display_zero_length_local_axes_02.py
 python tests/postprocess/vtk/test_display_reactions_01.py
 python tests/postprocess/vtk/test_display_eigenvectors_01.py
-python tests/postprocess/vtk/test_display_truss_areas.py
 python tests/postprocess/vtk/test_display_strong_weak_axis_01.py
+echo "$BLEU" "    Graphic output. Element properties." "$NORMAL"
+python tests/postprocess/vtk/element_properties/test_display_truss_areas.py
+python tests/postprocess/vtk/element_properties/test_display_element_thickness.py
 echo "$BLEU" "    Graphic output. Loads." "$NORMAL"
 python tests/postprocess/vtk/display_loads/test_display_loads_01.py
 python tests/postprocess/vtk/display_loads/test_display_loads_02.py

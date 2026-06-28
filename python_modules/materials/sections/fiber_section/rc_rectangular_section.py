@@ -589,7 +589,7 @@ class RCRectangularSection(basic_rectangular_rc_section.BasicRectangularRCSectio
                 self.appendPositiveLayer(nRebars= 2, rebarsDiam= lateralLayersDiameters[0], nominalCover= latTopCover+i*sLat, nominalLatCover= 3*nominalCover+fiStirr)
         return firstTopLayer, secondTopLayer, firstBottomLayer, secondBottomLayer
     
-    def defineShearReinforcementYZ(self, nShReinfBranchesY= 2, fiStirrY= 8e-3, spacingY= 0.15, nShReinfBranchesZ= 2, fiStirrZ= 8e-3, spacingZ= 0.15):
+    def defineShearReinforcementYZ(self, nShReinfBranchesY= 2, fiStirrY= 8e-3, spacingY= 0.15, nShReinfBranchesZ= 2, fiStirrZ= 8e-3, spacingZ= 0.15, angThetaConcrStruts= math.pi/4.0):
         ''' Define the shear reinforcement of the RC section.
 
         :param nShReinfBranchesY: number of branches (Y direction).
@@ -598,12 +598,15 @@ class RCRectangularSection(basic_rectangular_rc_section.BasicRectangularRCSectio
         :param nShReinfBranchesZ: number of branches (Z direction).
         :param fiStirrZ: diameter of the stirrups (Z direction).
         :param spacingZ: stirrups spacing (Z direction).
+        :param angThetaConcrStruts: angle between the concrete's compression 
+                                    struts and the axis of the member
+                                    expressed in radians.
         '''
         # Shear reinforcement.
         if(nShReinfBranchesY>0):
-            self.shReinfY= shear_reinforcement.ShearReinforcement(familyName= "sh1uy", nShReinfBranches= nShReinfBranchesY, areaShReinfBranch= math.pi*(fiStirrY)**2/4., shReinfSpacing= spacingY, angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
+            self.shReinfY= shear_reinforcement.ShearReinforcement(familyName= "sh1uy", nShReinfBranches= nShReinfBranchesY, areaShReinfBranch= math.pi*(fiStirrY)**2/4., shReinfSpacing= spacingY, angAlphaShReinf= math.pi/2.0, angThetaConcrStruts= angThetaConcrStruts)
         if(nShReinfBranchesZ>0):
-            self.shReinfZ= shear_reinforcement.ShearReinforcement(familyName= "sh1z", nShReinfBranches= nShReinfBranchesZ, areaShReinfBranch= math.pi*(fiStirrZ)**2/4., shReinfSpacing= spacingZ, angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
+            self.shReinfZ= shear_reinforcement.ShearReinforcement(familyName= "sh1z", nShReinfBranches= nShReinfBranchesZ, areaShReinfBranch= math.pi*(fiStirrZ)**2/4., shReinfSpacing= spacingZ, angAlphaShReinf= math.pi/2.0, angThetaConcrStruts= angThetaConcrStruts)
 
 def compute_element_reinforcement(element):
     ''' Return a list containing the reinforced concrete sections from the

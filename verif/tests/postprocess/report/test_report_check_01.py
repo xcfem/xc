@@ -188,15 +188,15 @@ controller= limitState.getController()
 ### setCalc: set of elements to be checked.
 ### crossSections: cross sections for each element.
 ### controller: object that controls the limit state checking.
-### appendToResFile:  'Yes','Y','y',.., if results are appended to 
-###                   existing file of results (defaults to 'N')
-### listFile: 'Yes','Y','y',.., if latex listing file of results 
-###           is desired to be generated (defaults to 'N')
-### calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-###               meant to be calculated (defaults to 'N')
+### appendToResFile:  True if results are appended to 
+###                   existing file of results (defaults to False)
+### listFile: True if latex listing file of results 
+###           is desired to be generated (defaults to False)
+### calcMeanCF: True if average capacity factor is
+###               meant to be calculated (defaults to False)
 ### threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
 ###           false if it's 2D (Fx,Fy,Mz).
-limitState.check(setCalc= setCalc, crossSections= reinfConcreteSectionDistribution,appendToResFile='N',listFile='N',calcMeanCF='N', controller= controller, threeDim= False)
+limitState.check(setCalc= setCalc, crossSections= reinfConcreteSectionDistribution,appendToResFile=False,listFile=False,calcMeanCF=False, controller= controller, threeDim= False)
 
 # Generate normal stresses check report.
 ## 2D elements (shells)
@@ -208,16 +208,16 @@ setsEl2D= [xcTotalSet] # Ordered list of 2D element sets to be included
 argsEl2D= ['CF','N', 'My'] ; rgMinMax=None
 
 ## 1D elements (truss, beam, ...)
+# pairs of ordered list of sets of beam elements, ordered list of argument for those sets]
 defaultDiagramDirection= 'K' # Default local axis to align the diagrams in 1D elements.
-setsEl1D= [] # Ordered list of 1D element sets to be included
-             # in the report.
-### Ordered list of arguments to be included in the report
-### Possible arguments: 'CF', 'N', 'My', 'Mz'
-argsEl1D= ['CF','N','My','Mz']
+pairs_setsBmEl_argsBmEl=[
+    [[],['CF', 'N', 'My', 'Mz']],
+    ]
 
 # Generate reports.
 report= report_generator.ReportGenerator(modelSpace= modelSpace, envConfig= cfg)
-fileNames= report.checksReport(limitStateLabel= limitState.label, setsShEl= setsEl2D, argsShEl= argsEl2D, setsBmEl= setsEl1D, argsBmEl= argsEl1D, rgMinMax=rgMinMax, defaultDiagramDirection= defaultDiagramDirection)
+
+fileNames= report.checksReport(limitStateLabel= limitState.label, setsShEl= setsEl2D, argsShEl= argsEl2D, pairs_setsBmEl_argsBmEl=pairs_setsBmEl_argsBmEl, rgMinMax=rgMinMax, defaultDiagramDirection= defaultDiagramDirection)
 ## Check results.
 refFileNames= ['totalCFSect1.jpg', 'totalCFSect2.jpg', 'totalNSect1.jpg', 'totalNSect2.jpg', 'totalMySect1.jpg', 'totalMySect2.jpg']
 

@@ -500,7 +500,7 @@ class WoodSection(object):
         '''Update the value of the load duration factor.'''
         # Does nothing. Redefine when necessary.
         
-    def setupULSControlVars(self, elems, chiN=1.0, chiLT=1.0, FcE=(0.0,0.0), FbE= 0.0):
+    def setupULSControlVars(self, elems, chiN=1.0, chiLT=1.0, FcE=(0.0,0.0), FbE= 0.0, force= False, silent= False):
         '''For each element creates the variables
            needed to check ultimate limit state criterion to satisfy.
 
@@ -509,16 +509,18 @@ class WoodSection(object):
         :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
         :param FcE: Critical buckling design values for compression.
         :param FbE: Critical buckling design value for bending.
+        :param force: if true assign the properties even if they exist already
+                      in the element.
+        :param silent: if true, don't issue a warning when the property is 
+                       already defined. Keep the current value and continue.
         '''
         vc.def_vars_envelope_internal_forces_beam_elems_3d(elems)
+        vc.def_structural_steel_shape_control_vars(steelShape= self, elems= elems, chiN= chiN, chiLT= chiLT, force= force, silent= silent)
         for e in elems:
-            e.setProp('chiLT',chiLT) # Lateral torsional buckling reduction factor.
-            e.setProp('chiN',chiN) # Axial strength reduction factor.
             e.setProp('FcE', FcE) # Critical buckling design values for compression.
             e.setProp('FbE', FbE) # Critical buckling design value for bending.
             e.setProp('FCTNCP',[-1.0,-1.0]) #Normal stresses efficiency.
             e.setProp('FCVCP',[-1.0,-1.0]) #Shear stresses efficiency.
-            e.setProp('crossSection', self)
             
     def getCompressiveStrength(self):
         ''' Return the value of the compressive strength of the section.

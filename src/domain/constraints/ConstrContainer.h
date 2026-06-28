@@ -34,6 +34,7 @@
 #include "MapActiveLoadPatterns.h"
 #include <deque>
 #include <set>
+#include <list>
 
 namespace XC {
 class Constraint;
@@ -173,15 +174,22 @@ class ConstrContainer: public MeshComponentContainer
     std::deque<int> getTagsMRMPsNode(int ) const;
     std::deque<int> getTagsLPs(void) const;
     std::deque<int> getTagsNLs(void) const;
+    
     bool nodeAffectedBySPs(int) const;
-    std::set<int> getTagsNodesffectedBySPs(int ) const;
+    std::set<int> getTagsNodesAffectedBySPs(int) const;
     bool nodeAffectedByMPs(int) const;
     bool nodeAffectedByMRMPs(int) const;
     bool nodeAffectedByConstraints(int ) const;
+    
     bool isDOFAffectedBySPs(int, int) const;
+    std::map<int, std::list<int> > getDOFsAffectedBySPs(void) const;
     bool isDOFAffectedByMPs(int, int) const;
+    std::map<int, std::list<int> > getDOFsAffectedByMPs(void) const;
     bool isDOFAffectedByMRMPs(int, int) const;
+    std::map<int, std::list<int> > getDOFsAffectedByMRMPs(void) const;
     bool isDOFAffectedByConstraints(int, int) const;
+    std::map<int, std::list<int> > getDOFsAffectedByConstraints(void) const;
+    
     std::string getLoadPatternsNames(void) const;
 
     virtual int calculateNodalReactions(bool inclInertia, const double &);

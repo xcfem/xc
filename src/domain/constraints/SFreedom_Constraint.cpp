@@ -153,10 +153,20 @@ bool XC::SFreedom_Constraint::affectsNodeAndDOF(int nodeTag, int theDOF) const
   {
     bool retval= false;
     if(affectsNode(nodeTag))
-      retval= (theDOF==dofNumber);
+      retval= (theDOF==this->dofNumber);
     return retval;
   }
 
+//! @brief Return the DOFs affected by the constraint.
+std::map<int, std::list<int> > XC::SFreedom_Constraint::getAffectedDOFs(void) const
+  {
+    std::map<int, std::list<int> > retval
+      {
+	std::make_pair(this->getNodeTag(), std::list({this->dofNumber})),
+      };
+    return retval;
+  }
+  
 //! @brief Returns the value of the prescribed displacement.
 //! 
 //! To return the value of the constraint determined in the last call to

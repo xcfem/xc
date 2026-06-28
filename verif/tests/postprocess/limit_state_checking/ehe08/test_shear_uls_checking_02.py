@@ -110,7 +110,7 @@ limitState= EHE_limit_state_checking.shearResistance
 controller= limitState.getController(solutionProcedureType= CustomNewtonRaphson)
 controller.verbose= False # Don't display log messages.
 ## Perform checking.
-meanCFs= limitState.check(setCalc= None, listFile='N',calcMeanCF='Y', controller= controller, threeDim= True, crossSections= reinfConcreteSectionDistribution)
+meanCFs= limitState.check(setCalc= None, listFile=False,calcMeanCF=True, controller= controller, threeDim= True, crossSections= reinfConcreteSectionDistribution)
 
 # Check results (21/06/2025: update values after fixing error in the EHE08
 # shear controller).

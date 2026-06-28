@@ -92,14 +92,18 @@ class MFreedom_ConstraintBase: public Constraint
     virtual size_t getNumRetainedNodes(void) const= 0;
     virtual std::vector<Node *> getPointersToRetainedNodes(void)= 0;
     virtual std::vector<const Node *> getPointersToRetainedNodes(void) const= 0;
+    
     std::vector<int> getIdxNodes(void) const;
 
     bool isTimeVarying(void) const;
 
     void setDomain(Domain *);
 
+    virtual std::set<int> getTagsAffectedNodes(void) const;
     bool affectsNode(int ) const;
     bool affectsNodeAndDOF(int theNode, int theDOF) const;
+    virtual std::map<int, std::list<int> > getAffectedDOFs(void) const;
+    
     int addResistingForceToNodalReaction(bool inclInertia);
 
     virtual void Print(std::ostream &s, int flag =0) const;

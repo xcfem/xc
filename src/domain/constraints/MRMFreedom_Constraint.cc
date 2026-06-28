@@ -209,7 +209,6 @@ int XC::MRMFreedom_Constraint::getNumRetainedDofs(void) const
 int XC::MRMFreedom_Constraint::getNumConstrainedDofs(void) const
   { return getConstrainedDOFs().Size();  }
 
-
 //! @brief Returns true if the constraint affect the node
 //! identified by the tag being passed as parameter.
 bool XC::MRMFreedom_Constraint::affectsNode(int nodeTag) const
@@ -267,6 +266,38 @@ bool XC::MRMFreedom_Constraint::affectsNodeAndDOF(int nodeTag, int theDOF) const
                   break;
 		}
             }
+      }
+    return retval;
+  }
+
+//! @brief Return the DOFs affected by the constraint.
+std::map<int, std::list<int> > XC::MRMFreedom_Constraint::getAffectedDOFs(void) const
+  {
+    std::map<int, std::list<int> > retval= MFreedom_ConstraintBase::getAffectedDOFs();
+    const ID &rNodes= getRetainedNodeTags();
+    const size_t sz_nodes= rNodes.Size();
+    for(size_t i= 0;i<sz_nodes;i++)
+      {
+	const ID &retainedDOFs= this->getRetainedDOFs();    
+	const size_t dofs_sz= retainedDOFs.Size();
+	std::list<int> c_dofs;
+	for(size_t j= 0; j<dofs_sz; j++)
+	  { c_dofs.push_back(retainedDOFs[j]);}
+	const int &retainedNodeTag= rNodes[i];
+	if(retval.count(retainedNodeTag)>0) // already exists.
+	  {
+	    std::list<int> &dof_lst= retval[retainedNodeTag];
+	    for(std::list<int>::const_iterator i= c_dofs.begin();
+		i!= c_dofs.end();
+		i++)
+	      {
+		const int &DOF= *i;
+		if(std::find(dof_lst.begin(), dof_lst.end(), DOF)==dof_lst.end()) // not found.
+		  dof_lst.push_back(DOF);
+	      }
+	  }
+	else // new.
+	  retval[rNodes[i]]= c_dofs;
       }
     return retval;
   }

@@ -115,25 +115,27 @@ class VectorField(fb.FieldBase):
             self.data.insertNextVector(v[0],v[1],v[2])
             self.data.insertNextPair(p[0],p[1],p[2],v[0],v[1],v[2],self.fUnitConv,self.showPushing)
 
-    def addToDisplay(self, recordDisplay, orientation= 1, title= None):
+    def addToDisplay(self, recordDisplay, scaleBarOrientation= 1, title= None):
         ''' Adds the vector field to the display. 
 
-        :param orientation: orientation of the scalar bar (1: horizontal,
-                            2: left-vertical, 3 right-vertical)
-                            (defaults to horizontal scalar bar)
+        :param scaleBarOrientation: 1 for horizontal bar, 
+                                    2 for left-vertical bar and
+                                    3 for right-vertical bar(defaults 
+                                    to horizontal).
         :param title: title of the scalar bar
         '''
         nTuples= self.data.getNumberOfTuples()
         if(nTuples>0):
             self.setupActor()
             recordDisplay.renderer.AddActor(self.actor)
-            self.creaColorScaleBar(orientation,title)
+            retval= self.newColorScaleBar(scaleBarOrientation, title)
             recordDisplay.renderer.AddActor2D(self.scalarBar)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             message= className+'.'+methodName+'; no vectors to display. Command ignored.'
             lmsg.warning(message)
+        return retval
 
 
 def get_force_and_torque_vector_fields(forceFieldName, forcePairs, torqueFieldName, torquePairs, fUnitConv, scaleFactor, showPushing= True):

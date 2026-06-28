@@ -198,16 +198,20 @@ class ColoredDiagram(vtk_lut_field.LUTField):
         self.actor= vtkActor() 
         self.actor.SetMapper(self.mapper)
 
-    def addDiagramToScene(self, recordDisplay, orientation= 1, title= None):
+    def addDiagramToScene(self, recordDisplay, scaleBarOrientation= 1, title= None):
         ''' Adds the diagram to de scene
 
         :param recordDisplay: DisplaySettings object.
-        :param orientation: orientation of the scalar bar (defaults to 1-horiz)
+        :param scaleBarOrientation: 1 for horizontal bar, 
+                                    2 for left-vertical bar and
+                                    3 for right-vertical bar(defaults 
+                                    to horizontal).
         :param title: title for the scalar bar (defaults to None)
         '''
         recordDisplay.renderer.AddActor(self.actor)
-        self.creaColorScaleBar(orientation, title)
+        retval= self.newColorScaleBar(scaleBarOrientation, title)
         recordDisplay.renderer.AddActor2D(self.scalarBar)
+        return retval
 
     def appendDataToDiagram(self, elements, diagramIndex, valueCouples, directions, defFScale=0.0):
         ''' Appends to the diagram the values being passed as parameter.

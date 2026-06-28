@@ -35,30 +35,39 @@ class VerifOutVars(object):
     :ivar setCalc: set of elements to be checked (defaults to 'None' which 
            means that all the elements in the file of internal forces
            results are analyzed) 
-    :ivar appendToResFile:  'Yes','Y','y',.., if results are appended to 
-           existing file of results (defaults to 'N')
-    :ivar listFile: 'Yes','Y','y',.., if latex listing file of results 
-           is desired to be generated (defaults to 'N')
-    :ivar calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-           meant to be calculated (defaults to 'N')
+    :ivar appendToResFile:  True if results are appended to 
+           existing file of results (defaults to False)
+    :ivar listFile: True if latex listing file of results 
+           is desired to be generated (defaults to False)
+    :ivar calcMeanCF: True if average capacity factor is
+           meant to be calculated (defaults to False)
     :ivar controller: object that controls the limit state checking.
     :ivar outputDataBaseFileName: file name for the file of files to write the output on.
     '''
-    def __init__(self, setCalc=None, appendToResFile='N', listFile='N', calcMeanCF='N', controller= None, outputDataBaseFileName= None):
+    def __init__(self, setCalc=None, appendToResFile=False, listFile=False, calcMeanCF=False, controller= None, outputDataBaseFileName= None):
         ''' Constructor.
 
         :param setCalc: set of elements to be checked (defaults to 'None' which 
                means that all the elements in the file of internal forces
                results are analyzed) 
-        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
-               existing file of results (defaults to 'N')
-        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
-               is desired to be generated (defaults to 'N')
-        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-               meant to be calculated (defaults to 'N')
+        :param appendToResFile:  True if results are appended to 
+               existing file of results (defaults to False)
+        :param listFile: True if latex listing file of results 
+               is desired to be generated (defaults to False)
+        :param calcMeanCF: True if average capacity factor is
+               meant to be calculated (defaults to False)
         :param controller: object that controls the limit state checking.
         :param outputDataBaseFileName: file name for the file of files to write the output on.
         '''
+        if appendToResFile not in [True,False]:
+            lmsg.error("Argument 'appendToResFile' must be True or False")
+            exit(1)
+        if listFile not in [True,False]:
+            lmsg.error("Argument 'listFile' must be True or False")
+            exit(1)
+        if calcMeanCF not in [True,False]:
+            lmsg.error("Argument 'calcMeanCF' must be True or False")
+            exit(1)
         self.setCalc= setCalc
         self.appendToResFile= appendToResFile
         self.listFile= listFile
@@ -510,8 +519,8 @@ class LimitStateData(object):
         :param outputCfg: instance of class 'VerifOutVars' which defines the 
                variables that control the output of the checking (set of 
                elements to be analyzed, append or not the results to the 
-               result file [defatults to 'N'], generation or not
-               of list file [defatults to 'N', ...)
+               result file [defatults to False], generation or not
+               of list file [defatults to False, ...)
         :param sections: names of the sections to write the output for.
         '''
         intForcCombFileName= self.getInternalForcesFileName()
@@ -746,7 +755,7 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
         '''
         return modelSpace.readControlVars(inputFileName= LimitStateData.getEnvConfig().projectDirTree.getVerifBucklingFile())
         
-    def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
+    def check(self, setCalc, crossSections, controller, appendToResFile=False, listFile=False, calcMeanCF=False, threeDim= True):
         ''' Perform buckling limit state checking.
 
         :param setCalc: set of elements to be checked (defaults to 'None' which 
@@ -754,15 +763,24 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
                results are analyzed) 
         :param crossSections: cross sections on each element.
         :param controller: object that controls the limit state checking.
-        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
-               existing file of results (defaults to 'N')
-        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
-               is desired to be generated (defaults to 'N')
-        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-               meant to be calculated (defaults to 'N')
+        :param appendToResFile:  True if results are appended to 
+               existing file of results (defaults to False)
+        :param listFile: True if latex listing file of results 
+               is desired to be generated (defaults to False)
+        :param calcMeanCF: True if average capacity factor is
+               meant to be calculated (defaults to False)
         :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
                false if it's 2D (Fx,Fy,Mz).
         '''
+        if appendToResFile not in [True,False]:
+            lmsg.error("Argument 'appendToResFile' must be True or False")
+            exit(1)
+        if listFile not in [True,False]:
+            lmsg.error("Argument 'listFile' must be True or False")
+            exit(1)
+        if calcMeanCF not in [True,False]:
+            lmsg.error("Argument 'calcMeanCF' must be True or False")
+            exit(1)
         dct= self.eheBucklingParametersDict['element_parameters']
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         controlVarsDict= crossSections.check(limitStateData= self, matDiagType= "d", outputCfg= outputCfg, threeDim= threeDim)
@@ -817,7 +835,7 @@ class NormalStressesRCLimitStateData(ULS_LimitStateData):
         '''
         return modelSpace.readControlVars(inputFileName= LimitStateData.getEnvConfig().projectDirTree.getVerifNormStrFile())
             
-    def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
+    def check(self, setCalc, crossSections, controller, appendToResFile=False, listFile=False, calcMeanCF=False, threeDim= True):
         ''' Perform limit state checking.
 
         :param setCalc: set of elements to be checked (defaults to 'None' which 
@@ -825,15 +843,24 @@ class NormalStressesRCLimitStateData(ULS_LimitStateData):
                results are analyzed) 
         :param crossSections: cross sections on each element.
         :param controller: object that controls the limit state checking.
-        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
-               existing file of results (defaults to 'N')
-        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
-               is desired to be generated (defaults to 'N')
-        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-               meant to be calculated (defaults to 'N')
+        :param appendToResFile:  True if results are appended to 
+               existing file of results (defaults to False)
+        :param listFile: True if latex listing file of results 
+               is desired to be generated (defaults to False)
+        :param calcMeanCF: True if average capacity factor is
+               meant to be calculated (defaults to False)
         :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
                false if it's 2D (Fx,Fy,Mz).
         '''
+        if appendToResFile not in [True,False]:
+            lmsg.error("Argument 'appendToResFile' must be True or False")
+            exit(1)
+        if listFile not in [True,False]:
+            lmsg.error("Argument 'listFile' must be True or False")
+            exit(1)
+        if calcMeanCF not in [True,False]:
+            lmsg.error("Argument 'calcMeanCF' must be True or False")
+            exit(1)
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
         
@@ -857,20 +884,29 @@ class NormalStressesSteelLimitStateData(ULS_LimitStateData):
         '''
         return modelSpace.readControlVars(inputFileName= LimitStateData.getEnvConfig().projectDirTree.getVerifNormStrFile())
     
-    def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
+    def check(self, setCalc, controller, appendToResFile=False, listFile=False, calcMeanCF=False):
         ''' Perform limit state checking.
 
         :param setCalc: set of elements to be checked (defaults to 'None' which 
                means that all the elements in the file of internal forces
                results are analyzed) 
         :param controller: object that controls the limit state checking.
-        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
-               existing file of results (defaults to 'N')
-        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
-               is desired to be generated (defaults to 'N')
-        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-               meant to be calculated (defaults to 'N')
+        :param appendToResFile:  True if results are appended to 
+               existing file of results (defaults to False)
+        :param listFile: True if latex listing file of results 
+               is desired to be generated (defaults to False)
+        :param calcMeanCF: True if average capacity factor is
+               meant to be calculated (defaults to False)
         '''
+        if appendToResFile not in [True,False]:
+            lmsg.error("Argument 'appendToResFile' must be True or False")
+            exit(1)
+        if listFile not in [True,False]:
+            lmsg.error("Argument 'listFile' must be True or False")
+            exit(1)
+        if calcMeanCF not in [True,False]:
+            lmsg.error("Argument 'calcMeanCF' must be True or False")
+            exit(1)
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return self.runChecking(outputCfg= outputCfg)
     
@@ -893,7 +929,7 @@ class ShearResistanceRCLimitStateData(ULS_LimitStateData):
         '''
         return modelSpace.readControlVars(inputFileName= LimitStateData.getEnvConfig().projectDirTree.getVerifShearFile())
     
-    def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
+    def check(self, setCalc, crossSections, controller, appendToResFile=False, listFile=False, calcMeanCF=False, threeDim= True):
         ''' Perform limit state checking.
 
         :param setCalc: set of elements to be checked (defaults to 'None' which 
@@ -901,15 +937,24 @@ class ShearResistanceRCLimitStateData(ULS_LimitStateData):
                results are analyzed) 
         :param crossSections: cross sections on each element.
         :param controller: object that controls the limit state checking.
-        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
-               existing file of results (defaults to 'N')
-        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
-               is desired to be generated (defaults to 'N')
-        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-               meant to be calculated (defaults to 'N')
+        :param appendToResFile:  True if results are appended to 
+               existing file of results (defaults to False)
+        :param listFile: True if latex listing file of results 
+               is desired to be generated (defaults to False)
+        :param calcMeanCF: True if average capacity factor is
+               meant to be calculated (defaults to False)
         :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
                false if it's 2D (Fx,Fy,Mz).
         '''
+        if appendToResFile not in [True,False]:
+            lmsg.error("Argument 'appendToResFile' must be True or False")
+            exit(1)
+        if listFile not in [True,False]:
+            lmsg.error("Argument 'listFile' must be True or False")
+            exit(1)
+        if calcMeanCF not in [True,False]:
+            lmsg.error("Argument 'calcMeanCF' must be True or False")
+            exit(1)
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
         
@@ -932,20 +977,29 @@ class ShearResistanceSteelLimitStateData(ULS_LimitStateData):
         '''
         return modelSpace.readControlVars(inputFileName= LimitStateData.getEnvConfig().projectDirTree.getVerifShearFile())
     
-    def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
+    def check(self, setCalc, controller, appendToResFile=False, listFile=False, calcMeanCF=False):
         ''' Perform limit state checking.
 
         :param setCalc: set of elements to be checked (defaults to 'None' which 
                means that all the elements in the file of internal forces
                results are analyzed) 
         :param controller: object that controls the limit state checking.
-        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
-               existing file of results (defaults to 'N')
-        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
-               is desired to be generated (defaults to 'N')
-        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-               meant to be calculated (defaults to 'N')
+        :param appendToResFile:  True if results are appended to 
+               existing file of results (defaults to False)
+        :param listFile: True if latex listing file of results 
+               is desired to be generated (defaults to False)
+        :param calcMeanCF: True if average capacity factor is
+               meant to be calculated (defaults to False)
         '''
+        if appendToResFile not in [True,False]:
+            lmsg.error("Argument 'appendToResFile' must be True or False")
+            exit(1)
+        if listFile not in [True,False]:
+            lmsg.error("Argument 'listFile' must be True or False")
+            exit(1)
+        if calcMeanCF not in [True,False]:
+            lmsg.error("Argument 'calcMeanCF' must be True or False")
+            exit(1)
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return self.runChecking(outputCfg= outputCfg)
     
@@ -969,7 +1023,7 @@ class TorsionResistanceRCLimitStateData(ULS_LimitStateData):
         '''
         return modelSpace.readControlVars(inputFileName= LimitStateData.getEnvConfig().projectDirTree.getVerifTorsionFile())
             
-    def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
+    def check(self, setCalc, crossSections, controller, appendToResFile=False, listFile=False, calcMeanCF=False, threeDim= True):
         ''' Perform limit state checking.
 
         :param setCalc: set of elements to be checked (defaults to 'None' which 
@@ -977,15 +1031,24 @@ class TorsionResistanceRCLimitStateData(ULS_LimitStateData):
                results are analyzed) 
         :param crossSections: cross sections on each element.
         :param controller: object that controls the limit state checking.
-        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
-               existing file of results (defaults to 'N')
-        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
-               is desired to be generated (defaults to 'N')
-        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-               meant to be calculated (defaults to 'N')
+        :param appendToResFile:  True if results are appended to 
+               existing file of results (defaults to False)
+        :param listFile: True if latex listing file of results 
+               is desired to be generated (defaults to False)
+        :param calcMeanCF: True if average capacity factor is
+               meant to be calculated (defaults to False)
         :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
                false if it's 2D (Fx,Fy,Mz).
         '''
+        if appendToResFile not in [True,False]:
+            lmsg.error("Argument 'appendToResFile' must be True or False")
+            exit(1)
+        if listFile not in [True,False]:
+            lmsg.error("Argument 'listFile' must be True or False")
+            exit(1)
+        if calcMeanCF not in [True,False]:
+            lmsg.error("Argument 'calcMeanCF' must be True or False")
+            exit(1)
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
 
@@ -1034,7 +1097,7 @@ class SLS_LimitStateData(LimitStateData):
 class CrackControlRCLimitStateData(SLS_LimitStateData):
     ''' Reinforced concrete crack control limit state data base class.'''
         
-    def check(self, setCalc, crossSections, controller, appendToResFile='N', listFile='N', calcMeanCF='N', threeDim= True):
+    def check(self, setCalc, crossSections, controller, appendToResFile=False, listFile=False, calcMeanCF=False, threeDim= True):
         ''' Perform limit state checking.
 
         :param setCalc: set of elements to be checked (defaults to 'None' which 
@@ -1042,15 +1105,24 @@ class CrackControlRCLimitStateData(SLS_LimitStateData):
                results are analyzed) 
         :param crossSections: cross sections on each element.
         :param controller: object that controls the limit state checking.
-        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
-               existing file of results (defaults to 'N')
-        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
-               is desired to be generated (defaults to 'N')
-        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-               meant to be calculated (defaults to 'N')
+        :param appendToResFile:  True if results are appended to 
+               existing file of results (defaults to False)
+        :param listFile: True if latex listing file of results 
+               is desired to be generated (defaults to False)
+        :param calcMeanCF: True if average capacity factor is
+               meant to be calculated (defaults to False)
         :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
                false if it's 2D (Fx,Fy,Mz).
         '''
+        if appendToResFile not in [True,False]:
+            lmsg.error("Argument 'appendToResFile' must be True or False")
+            exit(1)
+        if listFile not in [True,False]:
+            lmsg.error("Argument 'listFile' must be True or False")
+            exit(1)
+        if calcMeanCF not in [True,False]:
+            lmsg.error("Argument 'calcMeanCF' must be True or False")
+            exit(1)
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
     
@@ -1203,27 +1275,36 @@ class VonMisesStressLimitStateData(ULS_LimitStateData):
         :param outputCfg: instance of class 'VerifOutVars' which defines the 
                variables that control the output of the checking (set of 
                elements to be analyzed, append or not the results to the 
-               result file [defatults to 'N'], generation or not
-               of list file [defatults to 'N', ...)
+               result file [defatults to False], generation or not
+               of list file [defatults to False, ...)
         '''
         outputCfg.controller.vonMisesStressId= self.vonMisesStressId
         retval= super(VonMisesStressLimitStateData,self).runChecking(outputCfg, sections= [''])
         return retval
     
-    def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
+    def check(self, setCalc, controller, appendToResFile=False, listFile=False, calcMeanCF=False):
         ''' Perform limit state checking.
 
         :param setCalc: set of elements to be checked (defaults to 'None' which 
                means that all the elements in the file of internal forces
                results are analyzed) 
         :param controller: object that controls the limit state checking.
-        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
-               existing file of results (defaults to 'N')
-        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
-               is desired to be generated (defaults to 'N')
-        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-               meant to be calculated (defaults to 'N')
+        :param appendToResFile:  True if results are appended to 
+               existing file of results (defaults to False)
+        :param listFile: True if latex listing file of results 
+               is desired to be generated (defaults to False)
+        :param calcMeanCF: True if average capacity factor is
+               meant to be calculated (defaults to False)
         '''
+        if appendToResFile not in [True,False]:
+            lmsg.error("Argument 'appendToResFile' must be True or False")
+            exit(1)
+        if listFile not in [True,False]:
+            lmsg.error("Argument 'listFile' must be True or False")
+            exit(1)
+        if calcMeanCF not in [True,False]:
+            lmsg.error("Argument 'calcMeanCF' must be True or False")
+            exit(1)
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return self.runChecking(outputCfg= outputCfg)
 

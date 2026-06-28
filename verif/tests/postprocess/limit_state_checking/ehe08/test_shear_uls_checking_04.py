@@ -165,7 +165,7 @@ reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet
 controller= limitState.getController()
 controller.verbose= False # Don't display log messages.
 ## Perform checking.
-meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y', threeDim= False, controller= controller)
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile=False,calcMeanCF=True, threeDim= False, controller= controller)
 
 # Check results.
 # Check results (22/03/2026: Update the capacity factors after last changes in

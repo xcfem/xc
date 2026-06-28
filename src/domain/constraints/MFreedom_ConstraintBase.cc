@@ -153,6 +153,10 @@ bool XC::MFreedom_ConstraintBase::affectsNode(int nodeTag) const
     return (nodeTag== getNodeConstrained());
   }
 
+//! @brief Return the identifiers of the nodes affected by this constraint.
+std::set<int> XC::MFreedom_ConstraintBase::getTagsAffectedNodes(void) const
+  { return std::set<int>({this->getNodeConstrained()}); }
+
 //! @brief Returns true if the constraint affects the node and DOF arguments.
 bool XC::MFreedom_ConstraintBase::affectsNodeAndDOF(int nodeTag, int theDOF) const
   {
@@ -166,6 +170,19 @@ bool XC::MFreedom_ConstraintBase::affectsNodeAndDOF(int nodeTag, int theDOF) con
     return retval;
   }
 
+//! @brief Return the DOFs affected by the constraint.
+std::map<int, std::list<int> > XC::MFreedom_ConstraintBase::getAffectedDOFs(void) const
+  {
+    std::map<int, std::list<int> > retval;
+    const ID &constrainedDOFs= constrDOF;
+    const size_t sz= constrainedDOFs.Size();
+    std::list<int> c_dofs;
+    for(size_t i= 0; i<sz; i++)
+      { c_dofs.push_back(constrainedDOFs[i]);}
+    retval[this->getNodeConstrained()]= c_dofs;
+    return retval;
+  }
+  
 //! @brief Returns the identifiers of the constrained degrees of fredom.
 const XC::ID &XC::MFreedom_ConstraintBase::getConstrainedDOFs(void) const
   {

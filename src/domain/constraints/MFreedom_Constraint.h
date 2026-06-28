@@ -144,6 +144,7 @@ class MFreedom_Constraint: public MFreedom_ConstraintBase
     std::vector<const Node *> getPointersToRetainedNodes(void) const;
     bool affectsNode(int ) const;
     bool affectsNodeAndDOF(int , int ) const;
+    virtual std::map<int, std::list<int> > getAffectedDOFs(void) const;
     virtual const ID &getRetainedDOFs(void) const;            
     virtual int applyConstraint(double pseudoTime);
     virtual const Vector &getRetainedDOFsInitialDisplacement(void) const;

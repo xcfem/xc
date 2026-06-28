@@ -265,30 +265,12 @@ arcelor_shapes['AU']= AU
 # values are identical: no need to exchange.
 
 
-SHS= None
-with importlib.resources.open_text("materials.sections.structural_shapes.aux", "arcelor_shs_profiles.json") as file:
-    SHS= json.load(file)
-arcelor_shapes['SHS']= SHS
 
 '''
 TODO: Check shear distortion constants
    alpha-> alphaZ,alphaY
 '''
 
-# Arcelor rectangular hollow tubes.
-
-RHS= None
-with importlib.resources.open_text("materials.sections.structural_shapes.aux", "arcelor_rhs_profiles.json") as file:
-    RHS= json.load(file)
-arcelor_shapes['RHS']= RHS
-
-# Tata profiles
-
-# Tata steel circular hollow tubes.
-CHS= None
-with importlib.resources.open_text("materials.sections.structural_shapes.aux", "arcelor_chs_profiles.json") as file:
-    CHS= json.load(file)
-arcelor_shapes['CHS']= CHS
 
 
 # ARCELOR's hot rolled round steel bars.

@@ -130,7 +130,7 @@ int XC::Constraint::getNodeIdx(void) const
     return retval;
   }
 
-//! @brief Returns true ifafecta to the node cuyo tag being passed as parameter.
+//! @brief Returns true if the constraint affects the given node.
 bool XC::Constraint::affectsNode(int nodeTag) const
   { return (nodeTag== constrNodeTag); }
 
@@ -143,6 +143,17 @@ bool XC::Constraint::affectsNodeAndDOF(int nodeTag, int theDOF) const
 	      << Color::def << std::endl;
     return retval;
   }
+
+//! @brief Return the DOFs affected by the constraint.
+std::map<int, std::list<int> > XC::Constraint::getAffectedDOFs(void) const
+  {
+    std::map<int, std::list<int> > retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << " not implemented."
+	      << Color::def << std::endl;
+    return retval;
+  }
+  
 
 //! @brief Send members through the communicator argument.
 //! @param cp: definition of the communication parameters.

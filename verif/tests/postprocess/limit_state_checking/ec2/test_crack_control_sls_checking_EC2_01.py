@@ -139,15 +139,15 @@ controller.verbose= True #False # Don't display log messages.
 ### setCalc: set of elements to be checked.
 ### crossSections: cross sections for each element.
 ### controller: object that controls the limit state checking.
-### appendToResFile:  'Yes','Y','y',.., if results are appended to 
-###                   existing file of results (defaults to 'N')
-### listFile: 'Yes','Y','y',.., if latex listing file of results 
-###           is desired to be generated (defaults to 'N')
-### calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-###               meant to be calculated (defaults to 'N')
+### appendToResFile:  True if results are appended to 
+###                   existing file of results (defaults to False)
+### listFile: True if latex listing file of results 
+###           is desired to be generated (defaults to False)
+### calcMeanCF: True if average capacity factor is
+###               meant to be calculated (defaults to False)
 ### threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
 ###           false if it's 2D (Fx,Fy,Mz).
-meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution,listFile='N',calcMeanCF='Y', controller= controller, threeDim= False)
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution,listFile=False,calcMeanCF=True, controller= controller, threeDim= False)
 
 # Check results (22/03/2026): Update the capacity factors after last changes in
 # the code: fixed error in main reinforcement layers definition:
@@ -183,7 +183,7 @@ else:
 # # Read control variables to display.
 # limitState.readControlVars(modelSpace= modelSpace)
 # # Display them.
-# arguments= ['wk', 'CF', 'N', 'My'] # Possible arguments: 'CF','wk', 'N', 'My'
+# arguments= ['wk', 'CF', False, 'My'] # Possible arguments: 'CF','wk', False, 'My'
 # for arg in arguments:
 #     oh.displayFieldDirs1and2(limitStateLabel= limitState.label, argument= arg, setToDisplay= xcTotalSet, component=None, fileName=None, defFScale=0.0,rgMinMax= None)
 

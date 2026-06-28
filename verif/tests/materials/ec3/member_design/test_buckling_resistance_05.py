@@ -17,7 +17,7 @@ from materials.ec3 import EC3_limit_state_checking
 steel= EC3_materials.S355JR
 gammaM0= 1.00
 steel.gammaM= gammaM0 
-steelShape= EC3_materials.CHSShape(steel,'CHS_244.5_10.0')
+steelShape= EC3_materials.CHSShape(steel,'CHS_244.5_10')
 ## Section class.
 steelShape.sectionClass= steelShape.getClassInCompression()
 

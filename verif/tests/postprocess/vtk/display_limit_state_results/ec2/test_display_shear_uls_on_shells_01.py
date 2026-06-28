@@ -203,7 +203,7 @@ class CustomSolver(predefined_solutions.PlainNewtonRaphson):
 controller= limitState.getController(solutionProcedureType= CustomSolver)
 controller.verbose= False # Don't display log messages.
 ## Peform checking.
-meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y',controller= controller, threeDim= False)
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile=False,calcMeanCF=True,controller= controller, threeDim= False)
 
 # Check results.
 ratio1= abs(meanCFs[0]-refMeanFC0)/refMeanFC0

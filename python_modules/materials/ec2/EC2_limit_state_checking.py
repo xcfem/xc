@@ -939,22 +939,24 @@ def getShearResistanceCrackedNoShearReinf(concrete, NEd, Ac, Asl, bw, d, nationa
     :param d: effective depth of the cross-section.
     :param nationalAnnex: identifier of the national annex.
     '''
-    k= min(1.0+math.sqrt(0.2/d),2) # d in meters.
-    ro_l= min(Asl/bw/d,.02)
+    ro_l= min(Asl/bw/d,.02) # Reinforcement ratio.
     fcdMPa= -concrete.fcd()/1e6 # design value of concrete compressive strength (MPa).
-    sigma_cp= min(-NEd/Ac/1e6,.2*fcdMPa)
+    sigma_cp= min(-NEd/Ac/1e6, .2*fcdMPa)
     gamma_c= concrete.gmmC
-    CRdc= 0.18/gamma_c # Recommended value and Spanish national annex.
+    CRdc= 0.18/gamma_c # Shear resistance constant. Recommended value
+                       # and Spanish national annex.
     k1= 0.15
     fckMPa= -concrete.fck/1e6 # concrete characteristic compressive strength (MPa).
+    k= min(1.0+math.sqrt(0.2/d),2) # Effective depth factor (d in meters).
     if(nationalAnnex=='Spain'):
         v_min= 0.075/gamma_c*math.pow(k,1.5)*math.sqrt(min(fckMPa,60))
     else:
         v_min= 0.035*math.pow(k,1.5)*math.sqrt(fckMPa)
-    
-    VRdc_62a= (CRdc*k*math.pow(100.0*ro_l*fckMPa,1/3.0)+k1*sigma_cp)*bw*d*1e6
-    VRdc_62b= (v_min+k1*sigma_cp)*bw*d*1e6
-    return max(VRdc_62a, VRdc_62b)
+
+    vRdc_62a= (CRdc*k*math.pow(100.0*ro_l*fckMPa,1/3.0)+k1*sigma_cp)
+    vRdc_62b= (v_min+k1*sigma_cp)
+    retval= max(vRdc_62a, vRdc_62b)*bw*d*1e6
+    return retval
     
 def getShearResistanceNonCrackedNoShearReinf(concrete, I, S, NEd, Ac, bw, alpha_l= 1.0):
     ''' Return the design value of the shear resistance VRdc for non-cracked 
@@ -1001,7 +1003,7 @@ def getWebStrutAngleForSimultaneousCollapse(concrete, bw, s, Asw, shearReinfStee
 
 def getMaximumShearWebStrutCrushing(concrete, NEd, Ac, bw, z, shearReinfAngle= math.pi/2.0, webStrutAngle= math.pi/4.0, nationalAnnex= None):
     ''' Return the maximum shear force due to diagonal compression in the web
-        (strut crushing) according to expression 6.14 and 6.9 of EC2:2004.
+        (strut crushing) according to expressions 6.14 and 6.9 of EC2:2004.
 
     :param concrete: concrete material.
     :param NEd: axial force in the cross-section due to loading or prestressing.
@@ -1016,11 +1018,18 @@ def getMaximumShearWebStrutCrushing(concrete, NEd, Ac, bw, z, shearReinfAngle= m
     alpha_cw= concrete.getAlphaCw(NEd, Ac, nationalAnnex)
     # nu1: strength reduction factor for concrete cracked in shear
     nu1= concrete.getShearStrengthReductionFactor(nationalAnnex)
-    fcd= -concrete.fcd() # design value of concrete compressive strength (MPa).
+    fcd= -concrete.fcd()/concrete.alfacc # don't apply both factors:
+                                         # alpha_cc and alpha_cw.
+    retval= alpha_cw*bw*z*nu1*fcd
     webStrutAngle= checkWebStrutAngleLimits(webStrutAngle, nationalAnnex)
-    cotgTheta= 1/math.tan(webStrutAngle)
-    cotgAlpha= 1/math.tan(shearReinfAngle)
-    return alpha_cw*bw*z*nu1*fcd*(cotgTheta+cotgAlpha)/(1+cotgTheta**2)
+    tanTheta= math.tan(webStrutAngle)
+    cotgTheta= 1/tanTheta
+    if(abs(shearReinfAngle-math.pi/2.0)<1e-8): # vertical shear reinforcement.
+        retval/= (cotgTheta+tanTheta) # Expression (6.9)
+    else: # inclined shear reinforcement.
+        cotgAlpha= 1/math.tan(shearReinfAngle)
+        retval*= (cotgTheta+cotgAlpha)/(1+cotgTheta**2) # Expression (6.14)
+    return retval
 
 def getMaximumEffectiveShearReinforcement(concrete, NEd, Ac, bw, s, shearReinfSteel, shearReinfAngle= math.pi/2.0, nationalAnnex= None):
     ''' Return the maximum effective shear reinforcement according to expression
@@ -1856,26 +1865,35 @@ class Ec2InPlaneStressLimitStateData(lsd.ULS_LimitStateData):
         :param outputCfg: instance of class 'VerifOutVars' which defines the 
                variables that control the output of the checking (set of 
                elements to be analyzed, append or not the results to the 
-               result file [defatults to 'N'], generation or not
-               of list file [defatults to 'N', ...)
+               result file [defatults to False], generation or not
+               of list file [defatults to False, ...)
         '''
         retval= super(Ec2InPlaneStressLimitStateData,self).runChecking(outputCfg, sections= [''])
         return retval
     
-    def check(self, setCalc, controller, appendToResFile='N', listFile='N', calcMeanCF='N'):
+    def check(self, setCalc, controller, appendToResFile=False, listFile=False, calcMeanCF=False):
         ''' Perform limit state checking.
 
         :param setCalc: set of elements to be checked (defaults to 'None' which 
                means that all the elements in the file of internal forces
                results are analyzed) 
         :param controller: object that controls the limit state checking.
-        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
-               existing file of results (defaults to 'N')
-        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
-               is desired to be generated (defaults to 'N')
-        :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
-               meant to be calculated (defaults to 'N')
+        :param appendToResFile:  True if results are appended to 
+               existing file of results (defaults to False)
+        :param listFile: True if latex listing file of results 
+               is desired to be generated (defaults to False)
+        :param calcMeanCF: True if average capacity factor is
+               meant to be calculated (defaults to False)
         '''
+        if appendToResFile not in [True,False]:
+            lmsg.error("Argument 'appendToResFile' must be True or False")
+            exit(1)
+        if listFile not in [True,False]:
+            lmsg.error("Argument 'listFile' must be True or False")
+            exit(1)
+        if calcMeanCF not in [True,False]:
+            lmsg.error("Argument 'calcMeanCF' must be True or False")
+            exit(1)
         outputCfg= lsd.VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return self.runChecking(outputCfg= outputCfg)
 
@@ -2187,6 +2205,14 @@ class TorsionParameters(object):
            hollow section Ak.
         '''
         return self.midLine.getPerimeter()
+
+    def getShearStressDueToPureTorsionalMoment(self, TEd):
+        ''' Return the shear stress in a wall of a section subject to a pure 
+           torsional moment according to expression (6.26) of EC2.
+
+        :param TEd: applied torsional moment.
+        '''
+        return TEd/(2*self.Ak()*self.tef())
     
 def compute_effective_hollow_section_parameters(sectionGeometry, c, t0= None):
     '''Computes the parameters for torsion analysis of an
@@ -2237,7 +2263,8 @@ class TorsionController(lscb.ShearControllerBase):
         self.TRd_max= 0.0 # design torsional resistance moment according to
                           # to expression (6.30) of EC2:2004.
 
-    def calcTRd_max(self, rcSection, NEd, Ac, Ak, tef, nationalAnnex= None):
+    @staticmethod
+    def calcTRd_max(rcSection, NEd, Ac, Ak, tef, theta= None, nationalAnnex= None):
         ''' Return the design torsional resistance moment according to
             to expression (6.30) of EC2:2004.
 
@@ -2248,6 +2275,8 @@ class TorsionController(lscb.ShearControllerBase):
         :param Ak: Area enclosed by the middle line of the design effective 
                    hollow section (figure 6.11).
         :param tef: effective thickness of the wall of the design section.
+        :param theta: angle of compression struts (see Figure 6.5). If None
+                      get the angle from the torsion reinforcement.
         :param nationalAnnex: identifier of the national annex.
         '''
         concrete= rcSection.getConcreteType()
@@ -2257,10 +2286,12 @@ class TorsionController(lscb.ShearControllerBase):
         # alpha_cw: coefficient taking account of the state of the stress in the compression chord.
         alpha_cw= concrete.getAlphaCw(NEd, Ac, nationalAnnex)
         # angle of compression struts (see Figure 6.5).
-        theta= rcSection.torsionReinf.angThetaConcrStruts
+        if(theta is None):
+            theta= rcSection.torsionReinf.angThetaConcrStruts
         return 2.0*nu*alpha_cw*fcd*Ak*tef*math.sin(theta)*math.cos(theta)
 
-    def calcTrdc(self,  rcSection, Ak:float, tef:float):
+    @staticmethod
+    def calcTrdc(rcSection, Ak:float, tef:float):
         ''' Compute the torsional moment strength of the section without 
             torsional reinforcement.
 
@@ -2272,8 +2303,119 @@ class TorsionController(lscb.ShearControllerBase):
         concrete= rcSection.getConcreteType()
         fctd= concrete.fctd() # concrete design tensile strength.
         return 2*Ak*fctd*tef
+
+    @staticmethod
+    def getMaximumShearWebStrutCrushing(rcSection, NEd, bw, z, nationalAnnex= None):
+        ''' Return the maximum shear force due to diagonal compression in the 
+            web (strut crushing) according to expressions 6.14 and 6.9 
+            of EC2:2004.
+
+        :param rcSection: reinforced concrete section.
+        :param NEd: axial force in the cross-section due to loading or 
+                    prestressing.
+        :param bw: smallest width of the cross-section in the tensile area.
+        :param z: internal lever arm.
+        :param nationalAnnex: identifier of the national annex.
+        '''
+        concrete= rcSection.getConcreteType()
+        Ac= rcSection.A()
+        shReinf= rcSection.getShearReinfY()
+        shearReinfAngle= shReinf.angAlphaShReinf
+        webStrutAngle= shReinf.angThetaConcrStruts
+        return getMaximumShearWebStrutCrushing(concrete= concrete, NEd= NEd, Ac= Ac, bw= bw, z= z, shearReinfAngle= shearReinfAngle, webStrutAngle= webStrutAngle, nationalAnnex= nationalAnnex)
+
+    @staticmethod
+    def getShearResistanceCrackedNoShearReinf(rcSection, NEd, bw, d, nationalAnnex= None):
+        ''' Return the maximum shear force due to diagonal compression in the 
+            web (strut crushing) according to expressions 6.14 and 6.9 
+            of EC2:2004.
+
+        :param rcSection: reinforced concrete section.
+        :param NEd: axial force in the cross-section due to loading or 
+                    prestressing.
+        :param bw: smallest width of the cross-section in the tensile area.
+        :param d: effective depth of the cross-section.
+        :param nationalAnnex: identifier of the national annex.
+        '''
+        concrete= rcSection.getConcreteType()
+        Ac= rcSection.A()
+        Asl= rcSection.getMainReinforcementArea() # area of the tensile reinforcement.
+        return getShearResistanceCrackedNoShearReinf(concrete= concrete, NEd= NEd, Ac= Ac, Asl= Asl, bw= bw, d= d, nationalAnnex= nationalAnnex)
+
+    @staticmethod
+    def getShearResistanceNonCrackedNoShearReinf(rcSection, NEd, bw, alpha_l= 1.0, majorAxis= True):
+        ''' Return the design value of the shear resistance VRdc for non-cracked 
+            sections subjected to bending moment, according to expression 6.4 of
+            EC2:2004.
+
+        :param concrete: concrete material.
+        :param NEd: axial force in the cross-section due to loading or 
+                    prestressing.
+        :param bw: smallest width of the cross-section in the tensile area.
+        :param alpha_l: see expression 6.4 in EC2:2004.
+        '''
+        concrete= rcSection.getConcreteType()
+        Ac= rcSection.A() # area of concrete cross-section.
+        I= rcSection.I(majorAxis= majorAxis)
+        S= rcSection.getPlasticSectionModulus(majorAxis= majorAxis)
+        return getShearResistanceNonCrackedNoShearReinf(concrete= concrete, I= I, S= S, NEd= NEd, Ac= Ac, bw= bw, alpha_l= alpha_l)
+
+    @staticmethod
+    def getAsl_req(rcSection, TEd:float, Ak:float, uk:float, limitMaxStress= 400e6):
+        ''' Compute the required longitudinal reinforcement for torsion 
+            according to expression (6.28) of EC2.
+
+        :param rcSection: reinforced concrete section.
+        :param TEd: applied torsional moment.
+        :param Ak: Area enclosed by the middle line of the design effective 
+                   hollow section (figure 6.11).
+        :param uk: perimeter of the middle line in the design effective 
+                   hollow section Ak.
+        :param limitMaxStress: if not None, limit the maximum stress to the 
+                               given value.
+        '''
+        shReinf= rcSection.getShearReinfY()
+        webStrutAngle= shReinf.angThetaConcrStruts
+        fyd= rcSection.getReinfSteelType().fyd()
+        if(limitMaxStress is not None):
+            fyd= min(fyd, limitMaxStress)
+        cotgTheta= 1/math.tan(webStrutAngle)
+        return TEd*uk*cotgTheta/(2*Ak*fyd)
+
+    @staticmethod
+    def getAsw_req(rcSection, TEd:float, Ak:float, limitMaxStress= 400e6):
+        ''' Compute the required shear reinforcement (one leg) for torsion 
+            according to expression (6.28) of EC2.
+
+        :param rcSection: reinforced concrete section.
+        :param TEd: applied torsional moment.
+        :param Ak: Area enclosed by the middle line of the design effective 
+                   hollow section (figure 6.11).
+        :param limitMaxStress: if not None, limit the maximum stress to the 
+                               given value.
+        '''
+        shReinf= rcSection.getShearReinfY()
+        webStrutAngle= shReinf.angThetaConcrStruts
+        fyd= rcSection.getReinfSteelType().fyd()
+        if(limitMaxStress is not None):
+            fyd= min(fyd, limitMaxStress)
+        cotgTheta= 1/math.tan(webStrutAngle)
+        return TEd/(2*Ak*fyd*cotgTheta)
+
+    @staticmethod
+    def getAsw_max_spacing(rcSection, uk:float):
+        ''' Compute the maximum spacing for torsion shear reinforcement.
+
+        :param rcSection: reinforced concrete section.
+        :param limitMaxStress: if not None, limit the maximum stress to the 
+                               given value.
+        '''
+        b= rcSection.b
+        h= rcSection.h
+        return min(uk/8.0, b, h)
         
-    def calcTasl_max(self, rcSection, Ak:float, uk:float):
+    @staticmethod       
+    def calcTasl_max(rcSection, Ak:float, uk:float):
         ''' Compute the maximum torsional strength with the amount of torsional
             longitudinal reinforcement arranged in the section.
 
@@ -2288,7 +2430,8 @@ class TorsionController(lscb.ShearControllerBase):
         theta= rcSection.torsionReinf.angThetaConcrStruts
         return 2*Ak*rcSection.torsionReinf.A1/uk*fy1d*math.tan(theta)
     
-    def calcTasw_max(self, rcSection, Ak:float):
+    @staticmethod
+    def calcTasw_max(rcSection, Ak:float):
         ''' Compute the torsional stress which longitudinal reinforcements can 
             resist according to expression (6.28) of EC2.
 

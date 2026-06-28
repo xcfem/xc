@@ -121,7 +121,7 @@ reinfConcreteSectionDistribution.assign(elemSet= xcTotalSet.elements, setRCSects
 controller= limitState.getController()
 controller.verbose= True #False # Don't display log messages.
 ## Perform checking.
-meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y', threeDim= True, controller= controller)
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile=False,calcMeanCF=True, threeDim= True, controller= controller)
 
 ratio1= abs(meanCFs[0]-0.7499028951306632)/0.7499028951306632
 ratio2= abs(meanCFs[1]-0.7499028951307712)/0.7499028951307712

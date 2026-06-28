@@ -160,7 +160,7 @@ limitState= limitStates[0]
 controller= limitState.getController(biaxialBending= True)
 
 ## Perform checking.
-average= limitState.check(setCalc=ec3CalcSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)
+average= limitState.check(setCalc=ec3CalcSet, appendToResFile=False, listFile=False, calcMeanCF=True, controller= controller)
 
 # Check results.
 ratio= ((average[0]-1.0011156454277137)/1.0011156454277137)**2

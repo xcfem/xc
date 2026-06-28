@@ -223,6 +223,9 @@ class OutputStyle(object):
         elif(itemToDisp=='sectionArea'):
             fConvUnits= 1e4
             unitDescription= 'cm2'
+        elif(itemToDisp=='thickness'):
+            fConvUnits= 1e3
+            unitDescription= '[mm]'
         elif(itemToDisp=='strongAxisBucklingPercent'):
             fConvUnits= 1.0
             unitDescription= 'Dot product (projection) of the buckling eigenvector over the strong axis.'
@@ -286,12 +289,19 @@ sp_capTexts={
     'SLS_rareLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga raros',
     'SLS_frequentLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga frecuentes',
     'SLS_quasiPermanentLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga quasi-permanentes',
+    
     'ULS_StrutAndTie':'Comprobación ELU bielas y tirantes',
     'vm_stress': 'tensión de Von Mises',
     'wk': 'abertura de fisura',
     's_rmax': 'separación entre fisuras',
     'sigma_s': 'máxima tensión en la armadura',
     'sigma_c': 'máxima tensión de compresión en el hormigón',
+    'Ncrd': 'resistencia de cálculo a compresión',
+    'McRdy': 'resistencia de cálculo a flexión respecto al eje débil (Y)',
+    'McRdz': 'resistencia de cálculo a flexión respecto al eje fuerte (Z)',
+    'MvRdz': 'resistencia de cálculo a flexión respecto al eje fuerte (Z) reducida por interacción con cortante',
+    'MbRdz':'resistencia de cálculo a flexión respecto al eje fuerte (Z) reducida por pandeo lateral torsional', 
+    'chiLT': 'reduction factor for lateral-torsional buckling ',
     'Leff': 'longitud de pandeo.',
     'mechLambda': 'esbeltez mecánica.',
     'ef': 'excentricidad adicional por pandeo.',

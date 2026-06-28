@@ -130,7 +130,7 @@ reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=
 ## Build controller.
 controller= limitState.getController()
 ## Perform checking.
-meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile='N',calcMeanCF='Y',threeDim= True, controller= controller)
+meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution, listFile=False,calcMeanCF=True,threeDim= True, controller= controller)
 
 #print("mean FCs: ", meanCFs)
 

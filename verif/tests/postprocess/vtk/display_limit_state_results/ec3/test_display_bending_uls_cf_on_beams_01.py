@@ -148,7 +148,7 @@ limitState= limitStates[0]
 ### Build controller.
 controller= limitState.getController(biaxialBending= True)
 ### Perform checking.
-bendingAverage= limitState.check(setCalc=ec3CalcSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)
+bendingAverage= limitState.check(setCalc=ec3CalcSet, appendToResFile=False, listFile=False, calcMeanCF=True, controller= controller)
 
 ## Check shear.
 ### Limit state to check.
@@ -156,7 +156,7 @@ limitState= limitStates[1]
 ### Build controller.
 controller= limitState.getController()
 ### Perform checking.
-shearAverage= limitState.check(setCalc=ec3CalcSet, appendToResFile='N', listFile='N', calcMeanCF='Y', controller= controller)
+shearAverage= limitState.check(setCalc=ec3CalcSet, appendToResFile=False, listFile=False, calcMeanCF=True, controller= controller)
 
 # Check results.
 fname= os.path.basename(__file__)

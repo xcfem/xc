@@ -139,7 +139,7 @@ limitState= limitStates[0]
 #### Build controller.
 controller= aisc.VonMisesStressController(limitState.label)
 #### Perform checking.
-average= limitState.check(setCalc=xcTotalSet, appendToResFile='Y', listFile='N', calcMeanCF='Y', controller= controller)
+average= limitState.check(setCalc=xcTotalSet, appendToResFile=True, listFile=False, calcMeanCF=True, controller= controller)
 ratio= ((average[0]-0.27083778356986787)/0.27083778356986787)**2
 
 '''

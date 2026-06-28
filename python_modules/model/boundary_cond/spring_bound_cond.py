@@ -330,7 +330,20 @@ class ElasticFoundation(object):
             n= e.getNodes[0]
             retval.append(n)
         return retval
-    
+
+    def getReaction(self):
+        ''' Return the 3D sliding vector system equivalent to the reactions on
+            the supporting nodes.'''
+        centroid= self.getCentroid()
+        retval= geom.SlidingVectorsSystem3d(centroid)
+        supportingNodes= self.getFoundationSupportingNodes()
+        for n in supportingNodes:
+            nodePos= n.getInitialPos3d
+            nodeReaction= n.getReaction
+            svec= geom.SlidingVector3d(nodePos, geom.Vector3d(nodeReaction[0], nodeReaction[1], nodeReaction[2]))
+            retval+= svec
+        return retval
+        
     def getMaxMinAvgPressure(self, component):
         ''' Return the maximum foundation pressure component over the soil. 
          Calculates pressures  and forces in the free nodes of the springs

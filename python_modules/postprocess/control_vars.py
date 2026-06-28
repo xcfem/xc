@@ -786,7 +786,7 @@ class UniaxialBendingStrengthControlVars(UniaxialBendingControlVars):
     :ivar chiLT: reduction factor for lateral-torsional buckling (defaults to 1)
     :ivar chiN:  reduction factor for compressive strength (defaults to 1)
     '''
-    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0, N= 0.0, Mz= 0.0,Ncrd=0.0, McRdz=0.0,chiLT=1.0, chiN= 1.0):
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0, N= 0.0, Mz= 0.0,Ncrd=0.0, McRdz=0.0, chiLT=1.0, chiN= 1.0):
         '''
         Constructor.
 
@@ -809,6 +809,7 @@ class UniaxialBendingStrengthControlVars(UniaxialBendingControlVars):
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
         retval= super(UniaxialBendingStrengthControlVars,self).getDict()
+        retval['Mz']= retval.pop('My') # My <-> Mz
         retval.update({'Ncrd':self.Ncrd, 'McRdz':self.McRdz, 'chiLT':self.chiLT, 'chiN':self.chiN})
         return retval
        
@@ -817,7 +818,8 @@ class UniaxialBendingStrengthControlVars(UniaxialBendingControlVars):
 
         :param dct: dictionary containing the values of the object members.
         '''
-        super(BiaxialBendingStrengthControlVars,self).setFromDict(dct)
+        dct['My']= dct.pop('Mz') # Mz <-> My
+        super(UniaxialBendingStrengthControlVars,self).setFromDict(dct)
         self.Ncrd= dct['Ncrd']
         self.McRdz= dct['McRdz']
         self.chiLT= dct['chiLT']
@@ -1771,7 +1773,9 @@ def read_control_vars(preprocessor, inputFileName):
         with open(inputFileName) as f:
             dataDict= json.load(f)
     except IOError:
-        lmsg.error("can't read from file: "+str(inputFileName))
+        methodName= sys._getframe(0).f_code.co_name
+        errorMsg= "; can't read from file: "+str(inputFileName)
+        lmsg.error(methodName+errorMsg)
         return retval
     if('elementData' in dataDict): # Control variables on elements.
         elementData= dataDict['elementData']
@@ -1850,7 +1854,7 @@ def get_element_data_dict(controlVarsDict, controlVarName):
         else: # One record for each element.
             index= next(iter(elementControlVars))
             controlVar= elementControlVars[index]
-            retval[controlVarName][eTag]= controlVar.getStrConstructor()
+            retval[controlVarName][eTag][index]= controlVar.getStrConstructor()
     return retval
 
 def write_latex_control_vars(outputFile, controlVarsDict):
@@ -1895,6 +1899,69 @@ def get_capacity_factors_from_control_vars(controlVarsDict):
                     retval[controlVarName][index]= list()
                 retval[controlVarName][index].append(controlVar.getCF())
     return retval
+
+def convert_json_keys_to_int(obj):
+    '''Recursively convert dictionary keys that are integer strings to integers.
+
+    :param obj: dictionary to change whose keys will be converted to integers.
+    '''
+    if isinstance(obj, dict):
+        new_dict = {}
+        for key, value in obj.items():
+            try:
+                new_key = int(key)
+            except (ValueError, TypeError):
+                # Leave non-integer keys unchanged
+                new_key = key
+            new_dict[new_key] = convert_json_keys_to_int(value)
+        return new_dict
+
+    elif isinstance(obj, list):
+        return [convert_json_keys_to_int(item) for item in obj]
+
+    else:
+        return obj
+
+def read_existing_control_vars_dict(inputFileName):
+    ''' Read the values of the contral variables that are already written
+        in a results file.
+
+    :param inputFileName: name of the input file to read from.
+    '''
+    tmp= dict()
+    if(os.path.isfile(inputFileName)):
+        try:
+            with open(inputFileName, 'r') as f:
+               tmp= json.load(f)
+        except IOError:
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= "can't read from file: "
+            errorMsg+= str(inputFileName)
+            errorMsg+= ". Are you sure you need to read previous results?"
+            lmsg.error(methodName+errorMsg)
+            exit(1)
+    else:
+        tmp= dict()
+    # Convert keys to integers.
+    retval= convert_json_keys_to_int(tmp)
+    return retval
+
+def update_control_vars_dict(dataDict, newResults):
+    ''' Update the given dictionary with the given results.
+
+    :param dataDict: dictionary to update.
+    :param newResults: result to update the dictionary with.
+    '''
+    if('elementData' in dataDict):
+        limitStateData= dataDict['elementData']
+        for controlVarKey in newResults:
+            if(controlVarKey in limitStateData):
+                limitStateData[controlVarKey].update(newResults[controlVarKey])
+            else:
+                limitStateData[controlVarKey]= newResults[controlVarKey]
+    else:
+        dataDict['elementData']= newResults
+    
             
 def write_control_vars_from_phantom_elements(controlVarsDict, outputCfg):
     '''Writes to file the control-variable values calculated for
@@ -1910,30 +1977,26 @@ def write_control_vars_from_phantom_elements(controlVarsDict, outputCfg):
     controlVarName= outputCfg.controller.limitStateLabel
     dataDict= None
     jsonFileName= outputFileName+'.json'
-    if outputCfg.appendToResFile.lower()[0]=='y':
-        try:
-            with open(jsonFileName) as f:
-               dataDict= json.load(f)
-        except IOError:
-            lmsg.error("can't read from file: "+str(outputFileName))
+    if(outputCfg.appendToResFile):
+        dataDict= read_existing_control_vars_dict(jsonFileName)
     else:
         dataDict= dict()
     elementDataDict= get_element_data_dict(controlVarsDict= controlVarsDict, controlVarName= controlVarName)
-    dataDict['elementData']= elementDataDict
+    update_control_vars_dict(dataDict= dataDict, newResults= elementDataDict)
 
     # Write the dictionary in a JSON file.
     with open(jsonFileName, 'w') as f:
         json.dump(dataDict, f)       
 
-    if outputCfg.listFile.lower()[0]=='y':
-        if outputCfg.appendToResFile.lower()[0]=='y':
+    if outputCfg.listFile:
+        if outputCfg.appendToResFile:
             texOutput= open(outputFileName+".tex","a+")
         else:
             texOutput= open(outputFileName+".tex","w+")
         write_latex_control_vars(outputFile= texOutput, controlVarsDict= controlVarsDict)
         texOutput.close()
     retval=None
-    if outputCfg.calcMeanCF.lower()[0]=='y':
+    if outputCfg.calcMeanCF:
         capacityFactors= get_capacity_factors_from_control_vars(controlVarsDict= controlVarsDict)[controlVarName]
         retval= list()
         for key in capacityFactors:
@@ -1961,7 +2024,9 @@ def getControlVarImportModuleStr(preprocessor, outputCfg, sections):
         controlVar= e0.getProp(propName)
         retval= controlVar.getModuleImportString()
     else:
-        lmsg.error('element set is empty.')
+        methodName= sys._getframe(0).f_code.co_name
+        errorMsg= "; element set is empty."
+        lmsg.error(methodName+errorMsg)
     return retval
 
 def write_control_vars_from_elements(preprocessor, controlVarsDict, outputCfg, sections):
@@ -1981,20 +2046,22 @@ def write_control_vars_from_elements(preprocessor, controlVarsDict, outputCfg, s
     dataDict= None
     outputFileName= outputCfg.outputDataBaseFileName # name for the .json and .tex files.
     jsonFileName= outputFileName+'.json'
-    if(outputCfg.appendToResFile.lower()[0]=='y' and os.path.isfile(jsonFileName)):
-        try:
-            with open(jsonFileName) as f:
-               dataDict= json.load(f)
-        except IOError:
-            lmsg.error("can't read from file: "+str(jsonFileName)+". Are you sure you need to read previous results?")
-            quit()
+    # Get the existing data dictionary if required.
+    if(outputCfg.appendToResFile):
+        dataDict= read_existing_control_vars_dict(jsonFileName)
     else:
         dataDict= dict()
-    # Write report in JSON format.
+    # Write results in JSON format.
     importString= getControlVarImportModuleStr(preprocessor, outputCfg, sections)
-    dataDict['importString']= importString
+    if('importStrings' in dataDict):
+        importStringsList= dataDict['importStrings']
+        if(importString not in importStringsList):
+            importStringsList.append(importString)
+    else:
+        importStringsList=[importString]
+    dataDict['importStrings']= importStringsList
     elementDataDict= get_element_data_dict(controlVarsDict= controlVarsDict, controlVarName= controlVarName)
-    dataDict['elementData']= elementDataDict
+    update_control_vars_dict(dataDict= dataDict, newResults= elementDataDict)
     # for e in elems:
     #     elementDataDict[e.tag]= dict()
     #     for s in sections:
@@ -2003,10 +2070,9 @@ def write_control_vars_from_elements(preprocessor, controlVarsDict, outputCfg, s
     #         elementDataDict[e.tag][propName]= controlVar.getStrConstructor()
     with open(jsonFileName, 'w') as f:
         json.dump(dataDict, f)
-    
     # Write report in LaTeX format.
-    if outputCfg.listFile.lower()[0]=='y':
-        if outputCfg.appendToResFile.lower()[0]=='y':
+    if outputCfg.listFile:
+        if outputCfg.appendToResFile:
             texOutput= open(outputFileName+".tex","a+")
         else:
             texOutput= open(outputFileName+".tex","w+")
@@ -2020,7 +2086,7 @@ def write_control_vars_from_elements(preprocessor, controlVarsDict, outputCfg, s
         #         texOutput.write(outStr)
         texOutput.close()
     retval=None
-    if outputCfg.calcMeanCF.lower()[0]=='y':
+    if outputCfg.calcMeanCF:
         capacityFactors= get_capacity_factors_from_control_vars(controlVarsDict= controlVarsDict)[controlVarName]
         retval= list()
         for key in capacityFactors:

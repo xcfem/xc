@@ -2,6 +2,8 @@
 xc_installation_target.txt
 # Debian packages
 *.deb
+# Debian package creation
+debian-pkg
 
 
 
