@@ -774,6 +774,9 @@ python tests/solution/eigenvalues/linear_buckling_analysis/micropile_buckling_re
 python tests/solution/eigenvalues/linear_buckling_analysis/square_plate_buckling_01.py
 python tests/solution/eigenvalues/linear_buckling_analysis/square_plate_buckling_02.py # Depends on spectra library.
 
+## Push-over analysis.
+python tests/solution/push_over/rc_frame_gravity.py
+
 ## Geometric non-linearity.
 echo "$BLEU" "  PDelta solution tests." "$NORMAL"
 python tests/solution/geom_nl/test_pdelta_01.py
@@ -1497,6 +1500,7 @@ python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section_shear3d_02.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section_prop.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_fiber_section_discretization_error_01.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/3d/test_core_cover_rc_section.py
 echo "$BLEU" "        Fiber section interaction diagrams." "$NORMAL"
 python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_deformation_plane_01.py
 python tests/materials/xc_materials/sections/fiber_section/interaction_diagram/test_interaction_diagram01.py

@@ -10,14 +10,22 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import os
+import sys
 import xc
 import geom
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 
-# Import local modules.
+# Import RC section module.
+pth= os.path.dirname(__file__)
+if(not pth):
+    pth= "."
+sys.path.append(pth+"/../../aux/sections/")
 import core_cover_rc_section
+
+import rc_push_over_frame
 
 # Define problem type
 feProblem= xc.FEProblem()
@@ -25,49 +33,24 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-# Create nodes
-## Set parameters for overall model geometry
-width = 360.0
-height = 144.0
-
-# Create nodes
-#    tag, X, Y
-n1= modelSpace.newNode(0.0, 0.0)
-n2= modelSpace.newNode(width, 0.0)
-n3= modelSpace.newNode(0.0, height)
-n4= modelSpace.newNode(width, height)
-
-# Constraints.
-# Fix supports at base of columns
-#   tag, DX, DY, RZ
-for n in [n1, n2]:
-    modelSpace.fixNode('000', n.tag)
-    
-# Some parameters
+# RC section with confined concrete.
 colWidth= 15
 colDepth= 24
 cover= 1.5
 As= 0.60  # area of no. 7 bars    
 columnFiberSection= core_cover_rc_section.def_core_cover_rc_section(preprocessor, colWidth= colWidth, colDepth= colDepth, cover= cover, As= As)
 
-# Define column elements
-# ----------------------
 
-# Geometry of column elements
-#                tag
-pDelta= modelSpace.newPDeltaCrdTransf("pDelta")
+# Create nodes
+## Set parameters for overall model geometry
+width = 360.0
+height = 144.0
 
-# Lobatto integration
-beamIntegratorHandler= preprocessor.getBeamIntegratorHandler
-lobattoBeamIntegration= beamIntegratorHandler.newBeamIntegrator('Lobatto','lobattoBeamIntegration')
+frameItems= rc_push_over_frame.def_rc_push_over_frame(modelSpace= modelSpace, columnFiberSection= columnFiberSection, width= width, height= height)
 
-# Create the columns using Beam-column elements
-modelSpace.setDefaultCoordTransf(pDelta) # Coordinate transformation for the new elements.
-modelSpace.setDefaultMaterial(columnFiberSection) # Section material for the new elements.
-modelSpace.setNumSections(5) # Number of integration points along length of element.
-modelSpace.setDefaultIntegrator(lobattoBeamIntegration)
-column1= modelSpace.newElement("ForceBeamColumn2d", [n1.tag, n3.tag])
-column2= modelSpace.newElement("ForceBeamColumn2d", [n2.tag, n4.tag])
+column1= frameItems['column1']
+column2= frameItems['column2']
+
 weights1= column1.getSectionWeights()
 weights2= column1.getSectionWeights()
 integratorType1= str(type(column1.getIntegrator()))
@@ -77,19 +60,7 @@ testOK= testOK and (len(weights1)== 5)
 testOK= testOK and ('LobattoBeamIntegration' in integratorType2)
 testOK= testOK and (len(weights2)== 5)
 
-# Define beam element
-## Coordinate transformation.
-lin= modelSpace.newLinearCrdTransf("lin")
-## Linear elastic 2D section.
-A= 360
-E= 4030
-I= 8640
-nu= 0.3
-G= E/(2.0*(1+nu))
-beamSection= typical_materials.defElasticShearSection2d(preprocessor, "section",A= A, E= E, G= G, I= I, alpha= 1.0)
-modelSpace.setDefaultCoordTransf(lin) # Coordinate transformation for the new elements.
-modelSpace.setDefaultMaterial(beamSection) # Section material for the new elements.
-beam= modelSpace.newElement("ElasticBeam2d", [n3.tag, n4.tag]) # Create the beam element
+print('XXX create a module that can be loades from this script and from rc_frame_push_over.py.')
 
 # Define gravity loads
 # --------------------
@@ -99,6 +70,8 @@ P= 180.0;  # 10% of axial capacity of columns
 lts= modelSpace.newTimeSeries(name= 'lts', tsType= 'linear_ts')
 glp= modelSpace.newLoadPattern(name= 'glp', setCurrent= True)
 # Create nodal loads at nodes 3 & 4
+n3= frameItems['n3']
+n4= frameItems['n4']
 glp.newNodalLoad(n3.tag, xc.Vector([0,-P,0]))
 glp.newNodalLoad(n4.tag, xc.Vector([0,-P,0]))
 modelSpace.addLoadCaseToDomain(glp.name)
@@ -124,11 +97,13 @@ ratio2= abs(u4 + refVertDisplacement)
 
 testOK= testOK and (ratio1<1e-3) and (ratio2<1e-3)
 
+'''
 print('reference vertical displacement: ', refVertDisplacement*1e3) 
 print('u3= ', u3*1e3)
 print('ratio1= ', ratio1)
 print('u4= ', u4*1e3)
 print('ratio2= ', ratio2)
+'''
 
 import os
 from misc_utils import log_messages as lmsg

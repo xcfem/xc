@@ -11,13 +11,19 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import os
+import sys
 import math
 import xc
 import geom
 from model import predefined_spaces
 from postprocess.reports import common_formats as cf
 
-# Import local modules.
+# Import RC section module.
+pth= os.path.dirname(__file__)
+if(not pth):
+    pth= "."
+sys.path.append(pth+"/../../../../../../aux/sections/")
 import core_cover_rc_section
 
 # Define problem type
@@ -38,7 +44,6 @@ ratio_fs_1= abs(fiber_section_area-fiber_section_reference_area)/fiber_section_r
 fiber_section_yG= columnFiberSection.getCenterOfMassY()
 fiber_section_zG= columnFiberSection.getCenterOfMassZ()
 ratio_fs_2= math.sqrt(fiber_section_yG**2+fiber_section_zG**2)
-print('XXX Continue here, compute fiber_section_Iz and fiber_section_Iy')
 
 testOK= (ratio_fs_1<1e-6) and (ratio_fs_2<1e-6)
 
@@ -102,7 +107,7 @@ for f in fibers:
 testOK= testOK and abs(concreteFibersArea-(colWidth*colDepth))<1e-6
 testOK= testOK and abs(steelFibersArea-8*As)<1e-6
 
-
+'''
 print('cover area: ', coverArea)
 print('core area: ', coreArea)
 print('fiber section area: ', fiber_section_area)
@@ -123,6 +128,7 @@ print('regions reference Iz: ', regions_reference_Iz)
 print('regions Iy= ', regions_Iy)
 print('regions reference Iy: ', regions_reference_Iy)
 print('ratio_rg_3= ', ratio_rg_3)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
