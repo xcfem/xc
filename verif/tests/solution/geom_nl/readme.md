@@ -7,6 +7,9 @@
 - [Non-linear Finite Element Analysis of Solids and Structures Volume 1 : Essentials](https://www.google.es/books/edition/Non_Linear_Finite_Element_Analysis_of_So/hiTyAQAACAAJ?hl=en)
 - [Snap-Through Instability Patterns in Truss Structures](https://ntrs.nasa.gov/api/citations/20100016317/downloads/20100016317.pdf)
 
+### Structural codes
+- [Eurocode 2 Clause 5.2 Geometric imperfections](https://www.concretecentre.com/TCC/media/TCCMediaLibrary/PDF%20attachments/Lecture-7-Columns-PHG-B2-Rev-4-2Nov17.pdf)
+
 ### P-Delta effects
 - [Ways to analyze this](https://portwooddigital.com/2025/11/30/ways-to-analyze-this/)
 - [PDelta analysis](https://en.wikipedia.org/wiki/P-delta_effect).
