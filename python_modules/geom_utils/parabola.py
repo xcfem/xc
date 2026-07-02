@@ -94,6 +94,19 @@ def define_parabola_from_vertex_and_point(vertex, pt):
     p2= geom.Pos2d(x, pt.y)
     return Parabola(p0, p1, p2)
     
+def def_tendon_parabolic_segment(vertex, b, h):
+    ''' Return the parabola defining the tendon profile according to section
+        3.8 of FHWA Post-Tensioned Box Girder Design Manual. June 2016.
+
+    :param vertex: 2D position of the parabola's vertex.
+    :param b: length of the segment.
+    :param h: rise of the segment at its end.
+    '''
+    y= vertex.y+h
+    p0= geom.Pos2d(vertex.x-b, y)
+    p1= vertex
+    p2= geom.Pos2d(vertex.x+b, y)
+    return Parabola(p0, p1, p2)
   
 class GeneralizedParabola(Parabola):
     ''' Moved and/or rotated parabola.
@@ -201,7 +214,7 @@ def fit_parabola(x, y):
     a, b, c = np.linalg.solve(A, y)
     return a, b, c
 
-def eq_points_parabola(startS,stopS,numPts,a,b,c,angSX):
+def eq_points_parabola(startS, stopS, numPts, a, b, c, angSX):
     '''Returns equispaced nPts points of the parabola "z=as^2 + bs + c" 
     in the range [startS,stopS].
     S is a coordinate by the straight line projection of the parabola on 
@@ -213,3 +226,4 @@ def eq_points_parabola(startS,stopS,numPts,a,b,c,angSX):
     y_parab= np.linspace(startS*math.sin(angSX),stopS*math.sin(angSX),numPts)
     z_parab= a*s_parab**2+b*s_parab+c
     return x_parab,y_parab,z_parab
+

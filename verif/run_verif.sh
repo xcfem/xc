@@ -211,6 +211,8 @@ python tests/utility/geom/circles/circular_sector_2d_test_03.py
 echo "$BLEU" "    Parabolas." "$NORMAL"
 python tests/utility/geom/parabolas/parabola_test_01.py
 python tests/utility/geom/parabolas/parabola_test_02.py
+python tests/utility/geom/parabolas/test_tendon_parabolic_segment_01.py
+python tests/utility/geom/parabolas/test_tendon_parabolic_segment_02.py
 python tests/utility/geom/parabolas/generalized_parabola_test_01.py
 python tests/utility/geom/parabolas/generalized_parabola_test_02.py
 echo "$BLEU" "    Other geometric objects." "$NORMAL"
