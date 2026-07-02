@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
+'''Classes related to prestressed concrete.'''
 
 from __future__ import division
 
-'''Classes related to prestressed concrete 
-'''
 
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2017, AO_O"
