@@ -156,6 +156,7 @@ python tests/utility/geom/polylines/plane_polyline3d/plane_polyline3d_test_01.py
 python tests/utility/geom/polylines/plane_polyline3d/test_compute_chunks_01.py
 echo "$BLEU" "    Polygons." "$NORMAL"
 echo "$BLEU" "      2D Polygons." "$NORMAL"
+python tests/utility/geom/polygons/2d/triangle2D_test_01.py
 python tests/utility/geom/polygons/2d/polygon2D_test_01.py
 python tests/utility/geom/polygons/2d/polygon2D_test_02.py
 python tests/utility/geom/polygons/2d/polygon2D_test_03.py
