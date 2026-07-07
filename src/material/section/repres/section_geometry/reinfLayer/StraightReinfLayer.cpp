@@ -54,7 +54,6 @@
 // December 1998
 
 #include <cmath>
-#include <utility/matrix/Matrix.h>
 
 #include <material/section/repres/section_geometry/reinfLayer/StraightReinfLayer.h>
 #include <material/section/repres/section_geometry/reinfBar/ReinfBar.h>
@@ -69,16 +68,16 @@ XC::StraightReinfLayer::StraightReinfLayer(ListReinfLayer *owr,Material *mat)
 
 XC::StraightReinfLayer::StraightReinfLayer(ListReinfLayer *owr,Material *mat, int numReinfBars, 
                                        double reinfBarArea,
-                                       const XC::Vector &InitialPosition,
-                                       const XC::Vector &FinalPosition)
+                                       const Vector &InitialPosition,
+                                       const Vector &FinalPosition)
   : ReinfLayer(owr,mat,numReinfBars,0.0,reinfBarArea),
     initPosit(InitialPosition), finalPosit(FinalPosition) {}
 
 
-void XC::StraightReinfLayer::setInitialPosition (const XC::Vector &initialPosition)
+void XC::StraightReinfLayer::setInitialPosition(const Vector &initialPosition)
   { initPosit = initialPosition; }
 
-void XC::StraightReinfLayer::setFinalPosition (const XC::Vector &finalPosition)
+void XC::StraightReinfLayer::setFinalPosition(const Vector &finalPosition)
   { finalPosit = finalPosition; }
 
 void XC::StraightReinfLayer::setInitialPos(const Pos2d &p)
@@ -99,25 +98,27 @@ void XC::StraightReinfLayer::setFinalPos(const Pos2d &p)
 Pos2d XC::StraightReinfLayer::getFinalPos(void) const
   { return Pos2d(finalPosit(0),finalPosit(1)); }
 
-
 double XC::StraightReinfLayer::getMaxY(void) const
   {
     double retval= initPosit(0);
     retval= std::max(retval,finalPosit(0));
     return retval;
   }
+
 double XC::StraightReinfLayer::getMaxZ(void) const
   {
     double retval= initPosit(1);
     retval= std::max(retval,finalPosit(1));
     return retval;
   }
+
 double XC::StraightReinfLayer::getMinY(void) const
   {
     double retval= initPosit(0);
     retval= std::min(retval,finalPosit(0));
     return retval;
   }
+
 double XC::StraightReinfLayer::getMinZ(void) const
   {
     double retval= initPosit(1);
@@ -174,7 +175,7 @@ double XC::StraightReinfLayer::getLength(void) const
 double XC::StraightReinfLayer::getSpacement(void) const
   { return getLength()/getNumReinfBars(); }
 
-XC::ReinfLayer *XC::StraightReinfLayer::getCopy (void) const
+XC::ReinfLayer *XC::StraightReinfLayer::getCopy(void) const
   { return new StraightReinfLayer(*this); }
 
 void XC::StraightReinfLayer::Print(std::ostream &s, int flag) const
