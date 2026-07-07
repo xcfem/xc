@@ -1,4 +1,4 @@
-#!/bin/sh
+e#!/bin/sh
 # 
 #   Copyright (C)  Luis C. Pérez Tato
 # 
@@ -1462,6 +1462,7 @@ python tests/materials/xc_materials/sections/elastic_section/test_section_proper
 echo "$BLEU" "      Fiber section tests." "$NORMAL"
 python tests/materials/xc_materials/sections/fiber_section/test_reg_cuad_01.py
 python tests/materials/xc_materials/sections/fiber_section/test_straight_reinf_layer_01.py
+python tests/materials/xc_materials/sections/fiber_section/test_polyline_reinf_layer_01.py
 python tests/materials/xc_materials/sections/fiber_section/test_fiber2d_01.py
 python tests/materials/xc_materials/sections/fiber_section/test_fiber3d_01.py
 python tests/materials/xc_materials/sections/fiber_section/test_fiber3d_02.py
