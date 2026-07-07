@@ -78,13 +78,12 @@ reinforcement= geomSecHA.getReinfLayers
 reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementInf.numReinfBars= 2
 reinforcementInf.barDiameter= 16e-3
-reinforcementInf.p1= geom.Pos2d(cover-depth/2,width/2-cover) # bottom layer.
-reinforcementInf.p2= geom.Pos2d(cover-depth/2,cover-width/2)
+reinforcementInf.setP1P2(geom.Pos2d(cover-depth/2,width/2-cover), geom.Pos2d(cover-depth/2,cover-width/2)) # bottom layer.
+
 reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementSup.numReinfBars= 2
 reinforcementSup.barDiameter= 16e-3
-reinforcementSup.p1= geom.Pos2d(depth/2-cover,width/2-cover) # top layer.
-reinforcementSup.p2= geom.Pos2d(depth/2-cover,cover-width/2)
+reinforcementSup.setP1P2(geom.Pos2d(depth/2-cover,width/2-cover), geom.Pos2d(depth/2-cover,cover-width/2)) # top layer.
 
 materialHandler= preprocessor.getMaterialHandler
 secHA= materialHandler.newMaterial("fiber_section_3d","secHA")

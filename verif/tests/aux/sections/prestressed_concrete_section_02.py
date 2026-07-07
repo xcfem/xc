@@ -61,39 +61,33 @@ def gmSecHP02(preprocessor, nmbGeomSecc,concrDiagName,reinfSteelDiagramName,pres
     rebarLayer= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
     rebarLayer.numReinfBars= 13 # Bottom flange; bottom active reinforcement.
     rebarLayer.barArea= strandsArea
-    rebarLayer.p1= geom.Pos2d(-0.773,-0.31) 
-    rebarLayer.p2= geom.Pos2d(-0.773,0.31)
+    rebarLayer.setP1P2(geom.Pos2d(-0.773,-0.31), geom.Pos2d(-0.773,0.31))
 
     rebarLayer= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
     rebarLayer.numReinfBars= 13 # Bottom flange; intermediate active reinforcement.
     rebarLayer.barArea= strandsArea
-    rebarLayer.p1= geom.Pos2d(-0.713,-0.31) 
-    rebarLayer.p2= geom.Pos2d(-0.713,0.31)
+    rebarLayer.setP1P2(geom.Pos2d(-0.713,-0.31), geom.Pos2d(-0.713,0.31))
 
     rebarLayer= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
     rebarLayer.numReinfBars= 7
     rebarLayer.barArea= strandsArea
-    rebarLayer.p1= geom.Pos2d(-0.653,-0.155) # Bottom flange; top active reinforcement.
-    rebarLayer.p2= geom.Pos2d(-0.653,0.155)
+    rebarLayer.setP1P2(geom.Pos2d(-0.653,-0.155), geom.Pos2d(-0.653,0.155)) # Bottom flange; top active reinforcement.
 
     rebarLayer= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
     rebarLayer.numReinfBars= 3
     rebarLayer.barArea= strandsArea
-    rebarLayer.p1= geom.Pos2d(0.797,-0.478) # Top flange; active reinforcement.
-    rebarLayer.p2= geom.Pos2d(0.797,0.478)
+    rebarLayer.setP1P2(geom.Pos2d(0.797,-0.478), geom.Pos2d(0.797,0.478)) # Top flange; active reinforcement.
 
     # Passive reinforcement
     rebarLayer= reinforcement.newStraightReinfLayer(reinfSteelDiagramName)
     rebarLayer.numReinfBars= 5
     rebarLayer.barArea= areaFiLong
-    rebarLayer.p1= geom.Pos2d(-0.413,-0.031)
-    rebarLayer.p2= geom.Pos2d(0.587,-0.031)
+    rebarLayer.setP1P2(geom.Pos2d(-0.413,-0.031), geom.Pos2d(0.587,-0.031))
 
     rebarLayer= reinforcement.newStraightReinfLayer(reinfSteelDiagramName)
     rebarLayer.numReinfBars= 5
     rebarLayer.barArea= areaFiLong
-    rebarLayer.p1= geom.Pos2d(-0.413,0.031)
-    rebarLayer.p2= geom.Pos2d(0.587,0.031)
+    rebarLayer.setP1P2(geom.Pos2d(-0.413,0.031), geom.Pos2d(0.587,0.031))
 
     return geomSecc
 

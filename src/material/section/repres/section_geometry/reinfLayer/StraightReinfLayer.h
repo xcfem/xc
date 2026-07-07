@@ -94,6 +94,9 @@ class StraightReinfLayer: public ReinfLayer
     Pos2d getInitialPos(void) const;
     void setFinalPos(const Pos2d &);
     Pos2d getFinalPos(void) const;
+    void setP1P2(const Pos2d &, const Pos2d &);
+    void setLineSegment(const Segment2d &);
+    Segment2d getLineSegment(void) const;
 
     // inquiring functions
     const VectorReinfBar &getReinfBars(void) const;
@@ -103,7 +106,6 @@ class StraightReinfLayer: public ReinfLayer
     double getMaxZ(void) const;
     double getMinY(void) const;
     double getMinZ(void) const;
-    Segment2d getLineSegment(void) const;
     double getLength(void) const;
     double getSpacement(void) const;
 

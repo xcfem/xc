@@ -11,12 +11,10 @@ def define_section(preprocessor, leverArm, barDiam):
     reinforcementInf.numReinfBars= 2
     reinforcementInf.barDiameter= barDiam
     # reinforcementInf.barArea= barArea
-    reinforcementInf.p1= geom.Pos2d(-leverArm,leverArm) # bottom layer.
-    reinforcementInf.p2= geom.Pos2d(-leverArm,-leverArm)
+    reinforcementInf.setP1P2(geom.Pos2d(-leverArm,leverArm), geom.Pos2d(-leverArm,-leverArm)) # bottom layer.
     reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
     reinforcementSup.numReinfBars= 2
     reinforcementSup.barDiameter= barDiam
     # reinforcementSup.barArea= barArea
-    reinforcementSup.p1= geom.Pos2d(leverArm,leverArm) # top layer.
-    reinforcementSup.p2= geom.Pos2d(leverArm,-leverArm)
+    reinforcementSup.setP1P2(geom.Pos2d(leverArm,leverArm), geom.Pos2d(leverArm,-leverArm)) # top layer.
     return barsSectionGeometry, reinforcementInf, reinforcementSup

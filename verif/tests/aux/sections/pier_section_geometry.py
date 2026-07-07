@@ -81,24 +81,21 @@ def define_pier_section_geometry(preprocessor, name, concrete, steel, p4i, p5i, 
     r1.numReinfBars= r1Reinf[0]
     r1.barDiameter= r1Reinf[1]
     r1CoverVector= geom.Vector2d(0.0, -cover)
-    r1.p1= p10+r1CoverVector
-    r1.p2= p9+r1CoverVector
+    r1.setP1P2(p10+r1CoverVector, p9+r1CoverVector)
     ## R2
     r2= reinforcement.newStraightReinfLayer(steelDiag.name)
     r2.numReinfBars= r2Reinf[0]
     r2.barDiameter= r2Reinf[1]
     chamferVector= (p8-p7).normalized()
     chamferNormal= geom.Vector2d(-chamferVector.y, chamferVector.x)
-    r2.p1= p8-cover*chamferVector+cover*chamferNormal
-    r2.p2= p7+cover*chamferVector+cover*chamferNormal
+    r2.setP1P2(p8-cover*chamferVector+cover*chamferNormal, p7+cover*chamferVector+cover*chamferNormal)
     ## R3
     r3= reinforcement.newStraightReinfLayer(steelDiag.name)
     r3.numReinfBars= r3Reinf[0]
     r3.barDiameter= r3Reinf[1]
     r3TangentVector= (p6-p7).normalized()
     r3NormalVector= geom.Vector2d(-cover, 0.0).normalized()
-    r3.p1= p7+cover*r3TangentVector+cover*r3NormalVector
-    r3.p2= p6-cover*r3TangentVector+cover*r3NormalVector
+    r3.setP1P2(p7+cover*r3TangentVector+cover*r3NormalVector, p6-cover*r3TangentVector+cover*r3NormalVector)
     ## R4
     r4= gfs.reflect_straight_reinf_layer(reinforcement, reinfLayer= r2, symAxis= xAxis)
     ## R5
@@ -114,24 +111,21 @@ def define_pier_section_geometry(preprocessor, name, concrete, steel, p4i, p5i, 
     r9.numReinfBars= r9Reinf[0]
     r9.barDiameter= r9Reinf[1]
     r9CoverVector= geom.Vector2d(0.0, cover)
-    r9.p1= p10i+r9CoverVector
-    r9.p2= p9i+r9CoverVector
+    r9.setP1P2(p10i+r9CoverVector, p9i+r9CoverVector)
     ## R10
     r10= reinforcement.newStraightReinfLayer(steelDiag.name)
     r10.numReinfBars= r10Reinf[0]
     r10.barDiameter= r10Reinf[1]
     chamferVector= (p6i-p5i).normalized()
     chamferNormal= geom.Vector2d(-chamferVector.y, chamferVector.x)
-    r10.p1= p6i-cover*chamferVector-cover*chamferNormal
-    r10.p2= p5i+cover*chamferVector-cover*chamferNormal
+    r10.setP1P2(p6i-cover*chamferVector-cover*chamferNormal, p5i+cover*chamferVector-cover*chamferNormal)
     ## R11
     r11= reinforcement.newStraightReinfLayer(steelDiag.name)
     r11.numReinfBars= r11Reinf[0]
     r11.barDiameter= r11Reinf[1]
     r11TangentVector= (p5i-p4i).normalized()
     r11NormalVector= geom.Vector2d(-cover, 0.0).normalized()
-    r11.p1= p5i-cover*r11TangentVector-cover*r11NormalVector
-    r11.p2= p4i+cover*r11TangentVector-cover*r11NormalVector
+    r11.setP1P2(p5i-cover*r11TangentVector-cover*r11NormalVector, p4i+cover*r11TangentVector-cover*r11NormalVector)
     ## R12
     r12= gfs.reflect_straight_reinf_layer(reinforcement, reinfLayer= r10, symAxis= xAxis)
     ## R13

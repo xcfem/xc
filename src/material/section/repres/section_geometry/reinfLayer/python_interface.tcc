@@ -44,7 +44,10 @@ class_<XC::CircReinfLayer , bases<XC::ReinfLayer>, boost::noncopyable >("CircRei
 class_<XC::StraightReinfLayer , bases<XC::ReinfLayer>, boost::noncopyable >("StraightReinfLayer", no_init)
   .add_property("p1",&XC::StraightReinfLayer::getInitialPos,&XC::StraightReinfLayer::setInitialPos,"Initial position.")
   .add_property("p2",&XC::StraightReinfLayer::getFinalPos,&XC::StraightReinfLayer::setFinalPos,"Final position.")
-  .def("getSpacement",&XC::StraightReinfLayer::getSpacement,"Returns the spacement of the bars.")
+  .def("setP1P2", &XC::StraightReinfLayer::setP1P2, "Set the initial and final positions.")
+  .def("setSegment", &XC::StraightReinfLayer::setLineSegment, "Set the initial and final positions using the given segment.")
+  .def("getSegment", &XC::StraightReinfLayer::getLineSegment, "Get the segment that lies the initial and final positions.")
+  .def("getSpacement", &XC::StraightReinfLayer::getSpacement,"Returns the spacement of the bars.")
   ;
 
 class_<XC::PolylineReinfLayer , bases<XC::ReinfLayer>, boost::noncopyable >("PolylineReinfLayer", no_init)

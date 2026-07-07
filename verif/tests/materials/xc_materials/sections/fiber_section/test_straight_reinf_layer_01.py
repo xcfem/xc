@@ -50,14 +50,12 @@ reinforcement= quadFibersGeom.getReinfLayers
 reinforcementA= reinforcement.newStraightReinfLayer("steel")
 reinforcementA.numReinfBars= nRebarsA
 reinforcementA.barArea= As
-reinforcementA.p1= geom.Pos2d(y0-depth/2.0,z0-width/2.0)
-reinforcementA.p2= geom.Pos2d(y0+depth/2.0,z0-width/2.0)
+reinforcementA.setP1P2(geom.Pos2d(y0-depth/2.0,z0-width/2.0), geom.Pos2d(y0+depth/2.0,z0-width/2.0)) # positions of the first and last rebars.
 
 reinforcementB= reinforcement.newStraightReinfLayer("steel")
 reinforcementB.numReinfBars= nRebarsB
 reinforcementB.barArea= As
-reinforcementB.p1= geom.Pos2d(y0-depth/2.0,z0+width/2.0)
-reinforcementB.p2= geom.Pos2d(y0+depth/2.0,z0+width/2.0)
+reinforcementB.setP1P2(geom.Pos2d(y0-depth/2.0,z0+width/2.0), geom.Pos2d(y0+depth/2.0,z0+width/2.0)) # positions of the first and last rebars.
 
 materialHandler= preprocessor.getMaterialHandler
 # Sections

@@ -30,13 +30,11 @@ reinforcement= sectionGeometryTest.getReinfLayers
 reinforcementA= reinforcement.newStraightReinfLayer(steel.name)
 reinforcementA.numReinfBars= 2
 reinforcementA.barArea= areaFi16
-reinforcementA.p1= geom.Pos2d(0.05,0.95) # bottom layer.
-reinforcementA.p2= geom.Pos2d(0.05,0.05)
+reinforcementA.setP1P2(geom.Pos2d(0.05,0.95), geom.Pos2d(0.05,0.05)) # bottom layer.
 reinforcementB= reinforcement.newStraightReinfLayer(steel.name)
 reinforcementB.numReinfBars= 2
 reinforcementB.barArea= areaFi16
-reinforcementB.p1= geom.Pos2d(0.95,0.95) # bottom layer.
-reinforcementB.p2= geom.Pos2d(0.95,0.05)
+reinforcementB.setP1P2(geom.Pos2d(0.95,0.95), geom.Pos2d(0.95,0.05)) # bottom layer.
 
 nRebars= reinforcement.getNumReinfBars
 area= sectionGeometryTest.getAreaHomogenizedSection(Ec)

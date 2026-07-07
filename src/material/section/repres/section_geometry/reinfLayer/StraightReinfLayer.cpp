@@ -62,10 +62,12 @@
 #include "utility/geom/d1/Segment2d.h"
 
 
+//! @brief Constructor.
 XC::StraightReinfLayer::StraightReinfLayer(ListReinfLayer *owr,Material *mat)
   : ReinfLayer(owr,mat,0,0.0,0.0),
     initPosit(2), finalPosit(2) {}
 
+//! @brief Constructor.
 XC::StraightReinfLayer::StraightReinfLayer(ListReinfLayer *owr,Material *mat, int numReinfBars, 
                                        double reinfBarArea,
                                        const Vector &InitialPosition,
@@ -74,29 +76,50 @@ XC::StraightReinfLayer::StraightReinfLayer(ListReinfLayer *owr,Material *mat, in
     initPosit(InitialPosition), finalPosit(FinalPosition) {}
 
 
+//! @brief Set the initial position.
 void XC::StraightReinfLayer::setInitialPosition(const Vector &initialPosition)
   { initPosit = initialPosition; }
 
+//! @brief Set the final position.
 void XC::StraightReinfLayer::setFinalPosition(const Vector &finalPosition)
   { finalPosit = finalPosition; }
 
+//! @brief Set the initial position.
 void XC::StraightReinfLayer::setInitialPos(const Pos2d &p)
   {
     initPosit[0]= p.x();
     initPosit[1]= p.y();
   }
 
+//! @brief Get the initial position.
 Pos2d XC::StraightReinfLayer::getInitialPos(void) const
   { return Pos2d(initPosit(0),initPosit(1)); }
 
+//! @brief Set the final position.
 void XC::StraightReinfLayer::setFinalPos(const Pos2d &p)
   {
     finalPosit[0]= p.x();
     finalPosit[1]= p.y();
   }
 
+//! @brief Set the initial position.
 Pos2d XC::StraightReinfLayer::getFinalPos(void) const
   { return Pos2d(finalPosit(0),finalPosit(1)); }
+
+//! @brief Set the initial and final positions.
+void XC::StraightReinfLayer::setP1P2(const Pos2d &p1, const Pos2d &p2)
+  {
+    this->setInitialPos(p1);
+    this->setFinalPos(p2);
+  }
+
+//! @brief Set the initial and final positions using the given segment.
+void XC::StraightReinfLayer::setLineSegment(const Segment2d &s)
+  {
+    const Pos2d &p1= s.getFromPoint();
+    const Pos2d &p2= s.getToPoint();
+    this->setP1P2(p1, p2);
+  }
 
 double XC::StraightReinfLayer::getMaxY(void) const
   {

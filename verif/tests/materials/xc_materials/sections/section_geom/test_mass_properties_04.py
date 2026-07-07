@@ -45,8 +45,7 @@ reinforcement= sectionGeometryTest.getReinfLayers
 reinforcementA= reinforcement.newStraightReinfLayer(steel.name)
 reinforcementA.numReinfBars= 5
 reinforcementA.barArea= areaBar
-reinforcementA.p1= geom.Pos2d(0.0,b/2-bw/2+0.05)
-reinforcementA.p2= geom.Pos2d(0.0,b/2+bw/2-0.05)
+reinforcementA.setP1P2(geom.Pos2d(0.0,b/2-bw/2+0.05), geom.Pos2d(0.0,b/2+bw/2-0.05))
 
 elasticSection= typical_materials.defElasticSection3d(preprocessor, "elasticSection",0.0,Ec,Gc,0.0,0.0,1.0)
 elasticSection.sectionGeometry("sectionGeometryTest")

@@ -45,13 +45,11 @@ reinforcement= geomSecHA.getReinfLayers
 reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementInf.numReinfBars= 2 # number of bars.
 reinforcementInf.barArea= areaFi16 # bar area.
-reinforcementInf.p1= geom.Pos2d(cover-depth/2.0,width/2.0-cover) # bottom layer.
-reinforcementInf.p2= geom.Pos2d(cover-depth/2.0,cover-width/2.0)
+reinforcementInf.setP1P2(geom.Pos2d(cover-depth/2.0,width/2.0-cover), geom.Pos2d(cover-depth/2.0,cover-width/2.0)) # bottom layer.
 reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementSup.numReinfBars= 2 # number of bars.
 reinforcementSup.barArea= areaFi16 # bar area.
-reinforcementSup.p1= geom.Pos2d(depth/2.0-cover,width/2.0-cover) # top layer.
-reinforcementSup.p2= geom.Pos2d(depth/2.0-cover,cover-width/2.0)
+reinforcementSup.setP1P2(geom.Pos2d(depth/2.0-cover,width/2.0-cover), geom.Pos2d(depth/2.0-cover,cover-width/2.0)) # top layer.
 
 # Create fiber section.
 materialHandler= preprocessor.getMaterialHandler

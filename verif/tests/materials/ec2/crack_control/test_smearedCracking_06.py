@@ -98,8 +98,7 @@ reinfBottLayer.numReinfBars= 21
 reinfBottLayer.barArea= areaFi26
 yBotL=(width-2*coverLat-0.026)/2.0
 zBotL=-depth/2.0+coverInf+0.026/2.0
-reinfBottLayer.p1= geom.Pos2d(-yBotL,zBotL) # center point position of the starting rebar
-reinfBottLayer.p2= geom.Pos2d(yBotL,zBotL) # center point position of the starting rebar
+reinfBottLayer.setP1P2(geom.Pos2d(-yBotL,zBotL), geom.Pos2d(yBotL,zBotL)) # positions of the first and last rebars.
 
 # Section material 
 # it is a generic section created to be assigned to the elements specified

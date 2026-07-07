@@ -117,16 +117,15 @@ reinfBottLayer.numReinfBars= 6
 reinfBottLayer.barArea= areaFi24
 yBotL=(width-2*cover-0.024)/2.0
 zBotL=-depth/2.0+cover+0.024/2.0
-reinfBottLayer.p1= geom.Pos2d(-yBotL,zBotL) # center point position of the starting rebar
-reinfBottLayer.p2= geom.Pos2d(yBotL,zBotL) # center point position of the starting rebar
+reinfBottLayer.setP1P2(geom.Pos2d(-yBotL,zBotL), geom.Pos2d(yBotL,zBotL)) # positions of the first and last rebars.
+
 # top layer (negative bending)
 reinfTopLayer= reinforcement.newStraightReinfLayer(rfSteel.nmbDiagK) # Steel stress-strain diagram to use.
 reinfTopLayer.numReinfBars= 4
 reinfTopLayer.barArea= areaFi12
 yTopL=(width-2*cover-0.012)/2.0
 zTopL=depth/2.0-cover-0.012/2.0
-reinfTopLayer.p1= geom.Pos2d(-yTopL,zTopL) # center point position of the starting rebar
-reinfTopLayer.p2= geom.Pos2d(yTopL,zTopL) # center point position of the starting rebar
+reinfTopLayer.setP1P2(geom.Pos2d(-yTopL,zTopL), geom.Pos2d(yTopL,zTopL)) # positions of the first and last rebars.
 
 # Section material 
 # it is a generic section created to be assigned to the elements specified
