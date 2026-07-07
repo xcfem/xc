@@ -29,6 +29,7 @@
 #include "ListReinfLayer.h"
 #include "material/section/repres/section_geometry/reinfLayer/SingleBar.h"
 #include "material/section/repres/section_geometry/reinfLayer/StraightReinfLayer.h"
+#include "material/section/repres/section_geometry/reinfLayer/PolylineReinfLayer.h"
 #include "material/section/repres/section_geometry/reinfLayer/CircReinfLayer.h"
 #include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "material/Material.h" 
@@ -88,6 +89,20 @@ XC::StraightReinfLayer *XC::ListReinfLayer::newStraightReinfLayer(const std::str
     ReinfLayer *ptr= push_back(tmp);
     ptr->set_owner(this);
     return dynamic_cast<StraightReinfLayer *>(ptr);
+  }
+
+XC::PolylineReinfLayer *XC::ListReinfLayer::newPolylineReinfLayer(const std::string &cod_mat)
+  {
+    XC::Material *materialPtr= material_handler->find_ptr(cod_mat);
+    if(!materialPtr)
+      std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; WARNING, material: '"
+	        << cod_mat << "' not found."
+		<< Color::def << std::endl;
+    PolylineReinfLayer tmp(this, materialPtr);
+    ReinfLayer *ptr= push_back(tmp);
+    ptr->set_owner(this);
+    return dynamic_cast<PolylineReinfLayer *>(ptr);
   }
 
 XC::CircReinfLayer *XC::ListReinfLayer::newCircReinfLayer(const std::string &cod_mat)

@@ -102,6 +102,7 @@
 #include "material/section/repres/section_geometry/reinfBar/VectorReinfBar.h"
 #include "material/section/repres/section_geometry/reinfLayer/SingleBar.h"
 #include "material/section/repres/section_geometry/reinfLayer/StraightReinfLayer.h"
+#include "material/section/repres/section_geometry/reinfLayer/PolylineReinfLayer.h"
 #include "material/section/repres/section_geometry/reinfLayer/CircReinfLayer.h"
 #include "material/section/repres/section_geometry/reinfLayer/ListReinfLayer.h"
 #include "material/section/repres/section/SectionRepres.h"

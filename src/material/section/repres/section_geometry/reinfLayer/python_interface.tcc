@@ -47,6 +47,12 @@ class_<XC::StraightReinfLayer , bases<XC::ReinfLayer>, boost::noncopyable >("Str
   .def("getSpacement",&XC::StraightReinfLayer::getSpacement,"Returns the spacement of the bars.")
   ;
 
+class_<XC::PolylineReinfLayer , bases<XC::ReinfLayer>, boost::noncopyable >("PolylineReinfLayer", no_init)
+  .def("setPolyline",&XC::PolylineReinfLayer::setPolyline, "Set the polyline where the rebars are located along.")
+  .add_property("getPolyline",&XC::PolylineReinfLayer::getPolyline,"Get the polyline where the rebars are located along.")
+  .def("getSpacement",&XC::PolylineReinfLayer::getSpacement,"Returns the spacement of the bars.")
+  ;
+
 typedef std::list<XC::ReinfLayer *> list_ptr_reinf_layer;
 class_<list_ptr_reinf_layer, boost::noncopyable>("list_ptr_reinf_layer")
 //.def(vector_indexing_suite<list_ptr_reinf_layer>() )
@@ -64,6 +70,7 @@ class_<list_ptr_reinf_layer, boost::noncopyable>("list_ptr_reinf_layer")
 
 class_<XC::ListReinfLayer, bases<XC::SectionMassProperties,list_ptr_reinf_layer>, boost::noncopyable >("ListReinfLayer", no_init)
   .def("newStraightReinfLayer",make_function(&XC::ListReinfLayer::newStraightReinfLayer,return_internal_reference<>()))
+  .def("newPolylineReinfLayer",make_function(&XC::ListReinfLayer::newPolylineReinfLayer,return_internal_reference<>()))
   .def("newCircReinfLayer",make_function(&XC::ListReinfLayer::newCircReinfLayer,return_internal_reference<>()))
   .def("newReinfBar",make_function(&XC::ListReinfLayer::newReinfBar,return_internal_reference<>()))
   .add_property("getNumReinfBars",&XC::ListReinfLayer::getNumReinfBars,"Number of bars.")

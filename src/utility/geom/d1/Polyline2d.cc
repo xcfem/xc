@@ -769,13 +769,25 @@ Vector2d Polyline2d::getJVectorAtLength(const GEOM_FT &s) const
 VectorPos2d Polyline2d::Divide(int num_partes) const
   {
     const double L= this->getLength();
-    const double segmentLength= L/num_partes;
     const size_t numPoints= num_partes+1;
     VectorPos2d retval(numPoints);
-    retval[0]= this->getFromPoint(); // first point.
-    for(int i= 1; i<num_partes;i++) // intermediate points.
-      { retval[i]= this->getPointAtLength(i*segmentLength); }
-    retval[num_partes]= this->getToPoint(); //last point: num_partes==numPoints-1
+    if(L==0.0)
+      {
+	std::clog << Color::yellow << this->getClassName() << "::" << __FUNCTION__
+		  << "; the polyline has no length all the returned points will be coincident."
+		  << Color::def << std::endl;
+	const Pos2d p= this->getFromPoint();
+	for(size_t i= 0; i<numPoints;i++)
+	  { retval[i]= p; }
+      }
+    else
+      {
+	const double segmentLength= L/num_partes;
+	retval[0]= this->getFromPoint(); // first point.
+	for(int i= 1; i<num_partes;i++) // intermediate points.
+	  { retval[i]= this->getPointAtLength(i*segmentLength); }
+	retval[num_partes]= this->getToPoint(); //last point: num_partes==numPoints-1
+      }
     return retval;
   }
 

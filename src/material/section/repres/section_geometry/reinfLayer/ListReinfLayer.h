@@ -44,6 +44,7 @@ class Material;
 class ReinfLayer;
 class CircReinfLayer;
 class StraightReinfLayer;
+class PolylineReinfLayer;
 class SingleBar;
 class MaterialHandler;
 class Vector;
@@ -83,6 +84,7 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SectionMassProperti
     const SectionGeometry *getSectionGeometry(void) const;
     double getCover(void) const;
 
+    PolylineReinfLayer *newPolylineReinfLayer(const std::string &);
     StraightReinfLayer *newStraightReinfLayer(const std::string &);
     CircReinfLayer *newCircReinfLayer(const std::string &);
     SingleBar *newReinfBar(const std::string &);
