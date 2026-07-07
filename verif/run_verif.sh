@@ -1,4 +1,4 @@
-e#!/bin/sh
+#!/bin/sh
 # 
 #   Copyright (C)  Luis C. Pérez Tato
 # 
