@@ -75,11 +75,10 @@ class StraightReinfLayer: public ReinfLayer
     Vector initPosit; //!< Segment back end.
     Vector finalPosit; //!< Segment front end.
   protected:
-
-
     friend class ListReinfLayer;
     StraightReinfLayer(ListReinfLayer *,Material *mat);
-    StraightReinfLayer(ListReinfLayer *,Material *mat, int numReinfBars, double  reinfBarArea,
+    StraightReinfLayer(ListReinfLayer *,Material *mat, int numReinfBars,
+		       double  reinfBarArea,
                        const Vector &initialPosition, 
                        const Vector &finalPosition);
     ReinfLayer *getCopy(void) const;
