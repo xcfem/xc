@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-''' Trivial test for the straight reinforcement layer class.'''
+''' Trivial test for the polyline reinforcement layer class.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
-__copyright__= "Copyright 2015, LCPT and AO_O"
+__copyright__= "Copyright 2026, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
-# Test for checking the straight reinforcement layer
 import geom
 import xc
 from model import predefined_spaces
@@ -17,14 +16,13 @@ width= 1
 depth= 2
 y0= 0
 z0= 0
-nRebarsA= 2
-nRebarsB= 2
+nRebarsA= 4
+nRebarsB= 4
 nRebars= nRebarsA+nRebarsB
-totalArea= 1.0
+totalArea= 0.1
 As= totalArea/nRebars
-iyTeor= nRebars*As*(width/2.0)**2
-izTeor= nRebars*As*(depth/2.0)**2
-F= 1000.0 # Force magnitude
+areaTeor= nRebars*As
+F= 100.0 # Force magnitude
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -47,15 +45,21 @@ y1= width/2.0
 z1= depth/2.0
 
 reinforcement= quadFibersGeom.getReinfLayers
-reinforcementA= reinforcement.newStraightReinfLayer("steel")
+reinforcementA= reinforcement.newPolylineReinfLayer(steel.name)
 reinforcementA.numReinfBars= nRebarsA
 reinforcementA.barArea= As
-reinforcementA.setP1P2(geom.Pos2d(y0-depth/2.0,z0-width/2.0), geom.Pos2d(y0+depth/2.0,z0-width/2.0)) # positions of the first and last rebars.
+p1= geom.Pos2d(y0-depth/2.0,z0-width/2.0)
+p2= geom.Pos2d(y0+depth/2.0,z0-width/2.0)
+p3= geom.Pos2d((p1.x+p2.x)/2.0, 1.5*(p1.y+p2.y)/2.0)
+reinforcementA.setPolyline(geom.Polyline2d([p1, p3, p2]))
 
-reinforcementB= reinforcement.newStraightReinfLayer("steel")
+reinforcementB= reinforcement.newPolylineReinfLayer(steel.name)
 reinforcementB.numReinfBars= nRebarsB
 reinforcementB.barArea= As
-reinforcementB.setP1P2(geom.Pos2d(y0-depth/2.0,z0+width/2.0), geom.Pos2d(y0+depth/2.0,z0+width/2.0)) # positions of the first and last rebars.
+p1= geom.Pos2d(y0-depth/2.0,z0+width/2.0)
+p2= geom.Pos2d(y0+depth/2.0,z0+width/2.0)
+p3= geom.Pos2d((p1.x+p2.x)/2.0, 1.5*(p1.y+p2.y)/2.0)
+reinforcementB.setPolyline(geom.Polyline2d([p1, p3, p2]))
 
 materialHandler= preprocessor.getMaterialHandler
 # Sections
@@ -71,13 +75,6 @@ fibers= quadFibers.getFibers()
 # Iy= fibers.getIy(1.0,z0)
 # centerOfMassZ= fibers.getCenterOfMassZ()
 # centerOfMassY= fibers.getCenterOfMassY()
-
-'''
-for_each_fiber
-    print("fiber: ",tag, " mat. tag:", getMaterial.tag)
-'''
-
-
 
 # Elements definition
 elements= preprocessor.getElementHandler
@@ -113,26 +110,21 @@ nfib= scc.getFibers().getNumFibers()
 avgStrain= 0.0
 fibers= scc.getFibers()
 sumAreas= fibers.getArea(1.0)
-Iz= fibers.getIz(1.0,y0)
-Iy= fibers.getIy(1.0,z0)
 centerOfMassZ= fibers.getCenterOfMassZ()
 centerOfMassY= fibers.getCenterOfMassY()
 
 avgStrain= 0.0
 for f in fibers:
-# print("fiber: ",tag, " strain: ", getMaterial.strain)
    avgStrain+= f.getMaterial().getStrain()
 avgStrain/= nfib
 
 ratio1= (nfib-nRebars)/nRebars
-ratio2= (sumAreas-totalArea)/totalArea
+ratio2= (sumAreas-areaTeor)/areaTeor
 ratio3= centerOfMassY-y0
 ratio4= centerOfMassZ-z0
-ratio5= (Iz-izTeor)/izTeor
-ratio6= (Iy-iyTeor)/iyTeor
-ratio7= (-R-F)/F
-ratio8= ((E*deltax*totalArea)-F)/F
-ratio9= (avgStrain-deltax)/deltax
+ratio5= (-R-F)/F
+ratio6= ((E*deltax*totalArea)-F)/F
+ratio7= (avgStrain-deltax)/deltax
 
 ''' 
 print("R= ",R)
@@ -141,20 +133,15 @@ print("ratio1= ",ratio1)
 print("ratio2= ",ratio2)
 print("ratio3= ",ratio3)
 print("ratio4= ",ratio4)
-print("Iz= ",Iz)
-print("izTeor= ",izTeor)
 print("ratio5= ",ratio5)
-print("Iy= ",Iy)
-print("iyTeor= ",iyTeor)
 print("ratio6= ",ratio6)
 print("ratio7= ",ratio7)
-print("ratio8= ",ratio8)
-print("ratio9= ",ratio9)
-   '''
+'''
+
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5) & (abs(ratio5)<1e-5) & (abs(ratio6)<1e-5) & (abs(ratio7)<1e-5) & (abs(ratio8)<1e-5) & (abs(ratio9)<1e-5) :
+if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5) & (abs(ratio5)<1e-5) & (abs(ratio6)<1e-5) & (abs(ratio7)<1e-5) :
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

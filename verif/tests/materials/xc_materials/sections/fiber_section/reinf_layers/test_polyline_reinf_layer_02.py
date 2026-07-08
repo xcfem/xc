@@ -7,6 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
+import math
 import geom
 import xc
 from model import predefined_spaces
@@ -45,21 +46,22 @@ y1= width/2.0
 z1= depth/2.0
 
 reinforcement= quadFibersGeom.getReinfLayers
-reinforcementA= reinforcement.newPolylineReinfLayer("steel")
-reinforcementA.numReinfBars= nRebarsA
-reinforcementA.barArea= As
 p1= geom.Pos2d(y0-depth/2.0,z0-width/2.0)
 p2= geom.Pos2d(y0+depth/2.0,z0-width/2.0)
 p3= geom.Pos2d((p1.x+p2.x)/2.0, 1.5*(p1.y+p2.y)/2.0)
-reinforcementA.setPolyline(geom.Polyline2d([p1, p3, p2]))
+polylineA= geom.Polyline2d([p1, p3, p2])
+spacing= polylineA.getLength()/(nRebarsA-1)
+diameter= 2*math.sqrt(As/math.pi)
+reinforcementA= reinforcement.reinforcePolyline(steel.name, spacing, diameter, polylineA)
 
-reinforcementB= reinforcement.newPolylineReinfLayer("steel")
-reinforcementB.numReinfBars= nRebarsB
-reinforcementB.barArea= As
 p1= geom.Pos2d(y0-depth/2.0,z0+width/2.0)
 p2= geom.Pos2d(y0+depth/2.0,z0+width/2.0)
 p3= geom.Pos2d((p1.x+p2.x)/2.0, 1.5*(p1.y+p2.y)/2.0)
-reinforcementB.setPolyline(geom.Polyline2d([p1, p3, p2]))
+polylineB= geom.Polyline2d([p1, p3, p2])
+spacing= polylineB.getLength()/(nRebarsB-1)
+diameter= 2*math.sqrt(As/math.pi)
+reinforcementB= reinforcement.reinforcePolyline(steel.name, spacing, diameter, polylineB)
+
 
 materialHandler= preprocessor.getMaterialHandler
 # Sections
