@@ -13,7 +13,6 @@ import geom
 import math
 
 pol1=geom.Polyline2d()
-pol2=geom.Polyline2d()
 
 pol1.appendVertex(geom.Pos2d(0,0))
 pol1.appendVertex(geom.Pos2d(1,0))
@@ -35,4 +34,24 @@ if math.fabs(ratio1)<1e-10 and math.fabs(ratio2)<1e-10:
 else:
     lmsg.error('test: '+fname+' ERROR.')
 
+# # Graphic stuff
+# import matplotlib.pyplot as plt
+
+# # polyline
+# x1i= list()
+# y1i= list()
+# for v in pol1.getVertexList():
+#     x1i.append(v.x)
+#     y1i.append(v.y)
+# x2i= list()
+# y2i= list()
+# for v in pol2.getVertexList():
+#     x2i.append(v.x)
+#     y2i.append(v.y)
+    
+# plt.figure()
+# plt.axis('equal')
+# plt.plot(x1i,y1i)
+# plt.plot(x2i,y2i)
+# plt.show()
 
