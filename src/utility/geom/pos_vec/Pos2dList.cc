@@ -86,20 +86,29 @@ Pos2dList Pos2dList::offset(const GEOM_FT &d) const
 	      {
 		const Segment2d s2= Segment2d(*i,*j).offset(d);
 		Line2d r2= s2.getSupportLine();
-		Pos2d ptIntersection= intersection_point(r1,r2);
+		Pos2d intersectionPoint;
+		// Compute intersection.
+		if(colineales(r1, r2))
+		  {
+		    const Pos2d pA= s1.getToPoint();
+		    const Pos2d pB= s2.getFromPoint();
+		    intersectionPoint= Pos2d((pA.x()+pB.x())/2.0, (pA.y()+pB.y())/2.0);
+		  }
+		else
+		  intersectionPoint= intersection_point(r1,r2);
 		GEOM_FT dist= 0;
-		if(!ptIntersection.exists())
+		if(!intersectionPoint.exists())
 		  dist= std::abs(1000*d); // big enough.
 		else
-		  dist= (*i).dist(ptIntersection);
+		  dist= (*i).dist(intersectionPoint);
 		const GEOM_FT limit= std::abs(5*d);
 		if(dist>limit)
 		  {
 		    const Vector2d jVector1= s1.getJVector();
 		    const Vector2d jVector2= s2.getJVector();
-		    ptIntersection= lastPoint+d*(jVector1+jVector2);
+		    intersectionPoint= lastPoint+d*(jVector1+jVector2);
 		  }
-		retval.appendPoint(ptIntersection); // append computed intersection.
+		retval.appendPoint(intersectionPoint); // append computed intersection.
 		r1= r2; // update support line.
 		s1= s2; // update segment.
 		lastPoint= s2.getToPoint(); // update last point.
