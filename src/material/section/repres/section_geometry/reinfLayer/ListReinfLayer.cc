@@ -40,6 +40,7 @@
 #include "utility/geom/pos_vec/Pos2d.h"
 #include "utility/geom/coo_sys/ref_sys/Ref2d2d.h"
 #include "utility/geom/d2/BND2d.h"
+#include "utility/geom/d1/Segment2d.h"
 #include "material/section/repres/section_geometry/SectionGeometry.h"
 #include "utility/utils/misc_utils/colormod.h"
 
@@ -113,14 +114,83 @@ XC::CircReinfLayer *XC::ListReinfLayer::newCircReinfLayer(const std::string &cod
     return dynamic_cast<CircReinfLayer *>(ptr);
   }
 
-//! Returns a single bar with the material with the identifier being passed
-//! as parameter.
+//! @brief Returns a single bar with the material with the identifier being
+//! passed as parameter.
 XC::SingleBar *XC::ListReinfLayer::newReinfBar(const std::string &cod_mat)
   {
     SingleBar tmp(this,material_handler->find_ptr(cod_mat));
     ReinfLayer *ptr= push_back(tmp);
     ptr->set_owner(this);
     return dynamic_cast<SingleBar *>(ptr);
+  }
+
+//! @brief Create the StraightReinfLayer object defining the reinforcement along
+//! the given segment.
+XC::StraightReinfLayer *XC::ListReinfLayer::reinforceSegment(const std::string &cod_mat, const double &spacing, const double &diameter, const Segment2d &s)
+  {
+    StraightReinfLayer *retval= this->newStraightReinfLayer(cod_mat);
+    const int numReinfBars= int(s.getLength()/spacing)+1;
+    retval->setNumReinfBars(numReinfBars);
+    retval->setReinfBarDiameter(diameter);
+    retval->setLineSegment(s);
+    return retval;
+  }
+
+//! @brief Create the StraightReinfLayer object whose rebars are place between
+//" those of the given layer.
+XC::StraightReinfLayer *XC::ListReinfLayer::reinforceMidPoints(const StraightReinfLayer &rl, const double &diameter)
+  {
+    // Remove half the spacing from both extremities of the segment.
+    const Segment2d originalSegment= rl.getLineSegment();
+    const Vector2d vDir= originalSegment.VDir();
+    const int nRebars= rl.getNumReinfBars();
+    const double spacing= originalSegment.getLength()/(nRebars-1);
+    const double halfSpacing= spacing/2.0;
+    const Pos2d p1= originalSegment.getFromPoint()+halfSpacing*vDir;
+    const Pos2d p2= originalSegment.getToPoint()-halfSpacing*vDir;
+    const Segment2d newSegment= Segment2d(p1, p2);
+    // Create the new reinforcement layer.
+    StraightReinfLayer tmp(rl);
+    tmp.setNumReinfBars(nRebars-1);
+    tmp.setReinfBarDiameter(diameter);
+    tmp.setLineSegment(newSegment);
+    StraightReinfLayer *retval= dynamic_cast<StraightReinfLayer *>(push_back(tmp));
+    retval->set_owner(this);
+    return (retval);
+  }
+
+//! @brief Create the PolylineReinfLayer object defining the reinforcement along
+//! the given segment.
+XC::PolylineReinfLayer *XC::ListReinfLayer::reinforcePolyline(const std::string &cod_mat, const double &spacing, const double &diameter, const Polyline2d &pline)
+  {
+    PolylineReinfLayer *retval= this->newPolylineReinfLayer(cod_mat);
+    const int numReinfBars= int(pline.getLength()/spacing)+1;
+    retval->setNumReinfBars(numReinfBars);
+    retval->setReinfBarDiameter(diameter);
+    retval->setPolyline(pline);
+    return retval;
+  }
+
+XC::PolylineReinfLayer *XC::ListReinfLayer::reinforceMidPoints(const PolylineReinfLayer &rl, const double &diameter)
+  {
+    // Remove half the spacing from both extremities of the polyline.
+    const Polyline2d originalPolyline= rl.getPolyline();
+    const int nRebars= rl.getNumReinfBars();
+    const double length= originalPolyline.getLength();
+    const double spacing= length/(nRebars-1);
+    const double halfSpacing= spacing/2.0;
+    const Pos2d p1= originalPolyline.getPointAtLength(halfSpacing);
+    const Polyline2d tmpPolyline= originalPolyline.getRightChunk(p1, 0.0);
+    const Pos2d p2= originalPolyline.getPointAtLength(length-halfSpacing);
+    const Polyline2d newPolyline= tmpPolyline.getLeftChunk(p2, 0.0);
+    // Create the new reinforcement layer.
+    PolylineReinfLayer tmp(rl);
+    tmp.setNumReinfBars(nRebars-1);
+    tmp.setReinfBarDiameter(diameter);
+    tmp.setPolyline(newPolyline);
+    PolylineReinfLayer *retval= dynamic_cast<PolylineReinfLayer *>(push_back(tmp));
+    retval->set_owner(this);
+    return (retval);
   }
 
 //! @brief Destructor.

@@ -1461,9 +1461,8 @@ python tests/materials/xc_materials/sections/elastic_section/test_section_rotati
 python tests/materials/xc_materials/sections/elastic_section/test_section_properties_01.py
 python tests/materials/xc_materials/sections/elastic_section/test_section_properties_02.py
 echo "$BLEU" "      Fiber section tests." "$NORMAL"
+
 python tests/materials/xc_materials/sections/fiber_section/test_reg_cuad_01.py
-python tests/materials/xc_materials/sections/fiber_section/test_straight_reinf_layer_01.py
-python tests/materials/xc_materials/sections/fiber_section/test_polyline_reinf_layer_01.py
 python tests/materials/xc_materials/sections/fiber_section/test_fiber2d_01.py
 python tests/materials/xc_materials/sections/fiber_section/test_fiber3d_01.py
 python tests/materials/xc_materials/sections/fiber_section/test_fiber3d_02.py
@@ -1474,6 +1473,12 @@ python tests/materials/xc_materials/sections/fiber_section/test_fiber3d_06.py
 python tests/materials/xc_materials/sections/fiber_section/test_fiber3d_07.py
 python tests/materials/xc_materials/sections/fiber_section/test_fiber3d_08.py
 python tests/materials/xc_materials/sections/fiber_section/test_fiber3d_09.py
+echo "$BLEU" "        Reinf layer definition tests." "$NORMAL"
+python tests/materials/xc_materials/sections/fiber_section/reinf_layers/test_straight_reinf_layer_01.py
+python tests/materials/xc_materials/sections/fiber_section/reinf_layers/test_straight_reinf_layer_02.py
+python tests/materials/xc_materials/sections/fiber_section/reinf_layers/test_polyline_reinf_layer_01.py
+python tests/materials/xc_materials/sections/fiber_section/reinf_layers/test_polyline_reinf_layer_02.py
+python tests/materials/xc_materials/sections/fiber_section/reinf_layers/test_polyline_reinf_layer_03.py
 echo "$BLEU" "        Beam fiber section tests." "$NORMAL"
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_section_aggregator_01.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_sign_convention01.py

@@ -36,6 +36,8 @@
 
 class Pos2d;
 class Polygon2d;
+class Segment2d;
+class Polyline2d;
 class HalfPlane2d;
 class BND2d;
 
@@ -88,7 +90,11 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SectionMassProperti
     StraightReinfLayer *newStraightReinfLayer(const std::string &);
     CircReinfLayer *newCircReinfLayer(const std::string &);
     SingleBar *newReinfBar(const std::string &);
-
+    
+    StraightReinfLayer *reinforceSegment(const std::string &, const double &, const double &, const Segment2d &);
+    StraightReinfLayer *reinforceMidPoints(const StraightReinfLayer &, const double &);
+    PolylineReinfLayer *reinforcePolyline(const std::string &, const double &, const double &, const Polyline2d &);
+    PolylineReinfLayer *reinforceMidPoints(const PolylineReinfLayer &, const double &);
 
     size_t getNumReinfBars(void) const;
 

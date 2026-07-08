@@ -71,11 +71,17 @@ class_<list_ptr_reinf_layer, boost::noncopyable>("list_ptr_reinf_layer")
   // REMOVE NOT ALLOWED .def("__delitem__", &std_item<list_ptr_reinf_layer>::del)
   ;
 
+XC::StraightReinfLayer *(XC::ListReinfLayer::*reinforce_mid_points_straight_reinf_layer)(const XC::StraightReinfLayer &, const double &)= &XC::ListReinfLayer::reinforceMidPoints;
+XC::PolylineReinfLayer *(XC::ListReinfLayer::*reinforce_mid_points_polyline_reinf_layer)(const XC::PolylineReinfLayer &, const double &)= &XC::ListReinfLayer::reinforceMidPoints;
 class_<XC::ListReinfLayer, bases<XC::SectionMassProperties,list_ptr_reinf_layer>, boost::noncopyable >("ListReinfLayer", no_init)
-  .def("newStraightReinfLayer",make_function(&XC::ListReinfLayer::newStraightReinfLayer,return_internal_reference<>()))
-  .def("newPolylineReinfLayer",make_function(&XC::ListReinfLayer::newPolylineReinfLayer,return_internal_reference<>()))
-  .def("newCircReinfLayer",make_function(&XC::ListReinfLayer::newCircReinfLayer,return_internal_reference<>()))
-  .def("newReinfBar",make_function(&XC::ListReinfLayer::newReinfBar,return_internal_reference<>()))
+  .def("newStraightReinfLayer",make_function(&XC::ListReinfLayer::newStraightReinfLayer,return_internal_reference<>()), "Create a reinforcement layer along a line segment.")
+  .def("newPolylineReinfLayer",make_function(&XC::ListReinfLayer::newPolylineReinfLayer,return_internal_reference<>()), "Create a reinforcement layer along a polyline.")
+  .def("newCircReinfLayer",make_function(&XC::ListReinfLayer::newCircReinfLayer,return_internal_reference<>()), "Create a circular reinforcement layer.")
+  .def("newReinfBar", make_function(&XC::ListReinfLayer::newReinfBar,return_internal_reference<>()), "Create a single rebar.")
+  .def("reinforceSegment", make_function(&XC::ListReinfLayer::reinforceSegment,return_internal_reference<>()), "Create the StraightReinfLayer object defining the reinforcement along the given segment.")
+  .def("reinforcePolyline", make_function(&XC::ListReinfLayer::reinforcePolyline,return_internal_reference<>()), "Create the PolylineReinfLayer object defining the reinforcement along the given polyline.")
+  .def("reinforceMidPoints", make_function(reinforce_mid_points_straight_reinf_layer, return_internal_reference<>()), ".reinforceMidPoints(StraightReinfLayer, rebarDiameter): create the StraightReinfLayer object defining the reinforcement at the mid points of the given one.")
+  .def("reinforceMidPoints", make_function(reinforce_mid_points_polyline_reinf_layer, return_internal_reference<>()), ".reinforceMidPoints(PolylineReinfLayer, rebarDiameter): create the PolylineReinfLayer object defining the reinforcement at the mid points of the given one.")
   .add_property("getNumReinfBars",&XC::ListReinfLayer::getNumReinfBars,"Number of bars.")
   .add_property("getSectionGeometry",make_function(&XC::ListReinfLayer::getSectionGeometry,return_internal_reference<>()),"Returns the SectionGeometry object that owns this bars.")
   .def("getCover",&XC::ListReinfLayer::getCover,"returns concrete cover of the bars.")

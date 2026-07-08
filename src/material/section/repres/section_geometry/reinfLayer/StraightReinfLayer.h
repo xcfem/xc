@@ -99,7 +99,6 @@ class StraightReinfLayer: public ReinfLayer
 
     // inquiring functions
     const VectorReinfBar &getReinfBars(void) const;
-  
 
     double getMaxY(void) const;
     double getMaxZ(void) const;
