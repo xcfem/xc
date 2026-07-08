@@ -22,7 +22,6 @@ nRebarsB= 4
 nRebars= nRebarsA+nRebarsB
 totalArea= 0.1
 As= totalArea/nRebars
-areaTeor= nRebars*As
 F= 100.0 # Force magnitude
 
 # Problem type
@@ -121,7 +120,7 @@ for f in fibers:
 avgStrain/= nfib
 
 ratio1= (nfib-nRebars)/nRebars
-ratio2= (sumAreas-areaTeor)/areaTeor
+ratio2= (sumAreas-totalArea)/totalArea
 ratio3= centerOfMassY-y0
 ratio4= centerOfMassZ-z0
 ratio5= (-R-F)/F
