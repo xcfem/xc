@@ -13,7 +13,7 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 import geom
 import math
 
-pol1= geom.Polyline2d([geom.Pos2d(0,0), geom.Pos2d(1,0), geom.Pos2d(2,0)])
+pol1= geom.Polyline2d([geom.Pos2d(0,0), geom.Pos2d(1,0), geom.Pos2d(2,0), geom.Pos2d(3,0)])
 pol2= pol1.offset(-0.25)
 
 # Vertex between collinear segments.
