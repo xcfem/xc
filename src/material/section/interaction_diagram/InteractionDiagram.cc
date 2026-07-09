@@ -212,7 +212,7 @@ GeomObj::list_Pos3d XC::InteractionDiagram::get_intersection(const Pos3d &p) con
 	        nearest= i->Vertice(3);
 	      }
 	    GEOM_FT sphereRadius= nearest.dist(O);
-	    Pos3d pInt= Op.PtoParametricas(sphereRadius);
+	    Pos3d pInt= Op.getPointAtLength(sphereRadius);
 	    std::clog << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING: intersection for"
 		      << " internal forces(N,My,Mz): " << p

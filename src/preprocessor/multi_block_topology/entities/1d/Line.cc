@@ -200,7 +200,7 @@ XC::Edge *XC::Line::splitAtLambda(const double &lambda)
                   << std::endl;
     Edge *retval= nullptr;
     const Segment3d s= getLineSegment();
-    const Pos3d pN= s.PtoParametricas(lambda*s.getLength());
+    const Pos3d pN= s.getPointAtLength(lambda*s.getLength());
     retval= splitAtPos3d(pN);
     return retval;
   }
