@@ -60,6 +60,7 @@ class SingleBar: public ReinfLayer
     virtual double getSpacing(void) const;
 
     // inquiring functions
+    virtual std::vector<Pos2d> getReinfBarsCenterPositions(void) const;
     const VectorReinfBar &getReinfBars(void) const;
   
     const Vector &getPosition(void) const;

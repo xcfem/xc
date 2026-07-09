@@ -35,32 +35,32 @@
 
 XC::PolylineReinfLayer::PolylineReinfLayer(ListReinfLayer *owr,Material *mat)
   : ReinfLayer(owr,mat, 0, 0.0, 0.0),
-    positions() {}
+    vertices() {}
 
 XC::PolylineReinfLayer::PolylineReinfLayer(ListReinfLayer *owr,Material *mat,
 					   int numReinfBars, 
 					   double reinfBarArea,
-					   const std::deque<Vector> &vertices)
-  : ReinfLayer(owr,mat, numReinfBars, 0.0, reinfBarArea), positions(vertices) {}
+					   const std::deque<Vector> &_vertices)
+  : ReinfLayer(owr,mat, numReinfBars, 0.0, reinfBarArea), vertices(_vertices) {}
 
 
-void XC::PolylineReinfLayer::setPositions(const std::deque<Vector> &vertices)
-  { positions= vertices; }
+void XC::PolylineReinfLayer::setVertices(const std::deque<Vector> &_vertices)
+  { vertices= _vertices; }
 
-const std::deque<XC::Vector> &XC::PolylineReinfLayer::getPositions(void) const
-  { return this->positions; }
+const std::deque<XC::Vector> &XC::PolylineReinfLayer::getVertices(void) const
+  { return this->vertices; }
 
 void XC::PolylineReinfLayer::setPolyline(const Polyline2d &pol)
   {
     const size_t sz= pol.size();
-    positions.resize(sz, Vector(2, 0.0));
+    vertices.resize(sz, Vector(2, 0.0));
     GeomObj::list_Pos2d lst= pol.getVertexList();
     GeomObj::list_Pos2d::const_iterator i= lst.begin();
     size_t count= 0;
     for(;i!=lst.end();i++, count++)
       {
 	const Pos2d &p= *i;
-	Vector &v= positions[count];
+	Vector &v= vertices[count];
 	v[0]= p.x();
 	v[1]= p.y();
       }
@@ -69,8 +69,8 @@ void XC::PolylineReinfLayer::setPolyline(const Polyline2d &pol)
 Polyline2d XC::PolylineReinfLayer::getPolyline(void) const
   {
     Polyline2d retval;
-    for(std::deque<Vector>::const_iterator i= positions.begin();
-	i!= positions.end();
+    for(std::deque<Vector>::const_iterator i= vertices.begin();
+	i!= vertices.end();
 	i++)
       {
 	const Vector &v= *i;
@@ -83,10 +83,10 @@ Polyline2d XC::PolylineReinfLayer::getPolyline(void) const
 //! @brief Return the maximum value of the y coordinate.
 double XC::PolylineReinfLayer::getMaxY(void) const
   {
-    std::deque<Vector>::const_iterator i= positions.begin();
+    std::deque<Vector>::const_iterator i= vertices.begin();
     double retval= (*i)[0];
     i++;
-    for(;i!= positions.end();
+    for(;i!= vertices.end();
 	i++)
       {
 	const Vector &v= *i;
@@ -98,10 +98,10 @@ double XC::PolylineReinfLayer::getMaxY(void) const
 //! @brief Return the maximum value of the z coordinate.
 double XC::PolylineReinfLayer::getMaxZ(void) const
   {
-    std::deque<Vector>::const_iterator i= positions.begin();
+    std::deque<Vector>::const_iterator i= vertices.begin();
     double retval= (*i)[1];
     i++;
-    for(;i!= positions.end();
+    for(;i!= vertices.end();
 	i++)
       {
 	const Vector &v= *i;
@@ -113,10 +113,10 @@ double XC::PolylineReinfLayer::getMaxZ(void) const
 //! @brief Return the minimum value of the y coordinate.
 double XC::PolylineReinfLayer::getMinY(void) const
   {
-    std::deque<Vector>::const_iterator i= positions.begin();
+    std::deque<Vector>::const_iterator i= vertices.begin();
     double retval= (*i)[0];
     i++;
-    for(;i!= positions.end();
+    for(;i!= vertices.end();
 	i++)
       {
 	const Vector &v= *i;
@@ -128,14 +128,39 @@ double XC::PolylineReinfLayer::getMinY(void) const
 //! @brief Return the minimum value of the z coordinate.
 double XC::PolylineReinfLayer::getMinZ(void) const
   {
-    std::deque<Vector>::const_iterator i= positions.begin();
+    std::deque<Vector>::const_iterator i= vertices.begin();
     double retval= (*i)[1];
     i++;
-    for(;i!= positions.end();
+    for(;i!= vertices.end();
 	i++)
       {
 	const Vector &v= *i;
 	retval= std::min(retval,v[1]);
+      }
+    return retval;
+  }
+
+//! @brief Return the positions of the rebar centers.
+std::vector<Pos2d> XC::PolylineReinfLayer::getReinfBarsCenterPositions(void) const
+  {
+    const int num_bars= this->getNumReinfBars();
+    std::vector<Pos2d> retval(num_bars);
+
+    const Polyline2d polyline= this->getPolyline();
+
+    if(num_bars == 1)
+      {
+	const Pos2d centroid= polyline.getCenterOfMass();
+	retval[0]= centroid;
+      }
+    else if(num_bars > 1)
+      {
+	VectorPos2d points= polyline.Divide(num_bars-1);
+        for(int i= 0;i<num_bars;i++)
+          {
+	    const Pos2d &p= points[i];
+	    retval[i]= p;
+          }
       }
     return retval;
   }
@@ -189,33 +214,62 @@ double XC::PolylineReinfLayer::getSpacing(void) const
 int XC::PolylineReinfLayer::setSpacing(const double &spacing)
   {
     const double length= this->getLength();
-    int num_bars= int(length/spacing)+1;
+    const int num_bars= std::round(length/spacing+1);
     this->setNumReinfBars(num_bars);
     return num_bars;
   }
 
+//! @brief Virtual constructor.
 XC::ReinfLayer *XC::PolylineReinfLayer::getCopy(void) const
   { return new PolylineReinfLayer(*this); }
 
+//! @brief Create a secondary PolylineReinfLayer object whose rebars are
+//! placed between those of the given layer.
+//! @param offset: distance from the first rebar of the secondary reinforcement
+//!                layer to the first rebar of the primary one.
+//! @param spacing: distance between consecutive rebars for the secondary
+//!                 reinforcement layer.
+//! @param diameter: diameter of the rebars of the secondary reinforcement
+//!                  layer.
+XC::PolylineReinfLayer XC::PolylineReinfLayer::_get_secondary_reinf_layer(const double &offset, const double &spacing, const double &diameter) const
+  {
+    // Remove half the spacing from both extremities of the polyline.
+    const Polyline2d originalPolyline= this->getPolyline();
+    const Pos2d p1= originalPolyline.getPointAtLength(offset);
+    const Polyline2d rightChunk= originalPolyline.getRightChunk(p1, 0.0);
+    const double length= originalPolyline.getLength();
+    const Pos2d p2= originalPolyline.getPointAtLength(length-offset);
+    const Polyline2d newPolyline= rightChunk.getLeftChunk(p2, 0.0);
+    // Create the new reinforcement layer.
+    PolylineReinfLayer tmp(*this);
+    tmp.setPolyline(newPolyline);
+    //tmp.setNumReinfBars(nRebars-1);
+    tmp.setSpacing(spacing);
+    tmp.setReinfBarDiameter(diameter);
+    return tmp;
+  }
+
 //! @ brief Create a PolylineReinfLayer object whose rebars are placed between
 //! those of the given layer.
+//! @param diameter: diameter of the rebars of the returned reinforcement layer.
 XC::PolylineReinfLayer XC::PolylineReinfLayer::_reinforce_mid_points(const double &diameter) const
   {
     // Remove half the spacing from both extremities of the polyline.
     const Polyline2d originalPolyline= this->getPolyline();
-    const int nRebars= this->getNumReinfBars();
+    // const int nRebars= this->getNumReinfBars();
     const double length= originalPolyline.getLength();
-    const double spacing= length/(nRebars-1);
+    const double spacing= this->getSpacing();
     const double halfSpacing= spacing/2.0;
     const Pos2d p1= originalPolyline.getPointAtLength(halfSpacing);
-    const Polyline2d tmpPolyline= originalPolyline.getRightChunk(p1, 0.0);
+    const Polyline2d rightChunk= originalPolyline.getRightChunk(p1, 0.0);
     const Pos2d p2= originalPolyline.getPointAtLength(length-halfSpacing);
-    const Polyline2d newPolyline= tmpPolyline.getLeftChunk(p2, 0.0);
+    const Polyline2d newPolyline= rightChunk.getLeftChunk(p2, 0.0);
     // Create the new reinforcement layer.
     PolylineReinfLayer tmp(*this);
-    tmp.setNumReinfBars(nRebars-1);
-    tmp.setReinfBarDiameter(diameter);
     tmp.setPolyline(newPolyline);
+    //tmp.setNumReinfBars(nRebars-1);
+    tmp.setSpacing(spacing);
+    tmp.setReinfBarDiameter(diameter);
     return tmp;
   }
 
@@ -223,6 +277,6 @@ void XC::PolylineReinfLayer::Print(std::ostream &s, int flag) const
   {
      s << "\nReinforcing Layer type:  Polyline";
      ReinfLayer::Print(s,flag);
-     s << "\nPositions: " << this->getPolyline();
+     s << "\nVertices: " << this->getPolyline();
   }
 

@@ -84,6 +84,7 @@ class StraightReinfLayer: public ReinfLayer
     ReinfLayer *getCopy(void) const;
 
     StraightReinfLayer _reinforce_mid_points(const double &) const;
+    StraightReinfLayer _get_secondary_reinf_layer(const double &, const double &, const double &) const;
   public:
     // edition functions
     void setInitialPosition(const Vector &);
@@ -99,6 +100,7 @@ class StraightReinfLayer: public ReinfLayer
     Segment2d getLineSegment(void) const;
 
     // inquiring functions
+    std::vector<Pos2d> getReinfBarsCenterPositions(void) const;
     const VectorReinfBar &getReinfBars(void) const;
 
     double getMaxY(void) const;

@@ -79,21 +79,33 @@ XC::ReinfLayer::ReinfLayer(ListReinfLayer *owr,Material *m,const int &numReinfBa
   : DiscretBase(m), nReinfBars(numReinfBars), barDiam(bDiam),area(bArea) 
   { set_owner(owr); }
 
-//! @brief Return a pointer to the reinforcement layers container.
-const XC::ListReinfLayer *XC::ReinfLayer::getContainer(void) const
-  {
-    return dynamic_cast<const ListReinfLayer *>(this->Owner());
-  }
-
-//! @brief Return a pointer to the reinforcement layers container.
-XC::ListReinfLayer *XC::ReinfLayer::getContainer(void)
-  {
-    return dynamic_cast<ListReinfLayer *>(this->Owner());
-  }
-
 //! @brief Set the number or rebars in the layer.
 void XC::ReinfLayer::setNumReinfBars(int numReinfBars)
   { nReinfBars= numReinfBars; }
+
+//! @brief Return the positions of the rebar centers.
+std::vector<Pos2d> XC::ReinfLayer::getReinfBarsCenterPositions(void) const
+  {
+    std::vector<Pos2d> retval;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Return the positions of the rebar centers in a Python list.
+boost::python::list XC::ReinfLayer::getReinfBarsCenterPositionsPy(void) const
+  {
+    boost::python::list retval;
+    std::vector<Pos2d> tmp= this->getReinfBarsCenterPositions();
+    for(std::vector<Pos2d>::const_iterator i= tmp.begin(); i!=tmp.end(); i++)
+      {
+	const Pos2d &p= *i;
+	boost::python::object pyObj(p);
+	retval.append(pyObj);
+      }
+    return retval;
+  }
 
 //! @brief Set spacing between rebars (and return the resulting number of
 //! them).

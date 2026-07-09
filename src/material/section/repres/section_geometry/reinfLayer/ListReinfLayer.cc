@@ -136,8 +136,25 @@ XC::StraightReinfLayer *XC::ListReinfLayer::reinforceSegment(const std::string &
     return retval;
   }
 
+//! @brief Create a secondary StraightReinfLayer object whose rebars are
+//! placed between those of the given layer.
+//! @param offset: distance from the first rebar of the secondary reinforcement
+//!                layer to the first rebar of the primary one.
+//! @param spacing: distance between consecutive rebars for the secondary
+//!                 reinforcement layer.
+//! @param diameter: diameter of the rebars of the secondary reinforcement
+//!                  layer.
+XC::StraightReinfLayer *XC::ListReinfLayer::secondaryReinfLayer(const StraightReinfLayer &rl, const double &offset, const double &spacing, const double &diameter)
+  {
+    StraightReinfLayer tmp= rl._get_secondary_reinf_layer(offset, spacing, diameter);
+    StraightReinfLayer *retval= dynamic_cast<StraightReinfLayer *>(push_back(tmp));
+    retval->set_owner(this);
+    return (retval);
+  }
+
 //! @brief Create a StraightReinfLayer object whose rebars are placed between
 //! those of the given layer.
+//! @param diameter: diameter of the rebars of the returned reinforcement layer.
 XC::StraightReinfLayer *XC::ListReinfLayer::reinforceMidPoints(const StraightReinfLayer &rl, const double &diameter)
   {
     StraightReinfLayer tmp= rl._reinforce_mid_points(diameter);
@@ -160,10 +177,27 @@ XC::PolylineReinfLayer *XC::ListReinfLayer::reinforcePolyline(const std::string 
 
 //! @brief Create a PolylineReinfLayer object whose rebars are placed between
 //! those of the given layer.
+//! @param diameter: diameter of the rebars of the returned reinforcement layer.
 XC::PolylineReinfLayer *XC::ListReinfLayer::reinforceMidPoints(const PolylineReinfLayer &rl, const double &diameter)
   {
     PolylineReinfLayer tmp= rl._reinforce_mid_points(diameter);
 
+    PolylineReinfLayer *retval= dynamic_cast<PolylineReinfLayer *>(push_back(tmp));
+    retval->set_owner(this);
+    return (retval);
+  }
+
+//! @brief Create a secondary PolylineReinfLayer object whose rebars are
+//! placed between those of the given layer.
+//! @param offset: distance from the first rebar of the secondary reinforcement
+//!                layer to the first rebar of the primary one.
+//! @param spacing: distance between consecutive rebars for the secondary
+//!                 reinforcement layer.
+//! @param diameter: diameter of the rebars of the secondary reinforcement
+//!                  layer.
+XC::PolylineReinfLayer *XC::ListReinfLayer::secondaryReinfLayer(const PolylineReinfLayer &rl, const double &offset, const double &spacing, const double &diameter)
+  {
+    PolylineReinfLayer tmp= rl._get_secondary_reinf_layer(offset, spacing, diameter);
     PolylineReinfLayer *retval= dynamic_cast<PolylineReinfLayer *>(push_back(tmp));
     retval->set_owner(this);
     return (retval);

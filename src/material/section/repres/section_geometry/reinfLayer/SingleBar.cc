@@ -31,7 +31,7 @@
 
 #include <material/section/repres/section_geometry/reinfLayer/SingleBar.h>
 #include <material/section/repres/section_geometry/reinfBar/ReinfBar.h>
-
+#include "utility/geom/pos_vec/Pos2d.h"
 #include "utility/utils/text/text_string.h"
 
 
@@ -74,6 +74,14 @@ int XC::SingleBar::setSpacing(const double &)
 //! @brief Get the distance between consecutive bars.
 double XC::SingleBar::getSpacing(void) const
   { return std::numeric_limits<double>::infinity(); }
+
+//! @brief Return the positions of the rebar centers.
+std::vector<Pos2d> XC::SingleBar::getReinfBarsCenterPositions(void) const
+  {
+    const Pos2d p(posit[0], posit[1]);
+    std::vector<Pos2d> retval(1, p);
+    return retval;
+  }
 
 //! @brief Returns a rebars array.
 const XC::VectorReinfBar &XC::SingleBar::getReinfBars(void) const

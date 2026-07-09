@@ -43,7 +43,7 @@ class ReinfBar;
 class PolylineReinfLayer: public ReinfLayer
   {
   private:
-    std::deque<Vector> positions; //!< positions defining the polyline.
+    std::deque<Vector> vertices; //!< vertices defining the polyline.
   protected:
 
     friend class ListReinfLayer;
@@ -53,14 +53,16 @@ class PolylineReinfLayer: public ReinfLayer
                        const std::deque<Vector> &);
     ReinfLayer *getCopy(void) const;
     PolylineReinfLayer _reinforce_mid_points(const double &) const;
+    PolylineReinfLayer _get_secondary_reinf_layer(const double &, const double &, const double &) const;
   public:
     // edition functions
-    void setPositions(const std::deque<Vector> &);
-    const std::deque<Vector> &getPositions(void) const;
+    void setVertices(const std::deque<Vector> &);
+    const std::deque<Vector> &getVertices(void) const;
     void setPolyline(const Polyline2d &);
     Polyline2d getPolyline(void) const;
 
     // inquiring functions
+    std::vector<Pos2d> getReinfBarsCenterPositions(void) const;
     const VectorReinfBar &getReinfBars(void) const;
   
     double getMaxY(void) const;

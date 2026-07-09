@@ -170,6 +170,28 @@ double XC::CircReinfLayer::getMinZ(void) const
     return retval;
   }
 
+//! @brief Return the positions of the rebar centers.
+std::vector<Pos2d> XC::CircReinfLayer::getReinfBarsCenterPositions(void) const
+  {
+    const int num_barras= getNumReinfBars();
+    std::vector<Pos2d> retval(num_barras);
+
+    if(num_barras > 1)
+      {
+        const double dtheta = (finalAng-initAng)/num_barras;
+
+        double theta;
+        for(int i= 0;i<num_barras;i++)
+          {
+            theta = initAng + dtheta * i;
+            const double x= centerPosit(0) + arcRad*cos(theta);
+            const double y= centerPosit(1) + arcRad*sin(theta);
+	    retval[i]= Pos2d(x,y);
+          }
+      }
+    return retval;
+  }
+
 //! @brief Return a vector that contains the bars of the reinforcement layer.
 const XC::VectorReinfBar &XC::CircReinfLayer::getReinfBars(void) const
   {

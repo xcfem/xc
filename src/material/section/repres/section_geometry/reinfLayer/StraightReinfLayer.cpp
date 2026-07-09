@@ -149,14 +149,41 @@ double XC::StraightReinfLayer::getMinZ(void) const
     return retval;
   }
 
+//! @brief Return the positions of the rebar centers.
+std::vector<Pos2d> XC::StraightReinfLayer::getReinfBarsCenterPositions(void) const
+  {
+    const int num_bars= this->getNumReinfBars();
+    std::vector<Pos2d> retval(num_bars);
+    if(num_bars == 1)
+      {
+        const double x= (initPosit(0) + finalPosit(0)) / 2;
+        const double y= (initPosit(1) + finalPosit(1)) / 2;
+	retval[0]= Pos2d(x,y);
+      }
+    else if(num_bars > 1)
+      {
+        const double dy= (finalPosit(0) - initPosit(0))/(num_bars - 1);
+        const double dz= (finalPosit(1) - initPosit(1))/(num_bars - 1);
+
+
+        for(int i= 0;i<num_bars;i++)
+          {
+            const double x= initPosit(0) + dy * i;
+            const double y= initPosit(1) + dz * i;
+	    retval[i]= Pos2d(x,y);
+          }
+      }
+    return retval;
+  }
+
 //! @brief Returns an array of reinforcement bars.
 const XC::VectorReinfBar &XC::StraightReinfLayer::getReinfBars(void) const
   {
     Vector barPosit(2);
-    const int num_barras= getNumReinfBars();
+    const int num_bars= getNumReinfBars();
     const double area_barra= getReinfBarArea();
 
-    if(num_barras == 1)
+    if(num_bars == 1)
       {
         barPosit(0) = (initPosit(0) + finalPosit(0)) / 2;
         barPosit(1) = (initPosit(1) + finalPosit(1)) / 2;
@@ -164,14 +191,14 @@ const XC::VectorReinfBar &XC::StraightReinfLayer::getReinfBars(void) const
         reinfBars.resize(1);
         reinfBars.put(0,ReinfBar(area_barra,getMaterialPtr(),barPosit));
       }
-    else if(num_barras > 1)
+    else if(num_bars > 1)
       {
-        const double dy = (finalPosit(0) - initPosit(0))/(num_barras - 1);
-        const double dz = (finalPosit(1) - initPosit(1))/(num_barras - 1);
+        const double dy = (finalPosit(0) - initPosit(0))/(num_bars - 1);
+        const double dz = (finalPosit(1) - initPosit(1))/(num_bars - 1);
 
-        reinfBars.resize(num_barras);
+        reinfBars.resize(num_bars);
 
-        for(int i= 0;i<num_barras;i++)
+        for(int i= 0;i<num_bars;i++)
           {
             barPosit(0)= initPosit(0) + dy * i;
             barPosit(1)= initPosit(1) + dz * i;
@@ -209,8 +236,7 @@ double XC::StraightReinfLayer::getSpacing(void) const
 int XC::StraightReinfLayer::setSpacing(const double &spacing)
   {
     const double length= this->getLength();
-    const double tmp= length/spacing+1;
-    const int num_bars= std::round(tmp);
+    const int num_bars= std::round(length/spacing+1);
     this->setNumReinfBars(num_bars);
     return num_bars;
   }
@@ -218,8 +244,34 @@ int XC::StraightReinfLayer::setSpacing(const double &spacing)
 XC::ReinfLayer *XC::StraightReinfLayer::getCopy(void) const
   { return new StraightReinfLayer(*this); }
 
+//! @brief Create a secondary StraightReinfLayer object whose rebars are
+//! placed between those of the given layer.
+//! @param offset: distance from the first rebar of the secondary reinforcement
+//!                layer to the first rebar of the primary one.
+//! @param spacing: distance between consecutive rebars for the secondary
+//!                 reinforcement layer.
+//! @param diameter: diameter of the rebars of the secondary reinforcement
+//!                  layer.
+XC::StraightReinfLayer XC::StraightReinfLayer::_get_secondary_reinf_layer(const double &offset, const double &spacing, const double &diameter) const
+  {
+    // Remove half the spacing from both extremities of the segment.
+    const Segment2d originalSegment= this->getLineSegment();
+    const Pos2d p1= originalSegment.getPointAtLength(offset);
+    const double length= this->getLength();
+    const Pos2d p2= originalSegment.getPointAtLength(length-offset);
+    const Segment2d newSegment= Segment2d(p1, p2);
+    // Create the new reinforcement layer.
+    StraightReinfLayer tmp(*this);
+    tmp.setLineSegment(newSegment);
+    //tmp.setNumReinfBars(nRebars-1);
+    tmp.setSpacing(spacing);
+    tmp.setReinfBarDiameter(diameter);
+    return tmp;
+  }
+
 //! @brief Create a StraightReinfLayer object whose rebars are placed between
 //! those of the given layer.
+//! @param diameter: diameter of the rebars of the returned reinforcement layer.
 XC::StraightReinfLayer XC::StraightReinfLayer::_reinforce_mid_points(const double &diameter) const
   {
     // Remove half the spacing from both extremities of the segment.

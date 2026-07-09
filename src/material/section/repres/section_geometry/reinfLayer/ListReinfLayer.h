@@ -93,8 +93,10 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SectionMassProperti
     
     StraightReinfLayer *reinforceSegment(const std::string &, const double &, const double &, const Segment2d &);
     StraightReinfLayer *reinforceMidPoints(const StraightReinfLayer &, const double &);
+    StraightReinfLayer *secondaryReinfLayer(const StraightReinfLayer &,const double &, const double &, const double &);
     PolylineReinfLayer *reinforcePolyline(const std::string &, const double &, const double &, const Polyline2d &);
     PolylineReinfLayer *reinforceMidPoints(const PolylineReinfLayer &, const double &);
+    PolylineReinfLayer *secondaryReinfLayer(const PolylineReinfLayer &, const double &, const double &, const double &);
 
     size_t getNumReinfBars(void) const;
 

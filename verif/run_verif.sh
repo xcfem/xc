@@ -1476,9 +1476,12 @@ python tests/materials/xc_materials/sections/fiber_section/test_fiber3d_09.py
 echo "$BLEU" "        Reinf layer definition tests." "$NORMAL"
 python tests/materials/xc_materials/sections/fiber_section/reinf_layers/test_straight_reinf_layer_01.py
 python tests/materials/xc_materials/sections/fiber_section/reinf_layers/test_straight_reinf_layer_02.py
+python tests/materials/xc_materials/sections/fiber_section/reinf_layers/test_straight_reinf_layer_03.py
+python tests/materials/xc_materials/sections/fiber_section/reinf_layers/test_straight_reinf_layer_04.py
 python tests/materials/xc_materials/sections/fiber_section/reinf_layers/test_polyline_reinf_layer_01.py
 python tests/materials/xc_materials/sections/fiber_section/reinf_layers/test_polyline_reinf_layer_02.py
 python tests/materials/xc_materials/sections/fiber_section/reinf_layers/test_polyline_reinf_layer_03.py
+python tests/materials/xc_materials/sections/fiber_section/reinf_layers/test_polyline_reinf_layer_04.py
 echo "$BLEU" "        Beam fiber section tests." "$NORMAL"
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_section_aggregator_01.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_sign_convention01.py

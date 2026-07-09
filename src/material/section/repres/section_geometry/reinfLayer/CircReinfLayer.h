@@ -97,6 +97,7 @@ class CircReinfLayer: public ReinfLayer
     void setFinalAngle(const double &);  
 
     // inquiring functions
+    virtual std::vector<Pos2d> getReinfBarsCenterPositions(void) const;
     const VectorReinfBar &getReinfBars(void) const;
   
     Pos2d getCenterPosition(void) const;

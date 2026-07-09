@@ -85,8 +85,6 @@ class ReinfLayer: public DiscretBase
     ReinfLayer(ListReinfLayer *,Material *m);
     ReinfLayer(ListReinfLayer *,Material *mat,const int &numReinfBars,const double &bDiam=0.0,const double &bArea= 0.0);
     virtual ReinfLayer *getCopy(void) const= 0;
-    const ListReinfLayer *getContainer(void) const;
-    ListReinfLayer *getContainer(void);
   public:
     virtual ~ReinfLayer(void) {}
 
@@ -115,7 +113,9 @@ class ReinfLayer: public DiscretBase
 
     //! @brief Return the area of the bars.
     inline double getArea(void) const
-      { return area*nReinfBars; }
+      { return this->area*this->nReinfBars; }
+    virtual std::vector<Pos2d> getReinfBarsCenterPositions(void) const;
+    boost::python::list getReinfBarsCenterPositionsPy(void) const;
     VectorReinfBar &getReinfBars(void);  
     virtual const VectorReinfBar &getReinfBars(void) const= 0;  
 
