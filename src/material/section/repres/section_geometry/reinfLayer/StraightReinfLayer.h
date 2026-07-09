@@ -83,6 +83,7 @@ class StraightReinfLayer: public ReinfLayer
                        const Vector &finalPosition);
     ReinfLayer *getCopy(void) const;
 
+    StraightReinfLayer _reinforce_mid_points(const double &) const;
   public:
     // edition functions
     void setInitialPosition(const Vector &);
@@ -106,6 +107,7 @@ class StraightReinfLayer: public ReinfLayer
     double getMinZ(void) const;
     double getLength(void) const;
     double getSpacement(void) const;
+    int setSpacement(const double &);
 
 
     void Print(std::ostream &s, int flag =0) const;   

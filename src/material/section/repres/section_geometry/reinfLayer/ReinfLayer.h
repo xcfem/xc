@@ -85,12 +85,17 @@ class ReinfLayer: public DiscretBase
     ReinfLayer(ListReinfLayer *,Material *m);
     ReinfLayer(ListReinfLayer *,Material *mat,const int &numReinfBars,const double &bDiam=0.0,const double &bArea= 0.0);
     virtual ReinfLayer *getCopy(void) const= 0;
+    const ListReinfLayer *getContainer(void) const;
+    ListReinfLayer *getContainer(void);
   public:
     virtual ~ReinfLayer(void) {}
 
+    
     // edition functions
     virtual void setNumReinfBars(int numReinfBars);
+    virtual int setSpacement(const double &);
     virtual int getNumReinfBars(void) const;
+    virtual double getSpacement(void) const;
     virtual void setReinfBarDiameter(double reinfBarDiameter);
     virtual const double &getReinfBarDiameter(void) const;
     virtual void setReinfBarArea(double reinfBarArea);

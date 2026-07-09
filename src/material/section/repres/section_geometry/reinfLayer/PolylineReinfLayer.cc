@@ -176,10 +176,48 @@ double XC::PolylineReinfLayer::getLength(void) const
 
 //! @brier Returns spacement between rebars.
 double XC::PolylineReinfLayer::getSpacement(void) const
-  { return this->getLength()/this->getNumReinfBars(); }
+  {
+    double retval= std::numeric_limits<double>::infinity();
+    const int &num_bars= this->getNumReinfBars();
+    if(num_bars>1)
+      retval= this->getLength()/(num_bars-1);
+    return retval;
+  }
+
+//! @brief Set spacement between rebars (and return the resulting number of
+//! them).
+int XC::PolylineReinfLayer::setSpacement(const double &spacement)
+  {
+    const double length= this->getLength();
+    int num_bars= int(length/spacement)+1;
+    this->setNumReinfBars(num_bars);
+    return num_bars;
+  }
 
 XC::ReinfLayer *XC::PolylineReinfLayer::getCopy(void) const
   { return new PolylineReinfLayer(*this); }
+
+//! @ brief Create a PolylineReinfLayer object whose rebars are placed between
+//! those of the given layer.
+XC::PolylineReinfLayer XC::PolylineReinfLayer::_reinforce_mid_points(const double &diameter) const
+  {
+    // Remove half the spacing from both extremities of the polyline.
+    const Polyline2d originalPolyline= this->getPolyline();
+    const int nRebars= this->getNumReinfBars();
+    const double length= originalPolyline.getLength();
+    const double spacing= length/(nRebars-1);
+    const double halfSpacing= spacing/2.0;
+    const Pos2d p1= originalPolyline.getPointAtLength(halfSpacing);
+    const Polyline2d tmpPolyline= originalPolyline.getRightChunk(p1, 0.0);
+    const Pos2d p2= originalPolyline.getPointAtLength(length-halfSpacing);
+    const Polyline2d newPolyline= tmpPolyline.getLeftChunk(p2, 0.0);
+    // Create the new reinforcement layer.
+    PolylineReinfLayer tmp(*this);
+    tmp.setNumReinfBars(nRebars-1);
+    tmp.setReinfBarDiameter(diameter);
+    tmp.setPolyline(newPolyline);
+    return tmp;
+  }
 
 void XC::PolylineReinfLayer::Print(std::ostream &s, int flag) const
   {

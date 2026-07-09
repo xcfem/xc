@@ -52,6 +52,7 @@ class PolylineReinfLayer: public ReinfLayer
 		       double  reinfBarArea,
                        const std::deque<Vector> &);
     ReinfLayer *getCopy(void) const;
+    PolylineReinfLayer _reinforce_mid_points(const double &) const;
   public:
     // edition functions
     void setPositions(const std::deque<Vector> &);
@@ -69,7 +70,7 @@ class PolylineReinfLayer: public ReinfLayer
     // Segment2d getLineSegment(void) const;
     double getLength(void) const;
     double getSpacement(void) const;
-
+    int setSpacement(const double &);
 
     void Print(std::ostream &s, int flag =0) const;   
   };

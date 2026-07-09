@@ -82,7 +82,7 @@ XC::StraightReinfLayer *XC::ListReinfLayer::newStraightReinfLayer(const std::str
   {
     XC::Material *materialPtr= material_handler->find_ptr(cod_mat);
     if(!materialPtr)
-      std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING, material: '"
 	        << cod_mat << "' not found."
 		<< Color::def << std::endl;
@@ -96,7 +96,7 @@ XC::PolylineReinfLayer *XC::ListReinfLayer::newPolylineReinfLayer(const std::str
   {
     XC::Material *materialPtr= material_handler->find_ptr(cod_mat);
     if(!materialPtr)
-      std::cerr << Color::yellow << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING, material: '"
 	        << cod_mat << "' not found."
 		<< Color::def << std::endl;
@@ -136,24 +136,11 @@ XC::StraightReinfLayer *XC::ListReinfLayer::reinforceSegment(const std::string &
     return retval;
   }
 
-//! @brief Create the StraightReinfLayer object whose rebars are place between
-//" those of the given layer.
+//! @brief Create a StraightReinfLayer object whose rebars are placed between
+//! those of the given layer.
 XC::StraightReinfLayer *XC::ListReinfLayer::reinforceMidPoints(const StraightReinfLayer &rl, const double &diameter)
   {
-    // Remove half the spacing from both extremities of the segment.
-    const Segment2d originalSegment= rl.getLineSegment();
-    const Vector2d vDir= originalSegment.VDir();
-    const int nRebars= rl.getNumReinfBars();
-    const double spacing= originalSegment.getLength()/(nRebars-1);
-    const double halfSpacing= spacing/2.0;
-    const Pos2d p1= originalSegment.getFromPoint()+halfSpacing*vDir;
-    const Pos2d p2= originalSegment.getToPoint()-halfSpacing*vDir;
-    const Segment2d newSegment= Segment2d(p1, p2);
-    // Create the new reinforcement layer.
-    StraightReinfLayer tmp(rl);
-    tmp.setNumReinfBars(nRebars-1);
-    tmp.setReinfBarDiameter(diameter);
-    tmp.setLineSegment(newSegment);
+    StraightReinfLayer tmp= rl._reinforce_mid_points(diameter);
     StraightReinfLayer *retval= dynamic_cast<StraightReinfLayer *>(push_back(tmp));
     retval->set_owner(this);
     return (retval);
@@ -171,23 +158,12 @@ XC::PolylineReinfLayer *XC::ListReinfLayer::reinforcePolyline(const std::string 
     return retval;
   }
 
+//! @brief Create a PolylineReinfLayer object whose rebars are placed between
+//! those of the given layer.
 XC::PolylineReinfLayer *XC::ListReinfLayer::reinforceMidPoints(const PolylineReinfLayer &rl, const double &diameter)
   {
-    // Remove half the spacing from both extremities of the polyline.
-    const Polyline2d originalPolyline= rl.getPolyline();
-    const int nRebars= rl.getNumReinfBars();
-    const double length= originalPolyline.getLength();
-    const double spacing= length/(nRebars-1);
-    const double halfSpacing= spacing/2.0;
-    const Pos2d p1= originalPolyline.getPointAtLength(halfSpacing);
-    const Polyline2d tmpPolyline= originalPolyline.getRightChunk(p1, 0.0);
-    const Pos2d p2= originalPolyline.getPointAtLength(length-halfSpacing);
-    const Polyline2d newPolyline= tmpPolyline.getLeftChunk(p2, 0.0);
-    // Create the new reinforcement layer.
-    PolylineReinfLayer tmp(rl);
-    tmp.setNumReinfBars(nRebars-1);
-    tmp.setReinfBarDiameter(diameter);
-    tmp.setPolyline(newPolyline);
+    PolylineReinfLayer tmp= rl._reinforce_mid_points(diameter);
+
     PolylineReinfLayer *retval= dynamic_cast<PolylineReinfLayer *>(push_back(tmp));
     retval->set_owner(this);
     return (retval);

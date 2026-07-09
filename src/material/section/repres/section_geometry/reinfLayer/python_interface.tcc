@@ -30,6 +30,8 @@ class_<XC::ReinfLayer,XC::ReinfLayer *, bases<XC::DiscretBase>, boost::noncopyab
   .def("getCenterOfMass",&XC::ReinfLayer::getCenterOfMass,"Return the position of the centroid.")
   .def("getArea",&XC::ReinfLayer::getArea,"Return the reinforcement area.")
   .def("getBnd",&XC::ReinfLayer::getBnd, "Returns reinforcement layer boundary.")
+  .def("getSpacement", &XC::ReinfLayer::getSpacement,"Returns the distance between consecutive bars.")
+  .def("setSpacement", &XC::ReinfLayer::setSpacement,"Set the distance between consecutive bars (and return the resulting number of them).")
   ;
 
 class_<XC::SingleBar , bases<XC::ReinfLayer>, boost::noncopyable >("SingleBar", no_init);
@@ -47,13 +49,11 @@ class_<XC::StraightReinfLayer , bases<XC::ReinfLayer>, boost::noncopyable >("Str
   .def("setP1P2", &XC::StraightReinfLayer::setP1P2, "Set the initial and final positions.")
   .def("setSegment", &XC::StraightReinfLayer::setLineSegment, "Set the initial and final positions using the given segment.")
   .def("getSegment", &XC::StraightReinfLayer::getLineSegment, "Get the segment that lies the initial and final positions.")
-  .def("getSpacement", &XC::StraightReinfLayer::getSpacement,"Returns the spacement of the bars.")
   ;
 
 class_<XC::PolylineReinfLayer , bases<XC::ReinfLayer>, boost::noncopyable >("PolylineReinfLayer", no_init)
   .def("setPolyline",&XC::PolylineReinfLayer::setPolyline, "Set the polyline where the rebars are located along.")
   .add_property("getPolyline",&XC::PolylineReinfLayer::getPolyline,"Get the polyline where the rebars are located along.")
-  .def("getSpacement",&XC::PolylineReinfLayer::getSpacement,"Returns the spacement of the bars.")
   ;
 
 typedef std::list<XC::ReinfLayer *> list_ptr_reinf_layer;

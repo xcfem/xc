@@ -66,6 +66,15 @@ double XC::SingleBar::getMinY(void) const
 double XC::SingleBar::getMinZ(void) const
   { return posit(1); }
 
+//! @brief Set spacement between rebars (and return the resulting number of
+//! them).
+int XC::SingleBar::setSpacement(const double &)
+  { return 1; }
+
+//! @brief Get the distance between consecutive bars.
+double XC::SingleBar::getSpacement(void) const
+  { return std::numeric_limits<double>::infinity(); }
+
 //! @brief Returns a rebars array.
 const XC::VectorReinfBar &XC::SingleBar::getReinfBars(void) const
   {

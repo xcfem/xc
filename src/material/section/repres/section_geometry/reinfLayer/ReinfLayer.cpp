@@ -67,6 +67,7 @@
 #include "utility/geom/d2/HalfPlane2d.h"
 #include "utility/geom/d2/BND2d.h"
 #include "material/section/repres/section_geometry/SectionGeometry.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 XC::ReinfLayer::ReinfLayer(ListReinfLayer *owr,Material *m)
@@ -78,10 +79,40 @@ XC::ReinfLayer::ReinfLayer(ListReinfLayer *owr,Material *m,const int &numReinfBa
   : DiscretBase(m), nReinfBars(numReinfBars), barDiam(bDiam),area(bArea) 
   { set_owner(owr); }
 
+//! @brief Return a pointer to the reinforcement layers container.
+const XC::ListReinfLayer *XC::ReinfLayer::getContainer(void) const
+  {
+    return dynamic_cast<const ListReinfLayer *>(this->Owner());
+  }
+
+//! @brief Return a pointer to the reinforcement layers container.
+XC::ListReinfLayer *XC::ReinfLayer::getContainer(void)
+  {
+    return dynamic_cast<ListReinfLayer *>(this->Owner());
+  }
 
 //! @brief Set the number or rebars in the layer.
 void XC::ReinfLayer::setNumReinfBars(int numReinfBars)
   { nReinfBars= numReinfBars; }
+
+//! @brief Set spacement between rebars (and return the resulting number of
+//! them).
+int XC::ReinfLayer::setSpacement(const double &)
+  {
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; not implemented yet."
+		<< Color::def << std::endl;
+      return 0;
+  }
+
+//! @brief Get the distance between consecutive bars.
+double XC::ReinfLayer::getSpacement(void) const
+  {
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; not implemented yet."
+		<< Color::def << std::endl;
+      return 0.0;
+  }
 
 //! @brief Returns a reference to the (SectionGeometry) owner object.
 const XC::SectionGeometry *XC::ReinfLayer::getSectionGeometry(void) const

@@ -194,12 +194,51 @@ Segment2d XC::StraightReinfLayer::getLineSegment(void) const
 double XC::StraightReinfLayer::getLength(void) const
   { return getLineSegment().getLength(); }
 
-//! @brier Returns spacement between rebars.
+//! @brief Returns spacement between rebars.
 double XC::StraightReinfLayer::getSpacement(void) const
-  { return getLength()/getNumReinfBars(); }
+  {
+    double retval= std::numeric_limits<double>::infinity();
+    const int &num_bars= this->getNumReinfBars();
+    if(num_bars>1)
+      retval= this->getLength()/(num_bars-1);
+    return retval;
+  }
+
+//! @brief Set spacement between rebars (and return the resulting number of
+//! them).
+int XC::StraightReinfLayer::setSpacement(const double &spacement)
+  {
+    const double length= this->getLength();
+    const double tmp= length/spacement+1;
+    const int num_bars= std::round(tmp);
+    this->setNumReinfBars(num_bars);
+    return num_bars;
+  }
 
 XC::ReinfLayer *XC::StraightReinfLayer::getCopy(void) const
   { return new StraightReinfLayer(*this); }
+
+//! @brief Create a StraightReinfLayer object whose rebars are placed between
+//! those of the given layer.
+XC::StraightReinfLayer XC::StraightReinfLayer::_reinforce_mid_points(const double &diameter) const
+  {
+    // Remove half the spacing from both extremities of the segment.
+    const Segment2d originalSegment= this->getLineSegment();
+    // const int nRebars= this->getNumReinfBars();
+    const double length= originalSegment.getLength();
+    const double spacing= this->getSpacement();
+    const double halfSpacing= spacing/2.0;
+    const Pos2d p1= originalSegment.getPointAtLength(halfSpacing);
+    const Pos2d p2= originalSegment.getPointAtLength(length-halfSpacing);
+    const Segment2d newSegment= Segment2d(p1, p2);
+    // Create the new reinforcement layer.
+    StraightReinfLayer tmp(*this);
+    tmp.setLineSegment(newSegment);
+    //tmp.setNumReinfBars(nRebars-1);
+    tmp.setSpacement(spacing);
+    tmp.setReinfBarDiameter(diameter);
+    return tmp;
+  }
 
 void XC::StraightReinfLayer::Print(std::ostream &s, int flag) const
   {
