@@ -35,7 +35,7 @@ def eps2png(inputFileName, outputFileName= None):
     eps_image.save(outputFileName)
     
 
-def mplot_section_reinforcement(ax, reinforcement, rotate= False):
+def mplot_section_reinforcement(ax, reinforcement, rotate= False, fontsize= None):
     ''' Plot the geometry of the section using matplotlib.
 
     :param ax: matplotlib subplot.
@@ -58,9 +58,9 @@ def mplot_section_reinforcement(ax, reinforcement, rotate= False):
             labelPlot= str(int(round(b.diameter*1e3))) # bar label.
             circle= plt.Circle((x, y), rPlot, color= rebarColor)
             ax.add_patch(circle)
-            ax.annotate(labelPlot, (x+rPlot, y+rPlot))
+            ax.annotate(labelPlot, (x+rPlot, y+rPlot), fontsize= fontsize)
     
-def mplot_section_geometry(ax, sectionGeometry, rotate= False):
+def mplot_section_geometry(ax, sectionGeometry, rotate= False, fontsize= None):
     ''' Plot the geometry of the section using matplotlib.
 
     :param ax: matplotlib subplot.
@@ -87,7 +87,7 @@ def mplot_section_geometry(ax, sectionGeometry, rotate= False):
                 y.append(p.y)
         ax.fill(x,y,'tab:gray')
     # Plot reinforcement.
-    mplot_section_reinforcement(ax, sectionGeometry.getReinfLayers, rotate= rotate)    
+    mplot_section_reinforcement(ax, sectionGeometry.getReinfLayers, rotate= rotate, fontsize= fontsize)    
 
 def plot_reinforcement(reinforcement, ctx):
     '''draw section rebars in a postcript file.
