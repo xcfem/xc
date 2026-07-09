@@ -56,8 +56,8 @@ class SingleBar: public ReinfLayer
   public:
     // edition functions
     void setPosition(const Vector &);
-    virtual int setSpacement(const double &);
-    virtual double getSpacement(void) const;
+    virtual int setSpacing(const double &);
+    virtual double getSpacing(void) const;
 
     // inquiring functions
     const VectorReinfBar &getReinfBars(void) const;

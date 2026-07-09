@@ -174,8 +174,8 @@ const XC::VectorReinfBar &XC::PolylineReinfLayer::getReinfBars(void) const
 double XC::PolylineReinfLayer::getLength(void) const
   { return this->getPolyline().getLength(); }
 
-//! @brier Returns spacement between rebars.
-double XC::PolylineReinfLayer::getSpacement(void) const
+//! @brier Returns spacing between rebars.
+double XC::PolylineReinfLayer::getSpacing(void) const
   {
     double retval= std::numeric_limits<double>::infinity();
     const int &num_bars= this->getNumReinfBars();
@@ -184,12 +184,12 @@ double XC::PolylineReinfLayer::getSpacement(void) const
     return retval;
   }
 
-//! @brief Set spacement between rebars (and return the resulting number of
+//! @brief Set spacing between rebars (and return the resulting number of
 //! them).
-int XC::PolylineReinfLayer::setSpacement(const double &spacement)
+int XC::PolylineReinfLayer::setSpacing(const double &spacing)
   {
     const double length= this->getLength();
-    int num_bars= int(length/spacement)+1;
+    int num_bars= int(length/spacing)+1;
     this->setNumReinfBars(num_bars);
     return num_bars;
   }

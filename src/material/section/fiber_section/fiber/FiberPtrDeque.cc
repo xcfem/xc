@@ -1682,7 +1682,7 @@ void XC::FiberPtrDeque::computeCovers(const SectionGeometry &g) const
   }
 
 //! @brief Computes the distance from each fiber to the nearest one.
-void XC::FiberPtrDeque::computeSpacement(void) const
+void XC::FiberPtrDeque::computeSpacing(void) const
   { seps= getPositions().GetSeparaciones(); }
 
 //! @brief Return the value of the concrete cover for the i-th fiber.

@@ -560,13 +560,13 @@ void XC::FiberSectionBase::computeCovers(const std::string &rebarSetName) const
   }
 
 //! @brief Computes spacing of the fibers.
-void XC::FiberSectionBase::computeSpacement(const std::string &rebarSetName) const
+void XC::FiberSectionBase::computeSpacing(const std::string &rebarSetName) const
   {
     fiber_set_const_iterator i= fiber_sets.find(rebarSetName);
     if(i!=fiber_sets.end())
       {
         const FiberPtrDeque &rebars= (*i).second; //Rebars.
-        rebars.computeSpacement();
+        rebars.computeSpacing();
       }
     else
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__

@@ -32,7 +32,7 @@ fiRebar=12             #diameter rebar [mm]
 roughness='L'          #roughness of surface ('L'=low, 'H'=high)
 dynamic='N'            #no low fatigue or dynamic stresses consideration
 Ast=math.pi*(fiRebar*1e-3)**2/4
-spacement=0.10         #rebars spacement [m]
+spacing=0.10         #rebars spacing [m]
 angRebars=90           #Angle formed by the joining bars with the plane of the
                        #joint (degrees)
 
@@ -47,7 +47,7 @@ areaContact=widthContact*1
 sigma_cd=Nd/areaContact #External design tensile stress perpendicular to the
                         #plane of the joint [N/m]
 
-shJoint=EHEverif.LongShearJoints(concrtype,steelType,unitAreaContact,roughness,dynamic,sigma_cd,Ast,spacement,angRebars)
+shJoint=EHEverif.LongShearJoints(concrtype,steelType,unitAreaContact,roughness,dynamic,sigma_cd,Ast,spacing,angRebars)
 
 beta=shJoint.getBetaCoef()
 beta_comp=0.2

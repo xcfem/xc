@@ -45,11 +45,11 @@ def getNumberedPoints(points,firstNumber,step= 1):
         count+= step
     return retval
 
-def getPoints(plines,spacement,step= 1):
+def getPoints(plines,spacing,step= 1):
     pointsPiquetage={}
     for key in plines:
         pmtz= param.XYParametrized3DPoly(plines[key])
-        pts= pmtz.getPointsEveryXmetres(spacement)
+        pts= pmtz.getPointsEveryXmetres(spacing)
         count= key
         for p in pts:
             dt= dist(p,pointsPiquetage)

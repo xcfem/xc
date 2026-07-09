@@ -132,7 +132,7 @@ class_<XC::FiberPtrDeque, bases<CommandEntity,fiber_ptrs_dq>, boost::noncopyable
   .def("getFiberEffectiveConcreteArea",&XC::FiberPtrDeque::getFiberEffectiveConcreteArea)
   .def("getFibersEffectiveConcreteArea",&XC::FiberPtrDeque::getFibersEffectiveConcreteArea)
   .def("computeCovers",&XC::FiberPtrDeque::computeCovers)
-  .def("computeSpacement",&XC::FiberPtrDeque::computeSpacement)
+  .def("computeSpacing",&XC::FiberPtrDeque::computeSpacing)
   .def("getFiberCover",&XC::FiberPtrDeque::getFiberCover,return_value_policy<copy_const_reference>())
   .def("getFiberSpacing",&XC::FiberPtrDeque::getFiberSpacing,return_value_policy<copy_const_reference>())
   .def("getSigmaSRAtFiber",&XC::FiberPtrDeque::getSigmaSRAtFiber, "Return the stress on the i-th fiber when cracking occurs in its effective area.")

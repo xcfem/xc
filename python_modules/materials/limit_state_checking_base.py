@@ -306,9 +306,9 @@ class FibSectLSProperties(object):
         self.eps1= self.setsRC.concrFibers.fSet.getStrainMax()
         self.eps2= max(self.setsRC.concrFibers.fSet.getStrainMin(),0.0)
         self.sigma_c= self.setsRC.concrFibers.fSet.getStressMin()
-        self.sct.computeSpacement('tensSetFb')
+        self.sct.computeSpacing('tensSetFb')
         self.spacing= self.tensSetFb.getAverageDistanceBetweenFibers()
-        self.sct.computeSpacement('tensSetFb')
+        self.sct.computeSpacing('tensSetFb')
         self.spacing= self.tensSetFb.getAverageDistanceBetweenFibers()
         nmbFi=self.tensSetFb.getNumFibers()
         if nmbFi>0:
@@ -438,7 +438,7 @@ class TensionedRebarsProperties(TensionedRebarsBasicProperties):
  
     def printParams(self, os= sys.stdout):
         os.write("Number of tensioned bars: "+str(self.number))
-        os.write("Spacement of tensioned bars; s= "+str(self.spacing)+" m")
+        os.write("Spacing of tensioned bars; s= "+str(self.spacing)+" m")
         os.write("Area of tensioned bars; As= "+str(self.area*1e4)+" cm2")
         os.write("Centroid of tensioned bars; COG= ("+str(self.yCentroid)+","+str(self.zCentroid)+") m")
         os.write("Tensioned rebars average stress: "+str(self.averageStress/1e6)+" MPa")

@@ -93,9 +93,9 @@ class ReinfLayer: public DiscretBase
     
     // edition functions
     virtual void setNumReinfBars(int numReinfBars);
-    virtual int setSpacement(const double &);
+    virtual int setSpacing(const double &);
     virtual int getNumReinfBars(void) const;
-    virtual double getSpacement(void) const;
+    virtual double getSpacing(void) const;
     virtual void setReinfBarDiameter(double reinfBarDiameter);
     virtual const double &getReinfBarDiameter(void) const;
     virtual void setReinfBarArea(double reinfBarArea);

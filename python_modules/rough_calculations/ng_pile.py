@@ -67,9 +67,9 @@ print("\\item{Reinforcement tips} \\\\")
 print("\\begin{tabular}{lr}")
 print("Minimal diameter for the longitudinal reinforcement & $\\Phi$12 mm     \\\\")
 print("Minimal number of rebars & 6   \\\\")
-print("Minimal spacement between rebars in longitudinal reinforcement. & 20 cm  \\\\")
+print("Minimal spacing between rebars in longitudinal reinforcement. & 20 cm  \\\\")
 print("Minimal diameter of shear reinforcement rebars & $\\Phi_{transv.min} = 0,25\\Phi_{long}$   \\\\")
-print("Stirrups spacement & s<15$\\Phi_{long}$  \\\\")
+print("Stirrups spacing & s<15$\\Phi_{long}$  \\\\")
 if(prefabricado=="si"):
   print("Cover of the reinforcement & 4-5 cm  \\\\")
 else:

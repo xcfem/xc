@@ -329,7 +329,7 @@ def getOrdinatesFromPoints2d(points2d):
   return retval
 
 
-def getPointsProfilAlongPline3d(points,spacement):
+def getPointsProfilAlongPline3d(points,spacing):
   x= getAbscissasFromPline3d(points)
   y= getOrdinatesFromPline3d(points)
   fn= scipy.interpolate.interp1d(x,y)
@@ -339,7 +339,7 @@ def getPointsProfilAlongPline3d(points,spacement):
   while (s<xMax):
     p= (s,fn(s))
     retval.append(p)
-    s+= spacement
+    s+= spacing
   p= (x[-1],y[-1])
   retval.append(p)
   return retval

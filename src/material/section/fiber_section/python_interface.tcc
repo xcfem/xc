@@ -66,7 +66,7 @@ class_<XC::FiberSectionBase, bases<XC::PrismaticBarCrossSection>, boost::noncopy
   .def("getHomogenizedI",&XC::FiberSectionBase::getHomogenizedI,"Moment of inertia relative to bending axis.")
   .def("getSPosHomogenized",&XC::FiberSectionBase::getSPosHomogenized,"Static moment relative to bending axis of area that rests over this axis.")
   .def("computeCovers",&XC::FiberSectionBase::computeCovers,"Return the concrete cover of the set of reinforcement fibers whose name is given as parameter. Syntax: computeCovers(reinforcementSetName)")
-.def("computeSpacement",&XC::FiberSectionBase::computeSpacement,"Return the spacing between bars in the set of reinforcement fibers whose name is given as parameter. Syntax: computeSpacement(reinforcementSetName)")
+.def("computeSpacing",&XC::FiberSectionBase::computeSpacing,"Return the spacing between bars in the set of reinforcement fibers whose name is given as parameter. Syntax: computeSpacing(reinforcementSetName)")
   .def("getStrClaseEsfuerzo",&XC::FiberSectionBase::getStrClaseEsfuerzo,"Return the type of load acting at the cross-section('flexion_compuesta',...). Syntax: getStrClaseEsfuerzo(tolerance)")
   .add_property("getSectionGeometry",make_function(getSectionGeometryPtr,return_internal_reference<>()),"Return the section geometry.")
   .def("getMatTags", &XC::FiberSectionBase::getMatTagsPy,"return the different tags of the uniaxial materials used to define the fibers.")

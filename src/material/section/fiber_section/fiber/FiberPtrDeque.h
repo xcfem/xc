@@ -168,7 +168,7 @@ class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>, public Mo
     double getFiberEffectiveConcreteArea(const size_t &i) const;
     double getFibersEffectiveConcreteArea(void) const;
     void computeCovers(const SectionGeometry &) const;
-    void computeSpacement(void) const;
+    void computeSpacing(void) const;
     const double &getFiberCover(const size_t &i) const;
     const double &getFiberSpacing(const size_t &i) const;
     double getSigmaSRAtFiber(const size_t &,const double &,const double &,const double &) const;

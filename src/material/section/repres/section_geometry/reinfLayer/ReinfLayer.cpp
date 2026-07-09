@@ -95,9 +95,9 @@ XC::ListReinfLayer *XC::ReinfLayer::getContainer(void)
 void XC::ReinfLayer::setNumReinfBars(int numReinfBars)
   { nReinfBars= numReinfBars; }
 
-//! @brief Set spacement between rebars (and return the resulting number of
+//! @brief Set spacing between rebars (and return the resulting number of
 //! them).
-int XC::ReinfLayer::setSpacement(const double &)
+int XC::ReinfLayer::setSpacing(const double &)
   {
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; not implemented yet."
@@ -106,7 +106,7 @@ int XC::ReinfLayer::setSpacement(const double &)
   }
 
 //! @brief Get the distance between consecutive bars.
-double XC::ReinfLayer::getSpacement(void) const
+double XC::ReinfLayer::getSpacing(void) const
   {
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; not implemented yet."

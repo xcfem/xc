@@ -2321,7 +2321,7 @@ class CrackControl(lscb.CrackControlBaseParameters):
         self.Wk= 0.0
         if(self.tensionedRebars.number>0):
             scc.computeCovers(self.tensionedRebarsFiberSetName)
-            scc.computeSpacement(self.tensionedRebarsFiberSetName)
+            scc.computeSpacing(self.tensionedRebarsFiberSetName)
             self.eps1= concrFibers.getStrainMax()
             self.eps2= max(concrFibers.getStrainMin(),0.0)
             self.k1= (self.eps1+self.eps2)/8/self.eps1
@@ -2895,7 +2895,7 @@ def shearBetweenWebAndFlangesStrength(fck,gammac,hf,Asf,Sf,fyd):
     :param gammac: Partial safety factor for concrete.
     :param hf: flange thickness (m)
     :param Asf: reinforcement that cross the section by unit length (m2)
-    :param Sf: spacement of the rebars that cross the section (m)
+    :param Sf: spacing of the rebars that cross the section (m)
     :param fyd: design yield strength (Pa)
     '''
     hf=hf*1000     #Flange thickness in mm
@@ -3030,17 +3030,17 @@ class LongShearJoints(object):
                     of the joint. (<0 for compression tensions) 
                     (if sigma_cd > 0, beta, fct_d=0). Defaults to 0.
     :ivar Ast: Cross-section of effectively anchored steel bars, closing 
-               the joint (area of 1 those rebars, spacement is given also as a 
+               the joint (area of 1 those rebars, spacing is given also as a 
                parameter). Defaults to None = no reinforcement, in this case 
                all parameters attached to reinforcement are ignored .
-    :ivar spacement: distance between the closing bars along the joint plane.
+    :ivar spacing: distance between the closing bars along the joint plane.
                      (defaults to None)
     :ivar angRebars: Angle formed by the joining bars with the plane of the 
                      joint (degrees). Reinforcements with α > 135° or α < 45° 
                      shall not be incorporated. Defaults to 90º
     '''
 
-    def __init__(self,concrete,reinfsteel,contactSurf,roughness='L',dynamic='N',sigma_cd=0,Ast=None,spacement=None,angRebars=90):
+    def __init__(self,concrete,reinfsteel,contactSurf,roughness='L',dynamic='N',sigma_cd=0,Ast=None,spacing=None,angRebars=90):
         ''' Constructor.
 
         :param concrete: weakest EHE concrete type (ex: EHE_materials.HA25)
@@ -3058,11 +3058,11 @@ class LongShearJoints(object):
                          plane of the joint. (<0 for compression tensions) 
                          (if sigma_cd > 0, beta, fct_d=0). Defaults to 0.
         :param Ast: Cross-section of effectively anchored steel bars, closing 
-                   the joint -area of 1 those rebars, spacement is given also 
+                   the joint -area of 1 those rebars, spacing is given also 
                    as a parameter-. Defaults to None = no reinforcement, in 
                    this case  all parameters attached to reinforcement are
                    ignored.
-        :param spacement: distance between the closing bars along the joint
+        :param spacing: distance between the closing bars along the joint
                           plane (defaults to None).
         :param angRebars: Angle formed by the joining bars with the plane of 
                           the joint (degrees). Reinforcements with α > 135° 
@@ -3075,7 +3075,7 @@ class LongShearJoints(object):
         self.dynamic=dynamic
         self.sigma_cd=sigma_cd
         self.Ast=Ast
-        self.spacement=spacement
+        self.spacing=spacing
         self.angRebars=angRebars
 
     def getBetaCoef(self):
@@ -3154,7 +3154,7 @@ class LongShearJoints(object):
         else: #case 2 (clause 47.2.2.2)
             mu= self.getMuCoefCase2() # table 47.2.2.2
         term_aux=mu*math.sin(alpha)+math.cos(alpha)
-        tao_ru=self.Ast/(self.spacement*self.contactSurf)*f_yalphd*term_aux-mu*self.sigma_cd
+        tao_ru=self.Ast/(self.spacing*self.contactSurf)*f_yalphd*term_aux-mu*self.sigma_cd
         if tao_rd <= compVal:
             tao_ru+=compVal/2.5
         tao_ru_max= 0.25*abs(self.concrete.fcd())

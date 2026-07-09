@@ -23,7 +23,7 @@ z= 5
 c_prob= IAP_wind.getProbabilityFactor(T= 100.0, K= 0.2, n= 0.5)
 c_fx= IAP_wind.getSolidWebBridgeDragForceCoefficient(B, h_eq)
 f_wx= IAP_wind.getUnitWindLoadDeck(terrainCategory=tC, v_b0= vb, H_max= z)
-eta= IAP_wind.getHidingFactor(relativeSpacement= 2.2, solidityRatio= 1.0)
+eta= IAP_wind.getHidingFactor(relativeSpacing= 2.2, solidityRatio= 1.0)
 
 percent= 0.6
 pressureDistribution= IAP_wind.getTrapezoidalPressureDistribution(h= h_eq, heightFraction= percent, averagePressure= f_wx)

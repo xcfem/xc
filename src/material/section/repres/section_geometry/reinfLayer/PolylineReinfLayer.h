@@ -69,8 +69,8 @@ class PolylineReinfLayer: public ReinfLayer
     double getMinZ(void) const;
     // Segment2d getLineSegment(void) const;
     double getLength(void) const;
-    double getSpacement(void) const;
-    int setSpacement(const double &);
+    double getSpacing(void) const;
+    int setSpacing(const double &);
 
     void Print(std::ostream &s, int flag =0) const;   
   };

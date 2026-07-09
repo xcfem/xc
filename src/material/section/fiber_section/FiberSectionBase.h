@@ -147,7 +147,7 @@ class FiberSectionBase: public PrismaticBarCrossSection
     double computeFibersEffectiveConcreteArea(const double &hEfMax,const std::string &,const double &factor= 15) const;
     std::list<Polygon2d> getGrossEffectiveConcreteAreaContour(const double &) const;
     void computeCovers(const std::string &) const;
-    void computeSpacement(const std::string &) const;
+    void computeSpacing(const std::string &) const;
     int updateCenterOfMass(void);
     double getHomogenizedI(const double &E0) const;
     double getSPosHomogenized(const double &E0) const;

@@ -314,7 +314,7 @@ def getTrapezoidalPressureDistribution(h:float, heightFraction:float= 0.6, avera
 
 
 srHidingFactor= [0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 1e3] # solidity ratio
-rsHidingFactor= [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0] # relative spacement
+rsHidingFactor= [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0] # relative spacing
 
 zHidingFactor= [[0.75, 0.40, 0.31, 0.22, 0.13, 0.06, 0.06],
 [1.00, 0.82, 0.64, 0.46, 0.28, 0.10, 0.10],
@@ -326,13 +326,13 @@ zHidingFactor= [[0.75, 0.40, 0.31, 0.22, 0.13, 0.06, 0.06],
 
 fHidingFactor= scipy.interpolate.interp2d(srHidingFactor, rsHidingFactor, zHidingFactor, kind='linear')
 
-def getHidingFactor(relativeSpacement: float, solidityRatio: float):
+def getHidingFactor(relativeSpacing: float, solidityRatio: float):
     '''Return the hiding factor of a surface with respect to other
        according to table 4.2-c of IAP-11.
 
-    :param relativeSpacement: relative spacement according to 
-                              clause 4.2.3 of IAP-11.
+    :param relativeSpacing: relative spacing according to 
+                            clause 4.2.3 of IAP-11.
     :param solidityRatio: solidity ratio  according to clause 4.2.3 of IAP-11.
     '''
-    return float(fHidingFactor(solidityRatio, relativeSpacement))
+    return float(fHidingFactor(solidityRatio, relativeSpacing))
 

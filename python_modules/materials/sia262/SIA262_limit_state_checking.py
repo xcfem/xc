@@ -391,7 +391,7 @@ class CrackControlSIA262(lsc.CrackControlBaseParameters):
         self.tensionedRebars.number= rcSets.getNumTensionRebars()
         if(self.tensionedRebars.number>0):
             scc.computeCovers(self.tensionedRebarsFiberSetName)
-            scc.computeSpacement(self.tensionedRebarsFiberSetName)
+            scc.computeSpacing(self.tensionedRebarsFiberSetName)
             self.eps1= concrFibers.getStrainMax()
             self.eps2= max(concrFibers.getStrainMin(),0.0)
             self.tensionedRebars.setup(tensionedReinforcement)

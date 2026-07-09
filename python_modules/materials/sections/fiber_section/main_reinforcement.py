@@ -498,7 +498,7 @@ def RebarRow2ReinfRow(rebarRow, width= 1.0, nominalLatCover= 0.03):
     return retval
 
 def rebLayer_mm(fi,s,c):
-    '''Defines a layer of main reinforcement bars, given the spacement.
+    '''Defines a layer of main reinforcement bars, given the spacing.
 
     :param fi: bar diameter [mm]
     :param s: spacing [mm]
@@ -520,7 +520,7 @@ def rebLayerByNumFi_mm(n, fi, c, latC, L):
     return rl
 
 def rebLayer_m(fi,s,c):
-    '''Defines a layer of main reinforcement bars, given the spacement.
+    '''Defines a layer of main reinforcement bars, given the spacing.
 
     :param fi: bar diameter [m]
     :param s: spacing [m]

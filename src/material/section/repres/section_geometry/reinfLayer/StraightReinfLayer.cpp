@@ -194,8 +194,8 @@ Segment2d XC::StraightReinfLayer::getLineSegment(void) const
 double XC::StraightReinfLayer::getLength(void) const
   { return getLineSegment().getLength(); }
 
-//! @brief Returns spacement between rebars.
-double XC::StraightReinfLayer::getSpacement(void) const
+//! @brief Returns spacing between rebars.
+double XC::StraightReinfLayer::getSpacing(void) const
   {
     double retval= std::numeric_limits<double>::infinity();
     const int &num_bars= this->getNumReinfBars();
@@ -204,12 +204,12 @@ double XC::StraightReinfLayer::getSpacement(void) const
     return retval;
   }
 
-//! @brief Set spacement between rebars (and return the resulting number of
+//! @brief Set spacing between rebars (and return the resulting number of
 //! them).
-int XC::StraightReinfLayer::setSpacement(const double &spacement)
+int XC::StraightReinfLayer::setSpacing(const double &spacing)
   {
     const double length= this->getLength();
-    const double tmp= length/spacement+1;
+    const double tmp= length/spacing+1;
     const int num_bars= std::round(tmp);
     this->setNumReinfBars(num_bars);
     return num_bars;
@@ -226,7 +226,7 @@ XC::StraightReinfLayer XC::StraightReinfLayer::_reinforce_mid_points(const doubl
     const Segment2d originalSegment= this->getLineSegment();
     // const int nRebars= this->getNumReinfBars();
     const double length= originalSegment.getLength();
-    const double spacing= this->getSpacement();
+    const double spacing= this->getSpacing();
     const double halfSpacing= spacing/2.0;
     const Pos2d p1= originalSegment.getPointAtLength(halfSpacing);
     const Pos2d p2= originalSegment.getPointAtLength(length-halfSpacing);
@@ -235,7 +235,7 @@ XC::StraightReinfLayer XC::StraightReinfLayer::_reinforce_mid_points(const doubl
     StraightReinfLayer tmp(*this);
     tmp.setLineSegment(newSegment);
     //tmp.setNumReinfBars(nRebars-1);
-    tmp.setSpacement(spacing);
+    tmp.setSpacing(spacing);
     tmp.setReinfBarDiameter(diameter);
     return tmp;
   }

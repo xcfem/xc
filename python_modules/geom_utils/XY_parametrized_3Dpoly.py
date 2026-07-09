@@ -59,14 +59,14 @@ class XYParametrized3DPoly:
         return (self.x(s),self.y(s),self.z(s))
     def getPos3d(self,s):
         return geom.Pos3d(self.x(s),self.y(s),self.z(s))
-    def getPointsEveryXmetres(self,spacement):
+    def getPointsEveryXmetres(self,spacing):
         sMax= self.s[-1]
         retval= []
         s= 0.0
         while(s<sMax):
             p= self.getPoint(s)
             retval.append(p)
-            s+=spacement
+            s+=spacing
         p= self.getPoint(sMax)
         retval.append(p)
         return retval

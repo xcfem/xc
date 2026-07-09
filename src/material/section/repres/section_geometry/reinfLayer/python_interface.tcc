@@ -30,8 +30,8 @@ class_<XC::ReinfLayer,XC::ReinfLayer *, bases<XC::DiscretBase>, boost::noncopyab
   .def("getCenterOfMass",&XC::ReinfLayer::getCenterOfMass,"Return the position of the centroid.")
   .def("getArea",&XC::ReinfLayer::getArea,"Return the reinforcement area.")
   .def("getBnd",&XC::ReinfLayer::getBnd, "Returns reinforcement layer boundary.")
-  .def("getSpacement", &XC::ReinfLayer::getSpacement,"Returns the distance between consecutive bars.")
-  .def("setSpacement", &XC::ReinfLayer::setSpacement,"Set the distance between consecutive bars (and return the resulting number of them).")
+  .def("getSpacing", &XC::ReinfLayer::getSpacing,"Returns the distance between consecutive bars.")
+  .def("setSpacing", &XC::ReinfLayer::setSpacing,"Set the distance between consecutive bars (and return the resulting number of them).")
   ;
 
 class_<XC::SingleBar , bases<XC::ReinfLayer>, boost::noncopyable >("SingleBar", no_init);
