@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Trivial test for the reinforceMidPoints method.'''
+''' Trivial test for the secondaryReinfLayer method.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
 __copyright__= "Copyright 2026, LCPT and AO_O"
