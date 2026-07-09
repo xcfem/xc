@@ -168,10 +168,10 @@ if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1
 else:
     lmsg.error(fname+' ERROR.')
     
-# Section output
-import matplotlib.pyplot as plt
-from materials.sections.fiber_section import plot_fiber_section
-fig = plt.figure()
-ax= fig.add_subplot(111)
-plot_fiber_section.mplot_section_geometry(ax, sectionGeometry= quadFibersGeom)
-plt.show()
+# # Section output
+# import matplotlib.pyplot as plt
+# from materials.sections.fiber_section import plot_fiber_section
+# fig = plt.figure()
+# ax= fig.add_subplot(111)
+# plot_fiber_section.mplot_section_geometry(ax, sectionGeometry= quadFibersGeom)
+# plt.show()
