@@ -358,7 +358,7 @@ void Line2d::regularize(void)
 
 //! @brief Return a point of the line at a distance delta
 //! from its origin.
-Pos2d Line2d::PtoParametricas(const GEOM_FT &lambda) const
+Pos2d Line2d::getPointAtLength(const GEOM_FT &lambda) const
   {
     Pos2d retval= Point(0);
     if(fabs(lambda)>0.0)
@@ -716,7 +716,7 @@ void Line2d::setPyDict(const boost::python::dict &d)
   }
 
 void Line2d::Print(std::ostream &os) const
-  { os << PtoParametricas(0.0) << " " << PtoParametricas(100.0); }
+  { os << getPointAtLength(0.0) << " " << getPointAtLength(100.0); }
 
 void Line2d::Plot(Plotter &psos) const
   {

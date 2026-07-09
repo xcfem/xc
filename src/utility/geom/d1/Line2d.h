@@ -107,7 +107,7 @@ class Line2d : public Linear2d
     virtual GEOM_FT getLambda(const Pos2d &) const;
 
     Line2dParametricForm GetParametricas(void) const;
-    Pos2d PtoParametricas(const GEOM_FT &lambda) const;
+    Pos2d getPointAtLength(const GEOM_FT &lambda) const;
     void Parametricas(const Line2dParametricForm &param);
     bool EsVertical(void) const;
     bool isDegenerated(void) const;

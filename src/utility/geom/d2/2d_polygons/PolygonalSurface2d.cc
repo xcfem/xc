@@ -348,12 +348,12 @@ GeomObj::list_Pos2d PolygonalSurface2d::getApproxTangentPositions(const Vector2d
             angleI-=dosPi;
             angleJ-=dosPi;
             const double s= li.getLength()*(-angleI)/(angleJ-angleI);
-            retval.AgregaSiNuevo(li.PtoParametricas(s));
+            retval.AgregaSiNuevo(li.getPointAtLength(s));
           }
         else if(angleI*angleJ<=0)
           {
             const double s= li.getLength()*(-angleI)/(angleJ-angleI);
-            retval.AgregaSiNuevo(li.PtoParametricas(s));
+            retval.AgregaSiNuevo(li.getPointAtLength(s));
           }
       }
     return retval;

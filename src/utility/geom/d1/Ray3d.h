@@ -63,7 +63,7 @@ class Ray3d : public Linear3d
     const Pos3d Point(const int &i= 0) const
       { return Pos3d(cgsr.point(i)); }
     //! @brief Return a point of the line at a distance lambda from its origin.
-    Pos3d PtoParametricas(const GEOM_FT &lambda) const
+    Pos3d getPointAtLength(const GEOM_FT &lambda) const
       { return Point(0)+lambda*VDir().getNormalized(); }
     inline bool isDegenerated(void) const
       { return cgsr.is_degenerate(); }
@@ -111,7 +111,7 @@ class Ray3d : public Linear3d
     void setPyDict(const boost::python::dict &);
     
     inline void Print(std::ostream &os) const
-      { os << PtoParametricas(0.0) << " " << PtoParametricas(100.0); }
+      { os << getPointAtLength(0.0) << " " << getPointAtLength(100.0); }
   };
 
 inline GEOM_FT angle(const Ray3d &r,const Vector3d &v)

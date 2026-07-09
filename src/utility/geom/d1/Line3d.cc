@@ -327,7 +327,7 @@ void Line3d::regularize(void)
   }
 
 //! @brief Return a point at a distance lambda from its origin.
-Pos3d Line3d::PtoParametricas(const GEOM_FT &lambda) const
+Pos3d Line3d::getPointAtLength(const GEOM_FT &lambda) const
   {
     Pos3d retval= Point(0);
     if(fabs(lambda)>0.0)
@@ -507,7 +507,7 @@ void Line3d::setPyDict(const boost::python::dict &d)
 
 //! @brier Print stuff.
 void Line3d::Print(std::ostream &os) const
-  { os << PtoParametricas(0.0) << " " << PtoParametricas(100.0); }
+  { os << getPointAtLength(0.0) << " " << getPointAtLength(100.0); }
 
 //! @brief Return the distance from the point to the line.
 GEOM_FT dist(const Pos3d &p,const Line3d &r)

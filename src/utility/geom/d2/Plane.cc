@@ -632,7 +632,7 @@ GeomGroup3d intersection(const Plane &p1, const Plane &p2)
 	    const Line3d r3d(*ri);
  	    const Vector3d lineDir= r3d.getIVector();
 	    const Pos3d pt1= r3d.Point(0);
-	    const Pos3d pt2= r3d.PtoParametricas(100.0);
+	    const Pos3d pt2= r3d.getPointAtLength(100.0);
             retval.push_back(r3d);
 	  }
         else

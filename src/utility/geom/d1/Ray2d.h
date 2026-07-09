@@ -65,7 +65,7 @@ class Ray2d : public Linear2d
     bool downwards(void) const;
     const Pos2d Point(const int &i) const
       { return Pos2d(cgsr.point(i)); }
-    Pos2d PtoParametricas(const GEOM_FT &) const;
+    Pos2d getPointAtLength(const GEOM_FT &) const;
     inline bool EsVertical(void) const
       { return cgsr.is_vertical(); }
     inline bool isDegenerated(void) const

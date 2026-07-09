@@ -101,7 +101,7 @@ Vector2d Ray2d::getJVector(void) const
 
 //! @brief Return a point of the line at a distance lambda
 //! from its origin.
-Pos2d Ray2d::PtoParametricas(const GEOM_FT &lambda) const
+Pos2d Ray2d::getPointAtLength(const GEOM_FT &lambda) const
   {
     Pos2d retval= getFromPoint();
     if(fabs(lambda)>0.0)
@@ -245,7 +245,7 @@ void Ray2d::setPyDict(const boost::python::dict &d)
   }
 
 void Ray2d::Print(std::ostream &os) const
-  { os << PtoParametricas(0.0) << " " << PtoParametricas(100.0); }
+  { os << getPointAtLength(0.0) << " " << getPointAtLength(100.0); }
 void Ray2d::Plot(Plotter &psos) const
   {
     //Ray is not drawn, it must be clipped first.

@@ -104,7 +104,7 @@ class Line3d : public Linear3d
 
     GEOM_FT getSlope(void) const;
     Line3dParametricForm GetParametricas(void) const;
-    Pos3d PtoParametricas(const GEOM_FT &) const;
+    Pos3d getPointAtLength(const GEOM_FT &) const;
     void Parametricas(const Line3dParametricForm &);
     //! @brief Return true if the point is on the line.
     virtual bool In(const Pos3d &p, const double &tol= 0.0) const
