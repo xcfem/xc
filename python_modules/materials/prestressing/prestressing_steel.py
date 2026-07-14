@@ -65,7 +65,7 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
         :param preprocessor: pre-processor for the finite element problem.
         :param initialStress: value of the initial stress.
         '''
-        return typical_materials.defSteel02(preprocessor,self.nmbDiagK,self.Es,self.fpk,self.bsh,initialStress)
+        return typical_materials.defSteel02(preprocessor,self.getKDiagName(),self.Es,self.fpk,self.bsh,initialStress)
     
     def defDiagK(self, preprocessor, initialStress):
         '''Characteristic stress-strain diagram.
@@ -88,7 +88,7 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
         :param preprocessor: pre-processor for the finite element problem.
         :param initialStress: value of the initial stress.
         '''
-        return typical_materials.defSteel02(preprocessor,self.nmbDiagD,self.Es,self.fpd(),self.bsh,initialStress)
+        return typical_materials.defSteel02(preprocessor,self.getDDiagName(),self.Es,self.fpd(),self.bsh,initialStress)
     
     def defDiagD(self,preprocessor, initialStress):
         '''Design stress-strain diagram.

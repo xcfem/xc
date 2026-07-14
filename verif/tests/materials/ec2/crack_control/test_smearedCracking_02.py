@@ -87,7 +87,7 @@ concrSect.pMax= geom.Pos2d(+y1,+z1)
 
 #reinforcement bar (1 single rebar, centered in the cross-section )
 reinforcement= geomSectFibers.getReinfLayers
-reinforcementA= reinforcement.newStraightReinfLayer(rfSteel.nmbDiagK) #Steel stress-strain diagram to use.
+reinforcementA= reinforcement.newStraightReinfLayer(rfSteel.getKDiagName()) #Steel stress-strain diagram to use.
 reinforcementA.numReinfBars= 1
 reinforcementA.barArea= As_calc
 reinforcementA.p1= geom.Pos2d(0.0,0.0) # 1 single rebar, centered in the cross-section 

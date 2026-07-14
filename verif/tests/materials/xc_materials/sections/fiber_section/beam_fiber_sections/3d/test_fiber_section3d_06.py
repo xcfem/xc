@@ -41,7 +41,7 @@ if(not pth):
 sys.path.append(pth+"/../../../../../../aux/sections/")
 import concrete_section_01
 defSec= concrete_section_01.defSec
-concreteSectionGeom01= concrete_section_01.gmSecHA01(preprocessor, nmbGeomSecc="concreteSectionGeom01",defSec= defSec,concrDiagName= EHE_materials.HA25.nmbDiagD,reinfSteelDiagramName= EHE_materials.B500S.nmbDiagD)
+concreteSectionGeom01= concrete_section_01.gmSecHA01(preprocessor, nmbGeomSecc="concreteSectionGeom01",defSec= defSec,concrDiagName= EHE_materials.HA25.getDDiagName(),reinfSteelDiagramName= EHE_materials.B500S.getDDiagName())
 
 secHA= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()

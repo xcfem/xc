@@ -124,13 +124,13 @@ class RCFiberSectionParameters(object):
         retval= None
         if(self.concrType):
             if(self.diagType=="d"): # design diagram.
-                retval= self.concrType.nmbDiagD
+                retval= self.concrType.getDDiagName()
             elif(self.diagType=="k"): # characteristic diagram
-                retval= self.concrType.nmbDiagK
+                retval= self.concrType.getKDiagName()
             elif(self.diagType=="td"): # TD diagram
-                retval= self.concrType.nmbDiagTD
+                retval= self.concrType.getTDDiagName()
             elif(self.diagType=="elastic"): # elastic diagram
-                retval= self.concrType.nmbDiagE
+                retval= self.concrType.getEDiagName()
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
@@ -145,13 +145,13 @@ class RCFiberSectionParameters(object):
         retval= None
         if(self.reinfSteelType):
             if(self.diagType=="d"): # design diagram.
-                retval= self.reinfSteelType.nmbDiagD
+                retval= self.reinfSteelType.getDDiagName()
             elif(self.diagType=="k"): # characteristic diagram
-                retval= self.reinfSteelType.nmbDiagK
+                retval= self.reinfSteelType.getKDiagName()
             elif(self.diagType=="elastic"): # elastic diagram
-                retval= self.reinfSteelType.nmbDiagE
+                retval= self.reinfSteelType.getEDiagName()
             elif(self.diagType=="td"): # elastic diagram for TD concrete models.
-                retval= self.reinfSteelType.nmbDiagE
+                retval= self.reinfSteelType.getEDiagName()
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name

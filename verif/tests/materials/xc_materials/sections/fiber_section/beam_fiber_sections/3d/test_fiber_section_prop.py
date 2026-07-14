@@ -103,7 +103,7 @@ y1= width/2.0
 z1= depth/2.0
 # concrete region
 regions= geomSectFibers.getRegions
-concrSect= regions.newQuadRegion(concrete.nmbDiagK)
+concrSect= regions.newQuadRegion(concrete.getKDiagName())
 concrSect.nDivIJ= nDivIJ
 concrSect.nDivJK= nDivJK
 concrSect.pMin= geom.Pos2d(-y1,-z1)
@@ -112,7 +112,7 @@ concrSect.pMax= geom.Pos2d(+y1,+z1)
 # reinforcement layers
 reinforcement= geomSectFibers.getReinfLayers
 # bottom layer (positive bending)
-reinfBottLayer= reinforcement.newStraightReinfLayer(rfSteel.nmbDiagK) # Steel stress-strain diagram to use.
+reinfBottLayer= reinforcement.newStraightReinfLayer(rfSteel.getKDiagName()) # Steel stress-strain diagram to use.
 reinfBottLayer.numReinfBars= 6
 reinfBottLayer.barArea= areaFi24
 yBotL=(width-2*cover-0.024)/2.0
@@ -120,7 +120,7 @@ zBotL=-depth/2.0+cover+0.024/2.0
 reinfBottLayer.setP1P2(geom.Pos2d(-yBotL,zBotL), geom.Pos2d(yBotL,zBotL)) # positions of the first and last rebars.
 
 # top layer (negative bending)
-reinfTopLayer= reinforcement.newStraightReinfLayer(rfSteel.nmbDiagK) # Steel stress-strain diagram to use.
+reinfTopLayer= reinforcement.newStraightReinfLayer(rfSteel.getKDiagName()) # Steel stress-strain diagram to use.
 reinfTopLayer.numReinfBars= 4
 reinfTopLayer.barArea= areaFi12
 yTopL=(width-2*cover-0.012)/2.0

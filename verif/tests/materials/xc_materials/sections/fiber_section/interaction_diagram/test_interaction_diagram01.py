@@ -34,7 +34,7 @@ Es= EHE_materials.B500S.getDiagD(preprocessor).getTangent
 # Concrete section geometry.
 geomSecHA= preprocessor.getMaterialHandler.newSectionGeometry("geomSecHA")
 regions= geomSecHA.getRegions
-concrete= regions.newQuadRegion(EHE_materials.HA25.nmbDiagD)
+concrete= regions.newQuadRegion(EHE_materials.HA25.getDDiagName())
 concrete.nDivIJ= 10 # number of divisions in the IJ direction.
 concrete.nDivJK= 10 # number of divisions in the JK direction.
 concrete.pMin= geom.Pos2d(-depth/2.0,-width/2.0) # lower left corner.
@@ -42,11 +42,11 @@ concrete.pMax= geom.Pos2d(depth/2.0,width/2.0) # upper right corner.
 
 # Reinforcement.
 reinforcement= geomSecHA.getReinfLayers
-reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
+reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.getDDiagName())
 reinforcementInf.numReinfBars= 2 # number of bars.
 reinforcementInf.barArea= areaFi16 # bar area.
 reinforcementInf.setP1P2(geom.Pos2d(cover-depth/2.0,width/2.0-cover), geom.Pos2d(cover-depth/2.0,cover-width/2.0)) # bottom layer.
-reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
+reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.getDDiagName())
 reinforcementSup.numReinfBars= 2 # number of bars.
 reinforcementSup.barArea= areaFi16 # bar area.
 reinforcementSup.setP1P2(geom.Pos2d(depth/2.0-cover,width/2.0-cover), geom.Pos2d(depth/2.0-cover,cover-width/2.0)) # top layer.

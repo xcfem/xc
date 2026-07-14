@@ -35,14 +35,14 @@ def define_pier_section_geometry(preprocessor, name, concrete, steel, p4i, p5i, 
     regions= retval.getRegions
     ## generation of a quadrilateral regions
     ### Top region.
-    topRegion= regions.newQuadRegion(concrete.nmbDiagD) # name of material strain-stress diagram.
+    topRegion= regions.newQuadRegion(concrete.getDDiagName()) # name of material strain-stress diagram.
     topRegion.pMin= geom.Pos2d(p10i.x, p10i.y)
     topRegion.pMax= geom.Pos2d(p9.x, p9.y)
     topRegion.setTileSize(tileSize, tileSize)
     ### Bottom region
     bottomRegion= gfs.reflect_region(regions= regions, region= topRegion, symAxis= xAxis)
     ### Upper right spall region.
-    urSpallRegion= regions.newQuadRegion(concrete.nmbDiagD) # name of material strain-stress diagram.
+    urSpallRegion= regions.newQuadRegion(concrete.getDDiagName()) # name of material strain-stress diagram.
     urSpallRegion.setVertices(p9i, p6i, p8, p9)
     urSpallRegion.setTileSize(tileSize, tileSize)
     ### Lower right spall region.
@@ -52,7 +52,7 @@ def define_pier_section_geometry(preprocessor, name, concrete, steel, p4i, p5i, 
     ### Upper left spall region.
     ulSpallRegion= gfs.reflect_region(regions= regions, region= urSpallRegion, symAxis= yAxis)
     ### Upper right chamfer region.
-    urChamferRegion= regions.newQuadRegion(concrete.nmbDiagD)
+    urChamferRegion= regions.newQuadRegion(concrete.getDDiagName())
     urChamferRegion.setVertices(p8, p7, p5i, p6i)
     urChamferRegion.swap()
     urChamferRegion.setTileSize(tileSize, tileSize)
@@ -63,7 +63,7 @@ def define_pier_section_geometry(preprocessor, name, concrete, steel, p4i, p5i, 
     ### Upper left chamfer region.
     ulChamferRegion= gfs.reflect_region(regions= regions, region= urChamferRegion, symAxis= yAxis)
     ### Right side region.
-    rightSideRegion= regions.newQuadRegion(concrete.nmbDiagD)
+    rightSideRegion= regions.newQuadRegion(concrete.getDDiagName())
     rightSideRegion.setVertices(p7, p6, p4i, p5i)
     rightSideRegion.swap()
     rightSideRegion.setTileSize(tileSize, tileSize)

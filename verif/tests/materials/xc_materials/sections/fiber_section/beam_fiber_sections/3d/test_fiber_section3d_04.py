@@ -67,7 +67,7 @@ geomSecHA= preprocessor.getMaterialHandler.newSectionGeometry("geomSecHA")
 regions= geomSecHA.getRegions
 ## generation of a quadrilateral region of the specified sizes and number of
 ## divisions for the cells (fibers) generation
-rg= regions.newQuadRegion(EHE_materials.HA25.nmbDiagD)  #name of the quadrilateral region ==(EHE_materials.HA25.nmbDiagD
+rg= regions.newQuadRegion(EHE_materials.HA25.getDDiagName())  #name of the quadrilateral region ==(EHE_materials.HA25.getDDiagName()
 rg.nDivIJ= 10
 rg.nDivJK= 10
 rg.pMin= geom.Pos2d(-depth/2,-width/2)
@@ -75,12 +75,12 @@ rg.pMax= geom.Pos2d(depth/2,width/2)
 
 
 reinforcement= geomSecHA.getReinfLayers
-reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
+reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.getDDiagName())
 reinforcementInf.numReinfBars= 2
 reinforcementInf.barDiameter= 16e-3
 reinforcementInf.setP1P2(geom.Pos2d(cover-depth/2,width/2-cover), geom.Pos2d(cover-depth/2,cover-width/2)) # bottom layer.
 
-reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
+reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.getDDiagName())
 reinforcementSup.numReinfBars= 2
 reinforcementSup.barDiameter= 16e-3
 reinforcementSup.setP1P2(geom.Pos2d(depth/2-cover,width/2-cover), geom.Pos2d(depth/2-cover,cover-width/2)) # top layer.

@@ -41,7 +41,7 @@ regions= geomSecHA.getRegions
 
 #generation of a quadrilateral region with the specified sizes and number of
 #divisions for the cells (fibers) generation
-concrete= regions.newQuadRegion(EHE_materials.HA25.nmbDiagD)  #name of the region: EHE_materials.HA25.nmbDiagD
+concrete= regions.newQuadRegion(EHE_materials.HA25.getDDiagName())  #name of the region: EHE_materials.HA25.getDDiagName()
 concrete.nDivIJ= 10
 concrete.nDivJK= 10
 concrete.pMin= geom.Pos2d(-depth/2.0,-width/2.0)
@@ -49,24 +49,24 @@ concrete.pMax= geom.Pos2d(depth/2.0,width/2.0)
 
 #generation of reinforcement layers 
 reinforcement= geomSecHA.getReinfLayers
-reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
+reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.getDDiagName())
 reinforcementInf.numReinfBars= 6
 reinforcementInf.barArea= areaFi20
 reinforcementInf.setP1P2(geom.Pos2d(cover-depth/2.0,width/2.0-cover), geom.Pos2d(cover-depth/2.0,cover-width/2.0)) # bottom layer.
 
-reinforcementPielInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
+reinforcementPielInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.getDDiagName())
 reinforcementPielInf.numReinfBars= 2
 reinforcementPielInf.barArea= areaFi20
 y= (depth-2*cover)/3.0/2.0
 reinforcementPielInf.setP1P2(geom.Pos2d(-y,width/2-cover), geom.Pos2d(-y,cover-width/2)) # Bottom skin reinforcement.
 
-reinforcementPielSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
+reinforcementPielSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.getDDiagName())
 reinforcementPielSup.numReinfBars= 2
 reinforcementPielSup.barArea= areaFi20
 y= (depth-2*cover)/3.0/2.0
 reinforcementPielSup.setP1P2(geom.Pos2d(y,width/2-cover), geom.Pos2d(y,cover-width/2)) # Top skin reinforcement.
 
-reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
+reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.getDDiagName())
 reinforcementSup.numReinfBars= 6
 reinforcementSup.barArea= areaFi20
 reinforcementSup.setP1P2(geom.Pos2d(depth/2.0-cover,width/2.0-cover), geom.Pos2d(depth/2.0-cover,cover-width/2.0)) # top layer.

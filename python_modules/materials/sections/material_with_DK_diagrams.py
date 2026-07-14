@@ -15,12 +15,6 @@ class MaterialWithDKDiagrams(object):
     """Base class for materials with characteristic (K) and design (D) diagrams 
 
       :ivar materialName: name of the material.
-
-      :ivar nmbDiagK: name of the characteristic diagram.
-
-      :ivar nmbDiagD: name of the design diagram.
-
-      :ivar nmbDiagE: name of the elastic diagram.
     """
     def __init__(self, matName):
         ''' Constructor.
@@ -61,6 +55,22 @@ class MaterialWithDKDiagrams(object):
         else:
             retval= False
         return retval
+
+    def getKDiagName(self):
+        ''' Return the name of the characteristic stress-strain diagram.'''
+        return "dgK_"+self.materialName # Name identifying the characteristic stress-strain diagram.
+
+    def getDDiagName(self):
+        ''' Return the name of the design stress-strain diagram.'''
+        return "dgD_"+self.materialName # Name identifying the design stress-strain diagram.
+
+    def getTDDiagName(self):
+        ''' Return the name of the TD stress-strain diagram.'''
+        return "dgTD_"+self.materialName # Name identifying the TD stress-strain diagram.
+
+    def getEDiagName(self):
+        ''' Return the name of the linear elastic stress-strain diagram.'''
+        return "dgE_"+self.materialName # Name identifying the linear elastic stress-strain diagram.
     
     def setupName(self, matName):
         ''' Material setup.
@@ -68,15 +78,6 @@ class MaterialWithDKDiagrams(object):
         :param matName: material name.
         '''
         self.materialName= matName # Name identifying the material.
-        if(matName):
-            # Characteristic stress-strain diagram.
-            self.nmbDiagK= "dgK_"+self.materialName # Name identifying the characteristic stress-strain diagram.
-            # Design stress-strain diagram.
-            self.nmbDiagD= "dgD_"+self.materialName # Name identifying the design stress-strain diagram.
-            # TD stress-strain diagram.
-            self.nmbDiagTD= "dgTD_"+self.materialName # Name identifying the TD stress-strain diagram.
-            # Linear elastic stress-strain diagram.
-            self.nmbDiagE= "dgE_"+self.materialName # Name identifying the linear elastic stress-strain diagram.
 
     def __repr__(self):
         return self.materialName
@@ -87,7 +88,7 @@ class MaterialWithDKDiagrams(object):
 
         :param preprocessor: finite element preprocessor.
         '''
-        return preprocessor.getMaterialHandler.getMaterial(self.nmbDiagK)
+        return preprocessor.getMaterialHandler.getMaterial(self.getKDiagName())
     
     def diagKExists(self, preprocessor):
         ''' Return true if the  uniaxial material corresponding to the 
@@ -96,7 +97,7 @@ class MaterialWithDKDiagrams(object):
 
         :param preprocessor: pre-processor of the FE problem at hand.
         '''
-        return preprocessor.getMaterialHandler.materialExists(self.nmbDiagK)
+        return preprocessor.getMaterialHandler.materialExists(self.getKDiagName())
 
     def getMaterialDiagramK(self):
         ''' Return the uniaxial material corresponding to the characteristic 
@@ -129,7 +130,7 @@ class MaterialWithDKDiagrams(object):
 
         :param preprocessor: finite element preprocessor.
         '''
-        return preprocessor.getMaterialHandler.getMaterial(self.nmbDiagD)
+        return preprocessor.getMaterialHandler.getMaterial(self.getDDiagName())
 
     def diagDExists(self, preprocessor):
         ''' Return true if the  uniaxial material corresponding to the design
@@ -137,7 +138,7 @@ class MaterialWithDKDiagrams(object):
 
         :param preprocessor: pre-processor of the FE problem at hand.
         '''
-        return preprocessor.getMaterialHandler.materialExists(self.nmbDiagD)
+        return preprocessor.getMaterialHandler.materialExists(self.getDDiagName())
 
     def getMaterialDiagramD(self):
         ''' Return the uniaxial material corresponding to the design
@@ -170,7 +171,7 @@ class MaterialWithDKDiagrams(object):
 
         :param preprocessor: finite element preprocessor.
         '''
-        return preprocessor.getMaterialHandler.getMaterial(self.nmbDiagTD)
+        return preprocessor.getMaterialHandler.getMaterial(self.getTDDiagName())
     
     def diagTDExists(self, preprocessor):
         ''' Return true if the  uniaxial material corresponding to the 
@@ -179,7 +180,7 @@ class MaterialWithDKDiagrams(object):
 
         :param preprocessor: pre-processor of the FE problem at hand.
         '''
-        return preprocessor.getMaterialHandler.materialExists(self.nmbDiagTD)
+        return preprocessor.getMaterialHandler.materialExists(self.getTDDiagName())
     
     def getMaterialDiagramTD(self):
         ''' Return the uniaxial material corresponding to the TD stress-strain
@@ -212,7 +213,7 @@ class MaterialWithDKDiagrams(object):
 
         :param preprocessor: finite element preprocessor.
         '''
-        return preprocessor.getMaterialHandler.getMaterial(self.nmbDiagE)
+        return preprocessor.getMaterialHandler.getMaterial(self.getEDiagName())
     
     def diagEExists(self, preprocessor):
         ''' Return true if the  uniaxial material corresponding to the 
@@ -221,7 +222,7 @@ class MaterialWithDKDiagrams(object):
 
         :param preprocessor: pre-processor of the FE problem at hand.
         '''
-        return preprocessor.getMaterialHandler.materialExists(self.nmbDiagE)
+        return preprocessor.getMaterialHandler.materialExists(self.getEDiagName())
     
     def getMaterialDiagramE(self):
         ''' Return the uniaxial material corresponding to the linear elastic
@@ -261,7 +262,7 @@ class MaterialWithDKDiagrams(object):
                 # # Issue an warning message.
                 # className= type(self).__name__
                 # methodName= sys._getframe(0).f_code.co_name
-                # warningMsg= "; material: '"+str(self.nmbDiagK)
+                # warningMsg= "; material: '"+str(self.getKDiagName())
                 # warningMsg+= "' already exists but does not"
                 # warningMsg+= ' belong to the given preprocessor.'
                 # lmsg.warning(className+'.'+methodName+warningMsg)
