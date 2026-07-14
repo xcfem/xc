@@ -51,9 +51,9 @@ p3= geom.Pos2d((p1.x+p2.x)/2.0, 1.5*(p1.y+p2.y)/2.0)
 polylineA= geom.Polyline2d([p1, p3, p2])
 spacing= polylineA.getLength()/(nRebarsA-1)
 diameter= 2*math.sqrt(As/math.pi)
-reinforcementA= reinforcement.reinforcePolyline(steel.name, spacing, diameter, polylineA)
-reinforcementAA= reinforcement.secondaryReinfLayer(reinforcementA, spacing/2.0, 2*spacing, diameter/2.0)
-reinforcementAAPositions= reinforcementAA.getReinfBarsCenterPositions()
+primaryReinforcementA= reinforcement.reinforcePolyline(steel.name, spacing, diameter, polylineA)
+secondaryReinforcementA= reinforcement.secondaryReinfLayer(primaryReinforcementA, spacing/2.0, 2*spacing, diameter/2.0)
+secondaryReinforcementAPositions= secondaryReinforcementA.getReinfBarsCenterPositions()
 
 
 p1= geom.Pos2d(y0-depth/2.0,z0+width/2.0)
@@ -62,9 +62,9 @@ p3= geom.Pos2d((p1.x+p2.x)/2.0, 1.5*(p1.y+p2.y)/2.0)
 polylineB= geom.Polyline2d([p1, p3, p2])
 spacing= polylineB.getLength()/(nRebarsB-1)
 diameter= 2*math.sqrt(As/math.pi)
-reinforcementB= reinforcement.reinforcePolyline(steel.name, spacing, diameter, polylineB)
-reinforcementBB= reinforcement.secondaryReinfLayer(reinforcementB, spacing/2.0, 2*spacing, diameter/2.0)
-reinforcementBBPositions= reinforcementBB.getReinfBarsCenterPositions()
+primaryReinforcementB= reinforcement.reinforcePolyline(steel.name, spacing, diameter, polylineB)
+secondaryReinforcementB= reinforcement.secondaryReinfLayer(primaryReinforcementB, spacing/2.0, 2*spacing, diameter/2.0)
+secondaryReinforcementBPositions= secondaryReinforcementB.getReinfBarsCenterPositions()
 
 
 materialHandler= preprocessor.getMaterialHandler
@@ -137,10 +137,10 @@ ratio7= (avgStrain-deltax)/deltax
 err_aa= 0.0
 err_bb= 0.0
 for i, (x,y) in enumerate([(-0.8,-0.55), (-1.11022e-16,-0.75), (0.8, -0.55)]):
-   err_aa+= (reinforcementAAPositions[i].x-x)**2
-   err_aa+= (reinforcementAAPositions[i].y-y)**2
-   err_bb+= (reinforcementBBPositions[i].x-x)**2
-   err_bb+= (reinforcementBBPositions[i].y+y)**2
+   err_aa+= (secondaryReinforcementAPositions[i].x-x)**2
+   err_aa+= (secondaryReinforcementAPositions[i].y-y)**2
+   err_bb+= (secondaryReinforcementBPositions[i].x-x)**2
+   err_bb+= (secondaryReinforcementBPositions[i].y+y)**2
 err_aa= math.sqrt(err_aa)
 err_bb= math.sqrt(err_bb)
 
@@ -154,9 +154,9 @@ print("ratio4= ",ratio4)
 print("ratio5= ",ratio5)
 print("ratio6= ",ratio6)
 print("ratio7= ",ratio7)
-print('Reinforcement AA positions: ', reinforcementAAPositions)
+print('Secondary reinforcement A positions: ', secondaryReinforcementAPositions)
 print(err_aa)
-print('Reinforcement BB positions: ', reinforcementBBPositions)
+print('Secondary reinforcement B positions: ', secondaryReinforcementBPositions)
 print(err_bb)
 '''
 

@@ -51,8 +51,8 @@ p3= geom.Pos2d((p1.x+p2.x)/2.0, 1.5*(p1.y+p2.y)/2.0)
 polylineA= geom.Polyline2d([p1, p3, p2])
 spacing= polylineA.getLength()/(nRebarsA-1)
 diameter= 2*math.sqrt(As/math.pi)
-reinforcementA= reinforcement.reinforcePolyline(steel.name, spacing, diameter, polylineA)
-reinforcementAA= reinforcement.reinforceMidPoints(reinforcementA, diameter/2.0)
+primaryReinforcementA= reinforcement.reinforcePolyline(steel.name, spacing, diameter, polylineA)
+secondaryReinforcementA= reinforcement.reinforceMidPoints(primaryReinforcementA, diameter/2.0)
 
 
 p1= geom.Pos2d(y0-depth/2.0,z0+width/2.0)
@@ -61,8 +61,8 @@ p3= geom.Pos2d((p1.x+p2.x)/2.0, 1.5*(p1.y+p2.y)/2.0)
 polylineB= geom.Polyline2d([p1, p3, p2])
 spacing= polylineB.getLength()/(nRebarsB-1)
 diameter= 2*math.sqrt(As/math.pi)
-reinforcementB= reinforcement.reinforcePolyline(steel.name, spacing, diameter, polylineB)
-reinforcementBB= reinforcement.reinforceMidPoints(reinforcementB, diameter/2.0)
+primaryReinforcementB= reinforcement.reinforcePolyline(steel.name, spacing, diameter, polylineB)
+secondaryReinforcementB= reinforcement.reinforceMidPoints(primaryReinforcementB, diameter/2.0)
 
 
 materialHandler= preprocessor.getMaterialHandler

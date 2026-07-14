@@ -48,17 +48,17 @@ reinforcement= quadFibersGeom.getReinfLayers
 segmentA= geom.Segment2d(geom.Pos2d(y0-depth/2.0,z0-width/2.0), geom.Pos2d(y0+depth/2.0,z0-width/2.0)) # positions of the first and last rebars.
 spacing= segmentA.getLength()/(nRebarsA-1)
 diameter= 2*math.sqrt(As/math.pi)
-reinforcementA= reinforcement.reinforceSegment(steel.name, spacing, diameter, segmentA)
+primaryReinforcementA= reinforcement.reinforceSegment(steel.name, spacing, diameter, segmentA)
 
-reinforcementAA= reinforcement.secondaryReinfLayer(reinforcementA, spacing/2.0, 2*spacing, diameter/2.0)
-reinforcementAAPositions= reinforcementAA.getReinfBarsCenterPositions()
+secondaryReinforcementA= reinforcement.secondaryReinfLayer(primaryReinforcementA, spacing/2.0, 2*spacing, diameter/2.0)
+secondaryReinforcementAPositions= secondaryReinforcementA.getReinfBarsCenterPositions()
 
 segmentB= geom.Segment2d(geom.Pos2d(y0-depth/2.0,z0+width/2.0), geom.Pos2d(y0+depth/2.0,z0+width/2.0)) # positions of the first and last rebars.
 spacing= segmentA.getLength()/(nRebarsB-1)
 diameter= 2*math.sqrt(As/math.pi)
-reinforcementB= reinforcement.reinforceSegment(steel.name, spacing, diameter, segmentB)
-reinforcementBB= reinforcement.secondaryReinfLayer(reinforcementB, spacing/2.0, 2*spacing, diameter/2.0)
-reinforcementBBPositions= reinforcementBB.getReinfBarsCenterPositions()
+primaryReinforcementB= reinforcement.reinforceSegment(steel.name, spacing, diameter, segmentB)
+secondaryReinforcementB= reinforcement.secondaryReinfLayer(primaryReinforcementB, spacing/2.0, 2*spacing, diameter/2.0)
+secondaryReinforcementBPositions= secondaryReinforcementB.getReinfBarsCenterPositions()
 
 
 materialHandler= preprocessor.getMaterialHandler
@@ -128,8 +128,8 @@ ratio4= centerOfMassZ-z0
 ratio5= 0.0
 ratio6= 0.0
 for i, x in enumerate([-0.8, 0, 0.8]):
-   ratio5+= (reinforcementAAPositions[i].x-x)**2
-   ratio6+= (reinforcementBBPositions[i].x-x)**2
+   ratio5+= (secondaryReinforcementAPositions[i].x-x)**2
+   ratio6+= (secondaryReinforcementBPositions[i].x-x)**2
 ratio5= math.sqrt(ratio5)
 ratio6= math.sqrt(ratio6)
 ratio7= (-R-F)/F
@@ -143,9 +143,9 @@ print("ratio1= ",ratio1)
 print("ratio2= ",ratio2)
 print("ratio3= ",ratio3)
 print("ratio4= ",ratio4)
-print('Reinforcement AA positions: ', reinforcementAAPositions)
+print('Secondary reinforcement A positions: ', secondaryReinforcementAPositions)
 print("ratio5= ",ratio5)
-print('Reinforcement BB positions: ', reinforcementBBPositions)
+print('Secondary reinforcement B positions: ', secondaryReinforcementBPositions)
 print("ratio6= ",ratio6)
 print("ratio7= ",ratio7)
 print("ratio8= ",ratio8)

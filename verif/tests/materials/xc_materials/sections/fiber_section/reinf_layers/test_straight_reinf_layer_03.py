@@ -50,14 +50,14 @@ reinforcement= quadFibersGeom.getReinfLayers
 segmentA= geom.Segment2d(geom.Pos2d(y0-depth/2.0,z0-width/2.0), geom.Pos2d(y0+depth/2.0,z0-width/2.0)) # positions of the first and last rebars.
 spacing= segmentA.getLength()/(nRebarsA-1)
 diameter= 2*math.sqrt(As/math.pi)
-reinforcementA= reinforcement.reinforceSegment(steel.name, spacing, diameter, segmentA)
-reinforcementAA= reinforcement.reinforceMidPoints(reinforcementA, diameter/2.0)
+primaryReinforcementA= reinforcement.reinforceSegment(steel.name, spacing, diameter, segmentA)
+secondaryReinforcementA= reinforcement.reinforceMidPoints(primaryReinforcementA, diameter/2.0)
 
 segmentB= geom.Segment2d(geom.Pos2d(y0-depth/2.0,z0+width/2.0), geom.Pos2d(y0+depth/2.0,z0+width/2.0)) # positions of the first and last rebars.
 spacing= segmentA.getLength()/(nRebarsB-1)
 diameter= 2*math.sqrt(As/math.pi)
-reinforcementB= reinforcement.reinforceSegment(steel.name, spacing, diameter, segmentB)
-reinforcementBB= reinforcement.reinforceMidPoints(reinforcementB, diameter/2.0)
+primaryReinforcementB= reinforcement.reinforceSegment(steel.name, spacing, diameter, segmentB)
+secondaryReinforcementB= reinforcement.reinforceMidPoints(primaryReinforcementB, diameter/2.0)
 
 
 materialHandler= preprocessor.getMaterialHandler
