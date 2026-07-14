@@ -2109,6 +2109,9 @@ python tests/postprocess/limit_state_checking/generic/test_calculate_internal_fo
 # Graphic output tests
 ##python tests/postprocess/vtk/dibuja_edges.py
 echo "$BLEU" "  Graphic output." "$NORMAL"
+echo "$BLEU" "    Graphic output. DXF." "$NORMAL"
+python tests/postprocess/dxf/test_rc_section_write_dxf_01.py
+echo "$BLEU" "    Graphic output. VTK." "$NORMAL"
 python tests/postprocess/vtk/test_display_blocks.py
 python tests/postprocess/vtk/test_display_node_value_diagram_01.py
 python tests/postprocess/vtk/test_display_node_value_diagram_02.py
