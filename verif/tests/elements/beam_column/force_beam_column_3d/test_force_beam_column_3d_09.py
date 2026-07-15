@@ -61,14 +61,10 @@ fy= 275e6 # Yield stress of the steel.
 E= 210e9 # Young modulus of the steel.
 steel= typical_materials.defSteel01(preprocessor, "steel",E,fy,0.001)
 
-### Define fiber section.
-materialHandler= preprocessor.getMaterialHandler
-quadFibers= materialHandler.newMaterial("fiber_section_3d","quadFibers")
-fiberSectionRepr= quadFibers.getFiberSectionRepr()
 testQuadRegion= tqr.get_test_quad_region(preprocessor, y0, z0, width, depth, nDivIJ, nDivJK)
-fiberSectionRepr.setGeomNamed(testQuadRegion.name)
-quadFibers.setupFibers()
-# A= quadFibers.getFibers().getArea
+# Create fiber section.
+quadFibers= testQuadRegion.getFiberSection3d("quadFibers")
+
 
 ### Define section aggregation. 
 #### Define torsion and shear responses. 

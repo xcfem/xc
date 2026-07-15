@@ -71,11 +71,9 @@ tileSize= 0.05
 ## Set tile size.
 for region in [bottomWingRegion, topWingRegion, leftWebRegion, rightWebRegion]:
     region.setTileSize(tileSize, tileSize)
-materialHandler= preprocessor.getMaterialHandler
-rectangularHollowRCSection= materialHandler.newMaterial("fiber_section_3d","rectangularHollowRCSection")
-fiberSectionRepr= rectangularHollowRCSection.getFiberSectionRepr() # Get the fiber section representation.
-fiberSectionRepr.setGeomNamed(rectangularHollowSectionGeometry.name) # Assign the geometry.
-rectangularHollowRCSection.setupFibers() # Create fibers corresponding to the geometry.
+# Create fiber section.
+rectangularHollowRCSection= rectangularHollowSectionGeometry.getFiberSection3d("rectangularHollowRCSection")
+
 fibers= rectangularHollowRCSection.getFibers()
 
 ## Compute the same properties from the fibers object and compare them

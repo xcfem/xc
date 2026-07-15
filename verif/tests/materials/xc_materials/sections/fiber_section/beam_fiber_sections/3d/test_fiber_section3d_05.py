@@ -40,11 +40,8 @@ import bars_section_geometry as bsg
 
 barsSectionGeometry, reinforcementInf, reinforcementSup= bsg.define_section(preprocessor, leverArm, barDiam)
 
-
-barsSection= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","barsSection")
-fiberSectionRepr= barsSection.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(barsSectionGeometry.name)
-barsSection.setupFibers()
+# Create fiber section.
+barsSection= barsSectionGeometry.getFiberSection3d("barsSection")
 
 zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, barsSection.name)
 

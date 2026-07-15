@@ -55,16 +55,8 @@ import test_quad_region as tqr
 
 # Definition of a new empty fiber section named 'quadFibers' and stored in a
 # Python variable of the same name (surprisingly enough).
-quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","quadFibers")
-fiberSectionRepr= quadFibers.getFiberSectionRepr() # Fiber section representation
-                                                     # of 'quadFibers'
 testQuadRegion= tqr.get_test_quad_region(preprocessor, y0, z0, width, depth, nDivIJ, nDivJK)
-fiberSectionRepr.setGeomNamed(testQuadRegion.name) # We assign the geometry (regions and rebars)
-                                                  # to the fiber section representation
-                                                  # of 'quadFibers'
-quadFibers.setupFibers() # Create the fibers from the information contained in
-                         # the geometry.
-
+quadFibers= testQuadRegion.getFiberSection3d("quadFibers")
 
 # Elements definition
 elements= preprocessor.getElementHandler

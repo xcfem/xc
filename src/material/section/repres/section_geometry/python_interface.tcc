@@ -62,12 +62,23 @@ class_<XC::SectionGeometry, XC::SectionGeometry *, bases<XC::SectionMassProperti
   .def("newSpot",make_function(&XC::SectionGeometry::newSpot,return_internal_reference<>()))
   .def("distSpots",&XC::SectionGeometry::DistSpots)
   .add_property("tagLine",&XC::SectionGeometry::getAxisTag,&XC::SectionGeometry::setAxisTag)
-  .def("newSegment",make_function(&XC::SectionGeometry::newSegment,return_internal_reference<>()))
+  .def("newSegment",make_function(&XC::SectionGeometry::newSegment, return_internal_reference<>()))
   .add_property("name", make_function( &XC::SectionGeometry::Name, return_value_policy<copy_const_reference>()),"returns object name.")
   .def("clear", &XC::SectionGeometry::clear,"Clear the containers of this object.")
   .def("getReinforcementMaterials",&XC::SectionGeometry::getReinforcementMaterialsPy, "Return a Python list containing the different materials of the reinforcement.")
   .def("getRegionMaterials",&XC::SectionGeometry::getRegionMaterialsPy, "Return a Python list containing the different materials of the reinforcement.")
   .def("getMaterials",&XC::SectionGeometry::getMaterialsPy, "Return a Python list containing the different materials of the reinforcement.")
+
+  .def("getFiberSection2d", make_function(&XC::SectionGeometry::getFiberSection2d, return_internal_reference<>()), "Return a 2D fiber section material.")
+  .def("getFiberSection3d", make_function(&XC::SectionGeometry::getFiberSection3d, return_internal_reference<>()), "Return a 3D fiber section material.")
+  .def("getFiberSectionGJ", make_function(&XC::SectionGeometry::getFiberSectionGJ, return_internal_reference<>()), "Return a 3D fiber section material with torsional stiffness.")
+  .def("getFiberSectionShear2d", make_function(&XC::SectionGeometry::getFiberSectionShear2d, return_internal_reference<>()), "Return a 2D fiber shear section material")
+  .def("getFiberSectionShear3d", make_function(&XC::SectionGeometry::getFiberSectionShear3d, return_internal_reference<>()), "Return a 3D fiber shear section material")
+  .def("getElasticSection1d", make_function(&XC::SectionGeometry::getElasticSection1d, return_internal_reference<>()), "Return a 1D elastic section material.")
+  .def("getElasticSection2d", make_function(&XC::SectionGeometry::getElasticSection2d, return_internal_reference<>()), "Return a 2D elastic section material.")
+  .def("getElasticShearSection2d", make_function(&XC::SectionGeometry::getElasticShearSection2d, return_internal_reference<>()), "Return a 2D elastic shear section material.")
+  .def("getElasticSection3d", make_function(&XC::SectionGeometry::getElasticSection3d, return_internal_reference<>()), "Return a 3D elastic section material.")
+  .def("getElasticShearSection3d", make_function(&XC::SectionGeometry::getElasticShearSection3d, return_internal_reference<>()), "Return a 3D elastic shear section material.")
   ;
 
 

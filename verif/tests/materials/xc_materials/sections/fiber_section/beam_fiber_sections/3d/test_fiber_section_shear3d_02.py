@@ -49,14 +49,9 @@ respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e6) # Shear
 # creation
 geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
 reg= scc1x1.getRegion(geomRectang,"elast")
-sa= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d","sa")
-fiberSectionRepr= sa.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(geomRectang.name)
-sa.setupFibers()
+sa= geomRectang.getFiberSectionShear3d('sa', respVy.name, respVz.name, respT.name)
+
 fiber_section_test_macros.extractFiberSectionProperties(sa,scc1x1, fy)
-sa.setRespVyByName("respVy")
-sa.setRespVzByName("respVz")
-sa.setRespTByName("respT")
 
 zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, sa.name)
 # Constraints

@@ -53,22 +53,10 @@ auxModulePath= pth+"/../../../aux"
 sys.path.append(auxModulePath)
 import test_quad_region as tqr
 
-# Definition of a new empty fiber section named 'quadFibers' and stored in a
-# Python variable of the same name.
-quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","quadFibers")
-fiberSectionRepr= quadFibers.getFiberSectionRepr() # Fiber section
-                                                   # representation of
-                                                   # 'quadFibers'
 testQuadRegion= tqr.get_test_quad_region(preprocessor, y0, z0, width, depth, nDivIJ, nDivJK)
-fiberSectionRepr.setGeomNamed(testQuadRegion.name) # We assign the geometry
-                                                   # (regions and rebars)
-                                                   # to the fiber section
-                                                   # representation
-                                                    # of 'quadFibers'
-quadFibers.setupFibers() # Create the fibers from the information contained
-                         # in the geometry object.
-fibras= quadFibers.getFibers() # Get the fiber container from the object.
-A= fibras.getArea(1.0) # Get the sum of the fiber areas.
+# Create fiber section.
+quadFibers= testQuadRegion.getFiberSection3d("quadFibers")
+A= quadFibers.getFibers().getArea(1.0)
 
 
 

@@ -36,6 +36,7 @@
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 #include "utility/geom/FT_matrix.h"
+#include "material/uniaxial/UniaxialMaterial.h" 
 
 //! @brief Constructor.
 XC::SectRegion::SectRegion(Material *mat)
@@ -44,8 +45,9 @@ XC::SectRegion::SectRegion(Material *mat)
 //! @brief Return the region contour.
 Polygon2d XC::SectRegion::getPolygon(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; not implemented."
+	      << Color::def << std::endl;
     Polygon2d retval;
     return retval;
   }
@@ -53,8 +55,9 @@ Polygon2d XC::SectRegion::getPolygon(void) const
 //! @brief Reverse the orientation of the region.
 void XC::SectRegion::swap(void)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not implemented." << std::endl;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; not implemented."
+	      << Color::def << std::endl;
   }
 
 //! @brief Return the intersection of the region with the half-plane
@@ -64,9 +67,9 @@ XC::PolygonSectRegion XC::SectRegion::Intersection(const HalfPlane2d &sp) const
   {
     std::list<Polygon2d> tmpList= getPolygon().getIntersection(sp);
     if(tmpList.size()>1)
-      std::cerr << getClassName() << __FUNCTION__
+      std::cerr << Color::red << getClassName() << __FUNCTION__
 	        << "; not a simply connected region."
-                << std::endl;
+                << Color::def << std::endl;
     Polygon2d tmp= *tmpList.begin();
     return PolygonSectRegion(getMaterialPtr(),1,1,tmp);
   }
@@ -191,4 +194,22 @@ XC::Matrix &XC::SectRegion::getI(const Pos2d &o) const
     i(0,0)= tmp(1,1); i(0,1)= tmp(1,2);
     i(1,0)= tmp(1,2); i(1,1)= tmp(2,2);
     return i;
+  }
+
+//! @brief Return the linear density of the rebars in this region.
+double XC::SectRegion::getLinearRho(void) const
+  { 
+    double retval= 0.0;
+    const double area= this->getArea();
+    const UniaxialMaterial *mat= dynamic_cast<const UniaxialMaterial *>(this->getMaterialPtr());
+    if(mat)
+      {
+	const double rho= mat->getRho();
+	retval= rho*area;
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; can't get reinforcement layer material."
+		<< Color::def << std::endl;     
+    return retval;
   }

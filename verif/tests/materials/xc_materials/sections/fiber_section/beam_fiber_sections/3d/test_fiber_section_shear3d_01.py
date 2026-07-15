@@ -54,14 +54,9 @@ geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
 # generation of a quadrilateral region of the scc10x20 sizes and number of
 # divisions made of material nmbMat
 reg= scc10x20.getRegion(gm=geomRectang,nmbMat= epp.name)
-sa= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d","sa")
-fiberSectionRepr= sa.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(geomRectang.name)
-sa.setupFibers()
+sa= geomRectang.getFiberSectionShear3d('sa', respVy.name, respVz.name, respT.name)
+
 fiber_section_test_macros.extractFiberSectionProperties(sa,scc10x20, fy)
-sa.setRespVyByName(respVy.name) # Set shear response in y direction.
-sa.setRespVzByName(respVz.name) # Set shear response in z direction.
-sa.setRespTByName(respT.name) # Set torsion response.
 
 zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, sa.name)
 

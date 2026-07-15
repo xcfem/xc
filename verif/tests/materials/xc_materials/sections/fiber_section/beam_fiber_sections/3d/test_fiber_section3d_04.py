@@ -85,11 +85,8 @@ reinforcementSup.numReinfBars= 2
 reinforcementSup.barDiameter= 16e-3
 reinforcementSup.setP1P2(geom.Pos2d(depth/2-cover,width/2-cover), geom.Pos2d(depth/2-cover,cover-width/2)) # top layer.
 
-materialHandler= preprocessor.getMaterialHandler
-secHA= materialHandler.newMaterial("fiber_section_3d","secHA")
-fiberSectionRepr= secHA.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(geomSecHA.name)
-secHA.setupFibers()
+# Create fiber section.
+secHA= geomSecHA.getFiberSection3d("secHA")
 
 secHA.setTrialSectionDeformation(xc.Vector([e1,0,0]))
 secHA.commitState()

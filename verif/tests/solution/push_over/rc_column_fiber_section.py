@@ -135,11 +135,7 @@ def def_rc_column_fiber_section(preprocessor, colWidth, colDepth, cover, As):
     rightReinforcement.p2= coreRightTopCorner
 
     # Create fiber section.
-    columnFiberSection= matHandler.newMaterial("fiber_section_2d","columnFiberSection")
-    columnFiberSectionRepr= columnFiberSection.getFiberSectionRepr()
-    columnFiberSectionRepr.setGeomNamed(columnSectionGeometry.name)
-    columnFiberSection.setupFibers()
-
+    columnFiberSection= columnSectionGeometry.getFiberSection2d("columnFiberSection")
  
     return columnFiberSection
 

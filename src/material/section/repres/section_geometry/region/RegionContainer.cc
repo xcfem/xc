@@ -473,6 +473,18 @@ double XC::RegionContainer::getPyzHomogenizedSection(const double &E0) const
     return retval;
   }
 
+//! @brief Return the linear density of the regions in this container.
+double XC::RegionContainer::getLinearRho(void) const
+  { 
+    double retval= 0.0;
+    for(const_iterator i= begin();i!=end();i++)
+      {
+	const SectRegion *region= *i;
+	retval+= region->getLinearRho();
+      }
+    return retval;
+  }
+
 //! @brief Print stuff.
 void XC::RegionContainer::Print(std::ostream &os) const
   {

@@ -57,6 +57,7 @@
 #include "material/section/repres/section_geometry/reinfLayer/ReinfLayer.h"
 #include "material/section/repres/section_geometry/reinfBar/VectorReinfBar.h"
 #include "material/section/repres/section_geometry/reinfBar/ReinfBar.h"
+#include "material/uniaxial/UniaxialMaterial.h" 
 #include "utility/matrices/m_double.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
@@ -245,6 +246,24 @@ double XC::ReinfLayer::computeBarDiameterFromBarArea(void)
   {
     this->barDiam= sqrt(4*this->area/M_PI);
     return this->barDiam;
+  }
+
+//! @brief Return the linear density of the rebars in this layer.
+double XC::ReinfLayer::getLinearRho(void) const
+  { 
+    double retval= 0.0;
+    const double area= this->getArea();
+    const UniaxialMaterial *mat= dynamic_cast<const UniaxialMaterial *>(this->getMaterialPtr());
+    if(mat)
+      {
+	const double rho= mat->getRho();
+	retval= rho*area;
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; can't get reinforcement layer material."
+		<< Color::def << std::endl;     
+    return retval;
   }
 
 //! @brief Imprime.

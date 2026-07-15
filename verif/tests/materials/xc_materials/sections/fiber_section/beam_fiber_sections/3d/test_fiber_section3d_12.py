@@ -34,11 +34,8 @@ if(not pth):
 sys.path.append(pth+"/../../../../../../aux/sections/")
 import prestressed_concrete_section_01
 geomSecPret01= prestressed_concrete_section_01.gmSecHP01(preprocessor, "prestressedConcretSectionGeom01",EHE_materials.HP45.getDDiagName(),EHE_materials.Y1860S7.getDDiagName())
-materialHandler= preprocessor.getMaterialHandler
-secHP= materialHandler.newMaterial("fiber_section_3d","secHP")
-fiberSectionRepr= secHP.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(geomSecPret01.name)
-secHP.setupFibers()
+
+secHP= geomSecPret01.getFiberSection3d("secHP")
 
 zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, secHP.name)
 

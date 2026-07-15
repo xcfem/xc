@@ -120,6 +120,8 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SectionMassProperti
     double getIyHomogenizedSection(const double &E0) const;
     double getIzHomogenizedSection(const double &E0) const;
     double getPyzHomogenizedSection(const double &E0) const;
+    
+    double getLinearRho(void) const;
 
     void Print(std::ostream &s) const;
   };

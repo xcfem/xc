@@ -105,11 +105,8 @@ reinfBottLayer.setP1P2(geom.Pos2d(-yBotL,zBotL), geom.Pos2d(yBotL,zBotL)) # posi
 # it is a generic section created to be assigned to the elements specified
 # its stress and strain state is neutral (if we ask this section for stress or strain
 # values the result is always 0)
-materialHandler= preprocessor.getMaterialHandler
-sctFibers= materialHandler.newMaterial("fiber_section_3d","sctFibers")
-fiberSectionRepr= sctFibers.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(geomSectFibers.name)
-sctFibers.setupFibers()
+
+sctFibers= geomSectFibers.getFiberSection3d("sctFibers")
 
 # Elements definition
 elements= preprocessor.getElementHandler

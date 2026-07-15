@@ -214,60 +214,80 @@ XC::MaterialHandler::MaterialHandler(Preprocessor *owr)
 XC::Material *load_uniaxial_py_material(int tag_mat,const std::string &cmd)
   {
     XC::Material *retval= nullptr;
-    if(cmd == "py_simple1")
+    if((cmd=="PySimple1") || (cmd=="py_simple1"))
       retval= new XC::PySimple1(tag_mat);
-    else if(cmd == "qz_simple1")
+    
+    else if((cmd=="QzSimple1") || (cmd=="qz_simple1"))
       retval= new XC::QzSimple1(tag_mat);
-    else if(cmd == "tz_simple1")
+    
+    else if((cmd=="TzSimple1") || (cmd=="tz_simple1"))
       retval= new XC::TzSimple1(tag_mat);
-    else if(cmd == "py_liq1")
+    
+    else if((cmd=="PyLiq1") || (cmd=="py_liq1"))
       retval= new XC::PyLiq1(tag_mat);
-    else if(cmd == "tz_liq1")
+    else if((cmd=="TzLiq1") || (cmd=="tz_liq1"))
       retval= new XC::TzLiq1(tag_mat);
-    else if((cmd == "ey_base") || (cmd == "EyBasic"))
+    
+    else if((cmd=="EyBasic") || (cmd=="ey_base"))
       retval= new XC::EyBasic(tag_mat);
+    
    return retval;
   }
 
 XC::Material *load_uniaxial_snap_material(int tag_mat,const std::string &cmd)
   {
     XC::Material *retval= nullptr;
-    if(cmd == "snap_bilinear")
+    if((cmd=="Bilinear") || (cmd=="snap_bilinear"))
       retval= new XC::Bilinear(tag_mat);
-    else if(cmd == "snap_clough")
+    
+    else if((cmd=="Clough") || (cmd=="snap_clough"))
       retval= new XC::Clough(tag_mat);
-    else if(cmd == "snap_pinching")
+    
+    else if((cmd=="Pinching") || (cmd=="snap_pinching"))
       retval= new XC::Pinching(tag_mat);
-    else if(cmd == "snap_clough_damage")
-      retval= new XC::Clough(tag_mat);
-    else if(cmd == "snap_pinching_damage")
-      retval= new XC::Pinching(tag_mat);
+    
+    else if((cmd=="CloughDamage") || (cmd=="snap_clough_damage"))
+      retval= new XC::CloughDamage(tag_mat);
+    
+    else if((cmd=="PinchingDamage") || (cmd=="snap_pinching_damage"))
+      retval= new XC::PinchingDamage(tag_mat);
+
     return retval;
   }
 
 XC::Material *load_uniaxial_fedeas_material(int tag_mat,const std::string &cmd)
   {
     XC::Material *retval= nullptr;
-    if(cmd == "fedeas_bond1_material")
+    if((cmd=="FedeasBond1Material") || (cmd=="fedeas_bond1_material"))
       retval= new XC::FedeasBond1Material(tag_mat);
-    else if(cmd == "fedeas_bond2_material")
+    
+    else if((cmd=="FedeasBond2Material") || (cmd=="fedeas_bond2_material"))
       retval= new XC::FedeasBond2Material(tag_mat);
-    else if(cmd == "fedeas_concr1_material")
+    
+    else if((cmd=="FedeasConcr1Material") || (cmd=="fedeas_concr1_material"))
       retval= new XC::FedeasConcr1Material(tag_mat);
-    else if(cmd == "fedeas_concr2_material")
+	    
+    else if((cmd=="FedeasConcr2Material") || (cmd=="fedeas_concr2_material"))
       retval= new XC::FedeasConcr2Material(tag_mat);
-    else if(cmd == "fedeas_concr3_material")
+    
+    else if((cmd=="FedeasConcr3Material") || (cmd=="fedeas_concr3_material"))
       retval= new XC::FedeasConcr3Material(tag_mat);
-    else if(cmd == "fedeas_hardening_material")
+    
+    else if((cmd=="FedeasHardeningMaterial") || (cmd=="fedeas_hardening_material"))
       retval= new XC::FedeasHardeningMaterial(tag_mat);
-    else if(cmd == "fedeas_hyster1_material")
+    
+    else if((cmd=="FedeasHyster1Material") || (cmd=="fedeas_hyster1_material"))
       retval= new XC::FedeasHyster1Material(tag_mat);
-    else if(cmd == "fedeas_hyster2_material")
+    
+    else if((cmd=="FedeasHyster2Material") || (cmd=="fedeas_hyster2_material"))
       retval= new XC::FedeasHyster2Material(tag_mat);
-    else if(cmd == "fedeas_steel1_material")
+    
+    else if((cmd=="FedeasSteel1Material") || (cmd=="fedeas_steel1_material"))
       retval= new XC::FedeasSteel1Material(tag_mat);
-    else if(cmd == "fedeas_steel2_material")
+    
+    else if((cmd=="FedeasSteel2Material") || (cmd=="fedeas_steel2_material"))
       retval= new XC::FedeasSteel2Material(tag_mat);
+	    
     return retval;
   }
 
@@ -294,73 +314,106 @@ XC::Material *load_uniaxial_fedeas_material(int tag_mat,const std::string &cmd)
 XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
   {
     XC::Material *retval= nullptr;
-    if(cmd == "bar_slip_material")
+    if((cmd=="BarSlipMaterial") || (cmd=="bar_slip_material"))
       retval= new XC::BarSlipMaterial(tag_mat);
-    else if(cmd == "cable_material")
+    
+    else if((cmd=="BarSlipMaterial") || (cmd=="cable_material"))
       retval= new XC::CableMaterial(tag_mat);
-    else if(cmd == "concrete01_material")
+    
+    else if((cmd=="Concrete01") || (cmd=="concrete01_material"))
       retval= new XC::Concrete01(tag_mat);
-    else if(cmd == "concrete02_material")
+	    
+    else if((cmd=="Concrete02") || (cmd=="concrete02_material"))
       retval= new XC::Concrete02(tag_mat);
-    else if(cmd == "concrete02is_material")
+    
+    else if((cmd=="Concrete02IS") || (cmd=="concrete02is_material"))
       retval= new XC::Concrete02IS(tag_mat);
-    else if(cmd == "concrete04_material")
+    
+    else if((cmd=="Concrete04") || (cmd=="concrete04_material"))
       retval= new XC::Concrete04(tag_mat);
-    else if(cmd == "tdconcrete_material")
+    
+    else if((cmd=="TDConcrete") || (cmd=="tdconcrete_material"))
       retval= new XC::TDConcrete(tag_mat);
-    else if(cmd == "tdconcrete_mc10_material")
+    
+    else if((cmd=="TDConcreteMC10") || (cmd=="tdconcrete_mc10_material"))
       retval= new XC::TDConcreteMC10(tag_mat);
-    else if(cmd == "tdconcrete_mc10nl_material")
+    
+    else if((cmd=="TDConcreteMC10NL") || (cmd=="tdconcrete_mc10nl_material"))
       retval= new XC::TDConcreteMC10NL(tag_mat);
-    else if(cmd == "creep_material")
+    
+    else if((cmd=="CreepMaterial") || (cmd=="creep_material"))
       retval= new XC::CreepMaterial(tag_mat);
-    else if((cmd == "elastic_no_traction_material") or (cmd == "elastic_no_tension_material"))
+    
+    else if((cmd=="ENTMaterial") || (cmd=="elastic_no_traction_material") or (cmd=="elastic_no_tension_material"))
       retval= new XC::ENTMaterial(tag_mat);
-    else if(cmd == "elastic_no_compression_material")
+    
+    else if((cmd=="ENCMaterial") || (cmd=="elastic_no_compression_material"))
       retval= new XC::ENCMaterial(tag_mat);
-    else if(cmd == "tension_only_material")
+    
+    else if((cmd=="TensionOnlyMaterial") || (cmd=="tension_only_material"))
       retval= new XC::TensionOnlyMaterial(tag_mat);
-    else if(cmd == "compression_only_material")
+
+    else if((cmd=="CompressionOnlyMaterial") || (cmd=="compression_only_material"))
       retval= new XC::CompressionOnlyMaterial(tag_mat);
-    else if(cmd == "invert_material")
+    
+    else if((cmd=="InvertMaterial") || (cmd=="invert_material"))
       retval= new XC::InvertMaterial(tag_mat);
-    else if(cmd == "epp_gap_material")
+    
+    else if((cmd=="EPPGapMaterial") || (cmd=="epp_gap_material"))
       retval= new XC::EPPGapMaterial(tag_mat);
-    else if(cmd == "elastic_material")
+    
+    else if((cmd=="ElasticMaterial") || (cmd=="elastic_material"))
       retval= new XC::ElasticMaterial(tag_mat);
-    else if(cmd == "elasticpp_material")
+    
+    else if((cmd=="ElasticPPMaterial") || (cmd=="elasticpp_material"))
       retval= new XC::ElasticPPMaterial(tag_mat);
-    else if(cmd == "fatigue_material")
+    
+    else if((cmd=="FatigueMaterial") || (cmd=="fatigue_material"))
       retval= new XC::FatigueMaterial(tag_mat);
-    else if(cmd == "hardening_material")
+    
+    else if((cmd=="HardeningMaterial") || (cmd=="hardening_material"))
       retval= new XC::HardeningMaterial(tag_mat);
-    else if(cmd == "hysteretic_material")
+    
+    else if((cmd=="HystereticMaterial") || (cmd=="hysteretic_material"))
       retval= new XC::HystereticMaterial(tag_mat);
-    else if(cmd == "init_strain_material")
+    
+    else if((cmd=="InitStrainMaterial") || (cmd=="init_strain_material"))
       retval= new XC::InitStrainMaterial(tag_mat);
-    else if(cmd == "init_stress_material")
+	    
+    else if((cmd=="InitStressMaterial") || (cmd=="init_stress_material"))
       retval= new XC::InitStressMaterial(tag_mat);
-    else if(cmd == "min_max_material")
+    
+    else if((cmd=="MinMaxMaterial") || (cmd=="min_max_material"))
       retval= new XC::MinMaxMaterial(tag_mat);
-    else if(cmd == "parallel_material")
+    
+    else if((cmd=="ParallelMaterial") || (cmd=="parallel_material"))
       retval= new XC::ParallelMaterial(tag_mat);
-    else if(cmd == "path_independent_material")
+    
+    else if((cmd=="PathIndependentMaterial") || (cmd=="path_independent_material"))
       retval= new XC::PathIndependentMaterial(tag_mat);
-    else if(cmd == "pinching4_material")
+    
+    else if((cmd=="Pinching4Material") || (cmd=="pinching4_material"))
       retval= new XC::Pinching4Material(tag_mat);
-    else if(cmd == "series_material")
+    
+    else if((cmd=="SeriesMaterial") || (cmd=="series_material"))
       retval= new XC::SeriesMaterial(tag_mat);
-    else if(cmd == "reinforcing_steel")
+    
+    else if((cmd=="ReinforcingMaterial") || (cmd=="reinforcing_steel"))
       retval= new XC::ReinforcingSteel(tag_mat);
-    else if(cmd == "steel01")
+    
+    else if((cmd=="Steel01") || (cmd=="steel01"))
       retval= new XC::Steel01(tag_mat);
-    else if(cmd == "steel02")
+    
+    else if((cmd=="Steel02") || (cmd=="steel02"))
       retval= new XC::Steel02(tag_mat);
-    else if(cmd == "steel03")
+    
+    else if((cmd=="Steel03") || (cmd=="steel03"))
       retval= new XC::Steel03(tag_mat);
-    else if((cmd == "viscous") or (cmd == "viscous_material"))
+    
+    else if((cmd=="ViscousMaterial") || (cmd=="viscous") or (cmd=="viscous_material"))
       retval= new XC::ViscousMaterial(tag_mat);
-    else if(cmd == "multi_linear")
+    
+    else if((cmd=="MultiLinear") || (cmd=="multi_linear"))
       retval= new XC::MultiLinear(tag_mat);
     return retval;
   }
@@ -376,53 +429,76 @@ XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
 XC::Material *load_nD_material(int tag_mat,const std::string &cmd)
   {
     XC::Material *retval= nullptr;
-    if(cmd == "elastic_cross_anisotropic")
+    if((cmd=="ElasticCrossAnisotropic") || (cmd=="elastic_cross_anisotropic"))
       retval= new XC::ElasticCrossAnisotropic(tag_mat);
-    else if(cmd == "elastic_isotropic_3d")
+    
+    else if((cmd=="ElasticIsotropic3D") || (cmd=="elastic_isotropic_3d"))
       retval= new XC::ElasticIsotropic3D(tag_mat);
-    else if(cmd == "elastic_isotropic_plate_fiber")
+    
+    else if((cmd=="ElasticIsotropicPlateFiber") || (cmd=="elastic_isotropic_plate_fiber"))
       retval= new XC::ElasticIsotropicPlateFiber(tag_mat);
-    else if(cmd == "elastic_isotropic_plane_stress_2d")
+    
+    else if((cmd=="ElasticIsotropicPlaneStress2D") || (cmd=="elastic_isotropic_plane_stress_2d"))
       retval= new XC::ElasticIsotropicPlaneStress2D(tag_mat);
-    else if(cmd == "elastic_isotropic_plane_strain_2d")
+    
+    else if((cmd=="ElasticIsotropicPlaneStrain2D") || (cmd=="elastic_isotropic_plane_strain_2d"))
       retval= new XC::ElasticIsotropicPlaneStrain2D(tag_mat);
-    else if(cmd == "elastic_isotropic_beam_fiber")
+    
+    else if((cmd=="ElasticIsotropicBeamFiber") || (cmd=="elastic_isotropic_beam_fiber"))
       retval= new XC::ElasticIsotropicBeamFiber(tag_mat);
-    else if(cmd == "J2_axy_symm")
+    
+    else if((cmd=="J2AxiSymm") || (cmd=="J2_axy_symm"))
       retval= new XC::J2AxiSymm(tag_mat);
-    else if(cmd == "J2_plane_strain")
+    
+    else if((cmd=="J2PlaneStrain") || (cmd=="J2_plane_strain"))
       retval= new XC::J2PlaneStrain(tag_mat);
-    else if(cmd == "J2_plane_stress")
+    
+    else if((cmd=="J2PlaneStress") || (cmd=="J2_plane_stress"))
       retval= new XC::J2PlaneStress(tag_mat);
-    else if(cmd == "J2_plate_fiber")
+    
+    else if((cmd=="J2PlateFiber") || (cmd=="J2_plate_fiber"))
       retval= new XC::J2PlateFiber(tag_mat);
-    else if(cmd == "J2_plate_fibre")
+    
+    else if((cmd=="J2PlateFibre") || (cmd=="J2_plate_fibre"))
       retval= new XC::J2PlateFibre(tag_mat);
-    else if(cmd == "J2_three_dimensional")
+    
+    else if((cmd=="J2ThreeDimensional") || (cmd=="J2_three_dimensional"))
       retval= new XC::J2ThreeDimensional(tag_mat);
-    else if(cmd == "plane_stress_material")
+    
+    else if((cmd=="PlaneStressMaterial") || (cmd=="plane_stress_material"))
       retval= new XC::PlaneStressMaterial(tag_mat);
-    else if(cmd == "plate_fiber_material")
+	    
+    else if((cmd=="PlateFiberMaterial") || (cmd=="plate_fiber_material"))
       retval= new XC::PlateFiberMaterial(tag_mat);
-    else if(cmd == "pressure_dependent_elastic_3d")
+    
+    else if((cmd=="PressureDependentElastic3D") || (cmd=="pressure_dependent_elastic_3d"))
       retval= new XC::PressureDependentElastic3D(tag_mat);
-    else if(cmd == "template_3d_ep")
+    
+    else if((cmd=="Template3Dep") || (cmd=="template_3d_ep"))
       retval= new XC::Template3Dep(tag_mat);
-    else if(cmd == "drucker-prager_plane_strain")
+    
+    else if((cmd=="DruckerPragerPlaneStrain") || (cmd=="drucker-prager_plane_strain"))
       retval= new XC::DruckerPragerPlaneStrain(tag_mat);
-    else if(cmd == "drucker-prager_3d")
+    
+    else if((cmd=="DruckerPrager3D") || (cmd=="drucker-prager_3d"))
       retval= new XC::DruckerPrager3D(tag_mat);
-    else if(cmd == "initial_state_analysis_wrapper")
+    
+    else if((cmd=="InitialStateAnalysisWrapper") || (cmd=="initial_state_analysis_wrapper"))
       retval= new XC::InitialStateAnalysisWrapper(tag_mat);
-    else if(cmd == "contact_material_2d")
+    
+    else if((cmd=="ContactMaterial2D") || (cmd=="contact_material_2d"))
       retval= new XC::ContactMaterial2D(tag_mat);
-    else if(cmd == "contact_material_3d")
+    
+    else if((cmd=="ContactMaterial3D") || (cmd=="contact_material_3d"))
       retval= new XC::ContactMaterial3D(tag_mat);
-    else if(cmd == "plastic_damage_concrete_plane_stress")
+    
+    else if((cmd=="PlasticDamageConcretePlaneStress") || (cmd=="plastic_damage_concrete_plane_stress"))
       retval= new XC::PlasticDamageConcretePlaneStress(tag_mat);
-    else if(cmd == "plate_rebar")
+    
+    else if((cmd=="PlateRebarMaterial") || (cmd=="plate_rebar"))
       retval= new XC::PlateRebarMaterial(tag_mat);
-    else if(cmd == "plate_from_plane_stress")
+    
+    else if((cmd=="PlateFromPlaneStressMaterial") || (cmd=="plate_from_plane_stress"))
       retval= new XC::PlateFromPlaneStressMaterial(tag_mat);
     return retval;
   }
@@ -430,11 +506,13 @@ XC::Material *load_nD_material(int tag_mat,const std::string &cmd)
 XC::Material *load_nD_finite_deformation_material(int tag_mat,const std::string &cmd)
   {
     XC::Material *retval= nullptr;
-    if(cmd == "neo_hookean_compressible_3d")
+    if((cmd=="NeoHookeanCompressible3D") || (cmd=="neo_hookean_compressible_3d"))
       retval= new XC::NeoHookeanCompressible3D(tag_mat);
-    else if(cmd == "fd_decoupled_elastic_3d")
+    
+    else if((cmd=="FDdecoupledElastic3D") || (cmd=="fd_decoupled_elastic_3d"))
       retval= new XC::FDdecoupledElastic3D(tag_mat);
-    else if(cmd == "finite_deformation_ep_3d")
+    
+    else if((cmd=="FiniteDeformationEP3D") || (cmd=="finite_deformation_ep_3d"))
       retval= new XC::FiniteDeformationEP3D(tag_mat);
     return retval;
   }
@@ -442,11 +520,13 @@ XC::Material *load_nD_finite_deformation_material(int tag_mat,const std::string 
 XC::Material *load_nD_cyclic_soil_material(int tag_mat,const std::string &cmd)
   {
     XC::Material *retval= nullptr;
-    if(cmd == "multiaxial_cyclic_plasticity_3D")
+    if((cmd=="MultiaxialCyclicPlasticity3D") || (cmd=="multiaxial_cyclic_plasticity_3D"))
       retval= new XC::MultiaxialCyclicPlasticity3D(tag_mat);
-    else if(cmd == "multiaxial_cyclic_plasticity_axi_symm")
+    
+    else if((cmd=="MultiaxialCyclicPlasticityAxiSymm") || (cmd=="multiaxial_cyclic_plasticity_axi_symm"))
       retval= new XC::MultiaxialCyclicPlasticityAxiSymm(tag_mat);
-    else if(cmd == "multiaxial_cyclic_plasticity_plane_strain")
+    
+    else if((cmd=="MultiaxialCyclicPlasticityPlaneStrain") || (cmd=="multiaxial_cyclic_plasticity_plane_strain"))
       retval= new XC::MultiaxialCyclicPlasticityPlaneStrain(tag_mat);
     return retval;
   }
@@ -454,14 +534,18 @@ XC::Material *load_nD_cyclic_soil_material(int tag_mat,const std::string &cmd)
 XC::Material *load_nD_soil_material(int tag_mat,const std::string &cmd)
   {
     XC::Material *retval= nullptr;
-    if(cmd == "fluid_solid_porous_material")
+    if((cmd=="FluidSolidPorousMaterial") || (cmd=="fluid_solid_porous_material"))
       retval= new XC::FluidSolidPorousMaterial(tag_mat);
-    else if(cmd == "pressure_depend_multi_yield")
+    
+    else if((cmd=="PressureDependMultiYield") || (cmd=="pressure_depend_multi_yield"))
       retval= new XC::PressureDependMultiYield(tag_mat);
-    else if(cmd == "pressure_depend_multi_yield02")
+    
+    else if((cmd=="PressureDependMultiYield02") || (cmd=="pressure_depend_multi_yield02"))
       retval= new XC::PressureDependMultiYield02(tag_mat);
-    else if(cmd == "pressure_independ_multi_yield")
+    
+    else if((cmd=="PressureIndependMultiYield") || (cmd=="pressure_independ_multi_yield"))
       retval= new XC::PressureIndependMultiYield(tag_mat);
+    
     return retval;
   }
 
@@ -473,13 +557,16 @@ XC::Material *load_nD_soil_material(int tag_mat,const std::string &cmd)
 XC::Material *load_plate_section_material(int tag_mat,const std::string &cmd,XC::MaterialHandler *mhandler)
   {
     XC::Material *retval= nullptr;
-    if(cmd == "elastic_membrane_plate_section")
+    if((cmd=="ElasticMembranePlateSection") || (cmd=="elastic_membrane_plate_section"))
       retval= new XC::ElasticMembranePlateSection(tag_mat);
-    else if(cmd == "elastic_plate_section")
+    
+    else if((cmd=="ElasticPlateSection") || (cmd=="elastic_plate_section"))
       retval= new XC::ElasticPlateSection(tag_mat);
-    else if(cmd == "membrane_plate_fiber_section")
+    
+    else if((cmd=="MembranePlateFiberSection") || (cmd=="membrane_plate_fiber_section"))
       retval= new XC::MembranePlateFiberSection(tag_mat);
-    else if(cmd == "layered_shell_fiber_section")
+	    
+    else if((cmd=="LayeredShellFiberSection") || (cmd=="layered_shell_fiber_section"))
       retval= new XC::LayeredShellFiberSection(tag_mat);
     return retval;
   }
@@ -499,37 +586,52 @@ XC::Material *load_plate_section_material(int tag_mat,const std::string &cmd,XC:
 XC::Material *load_section_material(int tag_mat,const std::string &cmd,XC::MaterialHandler *mhandler)
   {
     XC::Material *retval= nullptr;
-    if(cmd == "bidirectional_section")
+    if((cmd=="Bidirectional") || (cmd=="bidirectional_section"))
       retval= new XC::Bidirectional(tag_mat);
-    else if(cmd == "elastic_section_1d")
-      retval= new XC::ElasticSection1d(tag_mat,mhandler);
-    else if(cmd == "elastic_section_2d")
-      retval= new XC::ElasticSection2d(tag_mat,mhandler);
-    else if((cmd == "elasticShearSection2d") || (cmd == "elastic_shear_section_2d"))
-      retval= new XC::ElasticShearSection2d(tag_mat,mhandler);
-    else if(cmd == "elastic_section_3d")
-      retval= new XC::ElasticSection3d(tag_mat,mhandler);
-    else if((cmd == "elasticShearSection3d")  || (cmd == "elastic_shear_section_3d"))
-      retval= new XC::ElasticShearSection3d(tag_mat,mhandler);
-    else if(cmd == "fiber_section_2d")
-      retval= new XC::FiberSection2d(tag_mat,mhandler);
-    else if(cmd == "fiberSectionShear2d" || (cmd == "fiber_section_shear_2d"))
-      retval= new XC::FiberSectionShear2d(tag_mat,mhandler);
-    else if(cmd == "fiber_section_3d")
-      retval= new XC::FiberSection3d(tag_mat,mhandler);
-    else if(cmd == "fiber_section_GJ")
-      retval= new XC::FiberSectionGJ(tag_mat,mhandler);
-    else if((cmd == "fiberSectionShear3d") || (cmd == "fiber_section_shear_3d"))
-      retval= new XC::FiberSectionShear3d(tag_mat,mhandler);
-    else if(cmd == "generic_section_1d")
+    
+    else if((cmd=="ElasticSection1d") || (cmd=="elastic_section_1d"))
+      retval= new XC::ElasticSection1d(tag_mat, mhandler);
+    
+    else if((cmd=="ElasticSection2d") || (cmd=="elastic_section_2d"))
+      retval= new XC::ElasticSection2d(tag_mat, mhandler);
+    
+    else if(((cmd=="ElasticShearSection2d") || cmd=="elasticShearSection2d") || (cmd=="elastic_shear_section_2d"))
+      retval= new XC::ElasticShearSection2d(tag_mat, mhandler);
+    
+    else if((cmd=="ElasticSection3d") || (cmd=="elastic_section_3d"))
+      retval= new XC::ElasticSection3d(tag_mat, mhandler);
+    
+    else if((cmd=="ElasticShearSection3d") || (cmd=="elasticShearSection3d") || (cmd=="elastic_shear_section_3d"))
+      retval= new XC::ElasticShearSection3d(tag_mat, mhandler);
+    
+    else if((cmd=="FiberSection2d") || (cmd=="fiber_section_2d"))
+      retval= new XC::FiberSection2d(tag_mat, mhandler);
+    
+    else if((cmd=="FiberSectionShear2d") ||(cmd=="fiberSectionShear2d") || (cmd=="fiber_section_shear_2d"))
+      retval= new XC::FiberSectionShear2d(tag_mat, mhandler);
+    
+    else if((cmd=="FiberSection3d") || (cmd=="fiber_section_3d"))
+      retval= new XC::FiberSection3d(tag_mat, mhandler);
+    
+    else if((cmd=="FiberSectionGJ") || (cmd=="fiber_section_GJ"))
+      retval= new XC::FiberSectionGJ(tag_mat, mhandler);
+    
+    else if((cmd=="FiberSectionShear3d") || (cmd=="fiberSectionShear3d") || (cmd=="fiber_section_shear_3d"))
+      retval= new XC::FiberSectionShear3d(tag_mat, mhandler);
+    
+    else if((cmd=="GenericSection1d") || (cmd=="generic_section_1d"))
       retval= new XC::GenericSection1d(tag_mat);
-    else if(cmd == "isolator2spring")
+    
+    else if((cmd=="Isolator2spring") || (cmd=="isolator2spring"))
       retval= new XC::Isolator2spring(tag_mat);
-    else if(cmd == "section_aggregator")
-      retval= new XC::SectionAggregator(tag_mat,mhandler);
-    else if(cmd == "ys_section_2d_02")
+    
+    else if((cmd=="SectionAggregator") || (cmd=="section_aggregator"))
+      retval= new XC::SectionAggregator(tag_mat, mhandler);
+	    
+    else if((cmd=="YS_Section2D02") || (cmd=="ys_section_2d_02"))
       retval= new XC::YS_Section2D02(tag_mat);
-    else if(cmd == "ys_section_2d_01")
+    
+    else if((cmd=="YS_Section2D01") || (cmd=="ys_section_2d_01"))
       retval= new XC::YS_Section2D01(tag_mat);
     return retval;
   }
@@ -537,11 +639,11 @@ XC::Material *load_section_material(int tag_mat,const std::string &cmd,XC::Mater
 XC::Material *load_yield_surf_plastic_hardening(int tag_mat,const std::string &cmd)
   {
     XC::Material *retval= nullptr;
-    if(cmd == "expon_reducing")
+    if(cmd=="expon_reducing")
       retval= new XC::ExponReducing(tag_mat);
-    else if(cmd == "multi_linear_kp")
+    else if(cmd=="multi_linear_kp")
       retval= new XC::MultiLinearKp(tag_mat);
-    else if(cmd == "null_plastic_material")
+    else if(cmd=="null_plastic_material")
       retval= new XC::NullPlasticMaterial(tag_mat);
     return retval;
   }
@@ -563,9 +665,9 @@ XC::Material *load_material(int tag_mat,const std::string &cmd,XC::MaterialHandl
     if(!retval)
       retval= load_nD_soil_material(tag_mat,cmd);
     if(!retval)
-      retval= load_section_material(tag_mat,cmd,mhandler);
+      retval= load_section_material(tag_mat,cmd, mhandler);
     if(!retval)
-      retval= load_plate_section_material(tag_mat,cmd,mhandler);
+      retval= load_plate_section_material(tag_mat,cmd, mhandler);
     if(!retval)
       retval= load_yield_surf_plastic_hardening(tag_mat,cmd);
     return retval;
@@ -906,7 +1008,7 @@ XC::Material *XC::MaterialHandler::find_ptr(const int &tag)
     Material *retval= nullptr;
     iterator i= begin();
     for(;i!= end();i++)
-      if((*i).second->getTag() == tag)
+      if((*i).second->getTag()==tag)
         {
           retval= (*i).second;
           break;
@@ -921,7 +1023,7 @@ const XC::Material *XC::MaterialHandler::find_ptr(const int &tag) const
     const Material *retval= nullptr;
     const_iterator i= begin();
     for(;i!= end();i++)
-      if((*i).second->getTag() == tag)
+      if((*i).second->getTag()==tag)
         {
           retval= (*i).second;
           break;
@@ -935,7 +1037,7 @@ std::string XC::MaterialHandler::getName(const int &tag) const
     std::string retval= "";
     const_iterator i= begin();
     for(;i!= end();i++)
-      if((*i).second->getTag() == tag)
+      if((*i).second->getTag()==tag)
         {
           retval= (*i).first;
           break;

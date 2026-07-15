@@ -51,14 +51,13 @@ materialHandler= preprocessor.getMaterialHandler
 geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
 
 reg= scc10x20.getRegion(geomRectang,"epp")
-rectang= materialHandler.newMaterial("fiber_section_3d","rectang")
-fiberSectionRepr= rectang.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(geomRectang.name)
-rectang.setupFibers()
+# Create fiber section.
+rectang= geomRectang.getFiberSection3d("rectang")
+
 fiber_section_test_macros.extractFiberSectionProperties(rectang,scc10x20, fy)
 # Define section aggregator
 sa= materialHandler.newMaterial("section_aggregator","sa")
-sa.setSection("rectang")
+sa.setSection(rectang.name)
 sa.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 # Define FE mesh.

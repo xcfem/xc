@@ -132,11 +132,9 @@ reinfTopLayer.setP1P2(geom.Pos2d(-yTopL,zTopL), geom.Pos2d(yTopL,zTopL)) # posit
 # its stress and strain state is neutral (if we ask this section for stress or strain
 # values the result is always 0)
 materialHandler= preprocessor.getMaterialHandler
-sctFibers= materialHandler.newMaterial("fiber_section_3d","sctFibers")
+# Create fiber sections.
+sctFibers= geomSectFibers.getFiberSection3d('sctFibers')
 
-fiberSectionRepr= sctFibers.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(geomSectFibers.name)
-sctFibers.setupFibers()
 
 
 # # report of the section material

@@ -93,8 +93,8 @@ class SectRegion: public DiscretBase
     double getIO(const Pos2d &o);
     Matrix &getI(void) const;
     Matrix &getI(const Pos2d &o) const;
-
-
+    
+    double getLinearRho(void) const;
 
     virtual void Print(std::ostream &s, int flag= 0) const =0;   
     friend std::ostream &operator<<(std::ostream &, const SectRegion &);

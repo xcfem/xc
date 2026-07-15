@@ -58,11 +58,7 @@ for_each_region
     print("num. cells: ",numCells)
 '''
            
-materialHandler= preprocessor.getMaterialHandler
-rectang= materialHandler.newMaterial("fiber_section_3d","rectang")
-fiberSectionRepr= rectang.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(geomRectang.name)
-rectang.setupFibers()
+rectang= geomRectang.getFiberSection3d('rectang')
 fibras= rectang.getFibers()
 
 nfibras= fibras.getNumFibers()

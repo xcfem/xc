@@ -60,17 +60,13 @@ elast.nDivIJ= nDivIJ
 elast.nDivJK= nDivJK
 elast.pMin= geom.Pos2d(y0-y1,z0-z1)
 elast.pMax= geom.Pos2d(y0+y1,z0+z1)
-rectang= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","quadFibers")
-fiberSectionRepr= rectang.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(testQuadRegion.name)
-rectang.setupFibers()
-fibras= rectang.getFibers()
+rectang= testQuadRegion.getFiberSection3d("quadFibers")
 
-# Torsion and shear responses.
+# Create section aggregation.
 materialHandler= preprocessor.getMaterialHandler
 agg= materialHandler.newMaterial("section_aggregator","agg")
 agg.setSection("quadFibers")
-agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
+agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"]) # Set the shear and torsion responses.
 
 # Elements definition
 elements= preprocessor.getElementHandler

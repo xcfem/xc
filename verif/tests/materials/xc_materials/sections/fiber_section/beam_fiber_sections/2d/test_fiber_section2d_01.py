@@ -51,12 +51,8 @@ geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
 # generation of a quadrilateral region of the scc10x20 sizes and number of
 # divisions made of material nmbMat
 reg= scc10x20.getRegion(gm=geomRectang, nmbMat= epp.name, twoDimensionalMember= True)
-rectang= preprocessor.getMaterialHandler.newMaterial("fiber_section_2d","rectang")
-
-fiberSectionRepr= rectang.getFiberSectionRepr() # Create fiber representation of the section.
-fiberSectionRepr.setGeomNamed(geomRectang.name) # Assign the geometry.
-rectang.setupFibers()
-fibers= rectang.getFibers()
+# Create fiber section.
+rectang= geomRectang.getFiberSection2d('rectang')
 
 fiber_section_test_macros.extractFiberSectionProperties(rectang,scc10x20, fy)
 curvM= 0.005

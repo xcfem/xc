@@ -55,6 +55,16 @@ class Vector;
 class Matrix;
 class CrossSectionProperties3d;
 class CrossSectionProperties2d;
+class FiberSection2d;
+class FiberSection3d;
+class FiberSectionGJ;
+class FiberSectionShear2d;
+class FiberSectionShear3d;
+class ElasticSection1d;
+class ElasticSection2d;
+class ElasticShearSection2d;
+class ElasticSection3d;
+class ElasticShearSection3d;
 
 //! @ingroup MATSCCRepres
 //!
@@ -182,6 +192,8 @@ class SectionGeometry: public SectionMassProperties
     std::set<Material *>getMaterials(void);
     boost::python::list getMaterialsPy(void);
 
+    double getLinearRho(void) const;
+
     BND2d getBnd(void) const;
     
     double getAreaGrossSection(void) const;
@@ -195,6 +207,17 @@ class SectionGeometry: public SectionMassProperties
     double getIyHomogenizedSection(const double &E0) const;
     double getIzHomogenizedSection(const double &E0) const;
     double getPyzHomogenizedSection(const double &E0) const;
+    
+    FiberSection2d *getFiberSection2d(const std::string &) const;
+    FiberSection3d *getFiberSection3d(const std::string &) const;
+    FiberSectionGJ *getFiberSectionGJ(const std::string &, const double &) const;
+    FiberSectionShear2d *getFiberSectionShear2d(const std::string &, const std::string &) const;
+    FiberSectionShear3d *getFiberSectionShear3d(const std::string &, const std::string &, const std::string &, const std::string &) const;
+    ElasticSection1d *getElasticSection1d(const std::string &, const double &, const double &) const;
+    ElasticSection2d *getElasticSection2d(const std::string &, const double &, const double &, bool) const;
+    ElasticShearSection2d *getElasticShearSection2d(const std::string &, const double &, const double &, const double &, const double &, bool) const;
+    ElasticSection3d *getElasticSection3d(const std::string &, const double &, const double &, const double &, const double &) const;
+    ElasticShearSection3d *getElasticShearSection3d(const std::string &, const double &, const double &, const double &, const double &, const double &, const double &) const;
 
     //! @brief Return a reference to the object name.
     const std::string &Name(void) const;

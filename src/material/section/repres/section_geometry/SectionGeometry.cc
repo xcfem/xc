@@ -41,7 +41,17 @@
 #include <material/section/repres/section_geometry/region/SectRegion.h>
 
 #include "material/section/repres/section_geometry/reinfLayer/ReinfLayer.h"
-
+#include "material/section/elastic_section/ElasticSection1d.h"
+#include "material/section/elastic_section/ElasticSection2d.h"
+#include "material/section/elastic_section/ElasticShearSection2d.h"
+#include "material/section/elastic_section/ElasticSection3d.h"
+#include "material/section/elastic_section/ElasticShearSection3d.h"
+#include "material/section/fiber_section/FiberSection2d.h"
+#include "material/section/fiber_section/FiberSection3d.h"
+#include "material/section/fiber_section/FiberSectionGJ.h"
+#include "material/section/fiber_section/FiberSectionShear2d.h"
+#include "material/section/fiber_section/FiberSectionShear3d.h"
+#include "material/section/repres/section/FiberSectionRepr.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include "utility/geom/pos_vec/Dir2d.h"
@@ -490,6 +500,7 @@ boost::python::list XC::SectionGeometry::getMaterialsPy(void)
   }
 
 //! @brief Return the homogenized area of the regions.
+//! @param E0: Reference elastic modulus.
 double XC::SectionGeometry::getAreaHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;
@@ -500,6 +511,8 @@ double XC::SectionGeometry::getAreaHomogenizedSection(const double &E0) const
     return retval;
   }
 
+//! @brief Return the homogenized center of mass of the regions.
+//! @param E0: reference elastic modulus.
 XC::Vector XC::SectionGeometry::getCenterOfMassHomogenizedSection(const double &E0) const
   {
     Vector retval(2);
@@ -653,6 +666,325 @@ double XC::SectionGeometry::getPyzGrossSection(void) const
     //     d2= (reinforcement_layers.getCenterOfMassGrossSection()[0]-yCenterOfMass)*(reinforcement_layers.getCenterOfMassGrossSection()[1]-zCenterOfMass);
     //     retval+= reinforcement_layers.getPyzGrossSection()+reinforcement_layers.getAreaGrossSection()*d2;
     //   }
+    return retval;
+  }
+
+//! @brief Return the linear density of this section.
+double XC::SectionGeometry::getLinearRho(void) const
+  { 
+    double retval= this->regions.getLinearRho();
+    retval+= this->reinforcement_layers.getLinearRho();
+    return retval;
+  }
+
+//! @brief Return a FiberSection2d object using the geometry from this
+//! object.
+//! @param name: name of the new fiber section object.
+XC::FiberSection2d *XC::SectionGeometry::getFiberSection2d(const std::string &name) const
+  {
+    FiberSection2d *retval= nullptr;
+    if(this->material_handler)
+      {
+	retval= dynamic_cast<FiberSection2d *>(material_handler->newMaterial("FiberSection2d", name));
+	FiberSectionRepr *fiber_section_repr= retval->getFiberSectionRepr();
+	fiber_section_repr->setGeomNamed(this->Name());
+	retval->setupFibers();	  
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no material handler available."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Return a FiberSection3d object using the geometry from this
+//! object.
+//! @param name: name of the new fiber section object.
+XC::FiberSection3d *XC::SectionGeometry::getFiberSection3d(const std::string &name) const
+  {
+    FiberSection3d *retval= nullptr;
+    if(this->material_handler)
+      {
+	retval= dynamic_cast<FiberSection3d *>(material_handler->newMaterial("FiberSection3d", name));
+	FiberSectionRepr *fiber_section_repr= retval->getFiberSectionRepr();
+	fiber_section_repr->setGeomNamed(this->Name());
+	retval->setupFibers();	  
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no material handler available."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Return a FiberSectionGJ object using the geometry from this
+//! object.
+//! @param name: name of the new fiber section object.
+//! @param gj: torsional stiffness of the returned section.
+XC::FiberSectionGJ *XC::SectionGeometry::getFiberSectionGJ(const std::string &name, const double &gj) const
+  {
+    FiberSectionGJ *retval= nullptr;
+    if(this->material_handler)
+      {
+	retval= dynamic_cast<FiberSectionGJ *>(material_handler->newMaterial("FiberSectionGJ", name));
+	retval->setGJ(gj);
+	FiberSectionRepr *fiber_section_repr= retval->getFiberSectionRepr();
+	fiber_section_repr->setGeomNamed(this->Name());
+	retval->setupFibers();
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no material handler available."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Return a FiberSectionShear2d object using the geometry from this
+//! object.
+//! @param name: name of the new fiber section object.
+//! @param respVyMatName: material name for the shear response along the y
+//!                       axis.
+XC::FiberSectionShear2d *XC::SectionGeometry::getFiberSectionShear2d(const std::string &name, const std::string &respVyMatName) const
+  {
+    FiberSectionShear2d *retval= nullptr;
+    if(this->material_handler)
+      {
+	retval= dynamic_cast<FiberSectionShear2d *>(material_handler->newMaterial("FiberSectionShear2d", name));
+	retval->setRespVyByName(respVyMatName);
+	FiberSectionRepr *fiber_section_repr= retval->getFiberSectionRepr();
+	fiber_section_repr->setGeomNamed(this->Name());
+	retval->setupFibers();
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no material handler available."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Return a FiberSectionShear3d object using the geometry from this
+//! object.
+//! @param name: name of the new fiber section object.
+//! @param respVyMatName: material name for the shear response along the y
+//!                       axis.
+//! @param respVzMatName: material name for the shear response along the z
+//!                       axis.
+//! @param respTMatName: material name for the torsion response arount the x
+//!                      axis.
+XC::FiberSectionShear3d *XC::SectionGeometry::getFiberSectionShear3d(const std::string &name, const std::string &respVyMatName, const std::string &respVzMatName, const std::string &respTMatName) const
+  {
+    FiberSectionShear3d *retval= nullptr;
+    if(this->material_handler)
+      {
+	retval= dynamic_cast<FiberSectionShear3d *>(material_handler->newMaterial("FiberSectionShear3d", name));
+	retval->setRespVyByName(respVyMatName);
+	retval->setRespVzByName(respVzMatName);
+	retval->setRespTByName(respTMatName);
+	FiberSectionRepr *fiber_section_repr= retval->getFiberSectionRepr();
+	fiber_section_repr->setGeomNamed(this->Name());
+	retval->setupFibers();
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no material handler available."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Return a ElasticSection1d object using the geometry from this
+//! object.
+//! @param name: name of the new fiber section object.
+//! @param E0: reference elastic modulus.
+//! @param Iw: warping constant.
+XC::ElasticSection1d *XC::SectionGeometry::getElasticSection1d(const std::string &name, const double &E0, const double &Iw) const
+  {
+    ElasticSection1d *retval= nullptr;
+    if(this->material_handler)
+      {
+	retval= dynamic_cast<ElasticSection1d *>(material_handler->newMaterial("ElasticSection1d", name));
+	CrossSectionProperties1d &sp= retval->getCrossSectionProperties();
+	sp.setIw(Iw);
+	const double area= this->getAreaHomogenizedSection(E0);
+	sp.setA(area);
+	const double rho= this->getLinearRho();
+	sp.setLinearRho(rho);
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no material handler available."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Return a ElasticSection2d object using the geometry from this
+//! object.
+//! @param name: name of the new fiber section object.
+//! @param E0: reference elastic modulus.
+//! @param Iw: warping constant.
+//! @param strongAxis: if true set the inertio of the strong axis for the new
+//!                    section.
+XC::ElasticSection2d *XC::SectionGeometry::getElasticSection2d(const std::string &name, const double &E0, const double &Iw, bool strongAxis) const
+  {
+    ElasticSection2d *retval= nullptr;
+    if(this->material_handler)
+      {
+	retval= dynamic_cast<ElasticSection2d *>(material_handler->newMaterial("ElasticSection2d", name));
+	CrossSectionProperties2d &sp= retval->getCrossSectionProperties();
+	sp.setIw(Iw);
+	const double area= this->getAreaHomogenizedSection(E0);
+	sp.setA(area);
+	const double iy= this->getIyHomogenizedSection(E0);
+	const double iz= this->getIyHomogenizedSection(E0);
+	if(strongAxis)
+	  sp.setI(std::max(iy, iz));
+	else
+	  sp.setI(std::min(iy, iz));
+	const double rho= this->getLinearRho();
+	sp.setLinearRho(rho);
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no material handler available."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Return a ElasticShearSection2d object using the geometry from this
+//! object.
+//! @param name: name of the new fiber section object.
+//! @param E0: reference elastic modulus.
+//! @param Iw: warping constant.
+//! @param G: shear modulus of the material.
+//! @param alpha: shear shape factor.
+//! @param strongAxis: if true set the inertio of the strong axis for the new
+//!                    section.
+XC::ElasticShearSection2d *XC::SectionGeometry::getElasticShearSection2d(const std::string &name, const double &E0, const double &Iw, const double &G, const double &alpha, bool strongAxis) const
+  {
+    ElasticShearSection2d *retval= nullptr;
+    if(this->material_handler)
+      {
+	retval= dynamic_cast<ElasticShearSection2d *>(material_handler->newMaterial("ElasticShearSection2d", name));
+	CrossSectionProperties2d &sp= retval->getCrossSectionProperties();
+	sp.setIw(Iw);
+	sp.setG(G);
+	sp.setAlpha(alpha);
+	const double area= this->getAreaHomogenizedSection(E0);
+	sp.setA(area);
+	const double iy= this->getIyHomogenizedSection(E0);
+	const double iz= this->getIyHomogenizedSection(E0);
+	if(strongAxis)
+	  sp.setI(std::max(iy, iz));
+	else
+	  sp.setI(std::min(iy, iz));
+	const double rho= this->getLinearRho();
+	sp.setLinearRho(rho);
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no material handler available."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Return a ElasticSection3d object using the geometry from this
+//! object.
+//! @param name: name of the new fiber section object.
+//! @param E0: reference elastic modulus.
+//! @param Iw: warping constant.
+//! @param G: shear modulus of the material.
+//! @param J: section torsional moment of inertia.
+XC::ElasticSection3d *XC::SectionGeometry::getElasticSection3d(const std::string &name, const double &E0, const double &Iw, const double &G, const double &J) const
+  {
+    ElasticSection3d *retval= nullptr;
+    if(this->material_handler)
+      {
+	retval= dynamic_cast<ElasticSection3d *>(material_handler->newMaterial("ElasticSection3d", name));
+	CrossSectionProperties3d &sp= retval->getCrossSectionProperties();
+	sp.setIw(Iw);
+	sp.setG(G);
+	sp.setJ(J);
+	const double area= this->getAreaHomogenizedSection(E0);
+	sp.setA(area);
+	const double iy= this->getIyHomogenizedSection(E0);
+	sp.setIy(iy);
+	const double iz= this->getIyHomogenizedSection(E0);
+	sp.setIz(iz);
+	const double pyz= this->getPyzHomogenizedSection(E0);
+	const double tol= std::max(iy, iz)*1e-6;
+	if(pyz>tol)
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; product of inertia: " << pyz << " is not zero."
+		    << Color::def << std::endl;
+	const double rho= this->getLinearRho();
+	sp.setLinearRho(rho);
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no material handler available."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Return a ElasticShearSection3d object using the geometry from this
+//! object.
+//! @param name: name of the new fiber section object.
+//! @param E0: reference elastic modulus.
+//! @param Iw: warping constant.
+//! @param G: shear modulus of the material.
+//! @param J: section torsional moment of inertia.
+//! @param alpha_y: shear shape factor on y axis.
+//! @param alpha_z: shear shape factor on z axis.
+XC::ElasticShearSection3d *XC::SectionGeometry::getElasticShearSection3d(const std::string &name, const double &E0, const double &Iw, const double &G, const double &J, const double &alpha_y, const double &alpha_z) const
+  {
+    ElasticShearSection3d *retval= nullptr;
+    if(this->material_handler)
+      {
+	retval= dynamic_cast<ElasticShearSection3d *>(material_handler->newMaterial("ElasticShearSection3d", name));
+	CrossSectionProperties3d &sp= retval->getCrossSectionProperties();
+	sp.setIw(Iw);
+	sp.setG(G);
+	sp.setJ(J);
+	sp.setAlphaY(alpha_y);
+	sp.setAlphaZ(alpha_z);
+	const double area= this->getAreaHomogenizedSection(E0);
+	sp.setA(area);
+	const double iy= this->getIyHomogenizedSection(E0);
+	sp.setIy(iy);
+	const double iz= this->getIyHomogenizedSection(E0);
+	sp.setIz(iz);
+	const double pyz= this->getPyzHomogenizedSection(E0);
+	const double tol= std::max(iy, iz)*1e-6;
+	if(pyz>tol)
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; product of inertia: " << pyz << " is not zero."
+		    << Color::def << std::endl;
+	const double rho= this->getLinearRho();
+	sp.setLinearRho(rho);
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no material handler available."
+		  << Color::def << std::endl;
+      }
     return retval;
   }
 

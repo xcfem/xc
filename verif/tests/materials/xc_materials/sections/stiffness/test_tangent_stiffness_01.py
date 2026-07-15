@@ -34,11 +34,8 @@ regEla.nDivIJ= 11
 regEla.nDivJK= 11
 regEla.pMin= geom.Pos2d(-depth/2.0,-width/2.0)
 regEla.pMax= geom.Pos2d(depth/2.0,width/2.0)
-
-scc= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","scc")
-fiberSectionRepr= scc.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(geomScc.name)
-scc.setupFibers()
+# Create fiber section.
+scc= geomScc.getFiberSection3d("scc")
 
 ts= scc.getTangentStiffness()
 EIz= ts(1,1)

@@ -49,11 +49,8 @@ rg.pMax= geom.Pos2d(y0+y1,z0+z1)
 
 
 import os
-fiberModel= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","fiberModel")
-fiberSectionRepr= fiberModel.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(geomSCC.name)
-fiberModel.setupFibers()
-fibras= fiberModel.getFibers()
+fiberModel= geomSCC.getFiberSection3d('fiberModel')
+fibers= fiberModel.getFibers()
 
 zinf= z0-z1
 zsup= z0+z1
@@ -67,7 +64,7 @@ N= fiberModel.getStressResultantComponent("N")
 Mz= fiberModel.getStressResultantComponent("Mz")
 My= fiberModel.getStressResultantComponent("My")
 
-nfiber= fibras.getNumFibers()
+nfiber= fibers.getNumFibers()
 hFiber= depth/rg.nDivJK
 IyFiber= 1/12.0*width*hFiber**3
 Iy= 1/12.0*width*depth**3

@@ -63,18 +63,17 @@ auxModulePath= pth+"/../aux"
 sys.path.append(auxModulePath)
 import test_quad_region as tqr
 
-materialHandler= preprocessor.getMaterialHandler
-quadFibers= materialHandler.newMaterial("fiber_section_3d","quadFibers")
-fiberSectionRepr= quadFibers.getFiberSectionRepr()
 testQuadRegion= tqr.get_test_quad_region(preprocessor, y0, z0, width, depth, nDivIJ, nDivJK)
-fiberSectionRepr.setGeomNamed(testQuadRegion.name)
-quadFibers.setupFibers()
+# Create fiber section.
+quadFibers= testQuadRegion.getFiberSection3d("quadFibers")
+
 A= quadFibers.getFibers().getArea(1.0)
 
+# Create section aggregator.
+materialHandler= preprocessor.getMaterialHandler
 agg= materialHandler.newMaterial("section_aggregator","agg")
 agg.setSection("quadFibers")
-agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
- # Torsion and shear responses.
+agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"]) # Set torsion and shear responses.
 
 # Elements definition
 elements= preprocessor.getElementHandler

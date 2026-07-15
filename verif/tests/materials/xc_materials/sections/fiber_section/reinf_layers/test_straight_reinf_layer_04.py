@@ -63,12 +63,9 @@ secondaryReinforcementBPositions= secondaryReinforcementB.getReinfBarsCenterPosi
 
 materialHandler= preprocessor.getMaterialHandler
 # Sections
-quadFibers= materialHandler.newMaterial("fiber_section_3d","quadFibers")
-fiberSectionRepr= quadFibers.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(quadFibersGeom.name)
-quadFibers.setupFibers()
-fibers= quadFibers.getFibers()
+quadFibers= quadFibersGeom.getFiberSection3d("quadFibers")
 
+# fibers= quadFibers.getFibers()
 # nfibers= fibers.getNumFibers()
 # sumAreas= fibers.getArea(1.0)
 # Iz= fibers.getIz(1.0,y0)

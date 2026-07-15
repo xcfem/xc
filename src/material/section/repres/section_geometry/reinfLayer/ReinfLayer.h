@@ -113,7 +113,9 @@ class ReinfLayer: public DiscretBase
 
     //! @brief Return the area of the bars.
     inline double getArea(void) const
-      { return this->area*this->nReinfBars; }
+      { return this->area*this->nReinfBars; }   
+    double getLinearRho(void) const;
+    
     virtual std::vector<Pos2d> getReinfBarsCenterPositions(void) const;
     boost::python::list getReinfBarsCenterPositionsPy(void) const;
     VectorReinfBar &getReinfBars(void);  

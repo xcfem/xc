@@ -65,11 +65,8 @@ reinforcementSup.barArea= areaFi10
 reinforcementSup.p1= geom.Pos2d(rebarsOffset-width/2.0,depth/2.0-cover)
 reinforcementSup.p2= geom.Pos2d(width/2.0-rebarsOffset,depth/2.0-cover)
 
-materialHandler= preprocessor.getMaterialHandler
-secHA= materialHandler.newMaterial("fiber_section_3d","secHA")
-fiberSectionRepr= secHA.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(geomSecHA.name)
-secHA.setupFibers()
+# Create fiber section.
+secHA= geomSecHA.getFiberSection3d("secHA")
 
 zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, secHA.name)
 

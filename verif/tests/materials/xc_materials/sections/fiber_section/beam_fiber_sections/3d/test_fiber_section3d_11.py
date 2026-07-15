@@ -40,11 +40,8 @@ if(not pth):
 sys.path.append(pth+"/../../../../../../aux/sections/")
 import concrete_section_01
 concreteSectionGeom01= concrete_section_01.gmSecHA01(preprocessor, nmbGeomSecc="concreteSectionGeom01",defSec= concrete_section_01.defSec,concrDiagName= EHE_materials.HA25.getDDiagName(),reinfSteelDiagramName= EHE_materials.B500S.getDDiagName())
-materialHandler= preprocessor.getMaterialHandler
-secHA= materialHandler.newMaterial("fiber_section_3d","secHA")
-fiberSectionRepr= secHA.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(concreteSectionGeom01.name)
-secHA.setupFibers()
+# Create fiber section.
+secHA= concreteSectionGeom01.getFiberSection3d('secHA')
 
 zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, secHA.name)
 

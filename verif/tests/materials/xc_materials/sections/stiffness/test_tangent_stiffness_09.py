@@ -78,11 +78,10 @@ steelRegion.nDivIJ= nDivIJ
 steelRegion.nDivJK= nDivJK
 steelRegion.pMin= geom.Pos2d(y0-y1,z0-z1)
 steelRegion.pMax= geom.Pos2d(y0+y1,z0+z1)
-quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_GJ","quadFibers")
-fiberSectionRepr= quadFibers.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(quadFibersGeom.name)
-quadFibers.setupFibers()
-quadFibers.setGJ(947003076.9230773)
+# Create fiber section.
+GJ= 947003076.9230773
+quadFibers= quadFibersGeom.getFiberSectionGJ("quadFibers", GJ)
+
 fibers= quadFibers.getFibers()
 A= fibers.getArea
 

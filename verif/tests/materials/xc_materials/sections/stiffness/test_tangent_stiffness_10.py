@@ -95,14 +95,8 @@ steelRegion.nDivIJ= nDivIJ
 steelRegion.nDivJK= nDivJK
 steelRegion.pMin= geom.Pos2d(y0-y1,z0-z1)
 steelRegion.pMax= geom.Pos2d(y0+y1,z0+z1)
-quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_shear_3d","quadFibers")
-fiberSectionRepr= quadFibers.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(quadFibersGeom.name)
-quadFibers.setupFibers()
-fibers= quadFibers.getFibers()
-quadFibers.setRespVyByName(respVy.name) # Set shear response in y direction.
-quadFibers.setRespVzByName(respVz.name) # Set shear response in z direction.
-quadFibers.setRespTByName(respT.name) # Set torsion response.
+# Create fiber section and set shear and torsional response.
+quadFibers= quadFibersGeom.getFiberSectionShear3d("quadFibers", respVy.name, respVz.name, respT.name)
 
 err= compare_values(material= steel, rectSection= rectangularSection, xcSection= quadFibers, GAy= GAy, GAz= GAz)
 

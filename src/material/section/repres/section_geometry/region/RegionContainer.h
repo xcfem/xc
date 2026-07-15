@@ -112,6 +112,8 @@ class RegionContainer: protected std::list<SectRegion *>, public SectionMassProp
     double getIyHomogenizedSection(const double &E0) const;
     double getIzHomogenizedSection(const double &E0) const;
     double getPyzHomogenizedSection(const double &E0) const;
+    
+    double getLinearRho(void) const;
 
     void Print(std::ostream &s) const;
   };

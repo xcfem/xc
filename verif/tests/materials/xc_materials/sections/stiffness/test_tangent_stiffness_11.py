@@ -64,11 +64,8 @@ steelRegion.nDivIJ= 1 # 2D discretization
 steelRegion.nDivJK= nDiv # number of cells in JK direction
 steelRegion.pMin= geom.Pos2d(z0-z1,y0-y1)
 steelRegion.pMax= geom.Pos2d(z0+z1,y0+y1)
-quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_2d","quadFibers")
-fiberSectionRepr= quadFibers.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(quadFibersGeom.name)
-quadFibers.setupFibers()
-fibers= quadFibers.getFibers()
+# Create fiber section.
+quadFibers= quadFibersGeom.getFiberSection2d("quadFibers")
 
 rectangularSection= section_properties.RectangularSection(name= 'test', b= b, h= h)
 

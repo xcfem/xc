@@ -40,11 +40,8 @@ sys.path.append(pth+"/../../../../../../aux/sections/")
 import prestressed_concrete_section_02
 geomSecPret02= prestressed_concrete_section_02.gmSecHP02(preprocessor, "prestressedConcretSectionGeom02",EHE_materials.HP45.getDDiagName(),EHE_materials.B500S.getDDiagName(),EHE_materials.Y1860S7.getDDiagName())
 
-materialHandler= preprocessor.getMaterialHandler
-secHP= materialHandler.newMaterial("fiber_section_3d","secHP")
-fiberSectionRepr= secHP.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed(geomSecPret02.name)
-secHP.setupFibers()
+# Create fiber section.
+secHP= geomSecPret02.getFiberSection3d("secHP")
 
 elem= zlElement, nodA, nodB= scc3d_testing_bench.section_model(preprocessor, secHP.name)
 

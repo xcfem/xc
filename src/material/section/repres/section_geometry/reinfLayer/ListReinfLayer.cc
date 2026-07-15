@@ -474,6 +474,18 @@ double XC::ListReinfLayer::getPyzGrossSection(void) const
     return retval;
   }
 
+//! @brief Return the linear density of the regions in this container.
+double XC::ListReinfLayer::getLinearRho(void) const
+  { 
+    double retval= 0.0;
+    for(const_iterator i= begin();i!=end();i++)
+      {
+	const ReinfLayer *reinfLayer= *i;
+	retval+= reinfLayer->getLinearRho();
+      }
+    return retval;
+  }
+
 void XC::ListReinfLayer::Print(std::ostream &os) const
   {
     for(const_iterator i= begin();i!=end();i++)

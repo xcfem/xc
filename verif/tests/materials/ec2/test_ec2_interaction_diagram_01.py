@@ -60,16 +60,10 @@ reinforcement.radius= concrete.extRad-cover # radius.
 
 # Fiber section definition
 ## Create fiber-section object.
-materialHandler= preprocessor.getMaterialHandler
-secHA= materialHandler.newMaterial("fiber_section_3d","secHA")
-fiberSectionRepr= secHA.getFiberSectionRepr()
-## Assign geometry.
-fiberSectionRepr.setGeomNamed(columnGeometry.name)
-## Create fibers from the geometry data.
-secHA.setupFibers()
-#fibers= secHA.getFibers()
+secHA= columnGeometry.getFiberSection3d("secHA")
 
 # Create interaction diagram.
+materialHandler= preprocessor.getMaterialHandler
 interactionDiagram= concrete_base.createInteractionDiagram(materialHandler, concrDiagram, steelDiagram, secHA)
 
 # Compute capacity factor.
