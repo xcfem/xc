@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Build an irregular pier section and check the values of its mass properties.
+''' Test getElasticSection3d method. Irregular section.
+    
+Check that the returned values for mass properties by the ElasticSection3d
+object are correct.
 '''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"

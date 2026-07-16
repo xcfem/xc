@@ -1413,6 +1413,7 @@ python tests/materials/xc_materials/sections/section_geom/test_mass_properties_0
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_06.py
 python tests/materials/xc_materials/sections/section_geom/test_modify_section_properties.py
 python tests/materials/xc_materials/sections/section_geom/test_get_elastic_section_01.py
+python tests/materials/xc_materials/sections/section_geom/test_get_elastic_section_02.py
 python tests/materials/xc_materials/sections/section_geom/test_get_elastic_section_03.py
 
 echo "$BLEU" "      Cross-sections region tests." "$NORMAL"
