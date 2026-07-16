@@ -2,8 +2,6 @@
 ''' Check the methods that return the mass properties of the section.Section
 with reinforcement.'''
 
-from __future__ import print_function
-
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"

@@ -27,10 +27,15 @@ d= 0.57 # Effective depth.
 diamBar= 22e-3 # Rebar diameter.
 areaBar= math.pi*(diamBar/2)**2 # Rebars area.
 
+# Define FE problem.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
+
+# Define materials.
 concrete= typical_materials.defElasticMaterial(preprocessor, 'concrete',Ec)
 steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
+
+# Define section geometry.
 sectionGeometryTest= preprocessor.getMaterialHandler.newSectionGeometry("sectionGeometryTest")
 regions= sectionGeometryTest.getRegions
 
@@ -54,6 +59,7 @@ area= sectionProperties.A
 Iy= sectionProperties.Iy
 Iz= sectionProperties.Iz
 
+# Check results.
 areaTeor= b*hf+(d-hf)*bw+n*5*areaBar
 izTeor= 0.0081
 iyTeor= 0.0073

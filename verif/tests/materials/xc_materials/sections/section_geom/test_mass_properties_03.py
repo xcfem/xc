@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Example taken from the page 258 of the book "Hormiǵon Armado. Jiménez Montoya (14a. edición) (url={https://books.google.ch/books?id=JWggPwAACAAJ}).
 '''
-import geom
-import xc
-from model import predefined_spaces
-from materials import typical_materials
-import math
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import geom
+import xc
+from model import predefined_spaces
+from materials import typical_materials
+import math
 
 Es= 2.1e11
 n= 7.365
@@ -24,10 +24,15 @@ d= 0.57 # Effective depth.
 diamBar= 22e-3 # Rebar diameter.
 areaBar= math.pi*(diamBar/2)**2 # Rebars area.
 
+# Create problem.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
+
+# Create materials.
 concrete= typical_materials.defElasticMaterial(preprocessor, 'concrete',Ec)
 steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
+
+# Define section geometry.
 sectionGeometryTest= preprocessor.getMaterialHandler.newSectionGeometry("sectionGeometryTest")
 
 regions= sectionGeometryTest.getRegions
@@ -44,7 +49,7 @@ reinforcementA.numReinfBars= 5
 reinforcementA.barArea= areaBar
 reinforcementA.setP1P2(geom.Pos2d(0.0,b/2-bw/2+0.05), geom.Pos2d(0.0,b/2+bw/2-0.05))
 
-
+# Check results.
 area= sectionGeometryTest.getAreaHomogenizedSection(Ec)
 G= sectionGeometryTest.getCenterOfMassHomogenizedSection(Ec)
 Iy= sectionGeometryTest.getIyHomogenizedSection(Ec)
