@@ -1,3 +1,7 @@
-Elements to modelize different types of bearings: elastomeric, pendulum, flat sliders.
+# Friction bearings.
+This elements to modelize different types of bearings: elastomeric, pendulum, flat sliders.
 
-THERE ARE ENHANCED VERSIONS OF THOSE ELEMENTS IN OpenSeed -> Migrate those to XC.
+THERE ARE ENHANCED VERSIONS OF THOSE ELEMENTS IN OpenSees -> Migrate those to XC.
+
+## References.
+- [Single Friction Pendulum Bearing Element](https://opensees.berkeley.edu/wiki/index.php/Single_Friction_Pendulum_Bearing_Element)
