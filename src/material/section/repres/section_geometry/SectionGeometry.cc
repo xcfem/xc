@@ -930,11 +930,7 @@ XC::ElasticSection3d *XC::SectionGeometry::getElasticSection3d(const std::string
 	const double iz= this->getIzHomogenizedSection(E0);
 	sp.setIz(iz);
 	const double pyz= this->getPyzHomogenizedSection(E0);
-	const double tol= std::max(iy, iz)*1e-6;
-	if(pyz>tol)
-	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		    << "; product of inertia: " << pyz << " is not zero."
-		    << Color::def << std::endl;
+	sp.setIyz(pyz);
 	const double rho= this->getLinearRho();
 	sp.setLinearRho(rho);
       }
@@ -976,11 +972,7 @@ XC::ElasticShearSection3d *XC::SectionGeometry::getElasticShearSection3d(const s
 	const double iz= this->getIzHomogenizedSection(E0);
 	sp.setIz(iz);
 	const double pyz= this->getPyzHomogenizedSection(E0);
-	const double tol= std::max(iy, iz)*1e-6;
-	if(pyz>tol)
-	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		    << "; product of inertia: " << pyz << " is not zero."
-		    << Color::def << std::endl;
+	sp.setIyz(pyz);
 	const double rho= this->getLinearRho();
 	sp.setLinearRho(rho);
       }
