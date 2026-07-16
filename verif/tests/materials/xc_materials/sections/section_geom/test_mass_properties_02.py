@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# Home made test
+''' Check the methods that return the mass properties of the section.Section
+with reinforcement.'''
 
 from __future__ import print_function
 
