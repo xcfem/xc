@@ -63,7 +63,7 @@
 //
 // What: "@(#) VDependentFriction.h, revA"
 
-#include "CoulombFriction.h"
+#include "Coulomb.h"
 
 namespace XC {
 //! @ingroup FrictionModelGrp
@@ -73,7 +73,7 @@ namespace XC {
 //! steel surface. For a detailed presentation on the velocity dependence
 //! of such interfaces please refer to Constantinou et al. (1999).
 //! <a href="https://www.researchgate.net/publication/276269723_Property_modification_factors_seismic_isolation_bearings">Property modification factors seismic isolation bearings.</a>
-class VDependentFriction: public CoulombFriction
+class VDependentFriction: public Coulomb
   {
   protected:
     double muSlow; //!< coefficient of friction at low velocity

@@ -314,7 +314,7 @@
 #define ELE_TAG_BeamContact3D       6115
 #define ELE_TAG_BeamContact2D       6117
 
-#define FRN_TAG_CoulombFriction     1
+#define FRN_TAG_Coulomb     1
 #define FRN_TAG_VDependentFriction  2
 #define FRN_TAG_VPDependentFriction 3
 

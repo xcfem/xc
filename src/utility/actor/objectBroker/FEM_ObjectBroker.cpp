@@ -871,8 +871,8 @@ XC::FrictionModel *XC::FEM_ObjectBroker::getNewFrictionModel(int classTag)
   {
     switch(classTag)
       {
-      case FRN_TAG_CoulombFriction:
-        return new CoulombFriction();
+      case FRN_TAG_Coulomb:
+        return new Coulomb();
       case FRN_TAG_VDependentFriction:
         return new VDependentFriction();
       case FRN_TAG_VPDependentFriction:

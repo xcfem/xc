@@ -207,7 +207,7 @@
 #include "material/damage/NormalizedPeak.h"
 
 // friction models
-#include "domain/mesh/element/special/frictionBearing/frictionModel/CoulombFriction.h"
+#include "domain/mesh/element/special/frictionBearing/frictionModel/Coulomb.h"
 #include "domain/mesh/element/special/frictionBearing/frictionModel/VDependentFriction.h"
 #include "domain/mesh/element/special/frictionBearing/frictionModel/VPDependentFriction.h"
 

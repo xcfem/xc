@@ -25,9 +25,9 @@ class_<XC::FrictionResponse, bases<XC::Response>, boost::noncopyable >("Friction
 
 class_<XC::FrictionModel , bases<XC::TaggedObject>, boost::noncopyable >("FrictionModel", no_init);
 
-class_<XC::CoulombFriction, bases<XC::FrictionModel>, boost::noncopyable >("CoulombFriction", no_init);
+class_<XC::Coulomb, bases<XC::FrictionModel>, boost::noncopyable >("Coulomb", no_init);
 
-class_<XC::VDependentFriction, bases<XC::CoulombFriction>, boost::noncopyable >("VDependentFriction", no_init);
+class_<XC::VDependentFriction, bases<XC::Coulomb>, boost::noncopyable >("VDependentFriction", no_init);
 
 class_<XC::VPDependentFriction, bases<XC::VDependentFriction>, boost::noncopyable >("VPDependentFriction", no_init);
 

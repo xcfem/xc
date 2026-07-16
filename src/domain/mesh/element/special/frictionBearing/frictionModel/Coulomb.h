@@ -47,20 +47,20 @@
 
 // $Revision: 1.1 $
 // $Date: 2009/04/17 23:02:41 $
-// $Source: element/special/frictionBearing/frictionModel/CoulombFriction.h,v $
+// $Source: element/special/frictionBearing/frictionModel/Coulomb.h,v $
 
-#ifndef CoulombFriction_h
-#define CoulombFriction_h         
+#ifndef Coulomb_h
+#define Coulomb_h         
 
 // Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
 // Created: 02/06
 // Revision: A
 //
-// Description: This file contains the class definition for the CoulombFriction
-// friction model. In the CoulombFriction model the friction force is given by
+// Description: This file contains the class definition for the Coulomb
+// friction model. In the Coulomb model the friction force is given by
 // mu*N, where mu is a constant coefficient of friction.
 //
-// What: "@(#) CoulombFriction.h, revA"
+// What: "@(#) Coulomb.h, revA"
 
 #include "FrictionModel.h"
 
@@ -69,7 +69,7 @@ namespace XC {
 //
 //! @brief "Coulomb friction" model object. Coulomb's Law of Friction
 //! states that kinetic friction is independent of the sliding velocity. 
-class CoulombFriction: public FrictionModel
+class Coulomb: public FrictionModel
   {
   protected:
     double mu; //!< coefficient of friction
@@ -78,8 +78,8 @@ class CoulombFriction: public FrictionModel
     int recvData(const Communicator &);
   public:
     // constructor
-    CoulombFriction(int classTag= FRN_TAG_CoulombFriction);
-    CoulombFriction(int tag, double mu,int classTag= FRN_TAG_CoulombFriction);
+    Coulomb(int classTag= FRN_TAG_Coulomb);
+    Coulomb(int tag, double mu,int classTag= FRN_TAG_Coulomb);
     
     // public methods to set and obtain response
     int setTrial(double normalForce, double velocity = 0.0);

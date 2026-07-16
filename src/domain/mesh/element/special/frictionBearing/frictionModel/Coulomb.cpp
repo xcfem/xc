@@ -20,38 +20,38 @@
 
 // $Revision: 1.1 $
 // $Date: 2009/04/17 23:02:41 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/special/frictionBearing/frictionModel/CoulombFriction.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/special/frictionBearing/frictionModel/Coulomb.cpp,v $
 
 // Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
 // Created: 02/06
 // Revision: A
 //
 // Description: This file contains the class implementation for the
-// CoulombFriction friction model.
+// Coulomb friction model.
 
-#include "CoulombFriction.h"
+#include "Coulomb.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "utility/matrix/ID.h"
 
 
-XC::CoulombFriction::CoulombFriction(int classTag)
+XC::Coulomb::Coulomb(int classTag)
   : FrictionModel(0, classTag),  mu(0.0) {}
 
 
-XC::CoulombFriction::CoulombFriction (int tag, double _mu, int classTag)
+XC::Coulomb::Coulomb(int tag, double _mu, int classTag)
   : FrictionModel(tag, classTag), mu(_mu)
   {
     if(mu <= 0.0)
       {
-        std::cerr << "CoulombFriction::CoulombFriction - "
+        std::cerr << "Coulomb::Coulomb - "
             << "the friction coefficient has to be positive\n";
         exit(-1);
       }
   }
 
 
-int XC::CoulombFriction::setTrial(double normalForce, double velocity)
+int XC::Coulomb::setTrial(double normalForce, double velocity)
   {	
     trialN   = normalForce;
     trialVel = velocity;  
@@ -59,7 +59,7 @@ int XC::CoulombFriction::setTrial(double normalForce, double velocity)
   }
 
 
-double XC::CoulombFriction::getFrictionForce(void)
+double XC::Coulomb::getFrictionForce(void)
   {
     if(trialN > 0.0)
       return mu*trialN;
@@ -68,7 +68,7 @@ double XC::CoulombFriction::getFrictionForce(void)
   }
 
 
-double XC::CoulombFriction::getFrictionCoeff(void)
+double XC::Coulomb::getFrictionCoeff(void)
   {
     if(trialN > 0.0)
       return mu;
@@ -77,7 +77,7 @@ double XC::CoulombFriction::getFrictionCoeff(void)
   }
 
 
-double XC::CoulombFriction::getDFFrcDNFrc(void)
+double XC::Coulomb::getDFFrcDNFrc(void)
   {
     if(trialN > 0.0)
       return mu;
@@ -86,20 +86,20 @@ double XC::CoulombFriction::getDFFrcDNFrc(void)
   }
 
 
-int XC::CoulombFriction::commitState(void)
+int XC::Coulomb::commitState(void)
   { return 0; }
 
 
-int XC::CoulombFriction::revertToLastCommit(void)
+int XC::Coulomb::revertToLastCommit(void)
   { return 0; }
 
 
-XC::FrictionModel* XC::CoulombFriction::getCopy(void) const
-  { return new CoulombFriction(*this); }
+XC::FrictionModel* XC::Coulomb::getCopy(void) const
+  { return new Coulomb(*this); }
 
 
 //! @brief Send data through the communicator argument.
-int XC::CoulombFriction::sendData(Communicator &comm)
+int XC::Coulomb::sendData(Communicator &comm)
   {
     int res= FrictionModel::sendData(comm);
     res+= comm.sendDouble(mu,getDbTagData(),CommMetaData(2));
@@ -108,14 +108,14 @@ int XC::CoulombFriction::sendData(Communicator &comm)
 
 
 //! @brief Receive data through the communicator argument.
-int XC::CoulombFriction::recvData(const Communicator &comm)
+int XC::Coulomb::recvData(const Communicator &comm)
   {
     int res= FrictionModel::recvData(comm);
     res+= comm.receiveDouble(mu,getDbTagData(),CommMetaData(2));
     return res;
   }
 
-int XC::CoulombFriction::sendSelf(Communicator &comm)
+int XC::Coulomb::sendSelf(Communicator &comm)
   {
     inicComm(3);
   
@@ -124,31 +124,31 @@ int XC::CoulombFriction::sendSelf(Communicator &comm)
     const int dbTag= getDbTag();
     res+= comm.sendIdData(getDbTagData(),dbTag);
     if(res < 0)
-      std::cerr << "CoulombFriction::sendSelf - failed to send data.\n";
+      std::cerr << "Coulomb::sendSelf - failed to send data.\n";
     return res;
   }
 
 
-int XC::CoulombFriction::recvSelf(const Communicator &comm)
+int XC::Coulomb::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     
     const int dbTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dbTag);
     if(res<0)
-      std::cerr << "CoulombFriction::recvSelf - failed to receive ids.\n";
+      std::cerr << "Coulomb::recvSelf - failed to receive ids.\n";
     else
       {
         res+= recvData(comm);
         if(res<0)
-           std::cerr << "CoulombFriction::recvSelf - failed to receive data.\n";
+           std::cerr << "Coulomb::recvSelf - failed to receive data.\n";
       }
     return res;
   }
 
 
-void XC::CoulombFriction::Print(std::ostream  &s, int flag) const
+void XC::Coulomb::Print(std::ostream  &s, int flag) const
   {
-    s << "CoulombFriction tag: " <<  getTag() << std::endl;
+    s << "Coulomb tag: " <<  getTag() << std::endl;
     s << "  mu: " << mu << std::endl;
   }

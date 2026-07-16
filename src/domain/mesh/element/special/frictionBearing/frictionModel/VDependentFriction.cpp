@@ -35,11 +35,11 @@
 #include "utility/actor/actor/MovableVector.h"
 
 XC::VDependentFriction::VDependentFriction(int classTag)
-  : CoulombFriction(0,classTag), muSlow(0.0), muFast(0.0), transRate(0.0) {}
+  : Coulomb(0,classTag), muSlow(0.0), muFast(0.0), transRate(0.0) {}
 
 
 XC::VDependentFriction::VDependentFriction(int tag, double muslow, double mufast, double transrate, int classTag)
-    : CoulombFriction(tag, classTag), muSlow(muslow), muFast(mufast), transRate(transrate)
+    : Coulomb(tag, classTag), muSlow(muslow), muFast(mufast), transRate(transrate)
   {
     if(muSlow <= 0.0  || muFast <= 0.0)
       {
@@ -52,7 +52,7 @@ XC::VDependentFriction::VDependentFriction(int tag, double muslow, double mufast
 
 int XC::VDependentFriction::setTrial(double normalForce, double velocity)
   {	
-    CoulombFriction::setTrial(normalForce,velocity);    
+    Coulomb::setTrial(normalForce,velocity);    
     mu = muFast - (muFast-muSlow)*exp(-transRate*fabs(trialVel));
     return 0;
   }
@@ -69,7 +69,7 @@ double XC::VDependentFriction::getDFFrcDNFrc(void)
 
 int XC::VDependentFriction::revertToStart(void)
   {
-    CoulombFriction::revertToStart();
+    Coulomb::revertToStart();
     mu= 0.0;    
     return 0;
   }
@@ -81,7 +81,7 @@ XC::FrictionModel *XC::VDependentFriction::getCopy(void) const
 //! @brief Send data through the communicator argument.
 int XC::VDependentFriction::sendData(Communicator &comm)
   {
-    int res= CoulombFriction::sendData(comm);
+    int res= Coulomb::sendData(comm);
     res+= comm.sendDoubles(muSlow,muFast,transRate,getDbTagData(),CommMetaData(3));
     return res;
   }
@@ -90,7 +90,7 @@ int XC::VDependentFriction::sendData(Communicator &comm)
 //! @brief Receive data through the communicator argument.
 int XC::VDependentFriction::recvData(const Communicator &comm)
   {
-    int res= CoulombFriction::recvData(comm);
+    int res= Coulomb::recvData(comm);
     res+= comm.receiveDoubles(muSlow,muFast,transRate,getDbTagData(),CommMetaData(3));
     return res;
   }
