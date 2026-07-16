@@ -813,6 +813,7 @@ XC::ElasticSection1d *XC::SectionGeometry::getElasticSection1d(const std::string
       {
 	retval= dynamic_cast<ElasticSection1d *>(material_handler->newMaterial("ElasticSection1d", name));
 	CrossSectionProperties1d &sp= retval->getCrossSectionProperties();
+	sp.setE(E0);
 	sp.setIw(Iw);
 	const double area= this->getAreaHomogenizedSection(E0);
 	sp.setA(area);
@@ -842,11 +843,12 @@ XC::ElasticSection2d *XC::SectionGeometry::getElasticSection2d(const std::string
       {
 	retval= dynamic_cast<ElasticSection2d *>(material_handler->newMaterial("ElasticSection2d", name));
 	CrossSectionProperties2d &sp= retval->getCrossSectionProperties();
+	sp.setE(E0);
 	sp.setIw(Iw);
 	const double area= this->getAreaHomogenizedSection(E0);
 	sp.setA(area);
 	const double iy= this->getIyHomogenizedSection(E0);
-	const double iz= this->getIyHomogenizedSection(E0);
+	const double iz= this->getIzHomogenizedSection(E0);
 	if(strongAxis)
 	  sp.setI(std::max(iy, iz));
 	else
@@ -879,13 +881,14 @@ XC::ElasticShearSection2d *XC::SectionGeometry::getElasticShearSection2d(const s
       {
 	retval= dynamic_cast<ElasticShearSection2d *>(material_handler->newMaterial("ElasticShearSection2d", name));
 	CrossSectionProperties2d &sp= retval->getCrossSectionProperties();
+	sp.setE(E0);
 	sp.setIw(Iw);
 	sp.setG(G);
 	sp.setAlpha(alpha);
 	const double area= this->getAreaHomogenizedSection(E0);
 	sp.setA(area);
 	const double iy= this->getIyHomogenizedSection(E0);
-	const double iz= this->getIyHomogenizedSection(E0);
+	const double iz= this->getIzHomogenizedSection(E0);
 	if(strongAxis)
 	  sp.setI(std::max(iy, iz));
 	else
@@ -916,6 +919,7 @@ XC::ElasticSection3d *XC::SectionGeometry::getElasticSection3d(const std::string
       {
 	retval= dynamic_cast<ElasticSection3d *>(material_handler->newMaterial("ElasticSection3d", name));
 	CrossSectionProperties3d &sp= retval->getCrossSectionProperties();
+	sp.setE(E0);
 	sp.setIw(Iw);
 	sp.setG(G);
 	sp.setJ(J);
@@ -923,7 +927,7 @@ XC::ElasticSection3d *XC::SectionGeometry::getElasticSection3d(const std::string
 	sp.setA(area);
 	const double iy= this->getIyHomogenizedSection(E0);
 	sp.setIy(iy);
-	const double iz= this->getIyHomogenizedSection(E0);
+	const double iz= this->getIzHomogenizedSection(E0);
 	sp.setIz(iz);
 	const double pyz= this->getPyzHomogenizedSection(E0);
 	const double tol= std::max(iy, iz)*1e-6;
@@ -959,6 +963,7 @@ XC::ElasticShearSection3d *XC::SectionGeometry::getElasticShearSection3d(const s
       {
 	retval= dynamic_cast<ElasticShearSection3d *>(material_handler->newMaterial("ElasticShearSection3d", name));
 	CrossSectionProperties3d &sp= retval->getCrossSectionProperties();
+	sp.setE(E0);
 	sp.setIw(Iw);
 	sp.setG(G);
 	sp.setJ(J);
@@ -968,7 +973,7 @@ XC::ElasticShearSection3d *XC::SectionGeometry::getElasticShearSection3d(const s
 	sp.setA(area);
 	const double iy= this->getIyHomogenizedSection(E0);
 	sp.setIy(iy);
-	const double iz= this->getIyHomogenizedSection(E0);
+	const double iz= this->getIzHomogenizedSection(E0);
 	sp.setIz(iz);
 	const double pyz= this->getPyzHomogenizedSection(E0);
 	const double tol= std::max(iy, iz)*1e-6;
