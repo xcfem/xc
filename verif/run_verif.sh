@@ -2180,6 +2180,7 @@ python tests/postprocess/report/test_latex_report_rc_section.py
 python tests/postprocess/report/test_pdf_report_rc_section.py
 python tests/postprocess/report/test_rc_section_report_generator.py
 python tests/postprocess/report/test_pot_bearing_report_01.py
+python tests/postprocess/report/test_plot_fiber_section_results.py
 
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)
