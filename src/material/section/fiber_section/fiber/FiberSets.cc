@@ -27,7 +27,6 @@
 //FiberSets.cc
 
 #include "FiberSets.h"
-#include "utility/actor/actor/MovableMap.h"
 #include "utility/geom/d2/2d_polygons/Polygon2d.h"
 
 //! @brief Constructor.
