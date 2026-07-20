@@ -510,7 +510,9 @@ XC::FeapMaterial::invokeSubroutine(int isw)
   this->fillDArray();
 
   // Fill in the common blocks
-  const double dt= FEProblem::theActiveDomain->getTimeTracker().getDt();  // From G3Globals.h
+  // get global timestep variable.
+  const Domain *theDomain= this->getDomain();
+  const double dt= theDomain->getDt(); //time step
   int niter = 1;    // Need to count the number of global iterations!
   feapcommon_(&dt, &niter);
 
