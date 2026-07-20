@@ -257,7 +257,9 @@ void XC::J2Plasticity::Print( std::ostream &s, int flag ) const
 void XC::J2Plasticity::plastic_integrator( )
   {
     const double tolerance= (1.0e-8)*sigma_0;
-    const double dt= FEProblem::theActiveDomain->getTimeTracker().getDt(); //time step
+    // get global timestep variable.
+    const Domain *theDomain= this->getDomain();
+    const double dt= theDomain->getDt(); //time step
 
     static Matrix dev_strain(tDim,tDim); //deviatoric strain
     static Matrix dev_stress(tDim,tDim); //deviatoric stress
