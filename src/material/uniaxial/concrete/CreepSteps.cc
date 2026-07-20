@@ -27,9 +27,10 @@
 
 #include "material/uniaxial/concrete/CreepSteps.h" //Changed by AMK
 #include "material/uniaxial/concrete/ConcreteHistoryVars.h"
+#include "FEProblem.h"
 
 int XC::CreepSteps::creepControl= 0;
-double XC::CreepSteps::creepDt= 0.0;
+double XC::CreepSteps::creepDt= FEProblem::getDt(); //time step.
 
 //! @brief Resize the vectors that store the creep history.
 std::size_t XC::CreepSteps::resize(void)
