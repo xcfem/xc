@@ -1,3 +1,29 @@
+//----------------------------------------------------------------------------
+//  XC program; finite element analysis code
+//  for structural analysis and design.
+//
+//  Copyright (C)  Luis C. Pérez Tato
+//
+//  This program derives from OpenSees <http://opensees.berkeley.edu>
+//  developed by the  «Pacific earthquake engineering research center».
+//
+//  Except for the restrictions that may arise from the copyright
+//  of the original program (see copyright_opensees.txt)
+//  XC is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or 
+//  (at your option) any later version.
+//
+//  This software is distributed in the hope that it will be useful, but 
+//  WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details. 
+//
+//
+// You should have received a copy of the GNU General Public License 
+// along with this program.
+// If not, see <http://www.gnu.org/licenses/>.
+//----------------------------------------------------------------------------
 /* ****************************************************************** **
 **    OpenSees - Open System for Earthquake Engineering Simulation    **
 **          Pacific Earthquake Engineering Research Center            **
@@ -48,6 +74,9 @@ XC::Coulomb::Coulomb(int tag, double _mu, int classTag)
             << "the friction coefficient has to be positive\n";
         exit(-1);
       }
+     
+    // initialize variables
+    this->revertToStart();
   }
 
 
@@ -59,7 +88,7 @@ int XC::Coulomb::setTrial(double normalForce, double velocity)
   }
 
 
-double XC::Coulomb::getFrictionForce(void)
+double XC::Coulomb::getFrictionForce(void) const
   {
     if(trialN > 0.0)
       return mu*trialN;
@@ -68,7 +97,11 @@ double XC::Coulomb::getFrictionForce(void)
   }
 
 
-double XC::Coulomb::getFrictionCoeff(void)
+double XC::Coulomb::getFrictionCoeff(void) const
+  { return mu; }
+
+
+double XC::Coulomb::getDFFrcDNFrc(void) const
   {
     if(trialN > 0.0)
       return mu;
@@ -76,14 +109,8 @@ double XC::Coulomb::getFrictionCoeff(void)
       return 0.0;
   }
 
-
-double XC::Coulomb::getDFFrcDNFrc(void)
-  {
-    if(trialN > 0.0)
-      return mu;
-    else
-      return 0.0;
-  }
+double XC::Coulomb::getDFFrcDVel(void) const
+  { return 0.0; }
 
 
 int XC::Coulomb::commitState(void)
@@ -92,7 +119,6 @@ int XC::Coulomb::commitState(void)
 
 int XC::Coulomb::revertToLastCommit(void)
   { return 0; }
-
 
 XC::FrictionModel* XC::Coulomb::getCopy(void) const
   { return new Coulomb(*this); }

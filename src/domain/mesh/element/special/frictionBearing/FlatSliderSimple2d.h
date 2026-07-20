@@ -61,15 +61,11 @@
 // simplified version uses small angle approximations and accounts for the
 // rotation of the sliding surface by shifting the shear force.
 
-#include "FrictionElementBase.h"
+#include "SimpleBearingBase.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 
 namespace XC {
-class Channel;
-class FrictionModel;
-class UniaxialMaterial;
-class Response;
 
 //! @ingroup FrictionElementGrp
 //
@@ -93,33 +89,39 @@ class Response;
 //! nodal geometry unless the optional x-axis vector is specified in which
 //! case the nodal geometry is ignored and the user-defined orientation
 //! is utilized. 
-class FlatSliderSimple2d: public FrictionElementBase
+class FlatSliderSimple2d: public SimpleBearingBase
   {
   private:    
     // state variables
-    double ubPlastic;   // plastic displacement in basic system
+    double ubPlastic; //!< plastic displacement in basic system
     
     // committed history variables
-    double ubPlasticC;  // plastic displacement in basic system
+    double ubPlasticC; //!< plastic displacement in basic system
     
     static Matrix theMatrix;
     static Vector theVector;
     // private methods
     void setUp();
-    double sgn(double x);
+  protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
+    void initializeStiffnessMatrix(void);
+    void initialize(void);
   public:
     // constructors
-    FlatSliderSimple2d(int tag, int Nd1, int Nd2,FrictionModel &theFrnMdl, double uy,
-		       const std::vector<UniaxialMaterial *> &theMaterials,
+    FlatSliderSimple2d(int tag, int Nd1, int Nd2,
+		       const FrictionModel &theFrnMdl, double kInit,
+		       const std::vector<UniaxialMaterial *> &,
 		       const Vector y= Vector(), const Vector x= Vector(),
-        double mass = 0.0, int maxIter = 20, double tol = 1E-8);
+		       const double &sdI= 0.0, const int &addRay= 0,
+		       const double &mass = 0.0,
+		       const int &maxIter = 20,
+		       const double &tol= 1E-8,
+		       const double &kFactUplift= 1E-12);
     FlatSliderSimple2d();
     
     // public methods to obtain information about dof & connectivity    
     const ID &getExternalNodes() const;
-    int getNumDOF();
     void setDomain(Domain *theDomain);
     
     // public methods to set the state of the element    
@@ -129,9 +131,10 @@ class FlatSliderSimple2d: public FrictionElementBase
     int update();
     
     // public methods to obtain stiffness, mass, damping and residual information    
-    const Matrix &getTangentStiff();
-    const Matrix &getInitialStiff();
-    const Matrix &getMass();
+    const Matrix &getTangentStiff() const;
+    const Matrix &getInitialStiff() const;
+    const Matrix &getDamp() const;
+    const Matrix &getMass() const;
     
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
@@ -142,7 +145,6 @@ class FlatSliderSimple2d: public FrictionElementBase
     // public methods for element output
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
-    int displaySelf(Renderer &theViewer, int displayMode, float fact);    
     void Print(std::ostream &s, int flag = 0) const;    
     
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);

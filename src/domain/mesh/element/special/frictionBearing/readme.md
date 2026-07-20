@@ -5,3 +5,4 @@ THERE ARE ENHANCED VERSIONS OF THOSE ELEMENTS IN OpenSees -> Migrate those to XC
 
 ## References.
 - [Single Friction Pendulum Bearing Element](https://opensees.berkeley.edu/wiki/index.php/Single_Friction_Pendulum_Bearing_Element)
+- [Elastomeric Bearing (Plasticity) Element](https://opensees.berkeley.edu/wiki/index.php/Elastomeric_Bearing_(Plasticity)_Element)

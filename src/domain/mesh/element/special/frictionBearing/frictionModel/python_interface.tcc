@@ -27,9 +27,12 @@ class_<XC::FrictionModel , bases<XC::TaggedObject>, boost::noncopyable >("Fricti
 
 class_<XC::Coulomb, bases<XC::FrictionModel>, boost::noncopyable >("Coulomb", no_init);
 
-class_<XC::VDependentFriction, bases<XC::Coulomb>, boost::noncopyable >("VDependentFriction", no_init);
+class_<XC::VelDependent, bases<XC::Coulomb>, boost::noncopyable >("VelDependent", no_init);
 
-class_<XC::VPDependentFriction, bases<XC::VDependentFriction>, boost::noncopyable >("VPDependentFriction", no_init);
+class_<XC::VelPressureDep, bases<XC::VelDependent>, boost::noncopyable >("VelPressureDep", no_init);
 
+class_<XC::VelNormalFrcDep, bases<XC::Coulomb>, boost::noncopyable >("VelNormalFrcDep", no_init);
+
+class_<XC::VelDepMultiLinear, bases<XC::Coulomb>, boost::noncopyable >("VelDepMultiLinear", no_init);
 
 

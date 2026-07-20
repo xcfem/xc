@@ -94,11 +94,12 @@ class FrictionModel: public TaggedObject, public MovableObject
     
     // public methods to set and obtain response
     virtual int setTrial(double normalForce, double velocity = 0.0) = 0;
-    virtual double getNormalForce(void);
-    virtual double getVelocity(void);
-    virtual double getFrictionForce(void) = 0;
-    virtual double getFrictionCoeff(void) = 0;
-    virtual double getDFFrcDNFrc(void) = 0;
+    virtual double getNormalForce(void) const;
+    virtual double getVelocity(void) const;
+    virtual double getFrictionForce(void) const= 0;
+    virtual double getFrictionCoeff(void) const= 0;
+    virtual double getDFFrcDNFrc(void) const= 0;
+    virtual double getDFFrcDVel() const= 0;
     
     virtual int commitState(void) = 0;
     virtual int revertToLastCommit(void) = 0;
@@ -107,8 +108,12 @@ class FrictionModel: public TaggedObject, public MovableObject
     virtual FrictionModel *getCopy(void) const=0;
     
     virtual Response *setResponse(const std::vector<std::string> &, Information &);
-    virtual int getResponse(int responseID, Information &info);
+    virtual int getResponse(int responseID, Information &info) const;
   };
+  
+int sendFrictionModelPtr(FrictionModel *,int posClassTag, int posDbTag,DbTagData &,Communicator &);
+FrictionModel *receiveFrictionModelPtr(FrictionModel *,int posClassTag, int posDbTag,DbTagData &,const Communicator &);
+  
 } // end of XC namespace
 
 #endif

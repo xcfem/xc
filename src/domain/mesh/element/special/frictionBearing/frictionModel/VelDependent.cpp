@@ -20,45 +20,65 @@
 
 // $Revision: 1.1 $
 // $Date: 2009/04/17 23:02:41 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/special/frictionBearing/frictionModel/VDependentFriction.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/special/frictionBearing/frictionModel/VelDependent.cpp,v $
 
 // Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
 // Created: 02/06
 // Revision: A
 //
 // Description: This file contains the class implementation for the
-// VDependentFriction friction model.
+// VelDependent friction model.
 
-#include "VDependentFriction.h"
+#include "VelDependent.h"
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableVector.h"
 
-XC::VDependentFriction::VDependentFriction(int classTag)
-  : Coulomb(0,classTag), muSlow(0.0), muFast(0.0), transRate(0.0) {}
+XC::VelDependent::VelDependent(int classTag)
+  : Coulomb(0,classTag),
+    muSlow(0.0), muFast(0.0), transRate(0.0), DmuDvel(0.0) {}
 
 
-XC::VDependentFriction::VDependentFriction(int tag, double muslow, double mufast, double transrate, int classTag)
-    : Coulomb(tag, classTag), muSlow(muslow), muFast(mufast), transRate(transrate)
+XC::VelDependent::VelDependent(int tag, double muslow, double mufast, double transrate, int classTag)
+    : Coulomb(tag, classTag),
+      muSlow(muslow), muFast(mufast), transRate(transrate), DmuDvel(0.0)
   {
+    // check that COF are positive and not zero
     if(muSlow <= 0.0  || muFast <= 0.0)
       {
-        std::cerr << "VDependentFriction::VDependentFriction - "
-            << "the friction coefficients have to be positive\n";
+        std::cerr << "VelDependent::VelDependent - "
+		  << "the friction coefficients have to be positive."
+	        << std::endl;
+        exit(-1);
+      }
+    // check that transRate is positive
+    if (transRate < 0.0)
+      {
+	std::cerr << "VelDependent::VelDependent - "
+		  << "the transition rate has to be positive."
+		  << std::endl;
         exit(-1);
       }
   }
 
 
-int XC::VDependentFriction::setTrial(double normalForce, double velocity)
+int XC::VelDependent::setTrial(double normalForce, double velocity)
   {	
     Coulomb::setTrial(normalForce,velocity);    
-    mu = muFast - (muFast-muSlow)*exp(-transRate*fabs(trialVel));
+    // get COF for given trial velocity
+    const double temp = (muFast-muSlow)*exp(-transRate*fabs(trialVel));
+    mu= muFast - temp;
+    // get derivative of COF wrt velocity
+    if(trialVel != 0.0)
+        DmuDvel = transRate*trialVel/fabs(trialVel)*temp;
+    else
+        DmuDvel = 0.0;
+
     return 0;
   }
 
 
-double XC::VDependentFriction::getDFFrcDNFrc(void)
+double XC::VelDependent::getDFFrcDNFrc(void) const
   {
     if (trialN > 0.0)
         return mu;
@@ -66,37 +86,46 @@ double XC::VDependentFriction::getDFFrcDNFrc(void)
         return 0.0;
   }
 
+double XC::VelDependent::getDFFrcDVel(void) const
+  {
+    if (trialN > 0.0)
+        return DmuDvel*trialN;
+    else
+        return 0.0;
+  }
 
-int XC::VDependentFriction::revertToStart(void)
+
+int XC::VelDependent::revertToStart(void)
   {
     Coulomb::revertToStart();
-    mu= 0.0;    
+    this->mu= muSlow;
+    this->DmuDvel= 0.0;
     return 0;
   }
 
 
-XC::FrictionModel *XC::VDependentFriction::getCopy(void) const
-  { return new VDependentFriction(*this); }
+XC::FrictionModel *XC::VelDependent::getCopy(void) const
+  { return new VelDependent(*this); }
 
 //! @brief Send data through the communicator argument.
-int XC::VDependentFriction::sendData(Communicator &comm)
+int XC::VelDependent::sendData(Communicator &comm)
   {
     int res= Coulomb::sendData(comm);
-    res+= comm.sendDoubles(muSlow,muFast,transRate,getDbTagData(),CommMetaData(3));
+    res+= comm.sendDoubles(muSlow,muFast,transRate, DmuDvel, getDbTagData(),CommMetaData(3));
     return res;
   }
 
 
 //! @brief Receive data through the communicator argument.
-int XC::VDependentFriction::recvData(const Communicator &comm)
+int XC::VelDependent::recvData(const Communicator &comm)
   {
     int res= Coulomb::recvData(comm);
-    res+= comm.receiveDoubles(muSlow,muFast,transRate,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveDoubles(muSlow,muFast,transRate, DmuDvel, getDbTagData(),CommMetaData(3));
     return res;
   }
 
 
-int XC::VDependentFriction::sendSelf(Communicator &comm)
+int XC::VelDependent::sendSelf(Communicator &comm)
   {
     inicComm(4);
   
@@ -105,32 +134,32 @@ int XC::VDependentFriction::sendSelf(Communicator &comm)
     const int dbTag= getDbTag();
     res+= comm.sendIdData(getDbTagData(),dbTag);
     if(res < 0)
-      std::cerr << "VDependentFriction::sendSelf - failed to send data.\n";
+      std::cerr << "VelDependent::sendSelf - failed to send data.\n";
     return res;
   }
 
 
-int XC::VDependentFriction::recvSelf(const Communicator &comm)
+int XC::VelDependent::recvSelf(const Communicator &comm)
   {
     inicComm(4);
     
     const int dbTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dbTag);
     if(res<0)
-      std::cerr << "VDependentFriction::recvSelf - failed to receive ids.\n";
+      std::cerr << "VelDependent::recvSelf - failed to receive ids.\n";
     else
       {
         res+= recvData(comm);
         if(res<0)
-           std::cerr << "VDependentFriction::recvSelf - failed to receive data.\n";
+           std::cerr << "VelDependent::recvSelf - failed to receive data.\n";
       }
     return res;
   }
 
 
-void XC::VDependentFriction::Print(std::ostream &s, int flag) const
+void XC::VelDependent::Print(std::ostream &s, int flag) const
   {
-    s << "VDependentFriction tag: " << this->getTag() << std::endl;
+    s << "VelDependent tag: " << this->getTag() << std::endl;
     s << "  muSlow: " << muSlow << std::endl;
     s << "  muFast: " << muFast << std::endl;
     s << "  transRate: " << transRate << std::endl;

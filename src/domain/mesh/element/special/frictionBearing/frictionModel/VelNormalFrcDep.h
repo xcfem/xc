@@ -45,59 +45,67 @@
 **                                                                    **
 ** ****************************************************************** */
 
-// $Revision: 1.1 $
-// $Date: 2009/04/17 23:02:41 $
-// $Source: element/special/frictionBearing/frictionModel/Coulomb.h,v $
+// $Revision$
+// $Date$
+// $URL$
 
-#ifndef Coulomb_h
-#define Coulomb_h         
+#ifndef VelNormalFrcDep_h
+#define VelNormalFrcDep_h
 
-// Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
-// Created: 02/06
+// Developed: Nhan D. Dao (nhan.unr@gmail.com)
+// Written: Andreas Schellenberg (andreas.schellenberg@gmail.com)
+// Created: 08/14
 // Revision: A
 //
-// Description: This file contains the class definition for the Coulomb
-// friction model. In the Coulomb model the friction force is given by
-// mu*N, where mu is a constant coefficient of friction.
-//
-// What: "@(#) Coulomb.h, revA"
+// Description: This file contains the class definition for the VelNormalFrcDep
+// friction model after Dao et al. (2013). In the velocity and normal force
+// dependent friction model the friction force is given in terms of the friction
+// coefficients at low and high velocities with both of them being a function of
+// the normal force. If the normal force N is negative the friction force is zero.
 
-#include "FrictionModel.h"
+#include "Coulomb.h"
 
 namespace XC {
 //! @ingroup FrictionModelGrp
 //
-//! @brief "Coulomb friction" model object. Coulomb's Law of Friction
-//! states that kinetic friction is independent of the sliding velocity. 
-class Coulomb: public FrictionModel
+class VelNormalFrcDep : public Coulomb
   {
+  private:
+    double aSlow;      // constant for slow COF
+    double nSlow;      // normal force exponent for slow COF (nSlow <= 0)
+    double aFast;      // constant for fast COF
+    double nFast;      // normal force exponent for fast COF (nFast <= 0)
+    double alpha0;     // constant rate parameter
+    double alpha1;     // linear rate parameter
+    double alpha2;     // quadratic rate parameter
+    double maxMuFact;  // factor for determining the maximum friction coefficients
+    
+    double DmuDn;      // derivative of COF wrt to normal force
+    double DmuDvel;    // derivative of COF wrt to velocity
   protected:
-    double mu; //!< coefficient of friction
-
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
     // constructor
-    Coulomb(int classTag= FRN_TAG_Coulomb);
-    Coulomb(int tag, double mu,int classTag= FRN_TAG_Coulomb);
+    VelNormalFrcDep();
+    VelNormalFrcDep(int tag,
+        double aSlow, double nSlow, double aFast, double nFast,
+        double alpha0, double alpha1, double alpha2, double maxMuFact);
     
     // public methods to set and obtain response
     int setTrial(double normalForce, double velocity = 0.0);
-    double getFrictionForce(void) const;
-    double getFrictionCoeff(void) const;
-    double getDFFrcDNFrc(void) const;
+    double getDFFrcDNFrc() const;
     double getDFFrcDVel() const;
     
-    int commitState(void);
-    int revertToLastCommit(void);
+    int revertToStart();
     
-    FrictionModel *getCopy(void) const;
+    FrictionModel *getCopy();
     
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
     
-    void Print(std::ostream &s, int flag = 0) const;
-};
+    void Print(std::ostream &, int flag = 0) const;
+  };
 } // end of XC namespace
 
 #endif

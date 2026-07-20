@@ -47,57 +47,63 @@
 
 // $Revision: 1.1 $
 // $Date: 2009/04/17 23:02:41 $
-// $Source: element/special/frictionBearing/frictionModel/Coulomb.h,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/special/frictionBearing/frictionModel/VelPressureDep.h,v $
 
-#ifndef Coulomb_h
-#define Coulomb_h         
+#ifndef VelPressureDep_h
+#define VelPressureDep_h         
 
 // Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
 // Created: 02/06
 // Revision: A
 //
-// Description: This file contains the class definition for the Coulomb
-// friction model. In the Coulomb model the friction force is given by
-// mu*N, where mu is a constant coefficient of friction.
+// Description: This file contains the class definition for the VelPressureDep
+// friction model after Constantinou et al. (1996). In the velocity and pressure
+// dependent friction model the friction force is given in terms of the friction
+// coefficients at low and high velocities with the latter one being a function of
+// pressure.
 //
-// What: "@(#) Coulomb.h, revA"
+// What: "@(#) VelPressureDep.h, revA"
 
-#include "FrictionModel.h"
+#include "VelDependent.h"
 
 namespace XC {
 //! @ingroup FrictionModelGrp
 //
-//! @brief "Coulomb friction" model object. Coulomb's Law of Friction
-//! states that kinetic friction is independent of the sliding velocity. 
-class Coulomb: public FrictionModel
+//! @brief Velocity an pressure dependent friction model.
+//!
+//! References:
+//! - Tsopelas P., and Constantinou M. C. (1996). "Experimental Study of FPS System in Bridge Seismic Isolation." Earthquake Eng. and Structural Dynamics, VOL. 25, 65-78.
+//! - Constantinou M. C., Tsopelas P., Kasalanati A., and Wolff E. D. (1999). Property Modification Factors for Seismic Isolation Bearings. Technical Report MCEER-99-0012, University of Buffalo, Buffalo, New York. 
+class VelPressureDep: public VelDependent
   {
+  private:
+    double A; //!< nominal contact area.
+    double deltaMu; //!< pressure parameter.
+    double alpha; //!< pressure parameter.
+    double DmuDn; //!< derivative of COF wrt to normal force.
+    inline const double &muFast0(void) const
+      { return muFast; }
   protected:
-    double mu; //!< coefficient of friction
-
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
     // constructor
-    Coulomb(int classTag= FRN_TAG_Coulomb);
-    Coulomb(int tag, double mu,int classTag= FRN_TAG_Coulomb);
+    VelPressureDep(void);
+    VelPressureDep(int tag, double muSlow, double muFast0, double A,
+        double deltaMu, double alpha, double transRate);
+    FrictionModel *getCopy(void) const;
     
     // public methods to set and obtain response
     int setTrial(double normalForce, double velocity = 0.0);
-    double getFrictionForce(void) const;
-    double getFrictionCoeff(void) const;
-    double getDFFrcDNFrc(void) const;
-    double getDFFrcDVel() const;
+    double getDFFrcDNFrc(void);
     
-    int commitState(void);
-    int revertToLastCommit(void);
-    
-    FrictionModel *getCopy(void) const;
+    int revertToStart();
     
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;
-};
+  };
 } // end of XC namespace
 
 #endif

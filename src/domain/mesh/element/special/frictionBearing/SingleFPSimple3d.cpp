@@ -1,3 +1,29 @@
+//----------------------------------------------------------------------------
+//  XC program; finite element analysis code
+//  for structural analysis and design.
+//
+//  Copyright (C)  Luis C. Pérez Tato
+//
+//  This program derives from OpenSees <http://opensees.berkeley.edu>
+//  developed by the  «Pacific earthquake engineering research center».
+//
+//  Except for the restrictions that may arise from the copyright
+//  of the original program (see copyright_opensees.txt)
+//  XC is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or 
+//  (at your option) any later version.
+//
+//  This software is distributed in the hope that it will be useful, but 
+//  WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details. 
+//
+//
+// You should have received a copy of the GNU General Public License 
+// along with this program.
+// If not, see <http://www.gnu.org/licenses/>.
+//----------------------------------------------------------------------------
 /* ****************************************************************** **
 **    OpenSees - Open System for Earthquake Engineering Simulation    **
 **          Pacific Earthquake Engineering Research Center            **
@@ -35,81 +61,119 @@
 #include "domain/mesh/node/Node.h"
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "utility/recorder/response/ElementResponse.h"
-#include "frictionModel/FrictionModel.h"
 #include "material/uniaxial/UniaxialMaterial.h"
+#include "domain/component/Parameter.h"
 
 
 // initialize the class wide variables
 XC::Matrix XC::SingleFPSimple3d::theMatrix(12,12);
 XC::Vector XC::SingleFPSimple3d::theVector(12);
 
-
-XC::SingleFPSimple3d::SingleFPSimple3d(int tag, int Nd1, int Nd2,const FrictionModel &thefrnmdl,const double &r, const double &_h,const double &_uy,const std::vector<UniaxialMaterial *> &materials,const Vector &_y, const Vector &_x,const double &m, const int &maxiter, const double &_tol)
-  : FrictionElementBase(tag, ELE_TAG_SingleFPSimple3d,Nd1,Nd2,6,thefrnmdl,materials,_uy,_x,_y,m,maxiter,tol),
-    R(r), h(_h), Reff(0.0), ubPlastic(2), ubPlasticC(2)
+//! @brief Initialize initial stiffness matrix.
+void XC::SingleFPSimple3d::initializeStiffnessMatrix(void)
   {
-    load.reset(12);
-    assert(materials.size()==4);
-
     // initialize initial stiffness matrix
     kbInit.Zero();
     kbInit(0,0) = physicalProperties[0]->getInitialTangent();
-    kbInit(1,1) = kbInit(0,0)*DBL_EPSILON;
-    kbInit(2,2) = kbInit(1,1);
+    kbInit(1,1) = kbInit(2,2) = this->kInit();
     kbInit(3,3) = physicalProperties[1]->getInitialTangent();
     kbInit(4,4) = physicalProperties[2]->getInitialTangent();
     kbInit(5,5) = physicalProperties[3]->getInitialTangent();
-    
-    // initialize other variables
-    this->revertToStart();
   }
 
+//! @brief Initialize element state after changint the value of its materials,
+//! or the k0 member.
+void XC::SingleFPSimple3d::initialize(void)
+  {
+    this->numDOF= 12;
+    //! Check the material vector size.
+    assert(materials.size()==4);
+    // Initialize initial stiffness matrix.
+    this->initializeStiffnessMatrix();
+    
+    // Initialize other variables.
+    revertToStart();
+  }
 
+//! @brief Constructor.
+XC::SingleFPSimple3d::SingleFPSimple3d(int tag, int Nd1, int Nd2,
+				       const FrictionModel &thefrnmdl,
+				       const double &reff,const double &kinit,
+				       const std::vector<UniaxialMaterial *> &materials,
+				       const Vector &_y, const Vector &_x,
+				       const double &sDistI, const int &addRay,
+				       int vert, const double &m,
+				       const int &maxiter, const double &_tol,
+				       const double &kfactuplift)
+  : SimpleBearingBase(tag, ELE_TAG_SingleFPSimple3d,Nd1,Nd2,6,
+		      FrictionModels(thefrnmdl), kinit,
+		      materials, _y, _x,
+		      sDistI, addRay,
+		      m,
+		      maxiter,
+		      _tol,
+		      kfactuplift),
+    Reff(reff), inclVertDisp(vert), ubPlastic(2), ubPlasticC(2)
+  {
+    this->initialize();
+    load.reset(this->numDOF);
+  }
+
+//! @brief Default constructor.
 XC::SingleFPSimple3d::SingleFPSimple3d()
-    : FrictionElementBase(ELE_TAG_SingleFPSimple3d,6),
-    R(0.0), h(0.0), Reff(0.0), ubPlastic(2), ubPlasticC(2) {load.reset(12);}
-
-
-int XC::SingleFPSimple3d::getNumDOF() 
-  { return 12; }
+  : SimpleBearingBase(ELE_TAG_SingleFPSimple3d,6),
+    Reff(0.0), inclVertDisp(0), ubPlastic(2), ubPlasticC(2)
+  {
+    this->numDOF= 12;
+    load.reset(this->numDOF);
+  }
 
 
 void XC::SingleFPSimple3d::setDomain(Domain *theDomain)
   {
-    FrictionElementBase::setDomain(theDomain);
+    if(theDomain)
+      {
+	SimpleBearingBase::setDomain(theDomain);
 
-    // now determine the number of dof and the dimension    
-    const int dofNd1 = theNodes[0]->getNumberDOF();
-    const int dofNd2 = theNodes[1]->getNumberDOF();	
-	
+	// now determine the number of dof and the dimension    
+	const int dofNd1 = theNodes[0]->getNumberDOF();
+	const int dofNd2 = theNodes[1]->getNumberDOF();	
+
 	// if differing dof at the ends - print a warning message
-    if(dofNd1 != 6)
-      {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; node 1: has incorrect number of DOF (not 6)\n";
-	return;
+	if(dofNd1 != 6)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; node 1: "
+		      << theNodes[0]->getTag()
+		      << " has incorrect number of DOF (not 6)."
+		      << std::endl;
+	    return;
+	  }
+	if(dofNd2 != 6)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; node 2: "
+		      << theNodes[1]->getTag()
+		      << " has incorrect number of DOF (not 6)."
+		      << std::endl;
+	    return;
+	  }
+
+	// set up the transformation matrix for orientation
+	this->setUp();
+
+	// length from center of dish to pivot point
+	// Reff = R - h;
       }
-    if(dofNd2 != 6)
-      {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; node 2: has incorrect number of DOF (not 6)\n";
-	return;
-      }
-	
-    // set up the transformation matrix for orientation
-    this->setUp();
-    
-    // length from center of dish to pivot point
-    Reff = R - h;
   }
 
 
 int XC::SingleFPSimple3d::commitState()
   {
-    int errCode = 0;
+    int errCode= this->SimpleBearingBase::commitState(); // commit the base class.
     
-    ubPlasticC = ubPlastic; // commit trial history variables
-    errCode+= theFrnMdl->commitState(); // commit friction model
+    ubPlasticC = ubPlastic; // commit trial history variables.
+    errCode+= this->frictionModels.commitState(); // commit friction model
     
     errCode+= physicalProperties.commitState();// commit material models
     return errCode;
@@ -118,8 +182,9 @@ int XC::SingleFPSimple3d::commitState()
 
 int XC::SingleFPSimple3d::revertToLastCommit()
   {
-    int errCode = 0;
-    errCode+= theFrnMdl->revertToLastCommit();// revert friction model
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
+    int errCode = this->frictionModels.revertToLastCommit();// revert friction model
     errCode+= physicalProperties.revertToLastCommit();// revert material models
     return errCode;
   }
@@ -127,7 +192,7 @@ int XC::SingleFPSimple3d::revertToLastCommit()
 
 int XC::SingleFPSimple3d::revertToStart()
   {   
-    int errCode=0;
+    int errCode= SimpleBearingBase::revertToStart();
     
     // reset trial history variables
     ub.Zero();
@@ -141,7 +206,7 @@ int XC::SingleFPSimple3d::revertToStart()
     kb = kbInit;
     
     // revert friction model
-    errCode+= theFrnMdl->revertToStart();
+    errCode+= this->frictionModels.revertToStart();
     
     
     errCode+= physicalProperties.revertToStart();// revert material models
@@ -158,111 +223,138 @@ int XC::SingleFPSimple3d::update(void)
     const Vector &vel2 = theNodes[1]->getTrialVel();
     
     static Vector ug(12), ugdot(12), uldot(12), ubdot(6);
-    for (int i=0; i<6; i++)  {
+    for(int i=0; i<6; i++)
+      {
         ug(i)   = dsp1(i);  ugdot(i)   = vel1(i);
         ug(i+6) = dsp2(i);  ugdot(i+6) = vel2(i);
-    }
+      }
     
     // transform response from the global to the local system
-    ul = Tgl*ug;
-    uldot = Tgl*ugdot;
+    ul.addMatrixVector(0.0, Tgl, ug, 1.0);
+    uldot.addMatrixVector(0.0, Tgl, ugdot, 1.0);
     
     // transform response from the local to the basic system
-    ub = Tlb*ul;
-    ubdot = Tlb*uldot;
+    ub.addMatrixVector(0.0, Tlb, ul, 1.0);
+    ubdot.addMatrixVector(0.0, Tlb, uldot, 1.0);
     
     // get radii in basic y- and z-direction
-    double Ry = sqrt(pow(Reff,2) - pow(ub(2),2));
-    double Rz = sqrt(pow(Reff,2) - pow(ub(1),2));
+    const double Ry = sqrt(pow(Reff,2) - pow(ub(2),2));
+    const double Rz = sqrt(pow(Reff,2) - pow(ub(1),2));
     
     // get absolute velocity
-    double ubdotAbs = sqrt(pow(ubdot(1)/Ry*ub(1) + 
+    const double ubdotAbs = sqrt(pow(ubdot(1)/Ry*ub(1) + 
         ubdot(2)/Rz*ub(2),2) + pow(ubdot(1),2) + pow(ubdot(2),2));
     
     // 1) get axial force and stiffness in basic x-direction
-    double ub0Old = physicalProperties[0]->getStrain();
-    physicalProperties[0]->setTrialStrain(ub(0),ubdot(0));
+    const double ub0Old = physicalProperties[0]->getStrain();
+    if (inclVertDisp == 0)
+      {
+        physicalProperties[0]->setTrialStrain(ub(0), ubdot(0));
+      }
+    else
+      {
+        const double ubVert = Reff - sqrt(pow(Reff,2) - pow(ub(1),2) - pow(ub(2),2));
+        physicalProperties[0]->setTrialStrain(ub(0)-ubVert, ubdot(0));
+      }
     qb(0) = physicalProperties[0]->getStress();
     kb(0,0) = physicalProperties[0]->getTangent();
     
     // check for uplift
-    if (qb(0) >= 0.0)  {
-        kb = kbInit;
-        if (qb(0) > 0.0)  {
-            physicalProperties[0]->setTrialStrain(ub0Old,0.0);
-            kb(0,0) *= DBL_EPSILON;
-        }
+    if (qb(0) >= 0.0)
+      {
+        // update plastic displacements
+        ubPlastic(0) = ub(1);
+        ubPlastic(1) = ub(2);
+        // set basic forces
         qb.Zero();
+        // set tangent stiffnesses
+        kb = kbInit;
+        if (qb(0) > 0.0)
+	  {
+            physicalProperties[0]->setTrialStrain(ub0Old, 0.0);
+            kb = kFactUplift*kbInit;  // kb = DBL_EPSILON*kbInit;
+            //opserr << "WARNING: SingleFPSimple3d::update() - element: "
+            //    << this->getTag() << " - uplift encountered, scaling "
+            //    << "stiffness matrix by: " << kFactUplift << endln;
+	  }
         return 0;
-    }
+      }
     
     // 2) calculate shear forces and stiffnesses in basic y- and z-direction
     int iter = 0;
     Vector qbOld(2);
+    FrictionModel *theFrnMdl= this->frictionModels[0];
     do  {
         // save old shear forces
+        iter++;
         qbOld(0) = qb(1);
         qbOld(1) = qb(2);
         
         // get normal and friction (yield) forces
         double N = -qb(0) + qb(1)/Ry*ub(1) + qb(2)/Rz*ub(2)
-                 - qb(1)*ul(5) + qb(2)*ul(4);
+            - qb(1)*ul(5) + qb(2)*ul(4);
+        N = N > 0.0 ? N : 0.0;  // can not be negative
         theFrnMdl->setTrial(N, ubdotAbs);
-        double qYield = (theFrnMdl->getFrictionForce());
+        const double qYield = (theFrnMdl->getFrictionForce());
         
         // get stiffnesses of elastic components
-        double k2y = N/Ry;
-        double k2z = N/Rz;
+        const double k2y = N/Ry;
+        const double k2z = N/Rz;
+        
         // get initial stiffnesses of hysteretic component
-        double k0 = qYield/uy;
+        const double k0y = this->kInit() - k2y;
+        const double k0z = this->kInit() - k2z;
         
         // get trial shear forces of hysteretic component
         Vector qTrial(2);
-        qTrial(0) = k0*(ub(1) - ubPlasticC(0));
-        qTrial(1) = k0*(ub(2) - ubPlasticC(1));
+        qTrial(0) = k0y*(ub(1) - ubPlasticC(0));
+        qTrial(1) = k0z*(ub(2) - ubPlasticC(1));
         
         // compute yield criterion of hysteretic component
-        double qTrialNorm = qTrial.Norm();
-        double Y = qTrialNorm - qYield;
+        const double qTrialNorm = qTrial.Norm();
+        const double Y = qTrialNorm - qYield;
         
         // elastic step -> no updates required
-        if (Y <= 0.0)  {
+        if (Y <= 0.0)
+	  {
             // set shear forces
             qb(1) = qTrial(0) + k2y*ub(1) - N*ul(5);
             qb(2) = qTrial(1) + k2z*ub(2) + N*ul(4);
             // set tangent stiffnesses
-            kb(1,1) = k0 + k2y;
+            kb(1,1) = kb(2,2) = this->kInit();
             kb(1,2) = kb(2,1) = 0.0;
-            kb(2,2) = k0 + k2z;
-        }
+	  }
         // plastic step -> return mapping
-        else  {
+        else
+	  {
             // compute consistency parameters
-            double dGamma = Y/k0;
+            const double dGammaY = Y/k0y;
+            const double dGammaZ = Y/k0z;
             // update plastic displacements
-            ubPlastic(0) = ubPlasticC(0) + dGamma*qTrial(0)/qTrialNorm;
-            ubPlastic(1) = ubPlasticC(1) + dGamma*qTrial(1)/qTrialNorm;
+            ubPlastic(0) = ubPlasticC(0) + dGammaY*qTrial(0)/qTrialNorm;
+            ubPlastic(1) = ubPlasticC(1) + dGammaZ*qTrial(1)/qTrialNorm;
             // set shear forces
             qb(1) = qYield*qTrial(0)/qTrialNorm + k2y*ub(1) - N*ul(5);
             qb(2) = qYield*qTrial(1)/qTrialNorm + k2z*ub(2) + N*ul(4);
             // set tangent stiffnesses
-            kb(1,1) =  qYield*k0*pow(qTrial(1),2)/pow(qTrialNorm,3) + k2y;
-            kb(1,2) = -qYield*k0*qTrial(0)*qTrial(1)/pow(qTrialNorm,3);
-            kb(2,1) = -qYield*k0*qTrial(0)*qTrial(1)/pow(qTrialNorm,3);
-            kb(2,2) =  qYield*k0*pow(qTrial(0),2)/pow(qTrialNorm,3) + k2z;
-        }
-        iter++;
+            const double D = pow(qTrialNorm,3);
+            kb(1,1) =  qYield*k0y*qTrial(1)*qTrial(1)/D + k2y;
+            kb(1,2) = -qYield*k0z*qTrial(1)*qTrial(0)/D;
+            kb(2,1) = -qYield*k0y*qTrial(0)*qTrial(1)/D;
+            kb(2,2) =  qYield*k0z*qTrial(0)*qTrial(0)/D + k2z;
+	  }      
     } while ((sqrt(pow(qb(1)-qbOld(0),2)+pow(qb(2)-qbOld(1),2)) >= tol) && (iter <= maxIter));
     
     // issue warning if iteration did not converge
-    if (iter >= maxIter)   {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; WARNING: did not find the shear force after "
-                << iter << " iterations and norm: "
-		<< sqrt(pow(qb(1)-qbOld(0),2)+pow(qb(2)-qbOld(1),2))
-		<< std::endl;
+    if (iter >= maxIter)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: did not find the shear force after "
+		  << iter << " iterations and norm: "
+		  << sqrt(pow(qb(1)-qbOld(0),2)+pow(qb(2)-qbOld(1),2))
+		  << std::endl;
         return -1;
-    }
+      }
     
     // 3) get moment and stiffness in basic x-direction
     physicalProperties[1]->setTrialStrain(ub(3),ubdot(3));
@@ -283,8 +375,8 @@ int XC::SingleFPSimple3d::update(void)
 }
 
 
-const XC::Matrix& XC::SingleFPSimple3d::getTangentStiff()
-{
+const XC::Matrix& XC::SingleFPSimple3d::getTangentStiff() const
+  {
     // zero the matrix
     theMatrix.Zero();
     
@@ -293,27 +385,34 @@ const XC::Matrix& XC::SingleFPSimple3d::getTangentStiff()
     kl.addMatrixTripleProduct(0.0, Tlb, kb, 1.0);
     
     // add geometric stiffness to local stiffness
-    kl(5,1) -= 1.0*qb(0);
-    kl(5,7) += 1.0*qb(0);
-    //kl(11,1) -= 0.0*qb(0);
-    //kl(11,7) += 0.0*qb(0);
-    kl(4,2) += 1.0*qb(0);
-    kl(4,8) -= 1.0*qb(0);
-    //kl(10,2) += 0.0*qb(0);
-    //kl(10,8) -= 0.0*qb(0);
-    kl(3,1) += qb(2);
-    kl(3,2) -= qb(1);
-    kl(3,7) -= qb(2);
-    kl(3,8) += qb(1);
+    const double Ls = (1.0 - shearDistI)*L;
+    // add P-Delta moment stiffness terms
+    kl(5,1)   -= qb(0);
+    kl(5,7)   += qb(0);
+    kl(5,11)  -= qb(0)*Ls;
+    kl(11,11) += qb(0)*Ls;
+    kl(4,2)   += qb(0);
+    kl(4,8)   -= qb(0);
+    kl(4,10)  -= qb(0)*Ls;
+    kl(10,10) += qb(0)*Ls;
+    // add V-Delta torsion stiffness terms
+    kl(3,1)   += qb(2);
+    kl(3,2)   -= qb(1);
+    kl(3,7)   -= qb(2);
+    kl(3,8)   += qb(1);
+    kl(3,10)  += qb(1)*Ls;
+    kl(3,11)  += qb(2)*Ls;
+    kl(9,10)  -= qb(1)*Ls;
+    kl(9,11)  -= qb(2)*Ls;
     
     // transform from local to global system
     theMatrix.addMatrixTripleProduct(0.0, Tgl, kl, 1.0);
     
     return theMatrix;
-}
+  }
 
 
-const XC::Matrix& XC::SingleFPSimple3d::getInitialStiff()
+const XC::Matrix& XC::SingleFPSimple3d::getInitialStiff() const
 {
     // zero the matrix
     theMatrix.Zero();
@@ -328,25 +427,57 @@ const XC::Matrix& XC::SingleFPSimple3d::getInitialStiff()
     return theMatrix;
 }
 
+const XC::Matrix& XC::SingleFPSimple3d::getDamp() const
+  {
+    // zero the matrix
+    theMatrix.Zero();
+    
+    // call base class to setup Rayleigh damping
+    double factThis = 0.0;
+    if (addRayleigh == 1)
+      {
+        theMatrix = this->SimpleBearingBase::getDamp();
+        factThis = 1.0;
+      }
+    
+    // now add damping tangent from materials
+    static Matrix cb(6,6);
+    cb.Zero();
+    cb(0,0) = physicalProperties[0]->getDampTangent();
+    cb(3,3) = physicalProperties[1]->getDampTangent();
+    cb(4,4) = physicalProperties[2]->getDampTangent();
+    cb(5,5) = physicalProperties[3]->getDampTangent();
+    
+    // transform from basic to local system
+    static Matrix cl(12,12);
+    cl.addMatrixTripleProduct(0.0, Tlb, cb, 1.0);
+    
+    // transform from local to global system and add to cg
+    theMatrix.addMatrixTripleProduct(factThis, Tgl, cl, 1.0);
+    
+    return theMatrix;
+  }
 
-const XC::Matrix& XC::SingleFPSimple3d::getMass()
-{
-	// zero the matrix
+const XC::Matrix& XC::SingleFPSimple3d::getMass() const
+  {
+    // zero the matrix
     theMatrix.Zero();
 
-	// check for quick return
-	if (mass == 0.0)  {
-		return theMatrix;
-	}    
+    // check for quick return
+    if (mass == 0.0)
+      {
+	return theMatrix;
+      }    
 
-	double m = 0.5*mass;
-	for (int i=0; i<3; i++)  {
-		theMatrix(i,i)     = m;
-		theMatrix(i+3,i+3) = m;
-	}
+    const double m = 0.5*mass;
+    for (int i=0; i<3; i++)
+      {
+	theMatrix(i,i)     = m;
+	theMatrix(i+6,i+6) = m;
+      }
 	
     return theMatrix; 
-}
+  }
 
 
 int XC::SingleFPSimple3d::addLoad(ElementalLoad *theLoad, double loadFactor)
@@ -360,33 +491,34 @@ int XC::SingleFPSimple3d::addLoad(ElementalLoad *theLoad, double loadFactor)
 
 
 int XC::SingleFPSimple3d::addInertiaLoadToUnbalance(const Vector &accel)
-{
-	// check for quick return
-	if (mass == 0.0)  {
-		return 0;
-	}    
-
-	// get R * accel from the nodes
-	const Vector &Raccel1 = theNodes[0]->getRV(accel);
-	const Vector &Raccel2 = theNodes[1]->getRV(accel);
-	
-	if (6 != Raccel1.Size() || 6 != Raccel2.Size())
-	  {
-		std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; matrix and vector sizes are incompatible\n";
-		return -1;
-	  }
-
-	// want to add ( - fact * M R * accel ) to unbalance
-	// take advantage of lumped mass matrix
-	double m = 0.5*mass;
-    for (int i=0; i<3; i++)  {
-        load(i)   -= m * Raccel1(i);
-        load(i+3) -= m * Raccel2(i);
-    }
-
+  {
+    // check for quick return
+    if (mass == 0.0)
+      {
 	return 0;
-}
+      }    
+
+    // get R * accel from the nodes
+    const Vector &Raccel1 = theNodes[0]->getRV(accel);
+    const Vector &Raccel2 = theNodes[1]->getRV(accel);
+	
+    if (6 != Raccel1.Size() || 6 != Raccel2.Size())
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; matrix and vector sizes are incompatible\n";
+	return -1;
+      }
+
+    // want to add ( - fact * M R * accel ) to unbalance
+    // take advantage of lumped mass matrix
+    const double m = 0.5*mass;
+    for (int i=0; i<3; i++)
+      {
+        load(i)   -= m * Raccel1(i);
+        load(i+6) -= m * Raccel2(i);
+      }
+    return 0;
+  }
 
 //! @brief Return the element resisting force.
 const XC::Vector& XC::SingleFPSimple3d::getResistingForce(void) const
@@ -396,39 +528,52 @@ const XC::Vector& XC::SingleFPSimple3d::getResistingForce(void) const
     
     // determine resisting forces in local system
     static Vector ql(12);
-    ql = Tlb^qb;
+    ql.addMatrixTransposeVector(0.0, Tlb, qb, 1.0);
     
     // add P-Delta moments to local forces
-    double MpDelta;
-    MpDelta = qb(0)*(ul(7)-ul(1));
-    ql(5)  += 1.0*MpDelta;
-    //ql(11) += 0.0*MpDelta;
-    MpDelta = qb(0)*(ul(8)-ul(2));
-    ql(4)  -= 1.0*MpDelta;
-    //ql(10) -= 0.0*MpDelta;
+    const double MpDelta1 = qb(0)*(ul(7)-ul(1));
+    ql(5)  += MpDelta1;
+    const double MpDelta2 = qb(0)*(1.0 - shearDistI)*L*ul(11);
+    ql(5)  -= MpDelta2;
+    ql(11) += MpDelta2;
+    const double MpDelta3 = qb(0)*(ul(8)-ul(2));
+    ql(4)  -= MpDelta3;
+    const double MpDelta4 = qb(0)*(1.0 - shearDistI)*L*ul(10);
+    ql(4)  -= MpDelta4;
+    ql(10) += MpDelta4;
+  
     
     // add V-Delta torsion to local forces
-    ql(3) = qb(1)*(ul(8)-ul(2)) - qb(2)*(ul(7)-ul(1));
+    const double Vdelta1 = qb(1)*(ul(8)-ul(2)) - qb(2)*(ul(7)-ul(1));
+    ql(3) += Vdelta1;
+    const double Vdelta2 = (1.0 - shearDistI)*L*(qb(1)*ul(10) + qb(2)*ul(11));
+    ql(3) += Vdelta2;
+    ql(9) -= Vdelta2;
+
     
     // determine resisting forces in global system
-    theVector = Tgl^ql;
+    theVector.addMatrixTransposeVector(0.0, Tgl, ql, 1.0);
     
-    // subtract external load
-    theVector.addVector(1.0, load, -1.0);
     
     return theVector;
-}
+  }
 
 //! @brief Return the element resisting force including inertia
 const XC::Vector& XC::SingleFPSimple3d::getResistingForceIncInertia(void) const
   {	
     theVector = this->getResistingForce();
 	
-    // add the damping forces if rayleigh damping
-    if(!rayFactors.nullValues())
-      theVector += this->getRayleighDampingForces();
+    // subtract external load
+    theVector.addVector(1.0, load, -1.0);
     
-    // now include the mass portion
+    // add the damping forces if rayleigh damping
+    if (addRayleigh == 1)
+      {
+	if(!rayFactors.nullValues())
+	  theVector+= this->getRayleighDampingForces();
+      }
+    
+    // add inertia forces from element mass
     if(mass != 0.0)
       {
 	const Vector &accel1 = theNodes[0]->getTrialAccel();
@@ -438,7 +583,7 @@ const XC::Vector& XC::SingleFPSimple3d::getResistingForceIncInertia(void) const
 	for(int i=0; i<3; i++)
 	  {
 	    theVector(i)   += m * accel1(i);
-	    theVector(i+3) += m * accel2(i);
+	    theVector(i+6) += m * accel2(i);
 	  }
       }
     return theVector;
@@ -447,26 +592,28 @@ const XC::Vector& XC::SingleFPSimple3d::getResistingForceIncInertia(void) const
 //! @brief Send members through the communicator argument.
 int XC::SingleFPSimple3d::sendData(Communicator &comm)
   {
-    int res= FrictionElementBase::sendData(comm);
-    res+= comm.sendVector(ubPlastic,getDbTagData(),CommMetaData(19));
-    res+= comm.sendVector(ubPlasticC,getDbTagData(),CommMetaData(20));
-    res+= comm.sendDoubles(R,h,Reff,getDbTagData(),CommMetaData(21));
+    int res= SimpleBearingBase::sendData(comm);
+    res+= comm.sendVector(ubPlastic,getDbTagData(),CommMetaData(21));
+    res+= comm.sendVector(ubPlasticC,getDbTagData(),CommMetaData(22));
+    res+= comm.sendDouble(Reff, getDbTagData(),CommMetaData(23));
+    res+= comm.sendInt(inclVertDisp, getDbTagData(),CommMetaData(24));
     return res;
   }
 
 //! @brief Receives members through the communicator argument.
 int XC::SingleFPSimple3d::recvData(const Communicator &comm)
   {
-    int res= FrictionElementBase::recvData(comm);
-    res+= comm.receiveVector(ubPlastic,getDbTagData(),CommMetaData(19));
-    res+= comm.receiveVector(ubPlasticC,getDbTagData(),CommMetaData(20));
-    res+= comm.receiveDoubles(R,h,Reff,getDbTagData(),CommMetaData(21));
+    int res= SimpleBearingBase::recvData(comm);
+    res+= comm.receiveVector(ubPlastic,getDbTagData(),CommMetaData(21));
+    res+= comm.receiveVector(ubPlasticC,getDbTagData(),CommMetaData(22));
+    res+= comm.receiveDouble(Reff,getDbTagData(),CommMetaData(23));
+    res+= comm.receiveInt(inclVertDisp, getDbTagData(),CommMetaData(24));
     return res;
   }
 
 int XC::SingleFPSimple3d::sendSelf(Communicator &comm)
   {
-    inicComm(22);
+    inicComm(25);
 
     int res= sendData(comm);
 
@@ -480,7 +627,7 @@ int XC::SingleFPSimple3d::sendSelf(Communicator &comm)
 
 int XC::SingleFPSimple3d::recvSelf(const Communicator &comm)
   {
-    inicComm(22);
+    inicComm(25);
 
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
@@ -494,30 +641,36 @@ int XC::SingleFPSimple3d::recvSelf(const Communicator &comm)
 
 
 void XC::SingleFPSimple3d::Print(std::ostream &s, int flag) const
-{
-    if (flag == 0)  {
+  {
+    if (flag == 0)
+      {
         // print everything
-		s << "Element: " << this->getTag(); 
-		//s << "  type: SingleFPSimple3d  iNode: " << connectedExternalNodes(0);
-		//s << "  jNode: " << connectedExternalNodes(1) << std::endl;
-        s << "  FrictionModel: " << theFrnMdl->getTag() << std::endl;
-        s << "  R: " << R << "  h: " << h << "  uy: " << uy << std::endl;
-        s << "  Material ux: " << physicalProperties[0]->getTag() << std::endl;
-        s << "  Material rx: " << physicalProperties[1]->getTag() << std::endl;
-        s << "  Material ry: " << physicalProperties[2]->getTag() << std::endl;
-        s << "  Material rz: " << physicalProperties[3]->getTag() << std::endl;
-        s << "  mass: " << mass << "  maxIter: " << maxIter << "  tol: " << tol << std::endl;
+	s << "Element: " << this->getTag()
+          << "  type: RJWatsonEQS2d  iNode: " << theNodes[0]->getTag()
+          << "  jNode: " << theNodes[1]->getTag() << std::endl;
+	frictionModels.Print(s, flag);
+        s << std::endl
+	  << "  Reff: " << Reff << "  kInit: " << this->kInit() << std::endl
+	  << "  Material ux: " << physicalProperties[0]->getTag() << std::endl
+          << "  Material rx: " << physicalProperties[1]->getTag() << std::endl
+          << "  Material ry: " << physicalProperties[2]->getTag() << std::endl
+          << "  Material rz: " << physicalProperties[3]->getTag() << std::endl
+	  << "  shearDistI: " << shearDistI << "  addRayleigh: "
+	  << addRayleigh << "  mass: " << mass
+	  << "  maxIter: " << maxIter << "  tol: " << tol << std::endl;
         // determine resisting forces in global system
         s << "  resisting force: " << this->getResistingForce() << std::endl;
-    } else if (flag == 1)  {
+      }
+    else if (flag == 1)
+      {
 		// does nothing
-    }
-}
+      }
+  }
 
 
 XC::Response* XC::SingleFPSimple3d::setResponse(const std::vector<std::string> &argv, Information &eleInformation)
   {
-    Response *theResponse = 0;
+    Response *theResponse = nullptr;
     
 //     output.tag("ElementOutput");
 //     output.attr("eleType","SingleFPSimple3d");
@@ -624,75 +777,97 @@ XC::Response* XC::SingleFPSimple3d::setResponse(const std::vector<std::string> &
 //     }
     
 //     output.endTag(); // ElementOutput
+//    // friction model output
+//    else if (strcmp(argv[0],"frictionModel") == 0 || strcmp(argv[0],"frnMdl") == 0 ||
+//        strcmp(argv[0],"frictionMdl") == 0 || strcmp(argv[0],"frnModel") == 0)  {
+//            if (argc > 1)
+//                theResponse = theFrnMdl->setResponse(&argv[1], argc-1, output);
+//    }
     
     return theResponse;
-}
+  }
 
 
 int XC::SingleFPSimple3d::getResponse(int responseID, Information &eleInfo)
   {
-    double MpDelta;
+    double MpDelta1, MpDelta2, MpDelta3, MpDelta4, Vdelta1, Vdelta2;
     
-    switch (responseID)  {
-	case 1:  // global forces
+    switch (responseID)
+      {
+      case 1:  // global forces
         return eleInfo.setVector(this->getResistingForce());
         
-	case 2:  // local forces
+      case 2:  // local forces
         theVector.Zero();
         // determine resisting forces in local system
-        theVector = Tlb^qb;
+        theVector.addMatrixTransposeVector(0.0, Tlb, qb, 1.0);
         // add P-Delta moments
-        MpDelta = qb(0)*(ul(7)-ul(1));
-        theVector(5)  += 1.0*MpDelta;
-        //theVector(11) += 0.0*MpDelta;
-        MpDelta = qb(0)*(ul(8)-ul(2));
-        theVector(4)  -= 1.0*MpDelta;
-        //theVector(10) -= 0.0*MpDelta;
-        
+        MpDelta1 = qb(0)*(ul(7)-ul(1));
+        theVector(5)  += MpDelta1;
+        MpDelta2 = qb(0)*(1.0 - shearDistI)*L*ul(11);
+        theVector(5)  -= MpDelta2;
+        theVector(11) += MpDelta2;
+        MpDelta3 = qb(0)*(ul(8)-ul(2));
+        theVector(4)  -= MpDelta3;
+        MpDelta4 = qb(0)*(1.0 - shearDistI)*L*ul(10);
+        theVector(4)  -= MpDelta4;
+        theVector(10) += MpDelta4;
+        // add V-Delta torsion
+        Vdelta1 = qb(1)*(ul(8)-ul(2)) - qb(2)*(ul(7)-ul(1));
+        theVector(3)  += Vdelta1;
+        Vdelta2 = (1.0 - shearDistI)*L*(qb(1)*ul(10) + qb(2)*ul(11));
+        theVector(3)  += Vdelta2;
+        theVector(9)  -= Vdelta2;        
         return eleInfo.setVector(theVector);
         
-	case 3:  // basic forces
+      case 3:  // basic forces
         return eleInfo.setVector(qb);
         
-	case 4:  // local displacements
+      case 4:  // local displacements
         return eleInfo.setVector(ul);
         
-	case 5:  // basic displacements
+      case 5:  // basic displacements
         return eleInfo.setVector(ub);
         
-    default:
-		return -1;
-	}
-}
+      default:
+	return -1;
+      }
+  }
 
 
-// Establish the external nodes and set up the transformation matrix for orientation
+//! @brief Establish the external nodes and set up the transformation matrix
+//! for orientation.
 void XC::SingleFPSimple3d::setUp()
-{ 
+  { 
     const Vector &end1Crd = theNodes[0]->getCrds();
     const Vector &end2Crd = theNodes[1]->getCrds();	
-    Vector xp = end2Crd - end1Crd;
-    L = xp.Norm();
+    const Vector xp = end2Crd - end1Crd;
+    this->L= xp.Norm();
     
-    if (L > DBL_EPSILON)  {
-		if (x.Size() == 0)  {
-		    x.resize(3);
-		    x = xp;
-        } else  {
+    if(L > DBL_EPSILON)
+      {
+	if(x.Size() == 0)
+	  {
+	    x.resize(3);
+	    x = xp;
+	  }
+	else if(this->onP0)
+	  {
             std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - " 
                       << "element: " << this->getTag() << std::endl
                       << "ignoring nodes and using specified "
                       << "local x vector to determine orientation\n";
-        }
-    }
+	  }
+      }
     // check that vectors for orientation are of correct size
-    if (x.Size() != 3 || y.Size() != 3)  {
+    if (x.Size() != 3 || y.Size() != 3)
+      {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; element: " << this->getTag() << std::endl
                   << "incorrect dimension of orientation vectors\n";
         exit(-1);
-    }
+      }
     
     // establish orientation of element for the transformation matrix
     // z = x cross yp
@@ -707,17 +882,18 @@ void XC::SingleFPSimple3d::setUp()
     y(2) = z(0)*x(1) - z(1)*x(0);
     
     // compute length(norm) of vectors
-    double xn = x.Norm();
-    double yn = y.Norm();
-    double zn = z.Norm();
+    const double xn = x.Norm();
+    const double yn = y.Norm();
+    const double zn = z.Norm();
     
     // check valid x and y vectors, i.e. not parallel and of zero length
-    if (xn == 0 || yn == 0 || zn == 0)  {
+    if (xn == 0 || yn == 0 || zn == 0)
+      {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; element: " << this->getTag() << std::endl
                   << "invalid orientation vectors\n";
         exit(-1);
-    }
+      }
     
     // create transformation matrix from global to local system
     Tgl.Zero();
@@ -735,17 +911,37 @@ void XC::SingleFPSimple3d::setUp()
     Tlb.Zero();
     Tlb(0,0) = Tlb(1,1) = Tlb(2,2) = Tlb(3,3) = Tlb(4,4) = Tlb(5,5) = -1.0;
     Tlb(0,6) = Tlb(1,7) = Tlb(2,8) = Tlb(3,9) = Tlb(4,10) = Tlb(5,11) = 1.0;
-    Tlb(1,11) = -L;
-    Tlb(2,10) = L;
-}
+    Tlb(1,5) = -shearDistI*L;
+    Tlb(1,11) = -(1.0 - shearDistI)*L;
+    Tlb(2,4) = -Tlb(1,5);
+    Tlb(2,10) = -Tlb(1,11);
+  }
 
+int XC::SingleFPSimple3d::setParameter(const std::vector<std::string> &argv, Parameter &param)
+  {
+    if (argv.size() < 1)
+      return -1;
 
-double XC::SingleFPSimple3d::sgn(double x)
-{ 
-    if (x > 0)
-        return 1.0;
-    else if (x < 0)
-        return -1.0;
+    if((argv[0]=="R") || (argv[0]=="Reff"))
+      {
+	param.setValue(Reff);
+	return param.addObject(1,this);
+      }
     else
-        return 0.0;
-}
+      {
+	FrictionModel *theFrnMdl= this->frictionModels[0];
+	return theFrnMdl->setParameter(argv, param);
+      }
+  }
+
+int XC::SingleFPSimple3d::updateParameter(int parameterID, Information &info)
+  {
+    switch(parameterID)
+      {
+      case 1:
+	Reff = info.theDouble;
+	return 0;
+      default:
+	return -1;
+      }
+  }

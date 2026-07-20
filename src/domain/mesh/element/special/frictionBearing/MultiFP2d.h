@@ -44,60 +44,104 @@
 **   Filip C. Filippou (filippou@ce.berkeley.edu)                     **
 **                                                                    **
 ** ****************************************************************** */
+                                                                        
+// $Revision$
+// $Date$
+// $Source$
+                                                                        
+#ifndef MultiFP2d_h
+#define MultiFP2d_h
 
-// $Revision: 1.1 $
-// $Date: 2009/04/17 23:02:41 $
-// $Source: element/special/frictionBearing/frictionModel/Coulomb.h,v $
-
-#ifndef Coulomb_h
-#define Coulomb_h         
-
-// Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
-// Created: 02/06
-// Revision: A
+// Written: fmk
+// Conversion from matlab to c++: fmk
 //
-// Description: This file contains the class definition for the Coulomb
-// friction model. In the Coulomb model the friction force is given by
-// mu*N, where mu is a constant coefficient of friction.
+// Description: This file contains the interface for the MultiFP2d class.
 //
-// What: "@(#) Coulomb.h, revA"
+// What: "@(#) MultiFP2d.h, revA"
 
-#include "FrictionModel.h"
+#include "domain/mesh/element/Element0D.h"
+#include "utility/matrix/Vector.h"
+#include "utility/matrix/Matrix.h"
 
 namespace XC {
-//! @ingroup FrictionModelGrp
-//
-//! @brief "Coulomb friction" model object. Coulomb's Law of Friction
-//! states that kinetic friction is independent of the sliding velocity. 
-class Coulomb: public FrictionModel
-  {
-  protected:
-    double mu; //!< coefficient of friction
+class UniaxialMaterial;
 
+class MultiFP2d : public Element0D
+  {
+  private:
+    // UniaxialMaterial *theVerticalModel;
+    UniaxialMaterial *theFrictionModel;
+    UniaxialMaterial *theVerticalModel;
+  
+    int type;
+    int axialCase;
+    double W0;   // original weight
+    double cW;   // current vertical force (obtained form vertical spring)
+  
+    
+    mutable Matrix theMatrix;
+    mutable Vector theVector;  
+
+  private:
+    void free_friction_model(void);
+    void alloc_friction_model(const UniaxialMaterial &);
+    void free_vertical_model(void);
+    void alloc_vertical_model(const UniaxialMaterial &);
+    
+  protected:    
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    // constructor
-    Coulomb(int classTag= FRN_TAG_Coulomb);
-    Coulomb(int tag, double mu,int classTag= FRN_TAG_Coulomb);
-    
-    // public methods to set and obtain response
-    int setTrial(double normalForce, double velocity = 0.0);
-    double getFrictionForce(void) const;
-    double getFrictionCoeff(void) const;
-    double getDFFrcDNFrc(void) const;
-    double getDFFrcDVel() const;
-    
+    // constructors
+    MultiFP2d(int tag, 
+	      int Nd1, int Nd2, 
+	      const UniaxialMaterial &theFrictionModel,
+	      const UniaxialMaterial &theVerticalModel,
+	      double w0, int axialCase);
+
+    MultiFP2d(int tag, 
+	      int Nd1, int Nd2,
+	      int type,
+	      const Vector &R,
+	      const Vector &h, 
+	      const Vector &D,
+	      const Vector &d,
+	      const Vector &mu,
+	      double Kvert,
+	      double w0, int axialCase);
+    MultiFP2d(const MultiFP2d &);
+    MultiFP2d &operator=(const MultiFP2d &);
+  
+    MultiFP2d();    
+  
+    // destructor
+    ~MultiFP2d();
+  
+    // public methods to obtain information about dof & connectivity
+    void setDomain(Domain *theDomain);
+  
+    // public methods to set the state of the element    
     int commitState(void);
-    int revertToLastCommit(void);
-    
-    FrictionModel *getCopy(void) const;
-    
+    int revertToLastCommit(void);        
+    int revertToStart(void);        
+    int update(void);
+  
+    // public methods to obtain stiffness
+    const Matrix &getTangentStiff(void) const;
+    const Matrix &getInitialStiff(void) const;
+  
+    // public method to obtain resisting force
+    const Vector &getResistingForce(void) const;
+  
+    // public methods for output    
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
-    
-    void Print(std::ostream &s, int flag = 0) const;
-};
+    void Print(std::ostream &s, int flag = 0) const;    
+
+    Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
+    int getResponse(int responseID, Information &eleInformation);
+  };
 } // end of XC namespace
 
 #endif
+

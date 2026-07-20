@@ -66,11 +66,11 @@ XC::FrictionModel::FrictionModel(int tag, int classTag)
   : TaggedObject(tag), MovableObject(classTag), trialN(0.0), trialVel(0.0) {}
 
 
-double XC::FrictionModel::getNormalForce(void)
+double XC::FrictionModel::getNormalForce(void) const
   { return trialN; }
 
 
-double XC::FrictionModel::getVelocity(void)
+double XC::FrictionModel::getVelocity(void) const
   { return trialVel; }
 
 
@@ -104,7 +104,7 @@ XC::Response *XC::FrictionModel::setResponse(const std::vector<std::string> &arg
 }
 
 
-int XC::FrictionModel::getResponse(int responseID, Information &info)
+int XC::FrictionModel::getResponse(int responseID, Information &info) const
 {
     // each subclass must implement its own stuff    
     switch (responseID)  {
@@ -151,4 +151,58 @@ int XC::FrictionModel::recvData(const Communicator &comm)
     setTag(getDbTagDataPos(0));
     int res= comm.receiveDoubles(trialN,trialVel,getDbTagData(),CommMetaData(1));
     return res;
+  }
+
+//! @brief Send a pointer to friction model through the given communicator.
+//! 
+//! @param posClassTag: index of the class tags in the data vector
+//! @param posDbTag: index of the dbTag in the data vector
+int XC::sendFrictionModelPtr(FrictionModel *ptr,int posClassTag, int posDbTag,DbTagData &dt,Communicator &comm)
+  {
+    int res= 0;
+    if(ptr)
+      {
+        dt.setDbTagDataPos(posClassTag,ptr->getClassTag());
+        res= comm.sendMovable(*ptr,dt,CommMetaData(posDbTag));
+      }
+    if(res < 0)
+      std::cerr << __FUNCTION__ << "; WARNING "
+                << "failed to send friction model.\n";
+    return res;
+  }
+
+//! @brief Receive a pointer to friction model through the communicator argument.
+//! @param posClassTag: index of the class tags in the data vector
+//! @param posDbTag: index of the dbTag in the data vector
+XC::FrictionModel *XC::receiveFrictionModelPtr(FrictionModel* ptr,int posClassTag, int posDbTag,DbTagData &dt,const Communicator &comm)
+  {
+    FrictionModel *retval= nullptr;
+    const int matClass= dt.getDbTagDataPos(posClassTag);
+    if(ptr && (ptr->getClassTag() == matClass))
+      retval= ptr;
+    else 
+      {
+
+        // check if we have a friction model object already & if we do if of right type
+        // if old one .. delete it
+        if(ptr)
+	  {
+            delete ptr;
+	    ptr= nullptr;
+	  }
+        // create a new friction model object
+        retval= comm.getNewFrictionModel(matClass);
+      }
+    if(retval)
+      {
+        int res= comm.receiveMovable(*retval,dt,CommMetaData(posDbTag));
+        if(res<0)
+          std::cerr << __FUNCTION__ << "; WARNING " 
+                    << "failed to receive friction model.\n";
+      }
+    else
+      std::cerr << __FUNCTION__ << "; WARNING "
+                << " failed to get a blank friction model of type: "
+                << matClass << std::endl; 
+    return retval;
   }

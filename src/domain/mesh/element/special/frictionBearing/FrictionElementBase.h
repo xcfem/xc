@@ -31,12 +31,11 @@
 #define FrictionElementBase_h
 
 #include "domain/mesh/element/Element0D.h"
+
 #include "domain/mesh/element/utils/physical_properties/UniaxialMatPhysicalProperties.h"
-#include "utility/matrix/Vector.h"
-#include "utility/matrix/Matrix.h"
+#include "frictionModel/FrictionModels.h"
 
 namespace XC {
-class FrictionModel;
 class UniaxialMaterial;
 class Response;
 
@@ -44,54 +43,71 @@ class Response;
 //!
 //! @defgroup FrictionElementGrp Element used to represent <a href="http://en.wikipedia.org/wiki/Friction">frictional</a> contacts.
 //
-//! @ingroup FrictionElementGrp
 //
 //! @brief Base class for friction elements.
+//! @ingroup FrictionElementGrp
 class FrictionElementBase: public Element0D
   {
   protected:    
-    FrictionModel *theFrnMdl; //!< pointer to friction model
+    FrictionModels frictionModels; //!< pointer to friction model
     UniaxialMatPhysicalProperties physicalProperties;  //!<array of uniaxial materials
     
     // parameters
-    double uy;          // yield displacement
-    Vector x;           // local x direction
-    Vector y;           // local y direction
-    double mass;        // mass of element
-    int maxIter;        // maximum number of iterations
-    double tol;         // tolerance for convergence criterion
-    double L;           // element length
+    Vector x; //!< local x direction.
+    Vector y; //!< local y direction.
+    double mass; //!< mass of element.
+    int maxIter; //!< maximum number of iterations.
+    double tol; //!< tolerance for convergence criterion.
+    double L; //!< element length.
     
     // state variables
-    Vector ub;          // displacements in basic system
-    Vector qb;          // forces in basic system
-    Matrix kb;          // stiffness matrix in basic system
-    Vector ul;          // displacements in local system
-    Matrix Tgl;         // transformation matrix from global to local system
-    Matrix Tlb;         // transformation matrix from local to basic system
+    Vector ub; //!< displacements in basic system.
+    Vector qb; //!< forces in basic system.
+    Matrix kb; //!< stiffness matrix in basic system.
+    Vector ul; //!< displacements in local system.
+    Matrix Tgl; //!< transformation matrix from global to local system.
+    Matrix Tlb; //!< transformation matrix from local to basic system.
     
     // committed history variables
     
-    // initial stiffness matrix in basic system
-    Matrix kbInit;
+    Matrix kbInit; //!< initial stiffness matrix in basic system.
     
-    void free_friction_model(void);
-    void alloc_friction_model(const FrictionModel &);
+    static double sgn(const double &x);
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
     // constructors
-    FrictionElementBase(int tag, int classTag, int Nd1, int Nd2,const size_t &dim,const FrictionModel &theFrnMdl, const UniaxialMatPhysicalProperties &, const double &uy= 0.0, const Vector &y= Vector(), const Vector &x= Vector(),const double &mass = 0.0,const int &maxIter= 20,const double &tol= 1E-8);
+    FrictionElementBase(int tag, int classTag, int Nd1, int Nd2, const size_t &dim, const FrictionModels &, const UniaxialMatPhysicalProperties &, const Vector &y= Vector(), const Vector &x= Vector(), const double &mass = 0.0, const int &maxIter= 20, const double &tol= 1E-8);
     FrictionElementBase(int classTag,const size_t &);
-    FrictionElementBase(const FrictionElementBase &);
-    FrictionElementBase &operator=(const FrictionElementBase &);
     
-    // destructor
-    ~FrictionElementBase(void);
+    // parameters
+    void setLocalXDirection(const Vector &x);
+    const Vector &getLocalXDirection(void) const;
+    void setLocalYDirection(const Vector &x);
+    const Vector &getLocalYDirection(void) const;
+    void setBearingElementMass(const double &);
+    const double &getBearingElementMass(void) const;
+    void setMaxIter(const int &);
+    int getMaxIter(void) const;
+    void setTol(const double &);
+    const double &getTol(void) const;
+    void setLength(const double &);
+    const double &getLength(void) const;
     
-    // public methods to obtain information about dof & connectivity    
-    int getNumDOF();
     
+    // state variables
+    void setDisplacementsInBasicSystem(const Vector &);
+    const Vector &getDisplacementsInBasicSystem(void) const;
+    void setForcesInBasicSystem(const Vector &);
+    const Vector &getForcesInBasicSystem(void) const;
+    void setStiffnessInBasicSystem(const Matrix &);
+    const Matrix &getStiffnessInBasicSystem(void) const;
+    void setDisplacementsInLocalSystem(const Vector &);
+    const Vector &getDisplacementsInLocalSystem(void) const;
+    void setTransformationGlobalToLocalSystem(const Matrix &);
+    const Matrix &getTransformationGlobalToLocalSystem(void) const;
+    void setTransformationLocalToBasicSystem(const Matrix &);
+    const Matrix &getTransformationLocalToBasicSystem(void) const;
   };
 } // end of XC namespace
 

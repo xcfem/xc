@@ -45,60 +45,73 @@
 **                                                                    **
 ** ****************************************************************** */
 
-// $Revision: 1.1 $
-// $Date: 2009/04/17 23:02:41 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/special/frictionBearing/frictionModel/VDependentFriction.h,v $
+// $Revision: 1.2 $
+// $Date: 2009/11/03 23:12:33 $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/special/frictionBearing/SimpleBearingBase.h,v $
 
-#ifndef VDependentFriction_h
-#define VDependentFriction_h         
+#ifndef SimpleBearingBase_h
+#define SimpleBearingBase_h
 
 // Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
 // Created: 02/06
 // Revision: A
 //
-// Description: This file contains the class definition for the VDependentFriction
-// friction model after Constantinou et al. (1990). In the velocity dependent
-// friction model the friction force is given in terms of the friction coefficients
-// at low and high velocities and a constant describing the rate of transition.
-//
-// What: "@(#) VDependentFriction.h, revA"
+// Description: This file contains the class definition for SimpleBearingBase.
+// SimpleBearingBase is a friction slider element defined by two nodes. This
+// simplified version uses small angle approximations and accounts for the
+// rotation of the sliding surface by shifting the shear force.
 
-#include "Coulomb.h"
+#include "FrictionElementBase.h"
+#include "utility/matrix/Vector.h"
+#include "utility/matrix/Matrix.h"
 
 namespace XC {
-//! @ingroup FrictionModelGrp
+class FrictionModel;
+class UniaxialMaterial;
+class Response;
+
+//! @ingroup FrictionElementGrp
 //
-//! @brief Velocity dependent friction model. It is useful for modeling
-//! the behavior of <a href="https://en.wikipedia.org/wiki/Polytetrafluoroethylene">"PTFE"</a> or PTFE-like materials sliding on a stainless
-//! steel surface. For a detailed presentation on the velocity dependence
-//! of such interfaces please refer to Constantinou et al. (1999).
-//! <a href="https://www.researchgate.net/publication/276269723_Property_modification_factors_seismic_isolation_bearings">Property modification factors seismic isolation bearings.</a>
-class VDependentFriction: public Coulomb
+//! @brief Bas class for flat slider bearing elements.
+class SimpleBearingBase: public FrictionElementBase
   {
   protected:
-    double muSlow; //!< coefficient of friction at low velocity
-    double muFast; //!< coefficient of friction at high velocity
-    double transRate; //!< transition rate from low to high velocity
-  protected:
+    // parameters
+    double k0; //!< initial stiffness of hysteretic component.
+    double shearDistI; //!< shear distance from node I as fraction of length.
+    int addRayleigh; //!< flag to add Rayleigh damping.
+    bool onP0; //!< flag to indicate if the element is on P0.
+    double kFactUplift; //!< stiffness factor when uplift is encountered.
+
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    // constructor
-    VDependentFriction(int classTag= FRN_TAG_VDependentFriction);
-    VDependentFriction(int tag, double muSlow, double muFast, double transRate,int classTag= FRN_TAG_VDependentFriction);
+    // constructors
+    SimpleBearingBase(int tag, int classTag, int Nd1, int Nd2, const size_t &dim,
+		      const FrictionModels &, double kInit,
+		      const std::vector<UniaxialMaterial *> &,
+		      const Vector &y, const Vector &x,
+		      const double &sdI, const int &addRay,
+		      const double &mass,
+		      const int &maxIter,
+		      const double &tol,
+		      const double &kFactUplift);
+    SimpleBearingBase(int classTag, const size_t &dim);
     
-    // public methods to set and obtain response
-    int setTrial(double normalForce, double velocity = 0.0);
-    double getDFFrcDNFrc(void);
+    void setInitialStiffnessOfHystereticComponent(const double &);
+    const double &getInitialStiffnessOfHystereticComponent(void) const;
+    void setShearDistanceFromNodeIAsFractionOfLength(const double &);
+    const double &getShearDistanceFromNodeIAsFractionOfLength(void) const;
+    void setAddRayleighDampingFlag(const int &);
+    int getAddRayleighDampingFlag(void) const;
+    void setElementIsOnP0Flag(const bool &);
+    bool getElementIsOnP0Flag(void) const;
+    void setStiffnessFactorWhenUplift(const double &);
+    const double &getStiffnessFactorWhenUplift(void) const;
+   
     
-    int revertToStart(void);
-    
-    FrictionModel *getCopy(void) const;
-    
-    int sendSelf(Communicator &);
-    int recvSelf(const Communicator &);
-    
-    void Print(std::ostream &, int flag = 0) const;
+    // public methods for element output
+    void Print(std::ostream &s, int flag = 0) const;
   };
 } // end of XC namespace
 

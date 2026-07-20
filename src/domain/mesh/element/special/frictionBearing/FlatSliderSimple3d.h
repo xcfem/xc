@@ -1,3 +1,29 @@
+//----------------------------------------------------------------------------
+//  XC program; finite element analysis code
+//  for structural analysis and design.
+//
+//  Copyright (C)  Luis C. Pérez Tato
+//
+//  This program derives from OpenSees <http://opensees.berkeley.edu>
+//  developed by the  «Pacific earthquake engineering research center».
+//
+//  Except for the restrictions that may arise from the copyright
+//  of the original program (see copyright_opensees.txt)
+//  XC is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or 
+//  (at your option) any later version.
+//
+//  This software is distributed in the hope that it will be useful, but 
+//  WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details. 
+//
+//
+// You should have received a copy of the GNU General Public License 
+// along with this program.
+// If not, see <http://www.gnu.org/licenses/>.
+//----------------------------------------------------------------------------
 /* ****************************************************************** **
 **    OpenSees - Open System for Earthquake Engineering Simulation    **
 **          Pacific Earthquake Engineering Research Center            **
@@ -34,7 +60,7 @@
 // simplified version uses small angle approximations and accounts for
 // rotations of the sliding surface by shifting the shear forces.
 
-#include "FrictionElementBase.h"
+#include "SimpleBearingBase.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 
@@ -64,33 +90,42 @@ class Response;
 //! nodal geometry unless the optional x-axis vector is specified in which
 //! case the nodal geometry is ignored and the user-defined orientation
 //! is utilized. 
-class FlatSliderSimple3d: public FrictionElementBase
+class FlatSliderSimple3d: public SimpleBearingBase
   {
-  private:
+  private:   
     
     // state variables
     Vector ubPlastic;   // plastic displacements in basic system
     
     // committed history variables
     Vector ubPlasticC;  // plastic displacements in basic system
-
+    
     static Matrix theMatrix;
     static Vector theVector;
 
     // private methods
     void setUp();
-    double sgn(double x);
+  protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
-    
+    void initializeStiffnessMatrix(void);
+    void initialize(void);
   public:
     // constructor
-    FlatSliderSimple3d(int tag, int Nd1, int Nd2,const FrictionModel &theFrnMdl, double uy,const std::vector<UniaxialMaterial *> &theMaterials, const Vector &y= Vector(), const Vector &x= Vector(),const  double &mass= 0.0,const int &maxIter = 20,const double &tol= 1E-8);
+    FlatSliderSimple3d(int tag, int Nd1, int Nd2,
+		       const FrictionModel &theFrnMdl, double kInit,
+		       const std::vector<UniaxialMaterial *> &theMaterials,
+		       const Vector &y= Vector(), const Vector &x= Vector(),
+		       const double &shearDistI= 0.0, const int &addRayleigh= 0,
+		       const  double &mass= 0.0,
+		       const int &maxIter = 25,
+		       const double &tol= 1E-12,
+		       const double &kFactUplift= 1E-12);
     FlatSliderSimple3d(void);
     
     // public methods to obtain information about dof & connectivity    
-    int getNumDOF();
     void setDomain(Domain *theDomain);
+    
     
     // public methods to set the state of the element    
     int commitState();
@@ -99,9 +134,10 @@ class FlatSliderSimple3d: public FrictionElementBase
     int update();
     
     // public methods to obtain stiffness, mass, damping and residual information    
-    const Matrix &getTangentStiff();
-    const Matrix &getInitialStiff();
-    const Matrix &getMass();
+    const Matrix &getTangentStiff() const;
+    const Matrix &getInitialStiff() const;
+    const Matrix &getDamp() const;
+    const Matrix &getMass() const;
     
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);

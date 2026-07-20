@@ -47,57 +47,62 @@
 
 // $Revision: 1.1 $
 // $Date: 2009/04/17 23:02:41 $
-// $Source: element/special/frictionBearing/frictionModel/Coulomb.h,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/special/frictionBearing/frictionModel/VelDependent.h,v $
 
-#ifndef Coulomb_h
-#define Coulomb_h         
+#ifndef VelDependent_h
+#define VelDependent_h         
 
 // Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
 // Created: 02/06
 // Revision: A
 //
-// Description: This file contains the class definition for the Coulomb
-// friction model. In the Coulomb model the friction force is given by
-// mu*N, where mu is a constant coefficient of friction.
+// Description: This file contains the class definition for the VelDependent
+// friction model after Constantinou et al. (1990). In the velocity dependent
+// friction model the friction force is given in terms of the friction coefficients
+// at low and high velocities and a constant describing the rate of transition.
 //
-// What: "@(#) Coulomb.h, revA"
+// What: "@(#) VelDependent.h, revA"
 
-#include "FrictionModel.h"
+#include "Coulomb.h"
 
 namespace XC {
 //! @ingroup FrictionModelGrp
 //
-//! @brief "Coulomb friction" model object. Coulomb's Law of Friction
-//! states that kinetic friction is independent of the sliding velocity. 
-class Coulomb: public FrictionModel
+//! @brief Velocity dependent friction model. It is useful for modeling
+//! the behavior of <a href="https://en.wikipedia.org/wiki/Polytetrafluoroethylene">"PTFE"</a> or PTFE-like materials sliding on a stainless
+//! steel surface. For a detailed presentation on the velocity dependence
+//! of such interfaces please refer to Constantinou et al. (1999).
+//! <a href="https://www.researchgate.net/publication/276269723_Property_modification_factors_seismic_isolation_bearings">Property modification factors seismic isolation bearings.</a>
+class VelDependent: public Coulomb
   {
   protected:
-    double mu; //!< coefficient of friction
-
+    double muSlow; //!< coefficient of friction at low velocity.
+    double muFast; //!< coefficient of friction at high velocity.
+    double transRate; //!< transition rate from low to high velocity.
+    
+    double DmuDvel;    // derivative of COF wrt to velocity
+  protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
     // constructor
-    Coulomb(int classTag= FRN_TAG_Coulomb);
-    Coulomb(int tag, double mu,int classTag= FRN_TAG_Coulomb);
+    VelDependent(int classTag= FRN_TAG_VelDependent);
+    VelDependent(int tag, double muSlow, double muFast, double transRate,int classTag= FRN_TAG_VelDependent);
     
     // public methods to set and obtain response
     int setTrial(double normalForce, double velocity = 0.0);
-    double getFrictionForce(void) const;
-    double getFrictionCoeff(void) const;
     double getDFFrcDNFrc(void) const;
-    double getDFFrcDVel() const;
+    double getDFFrcDVel(void) const;
     
-    int commitState(void);
-    int revertToLastCommit(void);
+    int revertToStart(void);
     
     FrictionModel *getCopy(void) const;
     
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
     
-    void Print(std::ostream &s, int flag = 0) const;
-};
+    void Print(std::ostream &, int flag = 0) const;
+  };
 } // end of XC namespace
 
 #endif
