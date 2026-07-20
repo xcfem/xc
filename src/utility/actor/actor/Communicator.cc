@@ -1298,3 +1298,9 @@ XC::BeamIntegration *XC::Communicator::getNewBeamIntegration(int classTag) const
     assert(broker);
     return broker->getNewBeamIntegration(classTag);
   }
+
+XC::FrictionModel *XC::Communicator::getNewFrictionModel(int classTag) const
+  {
+    assert(broker);
+    return broker->getNewFrictionModel(classTag);
+  }

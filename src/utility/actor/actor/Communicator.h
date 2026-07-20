@@ -59,6 +59,7 @@ class CrdTransf;
 class CrdTransf2d;
 class CrdTransf3d;
 class BeamIntegration;
+class FrictionModel;
 
 //! @ingroup IPComm
 //
@@ -228,6 +229,7 @@ class Communicator
     CrdTransf *getNewCrdTransf(int classTag) const;
     ShellCrdTransf3dBase *getNewShellCrdTransf3d(int classTag) const;
     BeamIntegration *getNewBeamIntegration(int classTag) const;
+    FrictionModel *getNewFrictionModel(int classTag) const;
   };
 
 template <class T>
