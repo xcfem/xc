@@ -56,7 +56,6 @@
 // HardeningMaterial. 
 
 #include "HardeningMaterial.h"
-#include "FEProblem.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/domain/Domain.h"
@@ -143,45 +142,46 @@ int XC::HardeningMaterial::setTrialStrain(double strain, double strainRate)
     double f = fabs(xsi) - (sigmaY + Hiso*Chardening);
 
     // Elastic step ... no updates required
-//    if (f <= -DBL_EPSILON * E)
+    //    if (f <= -DBL_EPSILON * E)
     if (f <= 1.0e-8)
-    {
+      {
         // Set trial tangent
         Ttangent = E;
-    }
-
+      }
     // Plastic step ... perform return mapping algorithm
     else
       {
         double etadt = 0.0;
-        const double dT= FEProblem::theActiveDomain->getTimeTracker().getDt();
-      if (eta != 0.0 || dT != 0)
+	// get global timestep variable.
+	const Domain *theDomain= this->getDomain();
+	const double dT= theDomain->getDt(); //time step
+	if (eta != 0.0 || dT != 0)
           etadt = eta/dT;
 
-      // Compute consistency parameter
-      double dGamma = f / (E+Hiso+Hkin+etadt);
+	// Compute consistency parameter
+	double dGamma = f / (E+Hiso+Hkin+etadt);
 
-      // Find sign of xsi
-      int sign = (xsi < 0) ? -1 : 1;
+	// Find sign of xsi
+	int sign = (xsi < 0) ? -1 : 1;
 
-      // Bring trial stress back to yield surface
-      Tstress -= dGamma*E*sign;
+	// Bring trial stress back to yield surface
+	Tstress -= dGamma*E*sign;
         
-      // Update plastic strain
-      TplasticStrain = CplasticStrain + dGamma*sign;
+	// Update plastic strain
+	TplasticStrain = CplasticStrain + dGamma*sign;
         
-      // Update back stress
-      TbackStress = CbackStress + dGamma*Hkin*sign;
+	// Update back stress
+	TbackStress = CbackStress + dGamma*Hkin*sign;
         
-      // Update internal hardening variable
-      Thardening = Chardening + dGamma;
+	// Update internal hardening variable
+	Thardening = Chardening + dGamma;
         
-      // Set trial tangent
-      Ttangent = E*(Hkin+Hiso+etadt) / (E+Hkin+Hiso+etadt);
-    }
+	// Set trial tangent
+	Ttangent = E*(Hkin+Hiso+etadt) / (E+Hkin+Hiso+etadt);
+      }
 
     return 0;
-}
+  }
 
 double XC::HardeningMaterial::getStress(void) const
   { return Tstress; }
