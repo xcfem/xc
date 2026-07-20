@@ -208,8 +208,10 @@
 
 // friction models
 #include "domain/mesh/element/special/frictionBearing/frictionModel/Coulomb.h"
-#include "domain/mesh/element/special/frictionBearing/frictionModel/VDependentFriction.h"
-#include "domain/mesh/element/special/frictionBearing/frictionModel/VPDependentFriction.h"
+#include "domain/mesh/element/special/frictionBearing/frictionModel/VelDependent.h"
+#include "domain/mesh/element/special/frictionBearing/frictionModel/VelPressureDep.h"
+#include "domain/mesh/element/special/frictionBearing/frictionModel/VelNormalFrcDep.h"
+#include "domain/mesh/element/special/frictionBearing/frictionModel/VelDepMultiLinear.h"
 
 // physical properties
 #include "domain/mesh/element/utils/physical_properties/UniaxialMatPhysicalProperties.h"
