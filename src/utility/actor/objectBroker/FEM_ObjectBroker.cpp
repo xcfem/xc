@@ -873,10 +873,14 @@ XC::FrictionModel *XC::FEM_ObjectBroker::getNewFrictionModel(int classTag)
       {
       case FRN_TAG_Coulomb:
         return new Coulomb();
-      case FRN_TAG_VDependentFriction:
-        return new VDependentFriction();
-      case FRN_TAG_VPDependentFriction:
-        return new VPDependentFriction();
+      case FRN_TAG_VelDependent:
+        return new VelDependent();
+      case FRN_TAG_VelPressureDep:
+        return new VelPressureDep();
+      case FRN_TAG_VelNormalFrcDep:
+        return new VelNormalFrcDep();
+      case FRN_TAG_VelDepMultiLinear:
+        return new VelDepMultiLinear();
       default:
         std::cerr << Color::red << "FEM_ObjectBroker::" << __FUNCTION__
 		  << "; no FrictionModel type exists for class tag "
