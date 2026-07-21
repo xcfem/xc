@@ -122,6 +122,7 @@ class FlatSliderSimple3d: public SimpleBearingBase
 		       const double &tol= 1E-12,
 		       const double &kFactUplift= 1E-12);
     FlatSliderSimple3d(void);
+    Element *getCopy() const;
     
     // public methods to obtain information about dof & connectivity    
     void setDomain(Domain *theDomain);

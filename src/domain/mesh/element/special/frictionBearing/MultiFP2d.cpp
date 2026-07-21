@@ -196,6 +196,10 @@ XC::MultiFP2d::~MultiFP2d(void)
     free_vertical_model();
   }
 
+//! @brief Virtual constructor.
+XC::Element *XC::MultiFP2d::getCopy() const
+  { return new MultiFP2d(*this); }
+
 //! @brief to set a link to the enclosing Domain, ensure nodes exist in Domain
 //! and set pointers to these nodes, also determines the length and 
 //! transformation Matrix.
@@ -352,6 +356,26 @@ const XC::Matrix &XC::MultiFP2d::getInitialStiff(void) const
 const XC::Vector &XC::MultiFP2d::getResistingForce() const
   {	
     return theVector;
+  }
+
+//! Add the given load to the element.
+int XC::MultiFP2d::addLoad(ElementalLoad *theLoad, double loadFactor)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "load type unknown for element: "
+	      << this->getTag() << "."
+              << std::endl;
+    
+    return -1;
+  }
+
+//! @brief Add to the element the inertia load due to the given acceleration.
+int XC::MultiFP2d::addInertiaLoadToUnbalance(const Vector &accel)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "not implemented yet."
+              << std::endl;    
+    return -1;
   }
 
 //! @brief Send members through the communicator argument.

@@ -120,6 +120,9 @@ XC::FlatSliderSimple2d::FlatSliderSimple2d(int tag, int Nd1, int Nd2,
     load.reset(this->numDOF);
   }
 
+//! @brief Virtual constructor.
+XC::Element *XC::FlatSliderSimple2d::getCopy() const
+  { return new FlatSliderSimple2d(*this); }
 
 XC::FlatSliderSimple2d::FlatSliderSimple2d()
   : SimpleBearingBase(ELE_TAG_FlatSliderSimple2d,3),

@@ -121,6 +121,9 @@ XC::RJWatsonEQS3d::RJWatsonEQS3d()
     ubPlastic(2), ubPlasticC(2)
   { }
 
+//! @brief Virtual constructor.
+XC::Element *XC::RJWatsonEQS3d::getCopy() const
+  { return new RJWatsonEQS3d(*this); }
 
 void XC::RJWatsonEQS3d::setDomain(Domain *theDomain)
   {
@@ -466,10 +469,10 @@ const XC::Matrix& XC::RJWatsonEQS3d::getMass() const
     return theMatrix; 
   }
 
-
+//! Add the given load to the element.
 int XC::RJWatsonEQS3d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    std::cerr <<"XC::RJWatsonEQS3d::addLoad() - "
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "load type unknown for element: "
 	      << this->getTag() << "."
               << std::endl;
@@ -477,7 +480,7 @@ int XC::RJWatsonEQS3d::addLoad(ElementalLoad *theLoad, double loadFactor)
     return -1;
   }
 
-
+//! @brief Add to the element the inertia load due to the given acceleration.
 int XC::RJWatsonEQS3d::addInertiaLoadToUnbalance(const Vector &accel)
   {
     // check for quick return

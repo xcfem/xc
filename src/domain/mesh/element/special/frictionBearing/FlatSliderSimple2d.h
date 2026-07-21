@@ -119,6 +119,7 @@ class FlatSliderSimple2d: public SimpleBearingBase
 		       const double &tol= 1E-8,
 		       const double &kFactUplift= 1E-12);
     FlatSliderSimple2d();
+    Element *getCopy() const;
     
     // public methods to obtain information about dof & connectivity    
     const ID &getExternalNodes() const;

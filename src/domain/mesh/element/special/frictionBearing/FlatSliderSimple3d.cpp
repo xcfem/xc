@@ -128,6 +128,9 @@ XC::FlatSliderSimple3d::FlatSliderSimple3d(void)
     load.reset(this->numDOF);
   }
 
+//! @brief Virtual constructor.
+XC::Element *XC::FlatSliderSimple3d::getCopy() const
+  { return new FlatSliderSimple3d(*this); }
 
 //! Set the domain for the element.
 void XC::FlatSliderSimple3d::setDomain(Domain *theDomain)

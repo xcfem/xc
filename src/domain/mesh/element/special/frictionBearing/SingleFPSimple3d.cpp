@@ -128,6 +128,9 @@ XC::SingleFPSimple3d::SingleFPSimple3d()
     load.reset(this->numDOF);
   }
 
+//! @brief Virtual constructor.
+XC::Element *XC::SingleFPSimple3d::getCopy() const
+  { return new SingleFPSimple3d(*this); }
 
 void XC::SingleFPSimple3d::setDomain(Domain *theDomain)
   {

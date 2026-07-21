@@ -112,6 +112,7 @@ class SingleFPSimple3d: public SimpleBearingBase
 		     const int &maxIter= 25,const double &tol= 1E-12,
 		     const double &kFactUplift= 1E-12);
     SingleFPSimple3d(void);
+    Element *getCopy() const;
 	
     // public methods to obtain information about dof & connectivity
     void setDomain(Domain *theDomain);

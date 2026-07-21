@@ -99,6 +99,10 @@ XC::SingleFPSimple2d::SingleFPSimple2d()
     load.reset(this->numDOF);
   }
 
+//! @brief Virtual constructor.
+XC::Element *XC::SingleFPSimple2d::getCopy() const
+  { return new SingleFPSimple2d(*this); }
+
 void XC::SingleFPSimple2d::setDomain(Domain *theDomain)
   {
     if(theDomain)

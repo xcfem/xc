@@ -110,9 +110,9 @@ class MultiFP2d : public Element0D
 	      double Kvert,
 	      double w0, int axialCase);
     MultiFP2d(const MultiFP2d &);
-    MultiFP2d &operator=(const MultiFP2d &);
-  
+    MultiFP2d &operator=(const MultiFP2d &);  
     MultiFP2d();    
+    Element *getCopy() const;
   
     // destructor
     ~MultiFP2d();
@@ -132,6 +132,9 @@ class MultiFP2d : public Element0D
   
     // public method to obtain resisting force
     const Vector &getResistingForce(void) const;
+    
+    int addLoad(ElementalLoad *theLoad, double loadFactor);
+    int addInertiaLoadToUnbalance(const Vector &accel);
   
     // public methods for output    
     int sendSelf(Communicator &);

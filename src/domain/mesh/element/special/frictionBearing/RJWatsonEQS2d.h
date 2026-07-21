@@ -110,6 +110,7 @@ class RJWatsonEQS2d : public SimpleBearingBase
 		  const double &tol = 1E-12,
 		  const double &kFactUplift = 1E-12);
     RJWatsonEQS2d();
+    Element *getCopy() const;
     
     // public methods to obtain information about dof & connectivity
     void setDomain(Domain *theDomain);

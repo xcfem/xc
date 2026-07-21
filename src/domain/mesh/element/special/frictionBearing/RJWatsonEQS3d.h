@@ -108,6 +108,7 @@ class RJWatsonEQS3d : public SimpleBearingBase
 		  const double &tol = 1E-12,
 		  const double &kFactUplift = 1E-12);
     RJWatsonEQS3d();
+    Element *getCopy() const;
     
     void setDomain(Domain *theDomain);
     

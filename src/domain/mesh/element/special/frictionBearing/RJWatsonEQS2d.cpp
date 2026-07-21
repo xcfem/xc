@@ -118,6 +118,10 @@ XC::RJWatsonEQS2d::RJWatsonEQS2d()
     load.reset(6);
   }
 
+//! @brief Virtual constructor.
+XC::Element *XC::RJWatsonEQS2d::getCopy() const
+  { return new RJWatsonEQS2d(*this); }
+
 
 void XC::RJWatsonEQS2d::setDomain(Domain *theDomain)
   {

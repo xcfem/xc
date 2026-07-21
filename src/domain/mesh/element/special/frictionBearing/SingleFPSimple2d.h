@@ -111,6 +111,7 @@ class SingleFPSimple2d: public SimpleBearingBase
 		     const int &maxIter= 25,const double &tol= 1E-12,
 		     const double &kFactUplift= 1E-6);
     SingleFPSimple2d(void);
+    Element *getCopy() const;
 	
     void setDomain(Domain *theDomain);
 	
