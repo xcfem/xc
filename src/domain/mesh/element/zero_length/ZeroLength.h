@@ -108,6 +108,11 @@ class ZeroLength: public Element0D
 
     Matrix t1d; //!< hold the transformation matrix.
     Vector persistentInitialDeformation; //!< Persistent initial displacement difference at element level. Used to store the deformation during the inactive phase of the element (if any).
+    int useRayleighDamping; //!< flag to compute the element's damping matrix:
+                    // 0: loop over 1d materials and add their damping tangents.
+                    // 1: use base class damping matrix (Element).
+                    // 2: loop over the damping materials and add their
+                    //    tangents.
 
     // private methods
     void checkDirection(ID &dir) const;
@@ -141,12 +146,17 @@ class ZeroLength: public Element0D
   public:
     ZeroLength(int tag= 0);
     // Constructor for a single 1d material model
-    ZeroLength(int tag,int dimension,int Nd1, int Nd2,const Vector &,const Vector &,UniaxialMaterial &,int direction );
+    ZeroLength(int tag,int dimension,int Nd1, int Nd2,const Vector &,const Vector &,UniaxialMaterial &,int direction, int doRayleigh= 0);
     // Constructor for a multiple 1d material models
-    ZeroLength(int tag,int dimension,int Nd1, int Nd2, const Vector &,const Vector &,const DqUniaxialMaterial &,const ID &direction);
-    ZeroLength(int tag,int dimension,const Material *ptr_mat,int direction);
+    ZeroLength(int tag,int dimension,int Nd1, int Nd2, const Vector &,const Vector &,const DqUniaxialMaterial &,const ID &direction, int doRayleigh= 0);
+    ZeroLength(int tag,int dimension,const Material *ptr_mat,int direction, int doRayleigh= 0);
     Element *getCopy(void) const;
     ~ZeroLength(void);
+
+    inline void setUseRayleighDampingFlag(const int &i)
+      { this->useRayleighDamping= i; }
+    int getUseRayleighDampingFlag(void) const
+      { return this->useRayleighDamping; }
 
     void setDomain(Domain *theDomain);
 

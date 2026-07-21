@@ -124,6 +124,14 @@ void XC::ZeroLengthSection::free_mem(void)
     theSection=nullptr;
   }
 
+//! @brief Default constructor.
+XC::ZeroLengthSection::ZeroLengthSection(void)
+  : XC::Element0D(0, ELE_TAG_ZeroLengthSection,0,0,0),
+    K(nullptr), P(nullptr), theSection(nullptr), order(0),
+    useRayleighDamping(0)
+    {}
+
+
 //! @brief Constructor.
 //!
 //! @param tag: element identifier.
@@ -133,21 +141,33 @@ void XC::ZeroLengthSection::free_mem(void)
 //! @param x: Vector that defines the local x-axis.
 //! @param yprime: Vector that defines the local x-y plane.
 //! @param sec: SectionForceDeformation material for the element.
+//! @param doRayleigh: flag to compute the element's damping matrix:
+//!                    0: loop over 1d materials and add their damping tangents.
+//!                    1: use base class damping matrix (Element).
+//!                    2: loop over the damping materials and add their
+//!                       tangents.
 XC::ZeroLengthSection::ZeroLengthSection(int tag, int dim, int Nd1, int Nd2,
                                          const Vector &x, const Vector &yprime,
-                                         SectionForceDeformation& sec)
+                                         SectionForceDeformation& sec, int doRayleigh)
   : Element0D(tag, ELE_TAG_ZeroLengthSection,Nd1,Nd2,dim,x,yprime),
-    K(nullptr), P(nullptr), theSection(nullptr), order(0)
-  { setup_section(&sec); }
+    K(nullptr), P(nullptr), theSection(nullptr), order(0),
+    useRayleighDamping(doRayleigh)
+    { setup_section(&sec); }
 
 //! @brief Constructor:
 //!
 //! @param tag: element identifier.
 //! @param dim: space dimension (1, 2 or 3).
 //! @param sec: SectionForceDeformation material for the element.
-XC::ZeroLengthSection::ZeroLengthSection(int tag, int dim,const Material *sec)
+//! @param doRayleigh: flag to compute the element's damping matrix:
+//!                    0: loop over 1d materials and add their damping tangents.
+//!                    1: use base class damping matrix (Element).
+//!                    2: loop over the damping materials and add their
+//!                       tangents.
+XC::ZeroLengthSection::ZeroLengthSection(int tag, int dim,const Material *sec, int doRayleigh)
   : Element0D(tag, ELE_TAG_ZeroLengthSection,0,0,dim),
-    K(nullptr), P(nullptr), theSection(nullptr), order(0)
+    K(nullptr), P(nullptr), theSection(nullptr), order(0),
+    useRayleighDamping(doRayleigh)
   {
     if(sec)
       setup_section(sec);
@@ -155,7 +175,7 @@ XC::ZeroLengthSection::ZeroLengthSection(int tag, int dim,const Material *sec)
 
 //! @brief Copy constructor.
 XC::ZeroLengthSection::ZeroLengthSection(const ZeroLengthSection &other)
-  : Element0D(other), A(other.A), v(other.v), K(nullptr), P(nullptr), theSection(nullptr), order(0)
+  : Element0D(other), A(other.A), v(other.v), K(nullptr), P(nullptr), theSection(nullptr), order(other.order), useRayleighDamping(other.useRayleighDamping)
   {
     if(other.theSection)
       setup_section(other.theSection);
@@ -167,15 +187,12 @@ XC::ZeroLengthSection &XC::ZeroLengthSection::operator=(const ZeroLengthSection 
     Element0D::operator=(other);
     if(other.theSection)
       setup_section(other.theSection);
-    A= other.A;
-    v= other.v;
+    this->A= other.A;
+    this->v= other.v;
+    this->order= other.order;
+    this->useRayleighDamping= other.useRayleighDamping;
     return *this;
   }
-
-//! @brief Default constructor.
-XC::ZeroLengthSection::ZeroLengthSection(void)
-  : XC::Element0D(0, ELE_TAG_ZeroLengthSection,0,0,0),
-    K(nullptr), P(nullptr), theSection(nullptr), order(0) {}
 
 //! @brief Virtual constructor.
 XC::Element *XC::ZeroLengthSection::getCopy(void) const
@@ -350,6 +367,18 @@ const XC::Matrix &XC::ZeroLengthSection::getTangentStiff(void) const
     return *K;
   }
 
+//! @brief Return the element damping matrix.
+const XC::Matrix &XC::ZeroLengthSection::getDamp() const
+  {	
+    if(useRayleighDamping == 1)
+      return this->Element::getDamp();
+    else
+      {
+	K->Zero();
+	return *K;
+      }
+  }
+
 //! @brief Return tangent stiffness matrix for element.  The element tangent
 //! is computed from the section tangent matrix,
 //! \f$k_b\f$, as \f$K_e = A^T k_b A\f$.
@@ -474,8 +503,9 @@ const XC::Vector &XC::ZeroLengthSection::getResistingForceIncInertia(void) const
     this->getResistingForce();
 
     // add the damping forces if rayleigh damping
-    if(!rayFactors.nullKValues())
-      *P += this->getRayleighDampingForces();
+    if (useRayleighDamping == 1)
+      if(!rayFactors.nullKValues())
+	*P += this->getRayleighDampingForces();
     if(isDead())
       (*P)*=dead_srf;
     return *P;
@@ -561,7 +591,7 @@ int XC::ZeroLengthSection::sendData(Communicator &comm)
   {
 
     int res= Element0D::sendData(comm);
-    res+= comm.sendInt(order,getDbTagData(),CommMetaData(9));
+    res+= comm.sendInts(order, useRayleighDamping, getDbTagData(),CommMetaData(9));
     res+= comm.sendMatrix(A,getDbTagData(),CommMetaData(10));
     res+= comm.sendVector(v,getDbTagData(),CommMetaData(11));
     res+= comm.sendMatrixPtr(K,getDbTagData(),MatrixCommMetaData(17,18,19,20));
@@ -574,7 +604,7 @@ int XC::ZeroLengthSection::sendData(Communicator &comm)
 int XC::ZeroLengthSection::recvData(const Communicator &comm)
   {
     int res= Element0D::recvData(comm);
-    res+= comm.receiveInt(order,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveInts(order, useRayleighDamping, getDbTagData(),CommMetaData(9));
     res+= comm.receiveMatrix(A,getDbTagData(),CommMetaData(10));
     res+= comm.receiveVector(v,getDbTagData(),CommMetaData(14));
     K= comm.receiveMatrixPtr(K,getDbTagData(),MatrixCommMetaData(17,18,19,20));

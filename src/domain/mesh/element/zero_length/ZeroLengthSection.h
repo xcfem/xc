@@ -100,6 +100,11 @@ class ZeroLengthSection: public Element0D
     
     SectionForceDeformation *theSection;  //!< Pointer to section object
     int order;	//!< Order of the section model
+    int useRayleighDamping; //!< flag to compute the element's damping matrix:
+                    // 0: loop over 1d materials and add their damping tangents.
+                    // 1: use base class damping matrix (Element).
+                    // 2: loop over the damping materials and add their
+                    //    tangents.
     
     // Class wide matrices for return
     static Matrix K6;
@@ -120,13 +125,18 @@ class ZeroLengthSection: public Element0D
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    ZeroLengthSection(int tag, int dimension, int Nd1, int Nd2, const Vector& x, const Vector& yprime, SectionForceDeformation& theSection);
-    ZeroLengthSection(int tag, int dimension,const Material *theSection);
     ZeroLengthSection(void);
+    ZeroLengthSection(int tag, int dimension, int Nd1, int Nd2, const Vector& x, const Vector& yprime, SectionForceDeformation& theSection, int doRayleigh= 0);
+    ZeroLengthSection(int tag, int dimension,const Material *theSection, int doRayleygh= 0);
     ZeroLengthSection(const ZeroLengthSection &);
     ZeroLengthSection &operator=(const ZeroLengthSection &);
     Element *getCopy(void) const;
     ~ZeroLengthSection(void);
+
+    inline void setUseRayleighDampingFlag(const int &i)
+      { this->useRayleighDamping= i; }
+    int getUseRayleighDampingFlag(void) const
+      { return this->useRayleighDamping; }
 
     void setDomain(Domain *theDomain);
 
@@ -146,6 +156,7 @@ class ZeroLengthSection: public Element0D
 
     // public methods to obtain stiffness, mass, damping and residual information    
     const Matrix &getTangentStiff(void) const;
+    const Matrix &getDamp(void) const;
     const Matrix &getInitialStiff(void) const;
 
     void alive(void);

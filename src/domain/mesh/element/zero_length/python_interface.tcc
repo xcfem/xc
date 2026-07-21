@@ -22,10 +22,13 @@
 //python_interface.tcc
 
 class_<XC::ZeroLength, bases<XC::Element0D>, boost::noncopyable >("ZeroLength", no_init)
-  .def("clearMaterials",&XC::ZeroLength::clearMaterials)
-  .def("setMaterial",&XC::ZeroLength::setMaterial)
-  .def("getMaterials",make_function(&XC::ZeroLength::getMaterials,return_internal_reference<>()))
-  ;
+  .def("clearMaterials",&XC::ZeroLength::clearMaterials, "Remove the element materials")
+  .def("setMaterial",&XC::ZeroLength::setMaterial, "Set the i-th material of the element.")
+  .def("getMaterials",make_function(&XC::ZeroLength::getMaterials,return_internal_reference<>()), "Get the element materials.")
+  .def("setUseRayleighDampingFlag",&XC::ZeroLength::setUseRayleighDampingFlag,"Set the flag flag to compute the element's damping matrix:\n 0: loop over 1d materials and add their damping tangents.\n 1: use base class damping matrix (Element).\n 2: loop over the damping materials and add their tangents.\n")
+  .def("getUseRayleighDampingFlag",&XC::ZeroLength::getUseRayleighDampingFlag,"Get the flag flag to compute the element's damping matrix:\n 0: loop over 1d materials and add their damping tangents.\n 1: use base class damping matrix (Element).\n 2: loop over the damping materials and add their tangents.\n")
+  .add_property("useRayleighDampingFlag", &XC::ZeroLength::getUseRayleighDampingFlag, &XC::ZeroLength::setUseRayleighDampingFlag,"Get/set the flag flag to compute the element's damping matrix:\n 0: loop over 1d materials and add their damping tangents.\n 1: use base class damping matrix (Element).\n 2: loop over the damping materials and add their tangents.\n")
+ ;
 
 class_<XC::ZeroLengthSection, bases<XC::Element0D>, boost::noncopyable >("ZeroLengthSection", no_init)
   .add_property("getOrder",&XC::ZeroLengthSection::getOrder,"Returns element order (order of the underlying section deformation vector).")
@@ -38,6 +41,9 @@ class_<XC::ZeroLengthSection, bases<XC::Element0D>, boost::noncopyable >("ZeroLe
   .def("getWeakAxisAngle",&XC::ZeroLengthSection::getWeakAxisAngle,"Returns the angle between element weak axis and local XZ plane.")
   .def("getVDirStrongAxisGlobalCoord",make_function(&XC::ZeroLengthSection::getVDirStrongAxisGlobalCoord, return_value_policy<copy_const_reference>()),"Returns the direction vector of element strong axis expressed in the global coordinate system.")
   .def("getVDirWeakAxisGlobalCoord",make_function(&XC::ZeroLengthSection::getVDirWeakAxisGlobalCoord, return_value_policy<copy_const_reference>()),"Returns the direction vector of element weak axis expressed in the global coordinate system.")
+  .def("setUseRayleighDampingFlag",&XC::ZeroLengthSection::setUseRayleighDampingFlag,"Set the flag flag to compute the element's damping matrix:\n 0: loop over 1d materials and add their damping tangents.\n 1: use base class damping matrix (Element).\n 2: loop over the damping materials and add their tangents.\n")
+  .def("getUseRayleighDampingFlag",&XC::ZeroLengthSection::getUseRayleighDampingFlag,"Get the flag flag to compute the element's damping matrix:\n 0: loop over 1d materials and add their damping tangents.\n 1: use base class damping matrix (Element).\n 2: loop over the damping materials and add their tangents.\n")
+  .add_property("useRayleighDampingFlag", &XC::ZeroLengthSection::getUseRayleighDampingFlag, &XC::ZeroLengthSection::setUseRayleighDampingFlag,"Get/set the flag flag to compute the element's damping matrix:\n 0: loop over 1d materials and add their damping tangents.\n 1: use base class damping matrix (Element).\n 2: loop over the damping materials and add their tangents.\n")
   ;
 
 class_<XC::ZeroLengthContact, bases<XC::Element0D>, boost::noncopyable >("ZeroLengthContact", no_init);

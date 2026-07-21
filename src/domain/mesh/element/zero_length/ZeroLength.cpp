@@ -94,8 +94,9 @@ XC::Vector XC::ZeroLength::ZeroLengthV12(12);
 XC::ZeroLength::ZeroLength(int tag)
   :Element0D(tag,ELE_TAG_ZeroLength,0,0,0),theMatrix(nullptr),
    theVector(nullptr), theMaterial1d(this),
-   persistentInitialDeformation()
-  {}
+   persistentInitialDeformation(),
+   useRayleighDamping(0)
+   {}
 
 //!  @brief Constructor.
 //!
@@ -114,11 +115,17 @@ XC::ZeroLength::ZeroLength(int tag)
 //! @param yp: Vector that defines the local x-y plane.
 //! @param theMat: uniaxial material for the element.
 //! @param direction: local direction on which the material works.
-XC::ZeroLength::ZeroLength(int tag,int dim,int Nd1, int Nd2,const Vector &x, const Vector &yp,UniaxialMaterial &theMat, int direction)
+//! @param doRayleigh: flag to compute the element's damping matrix:
+//!                    0: loop over 1d materials and add their damping tangents.
+//!                    1: use base class damping matrix (Element).
+//!                    2: loop over the damping materials and add their
+//!                       tangents.
+XC::ZeroLength::ZeroLength(int tag,int dim,int Nd1, int Nd2,const Vector &x, const Vector &yp,UniaxialMaterial &theMat, int direction, int doRayleigh)
   : Element0D(tag,ELE_TAG_ZeroLength,Nd1,Nd2,dim,x,yp),
     theMatrix(nullptr), theVector(nullptr),
     theMaterial1d(this, theMat, direction),
-    persistentInitialDeformation()
+    persistentInitialDeformation(),
+    useRayleighDamping(doRayleigh)
     {}
 
 
@@ -135,11 +142,18 @@ XC::ZeroLength::ZeroLength(int tag,int dim,int Nd1, int Nd2,const Vector &x, con
 //! @param dim: space dimension (1, 2 or 3).
 //! @param ptr_mat: uniaxial material for the element.
 //! @param direction: local direction on which the material works.
-XC::ZeroLength::ZeroLength(int tag,int dim,const Material *ptr_mat,int direction)
+//! @param doRayleigh: flag to compute the element's damping matrix:
+//!                    0: loop over 1d materials and add their damping tangents.
+//!                    1: use base class damping matrix (Element).
+//!                    2: loop over the damping materials and add their
+//!                       tangents.
+XC::ZeroLength::ZeroLength(int tag,int dim,const Material *ptr_mat,int direction, int doRayleigh)
   :Element0D(tag,ELE_TAG_ZeroLength,0,0,dim),
    theMatrix(nullptr), theVector(nullptr),
    theMaterial1d(this, cast_material<UniaxialMaterial>(ptr_mat), direction),
-   persistentInitialDeformation() {}
+   persistentInitialDeformation(),
+   useRayleighDamping(doRayleigh)
+  {}
 
 //! @brief Construct element with multiple unidirectional materials
 //!
@@ -159,11 +173,18 @@ XC::ZeroLength::ZeroLength(int tag,int dim,const Material *ptr_mat,int direction
 //! @param yp: Vector that defines the local x-y plane.
 //! @param theMat: material container.
 //! @param direction: direction container.
-XC::ZeroLength::ZeroLength(int tag,int dim,int Nd1, int Nd2,const Vector& x, const Vector& yp,const DqUniaxialMaterial &theMat,const ID& direction )
+//! @param doRayleigh: flag to compute the element's damping matrix:
+//!                    0: loop over 1d materials and add their damping tangents.
+//!                    1: use base class damping matrix (Element).
+//!                    2: loop over the damping materials and add their
+//!                       tangents.
+XC::ZeroLength::ZeroLength(int tag,int dim,int Nd1, int Nd2,const Vector& x, const Vector& yp,const DqUniaxialMaterial &theMat,const ID& direction, int doRayleigh)
   :Element0D(tag,ELE_TAG_ZeroLength,Nd1,Nd2,dim,x,yp),
    theMatrix(nullptr), theVector(nullptr),
    theMaterial1d(this,theMat,direction),
-   persistentInitialDeformation() {}
+   persistentInitialDeformation(),
+   useRayleighDamping(doRayleigh)
+  {}
 
 //! @brief Return a pointer to the material that corresponds to the name.
 //!
@@ -550,6 +571,12 @@ int XC::ZeroLength::update(void)
             strain= this->computeCurrentStrain1d(mat, diff);
             strainRate = this->computeCurrentStrain1d(mat,diffv);
             ret += theMaterial1d[mat]->setTrialStrain(strain,strainRate);
+	    if(useRayleighDamping == 2)
+	      {
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			  << "; useRayleighDamping == 2 not implemented yet."
+			  << Color::def << std::endl;
+	      }
           }
       }
     else
@@ -638,26 +665,39 @@ const XC::Matrix &XC::ZeroLength::getInitialStiff(void) const
 //! @brief Return the element damping matrix.
 const XC::Matrix &XC::ZeroLength::getDamp(void) const
   {
-    double eta;
 
     // damp is a reference to the matrix holding the damping matrix
     Matrix& damp = *theMatrix;
-
     // zero stiffness matrix
     damp.Zero();
 
-    // loop over 1d materials
-    const Matrix &tran= t1d;
-    for(size_t mat=0; mat<theMaterial1d.size(); mat++)
+    // get Rayleigh damping matrix    
+    if (useRayleighDamping == 1)
       {
-        // get tangent for material
-        eta = theMaterial1d[mat]->getDampTangent();
+	damp = this->Element0D::getDamp();
+      }
+    else if (useRayleighDamping == 2)
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; useRayleighDamping == 2 not implemented yet."
+		  << Color::def << std::endl;
+      }
+    else
+      {
+	double eta;
+	// loop over 1d materials
+	const Matrix &tran= t1d;
+	for(size_t mat=0; mat<theMaterial1d.size(); mat++)
+	  {
+	    // get tangent for material
+	    eta = theMaterial1d[mat]->getDampTangent();
 
-        // compute contribution of material to tangent matrix
-        for(int i=0; i<numDOF; i++)
-          for(int j=0; j<i+1; j++)
-            damp(i,j) +=  tran(mat,i) * eta * tran(mat,j);
-      } // end loop over 1d materials
+	    // compute contribution of material to tangent matrix
+	    for(int i=0; i<numDOF; i++)
+	      for(int j=0; j<i+1; j++)
+		damp(i,j) +=  tran(mat,i) * eta * tran(mat,j);
+	  } // end loop over 1d materials
+      }
 
     // complete symmetric stiffness matrix
     for(int i=0; i<numDOF; i++)
@@ -748,8 +788,39 @@ const XC::Vector &XC::ZeroLength::getResistingForce(void) const
 //! @brief Return resisting force vector with inertia included.
 const XC::Vector &XC::ZeroLength::getResistingForceIncInertia(void) const
   {
-    // there is no mass, so return
-    return this->getResistingForce();
+    // this already includes damping forces from materials
+    this->getResistingForce();
+
+    // Not implemented yet:
+    // if (theDamping) *theVector += this->getDampingForce();
+  
+    // add the damping forces from rayleigh damping
+    if(useRayleighDamping == 1)
+      {
+	if(!rayFactors.nullValues())
+	  {
+	    (*theVector)+= this->getRayleighDampingForces();
+	  }  
+      }
+    else if (useRayleighDamping == 2)
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; useRayleighDamping == 2 not implemented yet."
+		  << Color::def << std::endl;
+	// // loop over 1d damping materials
+	// for (int mat=0; mat<numMaterials1d; mat++)
+	//   {
+	
+	//     // get resisting force for damping materials
+	//     const double force = dampingMaterials1d[mat]->getStress();
+    
+	//     // compute residual due to resisting force
+	//     for (int i=0; i<numDOF; i++)
+	//       theVector(i)+= (*t1d)(mat,i) * force;
+	//   }
+      }
+
+    return (*theVector);
   }
 
 //! @brief Extrapolate from Gauss points to nodes.
@@ -816,7 +887,7 @@ XC::DbTagData &XC::ZeroLength::getDbTagData(void) const
 int XC::ZeroLength::sendData(Communicator &comm)
   {
     int res= Element0D::sendData(comm);
-    res+= comm.sendInt(elemType,getDbTagData(),CommMetaData(9));
+    res+= comm.sendInts(elemType, useRayleighDamping, getDbTagData(),CommMetaData(9));
     res+= comm.sendMatrixPtr(theMatrix,getDbTagData(),MatrixCommMetaData(10,11,12,13));
     res+= comm.sendVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(14,15,16));
     res+= comm.sendMovable(theMaterial1d,getDbTagData(),CommMetaData(17));
@@ -830,7 +901,7 @@ int XC::ZeroLength::recvData(const Communicator &comm)
   {
     int res= Element0D::recvData(comm);
     int et= elemType;
-    res+= comm.receiveInt(et,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveInts(et, useRayleighDamping, getDbTagData(),CommMetaData(9));
     elemType= Etype(et);
     theMatrix= comm.receiveMatrixPtr(theMatrix,getDbTagData(),MatrixCommMetaData(10,11,12,13));
     theVector= comm.receiveVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(14,15,16));
@@ -949,6 +1020,19 @@ void XC::ZeroLength::Print(std::ostream &s, int flag) const
               << ", dir: " << theMaterial1d.getDir(j) << std::endl;
             s << *(theMaterial1d[j]);
           }
+	if (useRayleighDamping == 2)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; useRayleighDamping == 2 not implemented yet."
+		      << Color::def << std::endl;
+            // s << "Damping Materials:\n";
+            // for (int j = numMaterials1d; j < 2 * numMaterials1d; j++)
+	    //   {
+            //     s << "\tMaterial1d, tag: " << theMaterial1d[j]->getTag()
+            //         << ", dir: " << (*dir1d)(j) << endln;
+            //     s << *(theMaterial1d[j]);
+	    //   }
+	  }
       }
     else if(flag == 1)
       { s << this->getTag() << "  " << strain << "  ";  }
@@ -979,6 +1063,12 @@ XC::Response *XC::ZeroLength::setResponse(const std::vector<std::string> &argv, 
           return 0;
         else
           return setMaterialResponse(theMaterial1d[matNum-1],argv,2,eleInformation);
+	if(useRayleighDamping == 2)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; useRayleighDamping == 2 not implemented yet."
+		      << Color::def << std::endl;
+	  }
       }
     else
       return 0;
@@ -1027,6 +1117,30 @@ int XC::ZeroLength::getResponse(int responseID, Information &eleInformation)
               (*(eleInformation.theMatrix))(i,i) = theMaterial1d[i]->getTangent();
           }
         return 0;
+      case 15:
+	eleInformation.theVector->Zero();
+	if (useRayleighDamping == 1)
+	  {
+	    if(!rayFactors.nullValues())
+	      (*(eleInformation.theVector))+= this->getRayleighDampingForces();      
+	  }
+	else if (useRayleighDamping == 2)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; useRayleighDamping == 2 not implemented yet."
+		      << Color::def << std::endl;
+	    // for (int mat=0; mat<numMaterials1d; mat++)
+	    //   {
+	  
+	    // 	// get resisting force for material
+	    // 	const double force = theDampingMaterial1d[mat]->getStress();
+	  
+	    // 	// compute residual due to resisting force
+	    // 	for (int i=0; i<numDOF; i++)
+	    // 	  (*(eleInformation.theVector))(i)+= (*t1d)(mat,i) * force;
+	    //   }
+	  }
+        return 0;	
       default:
         return -1;
       }
