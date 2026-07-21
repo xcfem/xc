@@ -49,6 +49,7 @@ class_<XC::RectangularSeries, bases<XC::PulseBaseSeries>, boost::noncopyable >("
 
 class_<XC::PathSeriesBase, bases<XC::CFactorSeries>, boost::noncopyable >("PathSeriesBase", no_init)
   .add_property("path", &XC::PathSeriesBase::getPath,&XC::PathSeriesBase::setPath, "Get/set the series path.")
+  .def("getPathList",  &XC::PathSeriesBase::getPath, "Return the path values in a Python list")
   .add_property("useLast", &XC::PathSeriesBase::getUseLast, &XC::PathSeriesBase::setUseLast, "Get/set useLast (use the last value of the series if time greater than end time).")
   ;
 

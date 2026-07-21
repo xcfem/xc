@@ -61,6 +61,7 @@ class PathSeriesBase: public CFactorSeries
 
     inline Vector getPath(void) const
       { return thePath; }
+    boost::python::list getPathPy(void) const;
     inline void setPath(const Vector &d)
       { thePath= d; }
     inline void setUseLast(const bool &b)

@@ -108,6 +108,10 @@ double XC::PathSeriesBase::getPeakFactor(void) const
     return retval;
   }
 
+//! @brief Return the path values in a Python list.
+boost::python::list XC::PathSeriesBase::getPathPy(void) const
+  { return this->thePath.getPyList(); }
+
 //! @brief Printing stuff.
 void XC::PathSeriesBase::Print(std::ostream &s, int flag) const
   {
