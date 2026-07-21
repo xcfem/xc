@@ -240,14 +240,21 @@ class Domain: public ObjWithRecorders, public DistributedBase
     //! @brief Return a constant reference to the internal time tracker.
     inline const PseudoTimeTracker &getTimeTracker(void) const
       { return timeTracker; }
+    //! @brief Return a reference to the internal time tracker.
+    inline PseudoTimeTracker &getTimeTracker(void)
+      { return timeTracker; }
     //! @brief Return the committed value of the pseudo-time.
     inline double getCommittedTime(void) const
       { return timeTracker.getCommittedTime(); }
     //! @brief Return the current value fo the pseudo-time.
     inline double getCurrentTime(void) const
       { return timeTracker.getCurrentTime(); }
+    //! @brief Get global timestep variable.
     inline double getDt(void) const
       { return timeTracker.getDt(); }
+    //! @brief Set global timestep variable.
+    inline void setDt(const double &d)
+      { timeTracker.setDt(d); }
     
     
     inline int getCurrentGeoTag(void) const

@@ -61,6 +61,7 @@ class PseudoTimeTracker: public MovableObject
     const double &getCurrentTime(void) const;
     const double &getCommittedTime(void) const;
     const double &getDt(void) const;
+    void setDt(const double &);
     const double &getEigenValueTimeSet(void) const;
 
     int sendSelf(Communicator &);  

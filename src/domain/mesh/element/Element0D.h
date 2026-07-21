@@ -74,6 +74,7 @@ class Element0D: public ElementBase<2>
 
     BoolArray3d getNodePattern(void) const;
     int getNumDOF(void) const;
+    void setNumDOF(int n);
     size_t getDimension(void) const;
     int getVtkCellType(void) const;
     const Vector &getX(void) const;

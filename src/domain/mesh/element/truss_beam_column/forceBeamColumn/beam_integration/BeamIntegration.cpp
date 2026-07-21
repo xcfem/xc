@@ -223,7 +223,7 @@ double XC::BeamIntegration::getIntegral(const ExprAlgebra &expr,int nIP,const Cr
     return retval;
   }
 
-//! @brief Send a pointer to material through the communicator argument.
+//! @brief Send a pointer to beam integration through the communicator argument.
 //! 
 //! @param posClassTag: index of the class tags in the data vector
 //! @param posDbTag: index of the dbTag in the data vector
@@ -237,7 +237,7 @@ int XC::sendBeamIntegrationPtr(BeamIntegration *ptr,int posClassTag, int posDbTa
       }
     if(res < 0)
       std::cerr << __FUNCTION__ << "; WARNING "
-                << "failed to send material.\n";
+                << "failed to send beam integration.\n";
     return res;
   }
 
@@ -253,14 +253,14 @@ XC::BeamIntegration *XC::receiveBeamIntegrationPtr(BeamIntegration* ptr,int posC
     else 
       {
 
-        // check if we have a material object already & if we do if of right type
+        // check if we have a beam integration object already & if we do if of right type
         // if old one .. delete it
         if(ptr)
 	  {
             delete ptr;
 	    ptr= nullptr;
 	  }
-        // create a new_ material object
+        // create a new_ beam integration object
         retval= comm.getNewBeamIntegration(matClass);
       }
     if(retval)
@@ -268,11 +268,11 @@ XC::BeamIntegration *XC::receiveBeamIntegrationPtr(BeamIntegration* ptr,int posC
         int res= comm.receiveMovable(*retval,dt,CommMetaData(posDbTag));
         if(res<0)
           std::cerr << __FUNCTION__ << "; WARNING " 
-                    << "failed to receive material.\n";
+                    << "failed to receive beam integration.\n";
       }
     else
       std::cerr << __FUNCTION__ << "; WARNING "
-                << " failed to get a blank material of type: "
+                << " failed to get a blank beam integration of type: "
                 << matClass << std::endl; 
     return retval;
   }

@@ -301,6 +301,16 @@
 #define ELE_TAG_SingleFPSimple3d    5105
 #define ELE_TAG_SingleFP2d          5106
 #define ELE_TAG_SingleFP3d          5107
+#define ELE_TAG_MultiFP2d           15108
+#define ELE_TAG_MultiFP3d           15109
+#define ELE_TAG_RJWatsonEQS2d       15149
+#define ELE_TAG_RJWatsonEQS3d       15150
+#define ELE_TAG_TFP_Bearing         15130
+#define ELE_TAG_TFP_Bearing2d       15131
+#define ELE_TAG_TPB1D               15129
+#define ELE_TAG_TripleFrictionPendulum 15132
+#define ELE_TAG_TripleFrictionPendulumX 15258
+#define ELE_TAG_FPBearingPTV        5166
 #define ELE_TAG_DoubleFPSimple2d    5108
 #define ELE_TAG_DoubleFPSimple3d    5109
 #define ELE_TAG_DoubleFP2d          5110
@@ -315,8 +325,11 @@
 #define ELE_TAG_BeamContact2D       6117
 
 #define FRN_TAG_Coulomb     1
-#define FRN_TAG_VDependentFriction  2
-#define FRN_TAG_VPDependentFriction 3
+#define FRN_TAG_VelDependent       2
+#define FRN_TAG_VelPressureDep     3
+#define FRN_TAG_VelDepMultiLinear  4
+#define FRN_TAG_VelNormalFrcDep    5
+
 
 // Terje:
 #define ELE_TAG_FourNodeQuad02  9903

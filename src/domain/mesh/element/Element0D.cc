@@ -152,6 +152,14 @@ size_t XC::Element0D::getDimension(void) const
 int XC::Element0D::getNumDOF(void) const
   { return numDOF; }
 
+//! @brief Set the number of degrees of freedom.
+//!
+//! Set the number of degrees of freedom for the element, which depends on
+//! the dimension of the problem and the number of degrees of freedom
+//! associated with each node.
+void XC::Element0D::setNumDOF(int i)
+  { numDOF= i; }
+
 //! @brief Returns the direction vector of local X axis (first row of the transformation).
 const XC::Vector &XC::Element0D::getX(void) const
   {

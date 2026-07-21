@@ -24,7 +24,8 @@
 class_<XC::PseudoTimeTracker, bases<XC::MovableObject>, boost::noncopyable >("PseudoTimeTracker", no_init)
   .add_property("getCurrentTime", make_function(&XC::PseudoTimeTracker::getCurrentTime, return_value_policy<copy_const_reference>() ),"return current pseudo-time.")
   .add_property("getCommittedTime", make_function(&XC::PseudoTimeTracker::getCommittedTime, return_value_policy<copy_const_reference>() ),"return committed pseudo-time.")
-  .add_property("getDt", make_function(&XC::PseudoTimeTracker::getDt, return_value_policy<copy_const_reference>() ),"return difference between committed and current time.")
+  .def("getDt", make_function(&XC::PseudoTimeTracker::getDt, return_value_policy<copy_const_reference>() ),"Return the difference between committed and current time.")
+  .def("setDt", &XC::PseudoTimeTracker::setDt, "Set the time step.")
   .add_property("getEigenValueTimeSet", make_function(&XC::PseudoTimeTracker::getEigenValueTimeSet, return_value_policy<copy_const_reference>() ),"return eigenvalue time set.")
   
   ;
@@ -36,11 +37,13 @@ XC::Node *(XC::Domain::*getNode)(int)= &XC::Domain::getNode;
 XC::Element *(XC::Domain::*getElement)(int)= &XC::Domain::getElement;
 void (XC::Domain::*set_load_constant)(void)= &XC::Domain::setLoadConstant;
 void (XC::Domain::*set_load_constant_t)(const double &)= &XC::Domain::setLoadConstant;
+XC::PseudoTimeTracker &(XC::Domain::*get_time_tracker)(void)= &XC::Domain::getTimeTracker;
+
 class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", no_init)
   .add_property("getPreprocessor", make_function( getPreprocessor, return_internal_reference<>() ),"returns preprocessor.")
   .add_property("getMesh", make_function( getMeshRef, return_internal_reference<>() ),"returns finite element mesh.")
   .add_property("getConstraints", make_function( getConstraintsRef, return_internal_reference<>() ),"returns mesh constraints.")
-  .add_property("getTimeTracker", make_function( &XC::Domain::getTimeTracker, return_internal_reference<>() ),"returns the pseudo-time tracker of the domain.")
+  .add_property("getTimeTracker", make_function( get_time_tracker, return_internal_reference<>() ),"returns the pseudo-time tracker of the domain.")
   .add_property("currentTime", &XC::Domain::getCurrentTime, &XC::Domain::setCurrentTime, "returns the current value of the pseudo-time.")
   .add_property("committedTime", &XC::Domain::getCommittedTime, &XC::Domain::setCommittedTime, "returns the committed value of the pseudo-time.")
   .add_property("currentCombinationName", &XC::Domain::getCurrentCombinationName,"returns current combination/load case name.")
@@ -51,6 +54,8 @@ class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", n
   .def("setLoadConstant", set_load_constant,"Sets currents load patterns as constant in time.")  
   .def("setLoadConstant", set_load_constant_t,"Sets currents load patterns as constant in time, and the domain time to the given value.")  
   .def("setTime",&XC::Domain::setTime,"sets the time on the time tracker.")
+  .def("getDt", &XC::Domain::getDt, "Return the difference between committed and current time.")
+  .def("setDt", &XC::Domain::setDt, "Set the time step.")
   .def("setRayleighDampingFactors",&XC::Domain::setRayleighDampingFactors,"sets the Rayleigh damping factors.")  
   .def("calculateNodalReactions",&XC::Domain::calculateNodalReactions,"triggers nodal reaction calculation.")  
   .def("checkNodalReactions",&XC::Domain::checkNodalReactions,"checkNodalReactions(tolerance): check that reactions at nodes correspond to constrained degrees of freedom.")

@@ -40,8 +40,13 @@ const double &XC::PseudoTimeTracker::getCurrentTime(void) const
 const double &XC::PseudoTimeTracker::getCommittedTime(void) const
   { return committedTime; }
 
+//! @brief Get timestep.
 const double &XC::PseudoTimeTracker::getDt(void) const
   { return dT; }
+
+//! @brief Set timestep.
+void XC::PseudoTimeTracker::setDt(const double &d)
+  { dT= d; }
 
 const double &XC::PseudoTimeTracker::getEigenValueTimeSet(void) const
   { return eigenvalueTimeSet; }
