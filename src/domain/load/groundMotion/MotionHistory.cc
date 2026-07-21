@@ -233,7 +233,7 @@ XC::TimeSeries *XC::MotionHistory::integrate(TimeSeries *theSeries) const
       }
 
     // integrate the series, if no vel series exists set it to new one
-    const double dT= getDelta();
+    const double dT= this->getDelta();
     if(dT>0.0)
       {
         retval= theIntegrator->integrate(theSeries, dT);
@@ -273,7 +273,7 @@ XC::TimeSeries* XC::MotionHistory::differentiate(TimeSeries *theSeries) const
       }
 
     // differentiate the series, if no vel series exists set it to new one
-    const double dT= getDelta();
+    const double dT= this->getDelta();
     if(dT>0.0)
       {
 	retval= theIntegrator->differentiate(theSeries, dT);
