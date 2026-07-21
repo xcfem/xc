@@ -240,8 +240,53 @@ bool XC::PathTimeSeries::readFromFiles(const std::string &filePathName,const std
 //! @brief Returns the time increment at the pseudo-time.
 double XC::PathTimeSeries::getTimeIncr(double pseudoTime) const
   {
-    // NEED TO FILL IN, FOR NOW return 1.0
-    return 1.0;
+    // check for a quick return
+    const int size= time.Size();
+    if(size < 2)
+      return 1.0;
+
+    // determine indexes into the data array whose boundary holds the time
+    double time1= time(currentTimeLoc);
+
+    // check for another quick return
+    if (pseudoTime <= time1 && currentTimeLoc == 0)
+      return time(currentTimeLoc+1) - time1;
+
+    const int sizem1= size - 1;
+    const int sizem2= size - 2;
+
+    // check we are at the end
+    if (pseudoTime > time1 && currentTimeLoc == sizem1)
+	return time[sizem1] - time[sizem2];
+
+    // otherwise go find the current interval
+    double time2= time(currentTimeLoc+1);
+    if (pseudoTime > time2)
+      {
+	while ((pseudoTime > time2) && (currentTimeLoc < sizem2))
+	  {
+	    currentTimeLoc++;
+	    time1= time2;
+	    time2= time(currentTimeLoc+1);
+	  }
+      // if pseudo time greater than ending time return 0
+	if (pseudoTime > time2)
+	  return time[sizem1] - time[sizem2];
+
+      }
+    else if (pseudoTime < time1)
+      {
+	while ((pseudoTime < time1) && (currentTimeLoc > 0))
+	  {
+	    currentTimeLoc--;
+	    time2= time1;	
+	    time1= time(currentTimeLoc);
+	  }
+	// if starting time less than initial starting time return 0
+	if (pseudoTime < time1)
+	  return time2 - time1;
+      }
+    return time2 - time1;
   }
 
 //! @brief Returns the value of the load factor at the specified time.
@@ -252,8 +297,9 @@ double XC::PathTimeSeries::getTimeIncr(double pseudoTime) const
 //! points times the factor \p cFactor.
 double XC::PathTimeSeries::getFactor(double pseudoTime) const
   {
+    const int size= time.Size();
     // check for a quick return
-    if(thePath.Size()<1)
+    if(size<1)
       return 0.0;
 
     // determine indexes into the data array whose boundary holds the time
@@ -265,7 +311,6 @@ double XC::PathTimeSeries::getFactor(double pseudoTime) const
     if(pseudoTime == time1)
       return cFactor * thePath(currentTimeLoc);
 
-    const int size= time.Size();
     const int sizem1= size - 1;
     const int sizem2= size - 2;
 
