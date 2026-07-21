@@ -169,3 +169,35 @@ void XC::FEProblem::clearAll(void)
     proc_solu.clearAll();
     preprocessor.clearAll();
   }
+
+//! @brief Get timestep variable for the active domain.
+double XC::FEProblem::getDt(void)
+  {
+    double retval= 0.0;
+    if(theActiveDomain)
+      retval= theActiveDomain->getTimeTracker().getDt();
+    // else
+    //   {
+    // 	std::cerr << Color::red << "FEProblem::" << __FUNCTION__
+    // 		  << "; WARNING No active domain."
+    // 		  << Color::def << std::endl;
+    // 	exit(-1);
+    //   }
+    return retval;   
+  }
+
+//! @brief Set timestep variable for the active domain.
+void XC::FEProblem::setDt(const double &d)
+  {
+    if(theActiveDomain)
+      theActiveDomain->getTimeTracker().setDt(d);
+    else
+      {
+	std::cerr << Color::red << "FEProblem::" << __FUNCTION__
+		  << "; WARNING No active domain."
+		  << " Command ignored. Exiting."
+		  << Color::def << std::endl;
+	exit(-1);
+      }
+   
+  }

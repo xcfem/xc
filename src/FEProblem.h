@@ -112,6 +112,8 @@ class FEProblem: public CommandEntity
       { return proc_solu; }
     inline DataOutputHandler::map_output_handlers *getOutputHandlers(void) const
       { return &output_handlers; }
+    static double getDt(void);
+    static void setDt(const double &);
 
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);    
