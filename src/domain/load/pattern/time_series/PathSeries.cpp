@@ -160,7 +160,7 @@ double XC::PathSeries::getFactor(double pseudoTime) const
     if(pseudoTime >= this->startTime && (size>0))
       {
         // determine indexes into the data array whose boundary holds the time
-        const double incr= pseudoTime/pathTimeIncr;
+        const double incr= (pseudoTime-startTime)/pathTimeIncr;
         const long long incr1= static_cast<long long>(floor(incr));
         const long long incr2= incr1+1;
 
@@ -182,7 +182,7 @@ double XC::PathSeries::getFactor(double pseudoTime) const
 
 //! @brief Returns series duration.
 double XC::PathSeries::getDuration(void) const
-  { return thePath.Size() * pathTimeIncr; }
+  { return this->thePath.Size() * this->pathTimeIncr; }
 
 
 //! @brief Return a Python dictionary with the object members values.
