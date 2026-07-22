@@ -15,10 +15,10 @@ __email__= "l.pereztato@gmail.com"
 
 import xc
 
-DT= 0.01
+DT= 0.01 # Time step to integrate the acceleration path.
 
 feProblem= xc.FEProblem()
-preprocessor=  feProblem.getPreprocessor
+preprocessor= feProblem.getPreprocessor
 
 x_i= list()
 xdot_i= list()
@@ -41,7 +41,7 @@ hist= mr.history
 accel= lPatterns.newTimeSeries("path_ts","accel")
 accel.path= xc.Vector(xdotdot_i)
 hist.accel= accel
-hist.delta= DT
+hist.delta= DT # Time step to integrate the acceleration path.
 
 motionHistoryDuration= mr.getDuration()
 motionHistoryPathSize= mr.history.getNumberOfDataPoints()
