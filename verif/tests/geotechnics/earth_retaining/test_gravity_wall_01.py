@@ -18,10 +18,9 @@ import math
 import scipy.integrate
 from scipy.constants import g
 import geom
-import matplotlib
 from matplotlib import patches
 from matplotlib.collections import PatchCollection
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from geotechnics.earth_retaining import gravity_wall
 
 #       ___      _ _    

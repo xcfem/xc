@@ -11,7 +11,6 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
-import matplotlib.pyplot as plt
 
 def analyze_SDOF(period, damping_ratio):
     
@@ -169,6 +168,7 @@ else:
 
 # Graphic output.
 if(not silent):
+    import matplotlib.pyplot as plt
     ## Plot accelerogram.
     plt.figure(figsize=(15,3))
     plt.plot(el_centro_raw[:,0], el_centro_raw[:,1], color='k')
