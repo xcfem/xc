@@ -178,6 +178,9 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("getMaxModalVelocityForDOFs",getMaxModalVelocityForDOFs)
   .def("getMaxModalAccelerationForDOFs",getMaxModalAccelerationForDOFs)
   .def("copySetsFrom", &XC::Node::copySetsFrom,"Add this node to all the sets containing the given node.")
+  .def("setRayleighDampingFactor", &XC::Node::setRayleighDampingFactor, "Set the Rayleigh damping factor.")
+  .def("getRayleighDampingFactor", &XC::Node::getRayleighDampingFactor, "Get the Rayleigh damping factor.")
+  .add_property("rayleighDampingFactor", &XC::Node::getRayleighDampingFactor, &XC::Node::setRayleighDampingFactor, "Get/set the Rayleigh damping factor.")
    ;
 
 XC::Node *(XC::NodeIter::*op_node_iter_parenthesis)(void)= &XC::NodeIter::operator();

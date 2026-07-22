@@ -298,6 +298,7 @@ class Node: public MeshComponent
     virtual const Vector &getRV(const Vector &V);
 
     virtual int setRayleighDampingFactor(double alphaM);
+    virtual double getRayleighDampingFactor(void) const;
     virtual const Matrix &getDamp(void) const;
 
     void addTributary(const double &) const;
