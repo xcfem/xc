@@ -1390,7 +1390,7 @@ int XC::Node::setRayleighDampingFactor(double alpham)
   }
 
 //! @brief Gets the Rayleigh dumping factor.
-double getRayleighDampingFactor(void) const;
+double XC::Node::getRayleighDampingFactor(void) const
   { return this->alphaM; }
 
 //! @brief Return the damping matrix of the node.
