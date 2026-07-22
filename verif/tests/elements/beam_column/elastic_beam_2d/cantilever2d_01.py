@@ -34,14 +34,14 @@ F= 1.5e3 # Load magnitude (kN)
 # Define FE Problem.
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeHandler
+nodeHandler= preprocessor.getNodeHandler
 
 # Problem type
-modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics2D(nodeHandler)
 
 # Problem geometry
-n1= nodes.newNodeXY(0,0.0)
-n2= nodes.newNodeXY(L,0.0)
+n1= modelSpace.newNode(0,0.0)
+n2= modelSpace.newNode(L,0.0)
 
 ## Coordinate transformation.
 lin= modelSpace.newLinearCrdTransf("lin")
