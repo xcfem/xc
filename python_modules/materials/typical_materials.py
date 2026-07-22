@@ -39,7 +39,7 @@ class BasicElasticMaterial(object):
         '''shear modulus.'''
         return self.E/(2*(1+self.nu))
 
-    def defElasticMaterial(self, preprocessor, name= None, overrideRho= None, initStrain= 0.0):
+    def defElasticMaterial(self, preprocessor, name= None, overrideRho= None, initStrain= 0.0, eta= 0.0):
         ''' Return an elastic uniaxial material appropriate for example for
             truss elements
 
@@ -61,17 +61,19 @@ class BasicElasticMaterial(object):
         if(materialHandler.materialExists(matName)):
            existingMat= materialHandler.getMaterial(matName)
            if(existingMat.tipo()=='XC::ElasticMaterial'): # Same type.
-               if(existingMat.E==self.E): # Same stiffness.
-                   if(existingMat.rho==matRho): # Same rho
-                       if(existingMat.initialStrain==initStrain): # Same initial strain.
-                           alreadyDefined= True
-
+               if((existingMat.E==self.E) and # Same stiffness.
+                  (existingMat.rho==matRho) and # Same rho
+                  (existingMat.initialStrain==initStrain) and # Same initial strain.
+                  (existingMat.eta==eta)):
+                      alreadyDefined= True
         if(alreadyDefined):
             retval= existingMat
         else:
             retval= materialHandler.newMaterial("elastic_material", matName)
             retval.E= self.E
             retval.rho= matRho
+            if(eta!= 0.0):
+                retval.eta= eta
             if(initStrain!=0.0):
                 retval.initialStrain= initStrain
         return retval
@@ -140,7 +142,7 @@ class BasicElasticMaterial(object):
         self.rho= dct['rho']
         
 
-def defElasticMaterial(preprocessor, name:str, E:float, rho= 0.0, nu= 0.3, initStrain= 0.0):
+def defElasticMaterial(preprocessor, name:str, E:float, rho= 0.0, nu= 0.3, initStrain= 0.0, eta= 0.0):
     '''Constructs an elastic uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
@@ -151,9 +153,10 @@ def defElasticMaterial(preprocessor, name:str, E:float, rho= 0.0, nu= 0.3, initS
     :param overrideRho: if defined (not None), override the value of 
                         the material density.
     :param initStrain: initial strain.
+    :param eta: damping tangent.
     '''
     tmp= BasicElasticMaterial(E= E, nu= nu, rho= rho)
-    return tmp.defElasticMaterial(preprocessor, name= name, initStrain= initStrain)
+    return tmp.defElasticMaterial(preprocessor, name= name, initStrain= initStrain, eta= eta)
 
 class ElasticPerfectlyPlasticMaterial(BasicElasticMaterial):
     ''' Elastic perperfectly-plastic material.
