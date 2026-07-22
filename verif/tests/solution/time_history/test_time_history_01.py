@@ -44,7 +44,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print("pth= ", pth)
-accelFilePath= pth+'/../../aux/A10000.json'
+accelFilePath= pth+'/../../aux/load_patterns/ground_motions/A10000.json'
 openSeesResultsPath= pth+'/../../aux/test_time_history_01_opensees_results.json'
 
 # *** PROBLEM
