@@ -44,10 +44,12 @@ class_<XC::UniaxialMaterial,XC::UniaxialMaterial *, bases<XC::Material>, boost::
    ;
 
 class_<XC::ElasticBaseMaterial, bases<XC::UniaxialMaterial>, boost::noncopyable >("ElasticBaseMaterial", no_init)
-    .add_property("E", &XC::ElasticBaseMaterial::getE, &XC::ElasticBaseMaterial::setE)
+  .add_property("E", &XC::ElasticBaseMaterial::getE, &XC::ElasticBaseMaterial::setE, "Get/set the value of the elastic modulus.")
   ;
 
 class_<XC::ElasticMaterial, bases<XC::ElasticBaseMaterial> >("ElasticMaterial")
+  .def("setDampTangent", &XC::ElasticMaterial::setDampTangent,"Set the value of the damping tangent (eta).")
+  .add_property("eta", &XC::ElasticMaterial::getDampTangent, &XC::ElasticMaterial::setDampTangent,"Get/set the value of the damping tangent.")
   ;
 
 class_<XC::ENTNCBaseMaterial , bases<XC::ElasticBaseMaterial>, boost::noncopyable >("ENTNCBaseMaterial", no_init)

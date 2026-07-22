@@ -91,6 +91,10 @@ int XC::ElasticMaterial::setTrialStrain(double strain, double strainRate)
     return 0;
   }
 
+//! @brief Set the value of the damping tangent (eta).
+void XC::ElasticMaterial::setDampTangent(const double &d)
+  { this->eta= d; }
+
 //! @brief Sets the value of the trial strain, \f$\epsilon\f$ to be {\em
 //! strain}. Returns 0.
 int XC::ElasticMaterial::setTrial(double strain, double &stress, double &tangent, double strainRate)
@@ -107,7 +111,7 @@ int XC::ElasticMaterial::setTrial(double strain, double &stress, double &tangent
 //! @brief Returns the product of \f$E * \epsilon\f$, where \f$\epsilon\f$ is
 //! the current trial strain.
 double XC::ElasticMaterial::getStress(void) const
-  { return E*get_total_strain() + eta*trialStrainRate; }
+  { return E*get_total_strain() + this->eta*trialStrainRate; }
 
 //! @brief Revert the material to its initial state.
 int XC::ElasticMaterial::revertToStart(void)
@@ -210,15 +214,15 @@ int XC::ElasticMaterial::updateParameter(int parameterID, Information &info)
     switch(parameterID)
       {
       case -1:
-	      return -1;
+	return -1;
       case 1:
-	      E = info.theDouble;
-	      return 0;
+	E = info.theDouble;
+	return 0;
       case 2:
-	      eta = info.theDouble;
-	      return 0;
+	eta = info.theDouble;
+	return 0;
       default:
-	      return -1;
+	return -1;
       }
   }
 

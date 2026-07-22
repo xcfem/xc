@@ -97,6 +97,7 @@ class ElasticMaterial: public ElasticBaseMaterial
     double getStrainRate(void) const {return trialStrainRate;};
     double getStress(void) const;
     double getTangent(void) const {return E;}
+    void setDampTangent(const double &);
     double getDampTangent(void) const {return eta;}
 
     int revertToStart(void);        
