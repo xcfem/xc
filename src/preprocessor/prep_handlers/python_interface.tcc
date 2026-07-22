@@ -94,6 +94,7 @@ class_<XC::ProtoElementHandler, bases<XC::PrepHandler>, boost::noncopyable >("Pr
   .add_property("defaultMaterial", make_function( &XC::ProtoElementHandler::getDefaultMaterial, return_value_policy<copy_const_reference>() ), &XC::ProtoElementHandler::setDefaultMaterial,"Set the default material (called by its name) for the elements to be created")
   .add_property("defaultTransformation", make_function( &XC::ProtoElementHandler::getDefaultTransf, return_value_policy<copy_const_reference>() ), &XC::ProtoElementHandler::setDefaultTransf,"Set the default coordinate transformation (called by its name) for the elements to be created")
   .add_property("defaultIntegrator", make_function( &XC::ProtoElementHandler::getDefaultIntegrator, return_value_policy<copy_const_reference>() ), &XC::ProtoElementHandler::setDefaultIntegrator,"Set the default integrator (called by its name) for the elements to be created")
+  .add_property("defaultFrictionModel", make_function( &XC::ProtoElementHandler::getDefaultFrictionModel, return_value_policy<copy_const_reference>() ), &XC::ProtoElementHandler::setDefaultFrictionModel,"Get/set the default friction model (called by its name) for the elements to be created")
   .def("newElement", &XC::ProtoElementHandler::newElement,return_internal_reference<>(),"\n newElement(type,iNodes): Create a new element of type 'type' from the nodes passed as parameter with the XC.ID object 'iNodes'. \n" "Parameters:\n""-type: type of element. Available types:'truss','truss_section','corot_truss','corot_truss_section','muelle', 'spring', 'beam2d_02', 'beam2d_03',  'beam2d_04', 'beam3d_01', 'beam3d_02', 'elastic_beam2d', 'elastic_beam3d', 'beam_with_hinges_2d', 'beam_with_hinges_3d', 'nl_beam_column_2d', 'nl_beam_column_3d','force_beam_column_2d', 'force_beam_column_3d', 'shell_mitc4', ' shell_nl', 'quad4n', 'tri31', 'brick', 'zero_length', 'zero_length_contact_2d', 'zero_length_contact_3d', 'zero_length_section'. \n""-iNodes: nodes ID, e.g. xc.ID([1,2]) to create a linear element from node 1 to node 2. \n")
    ;
 
@@ -107,6 +108,14 @@ class_<XC::ElementHandler::SeedElemHandler, bases<XC::ProtoElementHandler>, boos
   .def("getSeedElement",  get_seed_element,return_internal_reference<>(),"Return the seed element.")
    ;
 
+class_<XC::FrictionModelHandler, bases<XC::PrepHandler>, boost::noncopyable >("FrictionModelHandler", no_init)
+  .def("newFrictionModel", &XC::FrictionModelHandler::newFM,return_internal_reference<>(),"Creates a new friction model.")
+  .def("get", &XC::FrictionModelHandler::get,return_internal_reference<>(),"Returns the friction model.")
+  .def("exists",&XC::FrictionModelHandler::exists,"True if friction model is already defined.")
+  .add_property("size", &XC::FrictionModelHandler::size, "Returns container's size (number of defined friction models).")
+  .def("__len__",&XC::FrictionModelHandler::size, "Returns container's size (number of defined friction models).")
+  .def("clear",&XC::FrictionModelHandler::clearAll,"Removes all items.")
+ ;
 
 class_<XC::ElementHandler, bases<XC::ProtoElementHandler>, boost::noncopyable >("ElementHandler", no_init)
   .add_property("seedElemHandler", make_function( &XC::ElementHandler::getSeedElemHandler, return_internal_reference<>() ))

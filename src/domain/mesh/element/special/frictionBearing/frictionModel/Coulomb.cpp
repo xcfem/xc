@@ -61,8 +61,8 @@
 #include "utility/matrix/ID.h"
 
 
-XC::Coulomb::Coulomb(int classTag)
-  : FrictionModel(0, classTag),  mu(0.0) {}
+XC::Coulomb::Coulomb(int tag, int classTag)
+  : FrictionModel(tag, classTag),  mu(0.0) {}
 
 
 XC::Coulomb::Coulomb(int tag, double _mu, int classTag)

@@ -34,8 +34,8 @@
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableVector.h"
 
-XC::VelDependent::VelDependent(int classTag)
-  : Coulomb(0,classTag),
+XC::VelDependent::VelDependent(int tag, int classTag)
+  : Coulomb(tag, classTag),
     muSlow(0.0), muFast(0.0), transRate(0.0), DmuDvel(0.0) {}
 
 

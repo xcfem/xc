@@ -35,8 +35,8 @@
 #include "utility/actor/actor/MovableVector.h"
 
 
-XC::VelPressureDep::VelPressureDep()
-  : VelDependent(FRN_TAG_VelPressureDep),
+XC::VelPressureDep::VelPressureDep(int tag)
+  : VelDependent(tag, FRN_TAG_VelPressureDep),
     A(0.0), deltaMu(0.0), alpha(0.0), DmuDn(0.0) {}
 
 

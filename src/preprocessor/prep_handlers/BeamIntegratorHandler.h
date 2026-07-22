@@ -27,8 +27,8 @@
 //----------------------------------------------------------------------------
 //BeamIntegratorHandler.h
 
-#ifndef BEAMINTEGRATORLOADER_H
-#define BEAMINTEGRATORLOADER_H
+#ifndef BeamIntegratorHandler_h
+#define BeamIntegratorHandler_h
 
 #include "PrepHandler.h"
 #include <map>

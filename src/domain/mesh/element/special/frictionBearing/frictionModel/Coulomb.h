@@ -78,7 +78,7 @@ class Coulomb: public FrictionModel
     int recvData(const Communicator &);
   public:
     // constructor
-    Coulomb(int classTag= FRN_TAG_Coulomb);
+    Coulomb(int tag= 0, int classTag= FRN_TAG_Coulomb);
     Coulomb(int tag, double mu,int classTag= FRN_TAG_Coulomb);
     
     // public methods to set and obtain response
@@ -87,6 +87,11 @@ class Coulomb: public FrictionModel
     double getFrictionCoeff(void) const;
     double getDFFrcDNFrc(void) const;
     double getDFFrcDVel() const;
+
+    inline double getMu() const
+      { return this->mu; }
+    void setMu(const double &d)
+      { this->mu= d; }
     
     int commitState(void);
     int revertToLastCommit(void);

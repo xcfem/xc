@@ -80,14 +80,31 @@ class VelDependent: public Coulomb
     double muFast; //!< coefficient of friction at high velocity.
     double transRate; //!< transition rate from low to high velocity.
     
-    double DmuDvel;    // derivative of COF wrt to velocity
+    double DmuDvel; //!< derivative of coeficent of friction with respect to to velocity.
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
     // constructor
-    VelDependent(int classTag= FRN_TAG_VelDependent);
+    VelDependent(int tag= 0, int classTag= FRN_TAG_VelDependent);
     VelDependent(int tag, double muSlow, double muFast, double transRate,int classTag= FRN_TAG_VelDependent);
+    
+    inline double getMuSlow() const
+      { return this->muSlow; }
+    void setMuSlow(const double &d)
+      { this->muSlow= d; }
+    inline double getMuFast() const
+      { return this->muFast; }
+    void setMuFast(const double &d)
+      { this->muFast= d; }
+    inline double getTransRate() const
+      { return this->transRate; }
+    void setTransRate(const double &d)
+      { this->transRate= d; }
+    inline double getDmuDvel() const
+      { return this->DmuDvel; }
+    void setDmuDvel(const double &d)
+      { this->DmuDvel= d; }
     
     // public methods to set and obtain response
     int setTrial(double normalForce, double velocity = 0.0);

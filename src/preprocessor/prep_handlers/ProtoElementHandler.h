@@ -34,6 +34,7 @@
 #include "MaterialHandler.h"
 #include "TransfCooHandler.h"
 #include "BeamIntegratorHandler.h"
+#include "FrictionModelHandler.h"
 #include <map>
 
 namespace XC {
@@ -56,6 +57,7 @@ class ProtoElementHandler: public PrepHandler
     int dim_elem; //!< If required, dimension of the new element (0,1,2 or 3)
     std::string transformation_name; //!< If required, transformation identifier for the new element.
     std::string integrator_name; //!< If required, integrator identifier for the new element.
+    std::string friction_model_name; //!< If required, friction model identifier for the new element.
     int dir; //!< If required (i.e. for zero length elements), direction of the element material.
   protected:
     virtual void add(Element *)= 0;
@@ -68,6 +70,9 @@ class ProtoElementHandler: public PrepHandler
     const BeamIntegratorHandler &get_beam_integrator_handler(void) const;
     BeamIntegratorHandler::const_iterator get_iter_beam_integrator(void) const;
     const BeamIntegration *get_ptr_beam_integrator(void) const;
+    const FrictionModelHandler &get_friction_model_handler(void) const;
+    FrictionModelHandler::const_iterator get_iter_friction_model(void) const;
+    const FrictionModel *get_ptr_friction_model(void) const;
 
     friend class Preprocessor;
 
@@ -85,6 +90,8 @@ class ProtoElementHandler: public PrepHandler
     const std::string &getDefaultTransf(void) const;
     virtual void setDefaultIntegrator(const std::string &);
     const std::string &getDefaultIntegrator(void) const;
+    virtual void setDefaultFrictionModel(const std::string &);
+    const std::string &getDefaultFrictionModel(void) const;
 
     Element *newElement(const std::string &,const ID &);
 

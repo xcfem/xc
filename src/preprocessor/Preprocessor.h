@@ -42,6 +42,7 @@
 #include "set_mgmt/MapSet.h"
 #include "multi_block_topology/MultiBlockTopology.h"
 #include "utility/handler/DataOutputHandler.h"
+#include "prep_handlers/FrictionModelHandler.h"
 
 
 namespace XC {
@@ -69,7 +70,8 @@ class Preprocessor: public CommandEntity, public MovableObject
     NodeHandler nodeHandler; //! Node creation tools.
     ElementHandler elementHandler; //!< Element creation tools.
     LoadHandler loadHandler; //!< Load creation tools.
-    BoundaryCondHandler constraintHandler; //! Constraint creation tools.
+    BoundaryCondHandler constraintHandler; //!> Constraint creation tools.
+    FrictionModelHandler frictionModelHandler; //!< Friction models.
 
     MultiBlockTopology mbt; //!< Geometric entities: points, lines,...
 
@@ -155,6 +157,10 @@ class Preprocessor: public CommandEntity, public MovableObject
       { return beamIntegrators; }
     const BeamIntegratorHandler &getBeamIntegratorHandler(void) const
       { return beamIntegrators; }
+    FrictionModelHandler &getFrictionModelHandler(void)
+      { return frictionModelHandler; }
+    const FrictionModelHandler &getFrictionModelHandler(void) const
+      { return frictionModelHandler; }
 
     const MultiBlockTopology &getMultiBlockTopology(void) const
       { return mbt; }

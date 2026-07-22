@@ -88,7 +88,7 @@ class VelPressureDep: public VelDependent
     int recvData(const Communicator &);
   public:
     // constructor
-    VelPressureDep(void);
+    VelPressureDep(int tag= 0);
     VelPressureDep(int tag, double muSlow, double muFast0, double A,
         double deltaMu, double alpha, double transRate);
     FrictionModel *getCopy(void) const;

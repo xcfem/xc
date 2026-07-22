@@ -60,9 +60,9 @@
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "utility/matrix/ID.h"
 
-
-XC::VelNormalFrcDep::VelNormalFrcDep(void)
-  : Coulomb(0, FRN_TAG_VelNormalFrcDep),
+//! @brief Constructor.
+XC::VelNormalFrcDep::VelNormalFrcDep(int tag)
+  : Coulomb(tag, FRN_TAG_VelNormalFrcDep),
     aSlow(0.0), nSlow(1.0), aFast(0.0), nFast(1.0),
     alpha0(0.0), alpha1(0.0), alpha2(0.0), maxMuFact(2.0),
     DmuDn(0.0), DmuDvel(0.0)
@@ -70,7 +70,7 @@ XC::VelNormalFrcDep::VelNormalFrcDep(void)
     // does nothing
   }
 
-
+//! @brief Constructor.
 XC::VelNormalFrcDep::VelNormalFrcDep(int tag,
     double aslow, double nslow, double afast, double nfast,
     double _alpha0, double _alpha1, double _alpha2, double maxmufact)

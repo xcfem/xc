@@ -83,14 +83,23 @@ class Response;
 class FrictionModel: public TaggedObject, public MovableObject
   {
   protected:
-    double trialN;      // trial normal contact force
-    double trialVel;    // trial velocity
+    double trialN; //!< trial normal contact force.
+    double trialVel; //!< trial velocity.
 
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
     // constructor
     FrictionModel(int tag, int classTag);
+
+    inline double getTrialN() const
+      { return this->trialN; }
+    void setTrialN(const double &d)
+      { this->trialN= d; }
+    inline double getTrialVel() const
+      { return this->trialVel; }
+    void setTrialVel(const double &d)
+      { this->trialVel= d; }
     
     // public methods to set and obtain response
     virtual int setTrial(double normalForce, double velocity = 0.0) = 0;

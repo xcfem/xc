@@ -27,8 +27,8 @@
 //----------------------------------------------------------------------------
 //MaterialHandler.h
 
-#ifndef MATERIALLOADER_H
-#define MATERIALLOADER_H
+#ifndef MaterialHandler_h
+#define MaterialHandler_h
 
 #include "PrepHandler.h"
 #include <map>

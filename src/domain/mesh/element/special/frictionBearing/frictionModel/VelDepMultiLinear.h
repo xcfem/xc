@@ -71,23 +71,37 @@ namespace XC {
 class VelDepMultiLinear : public Coulomb
   {
   private:
-    Vector velocityPoints;  // velocity points on multi-linear curve
-    Vector frictionPoints;  // friction points on multi-linear curve
-    int trialID;            // trial ID into velocity, friction arrays
-    int trialIDmin;         // minimum of trial ID
-    int trialIDmax;         // maximum of trial ID
-    int numDataPoints;      // number of data points defining curve
+    Vector velocityPoints; //!< velocity points on multi-linear curve
+    Vector frictionPoints; //!< friction points on multi-linear curve
+    int trialID; //!< trial ID into velocity, friction arrays
+    int trialIDmin; //!< minimum of trial ID
+    int trialIDmax; //!< maximum of trial ID
     
-    double DmuDvel;         // derivative of COF wrt to velocity
+    double DmuDvel; //!< derivative of COF wrt to velocity
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
     // constructor
-    VelDepMultiLinear();
+    VelDepMultiLinear(int tag= 0);
     VelDepMultiLinear(int tag,
 		      const Vector &velocityPoints,
 		      const Vector &frictionPoints);
+
+    boost::python::list getVelocityFrictionPoints() const;
+    void setVelocityFrictionPoints(const boost::python::list &);
+    inline double getTrialID() const
+      { return this->trialID; }
+    void setTrialID(const double &d)
+      { this->trialID= d; }
+    inline double getTrialIDmin() const
+      { return this->trialIDmin; }
+    void setTrialIDmin(const double &d)
+      { this->trialIDmin= d; }
+    inline double getTrialIDmax() const
+      { return this->trialIDmax; }
+    void setTrialIDmax(const double &d)
+      { this->trialIDmax= d; }
     
     // public methods to set and obtain response
     int setTrial(double normalForce, double velocity = 0.0);

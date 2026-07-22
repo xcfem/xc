@@ -102,7 +102,7 @@
 
 //! @brief Default constructor.
 XC::ProtoElementHandler::ProtoElementHandler(Preprocessor *preprocessor)
-  : PrepHandler(preprocessor), material_name("nil"), num_sec(3), dim_elem(0), transformation_name("nil"), integrator_name("Lobatto"), dir(0)
+  : PrepHandler(preprocessor), material_name("nil"), num_sec(3), dim_elem(0), transformation_name("nil"), integrator_name("Lobatto"), friction_model_name("nil"), dir(0)
  {}
 
 //! @brief Returns a reference to the material handler.
@@ -143,7 +143,6 @@ const XC::BeamIntegratorHandler &XC::ProtoElementHandler::get_beam_integrator_ha
 XC::BeamIntegratorHandler::const_iterator XC::ProtoElementHandler::get_iter_beam_integrator(void) const
   { return getPreprocessor()->getBeamIntegratorHandler().find(integrator_name); }
 
-
 //! @brief Returns a pointer to the integrator whose name corresponds to
 //! the contents of integrator_name.
 const XC::BeamIntegration *XC::ProtoElementHandler::get_ptr_beam_integrator(void) const
@@ -157,6 +156,32 @@ const XC::BeamIntegration *XC::ProtoElementHandler::get_ptr_beam_integrator(void
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; integrator named: '" 
                   << integrator_name << "' not found."
+	          << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Returns a reference to the friction model handler.
+const XC::FrictionModelHandler &XC::ProtoElementHandler::get_friction_model_handler(void) const
+  { return getPreprocessor()->getFrictionModelHandler(); }
+
+//! @brief Returns an iterator to the friction model whose name corresponds to
+//! the contents of friction_model_name.
+XC::FrictionModelHandler::const_iterator XC::ProtoElementHandler::get_iter_friction_model(void) const
+  { return getPreprocessor()->getFrictionModelHandler().find(friction_model_name); }
+
+//! @brief Returns a pointer to the friction model whose name corresponds to
+//! the contents of friction_model_name.
+const XC::FrictionModel *XC::ProtoElementHandler::get_ptr_friction_model(void) const
+  {
+    FrictionModel *retval= nullptr;
+    FrictionModelHandler::const_iterator iFrictionMod= get_iter_friction_model();
+    if(iFrictionMod!= get_friction_model_handler().end())
+      retval= iFrictionMod->second;
+    else
+      if(verbosity>0)
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; friction model named: '" 
+                  << friction_model_name << "' not found."
 	          << Color::def << std::endl;
     return retval;
   }
@@ -561,3 +586,10 @@ void XC::ProtoElementHandler::setDefaultIntegrator(const std::string &nmb)
 const std::string &XC::ProtoElementHandler::getDefaultIntegrator(void) const
   { return integrator_name; }
 
+//! @brief Sets the default friction model name for new elements.
+void XC::ProtoElementHandler::setDefaultFrictionModel(const std::string &nmb)
+  { friction_model_name= nmb; }
+
+//! @brief Returns the default friction model name for new elements.
+const std::string &XC::ProtoElementHandler::getDefaultFrictionModel(void) const
+  { return friction_model_name; }

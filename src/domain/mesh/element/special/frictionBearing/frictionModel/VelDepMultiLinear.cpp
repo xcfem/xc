@@ -60,14 +60,14 @@
 #include "utility/matrix/ID.h"
 
 
-XC::VelDepMultiLinear::VelDepMultiLinear()
-    : Coulomb(0, FRN_TAG_VelDepMultiLinear),
-    velocityPoints(1), frictionPoints(1),
-    trialID(0), trialIDmin(0), trialIDmax(0),
-    numDataPoints(0), DmuDvel(0.0)
-{
+XC::VelDepMultiLinear::VelDepMultiLinear(int tag)
+    : Coulomb(tag, FRN_TAG_VelDepMultiLinear),
+      velocityPoints(1), frictionPoints(1),
+      trialID(0), trialIDmin(0), trialIDmax(0),
+      DmuDvel(0.0)
+  {
     // does nothing
-}
+  }
 
 
 XC::VelDepMultiLinear::VelDepMultiLinear(int tag,
@@ -76,36 +76,41 @@ XC::VelDepMultiLinear::VelDepMultiLinear(int tag,
     velocityPoints(velPts), frictionPoints(frnPts),
     trialID(0), trialIDmin(0), trialIDmax(0),
     DmuDvel(0.0)
-{
-    numDataPoints = velocityPoints.Size();
-    if (numDataPoints != frictionPoints.Size())  {
+  {
+    const int numDataPoints= velocityPoints.Size();
+    if (numDataPoints != frictionPoints.Size())
+      {
         std::cerr << "XC::VelDepMultiLinear::VelDepMultiLinear() "
             << "- velocity and friction arrays do not have same length.\n";
         exit(-1);
-    }
+      }
     trialIDmax = numDataPoints - 2;
     
     // check that velocity and friction points are non-negative
-    for (int i=0; i<numDataPoints; i++)  {
-        if (velocityPoints(i) < 0.0 || frictionPoints(i) < 0.0)  {
+    for (int i=0; i<numDataPoints; i++)
+      {
+        if (velocityPoints(i) < 0.0 || frictionPoints(i) < 0.0)
+	  {
             std::cerr << "XC::VelDepMultiLinear::VelDepMultiLinear - "
-                << "the velocity and friction points have to be positive.\n";
+		      << "the velocity and friction points have to be positive.\n";
             exit(-1);
-        }
-    }
+	  }
+      }
     
     // check that velocity points are monotonically increasing
-    for (int i=0; i<numDataPoints-1; i++)  {
-        if (velocityPoints(i) >= velocityPoints(i+1))  {
+    for (int i=0; i<numDataPoints-1; i++)
+      {
+        if (velocityPoints(i) >= velocityPoints(i+1))
+	  {
             std::cerr << "XC::VelDepMultiLinear::VelDepMultiLinear - "
                 << "the velocity points have to increase monotonically.\n";
             exit(-1);
-        }
-    }
+	  }
+      }
     
     // initialize variables
     this->revertToStart();
-}
+  }
 
 
 int XC::VelDepMultiLinear::setTrial(double normalForce, double velocity)
@@ -147,6 +152,32 @@ int XC::VelDepMultiLinear::setTrial(double normalForce, double velocity)
     return 0;
   }
 
+boost::python::list XC::VelDepMultiLinear::getVelocityFrictionPoints() const
+  {
+    boost::python::list retval;
+    const int sz= velocityPoints.Size();
+    for(int i= 0; i<sz; i++)
+      {
+	const double &v= velocityPoints[i];
+	const double &f= frictionPoints[i];
+	const boost::python::tuple tpl= boost::python::make_tuple(v,f);
+	retval.append(tpl);
+      }
+    return retval;
+  }
+
+void XC::VelDepMultiLinear::setVelocityFrictionPoints(const boost::python::list &l)
+  {
+    const int sz= boost::python::len(l);
+    velocityPoints.resize(sz);
+    frictionPoints.resize(sz);
+    for(int i=0; i<sz; i++)
+      {
+	const boost::python::tuple tmp= boost::python::extract<boost::python::tuple>(l[i]);
+	velocityPoints[i]= boost::python::extract<double>(tmp[0]);
+	frictionPoints[i]= boost::python::extract<double>(tmp[1]);
+      }
+  }
 
 double XC::VelDepMultiLinear::getDFFrcDVel() const
   {
@@ -207,7 +238,7 @@ int XC::VelDepMultiLinear::sendData(Communicator &comm)
     res+= comm.sendDouble(DmuDvel, getDbTagData(), CommMetaData(4));
     res+= comm.sendVector(velocityPoints, getDbTagData(), CommMetaData(5));
     res+= comm.sendVector(frictionPoints, getDbTagData(), CommMetaData(6));
-    res+= comm.sendInts(trialID, trialIDmin, trialIDmax, numDataPoints, getDbTagData(), CommMetaData(7));
+    res+= comm.sendInts(trialID, trialIDmin, trialIDmax, getDbTagData(), CommMetaData(7));
     return res;
   }
 
@@ -219,7 +250,7 @@ int XC::VelDepMultiLinear::recvData(const Communicator &comm)
     res+= comm.receiveDouble(DmuDvel, getDbTagData(),CommMetaData(4));
     res+= comm.receiveVector(velocityPoints, getDbTagData(),CommMetaData(5));
     res+= comm.receiveVector(frictionPoints, getDbTagData(),CommMetaData(6));
-    res+= comm.receiveInts(trialID, trialIDmin, trialIDmax, numDataPoints, getDbTagData(),CommMetaData(7));
+    res+= comm.receiveInts(trialID, trialIDmin, trialIDmax, getDbTagData(),CommMetaData(7));
     return res;
   }
 

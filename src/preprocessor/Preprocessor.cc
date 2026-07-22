@@ -42,15 +42,19 @@
 
 //! @brief Default constructor.
 XC::Preprocessor::Preprocessor(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh)
-  : CommandEntity(owr), MovableObject(0), domain(nullptr), materialHandler(this), transf(this), beamIntegrators(this), 
-    nodeHandler(this), elementHandler(this), loadHandler(this), constraintHandler(this),
+  : CommandEntity(owr), MovableObject(0), domain(nullptr),
+    materialHandler(this), transf(this), beamIntegrators(this), 
+    nodeHandler(this), elementHandler(this), loadHandler(this),
+    constraintHandler(this), frictionModelHandler(this),
     mbt(this),sets(this)
   { domain= new Domain(this,oh); }
 
 //! @brief Copy constructor (prohibited).
 XC::Preprocessor::Preprocessor(const Preprocessor &other)
-  : CommandEntity(other), MovableObject(other), domain(nullptr), materialHandler(this), transf(this), beamIntegrators(this),
-    nodeHandler(this), elementHandler(this), loadHandler(this), constraintHandler(this),
+  : CommandEntity(other), MovableObject(other), domain(nullptr),
+    materialHandler(this), transf(this), beamIntegrators(this),
+    nodeHandler(this), elementHandler(this), loadHandler(this),
+    constraintHandler(this), frictionModelHandler(this),
     mbt(this),sets(this)
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -336,6 +340,7 @@ void XC::Preprocessor::clearAll(void)
     loadHandler.clearAll();
     elementHandler.clearAll();
     constraintHandler.clearAll();
+    frictionModelHandler.clearAll();
     nodeHandler.clearAll();
     if(domain)
       domain->clearAll();
@@ -370,10 +375,11 @@ int XC::Preprocessor::sendData(Communicator &comm)
     //res+= comm.sendMovable(elementHandler,getDbTagData(),CommMetaData(4));
     int res= comm.sendMovable(loadHandler,getDbTagData(),CommMetaData(5));
     //res+= comm.sendMovable(constraintHandler,getDbTagData(),CommMetaData(6));
-    res+= comm.sendMovable(mbt,getDbTagData(),CommMetaData(7));
+    //res+= comm.sendMovable(frictionLoadHandler,getDbTagData(),CommMetaData(7));
+    res+= comm.sendMovable(mbt,getDbTagData(),CommMetaData(8));
     assert(domain);
-    res+= sendDomain(*domain,8,getDbTagData(),comm);
-    res+= comm.sendMovable(sets,getDbTagData(),CommMetaData(9));
+    res+= sendDomain(*domain,9,getDbTagData(),comm);
+    res+= comm.sendMovable(sets,getDbTagData(),CommMetaData(10));
     return res;
   }
 
@@ -387,10 +393,11 @@ int XC::Preprocessor::recvData(const Communicator &comm)
     //res+= comm.receiveMovable(elementHandler,getDbTagData(),CommMetaData(4));
     int res= comm.receiveMovable(loadHandler,getDbTagData(),CommMetaData(5));
     //res+= comm.receiveMovable(constraintHandler,getDbTagData(),CommMetaData(6));
-    res+= comm.receiveMovable(mbt,getDbTagData(),CommMetaData(7));
+    //res+= comm.receiveMovable(frictionModelHandler,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveMovable(mbt,getDbTagData(),CommMetaData(8));
     assert(domain);
     res+= receiveDomain(*domain,8,getDbTagData(),comm);
-    res+= comm.receiveMovable(sets,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveMovable(sets,getDbTagData(),CommMetaData(10));
     return res;
   }
 
@@ -399,7 +406,7 @@ int XC::Preprocessor::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(10);
+    inicComm(11);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -413,7 +420,7 @@ int XC::Preprocessor::sendSelf(Communicator &comm)
 //! @brief Receive object through the communicator argument.
 int XC::Preprocessor::recvSelf(const Communicator &comm)
   {
-    inicComm(10);
+    inicComm(11);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
@@ -446,6 +453,7 @@ boost::python::dict XC::Preprocessor::getPyDict(void) const
     retval["element_handler"]= elementHandler.getPyDict();
     retval["load_handler"]= loadHandler.getPyDict();
     retval["constraint_handler"]= constraintHandler.getPyDict();
+    retval["friction_model_handler"]= frictionModelHandler.getPyDict();
     retval["multi_block_topology"]= mbt.getPyDict();
     retval["sets"]= sets.getPyDict();
     return retval;
@@ -471,6 +479,7 @@ void XC::Preprocessor::setPyDict(const boost::python::dict &d)
     elementHandler.setPyDict(boost::python::extract<boost::python::dict>(d["element_handler"]));
     loadHandler.setPyDict(boost::python::extract<boost::python::dict>(d["load_handler"]));
     constraintHandler.setPyDict(boost::python::extract<boost::python::dict>(d["constraint_handler"]));
+    frictionModelHandler.setPyDict(boost::python::extract<boost::python::dict>(d["friction_model_handler"]));
     mbt.setPyDict(boost::python::extract<boost::python::dict>(d["multi_block_topology"]));
     sets.setPyDict(boost::python::extract<boost::python::dict>(d["sets"]));    
   }

@@ -30,6 +30,7 @@ enum_<XC::meshing_dir>("meshDir")
 XC::NodeHandler &(XC::Preprocessor::*getNodeHandlerRef)(void)= &XC::Preprocessor::getNodeHandler;
 XC::MaterialHandler &(XC::Preprocessor::*getMaterialHandlerRef)(void)= &XC::Preprocessor::getMaterialHandler;
 XC::BeamIntegratorHandler &(XC::Preprocessor::*getBeamIntegratorHandlerRef)(void)= &XC::Preprocessor::getBeamIntegratorHandler;
+XC::FrictionModelHandler &(XC::Preprocessor::*getFrictionModelHandlerRef)(void)= &XC::Preprocessor::getFrictionModelHandler;
 XC::ElementHandler &(XC::Preprocessor::*getElementHandlerRef)(void)= &XC::Preprocessor::getElementHandler;
 XC::BoundaryCondHandler &(XC::Preprocessor::*getBoundaryCondHandlerRef)(void)= &XC::Preprocessor::getBoundaryCondHandler;
 XC::LoadHandler &(XC::Preprocessor::*getLoadHandlerRef)(void)= &XC::Preprocessor::getLoadHandler;
@@ -45,6 +46,7 @@ class_<XC::Preprocessor, bases<CommandEntity>, boost::noncopyable >("Preprocesso
   .add_property("getNodeHandler", make_function( getNodeHandlerRef, return_internal_reference<>() ))
   .add_property("getMaterialHandler", make_function( getMaterialHandlerRef, return_internal_reference<>() ))
   .add_property("getBeamIntegratorHandler", make_function( getBeamIntegratorHandlerRef, return_internal_reference<>() ))
+  .add_property("getFrictionModelHandler", make_function( getFrictionModelHandlerRef, return_internal_reference<>() ))
   .add_property("getElementHandler", make_function( getElementHandlerRef, return_internal_reference<>() ))
   .add_property("getBoundaryCondHandler", make_function( getBoundaryCondHandlerRef, return_internal_reference<>() ))
   .add_property("getLoadHandler", make_function( getLoadHandlerRef, return_internal_reference<>() ))

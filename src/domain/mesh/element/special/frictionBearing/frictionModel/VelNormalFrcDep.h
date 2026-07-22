@@ -87,10 +87,11 @@ class VelNormalFrcDep : public Coulomb
     int recvData(const Communicator &);
   public:
     // constructor
-    VelNormalFrcDep();
+    VelNormalFrcDep(int tag= 0);
     VelNormalFrcDep(int tag,
-        double aSlow, double nSlow, double aFast, double nFast,
-        double alpha0, double alpha1, double alpha2, double maxMuFact);
+		    double aSlow, double nSlow, double aFast, double nFast,
+		    double alpha0, double alpha1, double alpha2,
+		    double maxMuFact);
     
     // public methods to set and obtain response
     int setTrial(double normalForce, double velocity = 0.0);
