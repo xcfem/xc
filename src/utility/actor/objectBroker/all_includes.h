@@ -213,6 +213,18 @@
 #include "domain/mesh/element/special/frictionBearing/frictionModel/VelNormalFrcDep.h"
 #include "domain/mesh/element/special/frictionBearing/frictionModel/VelDepMultiLinear.h"
 
+// friction bearings.
+#include "domain/mesh/element/special/frictionBearing/FlatSliderSimple2d.h"
+#include "domain/mesh/element/special/frictionBearing/FlatSliderSimple3d.h"
+#include "domain/mesh/element/special/frictionBearing/FrictionElementBase.h"
+#include "domain/mesh/element/special/frictionBearing/MultiFP2d.h"
+#include "domain/mesh/element/special/frictionBearing/RJWatsonEQS2d.h"
+#include "domain/mesh/element/special/frictionBearing/RJWatsonEQS3d.h"
+#include "domain/mesh/element/special/frictionBearing/SimpleBearingBase.h"
+#include "domain/mesh/element/special/frictionBearing/SingleFPSimple2d.h"
+#include "domain/mesh/element/special/frictionBearing/SingleFPSimple3d.h"
+#include "domain/mesh/element/special/frictionBearing/TripleFrictionPendulum.h"
+
 // physical properties
 #include "domain/mesh/element/utils/physical_properties/UniaxialMatPhysicalProperties.h"
 #include "domain/mesh/element/utils/physical_properties/ElasticSection1dPhysicalProperties.h"
