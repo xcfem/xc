@@ -87,6 +87,7 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getTotalMassComponent", &XC::Element::getTotalMassComponent,"Return the total mass matrix component for the DOF argument.")
   .def("nodeMass", getNodeMassRef, "Components of the element mass matrix corresponding to DOFs of the argument node.")
   .add_property("damp", make_function(getDampRef, return_internal_reference<>()) ,"Element damping matrix.")
+  .def("setRayleighDampingFactors", &XC::Element::setRayleighDampingFactors, "Set the rayleigh damping factors for the element.")
   .def("setDeadSRF",XC::Element::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation.")
   .add_property("getVtkCellType",&XC::Element::getVtkCellType,"Return cell type for Vtk graphics.")
   .def("getPosCentroid",&XC::Element::getCenterOfMassPosition,"getCenterOfMassPosition(initialCoordinates) return centroid's position. If initialCoordinates==True, return the initial position otherwise return the current position.")

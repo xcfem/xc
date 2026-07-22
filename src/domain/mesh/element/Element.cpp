@@ -158,7 +158,7 @@ int XC::Element::setRayleighDampingFactors(const RayleighDampingFactors &rF) con
 
     // check that memory has been allocated to store compute/return
     // damping matrix & residual force calculations
-    if(index == -1)
+    if(index == -1) 
       {
         int numDOF = this->getNumDOF();
 
@@ -395,8 +395,8 @@ void XC::Element::compute_damping_matrix(Matrix &theMatrix) const
 //! \f]
 const XC::Matrix &XC::Element::getDamp(void) const
   {
-    if(index == -1)
-      setRayleighDampingFactors(RayleighDampingFactors()); //Anula los factores de amortiguamiento.
+    if(index == -1) // If setRayleighDampingFactors has not been called.
+      setRayleighDampingFactors(this->rayFactors); //Allocate memory.
 
     // now compute the damping matrix
     Matrix &theMatrix= theMatrices[index];
@@ -416,8 +416,8 @@ const XC::Matrix &XC::Element::getDamp(void) const
 //! \f]
 const XC::Matrix &XC::Element::getMass(void) const
   {
-    if(index  == -1)
-      setRayleighDampingFactors(RayleighDampingFactors()); //Anula los factores de amortiguamiento.
+    if(index  == -1) // If setRayleighDampingFactors has not been called.
+      setRayleighDampingFactors(this->rayFactors); //Allocate memory.
 
     // zero the matrix & return it
     Matrix &theMatrix= theMatrices[index];
@@ -486,8 +486,8 @@ double XC::Element::getTotalMassComponent(const int &dof) const
 //! Computes damping matrix.
 const XC::Vector &XC::Element::getResistingForceIncInertia(void) const
   {
-    if(index == -1)
-      setRayleighDampingFactors(RayleighDampingFactors()); //Zeroes dumping factors.
+    if(index == -1) // If setRayleighDampingFactors has not been called.
+      setRayleighDampingFactors(this->rayFactors); //Allocate memory.
 
     Matrix &theMatrix= theMatrices[index];
     Vector &theVector= theVectors2[index];
@@ -654,8 +654,8 @@ XC::Matrix XC::Element::getEquivalentStaticNodalLoads(int mode,const double &acc
 const XC::Vector &XC::Element::getRayleighDampingForces(void) const
   {
 
-    if(index == -1)
-      setRayleighDampingFactors(RayleighDampingFactors()); //Anula los factores de amortiguamiento.
+    if(index == -1) // If setRayleighDampingFactors has not been called.
+      setRayleighDampingFactors(this->rayFactors); //Allocate memory.
 
     Matrix &theMatrix= theMatrices[index];
     Vector &theVector= theVectors2[index];
@@ -770,8 +770,8 @@ int XC::Element::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accel, b
 
 const XC::Matrix &XC::Element::getDampSensitivity(int gradNumber)
   {
-    if(index  == -1)
-      setRayleighDampingFactors(RayleighDampingFactors()); //Anula los factores de amortiguamiento.
+    if(index  == -1) // If setRayleighDampingFactors has not been called.
+      setRayleighDampingFactors(this->rayFactors); //Allocate memory.
 
     // now compute the damping matrix
     Matrix &theMatrix= theMatrices[index];
@@ -813,7 +813,7 @@ int XC::Element::addResistingForceToNodalReaction(bool inclInertia)
     // first we create the nodes in static arrays as presume
     // we are going to do this many times & save new/delete
     //
-    if(nodeIndex == -1)
+    if(nodeIndex == -1) // If setRayleighDampingFactors has not been called.
       {
         int numLastDOF = -1;
         const size_t numMatrices= theMatrices.size();
@@ -860,7 +860,7 @@ int XC::Element::addResistingForceToNodalReaction(bool inclInertia)
     else
       theResistingForce= &(getResistingForceIncInertia());
 
-    if(nodeIndex == -1)
+    if(nodeIndex == -1) 
       {
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; HUH!"
