@@ -173,7 +173,7 @@ if(not silent):
     plt.figure(figsize=(15,3))
     plt.plot(el_centro_raw[:,0], el_centro_raw[:,1], color='k')
 
-    plt.ylabel('$\ddot{d_g} (g)$', {'size':14})
+    plt.ylabel('$\\ddot{d_g} (g)$', {'size':14})
     plt.xlabel('Time (sec)', {'fontstyle':'italic','size':13})
 
     plt.grid()
@@ -186,7 +186,7 @@ if(not silent):
     plt.figure(figsize=(14,5))
 
     [plt.plot(data_frame[z]['T'], data_frame[z]['SD'],
-              label=('$\zeta$ = '+str(z))) for z in zeta_list]
+              label=('$\\zeta$ = '+str(z))) for z in zeta_list]
 
     plt.ylabel('Displacement (cm)', {'fontstyle':'italic','size':14})
     plt.xlabel('Period (sec)', {'fontstyle':'italic','size':14})
@@ -202,7 +202,7 @@ if(not silent):
     plt.figure(figsize=(14,5))
 
     [plt.plot(data_frame[z]['T'], data_frame[z]['SV'],
-              label=('$\zeta$ = '+str(z))) for z in zeta_list]
+              label=('$\\zeta$ = '+str(z))) for z in zeta_list]
 
     plt.ylabel('Velocity (cm/sec)', {'fontstyle':'italic','size':14})
     plt.xlabel('Period (sec)', {'fontstyle':'italic','size':14})
@@ -218,7 +218,7 @@ if(not silent):
     plt.figure(figsize=(14,5))
 
     [plt.plot(data_frame[z]['T'], np.array(data_frame[z]['SA'])/g,
-              label=('$\zeta$ = '+str(z))) for z in zeta_list]
+              label=('$\\zeta$ = '+str(z))) for z in zeta_list]
 
     plt.ylabel('Acceleration (g)', {'fontstyle':'italic','size':14})
     plt.xlabel('Period (sec)', {'fontstyle':'italic','size':14})
