@@ -91,7 +91,17 @@ class Coulomb: public FrictionModel
     inline double getMu() const
       { return this->mu; }
     void setMu(const double &d)
-      { this->mu= d; }
+      {
+	if(d <= 0.0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; the friction coefficient has to be positive."
+		      << std::endl;
+	    exit(-1);
+	  }
+
+	this->mu= d;
+      }
     
     int commitState(void);
     int revertToLastCommit(void);

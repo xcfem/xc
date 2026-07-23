@@ -57,9 +57,17 @@ class_<XC::VelDependent, bases<XC::Coulomb>, boost::noncopyable >("VelDependent"
   ;
 
 class_<XC::VelPressureDep, bases<XC::VelDependent>, boost::noncopyable >("VelPressureDep", no_init)
-  .add_property("A", &XC::VelPressureDep::getA, &XC::VelPressureDep::setA, "nominal contact area.")
-  .add_property("deltaMu", &XC::VelPressureDep::getDeltaMu, &XC::VelPressureDep::setDeltaMu, "pressure parameter.")
-  .add_property("alpha", &XC::VelPressureDep::getAlpha, &XC::VelPressureDep::setAlpha, "pressure parameter.")
+  .def("setNominalContactArea", &XC::VelPressureDep::setNominalContacArea, "Set value for nominal contact area.")
+  .def("getNominalContactArea", &XC::VelPressureDep::getNominalContacArea, "Get value for nominal contact area.")
+  .add_property("A", &XC::VelPressureDep::getNominalContacArea, &XC::VelPressureDep::setNominalContacArea, "nominal contact area.")
+
+  .def("setDeltaMuPressureParameter", &XC::VelPressureDep::setDeltaMuPressureParameter, "Set DeltaMu pressure parameter.")
+  .def("getDeltaMuPressureParameter", &XC::VelPressureDep::getDeltaMuPressureParameter, "Get DeltaMu pressure parameter.")
+  .add_property("deltaMu", &XC::VelPressureDep::getDeltaMuPressureParameter, &XC::VelPressureDep::setDeltaMuPressureParameter, "deltaMu pressure parameter.")
+
+  .def("setAlphaPressureParameter", &XC::VelPressureDep::setAlphaPressureParameter, "Set value for alpha pressure parameter.")
+  .def("getAlphaPressureParameter", &XC::VelPressureDep::getAlphaPressureParameter, "Get value for alpha pressure parameter.")
+  .add_property("alpha", &XC::VelPressureDep::getAlphaPressureParameter, &XC::VelPressureDep::setAlphaPressureParameter, "alpha pressure parameter.")
 
   // read-only, since this looks like a derived/output quantity.
   .add_property("DmuDn", &XC::VelPressureDep::getDmuDn, "derivative of friction coefficient with respect to normal force.")
