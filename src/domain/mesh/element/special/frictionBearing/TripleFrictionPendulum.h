@@ -41,8 +41,8 @@ class Response;
 class TripleFrictionPendulum : public Element0D
   {
   private:
-    FrictionModels frictionModels; //!< pointer to friction model
-    UniaxialMatPhysicalProperties physicalProperties;  //!<array of uniaxial materials
+    FrictionModels frictionModels; //!< friction models
+    UniaxialMatPhysicalProperties physicalProperties;  //!< array of uniaxial materials
     
     double L1;
     double L2;
@@ -154,6 +154,42 @@ class TripleFrictionPendulum : public Element0D
         double tol);
     
     TripleFrictionPendulum();
+    
+    double getL1() const { return L1; }
+    void setL1(double val) { L1 = val; }
+
+    double getL2() const { return L2; }
+    void setL2(double val) { L2 = val; }
+
+    double getL3() const { return L3; }
+    void setL3(double val) { L3 = val; }
+
+    double getUbar1() const { return Ubar1; }
+    void setUbar1(double val) { Ubar1 = val; }
+
+    double getUbar2() const { return Ubar2; }
+    void setUbar2(double val) { Ubar2 = val; }
+
+    double getUbar3() const { return Ubar3; }
+    void setUbar3(double val) { Ubar3 = val; }
+
+    double getW() const { return W; }
+    void setW(double val) { W = val; }
+
+    double getUy() const { return Uy; }
+    void setUy(double val) { Uy = val; }
+
+    double getKvt() const { return Kvt; }
+    void setKvt(double val) { Kvt = val; }
+
+    double getMinFv() const { return MinFv; }
+    void setMinFv(double val) { MinFv = val; }
+
+    double getTol() const { return TOL; }
+    void setTol(double val) { TOL = val; }
+
+    int getNiter() const { return Niter; }
+    void setNiter(int val) { Niter = val; }
     
     void setDomain(Domain *theDomain);
     

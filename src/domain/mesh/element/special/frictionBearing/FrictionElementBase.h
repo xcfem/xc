@@ -81,18 +81,22 @@ class FrictionElementBase: public Element0D
     FrictionElementBase(int classTag,const size_t &);
     
     // parameters
+    inline FrictionModels &getFrictionModels()
+      { return this->frictionModels; }
+    inline UniaxialMatPhysicalProperties &getMaterials()
+      { return this->physicalProperties;; }
     void setLocalXDirection(const Vector &x);
     const Vector &getLocalXDirection(void) const;
     void setLocalYDirection(const Vector &x);
     const Vector &getLocalYDirection(void) const;
     void setBearingElementMass(const double &);
-    const double &getBearingElementMass(void) const;
+    double getBearingElementMass(void) const;
     void setMaxIter(const int &);
     int getMaxIter(void) const;
     void setTol(const double &);
-    const double &getTol(void) const;
+    double getTol(void) const;
     void setLength(const double &);
-    const double &getLength(void) const;
+    double getLength(void) const;
     
     
     // state variables

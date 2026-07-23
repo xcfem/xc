@@ -93,6 +93,26 @@ class VelPressureDep: public VelDependent
         double deltaMu, double alpha, double transRate);
     FrictionModel *getCopy(void) const;
     
+    double getA() const
+      { return A; }
+    void setA(const double &d)
+      { A = d; }
+
+    double getDeltaMu() const
+      { return deltaMu; }
+    void setDeltaMu(const double &d)
+      { deltaMu = d; }
+
+    double getAlpha() const
+      { return alpha; }
+    void setAlpha(const double &d)
+      { alpha = d; }
+
+    double getDmuDn() const
+      { return DmuDn; }
+    void setDmuDn(const double &d)
+      { DmuDn = d; }
+    
     // public methods to set and obtain response
     int setTrial(double normalForce, double velocity = 0.0);
     double getDFFrcDNFrc(void);

@@ -21,7 +21,7 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::FrictionResponse, bases<XC::Response>, boost::noncopyable >("FrictionResponse", no_init);
+//class_<XC::FrictionResponse, bases<XC::Response>, boost::noncopyable >("FrictionResponse", no_init);
 
 class_<XC::FrictionModel , bases<XC::TaggedObject>, boost::noncopyable >("FrictionModel", no_init)
   .def("getTrialN", &XC::FrictionModel::getTrialN, "Get trial normal contact force.")
@@ -56,10 +56,35 @@ class_<XC::VelDependent, bases<XC::Coulomb>, boost::noncopyable >("VelDependent"
   .add_property("DmuDvel", &XC::VelDependent::getDmuDvel, &XC::VelDependent::setDmuDvel, "Get/set derivative of COF wrt to velocity.")
   ;
 
-class_<XC::VelPressureDep, bases<XC::VelDependent>, boost::noncopyable >("VelPressureDep", no_init);
+class_<XC::VelPressureDep, bases<XC::VelDependent>, boost::noncopyable >("VelPressureDep", no_init)
+  .add_property("A", &XC::VelPressureDep::getA, &XC::VelPressureDep::setA, "nominal contact area.")
+  .add_property("deltaMu", &XC::VelPressureDep::getDeltaMu, &XC::VelPressureDep::setDeltaMu, "pressure parameter.")
+  .add_property("alpha", &XC::VelPressureDep::getAlpha, &XC::VelPressureDep::setAlpha, "pressure parameter.")
 
-class_<XC::VelNormalFrcDep, bases<XC::Coulomb>, boost::noncopyable >("VelNormalFrcDep", no_init);
+  // read-only, since this looks like a derived/output quantity.
+  .add_property("DmuDn", &XC::VelPressureDep::getDmuDn, "derivative of friction coefficient with respect to normal force.")
+  ;
 
-class_<XC::VelDepMultiLinear, bases<XC::Coulomb>, boost::noncopyable >("VelDepMultiLinear", no_init);
+class_<XC::VelNormalFrcDep, bases<XC::Coulomb>, boost::noncopyable >("VelNormalFrcDep", no_init)
+  .add_property("aSlow", &XC::VelNormalFrcDep::getASlow, &XC::VelNormalFrcDep::setASlow, "constant for slow friction coefficient.")
+  .add_property("nSlow", &XC::VelNormalFrcDep::getNSlow, &XC::VelNormalFrcDep::setNSlow, "normal force exponent for slow friction coefficient (nSlow <= 0)")
+  .add_property("aFast", &XC::VelNormalFrcDep::getAFast, &XC::VelNormalFrcDep::setAFast, "constant for fast friction coefficient.")
+  .add_property("nFast", &XC::VelNormalFrcDep::getNFast, &XC::VelNormalFrcDep::setNFast, "normal force exponent for fast friction coefficient (nFast <= 0)")
+  .add_property("alpha0", &XC::VelNormalFrcDep::getAlpha0, &XC::VelNormalFrcDep::setAlpha0, "constant rate parameter.")
+  .add_property("alpha1", &XC::VelNormalFrcDep::getAlpha1, &XC::VelNormalFrcDep::setAlpha1, "linear rate parameter.")
+  .add_property("alpha2", &XC::VelNormalFrcDep::getAlpha2, &XC::VelNormalFrcDep::setAlpha2, "quadratic rate parameter.")
+  .add_property("maxMuFact", &XC::VelNormalFrcDep::getMaxMuFact, &XC::VelNormalFrcDep::setMaxMuFact, "factor for determining the maximum friction coefficients.")
+
+  // read-only, since these look like derived/output quantities
+  .add_property("DmuDn", &XC::VelNormalFrcDep::getDmuDn, "derivative of friction coefficient with respect normal force.")
+  .add_property("DmuDvel", &XC::VelNormalFrcDep::getDmuDvel, "derivative of friction coefficient with respect to to velocity.")
+  ;
+
+class_<XC::VelDepMultiLinear, bases<XC::Coulomb>, boost::noncopyable >("VelDepMultiLinear", no_init)
+  .add_property("velocityFrictionPoints", &XC::VelDepMultiLinear::getVelocityFrictionPoints, &XC::VelDepMultiLinear::setVelocityFrictionPoints, "Get/set the list of tuples (velocity, COF) that define the bearing behavior.")
+  .add_property("trialID", &XC::VelDepMultiLinear::getTrialID, &XC::VelDepMultiLinear::setTrialID, "trial ID into velocity, friction arrays.")
+  .add_property("trialIDmin", &XC::VelDepMultiLinear::getTrialIDmin, &XC::VelDepMultiLinear::setTrialIDmin, "minimum of trial ID.")
+  .add_property("trialIDmax", &XC::VelDepMultiLinear::getTrialIDmax, &XC::VelDepMultiLinear::setTrialIDmax, "maximum of trial ID.")
+  ;
 
 

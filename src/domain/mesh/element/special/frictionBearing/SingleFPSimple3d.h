@@ -114,7 +114,17 @@ class SingleFPSimple3d: public SimpleBearingBase
     SingleFPSimple3d(void);
     Element *getCopy() const;
 	
-    // public methods to obtain information about dof & connectivity
+    double getConcaveSlidingDishEffRadius() const
+      { return Reff; }
+    void setConcaveSlidingDishEffRadius(double val)
+      { Reff = val; }
+
+    int getIncludeVerticalDispFlag() const
+      { return inclVertDisp; }
+    void setIncludeVerticalDispFlag(int val)
+      { inclVertDisp = val; }
+    
+     // public methods to obtain information about dof & connectivity
     void setDomain(Domain *theDomain);
 	
     // public methods to set the state of the element

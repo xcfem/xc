@@ -101,7 +101,7 @@ const XC::Vector &XC::FrictionElementBase::getLocalYDirection(void) const
 void XC::FrictionElementBase::setBearingElementMass(const double &d)
   { this->mass= d; }
 //! @brief Get the mass of the element.
-const double &XC::FrictionElementBase::getBearingElementMass(void) const
+double XC::FrictionElementBase::getBearingElementMass(void) const
   { return this->mass; }
 //! @brief Set the maximum number of iterations.
 void XC::FrictionElementBase::setMaxIter(const int &i)
@@ -113,13 +113,13 @@ int XC::FrictionElementBase::getMaxIter(void) const
 void XC::FrictionElementBase::setTol(const double &d)
   { this->tol= d; }
 //! @brief Get the tolerance for convergence criterion.
-const double &XC::FrictionElementBase::getTol(void) const
+double XC::FrictionElementBase::getTol(void) const
   { return this->tol; }
 //! @brief Set the element length.
 void XC::FrictionElementBase::setLength(const double &d)
   { this->L= d; }
 //! @brief Get the element length.
-const double &XC::FrictionElementBase::getLength(void) const
+double XC::FrictionElementBase::getLength(void) const
   { return this->L; }
 
 

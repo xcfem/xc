@@ -112,24 +112,24 @@ int XC::VelNormalFrcDep::setTrial(double normalForce, double velocity)
     // get COF for given normal force and trial velocity
     double temp1 = exp(-transRate*fabs(trialVel));
     double temp2 = (muFast - muSlow)*temp1;
-    mu = muFast - temp2;
-    if (mu > maxMuFact*muFast || trialN <= 0.0)
-        mu = maxMuFact*muFast;
+    this->mu = muFast - temp2;
+    if (this->mu > maxMuFact*muFast || trialN <= 0.0)
+        this->mu = maxMuFact*muFast;
     
     // get derivative of COF wrt normal force
-    double DmuSlowDn = aSlow*(nSlow-1.0)*pow(trialN,nSlow-2.0);
-    double DmuFastDn = aFast*(nFast-1.0)*pow(trialN,nFast-2.0);
-    DmuDn = DmuFastDn - (DmuFastDn - DmuSlowDn)*temp1
-          + (alpha1 + 2.0*alpha2*trialN)*fabs(trialVel)*temp2;
+    const double DmuSlowDn= aSlow*(nSlow-1.0)*pow(trialN,nSlow-2.0);
+    const double DmuFastDn= aFast*(nFast-1.0)*pow(trialN,nFast-2.0);
+    this->DmuDn= DmuFastDn - (DmuFastDn - DmuSlowDn)*temp1
+      + (alpha1 + 2.0*alpha2*trialN)*fabs(trialVel)*temp2;
     
     // get derivative of COF wrt velocity
     if (trialVel != 0.0)
-        DmuDvel = transRate*trialVel/fabs(trialVel)*temp2;
+        this->DmuDvel = transRate*trialVel/fabs(trialVel)*temp2;
     else
-        DmuDvel = 0.0;
+        this->DmuDvel = 0.0;
     
     return 0;
-}
+  }
 
 
 
