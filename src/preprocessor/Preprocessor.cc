@@ -361,7 +361,7 @@ XC::FE_Datastore *XC::Preprocessor::getDataBase(void)
 //! of the class members
 XC::DbTagData &XC::Preprocessor::getDbTagData(void) const
   {
-    static DbTagData retval(10);
+    static DbTagData retval(11);
     return retval;
   }
 
@@ -396,7 +396,7 @@ int XC::Preprocessor::recvData(const Communicator &comm)
     //res+= comm.receiveMovable(frictionModelHandler,getDbTagData(),CommMetaData(7));
     res+= comm.receiveMovable(mbt,getDbTagData(),CommMetaData(8));
     assert(domain);
-    res+= receiveDomain(*domain,8,getDbTagData(),comm);
+    res+= receiveDomain(*domain,9,getDbTagData(),comm);
     res+= comm.receiveMovable(sets,getDbTagData(),CommMetaData(10));
     return res;
   }
@@ -406,7 +406,7 @@ int XC::Preprocessor::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(11);
+    inicComm(getDbTagData().Size());
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -420,7 +420,7 @@ int XC::Preprocessor::sendSelf(Communicator &comm)
 //! @brief Receive object through the communicator argument.
 int XC::Preprocessor::recvSelf(const Communicator &comm)
   {
-    inicComm(11);
+    inicComm(getDbTagData().Size());
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
