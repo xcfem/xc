@@ -74,13 +74,36 @@ class_<XC::VelPressureDep, bases<XC::VelDependent>, boost::noncopyable >("VelPre
   ;
 
 class_<XC::VelNormalFrcDep, bases<XC::Coulomb>, boost::noncopyable >("VelNormalFrcDep", no_init)
+  .def("getASlow", &XC::VelNormalFrcDep::getASlow, "Get constant for slow friction coefficient.")
+  .def("setASlow", &XC::VelNormalFrcDep::setASlow, "Set constant for slow friction coefficient.")
   .add_property("aSlow", &XC::VelNormalFrcDep::getASlow, &XC::VelNormalFrcDep::setASlow, "constant for slow friction coefficient.")
+
+  .def("getNSlow", &XC::VelNormalFrcDep::getNSlow, "Get normal force exponent for slow friction coefficient.")
+  .def("setNSlow", &XC::VelNormalFrcDep::setNSlow, "Set normal force exponent for slow friction coefficient (nSlow <= 0)")
   .add_property("nSlow", &XC::VelNormalFrcDep::getNSlow, &XC::VelNormalFrcDep::setNSlow, "normal force exponent for slow friction coefficient (nSlow <= 0)")
+
+  .def("getAFast", &XC::VelNormalFrcDep::getAFast, "Get constant for fast friction coefficient.")
+  .def("setAFast", &XC::VelNormalFrcDep::setAFast, "Set constant for fast friction coefficient.")
   .add_property("aFast", &XC::VelNormalFrcDep::getAFast, &XC::VelNormalFrcDep::setAFast, "constant for fast friction coefficient.")
-  .add_property("nFast", &XC::VelNormalFrcDep::getNFast, &XC::VelNormalFrcDep::setNFast, "normal force exponent for fast friction coefficient (nFast <= 0)")
+
+  .def("getNFast", &XC::VelNormalFrcDep::getNFast, "Get normal force exponent for fast friction coefficient.")
+  .def("setNFast", &XC::VelNormalFrcDep::setNFast, "Set normal force exponent for fast friction coefficient (nFast <= 0).")
+  .add_property("nFast", &XC::VelNormalFrcDep::getNFast, &XC::VelNormalFrcDep::setNFast, "normal force exponent for fast friction coefficient (nFast <= 0).")
+
+  .def("getAlpha0", &XC::VelNormalFrcDep::getAlpha0, "Get constant rate parameter.")
+  .def("setAlpha0", &XC::VelNormalFrcDep::setAlpha0, "Set constant rate parameter.")
   .add_property("alpha0", &XC::VelNormalFrcDep::getAlpha0, &XC::VelNormalFrcDep::setAlpha0, "constant rate parameter.")
+
+  .def("getAlpha1", &XC::VelNormalFrcDep::getAlpha1, "Get linear rate parameter.")
+  .def("setAlpha1", &XC::VelNormalFrcDep::setAlpha1, "Set linear rate parameter.")
   .add_property("alpha1", &XC::VelNormalFrcDep::getAlpha1, &XC::VelNormalFrcDep::setAlpha1, "linear rate parameter.")
+
+  .def("getAlpha2", &XC::VelNormalFrcDep::getAlpha2, "Get quadratic rate parameter.")
+  .def("setAlpha2", &XC::VelNormalFrcDep::setAlpha2, "Set quadratic rate parameter.")
   .add_property("alpha2", &XC::VelNormalFrcDep::getAlpha2, &XC::VelNormalFrcDep::setAlpha2, "quadratic rate parameter.")
+
+  .def("getMaxMuFact", &XC::VelNormalFrcDep::getMaxMuFact, "Get factor for determining the maximum friction coefficients.")
+  .def("setMaxMuFact", &XC::VelNormalFrcDep::setMaxMuFact, "Set factor for determining the maximum friction coefficients.")
   .add_property("maxMuFact", &XC::VelNormalFrcDep::getMaxMuFact, &XC::VelNormalFrcDep::setMaxMuFact, "factor for determining the maximum friction coefficients.")
 
   // read-only, since these look like derived/output quantities
@@ -89,6 +112,8 @@ class_<XC::VelNormalFrcDep, bases<XC::Coulomb>, boost::noncopyable >("VelNormalF
   ;
 
 class_<XC::VelDepMultiLinear, bases<XC::Coulomb>, boost::noncopyable >("VelDepMultiLinear", no_init)
+  .def("getVelocityFrictionPoints", &XC::VelDepMultiLinear::getVelocityFrictionPoints, "Get the list of tuples (velocity, COF) that define the bearing behavior.")
+  .def("setVelocityFrictionPoints", &XC::VelDepMultiLinear::setVelocityFrictionPoints, "Set the list of tuples (velocity, COF) that define the bearing behavior.")
   .add_property("velocityFrictionPoints", &XC::VelDepMultiLinear::getVelocityFrictionPoints, &XC::VelDepMultiLinear::setVelocityFrictionPoints, "Get/set the list of tuples (velocity, COF) that define the bearing behavior.")
   .add_property("trialID", &XC::VelDepMultiLinear::getTrialID, &XC::VelDepMultiLinear::setTrialID, "trial ID into velocity, friction arrays.")
   .add_property("trialIDmin", &XC::VelDepMultiLinear::getTrialIDmin, &XC::VelDepMultiLinear::setTrialIDmin, "minimum of trial ID.")

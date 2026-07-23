@@ -94,8 +94,7 @@ XC::VelNormalFrcDep::VelNormalFrcDep(int tag,
     
     // initialize variables
     this->revertToStart();
-}
-
+  }
 
 
 int XC::VelNormalFrcDep::setTrial(double normalForce, double velocity)
