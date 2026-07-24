@@ -81,6 +81,8 @@ boost::python::dict XC::sdof_response::getPyDict(void) const
     retval["up"]= up;
     retval["max_accel"]= max_accel;
     retval["time_max_accel"]= time_max_accel;
+    retval["max_true_accel"]= max_true_accel;
+    retval["time_max_true_accel"]= time_max_true_accel;
     return retval;
   }
 
@@ -105,12 +107,12 @@ XC::SDOFResponse::SDOFResponse(double _m,
 //! @param uresidual: residual displacement at the end of previous analysis
 //!                   (optional, default=0).
 //! @param max_prev_displ: previous displacement (optional, default=0).
-//! @param forces: input forces.
+//! @param accelerations: input accelerations.
 int XC::SDOFResponse::get_response(double dtF,
 				   double dt,
 				   double uresidual,
 				   double max_prev_displ,
-				   const std::vector<double> &forces,
+				   const std::vector<double> &accelerations,
 				   struct sdof_response &result)
   {
     const double gamma= 0.5;
@@ -145,16 +147,18 @@ int XC::SDOFResponse::get_response(double dtF,
     double max_vel= 0.0;
     double max_accel= 0.0;
     double time_max_accel= 0.0;
+    double max_true_accel= 0.0;
+    double time_max_true_accel= 0.0;
     double up= uresidual;
     double up0= up;
 
     //int i= 0;
     double u=0, du, v, a, fs, zs, ftrial, kT, kTeff, dg, phat, R, R0;
 
-    const size_t sz= forces.size();
+    const size_t sz= accelerations.size();
     for(size_t j= 0;j<sz;j++)
       {
-	const double &ft= forces[j];
+	const double &inputAccel= accelerations[j];
         //i++;
     
         u= u0;
@@ -163,7 +167,7 @@ int XC::SDOFResponse::get_response(double dtF,
         kT= kT0;
         up= up0;
       
-        phat= ft + a1*u0 + a2*v0 + a3*a0;
+        phat= inputAccel + a1*u0 + a2*v0 + a3*a0;
       
         R= phat - fs - a1*u;
         R0= R;
@@ -210,6 +214,7 @@ int XC::SDOFResponse::get_response(double dtF,
 
         v= vu*(u-u0) + vv*v0 + va*a0;
         a= au*(u-u0) - av*v0 - aa*a0;
+	const double true_accel= a-inputAccel;
 
         u0= u;
         v0= v;
@@ -229,12 +234,16 @@ int XC::SDOFResponse::get_response(double dtF,
         if(fabs(a) > max_accel)
 	  {
             max_accel= fabs(a);
-            //time_max_accel= i*dt;
             time_max_accel= (j+1)*dt;
+	  }
+        if(fabs(true_accel) > max_true_accel)
+	  {
+            max_true_accel= fabs(true_accel);
+            time_max_true_accel= (j+1)*dt;
 	  }
       }
   
-    result= sdof_response(max_displ, max_vel, u, up, max_accel, time_max_accel);
+    result= sdof_response(max_displ, max_vel, u, up, max_accel, time_max_accel, max_true_accel, time_max_true_accel);
 
     return 0;
   }
@@ -246,17 +255,17 @@ int XC::SDOFResponse::get_response(double dtF,
 //! @param uresidual: residual displacement at the end of previous analysis
 //!                   (optional, default=0).
 //! @param max_prev_displ: previous displacement (optional, default=0).
-//! @param forces: input forces.
+//! @param accelerations: input accelerations.
 boost::python::dict XC::SDOFResponse::getResponse(double dtF,
 						  double dt,
-						  const boost::python::list &forces,
+						  const boost::python::list &accelerations,
 						  double uresidual,
 						  double max_prev_displ)
   {
-    const size_t sz= boost::python::len(forces);
+    const size_t sz= boost::python::len(accelerations);
     std::vector<double> tmp(sz);
     for(size_t i= 0; i<sz; i++)
-      tmp[i]= boost::python::extract<double>(forces[i]);
+      tmp[i]= boost::python::extract<double>(accelerations[i]);
     sdof_response resp;
     this->get_response(dtF, dt, uresidual, max_prev_displ, tmp, resp);
     return resp.getPyDict();

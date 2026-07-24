@@ -37,12 +37,18 @@
 namespace XC {
 struct sdof_response
   {
-    double max_displ, max_vel, u, up, max_accel, time_max_accel;
+    double max_displ, max_vel, u, up, max_accel, time_max_accel, max_true_accel, time_max_true_accel;
     sdof_response(void)
-      : max_displ(0.0), max_vel(0.0), u(0.0), up(0.0), max_accel(0.0), time_max_accel(0.0)
+      : max_displ(0.0), max_vel(0.0),
+	u(0.0), up(0.0),
+	max_accel(0.0), time_max_accel(0.0),
+	max_true_accel(0.0), time_max_true_accel(0.0)
     {}
-    sdof_response(double md, double mv, double _u, double _up, double ma, double tma)
-      : max_displ(md), max_vel(mv), u(_u), up(_up), max_accel(ma), time_max_accel(tma)
+    sdof_response(double md, double mv, double _u, double _up, double ma, double tma, double mta, double tmta)
+      : max_displ(md), max_vel(mv),
+	u(_u), up(_up),
+	max_accel(ma), time_max_accel(tma),
+	max_true_accel(mta), time_max_true_accel(tmta)
     {}
     boost::python::dict getPyDict(void) const;
   };
@@ -66,7 +72,7 @@ class SDOFResponse
 		     double dt,
 		     double uresidual,
 		     double max_prev_displ,
-		     const std::vector<double> &forces,
+		     const std::vector<double> &accelerations,
 		     struct sdof_response &result);
   public:
     SDOFResponse();
@@ -99,7 +105,7 @@ class SDOFResponse
 
     boost::python::dict getResponse(double dtF,
 				    double dt,
-				    const boost::python::list &forces,
+				    const boost::python::list &accelerations,
 				    double uresidual= 0.0,
 				    double max_prev_displ= 0.0);
     

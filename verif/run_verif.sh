@@ -808,7 +808,12 @@ echo "$BLEU" "  Time history solution tests." "$NORMAL"
 python tests/solution/time_history/test_time_history_00.py
 python tests/solution/time_history/test_time_history_01.py
 python tests/solution/time_history/test_pseudo_time_history.py
+
+## Ground motion.
+echo "$BLEU" "  Ground motion solution tests." "$NORMAL"
 python tests/solution/time_history/elastic_response_spectra.py
+python tests/solution/time_history/test_sdof_response_01.py
+python tests/solution/time_history/test_sdof_response_02.py
 
 ## Convergence tests.
 echo "$BLEU" "  Convergence tests." "$NORMAL"
