@@ -56,6 +56,8 @@
 #include "utility/geom/coo_sys/ref_sys/PrincipalAxes2D.h"
 #include "utility/geom/coo_sys/ref_sys/PrincipalAxes3D.h"
 
+#include "utility/synth_quake/SDOFResponse.h"
+
 //Physical properties.
 typedef XC::PhysicalProperties<XC::UniaxialMaterial> PhysicalProperties_UMat;
 typedef PhysicalProperties_UMat::material_vector material_vector_UMat;
