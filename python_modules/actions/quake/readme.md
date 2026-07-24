@@ -13,3 +13,5 @@ From Wikipedia: seismic loading is one of the basic concepts of earthquake engin
 - [How to Apply a Pulse Ground Motion](https://portwooddigital.com/2023/11/01/how-to-apply-a-pulse-ground-motion/)
 - [Effective Earthquake Forces](https://portwooddigital.com/2024/06/02/effective-earthquake-forces/)
 - [Earthquake Engineering Experts Hate Me for This One Weird Trick](https://portwooddigital.com/2024/06/10/earthquake-engineering-experts-hate-me-for-this-one-weird-trick/)
+- [How Many Clicks Does It Take?](https://openseesdigital.com/2021/02/14/how-many-clicks-does-it-take/)
+- [Elastic Response Spectra](https://github.com/AmirHosseinNamadchi/OpenSeesPy-Examples/blob/master/Elastic%20Response%20Spectra.ipynb)

@@ -15,6 +15,7 @@ import json
 import xc
 import numpy as np
 from scipy.constants import g
+from actions.quake import response_spectrum as rs
 
 silent= True
 
@@ -28,45 +29,16 @@ el_centro_raw= np.loadtxt(accelFilePath)
 timeValues= el_centro_raw[:,0]
 accelerationValues= list(el_centro_raw[:,1]*g)
 
-# Define a period range below
+# a list of damping ratios to be included
+zeta_list= [0.02, 0.03, 0.05]
 T_min= 0.00001
 T_max= 5
-dtF= timeValues[1]-timeValues[0] # time step for input data.
-dT= dtF # time step for analysis.
+dtA= timeValues[1]-timeValues[0] # time step for input data.
+Fy= 1e16 # yielding strength (big value, so no yielding at all).
+alpha= .01 # strain-hardening ratio (no yielding so does not matter).
 
-# SDOF response object.
-m= 1.0 # mass.
-zeta= .05 # damping ratio (to be set later).
-k= 0.0 # stiffness (to be set later).
-Fy= 1e16 # yielding strength.
-alpha= .01 # strain-hardening ratio.
-sdfResponse= xc.SDOFResponse(m, zeta, k, Fy, alpha)
+data_frame= rs.compute_response_spectrum(accelerations= accelerationValues, dtA= dtA, dt= None, zLst= zeta_list, T_min= T_min, T_max= T_max, Fy= Fy, alpha= alpha, silent= silent)
 
-# a list of damping ratios to be included
-zeta_list= np.array([0.02, 0.03, 0.05])
-
-# Use nested loops to analyse the system for various damping ratios and periods.
-data_frame = dict()
-for z in zeta_list:    
-    resp = {'T':[0.0],'SD':[0.0], 'SV':[0.0], 'SA':[0.0], 'TA':[0.0], 'STA':[0.0], 'TTA':[0.0]}
-    for T in np.arange(T_min, T_max, dT):
-
-        k = (2*math.pi/T)**2 # mass = 1.0
-        sdfResponse.setStiffness(k)
-        sdfResponse.setDampingRatio(z)
-        sr= sdfResponse.getResponse(dtF, dT, accelerationValues, 0.0, 0.0)
-        resp['SD'].append(sr['max_displ'])
-        resp['SV'].append(sr['max_vel'])
-        resp['SA'].append(sr['max_accel'])
-        resp['TA'].append(sr['time_max_accel'])
-        resp['STA'].append(sr['max_true_accel'])
-        resp['TTA'].append(sr['time_max_true_accel'])
-        resp['T'].append(T)
-    # Appending keys and values dynamically
-    data_frame[z] = resp
-    if(not silent):
-        print('Done with zeta= '+str(z)+'!')
-    
 refFilePath= pth+"/../../aux/reference_files/"
 fname= os.path.basename(__file__)
 jsonFileName= refFilePath+'/ref_'+fname.replace('.py', '.json')
