@@ -72,7 +72,7 @@ class SDOFResponse
 		     double dt,
 		     double uresidual,
 		     double max_prev_displ,
-		     const std::vector<double> &accelerations,
+		     const std::vector<double> &forces,
 		     struct sdof_response &result);
   public:
     SDOFResponse();
@@ -105,7 +105,7 @@ class SDOFResponse
 
     boost::python::dict getResponse(double dtF,
 				    double dt,
-				    const boost::python::list &accelerations,
+				    const boost::python::list &forces,
 				    double uresidual= 0.0,
 				    double max_prev_displ= 0.0);
     

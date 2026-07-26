@@ -107,12 +107,12 @@ XC::SDOFResponse::SDOFResponse(double _m,
 //! @param uresidual: residual displacement at the end of previous analysis
 //!                   (optional, default=0).
 //! @param max_prev_displ: previous displacement (optional, default=0).
-//! @param accelerations: input accelerations.
+//! @param forces: input forces.
 int XC::SDOFResponse::get_response(double dtF,
 				   double dt,
 				   double uresidual,
 				   double max_prev_displ,
-				   const std::vector<double> &accelerations,
+				   const std::vector<double> &forces,
 				   struct sdof_response &result)
   {
     const double gamma= 0.5;
@@ -155,10 +155,10 @@ int XC::SDOFResponse::get_response(double dtF,
     //int i= 0;
     double u=0, du, v, a, fs, zs, ftrial, kT, kTeff, dg, phat, R, R0;
 
-    const size_t sz= accelerations.size();
+    const size_t sz= forces.size();
     for(size_t j= 0;j<sz;j++)
       {
-	const double &inputAccel= accelerations[j];
+	const double &inputForce= forces[j];
         //i++;
     
         u= u0;
@@ -167,7 +167,7 @@ int XC::SDOFResponse::get_response(double dtF,
         kT= kT0;
         up= up0;
       
-        phat= inputAccel + a1*u0 + a2*v0 + a3*a0;
+        phat= inputForce + a1*u0 + a2*v0 + a3*a0;
       
         R= phat - fs - a1*u;
         R0= R;
@@ -214,7 +214,7 @@ int XC::SDOFResponse::get_response(double dtF,
 
         v= vu*(u-u0) + vv*v0 + va*a0;
         a= au*(u-u0) - av*v0 - aa*a0;
-	const double true_accel= a-inputAccel;
+	const double true_accel= a-inputForce/this->m;
 
         u0= u;
         v0= v;
@@ -255,17 +255,17 @@ int XC::SDOFResponse::get_response(double dtF,
 //! @param uresidual: residual displacement at the end of previous analysis
 //!                   (optional, default=0).
 //! @param max_prev_displ: previous displacement (optional, default=0).
-//! @param accelerations: input accelerations.
+//! @param forces: input forces.
 boost::python::dict XC::SDOFResponse::getResponse(double dtF,
 						  double dt,
-						  const boost::python::list &accelerations,
+						  const boost::python::list &forces,
 						  double uresidual,
 						  double max_prev_displ)
   {
-    const size_t sz= boost::python::len(accelerations);
+    const size_t sz= boost::python::len(forces);
     std::vector<double> tmp(sz);
     for(size_t i= 0; i<sz; i++)
-      tmp[i]= boost::python::extract<double>(accelerations[i]);
+      tmp[i]= boost::python::extract<double>(forces[i]);
     sdof_response resp;
     this->get_response(dtF, dt, uresidual, max_prev_displ, tmp, resp);
     return resp.getPyDict();
