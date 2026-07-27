@@ -76,9 +76,8 @@ class FrictionElementBase: public Element0D
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    // constructors
+    FrictionElementBase(int tag, int classTag,const size_t &);
     FrictionElementBase(int tag, int classTag, int Nd1, int Nd2, const size_t &dim, const FrictionModels &, const UniaxialMatPhysicalProperties &, const Vector &y= Vector(), const Vector &x= Vector(), const double &mass = 0.0, const int &maxIter= 20, const double &tol= 1E-8);
-    FrictionElementBase(int classTag,const size_t &);
     
     // parameters
     inline FrictionModels &getFrictionModels()

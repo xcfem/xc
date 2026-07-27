@@ -101,7 +101,7 @@ class SingleFPSimple3d: public SimpleBearingBase
     void initializeStiffnessMatrix(void);
     void initialize(void);    
   public:
-    // constructor
+    SingleFPSimple3d(int tag= 0);
     SingleFPSimple3d(int tag, int Nd1, int Nd2,
 		     const FrictionModel &theFrnMdl,const double &Reff,
 		     const double &kInit,
@@ -111,7 +111,6 @@ class SingleFPSimple3d: public SimpleBearingBase
 		     int inclVertDisp= 0, const double &mass= 0.0,
 		     const int &maxIter= 25,const double &tol= 1E-12,
 		     const double &kFactUplift= 1E-12);
-    SingleFPSimple3d(void);
     Element *getCopy() const;
 	
     double getConcaveSlidingDishEffRadius() const

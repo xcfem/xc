@@ -57,6 +57,13 @@
 
 #include "SimpleBearingBase.h"
 
+//! @brief Constructor.
+XC::SimpleBearingBase::SimpleBearingBase(int tag, int classTag, const size_t &dim)
+  : FrictionElementBase(tag, classTag, dim),
+    k0(0.0), shearDistI(0.0), addRayleigh(0), onP0(false),
+    kFactUplift(1E-12)
+  {}
+
 XC::SimpleBearingBase::SimpleBearingBase(int tag, int classTag, int Nd1, int Nd2, const size_t &dim,
 					 const FrictionModels &thefrnmdls, double kInit,
 					 const std::vector<UniaxialMaterial *> &materials,
@@ -69,13 +76,6 @@ XC::SimpleBearingBase::SimpleBearingBase(int tag, int classTag, int Nd1, int Nd2
   : FrictionElementBase(tag, classTag,Nd1,Nd2, dim,thefrnmdls,UniaxialMatPhysicalProperties(materials),_y,_x,m,maxiter,tol),
     k0(kInit), shearDistI(sdI), addRayleigh(addRay), onP0(true),
     kFactUplift(kfactuplift)
-  {}
-
-
-XC::SimpleBearingBase::SimpleBearingBase(int classTag, const size_t &dim)
-  : FrictionElementBase(classTag, dim),
-    k0(0.0), shearDistI(0.0), addRayleigh(0), onP0(false),
-    kFactUplift(1E-12)
   {}
 
 //! @brief Set initial stiffness of hysteretic component.

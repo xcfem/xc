@@ -69,7 +69,7 @@ class Response;
 
 //! @brief R.J. Watson EradiQuake System two-node friction slider.
 //!
-//! RJWatsonEQS2d (R.J. Watson EradiQuake System) is a two-node friction
+//! RJWatsonEQS3d (R.J. Watson EradiQuake System) is a two-node friction
 //! slider element with mass energy regulator (MER) polyurethane springs.
 //! This simplified version uses a unidirectional plasticity model to
 //! simulate the sliding shear behavior and three uniaxial material models
@@ -97,7 +97,7 @@ class RJWatsonEQS3d : public SimpleBearingBase
     void initializeStiffnessMatrix(void);
     void initialize(void);
   public:
-    // constructor
+    RJWatsonEQS3d(int tag= 0);
     RJWatsonEQS3d(int tag, int Nd1, int Nd2,
 		  const FrictionModel &theFrnMdl, double kInit,
 		  const std::vector<UniaxialMaterial *> &,
@@ -107,7 +107,6 @@ class RJWatsonEQS3d : public SimpleBearingBase
 		  const int &maxIter = 25,
 		  const double &tol = 1E-12,
 		  const double &kFactUplift = 1E-12);
-    RJWatsonEQS3d();
     Element *getCopy() const;
     
     void setDomain(Domain *theDomain);

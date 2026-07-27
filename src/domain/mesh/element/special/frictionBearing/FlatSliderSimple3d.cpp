@@ -95,6 +95,16 @@ void XC::FlatSliderSimple3d::initialize(void)
     revertToStart();
   }
 
+//! @brief Default constructor.
+XC::FlatSliderSimple3d::FlatSliderSimple3d(int tag)
+  :SimpleBearingBase(tag, ELE_TAG_FlatSliderSimple3d,6),
+   ubPlastic(2), ubPlasticC(2)
+  {
+    this->numDOF= 12 ;
+    load.reset(this->numDOF);
+  }
+
+//! @brief Constructor.
 XC::FlatSliderSimple3d::FlatSliderSimple3d(int tag, int Nd1, int Nd2,
 					   const FrictionModel &thefrnmdl, double kInit,
 					   const std::vector<UniaxialMaterial *> &materials,
@@ -116,15 +126,6 @@ XC::FlatSliderSimple3d::FlatSliderSimple3d(int tag, int Nd1, int Nd2,
 
   {
     this->initialize();
-    load.reset(this->numDOF);
-  }
-
-//! Default constructor.
-XC::FlatSliderSimple3d::FlatSliderSimple3d(void)
-    :SimpleBearingBase(ELE_TAG_FlatSliderSimple3d,6),
-     ubPlastic(2), ubPlasticC(2)
-  {
-    this->numDOF= 12 ;
     load.reset(this->numDOF);
   }
 

@@ -60,6 +60,16 @@
 #include "frictionModel/FrictionModel.h"
 #include "utility/actor/actor/CommMetaData.h"
 
+//! @brief Default constructor.
+XC::FrictionElementBase::FrictionElementBase(int tag, int classTag,const size_t &dim)
+  : Element0D(tag,classTag,0,0,dim),
+    frictionModels(), physicalProperties(0,nullptr),
+    x(), y(), mass(0.0), maxIter(20), tol(1E-8),
+    L(0.0), ub(dim), qb(dim), kb(dim,dim), ul(dim*2),
+    Tgl(dim*2,dim*2), Tlb(dim,dim*2), kbInit(dim,dim)
+  {}
+
+//! @brief Constructor.
 XC::FrictionElementBase::FrictionElementBase(int tag, int classTag,int Nd1, int Nd2,const size_t &dim,
 					     const FrictionModels &thefrnmdls,
 					     const UniaxialMatPhysicalProperties &physProp,
@@ -74,15 +84,6 @@ XC::FrictionElementBase::FrictionElementBase(int tag, int classTag,int Nd1, int 
     Tgl(dim*2,dim*2), Tlb(dim,dim*2), kbInit(dim,dim)
   {
   }
-
-
-XC::FrictionElementBase::FrictionElementBase(int classTag,const size_t &dim)
-  : Element0D(0,classTag,0,0,dim),
-    frictionModels(), physicalProperties(0,nullptr),
-    x(), y(), mass(0.0), maxIter(20), tol(1E-8),
-    L(0.0), ub(dim), qb(dim), kb(dim,dim), ul(dim*2),
-    Tgl(dim*2,dim*2), Tlb(dim,dim*2), kbInit(dim,dim)
-  {}
 
 // parameters
 //! @brief Set local x direction vector.

@@ -97,6 +97,14 @@ void XC::FlatSliderSimple2d::initialize(void)
     revertToStart();
   }
 
+XC::FlatSliderSimple2d::FlatSliderSimple2d(int tag)
+  : SimpleBearingBase(tag, ELE_TAG_FlatSliderSimple2d, 3),
+    ubPlastic(0.0), ubPlasticC(0.0)
+  {
+    this->numDOF= 6;
+    load.reset(this->numDOF);
+  }
+
 XC::FlatSliderSimple2d::FlatSliderSimple2d(int tag, int Nd1, int Nd2,
 					   const FrictionModel &thefrnmdl, double kInit,
 					   const std::vector<UniaxialMaterial *> &materials,
@@ -123,14 +131,6 @@ XC::FlatSliderSimple2d::FlatSliderSimple2d(int tag, int Nd1, int Nd2,
 //! @brief Virtual constructor.
 XC::Element *XC::FlatSliderSimple2d::getCopy() const
   { return new FlatSliderSimple2d(*this); }
-
-XC::FlatSliderSimple2d::FlatSliderSimple2d()
-  : SimpleBearingBase(ELE_TAG_FlatSliderSimple2d,3),
-    ubPlastic(0.0), ubPlasticC(0.0)
-  {
-    this->numDOF= 6;
-    load.reset(this->numDOF);
-  }
 
 void XC::FlatSliderSimple2d::setDomain(Domain *theDomain)
   {

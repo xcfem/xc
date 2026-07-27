@@ -85,6 +85,14 @@ void XC::RJWatsonEQS2d::initialize(void)
     revertToStart();
   }
 
+//! @brief Default constructor.
+XC::RJWatsonEQS2d::RJWatsonEQS2d(int tag)
+  : SimpleBearingBase(tag, ELE_TAG_RJWatsonEQS2d,3),
+    ubPlastic(0.0), ubPlasticC(0.0)
+  {
+    load.reset(6);
+  }
+
 //! @brief Constructor.
 XC::RJWatsonEQS2d::RJWatsonEQS2d(int tag, int Nd1, int Nd2,
 				 const FrictionModel &thefrnmdl, double kInit,
@@ -108,14 +116,6 @@ XC::RJWatsonEQS2d::RJWatsonEQS2d(int tag, int Nd1, int Nd2,
   {
     load.reset(6);
     this->initialize();
-  }
-
-//! @brief Default constructor.
-XC::RJWatsonEQS2d::RJWatsonEQS2d()
-  : SimpleBearingBase(ELE_TAG_RJWatsonEQS2d,3),
-    ubPlastic(0.0), ubPlasticC(0.0)
-  {
-    load.reset(6);
   }
 
 //! @brief Virtual constructor.

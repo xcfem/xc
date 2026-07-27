@@ -136,6 +136,7 @@ class TripleFrictionPendulum : public Element0D
     void initialize(void);    
     
   public:
+    TripleFrictionPendulum(int tag= 0);
     // constructors
     TripleFrictionPendulum(int tag,
         int Nd1, int Nd2,
@@ -153,7 +154,6 @@ class TripleFrictionPendulum : public Element0D
         double minFv,
         double tol);
     
-    TripleFrictionPendulum();
     
     double getL1() const { return L1; }
     void setL1(double val) { L1 = val; }

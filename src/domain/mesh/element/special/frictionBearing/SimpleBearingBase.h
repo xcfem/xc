@@ -86,8 +86,9 @@ class SimpleBearingBase: public FrictionElementBase
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    // constructors
-    SimpleBearingBase(int tag, int classTag, int Nd1, int Nd2, const size_t &dim,
+    SimpleBearingBase(int tag, int classTag, const size_t &dim);
+    SimpleBearingBase(int tag, int classTag, int Nd1, int Nd2,
+		      const size_t &dim,
 		      const FrictionModels &, double kInit,
 		      const std::vector<UniaxialMaterial *> &,
 		      const Vector &y, const Vector &x,
@@ -96,7 +97,6 @@ class SimpleBearingBase: public FrictionElementBase
 		      const int &maxIter,
 		      const double &tol,
 		      const double &kFactUplift);
-    SimpleBearingBase(int classTag, const size_t &dim);
     
     void setInitialStiffnessOfHystereticComponent(const double &);
     const double &getInitialStiffnessOfHystereticComponent(void) const;
