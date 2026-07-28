@@ -76,23 +76,26 @@ class FrictionElementBase: public Element0D
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    // constructors
+    FrictionElementBase(int tag, int classTag,const size_t &);
     FrictionElementBase(int tag, int classTag, int Nd1, int Nd2, const size_t &dim, const FrictionModels &, const UniaxialMatPhysicalProperties &, const Vector &y= Vector(), const Vector &x= Vector(), const double &mass = 0.0, const int &maxIter= 20, const double &tol= 1E-8);
-    FrictionElementBase(int classTag,const size_t &);
     
     // parameters
+    inline FrictionModels &getFrictionModels()
+      { return this->frictionModels; }
+    inline UniaxialMatPhysicalProperties &getMaterials()
+      { return this->physicalProperties;; }
     void setLocalXDirection(const Vector &x);
     const Vector &getLocalXDirection(void) const;
     void setLocalYDirection(const Vector &x);
     const Vector &getLocalYDirection(void) const;
     void setBearingElementMass(const double &);
-    const double &getBearingElementMass(void) const;
+    double getBearingElementMass(void) const;
     void setMaxIter(const int &);
     int getMaxIter(void) const;
     void setTol(const double &);
-    const double &getTol(void) const;
+    double getTol(void) const;
     void setLength(const double &);
-    const double &getLength(void) const;
+    double getLength(void) const;
     
     
     // state variables

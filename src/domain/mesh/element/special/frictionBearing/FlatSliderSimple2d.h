@@ -108,7 +108,7 @@ class FlatSliderSimple2d: public SimpleBearingBase
     void initializeStiffnessMatrix(void);
     void initialize(void);
   public:
-    // constructors
+    FlatSliderSimple2d(int tag= 0);
     FlatSliderSimple2d(int tag, int Nd1, int Nd2,
 		       const FrictionModel &theFrnMdl, double kInit,
 		       const std::vector<UniaxialMaterial *> &,
@@ -118,7 +118,6 @@ class FlatSliderSimple2d: public SimpleBearingBase
 		       const int &maxIter = 20,
 		       const double &tol= 1E-8,
 		       const double &kFactUplift= 1E-12);
-    FlatSliderSimple2d();
     Element *getCopy() const;
     
     // public methods to obtain information about dof & connectivity    

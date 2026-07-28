@@ -90,18 +90,22 @@ class VelDepMultiLinear : public Coulomb
 
     boost::python::list getVelocityFrictionPoints() const;
     void setVelocityFrictionPoints(const boost::python::list &);
-    inline double getTrialID() const
+    inline int getTrialID() const
       { return this->trialID; }
-    void setTrialID(const double &d)
-      { this->trialID= d; }
-    inline double getTrialIDmin() const
+    void setTrialID(const int &i)
+      { this->trialID= i; }
+    inline int getTrialIDmin() const
       { return this->trialIDmin; }
-    void setTrialIDmin(const double &d)
-      { this->trialIDmin= d; }
-    inline double getTrialIDmax() const
+    void setTrialIDmin(const int &i)
+      { this->trialIDmin= i; }
+    inline int getTrialIDmax() const
       { return this->trialIDmax; }
-    void setTrialIDmax(const double &d)
-      { this->trialIDmax= d; }
+    void setTrialIDmax(const int &i)
+      { this->trialIDmax= i; }
+    inline double getDmuDvel() const
+      { return this->DmuDvel; }
+    // void setDmuDvel(const double &d)
+    //   { this->DmuDvel= d; }
     
     // public methods to set and obtain response
     int setTrial(double normalForce, double velocity = 0.0);

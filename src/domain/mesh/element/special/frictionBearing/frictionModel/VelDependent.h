@@ -92,11 +92,29 @@ class VelDependent: public Coulomb
     inline double getMuSlow() const
       { return this->muSlow; }
     void setMuSlow(const double &d)
-      { this->muSlow= d; }
+      {
+	if(d <= 0.0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; the friction coefficient has to be positive."
+		      << std::endl;
+	    exit(-1);
+	  }
+	this->muSlow= d;
+      }
     inline double getMuFast() const
       { return this->muFast; }
     void setMuFast(const double &d)
-      { this->muFast= d; }
+      {
+	if(d <= 0.0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; the friction coefficient has to be positive."
+		      << std::endl;
+	    exit(-1);
+	  }
+	this->muFast= d;
+      }
     inline double getTransRate() const
       { return this->transRate; }
     void setTransRate(const double &d)

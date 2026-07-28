@@ -174,6 +174,30 @@ void XC::FrictionModels::setFrictionModel(size_t i,const FrictionModel &fModel)
 void XC::FrictionModels::copyFrictionModelsFrom(const FrictionModels &other)
   { this->alloc(other.theFrictionModels); }
 
+void XC::FrictionModels::setPyList(const boost::python::list &l)
+  {
+    const size_t sz= boost::python::len(l);
+    std::vector<FrictionModel *> tmp(sz, nullptr);
+    for(size_t i= 0; i<sz; i++) 
+      {
+	tmp[i]= boost::python::extract<FrictionModel *>(l[i]);
+      }
+    this->alloc(tmp);
+  }
+
+boost::python::list XC::FrictionModels::getPyList() const
+  {
+    boost::python::list retval;
+    const size_t sz= this->size();
+    for(size_t i=0; i<sz; i++)
+      {
+	const FrictionModel *ptr= this->theFrictionModels[i];
+	boost::python::object pyObj(boost::ref(*ptr));
+        retval.append(pyObj);
+      }
+    return retval;
+  }
+
 //! @brief Returns a vector to store the dbTags
 //! of the class members.
 

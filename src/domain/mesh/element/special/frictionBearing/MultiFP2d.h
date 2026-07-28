@@ -116,7 +116,43 @@ class MultiFP2d : public Element0D
   
     // destructor
     ~MultiFP2d();
-  
+
+    UniaxialMaterial* getFrictionModel() const
+      { return theFrictionModel; }
+    void setFrictionModel(UniaxialMaterial* val)
+      {
+	if(val)
+	  alloc_friction_model(*val);
+      }
+    
+    UniaxialMaterial* getVerticalModel()
+      const { return theVerticalModel; }
+    void setVerticalModel(UniaxialMaterial* val)
+      {
+	if(val)
+	  alloc_vertical_model(*val);
+      }
+
+    int getType() const
+      { return type; }
+    void setType(int val)
+      { type = val; }
+
+    int getAxialCase() const
+      { return axialCase; }
+    void setAxialCase(int val)
+      { axialCase = val; }
+
+    double getW0() const
+      { return W0; }
+    void setW0(double val)
+      { W0 = val; }
+
+    double getCW() const
+      { return cW; }
+    void setCW(double val)
+      { cW = val; }
+    
     // public methods to obtain information about dof & connectivity
     void setDomain(Domain *theDomain);
   

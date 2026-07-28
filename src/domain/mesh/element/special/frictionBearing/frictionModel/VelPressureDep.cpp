@@ -48,7 +48,7 @@ XC::VelPressureDep::VelPressureDep(int tag, double muslow,
     // check that A is positive and not zero
     if (A <= 0.0)
       {
-	std::cerr << "VelPressureDep::VelPressureDep - "
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "the nominal contact area has to be positive."
 	          << std::endl;
         exit(-1);

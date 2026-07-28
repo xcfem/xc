@@ -93,6 +93,35 @@ class VelPressureDep: public VelDependent
         double deltaMu, double alpha, double transRate);
     FrictionModel *getCopy(void) const;
     
+    double getNominalContacArea() const
+      { return A; }
+    void setNominalContacArea(const double &d)
+      {
+	if(d <= 0.0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "the nominal contact area has to be positive."
+		      << std::endl;
+	    exit(-1);
+	  } 
+	this->A= d;
+      }
+
+    double getDeltaMuPressureParameter() const
+      { return this->deltaMu; }
+    void setDeltaMuPressureParameter(const double &d)
+      { this->deltaMu = d; }
+
+    double getAlphaPressureParameter() const
+      { return this->alpha; }
+    void setAlphaPressureParameter(const double &d)
+      { this->alpha = d; }
+
+    double getDmuDn() const
+      { return this->DmuDn; }
+    void setDmuDn(const double &d)
+      { this->DmuDn = d; }
+    
     // public methods to set and obtain response
     int setTrial(double normalForce, double velocity = 0.0);
     double getDFFrcDNFrc(void);

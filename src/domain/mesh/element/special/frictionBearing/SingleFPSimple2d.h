@@ -100,7 +100,7 @@ class SingleFPSimple2d: public SimpleBearingBase
     void initializeStiffnessMatrix(void);
     void initialize(void);
   public:
-    // constructors
+    SingleFPSimple2d(int tag= 0);
     SingleFPSimple2d(int tag, int Nd1, int Nd2,
 		     const FrictionModel &theFrnMdl,
 		     const double &Reff, const double &kInit,
@@ -110,9 +110,18 @@ class SingleFPSimple2d: public SimpleBearingBase
 		     int inclVertDisp= 0, const double &mass= 0.0,
 		     const int &maxIter= 25,const double &tol= 1E-12,
 		     const double &kFactUplift= 1E-6);
-    SingleFPSimple2d(void);
     Element *getCopy() const;
-	
+    
+    double getConcaveSlidingDishEffRadius() const
+      { return Reff; }
+    void setConcaveSlidingDishEffRadius(double val)
+      { Reff = val; }
+
+    int getIncludeVerticalDispFlag() const
+      { return inclVertDisp; }
+    void setIncludeVerticalDispFlag(int val)
+      { inclVertDisp = val; }
+    
     void setDomain(Domain *theDomain);
 	
     // public methods to set the state of the element    

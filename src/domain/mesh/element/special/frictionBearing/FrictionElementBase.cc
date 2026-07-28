@@ -60,6 +60,16 @@
 #include "frictionModel/FrictionModel.h"
 #include "utility/actor/actor/CommMetaData.h"
 
+//! @brief Default constructor.
+XC::FrictionElementBase::FrictionElementBase(int tag, int classTag,const size_t &dim)
+  : Element0D(tag,classTag,0,0,dim),
+    frictionModels(), physicalProperties(0,nullptr),
+    x(), y(), mass(0.0), maxIter(20), tol(1E-8),
+    L(0.0), ub(dim), qb(dim), kb(dim,dim), ul(dim*2),
+    Tgl(dim*2,dim*2), Tlb(dim,dim*2), kbInit(dim,dim)
+  {}
+
+//! @brief Constructor.
 XC::FrictionElementBase::FrictionElementBase(int tag, int classTag,int Nd1, int Nd2,const size_t &dim,
 					     const FrictionModels &thefrnmdls,
 					     const UniaxialMatPhysicalProperties &physProp,
@@ -74,15 +84,6 @@ XC::FrictionElementBase::FrictionElementBase(int tag, int classTag,int Nd1, int 
     Tgl(dim*2,dim*2), Tlb(dim,dim*2), kbInit(dim,dim)
   {
   }
-
-
-XC::FrictionElementBase::FrictionElementBase(int classTag,const size_t &dim)
-  : Element0D(0,classTag,0,0,dim),
-    frictionModels(), physicalProperties(0,nullptr),
-    x(), y(), mass(0.0), maxIter(20), tol(1E-8),
-    L(0.0), ub(dim), qb(dim), kb(dim,dim), ul(dim*2),
-    Tgl(dim*2,dim*2), Tlb(dim,dim*2), kbInit(dim,dim)
-  {}
 
 // parameters
 //! @brief Set local x direction vector.
@@ -101,7 +102,7 @@ const XC::Vector &XC::FrictionElementBase::getLocalYDirection(void) const
 void XC::FrictionElementBase::setBearingElementMass(const double &d)
   { this->mass= d; }
 //! @brief Get the mass of the element.
-const double &XC::FrictionElementBase::getBearingElementMass(void) const
+double XC::FrictionElementBase::getBearingElementMass(void) const
   { return this->mass; }
 //! @brief Set the maximum number of iterations.
 void XC::FrictionElementBase::setMaxIter(const int &i)
@@ -113,13 +114,13 @@ int XC::FrictionElementBase::getMaxIter(void) const
 void XC::FrictionElementBase::setTol(const double &d)
   { this->tol= d; }
 //! @brief Get the tolerance for convergence criterion.
-const double &XC::FrictionElementBase::getTol(void) const
+double XC::FrictionElementBase::getTol(void) const
   { return this->tol; }
 //! @brief Set the element length.
 void XC::FrictionElementBase::setLength(const double &d)
   { this->L= d; }
 //! @brief Get the element length.
-const double &XC::FrictionElementBase::getLength(void) const
+double XC::FrictionElementBase::getLength(void) const
   { return this->L; }
 
 

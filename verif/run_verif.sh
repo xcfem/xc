@@ -666,6 +666,12 @@ python tests/elements/bridge_bearings/test_pot_bearing_04.py
 echo "$BLEU" "  Misc elements tests." "$NORMAL"
 python tests/elements/spring_test_01.py
 python tests/elements/spring_test_02.py
+echo "$BLEU" "  Bridge bearings tests." "$NORMAL"
+python tests/elements/bridge_bearings/friction_bearings/friction_models/test_coulomb_01.py
+python tests/elements/bridge_bearings/friction_bearings/friction_models/test_normal_force_dependent_01.py
+python tests/elements/bridge_bearings/friction_bearings/friction_models/test_vel_dependent_01.py
+python tests/elements/bridge_bearings/friction_bearings/friction_models/test_vel_dep_multilinear_01.py
+python tests/elements/bridge_bearings/friction_bearings/friction_models/test_vel_pressure_dependent_01.py
 echo "$BLEU" "  Element birth and death tests." "$NORMAL"
 python tests/elements/birth_and_death/remove_node_test_01.py
 python tests/elements/birth_and_death/remove_element_test_01.py
@@ -802,7 +808,12 @@ echo "$BLEU" "  Time history solution tests." "$NORMAL"
 python tests/solution/time_history/test_time_history_00.py
 python tests/solution/time_history/test_time_history_01.py
 python tests/solution/time_history/test_pseudo_time_history.py
-python tests/solution/time_history/elastic_response_spectra.py
+
+## Ground motion.
+echo "$BLEU" "  Ground motion solution tests." "$NORMAL"
+python tests/solution/ground_motion/elastic_response_spectra.py
+python tests/solution/ground_motion/test_sdof_response_01.py
+python tests/solution/ground_motion/test_sdof_response_02.py
 
 ## Convergence tests.
 echo "$BLEU" "  Convergence tests." "$NORMAL"

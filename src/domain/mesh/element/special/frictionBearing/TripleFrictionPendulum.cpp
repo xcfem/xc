@@ -106,8 +106,8 @@ XC::TripleFrictionPendulum::TripleFrictionPendulum(int tag,
 
 
 //! @brief Default constructor.
-XC::TripleFrictionPendulum::TripleFrictionPendulum()
-    : Element0D(0, ELE_TAG_TripleFrictionPendulum,0,0,6),
+XC::TripleFrictionPendulum::TripleFrictionPendulum(int tag)
+    : Element0D(tag, ELE_TAG_TripleFrictionPendulum,0,0,6),
     L1(0.0), L2(0.0), L3(0.0), Ubar1(0.0), Ubar2(0.0), Ubar3(0.0),
     W(0.0), Uy(0.0), Kvt(0.0), MinFv(0.0), TOL(1E-6), Niter(20),
     K(2,2), Kpr(2,2), f(2), fpr(2),

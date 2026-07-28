@@ -70,8 +70,9 @@ XC::Coulomb::Coulomb(int tag, double _mu, int classTag)
   {
     if(mu <= 0.0)
       {
-        std::cerr << "Coulomb::Coulomb - "
-            << "the friction coefficient has to be positive\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; the friction coefficient has to be positive."
+	          << std::endl;
         exit(-1);
       }
      

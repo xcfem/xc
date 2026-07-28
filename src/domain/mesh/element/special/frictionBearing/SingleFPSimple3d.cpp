@@ -95,6 +95,15 @@ void XC::SingleFPSimple3d::initialize(void)
     revertToStart();
   }
 
+//! @brief Default constructor.
+XC::SingleFPSimple3d::SingleFPSimple3d(int tag)
+  : SimpleBearingBase(tag, ELE_TAG_SingleFPSimple3d, 6),
+    Reff(0.0), inclVertDisp(0), ubPlastic(2), ubPlasticC(2)
+  {
+    this->numDOF= 12;
+    load.reset(this->numDOF);
+  }
+
 //! @brief Constructor.
 XC::SingleFPSimple3d::SingleFPSimple3d(int tag, int Nd1, int Nd2,
 				       const FrictionModel &thefrnmdl,
@@ -116,15 +125,6 @@ XC::SingleFPSimple3d::SingleFPSimple3d(int tag, int Nd1, int Nd2,
     Reff(reff), inclVertDisp(vert), ubPlastic(2), ubPlasticC(2)
   {
     this->initialize();
-    load.reset(this->numDOF);
-  }
-
-//! @brief Default constructor.
-XC::SingleFPSimple3d::SingleFPSimple3d()
-  : SimpleBearingBase(ELE_TAG_SingleFPSimple3d,6),
-    Reff(0.0), inclVertDisp(0), ubPlastic(2), ubPlasticC(2)
-  {
-    this->numDOF= 12;
     load.reset(this->numDOF);
   }
 

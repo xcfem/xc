@@ -71,17 +71,17 @@ namespace XC {
 class VelNormalFrcDep : public Coulomb
   {
   private:
-    double aSlow;      // constant for slow COF
-    double nSlow;      // normal force exponent for slow COF (nSlow <= 0)
-    double aFast;      // constant for fast COF
-    double nFast;      // normal force exponent for fast COF (nFast <= 0)
-    double alpha0;     // constant rate parameter
-    double alpha1;     // linear rate parameter
-    double alpha2;     // quadratic rate parameter
-    double maxMuFact;  // factor for determining the maximum friction coefficients
+    double aSlow; //!< constant for slow COF
+    double nSlow; //!< normal force exponent for slow COF (nSlow <= 0)
+    double aFast; //!< constant for fast COF
+    double nFast; //!< normal force exponent for fast COF (nFast <= 0)
+    double alpha0; //!< constant rate parameter
+    double alpha1; //!< linear rate parameter
+    double alpha2; //!< quadratic rate parameter
+    double maxMuFact; //!< factor for determining the maximum friction coefficients
     
-    double DmuDn;      // derivative of COF wrt to normal force
-    double DmuDvel;    // derivative of COF wrt to velocity
+    double DmuDn; //!< derivative of COF wrt to normal force
+    double DmuDvel; //!< derivative of COF wrt to velocity
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
@@ -92,6 +92,79 @@ class VelNormalFrcDep : public Coulomb
 		    double aSlow, double nSlow, double aFast, double nFast,
 		    double alpha0, double alpha1, double alpha2,
 		    double maxMuFact);
+    
+    double getASlow() const
+      { return aSlow; }
+    void setASlow(const double &d)
+      {
+	if(d<=0.0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; the aSlow constant has to be positive."
+	              << std::endl;
+	    exit(-1);
+	  }
+	aSlow = d;
+      }
+
+    double getNSlow() const { return nSlow; }
+    void setNSlow(const double &d)
+      {
+	if(nSlow > 1.0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; the exponents n have to be <= 1.0."
+	              << std::endl;
+	    exit(-1);
+	  }
+	nSlow = d;
+      }
+
+    double getAFast() const
+      { return aFast; }
+    void setAFast(const double &d)
+      {
+	if(d<=0.0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; the aFast constant has to be positive."
+	              << std::endl;
+	    exit(-1);
+	  }
+	aFast = d;
+      }
+
+    double getNFast() const
+      { return nFast; }
+    void setNFast(const double &d)
+      {
+	if(nSlow > 1.0 || nFast > 1.0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; the exponents n have to be <= 1.0."
+	              << std::endl;
+	    exit(-1);
+	  }
+	nFast = d;
+      }
+
+    double getAlpha0() const { return alpha0; }
+    void setAlpha0(const double &d) { alpha0 = d; }
+
+    double getAlpha1() const { return alpha1; }
+    void setAlpha1(const double &d) { alpha1 = d; }
+
+    double getAlpha2() const { return alpha2; }
+    void setAlpha2(const double &d) { alpha2 = d; }
+
+    double getMaxMuFact() const { return maxMuFact; }
+    void setMaxMuFact(const double &d) { maxMuFact = d; }
+
+    double getDmuDn() const { return DmuDn; }
+    //void setDmuDn(const double &d) { DmuDn = d; }
+
+    double getDmuDvel() const { return DmuDvel; }
+    //void setDmuDvel(const double &d) { DmuDvel = d; }
     
     // public methods to set and obtain response
     int setTrial(double normalForce, double velocity = 0.0);

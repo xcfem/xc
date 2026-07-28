@@ -282,7 +282,9 @@ SET(nDarray utility/matrix/nDarray/basics.cpp utility/matrix/nDarray/BJtensor.cp
 
 SET(matrix utility/matrix/ID.cpp utility/matrix/IDVarSize.cc utility/matrix/IntPtrWrapper.cc utility/matrix/AuxMatrix.cc utility/matrix/Matrix.cpp utility/matrix/DqMatrices.cc utility/matrix/Vector.cpp utility/matrix/DqVectors.cc utility/matrix/util_matrix.cc ${nDarray})
 
-SET(utility ${actor} ${mpi} ${alpha_broker} ${database} ${handler} ${package} ${paving} ${recorder} ${remote} ${tagged} ${matrix} utility/Timer.cpp)
+SET(synth_quake utility/synth_quake/SDOFResponse.cc)
+
+SET(utility ${actor} ${mpi} ${alpha_broker} ${database} ${handler} ${package} ${paving} ${recorder} ${remote} ${tagged} ${matrix} ${synth_quake} utility/Timer.cpp)
 
 SET(arclength_integrators solution/analysis/integrator/static/arc-length/ProtoArcLength.cc solution/analysis/integrator/static/arc-length/ArcLength1.cpp solution/analysis/integrator/static/arc-length/ArcLengthBase.cc solution/analysis/integrator/static/arc-length/ArcLength.cpp solution/analysis/integrator/static/arc-length/HSConstraint.cpp)
 

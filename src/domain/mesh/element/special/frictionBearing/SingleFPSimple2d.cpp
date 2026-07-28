@@ -91,8 +91,8 @@ XC::SingleFPSimple2d::SingleFPSimple2d(int tag, int Nd1, int Nd2,
   }
 
 //! @brief Default constructor.
-XC::SingleFPSimple2d::SingleFPSimple2d()
-  : SimpleBearingBase(ELE_TAG_SingleFPSimple2d,3),
+XC::SingleFPSimple2d::SingleFPSimple2d(int tag)
+  : SimpleBearingBase(tag, ELE_TAG_SingleFPSimple2d,3),
     Reff(0.0), inclVertDisp(0), ubPlastic(0.0), ubPlasticC(0.0)
   {
     this->numDOF= 6;

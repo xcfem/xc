@@ -188,44 +188,44 @@ if(not silent):
     [plt.plot(data_frame[z]['T'], data_frame[z]['SD'],
               label=('$\\zeta$ = '+str(z))) for z in zeta_list]
 
-    plt.ylabel('Displacement (cm)', {'fontstyle':'italic','size':14})
+    plt.ylabel('Relative displacement (cm)', {'fontstyle':'italic','size':14})
     plt.xlabel('Period (sec)', {'fontstyle':'italic','size':14})
     plt.legend()
     plt.grid()
     plt.yticks(fontsize = 14)
     plt.xticks(fontsize = 14)
-    plt.title('Displacement Response Spectrum',
+    plt.title('Relative displacement response spectrum',
               {'fontstyle':'italic','size':18});
     plt.show()
 
-    # Velocity ------------
+    # Relative velocity ------------
     plt.figure(figsize=(14,5))
 
     [plt.plot(data_frame[z]['T'], data_frame[z]['SV'],
               label=('$\\zeta$ = '+str(z))) for z in zeta_list]
 
-    plt.ylabel('Velocity (cm/sec)', {'fontstyle':'italic','size':14})
+    plt.ylabel('Relative velocity (cm/sec)', {'fontstyle':'italic','size':14})
     plt.xlabel('Period (sec)', {'fontstyle':'italic','size':14})
     plt.legend()
     plt.grid()
     plt.yticks(fontsize = 14)
     plt.xticks(fontsize = 14)
-    plt.title('Veloctiy Response Spectrum', 
+    plt.title('Relative velocity response spectrum', 
               {'fontstyle':'italic','size':18});
     plt.show()
 
-    # Acceleration ------------
+    # Relative acceleration ------------
     plt.figure(figsize=(14,5))
 
     [plt.plot(data_frame[z]['T'], np.array(data_frame[z]['SA'])/g,
               label=('$\\zeta$ = '+str(z))) for z in zeta_list]
 
-    plt.ylabel('Acceleration (g)', {'fontstyle':'italic','size':14})
+    plt.ylabel('Relative acceleration (g)', {'fontstyle':'italic','size':14})
     plt.xlabel('Period (sec)', {'fontstyle':'italic','size':14})
     plt.legend()
     plt.grid()
     plt.yticks(fontsize = 14)
     plt.xticks(fontsize = 14)
-    plt.title('Acceleration Response Spectrum',
+    plt.title('Relative acceleration response spectrum',
               {'fontstyle':'italic','size':18});
     plt.show()
