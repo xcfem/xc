@@ -58,6 +58,9 @@ class PhysicalProperties: public CommandEntity, public MovableObject
     int recvData(const Communicator &);
 
   public:
+    typedef typename material_vector::iterator iterator;
+    typedef typename material_vector::const_iterator const_iterator;
+    
     PhysicalProperties(const size_t &nMat= 0,const MAT *matModel= nullptr);
     void setMaterial(const MAT *);
     void setMaterial(const MAT *,const std::string &);
@@ -65,6 +68,7 @@ class PhysicalProperties: public CommandEntity, public MovableObject
     void setMaterial(size_t i,const MAT &);
     void copyMaterialFrom(const PhysicalProperties<MAT> &other)
       { this->theMaterial= other.theMaterial; }
+    void setPyList(const boost::python::list &);
 
     // public methods to set the state of the properties
     int commitState(void);
@@ -73,6 +77,19 @@ class PhysicalProperties: public CommandEntity, public MovableObject
 
     inline size_t size(void) const
       { return theMaterial.size(); } 
+    inline iterator begin(void)
+      { return theMaterial.begin(); }
+    inline iterator end(void)
+      { return theMaterial.end(); }
+    inline const_iterator begin(void) const
+      { return theMaterial.begin(); }
+    inline const_iterator end(void) const
+      { return theMaterial.end(); }
+    inline MAT *at(const size_t &i)
+      { return theMaterial.at(i); }
+    inline bool empty() const
+      { return theMaterial.empty(); }
+    
     inline material_vector &getMaterialsVector(void)
       { return theMaterial; }
     inline const material_vector &getMaterialsVector(void) const
@@ -141,6 +158,10 @@ void PhysicalProperties<MAT>::setMaterial(size_t i,const MAT *matModel)
 template <class MAT>
 void PhysicalProperties<MAT>::setMaterial(size_t i,const MAT &matModel)
   { theMaterial.setMaterial(i,matModel); }
+  
+template <class MAT>
+void PhysicalProperties<MAT>::setPyList(const boost::python::list &lst)
+  { theMaterial.setPyList(lst); }
 
 //! @brief Returns a vector to store the dbTags
 //! of the class members.

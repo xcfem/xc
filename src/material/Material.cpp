@@ -68,6 +68,7 @@
 #include "material/ResponseId.h"
 #include "utility/utils/misc_utils/colormod.h"
 
+//! @brief Return the material identified by the given name.
 //! @param matName: name of the material.
 const XC::Material *XC::Material::getMaterialByName(const std::string &matName) const
   {
@@ -84,7 +85,8 @@ const XC::Material *XC::Material::getMaterialByName(const std::string &matName) 
     if(!retval)
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << "; "
 		<< "material identified by: '" << matName
-		<< "' not found.\n";      
+		<< "' not found."
+	        << Color::def << std::endl;      
     return retval;
   }
 

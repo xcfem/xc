@@ -103,8 +103,25 @@ XC::FlatSliderSimple2d::FlatSliderSimple2d(int tag)
   {
     this->numDOF= 6;
     load.reset(this->numDOF);
+    this->x= Vector({1, 0, 0});
+    this->y= Vector({0, 1, 0});
   }
 
+//! @brief Constructor.
+//! @param tag: element identifier.
+//! @param Nd1: identifier of the first node.
+//! @param Nd2: identifier of the second node.
+//! @param thefrnmdl: the friction model (horizontal response of the bearing).
+//! @param materials: vector of materials defining the vertical response and
+//!                   the rotational response of the bearing.
+//! @param y: y local direction vector.
+//! @param x: x local direction vector.
+//! @param sdI: shear distance from node I as fraction of length.
+//! @param addRay: flag to add Rayleigh damping.
+//! @param m: mass of the bearing element.
+//! @param maxIter: maximum number of iterations to reach convergence.
+//! @param tol: tolerance for convergence criterion.
+//! @param kfactuplift: stiffness factor when uplift is encountered.
 XC::FlatSliderSimple2d::FlatSliderSimple2d(int tag, int Nd1, int Nd2,
 					   const FrictionModel &thefrnmdl, double kInit,
 					   const std::vector<UniaxialMaterial *> &materials,
@@ -213,9 +230,105 @@ int XC::FlatSliderSimple2d::revertToStart()
     return errCode;
   }
 
+//! @brief Update bearing friction and stiffness.
+int XC::FlatSliderSimple2d::update_friction_and_stiffness(const Vector &ubdot)
+  {
+    const double &ubdotAbs= ubdot(1);
+    // 1) get axial force and stiffness in basic x-direction
+    if(this->physicalProperties.size()> 0)
+      {
+	const double ub0Old = physicalProperties[0]->getStrain();
+	physicalProperties[0]->setTrialStrain(ub(0),ubdot(0));
+	qb(0) = physicalProperties[0]->getStress();
+	kb(0,0) = physicalProperties[0]->getTangent();
+
+	// check for uplift
+	if (qb(0) >= 0.0)
+	  {
+	    kb = kbInit;
+	    if (qb(0) > 0.0)
+	      {
+		physicalProperties[0]->setTrialStrain(ub0Old,0.0);
+		kb = kFactUplift*kbInit;  // kb = DBL_EPSILON*kbInit;
+		// update plastic displacement
+		ubPlastic = ub(1);
+	      }
+	    qb.Zero();
+	    return 0;
+	  }
+      }
+    
+    // 2) calculate shear force and stiffness in basic y-direction
+    if(this->frictionModels.size()>0)
+      {
+	int iter = 0;
+	double qb1Old = 0.0;
+	FrictionModel *theFrnMdl= this->frictionModels[0];
+	do  {
+	    // save old shear force
+	    qb1Old = qb(1);
+
+	    // get normal and friction (yield) forces
+	    const double N = -qb(0) - qb(1)*ul(2);
+	    theFrnMdl->setTrial(N, ubdotAbs);
+	    const double qYield = (theFrnMdl->getFrictionForce());
+
+	    // get trial shear force of hysteretic component
+	    const double qTrial = k0*(ub(1) - ubPlasticC);
+
+	    // compute yield criterion of hysteretic component
+	    const double qTrialNorm = fabs(qTrial);
+	    const double Y = qTrialNorm - qYield;
+
+	    // elastic step -> no updates required
+	    if(Y <= 0.0)
+	      {
+		// set shear force
+		qb(1) = qTrial - N*ul(2);
+		// set tangent stiffness
+		kb(1,1) = k0;
+	      }
+	    // plastic step -> return mapping
+	    else
+	      {
+		// compute consistency parameter
+		const double dGamma = Y/k0;
+		// update plastic displacement
+		ubPlastic = ubPlasticC + dGamma*qTrial/qTrialNorm;
+		// set shear force
+		qb(1) = qYield*qTrial/qTrialNorm - N*ul(2);
+		// set tangent stiffness
+		kb(1,1) = 0.0;
+	      }
+	    iter++;
+	} while ((fabs(qb(1)-qb1Old) >= tol) && (iter <= maxIter));
+	
+	// issue warning if iteration did not converge
+	if (iter >= maxIter)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING: did not find the shear force after "
+		      << iter
+		      << " iterations and norm: "
+		      << fabs(qb(1)-qb1Old)
+		      << std::endl;
+	    return -1;
+	  }
+      }
+    
+    if(this->physicalProperties.size()> 1)
+      {
+	// 3) get moment and stiffness in basic z-direction
+	physicalProperties[1]->setTrialStrain(ub(2),ubdot(2));
+	qb(2) = physicalProperties[1]->getStress();
+	kb(2,2) = physicalProperties[1]->getTangent();
+      }
+    
+    return 0;
+  }
 
 int XC::FlatSliderSimple2d::update(void)
-{
+  {
     // get global trial displacements and velocities
     const Vector &dsp1 = theNodes[0]->getTrialDisp();
     const Vector &dsp2 = theNodes[1]->getTrialDisp();
@@ -223,7 +336,7 @@ int XC::FlatSliderSimple2d::update(void)
     const Vector &vel2 = theNodes[1]->getTrialVel();
     
     static Vector ug(6), ugdot(6), uldot(6), ubdot(3);
-    for (int i=0; i<3; i++)
+    for(int i=0; i<3; i++)
       {
         ug(i)   = dsp1(i);  ugdot(i)   = vel1(i);
         ug(i+3) = dsp2(i);  ugdot(i+3) = vel2(i);
@@ -238,90 +351,7 @@ int XC::FlatSliderSimple2d::update(void)
     ubdot.addMatrixVector(0.0, Tlb, uldot, 1.0);
     
     // get absolute velocity
-    double ubdotAbs = ubdot(1);
-    
-    // 1) get axial force and stiffness in basic x-direction
-    double ub0Old = physicalProperties[0]->getStrain();
-    physicalProperties[0]->setTrialStrain(ub(0),ubdot(0));
-    qb(0) = physicalProperties[0]->getStress();
-    kb(0,0) = physicalProperties[0]->getTangent();
-    
-    // check for uplift
-    if (qb(0) >= 0.0)
-      {
-        kb = kbInit;
-        if (qb(0) > 0.0)
-	  {
-            physicalProperties[0]->setTrialStrain(ub0Old,0.0);
-            kb = kFactUplift*kbInit;  // kb = DBL_EPSILON*kbInit;
-            // update plastic displacement
-            ubPlastic = ub(1);
-	  }
-        qb.Zero();
-        return 0;
-      }
-    
-    // 2) calculate shear force and stiffness in basic y-direction
-    int iter = 0;
-    double qb1Old = 0.0;
-    FrictionModel *theFrnMdl= this->frictionModels[0];
-    do  {
-        // save old shear force
-        qb1Old = qb(1);
-        
-        // get normal and friction (yield) forces
-        const double N = -qb(0) - qb(1)*ul(2);
-        theFrnMdl->setTrial(N, ubdotAbs);
-        const double qYield = (theFrnMdl->getFrictionForce());
-        
-        // get trial shear force of hysteretic component
-        const double qTrial = k0*(ub(1) - ubPlasticC);
-	
-        // compute yield criterion of hysteretic component
-        const double qTrialNorm = fabs(qTrial);
-        const double Y = qTrialNorm - qYield;
-        
-        // elastic step -> no updates required
-        if(Y <= 0.0)
-	  {
-            // set shear force
-            qb(1) = qTrial - N*ul(2);
-            // set tangent stiffness
-            kb(1,1) = k0;
-	  }
-        // plastic step -> return mapping
-        else
-	  {
-            // compute consistency parameter
-            const double dGamma = Y/k0;
-            // update plastic displacement
-            ubPlastic = ubPlasticC + dGamma*qTrial/qTrialNorm;
-            // set shear force
-            qb(1) = qYield*qTrial/qTrialNorm - N*ul(2);
-            // set tangent stiffness
-            kb(1,1) = 0.0;
-	  }
-        iter++;
-    } while ((fabs(qb(1)-qb1Old) >= tol) && (iter <= maxIter));
-    
-    // issue warning if iteration did not converge
-    if (iter >= maxIter)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING: did not find the shear force after "
-		  << iter
-		  << " iterations and norm: "
-		  << fabs(qb(1)-qb1Old)
-		  << std::endl;
-        return -1;
-      }
-    
-    // 3) get moment and stiffness in basic z-direction
-    physicalProperties[1]->setTrialStrain(ub(2),ubdot(2));
-    qb(2) = physicalProperties[1]->getStress();
-    kb(2,2) = physicalProperties[1]->getTangent();
-    
-    return 0;
+    return this->update_friction_and_stiffness(ubdot);
   }
 
 

@@ -86,6 +86,19 @@ XC::FrictionElementBase::FrictionElementBase(int tag, int classTag,int Nd1, int 
   }
 
 // parameters
+
+//! @brief Set friction models.
+void XC::FrictionElementBase::setFrictionModels(const boost::python::list &lst)
+  {
+    this->frictionModels.setPyList(lst);
+  }
+
+//! @brief Set materials.
+void XC::FrictionElementBase::setMaterials(const boost::python::list &lst)
+  {
+    this->physicalProperties.setPyList(lst);
+  }
+
 //! @brief Set local x direction vector.
 void XC::FrictionElementBase::setLocalXDirection(const Vector &v)
   { this->x= v; }

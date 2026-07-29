@@ -25,7 +25,13 @@
 
 material_vector_NDMat &(PhysicalProperties_NDMat::*getNDMatVector)(void) = &PhysicalProperties_NDMat::getMaterialsVector;
 void (PhysicalProperties_NDMat::*setMaterialPtr)(const XC::NDMaterial *)= &PhysicalProperties_NDMat::setMaterial;
+PhysicalProperties_NDMat::const_iterator (PhysicalProperties_NDMat::*cBegin_NDMat)(void) const= &PhysicalProperties_NDMat::begin;
+PhysicalProperties_NDMat::const_iterator (PhysicalProperties_NDMat::*cEnd_NDMat)(void) const= &PhysicalProperties_NDMat::end;
 class_<PhysicalProperties_NDMat,  bases<CommandEntity,XC::MovableObject>, boost::noncopyable >("PhysicalProperties_NDMat", no_init)
+  .def("__getitem__",&PhysicalProperties_NDMat::at, return_value_policy<return_by_value>())
+  .def("__iter__",range(cBegin_NDMat, cEnd_NDMat))
+  .def("__len__", &PhysicalProperties_NDMat::size,"return the number of materials.")
+  .def("empty", &PhysicalProperties_NDMat::empty,"return true if there is no materials.")
   .add_property("getVectorMaterials",make_function(getNDMatVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
   .add_property("generalizedStrains",&PhysicalProperties_NDMat::getGeneralizedStrains,"Returns a matrix with strain values for each gauss point.")
   .add_property("generalizedStresses",&PhysicalProperties_NDMat::getGeneralizedStresses,"Returns a matrix with stress values for each gauss point.")
@@ -63,7 +69,13 @@ class_<XC::SolidMech2D, bases<XC::NDMaterialPhysicalProperties>, boost::noncopya
 
 
 material_vector_SectionFDMat &(PhysicalProperties_SectionFDMat::*getSectionFDMatVector)(void) = &PhysicalProperties_SectionFDMat::getMaterialsVector;
+PhysicalProperties_SectionFDMat::const_iterator (PhysicalProperties_SectionFDMat::*cBegin_SectionFDMat)(void) const= &PhysicalProperties_SectionFDMat::begin;
+PhysicalProperties_SectionFDMat::const_iterator (PhysicalProperties_SectionFDMat::*cEnd_SectionFDMat)(void) const= &PhysicalProperties_SectionFDMat::end;
 class_<PhysicalProperties_SectionFDMat,  bases<CommandEntity,XC::MovableObject>, boost::noncopyable >("PhysicalProperties_SectionFDMat", no_init)
+  .def("__getitem__",&PhysicalProperties_SectionFDMat::at, return_value_policy<return_by_value>())
+  .def("__iter__",range(cBegin_SectionFDMat, cEnd_SectionFDMat))
+  .def("__len__", &PhysicalProperties_SectionFDMat::size,"return the number of materials.")
+  .def("empty", &PhysicalProperties_SectionFDMat::empty,"return true if there is no materials.")
   .add_property("getVectorMaterials",make_function(getSectionFDMatVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
    ;
 
@@ -76,7 +88,13 @@ class_<XC::SectionFDPhysicalProperties, bases<PhysicalProperties_SectionFDMat>, 
 
 
 material_vector_UMat &(PhysicalProperties_UMat::*getUMatVector)(void) = &PhysicalProperties_UMat::getMaterialsVector;
+PhysicalProperties_UMat::const_iterator (PhysicalProperties_UMat::*cBegin_UMat)(void) const= &PhysicalProperties_UMat::begin;
+PhysicalProperties_UMat::const_iterator (PhysicalProperties_UMat::*cEnd_UMat)(void) const= &PhysicalProperties_UMat::end;
 class_<PhysicalProperties_UMat,  bases<CommandEntity,XC::MovableObject>, boost::noncopyable >("PhysicalProperties_UMat", no_init)
+  .def("__getitem__",&PhysicalProperties_UMat::at, return_value_policy<return_by_value>())
+  .def("__iter__",range(cBegin_UMat, cEnd_UMat))
+  .def("__len__", &PhysicalProperties_UMat::size,"return the number of materials.")
+  .def("empty", &PhysicalProperties_UMat::empty,"return true if there is no materials.")
   .add_property("getVectorMaterials",make_function(getUMatVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
    ;
 
@@ -87,7 +105,13 @@ class_<XC::Joint2DPhysicalProperties, bases<XC::UniaxialMatPhysicalProperties>, 
   ;
 
 material_vector_BaseElasticSection1d &(PhysicalProperties_BaseElasticSection1d::*getBaseElasticSection1dVector)(void) = &PhysicalProperties_BaseElasticSection1d::getMaterialsVector;
+PhysicalProperties_BaseElasticSection1d::const_iterator (PhysicalProperties_BaseElasticSection1d::*cBegin_BaseElasticSection1d)(void) const= &PhysicalProperties_BaseElasticSection1d::begin;
+PhysicalProperties_BaseElasticSection1d::const_iterator (PhysicalProperties_BaseElasticSection1d::*cEnd_BaseElasticSection1d)(void) const= &PhysicalProperties_BaseElasticSection1d::end;
 class_<PhysicalProperties_BaseElasticSection1d, bases<CommandEntity,XC::MovableObject>, boost::noncopyable  >("PhysicalProperties_BaseElasticSection1d", no_init)
+  .def("__getitem__",&PhysicalProperties_BaseElasticSection1d::at, return_value_policy<return_by_value>())
+  .def("__iter__",range(cBegin_BaseElasticSection1d, cEnd_BaseElasticSection1d))
+  .def("__len__", &PhysicalProperties_BaseElasticSection1d::size,"return the number of materials.")
+  .def("empty", &PhysicalProperties_BaseElasticSection1d::empty,"return true if there is no materials.")
   .add_property("getVectorMaterials",make_function(getBaseElasticSection1dVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
   ;
 
@@ -99,7 +123,13 @@ class_<XC::ElasticSection1dPhysicalProperties, bases<ElasticSectionPhysicalPrope
 
 // BaseElasticSection2d
 material_vector_BaseElasticSection2d &(PhysicalProperties_BaseElasticSection2d::*getBaseElasticSection2dVector)(void) = &PhysicalProperties_BaseElasticSection2d::getMaterialsVector;
+PhysicalProperties_BaseElasticSection2d::const_iterator (PhysicalProperties_BaseElasticSection2d::*cBegin_BaseElasticSection2d)(void) const= &PhysicalProperties_BaseElasticSection2d::begin;
+PhysicalProperties_BaseElasticSection2d::const_iterator (PhysicalProperties_BaseElasticSection2d::*cEnd_BaseElasticSection2d)(void) const= &PhysicalProperties_BaseElasticSection2d::end;
 class_<PhysicalProperties_BaseElasticSection2d, bases<CommandEntity,XC::MovableObject>, boost::noncopyable  >("PhysicalProperties_BaseElasticSection2d", no_init)
+  .def("__getitem__",&PhysicalProperties_BaseElasticSection2d::at, return_value_policy<return_by_value>())
+  .def("__iter__",range(cBegin_BaseElasticSection2d, cEnd_BaseElasticSection2d))
+  .def("__len__", &PhysicalProperties_BaseElasticSection2d::size,"return the number of materials.")
+  .def("empty", &PhysicalProperties_BaseElasticSection2d::empty,"return true if there is no materials.")
   .add_property("getVectorMaterials",make_function(getBaseElasticSection2dVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
   ;
 
@@ -111,7 +141,13 @@ class_<XC::ElasticSection2dPhysicalProperties, bases<ElasticSectionPhysicalPrope
 
 // BaseElasticSection3d
 material_vector_BaseElasticSection3d &(PhysicalProperties_BaseElasticSection3d::*getBaseElasticSection3dVector)(void) = &PhysicalProperties_BaseElasticSection3d::getMaterialsVector;
+PhysicalProperties_BaseElasticSection3d::const_iterator (PhysicalProperties_BaseElasticSection3d::*cBegin_BaseElasticSection3d)(void) const= &PhysicalProperties_BaseElasticSection3d::begin;
+PhysicalProperties_BaseElasticSection3d::const_iterator (PhysicalProperties_BaseElasticSection3d::*cEnd_BaseElasticSection3d)(void) const= &PhysicalProperties_BaseElasticSection3d::end;
 class_<PhysicalProperties_BaseElasticSection3d, bases<CommandEntity,XC::MovableObject>, boost::noncopyable  >("PhysicalProperties_BaseElasticSection3d", no_init)
+  .def("__getitem__",&PhysicalProperties_BaseElasticSection3d::at, return_value_policy<return_by_value>())
+  .def("__iter__",range(cBegin_BaseElasticSection3d, cEnd_BaseElasticSection3d))
+  .def("__len__", &PhysicalProperties_BaseElasticSection3d::size,"return the number of materials.")
+  .def("empty", &PhysicalProperties_BaseElasticSection3d::empty,"return true if there is no materials.")
   .add_property("getVectorMaterials",make_function(getBaseElasticSection3dVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
   ;
 

@@ -99,15 +99,15 @@ class SimpleBearingBase: public FrictionElementBase
 		      const double &kFactUplift);
     
     void setInitialStiffnessOfHystereticComponent(const double &);
-    const double &getInitialStiffnessOfHystereticComponent(void) const;
+    double getInitialStiffnessOfHystereticComponent(void) const;
     void setShearDistanceFromNodeIAsFractionOfLength(const double &);
-    const double &getShearDistanceFromNodeIAsFractionOfLength(void) const;
+    double getShearDistanceFromNodeIAsFractionOfLength(void) const;
     void setAddRayleighDampingFlag(const int &);
     int getAddRayleighDampingFlag(void) const;
     void setElementIsOnP0Flag(const bool &);
     bool getElementIsOnP0Flag(void) const;
     void setStiffnessFactorWhenUplift(const double &);
-    const double &getStiffnessFactorWhenUplift(void) const;
+    double getStiffnessFactorWhenUplift(void) const;
    
     
     // public methods for element output

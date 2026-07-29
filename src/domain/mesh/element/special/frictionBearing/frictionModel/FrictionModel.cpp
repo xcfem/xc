@@ -57,15 +57,70 @@
 // What: "@(#) FrictionModel.cpp, revA"
 
 #include "FrictionModel.h"
+#include "preprocessor/prep_handlers/FrictionModelHandler.h"
 #include "FrictionResponse.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "utility/matrix/ID.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::FrictionModel::FrictionModel(int tag, int classTag)
   : TaggedObject(tag), MovableObject(classTag), trialN(0.0), trialVel(0.0) {}
 
+//! @brief Returns (if possible) a pointer to the friction model handler
+//! (owner).
+const XC::FrictionModelHandler *XC::FrictionModel::getFrictionModelHandler(void) const
+  {
+    const FrictionModelHandler *retval= dynamic_cast<const FrictionModelHandler *>(Owner());
+    if(!retval)
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; friction model handler not defined."
+		<< Color::def << std::endl;
+    return retval;
+  }
 
+//! @brief Returns a pointer to the friction model handler (if possible).
+XC::FrictionModelHandler *XC::FrictionModel::getFrictionModelHandler(void)
+  {
+    FrictionModelHandler *retval= dynamic_cast<FrictionModelHandler *>(Owner());
+    if(!retval)
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << "; friction model handler not defined."
+		<< Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Returns the name of the friction model.
+std::string XC::FrictionModel::getName(void) const
+  {
+    std::string retval;
+    const FrictionModelHandler *fmHandler= this->getFrictionModelHandler();
+    if(fmHandler)
+      retval= fmHandler->getName(this->getTag());
+    return retval;
+  }
+
+//! @brief Return the friction model identified by the given name.
+//! @param matName: name of the friction model.
+const XC::FrictionModel *XC::FrictionModel::getFrictionModelByName(const std::string &fmName) const
+  {
+    const FrictionModel *retval= nullptr; 
+    const FrictionModelHandler *friction_model_handler= this->getFrictionModelHandler();
+    if(friction_model_handler)
+      retval= friction_model_handler->find_ptr(fmName);
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to preprocessor."
+		  << Color::def << std::endl;
+      }
+    if(!retval)
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << "; "
+		<< "friction model identified by: '" << fmName
+		<< "' not found."
+	        << Color::def << std::endl;      
+    return retval;
+  }
 double XC::FrictionModel::getNormalForce(void) const
   { return trialN; }
 
@@ -166,8 +221,9 @@ int XC::sendFrictionModelPtr(FrictionModel *ptr,int posClassTag, int posDbTag,Db
         res= comm.sendMovable(*ptr,dt,CommMetaData(posDbTag));
       }
     if(res < 0)
-      std::cerr << __FUNCTION__ << "; WARNING "
-                << "failed to send friction model.\n";
+      std::cerr << Color::red << __FUNCTION__ << "; WARNING "
+                << " failed to send friction model."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -197,12 +253,14 @@ XC::FrictionModel *XC::receiveFrictionModelPtr(FrictionModel* ptr,int posClassTa
       {
         int res= comm.receiveMovable(*retval,dt,CommMetaData(posDbTag));
         if(res<0)
-          std::cerr << __FUNCTION__ << "; WARNING " 
-                    << "failed to receive friction model.\n";
+          std::cerr << Color::red << __FUNCTION__ << "; WARNING " 
+                    << "failed to receive friction model."
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << __FUNCTION__ << "; WARNING "
+      std::cerr << Color::red << __FUNCTION__ << "; WARNING "
                 << " failed to get a blank friction model of type: "
-                << matClass << std::endl; 
+                << matClass
+		<< Color::def << std::endl; 
     return retval;
   }

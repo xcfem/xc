@@ -26,7 +26,7 @@
 XC::FrictionModels::const_iterator (XC::FrictionModels::*cBegin)(void) const= &XC::FrictionModels::begin;
 XC::FrictionModels::const_iterator (XC::FrictionModels::*cEnd)(void) const= &XC::FrictionModels::end;
 class_<XC::FrictionModels, bases<CommandEntity>, boost::noncopyable >("FrictionModels", no_init)
-.def("__getitem__",&XC::FrictionModels::at, return_value_policy<return_by_value>())
+  .def("__getitem__",&XC::FrictionModels::at, return_value_policy<return_by_value>())
   .def("__iter__",range(cBegin,cEnd))
   .def("__len__", &XC::FrictionModels::size,"return the number of friction models.")
   .def("empty", &XC::FrictionModels::empty,"return true if there is no friction models.")
@@ -37,7 +37,9 @@ class_<XC::FrictionModels, bases<CommandEntity>, boost::noncopyable >("FrictionM
 class_<XC::FrictionElementBase, bases<XC::Element0D>, boost::noncopyable >("FrictionElementBase", no_init)
     // parameters
     .add_property("frictionModels", make_function(&XC::FrictionElementBase::getFrictionModels, return_internal_reference<>() ), "Get friction models.")
+    .def("setFrictionModels", &XC::FrictionElementBase::setFrictionModels, "Set the friction models.")
     .add_property("materials", make_function(&XC::FrictionElementBase::getMaterials, return_internal_reference<>() ), "Get materials.")
+    .def("setMaterials", &XC::FrictionElementBase::setMaterials, "Set the materials.")
     .def("setLocalXDirection", &XC::FrictionElementBase::setLocalXDirection, "Set local x direction vector.")
     .def("getLocalXDirection", make_function(&XC::FrictionElementBase::getLocalXDirection, return_internal_reference<>() ), "Get local x direction vector.")
     .def("setLocalYDirection", &XC::FrictionElementBase::setLocalYDirection, "Set local y direction vector.")
@@ -65,30 +67,31 @@ class_<XC::FrictionElementBase, bases<XC::Element0D>, boost::noncopyable >("Fric
     .def("setTransformationLocalToBasicSystem", &XC::FrictionElementBase::setTransformationLocalToBasicSystem, "Set transformation matrix from local to basic system.")
     .def("getTransformationLocalToBasicSystem", make_function(&XC::FrictionElementBase::getTransformationLocalToBasicSystem, return_internal_reference<>() ), "Get transformation matrix from local to basic system.")
   ;
-/*
+
 class_<XC::SimpleBearingBase, bases<XC::FrictionElementBase>, boost::noncopyable >("SimpleBearingBase", no_init)
     .def("setInitialStiffnessOfHystereticComponent", &XC::SimpleBearingBase::setInitialStiffnessOfHystereticComponent, "Set initial stiffness of hysteretic component.")
-    .def("getInitialStiffnessOfHystereticComponent", make_function(&XC::SimpleBearingBase::getInitialStiffnessOfHystereticComponent, return_internal_reference<>() ), "Get initial stiffness of hysteretic component.")
+  .def("getInitialStiffnessOfHystereticComponent", &XC::SimpleBearingBase::getInitialStiffnessOfHystereticComponent, "Get initial stiffness of hysteretic component.")
     .def("setShearDistanceFromNodeIAsFractionOfLength", &XC::SimpleBearingBase::setShearDistanceFromNodeIAsFractionOfLength, "Set shear distance from node I as fraction of length.")
-    .def("getShearDistanceFromNodeIAsFractionOfLength", make_function(&XC::SimpleBearingBase::getShearDistanceFromNodeIAsFractionOfLength, return_internal_reference<>() ), "Get shear distance from node I as fraction of length.")
+    .def("getShearDistanceFromNodeIAsFractionOfLength", &XC::SimpleBearingBase::getShearDistanceFromNodeIAsFractionOfLength, "Get shear distance from node I as fraction of length.")
     .def("setAddRayleighDampingFlag", &XC::SimpleBearingBase::setAddRayleighDampingFlag, "Set flag to add Rayleigh damping.")
     .def("getAddRayleighDampingFlag", &XC::SimpleBearingBase::getAddRayleighDampingFlag, "Get flag to add Rayleigh damping.")
     .def("setElementIsOnP0Flag", &XC::SimpleBearingBase::setElementIsOnP0Flag, "Set flag to indicate if the element is on P0.")
     .def("getElementIsOnP0Flag", &XC::SimpleBearingBase::getElementIsOnP0Flag, "Get flag to indicate if the element is on P0.")
+  .def("setStiffnessFactorWhenUplift", &XC::SimpleBearingBase::setStiffnessFactorWhenUplift, "Set the stiffness factor when uplift is encountered.")
+  .def("getStiffnessFactorWhenUplift", &XC::SimpleBearingBase::getStiffnessFactorWhenUplift, "Get the stiffness factor when uplift is encountered.")
+  .add_property("stiffnessFactorWhenUplift", &XC::SimpleBearingBase::getStiffnessFactorWhenUplift, &XC::SimpleBearingBase::setStiffnessFactorWhenUplift, "Get/set the stiffness factor when uplift is encountered.")
   ;
+
 
 class_<XC::FlatSliderSimple2d, bases<XC::SimpleBearingBase>, boost::noncopyable >("FlatSliderSimple2d", no_init)
   ;
 
 class_<XC::FlatSliderSimple3d, bases<XC::SimpleBearingBase>, boost::noncopyable >("FlatSliderSimple3d", no_init)
-  .def("setStiffnessFactorWhenUplift", &XC::FlatSliderSimple3d::setStiffnessFactorWhenUplift, "Set the stiffness factor when uplift is encountered.")
-  .def("getStiffnessFactorWhenUplift", make_function(&XC::FlatSliderSimple3d::getStiffnessFactorWhenUplift, return_internal_reference<>() ), "Get the stiffness factor when uplift is encountered.")
-  .add_property("stiffnessFactorWhenUplift", make_function(&XC::FlatSliderSimple3d::getStiffnessFactorWhenUplift, return_internal_reference<>() ), &XC::FlatSliderSimple3d::setStiffnessFactorWhenUplift, "Get/set the stiffness factor when uplift is encountered.")
   ;
 
 class_<XC::MultiFP2d, bases<XC::Element0D>, boost::noncopyable >("MultiFP2d", no_init)
-  .add_property("frictionModel", &XC::MultiFP2d::getFrictionModel, &XC::MultiFP2d::setFrictionModel)
-  .add_property("verticalModel", &XC::MultiFP2d::getVerticalModel, &XC::MultiFP2d::setVerticalModel)
+.add_property("frictionModel", make_function(&XC::MultiFP2d::getFrictionModel, return_internal_reference<>() ), &XC::MultiFP2d::setFrictionModel)
+  .add_property("verticalModel", make_function(&XC::MultiFP2d::getVerticalModel, return_internal_reference<>() ), &XC::MultiFP2d::setVerticalModel)
   .add_property("type", &XC::MultiFP2d::getType, &XC::MultiFP2d::setType)
   .add_property("axialCase", &XC::MultiFP2d::getAxialCase, &XC::MultiFP2d::setAxialCase)
   .add_property("W0", &XC::MultiFP2d::getW0, &XC::MultiFP2d::setW0)
@@ -123,6 +126,6 @@ class_<XC::TripleFrictionPendulum, bases<XC::Element0D>, boost::noncopyable >("T
   .add_property("tol", &XC::TripleFrictionPendulum::getTol, &XC::TripleFrictionPendulum::setTol)
   .add_property("Niter", &XC::TripleFrictionPendulum::getNiter, &XC::TripleFrictionPendulum::setNiter)
   ;
-*/
+
 //class_<XC::TripleFrictionPendulumX, bases<XC::Element0D>, boost::noncopyable >("TripleFrictionPendulumX", no_init);
 

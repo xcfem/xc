@@ -82,8 +82,10 @@ class FrictionElementBase: public Element0D
     // parameters
     inline FrictionModels &getFrictionModels()
       { return this->frictionModels; }
+    void setFrictionModels(const boost::python::list &);
     inline UniaxialMatPhysicalProperties &getMaterials()
       { return this->physicalProperties;; }
+    void setMaterials(const boost::python::list &);
     void setLocalXDirection(const Vector &x);
     const Vector &getLocalXDirection(void) const;
     void setLocalYDirection(const Vector &x);

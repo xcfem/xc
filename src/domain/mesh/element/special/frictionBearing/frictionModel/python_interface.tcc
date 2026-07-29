@@ -23,7 +23,9 @@
 
 //class_<XC::FrictionResponse, bases<XC::Response>, boost::noncopyable >("FrictionResponse", no_init);
 
-class_<XC::FrictionModel , bases<XC::TaggedObject>, boost::noncopyable >("FrictionModel", no_init)
+class_<XC::FrictionModel , XC::FrictionModel *, bases<XC::TaggedObject>, boost::noncopyable >("FrictionModel", no_init)
+  .def("getName",&XC::FrictionModel::getName,"Return the name of the friction model.")
+  .add_property("name",&XC::FrictionModel::getName,"Return the name of the friction model.")
   .def("getTrialN", &XC::FrictionModel::getTrialN, "Get trial normal contact force.")
   .def("setTrialN", &XC::FrictionModel::setTrialN, "Set trial normal contact force.")
   .add_property("trialN", &XC::FrictionModel::getTrialN, &XC::FrictionModel::setTrialN, "Get/set trial normal contact force.")

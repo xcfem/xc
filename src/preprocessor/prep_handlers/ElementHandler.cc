@@ -305,7 +305,6 @@ void XC::ElementHandler::Add(Element *e)
 		<< Color::def << std::endl;
   }
 
-
 //! @brief Adds a new element to the model.
 void XC::ElementHandler::new_element(Element *e)
   {
