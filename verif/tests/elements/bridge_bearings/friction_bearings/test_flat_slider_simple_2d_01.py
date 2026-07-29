@@ -43,7 +43,7 @@ frictionModel= fm.def_coulomb_friction_model(preprocessor, name= "frictionModel"
 # combining matTags for axial and rotation, shear via friction model)
 kInit= 250.0
 mass= 1.0
-flatSliderBearing= fb.def_flat_slider_braring_2d(modelSpace, n1= nod1, n2= nod2, frictionModel= frictionModel, vertResp= axialMat, rotResp= rotMat, kInit= kInit, x= xc.Vector([0,1,0]), y= xc.Vector([-1,0,0]), shearDistI= 0.0, addRayleigh= 0, mass= mass)
+flatSliderBearing= fb.def_flat_slider_bearing_2d(modelSpace, n1= nod1, n2= nod2, frictionModel= frictionModel, vertResp= axialMat, rotResp= rotMat, kInit= kInit, x= xc.Vector([0,1,0]), y= xc.Vector([-1,0,0]), shearDistI= 0.0, addRayleigh= 0, mass= mass)
 
 # 6. Check values.
 localXDir= flatSliderBearing.getLocalXDirection()
