@@ -36,10 +36,10 @@ axialMat= typical_materials.defElastNoTensMaterial(preprocessor, name= "axialMat
 # Material for rotational/other restrained direction (tag 2)
 rotMat= typical_materials.defElasticMaterial(preprocessor, name= "rotMat", E= 1e10)
 
-# 4. Define friction model (tag 1, coefficient of friction = 0.05)
+# 4. Define friction model (coefficient of friction = 0.05)
 frictionModel= fm.def_coulomb_friction_model(preprocessor, name= "frictionModel", mu= .05)
 
-# 5. Construct flatSliderBearing element (tag 1, nodes 1->2, 
+# 5. Construct flatSliderBearing element (nodes 1->2, 
 # combining matTags for axial and rotation, shear via friction model)
 kInit= 250.0
 mass= 1.0
