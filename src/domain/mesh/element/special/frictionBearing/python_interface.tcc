@@ -56,16 +56,27 @@ class_<XC::FrictionElementBase, bases<XC::Element0D>, boost::noncopyable >("Fric
     // state variables
     .def("setDisplacementsInBasicSystem", &XC::FrictionElementBase::setDisplacementsInBasicSystem, "Set displacements in basic system.")
     .def("getDisplacementsInBasicSystem", make_function(&XC::FrictionElementBase::getDisplacementsInBasicSystem, return_internal_reference<>() ), "Get displacements in basic system.")
+    .add_property("ub", make_function(&XC::FrictionElementBase::getDisplacementsInBasicSystem, return_internal_reference<>() ), "Return the displacements in basic system.")
+
     .def("setForcesInBasicSystem", &XC::FrictionElementBase::setForcesInBasicSystem, "Set forces in basic system.")
-    .def("getForcesInBasicSystem", make_function(&XC::FrictionElementBase::getForcesInBasicSystem, return_internal_reference<>() ), "Get forcesin basic system.")
+    .def("getForcesInBasicSystem", make_function(&XC::FrictionElementBase::getForcesInBasicSystem, return_internal_reference<>() ), "Get forces in basic system.")
+    .add_property("qb", make_function(&XC::FrictionElementBase::getForcesInBasicSystem, return_internal_reference<>() ), "Get forces in basic system.")
+
     .def("setStiffnessInBasicSystem", &XC::FrictionElementBase::setStiffnessInBasicSystem, "Set stiffnes in basic system.")
     .def("getStiffnessInBasicSystem", make_function(&XC::FrictionElementBase::getStiffnessInBasicSystem, return_internal_reference<>() ), "Get stiffness in basic system.")
+    .add_property("kb", make_function(&XC::FrictionElementBase::getStiffnessInBasicSystem, return_internal_reference<>() ), "Get stiffness in basic system.")
+
     .def("setDisplacementsInLocalSystem", &XC::FrictionElementBase::setDisplacementsInLocalSystem, "Set displacements in local system.")
     .def("getDisplacementsInLocalSystem", make_function(&XC::FrictionElementBase::getDisplacementsInLocalSystem, return_internal_reference<>() ), "Get displacements in local system.")
+    .add_property("ul", make_function(&XC::FrictionElementBase::getDisplacementsInLocalSystem, return_internal_reference<>() ), "Get displacements in local system.")
+
     .def("setTransformationGlobalToLocalSystem", &XC::FrictionElementBase::setTransformationGlobalToLocalSystem, "Set transformation matrix from global to local system.")
     .def("getTransformationGlobalToLocalSystem", make_function(&XC::FrictionElementBase::getTransformationGlobalToLocalSystem, return_internal_reference<>() ), "Get transformation matrix from global to local system.")
+    .add_property("Tgl", make_function(&XC::FrictionElementBase::getTransformationGlobalToLocalSystem, return_internal_reference<>() ), "Get transformation matrix from global to local system.")
+
     .def("setTransformationLocalToBasicSystem", &XC::FrictionElementBase::setTransformationLocalToBasicSystem, "Set transformation matrix from local to basic system.")
     .def("getTransformationLocalToBasicSystem", make_function(&XC::FrictionElementBase::getTransformationLocalToBasicSystem, return_internal_reference<>() ), "Get transformation matrix from local to basic system.")
+    .add_property("Tlb",  make_function(&XC::FrictionElementBase::getTransformationLocalToBasicSystem, return_internal_reference<>() ), "Get transformation matrix from local to basic system.")
   ;
 
 class_<XC::SimpleBearingBase, bases<XC::FrictionElementBase>, boost::noncopyable >("SimpleBearingBase", no_init)
@@ -84,6 +95,7 @@ class_<XC::SimpleBearingBase, bases<XC::FrictionElementBase>, boost::noncopyable
 
 
 class_<XC::FlatSliderSimple2d, bases<XC::SimpleBearingBase>, boost::noncopyable >("FlatSliderSimple2d", no_init)
+  .def("setup", &XC::FlatSliderSimple2d::setup, "Initialize stifness matrix and setup parameter values after any change in the input parameters.")
   ;
 
 class_<XC::FlatSliderSimple3d, bases<XC::SimpleBearingBase>, boost::noncopyable >("FlatSliderSimple3d", no_init)

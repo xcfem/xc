@@ -171,6 +171,7 @@ void XC::FrictionElementBase::setTransformationGlobalToLocalSystem(const Matrix 
 //! @brief Get the transformation matrix from global to local system.
 const XC::Matrix &XC::FrictionElementBase::getTransformationGlobalToLocalSystem(void) const
   { return this->Tgl; }
+
 //! @brief Set the transformation matrix from local to basic system.
 void XC::FrictionElementBase::setTransformationLocalToBasicSystem(const Matrix &m)
   { this->Tlb= m; }

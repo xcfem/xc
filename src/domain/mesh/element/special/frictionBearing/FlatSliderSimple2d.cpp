@@ -78,9 +78,9 @@ XC::Vector XC::FlatSliderSimple2d::theVector(6);
 void XC::FlatSliderSimple2d::initializeStiffnessMatrix(void)
   {
     kbInit.Zero();
-    kbInit(0,0) = physicalProperties[0]->getInitialTangent();
-    kbInit(1,1) = k0;
-    kbInit(2,2) = physicalProperties[1]->getInitialTangent();
+    kbInit(0,0)= physicalProperties[0]->getInitialTangent();
+    kbInit(1,1)= k0;
+    kbInit(2,2)= physicalProperties[1]->getInitialTangent();
   }
 
 //! @brief Initialize element state after changint the value of its materials,
@@ -154,8 +154,8 @@ void XC::FlatSliderSimple2d::setDomain(Domain *theDomain)
     SimpleBearingBase::setDomain(theDomain);
 	
     // now determine the number of dof and the dimension    
-    const int dofNd1 = theNodes[0]->getNumberDOF();
-    const int dofNd2 = theNodes[1]->getNumberDOF();	
+    const int dofNd1= theNodes[0]->getNumberDOF();
+    const int dofNd2= theNodes[1]->getNumberDOF();	
 	
     // if differing dof at the ends - print a warning message
     if(dofNd1 != 3)
@@ -184,7 +184,7 @@ void XC::FlatSliderSimple2d::setDomain(Domain *theDomain)
 
 int XC::FlatSliderSimple2d::commitState()
   {
-    ubPlasticC = ubPlastic;// commit trial history variables
+    this->ubPlasticC= this->ubPlastic;// commit trial history variables
     int errCode= this->frictionModels.commitState();// commit friction model
     
     errCode+= physicalProperties.commitState();// commit material models
@@ -199,7 +199,7 @@ int XC::FlatSliderSimple2d::revertToLastCommit()
   {
     // DON'T call Element::revertToLastCommit() because
     // is a pure virtual method.
-    int errCode = 0;
+    int errCode= 0;
     
     errCode += this->frictionModels.revertToLastCommit();// revert friction model    
     errCode += physicalProperties.revertToLastCommit();// revert material models
@@ -212,15 +212,15 @@ int XC::FlatSliderSimple2d::revertToStart()
     int errCode= SimpleBearingBase::revertToStart();
     
     // reset trial history variables
-    ub.Zero();
-    ubPlastic = 0.0;
-    qb.Zero();
+    this->ub.Zero();
+    this->ubPlastic= 0.0;
+    this->qb.Zero();
     
     // reset committed history variables
-    ubPlasticC = 0.0;
+    this->ubPlasticC= 0.0;
     
     // reset stiffness matrix in basic system
-    kb = kbInit;
+    this->kb= this->kbInit;
     
     // revert friction model
     errCode += this->frictionModels.revertToStart();
@@ -233,27 +233,27 @@ int XC::FlatSliderSimple2d::revertToStart()
 //! @brief Update bearing friction and stiffness.
 int XC::FlatSliderSimple2d::update_friction_and_stiffness(const Vector &ubdot)
   {
-    const double &ubdotAbs= ubdot(1);
+    const double &ubdotAbs= std::abs(ubdot(1));
     // 1) get axial force and stiffness in basic x-direction
     if(this->physicalProperties.size()> 0)
       {
-	const double ub0Old = physicalProperties[0]->getStrain();
-	physicalProperties[0]->setTrialStrain(ub(0),ubdot(0));
-	qb(0) = physicalProperties[0]->getStress();
-	kb(0,0) = physicalProperties[0]->getTangent();
+	const double ub0Old= physicalProperties[0]->getStrain();
+	physicalProperties[0]->setTrialStrain(this->ub(0), ubdot(0));
+	this->qb(0)= physicalProperties[0]->getStress();
+	this->kb(0,0)= physicalProperties[0]->getTangent();
 
 	// check for uplift
-	if (qb(0) >= 0.0)
+	if(this->qb(0) >= 0.0)
 	  {
-	    kb = kbInit;
-	    if (qb(0) > 0.0)
+	    this->kb= this->kbInit;
+	    if(this->qb(0) > 0.0)
 	      {
-		physicalProperties[0]->setTrialStrain(ub0Old,0.0);
-		kb = kFactUplift*kbInit;  // kb = DBL_EPSILON*kbInit;
+		physicalProperties[0]->setTrialStrain(ub0Old, 0.0);
+		this->kb= this->kFactUplift*this->kbInit;  // kb= DBL_EPSILON*kbInit;
 		// update plastic displacement
-		ubPlastic = ub(1);
+		ubPlastic= this->ub(1);
 	      }
-	    qb.Zero();
+	    this->qb.Zero();
 	    return 0;
 	  }
       }
@@ -261,44 +261,44 @@ int XC::FlatSliderSimple2d::update_friction_and_stiffness(const Vector &ubdot)
     // 2) calculate shear force and stiffness in basic y-direction
     if(this->frictionModels.size()>0)
       {
-	int iter = 0;
-	double qb1Old = 0.0;
-	FrictionModel *theFrnMdl= this->frictionModels[0];
+	int iter= 0;
+	double qb1Old= 0.0;
+        FrictionModel *theFrnMdl= this->frictionModels[0];
 	do  {
 	    // save old shear force
-	    qb1Old = qb(1);
+	    qb1Old= qb(1);
 
 	    // get normal and friction (yield) forces
-	    const double N = -qb(0) - qb(1)*ul(2);
+	    const double N= -qb(0) - qb(1)*ul(2);
 	    theFrnMdl->setTrial(N, ubdotAbs);
-	    const double qYield = (theFrnMdl->getFrictionForce());
+	    const double qYield= (theFrnMdl->getFrictionForce());
 
 	    // get trial shear force of hysteretic component
-	    const double qTrial = k0*(ub(1) - ubPlasticC);
+	    const double qTrial= k0*(ub(1) - ubPlasticC);
 
 	    // compute yield criterion of hysteretic component
-	    const double qTrialNorm = fabs(qTrial);
-	    const double Y = qTrialNorm - qYield;
+	    const double qTrialNorm= fabs(qTrial);
+	    const double Y= qTrialNorm - qYield;
 
 	    // elastic step -> no updates required
 	    if(Y <= 0.0)
 	      {
 		// set shear force
-		qb(1) = qTrial - N*ul(2);
+		qb(1)= qTrial - N*ul(2);
 		// set tangent stiffness
-		kb(1,1) = k0;
+		kb(1,1)= k0;
 	      }
 	    // plastic step -> return mapping
 	    else
 	      {
 		// compute consistency parameter
-		const double dGamma = Y/k0;
+		const double dGamma= Y/k0;
 		// update plastic displacement
-		ubPlastic = ubPlasticC + dGamma*qTrial/qTrialNorm;
+		ubPlastic= ubPlasticC + dGamma*qTrial/qTrialNorm;
 		// set shear force
-		qb(1) = qYield*qTrial/qTrialNorm - N*ul(2);
+		qb(1)= qYield*qTrial/qTrialNorm - N*ul(2);
 		// set tangent stiffness
-		kb(1,1) = 0.0;
+		kb(1,1)= 0.0;
 	      }
 	    iter++;
 	} while ((fabs(qb(1)-qb1Old) >= tol) && (iter <= maxIter));
@@ -320,8 +320,8 @@ int XC::FlatSliderSimple2d::update_friction_and_stiffness(const Vector &ubdot)
       {
 	// 3) get moment and stiffness in basic z-direction
 	physicalProperties[1]->setTrialStrain(ub(2),ubdot(2));
-	qb(2) = physicalProperties[1]->getStress();
-	kb(2,2) = physicalProperties[1]->getTangent();
+	qb(2)= physicalProperties[1]->getStress();
+	kb(2,2)= physicalProperties[1]->getTangent();
       }
     
     return 0;
@@ -330,30 +330,41 @@ int XC::FlatSliderSimple2d::update_friction_and_stiffness(const Vector &ubdot)
 int XC::FlatSliderSimple2d::update(void)
   {
     // get global trial displacements and velocities
-    const Vector &dsp1 = theNodes[0]->getTrialDisp();
-    const Vector &dsp2 = theNodes[1]->getTrialDisp();
-    const Vector &vel1 = theNodes[0]->getTrialVel();
-    const Vector &vel2 = theNodes[1]->getTrialVel();
-    
+    const Node *n0= this->theNodes[0];
+    const Node *n1= this->theNodes[1];
+    const Vector &dsp1= n0->getTrialDisp();
+    const Vector &dsp2= n1->getTrialDisp();
+    const Vector &vel1= n0->getTrialVel();
+    const Vector &vel2= n1->getTrialVel();
+
     static Vector ug(6), ugdot(6), uldot(6), ubdot(3);
     for(int i=0; i<3; i++)
       {
-        ug(i)   = dsp1(i);  ugdot(i)   = vel1(i);
-        ug(i+3) = dsp2(i);  ugdot(i+3) = vel2(i);
+        ug(i)  = dsp1(i);  ugdot(i)  = vel1(i);
+        ug(i+3)= dsp2(i);  ugdot(i+3)= vel2(i);
       }
     
     // transform response from the global to the local system
-    ul.addMatrixVector(0.0, Tgl, ug, 1.0);
+    this->ul.addMatrixVector(0.0, Tgl, ug, 1.0);
     uldot.addMatrixVector(0.0, Tgl, ugdot, 1.0);
     
     // transform response from the local to the basic system
-    ub.addMatrixVector(0.0, Tlb, ul, 1.0);
+    this->ub.addMatrixVector(0.0, Tlb, this->ul, 1.0);
     ubdot.addMatrixVector(0.0, Tlb, uldot, 1.0);
     
-    // get absolute velocity
+    // Update friction and stiffness.
     return this->update_friction_and_stiffness(ubdot);
   }
 
+//! @brief Initialize stifness matrix and setup parameter values after
+//! any change in the input parameters.
+int XC::FlatSliderSimple2d::setup()
+  {
+    this->initialize();
+    load.reset(this->numDOF);
+    this->setUp();
+    return this->update();
+  }
 
 const XC::Matrix &XC::FlatSliderSimple2d::getTangentStiff() const
   {
@@ -367,7 +378,7 @@ const XC::Matrix &XC::FlatSliderSimple2d::getTangentStiff() const
     // add geometric stiffness to local stiffness
     kl(2,1)-= qb(0);
     kl(2,4)+= qb(0);
-    const double kGeo = qb(0)*(1.0 - shearDistI)*L;
+    const double kGeo= qb(0)*(1.0 - shearDistI)*L;
     kl(2,5)-= kGeo;
     kl(5,5)+= kGeo;
     
@@ -399,18 +410,18 @@ const XC::Matrix &XC::FlatSliderSimple2d::getDamp(void) const
     theMatrix.Zero();
     
     // call base class to setup Rayleigh damping
-    double factThis = 0.0;
+    double factThis= 0.0;
     if(addRayleigh == 1)
       {
-        theMatrix = this->Element::getDamp();
-        factThis = 1.0;
+        theMatrix= this->Element::getDamp();
+        factThis= 1.0;
       }
     
     // now add damping tangent from materials
     static Matrix cb(3,3);
     cb.Zero();
-    cb(0,0) = physicalProperties[0]->getDampTangent();
-    cb(2,2) = physicalProperties[1]->getDampTangent();
+    cb(0,0)= physicalProperties[0]->getDampTangent();
+    cb(2,2)= physicalProperties[1]->getDampTangent();
     
     // transform from basic to local system
     static Matrix cl(6,6);
@@ -431,11 +442,11 @@ const XC::Matrix &XC::FlatSliderSimple2d::getMass(void) const
     if (mass == 0.0)
       {	return theMatrix; }
     
-    const double m = 0.5*mass;
+    const double m= 0.5*mass;
     for (int i=0; i<2; i++)
       {
-	theMatrix(i,i)     = m;
-	theMatrix(i+3,i+3) = m;
+	theMatrix(i,i)    = m;
+	theMatrix(i+3,i+3)= m;
       }	
     return theMatrix; 
   }
@@ -457,8 +468,8 @@ int XC::FlatSliderSimple2d::addInertiaLoadToUnbalance(const Vector &accel)
       {	return 0; }    
     
     // get R * accel from the nodes
-    const Vector &Raccel1 = theNodes[0]->getRV(accel);
-    const Vector &Raccel2 = theNodes[1]->getRV(accel);
+    const Vector &Raccel1= theNodes[0]->getRV(accel);
+    const Vector &Raccel2= theNodes[1]->getRV(accel);
 	
     if (3 != Raccel1.Size() || 3 != Raccel2.Size())
       {
@@ -469,7 +480,7 @@ int XC::FlatSliderSimple2d::addInertiaLoadToUnbalance(const Vector &accel)
     
     // want to add ( - fact * M R * accel ) to unbalance
     // take advantage of lumped mass matrix
-    const double m = 0.5*mass;
+    const double m= 0.5*mass;
     for (int i=0; i<2; i++)
       {
         load(i)   -= m * Raccel1(i);
@@ -490,9 +501,9 @@ const XC::Vector& XC::FlatSliderSimple2d::getResistingForce(void) const
     ql.addMatrixTransposeVector(0.0, Tlb, qb, 1.0);
     
     // add P-Delta moments to local forces
-    const double MpDelta1 = qb(0)*(ul(4)-ul(1));
+    const double MpDelta1= qb(0)*(ul(4)-ul(1));
     ql(2)+= MpDelta1;
-    const double MpDelta2 = qb(0)*(1.0 - shearDistI)*L*ul(5);
+    const double MpDelta2= qb(0)*(1.0 - shearDistI)*L*ul(5);
     ql(2)-= MpDelta2;
     ql(5)+= MpDelta2;
     
@@ -505,7 +516,7 @@ const XC::Vector& XC::FlatSliderSimple2d::getResistingForce(void) const
 //! @brief Return the element resisting force including inertia.
 const XC::Vector& XC::FlatSliderSimple2d::getResistingForceIncInertia(void) const
   {	
-    theVector = this->getResistingForce();
+    theVector= this->getResistingForce();
 	
     // subtract external load
     theVector.addVector(1.0, load, -1.0);
@@ -520,10 +531,10 @@ const XC::Vector& XC::FlatSliderSimple2d::getResistingForceIncInertia(void) cons
     // now include the mass portion
     if(mass != 0.0)
       {
-	const Vector &accel1 = theNodes[0]->getTrialAccel();
-	const Vector &accel2 = theNodes[1]->getTrialAccel();    
+	const Vector &accel1= theNodes[0]->getTrialAccel();
+	const Vector &accel2= theNodes[1]->getTrialAccel();    
 		
-	const double m = 0.5*mass;
+	const double m= 0.5*mass;
 	for(int i=0; i<2; i++)
           {
 	    theVector(i)+= m * accel1(i);
@@ -609,7 +620,7 @@ void XC::FlatSliderSimple2d::Print(std::ostream &s, int flag) const
 
 XC::Response *XC::FlatSliderSimple2d::setResponse(const std::vector<std::string> &argv, Information &eleInformation)
   {
-    Response *theResponse = 0;
+    Response *theResponse= 0;
 
 //     output.tag("ElementOutput");
 //     output.attr("eleType","FlatSliderSimple2d");
@@ -630,7 +641,7 @@ XC::Response *XC::FlatSliderSimple2d::setResponse(const std::vector<std::string>
 //         output.tag("ResponseType","Py_2");
 //         output.tag("ResponseType","Mz_2");
 
-//         theResponse = new ElementResponse(this, 1, theVector);
+//         theResponse= new ElementResponse(this, 1, theVector);
 //     }
 //     // local forces
 //     else if (strcmp(argv[0],"localForce") == 0 ||
@@ -643,7 +654,7 @@ XC::Response *XC::FlatSliderSimple2d::setResponse(const std::vector<std::string>
 //         output.tag("ResponseType","V_2");
 //         output.tag("ResponseType","M_2");
 
-//         theResponse = new ElementResponse(this, 2, theVector);
+//         theResponse= new ElementResponse(this, 2, theVector);
 //     }
 //     // basic forces
 //     else if (strcmp(argv[0],"basicForce") == 0 ||
@@ -653,7 +664,7 @@ XC::Response *XC::FlatSliderSimple2d::setResponse(const std::vector<std::string>
 //         output.tag("ResponseType","qb2");
 //         output.tag("ResponseType","qb3");
 
-//         theResponse = new ElementResponse(this, 3, Vector(3));
+//         theResponse= new ElementResponse(this, 3, Vector(3));
 //     }
 // 	// local displacements
 //     else if (strcmp(argv[0],"localDisplacement") == 0 ||
@@ -666,7 +677,7 @@ XC::Response *XC::FlatSliderSimple2d::setResponse(const std::vector<std::string>
 //         output.tag("ResponseType","uy_2");
 //         output.tag("ResponseType","rz_2");
         
-//         theResponse = new ElementResponse(this, 4, theVector);
+//         theResponse= new ElementResponse(this, 4, theVector);
 //     }
 // 	// basic displacements
 //     else if (strcmp(argv[0],"deformation") == 0 ||
@@ -680,14 +691,14 @@ XC::Response *XC::FlatSliderSimple2d::setResponse(const std::vector<std::string>
 //         output.tag("ResponseType","ub2");
 //         output.tag("ResponseType","ub3");
         
-//         theResponse = new ElementResponse(this, 5, Vector(3));
+//         theResponse= new ElementResponse(this, 5, Vector(3));
 //     }
 //     // material output
 //     else if (strcmp(argv[0],"material") == 0)  {
 //         if (argc > 2)  {
-//             int matNum = atoi(argv[1]);
+//             int matNum= atoi(argv[1]);
 //             if (matNum >= 1 && matNum <= 2)
-//                 theResponse =  physicalProperties[matNum-1]->setResponse(&argv[2], argc-2, output);
+//                 theResponse=  physicalProperties[matNum-1]->setResponse(&argv[2], argc-2, output);
 //         }
 //     }
     
@@ -737,19 +748,19 @@ int XC::FlatSliderSimple2d::getResponse(int responseID, Information &eleInfo)
 //! matrix for orientation
 void XC::FlatSliderSimple2d::setUp(void)
   {
-    const Vector &end1Crd = theNodes[0]->getCrds();
-    const Vector &end2Crd = theNodes[1]->getCrds();	
-    Vector xp = end2Crd - end1Crd;
-    L = xp.Norm();
+    const Vector &end1Crd= theNodes[0]->getCrds();
+    const Vector &end2Crd= theNodes[1]->getCrds();	
+    Vector xp= end2Crd - end1Crd;
+    L= xp.Norm();
     
     if (L > DBL_EPSILON)
       {
         if (x.Size() == 0)
 	  {
             x.resize(3);
-            x(0) = xp(0);  x(1) = xp(1);  x(2) = 0.0;
+            x(0)= xp(0);  x(1)= xp(1);  x(2)= 0.0;
             y.resize(3);
-            y(0) = -x(1);  y(1) = x(0);  y(2) = 0.0;
+            y(0)= -x(1);  y(1)= x(0);  y(2)= 0.0;
 	  }
 	else if(onP0)
 	  {
@@ -769,16 +780,16 @@ void XC::FlatSliderSimple2d::setUp(void)
       }
     
     // establish orientation of element for the transformation matrix
-    // z = x cross y
+    // z= x cross y
     static Vector z(3);
-    z(0) = x(1)*y(2) - x(2)*y(1);
-    z(1) = x(2)*y(0) - x(0)*y(2);
-    z(2) = x(0)*y(1) - x(1)*y(0);
+    z(0)= x(1)*y(2) - x(2)*y(1);
+    z(1)= x(2)*y(0) - x(0)*y(2);
+    z(2)= x(0)*y(1) - x(1)*y(0);
     
-    // y = z cross x
-    y(0) = z(1)*x(2) - z(2)*x(1);
-    y(1) = z(2)*x(0) - z(0)*x(2);
-    y(2) = z(0)*x(1) - z(1)*x(0);
+    // y= z cross x
+    y(0)= z(1)*x(2) - z(2)*x(1);
+    y(1)= z(2)*x(0) - z(0)*x(2);
+    y(2)= z(0)*x(1) - z(1)*x(0);
     
     // compute length(norm) of vectors
     const double xn= x.Norm();
@@ -796,17 +807,17 @@ void XC::FlatSliderSimple2d::setUp(void)
     
     // create transformation matrix from global to local system
     Tgl.Zero();
-    Tgl(0,0) = Tgl(3,3) = x(0)/xn;
-    Tgl(0,1) = Tgl(3,4) = x(1)/xn;
-    Tgl(1,0) = Tgl(4,3) = y(0)/yn;
-    Tgl(1,1) = Tgl(4,4) = y(1)/yn;
-    Tgl(2,2) = Tgl(5,5) = z(2)/zn;
+    Tgl(0,0)= Tgl(3,3)= x(0)/xn;
+    Tgl(0,1)= Tgl(3,4)= x(1)/xn;
+    Tgl(1,0)= Tgl(4,3)= y(0)/yn;
+    Tgl(1,1)= Tgl(4,4)= y(1)/yn;
+    Tgl(2,2)= Tgl(5,5)= z(2)/zn;
     
     // create transformation matrix from local to basic system (linear)
     Tlb.Zero();
-    Tlb(0,0) = Tlb(1,1) = Tlb(2,2) = -1.0;
-    Tlb(0,3) = Tlb(1,4) = Tlb(2,5) = 1.0;
-    Tlb(1,2) = -shearDistI*L;
-    Tlb(1,5) = -(1.0 - shearDistI)*L;
+    Tlb(0,0)= Tlb(1,1)= Tlb(2,2)= -1.0;
+    Tlb(0,3)= Tlb(1,4)= Tlb(2,5)= 1.0;
+    Tlb(1,2)= -shearDistI*L;
+    Tlb(1,5)= -(1.0 - shearDistI)*L;
   }
 

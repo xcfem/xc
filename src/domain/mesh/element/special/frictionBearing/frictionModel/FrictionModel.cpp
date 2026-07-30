@@ -100,6 +100,24 @@ std::string XC::FrictionModel::getName(void) const
     return retval;
   }
 
+//! @brief Return the value of the friction force.
+double XC::FrictionModel::getFrictionForce(void) const
+  {
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << Color::def << std::endl;
+    return 0.0;
+  }
+
+//! @brief Return the value of the friction coefficient.
+double XC::FrictionModel::getFrictionCoeff(void) const
+  {
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << Color::def << std::endl;
+    return 0.0;
+  }
+
 //! @brief Return the friction model identified by the given name.
 //! @param matName: name of the friction model.
 const XC::FrictionModel *XC::FrictionModel::getFrictionModelByName(const std::string &fmName) const
