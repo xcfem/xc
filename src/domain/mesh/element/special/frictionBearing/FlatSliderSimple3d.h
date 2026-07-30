@@ -132,6 +132,7 @@ class FlatSliderSimple3d: public SimpleBearingBase
     int revertToLastCommit();        
     int revertToStart();        
     int update();
+    int setup();
     
     // public methods to obtain stiffness, mass, damping and residual information    
     const Matrix &getTangentStiff() const;

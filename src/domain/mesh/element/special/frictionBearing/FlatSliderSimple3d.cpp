@@ -102,6 +102,8 @@ XC::FlatSliderSimple3d::FlatSliderSimple3d(int tag)
   {
     this->numDOF= 12 ;
     load.reset(this->numDOF);
+    this->x= Vector({1, 0, 0});
+    this->y= Vector({0, 1, 0});
   }
 
 //! @brief Constructor.
@@ -239,113 +241,139 @@ int XC::FlatSliderSimple3d::update(void)
     
     // get absolute velocity
     const double ubdotAbs = sqrt(pow(ubdot(1),2) + pow(ubdot(2),2));
-    
+
+  
     // 1) get axial force and stiffness in basic x-direction
-    const double ub0Old = physicalProperties[0]->getStrain();
-    physicalProperties[0]->setTrialStrain(ub(0),ubdot(0));
-    qb(0) = physicalProperties[0]->getStress();
-    kb(0,0) = physicalProperties[0]->getTangent();
-    
-    // check for uplift
-    if (qb(0) >= 0.0)
+    const size_t physicalPropertiesSize= this->physicalProperties.size();
+    if(physicalPropertiesSize>0)
       {
-        // update plastic displacements
-        ubPlastic(0) = ub(1);
-        ubPlastic(1) = ub(2);
-        // set basic forces
-        qb.Zero();
-        // set tangent stiffnesses
-        kb = kbInit;
-        if (qb(0) > 0.0)
+	const double ub0Old = physicalProperties[0]->getStrain();
+	physicalProperties[0]->setTrialStrain(ub(0),ubdot(0));
+	qb(0) = physicalProperties[0]->getStress();
+	kb(0,0) = physicalProperties[0]->getTangent();
+
+	// check for uplift
+	if (qb(0) >= 0.0)
 	  {
-            physicalProperties[0]->setTrialStrain(ub0Old, 0.0);
-            kb = kFactUplift*kbInit;  // kb = DBL_EPSILON*kbInit;
+	    // update plastic displacements
+	    ubPlastic(0) = ub(1);
+	    ubPlastic(1) = ub(2);
+	    // set basic forces
+	    qb.Zero();
+	    // set tangent stiffnesses
+	    kb = kbInit;
+	    if (qb(0) > 0.0)
+	      {
+		physicalProperties[0]->setTrialStrain(ub0Old, 0.0);
+		kb = kFactUplift*kbInit;  // kb = DBL_EPSILON*kbInit;
+	      }
+	    return 0;
 	  }
-        return 0;
       }
     
     // 2) calculate shear forces and stiffnesses in basic y- and z-direction
-    int iter = 0;
-    Vector qbOld(2);
-    FrictionModel *theFrnMdl= this->frictionModels[0];
-    do  {
-        // save old shear forces
-        iter++;
-        qbOld(0) = qb(1);
-        qbOld(1) = qb(2);
-        
-        // get normal and friction (yield) forces
-        double N = -qb(0) - qb(1)*ul(5) + qb(2)*ul(4);
-        N = N > 0.0 ? N : 0.0;  // can not be negative
-        theFrnMdl->setTrial(N, ubdotAbs);
-        double qYield = (theFrnMdl->getFrictionForce());
-        
-        // get trial shear forces of hysteretic component
-        Vector qTrial(2);
-        qTrial(0) = k0*(ub(1) - ubPlasticC(0));
-        qTrial(1) = k0*(ub(2) - ubPlasticC(1));
-        
-        // compute yield criterion of hysteretic component
-        const double qTrialNorm = qTrial.Norm();
-        const double Y= qTrialNorm - qYield;
-        
-        // elastic step -> no updates required
-        if(Y <= 0.0)
-	  {
-            // set shear forces
-            qb(1) = qTrial(0) - N*ul(5);
-            qb(2) = qTrial(1) + N*ul(4);
-            // set tangent stiffnesses
-            kb(1,1) = kb(2,2) = k0;
-            kb(1,2) = kb(2,1) = 0.0;
-	  }
-        // plastic step -> return mapping
-        else
-	  {
-            // compute consistency parameters
-            const double dGamma= Y/k0;
-            // update plastic displacements
-            ubPlastic(0) = ubPlasticC(0) + dGamma*qTrial(0)/qTrialNorm;
-            ubPlastic(1) = ubPlasticC(1) + dGamma*qTrial(1)/qTrialNorm;
-            // set shear forces
-            qb(1) = qYield*qTrial(0)/qTrialNorm - N*ul(5);
-            qb(2) = qYield*qTrial(1)/qTrialNorm + N*ul(4);
-            // set tangent stiffnesses
-            const double D= pow(qTrialNorm,3);
-            kb(1,1) = qYield*k0*qTrial(1)*qTrial(1)/D;
-            kb(1,2) = kb(2,1) = -qYield*k0*qTrial(1)*qTrial(0)/D;
-            kb(2,2) = qYield*k0*qTrial(0)*qTrial(0)/D;
-	  }
-        
-    } while ((sqrt(pow(qb(1)-qbOld(0),2)+pow(qb(2)-qbOld(1),2)) >= tol) && (iter <= maxIter)); 
-    
-    // issue warning if iteration did not converge
-    if (iter >= maxIter)
+    const size_t frictionModelsSize= this->frictionModels.size();
+    if(frictionModelsSize>0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING: did not find the shear force after "
-		  << iter << " iterations and norm: "
-		  << sqrt(pow(qb(1)-qbOld(0),2)+pow(qb(2)-qbOld(1),2))
-		  << std::endl;
-        return -1;
+	int iter = 0;
+	Vector qbOld(2);
+	FrictionModel *theFrnMdl= this->frictionModels[0];
+	do  {
+	    // save old shear forces
+	    iter++;
+	    qbOld(0) = qb(1);
+	    qbOld(1) = qb(2);
+
+	    // get normal and friction (yield) forces
+	    double N = -qb(0) - qb(1)*ul(5) + qb(2)*ul(4);
+	    N = N > 0.0 ? N : 0.0;  // can not be negative
+	    theFrnMdl->setTrial(N, ubdotAbs);
+	    double qYield = (theFrnMdl->getFrictionForce());
+
+	    // get trial shear forces of hysteretic component
+	    Vector qTrial(2);
+	    qTrial(0) = k0*(ub(1) - ubPlasticC(0));
+	    qTrial(1) = k0*(ub(2) - ubPlasticC(1));
+
+	    // compute yield criterion of hysteretic component
+	    const double qTrialNorm = qTrial.Norm();
+	    const double Y= qTrialNorm - qYield;
+
+	    // elastic step -> no updates required
+	    if(Y <= 0.0)
+	      {
+		// set shear forces
+		qb(1) = qTrial(0) - N*ul(5);
+		qb(2) = qTrial(1) + N*ul(4);
+		// set tangent stiffnesses
+		kb(1,1) = kb(2,2) = k0;
+		kb(1,2) = kb(2,1) = 0.0;
+	      }
+	    // plastic step -> return mapping
+	    else
+	      {
+		// compute consistency parameters
+		const double dGamma= Y/k0;
+		// update plastic displacements
+		ubPlastic(0) = ubPlasticC(0) + dGamma*qTrial(0)/qTrialNorm;
+		ubPlastic(1) = ubPlasticC(1) + dGamma*qTrial(1)/qTrialNorm;
+		// set shear forces
+		qb(1) = qYield*qTrial(0)/qTrialNorm - N*ul(5);
+		qb(2) = qYield*qTrial(1)/qTrialNorm + N*ul(4);
+		// set tangent stiffnesses
+		const double D= pow(qTrialNorm,3);
+		kb(1,1) = qYield*k0*qTrial(1)*qTrial(1)/D;
+		kb(1,2) = kb(2,1) = -qYield*k0*qTrial(1)*qTrial(0)/D;
+		kb(2,2) = qYield*k0*qTrial(0)*qTrial(0)/D;
+	      }
+
+	} while ((sqrt(pow(qb(1)-qbOld(0),2)+pow(qb(2)-qbOld(1),2)) >= tol) && (iter <= maxIter)); 
+
+	// issue warning if iteration did not converge
+	if (iter >= maxIter)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING: did not find the shear force after "
+		      << iter << " iterations and norm: "
+		      << sqrt(pow(qb(1)-qbOld(0),2)+pow(qb(2)-qbOld(1),2))
+		      << std::endl;
+	    return -1;
+	  }
       }
     
     // 3) get moment and stiffness in basic x-direction
-    physicalProperties[1]->setTrialStrain(ub(3),ubdot(3));
-    qb(3) = physicalProperties[1]->getStress();
-    kb(3,3) = physicalProperties[1]->getTangent();
-    
+    if(physicalPropertiesSize>1)
+      {
+	physicalProperties[1]->setTrialStrain(ub(3),ubdot(3));
+	qb(3) = physicalProperties[1]->getStress();
+	kb(3,3) = physicalProperties[1]->getTangent();
+      }
     // 4) get moment and stiffness in basic y-direction
-    physicalProperties[2]->setTrialStrain(ub(4),ubdot(4));
-    qb(4) = physicalProperties[2]->getStress();
-    kb(4,4) = physicalProperties[2]->getTangent();
+    if(physicalPropertiesSize>2)
+      {
+	physicalProperties[2]->setTrialStrain(ub(4),ubdot(4));
+	qb(4) = physicalProperties[2]->getStress();
+	kb(4,4) = physicalProperties[2]->getTangent();
+      }
     
     // 5) get moment and stiffness in basic z-direction
-    physicalProperties[3]->setTrialStrain(ub(5),ubdot(5));
-    qb(5) = physicalProperties[3]->getStress();
-    kb(5,5) = physicalProperties[3]->getTangent();
-    
+    if(physicalPropertiesSize>2)
+      {
+	physicalProperties[3]->setTrialStrain(ub(5),ubdot(5));
+	qb(5) = physicalProperties[3]->getStress();
+	kb(5,5) = physicalProperties[3]->getTangent();
+      }
     return 0;
+  }
+
+//! @brief Initialize stifness matrix and setup parameter values after
+//! any change in the input parameters.
+int XC::FlatSliderSimple3d::setup()
+  {
+    this->initialize();
+    load.reset(this->numDOF);
+    this->setUp();
+    return this->update();
   }
 
 //! @brief Return the current tangent stiffness matrix.

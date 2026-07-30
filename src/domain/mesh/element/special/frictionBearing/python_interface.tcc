@@ -99,6 +99,7 @@ class_<XC::FlatSliderSimple2d, bases<XC::SimpleBearingBase>, boost::noncopyable 
   ;
 
 class_<XC::FlatSliderSimple3d, bases<XC::SimpleBearingBase>, boost::noncopyable >("FlatSliderSimple3d", no_init)
+  .def("setup", &XC::FlatSliderSimple3d::setup, "Initialize stifness matrix and setup parameter values after any change in the input parameters.")
   ;
 
 class_<XC::MultiFP2d, bases<XC::Element0D>, boost::noncopyable >("MultiFP2d", no_init)

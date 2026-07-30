@@ -675,6 +675,8 @@ python tests/elements/bridge_bearings/friction_bearings/friction_models/test_vel
 python tests/elements/bridge_bearings/friction_bearings/friction_models/test_vel_pressure_dependent_01.py
 echo "$BLEU" "    Bridge bearings." "$NORMAL"
 python tests/elements/bridge_bearings/friction_bearings/test_flat_slider_simple_2d_01.py
+python tests/elements/bridge_bearings/friction_bearings/test_slider_2d_0.py
+python tests/elements/bridge_bearings/friction_bearings/test_flat_slider_simple_3d_01.py
 
 echo "$BLEU" "  Element birth and death tests." "$NORMAL"
 python tests/elements/birth_and_death/remove_node_test_01.py

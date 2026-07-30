@@ -47,3 +47,43 @@ def def_flat_slider_bearing_2d(modelSpace, n1, n2, frictionModel, vertResp, rotR
     retval.setStiffnessFactorWhenUplift(kFactUplift)
     retval.setup() # Call after any change in the input parameters.
     return retval
+
+def def_flat_slider_bearing_3d(modelSpace, n1, n2, frictionModel, vertResp, rotRespX, rotRespY, rotRespZ, kInit, x= xc.Vector([1,0,0]), y= xc.Vector([0,1,0]), shearDistI= 0.0, addRayleigh= 0, mass= 0.0, maxIter= 20, tol= 1e-8, kFactUplift= 1e-12):
+    ''' Defines a FlatSliderSimple3d element.
+
+    :param modelSpace: wrapper of the FE preprocessor.
+    :param n1: node I.
+    :param n2: node J.
+    :param frictionModel: friction model (horizontal response of the bearing).
+    :param vertResp: uniaxial material defining the vertical response of the
+                     bearing.
+    :param rotRespX: uniaxial material defining the rotational response of the
+                     bearing around the x axis.
+    :param rotRespY: uniaxial material defining the rotational response of the
+                     bearing around the y axis.
+    :param rotRespZ: uniaxial material defining the rotational response of the
+                     bearing around the z axis.
+    :param kInit: initial stiffness of hysteretic component.
+    :param x: x local direction vector.
+    :param y: y local direction vector.
+    :param shearDistI: shear distance from node I as fraction of length.
+    :param addRayleigh: flag to add Rayleigh damping.
+    :param mass: mass of the bearing element.
+    :param maxIter: maximum number of iterations to reach convergence.
+    :param tol: tolerance for convergence criterion.
+    :param kFactUplift: stiffness factor when uplift is encountered.
+    '''
+    retval= modelSpace.newElement("FlatSliderSimple3d", nodeTags= [n1.tag,n2.tag])
+    retval.setFrictionModels([frictionModel])
+    retval.setMaterials([vertResp, rotRespX, rotRespY, rotRespZ])
+    retval.setInitialStiffnessOfHystereticComponent(kInit)
+    retval.setLocalXDirection(x)
+    retval.setLocalYDirection(y)
+    retval.setShearDistanceFromNodeIAsFractionOfLength(shearDistI)
+    retval.setAddRayleighDampingFlag(addRayleigh)
+    retval.setBearingElementMass(mass)
+    retval.setMaxIter(maxIter)
+    retval.setTol(tol)
+    retval.setStiffnessFactorWhenUplift(kFactUplift)
+    retval.setup() # Call after any change in the input parameters.
+    return retval
