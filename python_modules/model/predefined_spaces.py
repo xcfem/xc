@@ -231,6 +231,11 @@ class PredefinedSpace(object):
         '''
         return self.preprocessor.getProblem
 
+    def getDomain(self):
+        ''' Return the XC finite element problem domain object.
+        '''
+        return self.preprocessor.getDomain
+
     def getBnd(self):
         ''' Return the boundary of the model.'''
         return self.getTotalSet().getBnd()
@@ -761,7 +766,7 @@ class PredefinedSpace(object):
         ''' Creates a times series -modulation of the load
             in time-.
 
-        :param name: name of the new time load pattern.
+        :param name: name of the new load pattern.
         :param lpType: type of the load pattern -default, uniform_excitation,
                        multi_support_pattern, pbowl_loading-.
         :param setCurrent: if true set the newly created load pattern as the
@@ -774,6 +779,35 @@ class PredefinedSpace(object):
         if(setCurrent):
             self.setCurrentLoadPattern(lp.name)
         return lp
+
+    def newUniformExcitation(self, name, dof, path, dt, cod_ts, factor= 1.0, vel0= 0.0):
+        ''' Create a new uniform excitation.
+
+        :param name: name of the new load pattern.
+        :param dof: degree of freedom in which the ground motion acts.
+        :param path: sequence of values defining the acceleration history.
+        :param dt: time step between the previous values.
+        :param cod_ts: name of the time series.
+        :param factor: constant factor to apply to the given accelerations
+                       (optional, default= 1.0).
+        :param vel0: initial velocity ((optional, default= 0.0).
+        '''
+        loadPatterns= self.getLoadPatterns()
+        retval= loadPatterns.newLoadPattern("uniform_excitation", name)
+        retval.dof= dof # translation along the global X axis.
+        motionRecord= retval.motionRecord
+        hist= motionRecord.history
+        hist.accel= loadPatterns.newTimeSeries("path_ts", cod_ts)
+        hist.accel.setFactor(factor)
+        hist.accel.path= xc.Vector(path)
+        hist.accel.setTimeIncr(dt) #define time step of the acceleration data.
+        if(vel0!=0.0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= '; initial velocity not implemented yet.'
+            lmsg.error(className+'.'+methodName+errorMsg)
+        return retval
+
 
     def removeLoadPattern(self, name:str):
         ''' Remove the load pattern with the given name.
@@ -804,6 +838,10 @@ class PredefinedSpace(object):
         '''
         self.getLoadHandler().getLoadPatterns.currentLoadPattern= lpName
         return self.getLoadPattern(lpName)
+
+    def getLoadPatterns(self):
+        ''' Return the load pattern container for this FE problem.'''
+        return self.getLoadHandler().getLoadPatterns
     
     def getLoadPattern(self, lpName: str):
         ''' Return the load pattern with the argument name.
