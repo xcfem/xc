@@ -45,5 +45,5 @@ def def_flat_slider_bearing_2d(modelSpace, n1, n2, frictionModel, vertResp, rotR
     retval.setMaxIter(maxIter)
     retval.setTol(tol)
     retval.setStiffnessFactorWhenUplift(kFactUplift)
-    retval.update() # Update internal members.
+    retval.setup() # Call after any change in the input parameters.
     return retval
