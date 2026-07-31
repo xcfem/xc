@@ -84,7 +84,7 @@ element RJWatsonEqsBearing 1 1 2 1 250.0 0.519 0.0 3.0 -P 1 -Mz 2 -orient 0 1 0 
 ## Create a Plain load pattern with a Linear TimeSeries
 lts= modelSpace.newTimeSeries(name= 'lts', tsType= 'linear_ts')
 glp= modelSpace.newLoadPattern(name= 'glp', setCurrent= True)
-## Create nodal loads at nodes 3 & 4
+## Create nodal loads at node 2.
 glp.newNodalLoad(n2.tag, xc.Vector([0,-P,0]))
 modelSpace.addLoadCaseToDomain(glp.name)
 
@@ -107,7 +107,7 @@ recN2Disp.callbackRecord= "n2Disp.append((self.getDomain.getTimeTracker.getCurre
 bearingForces= list()
 bearingRecorder= domain.newRecorder("element_prop_recorder",None)
 bearingRecorder.setElements(xc.ID([bearing.tag]))
-bearingRecorder.callbackRecord= "bearingForces.append((self.getDomain.getTimeTracker.getCurrentTime,self.getNodeResistingForceIncInertiaByTag("+str(n2.tag)+").getList()))"
+bearingRecorder.callbackRecord= "bearingForces.append((self.getDomain.getTimeTracker.getCurrentTime,self.getNodeResistingForceIncInertia(1).getList()))"
 
 # 9. Perform the gravity analysis.
 analysis.analyze(10)
@@ -197,7 +197,7 @@ bearingRecorder2.setElements(xc.ID([bearing.tag]))
 callbackRecord= '''
 time= self.getDomain.getTimeTracker.getCurrentTime
 ti.append(time)
-self.getResistingForce(); force= self.getNodeResistingForceIncInertiaByTag(1).getList()
+self.getResistingForce(); force= self.getNodeResistingForceIncInertia(1).getList()
 bearingForces2.append(force)
 ub= self.ub.getList()
 bearingBasicDeformations.append(ub)
@@ -241,12 +241,12 @@ jsonFileName= refFilePath+'/ref_'+fname.replace('.py', '.json')
 with open(jsonFileName, 'r') as f:
      ref_results= json.load(f)
      
-err= 0.0
+error= 0.0
 tol= 1e-8
 for key in ref_results:
     ref_values= ref_results[key]
     values= results[key]
-    error= (len(values)-len(ref_values))**2
+    error+= (len(values)-len(ref_values))**2
     if(error<tol):
         for v, v_ref in zip(values, ref_values):
             if(isinstance(v, float)):
