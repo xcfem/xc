@@ -181,20 +181,27 @@ rayleigh= xc.RayleighDampingFactors(alphaM, betaK, betaKinit, betaKcomm)
 domain.setRayleighDampingFactors(rayleigh)
 
 # 12. Define new recorders.
-## Record n2 node displacements, velocities and accelerations.
+## Record n2 and n3 node displacements, velocities and accelerations.
+nodesOfInterest= [n2.tag, n3.tag]
 domain= modelSpace.getDomain()
-n2Disp2= list()
+nodeDisp2= dict()
 recN2Disp2= domain.newRecorder("node_prop_recorder", None)
-recN2Disp2.setNodes(xc.ID([n2.tag]))
-recN2Disp2.callbackRecord= "n2Disp2.append((self.getDomain.getTimeTracker.getCurrentTime,self.getDisp))"
-n2Vel2= list()
+recN2Disp2.setNodes(xc.ID(nodesOfInterest))
+for nTag in nodesOfInterest:
+    nodeDisp2[nTag]= list()
+recN2Disp2.callbackRecord= "nodeDisp2[self.tag].append((self.getDomain.getTimeTracker.getCurrentTime,self.getDisp))"
+nodeVel2= dict()
 recN2Vel2= domain.newRecorder("node_prop_recorder", None)
-recN2Vel2.setNodes(xc.ID([n2.tag]))
-recN2Vel2.callbackRecord= "n2Vel2.append((self.getDomain.getTimeTracker.getCurrentTime,self.getVel))"
-n2Accel2= list()
+recN2Vel2.setNodes(xc.ID(nodesOfInterest))
+for nTag in nodesOfInterest:
+    nodeVel2[nTag]= list()
+recN2Vel2.callbackRecord= "nodeVel2[self.tag].append((self.getDomain.getTimeTracker.getCurrentTime,self.getVel))"
+nodeAccel2= dict()
 recN2Accel2= domain.newRecorder("node_prop_recorder", None)
-recN2Accel2.setNodes(xc.ID([n2.tag]))
-recN2Accel2.callbackRecord= "n2Accel2.append((self.getDomain.getTimeTracker.getCurrentTime,self.getAccel))"
+recN2Accel2.setNodes(xc.ID(nodesOfInterest))
+for nTag in nodesOfInterest:
+    nodeAccel2[nTag]= list()
+recN2Accel2.callbackRecord= "nodeAccel2[self.tag].append((self.getDomain.getTimeTracker.getCurrentTime,self.getAccel))"
 ## Record forces at the bearing.
 ti= list()
 bearingForces2= list()
@@ -280,25 +287,26 @@ if(not silent):
     import matplotlib
     # matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    # Get node 2 motion.
-    t, accel= zip(*n2Accel2)
-    t, vel= zip(*n2Vel2)
-    t, disp= zip(*n2Disp2)
-    for dof in [0, 1, 2]:
-        accel_dof= [a[dof] for a in accel]
-        vel_dof= [v[dof] for v in vel]
-        disp_dof= [d[dof] for d in disp]
-        fig, axes = plt.subplots(3, 1, figsize=(9, 9), sharex=True)
-        axes[0].plot(t, accel_dof, lw=0.7, color="tab:blue")
-        axes[0].set_ylabel("Acceleration")
-        axes[0].set_title("Node 2 motion DOF: "+str(dof))
-        axes[1].plot(t, vel_dof, lw=0.7, color="tab:orange")
-        axes[1].set_ylabel("Velocity")
-        axes[2].plot(t, disp_dof, lw=0.7, color="tab:green")
-        axes[2].set_ylabel("Displacement")
-        axes[2].set_xlabel("Time (s)")
-        fig.tight_layout()
-        plt.show()
+    # Get nodes motion.
+    for nTag in nodesOfInterest:
+        t, accel= zip(*nodeAccel2[nTag])
+        t, vel= zip(*nodeVel2[nTag])
+        t, disp= zip(*nodeDisp2[nTag])
+        for dof in [0, 1, 2]:
+            accel_dof= [a[dof] for a in accel]
+            vel_dof= [v[dof] for v in vel]
+            disp_dof= [d[dof] for d in disp]
+            fig, axes = plt.subplots(3, 1, figsize=(9, 9), sharex=True)
+            axes[0].plot(t, accel_dof, lw=0.7, color="tab:blue")
+            axes[0].set_ylabel("Acceleration")
+            axes[0].set_title("Node "+str(nTag)+" motion DOF: "+str(dof))
+            axes[1].plot(t, vel_dof, lw=0.7, color="tab:orange")
+            axes[1].set_ylabel("Velocity")
+            axes[2].plot(t, disp_dof, lw=0.7, color="tab:green")
+            axes[2].set_ylabel("Displacement")
+            axes[2].set_xlabel("Time (s)")
+            fig.tight_layout()
+            plt.show()
     # Get bearing results.
     t= ti
     forces= bearingForces2
