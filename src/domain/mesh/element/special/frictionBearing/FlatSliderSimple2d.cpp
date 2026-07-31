@@ -63,12 +63,7 @@
 #include "utility/recorder/response/ElementResponse.h"
 #include "frictionModel/FrictionModel.h"
 #include "material/uniaxial/UniaxialMaterial.h"
-
-#include <cfloat>
-#include <cmath>
-#include <cstdlib>
-#include <cstring>
-
+#include "utility/utils/misc_utils/colormod.h"
 
 // initialize the class wide variables
 XC::Matrix XC::FlatSliderSimple2d::theMatrix(6,6);
@@ -306,12 +301,12 @@ int XC::FlatSliderSimple2d::update_friction_and_stiffness(const Vector &ubdot)
 	// issue warning if iteration did not converge
 	if (iter >= maxIter)
 	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING: did not find the shear force after "
 		      << iter
 		      << " iterations and norm: "
 		      << fabs(qb(1)-qb1Old)
-		      << std::endl;
+		      << Color::def << std::endl;
 	    return -1;
 	  }
       }
@@ -453,9 +448,10 @@ const XC::Matrix &XC::FlatSliderSimple2d::getMass(void) const
 
 int XC::FlatSliderSimple2d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {  
-    std::cerr << getClassName() << "::" << __FUNCTION__
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	      <<"; load type unknown for element: "
-	      << this->getTag() << std::endl;
+	      << this->getTag()
+	      << Color::def << std::endl;
 
     return -1;
   }
@@ -473,8 +469,9 @@ int XC::FlatSliderSimple2d::addInertiaLoadToUnbalance(const Vector &accel)
 	
     if (3 != Raccel1.Size() || 3 != Raccel2.Size())
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; matrix and vector sizes are incompatible\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; matrix and vector sizes are incompatible."
+	          << Color::def << std::endl;
 	return -1;
       }
     
@@ -570,8 +567,9 @@ int XC::FlatSliderSimple2d::sendSelf(Communicator &comm)
     const int dataTag= getDbTag();
     res += comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send ID data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send ID data."
+	        << Color::def;
     return res;
   }
 
@@ -583,8 +581,9 @@ int XC::FlatSliderSimple2d::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to receive ID data.\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ID data."
+	        << Color::def;
     else
       res+= recvData(comm);
     return res;
@@ -753,30 +752,31 @@ void XC::FlatSliderSimple2d::setUp(void)
     Vector xp= end2Crd - end1Crd;
     L= xp.Norm();
     
-    if (L > DBL_EPSILON)
-      {
-        if (x.Size() == 0)
-	  {
-            x.resize(3);
-            x(0)= xp(0);  x(1)= xp(1);  x(2)= 0.0;
-            y.resize(3);
-            y(0)= -x(1);  y(1)= x(0);  y(2)= 0.0;
-	  }
-	else if(onP0)
-	  {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; WARNING element: " << this->getTag() << std::endl
-		      << "ignoring nodes and using specified "
-		      << "local x vector to determine orientation\n";
-	  }
-      }
     // check that vectors for orientation are of correct size
     if(x.Size() != 3 || y.Size() != 3)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; element: " << this->getTag() << std::endl
-		  << "incorrect dimension of orientation vectors\n";
+		  << "incorrect dimension of orientation vectors."
+	          << Color::def << std::endl;
         exit(-1);
+      }
+    
+    if(L > DBL_EPSILON)
+      {
+	if(onP0) // keep the already defined orientation.
+	  {
+            std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING element: " << this->getTag() << std::endl
+		      << "ignoring nodes and using specified "
+		      << "local x vector to determine orientation."
+	              << Color::def << std::endl;
+	  }
+        else // compute the orientation from the positions of the nodes.
+	  {
+            x(0)= xp(0);  x(1)= xp(1);  x(2)= 0.0;
+            y(0)= -x(1);  y(1)= x(0);  y(2)= 0.0;
+	  }
       }
     
     // establish orientation of element for the transformation matrix
@@ -799,9 +799,10 @@ void XC::FlatSliderSimple2d::setUp(void)
     // check valid x and y vectors, i.e. not parallel and of zero length
     if (xn == 0 || yn == 0 || zn == 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; element: " << this->getTag() << std::endl
-		  << "invalid orientation vectors\n";
+		  << "invalid orientation vectors."
+	          << Color::def << std::endl;
         exit(-1);
       }
     

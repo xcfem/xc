@@ -59,6 +59,7 @@
 #include "utility/recorder/response/ElementResponse.h"
 #include "frictionModel/FrictionModel.h"
 #include "material/uniaxial/UniaxialMaterial.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 // initialize the class wide variables
 XC::Matrix XC::RJWatsonEQS3d::theMatrix(12,12);
@@ -825,30 +826,30 @@ void XC::RJWatsonEQS3d::setUp()
     const Vector &end1Crd = theNodes[0]->getCrds();
     const Vector &end2Crd = theNodes[1]->getCrds();
     const Vector xp= end2Crd - end1Crd;
-    L = xp.Norm();
+    this->L = xp.Norm();
     
-    if (L > DBL_EPSILON)
-      {
-        if (x.Size() == 0)
-	  {
-            x.resize(3);
-            x = xp;
-	  }
-	else if (onP0)
-	  {
-            std::cerr << "WARNING XC::RJWatsonEQS3d::setUp() - "
-		      << "element: " << this->getTag()
-		      << " - ignoring nodes and using specified "
-		      << "local x vector to determine orientation.\n";
-	  }
-      }
     // check that vectors for orientation are of correct size
     if(x.Size() != 3 || y.Size() != 3)
       {
-        std::cerr << "XC::RJWatsonEQS3d::setUp() - "
-		  << "element: " << this->getTag()
-		  << " - incorrect dimension of orientation vectors.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; element: " << this->getTag() << std::endl
+		  << "incorrect dimension of orientation vectors."
+	          << Color::def << std::endl;
         exit(-1);
+      }
+    
+    if (L > DBL_EPSILON)
+      {
+	if(onP0) // keep the already defined orientation.
+	  {
+            std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING element: " << this->getTag() << std::endl
+		      << "ignoring nodes and using specified "
+		      << "local x vector to determine orientation."
+	              << Color::def << std::endl;
+	  }
+	else // compute the orientation from the positions of the nodes.
+	  { this->x = xp; }
       }
     
     // establish orientation of element for the transformation matrix

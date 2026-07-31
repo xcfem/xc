@@ -38,6 +38,7 @@
 #include "frictionModel/FrictionModel.h"
 #include "material/uniaxial/UniaxialMaterial.h"
 #include "domain/component/Parameter.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 // initialize the class wide variables
 XC::Matrix XC::SingleFPSimple2d::theMatrix(6,6);
@@ -117,11 +118,11 @@ void XC::SingleFPSimple2d::setDomain(Domain *theDomain)
 	// if differing dof at the ends - print a warning message
 	if(dofNd1 != 3)
 	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; node 1: "
 		      << theNodes[0]->getTag()
 		      << " has incorrect number of DOF (not 3)."
-		      << std::endl;
+		      << Color::def << std::endl;
 	  }
 	if (dofNd2 != 3)
 	  {
@@ -699,30 +700,31 @@ void XC::SingleFPSimple2d::setUp()
     const Vector xp = end2Crd - end1Crd;
     this->L = xp.Norm();
     
-    if (L > DBL_EPSILON)
-      {
-        if (x.Size() == 0)
-	  {
-            x.resize(3);
-            x(0) = xp(0);  x(1) = xp(1);  x(2) = 0.0;
-            y.resize(3);
-            y(0) = -x(1);  y(1) = x(0);  y(2) = 0.0;
-	  }
-	else if(onP0) 
-	  {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; WARNING element: " << this->getTag() << std::endl
-		      << "ignoring nodes and using specified "
-		      << "local x vector to determine orientation\n";
-	  }
-      }
     // check that vectors for orientation are of correct size
     if (x.Size() != 3 || y.Size() != 3)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; element: " << this->getTag() << std::endl
-		  << "incorrect dimension of orientation vectors\n";
+		  << "incorrect dimension of orientation vectors."
+	          << Color::def << std::endl;
         exit(-1);
+      }
+    
+    if (L > DBL_EPSILON)
+      {
+	if(onP0) // keep the already defined orientation.
+	  {
+            std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING element: " << this->getTag() << std::endl
+		      << "ignoring nodes and using specified "
+		      << "local x vector to determine orientation."
+	              << Color::def << std::endl;
+	  }
+        else // compute the orientation from the positions of the nodes.
+	  {
+            x(0) = xp(0);  x(1) = xp(1);  x(2) = 0.0;
+            y(0) = -x(1);  y(1) = x(0);  y(2) = 0.0;
+	  }
       }
     
     // establish orientation of element for the transformation matrix
