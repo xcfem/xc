@@ -44,7 +44,7 @@ n2.mass= xc.Matrix([[mass, 0.0, 0.0],[0.0, mass, 0.0], [0.0, 0.0, 0.0]])
 modelSpace.fixNode('000', n1.tag)
 modelSpace.fixNode('FF0', n2.tag)
 
-# 3. Define materials.
+# 3. Define materials for horizontal and vertical response.
 mv= 1.0*mass
 kv= 7500.0
 zetaVertical= 0.02
