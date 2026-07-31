@@ -29,7 +29,7 @@ preprocessor=  feProblem.getPreprocessor
 nodeHandler= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodeHandler)
 
-silent= False # True
+silent= True # True
 
 # 1. Define geometry for model
 g= 32.174*12.0 # 12*ft/s^2= in/s^2
