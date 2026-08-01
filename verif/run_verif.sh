@@ -682,6 +682,10 @@ python tests/elements/bridge_bearings/friction_bearings/test_slider_2d_3.py
 python tests/elements/bridge_bearings/friction_bearings/test_slider_2d_4.py
 python tests/elements/bridge_bearings/friction_bearings/test_flat_slider_simple_3d_01.py
 python tests/elements/bridge_bearings/friction_bearings/test_slider_3d_0.py
+python tests/elements/bridge_bearings/friction_bearings/test_slider_3d_1.py
+python tests/elements/bridge_bearings/friction_bearings/test_slider_3d_2.py
+python tests/elements/bridge_bearings/friction_bearings/test_slider_3d_3.py
+python tests/elements/bridge_bearings/friction_bearings/test_slider_3d_4.py
 
 echo "$BLEU" "  Element birth and death tests." "$NORMAL"
 python tests/elements/birth_and_death/remove_node_test_01.py
