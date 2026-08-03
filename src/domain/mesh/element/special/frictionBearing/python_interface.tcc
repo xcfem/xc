@@ -111,14 +111,27 @@ class_<XC::MultiFP2d, bases<XC::Element0D>, boost::noncopyable >("MultiFP2d", no
   .add_property("cW", &XC::MultiFP2d::getCW, &XC::MultiFP2d::setCW)
   ;
 
-class_<XC::SingleFPSimple2d , bases<XC::FrictionElementBase>, boost::noncopyable >("SingleFPSimple2d", no_init)
+class_<XC::SingleFPSimple2d , bases<XC::SimpleBearingBase>, boost::noncopyable >("SingleFPSimple2d", no_init)
+  .def("setConcaveSlidingDishEffRadius", &XC::SingleFPSimple2d::setConcaveSlidingDishEffRadius, "Set effective radius of concave sliding dish.")
+  .def("getConcaveSlidingDishEffRadius", &XC::SingleFPSimple2d::getConcaveSlidingDishEffRadius, "Get effective radius of concave sliding dish.")
   .add_property("concaveSlidingDishEffRadius", &XC::SingleFPSimple2d::getConcaveSlidingDishEffRadius, &XC::SingleFPSimple2d::setConcaveSlidingDishEffRadius, "Get/set effective radius of concave sliding dish.")
+
+  .def("setIncludeVerticalDispFlag", &XC::SingleFPSimple2d::setIncludeVerticalDispFlag, "Set flag to include vertical displacements.")
+  .def("getIncludeVerticalDispFlag", &XC::SingleFPSimple2d::getIncludeVerticalDispFlag, "Get flag to include vertical displacements.")
   .add_property("inclVertDisp", &XC::SingleFPSimple2d::getIncludeVerticalDispFlag, &XC::SingleFPSimple2d::setIncludeVerticalDispFlag, "Get/set flag to include vertical displacements.")
+  .def("setup", &XC::SingleFPSimple2d::setup, "Initialize stifness matrix and setup parameter values after any change in the input parameters.")
   ;
 
-class_<XC::SingleFPSimple3d , bases<XC::FrictionElementBase>, boost::noncopyable >("SingleFPSimple3d", no_init)
+class_<XC::SingleFPSimple3d , bases<XC::SimpleBearingBase>, boost::noncopyable >("SingleFPSimple3d", no_init)
+  .def("setConcaveSlidingDishEffRadius", &XC::SingleFPSimple3d::setConcaveSlidingDishEffRadius, "Set effective radius of concave sliding dish.")
+  .def("getConcaveSlidingDishEffRadius", &XC::SingleFPSimple3d::getConcaveSlidingDishEffRadius, "Get effective radius of concave sliding dish.")
   .add_property("concaveSlidingDishEffRadius", &XC::SingleFPSimple3d::getConcaveSlidingDishEffRadius, &XC::SingleFPSimple3d::setConcaveSlidingDishEffRadius)
+
+  .def("setIncludeVerticalDispFlag", &XC::SingleFPSimple3d::setIncludeVerticalDispFlag, "Set flag to include vertical displacements.")
+  .def("getIncludeVerticalDispFlag", &XC::SingleFPSimple3d::getIncludeVerticalDispFlag, "Get flag to include vertical displacements.")
   .add_property("inclVertDisp", &XC::SingleFPSimple3d::getIncludeVerticalDispFlag, &XC::SingleFPSimple3d::setIncludeVerticalDispFlag)
+
+  .def("setup", &XC::SingleFPSimple3d::setup, "Initialize stifness matrix and setup parameter values after any change in the input parameters.")
   ;
 
 class_<XC::RJWatsonEQS2d, bases<XC::SimpleBearingBase>, boost::noncopyable >("RJWatsonEQS2d", no_init);

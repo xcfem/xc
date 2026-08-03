@@ -80,16 +80,16 @@ class SingleFPSimple2d: public SimpleBearingBase
     void setUp();
     
     // parameters
-    double Reff; //!< effective radius of concave sliding dish
-    int inclVertDisp; //!< flag to include vertical displacements
+    double Reff; //!< effective radius of concave sliding dish.
+    int inclVertDisp; //!< flag to include vertical displacements.
     
     // state variables
-    double ubPlastic; //!< plastic displacement in basic system
+    double ubPlastic; //!< plastic displacement in basic system.
     static Matrix theMatrix;
     static Vector theVector;
    
     // committed history variables
-    double ubPlasticC; //!< plastic displacement in basic system
+    double ubPlasticC; //!< commited plastic displacement in basic system.
 
   protected:  
     //! @brief initial stiffness in local shear direction.
@@ -129,6 +129,7 @@ class SingleFPSimple2d: public SimpleBearingBase
     int revertToLastCommit();        
     int revertToStart();        
     int update();
+    int setup();
 	
     // public methods to obtain stiffness, mass, damping and residual information    
     const Matrix &getTangentStiff() const;
