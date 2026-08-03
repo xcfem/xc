@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Dummy FlatSiderSimple2d adapted from TestFPS2d_0.tcl
+''' Dummy SingleFPBearing2d adapted from TestFPS2d_0.tcl
 
 Purpose: this file tests the 2D SingleFPBearing element. It models a rigid ç
 isolated mass and the bearing element has zero length. It also tests the 

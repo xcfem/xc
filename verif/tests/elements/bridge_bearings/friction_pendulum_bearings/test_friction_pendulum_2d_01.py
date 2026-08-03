@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Dummy FlatSiderSimple2d regression test.'''
+''' Dummy SingleFPBearing2d regression test.'''
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -39,7 +39,7 @@ rotMat= typical_materials.defElasticMaterial(preprocessor, name= "rotMat", E= 1e
 # 4. Define friction model (coefficient of friction = 0.05)
 frictionModel= fm.def_coulomb_friction_model(preprocessor, name= "frictionModel", mu= .05)
 
-# 5. Construct flatSliderBearing element (nodes 1->2, 
+# 5. Construct SingleFPBearing element (nodes 1->2, 
 # combining matTags for axial and rotation, shear via friction model)
 kInit= 250.0
 Reff= 34.68 # Effective radius of concave sliding dish.

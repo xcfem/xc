@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Dummy FlatSiderSimple2d adapted from TestFPS2d_2.tcl
+''' Dummy SingleFPBearing2d adapted from TestFPS2d_2.tcl
 
 Purpose: this file tests the 2D SingleFPBearing or the
 singleFPBearing element. It models an isolated one story
