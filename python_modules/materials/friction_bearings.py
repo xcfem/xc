@@ -54,7 +54,7 @@ def def_flat_slider_bearing_2d(modelSpace, n1, n2, frictionModel, vertResp, rotR
     retval.setup() # Call after any change in the input parameters.
     return retval
 
-def def_flat_slider_bearing_3d(modelSpace, n1, n2, frictionModel, vertResp, rotRespX, rotRespY, rotRespZ, kInit, x= xc.Vector([1,0,0]), y= xc.Vector([0,1,0]), shearDistI= 0.0, addRayleigh= 0, mass= 0.0, maxIter= 20, tol= 1e-8, kFactUplift= 1e-12):
+def def_flat_slider_bearing_3d(modelSpace, n1, n2, frictionModel, vertResp, rotRespX, rotRespY, rotRespZ, kInit, x= xc.Vector([1,0,0]), y= xc.Vector([0,1,0]), shearDistI= 0.0, addRayleigh= 0, mass= 0.0, maxIter= 25, tol= 1e-8, kFactUplift= 1e-12):
     ''' Defines a FlatSliderSimple3d element.
 
     :param modelSpace: wrapper of the FE preprocessor.
@@ -117,7 +117,7 @@ def def_single_friction_pendulum_bearing_2d(modelSpace, n1, n2, frictionModel, v
     retval.setup() # Call after any change in the input parameters.
     return retval
 
-def def_single_friction_pendulum_bearing_3d(modelSpace, n1, n2, frictionModel, vertResp, rotRespX, rotRespY, rotRespZ, kInit, rEff, x= xc.Vector([1,0,0]), y= xc.Vector([0,1,0]), shearDistI= 0.0, addRayleigh= 0, mass= 0.0, maxIter= 20, tol= 1e-12, kFactUplift= 1e-6):
+def def_single_friction_pendulum_bearing_3d(modelSpace, n1, n2, frictionModel, vertResp, rotRespX, rotRespY, rotRespZ, kInit, rEff, x= xc.Vector([1,0,0]), y= xc.Vector([0,1,0]), shearDistI= 0.0, addRayleigh= 0, mass= 0.0, maxIter= 25, tol= 1e-12, kFactUplift= 1e-6):
     ''' Defines a SingleFPSimple3d element.
 
     :param modelSpace: wrapper of the FE preprocessor.

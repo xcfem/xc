@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-''' Dummy SingleFPBearing2d adapted from TestFPS2d_3.tcl
+''' Dummy SingleFPBearing2d adapted from TestFPS3d_0.tcl
 
-Purpose: this file tests the 2D SingleFPBearing or the
-singleFPBearing element. It models an isolated one story
-one bay building and the bearing element has finite length.
-It also tests the different friction models.
+Purpose: this file tests the 3D singleFPBearing element. It models an isolated 
+one story one bay building and the bearing element has finite length. It also
+ tests the different friction models.
 
 Original Copyright:
 # Written: Andreas Schellenberg (andreas.schellenberg@gmail.com)
@@ -20,6 +19,7 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from model import friction_models as fm
 from materials import friction_bearings as fb
+from misc_utils import log_messages as lmsg
 import tabulate
 
 # Problem type
@@ -27,57 +27,63 @@ import tabulate
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodeHandler= preprocessor.getNodeHandler
-modelSpace= predefined_spaces.StructuralMechanics2D(nodeHandler)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodeHandler)
 
-silent= True # True
-
-# Model arrangement.
-#
-# 3 +----------------+ 6
-#   |                | 
-#   |                | 
-#   |                | 
-#   |                | 
-#   |                | 
-# 2 +----------------+ 5
-#   +                +
-#  1                  4
-#
+silent= True
 
 # 1. Define geometry for model
 g= 32.174*12.0 # 12*ft/s^2= in/s^2
 P= 9.0
 mass= P/g
-# 1.1. Define nodes (zero-height bearing at coordinates x=0, y=0)
-massMatrix= xc.Matrix([[mass, 0.0, 0.0],[0.0, mass, 0.0], [0.0, 0.0, 0.0]])
-n1= modelSpace.newNode(0,0)
-n2= modelSpace.newNode(0,10.0)
-n2.mass= massMatrix
-n3= modelSpace.newNode(0,154.0)
-n3.mass= massMatrix
+templateMatrix= xc.Matrix([[1,0,0,0,0,0],
+                           [0,1,0,0,0,0],
+                           [0,0,1,0,0,0],
+                           [0,0,0,0,0,0],
+                           [0,0,0,0,0,0],
+                           [0,0,0,0,0,0]])
+nodeMassMatrix= mass*templateMatrix
 
-n4= modelSpace.newNode(144.0, 0.0)
-n5= modelSpace.newNode(144.0, 10.0)
-n5.mass= massMatrix
-n6= modelSpace.newNode(144.0, 154.0)
-n6.mass= massMatrix
+
+# Define geometry for model
+# -------------------------
+xi= 3*[0.0]+3*[144.0]+3*[0.0]+3*[144.0]+2*[72.0]
+yi= 6*[0.0]+6*[144.0]+2*[72.0]
+zi= 4*[0.0, 10.0, 154.0]+[10.0, 154.0]
+count= 1
+nodeDict= dict()
+for x, y, z in zip(xi, yi, zi):
+    newNode= modelSpace.newNode(x,y,z)
+    if(z>0.0 and x!=72.0):
+        newNode.mass= nodeMassMatrix
+    nodeDict[count]= newNode
+    count+= 1
 
 # 2. Constraints.
-modelSpace.fixNode('000', n1.tag)
-modelSpace.fixNode('000', n4.tag)
+for key in [1, 4, 7, 10]:
+    modelSpace.fixNode('000_000', nodeDict[key].tag)
+for key in [13, 14]:
+    modelSpace.fixNode('FF0_000', nodeDict[key].tag)
 
+# Set the multi-point constraints
+# rigidDiaphragm perpDir mNodeTag sNodeTags
+# rigidDiaphragm(3, 13, 2, 5, 8, 11)
+for key in [2, 5, 8, 11]:
+    modelSpace.newEqualDOF(nodeDict[13].tag, nodeDict[key].tag, dofs= xc.ID([0,1]))
+# rigidDiaphragm(3, 14, 3, 6, 9, 12)
+for key in [3, 6, 9, 12]:
+    modelSpace.newEqualDOF(nodeDict[14].tag, nodeDict[key].tag, dofs= xc.ID([0,1]))
+    
 # 3. Define materials.
 mv= 2.0*mass
 kv= 7500.0
 zetaVertical= 0.02
 cv= 2.0*zetaVertical*math.sqrt(kv*mv)
-
 ## Vertical response.
 vertResp= typical_materials.defElasticMaterial(preprocessor, name= "vertResp", E= kv, eta= cv)
 ## Rotational response.
 rotResp= typical_materials.defElasticMaterial(preprocessor, name= "rotResp", E= 0.0)
 
-scc= typical_materials.defElasticSection2d(preprocessor, "scc", A= 20.0, E= 29000.0, I= 400.0, linearRho= 1.0)
+scc= typical_materials.defElasticSection3d(preprocessor, "scc", A= 20.0, E= 29000.0, G= 11154.0, J= 100.0, Iy= 400.0, Iz= 400.0, linearRho= 1.0)
 
 # 4. Define friction model (coefficient of friction = 0.163)
 frictionModel= fm.def_coulomb_friction_model(preprocessor, name= "frictionModel", mu= .163)
@@ -91,38 +97,49 @@ frictionModel= fm.def_coulomb_friction_model(preprocessor, name= "frictionModel"
 '''
 
 # 5. Define elements
-Reff= 34.68
-bearing1= fb.def_single_friction_pendulum_bearing_2d(modelSpace, n1= n1, n2= n2, frictionModel= frictionModel, vertResp= vertResp, rotResp= rotResp, rEff=Reff, kInit= 250.0)
-bearing4= fb.def_single_friction_pendulum_bearing_2d(modelSpace, n1= n4, n2= n5, frictionModel= frictionModel, vertResp= vertResp, rotResp= rotResp, rEff=Reff, kInit= 250.0)
-## Orientation are determined by the positions of the I and J nodes.
+Reff= 34.68 # Effective radius of concave sliding dish.
+bearingDict= dict()
+count= 1
+for (keyN1, keyN2) in [(1, 2), (4, 5), (7, 8), (10, 11)]:
+    nI= nodeDict[keyN1]
+    nJ= nodeDict[keyN2]
+    bearingDict[count]= fb.def_single_friction_pendulum_bearing_3d(modelSpace, n1= nI, n2= nJ, frictionModel= frictionModel, vertResp= vertResp, rotRespX= rotResp, rotRespY= rotResp, rotRespZ= rotResp, rEff= Reff, kInit= 250.0, x= xc.Vector([1,0,0]))
+    count+= 1
 
 '''
-# element singleFPBearing eleTag NodeI NodeJ frnMdlTag Reff kInit -P matTag -Mz matTag <-orient x1 x2 x3 y1 y2 y3> <-shearDist sDratio> <-doRayleigh> <-mass m> <-iter maxIter tol>
-#element singleFPBearing 1 1 2 1 34.68 250.0 -P 1 -Mz 2
-#element singleFPBearing 2 4 5 1 34.68 250.0 -P 1 -Mz 2
+# element singleFPBearing eleTag NodeI NodeJ frnMdlTag Reff kInit -P matTag -T matTag -My matTag -Mz matTag <-orient <x1 x2 x3> y1 y2 y3> <-shearDist sDratio> <-doRayleigh> <-mass m> <-iter maxIter tol>
+#element singleFPBearing 1  1  2 1 34.68 250.0 -P 1 -T 2 -My 2 -Mz 2 -orient 1 0 0
+#element singleFPBearing 2  4  5 1 34.68 250.0 -P 1 -T 2 -My 2 -Mz 2 -orient 1 0 0
+#element singleFPBearing 3  7  8 1 34.68 250.0 -P 1 -T 2 -My 2 -Mz 2 -orient 1 0 0
+#element singleFPBearing 4 10 11 1 34.68 250.0 -P 1 -T 2 -My 2 -Mz 2 -orient 1 0 0
 
 # element RJWatsonEqsBearing eleTag NodeI NodeJ frnMdlTag kInit k2 k3 mu -P matTag -Mz matTag <-orient x1 x2 x3 y1 y2 y3> <-shearDist sDratio> <-doRayleigh> <-mass m> <-iter maxIter tol>
-#element RJWatsonEqsBearing 1 1 2 1 250.0 0.519 0.0 3.0 -P 1 -Mz 2
-#element RJWatsonEqsBearing 2 4 5 1 250.0 0.519 0.0 3.0 -P 1 -Mz 2
+#element RJWatsonEqsBearing 1  1  2 1 250.0 0.519 0.0 3.0 -P 1 -T 2 -My 2 -Mz 2 -orient 1 0 0
+#element RJWatsonEqsBearing 2  4  5 1 250.0 0.519 0.0 3.0 -P 1 -T 2 -My 2 -Mz 2 -orient 1 0 0
+#element RJWatsonEqsBearing 3  7  8 1 250.0 0.519 0.0 3.0 -P 1 -T 2 -My 2 -Mz 2 -orient 1 0 0
+#element RJWatsonEqsBearing 4 10 11 1 250.0 0.519 0.0 3.0 -P 1 -T 2 -My 2 -Mz 2 -orient 1 0 0
 '''
-
-lin= modelSpace.newLinearCrdTransf("lin")
-modelSpace.setDefaultCoordTransf(lin)
+lin1= modelSpace.newLinearCrdTransf("lin1", xzVector= xc.Vector([1, 0, 0]))
+lin2= modelSpace.newLinearCrdTransf("lin2", xzVector= xc.Vector([0, 1, 0]))
+lin3= modelSpace.newLinearCrdTransf("lin3", xzVector= xc.Vector([0, -1, 0]))
 modelSpace.setDefaultMaterial(scc)
-beamColumn1= modelSpace.newElement("ElasticBeam2d", [n2.tag,n3.tag])
-beamColumn2= modelSpace.newElement("ElasticBeam2d", [n5.tag,n6.tag])
-beamColumn3= modelSpace.newElement("ElasticBeam2d", [n2.tag,n5.tag])
-beamColumn4= modelSpace.newElement("ElasticBeam2d", [n3.tag,n6.tag])
-
+beamDict= dict()
+count= 1
+for (keyN1, keyN2, cTrf) in [(2, 3, lin2), (5, 6, lin2), (8, 9, lin2), (11, 12, lin2), (2, 5, lin3), (8, 11, lin3), (2, 8, lin1), (5, 11, lin1), (3, 6, lin3), (9, 12, lin3), (3, 9, lin1), (6, 12, lin1)]:
+    nI= nodeDict[keyN1]
+    nJ= nodeDict[keyN2]
+    modelSpace.setDefaultCoordTransf(cTrf)
+    beamDict[count]= modelSpace.newElement("ElasticBeam3d", [nI.tag, nJ.tag])
+    count+= 1
+    
 # 6. Define gravity loads
 ## Create a Plain load pattern with a Linear TimeSeries
 lts= modelSpace.newTimeSeries(name= 'lts', tsType= 'linear_ts')
 glp= modelSpace.newLoadPattern(name= 'glp', setCurrent= True)
-## Create nodal loads at nodes 2 & 3.
-glp.newNodalLoad(n2.tag, xc.Vector([0,-P,0]))
-glp.newNodalLoad(n3.tag, xc.Vector([0,-P,0]))
-glp.newNodalLoad(n5.tag, xc.Vector([0,-P,0]))
-glp.newNodalLoad(n6.tag, xc.Vector([0,-P,0]))
+## Create nodal loads at nodes.
+for key in [2, 5, 8, 11, 3, 6, 9, 12]:
+    n= nodeDict[key]
+    glp.newNodalLoad(n.tag, xc.Vector([0,0,-P,0,0,0]))
 modelSpace.addLoadCaseToDomain(glp.name)
 
 # 7. Solution procedure.
@@ -134,8 +151,11 @@ integrator.dLambda1= .1
 analysis= solProc.getAnalysis()
 
 # 8. Define recorders.
-## Record n2, n3, n5 and n6 node displacements.
-nodesOfInterest= [n2.tag, n3.tag, n5.tag, n6.tag]
+## Record node displacements.
+nodesOfInterest= list()
+for key in [2, 3, 5, 6, 8, 9, 11, 12]:
+    n= nodeDict[key]
+    nodesOfInterest.append(n.tag) 
 domain= modelSpace.getDomain()
 nodeDisp= dict()
 for nTag in nodesOfInterest:
@@ -143,8 +163,8 @@ for nTag in nodesOfInterest:
 recN2Disp= domain.newRecorder("node_prop_recorder",None)
 recN2Disp.setNodes(xc.ID(nodesOfInterest))
 recN2Disp.callbackRecord= "nodeDisp[self.tag].append((self.getDomain.getTimeTracker.getCurrentTime,self.getDisp))"
-## Record forces at the bearings.
-bearingsOfInterest= [bearing1.tag, bearing4.tag]
+## Record forces at the bearing.
+bearingsOfInterest= [v.tag for v in list(bearingDict.values())]
 bearingForces= dict()
 for eTag in bearingsOfInterest:
     bearingForces[eTag]= list()
@@ -153,7 +173,10 @@ bearingRecorder.setElements(xc.ID(bearingsOfInterest))
 bearingRecorder.callbackRecord= "bearingForces[self.tag].append((self.getDomain.getTimeTracker.getCurrentTime,self.getNodeResistingForceIncInertia(1).getList()))"
 
 # 9. Perform the gravity analysis.
-analysis.analyze(10)
+analOK= analysis.analyze(10)
+if(analOK!= 0):
+    lmsg.error("Can't solve.")
+    exit(1)
 ## Set the gravity loads to be constant & reset the time in the domain
 modelSpace.setLoadConstant(t= 0.0)
 if(not silent):
@@ -163,7 +186,7 @@ domain.removeRecorders()
 
 # 10. Perform an eigenvalue analysis-
 analysis= predefined_solutions.frequency_analysis(feProblem)
-analOk= analysis.analyze(8) # Compute 8 eigenvalues.
+analOk= analysis.analyze(14) # Compute 14 eigenvalues.
 eigenvalues= analysis.getEigenvalues()
 eigenvaluesTable= list([['Eigenvalues at start of transient'],
                         ["lambda","omega","period","frequency"]])
@@ -181,28 +204,36 @@ omega1= math.sqrt(eigenvalues[0])
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-exc1AccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCS052.AT2'
-exc2AccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCSUP.AT2'
-
-exc1AccelValues= list()
-with open(exc1AccelFilePath, 'r') as f:
+xAccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCS052.AT2'
+yAccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCS142.AT2'
+zAccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCSUP.AT2'
+xAccelValues= list()
+with open(xAccelFilePath, 'r') as f:
     for line in f:
         values= line.rstrip().split()
         for v in values:
-            exc1AccelValues.append(float(v))
-exc2AccelValues= list()
-with open(exc2AccelFilePath, 'r') as f:
+            xAccelValues.append(float(v))
+yAccelValues= list()
+with open(yAccelFilePath, 'r') as f:
     for line in f:
         values= line.rstrip().split()
         for v in values:
-            exc2AccelValues.append(float(v))
+            yAccelValues.append(float(v))
+zAccelValues= list()
+with open(zAccelFilePath, 'r') as f:
+    for line in f:
+        values= line.rstrip().split()
+        for v in values:
+            zAccelValues.append(float(v))
 dt= .005 # Time step for the excitation sample.
-scale= 1.0 #.max.=(1.7)
+scale= 1.0 #.max.=(1.1)
 ## Create acceleration load patterns.
-exc1GM= modelSpace.newUniformExcitation(name= "exc1GM", dof= 0, path= exc1AccelValues, dt= dt, cod_ts= 'exc1Accel', factor= g*scale, vel0= 0.0)
-modelSpace.addLoadCaseToDomain(exc1GM.name)
-exc2GM= modelSpace.newUniformExcitation(name= "exc2GM", dof= 1, path= exc2AccelValues, dt= dt, cod_ts= 'exc2Accel', factor= g*scale, vel0= 0.0)
-modelSpace.addLoadCaseToDomain(exc2GM.name)
+xGM= modelSpace.newUniformExcitation(name= "xGM", dof= 0, path= xAccelValues, dt= dt, cod_ts= 'xAccel', factor= g*scale, vel0= 0.0)
+modelSpace.addLoadCaseToDomain(xGM.name)
+yGM= modelSpace.newUniformExcitation(name= "yGM", dof= 1, path= yAccelValues, dt= dt, cod_ts= 'yAccel', factor= g*scale, vel0= 0.0)
+modelSpace.addLoadCaseToDomain(yGM.name)
+zGM= modelSpace.newUniformExcitation(name= "zGM", dof= 2, path= zAccelValues, dt= dt, cod_ts= 'zAccel', factor= g*scale, vel0= 0.0)
+modelSpace.addLoadCaseToDomain(zGM.name)
 
 ## Set the Rayleigh damping factors for nodes & elements.
 zeta = 0.01
@@ -215,7 +246,7 @@ rayleigh= xc.RayleighDampingFactors(alphaM, betaK, betaKinit, betaKcomm)
 domain.setRayleighDampingFactors(rayleigh)
 
 # 12. Define new recorders.
-## Record n2, n3, n5 and n6 node displacements, velocities and accelerations.
+## Record node displacements, velocities and accelerations.
 domain= modelSpace.getDomain()
 nodeDisp2= dict()
 recN2Disp2= domain.newRecorder("node_prop_recorder", None)
@@ -273,12 +304,15 @@ bearingCOFs[self.tag].append(COF)
 '''
 bearingsMotionRecorder.callbackRecord= callbackRecord
 
+
 # 13. Perform the dynamic analysis.
-numberOfSteps= max(len(exc1AccelValues), len(exc2AccelValues))
-transientSolProc= predefined_solutions.PlainNewmarkNewtonRaphson(feProblem, numSteps= numberOfSteps, timeStep= dt, gamma= 0.5, beta= 0.25, maxNumIter= 25, convergenceTestTol= 1e-12, printFlag= 0)
+numberOfSteps= max(len(xAccelValues), len(yAccelValues), len(zAccelValues))
+transientSolProc= predefined_solutions.PlainNewmarkKrylovNewton(feProblem, numSteps= numberOfSteps, timeStep= dt, gamma= 0.5, beta= 0.25, maxNumIter= 25, convergenceTestTol= 1e-12, printFlag= 0)
 if(transientSolProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')
     quit()
+
+
 
 # 14. Store bearing results in a dictionary.
 results= {'t': ti,
@@ -321,13 +355,19 @@ error= math.sqrt(error)
 if(not silent):
     print('error= ', error)
 
-from misc_utils import log_messages as lmsg
 if error<tol:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
 
 if(not silent):
+    # Display FE model.
+    from postprocess import output_handler
+    oh= output_handler.OutputHandler(modelSpace)
+    oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+    # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+    # oh.displayLocalAxes()
+    
     import matplotlib
     # matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -360,12 +400,12 @@ if(not silent):
         velocities= bearingVelocities[eTag]
         frictionForces= bearingFrictionForces[eTag]
         COFs= bearingCOFs[eTag]
-        colors= ["tab:red", "tab:green", "tab:blue"]
+        colors= 2*["tab:red", "tab:green", "tab:blue"]
         magnitudes= [forces, deformations]
         titles= ['Bearing forces', 'Bearing deformations']
         units= ['ozf', '']
         for values, title in zip(magnitudes, titles):
-            fig, axes = plt.subplots(3, 1, figsize=(9, 9), sharex=True)
+            fig, axes = plt.subplots(6, 1, figsize=(9, 9), sharex=True)
             sz= len(values[0])
             for dof in range(0, sz):
                 values_dof= [v[dof] for v in values]
@@ -390,4 +430,5 @@ if(not silent):
             plt.xticks(fontsize= 14)
             #plt.xlim([0.0, values[-1]]);
             plt.show()
+
 

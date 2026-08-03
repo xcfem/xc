@@ -40,18 +40,36 @@ class_<XC::FrictionElementBase, bases<XC::Element0D>, boost::noncopyable >("Fric
     .def("setFrictionModels", &XC::FrictionElementBase::setFrictionModels, "Set the friction models.")
     .add_property("materials", make_function(&XC::FrictionElementBase::getMaterials, return_internal_reference<>() ), "Get materials.")
     .def("setMaterials", &XC::FrictionElementBase::setMaterials, "Set the materials.")
+
+    // Local x direction.
     .def("setLocalXDirection", &XC::FrictionElementBase::setLocalXDirection, "Set local x direction vector.")
     .def("getLocalXDirection", make_function(&XC::FrictionElementBase::getLocalXDirection, return_internal_reference<>() ), "Get local x direction vector.")
+    .add_property("x", make_function(&XC::FrictionElementBase::getLocalXDirection, return_internal_reference<>() ), &XC::FrictionElementBase::setLocalXDirection, "Set local x direction vector.")
+
+    // Local y direction.
     .def("setLocalYDirection", &XC::FrictionElementBase::setLocalYDirection, "Set local y direction vector.")
     .def("getLocalYDirection", make_function(&XC::FrictionElementBase::getLocalYDirection, return_internal_reference<>() ), "Get local y direction vector.")
+    .add_property("y", make_function(&XC::FrictionElementBase::getLocalYDirection, return_internal_reference<>() ), &XC::FrictionElementBase::setLocalYDirection, "Set local y direction vector.")
+
+    // Element mass.
     .def("setBearingElementMass", &XC::FrictionElementBase::setBearingElementMass, "Set the mass of the bearing element.")
     .def("getBearingElementMass", &XC::FrictionElementBase::getBearingElementMass, "Get the mass of the bearing element.")
+   .add_property("mass", &XC::FrictionElementBase::getBearingElementMass, &XC::FrictionElementBase::setBearingElementMass, "Get/set the mass of the bearing element.")
+
+    // Maximum number of iterations for convergence.
     .def("setMaxIter", &XC::FrictionElementBase::setMaxIter, "Set the maximum number of iterations.")
     .def("getMaxIter", &XC::FrictionElementBase::getMaxIter, "Get the maximum number of iterations.")
+    .add_property("maxIter", &XC::FrictionElementBase::getMaxIter, &XC::FrictionElementBase::setMaxIter, "Get/set the maximum number of iterations.")
+
+    // Tolerance for convergence.
     .def("setTol", &XC::FrictionElementBase::setTol, "Set the tolerance for convergence criterion.")
     .def("getTol", &XC::FrictionElementBase::getTol, "Get the tolerance for convergence criterion.")
+    .add_property("tol", &XC::FrictionElementBase::getTol, &XC::FrictionElementBase::setTol, "Get/set the tolerance for convergence criterion.")
+
+    // Bearing length.
     .def("setLength", &XC::FrictionElementBase::setLength, "Set the element length.")
     .def("getLength",&XC::FrictionElementBase::getLength, "Get the element length.")
+    .add_property("L", &XC::FrictionElementBase::getLength, &XC::FrictionElementBase::setLength, "Get/set the element length.")
     
     // state variables
     .def("setDisplacementsInBasicSystem", &XC::FrictionElementBase::setDisplacementsInBasicSystem, "Set displacements in basic system.")

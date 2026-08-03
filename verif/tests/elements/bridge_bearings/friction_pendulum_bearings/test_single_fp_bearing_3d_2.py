@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-''' Dummy SingleFPBearing2d adapted from TestFPS2d_3.tcl
+''' Dummy SingleFPBearing2d adapted from TestFPS3d_0.tcl
 
-Purpose: this file tests the 2D SingleFPBearing or the
-singleFPBearing element. It models an isolated one story
-one bay building and the bearing element has finite length.
-It also tests the different friction models.
+Purpose: this file tests the 3D SingleFPBearing element. It models an isolated
+one story stick and the bearing element has finite length. It also tests the 
+different friction models.
 
 Original Copyright:
 # Written: Andreas Schellenberg (andreas.schellenberg@gmail.com)
@@ -20,6 +19,7 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from model import friction_models as fm
 from materials import friction_bearings as fb
+from misc_utils import log_messages as lmsg
 import tabulate
 
 # Problem type
@@ -27,57 +27,44 @@ import tabulate
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodeHandler= preprocessor.getNodeHandler
-modelSpace= predefined_spaces.StructuralMechanics2D(nodeHandler)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodeHandler)
 
-silent= True # True
-
-# Model arrangement.
-#
-# 3 +----------------+ 6
-#   |                | 
-#   |                | 
-#   |                | 
-#   |                | 
-#   |                | 
-# 2 +----------------+ 5
-#   +                +
-#  1                  4
-#
+silent= True
 
 # 1. Define geometry for model
 g= 32.174*12.0 # 12*ft/s^2= in/s^2
 P= 9.0
 mass= P/g
+templateMatrix= xc.Matrix([[1,0,0,0,0,0],
+                           [0,1,0,0,0,0],
+                           [0,0,1,0,0,0],
+                           [0,0,0,0,0,0],
+                           [0,0,0,0,0,0],
+                           [0,0,0,0,0,0]])
+nodeMassMatrix= mass*templateMatrix
 # 1.1. Define nodes (zero-height bearing at coordinates x=0, y=0)
-massMatrix= xc.Matrix([[mass, 0.0, 0.0],[0.0, mass, 0.0], [0.0, 0.0, 0.0]])
-n1= modelSpace.newNode(0,0)
-n2= modelSpace.newNode(0,10.0)
-n2.mass= massMatrix
-n3= modelSpace.newNode(0,154.0)
-n3.mass= massMatrix
-
-n4= modelSpace.newNode(144.0, 0.0)
-n5= modelSpace.newNode(144.0, 10.0)
-n5.mass= massMatrix
-n6= modelSpace.newNode(144.0, 154.0)
-n6.mass= massMatrix
+n1= modelSpace.newNode(0,0,0)
+n2= modelSpace.newNode(0,0,10.0)
+n2.mass= nodeMassMatrix
+n3= modelSpace.newNode(0,0,154.0)
+n3.mass= nodeMassMatrix
 
 # 2. Constraints.
-modelSpace.fixNode('000', n1.tag)
-modelSpace.fixNode('000', n4.tag)
+modelSpace.fixNode('000_000', n1.tag)
+modelSpace.fixNode('FFF_000', n2.tag)
+modelSpace.fixNode('FFF_000', n3.tag)
 
 # 3. Define materials.
 mv= 2.0*mass
 kv= 7500.0
 zetaVertical= 0.02
 cv= 2.0*zetaVertical*math.sqrt(kv*mv)
-
 ## Vertical response.
 vertResp= typical_materials.defElasticMaterial(preprocessor, name= "vertResp", E= kv, eta= cv)
 ## Rotational response.
 rotResp= typical_materials.defElasticMaterial(preprocessor, name= "rotResp", E= 0.0)
 
-scc= typical_materials.defElasticSection2d(preprocessor, "scc", A= 20.0, E= 29000.0, I= 400.0, linearRho= 1.0)
+scc= typical_materials.defElasticSection3d(preprocessor, "scc", A= 20.0, E= 29000.0, G= 11154.0, J= 100.0, Iy= 200.0, Iz= 200.0)
 
 # 4. Define friction model (coefficient of friction = 0.163)
 frictionModel= fm.def_coulomb_friction_model(preprocessor, name= "frictionModel", mu= .163)
@@ -91,38 +78,30 @@ frictionModel= fm.def_coulomb_friction_model(preprocessor, name= "frictionModel"
 '''
 
 # 5. Define elements
-Reff= 34.68
-bearing1= fb.def_single_friction_pendulum_bearing_2d(modelSpace, n1= n1, n2= n2, frictionModel= frictionModel, vertResp= vertResp, rotResp= rotResp, rEff=Reff, kInit= 250.0)
-bearing4= fb.def_single_friction_pendulum_bearing_2d(modelSpace, n1= n4, n2= n5, frictionModel= frictionModel, vertResp= vertResp, rotResp= rotResp, rEff=Reff, kInit= 250.0)
-## Orientation are determined by the positions of the I and J nodes.
+Reff= 34.68 # Effective radius of concave sliding dish.
+bearing= fb.def_single_friction_pendulum_bearing_3d(modelSpace, n1= n1, n2= n2, frictionModel= frictionModel, vertResp= vertResp, rotRespX= rotResp, rotRespY= rotResp, rotRespZ= rotResp, rEff= Reff, kInit= 250.0, x= xc.Vector([1,0,0]))
+
 
 '''
-# element singleFPBearing eleTag NodeI NodeJ frnMdlTag Reff kInit -P matTag -Mz matTag <-orient x1 x2 x3 y1 y2 y3> <-shearDist sDratio> <-doRayleigh> <-mass m> <-iter maxIter tol>
-#element singleFPBearing 1 1 2 1 34.68 250.0 -P 1 -Mz 2
-#element singleFPBearing 2 4 5 1 34.68 250.0 -P 1 -Mz 2
+# element singleFPBearing eleTag NodeI NodeJ frnMdlTag Reff kInit -P matTag -T matTag -My matTag -Mz matTag <-orient <x1 x2 x3> y1 y2 y3> <-shearDist sDratio> <-doRayleigh> <-mass m> <-iter maxIter tol>
+#element singleFPBearing 1 1 2 1 34.68 250.0 -P 1 -T 2 -My 2 -Mz 2 -orient 1 0 0
 
 # element RJWatsonEqsBearing eleTag NodeI NodeJ frnMdlTag kInit k2 k3 mu -P matTag -Mz matTag <-orient x1 x2 x3 y1 y2 y3> <-shearDist sDratio> <-doRayleigh> <-mass m> <-iter maxIter tol>
-#element RJWatsonEqsBearing 1 1 2 1 250.0 0.519 0.0 3.0 -P 1 -Mz 2
-#element RJWatsonEqsBearing 2 4 5 1 250.0 0.519 0.0 3.0 -P 1 -Mz 2
+#element RJWatsonEqsBearing 1 1 2 1 250.0 0.519 0.0 3.0 -P 1 -T 2 -My 2 -Mz 2 -orient 1 0 0
 '''
-
-lin= modelSpace.newLinearCrdTransf("lin")
+lin= modelSpace.newLinearCrdTransf("lin", xzVector= xc.Vector([0, 1, 0]))
 modelSpace.setDefaultCoordTransf(lin)
 modelSpace.setDefaultMaterial(scc)
-beamColumn1= modelSpace.newElement("ElasticBeam2d", [n2.tag,n3.tag])
-beamColumn2= modelSpace.newElement("ElasticBeam2d", [n5.tag,n6.tag])
-beamColumn3= modelSpace.newElement("ElasticBeam2d", [n2.tag,n5.tag])
-beamColumn4= modelSpace.newElement("ElasticBeam2d", [n3.tag,n6.tag])
+beamColumn= modelSpace.newElement("ElasticBeam3d", [n2.tag,n3.tag])
+
 
 # 6. Define gravity loads
 ## Create a Plain load pattern with a Linear TimeSeries
 lts= modelSpace.newTimeSeries(name= 'lts', tsType= 'linear_ts')
 glp= modelSpace.newLoadPattern(name= 'glp', setCurrent= True)
 ## Create nodal loads at nodes 2 & 3.
-glp.newNodalLoad(n2.tag, xc.Vector([0,-P,0]))
-glp.newNodalLoad(n3.tag, xc.Vector([0,-P,0]))
-glp.newNodalLoad(n5.tag, xc.Vector([0,-P,0]))
-glp.newNodalLoad(n6.tag, xc.Vector([0,-P,0]))
+glp.newNodalLoad(n2.tag, xc.Vector([0,0,-P,0,0,0]))
+glp.newNodalLoad(n3.tag, xc.Vector([0,0,-P,0,0,0]))
 modelSpace.addLoadCaseToDomain(glp.name)
 
 # 7. Solution procedure.
@@ -134,23 +113,17 @@ integrator.dLambda1= .1
 analysis= solProc.getAnalysis()
 
 # 8. Define recorders.
-## Record n2, n3, n5 and n6 node displacements.
-nodesOfInterest= [n2.tag, n3.tag, n5.tag, n6.tag]
+## Record n2 node displacements.
 domain= modelSpace.getDomain()
-nodeDisp= dict()
-for nTag in nodesOfInterest:
-    nodeDisp[nTag]= list()
+n2Disp= list()
 recN2Disp= domain.newRecorder("node_prop_recorder",None)
-recN2Disp.setNodes(xc.ID(nodesOfInterest))
-recN2Disp.callbackRecord= "nodeDisp[self.tag].append((self.getDomain.getTimeTracker.getCurrentTime,self.getDisp))"
-## Record forces at the bearings.
-bearingsOfInterest= [bearing1.tag, bearing4.tag]
-bearingForces= dict()
-for eTag in bearingsOfInterest:
-    bearingForces[eTag]= list()
+recN2Disp.setNodes(xc.ID([n2.tag, n3.tag]))
+recN2Disp.callbackRecord= "n2Disp.append((self.getDomain.getTimeTracker.getCurrentTime,self.getDisp))"
+## Record forces at the bearing.
+bearingForces= list()
 bearingRecorder= domain.newRecorder("element_prop_recorder",None)
-bearingRecorder.setElements(xc.ID(bearingsOfInterest))
-bearingRecorder.callbackRecord= "bearingForces[self.tag].append((self.getDomain.getTimeTracker.getCurrentTime,self.getNodeResistingForceIncInertia(1).getList()))"
+bearingRecorder.setElements(xc.ID([bearing.tag]))
+bearingRecorder.callbackRecord= "bearingForces.append((self.getDomain.getTimeTracker.getCurrentTime,self.getNodeResistingForceIncInertia(1).getList()))"
 
 # 9. Perform the gravity analysis.
 analysis.analyze(10)
@@ -163,7 +136,7 @@ domain.removeRecorders()
 
 # 10. Perform an eigenvalue analysis-
 analysis= predefined_solutions.frequency_analysis(feProblem)
-analOk= analysis.analyze(8) # Compute 8 eigenvalues.
+analOk= analysis.analyze(3) # Compute 3 eigenvalues.
 eigenvalues= analysis.getEigenvalues()
 eigenvaluesTable= list([['Eigenvalues at start of transient'],
                         ["lambda","omega","period","frequency"]])
@@ -181,28 +154,36 @@ omega1= math.sqrt(eigenvalues[0])
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-exc1AccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCS052.AT2'
-exc2AccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCSUP.AT2'
-
-exc1AccelValues= list()
-with open(exc1AccelFilePath, 'r') as f:
+xAccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCS052.AT2'
+yAccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCS142.AT2'
+zAccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCSUP.AT2'
+xAccelValues= list()
+with open(xAccelFilePath, 'r') as f:
     for line in f:
         values= line.rstrip().split()
         for v in values:
-            exc1AccelValues.append(float(v))
-exc2AccelValues= list()
-with open(exc2AccelFilePath, 'r') as f:
+            xAccelValues.append(float(v))
+yAccelValues= list()
+with open(yAccelFilePath, 'r') as f:
     for line in f:
         values= line.rstrip().split()
         for v in values:
-            exc2AccelValues.append(float(v))
+            yAccelValues.append(float(v))
+zAccelValues= list()
+with open(zAccelFilePath, 'r') as f:
+    for line in f:
+        values= line.rstrip().split()
+        for v in values:
+            zAccelValues.append(float(v))
 dt= .005 # Time step for the excitation sample.
-scale= 1.0 #.max.=(1.7)
+scale= 1.0 #.max.=(1.1)
 ## Create acceleration load patterns.
-exc1GM= modelSpace.newUniformExcitation(name= "exc1GM", dof= 0, path= exc1AccelValues, dt= dt, cod_ts= 'exc1Accel', factor= g*scale, vel0= 0.0)
-modelSpace.addLoadCaseToDomain(exc1GM.name)
-exc2GM= modelSpace.newUniformExcitation(name= "exc2GM", dof= 1, path= exc2AccelValues, dt= dt, cod_ts= 'exc2Accel', factor= g*scale, vel0= 0.0)
-modelSpace.addLoadCaseToDomain(exc2GM.name)
+xGM= modelSpace.newUniformExcitation(name= "xGM", dof= 0, path= xAccelValues, dt= dt, cod_ts= 'xAccel', factor= g*scale, vel0= 0.0)
+modelSpace.addLoadCaseToDomain(xGM.name)
+yGM= modelSpace.newUniformExcitation(name= "yGM", dof= 1, path= yAccelValues, dt= dt, cod_ts= 'yAccel', factor= g*scale, vel0= 0.0)
+modelSpace.addLoadCaseToDomain(yGM.name)
+zGM= modelSpace.newUniformExcitation(name= "zGM", dof= 2, path= zAccelValues, dt= dt, cod_ts= 'zAccel', factor= g*scale, vel0= 0.0)
+modelSpace.addLoadCaseToDomain(zGM.name)
 
 ## Set the Rayleigh damping factors for nodes & elements.
 zeta = 0.01
@@ -215,7 +196,8 @@ rayleigh= xc.RayleighDampingFactors(alphaM, betaK, betaKinit, betaKcomm)
 domain.setRayleighDampingFactors(rayleigh)
 
 # 12. Define new recorders.
-## Record n2, n3, n5 and n6 node displacements, velocities and accelerations.
+## Record n2 and n3 node displacements, velocities and accelerations.
+nodesOfInterest= [n2.tag, n3.tag]
 domain= modelSpace.getDomain()
 nodeDisp2= dict()
 recN2Disp2= domain.newRecorder("node_prop_recorder", None)
@@ -236,45 +218,38 @@ for nTag in nodesOfInterest:
     nodeAccel2[nTag]= list()
 recN2Accel2.callbackRecord= "nodeAccel2[self.tag].append((self.getDomain.getTimeTracker.getCurrentTime,self.getAccel))"
 ## Record forces at the bearing.
-ti= dict()
-bearingForces2= dict()
-bearingBasicDeformations= dict()
-bearingNormalForces= dict()
-bearingVelocities= dict()
-bearingFrictionForces= dict()
-bearingCOFs= dict()
-bearingsMotionRecorder= domain.newRecorder("element_prop_recorder",None)
-bearingsMotionRecorder.setElements(xc.ID(bearingsOfInterest))
-for eTag in bearingsOfInterest:
-    ti[eTag]= list()
-    bearingForces2[eTag]= list()
-    bearingBasicDeformations[eTag]= list()
-    bearingNormalForces[eTag]= list()
-    bearingVelocities[eTag]= list()
-    bearingFrictionForces[eTag]= list()
-    bearingCOFs[eTag]= list()
+ti= list()
+bearingForces2= list()
+bearingBasicDeformations= list()
+bearingNormalForces= list()
+bearingVelocities= list()
+bearingFrictionForces= list()
+bearingCOFs= list()
+bearingRecorder2= domain.newRecorder("element_prop_recorder",None)
+bearingRecorder2.setElements(xc.ID([bearing.tag]))
 callbackRecord= '''
 time= self.getDomain.getTimeTracker.getCurrentTime
-ti[self.tag].append(time)
+ti.append(time)
 self.getResistingForce()
 force= self.getNodeResistingForceIncInertia(1).getList()
-bearingForces2[self.tag].append(force)
+bearingForces2.append(force)
 ub= self.ub.getList()
-bearingBasicDeformations[self.tag].append(ub)
+bearingBasicDeformations.append(ub)
 fm= self.frictionModels[0]
 N= fm.trialN
-bearingNormalForces[self.tag].append(N)
+bearingNormalForces.append(N)
 V= fm.trialVel
-bearingVelocities[self.tag].append(V)
+bearingVelocities.append(V)
 ff= fm.frictionForce
-bearingFrictionForces[self.tag].append(ff)
+bearingFrictionForces.append(ff)
 COF= fm.mu
-bearingCOFs[self.tag].append(COF)
+bearingCOFs.append(COF)
 '''
-bearingsMotionRecorder.callbackRecord= callbackRecord
+bearingRecorder2.callbackRecord= callbackRecord
+
 
 # 13. Perform the dynamic analysis.
-numberOfSteps= max(len(exc1AccelValues), len(exc2AccelValues))
+numberOfSteps= max(len(xAccelValues), len(yAccelValues), len(zAccelValues))
 transientSolProc= predefined_solutions.PlainNewmarkNewtonRaphson(feProblem, numSteps= numberOfSteps, timeStep= dt, gamma= 0.5, beta= 0.25, maxNumIter= 25, convergenceTestTol= 1e-12, printFlag= 0)
 if(transientSolProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')
@@ -302,20 +277,17 @@ with open(jsonFileName, 'r') as f:
      
 error= 0.0
 tol= 1e-8
-for magnitudeKey in ref_results:
-    ref_values= ref_results[magnitudeKey]
-    values= results[magnitudeKey]
-    for bearingKey in ref_values:
-        element_ref_values= ref_values[bearingKey]
-        element_values= values[int(bearingKey)]
-        error+= (len(element_values)-len(element_ref_values))**2
-        if(error<tol):
-            for v, v_ref in zip(element_values, element_ref_values):
-                if(isinstance(v, float)):
-                    error+=(v-v_ref)**2
-                else:
-                    for vi, vi_ref in zip(v, v_ref):
-                        error+=(vi-vi_ref)**2
+for key in ref_results:
+    ref_values= ref_results[key]
+    values= results[key]
+    error+= (len(values)-len(ref_values))**2
+    if(error<tol):
+        for v, v_ref in zip(values, ref_values):
+            if(isinstance(v, float)):
+                error+=(v-v_ref)**2
+            else:
+                for vi, vi_ref in zip(v, v_ref):
+                    error+=(vi-vi_ref)**2
 error= math.sqrt(error)
 
 if(not silent):
@@ -352,42 +324,42 @@ if(not silent):
             fig.tight_layout()
             plt.show()
     # Get bearing results.
-    for eTag in bearingsOfInterest:
-        t= ti[eTag]
-        forces= bearingForces2[eTag]
-        deformations= bearingBasicDeformations[eTag]
-        normalForces= bearingNormalForces[eTag]
-        velocities= bearingVelocities[eTag]
-        frictionForces= bearingFrictionForces[eTag]
-        COFs= bearingCOFs[eTag]
-        colors= ["tab:red", "tab:green", "tab:blue"]
-        magnitudes= [forces, deformations]
-        titles= ['Bearing forces', 'Bearing deformations']
-        units= ['ozf', '']
-        for values, title in zip(magnitudes, titles):
-            fig, axes = plt.subplots(3, 1, figsize=(9, 9), sharex=True)
-            sz= len(values[0])
-            for dof in range(0, sz):
-                values_dof= [v[dof] for v in values]
-                axes[dof].plot(t, values_dof, lw=0.7, color=colors[dof])
-                axes[dof].set_ylabel("DOF: "+str(dof))
-                if(dof==0):
-                    axes[0].set_title(title+' (bearing: '+str(eTag)+')')
-                axes[dof].set_xlabel("Time (s)")
-            fig.tight_layout()
-            plt.show()
-        magnitudes= [velocities, normalForces, frictionForces, COFs]
-        titles= ['Bearing velocities', 'Bearing normal forces', 'Bearing friction forces', 'Bearing COF']
-        units= ['in/s', 'ozf', 'ozf', '']
-        for values, title, unit in zip(magnitudes, titles, units):
-            plt.figure(figsize=(15,3))
-            plt.plot(t, values)
-            plt.title(title)
-            plt.ylabel(unit, {'size':14})
-            plt.xlabel('Time (s)', {'fontstyle':'italic','size':13})
-            plt.grid()
-            plt.yticks(fontsize= 14)
-            plt.xticks(fontsize= 14)
-            #plt.xlim([0.0, values[-1]]);
-            plt.show()
+    t= ti
+    forces= bearingForces2
+    deformations= bearingBasicDeformations
+    normalForces= bearingNormalForces
+    velocities= bearingVelocities
+    frictionForces= bearingFrictionForces
+    COFs= bearingCOFs
+    colors= 2*["tab:red", "tab:green", "tab:blue"]
+    magnitudes= [forces, deformations]
+    titles= ['Bearing forces', 'Bearing deformations']
+    units= ['ozf', '']
+    for values, title in zip(magnitudes, titles):
+        fig, axes = plt.subplots(6, 1, figsize=(9, 9), sharex=True)
+        sz= len(values[0])
+        for dof in range(0, sz):
+            values_dof= [v[dof] for v in values]
+            axes[dof].plot(t, values_dof, lw=0.7, color=colors[dof])
+            axes[dof].set_ylabel("DOF: "+str(dof))
+            if(dof==0):
+                axes[0].set_title(title)
+            axes[dof].set_xlabel("Time (s)")
+        fig.tight_layout()
+        plt.show()
+    magnitudes= [velocities, normalForces, frictionForces, COFs]
+    titles= ['Bearing velocities', 'Bearing normal forces', 'Bearing friction forces', 'Bearing COF']
+    units= ['in/s', 'ozf', 'ozf', '']
+    for values, title, unit in zip(magnitudes, titles, units):
+        plt.figure(figsize=(15,3))
+        plt.plot(t, values)
+        plt.title(title)
+        plt.ylabel(unit, {'size':14})
+        plt.xlabel('Time (s)', {'fontstyle':'italic','size':13})
+        plt.grid()
+        plt.yticks(fontsize= 14)
+        plt.xticks(fontsize= 14)
+        #plt.xlim([0.0, values[-1]]);
+        plt.show()
+
 
