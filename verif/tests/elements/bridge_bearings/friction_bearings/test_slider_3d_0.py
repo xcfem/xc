@@ -19,6 +19,7 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from model import friction_models as fm
 from materials import friction_bearings as fb
+from misc_utils import log_messages as lmsg
 import tabulate
 
 # Problem type
