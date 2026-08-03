@@ -66,16 +66,25 @@
 
 void XC::UmfpackGenLinSolver::free_symbolic(void)
   {
-    if(Symbolic)
+    if(this->Symbolic)
       {
 	umfpack_di_free_symbolic(&Symbolic);
-	Symbolic= nullptr;
+	this->Symbolic= nullptr;
+      }
+  }
+
+void XC::UmfpackGenLinSolver::free_numeric(void)
+  {
+    if(this->Numeric)
+      {
+	umfpack_di_free_numeric(&Numeric);
+	this->Numeric= nullptr;
       }
   }
 
 XC::UmfpackGenLinSolver::UmfpackGenLinSolver()
  : LinearSOESolver(SOLVER_TAGS_UmfpackGenLinSolver),
-   Symbolic(nullptr), theSOE(nullptr)
+   Symbolic(nullptr), Numeric(nullptr), theSOE(nullptr)
   {}
 
 XC::LinearSOESolver *XC::UmfpackGenLinSolver::getCopy(void) const
@@ -83,7 +92,10 @@ XC::LinearSOESolver *XC::UmfpackGenLinSolver::getCopy(void) const
 
 //! @brief Destructor.
 XC::UmfpackGenLinSolver::~UmfpackGenLinSolver()
-  { free_symbolic(); }
+  {
+    free_symbolic();
+    free_numeric();
+  }
 
 int XC::UmfpackGenLinSolver::solve(void)
   {
@@ -106,38 +118,40 @@ int XC::UmfpackGenLinSolver::solve(void)
 	          << std::endl;
 	return -1;
       }
-    
-    // numerical analysis
-    void *Numeric= nullptr;
-    int status= umfpack_di_numeric(Ap,Ai,Ax,Symbolic,&Numeric,Control,Info);
-
-    // check error
-    if(status!=UMFPACK_OK)
+    if(theSOE->factored == false)
       {
-	std::cerr  << getClassName() << "::" << __FUNCTION__
-		   <<"; WARNING: numeric analysis returns "
-		   << static_cast<int>(status)
-		   << std::endl;
-	if(status==UMFPACK_WARNING_singular_matrix)
-	  std::cerr << " Singular matrix. Numeric factorization was successful, but the matrix is singular." << std::endl;
-	if(status==UMFPACK_ERROR_out_of_memory)
-	  std::cerr << " Insufficient memory to complete the numeric factorization." << std::endl;
-	if(status==UMFPACK_ERROR_argument_missing)
-	  std::cerr << " One or more required arguments are missing." << std::endl;
-	if(status==UMFPACK_ERROR_invalid_Symbolic_object)
-	  std::cerr << " Symbolic object provided as input is invalid." << std::endl;
-	if(status==UMFPACK_ERROR_different_pattern)
-	  std::cerr << " Different pattern." << std::endl;
-	return -1;
+	if(this->Numeric != nullptr)
+	  {
+	    this->free_numeric();
+	  }
+	// numerical analysis
+	const int status= umfpack_di_numeric(Ap,Ai,Ax,Symbolic,&Numeric,Control,Info);
+
+	// check error
+	if(status!=UMFPACK_OK)
+	  {
+	    std::cerr  << getClassName() << "::" << __FUNCTION__
+		       <<"; WARNING: numeric analysis returns "
+		       << static_cast<int>(status)
+		       << std::endl;
+	    if(status==UMFPACK_WARNING_singular_matrix)
+	      std::cerr << " Singular matrix. Numeric factorization was successful, but the matrix is singular." << std::endl;
+	    if(status==UMFPACK_ERROR_out_of_memory)
+	      std::cerr << " Insufficient memory to complete the numeric factorization." << std::endl;
+	    if(status==UMFPACK_ERROR_argument_missing)
+	      std::cerr << " One or more required arguments are missing." << std::endl;
+	    if(status==UMFPACK_ERROR_invalid_Symbolic_object)
+	      std::cerr << " Symbolic object provided as input is invalid." << std::endl;
+	    if(status==UMFPACK_ERROR_different_pattern)
+	      std::cerr << " Different pattern." << std::endl;
+	    return -1;
+	  }
+	theSOE->factored = true;
       }
 
     // solve
-    status= umfpack_di_solve(UMFPACK_A,Ap,Ai,Ax,X,B,Numeric,Control,Info);
+    const int status= umfpack_di_solve(UMFPACK_A,Ap,Ai,Ax,X,B,Numeric,Control,Info);
 
-    // delete Numeric
-    if(Numeric)
-      { umfpack_di_free_numeric(&Numeric); }
-    
     // check error
     if(status!=UMFPACK_OK)
       {
@@ -155,14 +169,24 @@ int XC::UmfpackGenLinSolver::solve(void)
 
 int XC::UmfpackGenLinSolver::setSize()
   {
+    const int n = theSOE->X.Size();
+    const int nnz = static_cast<int>(theSOE->Ai.size());
+    if (n == 0 || nnz==0)
+      {
+	if(this->Numeric != nullptr)
+	  {
+	    this->free_numeric();
+	  }
+	return 0;
+      }
+    if(this->Numeric != nullptr)
+      {
+	this->free_numeric();
+      }
     // set default control parameters
     umfpack_di_defaults(Control);
     Control[UMFPACK_PIVOT_TOLERANCE] = 1.0;
     Control[UMFPACK_STRATEGY] = UMFPACK_STRATEGY_SYMMETRIC;
-
-    const int n = theSOE->X.Size();
-    const int nnz = static_cast<int>(theSOE->Ai.size());
-    if (n == 0 || nnz==0) return 0;
     
     int *Ap= &(theSOE->Ap[0]);
     int *Ai= &(theSOE->Ai[0]);
