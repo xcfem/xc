@@ -328,9 +328,9 @@ results= {'t': ti,
 refFilePath= pth+"/../../../aux/reference_files/"
 fname= os.path.basename(__file__)
 jsonFileName= refFilePath+'/ref_'+fname.replace('.py', '.json')
-# Save output as reference.
-with open(jsonFileName, 'w') as f:
-    json.dump(results, f)
+# # Save output as reference.
+# with open(jsonFileName, 'w') as f:
+#     json.dump(results, f)
 
 # 15. Check results.
 ## Load reference values.
