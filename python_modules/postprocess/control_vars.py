@@ -1789,7 +1789,8 @@ def read_control_vars(preprocessor, inputFileName):
                 for propKey in elementControlVars: # iterate on element control vars.
                     expression= elementControlVars[propKey]
                     propValue= eval(expression)
-                    element.setProp(propName+propKey, propValue)
+                    sectPropName= propName+propKey
+                    element.setProp(sectPropName, propValue)
                     retval+= 1
     if('nodeData' in dataDict): # Control variables on nodes.
         nodeData= dataDict['nodeData']
