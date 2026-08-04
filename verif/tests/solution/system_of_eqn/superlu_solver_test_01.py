@@ -79,7 +79,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-sys.path.append(pth+"/../aux")
+sys.path.append(pth+"/../../aux")
 import sol_superlu
 
 solProc= sol_superlu.SuperLU(feProblem)
