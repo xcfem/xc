@@ -127,7 +127,6 @@ class StrutAndTieStressController(lscb.LimitStateControllerBase):
             # Compute efficiency.
             CFtmp, typo, inverted= self.computeEfficiency(elem, elementInternalForces= lf)
             label= self.limitStateLabel
-            # Element type.
             # Update efficiency.
             if(CFtmp>elem.getProp(label).CF):
                 elem.setProp(label, self.ControlVars(combName= lf.idComb, CF= CFtmp, N= lf.N, typo= typo, inverted= inverted))
