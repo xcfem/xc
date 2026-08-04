@@ -95,8 +95,6 @@ limitStateToCheck.analyzeLoadCombinations(combContainer,setCalc)
 limitStateToCheck.check(setCalc= setCalc, concrete= concrete, steel= reinfSteel, appendToResFile=False,listFile=False,calcMeanCF=False)
 
 # Check report generation.
-inputFileName= cfg.projectDirTree.getVerifStrutAndTieFile()
-modelSpace.readControlVars(inputFileName=cfg.projectDirTree.getVerifStrutAndTieFile())
 report=rprt.ReportGenerator(modelSpace,cfg)
 argsTrussEl=['CF','N']
 fileNames= report.checksReport(limitStateToCheck.label, setsTrussEl= [setCalc], argsTrussEl=argsTrussEl)
