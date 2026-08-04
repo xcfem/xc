@@ -65,7 +65,7 @@ class ControlVarDiagram(cd.ColoredDiagram):
         ''' Return the names of the properties used to construct the diagram.'''
         retval= list()
         if(self.attributeName == 'ULS_StrutAndTie'):
-            retval.append(self.attributeName + 'Sect0') # Value for the whole element.
+            retval.append(self.attributeName) # Value for the whole element.
         elif(self.attributeName != "intForce"): # not internal forces.
             retval.append(self.attributeName + 'Sect1') # Value at start node.
             retval.append(self.attributeName + 'Sect2') # Value at end node.
