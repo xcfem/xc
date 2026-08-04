@@ -19,6 +19,7 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from model import friction_models as fm
 from materials import friction_bearings as fb
+from actions.quake import ground_motion_utils as gmu
 import tabulate
 
 # Problem type
@@ -141,25 +142,12 @@ if(not pth):
 horizAccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCS052.AT2'
 vertAccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCSUP.AT2'
 
-horizAccelValues= list()
-with open(horizAccelFilePath, 'r') as f:
-    for line in f:
-        values= line.rstrip().split()
-        for v in values:
-            horizAccelValues.append(float(v))
-vertAccelValues= list()
-with open(vertAccelFilePath, 'r') as f:
-    for line in f:
-        values= line.rstrip().split()
-        for v in values:
-            vertAccelValues.append(float(v))
-            
 dt= .005 # Time step for the excitation sample.
 scale= 1.0 #.max.=(1.7)
 ## Create horizontal acceleration load pattern.
-horizGM= modelSpace.newUniformExcitation(name= "horizGM", dof= 0, path= horizAccelValues, dt= dt, cod_ts= 'horizAccel', factor= g*scale, vel0= 0.0)
+horizGM, horizGMsz= gmu.uniform_excitation_from_simple_record(modelSpace, name= "horizGM", dof= 0, inputFileName= horizAccelFilePath, dt= dt, cod_ts= 'horizAccel', factor= g*scale, vel0= 0.0)
 modelSpace.addLoadCaseToDomain(horizGM.name)
-vertGM= modelSpace.newUniformExcitation(name= "vertGM", dof= 1, path= vertAccelValues, dt= dt, cod_ts= 'vertAccel', factor= g*scale, vel0= 0.0)
+vertGM, vertGMsz= gmu.uniform_excitation_from_simple_record(modelSpace, name= "vertGM", dof= 1, inputFileName= vertAccelFilePath, dt= dt, cod_ts= 'vertAccel', factor= g*scale, vel0= 0.0)
 modelSpace.addLoadCaseToDomain(vertGM.name)
 
 ## Set the Rayleigh damping factors for nodes & elements.
@@ -215,7 +203,7 @@ bearingCOFs.append(COF)
 bearingRecorder2.callbackRecord= callbackRecord
 
 # 13. Perform the dynamic analysis.
-numberOfSteps= max(len(horizAccelValues), len(vertAccelValues))
+numberOfSteps= max(horizGMsz, vertGMsz)
 transientSolProc= predefined_solutions.PlainNewmarkNewtonRaphson(feProblem, numSteps= numberOfSteps, timeStep= dt, gamma= 0.5, beta= 0.25, maxNumIter= 25, convergenceTestTol= 1e-12, printFlag= 0)
 if(transientSolProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')

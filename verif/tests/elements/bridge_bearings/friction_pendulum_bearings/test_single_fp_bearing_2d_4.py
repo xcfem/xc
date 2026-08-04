@@ -20,6 +20,7 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from model import friction_models as fm
 from materials import friction_bearings as fb
+from actions.quake import ground_motion_utils as gmu
 import tabulate
 
 # Problem type
@@ -198,24 +199,12 @@ if(not pth):
 exc1AccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCS052.AT2'
 exc2AccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCSUP.AT2'
 
-exc1AccelValues= list()
-with open(exc1AccelFilePath, 'r') as f:
-    for line in f:
-        values= line.rstrip().split()
-        for v in values:
-            exc1AccelValues.append(float(v))
-exc2AccelValues= list()
-with open(exc2AccelFilePath, 'r') as f:
-    for line in f:
-        values= line.rstrip().split()
-        for v in values:
-            exc2AccelValues.append(float(v))
 dt= .005 # Time step for the excitation sample.
 scale= 1.0 #.max.=(1.7)
 ## Create acceleration load patterns.
-exc1GM= modelSpace.newUniformExcitation(name= "exc1GM", dof= 0, path= exc1AccelValues, dt= dt, cod_ts= 'exc1Accel', factor= g*scale, vel0= 0.0)
+exc1GM, exc1GMsz= gmu.uniform_excitation_from_simple_record(modelSpace, name= "exc1GM", dof= 0, inputFileName= exc1AccelFilePath, dt= dt, cod_ts= 'exc1Accel', factor= g*scale, vel0= 0.0)
 modelSpace.addLoadCaseToDomain(exc1GM.name)
-exc2GM= modelSpace.newUniformExcitation(name= "exc2GM", dof= 1, path= exc2AccelValues, dt= dt, cod_ts= 'exc2Accel', factor= g*scale, vel0= 0.0)
+exc2GM, exc2GMsz= gmu.uniform_excitation_from_simple_record(modelSpace, name= "exc2GM", dof= 1, inputFileName= exc2AccelFilePath, dt= dt, cod_ts= 'exc2Accel', factor= g*scale, vel0= 0.0)
 modelSpace.addLoadCaseToDomain(exc2GM.name)
 
 ## Set the Rayleigh damping factors for nodes & elements.
@@ -288,7 +277,7 @@ bearingCOFs[self.tag].append(COF)
 bearingsMotionRecorder.callbackRecord= callbackRecord
 
 # 13. Perform the dynamic analysis.
-numberOfSteps= max(len(exc1AccelValues), len(exc2AccelValues))
+numberOfSteps= max(exc1GMsz, exc2GMsz)
 transientSolProc= predefined_solutions.PlainNewmarkNewtonRaphson(feProblem, numSteps= numberOfSteps, timeStep= dt, gamma= 0.5, beta= 0.25, maxNumIter= 25, convergenceTestTol= 1e-12, printFlag= 0)
 if(transientSolProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')

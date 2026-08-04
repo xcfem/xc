@@ -20,6 +20,7 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from model import friction_models as fm
 from materials import friction_bearings as fb
+from actions.quake import ground_motion_utils as gmu
 from misc_utils import log_messages as lmsg
 import tabulate
 
@@ -143,32 +144,14 @@ if(not pth):
 xAccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCS052.AT2'
 yAccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCS142.AT2'
 zAccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCSUP.AT2'
-xAccelValues= list()
-with open(xAccelFilePath, 'r') as f:
-    for line in f:
-        values= line.rstrip().split()
-        for v in values:
-            xAccelValues.append(float(v))
-yAccelValues= list()
-with open(yAccelFilePath, 'r') as f:
-    for line in f:
-        values= line.rstrip().split()
-        for v in values:
-            yAccelValues.append(float(v))
-zAccelValues= list()
-with open(zAccelFilePath, 'r') as f:
-    for line in f:
-        values= line.rstrip().split()
-        for v in values:
-            zAccelValues.append(float(v))
 dt= .005 # Time step for the excitation sample.
 scale= 1.0 #.max.=(1.1)
 ## Create acceleration load patterns.
-xGM= modelSpace.newUniformExcitation(name= "xGM", dof= 0, path= xAccelValues, dt= dt, cod_ts= 'xAccel', factor= g*scale, vel0= 0.0)
+xGM, xGMsz= gmu.uniform_excitation_from_simple_record(modelSpace, name= "xGM", dof= 0, inputFileName= xAccelFilePath, dt= dt, cod_ts= 'xAccel', factor= g*scale, vel0= 0.0)
 modelSpace.addLoadCaseToDomain(xGM.name)
-yGM= modelSpace.newUniformExcitation(name= "yGM", dof= 1, path= yAccelValues, dt= dt, cod_ts= 'yAccel', factor= g*scale, vel0= 0.0)
+yGM, yGMsz= gmu.uniform_excitation_from_simple_record(modelSpace, name= "yGM", dof= 1, inputFileName= yAccelFilePath, dt= dt, cod_ts= 'yAccel', factor= g*scale, vel0= 0.0)
 modelSpace.addLoadCaseToDomain(yGM.name)
-zGM= modelSpace.newUniformExcitation(name= "zGM", dof= 2, path= zAccelValues, dt= dt, cod_ts= 'zAccel', factor= g*scale, vel0= 0.0)
+zGM, zGMsz= gmu.uniform_excitation_from_simple_record(modelSpace, name= "zGM", dof= 2, inputFileName= zAccelFilePath, dt= dt, cod_ts= 'zAccel', factor= g*scale, vel0= 0.0)
 modelSpace.addLoadCaseToDomain(zGM.name)
 
 ## Set the Rayleigh damping factors for nodes & elements.
@@ -225,7 +208,7 @@ bearingCOFs.append(COF)
 bearingRecorder2.callbackRecord= callbackRecord
 
 # 13. Perform the dynamic analysis.
-numberOfSteps= max(len(xAccelValues), len(yAccelValues), len(zAccelValues))
+numberOfSteps= max(xGMsz, yGMsz, zGMsz)
 transientSolProc= predefined_solutions.PlainNewmarkNewtonRaphson(feProblem, numSteps= numberOfSteps, timeStep= dt, gamma= 0.5, beta= 0.25, maxNumIter= 25, convergenceTestTol= 1e-12, printFlag= 0)
 if(transientSolProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')
