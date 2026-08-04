@@ -77,6 +77,7 @@ class MaterialVector: public std::vector<MAT *>, public CommandEntity, public Mo
     void setMaterial(size_t i, const MAT &);
     void setMaterial(const MAT *,const std::string &);
     void copyPropsFrom(const EntityWithProperties *);
+    void setPyList(const boost::python::list &);
     
     bool empty(void) const;
     int commitState(void);
@@ -269,6 +270,19 @@ void MaterialVector<MAT>::setMaterial(size_t i, const MAT *new_mat)
 template <class MAT>
 void MaterialVector<MAT>::setMaterial(size_t i, const MAT &new_mat)
   { setMaterial(i, &new_mat); }
+
+template <class MAT>
+void MaterialVector<MAT>::setPyList(const boost::python::list &lst)
+  {
+    const size_t sz= boost::python::len(lst);
+    std::vector<MAT *> tmp(sz, nullptr);
+    for(size_t i= 0; i<sz; i++) 
+      {
+	tmp[i]= boost::python::extract<MAT *>(lst[i]);
+      }
+    this->alloc(tmp);
+  }
+
 
 //! @brief copy the user defined properties of the given object on each of
 //! the materials.  

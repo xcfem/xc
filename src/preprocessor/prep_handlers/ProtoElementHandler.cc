@@ -96,6 +96,15 @@
 #include "domain/mesh/element/plane/surface_pressures/BrickSurfaceLoad.h"
 #include "domain/mesh/element/plane/surface_pressures/QuadSurfaceLoad.h"
 
+#include "domain/mesh/element/special/frictionBearing/FlatSliderSimple2d.h"
+#include "domain/mesh/element/special/frictionBearing/FlatSliderSimple3d.h"
+#include "domain/mesh/element/special/frictionBearing/MultiFP2d.h"
+#include "domain/mesh/element/special/frictionBearing/RJWatsonEQS2d.h"
+#include "domain/mesh/element/special/frictionBearing/RJWatsonEQS3d.h"
+#include "domain/mesh/element/special/frictionBearing/SingleFPSimple2d.h"
+#include "domain/mesh/element/special/frictionBearing/SingleFPSimple3d.h"
+#include "domain/mesh/element/special/frictionBearing/TripleFrictionPendulum.h"
+
 #include "preprocessor/Preprocessor.h"
 #include "utility/utils/misc_utils/colormod.h"
 
@@ -231,6 +240,15 @@ void materialNotSuitableMsg(const std::string &errHeader, const std::string &mat
 	      << Color::def << std::endl;
   }
 
+//! @brief Warning messages about element that cannot be allocated.
+void noElementCreatedMsg(const std::string &errHeader, const std::string &elemType)
+  {
+    std::cerr << Color::red <<"Error in "
+              << errHeader << "; could not create element of type: '"
+	      << elemType << "."
+	      << Color::def << std::endl;
+  }
+
 //! @brief Process the comands used to define
 //! the elements of the finite element model. It interprets
 //! the following commands (if the identifier (tag) is not
@@ -268,6 +286,18 @@ void materialNotSuitableMsg(const std::string &errHeader, const std::string &mat
 //! - ZeroLengthSection: Defines a zero length element with section type material (ZeroLengthSection).
 //! - BeamContact2D: Defines a two-dimensional beam-to-node contact element which defines a frictional contact interface between a beam element and a separate body.
 //! - BeamContact3D: Defines a three-dimensional beam-to-node contact element which defines a frictional contact interface between a beam element and a separate body.
+//! - FlatSliderSimple2d: slider bearing element for two-dimensional problems.
+//! - FlatSliderSimple3d: slider bearing element for three-dimensional problems.
+//! - MultiFP2d: ??
+//! - RJWatsonEQS2d: (R.J. Watson EradiQuake System) two-node friction
+//!   slider element with mass energy regulator (MER) polyurethane springs.
+//! - RJWatsonEQS3d: (R.J. Watson EradiQuake System) two-node friction
+//!   slider element with mass energy regulator (MER) polyurethane springs.
+//! - SingleFPSimple2d: single-concave friction pendulum element for 2D
+//!                     problems.
+//! - SingleFPSimple3d: single-concave friction pendulum element for 3D
+//!                     problems.
+//! - TripleFrictionPendulum: defines a triple friction pendulum element.
 XC::Element *XC::ProtoElementHandler::create_element(const std::string &elementType,int tag_elem)
   {
     Element *retval= nullptr;
@@ -496,24 +526,72 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &elementT
         if(!retval)
 	  materialNotSuitableMsg(errHeader,material_name,elementType);
       }
-    else if((elementType == "quad_surface_load")||(elementType == "QuadSurfaceLoad"))
-      {
-        retval= new_element<QuadSurfaceLoad>(tag_elem);
-        if(!retval)
-	  materialNotSuitableMsg(errHeader,material_name,elementType);
-      }
-    else if((elementType == "brick_surface_load")||(elementType == "BrickSurfaceLoad"))
-      {
-        retval= new_element<BrickSurfaceLoad>(tag_elem);
-        if(!retval)
-	  materialNotSuitableMsg(errHeader,material_name,elementType);
-      }
     // else if(elementType == "TotalLagrangianFD8NodeBrick")
     //   {
     //     retval= new_element_mat<TotalLagrangianFD8NodeBrick,NDMaterial>(tag_elem, get_ptr_material());
     //     if(!retval)
     // 	  materialNotSuitableMsg(errHeader,material_name,elementType);
     //   }
+    else if((elementType == "quad_surface_load")||(elementType == "QuadSurfaceLoad"))
+      {
+        retval= new_element<QuadSurfaceLoad>(tag_elem);
+        if(!retval)
+	  noElementCreatedMsg(errHeader, elementType);
+      }
+    else if((elementType == "brick_surface_load")||(elementType == "BrickSurfaceLoad"))
+      {
+        retval= new_element<BrickSurfaceLoad>(tag_elem);
+        if(!retval)
+	  noElementCreatedMsg(errHeader, elementType);
+      }
+    else if(elementType == "FlatSliderSimple2d")
+	  {
+	    retval= new_element<FlatSliderSimple2d>(tag_elem);
+	    if(!retval)
+	      noElementCreatedMsg(errHeader, elementType);
+	  }
+    else if(elementType == "FlatSliderSimple3d")
+	  {
+	    retval= new_element<FlatSliderSimple3d>(tag_elem);
+	    if(!retval)
+	      noElementCreatedMsg(errHeader, elementType);
+	  }
+    // else if(elementType == "MultiFP2d")
+    // 	  {
+    // 	    retval= new_element<MultiFP2d>(tag_elem);
+    // 	    if(!retval)
+    // 	      noElementCreatedMsg(errHeader, elementType);
+    // 	  }
+    else if(elementType == "RJWatsonEQS2d")
+	  {
+	    retval= new_element<RJWatsonEQS2d>(tag_elem);
+	    if(!retval)
+	      noElementCreatedMsg(errHeader, elementType);
+	  }
+    else if(elementType == "RJWatsonEQS3d")
+	  {
+	    retval= new_element<RJWatsonEQS3d>(tag_elem);
+	    if(!retval)
+	      noElementCreatedMsg(errHeader, elementType);
+	  }
+    else if(elementType == "SingleFPSimple2d")
+	  {
+	    retval= new_element<SingleFPSimple2d>(tag_elem);
+	    if(!retval)
+	      noElementCreatedMsg(errHeader, elementType);
+	  }
+    else if(elementType == "SingleFPSimple3d")
+	  {
+	    retval= new_element<SingleFPSimple3d>(tag_elem);
+	    if(!retval)
+	      noElementCreatedMsg(errHeader, elementType);
+	  }
+    else if(elementType == "TripleFrictionPendulum")
+      {
+        retval= new_element<TripleFrictionPendulum>(tag_elem);
+        if(!retval)
+	  noElementCreatedMsg(errHeader, elementType);
+      }
     else
       std::cerr << Color::red << errHeader
 		<< "; element type: '" << elementType << "' unknown."
@@ -535,7 +613,7 @@ XC::Element *XC::ProtoElementHandler::newElement(const std::string &type,const I
           {
 	    if(iNodes.Size()>0)
                 retval->setIdNodes(iNodes);
-            add(retval);
+            this->add(retval);
           }
       }
     else

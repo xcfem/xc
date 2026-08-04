@@ -107,12 +107,14 @@ class FlatSliderSimple2d: public SimpleBearingBase
     int recvData(const Communicator &);
     void initializeStiffnessMatrix(void);
     void initialize(void);
+    int update_friction_and_stiffness(const Vector &);
+
   public:
     FlatSliderSimple2d(int tag= 0);
     FlatSliderSimple2d(int tag, int Nd1, int Nd2,
 		       const FrictionModel &theFrnMdl, double kInit,
 		       const std::vector<UniaxialMaterial *> &,
-		       const Vector y= Vector(), const Vector x= Vector(),
+		       const Vector y= Vector({1,0,0}), const Vector x= Vector({0,1,0}),
 		       const double &sdI= 0.0, const int &addRay= 0,
 		       const double &mass = 0.0,
 		       const int &maxIter = 20,
@@ -129,6 +131,7 @@ class FlatSliderSimple2d: public SimpleBearingBase
     int revertToLastCommit();        
     int revertToStart();        
     int update();
+    int setup();
     
     // public methods to obtain stiffness, mass, damping and residual information    
     const Matrix &getTangentStiff() const;

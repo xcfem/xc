@@ -86,6 +86,19 @@ XC::FrictionElementBase::FrictionElementBase(int tag, int classTag,int Nd1, int 
   }
 
 // parameters
+
+//! @brief Set friction models.
+void XC::FrictionElementBase::setFrictionModels(const boost::python::list &lst)
+  {
+    this->frictionModels.setPyList(lst);
+  }
+
+//! @brief Set materials.
+void XC::FrictionElementBase::setMaterials(const boost::python::list &lst)
+  {
+    this->physicalProperties.setPyList(lst);
+  }
+
 //! @brief Set local x direction vector.
 void XC::FrictionElementBase::setLocalXDirection(const Vector &v)
   { this->x= v; }
@@ -158,6 +171,7 @@ void XC::FrictionElementBase::setTransformationGlobalToLocalSystem(const Matrix 
 //! @brief Get the transformation matrix from global to local system.
 const XC::Matrix &XC::FrictionElementBase::getTransformationGlobalToLocalSystem(void) const
   { return this->Tgl; }
+
 //! @brief Set the transformation matrix from local to basic system.
 void XC::FrictionElementBase::setTransformationLocalToBasicSystem(const Matrix &m)
   { this->Tlb= m; }

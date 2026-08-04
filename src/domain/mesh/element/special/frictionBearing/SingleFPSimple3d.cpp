@@ -63,6 +63,7 @@
 #include "utility/recorder/response/ElementResponse.h"
 #include "material/uniaxial/UniaxialMaterial.h"
 #include "domain/component/Parameter.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 // initialize the class wide variables
@@ -74,11 +75,23 @@ void XC::SingleFPSimple3d::initializeStiffnessMatrix(void)
   {
     // initialize initial stiffness matrix
     kbInit.Zero();
-    kbInit(0,0) = physicalProperties[0]->getInitialTangent();
-    kbInit(1,1) = kbInit(2,2) = this->kInit();
-    kbInit(3,3) = physicalProperties[1]->getInitialTangent();
-    kbInit(4,4) = physicalProperties[2]->getInitialTangent();
-    kbInit(5,5) = physicalProperties[3]->getInitialTangent();
+    const size_t sz= physicalProperties.size();
+    if(sz>3)
+      {
+	kbInit(0,0) = physicalProperties[0]->getInitialTangent();
+	kbInit(1,1) = kbInit(2,2) = this->kInit();
+	kbInit(3,3) = physicalProperties[1]->getInitialTangent();
+	kbInit(4,4) = physicalProperties[2]->getInitialTangent();
+	kbInit(5,5) = physicalProperties[3]->getInitialTangent();
+      }
+    else
+      {
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; four response defining materials were expected instead of: "
+		  << sz << "."
+	          << Color::def << std::endl;
+        exit(-1);
+      }
   }
 
 //! @brief Initialize element state after changint the value of its materials,
@@ -102,6 +115,8 @@ XC::SingleFPSimple3d::SingleFPSimple3d(int tag)
   {
     this->numDOF= 12;
     load.reset(this->numDOF);
+    this->x= Vector({1, 0, 0});
+    this->y= Vector({0, 1, 0});
   }
 
 //! @brief Constructor.
@@ -145,20 +160,20 @@ void XC::SingleFPSimple3d::setDomain(Domain *theDomain)
 	// if differing dof at the ends - print a warning message
 	if(dofNd1 != 6)
 	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; node 1: "
 		      << theNodes[0]->getTag()
 		      << " has incorrect number of DOF (not 6)."
-		      << std::endl;
+		      << Color::def << std::endl;
 	    return;
 	  }
 	if(dofNd2 != 6)
 	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; node 2: "
 		      << theNodes[1]->getTag()
 		      << " has incorrect number of DOF (not 6)."
-		      << std::endl;
+		      << Color::def << std::endl;
 	    return;
 	  }
 
@@ -249,134 +264,156 @@ int XC::SingleFPSimple3d::update(void)
         ubdot(2)/Rz*ub(2),2) + pow(ubdot(1),2) + pow(ubdot(2),2));
     
     // 1) get axial force and stiffness in basic x-direction
-    const double ub0Old = physicalProperties[0]->getStrain();
-    if (inclVertDisp == 0)
+    const size_t physicalPropertiesSize= this->physicalProperties.size();
+    if(physicalPropertiesSize>0)
       {
-        physicalProperties[0]->setTrialStrain(ub(0), ubdot(0));
-      }
-    else
-      {
-        const double ubVert = Reff - sqrt(pow(Reff,2) - pow(ub(1),2) - pow(ub(2),2));
-        physicalProperties[0]->setTrialStrain(ub(0)-ubVert, ubdot(0));
-      }
-    qb(0) = physicalProperties[0]->getStress();
-    kb(0,0) = physicalProperties[0]->getTangent();
-    
-    // check for uplift
-    if (qb(0) >= 0.0)
-      {
-        // update plastic displacements
-        ubPlastic(0) = ub(1);
-        ubPlastic(1) = ub(2);
-        // set basic forces
-        qb.Zero();
-        // set tangent stiffnesses
-        kb = kbInit;
-        if (qb(0) > 0.0)
+	const double ub0Old = physicalProperties[0]->getStrain();
+	if (inclVertDisp == 0)
 	  {
-            physicalProperties[0]->setTrialStrain(ub0Old, 0.0);
-            kb = kFactUplift*kbInit;  // kb = DBL_EPSILON*kbInit;
-            //opserr << "WARNING: SingleFPSimple3d::update() - element: "
-            //    << this->getTag() << " - uplift encountered, scaling "
-            //    << "stiffness matrix by: " << kFactUplift << endln;
+	    physicalProperties[0]->setTrialStrain(ub(0), ubdot(0));
 	  }
-        return 0;
-      }
-    
-    // 2) calculate shear forces and stiffnesses in basic y- and z-direction
-    int iter = 0;
-    Vector qbOld(2);
-    FrictionModel *theFrnMdl= this->frictionModels[0];
-    do  {
-        // save old shear forces
-        iter++;
-        qbOld(0) = qb(1);
-        qbOld(1) = qb(2);
-        
-        // get normal and friction (yield) forces
-        double N = -qb(0) + qb(1)/Ry*ub(1) + qb(2)/Rz*ub(2)
-            - qb(1)*ul(5) + qb(2)*ul(4);
-        N = N > 0.0 ? N : 0.0;  // can not be negative
-        theFrnMdl->setTrial(N, ubdotAbs);
-        const double qYield = (theFrnMdl->getFrictionForce());
-        
-        // get stiffnesses of elastic components
-        const double k2y = N/Ry;
-        const double k2z = N/Rz;
-        
-        // get initial stiffnesses of hysteretic component
-        const double k0y = this->kInit() - k2y;
-        const double k0z = this->kInit() - k2z;
-        
-        // get trial shear forces of hysteretic component
-        Vector qTrial(2);
-        qTrial(0) = k0y*(ub(1) - ubPlasticC(0));
-        qTrial(1) = k0z*(ub(2) - ubPlasticC(1));
-        
-        // compute yield criterion of hysteretic component
-        const double qTrialNorm = qTrial.Norm();
-        const double Y = qTrialNorm - qYield;
-        
-        // elastic step -> no updates required
-        if (Y <= 0.0)
+	else
 	  {
-            // set shear forces
-            qb(1) = qTrial(0) + k2y*ub(1) - N*ul(5);
-            qb(2) = qTrial(1) + k2z*ub(2) + N*ul(4);
-            // set tangent stiffnesses
-            kb(1,1) = kb(2,2) = this->kInit();
-            kb(1,2) = kb(2,1) = 0.0;
+	    const double ubVert = Reff - sqrt(pow(Reff,2) - pow(ub(1),2) - pow(ub(2),2));
+	    physicalProperties[0]->setTrialStrain(ub(0)-ubVert, ubdot(0));
 	  }
-        // plastic step -> return mapping
-        else
-	  {
-            // compute consistency parameters
-            const double dGammaY = Y/k0y;
-            const double dGammaZ = Y/k0z;
-            // update plastic displacements
-            ubPlastic(0) = ubPlasticC(0) + dGammaY*qTrial(0)/qTrialNorm;
-            ubPlastic(1) = ubPlasticC(1) + dGammaZ*qTrial(1)/qTrialNorm;
-            // set shear forces
-            qb(1) = qYield*qTrial(0)/qTrialNorm + k2y*ub(1) - N*ul(5);
-            qb(2) = qYield*qTrial(1)/qTrialNorm + k2z*ub(2) + N*ul(4);
-            // set tangent stiffnesses
-            const double D = pow(qTrialNorm,3);
-            kb(1,1) =  qYield*k0y*qTrial(1)*qTrial(1)/D + k2y;
-            kb(1,2) = -qYield*k0z*qTrial(1)*qTrial(0)/D;
-            kb(2,1) = -qYield*k0y*qTrial(0)*qTrial(1)/D;
-            kb(2,2) =  qYield*k0z*qTrial(0)*qTrial(0)/D + k2z;
-	  }      
-    } while ((sqrt(pow(qb(1)-qbOld(0),2)+pow(qb(2)-qbOld(1),2)) >= tol) && (iter <= maxIter));
-    
-    // issue warning if iteration did not converge
-    if (iter >= maxIter)
-      {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING: did not find the shear force after "
-		  << iter << " iterations and norm: "
-		  << sqrt(pow(qb(1)-qbOld(0),2)+pow(qb(2)-qbOld(1),2))
-		  << std::endl;
-        return -1;
-      }
-    
-    // 3) get moment and stiffness in basic x-direction
-    physicalProperties[1]->setTrialStrain(ub(3),ubdot(3));
-    qb(3) = physicalProperties[1]->getStress();
-    kb(3,3) = physicalProperties[1]->getTangent();
-    
-    // 4) get moment and stiffness in basic y-direction
-    physicalProperties[2]->setTrialStrain(ub(4),ubdot(4));
-    qb(4) = physicalProperties[2]->getStress();
-    kb(4,4) = physicalProperties[2]->getTangent();
-    
-    // 5) get moment and stiffness in basic z-direction
-    physicalProperties[3]->setTrialStrain(ub(5),ubdot(5));
-    qb(5) = physicalProperties[3]->getStress();
-    kb(5,5) = physicalProperties[3]->getTangent();
-    
-    return 0;
-}
+	qb(0) = physicalProperties[0]->getStress();
+	kb(0,0) = physicalProperties[0]->getTangent();
 
+	// check for uplift
+	if (qb(0) >= 0.0)
+	  {
+	    // update plastic displacements
+	    ubPlastic(0) = ub(1);
+	    ubPlastic(1) = ub(2);
+	    // set basic forces
+	    qb.Zero();
+	    // set tangent stiffnesses
+	    kb = kbInit;
+	    if (qb(0) > 0.0)
+	      {
+		physicalProperties[0]->setTrialStrain(ub0Old, 0.0);
+		kb = kFactUplift*kbInit;  // kb = DBL_EPSILON*kbInit;
+		//opserr << "WARNING: SingleFPSimple3d::update() - element: "
+		//    << this->getTag() << " - uplift encountered, scaling "
+		//    << "stiffness matrix by: " << kFactUplift << endln;
+	      }
+	    return 0;
+	  }
+      }
+    // 2) calculate shear forces and stiffnesses in basic y- and z-direction
+    const size_t frictionModelsSize= this->frictionModels.size();
+    if(frictionModelsSize>0)
+      {
+	int iter = 0;
+	Vector qbOld(2);
+	FrictionModel *theFrnMdl= this->frictionModels[0];
+	do  {
+	    // save old shear forces
+	    iter++;
+	    qbOld(0) = qb(1);
+	    qbOld(1) = qb(2);
+
+	    // get normal and friction (yield) forces
+	    double N = -qb(0) + qb(1)/Ry*ub(1) + qb(2)/Rz*ub(2)
+		- qb(1)*ul(5) + qb(2)*ul(4);
+	    N = N > 0.0 ? N : 0.0;  // can not be negative
+	    theFrnMdl->setTrial(N, ubdotAbs);
+	    const double qYield = (theFrnMdl->getFrictionForce());
+
+	    // get stiffnesses of elastic components
+	    const double k2y = N/Ry;
+	    const double k2z = N/Rz;
+
+	    // get initial stiffnesses of hysteretic component
+	    const double k0y = this->kInit() - k2y;
+	    const double k0z = this->kInit() - k2z;
+
+	    // get trial shear forces of hysteretic component
+	    Vector qTrial(2);
+	    qTrial(0) = k0y*(ub(1) - ubPlasticC(0));
+	    qTrial(1) = k0z*(ub(2) - ubPlasticC(1));
+
+	    // compute yield criterion of hysteretic component
+	    const double qTrialNorm = qTrial.Norm();
+	    const double Y = qTrialNorm - qYield;
+
+	    // elastic step -> no updates required
+	    if (Y <= 0.0)
+	      {
+		// set shear forces
+		qb(1) = qTrial(0) + k2y*ub(1) - N*ul(5);
+		qb(2) = qTrial(1) + k2z*ub(2) + N*ul(4);
+		// set tangent stiffnesses
+		kb(1,1) = kb(2,2) = this->kInit();
+		kb(1,2) = kb(2,1) = 0.0;
+	      }
+	    // plastic step -> return mapping
+	    else
+	      {
+		// compute consistency parameters
+		const double dGammaY = Y/k0y;
+		const double dGammaZ = Y/k0z;
+		// update plastic displacements
+		ubPlastic(0) = ubPlasticC(0) + dGammaY*qTrial(0)/qTrialNorm;
+		ubPlastic(1) = ubPlasticC(1) + dGammaZ*qTrial(1)/qTrialNorm;
+		// set shear forces
+		qb(1) = qYield*qTrial(0)/qTrialNorm + k2y*ub(1) - N*ul(5);
+		qb(2) = qYield*qTrial(1)/qTrialNorm + k2z*ub(2) + N*ul(4);
+		// set tangent stiffnesses
+		const double D = pow(qTrialNorm,3);
+		kb(1,1) =  qYield*k0y*qTrial(1)*qTrial(1)/D + k2y;
+		kb(1,2) = -qYield*k0z*qTrial(1)*qTrial(0)/D;
+		kb(2,1) = -qYield*k0y*qTrial(0)*qTrial(1)/D;
+		kb(2,2) =  qYield*k0z*qTrial(0)*qTrial(0)/D + k2z;
+	      }      
+	} while ((sqrt(pow(qb(1)-qbOld(0),2)+pow(qb(2)-qbOld(1),2)) >= tol) && (iter <= maxIter));
+
+	// issue warning if iteration did not converge
+	if (iter >= maxIter)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING: did not find the shear force after "
+		      << iter << " iterations and norm: "
+		      << sqrt(pow(qb(1)-qbOld(0),2)+pow(qb(2)-qbOld(1),2))
+		      << Color::def << std::endl;
+	    return -1;
+	  }
+      }    
+    // 3) get moment and stiffness in basic x-direction
+    if(physicalPropertiesSize>1)
+      {
+	physicalProperties[1]->setTrialStrain(ub(3),ubdot(3));
+	qb(3) = physicalProperties[1]->getStress();
+	kb(3,3) = physicalProperties[1]->getTangent();
+      }
+    // 4) get moment and stiffness in basic y-direction
+    if(physicalPropertiesSize>2)
+      {
+	physicalProperties[2]->setTrialStrain(ub(4),ubdot(4));
+	qb(4) = physicalProperties[2]->getStress();
+	kb(4,4) = physicalProperties[2]->getTangent();
+      }
+    // 5) get moment and stiffness in basic z-direction
+    if(physicalPropertiesSize>3)
+      {
+	physicalProperties[3]->setTrialStrain(ub(5),ubdot(5));
+	qb(5) = physicalProperties[3]->getStress();
+	kb(5,5) = physicalProperties[3]->getTangent();
+      }
+    return 0;
+  }
+
+//! @brief Initialize stifness matrix and setup parameter values after
+//! any change in the input parameters.
+int XC::SingleFPSimple3d::setup()
+  {
+    this->initialize();
+    load.reset(this->numDOF);
+    this->setUp();
+    const int retval= this->update();
+    return retval;
+  }
 
 const XC::Matrix& XC::SingleFPSimple3d::getTangentStiff() const
   {
@@ -485,11 +522,10 @@ const XC::Matrix& XC::SingleFPSimple3d::getMass() const
 
 int XC::SingleFPSimple3d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {  
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  <<"; load type unknown for element: "
-		<< this->getTag() << std::endl;
-
-	return -1;
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      <<"; load type unknown for element: "
+	      << Color::def << this->getTag() << std::endl;
+    return -1;
   }
 
 
@@ -507,8 +543,9 @@ int XC::SingleFPSimple3d::addInertiaLoadToUnbalance(const Vector &accel)
 	
     if (6 != Raccel1.Size() || 6 != Raccel2.Size())
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; matrix and vector sizes are incompatible\n";
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; matrix and vector sizes are incompatible."
+		  << Color::def << std::endl;
 	return -1;
       }
 
@@ -623,8 +660,9 @@ int XC::SingleFPSimple3d::sendSelf(Communicator &comm)
     const int dataTag= getDbTag();
     res += comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send ID data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send ID data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -635,8 +673,9 @@ int XC::SingleFPSimple3d::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to receive ID data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ID data."
+	        << Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;
@@ -847,29 +886,27 @@ void XC::SingleFPSimple3d::setUp()
     const Vector xp = end2Crd - end1Crd;
     this->L= xp.Norm();
     
-    if(L > DBL_EPSILON)
-      {
-	if(x.Size() == 0)
-	  {
-	    x.resize(3);
-	    x = xp;
-	  }
-	else if(this->onP0)
-	  {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; WARNING - " 
-                      << "element: " << this->getTag() << std::endl
-                      << "ignoring nodes and using specified "
-                      << "local x vector to determine orientation\n";
-	  }
-      }
     // check that vectors for orientation are of correct size
     if (x.Size() != 3 || y.Size() != 3)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; element: " << this->getTag() << std::endl
-                  << "incorrect dimension of orientation vectors\n";
+		  << "incorrect dimension of orientation vectors."
+	          << Color::def << std::endl;
         exit(-1);
+      }
+    if(L > DBL_EPSILON)
+      {
+	if(onP0) // keep the already defined orientation.
+	  {
+            std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING element: " << this->getTag() << std::endl
+		      << "ignoring nodes and using specified "
+		      << "local x vector to determine orientation."
+	              << Color::def << std::endl;
+	  }
+        else // compute the orientation from the positions of the nodes.
+	  { this->x= xp; }
       }
     
     // establish orientation of element for the transformation matrix

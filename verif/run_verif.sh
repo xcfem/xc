@@ -667,11 +667,39 @@ echo "$BLEU" "  Misc elements tests." "$NORMAL"
 python tests/elements/spring_test_01.py
 python tests/elements/spring_test_02.py
 echo "$BLEU" "  Bridge bearings tests." "$NORMAL"
-python tests/elements/bridge_bearings/friction_bearings/friction_models/test_coulomb_01.py
-python tests/elements/bridge_bearings/friction_bearings/friction_models/test_normal_force_dependent_01.py
-python tests/elements/bridge_bearings/friction_bearings/friction_models/test_vel_dependent_01.py
-python tests/elements/bridge_bearings/friction_bearings/friction_models/test_vel_dep_multilinear_01.py
-python tests/elements/bridge_bearings/friction_bearings/friction_models/test_vel_pressure_dependent_01.py
+echo "$BLEU" "    Friction models." "$NORMAL"
+python tests/elements/bridge_bearings/friction_models/test_coulomb_01.py
+python tests/elements/bridge_bearings/friction_models/test_normal_force_dependent_01.py
+python tests/elements/bridge_bearings/friction_models/test_vel_dependent_01.py
+python tests/elements/bridge_bearings/friction_models/test_vel_dep_multilinear_01.py
+python tests/elements/bridge_bearings/friction_models/test_vel_pressure_dependent_01.py
+echo "$BLEU" "    Friction slider bearings." "$NORMAL"
+python tests/elements/bridge_bearings/friction_slider_bearings/test_flat_slider_simple_2d_01.py
+python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_2d_0.py
+python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_2d_1.py
+python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_2d_2.py
+python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_2d_3.py
+python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_2d_4.py
+python tests/elements/bridge_bearings/friction_slider_bearings/test_flat_slider_simple_3d_01.py
+python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_3d_0.py
+python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_3d_1.py
+python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_3d_2.py
+python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_3d_3.py
+python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_3d_4.py
+echo "$BLEU" "    Friction pendulum bearings." "$NORMAL"
+python tests/elements/bridge_bearings/friction_pendulum_bearings/test_friction_pendulum_2d_01.py
+python tests/elements/bridge_bearings/friction_pendulum_bearings/test_single_fp_bearing_2d_0.py
+python tests/elements/bridge_bearings/friction_pendulum_bearings/test_single_fp_bearing_2d_1.py
+python tests/elements/bridge_bearings/friction_pendulum_bearings/test_single_fp_bearing_2d_2.py
+python tests/elements/bridge_bearings/friction_pendulum_bearings/test_single_fp_bearing_2d_3.py
+python tests/elements/bridge_bearings/friction_pendulum_bearings/test_single_fp_bearing_2d_4.py
+python tests/elements/bridge_bearings/friction_pendulum_bearings/test_friction_pendulum_3d_01.py
+python tests/elements/bridge_bearings/friction_pendulum_bearings/test_single_fp_bearing_3d_0.py
+python tests/elements/bridge_bearings/friction_pendulum_bearings/test_single_fp_bearing_3d_1.py
+python tests/elements/bridge_bearings/friction_pendulum_bearings/test_single_fp_bearing_3d_2.py
+python tests/elements/bridge_bearings/friction_pendulum_bearings/test_single_fp_bearing_3d_3.py
+python tests/elements/bridge_bearings/friction_pendulum_bearings/test_single_fp_bearing_3d_4.py
+
 echo "$BLEU" "  Element birth and death tests." "$NORMAL"
 python tests/elements/birth_and_death/remove_node_test_01.py
 python tests/elements/birth_and_death/remove_element_test_01.py
@@ -717,10 +745,11 @@ echo "$BLEU" "  Strut-and-tie tests." "$NORMAL"
 python tests/sample_problems/composite_structures/test_composite_structure_01.py
 
 echo "$BLEU" "Solution tests." "$NORMAL"
-python tests/solution/superlu_solver_test_01.py
-python tests/solution/superlu_solver_test_02.py
-python tests/solution/umf_solver_test_01.py
-python tests/solution/mumps_solver_test_01.py
+echo "$BLEU" "  Systems of equations tests." "$NORMAL"
+python tests/solution/system_of_eqn/superlu_solver_test_01.py
+python tests/solution/system_of_eqn/superlu_solver_test_02.py
+python tests/solution/system_of_eqn/umf_solver_test_01.py
+python tests/solution/system_of_eqn/mumps_solver_test_01.py
 echo "$BLEU" "  Ill conditioning tests." "$NORMAL"
 python tests/solution/ill_conditioning/ill_conditioning_01.py
 python tests/solution/ill_conditioning/get_floating_nodes_01.py

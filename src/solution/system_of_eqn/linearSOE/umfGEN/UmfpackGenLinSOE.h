@@ -81,6 +81,7 @@ class UmfpackGenLinSOE: public LinearSOEData
     std::vector<double> Ax;
     std::vector<int> Ap, Ai;
   protected:
+    bool factored;
     bool setSolver(LinearSOESolver *);
 
     friend class SolutionStrategy;

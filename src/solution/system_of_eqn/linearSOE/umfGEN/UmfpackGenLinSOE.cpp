@@ -72,10 +72,11 @@
 
 
 XC::UmfpackGenLinSOE::UmfpackGenLinSOE(SolutionStrategy *owr)
-  :LinearSOEData(owr,LinSOE_TAGS_UmfpackGenLinSOE), Ax(), Ap(), Ai()
+  :LinearSOEData(owr,LinSOE_TAGS_UmfpackGenLinSOE),
+   Ax(), Ap(), Ai(), factored(false)
   {}
 
-XC::SystemOfEqn *XC::UmfpackGenLinSOE::UmfpackGenLinSOE::getCopy(void) const
+XC::SystemOfEqn *XC::UmfpackGenLinSOE::getCopy(void) const
   { return new UmfpackGenLinSOE(*this); }
 
 bool XC::UmfpackGenLinSOE::setSolver(LinearSOESolver *newSolver)
@@ -170,6 +171,7 @@ int XC::UmfpackGenLinSOE::setSize(Graph &theGraph)
       }
 
     // invoke setSize() on the Solver
+    factored= false;
     LinearSOESolver *the_Solver = this->getSolver();
     int solverOK = the_Solver->setSize();
     if (solverOK < 0)
@@ -254,6 +256,7 @@ int XC::UmfpackGenLinSOE::addA(const Matrix &m, const ID &id, double fact)
 void XC::UmfpackGenLinSOE::zeroA(void)
   {
     Ax.assign(Ax.size(),0.0);
+    this->factored= false;
   }
 
 int XC::UmfpackGenLinSOE::sendSelf(Communicator &comm)

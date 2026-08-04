@@ -67,6 +67,7 @@
 #include "utility/tagged/TaggedObject.h"
 
 namespace XC {
+class FrictionModelHandler;
 class Response;
   
 //! @ingroup FrictionElementGrp
@@ -92,6 +93,11 @@ class FrictionModel: public TaggedObject, public MovableObject
     // constructor
     FrictionModel(int tag, int classTag);
 
+    const FrictionModelHandler *getFrictionModelHandler(void) const;
+    FrictionModelHandler *getFrictionModelHandler(void);
+    std::string getName(void) const;
+    const FrictionModel *getFrictionModelByName(const std::string &) const;    
+
     inline double getTrialN() const
       { return this->trialN; }
     void setTrialN(const double &d)
@@ -105,8 +111,8 @@ class FrictionModel: public TaggedObject, public MovableObject
     virtual int setTrial(double normalForce, double velocity = 0.0) = 0;
     virtual double getNormalForce(void) const;
     virtual double getVelocity(void) const;
-    virtual double getFrictionForce(void) const= 0;
-    virtual double getFrictionCoeff(void) const= 0;
+    virtual double getFrictionForce(void) const;
+    virtual double getFrictionCoeff(void) const;
     virtual double getDFFrcDNFrc(void) const= 0;
     virtual double getDFFrcDVel() const= 0;
     

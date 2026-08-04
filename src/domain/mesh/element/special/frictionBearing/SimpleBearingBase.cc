@@ -82,13 +82,13 @@ XC::SimpleBearingBase::SimpleBearingBase(int tag, int classTag, int Nd1, int Nd2
 void XC::SimpleBearingBase::setInitialStiffnessOfHystereticComponent(const double &d)
   { this->k0= d;}
 //! @brief Get initial stiffness of hysteretic component.
-const double &XC::SimpleBearingBase::getInitialStiffnessOfHystereticComponent(void) const
+double XC::SimpleBearingBase::getInitialStiffnessOfHystereticComponent(void) const
   { return this->k0; }
 //! @brief Set shear distance from node I as fraction of length.
 void XC::SimpleBearingBase::setShearDistanceFromNodeIAsFractionOfLength(const double &d)
   { this->shearDistI= d;}
 //! @brief Get shear distance from node I as fraction of length.
-const double &XC::SimpleBearingBase::getShearDistanceFromNodeIAsFractionOfLength(void) const
+double XC::SimpleBearingBase::getShearDistanceFromNodeIAsFractionOfLength(void) const
   {return this->shearDistI;}
 //! @brief Set flag to add Rayleigh damping.
 void XC::SimpleBearingBase::setAddRayleighDampingFlag(const int &i)
@@ -108,7 +108,7 @@ void XC::SimpleBearingBase::setStiffnessFactorWhenUplift(const double &d)
   { this->kFactUplift= d; }
 
 //! @brief Get the stiffness factor when uplift is encountered.
-const double &XC::SimpleBearingBase::getStiffnessFactorWhenUplift(void) const
+double XC::SimpleBearingBase::getStiffnessFactorWhenUplift(void) const
   { return this->kFactUplift; }
 
 //! @brief Send members through the communicator argument.

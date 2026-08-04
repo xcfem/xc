@@ -23,19 +23,24 @@
 
 //class_<XC::FrictionResponse, bases<XC::Response>, boost::noncopyable >("FrictionResponse", no_init);
 
-class_<XC::FrictionModel , bases<XC::TaggedObject>, boost::noncopyable >("FrictionModel", no_init)
+class_<XC::FrictionModel , XC::FrictionModel *, bases<XC::TaggedObject>, boost::noncopyable >("FrictionModel", no_init)
+  .def("getName",&XC::FrictionModel::getName,"Return the name of the friction model.")
+  .add_property("name",&XC::FrictionModel::getName,"Return the name of the friction model.")
+
   .def("getTrialN", &XC::FrictionModel::getTrialN, "Get trial normal contact force.")
   .def("setTrialN", &XC::FrictionModel::setTrialN, "Set trial normal contact force.")
   .add_property("trialN", &XC::FrictionModel::getTrialN, &XC::FrictionModel::setTrialN, "Get/set trial normal contact force.")
+
   .def("getTrialVel", &XC::FrictionModel::getTrialVel, "Get trial velocity.")
   .def("setTrialVel", &XC::FrictionModel::setTrialVel, "Set trial velocity.")
   .add_property("trialVel", &XC::FrictionModel::getTrialVel, &XC::FrictionModel::setTrialVel, "Get/set trial velocity.")
+  .add_property("mu", &XC::FrictionModel::getFrictionCoeff, "Get the value of the friction coefficient.")
+  .add_property("frictionForce", &XC::FrictionModel::getFrictionForce, "Get the value of the friction force.")
   ;
 
 class_<XC::Coulomb, bases<XC::FrictionModel>, boost::noncopyable >("Coulomb", no_init)
   .def("getMu", &XC::Coulomb::getMu, "Get friction coefficient.")
   .def("setMu", &XC::Coulomb::setMu, "Set friction coefficient.")
-  .add_property("mu", &XC::Coulomb::getMu, &XC::Coulomb::setMu, "Get/set friction coefficient.")
   ;
 
 class_<XC::VelDependent, bases<XC::Coulomb>, boost::noncopyable >("VelDependent", no_init)

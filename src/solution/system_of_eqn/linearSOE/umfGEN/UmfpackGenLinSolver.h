@@ -78,8 +78,10 @@ class UmfpackGenLinSolver: public LinearSOESolver
   {
   private:
     void *Symbolic;
+    void *Numeric;
     double Control[UMFPACK_CONTROL], Info[UMFPACK_INFO];
     void free_symbolic(void);
+    void free_numeric(void);
 
   protected:    
     UmfpackGenLinSOE *theSOE;
