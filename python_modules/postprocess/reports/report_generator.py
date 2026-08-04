@@ -36,6 +36,22 @@ class ReportGenerator(oh.OutputHandler):
         cfg= self.getEnvConfig()
         return cfg.projectDirTree.getReportFile(limitStateLabel)
 
+    def getGraphicOutputPath(self, limitStateLabel):
+        ''' Return the path where the graphic files will be stored.
+
+        :param limitStateLabel: label that identifies the limit state.
+        '''
+        cfg= self.getEnvConfig()
+        return cfg.projectDirTree.getReportGrPath(limitStateLabel)
+
+    def getGraphicOutputRelativePath(self, limitStateLabel):
+        ''' Return the relative path where the graphic files will be stored.
+
+        :param limitStateLabel: label that identifies the limit state.
+        '''
+        cfg= self.getEnvConfig()
+        return cfg.projectDirTree.getReportRltvGrPath(limitStateLabel)
+
     def checksReport(self, limitStateLabel, setsShEl=[], argsShEl=[], pairs_setsBmEl_argsBmEl=[], setsTrussEl=[],argsTrussEl=[],rgMinMax=None, defaultDiagramDirection= 'J',multicolEnv=False):
         '''Create a LaTeX report including the desired graphical results 
         obtained in the verification of a limit state.
@@ -62,9 +78,9 @@ class ReportGenerator(oh.OutputHandler):
         cfg= self.getEnvConfig()
         texReportFileName= self.getReportFileName(limitStateLabel= limitStateLabel)
         report= cfg.projectDirTree.open(fileName= texReportFileName, mode= 'w') # report latex file
-        fullPath= cfg.projectDirTree.getReportGrPath(limitStateLabel)
+        fullPath= self.getGraphicOutputPath(limitStateLabel)
         cfg.makedirs(fullPath) # crate the directory if needed.
-        rltvPath= cfg.projectDirTree.getReportRltvGrPath(limitStateLabel)
+        rltvPath= self.getGraphicOutputRelativePath(limitStateLabel)
         for st in setsShEl:
             for arg in argsShEl:
                 for idSection in [1, 2]:
