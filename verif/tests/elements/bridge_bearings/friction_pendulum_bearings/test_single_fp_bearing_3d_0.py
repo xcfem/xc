@@ -20,7 +20,6 @@ from solution import predefined_solutions
 from model import friction_models as fm
 from materials import friction_bearings as fb
 from actions.quake import ground_motion_utils as gmu
-import tabulate
 
 # Problem type
 # Model definition
@@ -139,6 +138,7 @@ for lambdA in eigenvalues:
     freq= 1/period
     eigenvaluesTable.append(["{:.3e}".format(lambdA), "{:.4f}".format(omega), "{:.4f}".format(period), "{:.4f}".format(freq)])
 if(not silent):
+    import tabulate
     print(tabulate.tabulate(eigenvaluesTable))
 
 # 11. Define dynamic loads.

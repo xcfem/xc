@@ -21,7 +21,6 @@ from model import friction_models as fm
 from materials import friction_bearings as fb
 from actions.quake import ground_motion_utils as gmu
 from misc_utils import log_messages as lmsg
-import tabulate
 
 # Problem type
 # Model definition
@@ -147,6 +146,7 @@ for lambdA in eigenvalues:
     freq= 1/period
     eigenvaluesTable.append(["{:.3e}".format(lambdA), "{:.4f}".format(omega), "{:.4f}".format(period), "{:.4f}".format(freq)])
 if(not silent):
+    import tabulate
     print(tabulate.tabulate(eigenvaluesTable))
 omega1= math.sqrt(eigenvalues[0])
 
