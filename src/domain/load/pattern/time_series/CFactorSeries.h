@@ -54,6 +54,10 @@ class CFactorSeries: public TimeSeries
     //! @brief Sets factor value.
     void setFactor(const double &d)
       { cFactor= d; }
+    //! @brief Return the value of the factor that multiplies
+    //! the series values.
+    inline double get_c_factor() const
+      { return cFactor; }
     
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);
