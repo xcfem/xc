@@ -793,11 +793,12 @@ class PredefinedSpace(object):
         :param vel0: initial velocity ((optional, default= 0.0).
         '''
         loadPatterns= self.getLoadPatterns()
+        timeSeries= self.newTimeSeries(name= cod_ts, tsType= 'path_ts', setCurrent= True)
         retval= loadPatterns.newLoadPattern("uniform_excitation", name)
         retval.dof= dof # translation along the global X axis.
         motionRecord= retval.motionRecord
         hist= motionRecord.history
-        hist.accel= loadPatterns.newTimeSeries("path_ts", cod_ts)
+        hist.accel= timeSeries
         hist.accel.setFactor(factor)
         hist.accel.path= xc.Vector(path)
         hist.accel.setTimeIncr(dt) #define time step of the acceleration data.
