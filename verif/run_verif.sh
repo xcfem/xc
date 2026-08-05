@@ -2145,6 +2145,7 @@ python tests/postprocess/limit_state_checking/serviceability_limit_states/test_i
 echo "$BLEU" "    strut-and-tie limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/strut_and_tie/strut_and_tie_stress_checking_01.py
 python tests/postprocess/limit_state_checking/strut_and_tie/strut_and_tie_stress_checking_02.py
+python tests/postprocess/limit_state_checking/strut_and_tie/strut_and_tie_stress_checking_03.py
 echo "$BLEU" "    generic limit state tools." "$NORMAL"
 python tests/postprocess/limit_state_checking/generic/test_select_critical_combs.py 
 python tests/postprocess/limit_state_checking/generic/test_internal_forces_envelope_truss.py 
@@ -2209,7 +2210,8 @@ python tests/postprocess/vtk/display_limit_state_results/ec2/test_display_shear_
 echo "$BLEU" "      Eurocode 3." "$NORMAL"
 python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_bending_uls_cf_on_beams_01.py
 python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_bending_uls_cf_on_beams_02.py
-python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_normal_stresses_control_vars.py
+python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_normal_stresses_control_vars_01.py
+python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_normal_stresses_control_vars_02.py
 python tests/postprocess/vtk/display_limit_state_results/ec3/test_display_shear_control_vars.py
 
 echo "$BLEU" "      Generic." "$NORMAL"
