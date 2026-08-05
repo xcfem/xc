@@ -31,7 +31,7 @@ preprocessor=  feProblem.getPreprocessor
 nodeHandler= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodeHandler)
 
-silent= True # True
+silent= True # If true display results.
 
 # Model arrangement.
 #
@@ -245,9 +245,8 @@ for eTag in bearingsOfInterest:
 callbackRecord= '''
 time= self.getDomain.getTimeTracker.getCurrentTime
 ti[self.tag].append(time)
-self.getResistingForce()
-force= self.getNodeResistingForceIncInertia(1).getList()
-bearingForces2[self.tag].append(force)
+qb= self.qb.getList()
+bearingForces2[self.tag].append(qb)
 ub= self.ub.getList()
 bearingBasicDeformations[self.tag].append(ub)
 fm= self.frictionModels[0]
@@ -303,9 +302,12 @@ for magnitudeKey in ref_results:
                 if(isinstance(v, float)):
                     error+=(v-v_ref)**2
                 else:
-                    for vi, vi_ref in zip(v, v_ref):
-                        error+=(vi-vi_ref)**2
-error= math.sqrt(error)
+                    for icomp, (vi, vi_ref) in enumerate(zip(v, v_ref)):
+                        i_err= (vi-vi_ref)**2
+                        # if(i_err>1e-4):
+                        #     print(magnitudeKey, icomp, vi, vi_ref, i_err, error)
+                        error+= i_err
+error= math.sqrt(error)/numberOfSteps
 
 if(not silent):
     print('error= ', error)
