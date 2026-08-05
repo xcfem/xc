@@ -235,9 +235,9 @@ class LimitStateControllerBase(object):
         methodName= sys._getframe(0).f_code.co_name
         lmsg.error(className+'.'+methodName+': limit state check not implemented.')
 
-class LimitStateControllerBase2Sections(LimitStateControllerBase):
+class LimitStateControllerBaseNSections(LimitStateControllerBase):
     '''
-    Limit state controller 2 sections for each element..
+    Limit state controller N sections for each element..
     '''
     def __init__(self,limitStateLabel, fakeSection= True, elementSections= ['Sect1', 'Sect2'], solutionProcedureType= defaultStaticLinearSolutionProcedure):
         '''
@@ -252,7 +252,7 @@ class LimitStateControllerBase2Sections(LimitStateControllerBase):
         :param solutionProcedureType: type of the solution procedure to use
                                       when computing load combination results.
         '''
-        super(LimitStateControllerBase2Sections,self).__init__(limitStateLabel= limitStateLabel, fakeSection= fakeSection, solutionProcedureType= solutionProcedureType)
+        super(LimitStateControllerBaseNSections,self).__init__(limitStateLabel= limitStateLabel, fakeSection= fakeSection, solutionProcedureType= solutionProcedureType)
         self.elementSections= elementSections
 
     def getSectionLabel(self, idSection):

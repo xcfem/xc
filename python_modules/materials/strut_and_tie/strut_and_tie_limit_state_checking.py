@@ -25,7 +25,7 @@ from misc_utils import log_messages as lmsg
 #      \__\___/_||_\__|_| \___/_|_\___|_| /__/   
 # Limit state controllers.
 
-class StrutAndTieStressController(lscb.LimitStateControllerBase):
+class StrutAndTieStressController(lscb.LimitStateControllerBaseNSections):
     '''Object that controls normal stresses limit state on strut and tie
        models.
 
@@ -44,7 +44,7 @@ class StrutAndTieStressController(lscb.LimitStateControllerBase):
         :param solutionProcedureType: type of the solution procedure to use
                                       when computing load combination results.
         '''
-        super(StrutAndTieStressController,self).__init__(limitStateLabel= limitStateLabel, solutionProcedureType= solutionProcedureType)
+        super(StrutAndTieStressController,self).__init__(limitStateLabel= limitStateLabel, elementSections= ['Sect0'], solutionProcedureType= solutionProcedureType)
         self.concrete= concrete
         self.steel= steel
 
@@ -126,10 +126,13 @@ class StrutAndTieStressController(lscb.LimitStateControllerBase):
         for lf in elementInternalForces:
             # Compute efficiency.
             CFtmp, typo, inverted= self.computeEfficiency(elem, elementInternalForces= lf)
-            label= self.limitStateLabel
+            idSection= 0 # Internal forces are constant in Truss elements. so
+                         # only one section is considered.
+            sectionLabel= self.getSectionLabel(idSection)
+            label= self.limitStateLabel+sectionLabel
             # Update efficiency.
             if(CFtmp>elem.getProp(label).CF):
-                elem.setProp(label, self.ControlVars(combName= lf.idComb, CF= CFtmp, N= lf.N, typo= typo, inverted= inverted))
+                elem.setProp(label, self.ControlVars(idSection= sectionLabel+'s', combName= lf.idComb, CF= CFtmp, N= lf.N, typo= typo, inverted= inverted))
           
 class StrutAndTieStressesLimitStateData(lsd.ULS_LimitStateData):
     ''' Strut and tie normal stresses data for limit state checking.'''
@@ -189,7 +192,7 @@ class StrutAndTieStressesLimitStateData(lsd.ULS_LimitStateData):
         controller= self.getController(concrete= concrete, steel= steel)
         controller._classify_strut_and_tie_elements_(setCalc.elements)
         outputCfg= lsd.VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
-        return self.runChecking(outputCfg= outputCfg, sections= [''])
+        return self.runChecking(outputCfg= outputCfg, sections= ['Sect0'])
     
 # StrutAndTie limit state.
 strutAndTieLimitState= StrutAndTieStressesLimitStateData()

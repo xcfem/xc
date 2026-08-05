@@ -416,7 +416,7 @@ class AISCBiaxialBendingControlVars(cv.SteelShapeBiaxialBendingControlVars):
 #      \__\___/_||_\__|_| \___/_|_\___|_| /__/   
 # Limit state controllers.
     
-class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections):
+class BiaxialBendingNormalStressController(lsc.LimitStateControllerBaseNSections):
     '''Object that controls normal stresses limit state.'''
 
     ControlVars= AISCBiaxialBendingControlVars
@@ -470,7 +470,7 @@ class NormalStressesLimitStateData(lsd.NormalStressesSteelLimitStateData):
     
 normalStressesResistance= NormalStressesLimitStateData()        
 
-class ShearController(lsc.LimitStateControllerBase2Sections):
+class ShearController(lsc.LimitStateControllerBaseNSections):
     '''Object that controls shear limit state.'''
 
     ControlVars= cv.ShearYControlVars

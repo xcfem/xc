@@ -440,7 +440,7 @@ class Member(steel_member_base.BucklingMember):
 #      \__\___/_||_\__|_| \___/_|_\___|_| /__/   
 # Limit state controllers.
    
-class UniaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections):
+class UniaxialBendingNormalStressController(lsc.LimitStateControllerBaseNSections):
     '''Object that controls normal stresses limit state.'''
 
     ControlVars= cv.SteelShapeUniaxialBendingControlVars
@@ -480,7 +480,7 @@ class UniaxialBendingNormalStressController(lsc.LimitStateControllerBase2Section
             errMsg= className+'.'+methodName+"; cross section not defined for element: " + str(elem.tag) + "\n"
             lmsg.error(errMsg)
             
-class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections):
+class BiaxialBendingNormalStressController(lsc.LimitStateControllerBaseNSections):
     '''Object that controls normal stresses limit state.'''
 
     ControlVars= cv.SteelShapeBiaxialBendingControlVars
@@ -538,7 +538,7 @@ class NormalStressesLimitStateData(lsd.NormalStressesSteelLimitStateData):
     
 normalStressesResistance= NormalStressesLimitStateData()
     
-class ShearController(lsc.LimitStateControllerBase2Sections):
+class ShearController(lsc.LimitStateControllerBaseNSections):
     '''Object that controls shear limit state.'''
 
     ControlVars= cv.ShearYControlVars
