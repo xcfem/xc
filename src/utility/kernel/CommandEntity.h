@@ -26,6 +26,7 @@
 #include "EntityWithProperties.h"
 #include "utility/utils/text/text_string.h"
 #include "utility/kernel/StandardOutputWrapper.h"
+#include <unordered_map>
 
 namespace boost
   {
@@ -41,6 +42,11 @@ class CommandEntity: public EntityWithProperties
   {
   private:
     static StandardOutputWrapper standardOutput; //!< Streams para errores y avisos.
+    typedef std::unordered_map<std::string, boost::python::object> compiled_code_map;
+    typedef typename compiled_code_map::iterator compiled_code_iterator;
+    typedef typename compiled_code_map::const_iterator compiled_code_const_iterator;
+    compiled_code_map compiled_code;
+    boost::python::object compile_code_block(const std::string &, const std::string &);
   protected:
     static CommandEntity *entcmd_cast(boost::any &data);
 

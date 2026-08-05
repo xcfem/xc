@@ -36,6 +36,35 @@
 //Variables estáticas de CommandEntity.
 StandardOutputWrapper CommandEntity::standardOutput; //!< Standard output streams.
 
+//! @brief Compile onceboost::python::object, get back a boost::python::object wrapping the code object.
+//! @param code: string containing the code to compile.
+//! @param name: name (or name of the file) identifying the script.
+boost::python::object compile_script(const std::string& code,
+				     const std::string& name = "<script>")
+  {
+    PyObject* co = Py_CompileString(code.c_str(), name.c_str(), Py_file_input);
+    if (!co)
+      { boost::python::throw_error_already_set(); }
+    // handle<> takes ownership of the new reference
+    return boost::python::object(boost::python::handle<>(co));
+  }
+
+//!@ Execute a previously-compiled code object against given globals/locals.
+//!@ param code: compiled code to execute.
+//!@ param globals: global variables available to the code.
+//!@ param globals: local variables available to the code.
+boost::python::object exec_compiled(const boost::python::object& code,
+				    boost::python::object globals,
+				    boost::python::object locals)
+  {
+    PyObject* result= PyEval_EvalCode(code.ptr(), globals.ptr(), locals.ptr());
+    if (!result)
+      {
+        boost::python::throw_error_already_set();
+      }
+    return boost::python::object(boost::python::handle<>(result));
+  }
+
 //! @brief Default constructor.
 CommandEntity::CommandEntity(CommandEntity *owr)
   : EntityWithProperties(owr) {}
@@ -105,6 +134,26 @@ void CommandEntity::setOutputFileName(const std::string &fname)
 void CommandEntity::resetStandardOutput(void)
   { standardOutput.reset(); }
 
+//! @brief Compile once the given code block, get back a boost::python::object
+//! wrapping the code object.
+//! @param block: string containing the code to compile.
+//! @param name: name (or name of the file) identifying the script.
+boost::python::object CommandEntity::compile_code_block(const std::string &block,
+							const std::string& name = "<script>")
+  {
+    boost::python::object retval;
+    compiled_code_const_iterator iter= compiled_code.find(block);
+    if(iter != compiled_code.end())
+      {
+        retval= (iter->second);
+      }
+    else
+      {
+        retval= compile_script(block, name);
+	compiled_code[block]= retval;
+      }
+    return retval;
+  }
 
 //! @brief Return the Python object that results from evaluating the argument.
 boost::python::object CommandEntity::evalPy(boost::python::object dict,const std::string &str)
@@ -120,7 +169,9 @@ boost::python::object CommandEntity::execPy(boost::python::object dict,const std
    {
      boost::python::object main_module = boost::python::import("__main__");
      boost::python::object main_namespace = main_module.attr("__dict__");
-     return boost::python::exec(block.c_str(),main_namespace,dict);
+     boost::python::object code= this->compile_code_block(block, "<script>");
+     //return boost::python::exec(block.c_str(),main_namespace,dict);
+     return exec_compiled(code, main_namespace, dict);
    }
 
 //! @brief Return the Python object that results from executing the code in the file.
