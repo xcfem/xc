@@ -1406,6 +1406,7 @@ echo "$BLEU" "      Rail structure interaction materials." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/track_structure_interaction/test_track_structure_interaction_spring_01.py
 echo "$BLEU" "      Damper materials." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/damper/test_viscous_damper_01.py
+python tests/materials/xc_materials/uniaxial/damper/test_viscous_damper_02.py
 
 #nD Materials
 echo "$BLEU" "      nD materials tests." "$NORMAL"
