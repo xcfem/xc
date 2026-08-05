@@ -25,6 +25,7 @@
 class_<XC::CFactorSeries, bases<XC::TimeSeries>, boost::noncopyable >("CFactorSeries", no_init)
   .def("getFactor",&XC::CFactorSeries::getFactor,"getFactor(time): return load factor value at specified time.")
   .def("setFactor",&XC::CFactorSeries::setFactor,"setFactor(factor): sets factor value.")
+  .add_property("cFactor", &XC::CFactorSeries::get_c_factor,"Return the value of the factor that multiplies the series values.")
   ;
 
 class_<XC::ConstantSeries, bases<XC::CFactorSeries>, boost::noncopyable >("ConstantSeries", no_init)

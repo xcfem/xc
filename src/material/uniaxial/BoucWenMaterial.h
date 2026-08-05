@@ -66,8 +66,6 @@
 namespace XC {
   class Matrix;
 
-//! @ingroup MatUnx
-//
 //! @brief Bouc-Wen smooth hysteretic material model.
 //!
 //! This material model is an extension of the original Bouc-Wen
@@ -84,6 +82,7 @@ namespace XC {
 //! The hysteresis loop will exhibit hardening if \f$\beta\f$+\f$\gamma\f$ < 0
 //! and \f$\beta\f$-\f$\gamma\f$ > 0, and quasi-linearity
 //! if \f$\beta\f$+\f$\gamma\f$ = 0 and \f$\beta\f$-\f$\gamma\f$ > 0.
+//! @ingroup MatUnx
 class BoucWenMaterial: public UniaxialMaterial
   {
   private:

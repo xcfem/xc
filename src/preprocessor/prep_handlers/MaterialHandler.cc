@@ -92,6 +92,10 @@
 #include "material/uniaxial/snap/Pinching.h"
 #include "material/uniaxial/snap/PinchingDamage.h"
 
+#include "material/uniaxial/damper/BilinearOilDamper.h"
+#include "material/uniaxial/damper/CoulombDamperMaterial.h"
+#include "material/uniaxial/damper/DamperMaterial.h"
+#include "material/uniaxial/damper/ViscousDamper.h"
 
 //nDMaterial
 #include "material/nD/NDMaterial.h"
@@ -415,6 +419,14 @@ XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
     
     else if((cmd=="MultiLinear") || (cmd=="multi_linear"))
       retval= new XC::MultiLinear(tag_mat);
+    else if(cmd=="BilinearOilDamper")
+      retval= new XC::BilinearOilDamper(tag_mat);
+    else if(cmd=="CoulombDamperMaterial")
+      retval= new XC::CoulombDamperMaterial(tag_mat);
+    else if(cmd=="DamperMaterial")
+      retval= new XC::DamperMaterial(tag_mat);
+    else if(cmd=="ViscousDamper")
+      retval= new XC::ViscousDamper(tag_mat);
     return retval;
   }
 

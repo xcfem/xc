@@ -1,4 +1,3 @@
-// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -45,73 +44,35 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-// $Revision: 1.5 $
-// $Date: 2003/02/25 23:33:39 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/ParallelMaterial.h,v $
-                                                                        
-                                                                        
-#ifndef ParallelMaterial_h
-#define ParallelMaterial_h
-
-// File: ~/material/ParallelMaterial.h
-//
 // Written: fmk 
-// Created: 07/98
+// Created: 12/17
 // Revision: A
 //
 // Description: This file contains the class definition for 
-// ParallelMaterial. ParallelMaterial is an aggregation
+// DamperModel. DamperModel is an aggregation
 // of UniaxialMaterial objects all considered acting in parallel.
 //
-// What: "@(#) ParallelMaterial.h, revA"
+// What: "@(#) DamperModel.C, revA"
 
-#include <material/uniaxial/connected/ConnectedMaterial.h>
+#include "DamperMaterial.h"
 
-namespace XC{
-//
-//! @brief Parallel connected materials.
-//!
-//! This types of material area an aggregation of
-//! UniaxialMaterial objects all considered acting in parallel.
-//! @ingroup MatUnx
-class ParallelMaterial: public ConnectedMaterial
-  {
-  private:
-    double trialStrain;
-    double trialStrainRate;
-  protected:
-    int sendData(Communicator &);
-    int recvData(const Communicator &);
-  public:
-    ParallelMaterial(int tag= 0);
-    ParallelMaterial(int tag, int classTag);
-    ParallelMaterial(int tag, const DqUniaxialMaterial &theMaterials);
-    ParallelMaterial(int tag, int classTag, const DqUniaxialMaterial &theMaterials);
+//! @brief Default constructor.
+XC::DamperMaterial::DamperMaterial(int tag)
+: ParallelMaterial(tag, MAT_TAG_DamperMaterial)
+  { }
 
-    int setTrialStrain(double strain, double strainRate = 0.0); 
-    double getStrain(void) const;          
-    double getStrainRate(void) const;
-    double getStress(void) const;
-    double getTangent(void) const;
-    double getDampTangent(void) const;
-    double getInitialTangent(void) const;
+XC::DamperMaterial::DamperMaterial(int tag, const XC::DqUniaxialMaterial &theMaterialModels)
+  : ParallelMaterial(tag, MAT_TAG_DamperMaterial, theMaterialModels)
+  {}
 
-    int commitState(void);
-    int revertToLastCommit(void);    
-    int revertToStart(void);        
+double XC::DamperMaterial::getTangent(void) const
+  { return 0.0; }
 
-    UniaxialMaterial *getCopy(void) const;
-    
-    int sendSelf(Communicator &);  
-    int recvSelf(const Communicator &);
-    
-    void Print(std::ostream &s, int flag =0) const;
-
-    Response *setResponse(const std::vector<std::string> &argv, Information &matInformation);
-    int getResponse(int responseID, Information &matInformation);
-  };
-} // end of XC namespace
+double XC::DamperMaterial::getInitialTangent(void) const
+  { return 0.0; }
 
 
-#endif
+
+
+
 

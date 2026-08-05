@@ -45,73 +45,35 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-// $Revision: 1.5 $
-// $Date: 2003/02/25 23:33:39 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/ParallelMaterial.h,v $
-                                                                        
-                                                                        
-#ifndef ParallelMaterial_h
-#define ParallelMaterial_h
+#ifndef DamperMaterial_h
+#define DamperMaterial_h
 
-// File: ~/material/ParallelMaterial.h
-//
 // Written: fmk 
-// Created: 07/98
+// Created: 12/17
 // Revision: A
 //
 // Description: This file contains the class definition for 
-// ParallelMaterial. ParallelMaterial is an aggregation
+// DamperMaterial. DamperMaterial is an aggregation
 // of UniaxialMaterial objects all considered acting in parallel.
-//
-// What: "@(#) ParallelMaterial.h, revA"
 
-#include <material/uniaxial/connected/ConnectedMaterial.h>
+#include <material/uniaxial/connected/ParallelMaterial.h>
 
 namespace XC{
 //
 //! @brief Parallel connected materials.
 //!
-//! This types of material area an aggregation of
-//! UniaxialMaterial objects all considered acting in parallel.
+//! DamperMaterial is an aggregation of UniaxialMaterial objects all
+//! considered acting in parallel.
 //! @ingroup MatUnx
-class ParallelMaterial: public ConnectedMaterial
+class DamperMaterial: public ParallelMaterial
   {
-  private:
-    double trialStrain;
-    double trialStrainRate;
-  protected:
-    int sendData(Communicator &);
-    int recvData(const Communicator &);
   public:
-    ParallelMaterial(int tag= 0);
-    ParallelMaterial(int tag, int classTag);
-    ParallelMaterial(int tag, const DqUniaxialMaterial &theMaterials);
-    ParallelMaterial(int tag, int classTag, const DqUniaxialMaterial &theMaterials);
+    DamperMaterial(int tag= 0);
+    DamperMaterial(int tag, const DqUniaxialMaterial &theMaterials);
 
-    int setTrialStrain(double strain, double strainRate = 0.0); 
-    double getStrain(void) const;          
-    double getStrainRate(void) const;
-    double getStress(void) const;
     double getTangent(void) const;
-    double getDampTangent(void) const;
     double getInitialTangent(void) const;
-
-    int commitState(void);
-    int revertToLastCommit(void);    
-    int revertToStart(void);        
-
-    UniaxialMaterial *getCopy(void) const;
-    
-    int sendSelf(Communicator &);  
-    int recvSelf(const Communicator &);
-    
-    void Print(std::ostream &s, int flag =0) const;
-
-    Response *setResponse(const std::vector<std::string> &argv, Information &matInformation);
-    int getResponse(int responseID, Information &matInformation);
   };
 } // end of XC namespace
 
-
 #endif
-

@@ -119,6 +119,12 @@
 #define MAT_TAG_TDConcreteMC10NL                227
 #define MAT_TAG_CreepMaterial                   228
 
+#define MAT_TAG_DamperMaterial                  97
+#define MAT_TAG_ViscousDamper                   71
+#define MAT_TAG_BilinearOilDamper               89
+#define MAT_TAG_CoulombDamperMaterial         1228
+
+
 #define MAT_TAG_UniaxialMaterialWrapper        2000
 #define MAT_TAG_EyBasic                        3000
 #endif

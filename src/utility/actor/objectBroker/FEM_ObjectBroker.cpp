@@ -674,6 +674,16 @@ XC::UniaxialMaterial *XC::FEM_ObjectBroker::getNewUniaxialMaterial(int classTag)
         return new DrainPinch1Material();
       case MAT_TAG_MinMax:
         return new MinMaxMaterial();
+
+      case MAT_TAG_DamperMaterial:
+        return new DamperMaterial();
+      case MAT_TAG_ViscousDamper:
+        return new ViscousDamper();
+      case MAT_TAG_BilinearOilDamper:
+        return new BilinearOilDamper();
+      case MAT_TAG_CoulombDamperMaterial:
+        return new CoulombDamperMaterial();
+	
       default:
 //         UniaxialPackage *matCommands = theUniaxialPackage;
 //         bool found = false;

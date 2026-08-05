@@ -77,7 +77,7 @@ XC::TrigSeries::TrigSeries(void)
 //! @brief Return load factor at specified time.
 double XC::TrigSeries::getFactor(double pseudoTime) const
   {
-    static double twopi = 4*asin(1.0);
+    static const double twopi = 4*asin(1.0);
     if(pseudoTime >= tStart && pseudoTime <= tFinish)
       return cFactor*sin(twopi*(pseudoTime-tStart)/period + shift);
     else

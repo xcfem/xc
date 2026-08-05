@@ -77,6 +77,11 @@
 #include "material/uniaxial/drain/DrainClough2Material.h"
 #include "material/uniaxial/drain/DrainPinch1Material.h"
 
+#include "material/uniaxial/damper/BilinearOilDamper.h"
+#include "material/uniaxial/damper/CoulombDamperMaterial.h"
+#include "material/uniaxial/damper/DamperMaterial.h"
+#include "material/uniaxial/damper/ViscousDamper.h"
+
 // Sections
 #include "material/section/elastic_section/ElasticSection1d.h"
 #include "material/section/elastic_section/ElasticSection2d.h"

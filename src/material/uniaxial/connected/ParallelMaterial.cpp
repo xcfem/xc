@@ -68,21 +68,25 @@
 #include <utility/recorder/response/MaterialResponse.h>
 #include "boost/lexical_cast.hpp"
 
-XC::ParallelMaterial::ParallelMaterial(int tag, const XC::DqUniaxialMaterial &theMaterialModels)
-  :ConnectedMaterial(tag,MAT_TAG_ParallelMaterial, theMaterialModels), trialStrain(0.0), trialStrainRate(0.0)
-  {}
-
+//! @brief Default constructor.
 XC::ParallelMaterial::ParallelMaterial(int tag)
   :ConnectedMaterial(tag,MAT_TAG_ParallelMaterial), trialStrain(0.0), trialStrainRate(0.0)
   {}
 
-// this constructor is used for a ParallelMaterailModel object that
-// needs to be constructed in a remote actor process. recvSelf() needs
-// to be called on this object
-XC::ParallelMaterial::ParallelMaterial(void)
-  :ConnectedMaterial(0,MAT_TAG_ParallelMaterial), trialStrain(0.0), trialStrainRate(0.0)
+//! @brief Constructor.
+XC::ParallelMaterial::ParallelMaterial(int tag, int classTag)
+  :ConnectedMaterial(tag, classTag), trialStrain(0.0), trialStrainRate(0.0)
   {}
 
+//! @brief Constructor.
+XC::ParallelMaterial::ParallelMaterial(int tag, const XC::DqUniaxialMaterial &theMaterialModels)
+  :ConnectedMaterial(tag,MAT_TAG_ParallelMaterial, theMaterialModels), trialStrain(0.0), trialStrainRate(0.0)
+  {}
+
+//! @brief Constructor.
+XC::ParallelMaterial::ParallelMaterial(int tag, int classTag, const XC::DqUniaxialMaterial &theMaterialModels)
+  :ConnectedMaterial(tag, classTag, theMaterialModels), trialStrain(0.0), trialStrainRate(0.0)
+  {}
 
 int XC::ParallelMaterial::setTrialStrain(double strain, double strainRate)
   {
