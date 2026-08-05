@@ -92,13 +92,7 @@ limitStateToCheck= st_ls.strutAndTieLimitState
 # Analyze load combinations.
 limitStateToCheck.analyzeLoadCombinations(combContainer,setCalc)
 # Perform checking.
-print('A')
 limitStateToCheck.check(setCalc= setCalc, concrete= concrete, steel= reinfSteel, appendToResFile=False,listFile=False,calcMeanCF=False)
-print('B')
-
-for e in setCalc.elements:
-    print(e.tag, e.getPropNames())
-quit()    
 
 # Check report generation.
 report=rprt.ReportGenerator(modelSpace,cfg)
