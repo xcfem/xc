@@ -27,6 +27,7 @@
 #include "utility/utils/text/text_string.h"
 #include "utility/kernel/StandardOutputWrapper.h"
 #include <unordered_map>
+#include <mutex>
 
 namespace boost
   {
@@ -35,6 +36,12 @@ namespace boost
 
 typedef enum{FALLO,CONTINUA,COMPLETADO} resul_lectura;
 
+struct CacheEntry
+  {
+    std::string source;
+    boost::python::object  compiled_code;
+  };
+
 //! @ingroup KERNEL
 //
 //! @brief Objet that can execute python scripts.
@@ -42,10 +49,11 @@ class CommandEntity: public EntityWithProperties
   {
   private:
     static StandardOutputWrapper standardOutput; //!< Streams para errores y avisos.
-    typedef std::unordered_map<std::string, boost::python::object> compiled_code_map;
+    typedef std::unordered_map<std::size_t, CacheEntry> compiled_code_map;
     typedef typename compiled_code_map::iterator compiled_code_iterator;
     typedef typename compiled_code_map::const_iterator compiled_code_const_iterator;
     compiled_code_map compiled_code;
+    inline static std::mutex mutex_;
     boost::python::object compile_code_block(const std::string &, const std::string &);
   protected:
     static CommandEntity *entcmd_cast(boost::any &data);

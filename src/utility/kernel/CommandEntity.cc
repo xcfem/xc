@@ -141,16 +141,23 @@ void CommandEntity::resetStandardOutput(void)
 boost::python::object CommandEntity::compile_code_block(const std::string &block,
 							const std::string& name = "<script>")
   {
+    bool found= false;
     boost::python::object retval;
-    compiled_code_const_iterator iter= compiled_code.find(block);
-    if(iter != compiled_code.end())
+    std::size_t key = std::hash<std::string>{}(block);
+    std::lock_guard<std::mutex> lock(CommandEntity::mutex_);
+    auto range = compiled_code.equal_range(key); // Key already in container.
+    for (auto it = range.first; it != range.second; ++it)
       {
-        retval= (iter->second);
+	if (it->second.source == block)
+	  {
+	    retval= it->second.compiled_code; // Identical code.
+	    found= true;
+	  }
       }
-    else
+    if(!found)      
       {
         retval= compile_script(block, name);
-	compiled_code[block]= retval;
+	compiled_code.emplace(key, CacheEntry{block, retval});
       }
     return retval;
   }
