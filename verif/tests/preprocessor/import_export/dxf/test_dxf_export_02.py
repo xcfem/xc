@@ -76,4 +76,6 @@ if(ok1 & ok2):
     print("test "+fname+": ok.")
 else:
     lmsg.error(fname+' ERROR.')
-
+# Clean after yourself.
+if os.path.exists(outputFileName):
+    os.remove(outputFileName)
