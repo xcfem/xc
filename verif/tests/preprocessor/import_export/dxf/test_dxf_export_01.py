@@ -45,8 +45,10 @@ s= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
 
 xcTotalSet= modelSpace.getTotalSet()
 bdTotal= bte.BlockData(verbosity= 0)
+# Number of entities read: 4 points, 4 lines and one surface.
 numEntitiesRead= bdTotal.readFromXCSet(xcTotalSet)
-ok1= (abs(numEntitiesRead-8)==0)
+numEntitiesRef= 9
+ok1= (abs(numEntitiesRead-numEntitiesRef)==0)
 # Avoid info messages
 import ezdxf
 logging.getLogger(ezdxf.__name__).setLevel(logging.ERROR)
@@ -68,3 +70,6 @@ if(ok1 & ok2):
 else:
     lmsg.error(fname+' ERROR.')
 
+# Clean after yourself.
+if os.path.exists(outputFileName):
+    os.remove(outputFileName)
