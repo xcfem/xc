@@ -475,9 +475,20 @@ class BlockRecord(me.CellRecord):
             self.blockProperties.setFromDict(blockProperties)        
 
 class BlockDict(dict):
-    '''Block container.'''    
-    def append(self,cell):
-        self[cell.ident]= cell
+    '''Block container.'''
+    
+    def append(self, cell):
+        ''' Append the given block to the dictionary.
+
+        :param cell: item to append to the dictionary
+        '''
+        ident= cell.ident
+        if(ident in self):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; identifier '+str(ident)+' already exists.')
+            exit(1)
+        self[ident]= cell
         
     def readFromXCSet(self, xcSet):
         ''' Read blocks from XC set.'''
@@ -490,7 +501,7 @@ class BlockDict(dict):
                 thickness= 0.0
                 if(len(s.elements)>0):
                     thickness= s.getElement(1,1,1).physicalProperties.getVectorMaterials[0].h
-                block= BlockRecord(blkId= s.tag, typ= 'surface',kPoints= tagPoints,thk= thickness)
+                block= BlockRecord(blkId= -1, typ= 'surface',kPoints= tagPoints,thk= thickness)
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
@@ -502,7 +513,7 @@ class BlockDict(dict):
             numPoints= len(points)
             if(numPoints==2):
                 tagPoints= [points[0],points[1]]
-                block= BlockRecord(blkId= l.tag, typ= 'line',kPoints= tagPoints, thk= 0.0)
+                block= BlockRecord(blkId= -1, typ= 'line',kPoints= tagPoints, thk= 0.0)
             self.append(block)
         return len(self)
         
@@ -511,7 +522,7 @@ class BlockDict(dict):
         layerName= name+'_blocks'
         drawing.layers.new(name= layerName)
         for key in self:
-            self[key].writeDxf(pointDict,drawing,layerName)
+            self[key].writeDxf(pointDict, drawing, layerName)
             
     def getXCCommandString(self,xcImportExportData):
         ''' Return a string with the XC commands that define the cells.'''
