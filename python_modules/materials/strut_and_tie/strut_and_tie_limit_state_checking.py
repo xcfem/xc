@@ -47,6 +47,7 @@ class StrutAndTieStressController(lscb.LimitStateControllerBaseNSections):
         super(StrutAndTieStressController,self).__init__(limitStateLabel= limitStateLabel, elementSections= ['Sect0'], solutionProcedureType= solutionProcedureType)
         self.concrete= concrete
         self.steel= steel
+        
 
     @staticmethod
     def _get_maximum_and_minimum_elastic_modulus_(elements):
@@ -71,7 +72,8 @@ class StrutAndTieStressController(lscb.LimitStateControllerBaseNSections):
 
         :param elements: elements to classify.
         '''
-        Es, Ec= StrutAndTieStressController._get_maximum_and_minimum_elastic_modulus_(elements)
+        Es=self.steel.Es
+        Ec=self.concrete.Ecm()
         self.strutTags= set()
         self.tieTags= set()
         for e in elements:
@@ -103,12 +105,12 @@ class StrutAndTieStressController(lscb.LimitStateControllerBaseNSections):
                 inverted= True
             else: # tie in tension.
                 retval= stress/fyd
+                inverted= True
         else:
             typo= 'strut'
             stress= N/elem.sectionArea
             if(stress>0.0): # strut in tension
                 retval= stress/fctm
-                inverted= True
             else: # strut in compression.
                 retval= stress/fcd
         return retval, typo, inverted  
