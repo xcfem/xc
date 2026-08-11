@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Section aggregator class verification test. Checking the response for trivial load cases.'''
+''' Section aggregator class verification test. Checking the response for 
+trivial load cases.'''
 
 from __future__ import print_function
 
@@ -48,9 +49,9 @@ respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Shear
 
 # Define section geometry
 materialHandler= preprocessor.getMaterialHandler
-geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
+geomRectang= materialHandler.newSectionGeometry("geomRectang")
 
-reg= scc10x20.getRegion(geomRectang,"epp")
+reg= scc10x20.getRegion(geomRectang, epp.name)
 # Create fiber section.
 rectang= geomRectang.getFiberSection3d("rectang")
 
