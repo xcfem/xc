@@ -48,7 +48,10 @@ class BeamColumn: public Element1D
     BeamColumn(int tag, int classTag);
     BeamColumn(int tag, int classTag, int Nd1, int Nd2);
 
+    virtual size_t getNumSections(void) const;
     virtual const PrismaticBarCrossSection *getSectionPtr(const size_t &) const;
+    virtual PrismaticBarCrossSection *getSectionPtr(const size_t &);
+    boost::python::list getSectionsPy(void);
 
     virtual const Matrix &getExtrapolationMatrix(void) const;
     Matrix getExtrapolatedValues(const Matrix &) const;

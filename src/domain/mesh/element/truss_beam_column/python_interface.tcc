@@ -23,8 +23,10 @@
 
 #include "truss/python_interface.tcc"
 
+XC::PrismaticBarCrossSection *(XC::BeamColumn::*beam_column_get_section_ptr)(const size_t &)= &XC::BeamColumn::getSectionPtr;
 class_<XC::BeamColumn, bases<XC::Element1D>, boost::noncopyable >("BeamColumn", no_init)
-  .def("getSection", make_function(&XC::BeamColumn::getSectionPtr, return_internal_reference<>() ), "getSection(i): return the i-th section of the element.")
+  .def("getSection", make_function(beam_column_get_section_ptr, return_internal_reference<>() ), "getSection(i): return the i-th section of the element.")
+  .def("getSections", &XC::BeamColumn::getSectionsPy, "Return a Python list populated with the sections along the element.")
   .add_property("extrapolationMatrix",make_function(&XC::BeamColumn::getExtrapolationMatrix,return_internal_reference<>() ),"Returns the element extrapolation matrix.")
   .def("getExtrapolatedValues", &XC::BeamColumn::getExtrapolatedValues,"Return the values at nodes from the values at the Gauss points.")
   ;
@@ -69,7 +71,7 @@ void (XC::BeamColumnWithSectionFD::*bcwsfd_set_material_ref)(const XC::Material 
 void (XC::BeamColumnWithSectionFD::*bcwsfd_set_material_name)(const std::string &)= &XC::BeamColumnWithSectionFD::setMaterial;
 class_<XC::BeamColumnWithSectionFD, bases<XC::BeamColumn>, boost::noncopyable >("BeamColumnWithSectionFD", no_init)
   .def("getNumSections",&XC::BeamColumnWithSectionFD::getNumSections)
-  .def("getSections",make_function(&XC::BeamColumnWithSectionFD::getSections, return_internal_reference<>() ),"Returns element's sections.")
+//.def("getSections",make_function(&XC::BeamColumnWithSectionFD::getSections, return_internal_reference<>() ),"Returns element's sections.")
   .def("setMaterial", bcwsfd_set_material_ref, "Assigns the given material to the element.")
   .def("setMaterial", bcwsfd_set_material_name, "Assigns the material with the given name to the element.")
   .add_property("rho", &XC::BeamColumnWithSectionFD::getRho,&XC::BeamColumnWithSectionFD::setRho, "Get/set the element density per unit length.")

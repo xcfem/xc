@@ -45,7 +45,25 @@ XC::BeamColumn::BeamColumn(int tag, int classTag, int Nd1, int Nd2)
   : Element1D(tag,classTag, Nd1, Nd2)
   {}
 
+//! @brief Return the number of sections along this element.
+size_t XC::BeamColumn::getNumSections(void) const
+  {
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+              << Color::def << std::endl;
+    return 0;
+  }
+
 //! @brief Returns a pointer to the i-th section of the element.
+XC::PrismaticBarCrossSection *XC::BeamColumn::getSectionPtr(const size_t &i)
+  {
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+              << Color::def << std::endl;
+    return nullptr;
+  }
+
+//! @brief Returns a const pointer to the i-th section of the element.
 const XC::PrismaticBarCrossSection *XC::BeamColumn::getSectionPtr(const size_t &i) const
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -53,6 +71,22 @@ const XC::PrismaticBarCrossSection *XC::BeamColumn::getSectionPtr(const size_t &
               << Color::def << std::endl;
     return nullptr;
   }
+
+//! @brief Return a python list of pointers to the element sections.
+boost::python::list XC::BeamColumn::getSectionsPy(void)
+  {
+    boost::python::list retval;
+    const size_t sz= this->getNumSections();
+    for(size_t i= 0; i<sz; i++)
+      {
+        PrismaticBarCrossSection *sectionPtr= this->getSectionPtr(i);
+	boost::python::object pyObj(boost::ref(*sectionPtr));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
+
 
 const XC::Matrix &XC::BeamColumn::getExtrapolationMatrix(void) const
   {

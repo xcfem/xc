@@ -59,6 +59,7 @@ class BeamColumnWithSectionFD: public BeamColumn
     BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc,const PrismaticBarCrossSection *sccModel,int Nd1,int Nd2);
 
     const PrismaticBarCrossSection *getSectionPtr(const size_t &i) const;
+    PrismaticBarCrossSection *getSectionPtr(const size_t &i);
 
     void setTrialSectionDeformations(const std::vector<Vector> &vs);
 
