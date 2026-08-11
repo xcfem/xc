@@ -125,6 +125,7 @@ class SectionAggregator: public PrismaticBarCrossSection
    void setAdditionsPyList(const boost::python::list &,const boost::python::list &);
 
 
+    double getLinearRho(void) const;
     int setInitialSectionDeformation(const Vector &deforms); 
     int setTrialSectionDeformation(const Vector &deforms); 
     virtual double getStrain(const double &y,const double &z) const;

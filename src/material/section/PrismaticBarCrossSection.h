@@ -46,6 +46,11 @@ class Vector2d;
 namespace XC {
 
 class DeformationPlane;
+class ElasticSection1d;
+class ElasticSection2d;
+class ElasticShearSection2d;
+class ElasticSection3d;
+class ElasticShearSection3d;
 
 //! @brief Base class for beam-column cross sections.
 //! Constitutive equations of the section.
@@ -98,6 +103,11 @@ class PrismaticBarCrossSection: public SectionForceDeformation
     CrossSectionProperties1d getCrossSectionProperties1d(const double &e= 1.0, const double &iw= 0.0) const;
     CrossSectionProperties2d getCrossSectionProperties2d(const double &e= 1.0, const double &iw= 0.0, const double &g= 1.0) const;
     CrossSectionProperties3d getCrossSectionProperties3d(const double &e= 1.0, const double &iw= 0.0, const double &g= 1.0) const;
+    ElasticSection1d *getElasticSection1d(const std::string &, const double &, const double &) const;
+    ElasticSection2d *getElasticSection2d(const std::string &, const double &, const double &, bool) const;
+    ElasticShearSection2d *getElasticShearSection2d(const std::string &, const double &, const double &, const double &, bool) const;
+    ElasticSection3d *getElasticSection3d(const std::string &, const double &, const double &, const double &) const;
+    ElasticShearSection3d *getElasticShearSection3d(const std::string &, const double &, const double &, const double &) const;
     
 
     bool hayAxil(const double &tol=1e-4) const;

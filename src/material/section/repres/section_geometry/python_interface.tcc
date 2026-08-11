@@ -66,7 +66,7 @@ class_<XC::SectionGeometry, XC::SectionGeometry *, bases<XC::SectionMassProperti
   .add_property("name", make_function( &XC::SectionGeometry::Name, return_value_policy<copy_const_reference>()),"returns object name.")
   .def("clear", &XC::SectionGeometry::clear,"Clear the containers of this object.")
   .def("getReinforcementMaterials",&XC::SectionGeometry::getReinforcementMaterialsPy, "Return a Python list containing the different materials of the reinforcement.")
-  .def("getRegionMaterials",&XC::SectionGeometry::getRegionMaterialsPy, "Return a Python list containing the different materials of the reinforcement.")
+  .def("getRegionMaterials",&XC::SectionGeometry::getRegionMaterialsPy, "Return a Python list containing the different materials of the regions.")
   .def("getMaterials",&XC::SectionGeometry::getMaterialsPy, "Return a Python list containing the different materials of the reinforcement.")
 
   .def("getFiberSection2d", make_function(&XC::SectionGeometry::getFiberSection2d, return_internal_reference<>()), "Return a 2D fiber section material.")

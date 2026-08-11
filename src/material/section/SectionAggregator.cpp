@@ -364,6 +364,21 @@ const double &XC::SectionAggregator::GJ(void) const
     return retval;
   }
 
+double XC::SectionAggregator::getLinearRho(void) const
+  {
+    double retval= 0.0;
+    if(this->theSection)
+      retval= this->theSection->getLinearRho();
+    else
+      {
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                  << "; null pointer to section."
+                  << Color::def << std::endl;
+	exit(-1);	
+      }
+    return retval;
+  }
+
 
 //! @brief Sets initial strain.
 int XC::SectionAggregator::setInitialSectionDeformation(const Vector &def)
