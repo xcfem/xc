@@ -64,8 +64,8 @@ modelSpace.fixNode000_FFF(n2.tag)
 gluedDOFs= [0,1,2]
 loadOnDOFs= [0,-F,0,0,0,0]
 for i in range(0,6):
-  if i not in gluedDOFs:
-    modelSpace.constraints.newSPConstraint(nA.tag,i,0.0)
+    if i not in gluedDOFs:
+        modelSpace.constraints.newSPConstraint(nA.tag,i,0.0)
 
 glue= modelSpace.constraints.newGlueNodeToElement(nA,beam3d,xc.ID(gluedDOFs))
 

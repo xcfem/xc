@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Home made test.'''
+''' Glue node to shell element. Home made test.'''
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -23,6 +23,7 @@ from solution import predefined_solutions
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 
 p1= geom.Pos3d(0,0,0)
@@ -31,14 +32,13 @@ p3= geom.Pos3d(1,1,0)
 p4= geom.Pos3d(0,1,0)
 
 # Problem type
-modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-n1= nodes.newNodeXYZ(p1.x,p1.y,p1.z)
-n2= nodes.newNodeXYZ(p2.x,p2.y,p2.z)
-n3= nodes.newNodeXYZ(p3.x,p3.y,p3.z)
-n4= nodes.newNodeXYZ(p4.x,p4.y,p4.z)
+n1= modelSpace.newNode(p1.x,p1.y,p1.z)
+n2= modelSpace.newNode(p2.x,p2.y,p2.z)
+n3= modelSpace.newNode(p3.x,p3.y,p3.z)
+n4= modelSpace.newNode(p4.x,p4.y,p4.z)
 
 pA= geom.Pos3d(p1.x,p1.y,p1.z)
-nA= nodes.newNodeXYZ(pA.x,pA.y,pA.z) # node to be glued.
+nA= modelSpace.newNode(pA.x,pA.y,pA.z) # node to be glued.
 
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
@@ -52,10 +52,6 @@ modelSpace.fixNode000_FFF(n1.tag)
 modelSpace.fixNode000_FFF(n2.tag)
 modelSpace.fixNode000_FFF(n3.tag)
 modelSpace.fixNode000_FFF(n4.tag)
-# modelSpace.fixNode000_000( 1)
-# modelSpace.fixNode000_000( 2)
-# modelSpace.fixNode000_000( 3)
-# modelSpace.fixNode000_000( 4)
 
 ## Glued node.
 gluedDOFs= [0,3,4,5]
@@ -66,7 +62,7 @@ for i in range(0,6):
   else:
     loadOnDOFs[i]= -1000.0
 
-glue= modelSpace.constraints.newGlueNodeToElement(nA,elem,xc.ID(gluedDOFs))
+glue= modelSpace.glueNodeToElement(nA.tag, elem.tag, xc.ID(gluedDOFs))
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -107,3 +103,14 @@ if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-9) & (abs(ratio3)<1e-9):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayDispRot(itemToDisp='uY', defFScale= 100.0)
+# oh.displayDispRot(itemToDisp='uZ', defFScale= 100.0)
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# #oh.displayLocalAxes()

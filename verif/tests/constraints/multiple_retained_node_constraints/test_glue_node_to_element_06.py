@@ -57,10 +57,6 @@ modelSpace.fixNode000_FFF(n1.tag)
 modelSpace.fixNode000_FFF(n2.tag)
 modelSpace.fixNode000_FFF(n3.tag)
 modelSpace.fixNode000_FFF(n4.tag)
-# modelSpace.fixNode000_000(n1.tag)
-# modelSpace.fixNode000_000(n2.tag)
-# modelSpace.fixNode000_000(n3.tag)
-# modelSpace.fixNode000_000(n4.tag)
 
 # Glued nodes.
 gluedDOFs= [0,3,4,5]
@@ -118,3 +114,14 @@ if (analOk==0) & condNode10 & condNode20:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayDispRot(itemToDisp='uY', defFScale= 100.0)
+# oh.displayDispRot(itemToDisp='uZ', defFScale= 100.0)
+# # oh.displayLocalAxes()
+# oh.displayLoads()
+# oh.displayReactions()
