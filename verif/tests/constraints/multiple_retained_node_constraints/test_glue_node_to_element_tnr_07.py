@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
-''' Home made test. Check newGlueNodeToElement function.'''
+''' Check newGlueNodeToElement function with transformation Newton-Raphson
+solution algorithm.
+
+The problem is linear, so there is no need to use a non-linear solver, BUT the 
+multi-row, multi-freedom constraints gave an error with this kind of solver. 
+This is a regression test for that error.
+'''
 
 from __future__ import print_function
 from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2022, LCPT and AOO"
+__copyright__= "Copyright 2026, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
@@ -66,11 +72,6 @@ for nn1 in n2Nodes[1:]:
     newTruss.sectionArea= A
     n2Trusses.append(newTruss)
     nn0= nn1
-    
-# Constraints
-constraints= preprocessor.getBoundaryCondHandler
-modelSpace.fixNode00(n1.tag)
-modelSpace.fixNode00(n2.tag)
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
@@ -91,7 +92,6 @@ for n in [nA, n2A]:
 
 glueA= modelSpace.constraints.newGlueNodeToElement(nA,truss1, gluedDOFs)
 middleIndex= int((len(n2Trusses)-1)/2)
-print(middleIndex)
 middleTruss= n2Trusses[middleIndex]
 gluesA= modelSpace.constraints.newGlueNodeToElement(n2A, middleTruss, gluedDOFs)
 
@@ -105,7 +105,11 @@ lp0.newNodalLoad(n2A.tag, loadVector)
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
-analysis= predefined_solutions.simple_static_linear(feProblem)
+# LP 14/08/2026.
+# The problem is linear, so there is no need to use a non-linear solver, BUT
+# the multi-row, multi-freedom constraints gave an error with this kind of
+# solver. This is a regression test for that error.
+analysis= predefined_solutions.transformation_newton_raphson_band_gen(feProblem, maxNumIter= 10, printFlag=0) # => OK 14/08/2026.
 result= analysis.analyze(1)
 if(result!= 0):
     lmsg.error("Can't solve.")
@@ -124,7 +128,7 @@ nADisp= nA.getDisp[0]
 n1ADisp= n1A.getDisp[0]
 n2ADisp= n2A.getDisp[0]
 refDisp= -F/2.*(l/2.)/E/A
-ratio4= abs(nADisp-refDisp)/-refDisp # Ignored. The displacement approx. is very poor.
+ratio4= abs(nADisp-refDisp)/-refDisp # Ignored. The displacement approx. is extremely poor.
 ratio5= abs(n1ADisp-refDisp)/-refDisp
 ratio6= abs(n2ADisp-refDisp)/-refDisp
 
@@ -138,7 +142,7 @@ print('A glued node displacement: ', nADisp)
 print('2A glued node displacement: ', n2ADisp)
 print('reference node displacement: ', n1ADisp)
 print('reference displacement: ', refDisp)
-print("ratio4= ", ratio4, 'Ignored. The displacement approx. is very poor.')
+print("ratio4= ", ratio4, 'Ignored. The displacement approx. is extremely poor.')
 print("ratio5= ", ratio5)
 print("ratio6= ", ratio6)
 '''
@@ -149,3 +153,12 @@ if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & (abs(ratio3)<1e-15) & (abs(ratio5
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# oh.displayDispRot(itemToDisp='uX')
+# # oh.displayLocalAxes()
+# oh.displayLoads()
+# oh.displayReactions()
