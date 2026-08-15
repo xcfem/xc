@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.5.0)
 set(CMAKE_BUILD_TYPE to "Release")
 #cygwin
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
@@ -11,6 +11,14 @@ ELSE (${CMAKE_VERSION_STRING} GREATER 3.20.0)
   MESSAGE ("CMake version is not greater than 3.20.0")
 ENDIF (${CMAKE_VERSION_STRING} GREATER 3.20.0)
 set(OpenGL_GL_PREFERENCE "GLVND")
+# CMake policy CMP0167 (boost libraries).
+if(POLICY CMP0167)
+  cmake_policy(SET CMP0167 NEW)
+endif()
+# CMake policy CMP0148 Python3
+if(POLICY CMP0148)
+  cmake_policy(SET CMP0148 NEW)
+endif()
 
 # Replaces -fPIC for all the targets.
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
