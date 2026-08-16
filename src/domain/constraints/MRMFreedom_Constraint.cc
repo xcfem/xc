@@ -64,8 +64,8 @@ void XC::MRMFreedom_Constraint::initializeUr0i(void)
 void XC::MRMFreedom_Constraint::initializeUr0i(const Domain *model)
   {
     const ID &retainedNodeTags= this->getRetainedNodeTags();
-    const size_t sz= retainedNodeTags.Size();
-    for(size_t j= 0; j<sz; j++)
+    const size_t numRetainedNodes= retainedNodeTags.Size();
+    for(size_t j= 0; j<numRetainedNodes; j++)
       {
 	const int retainedNodeTag= retainedNodeTags[j];
 	const Node* theRetainedNode= model->getNode(retainedNodeTag);
@@ -80,11 +80,13 @@ void XC::MRMFreedom_Constraint::initializeUr0i(const Domain *model)
 	  }
 	Vector &ur0_j= Ur0i[j];
 	const Vector &Ur= theRetainedNode->getTrialDisp();
+	const int Ur_size= Ur.Size();
 	const ID &idr= getRetainedDOFs();
-	for(int i = 0; i < idr.Size(); ++i)
+	const int idr_size= idr.Size();
+	for(int i = 0; i < idr_size; ++i) // for each retained DOF.
 	  {
-	    const int rdof = idr(i);
-	    if (rdof < 0 || rdof >= Ur.Size())
+	    const int rdof= idr(i);
+	    if (rdof < 0 || rdof >= Ur_size)
 	      {
 		std::cerr << getClassName() << "::" << __FUNCTION__
 			  << "; FATAL Error: Retained DOF "
@@ -219,8 +221,8 @@ bool XC::MRMFreedom_Constraint::affectsNode(int nodeTag) const
     else
       {
         const ID &rNodes= getRetainedNodeTags();
-        const size_t sz= rNodes.Size();
-        for(size_t i= 0;i<sz;i++)
+        const size_t numRetainedNodes= rNodes.Size();
+        for(size_t i= 0;i<numRetainedNodes;i++)
           if(nodeTag==rNodes(i))
             {
  	      retval= true;
@@ -239,7 +241,6 @@ void XC::MRMFreedom_Constraint::setDomain(Domain *model)
       {
         if(!initialized)
 	  { // don't do it if setDomain called after recvSelf when already initialized!
-	    initializeUc0(model);
 	    initializeUr0i(model);
             this->initialized = true;
 	  }
@@ -255,8 +256,8 @@ bool XC::MRMFreedom_Constraint::affectsNodeAndDOF(int nodeTag, int theDOF) const
     if(!retval)
       {
         const ID &rNodes= getRetainedNodeTags();
-        const size_t sz= rNodes.Size();
-        for(size_t i= 0;i<sz;i++)
+        const size_t numRetainedNodes= rNodes.Size();
+        for(size_t i= 0;i<numRetainedNodes;i++)
           if(nodeTag==rNodes(i))
             {
 	      int loc= getRetainedDOFs().getLocation(theDOF);
@@ -275,8 +276,8 @@ std::map<int, std::list<int> > XC::MRMFreedom_Constraint::getAffectedDOFs(void) 
   {
     std::map<int, std::list<int> > retval= MFreedom_ConstraintBase::getAffectedDOFs();
     const ID &rNodes= getRetainedNodeTags();
-    const size_t sz_nodes= rNodes.Size();
-    for(size_t i= 0;i<sz_nodes;i++)
+    const size_t numRetainedNodes= rNodes.Size();
+    for(size_t i= 0;i<numRetainedNodes;i++)
       {
 	const ID &retainedDOFs= this->getRetainedDOFs();    
 	const size_t dofs_sz= retainedDOFs.Size();

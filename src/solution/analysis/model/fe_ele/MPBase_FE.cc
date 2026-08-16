@@ -111,6 +111,8 @@ XC::DOF_Group *XC::MPBase_FE::determineConstrainedNodeDofGrpPtr(void)
 		    << "; WARNING - node no Group yet?"
 		    << Color::def << std::endl;
       }
+    std::cout << getClassName() << "::" << __FUNCTION__
+              << " retval= " << retval << std::endl;
     return retval;
   }
 

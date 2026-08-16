@@ -415,7 +415,10 @@ void XC::FE_Element::addKtToTang(double fact)
         if(fact == 0.0)// || myEle->isDead()) // Dead elements needed to avoid singular stiffness matrix.
           return;
         else if(myEle->isSubdomain() == false)
-          unbalAndTangent.getTangent().addMatrix(1.0, myEle->getTangentStiff(),fact);
+	  {
+	    const Matrix &Kt= myEle->getTangentStiff();
+            unbalAndTangent.getTangent().addMatrix(1.0, Kt,fact);
+	  }
         else
           {
             std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -446,7 +449,10 @@ void XC::FE_Element::addCtoTang(double fact)
         if(fact == 0.0)// || myEle->isDead()) // Dead elements needed to avoid singular damping matrix.
           return;
         else if(myEle->isSubdomain() == false)
-          unbalAndTangent.getTangent().addMatrix(1.0, myEle->getDamp(),fact);
+	  {
+	    const Matrix &C= myEle->getDamp();
+	    unbalAndTangent.getTangent().addMatrix(1.0, C, fact);
+	  }
         else
           {
             std::cerr << Color::red << getClassName() << "::" << __FUNCTION__

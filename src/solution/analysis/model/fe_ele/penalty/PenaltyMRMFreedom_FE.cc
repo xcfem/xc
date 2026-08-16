@@ -50,18 +50,19 @@ XC::PenaltyMRMFreedom_FE::PenaltyMRMFreedom_FE(int tag, Domain &theDomain,
   :MRMFreedom_FE(tag, TheMRMP.getNumDofGroups(),TheMRMP.getNumDofs(), TheMRMP,Alpha)
   {
     const ID &id1 = theMRMP->getConstrainedDOFs();
-    const int nDOFs= id1.Size();
-    const int numNodes= 1+theMRMP->getRetainedNodeTags().Size();//1 constrained node + numb. of retained nodes
-    const int size= nDOFs*numNodes;
+    const int nConstrainedDOFs= id1.Size();
+    const int numRetainedNodes= theMRMP->getRetainedNodeTags().Size();
+    const int nRetainedDOFs= theMRMP->getRetainedDOFs().Size();
+    const int size= nConstrainedDOFs+numRetainedNodes*nRetainedDOFs;
 
     tang= Matrix(size,size);
     resid= Vector(size);
-    C= Matrix(nDOFs,size);
+    C= Matrix(nConstrainedDOFs,size);
 
     theConstrainedNode = theDomain.getNode(theMRMP->getNodeConstrained());
     myDOF_Groups(0)= determineConstrainedNodeDofGrpPtr()->getTag();
 
-    determineRetainedNodesDofGrpPtr(theDomain, 1);
+    this->determineRetainedNodesDofGrpPtr(theDomain, 1);
 
     if(theMRMP->isTimeVarying() == false)
       this->determineTangent();
@@ -88,7 +89,31 @@ const XC::Matrix &XC::PenaltyMRMFreedom_FE::getTangent(Integrator *theNewIntegra
 
 const XC::Vector &XC::PenaltyMRMFreedom_FE::getResidual(Integrator *theNewIntegrator)
   {
-    // zero residual, CD = 0
+    // get the solution vector [Uc Ur]
+    static Vector UU;
+    const ID &id1= theMRMP->getConstrainedDOFs();
+    const int id1Sz= id1.Size();
+    const ID &id2 = theMRMP->getRetainedDOFs();
+    const int numRetainedNodes= theMRMP->getRetainedNodeTags().Size();
+    const int id2Sz= numRetainedNodes*id2.Size();
+    const int size= id1Sz + id2Sz;
+    std::cout << "size= " << size << std::endl;
+    UU.resize(size);
+    // Constrained DOFs.
+    this->assemble_constrained_DOF_displacements(UU);
+
+    // Retained DOFs.
+    this->assemble_retained_DOF_displacements(UU, id1Sz);
+
+    // compute residual
+    const Matrix& KK = getTangent(theNewIntegrator);
+    std::cout << "UU= " << UU << std::endl;
+    std::cout << "KK= " << KK << std::endl;
+    resid.addMatrixVector(0.0, KK, UU, -1.0);
+
+    std::cout << "resid= " << resid << std::endl;
+
+    // done
     return resid;
   }
 
@@ -139,11 +164,13 @@ const XC::Vector &XC::PenaltyMRMFreedom_FE::getM_Force(const Vector &disp, doubl
 
 void XC::PenaltyMRMFreedom_FE::determineTangent(void)
   {
+    std::cout << "Enters " << getClassName() << "::" << __FUNCTION__ << std::endl;
     // first determine [C] = [-I [Ccr]]
     C.Zero();
     const Matrix &constraint = theMRMP->getConstraint();
     const int noRows = constraint.noRows();
     const int noCols = constraint.noCols();
+    
 
     for(int j=0; j<noRows; j++)
       C(j,j) = -1.0;
@@ -166,6 +193,8 @@ void XC::PenaltyMRMFreedom_FE::determineTangent(void)
     // workaround no longer required
     const Matrix &Cref= C;
     tang.addMatrixTransposeProduct(0.0, Cref, Cref, alpha);
+    C.resize(0, 0); // C is no longer required.
+    std::cout << "Exits " << getClassName() << "::" << __FUNCTION__ << std::endl;
   }
 
 

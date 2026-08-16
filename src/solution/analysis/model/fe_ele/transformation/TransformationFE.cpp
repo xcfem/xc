@@ -228,14 +228,14 @@ const XC::Matrix &XC::TransformationFE::getTangent(Integrator *theNewIntegrator)
     static XC::Matrix localK;
 
     // foreach block row, for each block col do
-    for(int i=0; i<numNode; i++) {
-
+    for(int i=0; i<numNode; i++)
+      {
         int startCol = 0;
         int numDOFi = numDOFs[i];        
         int noColsOriginal = 0;
 
-        for(int j=0; j<numNode; j++) {
-
+        for(int j=0; j<numNode; j++)
+	  {
             const Matrix *Ti= theTransformations[i];
             const Matrix *Tj= theTransformations[j];
             int numDOFj = numDOFs[j];        
@@ -244,39 +244,46 @@ const XC::Matrix &XC::TransformationFE::getTangent(Integrator *theNewIntegrator)
             // copy K(i,j) into localK matrix
             // CHECK SIZE OF BUFFER            
             for(int a=0; a<numDOFi; a++)
-                for(int b=0; b<numDOFj; b++)
-                    localK(a,b) = theTangent(noRowsOriginal+a, noColsOriginal+b);
+	      for(int b=0; b<numDOFj; b++)
+		localK(a,b) = theTangent(noRowsOriginal+a, noColsOriginal+b);
 
             // now perform the matrix computation T(i)^T localK T(j)
             // note: if T == 0 then the Identity is assumed
             int noColsTransformed = 0;
             static Matrix localTtKT;
             
-            if(Ti != 0 && Tj != 0) {
+            if(Ti != 0 && Tj != 0)
+	      {
                 noRowsTransformed = Ti->noCols();
                 noColsTransformed = Tj->noCols();
                 // CHECK SIZE OF BUFFER
                 localTtKT.setData(dataBuffer.getDataPtr(), noRowsTransformed, noColsTransformed);
                 localTtKT = (*Ti) ^ localK * (*Tj);
-            } else if(Ti == 0 && Tj != 0) {
+	      }
+	    else if(Ti == 0 && Tj != 0)
+	      {
                 noRowsTransformed = numDOFi;
                 noColsTransformed = Tj->noCols();
                 // CHECK SIZE OF BUFFER
                 localTtKT.setData(dataBuffer.getDataPtr(), noRowsTransformed, noColsTransformed);
                 // localTtKT = localK * (*Tj);               
                 localTtKT.addMatrixProduct(0.0, localK, *Tj, 1.0);
-            } else if(Ti != 0 && Tj == 0) {
+	      }
+	    else if(Ti != 0 && Tj == 0)
+	      {
                 noRowsTransformed = Ti->noCols();
                 noColsTransformed = numDOFj;
                 // CHECK SIZE OF BUFFER
                 localTtKT.setData(dataBuffer.getDataPtr(), noRowsTransformed, noColsTransformed);
                 localTtKT = (*Ti) ^ localK;
-            } else {
+	      }
+	    else
+	      {
                 noRowsTransformed = numDOFi;
                 noColsTransformed = numDOFj;
                 localTtKT.setData(dataBuffer.getDataPtr(), noRowsTransformed, noColsTransformed);
                 localTtKT = localK;
-            }
+	      }
             // now copy into modTangent the T(i)^t K(i,j) T(j) product
             for(int c=0; c<noRowsTransformed; c++) 
                 for(int d=0; d<noColsTransformed; d++) 
@@ -284,12 +291,10 @@ const XC::Matrix &XC::TransformationFE::getTangent(Integrator *theNewIntegrator)
             
             startCol += noColsTransformed;
             noColsOriginal += numDOFj;
-        }
-
+	  }
         noRowsOriginal += numDOFi;
         startRow += noRowsTransformed;
-    }
-
+      }
     return unbalAndTangentMod.getTangent();
   }
 
