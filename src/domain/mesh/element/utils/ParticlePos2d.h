@@ -54,10 +54,14 @@ class ParticlePos2d
       { return r; }
     inline void set_r_coordinate(const double &r_coord)
       { r= r_coord; }
+    inline void increment_r_coordinate(const double &d)
+      { r+= d; }
     inline const double &s_coordinate(void) const
       { return s; }
     inline void set_s_coordinate(const double &s_coord)
       { s= s_coord; }
+    inline void increment_s_coordinate(const double &d)
+      { s+= d; }
     bool operator==(const ParticlePos2d &) const;
     void Print(std::ostream &) const;
   };

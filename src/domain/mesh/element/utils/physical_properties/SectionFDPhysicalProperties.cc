@@ -281,6 +281,17 @@ XC::Vector XC::SectionFDPhysicalProperties::getRhoi(void) const
     return retval;
   }
 
+//! @brief Returns densities for each position in a Python list.
+boost::python::list XC::SectionFDPhysicalProperties::getRhoiPy() const
+  {
+    const Vector tmp= this->getRhoi();
+    boost::python::list retval;
+    const size_t sz= tmp.Size();
+    for(size_t i=0; i<sz; i++)
+      retval.append(tmp[i]);
+    return retval;
+  }
+
 //! @brief Obtain information from an analysis.
 int XC::SectionFDPhysicalProperties::getResponse(int responseID, Information &eleInfo)
   {
