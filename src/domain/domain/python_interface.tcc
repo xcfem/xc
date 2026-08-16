@@ -41,7 +41,8 @@ XC::PseudoTimeTracker &(XC::Domain::*get_time_tracker)(void)= &XC::Domain::getTi
 
 class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", no_init)
   .add_property("getPreprocessor", make_function( getPreprocessor, return_internal_reference<>() ),"returns preprocessor.")
-  .add_property("getMesh", make_function( getMeshRef, return_internal_reference<>() ),"returns finite element mesh.")
+  .add_property("getMesh", make_function( getMeshRef, return_internal_reference<>() ),"TO DEPRECATE; returns finite element mesh.")
+  .add_property("mesh", make_function( getMeshRef, return_internal_reference<>() ),"returns finite element mesh.")
   .add_property("getConstraints", make_function( getConstraintsRef, return_internal_reference<>() ),"returns mesh constraints.")
   .add_property("getTimeTracker", make_function( get_time_tracker, return_internal_reference<>() ),"returns the pseudo-time tracker of the domain.")
   .add_property("currentTime", &XC::Domain::getCurrentTime, &XC::Domain::setCurrentTime, "returns the current value of the pseudo-time.")
