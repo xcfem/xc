@@ -313,9 +313,9 @@ void dot_product_matrix_vector(double Jac_transpose[3][3],
       }
   }
 
-double referenceToElementMapping(double v0, double v1, double v2, double v3,
-                                 double v4, double v5, double v6, double v7,
-                                 double r, double s, double t)
+double reference_to_element_mapping(double v0, double v1, double v2, double v3,
+				    double v4, double v5, double v6, double v7,
+				    double r, double s, double t)
  {
     return v0 + 0.5 * (r + 1.0) * (-v0 + v3) +
                 0.5 * (s + 1.0) * (-v0 + v1 - 0.5 * (r + 1.0) * (-v0 + v3) +
@@ -332,14 +332,14 @@ double referenceToElementMapping(double v0, double v1, double v2, double v3,
 // created by Dirk-Philip van Herwaarden on 4/21/17.
 // https://github.com/eth-csem/csemlibcsemlib/src/trilinearinterpolator.c
 
-void coordinateTransform(double pnt[], double xl[3][8], double solution[])
+void coordinate_transform(double pnt[], double xl[3][8], double solution[])
   {
     
-    solution[0]= referenceToElementMapping(xl[0][0], xl[0][1], xl[0][2], xl[0][3], xl[0][4],
+    solution[0]= reference_to_element_mapping(xl[0][0], xl[0][1], xl[0][2], xl[0][3], xl[0][4],
                                            xl[0][5], xl[0][6], xl[0][7], pnt[0], pnt[1], pnt[2]);
-    solution[1]= referenceToElementMapping(xl[1][0], xl[1][1], xl[1][2], xl[1][3], xl[1][4],
+    solution[1]= reference_to_element_mapping(xl[1][0], xl[1][1], xl[1][2], xl[1][3], xl[1][4],
                                            xl[1][5], xl[1][6], xl[1][7], pnt[0], pnt[1], pnt[2]);
-    solution[2]= referenceToElementMapping(xl[2][0], xl[2][1], xl[2][2], xl[2][3], xl[2][4],
+    solution[2]= reference_to_element_mapping(xl[2][0], xl[2][1], xl[2][2], xl[2][3], xl[2][4],
                                            xl[2][5], xl[2][6], xl[2][7], pnt[0], pnt[1], pnt[2]);
   }
 
@@ -382,8 +382,8 @@ double dNdT(int N, double R, double S)
     return 0.125 * XC::BrickBase::mNodesT[N] * (R * XC::BrickBase::mNodesR[N] + 1) * (S * XC::BrickBase::mNodesS[N] + 1);
   }
 
-// Computes inverse jacobian
-void inverseJacobianAtPoint(double pnt[3], double xl[3][8], double invJac[3][3])
+//! @brief Computes the inverse jacobian
+void inverse_jacobian_at_point(double pnt[3], double xl[3][8], double invJac[3][3])
   {
 
       // Initializing variables
@@ -412,7 +412,7 @@ void inverseJacobianAtPoint(double pnt[3], double xl[3][8], double invJac[3][3])
   }
 
 // Gets reference coordinates for pnt in xl and stores them in solution
-int inverseCoordinateTransform(double pnt[3], double xl[3][8], double solution[3])
+int inverse_coordinate_transform(double pnt[3], double xl[3][8], double solution[3])
   {
     double scalexy;
     double scale;
@@ -437,17 +437,18 @@ int inverseCoordinateTransform(double pnt[3], double xl[3][8], double solution[3
     tol = 1e-10 * scale;
     while(num_iter < max_iter)
       {
-        coordinateTransform(solution, xl, T);
+        coordinate_transform(solution, xl, T);
 
         for (i = 0; i < XC::BrickBase::ndm;i++)
             objective_function[i] = pnt[i] - T[i];
 
-        if ((fabs(objective_function[0]) < tol) && (fabs(objective_function[1]) < tol)
-                && (fabs(objective_function[0]) < tol))
+        if ((fabs(objective_function[0]) < tol) &&
+	    (fabs(objective_function[1]) < tol) &&
+	    (fabs(objective_function[2]) < tol))
             return 1;
         else
           {
-            inverseJacobianAtPoint(solution, xl, jacobian_inverse);  //compute inverse of jacobian
+            inverse_jacobian_at_point(solution, xl, jacobian_inverse);  //compute inverse of jacobian
             transpose(jacobian_inverse, jacobian_inverse_t);
             dot_product_matrix_vector(jacobian_inverse_t, objective_function, update);
 
@@ -511,11 +512,15 @@ Pos3d XC::BrickBase::getGlobalCoordinates(const double &r, const double &s, cons
     double pnt[ndm]= {r,s,t};
     double solution[ndm]= {0.0,0.0,0.0};
     computeBasis();
-    coordinateTransform(pnt,xl,solution);
+    coordinate_transform(pnt,xl,solution);
     retval= Pos3d(solution[0],solution[1],solution[2]);
     return retval;
   }
-  
+
+//! @brief Return the natural coordinates of the given point.
+//! @param pos: position to compute the natural coordinates for.
+//! @param initialGeometry: if false consider the deformed geometry of the
+//!                         element.
 XC::ParticlePos3d XC::BrickBase::getNaturalCoordinates(const Pos3d &pos,bool initialGeometry) const
   {
     // initialGeometry not used yet.
@@ -523,7 +528,7 @@ XC::ParticlePos3d XC::BrickBase::getNaturalCoordinates(const Pos3d &pos,bool ini
     double pnt[ndm]= {pos.x(),pos.y(),pos.z()};
     double solution[ndm]= {0.0,0.0,0.0}; // {r,s,t}
     computeBasis();
-    if(inverseCoordinateTransform(pnt, xl, solution))
+    if(inverse_coordinate_transform(pnt, xl, solution))
       retval= ParticlePos3d(solution[0],solution[1],solution[2]);
     else
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
