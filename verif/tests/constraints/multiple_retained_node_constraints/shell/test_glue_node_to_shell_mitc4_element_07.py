@@ -92,6 +92,8 @@ if(result!= 0):
 nodes.calculateNodalReactions(False,1e-7)
 
 # Check results.
+gluedNodeReaction= legTopNode.getReaction
+ratio1= gluedNodeReaction.Norm()
 Rx= 0; Ry= 0; Rz= 0
 R= legBottomNode.getReaction
 Rx+= R[0]
@@ -100,11 +102,12 @@ Rz+= R[2]
 refRz= rho*L*L*h*g
 errRz= abs(Rz-refRz)/refRz
 
+print(ratio1)
 print(Rx/1e3)
 print(Ry/1e3)
 print(Rz/1e3, refRz/1e3, errRz)
 
-testOK= (abs(Rx)<1e-7) and (abs(Ry)<1e-7) and (abs(errRz)<1e-6)
+testOK=  (ratio1<1e-12) and (abs(Rx)<1e-7) and (abs(Ry)<1e-7) and (abs(errRz)<1e-6)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
