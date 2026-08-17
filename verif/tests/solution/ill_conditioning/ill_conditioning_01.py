@@ -36,6 +36,7 @@ eig1= modelSpace.analysis.getEigenvalue(1) # Get the eignvalue.
 v1= n1.getEigenvector(1) # eigenvector 1 of node n1
 v2= n2.getEigenvector(1) # eigenvector 1 of node n2
 
+# Check results.
 ratio1= eig1
 ratio2= v2[0]**2+v2[1]**2+(v2[2]-1)**2
 
