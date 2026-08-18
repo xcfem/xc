@@ -250,7 +250,6 @@ void XC::FE_Element::setAnalysisModel(AnalysisModel &theAnalysisModel)
 //! FE\_Element.
 int XC::FE_Element::setID(void)
   {
-    
     if(!theModel)
       {
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -309,18 +308,19 @@ const XC::Matrix &XC::FE_Element::getTangent(Integrator *theNewIntegrator)
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; FATAL - no Element *given "
 		  << "- subclasses must provide implementation - "
-		  << " - a 1x1 error matrix will be returned." << Color::def << std::endl;
+		  << " - a 1x1 error matrix will be returned."
+		  << Color::def << std::endl;
         exit(-1);
       }
 
-    if(myEle->isSubdomain() == false)
+    if(myEle->isSubdomain() == false) // Not subdomain.
       {
         if(theNewIntegrator)
           theNewIntegrator->formEleTangent(this);
 	const Matrix &retval= unbalAndTangent.getTangent();
         return retval;
       }
-    else
+    else // Subdomain.
       {
         Subdomain *theSub= dynamic_cast<Subdomain *>(myEle);
         theSub->computeTang();
@@ -344,14 +344,15 @@ const XC::Vector &XC::FE_Element::getResidual(Integrator *theNewIntegrator)
     theIntegrator= theNewIntegrator;
 
     if(!theIntegrator)
-      return unbalAndTangent.getResidual();
+      return unbalAndTangent.getUnbalance();
 
     if(!myEle)
       {
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; FATAL - no element *given "
 		  << "- subclasses must provide implementation - "
-		  << " - an error Vector of order 1 will be returned." << Color::def << std::endl;
+		  << " - an error Vector of order 1 will be returned."
+		  << Color::def << std::endl;
         exit(-1);
       }
     else
@@ -359,7 +360,7 @@ const XC::Vector &XC::FE_Element::getResidual(Integrator *theNewIntegrator)
         if(myEle->isSubdomain() == false)
           {
             theNewIntegrator->formEleResidual(this);
-            return unbalAndTangent.getResidual();
+            return unbalAndTangent.getUnbalance();
           }
         else
           {
@@ -558,7 +559,7 @@ void XC::FE_Element::zeroResidual(void)
     if(myEle)
       {
         if(myEle->isSubdomain() == false)
-          unbalAndTangent.getResidual().Zero();
+          unbalAndTangent.getUnbalance().Zero();
         else
           {
             std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -592,7 +593,7 @@ void XC::FE_Element::addRtoResidual(double fact)
         else if(myEle->isSubdomain() == false)
           {
             const Vector &eleResisting= myEle->getResistingForce();
-            unbalAndTangent.getResidual().addVector(1.0, eleResisting, -fact);
+            unbalAndTangent.getUnbalance().addVector(1.0, eleResisting, -fact);
           }
         else 
           {
@@ -628,7 +629,7 @@ void XC::FE_Element::addRIncInertiaToResidual(double fact)
         else if(myEle->isSubdomain() == false)
           {
             const Vector &eleResisting= myEle->getResistingForceIncInertia();
-            unbalAndTangent.getResidual().addVector(1.0, eleResisting, -fact);
+            unbalAndTangent.getUnbalance().addVector(1.0, eleResisting, -fact);
           }
         else
           {
@@ -662,11 +663,11 @@ const XC::Vector &XC::FE_Element::getTangForce(const Vector &disp, double fact)
       {
 
         // zero out the force vector
-        unbalAndTangent.getResidual().Zero();
+        unbalAndTangent.getUnbalance().Zero();
 
         // check for a quick return
         if(fact == 0.0 || myEle->isDead())
-          return unbalAndTangent.getResidual();
+          return unbalAndTangent.getUnbalance();
 	else
 	  {
 	    // get the components we need out of the vector
@@ -685,7 +686,7 @@ const XC::Vector &XC::FE_Element::getTangForce(const Vector &disp, double fact)
 	      {
 		// form the tangent again and then add the force
 		theIntegrator->formEleTangent(this);
-		if(unbalAndTangent.getResidual().addMatrixVector(1.0, unbalAndTangent.getTangent(),tmp,fact) < 0) 
+		if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, unbalAndTangent.getTangent(),tmp,fact) < 0) 
 		  {
 		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			      << "; WARNING - "
@@ -696,14 +697,14 @@ const XC::Vector &XC::FE_Element::getTangForce(const Vector &disp, double fact)
 	    else
 	      {
 		Subdomain *theSub= dynamic_cast<Subdomain *>(myEle);
-		if(unbalAndTangent.getResidual().addMatrixVector(1.0, theSub->getTang(),tmp,fact) < 0)
+		if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, theSub->getTang(),tmp,fact) < 0)
 		  {
 		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			      << "; WARNING - "
 			      << "addMatrixVector returned error." << Color::def << std::endl;
 		  }
 	      }
-	    return unbalAndTangent.getResidual();
+	    return unbalAndTangent.getUnbalance();
 	  }
       }
     else
@@ -721,11 +722,11 @@ const XC::Vector &XC::FE_Element::getK_Force(const Vector &disp, double fact)
     if(myEle != 0)
       {
         // zero out the force vector
-        unbalAndTangent.getResidual().Zero();
+        unbalAndTangent.getUnbalance().Zero();
 
         // check for a quick return
         if(fact == 0.0 || myEle->isDead())
-            return unbalAndTangent.getResidual();
+            return unbalAndTangent.getUnbalance();
         else
 	  {
 	    // get the components we need out of the vector
@@ -740,13 +741,13 @@ const XC::Vector &XC::FE_Element::getK_Force(const Vector &disp, double fact)
 		  tmp(i)= 0.0;
 	      }
 
-	    if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getTangentStiff(), tmp, fact) < 0)
+	    if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, myEle->getTangentStiff(), tmp, fact) < 0)
 	      {
 		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			  << "; WARNING - "
 			  << "addMatrixVector returned error." << Color::def << std::endl;
 	      }
-	    return unbalAndTangent.getResidual();
+	    return unbalAndTangent.getUnbalance();
 	  }
       }
     else
@@ -764,11 +765,11 @@ const XC::Vector &XC::FE_Element::getKi_Force(const Vector &disp, double fact)
     if (myEle != 0)
       {    
 	// zero out the force vector
-	unbalAndTangent.getResidual().Zero();
+	unbalAndTangent.getUnbalance().Zero();
 
 	// check for a quick return
 	if(fact == 0.0 || myEle->isDead()) 
-	    return unbalAndTangent.getResidual();
+	    return unbalAndTangent.getUnbalance();
         else
 	  {
 	    // get the components we need out of the vector
@@ -783,14 +784,14 @@ const XC::Vector &XC::FE_Element::getKi_Force(const Vector &disp, double fact)
 		  tmp(i) = 0.0;
 	      }
 
-	    if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getInitialStiff(), tmp, fact) < 0)
+	    if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, myEle->getInitialStiff(), tmp, fact) < 0)
 	      {
 		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			  << "; WARNING - addMatrixVector returned error"
 			  << Color::def << std::endl;		 
 	      }		
 
-	    return unbalAndTangent.getResidual();
+	    return unbalAndTangent.getUnbalance();
 	  }
       }
     else
@@ -815,11 +816,11 @@ const XC::Vector &XC::FE_Element::getM_Force(const Vector &disp, double fact)
     if(myEle)
       {
         // zero out the force vector
-        unbalAndTangent.getResidual().Zero();
+        unbalAndTangent.getUnbalance().Zero();
 
         // check for a quick return
         if(fact == 0.0 || myEle->isDead())
-            return unbalAndTangent.getResidual();
+            return unbalAndTangent.getUnbalance();
         else
 	  {
 	    // get the components we need out of the vector
@@ -833,13 +834,13 @@ const XC::Vector &XC::FE_Element::getM_Force(const Vector &disp, double fact)
 		else
 		  tmp(i)= 0.0;
 	      }
-	    if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getMass(), tmp, fact) < 0)
+	    if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, myEle->getMass(), tmp, fact) < 0)
 	      {
 		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			  << "; WARNING - "
 			  << "addMatrixVector returned error." << Color::def << std::endl;
 	      }
-	    return unbalAndTangent.getResidual();
+	    return unbalAndTangent.getUnbalance();
 	  }
       }
     else
@@ -856,11 +857,11 @@ const XC::Vector &XC::FE_Element::getC_Force(const XC::Vector &disp, double fact
     if(myEle)
       {
         // zero out the force vector
-        unbalAndTangent.getResidual().Zero();
+        unbalAndTangent.getUnbalance().Zero();
 
         // check for a quick return
         if(fact == 0.0 || myEle->isDead())
-          return unbalAndTangent.getResidual();
+          return unbalAndTangent.getUnbalance();
         else
 	  {
 	    // get the components we need out of the vector
@@ -874,14 +875,14 @@ const XC::Vector &XC::FE_Element::getC_Force(const XC::Vector &disp, double fact
 		else
 		  tmp(i)= 0.0;
 	      }
-	    if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getDamp(), tmp, fact) < 0)
+	    if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, myEle->getDamp(), tmp, fact) < 0)
 	      {
 		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			  << "; WARNING - "
 			  << "addMatrixVector returned error."
 			  << Color::def << std::endl;
 	      }
-	    return unbalAndTangent.getResidual();
+	    return unbalAndTangent.getUnbalance();
 	  }
       }
     else
@@ -914,7 +915,7 @@ const XC::Vector &XC::FE_Element::getLastResponse(void)
       {
         if(theIntegrator)
           {
-            if(theIntegrator->getLastResponse(unbalAndTangent.getResidual(),myID) < 0)
+            if(theIntegrator->getLastResponse(unbalAndTangent.getUnbalance(),myID) < 0)
               {
                 std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			  << " - the integrator had problems with"
@@ -923,11 +924,11 @@ const XC::Vector &XC::FE_Element::getLastResponse(void)
           }
         else
           {
-            unbalAndTangent.getResidual().Zero();
+            unbalAndTangent.getUnbalance().Zero();
             std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING - no integrator yet passed\n";
           }
-        Vector &result= unbalAndTangent.getResidual();
+        Vector &result= unbalAndTangent.getUnbalance();
         return result;
       }
     else
@@ -967,7 +968,7 @@ void XC::FE_Element::addM_Force(const XC::Vector &accel, double fact)
 		    else
 		      tmp(i)= 0.0;
 		  }
-		if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getMass(), tmp, fact) < 0)
+		if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, myEle->getMass(), tmp, fact) < 0)
 		  {
 		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			      << "; WARNING - "
@@ -1017,7 +1018,7 @@ void XC::FE_Element::addD_Force(const XC::Vector &accel, double fact)
 		    else
 		      tmp(i)= 0.0;
 		  }
-		if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getDamp(), tmp, fact) < 0)
+		if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, myEle->getDamp(), tmp, fact) < 0)
 		  {
 		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			      << "; WARNING - "
@@ -1049,7 +1050,7 @@ void XC::FE_Element::addLocalM_Force(const Vector &accel, double fact)
 	  {
 	    if(myEle->isSubdomain() == false)
 	      {
-		if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getMass(),accel, fact) < 0)
+		if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, myEle->getMass(),accel, fact) < 0)
 		  {
 		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			      << "; WARNING - "
@@ -1081,7 +1082,7 @@ void XC::FE_Element::addLocalD_Force(const XC::Vector &accel, double fact)
 	  {
 	    if(myEle->isSubdomain() == false)
 	      {
-		if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getDamp(),accel, fact) < 0)
+		if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, myEle->getDamp(),accel, fact) < 0)
 		  {
 		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			      << "; WARNING - "
@@ -1117,7 +1118,7 @@ std::string XC::FE_Element::getElementClassName(void) const
 
 // AddingSensitivity:BEGIN /////////////////////////////////
 void XC::FE_Element::addResistingForceSensitivity(int gradNumber, double fact)
-  { unbalAndTangent.getResidual().addVector(1.0, myEle->getResistingForceSensitivity(gradNumber), -fact); }
+  { unbalAndTangent.getUnbalance().addVector(1.0, myEle->getResistingForceSensitivity(gradNumber), -fact); }
 
 void XC::FE_Element::addM_ForceSensitivity(int gradNumber, const XC::Vector &vect, double fact)
   {
@@ -1132,7 +1133,7 @@ void XC::FE_Element::addM_ForceSensitivity(int gradNumber, const XC::Vector &vec
         else
           { tmp(i)= 0.0; }
       }
-    if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getMassSensitivity(gradNumber),tmp,fact) < 0)
+    if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, myEle->getMassSensitivity(gradNumber),tmp,fact) < 0)
       {
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                   << "; WARNING - "
@@ -1140,7 +1141,7 @@ void XC::FE_Element::addM_ForceSensitivity(int gradNumber, const XC::Vector &vec
       }
   }
 
-void XC::FE_Element::addD_ForceSensitivity(int gradNumber, const XC::Vector &vect, double fact)
+void XC::FE_Element::addD_ForceSensitivity(int gradNumber, const Vector &vect, double fact)
   {
     if(myEle)
       {
@@ -1160,7 +1161,7 @@ void XC::FE_Element::addD_ForceSensitivity(int gradNumber, const XC::Vector &vec
                 else
                   tmp(i)= 0.0;
               }
-            if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getDampSensitivity(gradNumber), tmp, fact) < 0)
+            if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, myEle->getDampSensitivity(gradNumber), tmp, fact) < 0)
               {
                 std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                           << "; WARNING - "
@@ -1189,7 +1190,7 @@ void XC::FE_Element::addLocalD_ForceSensitivity(int gradNumber, const XC::Vector
           return;
         if(myEle->isSubdomain() == false)
           {
-            if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getDampSensitivity(gradNumber),accel, fact) < 0)
+            if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, myEle->getDampSensitivity(gradNumber),accel, fact) < 0)
               {
                 std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                           << "; WARNING - "
@@ -1218,7 +1219,7 @@ void XC::FE_Element::addLocalM_ForceSensitivity(int gradNumber, const XC::Vector
           return;
         if(myEle->isSubdomain() == false)
           {
-            if(unbalAndTangent.getResidual().addMatrixVector(1.0, myEle->getMassSensitivity(gradNumber),accel, fact) < 0)
+            if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, myEle->getMassSensitivity(gradNumber),accel, fact) < 0)
               {
                 std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                           << "; WARNING - "
