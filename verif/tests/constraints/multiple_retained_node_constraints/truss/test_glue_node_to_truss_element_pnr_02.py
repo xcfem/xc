@@ -76,7 +76,11 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 solProc= predefined_solutions.FullGenNewtonRaphson(feProblem, constraintHandlerType= 'penalty', maxNumIter= 2, printFlag= 0)
 solProc.setup()
 analysis= solProc.getAnalysis()
+feProblem.logFileName= "/tmp/erase.log" # Don't print warnings
+feProblem.errFileName= "/tmp/erase.err" # Don't print warnings
 result= analysis.analyze(1)
+feProblem.errFileName= "cerr" # Display errors if any.
+feProblem.logFileName= "clog" # Display errors if any.
 if(result!= 0):
     # lmsg.error("Can't solve.")
     fname= os.path.basename(__file__)
