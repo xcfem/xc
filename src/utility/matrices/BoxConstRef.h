@@ -90,7 +90,7 @@ template<class MAT>
 void BoxConstRef<MAT>::Print(std::ostream &os) const
   {
     os << '[';
-    size_t n_rows= this->getNumberOfRows(),n_columns= this->getNumColumns();
+    size_t n_rows= this->getNumberOfRows(),n_columns= this->getNumberOfColumns();
     for(size_t i= 1;i<=n_rows;i++)
       {
         os << '[';
