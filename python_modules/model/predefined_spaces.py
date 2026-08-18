@@ -2143,6 +2143,31 @@ class SolidMechanics1D(PredefinedSpace):
                                   the reaction values.
         '''
         self.fixNode('0', nodeTag, restrainedNodeId)
+        
+    def getForceComponents(self):
+        ''' Return the components of the load vectors that correspond to
+            forces.'''
+        return [0]
+
+    def getMomentComponents(self):
+        ''' Return the components of the load vectors that correspond to
+            moments.'''
+        return []
+    
+    def getDispComponentIndexFromName(self, compName: str):
+        '''Return the component index from the
+           displacement component name.
+
+        :param compName: displacement component name.
+        '''
+        retval= 0
+        if compName == 'uX':
+            retval= self.Ux
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: uX')
+        return retval
 
 class SolidMechanics2D(PredefinedSpace):
     def __init__(self,nodes, solProcType: predefined_solutions.SolutionProcedure = defaultSolutionProcedureType):
