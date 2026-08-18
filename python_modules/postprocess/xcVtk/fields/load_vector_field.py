@@ -87,10 +87,12 @@ class LoadVectorField(LoadOnPoints):
         '''
         retval= dict()
         dim= len(self.components)
-        if(dim>1):
-            comp_i= self.components[0]; comp_j= self.components[1];
-        if(dim>2):
-            comp_k= self.components[2]
+        if(dim>0):
+            comp_i= self.components[0]
+            if(dim>1):
+                comp_j= self.components[1]
+                if(dim>2):
+                    comp_k= self.components[2]
         for lp in actLP:
             lIter= lp.loads.getElementalLoadIter
             preprocessor= lp.getDomain.getPreprocessor
@@ -116,6 +118,8 @@ class LoadVectorField(LoadOnPoints):
                                       v= xc.Vector([vLoad[comp_i],vLoad[comp_j],vLoad[comp_k]])
                                   elif(dim>1):
                                       v= xc.Vector([vLoad[comp_i],vLoad[comp_j], 0.0])
+                                  elif(dim>0):
+                                      v= xc.Vector([vLoad[comp_i], 0.0, 0.0])
                                   if eTag in retval:
                                       retval[eTag]+= v
                                   else:
@@ -201,7 +205,7 @@ class LoadVectorField(LoadOnPoints):
                 lmsg.warning(className+'.'+methodName+'; displaying of loads over 1D elements not yet implemented')
         return len(self.elementalLoadVectors)
 
-    def sumNodalLoads(self,actLP):
+    def sumNodalLoads(self, actLP):
         ''' Iterate over loaded nodes to cumulate their loads.
 
         :param actLP: list of active load patterns
@@ -209,13 +213,17 @@ class LoadVectorField(LoadOnPoints):
         retval= dict()
         dim= len(self.components)
         comp_i= None; comp_j= None; comp_k= None
-        if(dim>1):
+        if(dim>0):
             comp_i= self.components[0];
-            comp_j= self.components[1];
-            if(dim>2):
-                comp_k= self.components[2]
+            if(dim>1):
+                comp_j= self.components[1];
+                if(dim>2):
+                    comp_k= self.components[2]
         else:
-            comp_k= self.components[0]
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; dimension must be greater than zero.')
+            exit(1)
         for lp in actLP:
             lIter= lp.loads.getNodalLoadIter
             nl= lIter.next()
@@ -233,8 +241,8 @@ class LoadVectorField(LoadOnPoints):
                         v= xc.Vector([vLoad[comp_i], vLoad[comp_j], vLoad[comp_k]])
                     elif(dim>1):
                         v= xc.Vector([vLoad[comp_i], vLoad[comp_j], 0.0])
-                    else:
-                        v= xc.Vector([0.0, 0.0, vLoad[comp_k]])
+                    elif(dim>0):
+                        v= xc.Vector([vLoad[comp_i], 0.0, 0.0])
                     if(v.Norm()>1e-6):
                         if nTag in retval:
                             retval[nTag]+= v
