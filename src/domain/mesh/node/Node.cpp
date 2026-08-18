@@ -2931,6 +2931,17 @@ Vector2d XC::Node::get2dForceComponents(const Vector &v) const
 		    << " and spaceDim= " << dim
 		    << Color::def << std::endl;
       }
+    else if(numberDOF==1)
+      {
+	if(dim==1) // 1D solid mechanics
+	  retval= Vector2d(v[0],0.0);
+	else
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << " not implemented for numDOFs= "	
+                    << numberDOF << " and spaceDim= "
+                    << dim
+		    << Color::def << std::endl;
+      }
     else
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << " not implemented for numDOFs= " << numberDOF
@@ -2961,6 +2972,15 @@ double XC::Node::get2dMomentComponent(const Vector &v) const
 	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << " not implemented for numDOFs= " << numberDOF
 		    << " and spaceDim= " << dim
+		    << Color::def << std::endl;
+      }
+    else if(numberDOF==1)
+      {
+	if(dim!=1) // NOT 1D solid mechanics => error.
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << " not implemented for numDOFs= "	
+                    << numberDOF << " and spaceDim= "
+                    << dim
 		    << Color::def << std::endl;
       }
     else
