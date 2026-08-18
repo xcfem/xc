@@ -76,15 +76,15 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 solProc= predefined_solutions.FullGenNewtonRaphson(feProblem, constraintHandlerType= 'penalty', maxNumIter= 2, printFlag= 0)
 solProc.setup()
 analysis= solProc.getAnalysis()
-feProblem.logFileName= "/tmp/erase.log" # Don't print warnings
-feProblem.errFileName= "/tmp/erase.err" # Don't print warnings
+feProblem.logFileName= "/tmp/erase.log" # Don't print warnings.
+feProblem.errFileName= "/tmp/erase.err" # Don't print error.
 result= analysis.analyze(1)
 feProblem.errFileName= "cerr" # Display errors if any.
-feProblem.logFileName= "clog" # Display errors if any.
+feProblem.logFileName= "clog" # Display warnings if any.
 if(result!= 0):
     # lmsg.error("Can't solve.")
     fname= os.path.basename(__file__)
-    lmsg.error(fname+' ERROR: this test shows a known problem of multi-row multi-freedom constraints that needs to be solved.')
+    lmsg.error(fname+' This test shows a known problem of multi-row multi-freedom constraints that needs to be solved.')
     exit(1)
 
 K= solProc.getA()
