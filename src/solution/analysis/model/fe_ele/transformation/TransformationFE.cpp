@@ -225,7 +225,7 @@ const XC::Matrix &XC::TransformationFE::getTangent(Integrator *theNewIntegrator)
     int noRowsTransformed = 0;
     int noRowsOriginal = 0;
 
-    static XC::Matrix localK;
+    static Matrix localK;
 
     // foreach block row, for each block col do
     for(int i=0; i<numNode; i++)
@@ -327,7 +327,7 @@ const XC::Vector &XC::TransformationFE::getResidual(Integrator *theNewIntegrator
             orig(k-startRowOriginal)= theResidual(k);
           mod = (*Ti)^orig;
           for(int k=startRowTransformed; k<startRowTransformed+noRows; k++)
-            (unbalAndTangentMod.getResidual())(k) = mod (k-startRowTransformed);
+            (unbalAndTangentMod.getUnbalance())(k) = mod (k-startRowTransformed);
 
           */
 
@@ -335,20 +335,20 @@ const XC::Vector &XC::TransformationFE::getResidual(Integrator *theNewIntegrator
             double sum = 0.0;
             for(int k=0; k<noCols; k++)
               sum += (*Ti)(k,j) * theResidual(startRowOriginal + k);
-            (unbalAndTangentMod.getResidual())(startRowTransformed +j) = sum;
+            (unbalAndTangentMod.getUnbalance())(startRowTransformed +j) = sum;
           }
 
         } else {
           noCols = theDOFs[i]->getNumDOF();
           noRows = noCols;
           for(int j=0; j<noRows; j++)
-            (unbalAndTangentMod.getResidual())(startRowTransformed +j) = theResidual(startRowOriginal + j);
+            (unbalAndTangentMod.getUnbalance())(startRowTransformed +j) = theResidual(startRowOriginal + j);
         }
         startRowTransformed += noRows;
         startRowOriginal += noCols;
     }
 
-    return unbalAndTangentMod.getResidual();
+    return unbalAndTangentMod.getUnbalance();
 }
 
 
@@ -358,8 +358,8 @@ const XC::Vector &XC::TransformationFE::getTangForce(const XC::Vector &disp, dou
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not yet implemented\n";
-    unbalAndTangentMod.getResidual().Zero();
-    return unbalAndTangentMod.getResidual();
+    unbalAndTangentMod.getUnbalance().Zero();
+    return unbalAndTangentMod.getUnbalance();
   }
 
 const XC::Vector &XC::TransformationFE::getK_Force(const XC::Vector &accel, double fact)
@@ -470,9 +470,9 @@ const XC::Vector &XC::TransformationFE::getK_Force(const XC::Vector &accel, doub
 	  tmp(j) = 0.0;
       }
 
-    unbalAndTangentMod.getResidual().addMatrixVector(0.0, unbalAndTangentMod.getTangent(), tmp, 1.0);
+    unbalAndTangentMod.getUnbalance().addMatrixVector(0.0, unbalAndTangentMod.getTangent(), tmp, 1.0);
 
-    return unbalAndTangentMod.getResidual();
+    return unbalAndTangentMod.getUnbalance();
   }
 
 const XC::Vector &XC::TransformationFE::getKi_Force(const XC::Vector &accel, double fact)
@@ -592,9 +592,9 @@ const XC::Vector &XC::TransformationFE::getKi_Force(const XC::Vector &accel, dou
 	  tmp(j)= 0.0;
       }
 
-    unbalAndTangentMod.getResidual().addMatrixVector(0.0, unbalAndTangentMod.getTangent(), tmp, 1.0);
+    unbalAndTangentMod.getUnbalance().addMatrixVector(0.0, unbalAndTangentMod.getTangent(), tmp, 1.0);
 
-    return unbalAndTangentMod.getResidual();
+    return unbalAndTangentMod.getUnbalance();
   }
 const XC::Vector &XC::TransformationFE::getM_Force(const Vector &accel, double fact)
   {
@@ -704,9 +704,9 @@ const XC::Vector &XC::TransformationFE::getM_Force(const Vector &accel, double f
       tmp(j) = 0.0;
   }
 
-  unbalAndTangentMod.getResidual().addMatrixVector(0.0, unbalAndTangentMod.getTangent(), tmp, 1.0);
+  unbalAndTangentMod.getUnbalance().addMatrixVector(0.0, unbalAndTangentMod.getTangent(), tmp, 1.0);
 
-  return unbalAndTangentMod.getResidual();
+  return unbalAndTangentMod.getUnbalance();
 }
 
 const XC::Vector &XC::TransformationFE::getC_Force(const XC::Vector &accel, double fact)
@@ -816,9 +816,9 @@ const XC::Vector &XC::TransformationFE::getC_Force(const XC::Vector &accel, doub
       tmp(j) = 0.0;
   }
 
-  unbalAndTangentMod.getResidual().addMatrixVector(0.0, unbalAndTangentMod.getTangent(), tmp, 1.0);
+  unbalAndTangentMod.getUnbalance().addMatrixVector(0.0, unbalAndTangentMod.getTangent(), tmp, 1.0);
 
-  return unbalAndTangentMod.getResidual();
+  return unbalAndTangentMod.getUnbalance();
 }
 
 
@@ -833,11 +833,11 @@ void XC::TransformationFE::addD_Force(const XC::Vector &disp,  double fact)
     for(int i=0; i<numTransformedDOF; i++) {
         int loc = modID(i);
         if(loc >= 0)
-            (unbalAndTangentMod.getResidual())(i) = disp(loc);
+            (unbalAndTangentMod.getUnbalance())(i) = disp(loc);
         else
-            (unbalAndTangentMod.getResidual())(i) = 0.0;
+            (unbalAndTangentMod.getUnbalance())(i) = 0.0;
     }
-    transformResponse(unbalAndTangentMod.getResidual(), response);
+    transformResponse(unbalAndTangentMod.getUnbalance(), response);
     this->addLocalD_Force(response, fact);
   }            
 
@@ -852,11 +852,11 @@ void XC::TransformationFE::addM_Force(const XC::Vector &disp,  double fact)
     for(int i=0; i<numTransformedDOF; i++) {
         int loc = modID(i);
         if(loc >= 0)
-            (unbalAndTangentMod.getResidual())(i) = disp(loc);
+            (unbalAndTangentMod.getUnbalance())(i) = disp(loc);
         else
-            (unbalAndTangentMod.getResidual())(i) = 0.0;
+            (unbalAndTangentMod.getUnbalance())(i) = 0.0;
     }
-    transformResponse(unbalAndTangentMod.getResidual(), response);
+    transformResponse(unbalAndTangentMod.getUnbalance(), response);
     this->addLocalM_Force(response, fact);
   }            
 
@@ -868,7 +868,7 @@ const XC::Vector &XC::TransformationFE::getLastResponse(void)
     Integrator *theLastIntegrator = this->getLastIntegrator();
     if(theLastIntegrator)
       {
-        if(theLastIntegrator->getLastResponse(unbalAndTangentMod.getResidual(),modID) < 0)
+        if(theLastIntegrator->getLastResponse(unbalAndTangentMod.getUnbalance(),modID) < 0)
 	  {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING  - the Integrator had problems "
@@ -877,12 +877,12 @@ const XC::Vector &XC::TransformationFE::getLastResponse(void)
       }
     else
       {
-        unbalAndTangentMod.getResidual().Zero();
+        unbalAndTangentMod.getUnbalance().Zero();
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING  no Integrator yet passed\n";
       }
     
-    return unbalAndTangentMod.getResidual();
+    return unbalAndTangentMod.getUnbalance();
   }
 
 
@@ -940,11 +940,11 @@ void XC::TransformationFE::addD_ForceSensitivity(int gradNumber, const XC::Vecto
     for(int i=0; i<numTransformedDOF; i++) {
         int loc = modID(i);
         if(loc >= 0)
-            (unbalAndTangentMod.getResidual())(i) = disp(loc);
+            (unbalAndTangentMod.getUnbalance())(i) = disp(loc);
         else
-            (unbalAndTangentMod.getResidual())(i) = 0.0;
+            (unbalAndTangentMod.getUnbalance())(i) = 0.0;
     }
-    transformResponse(unbalAndTangentMod.getResidual(), response);
+    transformResponse(unbalAndTangentMod.getUnbalance(), response);
     this->addLocalD_ForceSensitivity(gradNumber, response, fact);
 }            
 
@@ -959,11 +959,11 @@ void XC::TransformationFE::addM_ForceSensitivity(int gradNumber, const XC::Vecto
     for(int i=0; i<numTransformedDOF; i++) {
         int loc = modID(i);
         if(loc >= 0)
-            (unbalAndTangentMod.getResidual())(i) = disp(loc);
+            (unbalAndTangentMod.getUnbalance())(i) = disp(loc);
         else
-            (unbalAndTangentMod.getResidual())(i) = 0.0;
+            (unbalAndTangentMod.getUnbalance())(i) = 0.0;
     }
-    transformResponse(unbalAndTangentMod.getResidual(), response);
+    transformResponse(unbalAndTangentMod.getUnbalance(), response);
     this->addLocalM_ForceSensitivity(gradNumber, response, fact);
   }            
 
