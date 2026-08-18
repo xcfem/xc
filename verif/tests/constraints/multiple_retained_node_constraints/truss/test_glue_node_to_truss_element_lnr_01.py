@@ -92,7 +92,6 @@ for n in [nA, n2A]:
 
 glueA= modelSpace.constraints.newGlueNodeToElement(nA,truss1, gluedDOFs)
 middleIndex= int((len(n2Trusses)-1)/2)
-print(middleIndex)
 middleTruss= n2Trusses[middleIndex]
 gluesA= modelSpace.constraints.newGlueNodeToElement(n2A, middleTruss, gluedDOFs)
 
