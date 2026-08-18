@@ -246,6 +246,12 @@ const XC::Vector &XC::LinearSOEData::getB(void) const
 XC::Vector &XC::LinearSOEData::getB(void)
   { return B; }
 
+//! @brief Return the components of the B vector in a Python list.
+boost::python::list XC::LinearSOEData::getBPy(void) const
+  {
+    return this->B.getPyList();
+  }
+
 //! @brief Returns the 2-norm of the vector \f$x\f$.
 double XC::LinearSOEData::normRHS(void) const
   {
