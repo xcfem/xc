@@ -106,8 +106,8 @@ const XC::Matrix &XC::LagrangeDOF_Group::getTangent(Integrator *theIntegrator)
 const XC::Vector &XC::LagrangeDOF_Group::getUnbalance(Integrator *theIntegrator)
   {
     // does nothing - the Lagrange FE_Elements provide residual 
-    unbalAndTangent.getResidual().Zero();
-    return unbalAndTangent.getResidual();
+    unbalAndTangent.getUnbalance().Zero();
+    return unbalAndTangent.getUnbalance();
   }
 
 // void setNodeDisp(const Vector &u);
@@ -184,15 +184,15 @@ const XC::Vector &XC::LagrangeDOF_Group::getCommittedDisp(void) const
 const XC::Vector &XC::LagrangeDOF_Group::getCommittedVel(void) const
   {
     LagrangeDOF_Group *this_no_const= const_cast<LagrangeDOF_Group *>(this);
-    this_no_const->unbalAndTangent.getResidual().Zero();
-    return unbalAndTangent.getResidual();
+    this_no_const->unbalAndTangent.getUnbalance().Zero();
+    return unbalAndTangent.getUnbalance();
   }
 
 const XC::Vector &XC::LagrangeDOF_Group::getCommittedAccel(void) const
   {
     LagrangeDOF_Group *this_no_const= const_cast<LagrangeDOF_Group *>(this);
-    this_no_const->unbalAndTangent.getResidual().Zero();
-    return unbalAndTangent.getResidual();
+    this_no_const->unbalAndTangent.getUnbalance().Zero();
+    return unbalAndTangent.getUnbalance();
   }
 const XC::Vector &XC::LagrangeDOF_Group::getTrialDisp(void) const
   {
@@ -202,15 +202,15 @@ const XC::Vector &XC::LagrangeDOF_Group::getTrialDisp(void) const
 const XC::Vector& XC::LagrangeDOF_Group::getTrialVel(void) const
   {
     LagrangeDOF_Group *this_no_const= const_cast<LagrangeDOF_Group *>(this);
-    this_no_const->unbalAndTangent.getResidual().Zero();
-    return unbalAndTangent.getResidual();
+    this_no_const->unbalAndTangent.getUnbalance().Zero();
+    return unbalAndTangent.getUnbalance();
   }
 
 const XC::Vector& XC::LagrangeDOF_Group::getTrialAccel() const
   {
     LagrangeDOF_Group *this_no_const= const_cast<LagrangeDOF_Group *>(this);
-    this_no_const->unbalAndTangent.getResidual().Zero();
-    return unbalAndTangent.getResidual();
+    this_no_const->unbalAndTangent.getUnbalance().Zero();
+    return unbalAndTangent.getUnbalance();
   }
 
 void XC::LagrangeDOF_Group::addMtoTang(double fact)
@@ -236,20 +236,20 @@ const XC::Vector &XC::LagrangeDOF_Group::getTangForce(const Vector &disp, double
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; not yet implemented."
 	      << Color::def << std::endl;
-    unbalAndTangent.getResidual().Zero();
-    return unbalAndTangent.getResidual();
+    unbalAndTangent.getUnbalance().Zero();
+    return unbalAndTangent.getUnbalance();
   }
 
 const XC::Vector &XC::LagrangeDOF_Group::getC_Force(const Vector &disp, double fact)
   {
-    unbalAndTangent.getResidual().Zero();
-    return unbalAndTangent.getResidual();
+    unbalAndTangent.getUnbalance().Zero();
+    return unbalAndTangent.getUnbalance();
   }
 
 const XC::Vector &XC::LagrangeDOF_Group::getM_Force(const Vector &disp, double fact)
   {
-    unbalAndTangent.getResidual().Zero();
-    return unbalAndTangent.getResidual();
+    unbalAndTangent.getUnbalance().Zero();
+    return unbalAndTangent.getUnbalance();
   }
 
 

@@ -263,8 +263,8 @@ const XC::Vector &XC::TransformationDOF_Group::getUnbalance(Integrator *theInteg
     const Matrix *T= this->getT();
     if(T)
       {
-        // unbalAndTangentMod.getResidual()= (*T) ^ unmodUnbalance;
-	XC::Vector &residual= unbalAndTangentMod.getResidual();
+        // unbalAndTangentMod.getUnbalance()= (*T) ^ unmodUnbalance;
+	XC::Vector &residual= unbalAndTangentMod.getUnbalance();
         residual.addMatrixTransposeVector(0.0, *T, unmodUnbalance, 1.0);
         return residual;    
       }
@@ -286,7 +286,7 @@ XC::MFreedom_ConstraintBase *XC::TransformationDOF_Group::getMFreedomConstraint(
 //! @brief Computes the residual vector and returns it.
 const XC::Vector &XC::TransformationDOF_Group::setupResidual(int numCNodeDOF, const ID &constrainedDOF,const ID &retainedDOF, const Vector &responseC, const std::vector<const Node *> &ptrsToRetainedNodes,const Vector &(Node::*response)(void) const) const
   {
-    Vector &modUnbalance= unbalAndTangentMod.getResidual();
+    Vector &modUnbalance= unbalAndTangentMod.getUnbalance();
     int loc= 0;
     for(int i=0; i<numCNodeDOF; i++)
       {
@@ -376,7 +376,7 @@ const XC::Vector &XC::TransformationDOF_Group::getTrialResponse(const Vector &(N
       return responseT;
     else
       {
-        Vector &modUnbalance= unbalAndTangentMod.getResidual();
+        Vector &modUnbalance= unbalAndTangentMod.getUnbalance();
 	// Constrained node.
 	const ID &constrainedDOF= mfc_ptr->getConstrainedDOFs();    	
 	int numCNodeDOF= myNode->getNumberDOF();
@@ -456,7 +456,7 @@ const XC::Vector &XC::TransformationDOF_Group::getCommittedAccel(void) const
 
 void XC::TransformationDOF_Group::setupResidual_u_v_a(const Vector &u,int (Node::*setTrial)(const Vector &), const Vector &(Node::*response)(void) const) const
   {
-    Vector &modUnbalance= unbalAndTangentMod.getResidual();
+    Vector &modUnbalance= unbalAndTangentMod.getUnbalance();
     const ID &theID= this->getID();
     for(int i=0; i<modNumDOF; i++)
       {
@@ -527,7 +527,7 @@ void XC::TransformationDOF_Group::setupResidual_u_v_a(const Vector &u,int (Node:
 #endif // TRANSF_INCREMENTAL_MP
     
     const Matrix *T= this->getT();
-    Vector &unbalance= this->unbalAndTangent.getResidual();
+    Vector &unbalance= this->unbalAndTangent.getUnbalance();
     if(T)
       {
         // unbalance= (*T) * modUnbalance;
@@ -694,18 +694,18 @@ void XC::TransformationDOF_Group::setEigenvector(int mode, const Vector &u)
           {
             int loc= theID(i);
             if(loc >= 0)
-              (unbalAndTangentMod.getResidual())(i)= u(loc);
+              (unbalAndTangentMod.getUnbalance())(i)= u(loc);
             // DO THE SP STUFF
           }    
         const Matrix *T= this->getT();
         if(T)
           {
-            // unbalAndTangent.getResidual()= (*T) * (unbalAndTangentMod.getResidual());
-            unbalAndTangent.getResidual().addMatrixVector(0.0, *T, unbalAndTangentMod.getResidual(), 1.0);
-            myNode->setEigenvector(mode, unbalAndTangent.getResidual());
+            // unbalAndTangent.getUnbalance()= (*T) * (unbalAndTangentMod.getUnbalance());
+            unbalAndTangent.getUnbalance().addMatrixVector(0.0, *T, unbalAndTangentMod.getUnbalance(), 1.0);
+            myNode->setEigenvector(mode, unbalAndTangent.getUnbalance());
           }
         else
-          myNode->setEigenvector(mode, unbalAndTangentMod.getResidual());
+          myNode->setEigenvector(mode, unbalAndTangentMod.getUnbalance());
       }
   }
 
@@ -715,9 +715,9 @@ void XC::TransformationDOF_Group::compute_transformation_matrix(void) const
     const int numNodalDOF= myNode->getNumberDOF();
     const ID &retainedDOF= this->mfc_ptr->getRetainedDOFs();
     const ID &constrainedDOF= this->mfc_ptr->getConstrainedDOFs();    
-    int numNodalDOFConstrained= constrainedDOF.Size();
-    int numRetainedDOF= numNodalDOF - numNodalDOFConstrained;
-    int numRetainedNodeDOF= retainedDOF.Size();
+    const int numNodalDOFConstrained= constrainedDOF.Size();
+    const int numRetainedDOF= numNodalDOF - numNodalDOFConstrained;
+    const int numRetainedNodeDOF= retainedDOF.Size();
     const std::vector<const Node *> ptrsToRetainedNodes= getPointersToRetainedNodes();
 
     Trans.Zero();
@@ -881,7 +881,7 @@ int XC::TransformationDOF_Group::enforceSPs(int doMP)
 	
 		const std::vector<Node *> ptrsToRetainedNodes= getPointersToRetainedNodes();
 		const size_t numRetainedNodes= ptrsToRetainedNodes.size();
-		Vector &modUnbalance= unbalAndTangentMod.getResidual();
+		Vector &modUnbalance= unbalAndTangentMod.getUnbalance();
 		modUnbalance.Zero();
 		
 		const ID &theID= this->getID();
@@ -906,12 +906,12 @@ int XC::TransformationDOF_Group::enforceSPs(int doMP)
 		  {
 
 		    // *unbalance= (*T) * (*modUnbalance);
-		    unbalAndTangent.getResidual().addMatrixVector(0.0, *T, modUnbalance, 1.0);
+		    unbalAndTangent.getUnbalance().addMatrixVector(0.0, *T, modUnbalance, 1.0);
 
 		    for (int i=0; i<constrainedDOF.Size(); i++)
 		      {
 			int cDOF= constrainedDOF(i);
-			myNode->setTrialDispComponent(unbalAndTangent.getResidual()(cDOF), cDOF);
+			myNode->setTrialDispComponent(unbalAndTangent.getUnbalance()(cDOF), cDOF);
 		      }
 		  }		
 	      }
@@ -932,13 +932,13 @@ void XC::TransformationDOF_Group::addM_Force(const Vector &Udotdot, double fact)
           {
             const int loc= modID(i);
             if(loc >= 0)
-              (unbalAndTangentMod.getResidual())(i)= Udotdot(loc);
+              (unbalAndTangentMod.getUnbalance())(i)= Udotdot(loc);
             else         // DO THE SP STUFF
-              (unbalAndTangentMod.getResidual())(i)= 0.0;            
+              (unbalAndTangentMod.getUnbalance())(i)= 0.0;            
           }    
         Vector unmod(Trans.noRows());
-        //unmod= Trans * (unbalAndTangentMod.getResidual());
-        unmod.addMatrixVector(0.0, this->Trans, unbalAndTangentMod.getResidual(), 1.0);
+        //unmod= Trans * (unbalAndTangentMod.getUnbalance());
+        unmod.addMatrixVector(0.0, this->Trans, unbalAndTangentMod.getUnbalance(), 1.0);
         this->addLocalM_Force(unmod, fact);
       }
   }
@@ -971,11 +971,11 @@ const XC::Vector &XC::TransformationDOF_Group::getM_Force(const XC::Vector &Udot
           {
             // unbalAndTangentMod.getTangent()= (*T) ^ unmodTangent * (*T);
             unbalAndTangentMod.getTangent().addMatrixTripleProduct(0.0, *T, unmodTangent, 1.0);
-            unbalAndTangentMod.getResidual().addMatrixVector(0.0, unbalAndTangentMod.getTangent(), data, 1.0);
+            unbalAndTangentMod.getUnbalance().addMatrixVector(0.0, unbalAndTangentMod.getTangent(), data, 1.0);
           }
         else
-          unbalAndTangentMod.getResidual().addMatrixVector(0.0, unmodTangent, data, 1.0);
-        return unbalAndTangentMod.getResidual();
+          unbalAndTangentMod.getUnbalance().addMatrixVector(0.0, unmodTangent, data, 1.0);
+        return unbalAndTangentMod.getUnbalance();
       }
   }
 
@@ -984,7 +984,7 @@ const XC::Vector &XC::TransformationDOF_Group::getC_Force(const XC::Vector &Udot
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; not yet implemented"
 	      << Color::def << std::endl;
-    return unbalAndTangentMod.getResidual();
+    return unbalAndTangentMod.getUnbalance();
   }
 
 const XC::Vector &XC::TransformationDOF_Group::getTangForce(const XC::Vector &Udotdot, double fact)
@@ -992,7 +992,7 @@ const XC::Vector &XC::TransformationDOF_Group::getTangForce(const XC::Vector &Ud
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
               << "; not yet implemented"
 	      << Color::def << std::endl;
-    return unbalAndTangentMod.getResidual();
+    return unbalAndTangentMod.getUnbalance();
   }
 
 
@@ -1005,9 +1005,9 @@ const XC::Vector &XC::TransformationDOF_Group::getDispSensitivity(int gradNumber
     const Matrix *T= this->getT();
     if(T)
       {
-        // unbalAndTangentMod.getResidual()= (*T) ^ unmodUnbalance;
-        unbalAndTangentMod.getResidual().addMatrixTransposeVector(0.0, *T, result, 1.0);
-        return unbalAndTangentMod.getResidual();    
+        // unbalAndTangentMod.getUnbalance()= (*T) ^ unmodUnbalance;
+        unbalAndTangentMod.getUnbalance().addMatrixTransposeVector(0.0, *T, result, 1.0);
+        return unbalAndTangentMod.getUnbalance();    
       }
     else
       return result;
@@ -1020,9 +1020,9 @@ const XC::Vector &XC::TransformationDOF_Group::getVelSensitivity(int gradNumber)
     const Matrix *T= this->getT();
     if(T)
       {
-        // unbalAndTangentMod.getResidual()= (*T) ^ unmodUnbalance;
-        unbalAndTangentMod.getResidual().addMatrixTransposeVector(0.0, *T, result, 1.0);
-        return unbalAndTangentMod.getResidual();    
+        // unbalAndTangentMod.getUnbalance()= (*T) ^ unmodUnbalance;
+        unbalAndTangentMod.getUnbalance().addMatrixTransposeVector(0.0, *T, result, 1.0);
+        return unbalAndTangentMod.getUnbalance();    
       }
     else
       return result;
@@ -1035,9 +1035,9 @@ const XC::Vector &XC::TransformationDOF_Group::getAccSensitivity(int gradNumber)
     const Matrix *T= this->getT();
     if(T)
       {
-        // unbalAndTangentMod.getResidual()= (*T) ^ unmodUnbalance;
-        unbalAndTangentMod.getResidual().addMatrixTransposeVector(0.0, *T, result, 1.0);
-        return unbalAndTangentMod.getResidual();    
+        // unbalAndTangentMod.getUnbalance()= (*T) ^ unmodUnbalance;
+        unbalAndTangentMod.getUnbalance().addMatrixTransposeVector(0.0, *T, result, 1.0);
+        return unbalAndTangentMod.getUnbalance();    
       }
     else
       return result;
@@ -1064,17 +1064,17 @@ int XC::TransformationDOF_Group::saveSensitivity(Vector *u,Vector *udot,Vector *
           {
             int loc= theID(i);
             if(loc >= 0)
-              (unbalAndTangentMod.getResidual())(i)= (*u)(loc);
+              (unbalAndTangentMod.getUnbalance())(i)= (*u)(loc);
             // DO THE SP STUFF
           }    
         const Matrix *T= this->getT();
         if(T)
           {
-            // unbalAndTangent.getResidual()= (*T) * (unbalAndTangentMod.getResidual());
-            myV.addMatrixVector(0.0, *T, unbalAndTangentMod.getResidual(), 1.0);
+            // unbalAndTangent.getUnbalance()= (*T) * (unbalAndTangentMod.getUnbalance());
+            myV.addMatrixVector(0.0, *T, unbalAndTangentMod.getUnbalance(), 1.0);
           }
         else
-          myV= unbalAndTangentMod.getResidual();
+          myV= unbalAndTangentMod.getUnbalance();
 
 
         // Vel and Acc sensitivities only if they are being delivered
@@ -1086,32 +1086,32 @@ int XC::TransformationDOF_Group::saveSensitivity(Vector *u,Vector *udot,Vector *
               {
                 int loc= theID(i);
                 if(loc >= 0)
-                  (unbalAndTangentMod.getResidual())(i)= (*udot)(loc);
+                  (unbalAndTangentMod.getUnbalance())(i)= (*udot)(loc);
                 // DO THE SP STUFF
               }    
 
             if(T)
               {
-                // unbalAndTangent.getResidual()= (*T) * (unbalAndTangentMod.getResidual());
-                myVdot.addMatrixVector(0.0, *T, unbalAndTangentMod.getResidual(), 1.0);
+                // unbalAndTangent.getUnbalance()= (*T) * (unbalAndTangentMod.getUnbalance());
+                myVdot.addMatrixVector(0.0, *T, unbalAndTangentMod.getUnbalance(), 1.0);
               }
             else
-              myVdot= unbalAndTangentMod.getResidual();
+              myVdot= unbalAndTangentMod.getUnbalance();
 
             for(int j=0; j<modNumDOF; j++)
               {
                 int loc= theID(j);
                 if(loc >= 0)
-                  (unbalAndTangentMod.getResidual())(j)= (*udotdot)(loc);
+                  (unbalAndTangentMod.getUnbalance())(j)= (*udotdot)(loc);
                 // DO THE SP STUFF
               }
             if(T)
               {
-                // unbalAndTangent.getResidual()= (*T) * (unbalAndTangentMod.getResidual());
-                myVdotdot.addMatrixVector(0.0, *T, unbalAndTangentMod.getResidual(), 1.0);
+                // unbalAndTangent.getUnbalance()= (*T) * (unbalAndTangentMod.getUnbalance());
+                myVdotdot.addMatrixVector(0.0, *T, unbalAndTangentMod.getUnbalance(), 1.0);
               }
             else
-              myVdotdot= unbalAndTangentMod.getResidual();
+              myVdotdot= unbalAndTangentMod.getUnbalance();
             myNode->saveSensitivity(&myV, &myVdot, &myVdotdot, gradNum, numGrads);
           }
         else
@@ -1132,14 +1132,14 @@ void XC::TransformationDOF_Group::addM_ForceSensitivity(const XC::Vector &Udotdo
           {
             const int loc= modID(i);
             if(loc >= 0)
-              (unbalAndTangentMod.getResidual())(i)= Udotdot(loc);
+              (unbalAndTangentMod.getUnbalance())(i)= Udotdot(loc);
             else         // DO THE SP STUFF
-              (unbalAndTangentMod.getResidual())(i)= 0.0;            
+              (unbalAndTangentMod.getUnbalance())(i)= 0.0;            
           }    
 
         Vector unmod(Trans.noRows());
-        //unmod= Trans * (unbalAndTangentMod.getResidual());
-        unmod.addMatrixVector(0.0, this->Trans, unbalAndTangentMod.getResidual(), 1.0);
+        //unmod= Trans * (unbalAndTangentMod.getUnbalance());
+        unmod.addMatrixVector(0.0, this->Trans, unbalAndTangentMod.getUnbalance(), 1.0);
         this->DOF_Group::addM_ForceSensitivity(unmod, fact);
       }
   }
@@ -1156,13 +1156,13 @@ void XC::TransformationDOF_Group::addD_Force(const XC::Vector &Udot, double fact
           {
             const int loc= modID(i);
             if(loc >= 0)
-              (unbalAndTangentMod.getResidual())(i)= Udot(loc);
+              (unbalAndTangentMod.getUnbalance())(i)= Udot(loc);
             else         // DO THE SP STUFF
-              (unbalAndTangentMod.getResidual())(i)= 0.0;            
+              (unbalAndTangentMod.getUnbalance())(i)= 0.0;            
           }    
         Vector unmod(Trans.noRows());
-        //unmod= Trans * (unbalAndTangentMod.getResidual());
-        unmod.addMatrixVector(0.0, this->Trans, unbalAndTangentMod.getResidual(), 1.0);
+        //unmod= Trans * (unbalAndTangentMod.getUnbalance());
+        unmod.addMatrixVector(0.0, this->Trans, unbalAndTangentMod.getUnbalance(), 1.0);
         this->DOF_Group::addD_Force(unmod, fact);
       }
   }
@@ -1179,14 +1179,14 @@ void XC::TransformationDOF_Group::addD_ForceSensitivity(const XC::Vector &Udot, 
           {
             const int loc= modID(i);
             if(loc >= 0)
-              (unbalAndTangentMod.getResidual())(i)= Udot(loc);
+              (unbalAndTangentMod.getUnbalance())(i)= Udot(loc);
             else         // DO THE SP STUFF
-              (unbalAndTangentMod.getResidual())(i)= 0.0;    
+              (unbalAndTangentMod.getUnbalance())(i)= 0.0;    
           }    
 
         Vector unmod(Trans.noRows());
-        //unmod= Trans * (unbalAndTangentMod.getResidual());
-        unmod.addMatrixVector(0.0, this->Trans, unbalAndTangentMod.getResidual(), 1.0);
+        //unmod= Trans * (unbalAndTangentMod.getUnbalance());
+        unmod.addMatrixVector(0.0, this->Trans, unbalAndTangentMod.getUnbalance(), 1.0);
         this->DOF_Group::addD_ForceSensitivity(unmod, fact);
       }
   }
