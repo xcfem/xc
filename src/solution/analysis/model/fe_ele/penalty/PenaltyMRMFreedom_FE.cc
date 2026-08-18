@@ -97,7 +97,6 @@ const XC::Vector &XC::PenaltyMRMFreedom_FE::getResidual(Integrator *theNewIntegr
     const int numRetainedNodes= theMRMP->getRetainedNodeTags().Size();
     const int id2Sz= numRetainedNodes*id2.Size();
     const int size= id1Sz + id2Sz;
-    std::cout << "size= " << size << std::endl;
     UU.resize(size);
     // Constrained DOFs.
     this->assemble_constrained_DOF_displacements(UU);
@@ -106,12 +105,8 @@ const XC::Vector &XC::PenaltyMRMFreedom_FE::getResidual(Integrator *theNewIntegr
     this->assemble_retained_DOF_displacements(UU, id1Sz);
 
     // compute residual
-    const Matrix& KK = getTangent(theNewIntegrator);
-    std::cout << "UU= " << UU << std::endl;
-    std::cout << "KK= " << KK << std::endl;
+    const Matrix& KK = this->getTangent(theNewIntegrator);
     resid.addMatrixVector(0.0, KK, UU, -1.0);
-
-    std::cout << "resid= " << resid << std::endl;
 
     // done
     return resid;
@@ -164,7 +159,6 @@ const XC::Vector &XC::PenaltyMRMFreedom_FE::getM_Force(const Vector &disp, doubl
 
 void XC::PenaltyMRMFreedom_FE::determineTangent(void)
   {
-    std::cout << "Enters " << getClassName() << "::" << __FUNCTION__ << std::endl;
     // first determine [C] = [-I [Ccr]]
     C.Zero();
     const Matrix &constraint = theMRMP->getConstraint();
@@ -177,7 +171,7 @@ void XC::PenaltyMRMFreedom_FE::determineTangent(void)
     
     for(int i=0; i<noRows; i++)
       for(int j=0; j<noCols; j++)
-	C(i,j+noRows) = constraint(i,j);
+	C(i,j+noRows)= constraint(i,j);
     
     // now form the tangent: [K] = alpha * [C]^t[C]
     // *(tang) = C^C;
@@ -191,10 +185,8 @@ void XC::PenaltyMRMFreedom_FE::determineTangent(void)
       tang.addMatrixProduct(0.0, CT, Cref, alpha);
     */
     // workaround no longer required
-    const Matrix &Cref= C;
-    tang.addMatrixTransposeProduct(0.0, Cref, Cref, alpha);
+    tang.addMatrixTransposeProduct(0.0, C, C, alpha);
     C.resize(0, 0); // C is no longer required.
-    std::cout << "Exits " << getClassName() << "::" << __FUNCTION__ << std::endl;
   }
 
 
