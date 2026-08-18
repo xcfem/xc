@@ -44,9 +44,7 @@ void XC::MRMFreedom_FE::assemble_constrained_DOF_displacements(Vector &uu) const
     const ID &id1= theMRMP->getConstrainedDOFs();
     const int id1Sz= id1.Size();
     const Vector &Uc = theConstrainedNode->getTrialDisp();
-    std::cout << "Uc= " << Uc << std::endl;
     const Vector &Uc0 = theMRMP->getConstrainedDOFsInitialDisplacement();
-    std::cout << "Uc0= " << Uc0 << std::endl;
     for(int i = 0; i < id1Sz; i++)
       {
         const int cdof= id1(i);
@@ -113,19 +111,18 @@ int XC::MRMFreedom_FE::determineRetainedDOFsIDs(const int &offset)
     for(size_t i= 0;i<numRetainedNodes;i++)
       {
         Node *theRetainedNode= theRetainedNodes[i];
-
-        const DOF_Group *theRetainedNodesDOFs = theRetainedNode->getDOF_GroupPtr();
-        if(theRetainedNodesDOFs == nullptr)
+        const DOF_Group *theRetainedNodeDOFs = theRetainedNode->getDOF_GroupPtr();
+        if(theRetainedNodeDOFs == nullptr)
           {
 	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-		      << "; WARNING - no DOF_Group with retained Node"
+		      << "; WARNING - no DOF_Group with retained node."
 		      << Color::def << std::endl;
 	    return -2;
           }
 
-        const ID &theRetainedNodesID = theRetainedNodesDOFs->getID();    
+        const ID &theRetainedNodeID = theRetainedNodeDOFs->getID();
 
-        const int size2 = RetainedDOFs.Size();
+        const int size2= RetainedDOFs.Size();
 	retval+= size2;
         for(int j=0; j<size2; j++)
           {
@@ -136,25 +133,25 @@ int XC::MRMFreedom_FE::determineRetainedDOFsIDs(const int &offset)
 			  << "; WARNING unknown DOF: "
 			  << retained << " at retained node: "
 			  << theRetainedNode->getTag() << Color::def << std::endl;
-	        myID(conta) = -1; // modify so nothing will be added
+	        this->myID(conta) = -1; // modify so nothing will be added
 	        retval = -3;
 	      }
 	    else
               {
-	        if(retained >= theRetainedNodesID.Size())
+	        if(retained >= theRetainedNodeID.Size())
                   {
 		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			      << "; WARNING - nodes DOF_Group too small."
 			      << Color::def << std::endl;
-		    myID(conta) = -1; // modify so nothing will be added 
+		    this->myID(conta) = -1; // modify so nothing will be added 
 		    retval = -4;
 	          }
 	        else
-		  myID(conta) = theRetainedNodesID(retained);
+		  this->myID(conta) = theRetainedNodeID(retained);
 	      }
             conta++;
           }
-        myDOF_Groups(i+1)= theRetainedNodesDOFs->getTag();
+        myDOF_Groups(i+1)= theRetainedNodeDOFs->getTag();
       }
     // if(retval>=0)
     //   retval+= conta-RetainedDOFs.Size();
