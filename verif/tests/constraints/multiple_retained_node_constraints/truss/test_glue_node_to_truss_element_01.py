@@ -69,11 +69,6 @@ for nn1 in n2Nodes[1:]:
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-modelSpace.fixNode00(n1.tag)
-modelSpace.fixNode00(n2.tag)
-
-# Constraints
-constraints= preprocessor.getBoundaryCondHandler
 for n in [n1, n2, n11, n12, n2Nodes[0], n2Nodes[-1]]:
     modelSpace.fixNode('00', n.tag)
 for n in [n1A]+n2Nodes[1:-1]:
@@ -91,7 +86,6 @@ for n in [nA, n2A]:
 
 glueA= modelSpace.constraints.newGlueNodeToElement(nA,truss1, gluedDOFs)
 middleIndex= int((len(n2Trusses)-1)/2)
-print(middleIndex)
 middleTruss= n2Trusses[middleIndex]
 gluesA= modelSpace.constraints.newGlueNodeToElement(n2A, middleTruss, gluedDOFs)
 
