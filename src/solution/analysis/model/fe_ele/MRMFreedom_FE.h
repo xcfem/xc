@@ -40,7 +40,7 @@ class MRMFreedom_Constraint;
 
 //! @ingroup AnalysisFE
 //
-//! @brief ??
+//! @brief Multi-row multi-freedom FE.
 class MRMFreedom_FE: public MPBase_FE
   {
   protected:
