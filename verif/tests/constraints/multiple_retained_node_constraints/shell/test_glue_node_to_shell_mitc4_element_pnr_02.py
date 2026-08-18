@@ -18,6 +18,7 @@ nu= 0.3 # Poisson's ratio.
 h= 0.1 # Thickness.
 dens= 1.33 # Density kg/m2.
 
+import os
 import geom
 import xc
 from model import predefined_spaces
@@ -48,9 +49,9 @@ elem= elements.newElement("ShellMITC4",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-modelSpace.fixNode000_000(n1.tag) # If the rotations are free the Penalty
-modelSpace.fixNode000_FFF(n2.tag) # constraint handler makes the solution
-modelSpace.fixNode000_FFF(n3.tag) # algorithm to fail.
+modelSpace.fixNode000_FFF(n1.tag)
+modelSpace.fixNode000_FFF(n2.tag)
+modelSpace.fixNode000_FFF(n3.tag)
 modelSpace.fixNode000_FFF(n4.tag)
 
 ## Glued node.
@@ -77,9 +78,15 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # the multi-row, multi-freedom constraints gave an error with this kind of
 # solver. This is a regression test for that error.
 analysis= predefined_solutions.penalty_newton_raphson(feProblem, maxNumIter= 2, printFlag= 0) # => OK
+feProblem.logFileName= "/tmp/erase.log" # Don't print warnings.
+feProblem.errFileName= "/tmp/erase.err" # Don't print error.
 result= analysis.analyze(1)
+feProblem.errFileName= "cerr" # Display errors if any.
+feProblem.logFileName= "clog" # Display warnings if any.
 if(result!= 0):
-    lmsg.error("Can't solve.")
+    # lmsg.error("Can't solve.")
+    fname= os.path.basename(__file__)
+    lmsg.error(fname+' This test shows a known problem of multi-row multi-freedom constraints that needs to be solved.')
     exit(1)
 
 nodes.calculateNodalReactions(False,1e-7)
@@ -97,14 +104,13 @@ ratio3= svdResid.getMoment().getModulus()/actionNodeANorm
 # print("svdAction= ", svdAction)
 # print("svdReactionNodes= ", svdReactionNodes)
 # print("svdResid= ", svdResid)
-print("ratio1= ", ratio1)
+# print("ratio1= ", ratio1)
 # print("ratio2= ", ratio2)
 # print("ratio3= ", ratio3)
 # print("RN2= ", RN2)
 # print("RN3= ", RN3)
 # print("RN4= ", RN4)
 
-import os
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-9) & (abs(ratio3)<1e-9):
     print('test '+fname+': ok.')

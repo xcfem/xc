@@ -94,8 +94,10 @@ for R, refR in zip(reactions, refReactions):
         error+= (R[i]-refR[i])**2
 error= math.sqrt(error)
 
+'''
 print("ratio1= ", ratio1)
 print("error= ", error)
+'''
 
 import os
 fname= os.path.basename(__file__)

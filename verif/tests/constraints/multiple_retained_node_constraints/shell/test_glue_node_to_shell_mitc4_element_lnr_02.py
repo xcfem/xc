@@ -76,7 +76,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # The problem is linear, so there is no need to use a non-linear solver, BUT
 # the multi-row, multi-freedom constraints gave an error with this kind of
 # solver. This is a regression test for that error.
-analysis= predefined_solutions.lagrange_newton_raphson(feProblem, maxNumIter= 2) # => OK
+analysis= predefined_solutions.lagrange_newton_raphson(feProblem, maxNumIter= 2, printFlag= 0) # => OK
 result= analysis.analyze(1)
 if(result!= 0):
     lmsg.error("Can't solve.")
@@ -97,9 +97,9 @@ ratio3= svdResid.getMoment().getModulus()/actionNodeANorm
 # print("svdAction= ", svdAction)
 # print("svdReactionNodes= ", svdReactionNodes)
 # print("svdResid= ", svdResid)
-print("ratio1= ", ratio1)
-print("ratio2= ", ratio2)
-print("ratio3= ", ratio3)
+# print("ratio1= ", ratio1)
+# print("ratio2= ", ratio2)
+# print("ratio3= ", ratio3)
 
 import os
 fname= os.path.basename(__file__)

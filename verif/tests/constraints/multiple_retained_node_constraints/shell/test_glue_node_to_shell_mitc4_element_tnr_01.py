@@ -70,7 +70,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # The problem is linear, so there is no need to use a non-linear solver, BUT
 # the multi-row, multi-freedom constraints gave an error with this kind of
 # solver. This is a regression test for that error.
-analysis= predefined_solutions.transformation_newton_raphson_band_gen(feProblem, maxNumIter= 10, printFlag=0) # => OK 14/08/2026.
+analysis= predefined_solutions.transformation_newton_raphson_band_gen(feProblem, maxNumIter= 2, printFlag=0) # => OK 14/08/2026.
 result= analysis.analyze(1)
 if(result!= 0):
     lmsg.error("Can't solve.")

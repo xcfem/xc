@@ -102,10 +102,12 @@ Rz+= R[2]
 refRz= rho*L*L*h*g
 errRz= abs(Rz-refRz)/refRz
 
+'''
 print(ratio1)
 print(Rx/1e3)
 print(Ry/1e3)
 print(Rz/1e3, refRz/1e3, errRz)
+'''
 
 testOK=  (ratio1<1e-12) and (abs(Rx)<1e-7) and (abs(Ry)<1e-7) and (abs(errRz)<1e-6)
 import os
