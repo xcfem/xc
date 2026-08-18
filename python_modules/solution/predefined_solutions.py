@@ -232,6 +232,77 @@ class SolutionProcedure(sp.SolutionProcedure):
         preprocessor.getLoadHandler.removeFromDomain(combName) # Remove comb.
         return analOk
 
+class FullGenBase(SolutionProcedure):
+    ''' Base class for solution procedures using full general systems of 
+        equations. Normally they are used only with debugging purposes.
+    '''
+    def __init__(self, prb, name= None, constraintHandlerType= 'plain', maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'norm_unbalance_conv_test', integratorType:str= 'load_control_integrator', solutionAlgorithmType= 'linear_soln_algo'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param constraintHandlerType: type of the constraint handler (plain, penalty, transformation or langrange).
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        :param integratorType: integrator type (see integratorSetup).
+        '''
+        super(FullGenBase, self).__init__(name= name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'full_gen_lin_soe', solverType= 'full_gen_lin_lapack_solver', integratorType= integratorType, solutionAlgorithmType= solutionAlgorithmType)
+        self.setFEProblem(prb)
+        
+class FullGenStaticLinear(FullGenBase):
+    ''' Linear static solution algorithm with a plain constraint handler.
+        Normally used with debugging purposes.
+    '''
+    def __init__(self, prb, name= None, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'norm_unbalance_conv_test', integratorType:str= 'load_control_integrator'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param constraintHandlerType: type of the constraint handler (plain, penalty, transformation or langrange).
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        :param integratorType: integrator type (see integratorSetup).
+        '''
+        super(FullGenStaticLinear,self).__init__(prb= prb, name= name, constraintHandlerType= 'plain', maxNumIter= 1, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, integratorType= integratorType, solutionAlgorithmType= 'linear_soln_algo')
+        
+### Convenience function
+def full_gen_static_linear(prb, convergenceTestTol= 1e-9, printFlag= 0):
+    solProc= FullGenStaticLinear(prb, convergenceTestTol= convergenceTestTol, printFlag= printFlag)
+    solProc.setup()
+    return solProc.getAnalysis()
+
+class FullGenNewtonRaphson(FullGenBase):
+    ''' Newton raphson solution solution algorithm. Normally used with 
+        debugging purposes.
+    '''
+    def __init__(self, prb, name= None, constraintHandlerType= 'penalty', maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'norm_unbalance_conv_test', integratorType:str= 'load_control_integrator'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        :param integratorType: integrator type (see integratorSetup).
+        '''
+        super(FullGenNewtonRaphson,self).__init__(prb= prb, name= name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, integratorType= integratorType, solutionAlgorithmType= 'newton_raphson_soln_algo')
+        
+### Convenience function
+def full_gen_newton_raphson(prb, constraintHandlerType= 'penalty', maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
+    solProc= FullGenNewtonRaphson(prb, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag)
+    solProc.setup()
+    return solProc.getAnalysis()
+
 #Typical solution procedures.
 
 ## Linear static analysis.
