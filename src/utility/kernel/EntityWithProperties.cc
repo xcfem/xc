@@ -160,16 +160,17 @@ void EntityWithProperties::setPyDict(const boost::python::dict &d)
 	for(auto it = boost::python::stl_input_iterator<boost::python::tuple>(property_items); it != boost::python::stl_input_iterator<boost::python::tuple>(); ++it)
 	  {
 	    boost::python::tuple kv = *it;
-	    std::string key= boost::python::extract<std::string>(kv[0]);
-	    boost::python::object obj= kv[1];
-	    boost::python::extract<boost::python::dict> ent(obj);
+	    boost::python::extract<std::string> extracted(kv[0]);
+	    const std::string key = extracted();
+	    boost::python::object obj1= kv[1];
+	    boost::python::extract<boost::python::dict> ent(obj1);
 	    if(ent.check()) // it is a Python dictionary.
 	      {
 		boost::python::dict itemDict= ent();
 		// extract the object from the dictionary.
-	        obj= broke_property_from_python_dict(itemDict);
+	        obj1= broke_property_from_python_dict(itemDict);
 	      }
-	    setPyProp(key, obj);
+	    setPyProp(key, obj1);
 	  }
       }
   }
