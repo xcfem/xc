@@ -74,11 +74,11 @@ class_<XC::SectionGeometry, XC::SectionGeometry *, bases<XC::SectionMassProperti
   .def("getFiberSectionGJ", make_function(&XC::SectionGeometry::getFiberSectionGJ, return_internal_reference<>()), "Return a 3D fiber section material with torsional stiffness.")
   .def("getFiberSectionShear2d", make_function(&XC::SectionGeometry::getFiberSectionShear2d, return_internal_reference<>()), "Return a 2D fiber shear section material")
   .def("getFiberSectionShear3d", make_function(&XC::SectionGeometry::getFiberSectionShear3d, return_internal_reference<>()), "Return a 3D fiber shear section material")
-  .def("getElasticSection1d", make_function(&XC::SectionGeometry::getElasticSection1d, return_internal_reference<>()), "Return a 1D elastic section material.")
-  .def("getElasticSection2d", make_function(&XC::SectionGeometry::getElasticSection2d, return_internal_reference<>()), "Return a 2D elastic section material.")
-  .def("getElasticShearSection2d", make_function(&XC::SectionGeometry::getElasticShearSection2d, return_internal_reference<>()), "Return a 2D elastic shear section material.")
-  .def("getElasticSection3d", make_function(&XC::SectionGeometry::getElasticSection3d, return_internal_reference<>()), "Return a 3D elastic section material.")
-  .def("getElasticShearSection3d", make_function(&XC::SectionGeometry::getElasticShearSection3d, return_internal_reference<>()), "Return a 3D elastic shear section material.")
+  .def("getElasticSection1d", make_function(&XC::SectionGeometry::getElasticSection1d, return_internal_reference<>()), "getElasticSection1d(name, E0, Iw); return a 1D elastic section material.")
+  .def("getElasticSection2d", make_function(&XC::SectionGeometry::getElasticSection2d, return_internal_reference<>()), "getElasticSection2d(name, E0, Iw, G, strongAxis); return a 2D elastic section material.")
+  .def("getElasticShearSection2d", make_function(&XC::SectionGeometry::getElasticShearSection2d, return_internal_reference<>()), "getElasticShearSection2d(name, E0, Iw, G, alpha, strongAxis); return a 2D elastic shear section material.")
+  .def("getElasticSection3d", make_function(&XC::SectionGeometry::getElasticSection3d, return_internal_reference<>()), "getElasticSection3d(name, E0, Iw, G, J); return a 3D elastic section material.")
+  .def("getElasticShearSection3d", make_function(&XC::SectionGeometry::getElasticShearSection3d, return_internal_reference<>()), "getElasticShearSection3d(name, E0, Iw, G, J, alpha_y, alpha_z); return a 3D elastic shear section material.")
   ;
 
 
