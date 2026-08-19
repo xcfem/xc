@@ -12,7 +12,6 @@ unsigned long getMemoryUsed(void)
     // struct mallinfo info = mallinfo();
     // printf("Memory in use: %d bytes\n", info.usmblks + info.uordblks);
     // printf("Total heap size: %d bytes\n", info.arena);
-    struct mallinfo meminfo;
-    meminfo= mallinfo();
+    struct mallinfo2 meminfo= mallinfo2();
     return meminfo.usmblks + meminfo.uordblks;
   }
