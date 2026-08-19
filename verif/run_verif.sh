@@ -490,6 +490,7 @@ python tests/elements/crd_transf/test_crd_transf3d_01.py
 echo "$BLEU" "  Change element material tests." "$NORMAL"
 python tests/elements/change_material_properties/test_change_element_material_01.py
 python tests/elements/change_material_properties/test_change_element_material_02.py
+python tests/elements/change_material_properties/test_change_element_material_03.py
 python tests/elements/change_material_properties/test_change_element_material_properties_01.py
 python tests/elements/change_material_properties/test_change_element_material_properties_02.py
 python tests/elements/change_material_properties/test_change_element_material_properties_03.py
