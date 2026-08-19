@@ -15,7 +15,7 @@ class Beam(object):
     :ivar l: beam length.
     '''
     n= 20 # number of divisions for integration
-    def __init__(self,E:float= 1.0, I:float = 1.0, l:float= 1.0):
+    def __init__(self,E:float= 1.0, A:float= 1.0, I:float = 1.0, l:float= 1.0):
         ''' Constructor.
 
         :param E: elastic modulus.
@@ -23,12 +23,17 @@ class Beam(object):
         :param l: beam length.
         '''
         self.E= E
+        self.A= A
         self.I= I
         self.l= l
 
     def EI(self):
-        ''' Return the tangent stiffness.'''
+        ''' Return the tangent bending stiffness.'''
         return self.E*self.I
+
+    def EA(self):
+        ''' Return the axial stiffness.'''
+        return self.E*self.A
 
     def samplePoints(self, x0, x1):
         ''' Return a list of sample points.

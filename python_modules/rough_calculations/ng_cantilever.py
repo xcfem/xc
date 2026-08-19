@@ -25,6 +25,15 @@ from misc_utils import log_messages as lmsg
 class Cantilever(bm.Beam):
     ''' Cantilever formulas.'''
     
+    def getAxialDisplacementUnderUniformAxialLoad(self, w):
+        '''Return the axial displacement at the tip of the cantilever
+           due to a uniform axial load.
+
+        :param w: uniform axial load per unit length.
+        '''
+        W= w*self.l
+        return W*self.l/2.0/self.EA()
+        
     def getShearUnderUniformLoad(self,q,x):
         ''' Return the shear value at x.
 
