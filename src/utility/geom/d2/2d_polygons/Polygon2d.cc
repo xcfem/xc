@@ -108,13 +108,13 @@ GeomObj *Polygon2d::getCopy(void) const
 Polygon2d Polygon2d::offset(const GEOM_FT &d) const
   {
     Polygon2d retval;
-    typedef boost::shared_ptr<CGPolygon_2> PolygonPtr;
+    typedef std::shared_ptr<CGPolygon_2> PolygonPtr;
     typedef std::vector<PolygonPtr> PolygonPtrVector;
     PolygonPtrVector offset_polygons;
     if(d<0)
-      offset_polygons= CGAL::create_interior_skeleton_and_offset_polygons_2(-d,cgpol);
+      offset_polygons= CGAL::create_interior_skeleton_and_offset_polygons_2(-d, this->cgpol);
     else
-      offset_polygons= CGAL::create_exterior_skeleton_and_offset_polygons_2(d,cgpol);
+      offset_polygons= CGAL::create_exterior_skeleton_and_offset_polygons_2(d, this->cgpol);
     if(!offset_polygons.empty())
       {
         if(offset_polygons.size()!=1)
