@@ -52,17 +52,18 @@ class VertexPos: public KDTreePos
     explicit VertexPos(const Pos3d &p);
     inline const int &getIndex(void) const
       { return index; }
-    static inline double tac( VertexPos p, size_t k ) { return p[k]; }
+    static inline double tac( VertexPos p, size_t k )
+      { return p[k]; }
   };
 
 inline bool operator==(const VertexPos &A,const VertexPos &B)
   { return ((A.getIndex()== B.getIndex()) && (A[0] == B[0]) && (A[1] == B[1]) && (A[2] == B[2])); }
 
-class VerticesKDTree: protected kd_tree::KDTree<3, VertexPos, std::pointer_to_binary_function<VertexPos,size_t,double> >
+class VerticesKDTree: protected kd_tree::KDTree<3, VertexPos, std::function<double(VertexPos,size_t)> >
   {
     size_t pend_optimizar;
   public:
-    typedef kd_tree::KDTree<3, VertexPos, std::pointer_to_binary_function<VertexPos,size_t,double> > tree_type;
+    typedef kd_tree::KDTree<3, VertexPos, std::function<double(VertexPos,size_t)> > tree_type;
     VerticesKDTree(void);
 
     void insert(const int &,const Pos3d &);

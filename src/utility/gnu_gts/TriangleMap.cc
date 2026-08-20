@@ -35,7 +35,7 @@ VertexPos::VertexPos(const Pos3d &p)
 
 //! @brief Constructor.
 VerticesKDTree::VerticesKDTree(void)
-  : tree_type(std::ptr_fun(VertexPos::tac)), pend_optimizar(0) {}
+  : tree_type(std::function<double(VertexPos,size_t)>(VertexPos::tac)), pend_optimizar(0) {}
 
 
 void VerticesKDTree::insert(const int &i,const Pos3d &p)
