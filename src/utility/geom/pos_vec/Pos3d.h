@@ -40,9 +40,10 @@ class Solid3d;
 
 //! @ingroup GEOM
 //
-//! @brief Posición en tres dimensiones.
+//! @brief 3D position.
 class Pos3d : public ProtoGeom
   {
+  private:
     CGPoint_3 cgpt;
   public:
     typedef Vector3d vector;

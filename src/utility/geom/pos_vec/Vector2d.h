@@ -40,6 +40,7 @@ class FT_matrix;
 //! @brief Vector en dos dimensiones.
 class Vector2d: public ProtoGeom
   {
+  private:
     CGVector_2 cgvct;
   public:
     Vector2d(void): ProtoGeom(), cgvct(CGAL::NULL_VECTOR) {}
@@ -53,7 +54,7 @@ class Vector2d: public ProtoGeom
     explicit Vector2d(const FT_matrix &m);
     Vector2d(const Pos2d &p1,const Pos2d &p2);
 
-    virtual bool operator==(const Vector2d &) const;
+    bool operator==(const Vector2d &) const;
     bool operator!=(const Vector2d &) const;
     const CGVector_2 &ToCGAL(void) const
       { return cgvct; }

@@ -38,6 +38,7 @@ class SbVec3f;
 //! @brief Vector en tres dimensiones.
 class Vector3d: public ProtoGeom
   {
+  private:
     CGVector_3 cgvct;
   public:
     Vector3d(void): cgvct(CGAL::NULL_VECTOR){}
@@ -47,7 +48,7 @@ class Vector3d: public ProtoGeom
     explicit Vector3d(const FT_matrix &m);
     explicit Vector3d(const boost::python::list &);
     Vector3d(const Pos3d &p1,const Pos3d &p2);
-    virtual bool operator==(const Vector3d &) const;
+    bool operator==(const Vector3d &) const;
     bool operator!=(const Vector3d &) const;
     const CGVector_3 &ToCGAL(void) const
       { return cgvct; }

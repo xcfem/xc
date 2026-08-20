@@ -40,6 +40,7 @@ class Polygon2d;
 //! @brief Posición en dos dimensiones.
 class Pos2d: public ProtoGeom
   {
+  private:
     CGPoint_2 cgpt;
   public:
     typedef Vector2d vector;
