@@ -37,6 +37,7 @@ class Pos2dList;
 //! @brief Polígono en dos dimensiones.
 class Polygon2d: public PolygonalSurface2d
   {
+  private:
     CGPolygon_2 cgpol; //CGAL polygon.
     template <class inputIterator>
     bool Overlap(inputIterator begin, inputIterator end) const;
