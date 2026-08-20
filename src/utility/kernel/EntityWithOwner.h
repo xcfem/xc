@@ -19,7 +19,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //EntityWithOwner.h
-//Entidad con punetero a su propietaria.
+//Entity with a pointer to its owner.
 
 #ifndef ENTITYWITHOWNER_H
 #define ENTITYWITHOWNER_H
@@ -37,12 +37,12 @@ class EntityWithOwner
     EntityWithOwner *owner; //! Object that owns THIS ONE.
   protected:
     static int verbosity; //!< Verbosity level.
-    virtual bool isEqual(const EntityWithOwner &) const;
+    bool isEqual(const EntityWithOwner &) const;
    public:
     EntityWithOwner(EntityWithOwner *owr= nullptr);
     EntityWithOwner(const EntityWithOwner &);
     EntityWithOwner &operator=(const EntityWithOwner &);
-    virtual bool operator==(const EntityWithOwner &) const;
+    bool operator==(const EntityWithOwner &) const;
     //! @brief Virtual destructor
     virtual ~EntityWithOwner(void) {}
     
