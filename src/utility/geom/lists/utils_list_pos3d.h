@@ -24,11 +24,11 @@
 #define UTILS_LIST_POS3D_H
 
 #include "utility/geom/GeomObj.h"
+#include "utility/geom/pos_vec/Pos3d.h"
 #include "utility/geom/pos_vec/Vector3d.h"
 
 class BND3d;
 class Trf3d;
-class Vector3d;
 class PrincipalAxes3D;
 
 //Auxiliary functions for manipulation of position lists.
