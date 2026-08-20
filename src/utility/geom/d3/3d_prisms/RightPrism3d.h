@@ -102,7 +102,7 @@ class RightPrism3d : public Prism3d
     inline Pos3d getCenterOfMassOfBottom(void) const
       { return extru.getCenterOfMassOfBottom(); }
     inline Pos3d getCenterOfMassOfFacet(unsigned int faceta) const
-      { return this->Faceta(faceta).getCenterOfMass(); }
+      { return extru.Faceta(faceta).getCenterOfMass(); }
     
   };
 
