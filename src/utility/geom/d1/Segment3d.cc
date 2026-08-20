@@ -27,8 +27,8 @@
 #include "../pos_vec/Pos3d.h"
 #include "utility/geom/pos_vec/VectorPos3d.h"
 #include <CGAL/AABB_tree.h>
-#include <CGAL/AABB_traits.h>
-#include <CGAL/AABB_segment_primitive.h>
+#include <CGAL/AABB_traits_3.h>
+#include <CGAL/AABB_segment_primitive_3.h>
 #include <boost/graph/graphviz.hpp>
 #include <boost/graph/graph_utility.hpp>
 #include "utility/geom/d1/Polyline3d.h"
@@ -212,10 +212,10 @@ Pos3d Segment3d::getCenterOfMass(void) const
 GeomObj3d::list_Pos3d Segment3d::getIntersection(const Line3d &r) const
   {
     GeomObj3d::list_Pos3d retval;
-    auto result= intersection(cgseg, r.ToCGAL());
+    const auto result= intersection(cgseg, r.ToCGAL());
     if(result)
       {
-	const CGSegment_3 *s= boost::get<CGSegment_3>(&*result);
+	const CGSegment_3 *s= std::get_if<CGSegment_3>(&*result);
         if(s)
 	  {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
@@ -226,7 +226,7 @@ GeomObj3d::list_Pos3d Segment3d::getIntersection(const Line3d &r) const
 	  }
 	else
 	  {
-            const CGPoint_3* p= boost::get<CGPoint_3 >(&*result);
+            const CGPoint_3* p= std::get_if<CGPoint_3 >(&*result);
 	    retval.push_back(Pos3d(*p));
           }
       }
@@ -241,7 +241,7 @@ GeomObj3d::list_Pos3d Segment3d::getIntersection(const Ray3d &sr) const
     auto result= intersection(cgseg, sr.ToCGAL());
     if(result)
       {
-	const CGSegment_3 *s= boost::get<CGSegment_3>(&*result);
+	const CGSegment_3 *s= std::get_if<CGSegment_3>(&*result);
         if(s)
 	  {
 	    std::clog << getClassName() << "::" << __FUNCTION__
@@ -253,7 +253,7 @@ GeomObj3d::list_Pos3d Segment3d::getIntersection(const Ray3d &sr) const
 	  }
 	else
 	  {
-            const CGPoint_3* p= boost::get<CGPoint_3 >(&*result);
+            const CGPoint_3* p= std::get_if<CGPoint_3 >(&*result);
 	    retval.push_back(Pos3d(*p));
           }
       }
@@ -286,7 +286,7 @@ GeomObj3d::list_Pos3d Segment3d::getIntersection(const Segment3d &sg2) const
       result= intersection(sg2.cgseg, cgseg); // Sometimes this works.
     if(result)
       {
-	const CGSegment_3 *s= boost::get<CGSegment_3>(&*result);
+	const CGSegment_3 *s= std::get_if<CGSegment_3>(&*result);
         if(s)
 	  {
 	    std::clog << getClassName() << "::" << __FUNCTION__
@@ -299,7 +299,7 @@ GeomObj3d::list_Pos3d Segment3d::getIntersection(const Segment3d &sg2) const
 	  }
 	else
 	  {
-            const CGPoint_3* p= boost::get<CGPoint_3 >(&*result);
+            const CGPoint_3* p= std::get_if<CGPoint_3 >(&*result);
 	    retval.push_back(Pos3d(*p));
           }
       }
@@ -512,8 +512,8 @@ typedef SegmentVector::const_iterator ConstIterator;
 typedef std::pair<ConstIterator,ConstIterator> IdPair;
 typedef std::list<IdPair> PairList;
 typedef SegmentVector::iterator Iterator;
-typedef CGAL::AABB_segment_primitive<GEOMKernel, Iterator> Primitive;
-typedef CGAL::AABB_traits<GEOMKernel, Primitive> Traits;
+typedef CGAL::AABB_segment_primitive_3<GEOMKernel, Iterator> Primitive;
+typedef CGAL::AABB_traits_3<GEOMKernel, Primitive> Traits;
 typedef CGAL::AABB_tree<Traits> Tree;
 typedef Tree::Primitive_id PrimitiveId;
 typedef std::list<PrimitiveId> IdList;
