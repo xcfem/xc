@@ -310,7 +310,7 @@ int PolyPos<pos>::getIndexOfSegmentAtLength(const GEOM_FT &s) const
 //! @param lambda: parameter (0.0->start of the pline, 1.0->end of the pline).
 template <class pos>
 int PolyPos<pos>::getIndexOfSegmentAtParam(const GEOM_FT &lambda) const
-  { return this->getIndexOfSegmentAtParam(lambda*this->getLength()); }
+  { return this->getIndexOfSegmentAtLength(lambda*this->getLength()); }
 
 //! @brief Return the list of values for j-th coordinate.
 template <class pos>
