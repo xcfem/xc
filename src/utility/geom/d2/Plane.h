@@ -48,9 +48,9 @@ class Ref2d3d;
 //! @brief Plane in a three-dimensional space.
 class Plane : public Surface3d
   {
+  private:
     CGPlane_3 cgp;
   public:
-
     typedef enum{AHEAD,BEHIND,INSIDE,CROSSES} polygon_classification;
 
   protected:
