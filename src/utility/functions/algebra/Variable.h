@@ -30,6 +30,7 @@ class ExprAlgebra;
 
 class Variable : public NamedOperand
   {
+  private:
     bool asignada;
   public:
     Variable(void) : NamedOperand(), asignada(false) {}

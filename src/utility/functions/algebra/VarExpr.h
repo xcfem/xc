@@ -27,7 +27,9 @@
 
 class VarExpr : public Variable
   {
+  private:
     ExprAlgebra expr;
+    using Variable::AsignaExpr;
   public:
     VarExpr(void) : Variable() {}
     VarExpr(const std::string &nmb): Variable(nmb) {}

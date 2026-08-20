@@ -33,7 +33,7 @@ class ExprBase: public ProtoExpresion
     //! @brief Constructor por defecto.
     ExprBase(const bool &ET)
       : ProtoExpresion(), err_traduc(ET) {}
-    virtual bool operator==(const ExprBase &) const;
+    bool operator==(const ExprBase &) const;
     inline bool operator!=(const ExprBase &other) const
       { return !operator==(other); }
     //! @brief Devuelve verdadero si ha habido errores en la traducción.

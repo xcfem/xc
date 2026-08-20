@@ -97,7 +97,7 @@ class ArbolExpr : public ExprBase
     ArbolExpr(const std::string &str);
     ArbolExpr(const ArbolExpr &otro);
     explicit ArbolExpr(const double &d);
-    virtual bool operator==(const ArbolExpr &) const;
+    bool operator==(const ArbolExpr &) const;
     ArbolExpr &operator=(const ArbolExpr &otro);
     ArbolExpr &operator+=(const ArbolExpr &a2);
     ArbolExpr &operator-=(const ArbolExpr &a2);
