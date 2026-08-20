@@ -30,6 +30,7 @@
 class vcolM: public MMatrix
   {
   private:
+    using MMatrix::operator();
     inline m_double &operator()(const size_t &iRow,const size_t &)
       { return MMatrix::operator()(iRow,1); }
     inline const m_double &operator()(const size_t &iRow,const size_t &) const

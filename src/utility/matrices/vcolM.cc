@@ -30,7 +30,7 @@ vcolM::vcolM(const std::vector<size_t> &dim)
     const size_t num_gdl= dim.size();
     vcolM retval(num_gdl,m_double(1,1,0.0));
     for(size_t i=0;i<num_gdl;i++) //Iteramos sobre los grados de libertad.
-      (*this)(i+1)= m_double(dim[i],1,0.0); //Inicializamos el vector.
+      MMatrix::operator()(i+1, 1)= m_double(dim[i],1,0.0); //Inicializamos el vector.
   }
 //! @brief Constructor.
 vcolM::vcolM(const MMatrix &m,const size_type &c)
@@ -38,7 +38,7 @@ vcolM::vcolM(const MMatrix &m,const size_type &c)
   {
     const size_type nf= m.getNumberOfRows();
     for(size_type i=1;i<=nf;i++)
-      (*this)(i)= m(i,1);
+      MMatrix::operator()(i)= m(i,1);
   }
 vcolM &vcolM::operator*=(const m_double &m)
   {

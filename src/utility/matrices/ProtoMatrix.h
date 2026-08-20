@@ -130,7 +130,7 @@ class ProtoMatrix
         inic(m.n_rows,m.n_columns);
         return *this;
       }
-    virtual bool operator==(const ProtoMatrix &other) const
+    bool operator==(const ProtoMatrix &other) const
       {
 	bool retval= false;
 	if(this==&other)
