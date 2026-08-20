@@ -34,8 +34,8 @@ class Dir2d;
 //! @brief Ray in a two-dimensional space.
 class Ray2d : public Linear2d
   {
+  private:
     CGRay_2 cgsr;
-
     friend class Segment2d;
   public:
     Ray2d(void): Linear2d(),cgsr(CGPoint_2(0,0),CGPoint_2(1,0)) {}

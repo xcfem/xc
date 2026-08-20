@@ -37,6 +37,7 @@ class Polyline2d;
 //! @brief Segment in a two-dimensional space.
 class Segment2d : public Linear2d
   {
+  private:
     CGSegment_2 cgseg;
   public:
     Segment2d(void): Linear2d(),cgseg(CGPoint_2(0,0),CGPoint_2(1,0)) {}

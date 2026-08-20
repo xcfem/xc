@@ -35,6 +35,7 @@ class Dir3d;
 //! @brief Ray in a three-dimensional space.
 class Ray3d : public Linear3d
   {
+  private:
     CGRay_3 cgsr;
   public:
     Ray3d(void);
