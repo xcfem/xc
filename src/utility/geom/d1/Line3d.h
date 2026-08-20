@@ -37,6 +37,7 @@
 //! @brief Line in a three-dimensional space (parametric form).
 class Line3dParametricForm
   {
+  private:
     Pos3d org; //!< Line origin.
     Vector3d dir; //!< Direction vector.
   public:
@@ -61,6 +62,7 @@ class Dir3d;
 //! @brief Line in a three-dimensional space.
 class Line3d : public Linear3d
   {
+  private:
     CGLine_3 cgr;
     static const Pos3d defaultOrg;
     static const Pos3d defaultDest;

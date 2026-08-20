@@ -60,8 +60,8 @@ class Polyline2d;
 //! @brief Line in a two-dimensional space.
 class Line2d : public Linear2d
   {
+  private:
     CGLine_2 cgr;
-
     friend class Ray2d;
     friend class Segment2d;
   protected:
