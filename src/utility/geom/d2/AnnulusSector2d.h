@@ -42,7 +42,7 @@ class AnnulusSector2d : public CircularSector2d
     AnnulusSector2d(void) : CircularSector2d(), inner_radius(0.0) {}
     AnnulusSector2d(const CircularSector2d &c,const double &inner_radius);
 
-    virtual bool operator==(const AnnulusSector2d &) const;
+    bool operator==(const AnnulusSector2d &) const;
     virtual Surface2d *getCopy(void) const
       { return new AnnulusSector2d(*this); }
     virtual Pos2d getCenterOfMass(void) const;

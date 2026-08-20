@@ -41,7 +41,7 @@ class CircularSector2d : public Circle2d
     CircularSector2d(const Circle2d &c,const double &th1,const double &th2, bool ckwise= false);
     CircularSector2d(const Pos2d &p1,const Pos2d &p2,const Pos2d &p3);
     
-    virtual bool operator==(const CircularSector2d &) const;
+    bool operator==(const CircularSector2d &) const;
     virtual Surface2d *getCopy(void) const;
     virtual Pos2d getCenterOfMass(void) const;
     virtual Pos2d ArcCentroid(void) const;
