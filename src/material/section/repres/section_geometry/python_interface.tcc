@@ -69,6 +69,8 @@ class_<XC::SectionGeometry, XC::SectionGeometry *, bases<XC::SectionMassProperti
   .def("getRegionMaterials",&XC::SectionGeometry::getRegionMaterialsPy, "Return a Python list containing the different materials of the regions.")
   .def("getMaterials",&XC::SectionGeometry::getMaterialsPy, "Return a Python list containing the different materials of the reinforcement.")
 
+  .def("getLinearRho", &XC::SectionGeometry::getLinearRho, "Return the mass per unit length of the section.")
+
   .def("getFiberSection2d", make_function(&XC::SectionGeometry::getFiberSection2d, return_internal_reference<>()), "Return a 2D fiber section material.")
   .def("getFiberSection3d", make_function(&XC::SectionGeometry::getFiberSection3d, return_internal_reference<>()), "Return a 3D fiber section material.")
   .def("getFiberSectionGJ", make_function(&XC::SectionGeometry::getFiberSectionGJ, return_internal_reference<>()), "Return a 3D fiber section material with torsional stiffness.")

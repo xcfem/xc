@@ -374,7 +374,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             fcm= self.getFcm() # mean 28-day cylinder compressive strength.
             fct= self.getFctm() # the tensile strength (splitting or axial tensile strength should be input, rather than the flexural).
             mc10CreepShrinkageParameters= self.tdConcreteParameters.creepShrinkageParameters
-            retval= typical_materials.defTDConcreteMC10(preprocessor= preprocessor,name= name, fcm= fcm, ft= fct, Ec= Ec, Ecm= Ecm, beta= cp.beta, age= cp.age, mc10CSParameters= mc10CreepShrinkageParameters, tcast= cp.tcast)
+            retval= typical_materials.defTDConcreteMC10(preprocessor= preprocessor,name= name, fcm= fcm, ft= fct, Ec= Ec, Ecm= Ecm, beta= cp.beta, age= cp.age, mc10CSParameters= mc10CreepShrinkageParameters, tcast= cp.tcast, rho= self.density())
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -437,7 +437,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             Etsdiag=abs(self.tensionStiffparam.regresLine()['slope'])
             self.Ets=Etsdiag
             self.epsctu=ectdiag+ftdiag/Etsdiag
-            materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.getKDiagName(),epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
+            materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.getKDiagName(),epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag, rho= self.density())
             materialDiagramK.epsct0=ectdiag
             materialDiagramK.epsctu=ectdiag+ftdiag/Etsdiag
             '''
@@ -448,15 +448,15 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             '''
             # ftdiag=self.tensionStiffparam.f_ct
             # Etsdiag=-self.tensionStiffparam.slopeRegresLineFixedPoint()
-            # materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.getKDiagName(),epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
+            # materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.getKDiagName(),epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag, rho= self.density())
         elif(self.initTensStiff):
             Etsdiag, fctdiag= self.getApproximateEts()
-            materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.getKDiagName(),epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
+            materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.getKDiagName(),epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag, rho= self.density())
 #            materialDiagramK.epsct0=ectdiag
 #            materialDiagramK.epsctu=ectdiag+ftdiag/Etsdiag
             
         else:
-            materialDiagramK= typical_materials.defConcrete01(preprocessor=preprocessor,name= self.getKDiagName(),epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=self.fmaxK(),epscu=self.epsilonU())
+            materialDiagramK= typical_materials.defConcrete01(preprocessor=preprocessor,name= self.getKDiagName(),epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=self.fmaxK(),epscu=self.epsilonU(), rho= self.density())
         return materialDiagramK
     
     def defDiagK(self, preprocessor):
@@ -519,16 +519,16 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             Etsdiag=abs(self.tensionStiffparam.regresLine()['slope'])
             self.Ets=Etsdiag
             self.epsctu=ectdiag+ftdiag/Etsdiag
-            materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.getDDiagName(),epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=0.85*self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
+            materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.getDDiagName(),epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=0.85*self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag, rho= self.density())
             materialDiagramD.epsct0=ectdiag
             materialDiagramD.epsctu=ectdiag+ftdiag/Etsdiag
         elif(self.initTensStiff):
             ftdiag= self.fctk()/10.
             ectdiag= ftdiag/self.E0()
             Etsdiag= ftdiag/(5*ectdiag)
-            materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.getDDiagName(),epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=0.85*self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
+            materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name= self.getDDiagName(),epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=0.85*self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag, rho= self.density())
         else:
-            materialDiagramD= typical_materials.defConcrete01(preprocessor=preprocessor,name= self.getDDiagName(),epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=self.fmaxD(),epscu=self.epsilonU())
+            materialDiagramD= typical_materials.defConcrete01(preprocessor=preprocessor,name= self.getDDiagName(),epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=self.fmaxD(),epscu=self.epsilonU(), rho= self.density())
         return materialDiagramD
     
     def defDiagD(self, preprocessor):
@@ -1566,7 +1566,7 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
 
         :param preprocessor: pre-processor for the finite element problem.
         '''
-        return typical_materials.defSteel01(preprocessor, self.getKDiagName(),self.Es,self.fyk,self.bsh())
+        return typical_materials.defSteel01(preprocessor, self.getKDiagName(),self.Es,self.fyk,self.bsh(), rho= self.rho)
     
     def defDiagK(self, preprocessor):
         ''' Returns an XC uniaxial material  corresponding to the characteristic
@@ -1589,7 +1589,7 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
 
         :param preprocessor: pre-processor for the finite element problem.
         '''
-        return typical_materials.defSteel01(preprocessor, self.getDDiagName(),self.Es,self.fyd(),self.bsh())
+        return typical_materials.defSteel01(preprocessor, self.getDDiagName(),self.Es,self.fyd(),self.bsh(), rho= self.rho)
     
     def defDiagD(self, preprocessor):
         ''' Returns and XC uniaxial material corresponding to the design values

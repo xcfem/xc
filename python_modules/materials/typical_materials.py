@@ -34,7 +34,11 @@ class BasicElasticMaterial(object):
         self.E= E
         self.nu= nu
         self.rho= rho
-        
+
+    def density(self):
+        ''' Return the mass per unit volume.'''
+        return self.rho
+    
     def G(self):
         '''shear modulus.'''
         return self.E/(2*(1+self.nu))
@@ -334,7 +338,7 @@ def defCableMaterial(preprocessor, name, E, prestress, rho):
 
 
 #Steel 01.
-def defSteel01(preprocessor,name,E,fy,b):
+def defSteel01(preprocessor, name, E, fy, b, rho= 7850):
     '''Constructs a uniaxial bilinear steel material object with kinematic hardening
 
     :param preprocessor: preprocessor of the finite element problem.
@@ -342,20 +346,22 @@ def defSteel01(preprocessor,name,E,fy,b):
     :param E: initial elastic tangent 
     :param fy: yield strength 
     :param b: strain-hardening ratio: ratio between post-yield tangent
-                    and initial elastic tangent
+                    and initial elastic tangent.
+    :param rho: mass density.
     '''
     materialHandler= preprocessor.getMaterialHandler
     matName= name
     if(not matName):
         matName= uuid.uuid1().hex
     retval= materialHandler.newMaterial("steel01", matName)
+    retval.setRho(rho)
     retval.E= E
     retval.fy= fy
     retval.b= b
     return retval
 
 #Steel 02.
-def defSteel02(preprocessor, name, E, fy, b, initialStress= 0.0, params= None, a1= None, a2= None, a3= None, a4= None):
+def defSteel02(preprocessor, name, E, fy, b, initialStress= 0.0, params= None, a1= None, a2= None, a3= None, a4= None, rho= 7850):
     '''Constructs a uniaxial bilinear Giuffre-Menegotto-Pinto steel material with 
     isotropic strain hardening
 
@@ -371,12 +377,14 @@ def defSteel02(preprocessor, name, E, fy, b, initialStress= 0.0, params= None, a
     :param a2: coefficient for isotropic hardening in compression (see a1).
     :param a3: isotropic hardening parameter, increase of tension yield envelope as proportion of yield strength after a plastic strain of a4∗(Fy/E0). (optional)
     :param a4: coefficient for isotropic hardening in tension (see a3)
+    :param rho: mass density.
     '''
     materialHandler= preprocessor.getMaterialHandler
     matName= name
     if(not matName):
         matName= uuid.uuid1().hex
     retval= materialHandler.newMaterial("steel02", matName)
+    retval.setRho(rho)
     retval.E= E
     retval.fy= fy
     retval.b= b
@@ -399,7 +407,7 @@ def defSteel02(preprocessor, name, E, fy, b, initialStress= 0.0, params= None, a
 
 
 #Concrete 01.
-def defConcrete01(preprocessor,name,epsc0,fpc,fpcu,epscu):
+def defConcrete01(preprocessor,name,epsc0,fpc, fpcu, epscu, rho= 2500):
     ''''Constructs an uniaxial Kent-Scott-Park concrete material object 
     with degraded linear unloading/reloading stiffness according to 
     the work of Karsan-Jirsa and no tensile strength
@@ -410,12 +418,14 @@ def defConcrete01(preprocessor,name,epsc0,fpc,fpcu,epscu):
     :param fpc: concrete compressive strength at 28 days (compression is negative)
     :param fpcu: concrete crushing strength 
     :param epscu: concrete strain at crushing strength 
+    :param rho: mass density of the concrete (defaults to 2500 kg/m3).
     '''
     materialHandler= preprocessor.getMaterialHandler
     matName= name
     if(not matName):
         matName= uuid.uuid1().hex
     retval= materialHandler.newMaterial("concrete01_material", matName)
+    retval.setRho(rho)
     retval.epsc0= epsc0
     retval.fpc= fpc
     retval.fpcu= fpcu
@@ -427,7 +437,7 @@ def defConcrete01(preprocessor,name,epsc0,fpc,fpcu,epscu):
 
 
 # Concrete 02.
-def _def_concrete_02(preprocessor, className, matName, epsc0, fpc, fpcu, epscu, ratioSlope= 0.1, ft= None, Ets= None):
+def _def_concrete_02(preprocessor, className, matName, epsc0, fpc, fpcu, epscu, ratioSlope= 0.1, ft= None, Ets= None, rho= 2500):
     ''''Constructs an uniaxial concrete material with linear tension
     softening. Compressive concrete parameters should be input as negative values.
     The initial slope for this model is (2*fpc/epsc0) 
@@ -444,13 +454,14 @@ def _def_concrete_02(preprocessor, className, matName, epsc0, fpc, fpcu, epscu, 
     :param ratioSlope: ratio between unloading slope at epscu and initial slope (defaults to 0.1).
     :param ft: tensile strength (defaults to None in which case the value is set to -0.1*fpc)
     :param Ets: tension softening stiffness (absolute value) (slope of the linear tension softening branch) (defaults to None in which case the value is set to 0.1*fpc/epsc0)
-
+    :param rho: mass density of the concrete (defaults to 2500 kg/m3).
     '''
     materialHandler= preprocessor.getMaterialHandler
     concreteName= matName
     if(not concreteName):
         concreteName= uuid.uuid1().hex
     retval= materialHandler.newMaterial(className, concreteName)
+    retval.setRho(rho)
     retval.epsc0= epsc0
     retval.fpc= fpc
     retval.fpcu= fpcu
@@ -468,7 +479,7 @@ def _def_concrete_02(preprocessor, className, matName, epsc0, fpc, fpcu, epscu, 
         lmsg.warning("concrete02 compressive strength fpc is equal to crushing strength fpcu => the solver can return wrong stresses or have convergence problems ")
     return retval
 
-def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope= 0.1, ft= None, Ets= None):
+def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope= 0.1, ft= None, Ets= None, rho= 2500):
     ''''Constructs an uniaxial concrete material with linear tension
     softening. Compressive concrete parameters should be input as negative values.
     The initial slope for this model is (2*fpc/epsc0) 
@@ -482,6 +493,7 @@ def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope= 0.1, ft= No
     :param ratioSlope: ratio between unloading slope at epscu and initial slope (defaults to 0.1).
     :param ft: tensile strength (defaults to None in which case the value is set to -0.1*fpc)
     :param Ets: tension softening stiffness (absolute value) (slope of the linear tension softening branch) (defaults to None in which case the value is set to 0.1*fpc/epsc0)
+    :param rho: mass density of the concrete (defaults to 2500 kg/m3).
 
     '''
     return _def_concrete_02(preprocessor= preprocessor,
@@ -493,11 +505,12 @@ def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope= 0.1, ft= No
                             epscu= epscu,
                             ratioSlope= ratioSlope,
                             ft= ft,
-                            Ets= Ets)
+                            Ets= Ets,
+                            rho= rho)
     return retval
 
 # Concrete 02.
-def defConcrete02IS(preprocessor,name,epsc0,fpc,fpcu,epscu, Ec0, ratioSlope= 0.1, ft= None, Ets= None):
+def defConcrete02IS(preprocessor,name,epsc0,fpc,fpcu,epscu, Ec0, ratioSlope= 0.1, ft= None, Ets= None, rho= 2500):
     '''Constructs an uniaxial concrete material with linear tension
        softening and initial stiffness. Compressive concrete parameters should 
        be input as negative values. The initial slope for this model is Ec0. 
@@ -514,6 +527,7 @@ def defConcrete02IS(preprocessor,name,epsc0,fpc,fpcu,epscu, Ec0, ratioSlope= 0.1
     :param Ets: tension softening stiffness (absolute value) (slope of the 
                 linear tension softening branch) (defaults to None in 
                 which case the value is set to 0.1*fpc/epsc0).
+    :param rho: mass density of the concrete (defaults to 2500 kg/m3).
     '''
     retval= _def_concrete_02(preprocessor= preprocessor,
                              className= "concrete02is_material",
@@ -524,7 +538,8 @@ def defConcrete02IS(preprocessor,name,epsc0,fpc,fpcu,epscu, Ec0, ratioSlope= 0.1
                              epscu= epscu,
                              ratioSlope= ratioSlope,
                              ft= ft,
-                             Ets= Ets)
+                             Ets= Ets,
+                             rho= rho)
     if(Ec0):
         retval.Ec0= Ec0
     else:
@@ -575,7 +590,7 @@ def defCreepMaterial(preprocessor, name, encapsulatedConcrete, beta, age, tcast,
     return retval
 
 # TDConcrete.
-def defTDConcrete(preprocessor, name, fpc, ft, Ec, beta, age, tcast, csParameters, Ets= None):
+def defTDConcrete(preprocessor, name, fpc, ft, Ec, beta, age, tcast, csParameters, Ets= None, rho= 2500):
     ''''Constructs an uniaxial concrete material concrete is linear in 
         compression with nonlinear tension softening; creep and shrinkage ç
         evolution equations are based on ACI 209R-92 models.
@@ -591,12 +606,14 @@ def defTDConcrete(preprocessor, name, fpc, ft, Ec, beta, age, tcast, csParameter
                   (note: concrete will not be able to take on loads until 
                   the age of 2 days).
     :param csParameters: creep and shrinkage parameters.
+    :param rho: mass density of the concrete (defaults to 2500 kg/m3).
     '''
     materialHandler= preprocessor.getMaterialHandler
     matName= name
     if(not matName):
         matName= uuid.uuid1().hex
     retval= materialHandler.newMaterial("tdconcrete_material", matName)
+    retval.setRho(rho)
     retval.fpc= fpc # concrete compressive strength at 28 days (compression is negative)
     retval.ft= ft # concrete tensile strength.
     if(Ets):
@@ -627,7 +644,7 @@ def def_mc10_creep_and_shrinkage_parameters(epsba, epsbb, epsda, epsdb, phiba, p
     '''
     return xc.MC10CreepShrinkageParameters(epsba, epsbb, epsda, epsdb, phiba, phibb, phida, phidb, cem)
 
-def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, tcast, mc10CSParameters, Ets= None):
+def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, tcast, mc10CSParameters, Ets= None, rho= 2500):
     ''' Defines a TDConcreteMC10 uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
@@ -649,12 +666,14 @@ def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, tcast, mc1
     :param Ets: tension softening stiffness (absolute value) (slope of the 
                 linear tension softening branch) (defaults to None in 
                 which case the value is set to 0.1*fpc/epsc0).
+    :param rho: mass density of the concrete (defaults to 2500 kg/m3).
     '''
     materialHandler= preprocessor.getMaterialHandler
     matName= name
     if(not matName):
         matName= uuid.uuid1().hex
     retval= materialHandler.newMaterial("tdconcrete_mc10_material", matName)
+    retval.setRho(rho)
     retval.fpc= fcm # mean concrete compressive strength at 28 days (compression is negative)
     retval.ft= ft # concrete tensile strength.
     if(Ets):
@@ -672,7 +691,7 @@ def defTDConcreteMC10(preprocessor,name, fcm, ft, Ec, Ecm, beta, age, tcast, mc1
     retval.setup()
     return retval
 
-def defTDConcreteMC10NL(preprocessor,name, fcm, fcu, epscu, ft, Ec, Ecm, beta, age, tcast, mc10CSParameters, Ets= None):
+def defTDConcreteMC10NL(preprocessor,name, fcm, fcu, epscu, ft, Ec, Ecm, beta, age, tcast, mc10CSParameters, Ets= None, rho= 2500):
     '''
     :param preprocessor: preprocessor of the finite element problem.
     :param name: name identifying the new material.
@@ -695,12 +714,14 @@ def defTDConcreteMC10NL(preprocessor,name, fcm, fcu, epscu, ft, Ec, Ecm, beta, a
     :param Ets: tension softening stiffness (absolute value) (slope of the 
                 linear tension softening branch) (defaults to None in 
                 which case the value is set to 0.1*fpc/epsc0).
+    :param rho: mass density of the concrete (defaults to 2500 kg/m3).
     '''
     materialHandler= preprocessor.getMaterialHandler
     matName= name
     if(not matName):
         matName= uuid.uuid1().hex
     retval= materialHandler.newMaterial("tdconcrete_mc10_material", matName)
+    retval.setRho(rho)
     retval.fpc= fcm # mean concrete compressive strength at 28 days (compression is negative)
     retval.fcu= fcu # stress at ultimate (crushing) strain.
     retval.epscu= epscu # strain at crushing strength.

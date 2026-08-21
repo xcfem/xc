@@ -22,7 +22,9 @@
 //python_interface.tcc
 
 class_<XC::UniaxialMaterial,XC::UniaxialMaterial *, bases<XC::Material>, boost::noncopyable >("UniaxialMaterial", no_init)
-  .add_property("rho", &XC::UniaxialMaterial::getRho, &XC::UniaxialMaterial::setRho,"Material density.")
+  .def("getRho", &XC::UniaxialMaterial::getRho,"Get the mass density of the material.")
+  .def("setRho", &XC::UniaxialMaterial::setRho,"Set the mass density of the material.")
+  .add_property("rho", &XC::UniaxialMaterial::getRho, &XC::UniaxialMaterial::setRho,"Get/set the mass density of the material.")
   .add_property("initialStrain", &XC::UniaxialMaterial::getInitialStrain, &XC::UniaxialMaterial::setInitialStrain,"Value of the initial strain.")
   .def("getInitialStrain", &XC::UniaxialMaterial::getInitialStrain, "Get the initial strain.")
   .def("setInitialStrain", &XC::UniaxialMaterial::setInitialStrain, "Set the initial strain.")
