@@ -204,17 +204,15 @@ const XC::Matrix &XC::ElasticBeam3d::getTangentStiff(void) const
     const Vector &v= getSectionDeformation();
     // Warn about sections with product moment of inertia not zero.
     const CrossSectionProperties3d &sprop= getSectionProperties();
-    const double eiyz= sprop.EIyz();
-    // Compute an approximation of the principal ancle relative to the
-    // main moments of inertia (Ix and Iy):
-    const double approxPrincipalAngle= eiyz/std::abs(sprop.EIz()-sprop.EIy());
-    if(abs(approxPrincipalAngle)>1e-3) //Product of inertia not zero.
+    // Check that the product of inertia is small enough.
+    const bool pyzOK= sprop.checkProductOfInertia(1e-3);
+    if(!pyzOK) //Product of inertia not small enough.
       std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; this element must not"
                 << " be used with a section that have a non-zero"
                 << " product of inertia. Element tag: "
 	        << this->getTag()
-	        << " principal angle (approx.)= " << approxPrincipalAngle*1e3
+	        << " principal angle: " << sprop.getTheta()*1e3
 	        << " mrad."
                 << Color::def << std::endl;
 
@@ -319,14 +317,16 @@ const XC::Matrix &XC::ElasticBeam3d::getInitialStiff(void) const
     //Ignore sections with product moment
     //of inertia not zero.
     const CrossSectionProperties3d &sprop= getSectionProperties();
-    const double eiyz= sprop.EIyz();
-    const double eimax= std::max(sprop.EIz(),sprop.EIy());
-    if(std::abs(eiyz/eimax)>1e-5) //Product of inertia not null.
+    // Check that the product of inertia is small enough.
+    const bool pyzOK= sprop.checkProductOfInertia(1e-3);
+    if(!pyzOK) //Product of inertia not small enough.
       std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; this element must not"
-                << " be used with a section that have a non-zero ("
-	        << eiyz
-                << ") product of inertia."
+                << " be used with a section that have a non-zero"
+                << " product of inertia. Element tag: "
+	        << this->getTag()
+	        << " principal angle: " << sprop.getTheta()*1e3
+	        << " mrad."
                 << Color::def << std::endl;
 
     const double L = theCoordTransf->getInitialLength();
