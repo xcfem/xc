@@ -60,11 +60,11 @@ inline bool operator==(const ElemPos &A,const ElemPos &B)
 //! @ingroup FEMisc
 //!
 //! See <a href="https://en.wikipedia.org/wiki/K-d_tree"> k-d tree <\a>
-class KDTreeElements: protected kd_tree::KDTree<3, ElemPos, std::pointer_to_binary_function<ElemPos,size_t,double> >
+  class KDTreeElements: protected kd_tree::KDTree<3, ElemPos, std::function<double(ElemPos,size_t)> >
   {
     size_t pend_optimizar;
   public:
-    typedef kd_tree::KDTree<3, ElemPos, std::pointer_to_binary_function<ElemPos,size_t,double> > tree_type;
+    typedef kd_tree::KDTree<3, ElemPos, std::function<double(ElemPos,size_t)> > tree_type;
     KDTreeElements(void);
 
     void insert(const Element &);

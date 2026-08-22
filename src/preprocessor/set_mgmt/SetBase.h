@@ -54,7 +54,7 @@ class SetBase: public EntMdlrBase
   public:
     SetBase(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
     inline virtual ~SetBase(void) {}
-    virtual bool operator==(const SetBase &) const;
+    bool operator==(const SetBase &) const;
     void setColorComponents(const double &, const double &, const double &);
     void setColor(const Vector &);
     const Vector &getColor(void) const;

@@ -129,7 +129,7 @@ XC::NodalLoad::NodalLoad(int tag, int nodeTag, const Vector &theLoad, bool isLoa
   }
 
 //! @brief Virtual constructor.
-XC::NodalLoad *XC::NodalLoad::getCopy(const int &tag)
+XC::NodalLoad *XC::NodalLoad::getCopy(const int &tag) const
   {
     XC::NodalLoad *retval= new NodalLoad(*this);
     retval->setTag(tag);

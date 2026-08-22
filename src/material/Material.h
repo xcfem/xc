@@ -92,6 +92,9 @@ class ID;
 //! in the domain. 
 class Material: public TaggedObject, public MovableObject
   {
+  private:
+    using MovableObject::getVariable;
+    using MovableObject::setVariable;
   protected:
     bool isEqual(const Material &) const;
   public:

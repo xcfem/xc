@@ -80,12 +80,13 @@ class EntMdlr: public SetEstruct
     EntMdlr(const EntMdlr &);
     virtual ~EntMdlr(void);
     EntMdlr &operator=(const EntMdlr &);
-    virtual bool operator==(const EntMdlr &) const;
+    bool operator==(const EntMdlr &) const;
 
     std::string getDescription(void) const;
     
     virtual void set_index(const size_t &i);
 
+    using SetEstruct::In;
     virtual bool In(const GeomObj3d &, const double &tol= 0.0) const;
     virtual bool Out(const GeomObj3d &, const double &tol= 0.0) const;
 

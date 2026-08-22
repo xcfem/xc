@@ -204,10 +204,12 @@ void XC::LoadHandler::setPyDict(const boost::python::dict &d)
 	  {
 	    for(size_t i=0; i<sz; i++)
 	      {
-		const std::string key= boost::python::extract<std::string>(items[i][0]);
+		boost::python::extract<std::string> extracted_key(items[i][0]);
+		const std::string key= extracted_key();
 		const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
 		const int classTag= boost::python::extract<int>(itemDict["classTag"]);
-		const std::string className= boost::python::extract<std::string>(itemDict["className"]);
+		boost::python::extract<std::string> extracted_class_name(itemDict["className"]);
+		const std::string className= extracted_class_name();
 		GroundMotion *newObject= dynamic_cast<GroundMotion *>(get_new_movable_object(className, classTag));
 		if(newObject)
 		  {

@@ -32,11 +32,14 @@
 int tag_integer_from_py_object(const boost::python::object &obj)
   {
     int retval= -1; // if negative we have not succeeded.
-    const std::string obj_classname= boost::python::extract<std::string>(obj.attr("__class__").attr("__name__"));
+    boost::python::extract<std::string> extracted_class_name(obj.attr("__class__").attr("__name__"));
+    const std::string obj_classname= extracted_class_name();
     if(obj_classname=="str") // is a string.
       {
-        const boost::python::str py_string= boost::python::extract<boost::python::str>(obj);
-        const std::string cpp_string= boost::python::extract<std::string>(py_string);
+	boost::python::extract<boost::python::str> extracted_py_obj(obj);
+        const boost::python::str py_string= extracted_py_obj();
+	boost::python::extract<std::string> extracted_py_string(py_string);
+        const std::string cpp_string= extracted_py_string();
 	retval= stoi(cpp_string);
       }
     else if(obj_classname=="int") // is an integer
@@ -87,7 +90,11 @@ std::vector<std::string> vector_string_from_py_list(const boost::python::list &l
     std::vector<std::string> retval;
     const size_t sz= len(l);
     for(size_t i= 0;i<sz;++i)
-      retval.push_back(boost::python::extract<std::string>(l[i]));
+      {
+	boost::python::extract<std::string> extracted(l[i]);
+	const std::string item= extracted();
+        retval.push_back(item);
+      }
     return retval;
   }
 

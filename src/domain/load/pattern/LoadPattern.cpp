@@ -103,7 +103,7 @@ XC::LoadPattern::LoadPattern(int tag)
   {}
 
 //! @brief Virtual constructor.
-XC::LoadPattern *XC::LoadPattern::getCopy(void)
+XC::LoadPattern *XC::LoadPattern::getCopy(void) const
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	      << "; not implemented."

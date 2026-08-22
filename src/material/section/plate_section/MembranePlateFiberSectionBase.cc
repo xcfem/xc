@@ -213,7 +213,8 @@ void XC::MembranePlateFiberSectionBase::setMaterialPy(const boost::python::list 
     std::vector<std::string> mat_names(sz);
     for(size_t i= 0;i<sz;i++)
       {
-	mat_names[i]= boost::python::extract<std::string>(matNames[i]);
+	boost::python::extract<std::string> extracted(matNames[i]);
+	mat_names[i]= extracted();
       }
     this->setMaterial(mat_names);
   }

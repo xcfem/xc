@@ -60,7 +60,7 @@ class TMatrix: public ProtoMatrix, public STO
     TMatrix<T,STO>& operator=(const TMatrix<T,STO> &m);
     TMatrix<T,STO>& operator=(const T &n)
       { return Con(n); }
-    virtual bool operator==(const TMatrix<T,STO> &) const;
+    bool operator==(const TMatrix<T,STO> &) const;
     using ProtoMatrix::resize;
     void resize(size_t n_rows,size_t n_columns,T val);
     inline size_t size(void) const

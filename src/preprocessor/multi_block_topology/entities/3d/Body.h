@@ -76,8 +76,10 @@ class Body: public EntMdlr
     //! @brief Surface that limits the body (face as seen by the body).
     class BodyFace: public CommandEntity
       {
+      private:
         Face *surface; //!< Face geometry.
         SideSequence side_seq; //!< Edge sequence.
+	using CommandEntity::setPyDict;
       public:
         BodyFace(Body *b= nullptr, Face *ptr= nullptr,const size_t &p=1,const bool &d=true);
         virtual bool operator==(const BodyFace &) const;

@@ -44,6 +44,8 @@ class Paver; // wrapper of the paving algorithm.
 //! @brief Polygonal face defined by an arbitrary number of vertices.
 class PolygonalFace: public Face
   {
+  private:
+    using Face::genMesh;
   protected:
     Ref2d3d ref; //!< local reference system.
     

@@ -46,6 +46,7 @@ class PyDictDatastore: public FE_Datastore
     const std::string &getFileName(void) const
       { return getName(); }
     boost::python::dict pyDict; //!< python dictionary.
+    using FE_Datastore::insertData;
     void insertData(const std::string &,const int &,const int &,const double *,const int &);
     void insertData(const std::string &,const int &,const int &,const int *,const int &);
     std::vector<double> retrieveDoubleData(const std::string &,const int &,const int &);

@@ -117,7 +117,8 @@ void XC::LayeredShellFiberSection::setupPy(const boost::python::list &materialTh
       {
 	boost::python::tuple tpl= boost::python::extract<boost::python::tuple>(materialThicknessPairs[i]);
         if(boost::python::len(tpl) != 2) throw std::invalid_argument("bad");
-        mat_names[i]= boost::python::extract<std::string>(tpl[0]);
+	boost::python::extract<std::string> extracted(tpl[0]);
+        mat_names[i]= extracted();
         thcks[i]= boost::python::extract<double>(tpl[1]);
       }
     // Setup members.

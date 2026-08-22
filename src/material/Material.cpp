@@ -337,7 +337,8 @@ void XC::Material::setPyDict(const boost::python::dict &d)
   {
     TaggedObject::setPyDict(d);
     // Check that it has been created with the same name.
-    const std::string tmp= boost::python::extract<std::string>(d["name"]);
+    boost::python::extract<std::string> extracted(d["name"]);
+    const std::string tmp= extracted();
     if(tmp!=this->getName())
       {
 	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__

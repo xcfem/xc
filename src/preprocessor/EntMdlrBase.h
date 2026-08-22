@@ -58,7 +58,7 @@ class EntMdlrBase: public NamedEntity, public MovableObject
     EntMdlrBase &operator+=(const EntMdlrBase &);
     EntMdlrBase &operator-=(const EntMdlrBase &);
     EntMdlrBase &operator*=(const EntMdlrBase &);
-    virtual bool operator==(const EntMdlrBase &) const;
+    bool operator==(const EntMdlrBase &) const;
     const Preprocessor *getPreprocessor(void) const;
     Preprocessor *getPreprocessor(void);
     inline const LabelContainer &getLabels(void) const

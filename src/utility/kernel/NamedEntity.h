@@ -52,8 +52,13 @@ class NamedEntity: public CommandEntity
     std::string &Name(void)
       { return name; }
     //! @brief Comparison operator.
-    inline virtual bool operator==(const NamedEntity &other) const
-      { return (name==other.name); }
+    bool operator==(const NamedEntity &other) const
+      {
+	if(this==&other)
+	  return true;
+	else
+	  return (name==other.name);
+      }
     //! @brief Less than operator.
     inline bool operator<(const NamedEntity &other) const
       { return (name<other.name); }

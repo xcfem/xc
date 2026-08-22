@@ -307,7 +307,8 @@ void XC::LineMap::setPyDict(const boost::python::dict &d)
 	    const boost::python::object obj= boost::python::extract<boost::python::object>(items[i][0]);
 	    const int tag= tag_integer_from_py_object(obj);
 	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
-	    const std::string className= boost::python::extract<std::string>(itemDict["className"]);
+	    boost::python::extract<std::string> extracted(itemDict["className"]);
+	    const std::string className= extracted();
 	    Edge *tmp= New(tag, className);
 	    if(tmp)
 	      { tmp->setPyDict(itemDict); }

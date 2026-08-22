@@ -214,7 +214,10 @@ boost::python::list cmb_acc::LoadCombinationVector::getCoefficientsPy(const boos
     std::vector<std::string> v_string;
     const size_t sz= boost::python::len(base);
     for(size_t i= 0;i<sz;++i)
-      v_string.push_back(boost::python::extract<std::string>(base[i]));
+      {
+	boost::python::extract<std::string> extracted(base[i]);
+	v_string.push_back(extracted());
+      }
     const m_double tmp= this->getCoefficients(v_string);
     return m_double_to_py_list(tmp);
   }

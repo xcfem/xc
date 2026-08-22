@@ -59,11 +59,11 @@ inline bool operator==(const NodePos &A,const NodePos &B)
 //! @ingroup Nod
 //!
 //! See <a href="https://en.wikipedia.org/wiki/K-d_tree"> k-d tree <\a>
-class KDTreeNodes: protected kd_tree::KDTree<3, NodePos, std::pointer_to_binary_function<NodePos,size_t,double> >
+  class KDTreeNodes: protected kd_tree::KDTree<3, NodePos, std::function<double(NodePos,size_t)> >
   {
     size_t pend_optimizar;
   public:
-    typedef kd_tree::KDTree<3, NodePos, std::pointer_to_binary_function<NodePos,size_t,double> > tree_type;
+    typedef kd_tree::KDTree<3, NodePos, std::function<double(NodePos,size_t)> > tree_type;
     KDTreeNodes(void);
 
     void insert(const Node &);

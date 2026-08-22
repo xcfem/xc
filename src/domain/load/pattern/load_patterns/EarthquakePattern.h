@@ -89,6 +89,7 @@ class EarthquakePattern: public EQBasePattern
 // AddingSensitivity:END ///////////////////////////////////////////
     EarthquakePattern(const EarthquakePattern &);
     EarthquakePattern &operator=(const EarthquakePattern &);
+    using LoadPattern::addMotion;
   protected:
     void copy(const Vector *,const Vector *);
     int addMotion(GroundMotion &);

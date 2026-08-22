@@ -44,7 +44,8 @@ boost::python::object broke_property_from_python_dict(const boost::python::dict 
     boost::python::object retval;
     if(d.has_key("className"))
       {
-	const std::string className= boost::python::extract<std::string>(d["className"]);
+	boost::python::extract<std::string> extracted_class_name(d["className"]);
+	const std::string className= extracted_class_name();
 	if(std::find(geomClasses.begin(), geomClasses.end(), className)!=geomClasses.end())
 	  {
 	    boost::python::object foo= geom.attr(className.c_str())();

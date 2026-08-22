@@ -309,7 +309,8 @@ void XC::TaggedObjectStorage::setPyDict(const boost::python::dict &d)
       {
 	boost::python::dict objectDict= boost::python::extract<boost::python::dict>(values[i]);
 	const int classTag= boost::python::extract<int>(objectDict["classTag"]);
-	const std::string className= boost::python::extract<std::string>(objectDict["className"]);
+	boost::python::extract<std::string> extracted(objectDict["className"]);
+	const std::string className= extracted();
 	TaggedObject *newObject= get_new_tagged_object(className, classTag);
 	if(newObject)
 	  {

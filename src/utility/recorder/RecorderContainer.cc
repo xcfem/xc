@@ -272,7 +272,8 @@ void XC::RecorderContainer::setPyDict(const boost::python::dict &d)
     for(size_t i= 0; i<sz; i++)
       {
 	boost::python::dict tmp= boost::python::extract<boost::python::dict>(recorder_lst[i]);
-	const std::string className= boost::python::extract<std::string>(tmp["className"]);
+	boost::python::extract<std::string> extracted(tmp["className"]);
+	const std::string className= extracted();
 	Recorder *newR= this->newRecorder(className);
 	if(!newR) // failed.
 	  std::cerr << Color::red << "RecorderContainer::" << __FUNCTION__

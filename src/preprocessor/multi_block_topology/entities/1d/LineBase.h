@@ -40,6 +40,8 @@ namespace XC {
 //! @brief Base class for 1D entities.
 class LineBase: public Edge
   {
+  private:
+    using Edge::create_nodes;
   protected:
     Pnt *p1; //!< Back end.
     Pnt *p2; //!< Front end.
@@ -48,7 +50,7 @@ class LineBase: public Edge
   public:
     LineBase(Preprocessor *m,const size_t &ndiv= 4);
     LineBase(const std::string &name,Preprocessor *m,const size_t &ndiv= 4);
-    virtual bool operator==(const LineBase &) const;
+    bool operator==(const LineBase &) const;
     //! @brief Return pointer to back end.
     inline Pnt *P1(void)
       { return p1; }

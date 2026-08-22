@@ -57,8 +57,10 @@ class CmbEdge: public Edge
     //! line must be taken with its reversed direction or not.
     class Side: public CommandEntity
       {
+      private:
         Edge *edge; //!< Pointer to line.
         bool forward; //!< true: forward (P1->P2), false: reversed (P2->P1)
+	using CommandEntity::setPyDict;
       public:
         Side(Edge *ptr= nullptr,const bool &s=true);
         bool equal(const Side &) const;
@@ -135,7 +137,7 @@ class CmbEdge: public Edge
     CmbEdge(void);
     CmbEdge(Preprocessor *m,const size_t &nd= 4);
     CmbEdge(const std::string &name,Preprocessor *m,const size_t &nd);
-    virtual bool operator==(const CmbEdge &) const;
+    bool operator==(const CmbEdge &) const;
     virtual SetEstruct *getCopy(void) const;
     virtual void insert(Edge *l);
     void insert(const size_t &i);

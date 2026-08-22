@@ -128,7 +128,8 @@ void XC::FEProblem::setPyDict(const boost::python::dict &d)
 	          << Color::def << std::endl;
 	for(size_t i=0; i<sz; i++)
 	  {
-	    const std::string key= boost::python::extract<std::string>(items[i][0]);
+	    boost::python::extract<std::string> extracted(items[i][0]);
+	    const std::string key= extracted();
 	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
 	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << " ouput handler: " << key
@@ -142,8 +143,10 @@ void XC::FEProblem::setPyDict(const boost::python::dict &d)
       {
 	if(!dataBase)
 	  {
-	    const std::string dbName= boost::python::extract<std::string>(d["data_base_name"]);
-	    const std::string dbType= boost::python::extract<std::string>(d["data_base_type"]);
+	    boost::python::extract<std::string> extracted_db_name(d["data_base_name"]);
+	    const std::string dbName= extracted_db_name();
+	    boost::python::extract<std::string> extracted_db_type(d["data_base_type"]);
+	    const std::string dbType= extracted_db_type();
 	    defineDatabase(dbType, dbName);
 	  }
         if(dataBase)

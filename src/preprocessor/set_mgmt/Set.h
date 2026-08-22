@@ -89,6 +89,7 @@ class Set: public SetMeshComp
     Set getEntitiesSet(void) const;
     Set getMeshComponentsSet(void) const;
 
+    using SetMeshComp::In;
     bool In(const Node *) const;
     bool isCloserThan(const Node &, const double &) const;
     bool remove(Node *);

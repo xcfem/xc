@@ -54,7 +54,11 @@ XC::ResponseId::ResponseId(const boost::python::list &l)
   {
     const size_t sz= this->Size();
     for(size_t i=0; i<sz; i++)
-      (*this)[i]= getComponentIdFromString(boost::python::extract<std::string>(l[i]));
+      {
+	boost::python::extract<std::string> extracted(l[i]);
+	const std::string item= extracted();
+	(*this)[i]= getComponentIdFromString(item);
+      }
   }
 
 // XC::ResponseId::ResponseId(int *dt, int size, bool cleanIt)

@@ -114,7 +114,8 @@ void XC::ConnectedMaterial::setMaterials(const boost::python::list &materialsToC
     const size_t sz= len(materialsToConnect);
     for(size_t i=0; i<sz; i++)
       {
-	const std::string matName= boost::python::extract<std::string>(materialsToConnect[i]);
+	boost::python::extract<std::string> extracted(materialsToConnect[i]);
+	const std::string matName= extracted();
 	appendMaterial(matName);
       }
   }

@@ -170,6 +170,7 @@ class LoadPattern: public NodeLocker
     void copyLoads(const Element *, const Element *);
     
     // methods to apply loads
+    using NodeLocker::applyLoad;
     virtual void applyLoad(double pseudoTime = 0.0);
     virtual void setLoadConstant(void);
     inline void setIsConstant(const bool &b)
@@ -200,7 +201,7 @@ class LoadPattern: public NodeLocker
 
     virtual void Print(std::ostream &s, int flag =0) const;
 
-    virtual LoadPattern *getCopy(void);
+    virtual LoadPattern *getCopy(void) const;
 
     virtual int addMotion(GroundMotion &theMotion, int tag);
     virtual GroundMotion *getMotion(int tag);

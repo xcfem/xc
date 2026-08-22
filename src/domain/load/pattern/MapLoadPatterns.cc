@@ -537,10 +537,12 @@ void XC::MapLoadPatterns::setPyDict(const boost::python::dict &d)
       {
 	for(size_t i=0; i<ts_sz; i++)
 	  {
-	    const std::string key= boost::python::extract<std::string>(ts_items[i][0]);
+	    boost::python::extract<std::string> extracted_key(ts_items[i][0]);
+	    const std::string key= extracted_key();
 	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(ts_items[i][1]);
 	    const int classTag= boost::python::extract<int>(itemDict["classTag"]);
-	    const std::string className= boost::python::extract<std::string>(itemDict["className"]);
+	    boost::python::extract<std::string> extracted_class_name(itemDict["className"]);
+	    const std::string className= extracted_class_name();
 	    TimeSeries *newObject= dynamic_cast<TimeSeries *>(get_new_movable_object(className, classTag));
 	    if(newObject)
 	      {
@@ -554,7 +556,8 @@ void XC::MapLoadPatterns::setPyDict(const boost::python::dict &d)
 			<< Color::def << std::endl;
 	  }	
       }
-    this->time_series_name= boost::python::extract<std::string>(d["time_series_name"]);
+    boost::python::extract<std::string> extracted_time_series_name(d["time_series_name"]);
+    this->time_series_name= extracted_time_series_name();
     boost::python::dict lPatternsDict= boost::python::extract<boost::python::dict>(d["loadpatterns"]);
     boost::python::list lp_items= lPatternsDict.items();
     const size_t lp_sz= len(lp_items);
@@ -562,10 +565,12 @@ void XC::MapLoadPatterns::setPyDict(const boost::python::dict &d)
       {
 	for(size_t i=0; i<lp_sz; i++)
 	  {
-	    const std::string key= boost::python::extract<std::string>(lp_items[i][0]);
+	    boost::python::extract<std::string> extracted_key(lp_items[i][0]);
+	    const std::string key= extracted_key();
 	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(lp_items[i][1]);
 	    const int classTag= boost::python::extract<int>(itemDict["classTag"]);
-	    const std::string className= boost::python::extract<std::string>(itemDict["className"]);
+	    boost::python::extract<std::string> extracted_class_name(itemDict["className"]);
+	    const std::string className= extracted_class_name();
 	    LoadPattern *newObject= dynamic_cast<LoadPattern *>(get_new_tagged_object(className, classTag));
 	    if(newObject)
 	      {
@@ -579,7 +584,8 @@ void XC::MapLoadPatterns::setPyDict(const boost::python::dict &d)
 			<< Color::def << std::endl;
 	  }	
       }
-    this->lpcode= boost::python::extract<std::string>(d["lpcode"]);
+    boost::python::extract<std::string> extracted_lp_code(d["lpcode"]);
+    this->lpcode= extracted_lp_code();
     this->tag_el= boost::python::extract<int>(d["tag_el"]);
     this->tag_nl= boost::python::extract<int>(d["tag_nl"]);
     this->tag_spc= boost::python::extract<int>(d["tag_spc"]);    

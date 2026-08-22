@@ -62,7 +62,7 @@ class Edge: public EntMdlr
   public:
     Edge(Preprocessor *m,const size_t &nd= 4);
     Edge(const std::string &name= "",Preprocessor *m= nullptr,const size_t &nd= 4);
-    virtual bool operator==(const Edge &) const;
+    bool operator==(const Edge &) const;
 
     // Geometry.
     //! @brief Return the object dimension (0, 1, 2 or 3).

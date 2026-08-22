@@ -410,7 +410,10 @@ bool XC::LoadPatternCombination::addToDomain(boost::python::list &filter)
     std::set<std::string> cpp_filter;
     const size_t sz= len(filter);
     for(size_t i= 0;i<sz;++i)
-      cpp_filter.insert(boost::python::extract<std::string>(filter[i]));
+      {
+	boost::python::extract<std::string> extracted(filter[i]);
+	cpp_filter.insert(extracted());
+      }
     return addToDomain(cpp_filter);
   }
 
@@ -539,8 +542,10 @@ boost::python::dict XC::LoadPatternCombination::getPyDict(void) const
 void XC::LoadPatternCombination::setPyDict(const boost::python::dict &d)
   {
     ForceReprComponent::setPyDict(d);
-    name= boost::python::extract<std::string>(d["name"]);
-    const std::string components= boost::python::extract<std::string>(d["components"]);
+    boost::python::extract<std::string> extracted_name(d["name"]);
+    name= extracted_name();
+    boost::python::extract<std::string> extracted_components(d["components"]);
+    const std::string components= extracted_components();
     setDescomp(components);
   }
 

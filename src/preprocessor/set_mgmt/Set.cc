@@ -808,6 +808,7 @@ boost::python::dict XC::Set::getPyDict(void) const
 void XC::Set::setPyDict(const boost::python::dict &d)
   {
     SetMeshComp::setPyDict(d);
-    this->description= boost::python::extract<std::string>(d["description"]);
+    boost::python::extract<std::string> extracted(d["description"]);
+    this->description= extracted();
     this->entities.setPyDict(boost::python::extract<boost::python::dict>(d["entities"]));
   }

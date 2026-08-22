@@ -144,7 +144,8 @@ void cmb_acc::ActionWrapper::setPyDict(const boost::python::dict &d)
               << "; not implemented yet."
 	      << Color::def << std::endl;
     // EntityWithOwner::setPyDict(d);
-    // boost::python::dict actionDict= boost::python::extract<std::string>(d["actions"]);
+    // boost::python::extract<std::string> extracted(d["actions"]);
+    // boost::python::dict actionDict= extracted();
     // auto items= actionDict.items();
     // for (auto it = stl_input_iterator<tuple>(items); it != stl_input_iterator<tuple>(); ++it)
     //   {

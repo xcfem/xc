@@ -132,7 +132,8 @@ boost::python::dict cmb_acc::Action::getPyDict(void) const
 void cmb_acc::Action::setPyDict(const boost::python::dict &d)
   {
     NamedEntity::setPyDict(d);
-    description= boost::python::extract<std::string>(d["description"]);
+    boost::python::extract<std::string> extracted_description(d["description"]);
+    this->description= extracted_description();
     boost::python::dict tmp= boost::python::extract<boost::python::dict>(d["relations"]);
     relaciones.setPyDict(tmp);
     nodet= boost::python::extract<bool>(d["nodet"]);

@@ -98,7 +98,8 @@ void LabelDictionary::setPyDict(const boost::python::dict &d)
       {
 	const boost::python::object obj= boost::python::extract<boost::python::object>(items[i][0]);
 	const int id= tag_integer_from_py_object(obj);
-	const std::string &e=  boost::python::extract<std::string>(items[i][0]);
+	boost::python::extract<std::string> extracted(items[i][0]);
+	const std::string &e= extracted();
         bm.insert(bm_type::value_type(id,e));
       }
   }

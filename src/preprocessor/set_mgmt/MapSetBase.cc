@@ -414,9 +414,11 @@ void XC::MapSetBase::setPyDict(Preprocessor *preprocessor, const boost::python::
       {
 	for(boost::python::ssize_t i=0; i<sz; i++)
 	  {
-	    const std::string name= boost::python::extract<std::string>(items[i][0]);
+	    boost::python::extract<std::string> extracted_name(items[i][0]);
+	    const std::string name= extracted_name();
 	    const boost::python::dict itemDict= boost::python::extract<boost::python::dict>(items[i][1]);
-	    const std::string className= boost::python::extract<std::string>(itemDict["className"]);
+	    boost::python::extract<std::string> extracted_class_name(itemDict["className"]);
+	    const std::string className= extracted_class_name();
 	    Set *set= new Set(name,preprocessor);
 	    if(set)
 	      {

@@ -1500,7 +1500,8 @@ void XC::Domain::setPyDict(const boost::python::dict &d)
   {
     ObjWithRecorders::setPyDict(d);
     timeTracker.setPyDict(boost::python::extract<boost::python::dict>(d["timeTracker"]));
-    callbackCommit= boost::python::extract<std::string>(d["callbackCommit"]);
+    boost::python::extract<std::string> extract_callback_commit(d["callbackCommit"]);
+    callbackCommit= extract_callback_commit();
     dbTag= boost::python::extract<int>(d["dbTag"]);
     currentGeoTag= boost::python::extract<int>(d["currentGeoTag"]);
     hasDomainChangedFlag= boost::python::extract<bool>(d["hasDomainChangedFlag"]);
@@ -1513,7 +1514,10 @@ void XC::Domain::setPyDict(const boost::python::dict &d)
     boost::python::list active_combinations= boost::python::extract<boost::python::list>(d["activeCombinations"]);
     const size_t sz= len(active_combinations);
     for(size_t i= 0; i<sz; i++)
-      this->activeCombinations.push_back(boost::python::extract<std::string>(active_combinations[i]));
+      {
+	boost::python::extract<std::string> extracted(active_combinations[i]);
+	this->activeCombinations.push_back(extracted());
+      }
     if(d.has_key("theParameters"))
       {
 	theParameters->setPyDict(boost::python::extract<boost::python::dict>(d["theParameters"]));

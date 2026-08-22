@@ -45,7 +45,7 @@ class DividedLine: public Line
   public:
     DividedLine(Preprocessor *m,const size_t &ndiv= 4);
     DividedLine(const std::string &name= "",Preprocessor *m= nullptr,const size_t &ndiv= 4);
-    virtual bool operator==(const DividedLine &) const;
+    bool operator==(const DividedLine &) const;
     void setLengths(const Vector &);
     virtual SetEstruct *getCopy(void) const;
 

@@ -45,6 +45,7 @@ class EQBasePattern: public LoadPattern
   protected:
     DqGroundMotions theMotions;
 
+    using LoadPattern::addMotion;
     int addMotion(GroundMotion &theMotion);
     int sendData(Communicator &);
     int recvData(const Communicator &);

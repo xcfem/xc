@@ -308,7 +308,8 @@ std::tuple<std::vector<cmb_acc::Action>, std::vector<std::string> > cmb_acc::ext
 	  } 
         const Action extractedAction= boost::python::extract<Action>(tuple[0]);
 	actionLst[i]= extractedAction;
-        const std::string extractedString= boost::python::extract<std::string>(tuple[1]);
+	boost::python::extract<std::string> extracted(tuple[1]);
+        const std::string extractedString= extracted();
 	combFactorsNameLst[i]= extractedString;
 	
       }

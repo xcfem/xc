@@ -589,7 +589,8 @@ void XC::MapSet::setPyDict(const boost::python::dict &d)
       {
 	for(boost::python::ssize_t i=0; i<sz; i++)
 	  {
-	    const std::string name= boost::python::extract<std::string>(openSetsNames[i]);
+	    boost::python::extract<std::string> extracted(openSetsNames[i]);
+	    const std::string name= extracted();
 	    abre_set(name);
 	  }
       }

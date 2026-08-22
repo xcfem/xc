@@ -449,7 +449,8 @@ void XC::DqUniaxialMaterial::setPyDict(const boost::python::dict &d)
       {
 	boost::python::dict materialDict= boost::python::extract<boost::python::dict>(materialList[i]);
 	const int classTag= boost::python::extract<int>(materialDict["classTag"]);
-	const std::string className= boost::python::extract<std::string>(materialDict["className"]);
+	boost::python::extract<std::string> extracted(materialDict["className"]);
+	const std::string className= extracted();
 	UniaxialMaterial *newMaterial= dynamic_cast<UniaxialMaterial *>(get_new_tagged_object(className, classTag));
 	if(newMaterial)
 	  (*this)[i]= newMaterial;

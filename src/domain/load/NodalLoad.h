@@ -95,6 +95,7 @@ class NodalLoad: public Load
     Node *get_node_ptr(void);
     const Node *get_node_ptr(void) const;
 
+    using Load::getCopy;
   protected:
     DbTagData &getDbTagData(void) const;
     int sendData(Communicator &comm);
@@ -103,7 +104,7 @@ class NodalLoad: public Load
     NodalLoad(int tag, int theClassTag=  LOAD_TAG_NodalLoad);
     NodalLoad(int tag, int node, int classTag);
     NodalLoad(int tag, int node, const Vector &load, bool isLoadConstant = false);
-    NodalLoad *getCopy(const int &);
+    NodalLoad *getCopy(const int &) const;
 
     virtual void setDomain(Domain *newDomain);
     inline const Node *getNode(void) const

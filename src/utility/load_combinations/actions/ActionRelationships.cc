@@ -212,13 +212,17 @@ void cmb_acc::ActionRelationships::setPyDict(const boost::python::dict &d)
     const size_t szi= len(lstIncomp);
     for(size_t i=0; i<szi; i++)
       {
-	const std::string &str= boost::python::extract<std::string>(lstIncomp[i]);
+	boost::python::extract<std::string> extracted(lstIncomp[i]);
+	const std::string &str= extracted();
 	incompatibles.insert(str);
       }
     boost::python::list lstMainAct= boost::python::extract<boost::python::list>(d["main_actions"]);
     const size_t szm= len(lstMainAct);
     for(size_t i=0; i<szm; i++)
-      main_actions.push_back(boost::python::extract<std::string>(lstMainAct[i]));
+      {
+	boost::python::extract<std::string> extracted(lstMainAct[i]);
+	main_actions.push_back(extracted());
+      }
     contiene_incomp= boost::python::extract<bool>(d["contiene_incomp"]);
   }
 
