@@ -318,7 +318,7 @@ void XC::ElTawil2DUnSym::customizeInterpolate(double &xi, double &yi, double &xj
   }
 
 XC::YieldSurface_BC *XC::ElTawil2DUnSym::getCopy(void) const
-  { return ElTawil2DUnSym(*this); }
+  { return new ElTawil2DUnSym(*this); }
 
 void XC::ElTawil2DUnSym::Print(std::ostream &s, int flag) const
   {
