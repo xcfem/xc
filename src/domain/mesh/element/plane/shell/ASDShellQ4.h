@@ -227,7 +227,7 @@ class ASDShellQ4: public QuadBase4N<SectionFDPhysicalProperties>
     int setDamping(Domain *theDomain, Damping *theDamping);
 
     // print
-    void Print(std::ostream &, int flag);
+    void Print(std::ostream &, int flag) const;
 
     int getNumDOF(void) const;
 

@@ -858,7 +858,7 @@ int XC::ASDShellQ4::setDamping(Domain *theDomain, Damping *damping)
     return 0;
   }
 
-void XC::ASDShellQ4::Print(std::ostream &s, int flag)
+void XC::ASDShellQ4::Print(std::ostream &s, int flag) const
   {
     if(flag == -1)
       {
