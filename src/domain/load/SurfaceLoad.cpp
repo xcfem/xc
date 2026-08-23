@@ -170,7 +170,7 @@ int XC::SurfaceLoad::recvSelf(const Communicator &comm)
     return res;
   }
 
-void XC::SurfaceLoad::Print(std::ostream &os, int flag)
+void XC::SurfaceLoad::Print(std::ostream &os, int flag) const
   {
     os << getClassName() <<"..."
        << "  element acted on: " << elemTags << std::endl;
