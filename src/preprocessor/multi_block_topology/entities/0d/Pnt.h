@@ -54,7 +54,10 @@ class Pnt: public EntMdlr
   private:
     Pos3d p; //!< Position of the point.
     mutable std::set<const Edge *> lines_pt; //!< Lines that begin or end in this point (topology).
-    using EntMdlr::getNode;
+    inline Node *getNode(const size_t &i,const size_t &j,const size_t &k)
+      { return EntMdlr::getNode(1,1,1); }
+    inline const Node *getNode(const size_t &i,const size_t &j,const size_t &k) const
+      { return EntMdlr::getNode(1,1,1); }
   protected:
 
     virtual void update_topology(void);

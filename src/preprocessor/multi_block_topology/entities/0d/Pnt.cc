@@ -393,7 +393,7 @@ bool XC::Pnt::hasNode(void) const
   {
     bool retval= false;
     if(getNumberOfNodes()>0)
-      retval= (getNode()!= nullptr);
+      retval= (EntMdlr::getNode(1,1,1)!= nullptr);
     return retval;      
   }
 
@@ -401,7 +401,7 @@ bool XC::Pnt::hasNode(void) const
 int XC::Pnt::getTagNode(void) const
   {
     int retval= -1;
-    const Node *nod= getNode();
+    const Node *nod= this->EntMdlr::getNode(1,1,1);
     if(nod)
       retval= nod->getTag();
     else
@@ -415,7 +415,7 @@ int XC::Pnt::getTagNode(void) const
 //! @brief Return point's node.
 XC::Node *XC::Pnt::getNode(void)
   {
-    Node *nod= EntMdlr::getNode();
+    Node *nod= this->EntMdlr::getNode(1,1,1);
     if(!nod)
       std::cerr << getClassName() << "::" << __FUNCTION__ << "; the point: '"
 		<< getName()
@@ -426,7 +426,7 @@ XC::Node *XC::Pnt::getNode(void)
 //! @brief Return point's node.
 const XC::Node *XC::Pnt::getNode(void) const
   {
-    const Node *nod= EntMdlr::getNode();
+    const Node *nod= this->EntMdlr::getNode(1,1,1);
     if(!nod)
       std::cerr << getClassName() << "::" << __FUNCTION__ << "; the point: '"
 		<< getName()
@@ -437,7 +437,7 @@ const XC::Node *XC::Pnt::getNode(void) const
 //! @brief Set the point node.
 const XC::Node *XC::Pnt::setNode(Node *nodePtr)
   {
-    const Node *oldNode= EntMdlr::getNode();
+    const Node *oldNode= EntMdlr::getNode(1,1,1);
     if(nodePtr)
       {
 	if(!oldNode)
