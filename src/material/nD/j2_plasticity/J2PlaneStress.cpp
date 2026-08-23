@@ -376,7 +376,7 @@ int XC::J2PlaneStress::recvSelf(const Communicator &comm)
 //! indices: matrix_index ---> tensor indices i,j
 //! plane stress different because of condensation on tangent
 //! case 3 switched to 1-2 and case 4 to 3-3 
-void XC::J2PlaneStress::index_map(int matrix_index, int &i, int &j )
+void XC::J2PlaneStress::index_map(int matrix_index, int &i, int &j ) const
 {
   switch( matrix_index+1 )
     { //add 1 for standard tensor indices

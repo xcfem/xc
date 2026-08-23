@@ -98,7 +98,7 @@ class J2PlaneStress: public J2Plasticity
 
     //index mapping special for plane stress because of 
     // condensation on tangent
-    void index_map( int matrix_index, int &i, int &j );
+    void index_map( int matrix_index, int &i, int &j ) const;
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
