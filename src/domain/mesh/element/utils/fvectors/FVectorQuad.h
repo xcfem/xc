@@ -40,6 +40,8 @@ class Vector;
 //! @brief Ingernal forces for a quad element.
 class FVectorQuad: public FVectorData<8>
   {
+  private:
+    using FVectorData<8>::addForce;
   public:
     FVectorQuad(void);
     FVectorQuad(const FVectorQuad &);
