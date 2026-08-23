@@ -40,7 +40,7 @@ XC::NodePos::NodePos(const Pos3d &p)
   
 //! @brief Constructor.
 XC::KDTreeNodes::KDTreeNodes(void)
-  : tree_type(std::ptr_fun(NodePos::tac)), pend_optimizar(0) {}
+  : tree_type(std::function(NodePos::tac)), pend_optimizar(0) {}
 
 
 void XC::KDTreeNodes::insert(const Node &n)

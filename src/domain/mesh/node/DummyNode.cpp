@@ -176,8 +176,8 @@ int XC::DummyNode::commitState()
 
 //! @brief Returns the result of invoking addUnbalancedLoad() on its associated
 //! node object. 
-void XC::DummyNode::addUnbalancedLoad(const Vector &load)
-  { theRealNode->addUnbalancedLoad(load); }
+int XC::DummyNode::addUnbalancedLoad(const Vector &load, double fact)
+  { return theRealNode->addUnbalancedLoad(load, fact); }
 
 //! @brief Returns the result of invoking getUnbalancedLoad() on its associated
 //! node object. 
@@ -226,12 +226,12 @@ int XC::DummyNode::recvSelf(const Communicator &comm)
   }    
 
 //! @brief Print stuff.
-void XC::DummyNode::Print(std::ostream &s) const
+void XC::DummyNode::Print(std::ostream &s, int) const
   { theRealNode->Print(s); }
   
 std::ostream &XC::operator<<(std::ostream &s, const XC::DummyNode &N)
   {
-    N.Print(s);
+    N.Print(s, 1);
     return s;
   }
 

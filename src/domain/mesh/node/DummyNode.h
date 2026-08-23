@@ -119,12 +119,12 @@ class DummyNode: public Node
     int setIncrTrialVel(const Vector &);    
     int setIncrTrialAccel(const Vector &);        
     
-    void addUnbalancedLoad(const Vector &);        
+    int addUnbalancedLoad(const Vector &, double fact= 1.0);        
     const Vector &getUnbalancedLoad(void) const;    
     void zeroUnbalancedLoad(void);
     int commitState();
 
-    void Print(std::ostream &s) const;
+    void Print(std::ostream &s, int) const;
     friend std::ostream &operator<<(std::ostream &, const DummyNode &);
 
     int addElementPtr(Element *);
