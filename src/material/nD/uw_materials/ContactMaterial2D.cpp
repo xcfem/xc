@@ -289,7 +289,7 @@ int XC::ContactMaterial2D::getOrder(void) const
     return 3;
 }
 
-void XC::ContactMaterial2D::Print(std::ostream &s, int flag )
+void XC::ContactMaterial2D::Print(std::ostream &s, int flag ) const
   {
     s << "ContactMaterial2D" << std::endl;
   }

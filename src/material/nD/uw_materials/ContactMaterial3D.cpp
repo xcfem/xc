@@ -335,7 +335,7 @@ int XC::ContactMaterial3D::getOrder(void) const
   return 6;
 }
 
-void XC::ContactMaterial3D::Print(std::ostream &s, int flag )
+void XC::ContactMaterial3D::Print(std::ostream &s, int flag ) const
 {
 #ifdef DEBUG
   std::cerr << "XC::ContactMaterial3D::Print(OPS_Stream &s, int flag )" << std::endl;

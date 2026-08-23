@@ -100,7 +100,7 @@ class ContactMaterial2D : public ContactMaterialBase
     // Return ndm.
     int getOrder(void) const;
 
-    void Print(std::ostream &, int flag =0);
+    void Print(std::ostream &, int flag =0) const;
 
     // public methods for material stage update
     int updateParameter(int responseID, Information &eleInformation);
