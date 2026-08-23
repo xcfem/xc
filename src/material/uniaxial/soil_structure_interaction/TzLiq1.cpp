@@ -268,130 +268,135 @@ int XC::TzLiq1::revertToStart(void)
   }
 
 /////////////////////////////////////////////////////////////////////
-double 
-XC::TzLiq1::getEffectiveStress(void)
-{
-        // Default value for meanStress
-        double meanStress = meanConsolStress;
+double XC::TzLiq1::getEffectiveStress(void)
+  {
+    // Default value for meanStress
+    double meanStress = meanConsolStress;
         
-        // if the elemFlag has not been set yet, then set it
-        //
-        if(elemFlag.compare("NONE") == 0) {        //string.compare returns zero if equal
+    // if the elemFlag has not been set yet, then set it
+    //
+    if(elemFlag.compare("NONE") == 0)
+      {
+	//string.compare returns zero if equal
+	
+	// if theDomain pointer is nonzero, then set pointers to attached soil elements.
+	//
+	if(theDomain != nullptr)
+	  {        
+	    Element *theElement1 = theDomain->getElement(solidElem1);
+	    Element *theElement2 = theDomain->getElement(solidElem2);
+	    if (theElement1 == nullptr || theElement2 == nullptr)
+	      {
+		std::cerr << "WARNING solid element not found in getEffectiveStress" << std::endl;
+		std::cerr << "TzLiq1: " << std::endl;
+		std::cerr << "Adjacent solidElems: " << solidElem1 << ", " << solidElem2 << std::endl;
+		exit(-1);
+	      }
 
-                // if theDomain pointer is nonzero, then set pointers to attached soil elements.
-                //
-                if(theDomain != 0)
-                {        
-                        Element *theElement1 = theDomain->getElement(solidElem1);
-                        Element *theElement2 = theDomain->getElement(solidElem2);
-                        if (theElement1 == 0 || theElement2 == 0) {
-                                std::cerr << "WARNING solid element not found in getEffectiveStress" << std::endl;
-                                std::cerr << "TzLiq1: " << std::endl;
-                                std::cerr << "Adjacent solidElems: " << solidElem1 << ", " << solidElem2 << std::endl;
-                                exit(-1);
-                        }
+	    // Check each of the allowable element types, starting with 4NodeQuads
+	    theQuad1 = dynamic_cast<FourNodeQuad*>(theElement1);
+	    theQuad2 = dynamic_cast<FourNodeQuad*>(theElement2);
+	    if(theQuad1 != 0 && theQuad2 != 0)
+	      {
+		elemFlag.assign("4NodeQuad");
+	      }
 
-                        // Check each of the allowable element types, starting with 4NodeQuads
-                        theQuad1 = dynamic_cast<FourNodeQuad*>(theElement1);
-                        theQuad2 = dynamic_cast<FourNodeQuad*>(theElement2);
-                        if(theQuad1 != 0 && theQuad2 != 0) {
-                                elemFlag.assign("4NodeQuad");
-                        }
-
-                        // Check on each other type of allowable element types, only if no successful yet.
-                        if(elemFlag.compare("NONE") == 0) {        //string.compare returns zero if equal
-
-                                // try other elements like, 4NodeQuadUP
-                                elemFlag.assign("NONE");
-                        }
+	    // Check on each other type of allowable element types, only if no successful yet.
+	    if(elemFlag.compare("NONE") == 0)
+	      {
+		//string.compare returns zero if equal
+		// try other elements like, 4NodeQuadUP
+		elemFlag.assign("NONE");
+	      }
                         
-                        // Check on acceptable soil materials
-                        //
-                        if(elemFlag.compare("4NodeQuad") == 0) {
-                                XC::NDMaterial *theNDM1[4];
-                                XC::NDMaterial *theNDM2[4];
-                                FluidSolidPorousMaterial *theFSPM1[4];
-                                FluidSolidPorousMaterial *theFSPM2[4];
+	    // Check on acceptable soil materials
+	    //
+	    if(elemFlag.compare("4NodeQuad") == 0)
+	      {
+		XC::NDMaterial *theNDM1[4];
+		XC::NDMaterial *theNDM2[4];
+		FluidSolidPorousMaterial *theFSPM1[4];
+		FluidSolidPorousMaterial *theFSPM2[4];
                 NDMaterialPhysicalProperties physProp1= theQuad1->getPhysicalProperties();
                 NDMaterialPhysicalProperties physProp2= theQuad2->getPhysicalProperties();
 
-                                int dummy = 0;
-                                for (int i=0; i<4; i++)
-                                  {
-                                        theNDM1[i] = physProp1[i];
-                                        theNDM2[i] = physProp2[i];
-                                        theFSPM1[i] = dynamic_cast<FluidSolidPorousMaterial*>(theNDM1[i]);
-                                        theFSPM2[i] = dynamic_cast<FluidSolidPorousMaterial*>(theNDM2[i]);
-                                        if(theFSPM1 == 0 || theFSPM2 == 0) dummy = dummy + 1;
-                                }
-                                if(dummy == 0) elemFlag.append("-FSPM");
+		int dummy = 0;
+		for (int i=0; i<4; i++)
+		  {
+		    theNDM1[i] = physProp1[i];
+		    theNDM2[i] = physProp2[i];
+		    theFSPM1[i] = dynamic_cast<FluidSolidPorousMaterial*>(theNDM1[i]);
+		    theFSPM2[i] = dynamic_cast<FluidSolidPorousMaterial*>(theNDM2[i]);
+		    if(theFSPM1[i] == nullptr || theFSPM2[i] == nullptr) dummy+= 1;
+		  }
+		if(dummy == 0) elemFlag.append("-FSPM");	
+		// Check other acceptable soil types.
+	      }
 
-                                // Check other acceptable soil types.
-                        }
-
-                        if(elemFlag.compare("NONE") == 0) {        // Never obtained a valid pointer set
-                                std::cerr << "WARNING: Adjoining solid elements did not return valid pointers";
-                                std::cerr << "TzLiq1: " << std::endl;
-                                std::cerr << "Adjacent solidElems: " << solidElem1 << ", " << solidElem2 << std::endl;
-                                exit(-1);
-                                return meanStress;
-                        }
+	    if(elemFlag.compare("NONE") == 0)
+	      {
+		// Never obtained a valid pointer set
+		std::cerr << "WARNING: Adjoining solid elements did not return valid pointers";
+		std::cerr << "TzLiq1: " << std::endl;
+		std::cerr << "Adjacent solidElems: " << solidElem1 << ", " << solidElem2 << std::endl;
+		exit(-1);
+		return meanStress;
+	      }
         
-                }
-        }
+	  }
+      }
         
-        // Get effective stresses using appropriate pointers in elemFlag not "NONE"
-        //
-        if(elemFlag.compare("NONE") != 0) {
+    // Get effective stresses using appropriate pointers in elemFlag not "NONE"
+    //
+    if(elemFlag.compare("NONE") != 0)
+      {
+	if(elemFlag.compare("4NodeQuad-FSPM") == 0)
+	  {
+	    meanStress = 0.0;
+	    XC::Vector *theStressVector = &stressV3;
+	    double excessPorePressure = 0.0;
+	    XC::NDMaterial *theNDM;
+	    FluidSolidPorousMaterial *theFSPM;
+	    NDMaterialPhysicalProperties physProp1= theQuad1->getPhysicalProperties();
+	    NDMaterialPhysicalProperties physProp2= theQuad2->getPhysicalProperties();
 
-                if(elemFlag.compare("4NodeQuad-FSPM") == 0) {
-                        meanStress = 0.0;
-                        XC::Vector *theStressVector = &stressV3;
-                        double excessPorePressure = 0.0;
-                        XC::NDMaterial *theNDM;
-                        FluidSolidPorousMaterial *theFSPM;
-                NDMaterialPhysicalProperties physProp1= theQuad1->getPhysicalProperties();
-                NDMaterialPhysicalProperties physProp2= theQuad2->getPhysicalProperties();
-
-                        for(int i=0; i < 4; i++)
-                          { 
-                                *theStressVector = physProp1[i]->getStress();
-                                meanStress += 2.0*(*theStressVector)[0] + (*theStressVector)[1];
-                                *theStressVector = physProp2[i]->getStress();
-                                meanStress += 2.0*(*theStressVector)[0] + (*theStressVector)[1];
-
-                                theNDM = physProp1[i];
-                                theFSPM= dynamic_cast<FluidSolidPorousMaterial*>(theNDM);
-                                excessPorePressure += (theFSPM->trialExcessPressure);
-                                theNDM = physProp2[i];
-                                theFSPM= dynamic_cast<FluidSolidPorousMaterial*>(theNDM);
-                                excessPorePressure += (theFSPM->trialExcessPressure);
-                        }
-                        meanStress = meanStress/(2.0*4.0*3.0);
-                        excessPorePressure = excessPorePressure/(2.0*4.0);
-                        meanStress = meanStress - excessPorePressure;
-
-                        return meanStress;
-                }
-
-                else if(elemFlag.compare("4NodeQuadUP-FSPM") == 0) {
-                        
-                        // expect to later have UP option on quads
-
-                        return meanStress;
-                }
-                
-                else {        // Never found a matching flag
-                        std::cerr << "WARNING: Something wrong with specification of elemFlag in getEffectiveStress";
-                        std::cerr << "TzLiq1: " << std::endl;
-                        std::cerr << "Adjacent solidElems: " << solidElem1 << ", " << solidElem2 << std::endl;
-                        exit(-1);
-                        return meanStress;
-                }
-        }
-
-        return meanStress;
-}
+	    for(int i=0; i < 4; i++)
+	      { 
+		*theStressVector = physProp1[i]->getStress();
+		meanStress += 2.0*(*theStressVector)[0] + (*theStressVector)[1];
+		*theStressVector = physProp2[i]->getStress();
+		meanStress += 2.0*(*theStressVector)[0] + (*theStressVector)[1];
+		
+		theNDM = physProp1[i];
+		theFSPM= dynamic_cast<FluidSolidPorousMaterial*>(theNDM);
+		excessPorePressure += (theFSPM->trialExcessPressure);
+		theNDM = physProp2[i];
+		theFSPM= dynamic_cast<FluidSolidPorousMaterial*>(theNDM);
+		excessPorePressure += (theFSPM->trialExcessPressure);
+	      }
+	    meanStress = meanStress/(2.0*4.0*3.0);
+	    excessPorePressure = excessPorePressure/(2.0*4.0);
+	    meanStress = meanStress - excessPorePressure;
+	    
+	    return meanStress;
+	  }
+	else if(elemFlag.compare("4NodeQuadUP-FSPM") == 0)
+	  {
+	    // expect to later have UP option on quads
+	    return meanStress;
+	  }
+	else
+	  {
+	    // Never found a matching flag
+	    std::cerr << "WARNING: Something wrong with specification of elemFlag in getEffectiveStress";
+	    std::cerr << "TzLiq1: " << std::endl;
+	    std::cerr << "Adjacent solidElems: " << solidElem1 << ", " << solidElem2 << std::endl;
+	    exit(-1);
+	    return meanStress;
+	  }
+      }
+    return meanStress;
+  }
 
 //! @breif return the material stage (0:elastic 1:plastic).
 int XC::TzLiq1::getMaterialStage(void)
