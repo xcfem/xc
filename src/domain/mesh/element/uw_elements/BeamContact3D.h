@@ -183,7 +183,7 @@ class BeamContact3D : public ElemWithMaterial<BC3D_NUM_NODE, Contact3D>
     void Print(std::ostream &s, int flag =0) const;
 
     // Response *setResponse(const char **argv, int argc, Information &eleInfo);
-    Response *setResponse(const std::vector<std::string> &argv, Parameter &param);
+    Response *setResponse(const std::vector<std::string> &argv, Information &);
     int getResponse(int responseID, Information &eleInformation);
 
     // public methods for material stage update

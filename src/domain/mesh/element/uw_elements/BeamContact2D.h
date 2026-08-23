@@ -177,7 +177,7 @@ class BeamContact2D : public ElemWithMaterial<BC2D_NUM_NODE, Contact2D>
     int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
 
-    Response *setResponse(const std::vector<std::string> &argv, Parameter &param);
+    Response *setResponse(const std::vector<std::string> &argv,  Information &);
     int getResponse(int responseID, Information &eleInformation);
 
 	// public methods for material stage update

@@ -1703,7 +1703,7 @@ void XC::BeamContact3D::Print(std::ostream &s, int flag) const
   }
 
 
-XC::Response *XC::BeamContact3D::setResponse(const std::vector<std::string> &argv, Parameter &param)
+XC::Response *XC::BeamContact3D::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
   {
     if ((argv[0]=="force") || (argv[0]=="forces"))
         return new ElementResponse(this, 1, Vector(3));
