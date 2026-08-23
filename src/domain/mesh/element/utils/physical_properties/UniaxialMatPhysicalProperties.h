@@ -44,7 +44,7 @@ class UniaxialMatPhysicalProperties: public PhysicalProperties<UniaxialMaterial>
     UniaxialMatPhysicalProperties(const size_t &nMat= 0,const UniaxialMaterial *ptr_mat= nullptr);
     UniaxialMatPhysicalProperties(const std::vector<UniaxialMaterial *> &);
     Vector getStresses(void) const; 
-    void Print(std::ostream &os) const;
+    void Print(std::ostream &os, int) const;
   }; 
 
 } // end of XC namespace
