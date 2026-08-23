@@ -182,7 +182,8 @@ class FE_Element: public TaggedObject
     Element *getElement(void);
     std::string getElementClassName(void) const;
 
-    virtual void Print(std::ostream &, int = 0) {return;};
+    virtual void Print(std::ostream &, int = 0) const
+      {return;};
 
     // AddingSensitivity:BEGIN ////////////////////////////////////
     virtual void addResistingForceSensitivity(int gradNumber, double fact = 1.0);

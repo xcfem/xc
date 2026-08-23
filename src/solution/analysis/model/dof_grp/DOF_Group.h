@@ -195,7 +195,8 @@ class DOF_Group: public TaggedObject
     virtual const Vector & getAccSensitivity(int gradNumber);
     virtual int saveSensitivity(Vector *v,Vector *vdot,Vector *vdotdot,int gradNum,int numGrads);
 // AddingSensitivity:END //////////////////////////////////////
-    virtual void  Print(std::ostream &, int = 0) {return;};
+    virtual void  Print(std::ostream &, int = 0) const
+      {return;};
     virtual void resetNodePtr(void);
   };
 } // end of XC namespace
