@@ -124,7 +124,7 @@ class VelPressureDep: public VelDependent
     
     // public methods to set and obtain response
     int setTrial(double normalForce, double velocity = 0.0);
-    double getDFFrcDNFrc(void);
+    double getDFFrcDNFrc(void) const;
     
     int revertToStart();
     

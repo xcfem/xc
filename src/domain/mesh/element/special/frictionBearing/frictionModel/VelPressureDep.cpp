@@ -86,7 +86,7 @@ int XC::VelPressureDep::setTrial(double normalForce, double velocity)
   }
 
 
-double XC::VelPressureDep::getDFFrcDNFrc(void)
+double XC::VelPressureDep::getDFFrcDNFrc(void) const
   {
     if (trialN >= 0.0)
         return mu + DmuDn*trialN;
