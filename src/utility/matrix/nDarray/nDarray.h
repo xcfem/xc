@@ -160,28 +160,20 @@ class nDarray
       { return pc_nDarray_rep(first); }
     
     inline double &operator()(int first)
-      {
-	nDarray *this_no_const= const_cast<nDarray *>(this);
-	return this_no_const->operator()(first);
-      }
+      { return pc_nDarray_rep(first); }
     
     inline const double &operator()(int first, int second) const
       { return pc_nDarray_rep(first, second); }
 
     inline double &operator()(int first, int second)
-      {
-	nDarray *this_no_const= const_cast<nDarray *>(this);
-	return this_no_const->operator()(first, second);
-      }
+      { return pc_nDarray_rep(first, second); }
     
     inline const double &operator()(int first, int second, int third) const
       { return pc_nDarray_rep(first, second, third); }
 
     inline double &operator()(int first, int second, int third)
-      {
-	nDarray *this_no_const= const_cast<nDarray *>(this);
-	return this_no_const->operator()(first, second, third);
-      }
+      { return pc_nDarray_rep(first, second, third); }
+    
     inline const double &operator()(int first, int second, int third, int fourth) const
       { return pc_nDarray_rep(first, second, third, fourth); }
     
