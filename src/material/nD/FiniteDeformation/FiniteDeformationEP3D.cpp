@@ -325,7 +325,7 @@ const XC::straintensor &XC::FiniteDeformationEP3D::getF(void) const
   { return F; }
 
 //----------------------------------------------------------------------
-const XC::straintensor XC::FiniteDeformationEP3D::getFp(void)
+const XC::straintensor XC::FiniteDeformationEP3D::getFp(void) const
   { return fdeps->getFpInVar(); }
 
 //----------------------------------------------------------------------
@@ -397,7 +397,7 @@ void XC::FiniteDeformationEP3D::Print(std::ostream &s, int flag) const
 }
 
 //----------------------------------------------------------------------
-const XC::stresstensor XC::FiniteDeformationEP3D::getCauchyStressTensor(void)
+const XC::stresstensor XC::FiniteDeformationEP3D::getCauchyStressTensor(void) const
 {
     return cauchystress;
 }

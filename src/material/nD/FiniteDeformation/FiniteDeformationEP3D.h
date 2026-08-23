@@ -51,7 +51,7 @@
 //#
 //===============================================================================
 #ifndef FiniteDeformationEP3D_H
-#define FiniteDefornationEP3D_H
+#define FiniteDeformationEP3D_H
 
 #include "FiniteDeformationMaterial.h"
 
@@ -140,7 +140,7 @@ class FiniteDeformationEP3D: public FiniteDeformationMaterial
     const straintensor &getStrainTensor(void) const;  // Default Green Strain
     const stresstensor &getStressTensor(void) const ;  // Default 2nd Piola Kirchhoff Stress
     const straintensor &getF(void) const;
-    const straintensor getFp(void);
+    const straintensor getFp(void) const;
 
     int commitState(void) ;
     int revertToLastCommit(void) ;
@@ -157,7 +157,7 @@ class FiniteDeformationEP3D: public FiniteDeformationMaterial
 
     void Print(std::ostream &s, int flag) const;
 
-    const  stresstensor getCauchyStressTensor(void);
+    const  stresstensor getCauchyStressTensor(void) const;
   };
 } // end of XC namespace
 
