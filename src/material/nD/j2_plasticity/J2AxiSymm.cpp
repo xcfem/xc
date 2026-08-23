@@ -126,12 +126,12 @@ int XC::J2AxiSymm::setTrialStrain( const XC::Vector &strain_from_element)
 {
   strain.Zero( );
 
-  strain(0,0) =        strain_from_element(0);
-  strain(1,1) =        strain_from_element(1);
-  strain(2,2) =        strain_from_element(2);
+  strain(0,0)= strain_from_element(0);
+  strain(1,1)= strain_from_element(1);
+  strain(2,2)= strain_from_element(2);
 
   strain(0,1) = 0.50 * strain_from_element(3);
-  strain(1,0) =        strain(0,1);
+  strain(1,0)= strain(0,1);
 
   this->plastic_integrator( );
 
@@ -159,25 +159,25 @@ int XC::J2AxiSymm::setTrialStrainIncr( const XC::Vector &v, const XC::Vector &r 
 
 //! @brief send back the strain
 const XC::Vector& XC::J2AxiSymm::getStrain(void) const 
-{
-  strain_vec(0) =       strain(0,0);
-  strain_vec(1) =       strain(1,1);
-  strain_vec(2) =       strain(2,2);
+  {
+    strain_vec(0)= strain(0,0);
+    strain_vec(1)= strain(1,1);
+    strain_vec(2)= strain(2,2);
 
-  strain_vec(3) = 2.0 * strain(0,1);
-
-  return strain_vec;
-} 
+    strain_vec(3)= 2.0 * strain(0,1);
+    
+    return strain_vec;
+  } 
 
 
 //! @brief send back the stress 
-const XC::Vector& XC::J2AxiSymm::getStress(void) 
+const XC::Vector& XC::J2AxiSymm::getStress(void) const
 {
-  stress_vec(0) = stress(0,0);
-  stress_vec(1) = stress(1,1);
-  stress_vec(2) = stress(2,2);
+  stress_vec(0)= stress(0,0);
+  stress_vec(1)= stress(1,1);
+  stress_vec(2)= stress(2,2);
 
-  stress_vec(3) = stress(0,1);
+  stress_vec(3)= stress(0,1);
 
   return stress_vec;
 }
@@ -196,13 +196,13 @@ const XC::Matrix& XC::J2AxiSymm::getTangent(void) const
   int ii, jj;
   int i, j, k, l;
 
-  for( ii = 0; ii < 4; ii++ ) {
-    for( jj = 0; jj < 4; jj++ ) {
+  for( ii= 0; ii < 4; ii++ ) {
+    for( jj= 0; jj < 4; jj++ ) {
 
       index_map( ii, i, j );
       index_map( jj, k, l );
 
-      tangent_matrix(ii,jj) = tangent[i][j][k][l];
+      tangent_matrix(ii,jj)= tangent[i][j][k][l];
 
     } //end for j
   } //end for i
@@ -225,13 +225,13 @@ const XC::Matrix& XC::J2AxiSymm::getInitialTangent(void) const
 
     int i, j, k, l;
 
-    for(int ii = 0; ii < 4; ii++ )
+    for(int ii= 0; ii < 4; ii++ )
       {
-        for(int jj = 0; jj < 4; jj++ )
+        for(int jj= 0; jj < 4; jj++ )
 	  {
 	    index_map( ii, i, j );
 	    index_map( jj, k, l );
-	    tangent_matrix(ii,jj) = initialTangent[i][j][k][l];
+	    tangent_matrix(ii,jj)= initialTangent[i][j][k][l];
 	  } //end for j
       } //end for i
     return tangent_matrix;
@@ -242,8 +242,8 @@ const XC::Matrix& XC::J2AxiSymm::getInitialTangent(void) const
 //! @brief swap history variables
 int XC::J2AxiSymm::commitState( )  
   {
-    epsilon_p_n = epsilon_p_nplus1;
-    xi_n        = xi_nplus1;
+    epsilon_p_n= epsilon_p_nplus1;
+    xi_n= xi_nplus1;
     return 0;
   }
 

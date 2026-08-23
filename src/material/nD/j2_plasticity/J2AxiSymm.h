@@ -139,7 +139,7 @@ class J2AxiSymm: public J2Plasticity
     const Vector& getStrain(void) const;
 
     //send back the stress 
-    const Vector& getStress(void);
+    const Vector& getStress(void) const;
 
     //send back the tangent 
     const Matrix& getTangent(void) const;
