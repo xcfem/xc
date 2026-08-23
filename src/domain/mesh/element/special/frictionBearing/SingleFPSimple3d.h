@@ -132,6 +132,7 @@ class SingleFPSimple3d: public SimpleBearingBase
     int revertToStart();
     int update();
     int setup();
+    using SimpleBearingBase::setUp;
 	
     // public methods to obtain stiffness, mass, damping and residual information    
     const Matrix &getTangentStiff() const;

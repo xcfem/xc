@@ -117,6 +117,8 @@ class RJWatsonEQS3d : public SimpleBearingBase
     int revertToStart();
     int update();
     
+    using SimpleBearingBase::setUp;
+    
     // public methods to obtain stiffness, mass, damping and residual information
     const Matrix &getTangentStiff() const;
     const Matrix &getInitialStiff() const;
