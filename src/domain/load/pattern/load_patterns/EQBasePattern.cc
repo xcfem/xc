@@ -49,7 +49,7 @@ void XC::EQBasePattern::Print(std::ostream &s, int flag) const
 //! @brief Send members through the communicator argument.
 int XC::EQBasePattern::sendData(Communicator &comm)
   {
-    int res= EQBasePattern::sendData(comm);
+    int res= LoadPattern::sendData(comm);
     res+= comm.sendMovable(theMotions,getDbTagData(),CommMetaData(16));
     return res;
   }
@@ -57,7 +57,7 @@ int XC::EQBasePattern::sendData(Communicator &comm)
 //! @brief Receives members through the communicator argument.
 int XC::EQBasePattern::recvData(const Communicator &comm)
   {
-    int res= EQBasePattern::recvData(comm);
+    int res= LoadPattern::recvData(comm);
     res+= comm.receiveMovable(theMotions,getDbTagData(),CommMetaData(16));
     return res;
   }
