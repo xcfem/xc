@@ -87,7 +87,7 @@ class SecStifDamping: public Damping
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
 
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
 
     virtual int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);

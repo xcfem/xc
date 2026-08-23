@@ -194,7 +194,7 @@ int XC::SecStifDamping::recvSelf(const Communicator &comm)
     return res;
   }
 
-void XC::SecStifDamping::Print(std::ostream &s, int flag)
+void XC::SecStifDamping::Print(std::ostream &s, int flag) const
   {
     s << "\nDamping: " << this->getTag() << " Type: SecStifDamping"
       << "\tdamping factor: " << beta << std::endl

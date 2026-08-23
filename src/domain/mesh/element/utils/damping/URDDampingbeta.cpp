@@ -198,7 +198,7 @@ int XC::URDDampingbeta::recvSelf(const Communicator &comm)
   }
 
 
-void XC::URDDampingbeta::Print(std::ostream &s, int flag)
+void XC::URDDampingbeta::Print(std::ostream &s, int flag) const
   {
     s << "\nDamping: " << this->getTag() << " Type: URDDampingbeta";
     s << "\tnumber of filters: " << nFilter << std::endl;

@@ -312,7 +312,7 @@ int XC::UniformDamping::recvSelf(const Communicator &comm)
     return res;
   }
 
-void XC::UniformDamping::Print(std::ostream &s, int flag)
+void XC::UniformDamping::Print(std::ostream &s, int flag) const
   {
     s << "\nDamping: " << this->getTag() << " Type: UniformDamping";
     s << "\tdamping ratio: " << 0.5 * eta << std::endl;

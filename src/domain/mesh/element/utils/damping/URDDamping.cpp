@@ -555,7 +555,7 @@ int XC::URDDamping::recvSelf(const Communicator &comm)
     return res;
   }
 
-void XC::URDDamping::Print(std::ostream &s, int flag)
+void XC::URDDamping::Print(std::ostream &s, int flag) const
   {
     s << "\nDamping: " << this->getTag() << " Type: URDDamping";
     s << "\tnumber of frequencies: " << numfreq << std::endl;
