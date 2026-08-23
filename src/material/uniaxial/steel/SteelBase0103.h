@@ -98,7 +98,7 @@ class SteelBase0103: public SteelBase
     double getStress(void) const;
     double getTangent(void) const;
 
-    inline virtual double getEnergy()
+    inline virtual double getEnergy() const
       { return Energy; }
     
     int commitState(void);

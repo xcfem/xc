@@ -93,7 +93,7 @@ class ElasticPPMaterialBase: public EPPBaseMaterial
           return (-sigtrial + fyn);
       }
 
-    inline double get_total_strain(void) 
+    inline double get_total_strain(void) const
       { return EPPBaseMaterial::get_total_strain()-ep; }
     int sendData(Communicator &);
     int recvData(const Communicator &);
@@ -110,7 +110,7 @@ class ElasticPPMaterialBase: public EPPBaseMaterial
     double get_eyp(void) const;
     double get_fyn(void) const;
     double get_eyn(void) const;
-    virtual double getEnergy(void)
+    virtual double getEnergy(void) const
       { return EnergyP; }
 
     int setTrialStrain(double strain, double strainRate = 0.0); 

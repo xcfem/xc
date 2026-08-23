@@ -335,7 +335,7 @@ double XC::UniaxialMaterial::getEnergy(void) const
 	      << "; this method " << std::endl
               << " is not implemented for the selected material. "
 	      << std::endl;
-   return 0;
+     return 0;
   }
 
 //! @brief Receives a pointer to uniaxial material through the communicator argument.

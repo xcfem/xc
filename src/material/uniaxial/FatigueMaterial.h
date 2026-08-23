@@ -148,7 +148,7 @@ class FatigueMaterial: public UniaxialMaterial
     bool hasFailed(void);  
 
     //by SAJalali
-    inline virtual double getEnergy(void)
+    inline virtual double getEnergy(void) const
       { return energy; }
   };
 } // end of XC namespace

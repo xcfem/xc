@@ -47,7 +47,8 @@ class ElasticBaseMaterial: public UniaxialMaterial
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    inline virtual double get_total_strain(void) const { return trialStrain-ezero; }
+    inline virtual double get_total_strain(void) const
+      { return trialStrain-ezero; }
   public:
     ElasticBaseMaterial(int tag= 0, int classtag= 0, double E= 0.0, double e0= 0.0);    
 

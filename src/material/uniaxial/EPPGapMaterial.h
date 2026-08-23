@@ -138,7 +138,7 @@ class EPPGapMaterial: public EPPBaseMaterial
     int recvSelf(const Communicator &);
     
     //by SAJalali
-    virtual double getEnergy(void)
+    virtual double getEnergy(void) const
       { return Energy; }
     void Print(std::ostream &s, int flag =0) const;
     
