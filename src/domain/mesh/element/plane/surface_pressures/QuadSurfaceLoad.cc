@@ -242,7 +242,7 @@ int XC::QuadSurfaceLoad::recvSelf(const Communicator &comm)
     return res;
   }
 
-void XC::QuadSurfaceLoad::Print(std::ostream &os, int flag)
+void XC::QuadSurfaceLoad::Print(std::ostream &os, int flag) const
   {
     os << getClassName() << ", element id:  " << this->getTag() << std::endl
        << "   Connected external nodes:  " << theNodes << std::endl; 
