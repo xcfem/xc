@@ -119,10 +119,13 @@ class DamageModel:  public TaggedObject, public MovableObject
     virtual int revertToStart(void) = 0;        
     
     virtual DamageModel *getCopy(void) const= 0;
-    
+
     virtual int setVariable(const std::string &argv)  { return -1; }
+    using MovableObject::setVariable;
     virtual int getVariable(int variableID, double &info)  { return -1; }
+    using MovableObject::getVariable;
     
+    using MovableObject::setParameter;
     virtual int setParameter(const std::vector<std::string> &argv, Information &theInformation);
     virtual int updateParameter(int responseID, Information &theInformation);	
     virtual Response *setResponse(const std::vector<std::string> &argv, Information &theInformation) = 0;
