@@ -39,6 +39,8 @@ class KEigenIntegrator;
 //! @brief Algorithm for ill-conditioning analysis.
 class KEigenAlgo: public EigenAlgorithm
   {
+  private:
+    using EigenAlgorithm::eigen_to_model;
   protected:
     int ns; //!< number of smallest eigenpairs
     int nl; //!< number of largest eigenpairs
