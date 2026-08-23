@@ -184,10 +184,10 @@ class Subdomain: public Element, public Domain
 
     virtual int commitState(void);
 
-    virtual const Matrix &getTangentStiff(void);
-    virtual const Matrix &getInitialStiff(void);
-    virtual const Matrix &getDamp(void);
-    virtual const Matrix &getMass(void);
+    virtual const Matrix &getTangentStiff(void) const;
+    virtual const Matrix &getInitialStiff(void) const;
+    virtual const Matrix &getDamp(void) const;
+    virtual const Matrix &getMass(void) const;
 
     virtual void  zeroLoad(void);
     virtual int addLoad(ElementalLoad *theLoad, double loadFactor);

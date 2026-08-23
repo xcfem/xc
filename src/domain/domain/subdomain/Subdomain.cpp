@@ -534,7 +534,7 @@ int XC::Subdomain::getNumDOF(void) const
 int XC::Subdomain::commitState(void)
   { return this->commit(); }
 
-const XC::Matrix &XC::Subdomain::getTangentStiff(void)
+const XC::Matrix &XC::Subdomain::getTangentStiff(void) const
   {
     std::cerr << Domain::getClassName() << "::" << __FUNCTION__
 	      << "; DOES NOT DO ANYTHING";
@@ -544,7 +544,7 @@ const XC::Matrix &XC::Subdomain::getTangentStiff(void)
 //! @brief For this class does nothing but print an error message. Subtypes may
 //! provide a condensed stiffness matrix, \f$T^tKT\f$ corresponding to
 //! external nodes. Returns a zero matrix of dimensions (1x1).
-const XC::Matrix &XC::Subdomain::getInitialStiff(void)
+const XC::Matrix &XC::Subdomain::getInitialStiff(void) const
   {
     std::cerr << Domain::getClassName() << "::" << __FUNCTION__
 	      << "; DOES NOT DO ANYTHING."
@@ -556,7 +556,7 @@ const XC::Matrix &XC::Subdomain::getInitialStiff(void)
 //! provide a condensed damping matrix, \f$T^tDT\f$ or a damping matrix
 //! corresponding to some combination of the condensed stifffness and mass
 //! matrices. Returns a zero matrix of dimensions (1x1).
-const XC::Matrix &XC::Subdomain::getDamp(void)
+const XC::Matrix &XC::Subdomain::getDamp(void) const
   {
     std::cerr << Domain::getClassName() << "::" << __FUNCTION__
 	      << "; DOES NOT DO ANYTHING"
@@ -567,7 +567,7 @@ const XC::Matrix &XC::Subdomain::getDamp(void)
 //! For this class does nothing but print an error message. Subtypes may
 //! provide a condensed mass matrix, \f$T^tMT\f$ or a mass matrix with zero
 //! diag elements. Returns a zero matrix of dimensions (1x1).
-const XC::Matrix &XC::Subdomain::getMass(void)
+const XC::Matrix &XC::Subdomain::getMass(void) const
   {
     std::cerr << Domain::getClassName() << "::" << __FUNCTION__
 	      << "; DOES NOT DO ANYTHING"
