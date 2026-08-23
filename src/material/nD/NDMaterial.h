@@ -153,8 +153,8 @@ class NDMaterial: public Material
     virtual void setInitialGeneralizedStrain(const Vector &);
     const Vector &getInitialGeneralizedStrain(void) const;
 
-    virtual const Vector &getCommittedStress(void);
-    virtual const Vector &getCommittedStrain(void);
+    virtual const Vector &getCommittedStress(void) const;
+    virtual const Vector &getCommittedStrain(void) const;
 
     //! @brief Virtual constructor.
     virtual NDMaterial *getCopy(void) const= 0;

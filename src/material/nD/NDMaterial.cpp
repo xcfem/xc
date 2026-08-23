@@ -121,11 +121,11 @@ double XC::NDMaterial::getpsi(void) const
   { return 0.0; }
 
 //! @brief Returns committed stresses
-const XC::Vector &XC::NDMaterial::getCommittedStress(void) 
+const XC::Vector &XC::NDMaterial::getCommittedStress(void) const 
   { return this->getStress(); }
 
 //! @brief Returns committed strains
-const XC::Vector &XC::NDMaterial::getCommittedStrain(void) 
+const XC::Vector &XC::NDMaterial::getCommittedStrain(void) const
   { return this->getStrain(); }
 
 // methods to set and retrieve state.

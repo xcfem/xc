@@ -117,7 +117,7 @@ int XC::NDAdaptorMaterial::revertToStart()
 double XC::NDAdaptorMaterial::getRho(void) const
   { return theMaterial->getRho(); }
 
-const XC::Vector& XC::NDAdaptorMaterial::getStrain(void)
+const XC::Vector& XC::NDAdaptorMaterial::getStrain(void) const
   { return strain; }
 
 //! @brief Send object members through the communicator argument.

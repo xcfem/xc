@@ -131,8 +131,8 @@ class FDdecoupledElastic3D: public FiniteDeformationElastic3D
 //    virtual const Vector &getStress(void) const;
 //    virtual const Vector &getStrain(void) const;
 
-//    virtual const stresstensor getCommittedStress(void);
-//    virtual const straintensor getCommittedStrain(void);
+//    virtual const stresstensor getCommittedStress(void) const;
+//    virtual const straintensor getCommittedStrain(void) const;
 
 //    virtual const straintensor getPlasticStrainTensor(void);
 

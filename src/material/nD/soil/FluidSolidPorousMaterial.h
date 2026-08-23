@@ -106,9 +106,9 @@ class FluidSolidPorousMaterial: public SoilMaterialBase
      // Calculates the corresponding stress increment(rate), for a given strain increment. 
      const Vector &getStress(void) const;
      const Vector &getStrain(void) const;
-     const Vector &getCommittedStress(void);
-     const Vector &getCommittedStrain(void);
-     const Vector &getCommittedPressure(void);
+     const Vector &getCommittedStress(void) const;
+     const Vector &getCommittedStrain(void) const;
+     const Vector &getCommittedPressure(void) const;
 
      // Accepts the current trial strain values as being on the solution path, and updates 
      // all model parameters related to stress/strain states. Return 0 on success.

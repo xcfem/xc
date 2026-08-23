@@ -57,6 +57,8 @@ namespace XC {
 class PressureDependMultiYield02: public PressureDependMultiYieldBase
   {
   private:
+    using PressureDependMultiYieldBase::setTrialStrainIncr;
+    using PressureDependMultiYieldBase::setTrialStrain;
     // user supplied
     static std::vector<double> contractParam2x;
     static std::vector<double> contractParam3x;

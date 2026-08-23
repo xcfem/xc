@@ -65,7 +65,7 @@ class NDAdaptorMaterial: public NDMaterial
     NDAdaptorMaterial &operator=(const NDAdaptorMaterial &);
     virtual ~NDAdaptorMaterial(void);
 
-    const Vector& getStrain(void);
+    const Vector& getStrain(void) const;
     double getRho(void) const;
 
     int commitState(void);

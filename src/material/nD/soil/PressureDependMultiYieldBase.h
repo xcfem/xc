@@ -213,14 +213,14 @@ class PressureDependMultiYieldBase: public PressureMultiYieldBase
      int setTrialStrainIncr(const Vector &v, const Vector &r);
 
      // Calculates current tangent stiffness.
-     const Matrix &getInitialTangent(void);
+     const Matrix &getInitialTangent(void) const;
         
      void getBackbone(Matrix &);
 
      // Calculates the corresponding stress increment (rate), for a given strain increment. 
-     const Vector &getStrain (void);
-     const Vector &getCommittedStress (void);
-     const Vector &getCommittedStrain (void);
+     const Vector &getStrain (void) const;
+     const Vector &getCommittedStress (void) const;
+     const Vector &getCommittedStrain (void) const;
 
      // Accepts the current trial strain values as being on the solution path, and updates 
      // all model parameters related to stress/strain states. Return 0 on success.

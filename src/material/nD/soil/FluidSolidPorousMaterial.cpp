@@ -290,19 +290,15 @@ int XC::FluidSolidPorousMaterial::updateParameter(int responseID, Information &i
   }
 
 
-const XC::Vector & XC::FluidSolidPorousMaterial::getCommittedStress(void)
-{
-    return theSoilMaterial->getCommittedStress();
-}
+const XC::Vector & XC::FluidSolidPorousMaterial::getCommittedStress(void) const
+  { return theSoilMaterial->getCommittedStress(); }
 
 
-const XC::Vector & XC::FluidSolidPorousMaterial::getCommittedStrain(void)
-{
-    return theSoilMaterial->getCommittedStrain();
-}
+const XC::Vector & XC::FluidSolidPorousMaterial::getCommittedStrain(void) const
+  { return theSoilMaterial->getCommittedStrain(); }
 
 
-const XC::Vector & XC::FluidSolidPorousMaterial::getCommittedPressure(void)
+const XC::Vector & XC::FluidSolidPorousMaterial::getCommittedPressure(void) const
   {
     //int ndm = ndmx[matN];
     static XC::Vector temp(2);

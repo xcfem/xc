@@ -331,7 +331,7 @@ int XC::PressureDependMultiYieldBase::setTrialStrainIncr(const XC::Vector &strai
 }
 
 
-const XC::Matrix &XC::PressureDependMultiYieldBase::getInitialTangent(void)
+const XC::Matrix &XC::PressureDependMultiYieldBase::getInitialTangent(void) const
 {
   int loadStage = loadStagex[matN];
   double refShearModulus = refShearModulusx[matN];
@@ -389,7 +389,7 @@ const XC::Matrix &XC::PressureDependMultiYieldBase::getInitialTangent(void)
 }
 
 
-const XC::Vector & XC::PressureDependMultiYieldBase::getStrain(void)
+const XC::Vector & XC::PressureDependMultiYieldBase::getStrain(void) const
   { return getCommittedStrain(); }
 
 
@@ -624,63 +624,64 @@ void XC::PressureDependMultiYieldBase::Print(std::ostream &s, int flag ) const
 }
 
 
-const XC::Vector & XC::PressureDependMultiYieldBase::getCommittedStress(void)
-{
-        int ndm = ndmx[matN];
-        int numOfSurfaces = numOfSurfacesx[matN];
+const XC::Vector & XC::PressureDependMultiYieldBase::getCommittedStress(void) const
+  {
+    int ndm = ndmx[matN];
+    int numOfSurfaces = numOfSurfacesx[matN];
     double residualPress = residualPressx[matN];
 
-        double scale = currentStress.deviatorRatio(residualPress)/committedSurfaces[numOfSurfaces].size();
+    double scale = currentStress.deviatorRatio(residualPress)/committedSurfaces[numOfSurfaces].size();
         if(loadStagex[matN] != 1) scale = 0.;
-  if(ndm==3) {
-                static XC::Vector temp7(7);
-                workV6 = currentStress.t2Vector();
-    temp7[0] = workV6[0];
-    temp7[1] = workV6[1];
-    temp7[2] = workV6[2];
-    temp7[3] = workV6[3];
-    temp7[4] = workV6[4];
-    temp7[5] = workV6[5];
-    temp7[6] = scale;
-                return temp7;
-        }
-
-  else {
-    static XC::Vector temp5(5);  
-                workV6 = currentStress.t2Vector();
-    temp5[0] = workV6[0];
-    temp5[1] = workV6[1];
-    temp5[2] = workV6[2];
-    temp5[3] = workV6[3];
-    temp5[4] = scale;
-    /*temp5[5] = committedActiveSurf;
-        temp5[7] = currentStress.deviatorRatio(residualPressx[matN]);
-    temp5[8] = pressureDCommitted;
-    temp5[9] = cumuDilateStrainOctaCommitted;
-    temp5[10] = maxCumuDilateStrainOctaCommitted;
-    temp5[11] = cumuTranslateStrainOctaCommitted;
-    temp5[12] = onPPZCommitted;
-    temp5[13] = PPZSizeCommitted;*/
-    return temp5;
-  }
-}
-
-
-const XC::Vector & XC::PressureDependMultiYieldBase::getCommittedStrain(void)
-{
-        int ndm = ndmx[matN];
-
   if(ndm==3)
-    return currentStrain.t2Vector(1);
-  else {
-                static XC::Vector workV(3);
-                workV6 = currentStrain.t2Vector(1);
-    workV[0] = workV6[0];
-    workV[1] = workV6[1];
-    workV[2] = workV6[3];
-    return workV;
+    {
+      static XC::Vector temp7(7);
+      workV6 = currentStress.t2Vector();
+      temp7[0] = workV6[0];
+      temp7[1] = workV6[1];
+      temp7[2] = workV6[2];
+      temp7[3] = workV6[3];
+      temp7[4] = workV6[4];
+      temp7[5] = workV6[5];
+      temp7[6] = scale;
+      return temp7;
+    }
+  else
+    {
+      static XC::Vector temp5(5);  
+      workV6 = currentStress.t2Vector();
+      temp5[0] = workV6[0];
+      temp5[1] = workV6[1];
+      temp5[2] = workV6[2];
+      temp5[3] = workV6[3];
+      temp5[4] = scale;
+      /*temp5[5] = committedActiveSurf;
+        temp5[7] = currentStress.deviatorRatio(residualPressx[matN]);
+	temp5[8] = pressureDCommitted;
+	temp5[9] = cumuDilateStrainOctaCommitted;
+	temp5[10] = maxCumuDilateStrainOctaCommitted;
+	temp5[11] = cumuTranslateStrainOctaCommitted;
+	temp5[12] = onPPZCommitted;
+	temp5[13] = PPZSizeCommitted;*/
+      return temp5;
+    }
   }
-}
+
+const XC::Vector & XC::PressureDependMultiYieldBase::getCommittedStrain(void) const
+ {
+   int ndm = ndmx[matN];
+
+   if(ndm==3)
+     return currentStrain.t2Vector(1);
+   else
+     {
+       static XC::Vector workV(3);
+       workV6 = currentStrain.t2Vector(1);
+       workV[0] = workV6[0];
+       workV[1] = workV6[1];
+       workV[2] = workV6[3];
+       return workV;
+     }
+  }
 
 
 double XC::PressureDependMultiYieldBase::yieldFunc(const XC::T2Vector & stress, 
