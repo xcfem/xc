@@ -144,7 +144,7 @@ class ProtoMatrix
     virtual ~ProtoMatrix(void) {}
     inline virtual void resize(size_t n_rows,size_t n_columns)
       { inic(n_rows,n_columns); }
-    inline virtual size_t Tam(void)
+    inline virtual size_t Tam(void) const
       { return (n_rows*n_columns); }
     inline size_t getNumberOfRows(void) const
       { return n_rows; }                    

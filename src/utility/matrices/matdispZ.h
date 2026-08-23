@@ -60,15 +60,14 @@ class matdispZ : public ZMatrix<numero>
       };
     typedef std::map<size_type, sp_vector> column_map;
     column_map columns;
-
-
+    
     typedef typename sp_vector::const_iterator const_f_iterator;
     typedef typename sp_vector::iterator f_iterator;
     typedef typename column_map::const_iterator const_c_iterator;
     typedef typename column_map::iterator c_iterator;
 
   private:
-    inline virtual size_type Tam(size_type ,size_type )
+    static size_type _tam(size_type ,size_type )
       { return 0; }
     inline virtual size_type Indice(const size_type &iRow,const size_type &col) const
       { return 0; }

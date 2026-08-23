@@ -166,11 +166,11 @@ class TMatrix: public ProtoMatrix, public STO
 //! @brief Constructor por defecto.
 template <class T,class STO>
 TMatrix<T,STO>::TMatrix(size_t n_rows,size_t n_columns)
-  : ProtoMatrix(n_rows,n_columns), STO(Tam()) {}
+  : ProtoMatrix(n_rows,n_columns), STO(ProtoMatrix::Tam()) {}
 //! @brief Constructor.
 template <class T,class STO>
 TMatrix<T,STO>::TMatrix(size_t n_rows,size_t n_columns,T val)
-  : ProtoMatrix(n_rows,n_columns), STO(Tam(),val) {}
+  : ProtoMatrix(n_rows,n_columns), STO(ProtoMatrix::Tam(),val) {}
 //! @brief Constructor de copia.
 template <class T,class STO>
 TMatrix<T,STO>::TMatrix(const TMatrix<T,STO> &other) 
@@ -202,7 +202,7 @@ template <class T,class STO>
 void TMatrix<T,STO>::resize(size_t n_rows,size_t n_columns,T val)
   {
     ProtoMatrix::resize(n_rows,n_columns);
-    STO::resize(Tam());
+    STO::resize(ProtoMatrix::Tam());
   }
 
 //! @brief Comparison operator.
@@ -295,7 +295,7 @@ inline M traspuesta(const M &m)
   { return m.GetTrn(); }
 
 template<class T,class STO>
-TMatrix<T,STO>::TMatrix(const TMatrix<T,STO> &orig,size_t f1, size_t c1, size_t f2, size_t c2): ProtoMatrix(f2-f1+1,c2-c1+1), STO(Tam()) 
+TMatrix<T,STO>::TMatrix(const TMatrix<T,STO> &orig,size_t f1, size_t c1, size_t f2, size_t c2): ProtoMatrix(f2-f1+1,c2-c1+1), STO(ProtoMatrix::Tam()) 
   {
     orig.check_get_box(f1,c1,f2,c2);
     for(size_t i=1;i<=n_rows;i++)

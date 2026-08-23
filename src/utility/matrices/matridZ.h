@@ -36,7 +36,7 @@ class matridZ : public ZMatrix<numero>
     typedef typename ZMatrix_number::const_reference const_reference;
     typedef typename ZMatrix_number::size_type size_type;
   protected:
-    inline virtual size_type Tam(size_type n_rows,size_type cols) const
+    static size_type _tam(size_type n_rows, size_type cols) const
       { return (3*n_rows-1); }
     inline virtual int se_guarda(size_type iRow,size_type col) const
       { return (labs(iRow-col) <= 1); }
@@ -49,14 +49,21 @@ class matridZ : public ZMatrix<numero>
           return ((iRow-1)*3+col-iRow+1);
       }
   public:
-    matridZ(void) : ZMatrix_number (1,1)
+    matridZ(void)
+      : ZMatrix_number (1,1)
       { vectorZ_numero::operator[](0)= 0.0; }
-    matridZ(const size_type &dim) : ZMatrix_number(1,Tam(dim,dim))
+    matridZ(const size_type &dim)
+      : ZMatrix_number(1,_tam(dim,dim))
       { PutDim(dim,dim); vectorZ_numero::operator[](0)= 0.0; }
-    matridZ(const size_type &dim,const numero &val) : ZMatrix_number(1,Tam(dim,dim))
+    matridZ(const size_type &dim,const numero &val)
+      : ZMatrix_number(1,_tam(dim,dim))
       { PutDim(dim,dim); vectorZ_numero::operator[](0)= 0.0; }
-    matridZ(const matridZ<numero> &other) : ZMatrix_number(other)
-      { PutDim(other.n_rows,other.n_columns); vectorZ_numero::operator[](0)= 0.0; }
+    matridZ(const matridZ<numero> &other)
+      : ZMatrix_number(other)
+      {
+	PutDim(other.n_rows,other.n_columns);
+	vectorZ_numero::operator[](0)= 0.0;
+      }
     matridZ<numero>& operator =(const matridZ<numero> &m)
       {
         ZMatrix_number::operator =(m);

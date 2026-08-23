@@ -37,7 +37,7 @@ class matsimZ : public ZMatrix<numero>
     //Multiplies the elements of the lower triangle
     //can be used with antysimmetric matrices.
     int signo;
-    inline virtual size_type Tam(size_type n_rows,size_type cols)
+    static size_type _tam(size_type n_rows,size_type cols)
       { return (n_rows*(n_rows+1)/2); }
     inline virtual size_type Indice( const size_type &iRow,
                                      const size_type &iCol) const
@@ -47,12 +47,16 @@ class matsimZ : public ZMatrix<numero>
         return (c-1)*(2*this->n_rows-c)/2+f-1;
       }
   public:
-    matsimZ(void) : ZMatrix_number (1,1) {}
-    matsimZ(size_type dim) : ZMatrix_number(1,Tam(dim,dim))
+    matsimZ(void)
+      : ZMatrix_number (1,1) {}
+    matsimZ(size_type dim)
+      : ZMatrix_number(1,_tam(dim,dim))
       { PutDim(dim,dim); }
-    matsimZ(size_type dim,numero val) : ZMatrix_number(1,Tam(dim,dim),val)
+    matsimZ(size_type dim,numero val)
+      : ZMatrix_number(1,_tam(dim,dim),val)
       { PutDim(dim,dim); }
-    matsimZ(const matsimZ<numero> &other) : ZMatrix_number(other)
+    matsimZ(const matsimZ<numero> &other)
+      : ZMatrix_number(other)
       { PutDim(other.n_rows,other.n_columns); }
     matsimZ<numero>& operator =(const matsimZ<numero> &m)
       {
