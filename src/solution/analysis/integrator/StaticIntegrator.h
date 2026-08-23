@@ -137,6 +137,8 @@ class Vector;
 //! load control, arc length, and displacement control.
 class StaticIntegrator: public IncrementalIntegrator
   {
+  private:
+    using IncrementalIntegrator::newStep;
   protected:
     StaticIntegrator(SolutionStrategy *,int classTag);
   public:
