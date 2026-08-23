@@ -130,10 +130,10 @@ void XC::FrictionElementBase::setTol(const double &d)
 double XC::FrictionElementBase::getTol(void) const
   { return this->tol; }
 //! @brief Set the element length.
-void XC::FrictionElementBase::setLength(const double &d)
+void XC::FrictionElementBase::setBearingLength(const double &d)
   { this->L= d; }
 //! @brief Get the element length.
-double XC::FrictionElementBase::getLength(void) const
+double XC::FrictionElementBase::getBearingLength(void) const
   { return this->L; }
 
 

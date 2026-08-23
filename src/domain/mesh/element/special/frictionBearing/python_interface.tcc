@@ -67,9 +67,9 @@ class_<XC::FrictionElementBase, bases<XC::Element0D>, boost::noncopyable >("Fric
     .add_property("tol", &XC::FrictionElementBase::getTol, &XC::FrictionElementBase::setTol, "Get/set the tolerance for convergence criterion.")
 
     // Bearing length.
-    .def("setLength", &XC::FrictionElementBase::setLength, "Set the element length.")
-    .def("getLength",&XC::FrictionElementBase::getLength, "Get the element length.")
-    .add_property("L", &XC::FrictionElementBase::getLength, &XC::FrictionElementBase::setLength, "Get/set the element length.")
+    .def("setBearingLength", &XC::FrictionElementBase::setBearingLength, "Set the bearing length.")
+    .def("getBearingLength",&XC::FrictionElementBase::getBearingLength, "Get the bearing length.")
+    .add_property("L", &XC::FrictionElementBase::getBearingLength, &XC::FrictionElementBase::setBearingLength, "Get/set the bearing length.")
     
     // state variables
     .def("setDisplacementsInBasicSystem", &XC::FrictionElementBase::setDisplacementsInBasicSystem, "Set displacements in basic system.")

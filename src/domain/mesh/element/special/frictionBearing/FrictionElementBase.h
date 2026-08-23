@@ -96,8 +96,8 @@ class FrictionElementBase: public Element0D
     int getMaxIter(void) const;
     void setTol(const double &);
     double getTol(void) const;
-    void setLength(const double &);
-    double getLength(void) const;
+    void setBearingLength(const double &);
+    double getBearingLength(void) const;
     
     
     // state variables
