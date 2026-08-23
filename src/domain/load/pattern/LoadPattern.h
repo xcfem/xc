@@ -170,7 +170,6 @@ class LoadPattern: public NodeLocker
     void copyLoads(const Element *, const Element *);
     
     // methods to apply loads
-    using NodeLocker::applyLoad;
     virtual void applyLoad(double pseudoTime = 0.0);
     virtual void setLoadConstant(void);
     inline void setIsConstant(const bool &b)

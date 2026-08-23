@@ -90,7 +90,7 @@ class NodeLocker: public ForceReprComponent
     virtual bool removeSFreedom_Constraint(int tag);
 
     // methods to apply loads
-    virtual void applyLoad(const double &pseudoTime= 0.0,const double &factor= 1.0);
+    void applyLoad(const double &pseudoTime= 0.0,const double &factor= 1.0);
 
     // methods for o/p
     virtual int sendSelf(Communicator &);
