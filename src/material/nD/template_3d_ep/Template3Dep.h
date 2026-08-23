@@ -198,7 +198,7 @@ class Template3Dep: public NDMaterial
     const stresstensor &getStressTensor(void) const;
     const straintensor &getStrainTensor(void) const;
     const straintensor &getPlasticStrainTensor(void) const; //Added Joey Aug. 13, 2001
-    double getpsi(void); //Added Joey 02-18-03
+    double getpsi(void) const; //Added Joey 02-18-03
 
     const EPState &getEPS() const;
     void setEPS(const EPState &eps);

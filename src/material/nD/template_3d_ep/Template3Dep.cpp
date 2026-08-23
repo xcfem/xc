@@ -973,7 +973,7 @@ const XC::straintensor &XC::Template3Dep::getPlasticStrainTensor(void) const
   { return EPS.getPlasticStrain(); }
 
 //================================================================================
-double XC::Template3Dep::getpsi(void)
+double XC::Template3Dep::getpsi(void) const
   {
      //this function cannot be moved,
      //leave here for compiling..., Zhao04/22/04
