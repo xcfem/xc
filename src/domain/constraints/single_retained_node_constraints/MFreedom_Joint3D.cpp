@@ -278,7 +278,7 @@ int XC::MFreedom_Joint3D::recvSelf(const Communicator &comm)
   }
 
 //! @brief Returns the constraint matrix.
-const XC::Matrix &XC::MFreedom_Joint3D::getConstraint(void)
+const XC::Matrix &XC::MFreedom_Joint3D::getConstraint(void) const
   {
     if(constraintMatrix.isEmpty())
       {

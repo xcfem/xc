@@ -101,7 +101,7 @@ class MFreedom_Joint3D: public MFreedom_Joint
 
     // method to get information about the constraint
     int applyConstraint(double pseudoTime);
-    const Matrix &getConstraint(void);    
+    const Matrix &getConstraint(void) const;    
     void setDomain(Domain *theDomain);
 
     // methods for output
