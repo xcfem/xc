@@ -31,6 +31,7 @@
 
 #include "utility/geom/pos_vec/KDTreePos.h"
 #include "utility/kdtree++/kdtree.hpp"
+#include <functional>
 
 class Pos3d;
 
