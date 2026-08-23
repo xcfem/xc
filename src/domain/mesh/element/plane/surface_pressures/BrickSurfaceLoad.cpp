@@ -338,7 +338,7 @@ int XC::BrickSurfaceLoad::recvSelf(const Communicator &comm)
     return res;
   }
 
-void XC::BrickSurfaceLoad::Print(std::ostream &os, int flag)
+void XC::BrickSurfaceLoad::Print(std::ostream &os, int flag) const
   {
     os << getClassName() << ", element id:  " << this->getTag() << std::endl
        << "   Connected external nodes:  " << theNodes << std::endl; 

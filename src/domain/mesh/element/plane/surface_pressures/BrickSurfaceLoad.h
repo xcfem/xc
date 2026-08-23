@@ -129,7 +129,7 @@ class BrickSurfaceLoad: public SurfaceLoadBase<SL_NUM_NODE>
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
 
-    void Print(std::ostream &, int flag =0);    
+    void Print(std::ostream &, int flag =0) const;    
 
   };
 
