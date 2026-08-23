@@ -152,14 +152,14 @@ class J2PlateFibre: public NDMaterial
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
 
-    void Print(std::ostream &, int flag = 0);
+    void Print(std::ostream &, int flag = 0) const;
 
     int setParameter(const std::vector<std::string> &, Parameter &);
     int updateParameter(int parameterID, Information &);
     int activateParameter(int paramID);
 
     const Vector& getStressSensitivity(int gradIndex, bool conditional);
-    int commitSensitivity(const Vector &depsdh, int gradIndex, int numGrads);
+    int commitSensitivity(Vector &depsdh, int gradIndex, int numGrads);
   };
 
 } //end of XC namespace

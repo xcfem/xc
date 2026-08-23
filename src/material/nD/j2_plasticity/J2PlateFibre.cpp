@@ -729,7 +729,7 @@ const XC::Vector &XC::J2PlateFibre::getStressSensitivity(int gradIndex, bool con
     return sigma;
   }
 
-int XC::J2PlateFibre::commitSensitivity(const Vector &depsdh, int gradIndex, int numGrads)
+int XC::J2PlateFibre::commitSensitivity(Vector &depsdh, int gradIndex, int numGrads)
   {
     if(SHVs.isEmpty())
       { SHVs= Matrix(6,numGrads); }
@@ -928,7 +928,7 @@ int XC::J2PlateFibre::recvSelf(const Communicator &comm)
     return res;
   }
 
-void XC::J2PlateFibre::Print(std::ostream &s, int flag)
+void XC::J2PlateFibre::Print(std::ostream &s, int flag) const
   {
     s << "J2 Plate Fibre Material Model" << std::endl
       << "\tE:  " << E << std::endl
