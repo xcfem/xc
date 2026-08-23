@@ -47,7 +47,7 @@ XC::Isotropic2D01::Isotropic2D01(int tag, double min_iso_factor,
 }
 
 XC::YS_Evolution *XC::Isotropic2D01::getCopy(void) const
-  { return Isotropic2D01(*this); }
+  { return new Isotropic2D01(*this); }
 
 void XC::Isotropic2D01::Print(std::ostream &s, int flag) const
 {

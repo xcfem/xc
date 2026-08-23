@@ -58,6 +58,8 @@ class NullEvolution: public YS_Evolution
     static Vector vec_dim_1;
     static Vector vec_dim_2;  
     static Vector vec_dim_3;
+
+    using YS_Evolution::commitState;
   public: 
 
     NullEvolution(int tag, double isox);
