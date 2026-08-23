@@ -78,6 +78,7 @@ class NewElement: public Element
   private:
     mutable Matrix theMatrix; //!< matrix to return stiff, damp & mass
     Vector theVector; //!< vector to return the residual
+    using Element::addLoad;
   public:
     NewElement(int tag);
     NewElement();    
