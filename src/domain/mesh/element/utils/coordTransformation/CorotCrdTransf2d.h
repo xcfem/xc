@@ -142,8 +142,9 @@ class CorotCrdTransf2d: public CrdTransf2d
     // functions used in post-processing only    
     const Vector &getPointGlobalCoordFromLocal(const Vector &) const;
     const Vector &getPointGlobalDisplFromBasic(double xi, const Vector &basicDisps) const;
-    const Vector &getI(void);
-    const Vector &getJ(void);
+    const Vector &getI(void) const;
+    const Vector &getJ(void) const;
+    using CrdTransf2d::getLocalAxes;
     int getLocalAxes(Vector &xAxis, Vector &yAxis) const; 
 
   };

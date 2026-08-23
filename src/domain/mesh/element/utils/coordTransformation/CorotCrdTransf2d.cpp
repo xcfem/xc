@@ -1026,7 +1026,7 @@ const XC::Vector &XC::CorotCrdTransf2d::getPointGlobalDisplFromBasic(double xi, 
 
 //! @brief Returns the $\vec{i}$ unit vector of the local axis
 //! expressed in global coordinates for the current geometry.
-const XC::Vector &XC::CorotCrdTransf2d::getI(void)
+const XC::Vector &XC::CorotCrdTransf2d::getI(void) const
   {
     static Vector vectorI(2);
     vectorI(0)= cosAlpha;
@@ -1036,7 +1036,7 @@ const XC::Vector &XC::CorotCrdTransf2d::getI(void)
 
 //! @brief Returns the $\vec{j}$ unit vector of the local axis
 //! expressed in global coordinates for the current geometry.
-const XC::Vector &XC::CorotCrdTransf2d::getJ(void)
+const XC::Vector &XC::CorotCrdTransf2d::getJ(void) const
   {
     static Vector vectorJ(2);
     vectorJ(0)= -sinAlpha;
