@@ -88,7 +88,7 @@ class SurfaceLoadBase: public ElementBase<NNODES>
     int addInertiaLoadToUnbalance(const Vector &accel);
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     
-    void Print(std::ostream &, int flag =0);
+    void Print(std::ostream &, int flag =0) const;
   };
   
 template <int NNODES>
@@ -197,7 +197,7 @@ int SurfaceLoadBase<NNODES>::recvData(const Communicator &comm)
   }
 
 template <int NNODES>
-void SurfaceLoadBase<NNODES>::Print(std::ostream &os, int flag)
+void SurfaceLoadBase<NNODES>::Print(std::ostream &os, int flag) const
   {
     os << this->getClassName() << ", element id:  "
        << this->getTag() << std::endl
