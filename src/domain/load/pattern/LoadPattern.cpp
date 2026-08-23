@@ -510,11 +510,13 @@ boost::python::dict XC::LoadPattern::getPyDict(void) const
 void XC::LoadPattern::setPyDict(const boost::python::dict &d)
   {
     NodeLocker::setPyDict(d);
-    this->description= boost::python::extract<std::string>(d["description"]);
+    boost::python::extract<std::string> extracted_description(d["description"]);
+    this->description= extracted_description();
     this->loadFactor= boost::python::extract<double>(d["load_factor"]);
     this->gamma_f= boost::python::extract<double>(d["gamma_f"]);
     const int ts_class_tag= boost::python::extract<int>(d["ts_class_tag"]);
-    const std::string ts_class_name= boost::python::extract<std::string>(d["ts_class_name"]);
+    boost::python::extract<std::string> extracted_ts_class_name(d["ts_class_name"]);
+    const std::string ts_class_name= extracted_ts_class_name();
     TimeSeries *newTimeSeries= dynamic_cast<TimeSeries *>(get_new_movable_object(ts_class_name, ts_class_tag));
     if(newTimeSeries)
       this->setTimeSeries(newTimeSeries);
