@@ -64,6 +64,7 @@ class CrossSectionProperties2d: public CrossSectionProperties1d
     virtual DbTagData &getDbTagData(void) const;
     int sendData(Communicator &);
     int recvData(const Communicator &);
+    using MovableObject::setParameter;
 
   public:
     CrossSectionProperties2d(double E, double A, double I, double G= 0.0,double alpha= 0.0, double rho= 0.0);

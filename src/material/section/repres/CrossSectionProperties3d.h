@@ -50,6 +50,7 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
     DbTagData &getDbTagData(void) const;
     int sendData(Communicator &);
     int recvData(const Communicator &);
+    using MovableObject::setParameter;
 
   public:
     CrossSectionProperties3d(double E, double A, double Iz, double Iy, double G, double J, double alpha_y= 0.0, double alpha_z= 0.0, double rho= 0.0);
