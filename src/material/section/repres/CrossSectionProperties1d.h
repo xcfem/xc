@@ -56,6 +56,7 @@ class CrossSectionProperties1d: public CommandEntity, public MovableObject
     double rho;  //!< Material density.
     double iw; //< Warping constant.
     static Matrix ks;
+    using MovableObject::setParameter;
   protected:
     virtual DbTagData &getDbTagData(void) const;
     int sendData(Communicator &);
