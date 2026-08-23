@@ -692,7 +692,7 @@ XC::NodeIter &XC::ShadowSubdomain::getInternalNodeIter(void)
     return fakeNodIter;
   }
 
-XC::NodeIter &XC::ShadowSubdomain::getExternalNodeIter(void)
+XC::NodeIter &XC::ShadowSubdomain::getExternalNodeIter(void) const
   {
     std::cerr << "XC::ShadowSubdomain::getExternalNodeIter() ";
     std::cerr << " - SHOULD NEVER BE CALLED - EXITING\n";

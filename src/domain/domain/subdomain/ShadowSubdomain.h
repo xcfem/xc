@@ -156,7 +156,7 @@ class ShadowSubdomain: public Shadow, public Subdomain
     virtual  ElementIter       &getElements();
     virtual  NodeIter          &getNodes();
     virtual  NodeIter	       &getInternalNodeIter(void);
-    virtual  NodeIter	       &getExternalNodeIter(void);    
+    virtual  NodeIter	       &getExternalNodeIter(void) const;    
     
     virtual  Element       *getElementPtr(int tag);
     virtual  Node          *getNodePtr(int tag);
