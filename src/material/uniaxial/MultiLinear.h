@@ -91,6 +91,7 @@ class MultiLinear : public UniaxialMaterial
     int recvData(const Communicator &);
     void setup_data(void);
     void setup(const Vector &, const Vector &);
+    using UniaxialMaterial::getCopy;
   public:
     MultiLinear(int tag= 0);
     MultiLinear(int tag, const Vector &s, const Vector &e);
