@@ -97,7 +97,7 @@ class TRBDFBase : public TransientIntegrator
 
     const Vector &getVel(void);
     
-    void Print(std::ostream &, int flag = 0);
+    void Print(std::ostream &, int flag = 0) const;
   };
 } // end of XC namespace
 

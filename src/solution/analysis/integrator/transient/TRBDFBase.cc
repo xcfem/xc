@@ -196,10 +196,10 @@ int XC::TRBDFBase::recvData(const Communicator &comm)
   }
 
 
-void XC::TRBDFBase::Print(std::ostream &s, int flag)
+void XC::TRBDFBase::Print(std::ostream &s, int flag) const
   {
-    AnalysisModel *theModel = this->getAnalysisModelPtr();
-    if (theModel != 0)
+    const AnalysisModel *theModel = this->getAnalysisModelPtr();
+    if (theModel != nullptr)
       {
         double currentTime = getCurrentModelTime();
         s << "\t " << getClassName() << " - currentTime: " << currentTime;
