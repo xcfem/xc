@@ -69,7 +69,7 @@ class NullEvolution: public YS_Evolution
 
   const Vector &getEquiPlasticStiffness();
 
-  YS_Evolution* getCopy();
+  YS_Evolution* getCopy() const;
 
   int getResponse(int responseID, Information & info);
   Response* setResponse(const std::vector<std::string> &argv, Information & info);

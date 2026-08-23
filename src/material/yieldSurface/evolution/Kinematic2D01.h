@@ -48,7 +48,7 @@ class Kinematic2D01: public PlasticHardening2D
 				PlasticHardeningMaterial &kpy, double dir);
 
     virtual void Print(std::ostream &s, int flag =0) const;
-    virtual YS_Evolution *getCopy(void);
+    virtual YS_Evolution *getCopy(void) const;
     //virtual int evolveSurface(YieldSurfaceBC *ys, double magPlasticDefo);
 	
   };

@@ -169,10 +169,10 @@ double drift = phi - 1;
 	return drift;
 }
 
-XC::YieldSurface_BC *XC::Hajjar2D::getCopy(void)
+XC::YieldSurface_BC *XC::Hajjar2D::getCopy(void) const
   {
     Hajjar2D *theCopy = new Hajjar2D(this->getTag(), *hModel,
-									 depth, width, thick, fc, fy);
+				     depth, width, thick, fc, fy);
     //later  copy all the state variables
     return theCopy;
   }

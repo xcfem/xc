@@ -45,7 +45,7 @@ class NullYS2D: public YieldSurface_BC2D
   public:
     NullYS2D(int tag);
 
-    virtual YieldSurface_BC *getCopy(void);
+    virtual YieldSurface_BC *getCopy(void) const;
     virtual void Print(std::ostream &s, int flag =0) const;
 
 //protected:

@@ -69,11 +69,8 @@ double XC::NullYS2D::getSurfaceDrift(double x, double y)
 	return -1;
 }
 
- XC::YieldSurface_BC *XC::NullYS2D::getCopy(void)
-{
-    NullYS2D *theCopy = new NullYS2D(this->getTag());
-    return theCopy;
-}
+XC::YieldSurface_BC *XC::NullYS2D::getCopy(void) const
+  { return new NullYS2D(*this); }
 
 void XC::NullYS2D::Print(std::ostream &s, int flag) const
 {

@@ -47,7 +47,7 @@ class Attalla2D: public YieldSurface_BC2D
               double a01=0.19,  double a02=0.54, double a03=-1.4,
               double a04=-1.64, double a05=2.21, double a06=2.10);
 
-    virtual YieldSurface_BC *getCopy(void);
+    virtual YieldSurface_BC *getCopy(void) const;
     virtual void Print(std::ostream &s, int flag =0) const;
 
 //protected:

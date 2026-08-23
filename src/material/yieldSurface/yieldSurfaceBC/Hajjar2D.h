@@ -51,7 +51,7 @@ class Hajjar2D: public YieldSurface_BC2D
     Hajjar2D(int tag, YS_Evolution &model,
 	     double D, double b, double t, double fc_, double fy_);
 
-    virtual YieldSurface_BC *getCopy(void);
+    virtual YieldSurface_BC *getCopy(void) const;
     virtual void Print(std::ostream &s, int flag =0) const;
 
 //protected:

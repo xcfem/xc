@@ -50,7 +50,7 @@ XC::Kinematic2D02::Kinematic2D02(int tag, double min_iso_factor,
                         lim_surface, kpx, kpy,
                         nullMat, nullMat, nullMat, nullMat, algo, resfact, appfact, dir){}
 
-XC::YS_Evolution *XC::Kinematic2D02::getCopy(void)
+XC::YS_Evolution *XC::Kinematic2D02::getCopy(void) const
   { return new Kinematic2D02(*this); }
 
 

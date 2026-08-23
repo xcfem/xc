@@ -44,7 +44,7 @@ class Isotropic2D01: public PlasticHardening2D
     Isotropic2D01(int tag, double min_iso_factor,PlasticHardeningMaterial &kpx, PlasticHardeningMaterial  &kpy);
 
     virtual void Print(std::ostream &s, int flag =0) const;
-    virtual YS_Evolution *getCopy(void);
+    virtual YS_Evolution *getCopy(void) const;
     //virtual int evolveSurface(YieldSurfaceBC *ys, double magPlasticDefo);
   };
 } // end of XC namespace

@@ -74,7 +74,7 @@ class YS_Evolution: public TaggedObject, public MovableObject
     virtual int	update(int flag=0);
     virtual int commitState(void);
     virtual int	revertToLastCommit(void);
-    virtual YS_Evolution *getCopy(void) = 0;
+    virtual YS_Evolution *getCopy(void) const= 0;
 
     virtual Response *setResponse(const std::vector<std::string> &argv, Information &info)=0;
     virtual int	getResponse(int responseID, Information &info)=0;

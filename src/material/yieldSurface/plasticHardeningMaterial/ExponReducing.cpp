@@ -95,6 +95,6 @@ void XC::ExponReducing::Print(std::ostream &s, int flag) const
   }
 
 //! @brief Virtual constructor.
-XC::PlasticHardeningMaterial *XC::ExponReducing::getCopy(void)
+XC::PlasticHardeningMaterial *XC::ExponReducing::getCopy(void) const
   {  return new ExponReducing(*this); }
 

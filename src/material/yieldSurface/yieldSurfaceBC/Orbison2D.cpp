@@ -89,17 +89,8 @@ double drift = phi - 1;
 	return drift;
 }
 
- XC::YieldSurface_BC *XC::Orbison2D::getCopy(void)
-{
-    Orbison2D *theCopy = new Orbison2D(this->getTag(), capX, capY, *hModel);
-    if(theCopy==0)
-    {
-     	std::cerr << "XC::Orbison2D::getCopy(void) - unable to make copy\n";
-     	std::cerr << "\a";
-    }
-    //later  copy all the state variables
-    return theCopy;
-}
+XC::YieldSurface_BC *XC::Orbison2D::getCopy(void) const
+  { return new Orbison2D(*this); }
 
 void XC::Orbison2D::Print(std::ostream &s, int flag) const
   { s << "\nYield Surface No: " << this->getTag() << " type: Attalla2D\n"; }

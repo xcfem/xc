@@ -73,7 +73,7 @@ class ElTawil2DUnSym: public YieldSurface_BC2D
 				double czNeg=1.6, double tyNeg=1.9);
 
 
-	virtual YieldSurface_BC *getCopy(void);
+	virtual YieldSurface_BC *getCopy(void) const;
 	virtual void Print(std::ostream &s, int flag =0) const;
 
 //protected:

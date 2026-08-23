@@ -55,7 +55,7 @@ XC::CombinedIsoKin2D01::CombinedIsoKin2D01(int tag,
 	kinematicRatio_shrink = shr_kin_ratio;
 }
 
-XC::YS_Evolution *XC::CombinedIsoKin2D01::getCopy(void)
+XC::YS_Evolution *XC::CombinedIsoKin2D01::getCopy(void) const
   { return new CombinedIsoKin2D01(*this); }
 
 void XC::CombinedIsoKin2D01::Print(std::ostream &s, int flag) const

@@ -51,7 +51,7 @@ class ExponReducing: public PlasticHardeningMaterial
     ExponReducing(int tag, double kp0, double alfa, double res_fact);
 
     double getTrialPlasticStiffness(void) const;
-    PlasticHardeningMaterial *getCopy(void);
+    PlasticHardeningMaterial *getCopy(void) const;
     void Print(std::ostream &s, int flag =0) const;
 
   };

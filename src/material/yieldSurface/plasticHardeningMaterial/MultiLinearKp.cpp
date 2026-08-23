@@ -128,20 +128,6 @@ void XC::MultiLinearKp::Print(std::ostream &s, int flag) const
 	s << "    Kp XC::Vector          = " <<  Kp << std::endl;
   }
 
-XC::PlasticHardeningMaterial *XC::MultiLinearKp::getCopy(void)
-  {
-    Vector spd(numPoints);
-    Vector kp(numPoints);
-
-    for(int i =0; i < numPoints; i++)
-      {
-    	spd(i) =  sumPlasDefo(i);
-    	kp(i)  =  Kp(i);
-      }
-
-    // Don't want to pass the actual vectors or else the size will
-    // keep on increasing by 1
-    PlasticHardeningMaterial *theMat = new MultiLinearKp(getTag(), spd, kp);
-    return theMat;
-  }
+XC::PlasticHardeningMaterial *XC::MultiLinearKp::getCopy(void) const
+  { return new MultiLinearKp(*this); }
 

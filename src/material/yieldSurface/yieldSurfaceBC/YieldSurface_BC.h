@@ -118,7 +118,7 @@ class YieldSurface_BC: public TaggedObject, public MovableObject
     virtual int commitState(Vector &force);
     virtual int revertToLastCommit(void)=0;
 
-    virtual YieldSurface_BC *getCopy(void) = 0;
+    virtual YieldSurface_BC *getCopy(void) const= 0;
 
 protected:
     void toLocalSystem  (Vector &eleVector, double &x, bool nonDimensionalize, bool signMult=true);

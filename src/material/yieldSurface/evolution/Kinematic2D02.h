@@ -50,7 +50,7 @@ class Kinematic2D02: public BkStressLimSurface2D
 				int algo, double resfact, double appfact, double dir);
 
     virtual void Print(std::ostream &s, int flag =0) const;
-    virtual YS_Evolution *getCopy(void);
+    virtual YS_Evolution *getCopy(void) const;
 
     static NullPlasticMaterial nullMat;
   };

@@ -53,7 +53,7 @@ class MultiLinearKp: public PlasticHardeningMaterial
     MultiLinearKp(int tag, Vector &sum_plas_defo, Vector &kp);
 	
     double getTrialPlasticStiffness(void) const;
-    PlasticHardeningMaterial *getCopy(void);
+    PlasticHardeningMaterial *getCopy(void) const;
     void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace

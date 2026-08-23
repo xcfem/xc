@@ -42,7 +42,7 @@ class Orbison2D: public YieldSurface_BC2D
   {
   public:
     Orbison2D(int tag, double xmax, double ymax, YS_Evolution &model);
-    virtual YieldSurface_BC *getCopy(void);
+    virtual YieldSurface_BC *getCopy(void) const;
     virtual void Print(std::ostream &s, int flag =0) const;
 
 //protected:

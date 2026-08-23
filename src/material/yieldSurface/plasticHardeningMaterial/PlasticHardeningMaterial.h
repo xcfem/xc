@@ -67,7 +67,7 @@ class PlasticHardeningMaterial: public Material
 
     virtual double getTrialPlasticStiffness() const=0;
     double getTrialValue(void) const;
-    virtual PlasticHardeningMaterial *getCopy(void)= 0;
+    virtual PlasticHardeningMaterial *getCopy(void) const= 0;
 
     virtual Response *setResponse(const std::vector<std::string> &argv, Information &matInformation);
     virtual int getResponse (int responseID, Information &matInformation);

@@ -42,5 +42,5 @@ XC::NullPlasticMaterial::NullPlasticMaterial(int tag)
 double XC::NullPlasticMaterial::getTrialPlasticStiffness(void) const
   { return 0; }
 
-XC::PlasticHardeningMaterial *XC::NullPlasticMaterial::getCopy()
+XC::PlasticHardeningMaterial *XC::NullPlasticMaterial::getCopy() const
   { return new NullPlasticMaterial(*this); }

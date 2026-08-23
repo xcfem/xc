@@ -63,7 +63,7 @@ public:
     virtual int  revertToLastCommit(void);
 
     virtual void Print(std::ostream &s, int flag =0) const;
-    virtual YS_Evolution *getCopy(void)=0;
+    virtual YS_Evolution *getCopy(void) const=0;
     virtual const Vector &getEquiPlasticStiffness(void);
     double getTrialPlasticStrains(int dof) const;
     double getCommitPlasticStrains(int dof);

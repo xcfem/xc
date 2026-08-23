@@ -42,7 +42,7 @@ XC::Kinematic2D01::Kinematic2D01(int tag, double min_iso_factor,
                     kpx, kpx, kpy, kpy, dir){}
 
 //! @brief Copy constructor.
-XC::YS_Evolution *XC::Kinematic2D01::getCopy(void)
+XC::YS_Evolution *XC::Kinematic2D01::getCopy(void) const
   { return new Kinematic2D01(*this); }
 
 //! @brief Print stuff.

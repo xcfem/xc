@@ -46,7 +46,7 @@ XC::PeakOriented2D01::PeakOriented2D01(int tag, double min_iso_factor,
 
 }
 
-XC::YS_Evolution *XC::PeakOriented2D01::getCopy(void)
+XC::YS_Evolution *XC::PeakOriented2D01::getCopy(void) const
   { return new  PeakOriented2D01(*this); }
 
 void XC::PeakOriented2D01::Print(std::ostream &s, int flag) const

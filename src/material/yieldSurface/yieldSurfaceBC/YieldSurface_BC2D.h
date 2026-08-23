@@ -113,7 +113,7 @@ class YieldSurface_BC2D: public YieldSurface_BC
     virtual int commitState(Vector &force);
     virtual int revertToLastCommit(void);
 
-    virtual YieldSurface_BC *getCopy(void) = 0;
+    virtual YieldSurface_BC *getCopy(void) const= 0;
 //protected:
     virtual Vector &translationTo(Vector &f_new, Vector &f_dir);
     virtual double getDrift(double x, double y);

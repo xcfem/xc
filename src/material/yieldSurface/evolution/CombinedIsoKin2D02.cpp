@@ -62,7 +62,7 @@ XC::CombinedIsoKin2D02::CombinedIsoKin2D02(int tag,  double min_iso_factor,
 	deformable = isDeformable;
 }
 
-XC::YS_Evolution * XC::CombinedIsoKin2D02::getCopy()
+XC::YS_Evolution * XC::CombinedIsoKin2D02::getCopy() const
   { return new CombinedIsoKin2D02(*this); }
 
 

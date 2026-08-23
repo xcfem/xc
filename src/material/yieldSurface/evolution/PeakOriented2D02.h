@@ -82,7 +82,7 @@ class PeakOriented2D02: public BkStressLimSurface2D
 					PlasticHardeningMaterial &isoY,
 					int algo
 					);
-	YS_Evolution * getCopy();
+	YS_Evolution * getCopy() const;
 	void Print(std::ostream & s, int flag) const;
   };
 } // end of XC namespace

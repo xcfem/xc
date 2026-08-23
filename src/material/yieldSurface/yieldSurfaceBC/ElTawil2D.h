@@ -50,7 +50,7 @@ class ElTawil2D: public YieldSurface_BC2D
   public:
     ElTawil2D(int tag, double xbal, double ybal, double ypos, double yneg,YS_Evolution &model, double cz=1.6, double ty=1.9);
 
-    virtual YieldSurface_BC *getCopy(void);
+    virtual YieldSurface_BC *getCopy(void) const;
     virtual void Print(std::ostream &s, int flag =0) const;
 
 //protected:
