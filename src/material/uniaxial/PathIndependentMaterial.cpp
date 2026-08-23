@@ -81,18 +81,18 @@ int XC::PathIndependentMaterial::setTrialStrain(double strain, double strainRate
   }
 
 //! @brief Return the material strain.
-double XC::PathIndependentMaterial::getStrain(void)
+double XC::PathIndependentMaterial::getStrain(void) const
   {
-    UniaxialMaterial *tmp= this->getMaterial();
+    const UniaxialMaterial *tmp= this->getMaterial();
     if (tmp)
       return tmp->getStrain();
     else
       return 0.0;
   }
 
-double XC::PathIndependentMaterial::getStrainRate(void)
+double XC::PathIndependentMaterial::getStrainRate(void) const
   {
-    UniaxialMaterial *tmp= this->getMaterial();
+    const UniaxialMaterial *tmp= this->getMaterial();
     if (tmp)
       return tmp->getStrainRate();
     else
