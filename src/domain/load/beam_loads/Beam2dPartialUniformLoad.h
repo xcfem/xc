@@ -93,7 +93,7 @@ class Beam2dPartialUniformLoad: public BeamUniformLoad
     int updateParameter(int parameterID, Information &info);
     int activateParameter(int paramID);
 
-    const Vector &getSensitivityData(int gradNumber);
+    const Vector &getSensitivityData(const int &gradNumber) const;
   
   };
 } // end of XC namespace

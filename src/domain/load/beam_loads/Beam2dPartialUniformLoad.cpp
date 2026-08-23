@@ -188,7 +188,7 @@ int XC::Beam2dPartialUniformLoad::activateParameter(int paramID)
     return 0;
   }
 
-const XC::Vector &XC::Beam2dPartialUniformLoad::getSensitivityData(int gradNumber)
+const XC::Vector &XC::Beam2dPartialUniformLoad::getSensitivityData(const int &gradNumber) const
   {
     data.Zero();
 
