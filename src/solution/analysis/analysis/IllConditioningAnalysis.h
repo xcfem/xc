@@ -44,6 +44,13 @@ namespace XC {
 //! @brief Linear buckling analysis (used inside an StaticAnalysis).
 class IllConditioningAnalysis: public EigenAnalysis
   {
+  private:
+    using Analysis::setAlgorithm;
+    using Analysis::setIntegrator;
+    inline int setAlgorithm(EigenAlgorithm &theAlgo)
+      { return EigenAnalysis::setAlgorithm(theAlgo); }
+    inline int setIntegrator(EigenIntegrator &theIntegrator)
+      { return EigenAnalysis::setIntegrator(theIntegrator); }
   protected:
     friend class SolutionProcedure;
     friend class KEigenAnalysis;

@@ -84,6 +84,8 @@ class EigenAnalysis: public Analysis
     friend class SolutionProcedure;
     EigenAnalysis(SolutionStrategy *analysis_aggregation);
     Analysis *getCopy(void) const;
+    using Analysis::setAlgorithm;
+    using Analysis::setIntegrator;
   public:     
     virtual int analyze(int numModes);
     void clearAll(void);

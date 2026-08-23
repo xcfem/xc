@@ -43,6 +43,9 @@ namespace XC {
 //! @brief Eigenvalue analysis for linear buckling analysis (used inside an StaticAnalysis).
 class LinearBucklingEigenAnalysis: public EigenAnalysis
   {
+  private:
+    using EigenAnalysis::setAlgorithm;
+    using EigenAnalysis::setIntegrator;
   protected:
     friend class SolutionProcedure;
     friend class LinearBucklingAnalysis;

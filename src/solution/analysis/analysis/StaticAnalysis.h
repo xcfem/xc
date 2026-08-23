@@ -78,6 +78,9 @@ class SensitivityAlgorithm;
 //! @brief performs a static analysis on the FE\_Model.
 class StaticAnalysis: public Analysis
   {
+  private:
+    using Analysis::setAlgorithm;
+    using Analysis::setIntegrator;
   protected:
     int domainStamp;
 

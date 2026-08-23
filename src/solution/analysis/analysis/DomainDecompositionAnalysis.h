@@ -103,6 +103,8 @@ class DomainDecompositionAnalysis: public Analysis, public MovableObject
     // before being asked to form Residual(). 
     bool tangFormed; //!< True if the tangent stiffness matrix is already formed.
     int tangFormedCount; //!< saves the expense of computing formTangent() for same state of Subdomain.
+    using Analysis::setAlgorithm;
+    using Analysis::setIntegrator;
   protected:
     int domainStamp;
     //! @brief Returns a pointer to the subdomain.
