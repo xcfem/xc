@@ -81,7 +81,28 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
             retval= self._define_characteristic_diagram(preprocessor, initialStress)
         self._set_preprocessor(preprocessor)
         return retval
-  
+
+    def _define_elastic_diagram(self, preprocessor):
+        '''Characteristic stress-strain diagram.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        '''
+        return typical_materials.defElasticMaterial(preprocessor= preprocessor, name= self.getEDiagName(), E= self.Es)
+    
+    def defDiagE(self, preprocessor):
+        '''Characteristic stress-strain diagram.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        '''
+        retval= None
+        materialExists= self.diagEExists(preprocessor)
+        if(materialExists):
+            retval= self.getDiagE(preprocessor)
+        else:
+            retval= self._define_elastic_diagram(preprocessor)
+        self._set_preprocessor(preprocessor)
+        return retval
+    
     def _define_design_diagram(self, preprocessor, initialStress):
         '''Design stress-strain diagram.
 
