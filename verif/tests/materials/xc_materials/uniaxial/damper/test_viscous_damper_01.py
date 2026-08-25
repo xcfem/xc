@@ -20,14 +20,14 @@ modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
 # Define viscous damper material
 name= 'test'
-k= 300
-c= 280.3
-alph= 0.3
-lgap= 1e-3
-nm= 2
-relTol= 1e-5
-absTol= 1e-9
-maxIter= 25
+k= 300 # Elastic stiffness of linear spring to model.
+c= 280.3 # Damping coefficient.
+alph= 0.3 # Velocity exponent.
+lgap= 1e-3 # Gap length to simulate the gap length due to the pin tolerance.
+nm= 2 # Employed adaptive numerical algorithm (default value NM = 1; 1 = Dormand-Prince54, 2=6th order Adams-Bashforth-Moulton, 3=modified Rosenbrock Triple) 
+relTol= 1e-5 # # Tolerance for absolute relative error control of the adaptive iterative algorithm (default value 1e-6). 
+absTol= 1e-9 # Tolerance for absolute error control of adaptive iterative algorithm (default value 10e-10.
+maxIter= 25 # Maximum number of sub-step iterations within an integration step (default value 15).
 vd= damper_materials.def_viscous_damper(modelSpace, name= name, k= k, c= c, alpha= alph, lgap= lgap, nm= nm, relTol= relTol, absTol= absTol, maxHalf= maxIter)
 
 testOK= (vd.name==name)
