@@ -52,6 +52,7 @@ class BasicElasticMaterial(object):
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         :param initStrain: initial strain.
+        :param eta: damping tangent.
         '''        
         materialHandler= preprocessor.getMaterialHandler
         retval= None
