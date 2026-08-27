@@ -1296,6 +1296,12 @@ echo "$BLEU" "      Strain loads on bricks." "$NORMAL"
 python tests/loads/strain_loads/bricks/brick_strain_load_01.py
 python tests/loads/strain_loads/bricks/brick_strain_load_02.py
 echo "$BLEU" "    Inertia loads." "$NORMAL"
+echo "$BLEU" "      Inertia loads on nodes." "$NORMAL"
+python tests/loads/inertia_loads/nodes/test_inertia_loads_node_01.py
+python tests/loads/inertia_loads/nodes/test_inertia_loads_node_02.py
+python tests/loads/inertia_loads/nodes/test_inertia_loads_node_03.py
+python tests/loads/inertia_loads/nodes/test_inertia_loads_node_04.py
+python tests/loads/inertia_loads/nodes/test_inertia_loads_node_05.py
 echo "$BLEU" "      Inertia loads on trusses." "$NORMAL"
 python tests/loads/inertia_loads/trusses/test_inertia_loads_truss_01.py
 python tests/loads/inertia_loads/trusses/test_inertia_loads_truss_02.py
