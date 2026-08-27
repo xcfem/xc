@@ -30,11 +30,11 @@ nod2= modelSpace.newNode(0,0,0)
 # 3. Define axial and rotational uniaxial materials
 # Material for axial direction (axialMat), high stiffness in compression,
 # no tension
-axialMat= typical_materials.defElastNoTensMaterial(preprocessor, name= "axialMat", E= 20000.0)
-# Material for rotational/other restrained direction (tag 2)
-rotMatX= typical_materials.defElasticMaterial(preprocessor, name= "rotMatX", E= 1e10)
-rotMatY= typical_materials.defElasticMaterial(preprocessor, name= "rotMatY", E= 2e10)
-rotMatZ= typical_materials.defElasticMaterial(preprocessor, name= "rotMatZ", E= 3e10)
+axialMat= typical_materials.defElastNoTensMaterial(preprocessor, name= "axialMat", E= 20000.0) # Dummy material valid only to check the object behaviour.
+# Material for rotational/other restrained direction.
+rotMatX= typical_materials.defElasticMaterial(preprocessor, name= "rotMatX", E= 1e10) # Dummy material valid only to check the object behaviour.
+rotMatY= typical_materials.defElasticMaterial(preprocessor, name= "rotMatY", E= 2e10) # Dummy material valid only to check the object behaviour.
+rotMatZ= typical_materials.defElasticMaterial(preprocessor, name= "rotMatZ", E= 3e10) # Dummy material valid only to check the object behaviour.
 
 # 4. Define friction model (coefficient of friction = 0.05)
 frictionModel= fm.def_coulomb_friction_model(preprocessor, name= "frictionModel", mu= .05)
