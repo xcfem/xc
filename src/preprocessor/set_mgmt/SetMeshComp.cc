@@ -541,7 +541,8 @@ boost::python::list XC::SetMeshComp::createInertiaLoads(const Vector &accel)
 XC::Matrix XC::SetMeshComp::getTotalMass(void) const
   {
     Matrix retval= nodes.getTotalMass();
-    retval+= elements.getTotalMass();
+    if(elements.size()>0)
+      retval+= elements.getTotalMass();
     return retval;
   }
 
