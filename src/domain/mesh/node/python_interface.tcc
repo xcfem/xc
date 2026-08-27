@@ -156,6 +156,7 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("clearEigenvectors", &XC::Node::clearEigenvectors,"Remove the stored eigenvectors.")
 
   .def("newLoad",make_function(&XC::Node::newLoad, return_internal_reference<>() ),"Create a new load on the node and put it on the current load pattern.")
+  .def("createInertiaLoad", make_function(&XC::Node::createInertiaLoad, return_internal_reference<>() ),"Create the inertia load for the given acceleration vector.")
 
   .add_property("numberOfConnectedConstraints", get_number_of_connected_constraints_node, "Returns the number of constraints that affect this node.")
   .def("getNumberOfConnectedConstraints", get_number_of_connected_constraints_node_set, "Returns the number of constraints of the given set that affect this node.")
