@@ -19,9 +19,9 @@ from materials.ec2 import EC2_materials
 from model.boundary_cond import spring_bound_cond
 
 # Problem geometry
-foundationWidth= 10.0
-foundationLength= 10.0
-elementSize= 1.0
+foundationWidth= 1.0
+foundationLength= 1.0
+elementSize= 0.1
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -50,7 +50,7 @@ modelSpace.newSeedElement('ShellMITC4')
 xcTotalSet.genMesh(xc.meshDir.I)
 
 ## Boundary conditions.
-elasticFoundation= spring_bound_cond.ElasticFoundation(wModulus= 10e6, cRoz= 0.01)
+elasticFoundation= spring_bound_cond.ElasticFoundation(wModulus= 10e6, cRoz= 0.01,noTensionZ=True)
 
 elasticFoundation.generateSprings(xcSet= xcTotalSet)
 
@@ -58,15 +58,20 @@ foundationSet= modelSpace.defSet(setName= 'foundationSet', surfaces= [slab])
 foundationSet.fillDownwards()
 
 # Create loads.
-## Self weight.
+Mx=3e3 # kNm
+## Self weight and bending moment.
 gravityVector= xc.Vector([0.0,0.0,g])
 cLC= modelSpace.newLoadPattern(name= 'G', setCurrent= True)
 cLC.description= 'Self weight'
 loadedElements= modelSpace.createSelfWeightLoad(xcSet= foundationSet, gravityVector= gravityVector)
+n=foundationSet.nodes.getNearestNode(geom.Pos3d(0,0,0))
+n.newLoad(xc.Vector([0,0,0,Mx,0,0]))
+
 modelSpace.addLoadCaseToDomain(cLC.name)
 
 # Solution
-analysis= predefined_solutions.simple_static_linear(feProblem)
+#analysis= predefined_solutions.simple_static_linear(feProblem)
+analysis= predefined_solutions.penalty_newton_raphson(prb=feProblem,maxNumIter=10,convergenceTestTol=0.0001,printFlag=1)
 result= analysis.analyze(1)
 
 # The tributary areas are also computed during the analysis. It will be useful
@@ -75,12 +80,19 @@ result= analysis.analyze(1)
 #     print(n.tag, 'D tributary area a= ', n.getTributaryArea())
 
 maxPressure, maxPressureNode, minPressure, minPressureNode, avgPressure= elasticFoundation.getMaxMinAvgPressure(component= 2)
+# print('maxPressure= ', maxPressure/1e3, 'kPa')
+# print('minPressure= ', minPressure/1e3, 'kPa')
 
 
-refValue= 2500*0.6*g
-ratio1= abs(maxPressure-refValue)/refValue
-ratio2= abs(minPressure-refValue)/refValue
-ratio3= abs(avgPressure-refValue)/refValue
+N= 2500*slabDepth*g*foundationWidth*foundationLength
+e=Mx/N # eccentricity
+x=foundationWidth/2-e
+refMaxPressure=2*N/(3*foundationLength*(foundationWidth/2-e))
+ratio1= abs(maxPressure-refMaxPressure)/refMaxPressure
+refMinPressure=0
+ratio2= abs(minPressure-refMinPressure)
+refAvgPressure=N/(foundationWidth*foundationLength)
+ratio3= abs(avgPressure-refAvgPressure)/refAvgPressure
 
 modelSpace.calculateNodalReactions()
 reaction= elasticFoundation.getReaction()
@@ -89,7 +101,7 @@ ratio4= abs(Rx)
 Ry= reaction[1]
 ratio5= abs(Ry)
 Rz= reaction[2]
-refRz= refValue*foundationWidth*foundationLength
+refRz= refAvgPressure*foundationWidth*foundationLength
 ratio6= abs(Rz-refRz)/refRz
 
 
@@ -106,7 +118,7 @@ print(Rz, ratio6)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-6) & (abs(ratio2)<1e-6) & (abs(ratio3)<1e-6) & (abs(ratio4)<1e-6) & (abs(ratio5)<1e-6) & (abs(ratio6)<1e-6):
+if (abs(ratio1)<1.5e-2) & (abs(ratio2)<1e-6) & (abs(ratio3)<1.5e-2) & (abs(ratio4)<1e-6) & (abs(ratio5)<1e-6) & (abs(ratio6)<1e-6):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

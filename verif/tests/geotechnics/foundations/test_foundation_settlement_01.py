@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 '''
 Example based on settlement calculated for section R2 LAV-VP pág. 91 Anejo Nª 6 - Geotecnia Proyecto de construcción de plataforma de la integración del ferrocarril en la ciudad de Palencia. Tramo: acceso sur, fase II, pag.
-#The settlement calculated in the project is 69 mm, aprox. half the one obtained here, but not all the variables introduced in their calculation are known. It is also not clear than the method proposed in the Guide is suitable for embankments settlement.
+#The settlement calculated in the project is 69 mm, aprox. half the one obtained here, but not all the variables introduced in their calculation are known. It is also not clear that the method proposed in the Guide is suitable for embankments settlement.
 '''
 
 __author__= "Ana Ortega (AO_O)"
