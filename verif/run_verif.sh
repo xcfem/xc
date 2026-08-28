@@ -490,6 +490,7 @@ python tests/elements/crd_transf/test_crd_transf3d_01.py
 echo "$BLEU" "  Change element material tests." "$NORMAL"
 python tests/elements/change_material_properties/test_change_element_material_01.py
 python tests/elements/change_material_properties/test_change_element_material_02.py
+python tests/elements/change_material_properties/test_change_element_material_03.py
 python tests/elements/change_material_properties/test_change_element_material_properties_01.py
 python tests/elements/change_material_properties/test_change_element_material_properties_02.py
 python tests/elements/change_material_properties/test_change_element_material_properties_03.py
@@ -598,6 +599,7 @@ python tests/elements/plane/test_tri31.py
 python tests/elements/plane/test_four_node_quad_01.py
 python tests/elements/plane/test_four_node_quad_02.py
 python tests/elements/plane/test_four_node_quad_03.py
+python tests/elements/plane/test_four_node_quad_natural_coordinates_01.py
 python tests/elements/plane/test_maximum_corner_angle.py
 python tests/elements/plane/test_extrapolate_values_quad_01.py
 python tests/elements/plane/test_extrapolate_values_quad_02.py
@@ -1079,15 +1081,48 @@ python tests/constraints/single_retained_node_constraints/test_rigid_beam_01.py
 python tests/constraints/single_retained_node_constraints/test_rigid_rod_01.py
 python tests/constraints/single_retained_node_constraints/remove_equal_dof_01.py
 echo "$BLEU" "  Multiple retained node constraints tests." "$NORMAL"
-python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_01.py
-python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_02.py
-python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_03.py
-python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_04.py
-python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_05.py
-python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_06.py
-python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_07.py
-python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_08.py
-python tests/constraints/multiple_retained_node_constraints/test_glue_node_to_element_09.py
+echo "$BLEU" "    Elastic beam 2D multiple retained node constraints tests." "$NORMAL"
+python tests/constraints/multiple_retained_node_constraints/elastic_beam_2d/test_glue_node_to_elastic_beam_2d_element_ssl_01.py
+python tests/constraints/multiple_retained_node_constraints/elastic_beam_2d/test_glue_node_to_elastic_beam_2d_element_lnr_01.py
+python tests/constraints/multiple_retained_node_constraints/elastic_beam_2d/test_glue_node_to_elastic_beam_2d_element_pnr_01.py
+python tests/constraints/multiple_retained_node_constraints/elastic_beam_2d/test_glue_node_to_elastic_beam_2d_element_tnr_01.py
+echo "$BLEU" "    Elastic beam 3D multiple retained node constraints tests." "$NORMAL"
+python tests/constraints/multiple_retained_node_constraints/elastic_beam_3d/test_glue_node_to_elastic_beam_3d_element_ssl_01.py
+python tests/constraints/multiple_retained_node_constraints/elastic_beam_3d/test_glue_node_to_elastic_beam_3d_element_lnr_01.py
+python tests/constraints/multiple_retained_node_constraints/elastic_beam_3d/test_glue_node_to_elastic_beam_3d_element_pnr_01.py
+python tests/constraints/multiple_retained_node_constraints/elastic_beam_3d/test_glue_node_to_elastic_beam_3d_element_tnr_01.py
+echo "$BLEU" "    Plane elements multiple retained node constraints tests." "$NORMAL"
+python tests/constraints/multiple_retained_node_constraints/plane_elements/test_glue_node_to_4n_quad_element_ssl_01.py
+python tests/constraints/multiple_retained_node_constraints/plane_elements/test_glue_node_to_4n_quad_element_lnr_01.py
+python tests/constraints/multiple_retained_node_constraints/plane_elements/test_glue_node_to_4n_quad_element_pnr_01.py
+python tests/constraints/multiple_retained_node_constraints/plane_elements/test_glue_node_to_4n_quad_element_tnr_01.py
+echo "$BLEU" "    Truss elements multiple retained node constraints tests." "$NORMAL"
+python tests/constraints/multiple_retained_node_constraints/truss/test_glue_node_to_truss_element_ssl_01.py
+python tests/constraints/multiple_retained_node_constraints/truss/test_glue_node_to_truss_element_lnr_01.py
+python tests/constraints/multiple_retained_node_constraints/truss/test_glue_node_to_truss_element_pnr_01.py
+python tests/constraints/multiple_retained_node_constraints/truss/test_glue_node_to_truss_element_tnr_01.py
+python tests/constraints/multiple_retained_node_constraints/truss/test_glue_node_to_truss_element_ssl_02.py
+python tests/constraints/multiple_retained_node_constraints/truss/test_glue_node_to_truss_element_lnr_02.py
+python tests/constraints/multiple_retained_node_constraints/truss/test_glue_node_to_truss_element_pnr_02.py
+python tests/constraints/multiple_retained_node_constraints/truss/test_glue_node_to_truss_element_tnr_02.py
+echo "$BLEU" "    Shell elements multiple retained node constraints tests." "$NORMAL"
+python tests/constraints/multiple_retained_node_constraints/shell/test_glue_node_to_shell_mitc4_element_lnr_01.py
+python tests/constraints/multiple_retained_node_constraints/shell/test_glue_node_to_shell_mitc4_element_lnr_02.py
+python tests/constraints/multiple_retained_node_constraints/shell/test_glue_node_to_shell_mitc4_element_pnr_01.py
+python tests/constraints/multiple_retained_node_constraints/shell/test_glue_node_to_shell_mitc4_element_pnr_02.py
+python tests/constraints/multiple_retained_node_constraints/shell/test_glue_node_to_shell_mitc4_element_slsl_03.py
+python tests/constraints/multiple_retained_node_constraints/shell/test_glue_node_to_shell_mitc4_element_slsl_04.py
+python tests/constraints/multiple_retained_node_constraints/shell/test_glue_node_to_shell_mitc4_element_slsl_05.py
+python tests/constraints/multiple_retained_node_constraints/shell/test_glue_node_to_shell_mitc4_element_slsl_06.py
+python tests/constraints/multiple_retained_node_constraints/shell/test_glue_node_to_shell_mitc4_element_ssl_01.py
+python tests/constraints/multiple_retained_node_constraints/shell/test_glue_node_to_shell_mitc4_element_ssl_02.py
+python tests/constraints/multiple_retained_node_constraints/shell/test_glue_node_to_shell_mitc4_element_ssl_07.py
+python tests/constraints/multiple_retained_node_constraints/shell/test_glue_node_to_shell_mitc4_element_ssl_08.py
+python tests/constraints/multiple_retained_node_constraints/shell/test_glue_node_to_shell_mitc4_element_ssl_09.py
+python tests/constraints/multiple_retained_node_constraints/shell/test_glue_node_to_shell_mitc4_element_tnr_01.py
+python tests/constraints/multiple_retained_node_constraints/shell/test_glue_node_to_shell_mitc4_element_tnr_02.py
+python tests/constraints/multiple_retained_node_constraints/shell/test_glue_node_to_shell_mitc4_element_tnr_07.py
+
 echo "$BLEU" "  Symmetry constraints tests." "$NORMAL"
 python tests/constraints/skew_constraints/test_symmetry_constraint_01.py
 python tests/constraints/skew_constraints/test_symmetry_constraint_02.py
@@ -1262,6 +1297,12 @@ echo "$BLEU" "      Strain loads on bricks." "$NORMAL"
 python tests/loads/strain_loads/bricks/brick_strain_load_01.py
 python tests/loads/strain_loads/bricks/brick_strain_load_02.py
 echo "$BLEU" "    Inertia loads." "$NORMAL"
+echo "$BLEU" "      Inertia loads on nodes." "$NORMAL"
+python tests/loads/inertia_loads/nodes/test_inertia_loads_node_01.py
+python tests/loads/inertia_loads/nodes/test_inertia_loads_node_02.py
+python tests/loads/inertia_loads/nodes/test_inertia_loads_node_03.py
+python tests/loads/inertia_loads/nodes/test_inertia_loads_node_04.py
+python tests/loads/inertia_loads/nodes/test_inertia_loads_node_05.py
 echo "$BLEU" "      Inertia loads on trusses." "$NORMAL"
 python tests/loads/inertia_loads/trusses/test_inertia_loads_truss_01.py
 python tests/loads/inertia_loads/trusses/test_inertia_loads_truss_02.py
@@ -1456,6 +1497,7 @@ python tests/materials/xc_materials/sections/section_geom/test_mass_properties_0
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_04.py
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_05.py
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_06.py
+python tests/materials/xc_materials/sections/section_geom/test_mass_properties_07.py
 python tests/materials/xc_materials/sections/section_geom/test_modify_section_properties.py
 python tests/materials/xc_materials/sections/section_geom/test_get_elastic_section_01.py
 python tests/materials/xc_materials/sections/section_geom/test_get_elastic_section_02.py
@@ -1533,6 +1575,7 @@ python tests/materials/xc_materials/sections/fiber_section/reinf_layers/test_pol
 python tests/materials/xc_materials/sections/fiber_section/reinf_layers/test_polyline_reinf_layer_04.py
 echo "$BLEU" "        Beam fiber section tests." "$NORMAL"
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_section_aggregator_01.py
+python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_section_aggregator_02.py
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/test_fiber_section_sign_convention01.py
 echo "$BLEU" "          2D Beam fiber section tests." "$NORMAL"
 python tests/materials/xc_materials/sections/fiber_section/beam_fiber_sections/2d/test_fiber_section2d_01.py
@@ -2038,6 +2081,7 @@ python tests/rough_calculations/earth_retaining/pile_wall_displacement_estimatio
 echo "$BLEU" "  Beam formulas..." "$NORMAL"
 python tests/rough_calculations/beam_formulas/test_cantilever01.py
 python tests/rough_calculations/beam_formulas/test_cantilever02.py
+python tests/rough_calculations/beam_formulas/test_cantilever03.py
 python tests/rough_calculations/beam_formulas/test_simple_beam_01.py
 python tests/rough_calculations/beam_formulas/test_simple_beam_02.py
 python tests/rough_calculations/beam_formulas/test_simple_beam_03.py

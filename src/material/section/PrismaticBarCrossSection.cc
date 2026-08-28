@@ -34,6 +34,11 @@
 #include <utility/matrix/Vector.h>
 #include <utility/recorder/response/MaterialResponse.h>
 #include <deque>
+#include "material/section/elastic_section/ElasticSection1d.h"
+#include "material/section/elastic_section/ElasticSection2d.h"
+#include "material/section/elastic_section/ElasticShearSection2d.h"
+#include "material/section/elastic_section/ElasticSection3d.h"
+#include "material/section/elastic_section/ElasticShearSection3d.h"
 
 
 #include "material/ResponseId.h"
@@ -253,6 +258,212 @@ XC::CrossSectionProperties3d XC::PrismaticBarCrossSection::getCrossSectionProper
     return CrossSectionProperties3d(*this, e, iw, g);
   }
 
+//! @brief Return a ElasticSection1d object using the geometry from this
+//! object.
+//! @param name: name of the new fiber section object.
+//! @param E0: reference elastic modulus.
+//! @param Iw: warping constant.
+XC::ElasticSection1d *XC::PrismaticBarCrossSection::getElasticSection1d(const std::string &name, const double &E0, const double &Iw) const
+  {
+    ElasticSection1d *retval= nullptr;
+    if(this->material_handler)
+      {
+	retval= dynamic_cast<ElasticSection1d *>(material_handler->newMaterial("ElasticSection1d", name));
+	CrossSectionProperties1d &sp= retval->getCrossSectionProperties();
+	sp.setE(E0);
+	sp.setIw(Iw);
+	const double area= this->EA()/E0;
+	sp.setA(area);
+	const double rho= this->getLinearRho();
+	sp.setLinearRho(rho);
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no material handler available."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Return a ElasticSection2d object using the geometry from this
+//! object.
+//! @param name: name of the new fiber section object.
+//! @param E0: reference elastic modulus.
+//! @param Iw: warping constant.
+//! @param strongAxis: if true set the inertio of the strong axis for the new
+//!                    section.
+XC::ElasticSection2d *XC::PrismaticBarCrossSection::getElasticSection2d(const std::string &name, const double &E0, const double &Iw, bool strongAxis) const
+  {
+    ElasticSection2d *retval= nullptr;
+    if(this->material_handler)
+      {
+	retval= dynamic_cast<ElasticSection2d *>(material_handler->newMaterial("ElasticSection2d", name));
+	CrossSectionProperties2d &sp= retval->getCrossSectionProperties();
+	sp.setE(E0);
+	sp.setIw(Iw);
+	const double area= this->EA()/E0;
+	sp.setA(area);
+	const double iy= this->EIy()/E0;
+	const double iz= this->EIz()/E0;
+	if(strongAxis)
+	  sp.setI(std::max(iy, iz));
+	else
+	  sp.setI(std::min(iy, iz));
+	const double rho= this->getLinearRho();
+	sp.setLinearRho(rho);
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no material handler available."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Return a ElasticShearSection2d object using the geometry from this
+//! object.
+//! @param name: name of the new fiber section object.
+//! @param E0: reference elastic modulus.
+//! @param Iw: warping constant.
+//! @param G: shear modulus of the material.
+//! @param alpha: shear shape factor.
+//! @param strongAxis: if true set the inertio of the strong axis for the new
+//!                    section.
+XC::ElasticShearSection2d *XC::PrismaticBarCrossSection::getElasticShearSection2d(const std::string &name, const double &E0, const double &Iw, const double &G, bool strongAxis) const
+  {
+    ElasticShearSection2d *retval= nullptr;
+    if(this->material_handler)
+      {
+	retval= dynamic_cast<ElasticShearSection2d *>(material_handler->newMaterial("ElasticShearSection2d", name));
+	CrossSectionProperties2d &sp= retval->getCrossSectionProperties();
+	sp.setE(E0);
+	sp.setIw(Iw);
+	sp.setG(G);
+	const double area= this->EA()/E0;
+	sp.setA(area);
+	const double iy= this->EIy()/E0;
+	const double iz= this->EIz()/E0;
+	const double alpha_y= this->GAy()/G/area;
+	const double alpha_z= this->GAz()/G/area;
+	if(strongAxis)
+	  {
+	    if(iy>iz) // strong axis: y.
+	      {
+		sp.setI(iy);
+		sp.setAlpha(alpha_z);
+	      }
+	    else // strong axis: z.
+	      {
+		sp.setI(iz);
+		sp.setAlpha(alpha_y);
+	      }	      
+	  }
+	else // weak axis.
+	  {
+	    if(iy<iz) // weak axis: y.
+	      {
+		sp.setI(iy);
+		sp.setAlpha(alpha_z);
+	      }
+	    else  // weak axis: z.
+	      {
+		sp.setI(iz);
+		sp.setAlpha(alpha_y);
+	      }
+	  }
+	const double rho= this->getLinearRho();
+	sp.setLinearRho(rho);
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no material handler available."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Return a ElasticSection3d object using the geometry from this
+//! object.
+//! @param name: name of the new fiber section object.
+//! @param E0: reference elastic modulus.
+//! @param Iw: warping constant.
+//! @param G: shear modulus of the material.
+XC::ElasticSection3d *XC::PrismaticBarCrossSection::getElasticSection3d(const std::string &name, const double &E0, const double &Iw, const double &G) const
+  {
+    ElasticSection3d *retval= nullptr;
+    if(this->material_handler)
+      {
+	retval= dynamic_cast<ElasticSection3d *>(material_handler->newMaterial("ElasticSection3d", name));
+	CrossSectionProperties3d &sp= retval->getCrossSectionProperties();
+	sp.setE(E0);
+	sp.setIw(Iw);
+	sp.setG(G);
+	const double area= this->EA()/E0;
+	sp.setA(area);
+	const double iy= this->EIy()/E0;
+	sp.setIy(iy);
+	const double iz= this->EIz()/E0;
+	sp.setIz(iz);
+	const double pyz= this->EIyz()/E0;
+	sp.setIyz(pyz);
+	const double j= this->GJ()/G;
+	sp.setJ(j);	
+	const double rho= this->getLinearRho();
+	sp.setLinearRho(rho);
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no material handler available."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Return a ElasticShearSection3d object using the geometry from this
+//! object.
+//! @param name: name of the new fiber section object.
+//! @param E0: reference elastic modulus.
+//! @param Iw: warping constant.
+//! @param G: shear modulus of the material.
+XC::ElasticShearSection3d *XC::PrismaticBarCrossSection::getElasticShearSection3d(const std::string &name, const double &E0, const double &Iw, const double &G) const
+  {
+    ElasticShearSection3d *retval= nullptr;
+    if(this->material_handler)
+      {
+	retval= dynamic_cast<ElasticShearSection3d *>(material_handler->newMaterial("ElasticShearSection3d", name));
+	CrossSectionProperties3d &sp= retval->getCrossSectionProperties();
+	sp.setE(E0);
+	sp.setIw(Iw);
+	sp.setG(G);
+	const double area= this->EA()/E0;
+	sp.setA(area);
+	const double iy= this->EIy()/E0;
+	sp.setIy(iy);
+	const double iz= this->EIz()/E0;
+	sp.setIz(iz);
+	const double pyz= this->EIyz()/E0;
+	sp.setIyz(pyz);
+	const double j= this->GJ()/G;
+	sp.setJ(j);	
+	const double alpha_y= this->GAy()/G/area;
+	sp.setAlphaY(alpha_y);
+	const double alpha_z= this->GAz()/G/area;
+	sp.setAlphaZ(alpha_z);
+	const double rho= this->getLinearRho();
+	sp.setLinearRho(rho);
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; no material handler available."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
 
 //! @brief Returns the principal axes of inertia of the cross-section.
 PrincipalAxes2D XC::PrismaticBarCrossSection::getInertiaAxes(void) const

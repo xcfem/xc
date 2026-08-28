@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
-''' Home made test.'''
-from __future__ import print_function
+''' Check newGlueNodeToElement function with transformation Newton-Raphson solution
+algorithm.
+
+The problem is linear, so there is no need to use a non-linear solver, BUT the 
+multi-row, multi-freedom constraints gave an error with this kind of solver. 
+This is a regression test for that error.
+'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__copyright__= "Copyright 2026, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
@@ -19,26 +24,21 @@ from model import predefined_spaces
 from materials import typical_materials
 from postprocess.quick_inquiry import nodal_reactions
 from solution import predefined_solutions
+from misc_utils import log_messages as lmsg
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
-
-
-p1= geom.Pos3d(0,0,0)
-p2= geom.Pos3d(1,0,0)
-p3= geom.Pos3d(1,1,0)
-p4= geom.Pos3d(0,1,0)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 # Problem type
-modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-n1= nodes.newNodeXYZ(p1.x,p1.y,p1.z)
-n2= nodes.newNodeXYZ(p2.x,p2.y,p2.z)
-n3= nodes.newNodeXYZ(p3.x,p3.y,p3.z)
-n4= nodes.newNodeXYZ(p4.x,p4.y,p4.z)
+n1= modelSpace.newNode(0,0,0)
+n2= modelSpace.newNode(1,0,0)
+n3= modelSpace.newNode(1,1,0)
+n4= modelSpace.newNode(0,1,0)
 
-pA= geom.Pos3d(p1.x,p1.y,p1.z)
-nA= nodes.newNodeXYZ(pA.x,pA.y,pA.z) # node to be glued.
+pA= n1.getInitialPos3d
+nA= modelSpace.newNode(pA.x,pA.y,pA.z) # node to be glued.
 
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
@@ -52,21 +52,18 @@ modelSpace.fixNode000_FFF(n1.tag)
 modelSpace.fixNode000_FFF(n2.tag)
 modelSpace.fixNode000_FFF(n3.tag)
 modelSpace.fixNode000_FFF(n4.tag)
-# modelSpace.fixNode000_000( 1)
-# modelSpace.fixNode000_000( 2)
-# modelSpace.fixNode000_000( 3)
-# modelSpace.fixNode000_000( 4)
 
 ## Glued node.
 gluedDOFs= [0,3,4,5]
 loadOnDOFs= [0,0,0,0,0,0]
+F= 1000
 for i in range(0,6):
   if i not in gluedDOFs:
     modelSpace.constraints.newSPConstraint(nA.tag,i,0.0)
   else:
-    loadOnDOFs[i]= -1000.0
+    loadOnDOFs[i]= -F
 
-glue= modelSpace.constraints.newGlueNodeToElement(nA,elem,xc.ID(gluedDOFs))
+glue= modelSpace.glueNodeToElement(nA.tag, elem.tag, xc.ID(gluedDOFs))
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -75,8 +72,15 @@ lp0.newNodalLoad(nA.tag,xc.Vector(loadOnDOFs))
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
-analysis= predefined_solutions.simple_static_linear(feProblem)
+# LP 14/08/2026.
+# The problem is linear, so there is no need to use a non-linear solver, BUT
+# the multi-row, multi-freedom constraints gave an error with this kind of
+# solver. This is a regression test for that error.
+analysis= predefined_solutions.transformation_newton_raphson_band_gen(feProblem, maxNumIter= 2) # => OK
 result= analysis.analyze(1)
+if(result!= 0):
+    lmsg.error("Can't solve.")
+    exit(1)
 
 nodes.calculateNodalReactions(False,1e-7)
 
@@ -96,14 +100,21 @@ ratio3= svdResid.getMoment().getModulus()/actionNodeANorm
 # print("ratio1= ", ratio1)
 # print("ratio2= ", ratio2)
 # print("ratio3= ", ratio3)
-# print("RN2= ", RN2)
-# print("RN3= ", RN3)
-# print("RN4= ", RN4)
 
 import os
-from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-9) & (abs(ratio3)<1e-9):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# oh.displayDispRot(itemToDisp='uX', defFScale= 1.0)
+# oh.displayDispRot(itemToDisp='uY', defFScale= 1.0)
+# oh.displayDispRot(itemToDisp='uZ', defFScale= 1.0)
+# oh.displayLoads()
+# oh.displayReactions()
+# # oh.displayLocalAxes()

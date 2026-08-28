@@ -790,7 +790,7 @@ class Y1860S7Strand(PrestressingSteel):
         :param suddenRelease: if true, prestressing is transfered to concrete
                               in a very short time.
         :param ELU: true if ultimate limit state checking.
-        :param t: concrete age at themoment of the prestress transmission
+        :param t: concrete age at the moment of the prestress transmission
                   expressed in days.
         '''
         return super(Y1860S7Strand,self).getTransmissionLength(self.diameter, concrete, pos, sg_pi, suddenRelease, ELU, t)
@@ -808,7 +808,7 @@ class Y1860S7Strand(PrestressingSteel):
         :param suddenRelease: if true, prestressing is transfered to concrete
                               in a very short time.
         :param ELU: true if ultimate limit state checking.
-        :param t: concrete age at themoment of the prestress transmission
+        :param t: concrete age at the moment of the prestress transmission
                   expressed in days.
         '''
         lbpt= self.getTransmissionLength(concrete, pos, sg_pi, suddenRelease, ELU, t)

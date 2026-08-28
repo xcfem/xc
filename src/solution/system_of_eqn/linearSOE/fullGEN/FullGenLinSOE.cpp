@@ -224,6 +224,26 @@ void XC::FullGenLinSOE::zeroA(void)
     factored = false;
   }
 
+//! @brief Return the rows of the stiffness matrix in a Python list.
+boost::python::list XC::FullGenLinSOE::getAPy(void) const
+  {
+    boost::python::list retval;
+    const size_t nRows= this->getNumEqn();
+    const size_t nCols= nRows;
+    for(size_t i=0; i < nRows; ++i )
+      {
+	boost::python::list row= boost::python::list();
+        for(size_t j=0; j<nCols; ++j )
+	  {
+	    const int k= i*nCols+j; 
+	    const double &tmp= A(k);
+	    row.append(tmp);
+	  }
+	retval.append(row);
+      }
+    return retval;
+  }
+
 //! @brief Sends objects through the communicator.
 int XC::FullGenLinSOE::sendSelf(Communicator &comm)
   {

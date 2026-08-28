@@ -15,7 +15,14 @@ from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
 
-E= 30e6 # Young modulus (psi)
+A= 31e-4 # Beam cross-section area.
+E= 2.0e11 # Young modulus.
+nu= 0.3 # Poisson's ratio.
+G= E/(2.0*(1+nu))
+Iy= 2810e-8 # Inertia of the beam section.
+Iz= Iy
+J= 25.2935e-8 # Cross section torsion constant (m4)
+
 l= 10 # Bar length in inches
 F= 1000.0
 
@@ -23,34 +30,44 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
-modelSpace= predefined_spaces.SolidMechanics2D(nodes)
-n1= nodes.newNodeXY(0,0)
-n2= nodes.newNodeXY(l,0)
-nA= nodes.newNodeXY(l/2.0,0) # node to be glued.
+# Problem type
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
-elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
+# Problem geometry
+n1= nodes.newNodeXYZ(0,0,0)
+n2= nodes.newNodeXYZ(l,0,0)
+nA= nodes.newNodeXYZ(l/2.0,0,0) # node to be glued.
 
+# Materials definition
+sectionProperties= xc.CrossSectionProperties3d()
+sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G
+sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
+scc= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "scc",sectionProperties)
+
+# Mesh generation
+
+## Geometric transformations
+lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
+
+## Element definition
 elements= preprocessor.getElementHandler
-elements.dimElem= 2 # Bars defined ina a two dimensional space.
-elements.defaultMaterial= elast.name
-truss= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
-truss.sectionArea= 1
+elements.defaultMaterial= scc.name
+elements.defaultTransformation= lin.name
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-modelSpace.fixNode00(n1.tag)
-modelSpace.fixNode00(n2.tag)
+modelSpace.fixNode000_0FF(n1.tag)
+modelSpace.fixNode000_FFF(n2.tag)
 
 ## Glued node.
-gluedDOFs= [0]
-loadOnDOFs= [0,0]
-for i in range(0,2):
-  if i not in gluedDOFs:
-    modelSpace.constraints.newSPConstraint(nA.tag,i,0.0)
-  else:
-    loadOnDOFs[i]= -F
+gluedDOFs= [0,1,2]
+loadOnDOFs= [0,-F,0,0,0,0]
+for i in range(0,6):
+    if i not in gluedDOFs:
+        modelSpace.constraints.newSPConstraint(nA.tag,i,0.0)
 
-glue= modelSpace.constraints.newGlueNodeToElement(nA,truss,xc.ID(gluedDOFs))
+glue= modelSpace.constraints.newGlueNodeToElement(nA,beam3d,xc.ID(gluedDOFs))
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -64,7 +81,7 @@ result= analysis.analyze(1)
 
 nodes.calculateNodalReactions(False,1e-7)
 
-refVector= xc.Vector([F/2.0, 0])
+refVector= xc.Vector([0, F/2.0, 0, 0, 0, 0])
 reactionNodeA= nA.getReaction
 ratio1= reactionNodeA.Norm()
 reactionNode1= n1.getReaction

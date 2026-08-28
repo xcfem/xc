@@ -68,6 +68,8 @@
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 #include "utility/matrix/Matrix.h"
 #include "solution/analysis/model/UnbalAndTangent.h"
+#include "domain/mesh/node/Node.h"
+#include "domain/constraints/MFreedom_ConstraintBase.h"
 
 // M.Petracca 2024. Unified approach to constraints
 #define TRANSF_INCREMENTAL_SP
@@ -92,7 +94,7 @@ class TransformationConstraintHandler;
 class TransformationDOF_Group: public DOF_Group
   {
   private:
-    MFreedom_ConstraintBase *mfc; //!< Pointer to multi-freedom constraint.
+    MFreedom_ConstraintBase *mfc_ptr; //!< Pointer to multi-freedom constraint.
     
     mutable Matrix Trans;
     ID modID;
@@ -113,8 +115,16 @@ class TransformationDOF_Group: public DOF_Group
     static Vector modTrialDispOld;
 #endif // TRANSF_INCREMENTAL_MP
     
-    void arrays_setup(int numNodalDOF, int numConstrainedNodeRetainedDOF, int numRetainedNodeDOF, int numRetainedNodes);
+    void arrays_setup(int numNodalDOF, int numRetainedNodeDOF, int numRetainedNodes);
     void initialize(TransformationConstraintHandler *);
+    inline int getNumConstrainedNodeRetainedDOF(void) const
+      {
+	const int numNodalDOF= myNode->getNumberDOF();
+	const ID &constrainedDOF= this->mfc_ptr->getConstrainedDOFs();    
+	const int numNodalDOFConstrained= constrainedDOF.Size();
+        return numNodalDOF - numNodalDOFConstrained;
+      }
+    void compute_transformation_matrix(void) const;
   protected:
     friend class AnalysisModel;
     friend class AutoConstraintHandler;
@@ -130,7 +140,7 @@ class TransformationDOF_Group: public DOF_Group
     const Vector &setupResidual(int numCNodeDOF, const ID &,const ID &, const Vector &, const std::vector<const Node *> &,const Vector &(Node::*response)(void) const) const;
     const Vector &getTrialResponse(const Vector &(Node::*response)(void) const) const;
     const Vector &getCommittedResponse(const Vector &(Node::*response)(void) const) const;
-    void setupResidual(const Vector &,int (Node::*setTrial)(const Vector &), const Vector &(Node::*response)(void) const) const;
+    void setupResidual_u_v_a(const Vector &,int (Node::*setTrial)(const Vector &), const Vector &(Node::*response)(void) const) const;
   public:
     ~TransformationDOF_Group();
     

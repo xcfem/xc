@@ -57,7 +57,13 @@ double (XC::Element::*getDist2Pos3d)(const Pos3d &,bool initialGeometry) const= 
 boost::python::list (XC::Element::*get_connected_elements_element_py)(void)= &XC::Element::getConnectedElementsPy;    
 boost::python::list (XC::Element::*get_connected_elements_element_set_py)(const XC::SetBase *)= &XC::Element::getConnectedElementsPy; 
 boost::python::list (XC::Element::*get_connected_elements_tags_element_py)(void) const= &XC::Element::getConnectedElementTags;    
-boost::python::list (XC::Element::*get_connected_elements_tags_element_set_py)(const XC::SetBase *) const= &XC::Element::getConnectedElementTags; 
+boost::python::list (XC::Element::*get_connected_elements_tags_element_set_py)(const XC::SetBase *) const= &XC::Element::getConnectedElementTags;
+XC::ParticlePos3d (XC::Element::*getNaturalCoordinates3d)(const Pos3d &, bool initialGeometry) const= &XC::Element::getNaturalCoordinates;
+XC::Vector (XC::Element::*getParticlePos3dInterpolationFactors)(const XC::ParticlePos3d &) const= &XC::Element::getInterpolationFactors;
+XC::Vector (XC::Element::*getPos3dInterpolationFactors)(const Pos3d &) const= &XC::Element::getInterpolationFactors;
+XC::ParticlePos2d (XC::Element::*getNaturalCoordinates2d)(const Pos2d &, bool initialGeometry) const= &XC::Element::getNaturalCoordinates;
+XC::Vector (XC::Element::*getParticlePos2dInterpolationFactors)(const XC::ParticlePos2d &) const= &XC::Element::getInterpolationFactors;
+XC::Vector (XC::Element::*getPos2dInterpolationFactors)(const Pos2d &) const= &XC::Element::getInterpolationFactors;
 class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >("Element", no_init)
   .add_property("getNodes", make_function( getNodePtrsRef, return_internal_reference<>() ),"DEPRECATED; return the element nodes.")
   .add_property("nodes", make_function( getNodePtrsRef, return_internal_reference<>() ),"Return the element nodes.")
@@ -141,7 +147,13 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getConnectedElements", get_connected_elements_element_set_py, "Returns the elements from the given set that are connected to any of the nodes of this element.")
 .add_property("connectedElementTags", get_connected_elements_tags_element_py, "Returns the tags of the elements connected to any of the nodes of this element.")
   .def("getConnectedElementTags", get_connected_elements_tags_element_set_py, "Returns the tags of the elements from the given set that are connected to any of the nodes of this element.")
-   ;
+  .def("getNaturalCoordinates", getNaturalCoordinates3d, "Returns natural coordinates of the given 3D point.")
+  .def("getPos3dInterpolationFactors",getPos3dInterpolationFactors, "Return the values of the interpolation factors at the given point.")
+  .def("getParticlePos3dInterpolationFactors",getParticlePos3dInterpolationFactors, "Return the values of the interpolation factors at the given point expressed in natural coordinates..")
+  .def("getNaturalCoordinates", getNaturalCoordinates2d, "Returns natural coordinates of the given 2D point.")
+  .def("getPos2dInterpolationFactors",getPos2dInterpolationFactors, "Return the values of the interpolation factors at the given point.")
+  .def("getParticlePos2dInterpolationFactors",getParticlePos2dInterpolationFactors, "Return the values of the interpolation factors at the given point expressed in natural coordinates..")
+  ;
 
 XC::Element *(XC::ElementIter::*element_iter_parenthesis_op)(void)= &XC::ElementIter::operator();
 class_<XC::ElementIter, boost::noncopyable >("ElementIter", no_init)

@@ -45,26 +45,3 @@ XC::UnbalAndTangent::~UnbalAndTangent(void)
     unbalAndTangentArray= nullptr;
   }
 
-//! @brief Return the tangent stiffness matrix.
-const XC::Matrix &XC::UnbalAndTangent::getTangent(void) const
-  {
-    return unbalAndTangentArray->getTangent(this->nDOF);
-  }
-
-//! @brief Return the tangent stiffness matrix.
-XC::Matrix &XC::UnbalAndTangent::getTangent(void)
-  {
-    return unbalAndTangentArray->getTangent(this->nDOF);
-  }
-
-//! @brief Returns the residual vector.
-const XC::Vector &XC::UnbalAndTangent::getResidual(void) const
-  {
-    return unbalAndTangentArray->getUnbalance(this->nDOF);
-  }
-
-//! @brief Return the residual vector.
-XC::Vector &XC::UnbalAndTangent::getResidual(void)
-  {
-    return unbalAndTangentArray->getUnbalance(this->nDOF);
-  }

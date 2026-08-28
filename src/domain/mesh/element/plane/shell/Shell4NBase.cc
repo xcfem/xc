@@ -406,6 +406,14 @@ const XC::SectionForceDeformation *XC::Shell4NBase::getSectionPtr(const size_t &
     return retval;
   }
 
+//! @brief check to see if have mass
+bool XC::Shell4NBase::haveRho(void) const
+  { return this->physicalProperties.haveRho(); }
+
+//! @brief Returns densities for each position in a Python list.
+boost::python::list XC::Shell4NBase::getRhoiPy() const
+  { return this->physicalProperties.getRhoiPy(); }
+
 //! @brief Sets loads to zero.
 void XC::Shell4NBase::zeroLoad(void)
   {

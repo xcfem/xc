@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Home made test.'''
+
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -19,7 +20,6 @@ from model import predefined_spaces
 from materials import typical_materials
 from postprocess.quick_inquiry import nodal_reactions
 from solution import predefined_solutions
-from misc_utils import log_messages as lmsg
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -33,19 +33,19 @@ p4= geom.Pos3d(0,1,0)
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-n1= nodes.newNodeIDXYZ(1,p1.x,p1.y,p1.z)
-n2= nodes.newNodeIDXYZ(2,p2.x,p2.y,p2.z)
-n3= nodes.newNodeIDXYZ(3,p3.x,p3.y,p3.z)
-n4= nodes.newNodeIDXYZ(4,p4.x,p4.y,p4.z)
+n1= nodes.newNodeXYZ(p1.x,p1.y,p1.z)
+n2= nodes.newNodeXYZ(p2.x,p2.y,p2.z)
+n3= nodes.newNodeXYZ(p3.x,p3.y,p3.z)
+n4= nodes.newNodeXYZ(p4.x,p4.y,p4.z)
 
-p10= geom.Pos3d(p1.x,p1.y,p1.z)
-n10= nodes.newNodeIDXYZ(10,p10.x,p10.y,p10.z)
+pA= geom.Pos3d(0.5,0.5,0.0)
+nA= nodes.newNodeXYZ(pA.x,pA.y,pA.z)
 
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= memb1.name
-elem= elements.newElement("ShellMITC4",xc.ID([1,2,3,4]))
+elem= elements.newElement("ShellMITC4",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
@@ -53,46 +53,43 @@ modelSpace.fixNode000_FFF(n1.tag)
 modelSpace.fixNode000_FFF(n2.tag)
 modelSpace.fixNode000_FFF(n3.tag)
 modelSpace.fixNode000_FFF(n4.tag)
-# modelSpace.fixNode000_000( n1.tag)
-# modelSpace.fixNode000_000( n2.tag)
-# modelSpace.fixNode000_000( n3.tag)
-# modelSpace.fixNode000_000( n4.tag)
+# modelSpace.fixNode000_000( 1)
+# modelSpace.fixNode000_000( 2)
+# modelSpace.fixNode000_000( 3)
+# modelSpace.fixNode000_000( 4)
 
 # Glued node.
-gluedDOFs= [0,2,5]
+gluedDOFs= [0,1,2,3,4,5]
 loadOnDOFs= [0,0,0,0,0,0]
 for i in range(0,6):
   if i not in gluedDOFs:
-    modelSpace.constraints.newSPConstraint(10,i,0.0)
+    modelSpace.constraints.newSPConstraint(nA.tag,i,0.0)
   else:
     loadOnDOFs[i]= -1000.0
 
-glue= modelSpace.constraints.newGlueNodeToElement(n10,elem,xc.ID(gluedDOFs))
-# Equivalent in this case:
-# glue= modelSpace.constraints.newEqualDOF(n10.tag,1,xc.ID(gluedDOFs))
+glue= modelSpace.constraints.newGlueNodeToElement(nA,elem,xc.ID(gluedDOFs))
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(10,xc.Vector(loadOnDOFs))
+lp0.newNodalLoad(nA.tag,xc.Vector(loadOnDOFs))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
-solProc= predefined_solutions.SimpleLagrangeStaticLinear(feProblem)
-analOk= solProc.solve(True, reactionCheckTolerance= 1e-7)
-if(analOk!=0):
-   lmsg.error('Failed to solve for: ', lp0.name)
-   quit()
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
-reactionNode10= nodes.getNode(10).getReaction
-ratio1= reactionNode10.Norm()
-svdReactionNodes= nodal_reactions.getReactionFromNodes(nodes,"UVWRxRyRz",[1,2,3,4])
-actionNode10= xc.Vector(loadOnDOFs)
-actionNode10Norm= actionNode10.Norm()
-svdAction= nodal_reactions.getSlidingVectorsSystemfromSlidingVector("UVWRxRyRz",n10.get3dCoo,actionNode10)
+nodes.calculateNodalReactions(False,1e-7)
+
+reactionNodeA= nA.getReaction
+ratio1= reactionNodeA.Norm()
+svdReactionNodes= nodal_reactions.getReactionFromNodes(nodes,"UVWRxRyRz",[n1.tag,n2.tag,n3.tag,n4.tag])
+actionNodeA= xc.Vector(loadOnDOFs)
+actionNodeANorm= actionNodeA.Norm()
+svdAction= nodal_reactions.getSlidingVectorsSystemfromSlidingVector("UVWRxRyRz",nA.get3dCoo,actionNodeA)
 svdResid= svdReactionNodes+svdAction
-ratio2= svdResid.getResultant().getModulus()/actionNode10Norm
-ratio3= svdResid.getMoment().getModulus()/actionNode10Norm
+ratio2= svdResid.getResultant().getModulus()/actionNodeANorm
+ratio3= svdResid.getMoment().getModulus()/actionNodeANorm
 
 # print("svdAction= ", svdAction)
 # print("svdReactionNodes= ", svdReactionNodes)
@@ -105,8 +102,20 @@ ratio3= svdResid.getMoment().getModulus()/actionNode10Norm
 # print("RN4= ", RN4)
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-9) & (abs(ratio3)<1e-9) & (analOk==0):
+if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-9) & (abs(ratio3)<1e-9):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# # oh.displayFEMesh()#setsToDisplay= [columnSet, pileSet])
+# oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayDispRot(itemToDisp='uY', defFScale= 100.0)
+# oh.displayDispRot(itemToDisp='uZ', defFScale= 100.0)
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# oh.displayReactions()

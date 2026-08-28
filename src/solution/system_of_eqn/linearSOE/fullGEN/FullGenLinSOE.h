@@ -122,9 +122,10 @@ class FullGenLinSOE: public FactoredSOEBase
     SystemOfEqn *getCopy(void) const;
   public:
     int setSize(Graph &theGraph);
-    int addA(const Matrix &, const ID &, double fact = 1.0);
     
+    int addA(const Matrix &, const ID &, double fact = 1.0);
     void zeroA(void);
+    virtual boost::python::list getAPy(void) const;
     
     friend class FullGenLinLapackSolver;    
 

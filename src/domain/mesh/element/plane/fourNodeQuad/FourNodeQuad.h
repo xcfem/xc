@@ -92,6 +92,8 @@ class FourNodeQuad: public SolidMech4N
 
     // private member functions - only objects of this class can call these
     double shapeFunction(const GaussPoint &gp) const;
+    void computeShapeFunctions(const ParticlePos2d &pos, double N[4]) const;
+    void computeShapeDerivatives(const ParticlePos2d &pos, double dN_dr[4], double dN_ds[4]) const;
     void setPressureLoadAtNodes(void);
     
     //inertia terms
@@ -134,6 +136,10 @@ class FourNodeQuad: public SolidMech4N
     virtual ElementalLoad *createInertiaLoad(const Vector &);
 
     Pos2d getCartesianCoordinates(const ParticlePos2d &, bool initialGeometry= true) const;
+    ParticlePos2d getNaturalCoordinates(const Pos2d &, bool initialGeometry= true) const;
+    Vector getInterpolationFactors(const ParticlePos2d &) const;
+    Vector getInterpolationFactors(const Pos2d &) const;
+    Vector getInterpolationFactors(const Pos3d &) const;
     
     // public methods for element output
     int sendSelf(Communicator &);

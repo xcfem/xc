@@ -78,7 +78,7 @@ for key in [3, 6, 9, 12]:
 mv= 2.0*mass
 kv= 7500.0
 zetaVertical= 0.02
-cv= 2.0*zetaVertical*math.sqrt(kv*mv)
+cv= 2.0*zetaVertical*math.sqrt(kv*mv) # Vertical damping tangent.
 ## Vertical response.
 vertResp= typical_materials.defElasticMaterial(preprocessor, name= "vertResp", E= kv, eta= cv)
 ## Rotational response.

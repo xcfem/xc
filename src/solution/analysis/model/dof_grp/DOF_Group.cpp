@@ -326,14 +326,14 @@ void XC::DOF_Group::addCtoTang(double fact)
 //! To zero the unbalance vector. Invokes Zero() on the vector
 //! object used to store the unbalance information.
 void XC::DOF_Group::zeroUnbalance(void)
-  { unbalAndTangent.getResidual().Zero(); }
+  { unbalAndTangent.getUnbalance().Zero(); }
 
 //! @brief Returns the vector holding the unbalance.
 const XC::Vector &XC::DOF_Group::getUnbalance(Integrator *theIntegrator)
   {
     if(theIntegrator)
       theIntegrator->formNodUnbalance(this);
-    return unbalAndTangent.getResidual();
+    return unbalAndTangent.getUnbalance();
   }
 
 //! @brief Adds the product of the unbalanced load at the node and \p fact to
@@ -349,7 +349,7 @@ void XC::DOF_Group::addPtoUnbalance(double fact)
   {
     if(myNode != 0)
       {
-        if(unbalAndTangent.getResidual().addVector(1.0, myNode->getUnbalancedLoad(), fact) < 0)
+        if(unbalAndTangent.getUnbalance().addVector(1.0, myNode->getUnbalancedLoad(), fact) < 0)
           {
             std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; invoking addVector() on the unbalance failed."
@@ -368,7 +368,7 @@ void XC::DOF_Group::addPIncInertiaToUnbalance(double fact)
   {
     if(myNode)
       {
-        if(unbalAndTangent.getResidual().addVector(1.0, myNode->getUnbalancedLoadIncInertia(), fact) < 0)
+        if(unbalAndTangent.getUnbalance().addVector(1.0, myNode->getUnbalancedLoadIncInertia(), fact) < 0)
           {
             std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; invoking addVector() on the unbalance failed."
@@ -407,7 +407,7 @@ void XC::DOF_Group::addM_Force(const XC::Vector &Udotdot, double fact)
 	      accel(i)= 0.0;
 	  }
 
-	if(unbalAndTangent.getResidual().addMatrixVector(1.0, myNode->getMass(), accel, fact) < 0)
+	if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, myNode->getMass(), accel, fact) < 0)
 	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; invoking addMatrixVector() "
 		    << " on the unbalance failed."
@@ -422,7 +422,7 @@ const XC::Vector &XC::DOF_Group::getTangForce(const Vector &Udotdot, double fact
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	      << "; not yet implemented."
 	      << Color::def << std::endl;
-    return unbalAndTangent.getResidual();
+    return unbalAndTangent.getUnbalance();
   }
 
 
@@ -434,7 +434,7 @@ const XC::Vector &XC::DOF_Group::getM_Force(const Vector &Udotdot, double fact)
 		  << "; no node associated"
 		  << " subclass should not call this method."
 		  << Color::def << std::endl;
-        return unbalAndTangent.getResidual();
+        return unbalAndTangent.getUnbalance();
       }
 
     const int sz= getNumDOF();
@@ -448,11 +448,11 @@ const XC::Vector &XC::DOF_Group::getM_Force(const Vector &Udotdot, double fact)
         else accel(i) = 0.0;
       }
 
-    if(unbalAndTangent.getResidual().addMatrixVector(0.0, myNode->getMass(), accel, fact) < 0)
+    if(unbalAndTangent.getUnbalance().addMatrixVector(0.0, myNode->getMass(), accel, fact) < 0)
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                 << "; invoking addMatrixVector() on the unbalance failed."
 		<< Color::def << std::endl;
-    return unbalAndTangent.getResidual();
+    return unbalAndTangent.getUnbalance();
   }
 
 
@@ -478,12 +478,12 @@ const XC::Vector &XC::DOF_Group::getC_Force(const Vector &Udotdot, double fact)
 	      accel(i) = 0.0;
 	  }
 
-	if(unbalAndTangent.getResidual().addMatrixVector(0.0, myNode->getDamp(), accel, fact) < 0)
+	if(unbalAndTangent.getUnbalance().addMatrixVector(0.0, myNode->getDamp(), accel, fact) < 0)
 	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; invoking addMatrixVector() on the unbalance failed."
 		    << Color::def << std::endl;
       }
-    return unbalAndTangent.getResidual();
+    return unbalAndTangent.getUnbalance();
   }
 
 
@@ -566,7 +566,7 @@ void XC::DOF_Group::setNodeDisp(const Vector &u)
 		<< Color::def << std::endl;
     else
       {
-	Vector &disp= unbalAndTangent.getResidual();
+	Vector &disp= unbalAndTangent.getUnbalance();
 	disp= myNode->getTrialDisp();
 
 	// get disp for my dof out of vector u
@@ -602,7 +602,7 @@ void XC::DOF_Group::setNodeVel(const Vector &udot)
 		<< Color::def << std::endl;
     else
       {
-	 Vector &vel = unbalAndTangent.getResidual();
+	 Vector &vel = unbalAndTangent.getUnbalance();
 	 vel = myNode->getTrialVel();
 
 	 // get vel for my dof out of vector udot
@@ -640,7 +640,7 @@ void XC::DOF_Group::setNodeAccel(const Vector &udotdot)
 		<< Color::def << std::endl;
     else
       {
-	Vector &accel = unbalAndTangent.getResidual();;
+	Vector &accel = unbalAndTangent.getUnbalance();;
 	accel = myNode->getTrialAccel();
 
 	// get disp for the unconstrained dof
@@ -670,7 +670,7 @@ void XC::DOF_Group::incrNodeDisp(const Vector &u)
       }
     else
       {
-	Vector &disp= unbalAndTangent.getResidual();
+	Vector &disp= unbalAndTangent.getUnbalance();
 
 	if(disp.Size() == 0)
 	  {
@@ -716,7 +716,7 @@ void XC::DOF_Group::incrNodeVel(const Vector &udot)
       }
     else
       {
-	Vector &vel = unbalAndTangent.getResidual();
+	Vector &vel = unbalAndTangent.getUnbalance();
 
 	// get vel for my dof out of vector udot
 	const int sz= getNumDOF();
@@ -750,7 +750,7 @@ void XC::DOF_Group::incrNodeAccel(const Vector &udotdot)
       }
     else
       {
-	Vector &accel = unbalAndTangent.getResidual();
+	Vector &accel = unbalAndTangent.getUnbalance();
 
 	// get disp for the unconstrained dof
 	const int sz= getNumDOF();
@@ -823,7 +823,7 @@ void XC::DOF_Group::setEigenvector(int mode, const Vector &theVector)
       }
     else
       {
-	Vector &eigenvector = unbalAndTangent.getResidual();
+	Vector &eigenvector = unbalAndTangent.getUnbalance();
 
 	// get disp for the unconstrained dof
 	const int sz= getNumDOF();
@@ -849,7 +849,7 @@ void XC::DOF_Group::addLocalM_Force(const Vector &accel, double fact)
   {
     if(myNode)
       {
-        if(unbalAndTangent.getResidual().addMatrixVector(1.0, myNode->getMass(), accel, fact) < 0)
+        if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, myNode->getMass(), accel, fact) < 0)
           std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << "; invoking addMatrixVector() on the unbalance failed."
 		    << Color::def << std::endl;
@@ -865,7 +865,7 @@ void XC::DOF_Group::addLocalM_Force(const Vector &accel, double fact)
 // AddingSensitivity:BEGIN ////////////////////////////////////////
 const XC::Vector &XC::DOF_Group::getDispSensitivity(int gradNumber)
   {
-    Vector &result = unbalAndTangent.getResidual();
+    Vector &result = unbalAndTangent.getUnbalance();
     const int sz= getNumDOF();
     for(int i=0; i<sz; i++)
       { result(i) = myNode->getDispSensitivity(i+1,gradNumber);        }
@@ -874,7 +874,7 @@ const XC::Vector &XC::DOF_Group::getDispSensitivity(int gradNumber)
 
 const XC::Vector &XC::DOF_Group::getVelSensitivity(int gradNumber)
   {
-    Vector &result = unbalAndTangent.getResidual();
+    Vector &result = unbalAndTangent.getUnbalance();
     const int sz= getNumDOF();
     for(int i=0; i<sz; i++)
       { result(i) = myNode->getVelSensitivity(i+1,gradNumber); }
@@ -883,7 +883,7 @@ const XC::Vector &XC::DOF_Group::getVelSensitivity(int gradNumber)
 
 const XC::Vector &XC::DOF_Group::getAccSensitivity(int gradNumber)
   {
-    Vector &result = unbalAndTangent.getResidual();
+    Vector &result = unbalAndTangent.getUnbalance();
     const int sz= getNumDOF();
     for(int i=0; i<sz; i++)
       { result(i) = myNode->getAccSensitivity(i+1,gradNumber); }
@@ -954,7 +954,7 @@ void XC::DOF_Group::addM_ForceSensitivity(const XC::Vector &Udotdot, double fact
 	    else accel(i) = 0.0;
 	  }
 
-	if(unbalAndTangent.getResidual().addMatrixVector(1.0, myNode->getMassSensitivity(), accel, fact) < 0)
+	if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, myNode->getMassSensitivity(), accel, fact) < 0)
 	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; invoking addMatrixVector() on the unbalance failed"
 		    << Color::def << std::endl;
@@ -981,7 +981,7 @@ void XC::DOF_Group::addD_Force(const XC::Vector &Udot, double fact)
 	    else vel(i) = 0.0;
 	  }
 
-	if(unbalAndTangent.getResidual().addMatrixVector(1.0, myNode->getDamp(), vel, fact) < 0)
+	if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, myNode->getDamp(), vel, fact) < 0)
 	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; invoking addMatrixVector() on the unbalance failed"
 		    << Color::def << std::endl;
@@ -1009,7 +1009,7 @@ void XC::DOF_Group::addD_ForceSensitivity(const Vector &Udot, double fact)
 	      vel(i) = 0.0;
 	  }
 
-	if(unbalAndTangent.getResidual().addMatrixVector(1.0, myNode->getDampSensitivity(), vel, fact) < 0)
+	if(unbalAndTangent.getUnbalance().addMatrixVector(1.0, myNode->getDampSensitivity(), vel, fact) < 0)
 	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << "; invoking addMatrixVector() on the unbalance failed"
 		    << Color::def << std::endl;

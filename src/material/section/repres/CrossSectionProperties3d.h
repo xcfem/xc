@@ -123,6 +123,7 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
       { return G()*getAvz(); }
     double getRadiusOfGyrationZ(void) const;
     double getRadiusOfGyrationY(void) const;
+    bool checkProductOfInertia(const double &tol) const;
 
     double getTheta(void) const;
     double getI1(void) const;

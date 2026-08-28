@@ -121,6 +121,23 @@ XC::CrossSectionProperties3d::CrossSectionProperties3d(const SectionForceDeforma
 double XC::CrossSectionProperties3d::getTheta(void) const
   { return theta_inertia(Iy(),Iz(),Iyz()); }
 
+//! @brief Compute an approximation of the principal angle and check that
+//! is smaller than the given tolerance.
+bool XC::CrossSectionProperties3d::checkProductOfInertia(const double &tol) const
+  {
+    bool retval= true;
+    const double eiyz= this->EIyz();
+    // Compute an approximation of the principal angle relative to the
+    // main moments of inertia (Ix and Iy):
+    double denom= std::max(std::abs(this->EIz()-this->EIy()), tol*1e-1);
+    const double approxPrincipalAngle= eiyz/denom;
+    if(abs(approxPrincipalAngle)>tol) //Product of inertia not zero.
+      {
+	retval= false;
+      }
+    return retval;
+  }
+
 //! @brief Returns the major principal axis of inertia.
 double XC::CrossSectionProperties3d::getI1(void) const
   { return I1_inertia(Iy(),Iz(),Iyz()); }

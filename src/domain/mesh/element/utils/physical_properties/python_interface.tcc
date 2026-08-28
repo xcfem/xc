@@ -84,6 +84,8 @@ class_<XC::SectionFDPhysicalProperties, bases<PhysicalProperties_SectionFDMat>, 
     .def("getMeanInternalDeformation",&XC::SectionFDPhysicalProperties::getMeanInternalDeformation)
     .def("getMeanGeneralizedStressByName", &XC::SectionFDPhysicalProperties::getMeanGeneralizedStressByName)
     .def("getMeanGeneralizedStrainByName", &XC::SectionFDPhysicalProperties::getMeanGeneralizedStrainByName)
+    .def("haveRho", &XC::SectionFDPhysicalProperties::haveRho, "Return true if the materials have mass.")
+    .def("getRhoi", &XC::SectionFDPhysicalProperties::getRhoiPy, "Return the densities at each position.")
    ;
 
 

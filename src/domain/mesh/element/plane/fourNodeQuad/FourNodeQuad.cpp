@@ -857,8 +857,30 @@ double XC::FourNodeQuad::shapeFunction(const GaussPoint &gp) const
 //! coordinates.
 Pos2d XC::FourNodeQuad::getCartesianCoordinates(const ParticlePos2d &pt, bool initialGeometry) const
   {
-    const double &xi= pt.r_coordinate();
-    const double &eta= pt.s_coordinate();
+    
+    //Node positions
+    double factor= 1.0;
+    if(initialGeometry)
+      factor= 0.0;
+    const Pos2d n1Pos= theNodes[0]->getCurrentPosition2d(factor);
+    const Pos2d n2Pos= theNodes[1]->getCurrentPosition2d(factor);
+    const Pos2d n3Pos= theNodes[2]->getCurrentPosition2d(factor);
+    const Pos2d n4Pos= theNodes[3]->getCurrentPosition2d(factor);
+    
+    // Compute shape functions.
+    double N[4];
+    computeShapeFunctions(pt, N);
+
+    // Compute cartesian coordinates.
+    const double x= N[0]*n1Pos.x()+N[1]*n2Pos.x()+N[2]*n3Pos.x()+N[3]*n4Pos.x();
+    const double y= N[0]*n1Pos.y()+N[1]*n2Pos.y()+N[2]*n3Pos.y()+N[3]*n4Pos.y();
+    return Pos2d(x,y);
+  }
+//! @brief Compute the derivatives of the shape functions with respect to the natural coordinates.
+void XC::FourNodeQuad::computeShapeFunctions(const ParticlePos2d &pos, double N[4]) const
+  {
+    const double &xi= pos.r_coordinate();
+    const double &eta= pos.s_coordinate();
    
     const double oneMinuseta = 1.0-eta;
     const double onePluseta = 1.0+eta;
@@ -866,23 +888,144 @@ Pos2d XC::FourNodeQuad::getCartesianCoordinates(const ParticlePos2d &pt, bool in
     const double onePlusxi = 1.0+xi;
 
     // Shape functions.
-    const double N1= 0.25*oneMinusxi*oneMinuseta; // N_1
-    const double N2= 0.25*onePlusxi*oneMinuseta; // N_2
-    const double N3= 0.25*onePlusxi*onePluseta;  // N_3
-    const double N4= 0.25*oneMinusxi*onePluseta; // N_4
+    N[0]= 0.25*oneMinusxi*oneMinuseta; // N_1
+    N[1]= 0.25*onePlusxi*oneMinuseta; // N_2
+    N[2]= 0.25*onePlusxi*onePluseta;  // N_3
+    N[3]= 0.25*oneMinusxi*onePluseta; // N_4
+  }
+
+//! @brief Compute the derivatives of the shape functions with respect to the natural coordinates.
+void XC::FourNodeQuad::computeShapeDerivatives(const ParticlePos2d &pos, double dN_dxi[4], double dN_deta[4]) const
+  {
+    const double &eta= pos.s_coordinate();
+    // Derivatives with respect to xi.
+    dN_dxi[0] = -0.25 * (1.0 - eta);
+    dN_dxi[1] =  0.25 * (1.0 - eta);
+    dN_dxi[2] =  0.25 * (1.0 + eta);
+    dN_dxi[3] = -0.25 * (1.0 + eta);
+
+    const double &xi= pos.r_coordinate();
+    // Derivatives with respect to eta
+    dN_deta[0] = -0.25 * (1.0 - xi);
+    dN_deta[1] = -0.25 * (1.0 + xi);
+    dN_deta[2] =  0.25 * (1.0 + xi);
+    dN_deta[3] =  0.25 * (1.0 - xi);
+  }
+
+//! @brief Return the natural coordinates of the given point.
+//! @param pos: position to compute the natural coordinates for.
+//! @param initialGeometry: if false consider the deformed geometry of the
+//!                         element.
+XC::ParticlePos2d XC::FourNodeQuad::getNaturalCoordinates(const Pos2d &target, bool initialGeometry) const
+  {
+    const int max_iter = 20;
+    const double tolerance = 1e-8;
+
+    // 1. Initial guess at the element center
+    ParticlePos2d retval(0.0, 0.0);
+
+    double N[4];
+    double dN_dxi[4], dN_deta[4];
     
-    //Node positions
+    //Initial geometry.
     double factor= 1.0;
     if(initialGeometry)
       factor= 0.0;
-    const Pos3d n1Pos= theNodes[0]->getCurrentPosition3d(factor);
-    const Pos3d n2Pos= theNodes[1]->getCurrentPosition3d(factor);
-    const Pos3d n3Pos= theNodes[2]->getCurrentPosition3d(factor);
-    const Pos3d n4Pos= theNodes[3]->getCurrentPosition3d(factor);
-    
-    const double x= N1*n1Pos.x()+N2*n2Pos.x()+N3*n3Pos.x()+N4*n4Pos.x();
-    const double y= N1*n1Pos.y()+N2*n2Pos.y()+N3*n3Pos.y()+N4*n4Pos.y();
-    return Pos2d(x,y);
+
+    for (int iter = 0; iter < max_iter; ++iter)
+      {
+        computeShapeFunctions(retval, N);
+        computeShapeDerivatives(retval, dN_dxi, dN_deta);
+
+        // Calculate current global coordinates based on current (xi, eta)
+        double current_x = 0.0;
+        double current_y = 0.0;
+        for (int i = 0; i < 4; ++i)
+	  {
+	    const Pos2d niPos= theNodes[i]->getCurrentPosition2d(factor);
+            current_x += N[i] * niPos.x();
+            current_y += N[i] * niPos.y();
+	  }
+
+        // 2. Residual functions
+        const double fx = current_x - target.x();
+        const double fy = current_y - target.y();
+
+        // Check convergence (stop if error is small enough)
+        if (std::sqrt(fx * fx + fy * fy) < tolerance)
+	  { return retval; }
+
+        // 3. Compute components of the Jacobian Matrix
+        double dx_dxi  = 0.0; double dy_dxi  = 0.0;
+        double dx_deta = 0.0; double dy_deta = 0.0;
+
+        for (int i = 0; i < 4; ++i)
+	  {
+	    const Pos2d niPos= theNodes[i]->getCurrentPosition2d(factor);
+            dx_dxi  += dN_dxi[i] * niPos.x();
+            dy_dxi  += dN_dxi[i] * niPos.y();
+            dx_deta += dN_deta[i] * niPos.x();
+            dy_deta += dN_deta[i] * niPos.y();
+	  }
+
+        // Determinant of the Jacobian
+        const double detJ = dx_dxi * dy_deta - dx_deta * dy_dxi;
+
+        // Fail if the element is inverted, highly distorted, or flat
+        if (std::abs(detJ) < 1e-12)
+	  {
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; jacobian determinant is zero or near-zero."
+		      << Color::def << std::endl;
+            return false;
+	  }
+
+        // 4. Update step using Cramer's rule to solve the 2x2 system:
+        // [dx_dxi,  dx_deta] [delta_xi ]   [-fx]
+        // [dy_dxi,  dy_deta] [delta_eta] = [-fy]
+        const double delta_xi  = (-fx * dy_deta - (-fy * dx_deta)) / detJ;
+        const double delta_eta = (dx_dxi * (-fy) - dy_dxi * (-fx)) / detJ;
+
+        // Apply corrections
+        retval.increment_r_coordinate(delta_xi);
+        retval.increment_s_coordinate(delta_eta);
+
+        // Early exit if the update vector is tiny.
+        if (std::sqrt(delta_xi * delta_xi + delta_eta * delta_eta) < tolerance)
+	  { return retval; }
+      }
+
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	      << "; failed to converge within max iterations."
+	      << Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Returns interpolation factors for a material point.
+//! @param pos: natural coordinates of the material point.
+XC::Vector XC::FourNodeQuad::getInterpolationFactors(const ParticlePos2d &pos) const
+  {
+    static const int numberOfNodes= 4;
+
+    Vector retval(numberOfNodes);
+
+    // Compute shape functions.
+    double N[4];
+    computeShapeFunctions(pos, N);
+
+    //node loop to extract factors
+    return Vector({N[0], N[1], N[2], N[3]});
+  }
+
+//! @brief Returns interpolation factors for a material point.
+XC::Vector XC::FourNodeQuad::getInterpolationFactors(const Pos2d &pos) const
+  { return this->getInterpolationFactors(this->getNaturalCoordinates(pos)); }
+
+//! @brief Returns interpolation factors for a material point.
+XC::Vector XC::FourNodeQuad::getInterpolationFactors(const Pos3d &pos) const
+  {
+    const Pos2d p2d(pos.x(), pos.y());
+    return this->getInterpolationFactors(this->getNaturalCoordinates(p2d));
   }
 
 //! @brief Define the values of the pressure load at the element nodes.

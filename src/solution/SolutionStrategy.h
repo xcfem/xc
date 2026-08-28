@@ -149,8 +149,10 @@ class SolutionStrategy: public CommandEntity
     const LinearSOE *getLinearSOEPtr(void) const;
     EigenSOE *getEigenSOEPtr(void);
     const EigenSOE *getEigenSOEPtr(void) const;
+    virtual boost::python::list getAPy(void) const;
+    virtual boost::python::list getBPy(void) const;
+    
     Integrator &newIntegrator(const std::string &, const Vector &);
-
     //! @brief Returns a pointer to the integrator.
     inline Integrator *getIntegratorPtr(void)
       { return theIntegrator; }

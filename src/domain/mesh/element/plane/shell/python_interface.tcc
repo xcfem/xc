@@ -27,30 +27,27 @@ class_<QuadBase4N_SFD, bases<PlaneElement4N_SFD>, boost::noncopyable >("QuadBase
   .def("getPerimeter", &QuadBase4N_SFD::getPerimeter, "Returns element's perimeter.")
    ;
 
-XC::ShellCrdTransf3dBase *(XC::Shell4NBase::*getCoordTransfRef)(void)= &XC::ShellMITC4::getCoordTransf;
-XC::Vector (XC::Shell4NBase::*getParticlePos3dInterpolationFactors)(const XC::ParticlePos3d &) const= &XC::ShellMITC4::getInterpolationFactors;
-XC::Vector (XC::Shell4NBase::*getPos3dInterpolationFactors)(const Pos3d &) const= &XC::ShellMITC4::getInterpolationFactors;
-XC::Vector (XC::Shell4NBase::*getParticlePos3dInterpolatedDisplacements)(const XC::ParticlePos3d &) const= &XC::ShellMITC4::getInterpolationFactors;
-XC::Vector (XC::Shell4NBase::*getPos3dInterpolatedDisplacements)(const Pos3d &) const= &XC::ShellMITC4::getInterpolationFactors;
-Pos3d (XC::Shell4NBase::*getCartesianCoordinates2D)(const XC::ParticlePos2d &,bool) const= &XC::ShellMITC4::getCartesianCoordinates;
-Pos3d (XC::Shell4NBase::*getCartesianCoordinates3D)(const XC::ParticlePos3d &,bool) const= &XC::ShellMITC4::getCartesianCoordinates;
+XC::ShellCrdTransf3dBase *(XC::Shell4NBase::*getCoordTransfRef)(void)= &XC::Shell4NBase::getCoordTransf;
+XC::Vector (XC::Shell4NBase::*getParticlePos3dInterpolatedDisplacements)(const XC::ParticlePos3d &) const= &XC::Shell4NBase::getInterpolatedDisplacements;
+XC::Vector (XC::Shell4NBase::*getPos3dInterpolatedDisplacements)(const Pos3d &) const= &XC::Shell4NBase::getInterpolatedDisplacements;
+Pos3d (XC::Shell4NBase::*getCartesianCoordinates2D)(const XC::ParticlePos2d &,bool) const= &XC::Shell4NBase::getCartesianCoordinates;
+Pos3d (XC::Shell4NBase::*getCartesianCoordinates3D)(const XC::ParticlePos3d &,bool) const= &XC::Shell4NBase::getCartesianCoordinates;
 class_<XC::Shell4NBase, bases<QuadBase4N_SFD>, boost::noncopyable >("Shell4NBase", no_init)
-    .def("computeBasis", &XC::ShellMITC4Base::computeBasis,"Compute local coordinates and basis")
+    .def("computeBasis", &XC::Shell4NBase::computeBasis,"Compute local coordinates and basis")
     .add_property("getCoordTransf", make_function( getCoordTransfRef, return_internal_reference<>() ))
-    .def("getLocalCoordinatesOfNode", &XC::ShellMITC4Base::getLocalCoordinatesOfNode,"Returns local coordinates of node i.")
-    .def("getNaturalCoordinates", &XC::ShellMITC4Base::getNaturalCoordinates,"Returns natural coordinates of the given point.")
+    .def("getLocalCoordinatesOfNode", &XC::Shell4NBase::getLocalCoordinatesOfNode,"Returns local coordinates of node i.")
     .def("getCartesianCoordinates", getCartesianCoordinates2D,"Returns cartesian coordinates of the given point.")
     .def("getCartesianCoordinates", getCartesianCoordinates3D,"Returns cartesian coordinates of the given point.")
-    .def("getMeanInternalForce",&XC::ShellMITC4Base::getMeanInternalForce)
-    .def("getMeanInternalDeformation",&XC::ShellMITC4Base::getMeanInternalDeformation)
-    .def("getPos3dInterpolationFactors",getPos3dInterpolationFactors)
-    .def("getParticlePos3dInterpolationFactors",getParticlePos3dInterpolationFactors)
+    .def("getMeanInternalForce",&XC::Shell4NBase::getMeanInternalForce)
+    .def("getMeanInternalDeformation",&XC::Shell4NBase::getMeanInternalDeformation)
     .def("getParticlePos3dInterpolatedDisplacements",getParticlePos3dInterpolatedDisplacements)
     .def("getPos3dInterpolatedDisplacements",getPos3dInterpolatedDisplacements)
-    .def("vector3dUniformLoadLocal", make_function(&XC::ShellMITC4Base::vector3dUniformLoadLocal, return_internal_reference<>() ))
-    .def("vector3dUniformLoadGlobal", make_function(&XC::ShellMITC4Base::vector3dUniformLoadGlobal, return_internal_reference<>() ))
-    .def("strainLoad", make_function(&XC::ShellMITC4Base::strainLoad, return_internal_reference<>() ))
-    .def("getSection", make_function(&XC::ShellMITC4Base::getSectionPtr, return_internal_reference<>() ), "getSection(i): return the i-th section of the element.")
+    .def("vector3dUniformLoadLocal", make_function(&XC::Shell4NBase::vector3dUniformLoadLocal, return_internal_reference<>() ))
+    .def("vector3dUniformLoadGlobal", make_function(&XC::Shell4NBase::vector3dUniformLoadGlobal, return_internal_reference<>() ))
+    .def("strainLoad", make_function(&XC::Shell4NBase::strainLoad, return_internal_reference<>() ))
+    .def("getSection", make_function(&XC::Shell4NBase::getSectionPtr, return_internal_reference<>() ), "getSection(i): return the i-th section of the element.")
+    .def("haveRho", &XC::Shell4NBase::haveRho, "Return true if the element materials have mass.")
+    .def("getRhoi", &XC::Shell4NBase::getRhoiPy, "Return the densities at each gauss point.")
    ;
 
 class_<XC::ShellMITC4Base, bases<XC::Shell4NBase>, boost::noncopyable >("ShellMITC4Base", no_init)

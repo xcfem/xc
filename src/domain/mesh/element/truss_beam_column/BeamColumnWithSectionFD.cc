@@ -135,6 +135,10 @@ void XC::BeamColumnWithSectionFD::setTrialSectionDeformations(const std::vector<
   { return theSections.setTrialSectionDeformations(vs); }
 
 //! @brief Returns a pointer to the i-th section of the element.
+XC::PrismaticBarCrossSection *XC::BeamColumnWithSectionFD::getSectionPtr(const size_t &i)
+  { return theSections[i]; }
+
+//! @brief Returns a const pointer to the i-th section of the element.
 const XC::PrismaticBarCrossSection *XC::BeamColumnWithSectionFD::getSectionPtr(const size_t &i) const
   { return theSections[i]; }
 

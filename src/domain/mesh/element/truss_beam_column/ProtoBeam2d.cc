@@ -132,11 +132,24 @@ void XC::ProtoBeam2d::setSectionProperties(const CrossSectionProperties2d &csp)
     physicalProperties.set(0,csp);
   }
 
+//! @brief Returns the number of sections along the element.
+size_t XC::ProtoBeam2d::getNumSections() const
+  { return this->physicalProperties.size(); }
+
 //! @brief Returns a pointer to the i-th section of the element.
+XC::PrismaticBarCrossSection *XC::ProtoBeam2d::getSectionPtr(const size_t &i)
+  {
+    PrismaticBarCrossSection *retval(nullptr);
+    if(physicalProperties.size()>i)
+      retval= physicalProperties[i];
+    return retval;
+  }
+
+//! @brief Returns a const pointer to the i-th section of the element.
 const XC::PrismaticBarCrossSection *XC::ProtoBeam2d::getSectionPtr(const size_t &i) const
   {
     const PrismaticBarCrossSection *retval(nullptr);
-    if(physicalProperties.size()>0)
+    if(physicalProperties.size()>i)
       retval= physicalProperties[i];
     return retval;
   }

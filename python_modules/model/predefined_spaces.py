@@ -1556,12 +1556,18 @@ class PredefinedSpace(object):
             lp= self.addLoadCaseToDomain(lpName)
             lp.gammaF= factor
                 
-    def createSelfWeightLoad(self, xcSet: xc.Set, gravityVector, alreadyLoaded= None):
+    def createSelfWeightLoad(self, xcSet: xc.Set, gravityVector, alreadyLoadedElements= None, alreadyLoadedNodes= None):
         ''' Creates the self-weight load on the elements. Return the 
             identifiers of the loaded elements.
 
         :param xcSet: set with the elements to load.
         :param gravityVector: gravity acceleration vector.
+        :param alreadyLoadedElements: identifiers of the elements that have been
+                                      already loaded and must not be loaded
+                                      again.
+        :param alreadyLoadedNodes: identifiers of the nodes that have been
+                                      already loaded and must not be loaded
+                                      again.
         '''
         spaceDimension= self.getSpaceDimension()
         if(len(gravityVector)!= spaceDimension):
@@ -1571,15 +1577,23 @@ class PredefinedSpace(object):
             errMsg+= str(spaceDimension)+'.\n'
             lmsg.error(className+'.'+methodName+errMsg)
             exit(1)
-        retval= set()
-        if(alreadyLoaded):
-            retval.update(alreadyLoaded)
+        loadedElements= set()
+        if(alreadyLoadedElements):
+            loadedElements.update(alreadyLoadedElements)
         for e in xcSet.getElements:
             tag= e.tag
-            if(tag not in retval):
+            if(tag not in loadedElements):
                 e.createInertiaLoad(gravityVector)
-                retval.add(tag)
-        return retval
+                loadedElements.add(tag)
+        loadedNodes= set()
+        if(alreadyLoadedNodes):
+            loadedNodes.update(alreadyLoadedNodes)
+        for n in xcSet.getNodes:
+            tag= n.tag
+            if(tag not in loadedNodes):
+                n.createInertiaLoad(gravityVector)
+                loadedNodes.add(tag)
+        return loadedElements, loadedNodes
 
     def setSolutionProcedureType(self, solutionProcedureType: predefined_solutions.SolutionProcedure):
         ''' Set the solution procedure that will be used
@@ -2143,6 +2157,31 @@ class SolidMechanics1D(PredefinedSpace):
                                   the reaction values.
         '''
         self.fixNode('0', nodeTag, restrainedNodeId)
+        
+    def getForceComponents(self):
+        ''' Return the components of the load vectors that correspond to
+            forces.'''
+        return [0]
+
+    def getMomentComponents(self):
+        ''' Return the components of the load vectors that correspond to
+            moments.'''
+        return []
+    
+    def getDispComponentIndexFromName(self, compName: str):
+        '''Return the component index from the
+           displacement component name.
+
+        :param compName: displacement component name.
+        '''
+        retval= 0
+        if compName == 'uX':
+            retval= self.Ux
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: uX')
+        return retval
 
 class SolidMechanics2D(PredefinedSpace):
     def __init__(self,nodes, solProcType: predefined_solutions.SolutionProcedure = defaultSolutionProcedureType):
