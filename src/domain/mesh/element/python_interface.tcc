@@ -133,6 +133,7 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getIVector3d",&XC::Element::getIVector3d,"Return a 3D vector in the direction of the local axis 1.")
   .def("getJVector3d",&XC::Element::getJVector3d,"Return a 3D vector in the direction of the local axis 2.")
   .def("getKVector3d",&XC::Element::getKVector3d,"Return a 3D vector in the direction of the local axis 3.")
+  .def("getPosNode", &XC::Element::getPosNode," getPosNode(i, initialGeometry) return the position of the i-th node of the element. If initialGeometry is false, return the current position of the node.")
   .def("getGaussModel",make_function(&XC::Element::getGaussModel, return_internal_reference<>() ),"Return the element Gauss quadrature.")
   .def("getCoordinateSystem",&XC::Element::getCooSys,"Return the element coordinate system.")
   .def("get2DCoordinateSystem",&XC::Element::getCooSys2d,"Return the element coordinate system in a two-dimensional space.")
