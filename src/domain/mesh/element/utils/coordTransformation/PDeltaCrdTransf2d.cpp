@@ -94,15 +94,15 @@ XC::PDeltaCrdTransf2d::PDeltaCrdTransf2d(void)
   :SmallDispCrdTransf2d(0, CRDTR_TAG_PDeltaCrdTransf2d), ul14(0)
   {}
 
-
+//! @brief Commit the element state.
 int XC::PDeltaCrdTransf2d::commitState(void)
   { return 0; }
 
-
+//! @brief Revert to the last commited state.
 int XC::PDeltaCrdTransf2d::revertToLastCommit(void)
   { return 0; }
 
-
+//! @brief Revert the element to its initial state.
 int XC::PDeltaCrdTransf2d::revertToStart(void)
   { return 0; }
 
@@ -440,7 +440,7 @@ const XC::Matrix &XC::PDeltaCrdTransf2d::getInitialGlobalStiffMatrix (const XC::
     return kg;
   }
 
-
+//! @brief Virtual constructor.
 XC::CrdTransf2d *XC::PDeltaCrdTransf2d::getCopy(void) const
   { return new PDeltaCrdTransf2d(*this); }
 

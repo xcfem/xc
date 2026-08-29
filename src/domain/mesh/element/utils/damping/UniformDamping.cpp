@@ -251,7 +251,7 @@ double XC::UniformDamping::getStiffnessMultiplier(void) const
       }
     return 1.0 + km;
   }
-
+//! @brief Virtual constructor.
 XC::Damping *XC::UniformDamping::getCopy(void) const
   { return new UniformDamping(*this); }
 

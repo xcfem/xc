@@ -157,7 +157,7 @@ void XC::RJWatsonEQS2d::setDomain(Domain *theDomain)
 	this->setUp();
       }
   }
-
+//! @brief Commit the element state.
 int XC::RJWatsonEQS2d::commitState()
   {
     // commit the base class
@@ -169,7 +169,7 @@ int XC::RJWatsonEQS2d::commitState()
     return errCode;
   }
 
-
+//! @brief Revert to the last commited state.
 int XC::RJWatsonEQS2d::revertToLastCommit()
   {
     // DON'T call Element::revertToLastCommit() because
@@ -179,7 +179,7 @@ int XC::RJWatsonEQS2d::revertToLastCommit()
     return errCode;
   }
 
-
+//! @brief Revert the element to its initial state.
 int XC::RJWatsonEQS2d::revertToStart()
   {
     int errCode= SimpleBearingBase::revertToStart(); // reset parent object.
@@ -529,7 +529,7 @@ int XC::RJWatsonEQS2d::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(ubPlastic,ubPlasticC, getDbTagData(),CommMetaData(21));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::RJWatsonEQS2d::sendSelf(Communicator &comm)
   {
     inicComm(22);
@@ -543,7 +543,7 @@ int XC::RJWatsonEQS2d::sendSelf(Communicator &comm)
 		<< "; failed to send ID data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::RJWatsonEQS2d::recvSelf(const Communicator &comm)
   {
     inicComm(22);

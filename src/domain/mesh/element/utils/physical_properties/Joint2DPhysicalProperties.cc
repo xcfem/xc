@@ -89,14 +89,14 @@ int XC::Joint2DPhysicalProperties::commitState(void)
     retval+= theDamages.commitState(theMaterial);
     return retval;
   }
-
+//! @brief Revert to the last commited state.
 int XC::Joint2DPhysicalProperties::revertToLastCommit(void)
   {
     int retval= UniaxialMatPhysicalProperties::revertToLastCommit();
     retval+= theDamages.revertToLastCommit();
     return retval;
   }
-
+//! @brief Revert the element to its initial state.
 int XC::Joint2DPhysicalProperties::revertToStart(void)
   { 
     int retval= UniaxialMatPhysicalProperties::revertToStart();

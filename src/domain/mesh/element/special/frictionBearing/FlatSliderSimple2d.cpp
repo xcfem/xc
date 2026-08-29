@@ -176,7 +176,7 @@ void XC::FlatSliderSimple2d::setDomain(Domain *theDomain)
     this->setUp();
   }
 
-
+//! @brief Commit the element state.
 int XC::FlatSliderSimple2d::commitState()
   {
     this->ubPlasticC= this->ubPlastic;// commit trial history variables
@@ -189,7 +189,7 @@ int XC::FlatSliderSimple2d::commitState()
     return errCode;
   }
 
-
+//! @brief Revert to the last commited state.
 int XC::FlatSliderSimple2d::revertToLastCommit()
   {
     // DON'T call Element::revertToLastCommit() because
@@ -201,7 +201,7 @@ int XC::FlatSliderSimple2d::revertToLastCommit()
     return errCode;
   }
 
-
+//! @brief Revert the element to its initial state.
 int XC::FlatSliderSimple2d::revertToStart()
   {     
     int errCode= SimpleBearingBase::revertToStart();
@@ -557,7 +557,7 @@ int XC::FlatSliderSimple2d::recvData(const Communicator &comm)
     return res;
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::FlatSliderSimple2d::sendSelf(Communicator &comm)
   {
     inicComm(22);
@@ -573,7 +573,7 @@ int XC::FlatSliderSimple2d::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::FlatSliderSimple2d::recvSelf(const Communicator &comm)
   {
     inicComm(22);

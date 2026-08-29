@@ -149,7 +149,7 @@ double XC::VelNormalFrcDep::getDFFrcDVel(void) const
         return 0.0;
   }
 
-
+//! @brief Revert the element to its initial state.
 int XC::VelNormalFrcDep::revertToStart()
   {
     trialN   = 0.0;
@@ -161,8 +161,8 @@ int XC::VelNormalFrcDep::revertToStart()
     return 0;
   }
 
-
-XC::FrictionModel* XC::VelNormalFrcDep::getCopy()
+//! @brief Virtual constructor.
+XC::FrictionModel* XC::VelNormalFrcDep::getCopy() const
   { return new VelNormalFrcDep(*this); }
 
 //! @brief Send data through the communicator argument.
@@ -183,7 +183,7 @@ int XC::VelNormalFrcDep::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(alpha0, alpha1, alpha2, maxMuFact, getDbTagData(),CommMetaData(5));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::VelNormalFrcDep::sendSelf(Communicator &comm)
   {
     inicComm(5);
@@ -197,7 +197,7 @@ int XC::VelNormalFrcDep::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::VelNormalFrcDep::recvSelf(const Communicator &comm)
   {
     inicComm(5);

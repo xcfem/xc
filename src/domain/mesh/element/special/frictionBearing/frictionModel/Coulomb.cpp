@@ -113,11 +113,11 @@ double XC::Coulomb::getDFFrcDNFrc(void) const
 double XC::Coulomb::getDFFrcDVel(void) const
   { return 0.0; }
 
-
+//! @brief Commit the element state.
 int XC::Coulomb::commitState(void)
   { return 0; }
 
-
+//! @brief Revert to the last commited state.
 int XC::Coulomb::revertToLastCommit(void)
   { return 0; }
 
@@ -141,7 +141,7 @@ int XC::Coulomb::recvData(const Communicator &comm)
     res+= comm.receiveDouble(mu,getDbTagData(),CommMetaData(2));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::Coulomb::sendSelf(Communicator &comm)
   {
     inicComm(3);
@@ -155,7 +155,7 @@ int XC::Coulomb::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::Coulomb::recvSelf(const Communicator &comm)
   {
     inicComm(3);

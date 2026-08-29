@@ -78,7 +78,7 @@ XC::UDampingBase::UDampingBase(int tag, int classTag, double t1, double t2, Time
       }
   }
 
-
+//! @brief Commit the element state.
 int XC::UDampingBase::commitState(void)
   {
     Damping::commitState();
@@ -87,7 +87,7 @@ int XC::UDampingBase::commitState(void)
     return 0;
   }
 
-
+//! @brief Revert to the last commited state.
 int XC::UDampingBase::revertToLastCommit(void)
   {
     Damping::revertToLastCommit();
@@ -96,7 +96,7 @@ int XC::UDampingBase::revertToLastCommit(void)
     return 0;
   }
 
-
+//! @brief Revert the element to its initial state.
 int XC::UDampingBase::revertToStart(void)
   {
     Damping::revertToStart();

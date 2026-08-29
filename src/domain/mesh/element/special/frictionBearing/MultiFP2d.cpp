@@ -241,7 +241,7 @@ void XC::MultiFP2d::setDomain(Domain *theDomain)
     }
   }   	 
 
-
+//! @brief Commit the element state.
 int XC::MultiFP2d::commitState()
   {
     Element0D::commitState(); // commit the base class.
@@ -252,7 +252,7 @@ int XC::MultiFP2d::commitState()
 
     return 0;
   }
-
+//! @brief Revert to the last commited state.
 int XC::MultiFP2d::revertToLastCommit()
   {
     // DON'T call Element::revertToLastCommit() because
@@ -262,7 +262,7 @@ int XC::MultiFP2d::revertToLastCommit()
   
     return 0;
   }
-
+//! @brief Revert the element to its initial state.
 int XC::MultiFP2d::revertToStart()
   {
     theFrictionModel->revertToStart();
@@ -403,7 +403,7 @@ int XC::MultiFP2d::recvData(const Communicator &comm)
     res+= comm.receiveVector(theVector, getDbTagData(), CommMetaData(18));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::MultiFP2d::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -419,8 +419,7 @@ int XC::MultiFP2d::sendSelf(Communicator &comm)
     return res;
   }
 
-int
-XC::MultiFP2d::recvSelf(const Communicator &comm)
+int XC::MultiFP2d::recvSelf(const Communicator &comm)
   {
     inicComm(19);
     

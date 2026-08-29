@@ -517,10 +517,10 @@ int XC::Joint3D::getResponse(int responseID, Information &eleInformation)
         }
 }
 
-
+//! @brief Send the object through the given communicator.
 int XC::Joint3D::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::Joint3D::recvSelf(const Communicator &comm)
   { return 0; }
 

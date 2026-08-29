@@ -105,7 +105,7 @@ void XC::ShellNLDKGQ::setDomain(Domain *theDomain)
     this->resetNodalCoordinates(); 
   }
 
-//! @brief commit state
+//! @brief Commit element state
 int XC::ShellNLDKGQ::commitState(void)
   {
     int success= Shell4NBase::commitState();

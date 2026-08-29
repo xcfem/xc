@@ -220,7 +220,7 @@ const XC::Matrix &XC::EightNodeBrick_u_p_U::getDamp(void) const
   }
 
 //======================================================================
-const XC::Matrix &XC::EightNodeBrick_u_p_U::getMass (void) const
+const XC::Matrix &XC::EightNodeBrick_u_p_U::getMass(void) const
   {
     BJtensor tM = getMassTensorMsf();
     //tM.print("M","\n");

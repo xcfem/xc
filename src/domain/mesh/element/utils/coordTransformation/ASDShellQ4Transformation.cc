@@ -26,6 +26,7 @@
 //----------------------------------------------------------------------------
 #include "ASDShellQ4Transformation.h"
 
+//! @brief Virtual constructor.
 XC::ASDShellQ4Transformation *XC::ASDShellQ4Transformation::getCopy(void) const
   { return new ASDShellQ4Transformation(*this); }
   

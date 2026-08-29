@@ -162,7 +162,7 @@ void XC::RJWatsonEQS3d::setDomain(Domain *theDomain)
       }
   }
 
-
+//! @brief Commit the element state.
 int XC::RJWatsonEQS3d::commitState()
   {
     int errCode= this->SimpleBearingBase::commitState(); // commit the base class.
@@ -173,7 +173,7 @@ int XC::RJWatsonEQS3d::commitState()
     return errCode;
   }
 
-
+//! @brief Revert to the last commited state.
 int XC::RJWatsonEQS3d::revertToLastCommit()
   {
     // DON'T call Element::revertToLastCommit() because
@@ -183,7 +183,7 @@ int XC::RJWatsonEQS3d::revertToLastCommit()
     return errCode;
   }
 
-
+//! @brief Revert the element to its initial state.
 int XC::RJWatsonEQS3d::revertToStart()
   {
     int errCode= SimpleBearingBase::revertToStart();
@@ -597,7 +597,7 @@ int XC::RJWatsonEQS3d::recvData(const Communicator &comm)
     res+= comm.receiveVector(ubPlasticC,getDbTagData(),CommMetaData(22));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::RJWatsonEQS3d::sendSelf(Communicator &comm)
   {
     inicComm(23);
@@ -611,7 +611,7 @@ int XC::RJWatsonEQS3d::sendSelf(Communicator &comm)
 		<< "; failed to send ID data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::RJWatsonEQS3d::recvSelf(const Communicator &comm)
   {
     inicComm(23);

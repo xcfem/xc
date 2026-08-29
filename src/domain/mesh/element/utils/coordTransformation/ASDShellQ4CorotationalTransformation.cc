@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 #include "ASDShellQ4CorotationalTransformation.h"
 
-
+//! @brief Virtual constructor.
 XC::ASDShellQ4Transformation *XC::ASDShellQ4CorotationalTransformation::getCopy(void) const
   { return new ASDShellQ4CorotationalTransformation(*this); }
 

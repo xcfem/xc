@@ -180,7 +180,7 @@ void XC::BeamColumnJoint2d::setDomain(Domain *theDomain)
         getdg_df();
         getdDef_du();
 }
-
+//! @brief Commit the element state.
 int XC::BeamColumnJoint2d::commitState(void)
   {
     // store committed external nodal displacements
@@ -192,7 +192,7 @@ int XC::BeamColumnJoint2d::commitState(void)
     int mcs= ElemWithMaterial<4,BeamColumnJointPhysicalProperties>::commitState();
     return mcs;
   }
-
+//! @brief Revert to the last commited state.
 int XC::BeamColumnJoint2d::revertToLastCommit(void)
   {
      int mcs= ElemWithMaterial<4,BeamColumnJointPhysicalProperties>::revertToLastCommit();
@@ -202,7 +202,7 @@ int XC::BeamColumnJoint2d::revertToLastCommit(void)
      this->update();
      return mcs;
   }
-
+//! @brief Revert the element to its initial state.
 int XC::BeamColumnJoint2d::revertToStart(void)
   {
      int mcs= ElemWithMaterial<4,BeamColumnJointPhysicalProperties>::revertToStart();
@@ -886,13 +886,13 @@ const XC::Vector &XC::BeamColumnJoint2d::getResistingForceIncInertia(void) const
     //not applicable (residual being returned)
     return getResistingForce();
   }
-
+//! @brief Send the object through the given communicator.
 int XC::BeamColumnJoint2d::sendSelf(Communicator &comm)
   {
     // yet to do.
     return -1;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::BeamColumnJoint2d::recvSelf(const Communicator &comm)
   {
     // yet to do.
@@ -967,8 +967,7 @@ XC::Response* XC::BeamColumnJoint2d::setResponse(const std::vector<std::string> 
                 return 0;
 }
 
-int
-XC::BeamColumnJoint2d::getResponse(int responseID, Information &eleInfo)
+int XC::BeamColumnJoint2d::getResponse(int responseID, Information &eleInfo)
 {
         static XC::Vector delta(13);
         static XC::Vector def(4);

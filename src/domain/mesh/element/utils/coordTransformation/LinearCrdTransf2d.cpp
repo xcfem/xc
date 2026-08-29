@@ -91,15 +91,15 @@ XC::LinearCrdTransf2d::LinearCrdTransf2d()
   : XC::SmallDispCrdTransf2d(0, CRDTR_TAG_LinearCrdTransf2d)
   {}
 
-
+//! @brief Commit the element state.
 int XC::LinearCrdTransf2d::commitState(void)
   { return 0; }
 
-
+//! @brief Revert to the last commited state.
 int XC::LinearCrdTransf2d::revertToLastCommit(void)
   { return 0; }
 
-
+//! @brief Revert the element to its initial state.
 int XC::LinearCrdTransf2d::revertToStart(void)
   { return 0; }
 
@@ -658,7 +658,7 @@ const XC::Matrix &XC::LinearCrdTransf2d::getInitialGlobalStiffMatrix(const Matri
     return kg;
   }
 
-
+//! @brief Virtual constructor.
 XC::CrdTransf2d *XC::LinearCrdTransf2d::getCopy(void) const
   { return new LinearCrdTransf2d(*this); }
 

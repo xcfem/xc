@@ -1107,7 +1107,7 @@ void XC::ShellMITC9::Print(std::ostream &s, int flag ) const
         s << std::endl;
       }
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ShellMITC9::sendSelf(Communicator &comm)
   {
     inicComm(getDbTagData().Size());

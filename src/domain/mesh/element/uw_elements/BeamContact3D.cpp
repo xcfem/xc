@@ -368,7 +368,7 @@ void XC::BeamContact3D::setDomain(Domain *theDomain)
     this->DomainComponent::setDomain(theDomain);
   }
 
-
+//! @brief Commit the element state.
 int XC::BeamContact3D::commitState()
   {
 #ifdef DEBUG
@@ -456,12 +456,12 @@ int XC::BeamContact3D::commitState()
 
 }
 
-
+//! @brief Revert to the last commited state.
 int XC::BeamContact3D::revertToLastCommit()
   {
     return physicalProperties.revertToLastCommit();
   }
-
+//! @brief Revert the element to its initial state.
 int XC::BeamContact3D::revertToStart()
   {
     if (mIniContact == 0)
@@ -1677,7 +1677,7 @@ int XC::BeamContact3D::sendSelf(Communicator &comm)
 		<< "; could not send data Vector\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::BeamContact3D::recvSelf(const Communicator &comm)
   {
     inicComm(28);

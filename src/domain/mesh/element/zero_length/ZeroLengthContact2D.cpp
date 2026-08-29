@@ -137,7 +137,7 @@ void XC::ZeroLengthContact2D::setDomain(Domain *theDomain)
         return;
       }
   }
-
+//! @brief Commit the element state.
 int XC::ZeroLengthContact2D::commitState(void)
   {
     // need to update stick point here
@@ -156,7 +156,7 @@ int XC::ZeroLengthContact2D::commitState(void)
   }
 
 
-
+//! @brief Revert to the last commited state.
 int XC::ZeroLengthContact2D::revertToLastCommit(void)
   {
     // DON'T call Element::revertToLastCommit() because
@@ -175,7 +175,7 @@ int XC::ZeroLengthContact2D::revertToLastCommit(void)
     return 0;
   }
 
-
+//! @brief Revert the element to its initial state.
 int XC::ZeroLengthContact2D::revertToStart(void)
   {
     int retval= ZeroLengthContact::revertToStart();
@@ -269,13 +269,13 @@ const XC::Vector &XC::ZeroLengthContact2D::getResistingForceIncInertia(void) con
     return  resid ;
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::ZeroLengthContact2D::sendSelf(Communicator &comm)
   {
     // doing nothing here
     return 0;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::ZeroLengthContact2D::recvSelf(const Communicator &comm)
   {
     // doing nothing here

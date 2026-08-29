@@ -1154,7 +1154,7 @@ int XC::NineNodeMixedQuad::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::NineNodeMixedQuad::recvSelf(const Communicator &comm)
   {
     inicComm(17);

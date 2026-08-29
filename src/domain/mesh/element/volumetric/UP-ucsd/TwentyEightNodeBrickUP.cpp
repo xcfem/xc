@@ -251,8 +251,7 @@ void  XC::TwentyEightNodeBrickUP::Print( std::ostream &s, int flag ) const
         }
 }
 
-int
-XC::TwentyEightNodeBrickUP::update(void)
+int XC::TwentyEightNodeBrickUP::update(void)
   {
         int i, j;
         static double u[3][20];
@@ -1016,8 +1015,7 @@ XC::Response*XC::TwentyEightNodeBrickUP::setResponse(const std::vector<std::stri
       return 0;
   }
 
-int
-XC::TwentyEightNodeBrickUP::getResponse(int responseID, Information &eleInfo)
+int XC::TwentyEightNodeBrickUP::getResponse(int responseID, Information &eleInfo)
 {
     static XC::Vector stresses(162);
 

@@ -253,7 +253,7 @@ int XC::VelDepMultiLinear::recvData(const Communicator &comm)
     res+= comm.receiveInts(trialID, trialIDmin, trialIDmax, getDbTagData(),CommMetaData(7));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::VelDepMultiLinear::sendSelf(Communicator &comm)
   {
     inicComm(8);
@@ -267,7 +267,7 @@ int XC::VelDepMultiLinear::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::VelDepMultiLinear::recvSelf(const Communicator &comm)
   {
     inicComm(8);

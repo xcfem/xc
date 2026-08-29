@@ -331,7 +331,7 @@ void XC::NodePtrsWithIDs::setPyDict(const boost::python::dict &d)
     NodePtrs::setPyDict(d);
     this->connectedExternalNodes= ID(boost::python::extract<boost::python::list>(d["connectedExternalNodes"]));
   }
-
+//! @brief Send the object through the given communicator.
 int XC::NodePtrsWithIDs::sendSelf(Communicator &comm)
   {
     inicComm(1); 
@@ -344,7 +344,7 @@ int XC::NodePtrsWithIDs::sendSelf(Communicator &comm)
 	        << Color::def << std::endl;
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::NodePtrsWithIDs::recvSelf(const Communicator &comm)
   {
     // first we get the data about the state of the mesh for this cTag

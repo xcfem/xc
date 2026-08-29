@@ -166,20 +166,20 @@ int XC::Damping::setDomain(Domain *domain, int nComp)
     q0C = Vector(nComp);
     return 0;
   }
-
+//! @brief Commit the element state.
 int XC::Damping::commitState(void)
   {
     q0C= q0;
     return 0;
   }
-
+//! @brief Revert to the last commited state.
 int XC::Damping::revertToLastCommit(void)
   {
     q0= q0C;
     return 0;
   }
 
-
+//! @brief Revert the element to its initial state.
 int XC::Damping::revertToStart(void)
   {
     q0.Zero();

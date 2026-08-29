@@ -159,7 +159,7 @@ void XC::TripleFrictionPendulum::setDomain(Domain *theDomain)
 	  }
       }
   }
-
+//! @brief Commit the element state.
 int XC::TripleFrictionPendulum::commitState()
   {
     int errCode= this->Element0D::commitState(); // commit the base class.
@@ -179,7 +179,7 @@ int XC::TripleFrictionPendulum::commitState()
     
     return 0;
   }
-
+//! @brief Revert to the last commited state.
 int XC::TripleFrictionPendulum::revertToLastCommit()
   {
     // DON'T call Element::revertToLastCommit() because
@@ -189,7 +189,7 @@ int XC::TripleFrictionPendulum::revertToLastCommit()
     
     return 0;
   }
-
+//! @brief Revert the element to its initial state.
 int XC::TripleFrictionPendulum::revertToStart()
   {
     int errCode= Element0D::revertToStart();
@@ -572,7 +572,7 @@ int XC::TripleFrictionPendulum::recvData(const Communicator &comm)
     this->initialize();
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::TripleFrictionPendulum::sendSelf(Communicator &comm)
   {
     inicComm(14);
@@ -586,7 +586,7 @@ int XC::TripleFrictionPendulum::sendSelf(Communicator &comm)
 		<< "; failed to send ID data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::TripleFrictionPendulum::recvSelf(const Communicator &comm)
   {
     inicComm(14);

@@ -143,7 +143,7 @@ void XC::SingleFPSimple2d::setDomain(Domain *theDomain)
       }
   }   	 
 
-
+//! @brief Commit the element state.
 int XC::SingleFPSimple2d::commitState()
   {
     ubPlasticC = ubPlastic; // commit trial history variables
@@ -153,7 +153,7 @@ int XC::SingleFPSimple2d::commitState()
     return errCode;
   }
 
-
+//! @brief Revert to the last commited state.
 int XC::SingleFPSimple2d::revertToLastCommit()
   {
     // DON'T call Element::revertToLastCommit() because
@@ -163,7 +163,7 @@ int XC::SingleFPSimple2d::revertToLastCommit()
     return errCode;
   }
 
-
+//! @brief Revert the element to its initial state.
 int XC::SingleFPSimple2d::revertToStart()
   {   
     int errCode= SimpleBearingBase::revertToStart(); // reset parent object.
@@ -523,7 +523,7 @@ int XC::SingleFPSimple2d::recvData(const Communicator &comm)
     res+= comm.receiveInt(inclVertDisp, getDbTagData(),CommMetaData(22));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::SingleFPSimple2d::sendSelf(Communicator &comm)
   {
     inicComm(23);
@@ -537,7 +537,7 @@ int XC::SingleFPSimple2d::sendSelf(Communicator &comm)
 		<< "; failed to send ID data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::SingleFPSimple2d::recvSelf(const Communicator &comm)
   {
     inicComm(23);

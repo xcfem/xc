@@ -81,13 +81,13 @@ int XC::ZeroLengthContact::addInertiaLoadToUnbalance(const Vector &accel)
     // does nothing as element has no mass yet!
     return 0;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ZeroLengthContact::sendSelf(Communicator &comm)
   {
     // doing nothing here
     return 0;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::ZeroLengthContact::recvSelf(const Communicator &comm)
   {
     // doing nothing here

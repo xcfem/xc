@@ -103,7 +103,7 @@ int XC::VelDependent::revertToStart(void)
     return 0;
   }
 
-
+//! @brief Virtual constructor.
 XC::FrictionModel *XC::VelDependent::getCopy(void) const
   { return new VelDependent(*this); }
 
@@ -124,7 +124,7 @@ int XC::VelDependent::recvData(const Communicator &comm)
     return res;
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::VelDependent::sendSelf(Communicator &comm)
   {
     inicComm(4);
@@ -138,7 +138,7 @@ int XC::VelDependent::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::VelDependent::recvSelf(const Communicator &comm)
   {
     inicComm(4);

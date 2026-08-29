@@ -443,7 +443,7 @@ int XC::Joint2D::update(void)
 
         return result;
 }
-
+//! @brief Commit the element state.
 int XC::Joint2D::commitState()
   {
 
@@ -454,7 +454,7 @@ int XC::Joint2D::commitState()
       result+= physicalProperties.commitState();
     return result;
   }
-
+//! @brief Revert to the last commited state.
 int XC::Joint2D::revertToLastCommit()
   {
     int result= Joint2dBase::revertToLastCommit();
@@ -462,7 +462,7 @@ int XC::Joint2D::revertToLastCommit()
       result+= physicalProperties.revertToLastCommit();
     return result;
   }
-
+//! @brief Revert the element to its initial state.
 int XC::Joint2D::revertToStart(void)
   {
     int result= Joint2dBase::revertToStart();
@@ -834,8 +834,7 @@ int XC::Joint2D::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accel, b
 }
 
 
-int
-XC::Joint2D::setParameter(const std::vector<std::string> &argv, Parameter &param)
+int XC::Joint2D::setParameter(const std::vector<std::string> &argv, Parameter &param)
 {//
         // From the parameterID value it should be possible to extract
         // information about:
@@ -889,8 +888,7 @@ XC::Joint2D::setParameter(const std::vector<std::string> &argv, Parameter &param
       return -1;
 }
 
-int
-XC::Joint2D::updateParameter (int parameterID, Information &info)
+int XC::Joint2D::updateParameter (int parameterID, Information &info)
 {
         // Extract section and material tags from the passedParameterID
         int MaterialTag = (int)( floor( (double)parameterID / 1000.0 ) );
@@ -909,8 +907,7 @@ XC::Joint2D::updateParameter (int parameterID, Information &info)
 }
 
 
-int
-XC::Joint2D::activateParameter(int passedParameterID)
+int XC::Joint2D::activateParameter(int passedParameterID)
 {
         // Note that the parameteID that is stored here at the
         // element level contains all information about section

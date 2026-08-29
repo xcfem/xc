@@ -346,7 +346,7 @@ void XC::fElement::setDomain(Domain *theDomain)
      }
   }
 
-
+//! @brief Commit the element state.
 int XC::fElement::commitState()
 {
   int retVal = 0;
@@ -362,7 +362,7 @@ int XC::fElement::commitState()
   nrCount = 0;
   return retVal;
 }
-
+//! @brief Revert to the last commited state.
 int XC::fElement::revertToLastCommit()
   {
     // DON'T call Element::revertToLastCommit() because
@@ -374,7 +374,7 @@ int XC::fElement::revertToLastCommit()
     nrCount = 0;
     return 0;
   }
-
+//! @brief Revert the element to its initial state.
 int XC::fElement::revertToStart()
   { return Element::revertToStart(); }
 
@@ -626,13 +626,13 @@ const XC::Vector &XC::fElement::getResistingForceIncInertia(void) const
     return *(fElementV[nstR]);
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::fElement::sendSelf(Communicator &comm)
   {
     std::cerr << "XC::fElement::sendSelf() - not yet implemented\n";
     return -1;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::fElement::recvSelf(const Communicator &comm)
   {
     std::cerr << "XC::fElement::recvSelf() - not yet implemented\n";

@@ -173,7 +173,7 @@ class VelNormalFrcDep : public Coulomb
     
     int revertToStart();
     
-    FrictionModel *getCopy();
+    FrictionModel *getCopy() const;
     
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

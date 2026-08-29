@@ -88,7 +88,7 @@ XC::FrictionModels &XC::FrictionModels::operator=(const FrictionModels &other)
   }
 XC::FrictionModels::~FrictionModels()
   { this->clearAll(); }
-
+//! @brief Commit the element state.
 int XC::FrictionModels::commitState(void)
   {
     int retval= 0;
@@ -102,7 +102,7 @@ int XC::FrictionModels::commitState(void)
     return retval;
   }
 
-
+//! @brief Revert to the last commited state.
 int XC::FrictionModels::revertToLastCommit(void)
   {
     int retval= 0;
@@ -117,7 +117,7 @@ int XC::FrictionModels::revertToLastCommit(void)
   }
 
 
-
+//! @brief Revert the element to its initial state.
 int XC::FrictionModels::revertToStart(void)
   {
     int retval= 0;
@@ -224,7 +224,7 @@ int XC::FrictionModels::recvData(const Communicator &comm)
   }
 
 //! @brief Sends object.
-
+//! @brief Send the object through the given communicator.
 int XC::FrictionModels::sendSelf(Communicator &comm)
   {
     inicComm(2);
@@ -241,7 +241,7 @@ int XC::FrictionModels::sendSelf(Communicator &comm)
   }
 
 //! @brief Receives object
-
+//! @brief Receive the object through the given communicator.
 int XC::FrictionModels::recvSelf(const Communicator &comm)
   {
     inicComm(2);

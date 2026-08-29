@@ -109,7 +109,7 @@ void XC::TotalLagrangianFD8NodeBrick::setDomain(Domain *theDomain)
 
 
 //=============================================================================
-
+//! @brief Commit the element state.
 int XC::TotalLagrangianFD8NodeBrick::commitState(void)
 
 {
@@ -138,7 +138,7 @@ int XC::TotalLagrangianFD8NodeBrick::commitState(void)
 
 
 //=============================================================================
-
+//! @brief Revert to the last commited state.
 int XC::TotalLagrangianFD8NodeBrick::revertToLastCommit(void)
 
 {
@@ -161,7 +161,7 @@ int XC::TotalLagrangianFD8NodeBrick::revertToLastCommit(void)
 
 
 //=============================================================================
-
+//! @brief Revert the element to its initial state.
 int XC::TotalLagrangianFD8NodeBrick::revertToStart(void)
 
 {
@@ -999,7 +999,7 @@ const XC::Vector &XC::TotalLagrangianFD8NodeBrick::getResistingForceIncInertia(v
 
 
 //=============================================================================
-
+//! @brief Send the object through the given communicator.
 int XC::TotalLagrangianFD8NodeBrick::sendSelf(Communicator &comm)
   {
      // Not implemtented yet
@@ -1008,7 +1008,7 @@ int XC::TotalLagrangianFD8NodeBrick::sendSelf(Communicator &comm)
 
 
 //=============================================================================
-
+//! @brief Receive the object through the given communicator.
 int XC::TotalLagrangianFD8NodeBrick::recvSelf(const Communicator &comm)
   {
      // Not implemtented yet

@@ -882,7 +882,7 @@ int XC::NineFourNodeQuadUP::recvData(const Communicator &comm)
     return res;
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::NineFourNodeQuadUP::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -897,7 +897,7 @@ int XC::NineFourNodeQuadUP::sendSelf(Communicator &comm)
 		<< Color::def << std::endl;
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::NineFourNodeQuadUP::recvSelf(const Communicator &comm)
   {
     inicComm(14);

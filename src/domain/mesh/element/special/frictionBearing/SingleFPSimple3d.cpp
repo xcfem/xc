@@ -185,7 +185,7 @@ void XC::SingleFPSimple3d::setDomain(Domain *theDomain)
       }
   }
 
-
+//! @brief Commit the element state.
 int XC::SingleFPSimple3d::commitState()
   {
     int errCode= this->SimpleBearingBase::commitState(); // commit the base class.
@@ -197,7 +197,7 @@ int XC::SingleFPSimple3d::commitState()
     return errCode;
   }
 
-
+//! @brief Revert to the last commited state.
 int XC::SingleFPSimple3d::revertToLastCommit()
   {
     // DON'T call Element::revertToLastCommit() because
@@ -207,7 +207,7 @@ int XC::SingleFPSimple3d::revertToLastCommit()
     return errCode;
   }
 
-
+//! @brief Revert the element to its initial state.
 int XC::SingleFPSimple3d::revertToStart()
   {   
     int errCode= SimpleBearingBase::revertToStart();
@@ -650,7 +650,7 @@ int XC::SingleFPSimple3d::recvData(const Communicator &comm)
     res+= comm.receiveInt(inclVertDisp, getDbTagData(),CommMetaData(24));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::SingleFPSimple3d::sendSelf(Communicator &comm)
   {
     inicComm(25);
@@ -665,7 +665,7 @@ int XC::SingleFPSimple3d::sendSelf(Communicator &comm)
 	        << Color::def << std::endl;
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::SingleFPSimple3d::recvSelf(const Communicator &comm)
   {
     inicComm(25);

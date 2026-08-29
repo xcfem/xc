@@ -128,14 +128,14 @@ XC::CorotCrdTransf2d::CorotCrdTransf2d(int tag, const Vector &rigJntOffsetI,cons
     else
       nodeOffsets = false;
   }  
-
+//! @brief Commit the element state.
 int XC::CorotCrdTransf2d::commitState(void)
   {
     ubcommit = ub;
     return 0;
   }
 
-
+//! @brief Revert to the last commited state.
 int XC::CorotCrdTransf2d::revertToLastCommit(void)
   {
     ub = ubcommit;  
@@ -143,7 +143,7 @@ int XC::CorotCrdTransf2d::revertToLastCommit(void)
     return 0;
   }
 
-
+//! @brief Revert the element to its initial state.
 int XC::CorotCrdTransf2d::revertToStart(void)
   {
     ub.Zero();
@@ -941,7 +941,7 @@ double XC::CorotCrdTransf2d::getInitialLength(void) const
 double XC::CorotCrdTransf2d::getDeformedLength(void) const
   { return Ln; }
 
-
+//! @brief Virtual constructor.
 XC::CrdTransf2d *XC::CorotCrdTransf2d::getCopy(void) const
   { return new CorotCrdTransf2d(*this); }
 

@@ -932,7 +932,7 @@ const XC::SectionForceDeformation *XC::ASDShellQ4::getSectionPtr(const size_t &i
 		<< Color::def << std::endl;
     return retval;
   }
-
+//! @brief Commit the element state.
 int XC::ASDShellQ4::commitState(void)
   {
     // transformation
@@ -965,7 +965,7 @@ int XC::ASDShellQ4::commitState(void)
     // done
     return success;
   }
-
+//! @brief Revert to the last commited state.
 int XC::ASDShellQ4::revertToLastCommit(void)
   {
     // transformation
@@ -998,7 +998,7 @@ int XC::ASDShellQ4::revertToLastCommit(void)
     // done
     return success;
   }
-
+//! @brief Revert the element to its initial state.
 int XC::ASDShellQ4::revertToStart(void)
   {
     // transformation
@@ -1274,7 +1274,7 @@ int XC::ASDShellQ4::recvData(const Communicator &comm)
       }
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ASDShellQ4::sendSelf(Communicator &comm)
   {
     setDbTag(comm);

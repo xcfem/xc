@@ -138,7 +138,7 @@ double XC::URDDampingbeta::getStiffnessMultiplier(void) const
     }
     return 1.0 + km;
   }
-
+//! @brief Virtual constructor.
 XC::Damping *XC::URDDampingbeta::getCopy(void) const
   { return new URDDampingbeta(*this); }
 

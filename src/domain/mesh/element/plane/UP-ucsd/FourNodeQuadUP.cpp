@@ -644,7 +644,7 @@ int XC::FourNodeQuadUP::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(pressure,kc,perm[0],perm[1],getDbTagData(),CommMetaData(3));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::FourNodeQuadUP::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -657,7 +657,7 @@ int XC::FourNodeQuadUP::sendSelf(Communicator &comm)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::FourNodeQuadUP::recvSelf(const Communicator &comm)
   {
     inicComm(3);
@@ -712,8 +712,7 @@ XC::Response *XC::FourNodeQuadUP::setResponse(const std::vector<std::string> &ar
                 return 0;
 }
 
-int
-XC::FourNodeQuadUP::getResponse(int responseID, Information &eleInfo)
+int XC::FourNodeQuadUP::getResponse(int responseID, Information &eleInfo)
 {
         switch (responseID) {
 
@@ -728,8 +727,7 @@ XC::FourNodeQuadUP::getResponse(int responseID, Information &eleInfo)
         }
 }
 
-int
-XC::FourNodeQuadUP::setParameter(const std::vector<std::string> &argv, Parameter &param)
+int XC::FourNodeQuadUP::setParameter(const std::vector<std::string> &argv, Parameter &param)
 {
         // quad mass density per unit volume
     if(argv[0] == "rho")

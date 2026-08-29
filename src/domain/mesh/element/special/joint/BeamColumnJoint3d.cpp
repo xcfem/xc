@@ -197,7 +197,7 @@ void XC::BeamColumnJoint3d::setDomain(Domain *theDomain)
         getdDef_du();
         formTransfMat();
 }
-
+//! @brief Commit the element state.
 int XC::BeamColumnJoint3d::commitState(void)
   {
     // store committed external nodal displacements
@@ -209,7 +209,7 @@ int XC::BeamColumnJoint3d::commitState(void)
     int mcs= ElemWithMaterial<4,BeamColumnJointPhysicalProperties>::commitState();
     return mcs;
   }
-
+//! @brief Revert to the last commited state.
 int XC::BeamColumnJoint3d::revertToLastCommit(void)
   {
 
@@ -219,7 +219,7 @@ int XC::BeamColumnJoint3d::revertToLastCommit(void)
      this->update();
      return mcs;
   }
-
+//! @brief Revert the element to its initial state.
 int XC::BeamColumnJoint3d::revertToStart()
   {
      int mcs= ElemWithMaterial<4,BeamColumnJointPhysicalProperties>::revertToStart();
@@ -932,10 +932,10 @@ const XC::Vector &XC::BeamColumnJoint3d::getResistingForceIncInertia(void) const
     //yet to do  (residual being returned)
     return getResistingForce();
   }
-
+//! @brief Send the object through the given communicator.
 int XC::BeamColumnJoint3d::sendSelf(Communicator &comm)
   { return -1; }
-
+//! @brief Receive the object through the given communicator.
 int XC::BeamColumnJoint3d::recvSelf(const Communicator &comm)
   { return -1; }
 
@@ -1008,8 +1008,7 @@ XC::Response *XC::BeamColumnJoint3d::setResponse(const std::vector<std::string> 
                 return 0;
 }
 
-int
-XC::BeamColumnJoint3d::getResponse(int responseID, Information &eleInfo)
+int XC::BeamColumnJoint3d::getResponse(int responseID, Information &eleInfo)
 {
         static XC::Vector delta(13);
         static XC::Vector def(4);

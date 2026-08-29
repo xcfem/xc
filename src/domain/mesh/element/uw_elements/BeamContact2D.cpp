@@ -241,6 +241,7 @@ void XC::BeamContact2D::setDomain(Domain *theDomain)
     initialize_parameters();
   }
 
+//! @brief Commit the element state.
 int XC::BeamContact2D::commitState(void)
   {
     // update projection
@@ -266,12 +267,12 @@ int XC::BeamContact2D::commitState(void)
     retVal= physicalProperties.commitState();
     return retVal;
   }
-
+//! @brief Revert to the last commited state.
 int XC::BeamContact2D::revertToLastCommit()
   {
     return physicalProperties.revertToLastCommit();
   }
-
+//! @brief Revert the element to its initial state.
 int XC::BeamContact2D::revertToStart()
   {
     setup_contact_state();

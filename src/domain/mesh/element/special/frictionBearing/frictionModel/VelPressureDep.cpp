@@ -118,7 +118,7 @@ int XC::VelPressureDep::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(A,deltaMu,alpha, DmuDn, getDbTagData(),CommMetaData(4));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::VelPressureDep::sendSelf(Communicator &comm)
   {
     inicComm(5);
@@ -132,7 +132,7 @@ int XC::VelPressureDep::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::VelPressureDep::recvSelf(const Communicator &comm)
   {
     inicComm(5);

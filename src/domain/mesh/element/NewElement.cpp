@@ -104,7 +104,7 @@ void XC::NewElement::setDomain(Domain *theDomain)
 
 }
 
-
+//! @brief Commit the element state.
 int XC::NewElement::commitState()
 {
   int retVal = 0;
@@ -118,7 +118,7 @@ int XC::NewElement::commitState()
 
   return retVal;
 }
-
+//! @brief Revert to the last commited state.
 int XC::NewElement::revertToLastCommit()
   {
     // DON'T call Element::revertToLastCommit() because
@@ -126,6 +126,7 @@ int XC::NewElement::revertToLastCommit()
     return 0;
   }
 
+//! @brief Revert the element to its initial state.
 int XC::NewElement::revertToStart()
   { return Element::revertToStart(); }
 
@@ -171,10 +172,10 @@ const XC::Vector &XC::NewElement::getResistingForce(void) const
 const XC::Vector &XC::NewElement::getResistingForceIncInertia(void) const
   { return theVector; }
 
-
+//! @brief Send the object through the given communicator.
 int XC::NewElement::sendSelf(Communicator &comm)
   { return -1; }
-
+//! @brief Receive the object through the given communicator.
 int XC::NewElement::recvSelf(const Communicator &comm)
   { return -1; }
 

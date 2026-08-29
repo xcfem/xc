@@ -135,7 +135,7 @@ double XC::SecStifDamping::getStiffnessMultiplier(void) const
     return 1.0 + km;
 }
 
-
+//! @brief Virtual constructor.
 XC::Damping *XC::SecStifDamping::getCopy(void) const
   { return new SecStifDamping(*this); }
 

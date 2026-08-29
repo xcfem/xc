@@ -205,7 +205,7 @@ void XC::CorotCrdTransf3d::set_xz_vector(const XC::Vector &vecInLocXZPlane)
     CrdTransf3d::set_xz_vector(vecInLocXZPlane);
     vAxis= vecInLocXZPlane;
   }
-
+//! @brief Commit the element state.
 int XC::CorotCrdTransf3d::commitState(void)
   {
     ulcommit= ul;
@@ -214,7 +214,7 @@ int XC::CorotCrdTransf3d::commitState(void)
     return 0;
   }
 
-
+//! @brief Revert to the last commited state.
 int XC::CorotCrdTransf3d::revertToLastCommit(void)
   {
     // determine global displacement increments from last iteration
@@ -248,7 +248,7 @@ int XC::CorotCrdTransf3d::revertToLastCommit(void)
     return 0;
   }
 
-
+//! @brief Revert the element to its initial state.
 int XC::CorotCrdTransf3d::revertToStart(void)
   {
     ul.Zero();
@@ -1031,7 +1031,7 @@ const XC::Vector &XC::CorotCrdTransf3d::getBasicTrialDisp(void) const
   }
 
 
-const XC::Vector &XC::CorotCrdTransf3d::getBasicIncrDeltaDisp (void) const
+const XC::Vector &XC::CorotCrdTransf3d::getBasicIncrDeltaDisp(void) const
   {
     static Vector dub(6);
     static Vector dul(7);
@@ -1990,7 +1990,7 @@ const XC::Matrix &XC::CorotCrdTransf3d::getKs2Matrix(const Vector &ri, const Vec
     return ks2;
   }
 
-
+//! @brief Virtual constructor.
 XC::CrdTransf3d *XC::CorotCrdTransf3d::getCopy(void) const
   { return new CorotCrdTransf3d(*this); }
 
@@ -2038,7 +2038,7 @@ int XC::CorotCrdTransf3d::recvData(const Communicator &comm)
 		<< "; failed to receive data." << std::endl;
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::CorotCrdTransf3d::sendSelf(Communicator &comm)
   {
     static ID data(22);
@@ -2052,7 +2052,7 @@ int XC::CorotCrdTransf3d::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::CorotCrdTransf3d::recvSelf(const Communicator &comm)
   {
     static ID data(22);

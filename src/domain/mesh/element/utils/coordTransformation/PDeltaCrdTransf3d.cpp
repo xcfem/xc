@@ -95,15 +95,15 @@ XC::PDeltaCrdTransf3d::PDeltaCrdTransf3d(int tag, const XC::Vector &vecInLocXZPl
 XC::PDeltaCrdTransf3d::PDeltaCrdTransf3d(void)
   : XC::SmallDispCrdTransf3d(0, CRDTR_TAG_PDeltaCrdTransf3d), ul17(0), ul28(0) {}
 
-
+//! @brief Commit the element state.
 int XC::PDeltaCrdTransf3d::commitState(void)
   { return 0; }
 
-
+//! @brief Revert to the last commited state.
 int XC::PDeltaCrdTransf3d::revertToLastCommit(void)
   { return 0; }
 
-
+//! @brief Revert the element to its initial state.
 int XC::PDeltaCrdTransf3d::revertToStart(void)
   { return 0; }
 

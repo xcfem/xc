@@ -169,7 +169,7 @@ void XC::FlatSliderSimple3d::setDomain(Domain *theDomain)
     this->setUp();
   }
 
-
+//! @brief Commit the element state.
 int XC::FlatSliderSimple3d::commitState()
   {
     int errCode = 0;
@@ -184,7 +184,7 @@ int XC::FlatSliderSimple3d::commitState()
     return errCode;
   }
 
-
+//! @brief Revert to the last commited state.
 int XC::FlatSliderSimple3d::revertToLastCommit()
   {
     // DON'T call Element::revertToLastCommit() because
@@ -194,7 +194,7 @@ int XC::FlatSliderSimple3d::revertToLastCommit()
     return errCode;
   }
 
-
+//! @brief Revert the element to its initial state.
 int XC::FlatSliderSimple3d::revertToStart()
   {   
     int errCode= SimpleBearingBase::revertToStart();
@@ -613,7 +613,7 @@ int XC::FlatSliderSimple3d::recvData(const Communicator &comm)
     res+= comm.receiveVector(ubPlasticC,getDbTagData(),CommMetaData(22));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::FlatSliderSimple3d::sendSelf(Communicator &comm)
   {
     inicComm(23);
@@ -628,7 +628,7 @@ int XC::FlatSliderSimple3d::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::FlatSliderSimple3d::recvSelf(const Communicator &comm)
   {
     inicComm(23);
