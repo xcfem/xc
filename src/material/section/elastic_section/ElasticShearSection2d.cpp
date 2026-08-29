@@ -130,7 +130,7 @@ XC::DbTagData &XC::ElasticShearSection2d::getDbTagData(void) const
     static DbTagData retval(8);
     return retval;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ElasticShearSection2d::sendSelf(Communicator &comm)
   {
     const DbTagData &dbTagData= getDbTagData();
@@ -144,7 +144,7 @@ int XC::ElasticShearSection2d::sendSelf(Communicator &comm)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::ElasticShearSection2d::recvSelf(const Communicator &comm)
   {
     DbTagData &dbTagData= getDbTagData();

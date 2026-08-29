@@ -151,7 +151,7 @@ int XC::InitStressMaterial::setTrialStrain(double strain, double strainRate)
 
 double XC::InitStressMaterial::getStrain(void) const
   { return this->getMaterial()->getStrain(); }
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::InitStressMaterial::getCopy(void) const
   { return new InitStressMaterial(*this); }
 
@@ -178,7 +178,7 @@ int XC::InitStressMaterial::recvData(const Communicator &comm)
     res+= comm.receiveDouble(sigInit, getDbTagData(),CommMetaData(5));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::InitStressMaterial::sendSelf(Communicator &comm)
   {
     inicComm(6);
@@ -191,7 +191,7 @@ int XC::InitStressMaterial::sendSelf(Communicator &comm)
 	        << Color::def << std::endl;    
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::InitStressMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(6);

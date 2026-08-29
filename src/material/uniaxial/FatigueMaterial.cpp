@@ -680,14 +680,14 @@ int XC::FatigueMaterial::revertToStart(void)
     return retval;
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::FatigueMaterial::sendSelf(Communicator &comm)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << " not migrated from OpenSees yet." << std::endl;
     return 0;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::FatigueMaterial::recvSelf(const Communicator &comm)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__

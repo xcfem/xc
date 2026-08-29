@@ -520,10 +520,10 @@ const XC::Vector & XC::PressureDependMultiYield02::getStress(void) const
   }
 }
 
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::PressureDependMultiYield02::getCopy(void) const
   { return new PressureDependMultiYield02(*this); }
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::PressureDependMultiYield02::getCopy(const std::string &code) const
   {
     PressureDependMultiYield02 *copy= nullptr;
@@ -561,7 +561,7 @@ int XC::PressureDependMultiYield02::recvData(const Communicator &comm)
     res+= comm.receiveVector(PivotStrainRateCommitted,getDbTagData(),CommMetaData(23));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::PressureDependMultiYield02::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -575,7 +575,7 @@ int XC::PressureDependMultiYield02::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::PressureDependMultiYield02::recvSelf(const Communicator &comm)
   {
     inicComm(24);
@@ -600,58 +600,59 @@ void XC::PressureDependMultiYield02::Print(std::ostream &s, int flag ) const
 }
 
 
-const XC::Vector & XC::PressureDependMultiYield02::getCommittedStress(void)
-{
-        int ndm = ndmx[matN];
-        int numOfSurfaces = numOfSurfacesx[matN];
+const XC::Vector & XC::PressureDependMultiYield02::getCommittedStress(void) const
+  {
+    int ndm = ndmx[matN];
+    int numOfSurfaces = numOfSurfacesx[matN];
     double residualPress = residualPressx[matN];
 
-        double scale = currentStress.deviatorRatio(residualPress)/committedSurfaces[numOfSurfaces].size();
-        if(loadStagex[matN] != 1) scale = 0.;
-  if(ndm==3) {
-                static XC::Vector temp7(7);
-                workV6 = currentStress.t2Vector();
-    temp7[0] = workV6[0];
-    temp7[1] = workV6[1];
-    temp7[2] = workV6[2];
-    temp7[3] = workV6[3];
-    temp7[4] = workV6[4];
-    temp7[5] = workV6[5];
-    temp7[6] = scale;
-    /*temp7[7] = committedActiveSurf;
-        temp7[8] = stressRatioPTx[matN];
-        temp7[9] = currentStress.deviatorRatio(residualPressx[matN]);
-    temp7[10] = pressureDCommitted;
-    temp7[11] = cumuDilateStrainOctaCommitted;
-    temp7[12] = maxCumuDilateStrainOctaCommitted;
-    temp7[13] = cumuTranslateStrainOctaCommitted;
-    temp7[14] = onPPZCommitted;
-    temp7[15] = PPZSizeCommitted;*/
-                return temp7;
-        }
-
-  else {
-    static XC::Vector temp5(5);
-        workV6 = currentStress.t2Vector();
-    temp5[0] = workV6[0];
-    temp5[1] = workV6[1];
-    temp5[2] = workV6[2];
-    temp5[3] = workV6[3];
-    temp5[4] = scale;
-    /*temp5[5] = committedActiveSurf;
+    double scale = currentStress.deviatorRatio(residualPress)/committedSurfaces[numOfSurfaces].size();
+    if(loadStagex[matN] != 1) scale = 0.;
+    if(ndm==3)
+      {
+	static XC::Vector temp7(7);
+	workV6 = currentStress.t2Vector();
+	temp7[0] = workV6[0];
+	temp7[1] = workV6[1];
+	temp7[2] = workV6[2];
+	temp7[3] = workV6[3];
+	temp7[4] = workV6[4];
+	temp7[5] = workV6[5];
+	temp7[6] = scale;
+	/*temp7[7] = committedActiveSurf;
+	  temp7[8] = stressRatioPTx[matN];
+	  temp7[9] = currentStress.deviatorRatio(residualPressx[matN]);
+	  temp7[10] = pressureDCommitted;
+	  temp7[11] = cumuDilateStrainOctaCommitted;
+	  temp7[12] = maxCumuDilateStrainOctaCommitted;
+	  temp7[13] = cumuTranslateStrainOctaCommitted;
+	  temp7[14] = onPPZCommitted;
+	  temp7[15] = PPZSizeCommitted;*/
+	return temp7;
+      }
+  else
+    {
+      static XC::Vector temp5(5);
+      workV6 = currentStress.t2Vector();
+      temp5[0] = workV6[0];
+      temp5[1] = workV6[1];
+      temp5[2] = workV6[2];
+      temp5[3] = workV6[3];
+      temp5[4] = scale;
+      /*temp5[5] = committedActiveSurf;
         temp5[6] = PPZCenterCommitted.deviator()[3];
         temp5[7] = PPZPivotCommitted.deviator()[3];
-    temp5[8] = pressureDCommitted;
-    temp5[9] = cumuDilateStrainOctaCommitted;
-    temp5[10] = maxCumuDilateStrainOctaCommitted;
-    temp5[11] = cumuTranslateStrainOctaCommitted;
-    temp5[12] = onPPZCommitted;
-    temp5[13] = PPZSizeCommitted;
+	temp5[8] = pressureDCommitted;
+	temp5[9] = cumuDilateStrainOctaCommitted;
+	temp5[10] = maxCumuDilateStrainOctaCommitted;
+	temp5[11] = cumuTranslateStrainOctaCommitted;
+	temp5[12] = onPPZCommitted;
+	temp5[13] = PPZSizeCommitted;
         temp5[14] = PivotStrainRateCommitted[3];
-    temp5[15] = initPress;*/
-    return temp5;
+	temp5[15] = initPress;*/
+      return temp5;
+    }
   }
-}
 
 
 // NOTE: surfaces[0] is not used

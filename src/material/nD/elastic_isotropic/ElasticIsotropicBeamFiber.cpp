@@ -79,8 +79,7 @@ int XC::ElasticIsotropicBeamFiber::setTrialStrainIncr(const XC::Vector &strain)
 	return 0;
 }
 
-int
-XC::ElasticIsotropicBeamFiber::setTrialStrainIncr(const XC::Vector &strain, const XC::Vector &rate)
+int XC::ElasticIsotropicBeamFiber::setTrialStrainIncr(const XC::Vector &strain, const XC::Vector &rate)
 {
 	return 0;
 }
@@ -137,7 +136,7 @@ int XC::ElasticIsotropicBeamFiber::revertToLastCommit(void)
 
 int XC::ElasticIsotropicBeamFiber::revertToStart(void)
   { return ElasticIsotropicMaterial::revertToStart(); }
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::ElasticIsotropicBeamFiber::getCopy(void) const
   { return new ElasticIsotropicBeamFiber(*this); }
 

@@ -1109,7 +1109,7 @@ int XC::PlasticDamageConcretePlaneStress::revertToLastCommit(void)
 
 int XC::PlasticDamageConcretePlaneStress::revertToStart(void)
   { return 0; }
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::PlasticDamageConcretePlaneStress::getCopy(const std::string &type) const
   {
     NDMaterial *retval= nullptr;
@@ -1117,7 +1117,7 @@ XC::NDMaterial *XC::PlasticDamageConcretePlaneStress::getCopy(const std::string 
       { retval= this->getCopy(); }
     return retval;
   }
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::PlasticDamageConcretePlaneStress::getCopy(void) const
   { return new PlasticDamageConcretePlaneStress(*this); }
 
@@ -1179,7 +1179,7 @@ int XC::PlasticDamageConcretePlaneStress::recvData(const Communicator &comm)
     res+= comm.receiveVector(Cstrain, getDbTagData(),CommMetaData(18));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::PlasticDamageConcretePlaneStress::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -1193,7 +1193,7 @@ int XC::PlasticDamageConcretePlaneStress::sendSelf(Communicator &comm)
 		<< "; failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::PlasticDamageConcretePlaneStress::recvSelf(const Communicator &comm)
   {
     inicComm(6);

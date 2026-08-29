@@ -253,7 +253,7 @@ XC::NDMaterial *XC::ContactMaterial2D::getCopy(void) const
   return copy;
 }
 
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::ContactMaterial2D::getCopy(const std::string &code) const
   {
 #ifdef DEBUG
@@ -319,7 +319,7 @@ int XC::ContactMaterial2D::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(s_e_n, s_e_nplus1, r_nplus1, getDbTagData(),CommMetaData(8));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ContactMaterial2D::sendSelf(Communicator &comm)
   {
     inicComm(9);
@@ -331,7 +331,7 @@ int XC::ContactMaterial2D::sendSelf(Communicator &comm)
 	        << "; failed to send data.\n";    
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::ContactMaterial2D::recvSelf(const Communicator &comm)
   {
     inicComm(9);

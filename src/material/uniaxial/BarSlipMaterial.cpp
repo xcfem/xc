@@ -614,10 +614,10 @@ XC::UniaxialMaterial* XC::BarSlipMaterial::getCopy(void) const
 
     return theCopy;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::BarSlipMaterial::sendSelf(Communicator &comm)
   { return -1; }
-
+//! @brief Receive the object through the given communicator.
 int XC::BarSlipMaterial::recvSelf(const Communicator &comm)
   { return -1; }
 

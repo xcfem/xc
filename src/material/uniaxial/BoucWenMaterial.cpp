@@ -268,7 +268,7 @@ int XC::BoucWenMaterial::revertToStart(void)
       SHVs->Zero();
     return 0;
   }
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::BoucWenMaterial::getCopy(void) const
   {
     BoucWenMaterial *theCopy= new BoucWenMaterial(this->getTag(), alpha, ko, n, gamma, beta, Ao, deltaA, deltaNu, deltaEta,tolerance,maxNumIter);
@@ -284,10 +284,10 @@ XC::UniaxialMaterial *XC::BoucWenMaterial::getCopy(void) const
 
     return theCopy;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::BoucWenMaterial::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::BoucWenMaterial::recvSelf(const Communicator &comm)
   { return 0; }
 

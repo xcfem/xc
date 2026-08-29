@@ -186,7 +186,7 @@ class PressureDependMultiYield02: public PressureDependMultiYieldBase
 
      // Calculates the corresponding stress increment (rate), for a given strain increment.
      const Vector &getStress(void) const;
-     const Vector &getCommittedStress(void);
+     const Vector &getCommittedStress(void) const;
 
      int setTrialStrain(const Tensor &v) {return 0;}
      int setTrialStrain(const Tensor &v, const Tensor &r) {return 0;}

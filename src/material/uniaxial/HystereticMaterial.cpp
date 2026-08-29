@@ -411,7 +411,7 @@ int XC::HystereticMaterial::revertToStart(void)
     trial.revertToStart(E1p);
     return retval;
   }
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::HystereticMaterial::getCopy(void) const
   { return new HystereticMaterial(*this); }
 

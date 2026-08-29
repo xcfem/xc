@@ -68,7 +68,7 @@ double XC::NullYS2D::getSurfaceDrift(double x, double y)
 {
 	return -1;
 }
-
+//! @brief Virtual constructor.
 XC::YieldSurface_BC *XC::NullYS2D::getCopy(void) const
   { return new NullYS2D(*this); }
 

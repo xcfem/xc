@@ -132,7 +132,7 @@ class ManzariDafaliasEvolutionLaw: public EvolutionLaw_S
     void UpdateAllVars( EPState *EPS, double dlamda );  // Evolve all vars
     //void UpdateAllTensorVar( EPState *EPS, double dlamda );  // Evolve all tensor vars
 
-    void print();
+    void print(std::ostream &os) const;
 
     // some accessor functions
     double getMc() const;

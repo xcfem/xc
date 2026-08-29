@@ -96,7 +96,7 @@ const XC::Vector &XC::SingleBar::getPosition(void) const
   { return posit; }
 
 //! @brief Virtual constructor.
-XC::ReinfLayer *XC::SingleBar::getCopy (void) const
+XC::ReinfLayer *XC::SingleBar::getCopy(void) const
   { return new SingleBar(*this); }
 
 //! @brif Displays information about the bar.

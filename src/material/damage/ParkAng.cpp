@@ -140,8 +140,7 @@ int XC::ParkAng::setTrial(const Vector &trialVector)
 }
 
 
-int
-XC::ParkAng::setTrial ()
+int XC::ParkAng::setTrial ()
 {
         std::cerr << "WARNING: XC::ParkAng::setTrial Wrong Method called" << std::endl;
         std::cerr << "ParkAng Model uses vector based setTrial method" << std::endl;
@@ -150,26 +149,25 @@ XC::ParkAng::setTrial ()
 
 
 double
-XC::ParkAng::getDamage (void)
+XC::ParkAng::getDamage(void)
 {
         return TrialInfo[5];
 }
 
 
-double XC::ParkAng::getPosDamage (void)
+double XC::ParkAng::getPosDamage(void)
 {
         return TrialInfo[5];
 }
 
 
-double XC::ParkAng::getNegDamage (void)
+double XC::ParkAng::getNegDamage(void)
 {
         return TrialInfo[5];
 }
 
     
-int
-XC::ParkAng::commitState (void)
+int XC::ParkAng::commitState(void)
 {
         for ( int i=0 ; i<6 ; i++ )
         {
@@ -180,8 +178,7 @@ XC::ParkAng::commitState (void)
         return 0;
 }
 
-int
-XC::ParkAng::revertToLastCommit (void)
+int XC::ParkAng::revertToLastCommit(void)
 {
         for ( int i=0 ; i<6 ; i++ )
         {
@@ -191,8 +188,7 @@ XC::ParkAng::revertToLastCommit (void)
         return 0;
 }
 
-int
-XC::ParkAng::revertToStart (void)
+int XC::ParkAng::revertToStart(void)
 {
         for ( int i = 0 ; i< 6 ; i++ ){
                 TrialInfo[i] = 0.0;
@@ -202,7 +198,7 @@ XC::ParkAng::revertToStart (void)
 
         return 0;
 }
-
+//! @brief Virtual constructor.
 XC::DamageModel *XC::ParkAng::getCopy(void) const
   {
         ParkAng *theCopy = new ParkAng(this->getTag(), DeltaU , Beta , SigmaY );
@@ -230,8 +226,7 @@ int XC::ParkAng::getVariable(int variableID, double &info)
 int XC::ParkAng::setParameter(const std::vector<std::string> &argv, Information &eleInformation)
   { return -1; }
 
-int
-XC::ParkAng::updateParameter(int responseID, Information &eleInformation)
+int XC::ParkAng::updateParameter(int responseID, Information &eleInformation)
 {
     return -1;
 }
@@ -293,11 +288,11 @@ XC::ParkAng::getResponse(int responseID, Information &info)
         }
 }
 
-
+//! @brief Send the object through the given communicator.
 int XC::ParkAng::sendSelf(Communicator &comm)
   { return 0; }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::ParkAng::recvSelf(const Communicator &comm)
   { return 0; }
 

@@ -45,7 +45,7 @@ XC::PeakOriented2D01::PeakOriented2D01(int tag, double min_iso_factor,
 {
 
 }
-
+//! @brief Virtual constructor.
 XC::YS_Evolution *XC::PeakOriented2D01::getCopy(void) const
   { return new  PeakOriented2D01(*this); }
 

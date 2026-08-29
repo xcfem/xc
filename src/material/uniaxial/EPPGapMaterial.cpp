@@ -228,7 +228,7 @@ int XC::EPPGapMaterial::revertToStart(void)
     return retval;
   }
 
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::EPPGapMaterial::getCopy(void) const
   { return new EPPGapMaterial(*this); }
 
@@ -251,7 +251,7 @@ int XC::EPPGapMaterial::recvData(const Communicator &comm)
     res+= comm.receiveInt(damage,getDbTagData(), CommMetaData(6));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::EPPGapMaterial::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -264,7 +264,7 @@ int XC::EPPGapMaterial::sendSelf(Communicator &comm)
 	        << "; failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::EPPGapMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(7);

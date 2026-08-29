@@ -154,7 +154,7 @@ int XC::CoulombDamperMaterial::revertToStart(void)
     flipped = 0;
     return 0;
   } 
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::CoulombDamperMaterial::getCopy(void) const
   { return new CoulombDamperMaterial(*this); }
 

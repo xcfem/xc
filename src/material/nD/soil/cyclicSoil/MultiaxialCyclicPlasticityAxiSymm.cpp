@@ -339,14 +339,12 @@ int XC::MultiaxialCyclicPlasticityAxiSymm::revertToStart( )
  
 
 
-int
-XC::MultiaxialCyclicPlasticityAxiSymm::sendSelf(Communicator &comm)
+int XC::MultiaxialCyclicPlasticityAxiSymm::sendSelf(Communicator &comm)
 {
   return -1;
 }
 
-int
-XC::MultiaxialCyclicPlasticityAxiSymm::recvSelf(const Communicator &comm)
+int XC::MultiaxialCyclicPlasticityAxiSymm::recvSelf(const Communicator &comm)
 {
   return -1;
 }

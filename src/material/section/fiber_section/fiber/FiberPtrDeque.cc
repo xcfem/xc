@@ -2545,7 +2545,11 @@ int XC::FiberPtrDeque::setParameter(const int &paramMatTag,const std::vector<std
     return parameterID;
   }
 
-int XC::FiberPtrDeque::updateParameter(const int &paramMatTag,int parameterID, Information &info)
+//! @brief Update the parameter for the fibers made of the given material.
+//! @param paramMatTag: identifier of the material.
+//! @param parameterID: identifier of the parameter to update.
+//! @param info: ??
+int XC::FiberPtrDeque::updateMatParameter(const int &paramMatTag,int parameterID, Information &info)
   {
     int ok= -1;
     std::deque<Fiber *>::iterator i= begin();

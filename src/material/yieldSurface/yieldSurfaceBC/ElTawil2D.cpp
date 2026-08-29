@@ -211,7 +211,7 @@ void XC::ElTawil2D::customizeInterpolate(double &xi, double &yi, double &xj, dou
 
 }
 
-
+//! @brief Virtual constructor.
 XC::YieldSurface_BC *XC::ElTawil2D::getCopy(void) const
   { return new ElTawil2D(*this); }
 

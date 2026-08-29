@@ -191,7 +191,7 @@ XC::DbTagData &XC::ElasticShearSection3d::getDbTagData(void) const
     static DbTagData retval(8);
     return retval;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ElasticShearSection3d::sendSelf(Communicator &comm)
   {
     const DbTagData &dbTagData= getDbTagData();
@@ -207,7 +207,7 @@ int XC::ElasticShearSection3d::sendSelf(Communicator &comm)
 	        << Color::def << std::endl;
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::ElasticShearSection3d::recvSelf(const Communicator &comm)
   {
     DbTagData &dbTagData= getDbTagData();

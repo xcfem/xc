@@ -139,8 +139,7 @@ XC::FeapMaterial::~FeapMaterial()
 
 // Here we are assuming the following order on strains
 // \epsilon = {11, 22, 33, 12, 23, 31}
-int
-XC::FeapMaterial::setTrialStrain(const XC::Vector &strain)
+int XC::FeapMaterial::setTrialStrain(const XC::Vector &strain)
 {
   switch(myFormulation) {
   case ThreeDimensional:
@@ -279,8 +278,7 @@ int XC::FeapMaterial::commitState(void)
   return 0;
 }
 
-int
-XC::FeapMaterial::revertToLastCommit(void)
+int XC::FeapMaterial::revertToLastCommit(void)
 {
   // Set trial values equal to corresponding committed values
   for(int i = 0; i < numHV; i++)
@@ -298,10 +296,10 @@ int XC::FeapMaterial::revertToStart(void)
       hstv[i] = 0.0;
     return retval;
   }
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::FeapMaterial::getCopy(void) const
   { return new FeapMaterial(*this); }
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::FeapMaterial::getCopy(const std::string &type) const
   {
     FeapMaterial *theCopy = dynamic_cast<FeapMaterial *>(this->getCopy());
@@ -350,7 +348,7 @@ int XC::FeapMaterial::getOrder(void) const
     return 0;
   }
 }
-
+//! @brief Send the object through the given communicator.
 int XC::FeapMaterial::sendSelf(Communicator &comm)
   {
     int res = 0;
@@ -382,7 +380,7 @@ int XC::FeapMaterial::sendSelf(Communicator &comm)
       std::cerr << "FeapMaterial::sendSelf() - failed to send XC::Vector data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::FeapMaterial::recvSelf(const Communicator &comm)
 {
   int res = 0;
@@ -488,8 +486,7 @@ extern "C" int matl03_(double *eps, double *trace, double *td, double *d,
 
 #endif
 
-int
-XC::FeapMaterial::invokeSubroutine(int isw)
+int XC::FeapMaterial::invokeSubroutine(int isw)
 {
   // Trace of strain vector
   double trace = eps[0] + eps[1] + eps[2];
@@ -539,8 +536,7 @@ XC::FeapMaterial::invokeSubroutine(int isw)
   return 0;
 }
 
-int
-XC::FeapMaterial::fillDArray(void)
+int XC::FeapMaterial::fillDArray(void)
 {
   // Must be done by subclasses!
   return 0;

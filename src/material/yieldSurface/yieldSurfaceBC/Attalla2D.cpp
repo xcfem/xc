@@ -133,7 +133,7 @@ double yt = 0.95, xt = 0.054029;
 	}
 }
 
-
+//! @brief Virtual constructor.
 XC::YieldSurface_BC *XC::Attalla2D::getCopy(void) const
   { return new Attalla2D(*this); }
 

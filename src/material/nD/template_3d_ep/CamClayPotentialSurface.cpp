@@ -63,7 +63,7 @@ XC::CamClayPotentialSurface::CamClayPotentialSurface(double Mp )
 //================================================================================
 //create a clone of itself
 //================================================================================
-
+//! @brief Virtual constructor.
 XC::PotentialSurface *XC::CamClayPotentialSurface::getCopy(void) const
   { return new CamClayPotentialSurface(*this); }
 

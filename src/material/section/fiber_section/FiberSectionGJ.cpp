@@ -110,7 +110,7 @@ int XC::FiberSectionGJ::setTrialSectionDeformation(const XC::Vector &deforms)
 //! @brief Return the initial tangent stiffness matrix.
 const XC::Matrix &XC::FiberSectionGJ::getInitialTangent(void) const
   { return fibers.getInitialTangent(*this);  }
-
+//! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::FiberSectionGJ::getCopy(void) const
   { return new FiberSectionGJ(*this); }
 
@@ -130,13 +130,13 @@ int XC::FiberSectionGJ::revertToLastCommit(void)
 //! @brief Return to the initial state.
 int XC::FiberSectionGJ::revertToStart(void)
   { return fibers.revertToStart(*this,kr); }
-
+//! @brief Send the object through the given communicator.
 int XC::FiberSectionGJ::sendSelf(Communicator &comm)
   {
     int res= 0;
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::FiberSectionGJ::recvSelf(const Communicator &)
   {
     int res= 0;

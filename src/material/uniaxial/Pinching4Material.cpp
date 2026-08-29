@@ -423,12 +423,12 @@ int XC::Pinching4Material::revertToStart(void)
 
 XC::UniaxialMaterial* XC::Pinching4Material::getCopy(void) const
   { return new Pinching4Material(*this); }
-
+//! @brief Send the object through the given communicator.
 int XC::Pinching4Material::sendSelf(Communicator &comm)
 {
         return -1;
 }
-
+//! @brief Receive the object through the given communicator.
 int XC::Pinching4Material::recvSelf(const Communicator &comm)
 {
         return -1;

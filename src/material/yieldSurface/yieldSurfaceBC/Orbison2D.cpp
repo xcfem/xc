@@ -88,7 +88,7 @@ double phi = 1.15*y*y - 0.15*pow(y, 6) + x*x + 3.67*y*y*x*x;
 double drift = phi - 1;
 	return drift;
 }
-
+//! @brief Virtual constructor.
 XC::YieldSurface_BC *XC::Orbison2D::getCopy(void) const
   { return new Orbison2D(*this); }
 

@@ -211,7 +211,7 @@ class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>, public Mo
 
     int setParameter(const std::vector<std::string> &, Parameter &);
     int setParameter(const int &,const std::vector<std::string> &, Parameter &);
-    int updateParameter(const int &,int parameterID, Information &info);
+    int updateMatParameter(const int &,int parameterID, Information &info);
     int activateParameter(int passedParameterID);
 
     double GetYMin(void) const;

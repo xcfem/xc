@@ -132,7 +132,7 @@ int XC::CrossSectionKR::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(kData[12],kData[13],kData[14],kData[15],getDbTagData(),CommMetaData(4));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::CrossSectionKR::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -147,7 +147,7 @@ int XC::CrossSectionKR::sendSelf(Communicator &comm)
 	        << std::endl;
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::CrossSectionKR::recvSelf(const Communicator &comm)
   {
     inicComm(5);

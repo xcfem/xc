@@ -208,7 +208,7 @@ XC::J2Plasticity::J2Plasticity(int tag, int  classTag, double K, double G)
     setup(K, G, 1.0e16*G, 1.0e16*G, 0.0, 0.0, 0.0);
   }
 
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::J2Plasticity::getCopy(const std::string &type) const
   {
     NDMaterial *retval= nullptr;
@@ -516,7 +516,7 @@ void XC::J2Plasticity::index_map(int matrix_index, int &i, int &j ) const
     j--;
   }
 
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::J2Plasticity::getCopy(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__

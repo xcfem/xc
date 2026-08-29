@@ -270,14 +270,14 @@ double XC::Clough::getStrain(void) const
     return hsTrial[0];
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::Clough::recvSelf(const Communicator &comm)
 {
         if ( DEBG ==1 ) fprintf( OutputFile , "Receive self\n" );        // debugging
         return 0;
 }
 
-
+//! @brief Send the object through the given communicator.
 int XC::Clough::sendSelf(Communicator &comm)
 {
         if ( DEBG ==1 ) fprintf( OutputFile , "Send self\n" );        // debugging

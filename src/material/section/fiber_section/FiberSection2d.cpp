@@ -197,7 +197,7 @@ int XC::FiberSection2d::recvData(const Communicator &comm)
     res+= comm.receiveInt(parameterID,getDbTagData(),CommMetaData(12));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::FiberSection2d::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -212,7 +212,7 @@ int XC::FiberSection2d::sendSelf(Communicator &comm)
 	        << std::endl;
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::FiberSection2d::recvSelf(const Communicator &comm)
   {
     inicComm(13);

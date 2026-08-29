@@ -127,7 +127,7 @@ void XC::MultiLinearKp::Print(std::ostream &s, int flag) const
 	s << "    SumPlasDefo XC::Vector = " <<  sumPlasDefo;
 	s << "    Kp XC::Vector          = " <<  Kp << std::endl;
   }
-
+//! @brief Virtual constructor.
 XC::PlasticHardeningMaterial *XC::MultiLinearKp::getCopy(void) const
   { return new MultiLinearKp(*this); }
 

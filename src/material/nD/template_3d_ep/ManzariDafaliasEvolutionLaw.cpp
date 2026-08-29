@@ -522,7 +522,7 @@ double XC::ManzariDafaliasEvolutionLaw::g_WW(double theta, double e) {
 //================================================================================
 //  Print vars defined in MD Evolution Law
 //================================================================================
-void XC::ManzariDafaliasEvolutionLaw::print()
+void XC::ManzariDafaliasEvolutionLaw::print(std::ostream &os) const
   {
     std::clog << " Manzari-Dafalias Evolution Law's Parameters" << std::endl;
     std::clog << (*this);

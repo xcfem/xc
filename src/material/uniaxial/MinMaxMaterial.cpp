@@ -172,7 +172,7 @@ int XC::MinMaxMaterial::recvData(const Communicator &comm)
     res+= comm.receiveBools(Tfailed, Cfailed, getDbTagData(), CommMetaData(5));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::MinMaxMaterial::sendSelf(Communicator &comm)
   {
     inicComm(6);
@@ -184,7 +184,7 @@ int XC::MinMaxMaterial::sendSelf(Communicator &comm)
 	        << "; failed to send data.\n";    
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::MinMaxMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(6);

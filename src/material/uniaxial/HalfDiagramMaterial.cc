@@ -92,7 +92,7 @@ XC::DbTagData &XC::HalfDiagramMaterial::getDbTagData(void) const
     return retval;
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::HalfDiagramMaterial::sendSelf(Communicator &comm)
   {
     inicComm(4);
@@ -104,7 +104,7 @@ int XC::HalfDiagramMaterial::sendSelf(Communicator &comm)
 	        << "; failed to send data.\n";    
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::HalfDiagramMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(4);

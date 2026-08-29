@@ -896,8 +896,7 @@ int XC::ReinforcingSteel::BranchDriver(int res)
 }
 
 // Rule 1: Tension Envelope Branch
-int
-XC::ReinforcingSteel::Rule1(int res)
+int XC::ReinforcingSteel::Rule1(int res)
 {
   double strain=trial.getStrain()-Teo_p;
   // check for load reversal
@@ -1000,8 +999,7 @@ XC::ReinforcingSteel::Rule1(int res)
 }
 
 // Rule 2: Compression Envelope Branch
-int
-XC::ReinforcingSteel::Rule2(int res)
+int XC::ReinforcingSteel::Rule2(int res)
 {
   double strain= trial.getStrain()-Teo_n;
 
@@ -1100,8 +1098,7 @@ XC::ReinforcingSteel::Rule2(int res)
 }
 
 // Rule 3: Unloading Reversal Branch
-int
-XC::ReinforcingSteel::Rule3(int res)
+int XC::ReinforcingSteel::Rule3(int res)
 {
   if(trial.getStrain()-converged.getStrain() > 0.0)
     {        // reversal from branch
@@ -1155,8 +1152,7 @@ XC::ReinforcingSteel::Rule3(int res)
 }
 
 // Rule 4: Loading Reversal Branch
-int
-XC::ReinforcingSteel::Rule4(int res)
+int XC::ReinforcingSteel::Rule4(int res)
 {
   if (trial.getStrain()-converged.getStrain() < 0.0) {
         if(Temax<converged.getStrain()-Teo_p) Temax=converged.getStrain()-Teo_p;
@@ -1204,8 +1200,7 @@ XC::ReinforcingSteel::Rule4(int res)
 }
 
 // Rule 5: Loading Returning Branch
-int
-XC::ReinforcingSteel::Rule5(int res)
+int XC::ReinforcingSteel::Rule5(int res)
 {
   if (trial.getStrain()-converged.getStrain() < 0.0) {
         rE1=0.0;
@@ -1268,8 +1263,7 @@ XC::ReinforcingSteel::Rule5(int res)
 }
 
 // Rule 6: Unloading Returning Branch
-int
-XC::ReinforcingSteel::Rule6(int res)
+int XC::ReinforcingSteel::Rule6(int res)
 {
   if (trial.getStrain()-converged.getStrain() > 0.0) {
         rE1=0.0;
@@ -1332,8 +1326,7 @@ XC::ReinforcingSteel::Rule6(int res)
 }
 
 // Rule 7: Unloading First Transition Branch
-int
-XC::ReinforcingSteel::Rule7(int res)
+int XC::ReinforcingSteel::Rule7(int res)
 {
   if (trial.getStrain()-converged.getStrain() > 0.0) {
         SetPastCurve(TBranchNum-2);
@@ -1399,8 +1392,7 @@ XC::ReinforcingSteel::Rule7(int res)
 }
 
 // Rule 8: Loading First Transition Branch
-int
-XC::ReinforcingSteel::Rule8(int res)
+int XC::ReinforcingSteel::Rule8(int res)
 {
   if (trial.getStrain()-converged.getStrain() < 0.0) {
         SetPastCurve(TBranchNum-2);
@@ -1466,8 +1458,7 @@ XC::ReinforcingSteel::Rule8(int res)
 }
 
 // Rule 9: Loading Second Transition Branch
-int
-XC::ReinforcingSteel::Rule9(int res)
+int XC::ReinforcingSteel::Rule9(int res)
 {
   if (trial.getStrain()-converged.getStrain() < 0.0) {
         double eb= Tea;
@@ -1522,8 +1513,7 @@ XC::ReinforcingSteel::Rule9(int res)
 }
 
 // Rule 10: Unloading Second Transition Branch
-int
-XC::ReinforcingSteel::Rule10(int res)
+int XC::ReinforcingSteel::Rule10(int res)
 {
   if (trial.getStrain()-converged.getStrain() > 0.0) {
         double eb= Tea;
@@ -1581,8 +1571,7 @@ XC::ReinforcingSteel::Rule10(int res)
 }
 
 // Rule 11: Unloading Third Transition Branch
-int
-XC::ReinforcingSteel::Rule11(int res)
+int XC::ReinforcingSteel::Rule11(int res)
 {
   if (trial.getStrain()-converged.getStrain() > 0.0) {
         // reset past curve
@@ -1645,8 +1634,7 @@ XC::ReinforcingSteel::Rule11(int res)
 }
 
 // Rule 12: Loading Third Transition Branch
-int
-XC::ReinforcingSteel::Rule12(int res)
+int XC::ReinforcingSteel::Rule12(int res)
 {
   if (trial.getStrain()-converged.getStrain() < 0.0) {
         // reset past curve

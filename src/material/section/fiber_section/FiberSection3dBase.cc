@@ -120,7 +120,7 @@ int XC::FiberSection3dBase::updateParameter(int parameterID, Information &info)
             paramIDPtr= info.theID;
             ID paramID= (*paramIDPtr);
             int paramMatrTag= paramID(1);
-            ok= fibers.updateParameter(paramMatrTag,parameterID-100,info);
+            ok= fibers.updateMatParameter(paramMatrTag,parameterID-100,info);
             if(ok<0)
               {
                 std::cerr << getClassName() << "::" << __FUNCTION__

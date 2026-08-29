@@ -137,6 +137,6 @@ int XC::DrainClough1Material::revertToStart(void)
       hstv[i+15] = hstv[i];
     return retval;
   }
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::DrainClough1Material::getCopy(void) const
   { return new DrainClough1Material(*this); }

@@ -117,12 +117,12 @@ XC::NormalizedPeak::NormalizedPeak()
 {
   // Does nothing
 }
-
-XC::DamageModel *XC::NormalizedPeak::getCopy (void) const
+//! @brief Virtual constructor.
+XC::DamageModel *XC::NormalizedPeak::getCopy(void) const
   { return new NormalizedPeak(*this); }
 
     
-int XC::NormalizedPeak::commitState (void)
+int XC::NormalizedPeak::commitState(void)
 {
   LCommitScalar = CommitScalar;
   LCommitDmg = CommitDmg;
@@ -135,8 +135,7 @@ int XC::NormalizedPeak::commitState (void)
   return 0;
 }
 
-int
-XC::NormalizedPeak::revertToLastCommit (void)
+int XC::NormalizedPeak::revertToLastCommit(void)
 {
   CommitScalar = LCommitScalar;
   CommitDmg = LCommitDmg;
@@ -146,8 +145,7 @@ XC::NormalizedPeak::revertToLastCommit (void)
   return 0;
 }
 
-int
-XC::NormalizedPeak::revertToStart (void)
+int XC::NormalizedPeak::revertToStart(void)
 {
   TrialScalar = CommitScalar = LCommitScalar = 0.0;
   TrialDmg = CommitDmg = LCommitDmg = 0.0;
@@ -251,11 +249,11 @@ int XC::NormalizedPeak::getResponse(int responseID, Information &info)
   }
 }
 
-
+//! @brief Send the object through the given communicator.
 int XC::NormalizedPeak::sendSelf(Communicator &comm)
   { return 0; }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::NormalizedPeak::recvSelf(const Communicator &comm)
   { return 0; }
 

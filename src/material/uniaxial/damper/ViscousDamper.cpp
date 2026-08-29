@@ -281,7 +281,7 @@ int XC::ViscousDamper::ROS(double vel0, double vel1, double y0, double h, double
 
 double XC::ViscousDamper::f(double v, double fd) const
   { return (v - sgn(fd) * pow(fabs(fd)/C,1.0/Alpha))*K; }
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::ViscousDamper::getCopy(void) const
   { return new ViscousDamper(*this); }
 

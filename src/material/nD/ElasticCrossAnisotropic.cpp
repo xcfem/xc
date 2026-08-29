@@ -185,15 +185,13 @@ const XC::Vector &XC::ElasticCrossAnisotropic::getStrain(void) const
     return Tepsilon;
 }
 
-int
-XC::ElasticCrossAnisotropic::setTrialStrain(const XC::Tensor &v)
+int XC::ElasticCrossAnisotropic::setTrialStrain(const XC::Tensor &v)
 {
     Strain = v;
     return 0;
 }
 
-int
-XC::ElasticCrossAnisotropic::setTrialStrain(const Tensor &v, const XC::Tensor &r)
+int XC::ElasticCrossAnisotropic::setTrialStrain(const Tensor &v, const XC::Tensor &r)
 {
     Strain = v;
     return 0;
@@ -252,7 +250,7 @@ int XC::ElasticCrossAnisotropic::revertToStart(void)
     Cepsilon.Zero();
     return retval;
   }
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::ElasticCrossAnisotropic::getCopy(void) const
   { return new ElasticCrossAnisotropic(*this); }
 
@@ -335,8 +333,7 @@ void XC::ElasticCrossAnisotropic::Print(std::ostream &s, int flag) const
 //  return -1;
 //}
 
-/*int
-XC::ElasticCrossAnisotropic::updateParameter(int parameterID, Information &info)
+/*int XC::ElasticCrossAnisotropic::updateParameter(int parameterID, Information &info)
 {
   return -1;
 }

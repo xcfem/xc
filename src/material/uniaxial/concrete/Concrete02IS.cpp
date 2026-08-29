@@ -100,7 +100,7 @@ int XC::Concrete02IS::recvData(const Communicator &comm)
     res+= comm.receiveDouble(E0,getDbTagData(),CommMetaData(6));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::Concrete02IS::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -114,7 +114,7 @@ int XC::Concrete02IS::sendSelf(Communicator &comm)
 		<< "; failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::Concrete02IS::recvSelf(const Communicator &comm)
   {
     inicComm(7);

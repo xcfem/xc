@@ -328,10 +328,10 @@ int XC::Concrete04::revertToStart(void)
     revertToLastCommit();
     return retval;
   }
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::Concrete04::getCopy(void) const
   { return new Concrete04(*this); }
-
+//! @brief Send the object through the given communicator.
 int XC::Concrete04::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -345,7 +345,7 @@ int XC::Concrete04::sendSelf(Communicator &comm)
 		<< "; failed to send data.\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::Concrete04::recvSelf(const Communicator &comm)
   {
     inicComm(3);

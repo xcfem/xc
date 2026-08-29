@@ -95,7 +95,7 @@ int XC::InvertMaterial::revertToLastCommit(void)
 
 int XC::InvertMaterial::revertToStart(void)
   { return this->getMaterial()->revertToStart(); }
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::InvertMaterial::getCopy(void) const
   { return new InvertMaterial(*this); }
 
@@ -107,7 +107,7 @@ XC::DbTagData &XC::InvertMaterial::getDbTagData(void) const
     return retval;
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::InvertMaterial::sendSelf(Communicator &comm)
   {
     inicComm(4);
@@ -119,7 +119,7 @@ int XC::InvertMaterial::sendSelf(Communicator &comm)
 	        << "; failed to send data.\n";    
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::InvertMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(4);

@@ -110,7 +110,7 @@ int XC::CompressionOnlyMaterial::commitState(void)
     else
       return 0;
   }
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::CompressionOnlyMaterial::getCopy(void) const
   { return new CompressionOnlyMaterial(*this); }
 

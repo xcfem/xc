@@ -76,7 +76,7 @@ XC::BeamFiberMaterial::BeamFiberMaterial(int tag, XC::NDMaterial &theMat)
     Tstrain33(0.0), Tgamma23(0.0),
     Cstrain33(0.0), Cgamma23(0.0)
   {}
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::BeamFiberMaterial::getCopy(void) const
   { return new BeamFiberMaterial(*this); }
 

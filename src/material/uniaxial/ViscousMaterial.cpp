@@ -140,7 +140,7 @@ int XC::ViscousMaterial::revertToStart(void)
     trialRate = 0.0;
     return retval;
   }
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::ViscousMaterial::getCopy(void) const
   { return new ViscousMaterial(*this); }
 

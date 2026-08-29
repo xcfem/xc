@@ -92,7 +92,7 @@ double XC::ENCMaterial::getTangent(void) const
         return a*E*(1.0-tanhB*tanhB);
       }
   }
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::ENCMaterial::getCopy(void) const
   { return new ENCMaterial(*this); }
 

@@ -371,7 +371,7 @@ int XC::Isolator2spring::revertToStart(void)
     ks.Zero();
     return 0;
   }
-
+//! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::Isolator2spring::getCopy(void) const
   { return new Isolator2spring(*this); }
 
@@ -406,7 +406,7 @@ int XC::Isolator2spring::recvData(const Communicator &comm)
     res+= comm.receiveVector(f0,getDbTagData(),CommMetaData(10));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::Isolator2spring::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -419,7 +419,7 @@ int XC::Isolator2spring::sendSelf(Communicator &comm)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::Isolator2spring::recvSelf(const Communicator &comm)
   {
     inicComm(11);

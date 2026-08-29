@@ -282,13 +282,13 @@ double XC::Pinching::getStress(void) const
 double XC::Pinching::getStrain(void) const
   { return hsTrial[0]; }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::Pinching::recvSelf(const Communicator &comm)
 {
         return 0;
 }
 
-
+//! @brief Send the object through the given communicator.
 int XC::Pinching::sendSelf(Communicator &comm)
 {
         return 0;

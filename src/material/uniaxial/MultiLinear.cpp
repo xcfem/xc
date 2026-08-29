@@ -412,7 +412,7 @@ int XC::MultiLinear::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(cStrain, cStress, cTangent, getDbTagData(),CommMetaData(7));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::MultiLinear::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -425,7 +425,7 @@ int XC::MultiLinear::sendSelf(Communicator &comm)
 	        << "; failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::MultiLinear::recvSelf(const Communicator &comm)
   {
     inicComm(8);

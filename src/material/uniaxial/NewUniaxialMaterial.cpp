@@ -117,10 +117,10 @@ int XC::NewUniaxialMaterial::revertToStart(void)
 //! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::NewUniaxialMaterial::getCopy(void) const
   { return new NewUniaxialMaterial(this->getTag()); }
-
+//! @brief Send the object through the given communicator.
 int XC::NewUniaxialMaterial::sendSelf(Communicator &comm)
   { return -1; }
-
+//! @brief Receive the object through the given communicator.
 int XC::NewUniaxialMaterial::recvSelf(const Communicator &comm)
   { return -1; }
 

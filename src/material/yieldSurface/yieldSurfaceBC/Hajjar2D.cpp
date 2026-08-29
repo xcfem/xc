@@ -168,7 +168,7 @@ double phi = c1*x*x + c2*y*y + c3*y*y*x*x;
 double drift = phi - 1;
 	return drift;
 }
-
+//! @brief Virtual constructor.
 XC::YieldSurface_BC *XC::Hajjar2D::getCopy(void) const
   {
     Hajjar2D *theCopy = new Hajjar2D(this->getTag(), *hModel,

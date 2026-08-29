@@ -241,7 +241,7 @@ int XC::PlateRebarMaterial::recvData(const Communicator &comm)
     res+= comm.receiveVector(strain, getDbTagData(),CommMetaData(3));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::PlateRebarMaterial::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -255,7 +255,7 @@ int XC::PlateRebarMaterial::sendSelf(Communicator &comm)
 		<< "; failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::PlateRebarMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(4);

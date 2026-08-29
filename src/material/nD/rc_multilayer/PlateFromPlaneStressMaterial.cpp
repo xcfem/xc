@@ -244,7 +244,7 @@ int XC::PlateFromPlaneStressMaterial::sendSelf(Communicator &comm)
 		<< "; failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::PlateFromPlaneStressMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(4);

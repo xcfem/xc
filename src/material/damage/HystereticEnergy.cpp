@@ -170,7 +170,7 @@ int XC::HystereticEnergy::setTrial(void)
   }
 
 
-double XC::HystereticEnergy::getDamage (void)
+double XC::HystereticEnergy::getDamage(void)
   {
     TrialInfo[7] =  CommitInfo[6] + TrialInfo[5] - TrialInfo[5] * CommitInfo[6];
     if( TrialInfo[7] < CommitInfo[7] ) TrialInfo[7] = CommitInfo[7];
@@ -178,16 +178,16 @@ double XC::HystereticEnergy::getDamage (void)
   }
 
 
-double XC::HystereticEnergy::getPosDamage (void)
+double XC::HystereticEnergy::getPosDamage(void)
   { return this->getDamage(); }
 
 
-double XC::HystereticEnergy::getNegDamage (void)
+double XC::HystereticEnergy::getNegDamage(void)
   { return this->getDamage(); }
 
 
 //! @brief Commit the state of the material.
-int XC::HystereticEnergy::commitState (void)
+int XC::HystereticEnergy::commitState(void)
   {
         for ( int i=0 ; i<8 ; i++ )
         {
@@ -199,8 +199,7 @@ int XC::HystereticEnergy::commitState (void)
 }
 
 
-int
-XC::HystereticEnergy::revertToLastCommit (void)
+int XC::HystereticEnergy::revertToLastCommit(void)
 {
         for ( int i=0 ; i<8 ; i++ )
         {
@@ -211,8 +210,7 @@ XC::HystereticEnergy::revertToLastCommit (void)
 }
 
 
-int
-XC::HystereticEnergy::revertToStart (void)
+int XC::HystereticEnergy::revertToStart(void)
 {
         for ( int i = 0 ; i< 8 ; i++ ){
                 TrialInfo[i] = 0.0;
@@ -223,7 +221,7 @@ XC::HystereticEnergy::revertToStart (void)
         return 0;
 }
 
-
+//! @brief Virtual constructor.
 XC::DamageModel *XC::HystereticEnergy::getCopy(void) const
   {
     HystereticEnergy *theCopy = new HystereticEnergy(this->getTag(), Etotal , Cpower);
@@ -239,14 +237,12 @@ XC::DamageModel *XC::HystereticEnergy::getCopy(void) const
 }
 
 
-//! @brief Returns the identifier of the variable which name
-//! being passed as parameter.
+//! @brief Returns the identifier of the given variable.
 int XC::HystereticEnergy::setVariable(const std::string &argv)
   { return -1; }
 
 
-//! @brief Returns the value of the variable which name
-//! being passed as parameter.
+//! @brief Returns the value of the given variable.
 int XC::HystereticEnergy::getVariable(int variableID, double &info)
   { return -1; }
 
@@ -298,11 +294,11 @@ int XC::HystereticEnergy::getResponse(int responseID, Information &info)
         }
 }
 
-
+//! @brief Send the object through the given communicator.
 int XC::HystereticEnergy::sendSelf(Communicator &comm)
   { return 0; }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::HystereticEnergy::recvSelf(const Communicator &comm)
   { return 0; }
 

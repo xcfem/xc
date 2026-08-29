@@ -49,7 +49,7 @@ XC::Kinematic2D02::Kinematic2D02(int tag, double min_iso_factor,
 :BkStressLimSurface2D(tag, KINEMATIC2D02_CLASSTAG, min_iso_factor,0.0, 1.0,
                         lim_surface, kpx, kpy,
                         nullMat, nullMat, nullMat, nullMat, algo, resfact, appfact, dir){}
-
+//! @brief Virtual constructor.
 XC::YS_Evolution *XC::Kinematic2D02::getCopy(void) const
   { return new Kinematic2D02(*this); }
 

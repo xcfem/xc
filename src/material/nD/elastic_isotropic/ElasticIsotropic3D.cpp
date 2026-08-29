@@ -140,7 +140,7 @@ int XC::ElasticIsotropic3D::revertToStart(void)
     int retval= ElasticIsotropicMaterial::revertToStart();
     return retval;
   }
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::ElasticIsotropic3D::getCopy(void) const
   { return new ElasticIsotropic3D(*this); }
 

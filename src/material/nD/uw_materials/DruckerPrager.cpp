@@ -193,7 +193,7 @@ void XC::DruckerPrager::setup(const int &elastFlag)
     //mTo= 100;
     this->initialize();    
   } 
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::DruckerPrager::getCopy(const std::string &type) const
   {
     if((type=="PlaneStrain2D") || (type=="PlaneStrain"))
@@ -326,7 +326,7 @@ int XC::DruckerPrager::commitState(void)
     return 0;
   }
  
-int XC::DruckerPrager::revertToLastCommit (void)
+int XC::DruckerPrager::revertToLastCommit(void)
   { return 0; }
 
 //! @brief Revert the material to its initial state.
@@ -344,7 +344,7 @@ int XC::DruckerPrager::revertToStart(void)
       // }
     return retval;
   }
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::DruckerPrager::getCopy(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -966,7 +966,7 @@ int XC::DruckerPrager::updateParameter(int responseID, Information &info)
       }
     return 0;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::DruckerPrager::sendSelf(Communicator &)
   {
     std::cerr << "DruckerPrager::sendSelf not yet implemented" << std::endl;
@@ -1032,7 +1032,7 @@ int XC::DruckerPrager::sendSelf(Communicator &)
     
      return 0;
  }
-
+//! @brief Receive the object through the given communicator.
 int XC::DruckerPrager::recvSelf(const Communicator &)    
  {
     std::cerr << "DruckerPrager::sendSelf not yet implemented" << std::endl;

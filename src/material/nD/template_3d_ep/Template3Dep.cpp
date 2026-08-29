@@ -425,8 +425,7 @@ XC::Template3Dep &XC::Template3Dep::operator=(const Template3Dep &other)
 
 
 
-//! @brief  Routine used to generate elastic compliance BJtensor D for this material point
-XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
+//! @brief  Routine used to generate elastic compliance BJtensor D for this material point XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
   {
     BJtensor ret( def_dim_4, 0.0 );
 

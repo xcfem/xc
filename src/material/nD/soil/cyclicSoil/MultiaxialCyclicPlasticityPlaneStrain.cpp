@@ -300,15 +300,13 @@ int XC::MultiaxialCyclicPlasticityPlaneStrain::revertToStart( )
 }
  
 
-int
-XC::MultiaxialCyclicPlasticityPlaneStrain::sendSelf(Communicator &comm)
+int XC::MultiaxialCyclicPlasticityPlaneStrain::sendSelf(Communicator &comm)
 {
  
   return -1;
 }
 
-int
-XC::MultiaxialCyclicPlasticityPlaneStrain::recvSelf(const Communicator &comm)
+int XC::MultiaxialCyclicPlasticityPlaneStrain::recvSelf(const Communicator &comm)
 {
   
   return -1;

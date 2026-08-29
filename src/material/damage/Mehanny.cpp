@@ -163,7 +163,7 @@ double XC::Mehanny::getPosDamage(void)
   }
 
 
-double XC::Mehanny::getNegDamage (void)
+double XC::Mehanny::getNegDamage(void)
   {
     const double PosDamage= ( pow(TrialPosPHC,Alpha) + pow(TrialSumPosFHC,Beta) ) / ( pow(UltimatePosValue,Alpha) + pow(TrialSumPosFHC,Beta) ) ;
   
@@ -175,7 +175,7 @@ double XC::Mehanny::getNegDamage (void)
   }
 
     
-int XC::Mehanny::commitState (void)
+int XC::Mehanny::commitState(void)
   {
     /*
     if ( DEBG ==1 )
@@ -222,7 +222,7 @@ int XC::Mehanny::revertToLastCommit(void)
     return 0;
   }
 
-int XC::Mehanny::revertToStart (void)
+int XC::Mehanny::revertToStart(void)
   {
     CommPlasticDefo = LCommPlasticDefo = 0.0;
     CommDefoIncr = LCommDefoIncr = 0.0;
@@ -236,7 +236,7 @@ int XC::Mehanny::revertToStart (void)
     CommDamage = LCommDamage = 0.0;
     return 0;
   }
-
+//! @brief Virtual constructor.
 XC::DamageModel *XC::Mehanny::getCopy(void) const
   {
     Mehanny *theCopy = new Mehanny(this->getTag(), Alpha , Beta , Gamma , UltimatePosValue , UltimateNegValue, AbsTol, RelTol, PosModifier, NegModifier );
@@ -334,11 +334,11 @@ int XC::Mehanny::getResponse(int responseID, Information &info)
     }
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::Mehanny::sendSelf(Communicator &comm)
   { return 0; }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::Mehanny::recvSelf(const Communicator &comm)
   { return 0; }
 

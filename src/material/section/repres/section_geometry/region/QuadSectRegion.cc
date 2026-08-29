@@ -285,8 +285,8 @@ const XC::VectorCells &XC::QuadSectRegion::getCells(void) const
     return cells;
   }
 
-
-XC::SectRegion *XC::QuadSectRegion::getCopy (void) const
+//! @brief Virtual constructor.
+XC::SectRegion *XC::QuadSectRegion::getCopy(void) const
   { return new QuadSectRegion(*this); }
  
 void XC::QuadSectRegion::Print(std::ostream &s, int flag) const

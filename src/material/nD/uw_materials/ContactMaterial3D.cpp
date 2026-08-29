@@ -296,19 +296,19 @@ int XC::ContactMaterial3D::revertToStart(void)
 
   return 0;
 }
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::ContactMaterial3D::getCopy(void) const
 {
 #ifdef DEBUG
-  std::cerr << "XC::ContactMaterial3D::getCopy (void)" << std::endl;
+  std::cerr << "XC::ContactMaterial3D::getCopy(void)" << std::endl;
 #endif
   return new ContactMaterial3D(*this);
 }
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::ContactMaterial3D::getCopy(const std::string &code) const
 {
 #ifdef DEBUG
-  std::cerr << "XC::ContactMaterial3D::getCopy (const char *code)" << std::endl;
+  std::cerr << "XC::ContactMaterial3D::getCopy(const char *code)" << std::endl;
 #endif
   ContactMaterial3D *retval(nullptr);
   if (code=="ContactMaterial3D")
@@ -321,7 +321,7 @@ XC::NDMaterial *XC::ContactMaterial3D::getCopy(const std::string &code) const
 const std::string &XC::ContactMaterial3D::getType(void) const
   {
 #ifdef DEBUG
-  std::cerr << "XC::ContactMaterial3D::getType (void) const" << std::endl;
+  std::cerr << "XC::ContactMaterial3D::getType(void) const" << std::endl;
 #endif
     static const std::string tmp= "ThreeDimensional";
     return tmp;
@@ -330,7 +330,7 @@ const std::string &XC::ContactMaterial3D::getType(void) const
 int XC::ContactMaterial3D::getOrder(void) const
 {
 #ifdef DEBUG
-  std::cerr << "XC::ContactMaterial3D::getOrder (void) const" << std::endl;
+  std::cerr << "XC::ContactMaterial3D::getOrder(void) const" << std::endl;
 #endif
   return 6;
 }
@@ -374,7 +374,7 @@ int XC::ContactMaterial3D::recvData(const Communicator &comm)
     res+= comm.receiveMatrix(G, getDbTagData(), CommMetaData(13));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ContactMaterial3D::sendSelf(Communicator &comm)
   {
     inicComm(14);
@@ -386,7 +386,7 @@ int XC::ContactMaterial3D::sendSelf(Communicator &comm)
 	        << "; failed to send data.\n";    
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::ContactMaterial3D::recvSelf(const Communicator &comm)
   {
     inicComm(14);

@@ -240,7 +240,7 @@ int XC::StraightReinfLayer::setSpacing(const double &spacing)
     this->setNumReinfBars(num_bars);
     return num_bars;
   }
-
+//! @brief Virtual constructor.
 XC::ReinfLayer *XC::StraightReinfLayer::getCopy(void) const
   { return new StraightReinfLayer(*this); }
 

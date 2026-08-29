@@ -142,6 +142,6 @@ int XC::DrainClough2Material::revertToStart(void)
 
     return retval;
   }
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::DrainClough2Material::getCopy(void) const
   { return new DrainClough2Material(*this); }

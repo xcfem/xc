@@ -243,7 +243,7 @@ void XC::CircReinfLayer::setInitAngle(const double &d)
 void XC::CircReinfLayer::setFinalAngle(const double &d)
   { finalAng= d; }
 
-
+//! @brief Virtual constructor.
 XC::ReinfLayer *XC::CircReinfLayer::getCopy(void) const
   { return new CircReinfLayer(*this); }
 

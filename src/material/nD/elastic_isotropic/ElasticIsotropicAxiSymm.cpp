@@ -128,12 +128,11 @@ int XC::ElasticIsotropicAxiSymm::commitState(void)
   return 0;
 }
 
-int
-XC::ElasticIsotropicAxiSymm::revertToLastCommit(void)
+int XC::ElasticIsotropicAxiSymm::revertToLastCommit(void)
 {
   return 0;
 }
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::ElasticIsotropicAxiSymm::getCopy(void) const
   { return new ElasticIsotropicAxiSymm(*this); }
 

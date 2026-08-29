@@ -191,7 +191,7 @@ int XC::TDConcreteMC10Base::recvData(const Communicator &comm)
     res+= comm.receiveMovable(creepShrinkageState, getDbTagData(),CommMetaData(6));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::TDConcreteMC10Base::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -206,7 +206,7 @@ int XC::TDConcreteMC10Base::sendSelf(Communicator &comm)
 	        << Color::def << std::endl;
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::TDConcreteMC10Base::recvSelf(const Communicator &comm)
   {
     inicComm(7);

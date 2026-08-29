@@ -403,14 +403,14 @@ double XC::Bilinear::getStrain(void) const
     return hsTrial[0];
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::Bilinear::recvSelf(const Communicator &comm)
 {
         if ( DEBG ==1 ) fprintf( OutputFile , "Receive self\n" );        // debugging
         return 0;
 }
 
-
+//! @brief Send the object through the given communicator.
 int XC::Bilinear::sendSelf(Communicator &comm)
 {
         if ( DEBG ==1 ) fprintf( OutputFile , "Send self\n" );        // debugging
@@ -803,8 +803,7 @@ int XC::Bilinear::setParameter(const std::vector<std::string> &argv, Parameter &
   }
 
 
-int
-XC::Bilinear::updateParameter(int parameterID, Information &info)
+int XC::Bilinear::updateParameter(int parameterID, Information &info)
 {
 
         switch (parameterID) {
@@ -846,8 +845,7 @@ XC::Bilinear::updateParameter(int parameterID, Information &info)
 
 
 
-int
-XC::Bilinear::activateParameter(int passedParameterID)
+int XC::Bilinear::activateParameter(int passedParameterID)
 {
         parameterID = passedParameterID;
 
@@ -975,8 +973,7 @@ double XC::BoucWenMaterial::getRhoSensitivity(int gradNumber)
 }
 
 
-int
-XC::BoucWenMaterial::commitSensitivity(double TstrainSensitivity, int gradNumber, int numGrads)
+int XC::BoucWenMaterial::commitSensitivity(double TstrainSensitivity, int gradNumber, int numGrads)
 {
         if(SHVs == 0) {
                 SHVs = new Matrix(3,numGrads);

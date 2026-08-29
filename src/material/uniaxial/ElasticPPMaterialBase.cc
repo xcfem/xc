@@ -230,7 +230,7 @@ int XC::ElasticPPMaterialBase::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(fyp, fyn, ep, commitStress, EnergyP, getDbTagData(),CommMetaData(4));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ElasticPPMaterialBase::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -247,7 +247,7 @@ int XC::ElasticPPMaterialBase::sendSelf(Communicator &comm)
 	        << Color::def << std::endl;
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::ElasticPPMaterialBase::recvSelf(const Communicator &comm)
   {
     inicComm(5);

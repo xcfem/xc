@@ -54,7 +54,7 @@ XC::CombinedIsoKin2D01::CombinedIsoKin2D01(int tag,
 	isotropicRatio_shrink = shr_iso_ratio;
 	kinematicRatio_shrink = shr_kin_ratio;
 }
-
+//! @brief Virtual constructor.
 XC::YS_Evolution *XC::CombinedIsoKin2D01::getCopy(void) const
   { return new CombinedIsoKin2D01(*this); }
 

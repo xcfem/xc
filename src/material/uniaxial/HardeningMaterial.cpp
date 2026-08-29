@@ -237,7 +237,7 @@ int XC::HardeningMaterial::revertToStart(void)
 
     return retval;
   }
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::HardeningMaterial::getCopy(void) const
   { return new HardeningMaterial(*this); }
 
@@ -264,7 +264,7 @@ int XC::HardeningMaterial::recvData(const Communicator &comm)
     SHVs= comm.receiveMatrixPtr(SHVs,getDbTagData(),MatrixCommMetaData(6,7,8,9));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::HardeningMaterial::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -277,7 +277,7 @@ int XC::HardeningMaterial::sendSelf(Communicator &comm)
       std::cerr << "HardeningMaterial::sendSelf - failed to send data.\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::HardeningMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(10);

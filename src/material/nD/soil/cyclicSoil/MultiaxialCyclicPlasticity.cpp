@@ -475,7 +475,7 @@ XC::MultiaxialCyclicPlasticity::MultiaxialCyclicPlasticity(int    tag,
   IIdev [2][2] [2][2] =  two3; // 0.666667 
 }
 
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::MultiaxialCyclicPlasticity::getCopy(const std::string &type) const
   {
     NDMaterial *retval= nullptr;

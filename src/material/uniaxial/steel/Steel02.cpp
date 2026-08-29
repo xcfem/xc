@@ -175,7 +175,7 @@ void XC::Steel02::setInitialStress(const double &d)
     sigini= d;
     setup_parameters(); //Initialize history variables.
   }
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::Steel02::getCopy(void) const
   { return new Steel02(*this); }
 

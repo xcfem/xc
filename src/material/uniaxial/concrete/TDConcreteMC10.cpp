@@ -115,7 +115,7 @@ XC::TDConcreteMC10::~TDConcreteMC10(void)
   {
   // Does nothing
   }
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::TDConcreteMC10::getCopy(void) const
   { return new TDConcreteMC10(*this); }
 

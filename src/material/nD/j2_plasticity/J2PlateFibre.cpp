@@ -567,10 +567,10 @@ int XC::J2PlateFibre::revertToStart(void)
     SHVs.Zero();
     return retval;
   }
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::J2PlateFibre::getCopy(void) const
   { return new J2PlateFibre(*this); }
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::J2PlateFibre::getCopy(const std::string &type) const
   {
     NDMaterial *retval= nullptr;

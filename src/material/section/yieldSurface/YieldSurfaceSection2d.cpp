@@ -254,10 +254,10 @@ const XC::ResponseId &XC::YieldSurfaceSection2d::getResponseType(void) const
 
 int XC::YieldSurfaceSection2d::getOrder(void) const
   { return 2; }
-
+//! @brief Send the object through the given communicator.
 int XC::YieldSurfaceSection2d::sendSelf(Communicator &comm)
   { return -1; }
-
+//! @brief Receive the object through the given communicator.
 int XC::YieldSurfaceSection2d::recvSelf(const Communicator &)
   { return -1; }
 

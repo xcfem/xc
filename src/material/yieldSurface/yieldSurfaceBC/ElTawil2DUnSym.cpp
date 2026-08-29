@@ -316,7 +316,7 @@ void XC::ElTawil2DUnSym::customizeInterpolate(double &xi, double &yi, double &xj
     else
       ; // values are okay
   }
-
+//! @brief Virtual constructor.
 XC::YieldSurface_BC *XC::ElTawil2DUnSym::getCopy(void) const
   { return new ElTawil2DUnSym(*this); }
 

@@ -137,14 +137,14 @@ int XC::FiberSection3d::revertToLastCommit(void)
 //! @brief Returns to the initial state.
 int XC::FiberSection3d::revertToStart(void)
   { return fibers.revertToStart(*this,kr); }
-
+//! @brief Send the object through the given communicator.
 int XC::FiberSection3d::sendSelf(Communicator &comm)
   {
     int res= 0;
     std::cerr << "FiberSection3d::sendSelf - not implemented.\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::FiberSection3d::recvSelf(const Communicator &comm)
   {
     int res= 0;

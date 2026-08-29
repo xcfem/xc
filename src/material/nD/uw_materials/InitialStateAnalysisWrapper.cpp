@@ -79,7 +79,7 @@ void XC::InitialStateAnalysisWrapper::setup(int ndim, const NDMaterial &mainMat)
 // clone material
 XC::NDMaterial *XC::InitialStateAnalysisWrapper::getCopy(const std::string &) const
   { return this->getCopy(); }
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::InitialStateAnalysisWrapper::getCopy(void) const
   { return new InitialStateAnalysisWrapper(*this); }
 
@@ -211,7 +211,7 @@ int XC::InitialStateAnalysisWrapper::recvData(const Communicator &comm)
     res+= comm.receiveVector(mStrain, getDbTagData(), CommMetaData(4));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::InitialStateAnalysisWrapper::sendSelf(Communicator &comm)
   {
     inicComm(5);
@@ -223,7 +223,7 @@ int XC::InitialStateAnalysisWrapper::sendSelf(Communicator &comm)
 	        << "; failed to send data.\n";    
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::InitialStateAnalysisWrapper::recvSelf(const Communicator &comm)
   {
     inicComm(5);
@@ -244,8 +244,7 @@ void XC::InitialStateAnalysisWrapper::Print(std::ostream &s, int flag) const
     theMainMaterial.Print(s, flag);
   }
 
-int
-XC::InitialStateAnalysisWrapper::setParameter(const std::vector<std::string> &argv, Parameter &param)
+int XC::InitialStateAnalysisWrapper::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {
     // this allows for the use of updateMaterialStage command for the main material
     int retval= -1;

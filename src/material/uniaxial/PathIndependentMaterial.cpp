@@ -152,11 +152,11 @@ int XC::PathIndependentMaterial::revertToStart(void)
     retval+= this->getMaterial()->revertToStart();
     return retval;
   }
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::PathIndependentMaterial::getCopy(void) const
   { return new PathIndependentMaterial(*this); }
 
-
+//! @brief Send the object through the given communicator.
 int XC::PathIndependentMaterial::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -171,7 +171,7 @@ int XC::PathIndependentMaterial::sendSelf(Communicator &comm)
     return res;
 
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::PathIndependentMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(4);

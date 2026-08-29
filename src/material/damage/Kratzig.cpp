@@ -224,26 +224,25 @@ int XC::Kratzig::setTrial(const Vector &trialVector)
   }
 
 
-double XC::Kratzig::getDamage (void)
+double XC::Kratzig::getDamage(void)
   { return TrialInfo[9]; }
     
 
-double XC::Kratzig::getPosDamage (void)
+double XC::Kratzig::getPosDamage(void)
 {
         double PosDamage = ( TrialInfo[4] + TrialInfo[3] ) / ( UltimatePosValue + TrialInfo[3] ) ;
         return PosDamage;
 }
 
 
-double XC::Kratzig::getNegDamage (void)
+double XC::Kratzig::getNegDamage(void)
 {
         double         NegDamage = ( fabs(TrialInfo[6]) + fabs(TrialInfo[5]) ) / ( fabs(UltimateNegValue) + fabs(TrialInfo[5]) ) ;
         return NegDamage;
 }
 
 
-int
-XC::Kratzig::commitState (void)
+int XC::Kratzig::commitState(void)
 {
         for ( int i=0 ; i<10 ; i++ )
         {
@@ -254,8 +253,7 @@ XC::Kratzig::commitState (void)
         return 0;
 }
 
-int
-XC::Kratzig::revertToLastCommit (void)
+int XC::Kratzig::revertToLastCommit(void)
 {
         for ( int i=0 ; i<10 ; i++ )
         {
@@ -265,8 +263,7 @@ XC::Kratzig::revertToLastCommit (void)
         return 0;
 }
 
-int
-XC::Kratzig::revertToStart (void)
+int XC::Kratzig::revertToStart(void)
 {
         for ( int i = 0 ; i< 10 ; i++ ){
                 TrialInfo[i] = 0.0;
@@ -277,7 +274,7 @@ XC::Kratzig::revertToStart (void)
         return 0;
 }
 
-
+//! @brief Virtual constructor.
 XC::DamageModel *XC::Kratzig::getCopy(void) const
 {
         Kratzig *theCopy = new Kratzig(this->getTag() , UltimatePosValue , UltimateNegValue );
@@ -307,8 +304,7 @@ int XC::Kratzig::setParameter(const std::vector<std::string> &argv, Information 
     return -1;
 }
 
-int
-XC::Kratzig::updateParameter(int responseID, Information &eleInformation)
+int XC::Kratzig::updateParameter(int responseID, Information &eleInformation)
 {
     return -1;
 }
@@ -361,11 +357,11 @@ XC::Kratzig::getResponse(int responseID, Information &info)
         }
 }
 
-
+//! @brief Send the object through the given communicator.
 int XC::Kratzig::sendSelf(Communicator &comm)
   { return 0; }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::Kratzig::recvSelf(const Communicator &comm)
   { return 0; }
 

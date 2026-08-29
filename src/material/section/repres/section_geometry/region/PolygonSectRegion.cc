@@ -76,8 +76,8 @@ const XC::VectorCells &XC::PolygonSectRegion::getCells(void) const
     return cells;
   }
 
-
-XC::SectRegion *XC::PolygonSectRegion::getCopy (void) const
+//! @brief Virtual constructor.
+XC::SectRegion *XC::PolygonSectRegion::getCopy(void) const
   { return new PolygonSectRegion(*this); }
  
 void XC::PolygonSectRegion::Print(std::ostream &s, int flag) const
