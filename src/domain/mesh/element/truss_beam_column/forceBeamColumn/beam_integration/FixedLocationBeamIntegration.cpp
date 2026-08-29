@@ -49,7 +49,7 @@ XC::FixedLocationBeamIntegration::FixedLocationBeamIntegration(int tag, const Ve
     J.Solve(R, wts);
   }
 
-
+//! @brief Virtual constructor.
 XC::BeamIntegration *XC::FixedLocationBeamIntegration::getCopy(void) const
   { return new FixedLocationBeamIntegration(*this); }
 
@@ -77,13 +77,13 @@ void XC::FixedLocationBeamIntegration::Print(std::ostream &s, int flag) const
     s << " Condition Number: " << sum << std::endl;
   }
 
-void XC::FixedLocationBeamIntegration::getLocationsDeriv(int numSections, double L, double dLdh, double *dptsdh) const
+void XC::FixedLocationBeamIntegration::getLocationsDeriv(int numSections, double L, double dLdh, double *dptsdh)
   {
     for(int i = 0; i < numSections; i++)
       dptsdh[i] = 0.0;
   }
 
-void XC::FixedLocationBeamIntegration::getWeightsDeriv(int numSections, double L, double dLdh, double *dwtsdh) const
+void XC::FixedLocationBeamIntegration::getWeightsDeriv(int numSections, double L, double dLdh, double *dwtsdh)
   {
     for(int i = 0; i < numSections; i++)
       dwtsdh[i] = 0.0;
