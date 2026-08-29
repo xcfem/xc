@@ -328,7 +328,7 @@ int XC::beam2d04::recvData(const Communicator &comm)
     int res= beam2d::recvData(comm);
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::beam2d04::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -342,7 +342,7 @@ int XC::beam2d04::sendSelf(Communicator &comm)
 		<< "; failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::beam2d04::recvSelf(const Communicator &comm)
   {
     inicComm(10);

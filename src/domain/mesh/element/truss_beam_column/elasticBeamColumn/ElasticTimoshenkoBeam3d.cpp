@@ -156,7 +156,7 @@ void XC::ElasticTimoshenkoBeam3d::setDomain(Domain *theDomain)
     this->setUp();
   }
 
-
+//! @brief Commit the element state.
 int XC::ElasticTimoshenkoBeam3d::commitState()
   {
     int errCode = 0;
@@ -419,7 +419,7 @@ int XC::ElasticTimoshenkoBeam3d::recvData(const Communicator &comm)
     res+= comm.receiveBool(nlGeo, getDbTagData(), CommMetaData(13));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ElasticTimoshenkoBeam3d::sendSelf(Communicator &comm)
   {
     inicComm(14);
@@ -432,7 +432,7 @@ int XC::ElasticTimoshenkoBeam3d::sendSelf(Communicator &comm)
 		<< "; could not send data.\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::ElasticTimoshenkoBeam3d::recvSelf(const Communicator &comm)
   {
     const int dataTag= getDbTag();
@@ -482,7 +482,7 @@ void XC::ElasticTimoshenkoBeam3d::Print(std::ostream &s, int flag) const
     //   }
   }
 
-XC::Response *XC::ElasticTimoshenkoBeam3d::setResponse(const std::vector<std::string> &argv, Parameter &param)
+XC::Response *XC::ElasticTimoshenkoBeam3d::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
   {
     Response *theResponse = 0;
     

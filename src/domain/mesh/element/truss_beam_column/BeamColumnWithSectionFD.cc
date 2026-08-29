@@ -57,7 +57,7 @@ void XC::BeamColumnWithSectionFD::zeroLoad(void)
     BeamColumn::zeroLoad();
     theSections.zeroInitialSectionDeformations(); //Removes initial strains.
   }
-
+//! @brief Commit the element state.
 int XC::BeamColumnWithSectionFD::commitState(void)
   {
     int retVal = 0;

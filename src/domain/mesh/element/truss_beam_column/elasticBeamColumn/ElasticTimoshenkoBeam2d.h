@@ -164,7 +164,7 @@ class ElasticTimoshenkoBeam2d: public ElasticBeam2dBase
     void Print(std::ostream &s, int flag = 0) const;
     
     // public methods for element recorder
-    Response *setResponse(const std::vector<std::string> &argv, Parameter &param);
+    Response *setResponse(const std::vector<std::string> &argv, Information &);
     int getResponse(int responseID, Information &info);
     
     int setParameter(const std::vector<std::string> &argv, Parameter &param);

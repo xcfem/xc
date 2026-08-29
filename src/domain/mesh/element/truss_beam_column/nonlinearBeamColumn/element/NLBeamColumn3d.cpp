@@ -152,7 +152,7 @@ void XC::NLBeamColumn3d::setDomain(Domain *theDomain)
       }
   }
 
-
+//! @brief Commit the element state.
 int XC::NLBeamColumn3d::commitState(void)
   {
 
@@ -184,7 +184,7 @@ int XC::NLBeamColumn3d::commitState(void)
     return err;
   }
 
-
+//! @brief Revert to the last commited state.
 int XC::NLBeamColumn3d::revertToLastCommit(void)
   {
     int err= NLForceBeamColumn3dBase::revertToLastCommit();
@@ -225,7 +225,7 @@ int XC::NLBeamColumn3d::revertToLastCommit(void)
     return err;
   }
 
-
+//! @brief Revert the element to its initial state.
 int XC::NLBeamColumn3d::revertToStart(void)
   {
     // revert the sections state to start
@@ -968,7 +968,7 @@ int XC::NLBeamColumn3d::recvData(const Communicator &comm)
     int res= NLForceBeamColumn3dBase::recvData(comm);
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::NLBeamColumn3d::sendSelf(Communicator &comm)
   {
     inicComm(29);
@@ -981,7 +981,7 @@ int XC::NLBeamColumn3d::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::NLBeamColumn3d::recvSelf(const Communicator &comm)
   {
     inicComm(29);

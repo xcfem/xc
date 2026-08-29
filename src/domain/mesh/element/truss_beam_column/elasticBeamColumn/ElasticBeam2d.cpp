@@ -491,7 +491,7 @@ int XC::ElasticBeam2d::recvData(const Communicator &comm)
     res+= comm.receiveInt(release,getDbTagData(),CommMetaData(12));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ElasticBeam2d::sendSelf(Communicator &comm)
   {
     inicComm(13);
@@ -504,7 +504,7 @@ int XC::ElasticBeam2d::sendSelf(Communicator &comm)
 		<< "; could not send data.\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::ElasticBeam2d::recvSelf(const Communicator &comm)
   {
     const int dataTag= getDbTag();
@@ -547,7 +547,7 @@ void XC::ElasticBeam2d::Print(std::ostream &s, int flag) const
       }
    }
 
-XC::Response *XC::ElasticBeam2d::setResponse(const std::vector<std::string> &argv, Parameter &param)
+XC::Response *XC::ElasticBeam2d::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
   {
     // stiffness
     if(argv[0]=="stiffness")

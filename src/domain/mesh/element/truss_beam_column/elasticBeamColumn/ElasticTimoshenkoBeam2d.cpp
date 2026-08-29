@@ -138,7 +138,7 @@ void XC::ElasticTimoshenkoBeam2d::setDomain(Domain *theDomain)
     this->setUp();
   }
 
-
+//! @brief Commit the element state.
 int XC::ElasticTimoshenkoBeam2d::commitState(void)
   {
     int errCode = 0;
@@ -398,7 +398,7 @@ int XC::ElasticTimoshenkoBeam2d::recvData(const Communicator &comm)
     res+= comm.receiveBool(nlGeo, getDbTagData(), CommMetaData(13));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ElasticTimoshenkoBeam2d::sendSelf(Communicator &comm)
   {
     inicComm(14);
@@ -411,7 +411,7 @@ int XC::ElasticTimoshenkoBeam2d::sendSelf(Communicator &comm)
 		<< "; could not send data.\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::ElasticTimoshenkoBeam2d::recvSelf(const Communicator &comm)
   {
     const int dataTag= getDbTag();
@@ -457,7 +457,7 @@ void XC::ElasticTimoshenkoBeam2d::Print(std::ostream &s, int flag) const
   }
 
 
-XC::Response *XC::ElasticTimoshenkoBeam2d::setResponse(const std::vector<std::string> &argv, Parameter &param)
+XC::Response *XC::ElasticTimoshenkoBeam2d::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
   {
     Response *theResponse= nullptr;
     

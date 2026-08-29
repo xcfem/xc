@@ -614,7 +614,7 @@ int XC::Spring::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(cosX[0],cosX[1],cosX[2],getDbTagData(),CommMetaData(19));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::Spring::sendSelf(Communicator &comm)
   {
     inicComm(21);
@@ -626,7 +626,7 @@ int XC::Spring::sendSelf(Communicator &comm)
       std::cerr << "Spring::sendSelf -- failed to send ID data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::Spring::recvSelf(const Communicator &comm)
   {
     inicComm(21);

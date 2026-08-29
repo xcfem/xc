@@ -170,7 +170,7 @@ void XC::NLBeamColumn2d::setDomain(Domain *theDomain)
   }
 
 
-
+//! @brief Commit the element state.
 int XC::NLBeamColumn2d::commitState(void)
 {
    int err = 0;
@@ -216,7 +216,7 @@ int XC::NLBeamColumn2d::commitState(void)
    return err;
 }
 
-
+//! @brief Revert to the last commited state.
 int XC::NLBeamColumn2d::revertToLastCommit()
   {
    int err= NLForceBeamColumn2dBase::revertToLastCommit();
@@ -252,7 +252,7 @@ int XC::NLBeamColumn2d::revertToLastCommit()
    return err;
 }
 
-
+//! @brief Revert the element to its initial state.
 int XC::NLBeamColumn2d::revertToStart()
   {
    // revert the sections state to start
@@ -992,7 +992,7 @@ int XC::NLBeamColumn2d::recvData(const Communicator &comm)
     res+= comm.receiveInt(maxSubdivisions,getDbTagData(),CommMetaData(25));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::NLBeamColumn2d::sendSelf(Communicator &comm)
   {
     inicComm(26);
@@ -1005,7 +1005,7 @@ int XC::NLBeamColumn2d::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::NLBeamColumn2d::recvSelf(const Communicator &comm)
   {
     inicComm(26);

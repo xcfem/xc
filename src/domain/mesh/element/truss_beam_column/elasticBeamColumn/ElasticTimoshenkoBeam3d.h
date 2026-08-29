@@ -194,8 +194,8 @@ class ElasticTimoshenkoBeam3d : public ElasticBeam3dBase
     void Print(std::ostream &s, int flag = 0) const;
     
     // public methods for element recorder
-    Response *setResponse(const std::vector<std::string> &argv, Parameter &param);
-    int getResponse(int responseID, Information &info);
+    Response *setResponse(const std::vector<std::string> &argv, Information &);
+    int getResponse(int responseID, Information &);
     
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);

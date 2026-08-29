@@ -539,7 +539,7 @@ int XC::beam3d02::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(twelveE,sixE,getDbTagData(),CommMetaData(14));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::beam3d02::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -552,7 +552,7 @@ int XC::beam3d02::sendSelf(Communicator &comm)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::beam3d02::recvSelf(const Communicator &comm)
   {
     inicComm(15);

@@ -160,7 +160,7 @@ class ElasticBeam2d: public ElasticBeam2dBase
       { return q(2); }
 
 
-    Response *setResponse(const std::vector<std::string> &argv, Parameter &param);
+    Response *setResponse(const std::vector<std::string> &argv, Information &);
     int getResponse(int responseID, Information &info);
  
     int setParameter(const std::vector<std::string> &argv, Parameter &param);

@@ -592,10 +592,10 @@ const XC::Vector &XC::CorotTrussSection::getResistingForceIncInertia(void) const
       (*theVector)*=dead_srf; // WARNING: it is applied twice on getResistingForce: to be fixed.
     return *theVector;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::CorotTrussSection::sendSelf(Communicator &comm)
   { return -1; }
-
+//! @brief Receive the object through the given communicator.
 int XC::CorotTrussSection::recvSelf(const Communicator &comm)
   { return -1; }
 

@@ -271,7 +271,7 @@ void XC::ForceBeamColumn2d::setDomain(Domain *theDomain)
     if(initialFlag == 0)
       this->initializeSectionHistoryVariables();
   }
-
+//! @brief Commit the element state.
 int XC::ForceBeamColumn2d::commitState(void)
   {
     int err = 0;
@@ -307,7 +307,7 @@ int XC::ForceBeamColumn2d::commitState(void)
     //                         - i have not a clue why, ask remo if he ever gets in contact with us again!
     return err;
   }
-
+//! @brief Revert to the last commited state.
 int XC::ForceBeamColumn2d::revertToLastCommit(void)
   {
     int err= NLForceBeamColumn2dBase::revertToLastCommit();
@@ -354,7 +354,7 @@ double XC::ForceBeamColumn2d::getSubdivideFactor(void) const
 //! @brief Set the factor to reduce newton scheme step size.
 void XC::ForceBeamColumn2d::setSubdivideFactor(const double &d)
   { this->subdivideFactor= d; }
-
+//! @brief Revert the element to its initial state.
 int XC::ForceBeamColumn2d::revertToStart(void)
   {
     // revert the sections state to start

@@ -165,7 +165,7 @@ void XC::BeamWithHinges3d::setDomain(Domain *theDomain)
           this->update();
       }
   }
-
+//! @brief Commit the element state.
 int XC::BeamWithHinges3d::commitState(void)
   {
     int err = 0;
@@ -188,7 +188,7 @@ int XC::BeamWithHinges3d::commitState(void)
     //initialFlag = 0;
     return err;
   }
-
+//! @brief Revert to the last commited state.
 int XC::BeamWithHinges3d::revertToLastCommit(void)
   {
     int err = BeamColumnWithSectionFDTrf3d::revertToLastCommit();
@@ -216,7 +216,7 @@ int XC::BeamWithHinges3d::revertToLastCommit(void)
     initialFlag = 0;
     return err;
   }
-
+//! @brief Revert the element to its initial state.
 int XC::BeamWithHinges3d::revertToStart(void)
   {
     int err = BeamColumnWithSectionFDTrf3d::revertToStart();

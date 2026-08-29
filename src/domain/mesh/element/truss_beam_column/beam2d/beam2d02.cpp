@@ -155,7 +155,7 @@ void XC::beam2d02::setDomain(Domain *theDomain)
     M = 0.5*M*sprop.A()*L;
   }
 
-
+//! @brief Commit the element state.
 int XC::beam2d02::commitState()
   {
     int retVal = 0;
@@ -169,14 +169,14 @@ int XC::beam2d02::commitState()
     retVal = theCoordTransf->commitState();
     return retVal;
   }
-
+//! @brief Revert to the last commited state.
 int XC::beam2d02::revertToLastCommit()
   {
     int retval= beam2d::revertToLastCommit();
     retval+= theCoordTransf->revertToLastCommit();
     return retval;
   }
-
+//! @brief Revert the element to its initial state.
 int XC::beam2d02::revertToStart(void)
   {
     int retval= beam2d::revertToStart();

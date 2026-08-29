@@ -297,7 +297,7 @@ int XC::beam2d03::recvData(const Communicator &comm)
     res+= comm.receiveMatrix(trans,getDbTagData(),CommMetaData(12));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::beam2d03::sendSelf(Communicator &comm)
   {
     inicComm(13);
@@ -310,7 +310,7 @@ int XC::beam2d03::sendSelf(Communicator &comm)
 		<< "; could not send data Vector\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::beam2d03::recvSelf(const Communicator &comm)
   {
     inicComm(13);

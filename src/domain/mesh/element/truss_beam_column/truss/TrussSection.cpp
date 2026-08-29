@@ -199,7 +199,7 @@ void XC::TrussSection::setDomain(Domain *theDomain)
     update();
   }
 
-
+//! @brief Commit the element state.
 int XC::TrussSection::commitState(void)
   {
     int retVal = 0;
@@ -590,7 +590,7 @@ int XC::TrussSection::recvData(const Communicator &comm)
     res+= comm.receiveMovable(physicalProperties,getDbTagData(),CommMetaData(20));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::TrussSection::sendSelf(Communicator &comm)
   {
     inicComm(21);
@@ -603,7 +603,7 @@ int XC::TrussSection::sendSelf(Communicator &comm)
 		<< "; failed to send ID data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::TrussSection::recvSelf(const Communicator &comm)
   {
     inicComm(21);
