@@ -121,7 +121,7 @@ int XC::MatParameter::recvData(const Communicator &comm)
     res+= comm.receiveInts(theMaterialTag,theParameterID,getDbTagData(),CommMetaData(3));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::MatParameter::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -134,7 +134,7 @@ int XC::MatParameter::sendSelf(Communicator &comm)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::MatParameter::recvSelf(const Communicator &comm)
   {
     inicComm(3);

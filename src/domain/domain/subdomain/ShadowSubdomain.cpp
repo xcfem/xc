@@ -1213,14 +1213,14 @@ double XC::ShadowSubdomain::getCost(void)
   return 0.0;
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::ShadowSubdomain::sendSelf(Communicator &comm)
   {
     std::cerr << "XC::ShadowSubdomain::sendSelf() ";
     std::cerr << " - NOT YET IMPLEMENTED\n";
     return -1;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::ShadowSubdomain::recvSelf(const Communicator &comm)
   {
     std::cerr << "XC::ShadowSubdomain::recvSelf() ";

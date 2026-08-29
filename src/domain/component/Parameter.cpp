@@ -190,9 +190,9 @@ int XC::Parameter::addObject(int paramID, MovableObject *object)
 
 void XC::Parameter::setDomain(Domain *theDomain)
   { return; }
-
+//! @brief Send the object through the given communicator.
 int XC::Parameter::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::Parameter::recvSelf(const Communicator &comm)
   { return 0; }
