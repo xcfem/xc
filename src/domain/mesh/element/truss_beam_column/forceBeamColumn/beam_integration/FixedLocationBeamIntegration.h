@@ -78,8 +78,8 @@ class FixedLocationBeamIntegration: public ParameterIDBeamIntegration
 
     void Print(std::ostream &s, int flag = 0) const;  
 
-    void getLocationsDeriv(int nIP, double L, double dLdh, double *dptsdh) const;
-    void getWeightsDeriv(int nIP, double L, double dLdh, double *dwtsdh) const;
+    void getLocationsDeriv(int nIP, double L, double dLdh, double *dptsdh);
+    void getWeightsDeriv(int nIP, double L, double dLdh, double *dwtsdh);
 };
 } // end of XC namespace
 
