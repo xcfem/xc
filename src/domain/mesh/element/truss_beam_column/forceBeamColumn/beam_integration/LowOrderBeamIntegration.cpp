@@ -145,7 +145,7 @@ void XC::LowOrderBeamIntegration::getSectionWeights(int numSections, double L, d
     for( ; i < numSections; i++)
       wt[i] = 1.0;
   }
-
+//! @brief Virtual constructor.
 XC::BeamIntegration *XC::LowOrderBeamIntegration::getCopy(void) const
   { return new LowOrderBeamIntegration(*this); }
 

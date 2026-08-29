@@ -54,7 +54,7 @@
 XC::NewtonCotesBeamIntegration::NewtonCotesBeamIntegration(int tag)
   : BeamIntegration(tag, BEAM_INTEGRATION_TAG_NewtonCotes)
   {}
-
+//! @brief Virtual constructor.
 XC::BeamIntegration *XC::NewtonCotesBeamIntegration::getCopy(void) const
   { return new NewtonCotesBeamIntegration(*this); }
 

@@ -131,10 +131,10 @@ int XC::UserDefinedBeamIntegrationBase::recvData(const Communicator &comm)
     res+= comm.receiveVector(wts,getDbTagData(),CommMetaData(2));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::UserDefinedBeamIntegrationBase::sendSelf(Communicator &comm)
   { return -1; }
-
+//! @brief Receive the object through the given communicator.
 int XC::UserDefinedBeamIntegrationBase::recvSelf(const Communicator &comm)
   { return -1; }
 

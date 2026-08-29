@@ -55,7 +55,7 @@ XC::CompositeSimpsonBeamIntegration::CompositeSimpsonBeamIntegration(int tag)
   {
     // Nothing to do
   }
-
+//! @brief Virtual constructor.
 XC::BeamIntegration *XC::CompositeSimpsonBeamIntegration::getCopy(void) const
   { return new CompositeSimpsonBeamIntegration(*this); }
 

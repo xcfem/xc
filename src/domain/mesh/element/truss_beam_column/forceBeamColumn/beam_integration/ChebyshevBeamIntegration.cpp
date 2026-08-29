@@ -30,7 +30,7 @@ XC::ChebyshevBeamIntegration::ChebyshevBeamIntegration(int tag, int t)
     if(type < 0 || type > 2)
       type = 0;
   }
-
+//! @brief Virtual constructor.
 XC::BeamIntegration *XC::ChebyshevBeamIntegration::getCopy(void) const
   { return new ChebyshevBeamIntegration(*this); }
 

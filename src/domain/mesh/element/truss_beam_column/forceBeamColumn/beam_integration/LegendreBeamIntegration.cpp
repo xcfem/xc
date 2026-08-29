@@ -54,7 +54,7 @@
 XC::LegendreBeamIntegration::LegendreBeamIntegration(int tag)
   : BeamIntegration(tag, BEAM_INTEGRATION_TAG_Legendre)
   {}
-
+//! @brief Virtual constructor.
 XC::BeamIntegration *XC::LegendreBeamIntegration::getCopy(void) const
   { return new LegendreBeamIntegration(*this); }
 

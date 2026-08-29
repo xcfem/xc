@@ -55,7 +55,7 @@ XC::TrapezoidalBeamIntegration::TrapezoidalBeamIntegration(int tag)
   {
     // Nothing to do
   }
-
+//! @brief Virtual constructor.
 XC::BeamIntegration *XC::TrapezoidalBeamIntegration::getCopy(void) const
   { return new TrapezoidalBeamIntegration(*this); }
 

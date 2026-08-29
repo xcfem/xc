@@ -59,7 +59,7 @@ XC::UserDefinedBeamIntegration::UserDefinedBeamIntegration(int tag, int nIP, con
   : UserDefinedBeamIntegrationBase(tag, BEAM_INTEGRATION_TAG_UserDefined,pt,wt)
   {}
 
-
+//! @brief Virtual constructor.
 XC::BeamIntegration *XC::UserDefinedBeamIntegration::getCopy(void) const
   { return new UserDefinedBeamIntegration(*this); }
 

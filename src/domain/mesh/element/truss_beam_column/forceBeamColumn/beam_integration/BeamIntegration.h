@@ -110,8 +110,10 @@ class BeamIntegration: public TaggedObject, public MovableObject
     // Return 0 if there is no elastic interior, -1 otherwise
     virtual int addElasticFlexibility(double L, Matrix &fe) {return 0;}
 
-    virtual double getTangentDriftI(double L, double LI, double q2,double q3, bool yAxis = false) {return 0.0;}
-    virtual double getTangentDriftJ(double L, double LI, double q2,double q3, bool yAxis = false) {return 0.0;}
+    virtual double getTangentDriftI(double L, double LI, double q2,double q3, bool yAxis = false)
+      {return 0.0;}
+    virtual double getTangentDriftJ(double L, double LI, double q2,double q3, bool yAxis = false)
+      {return 0.0;}
 
     virtual BeamIntegration *getCopy(void) const= 0;
 

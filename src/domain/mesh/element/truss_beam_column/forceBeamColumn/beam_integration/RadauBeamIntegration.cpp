@@ -55,7 +55,7 @@
 XC::RadauBeamIntegration::RadauBeamIntegration(int tag)
   : BeamIntegration(tag, BEAM_INTEGRATION_TAG_Radau)
   {}
-
+//! @brief Virtual constructor.
 XC::BeamIntegration *XC::RadauBeamIntegration::getCopy(void) const
   { return new RadauBeamIntegration(*this); }
 
