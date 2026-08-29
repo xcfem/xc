@@ -287,7 +287,7 @@ void XC::DispBeamColumnNL2d::getBasicStiff(Matrix &kb, int initial) const
     }
   }
 
-const XC::Matrix &XC::DispBeamColumnNL2d::getTangentStiff(void)
+const XC::Matrix &XC::DispBeamColumnNL2d::getTangentStiff(void) const
   {
     static Matrix kb(3,3);
 
@@ -364,7 +364,7 @@ const XC::Matrix &XC::DispBeamColumnNL2d::getTangentStiff(void)
   }
 
 
-const XC::Vector &XC::DispBeamColumnNL2d::getResistingForce(void)
+const XC::Vector &XC::DispBeamColumnNL2d::getResistingForce(void) const
   {
     // Update the transformation
     theCoordTransf->update();

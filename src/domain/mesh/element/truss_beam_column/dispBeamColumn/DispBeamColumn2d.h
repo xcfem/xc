@@ -86,7 +86,6 @@ class DispBeamColumn2d: public DispBeamColumn2dBase
     int update(void);
     const Matrix &getTangentStiff(void) const;
     const Matrix &getInitialStiff(void) const;
-
     const Vector &getResistingForce(void) const;
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInfo);

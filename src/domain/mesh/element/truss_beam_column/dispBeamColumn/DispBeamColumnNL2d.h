@@ -86,11 +86,9 @@ class DispBeamColumnNL2d: public DispBeamColumn2dBase
 
     // public methods to obtain stiffness, mass, damping and residual information    
     int update(void);
-    const Matrix &getTangentStiff(void);
-    const Matrix &getInitialStiff(void);
-
-    const Vector &getResistingForce(void);
-
+    const Matrix &getTangentStiff(void) const;
+    //const Matrix &getInitialStiff(void) const;
+    const Vector &getResistingForce(void) const;
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInfo);
     int getResponse(int responseID, Information &eleInfo);

@@ -707,8 +707,7 @@ int XC::DispBeamColumn2d::updateParameter(int parameterID, Information &info)
 
 
 
-int
-XC::DispBeamColumn2d::activateParameter(int passedParameterID)
+int XC::DispBeamColumn2d::activateParameter(int passedParameterID)
 {
         // Note that the parameteID that is stored here at the
         // element level contains all information about section

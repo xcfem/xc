@@ -175,7 +175,7 @@ void XC::DispBeamColumn3d::setDomain(Domain *theDomain)
         this->update();
      }
   }
-
+//! @brief Commit the element state.
 int XC::DispBeamColumn3d::commitState(void)
   {
     int retVal = 0;
@@ -187,7 +187,7 @@ int XC::DispBeamColumn3d::commitState(void)
     retVal += theCoordTransf->commitState();
     return retVal;
   }
-
+//! @brief Revert to the last commited state.
 int XC::DispBeamColumn3d::revertToLastCommit(void)
   {
     int retVal= BeamColumnWithSectionFDTrf3d::revertToLastCommit();
@@ -199,7 +199,7 @@ int XC::DispBeamColumn3d::revertToLastCommit(void)
     retVal += theCoordTransf->revertToLastCommit();
     return retVal;
   }
-
+//! @brief Revert the element to its initial state.
 int XC::DispBeamColumn3d::revertToStart(void)
   {
     int retVal= BeamColumnWithSectionFDTrf3d::revertToStart();
@@ -709,7 +709,7 @@ int XC::DispBeamColumn3d::recvData(const Communicator &comm)
     res+= comm.receiveInt(parameterID,getDbTagData(),CommMetaData(18));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::DispBeamColumn3d::sendSelf(Communicator &comm)
   {
     inicComm(19);
@@ -721,7 +721,7 @@ int XC::DispBeamColumn3d::sendSelf(Communicator &comm)
       std::cerr << "NLBeamColumn3d::sendSelf -- failed to send ID data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::DispBeamColumn3d::recvSelf(const Communicator &comm)
   {
     inicComm(19);
@@ -992,8 +992,7 @@ int XC::DispBeamColumn3d::updateParameter(int parameterID, Information &info)
 
 
 
-int
-XC::DispBeamColumn3d::activateParameter(int passedParameterID)
+int XC::DispBeamColumn3d::activateParameter(int passedParameterID)
 {
         // Note that the parameteID that is stored here at the
         // element level contains all information about section

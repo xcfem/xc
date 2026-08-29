@@ -398,7 +398,7 @@ int XC::DispBeamColumn2dBase::recvData(const Communicator &comm)
     res+= comm.receiveInt(parameterID,getDbTagData(),CommMetaData(18));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::DispBeamColumn2dBase::sendSelf(Communicator &comm)
   {
     inicComm(19);
@@ -411,7 +411,7 @@ int XC::DispBeamColumn2dBase::sendSelf(Communicator &comm)
 		<< "; failed to send ID data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::DispBeamColumn2dBase::recvSelf(const Communicator &comm)
   {
     inicComm(19);
