@@ -190,11 +190,11 @@ int XC::DiagonalDirectSolver::setDiagonalSOE(DiagonalSOE &theNewSOE)
   return 0;
 }
 
-
+//! @brief Send the object through the given communicator.
 int XC::DiagonalDirectSolver::sendSelf(Communicator &comm)
   { return comm.sendDouble(minDiagTol,getDbTagData(),CommMetaData(0)); }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::DiagonalDirectSolver::recvSelf(const Communicator &comm)
   { return comm.receiveDouble(minDiagTol,getDbTagData(),CommMetaData(0)); }
 

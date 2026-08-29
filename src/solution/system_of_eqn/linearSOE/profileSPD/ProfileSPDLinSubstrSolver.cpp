@@ -517,7 +517,7 @@ int XC::ProfileSPDLinSubstrSolver::solveXint(void)
 
 int XC::ProfileSPDLinSubstrSolver::getClassTag(void) const
   { return SOLVER_TAGS_ProfileSPDLinSubstrSolver; }
-
+//! @brief Send the object through the given communicator.
 int XC::ProfileSPDLinSubstrSolver::sendSelf(Communicator &comm)
   {
     if(size != 0)
@@ -526,6 +526,6 @@ int XC::ProfileSPDLinSubstrSolver::sendSelf(Communicator &comm)
     return 0;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::ProfileSPDLinSubstrSolver::recvSelf(const Communicator &comm)
   { return 0; }

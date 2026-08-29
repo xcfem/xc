@@ -381,7 +381,7 @@ int XC::MumpsSOE::addA(const Matrix &m, const ID &id, double fact)
     
 int XC::MumpsSOE::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::MumpsSOE::recvSelf(const Communicator &comm)  
   { return 0; }
 

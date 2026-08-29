@@ -76,7 +76,7 @@ XC::SparseGenColLinSOE::SparseGenColLinSOE(SolutionStrategy *owr)
 //! @param classTag: class identifier.
 XC::SparseGenColLinSOE::SparseGenColLinSOE(SolutionStrategy *owr,int classTag)
   : SparseGenSOEBase(owr,classTag) {}
-
+//! @brief Virtual constructor.
 XC::SystemOfEqn *XC::SparseGenColLinSOE::getCopy(void) const
   { return new SparseGenColLinSOE(*this); }
 
@@ -300,7 +300,7 @@ int XC::SparseGenColLinSOE::addA(const Matrix &m, const ID &id, double fact)
     
 int XC::SparseGenColLinSOE::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::SparseGenColLinSOE::recvSelf(const Communicator &comm)  
   { return 0; }
 

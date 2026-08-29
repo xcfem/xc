@@ -395,11 +395,11 @@ const double &XC::FullGenEigenSolver::getEigenvalue(int mode) const
       }
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::FullGenEigenSolver::sendSelf(Communicator &comm)
   { return 0; }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::FullGenEigenSolver::recvSelf(const Communicator &comm)
   { return 0; }
 

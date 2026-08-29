@@ -277,7 +277,7 @@ int XC::NewmarkHybridSimulation::recvData(const Communicator &comm)
     res+= comm.receiveDouble(rFact,getDbTagData(),CommMetaData(17));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::NewmarkHybridSimulation::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -292,7 +292,7 @@ int XC::NewmarkHybridSimulation::sendSelf(Communicator &comm)
 	        << Color::def << std::endl;
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::NewmarkHybridSimulation::recvSelf(const Communicator &comm)
   {
     inicComm(18);

@@ -348,10 +348,10 @@ void  XC::BFGS::BFGSUpdate(IncrementalIntegrator *theIntegrator, LinearSOE *theS
       } //end for i
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::BFGS::sendSelf(Communicator &comm)
   { return -1; }
-
+//! @brief Receive the object through the given communicator.
 int XC::BFGS::recvSelf(const Communicator &comm)
   { return -1; }
 

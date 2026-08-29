@@ -178,7 +178,7 @@ int XC::ProtoArcLength::recvData(const Communicator &comm)
     res+= comm.receiveInt(signLastDeltaLambdaStep,getDbTagData(),CommMetaData(7));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ProtoArcLength::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -193,7 +193,7 @@ int XC::ProtoArcLength::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::ProtoArcLength::recvSelf(const Communicator &comm)
   {
     inicComm(8);

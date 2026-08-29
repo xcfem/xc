@@ -86,7 +86,7 @@ XC::UmfpackGenLinSolver::UmfpackGenLinSolver()
  : LinearSOESolver(SOLVER_TAGS_UmfpackGenLinSolver),
    Symbolic(nullptr), Numeric(nullptr), theSOE(nullptr)
   {}
-
+//! @brief Virtual constructor.
 XC::LinearSOESolver *XC::UmfpackGenLinSolver::getCopy(void) const
    { return new UmfpackGenLinSolver(*this); }
 
@@ -229,13 +229,13 @@ bool XC::UmfpackGenLinSolver::setLinearSOE(LinearSOE *soe)
 
 bool XC::UmfpackGenLinSolver::setLinearSOE(UmfpackGenLinSOE &theLinearSOE)
   { return setLinearSOE(&theLinearSOE); }
-
+//! @brief Send the object through the given communicator.
 int XC::UmfpackGenLinSolver::sendSelf(Communicator &comm)
   {
     // nothing to do
     return 0;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::UmfpackGenLinSolver::recvSelf(const Communicator &comm)
   {
     // nothing to do

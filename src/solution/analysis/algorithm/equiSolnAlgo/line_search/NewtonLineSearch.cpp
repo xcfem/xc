@@ -267,10 +267,10 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
     // which should be the number of iterations
     return result;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::NewtonLineSearch::sendSelf(Communicator &comm)
   { return -1; }
-
+//! @brief Receive the object through the given communicator.
 int XC::NewtonLineSearch::recvSelf(const Communicator &comm)
   { return -1; }
 

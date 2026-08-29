@@ -175,11 +175,11 @@ int XC::DistributedDiagonalSolver::solve(void)
 
   return 0;
 }
-
+//! @brief Send the object through the given communicator.
 int XC::DistributedDiagonalSolver::sendSelf(Communicator &comm)
   { return comm.sendDouble(minDiagTol,getDbTagData(),CommMetaData(0)); }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::DistributedDiagonalSolver::recvSelf(const Communicator &comm)
   { return comm.receiveDouble(minDiagTol,getDbTagData(),CommMetaData(0)); }
 

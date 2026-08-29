@@ -177,10 +177,10 @@ int XC::CentralDifferenceAlternative::commit(void)
 
     return commitModel();
   }
-
+//! @brief Send the object through the given communicator.
 int XC::CentralDifferenceAlternative::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::CentralDifferenceAlternative::recvSelf(const Communicator &comm)
   { return 0; }
 

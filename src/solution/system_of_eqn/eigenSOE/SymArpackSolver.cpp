@@ -356,13 +356,13 @@ const double &XC::SymArpackSolver::getEigenvalue(int mode) const
     return value[mode - 1];
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::SymArpackSolver::sendSelf(Communicator &comm)
   {
     // nothing to do
     return 0;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::SymArpackSolver::recvSelf(const Communicator &comm)
   {
     // nothing to do

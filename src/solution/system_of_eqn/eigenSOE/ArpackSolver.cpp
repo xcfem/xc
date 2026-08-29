@@ -597,10 +597,10 @@ double XC::ArpackSolver::getRCond(const char &c)
               << "; not implemented yet." << std::endl;
     return -1;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ArpackSolver::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::ArpackSolver::recvSelf(const Communicator &comm)
   {
     // nothing to do

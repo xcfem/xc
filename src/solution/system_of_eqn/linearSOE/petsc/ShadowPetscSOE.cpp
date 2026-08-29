@@ -426,7 +426,7 @@ int XC::ShadowPetscSOE::setSolver(PetscSolver &newSolver)
     return false;
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::ShadowPetscSOE::sendSelf(Communicator &comm)
   {
     std::cerr  << getClassName() << "::" << __FUNCTION__
@@ -434,7 +434,7 @@ int XC::ShadowPetscSOE::sendSelf(Communicator &comm)
     return 0;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::ShadowPetscSOE::recvSelf(const Communicator &comm)
   {
     std::cerr  << getClassName() << "::" << __FUNCTION__

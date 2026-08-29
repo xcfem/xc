@@ -75,7 +75,7 @@ XC::UmfpackGenLinSOE::UmfpackGenLinSOE(SolutionStrategy *owr)
   :LinearSOEData(owr,LinSOE_TAGS_UmfpackGenLinSOE),
    Ax(), Ap(), Ai(), factored(false)
   {}
-
+//! @brief Virtual constructor.
 XC::SystemOfEqn *XC::UmfpackGenLinSOE::getCopy(void) const
   { return new UmfpackGenLinSOE(*this); }
 
@@ -258,12 +258,12 @@ void XC::UmfpackGenLinSOE::zeroA(void)
     Ax.assign(Ax.size(),0.0);
     this->factored= false;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::UmfpackGenLinSOE::sendSelf(Communicator &comm)
   {
     return 0;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::UmfpackGenLinSOE::recvSelf(const Communicator &comm)
   {
     return 0;

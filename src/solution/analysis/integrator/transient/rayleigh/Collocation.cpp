@@ -345,7 +345,7 @@ int XC::Collocation::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(theta,beta,gamma,c1,c2,c3,getDbTagData(),CommMetaData(6));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::Collocation::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -359,7 +359,7 @@ int XC::Collocation::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::Collocation::recvSelf(const Communicator &comm)
   {
     inicComm(7);

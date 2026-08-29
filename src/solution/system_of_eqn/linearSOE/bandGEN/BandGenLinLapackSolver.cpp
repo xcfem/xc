@@ -249,10 +249,10 @@ int XC::BandGenLinLapackSolver::setSize()
       iPiv.resize(theSOE->size);
     return 0;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::BandGenLinLapackSolver::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::BandGenLinLapackSolver::recvSelf(const Communicator &comm)
   {
     // nothing to do

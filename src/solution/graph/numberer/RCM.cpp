@@ -284,10 +284,10 @@ const XC::ID &XC::RCM::number(Graph &theGraph, int startVertex)
   }
 
 
-
+//! @brief Send the object through the given communicator.
 int XC::RCM::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::RCM::recvSelf(const Communicator &comm)
   { return 0; }
 

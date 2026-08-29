@@ -225,7 +225,7 @@ int XC::TRBDF3::recvData(const Communicator &comm)
     res+= comm.receiveMovable(Utm2,getDbTagData(),CommMetaData(8));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::TRBDF3::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -238,7 +238,7 @@ int XC::TRBDF3::sendSelf(Communicator &comm)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::TRBDF3::recvSelf(const Communicator &comm)
   {
     inicComm(9);

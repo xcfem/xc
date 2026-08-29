@@ -196,7 +196,7 @@ int XC::TRBDF2::update(const Vector &deltaU)
     return 0;
   }    
 
-
+//! @brief Send the object through the given communicator.
 int XC::TRBDF2::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -210,7 +210,7 @@ int XC::TRBDF2::sendSelf(Communicator &comm)
 	        << " - failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::TRBDF2::recvSelf(const Communicator &comm)
   {
     inicComm(8);

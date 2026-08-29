@@ -235,7 +235,7 @@ int XC::SparseGenRowLinSOE::addA(const XC::Matrix &m, const XC::ID &id, double f
     
 int XC::SparseGenRowLinSOE::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::SparseGenRowLinSOE::recvSelf(const Communicator &comm)  
   { return 0; }
 

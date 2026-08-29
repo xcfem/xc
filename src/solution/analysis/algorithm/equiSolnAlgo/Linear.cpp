@@ -75,7 +75,7 @@
 //! @brief Constructor
 XC::Linear::Linear(SolutionStrategy *owr)
   :EquiSolnAlgo(owr,EquiALGORITHM_TAGS_Linear) {}
-
+//! @brief Virtual constructor.
 XC::SolutionAlgorithm *XC::Linear::getCopy(void) const
   { return new Linear(*this); }
 

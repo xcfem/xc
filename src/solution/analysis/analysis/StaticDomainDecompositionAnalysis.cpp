@@ -433,7 +433,7 @@ int XC::StaticDomainDecompositionAnalysis::sendSelf(Communicator &comm)
 
   return 0;
 }
-
+//! @brief Receive the object through the given communicator.
 int XC::StaticDomainDecompositionAnalysis::recvSelf(const Communicator &comm)
   {
     //Domain *the_Domain = this->getSubdomainPtr();

@@ -265,7 +265,7 @@ int XC::ProfileSPDLinDirectSkypackSolver::sendSelf(Communicator &comm)
     return 0;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::ProfileSPDLinDirectSkypackSolver::recvSelf(const Communicator &comm)
   {
     return 0;

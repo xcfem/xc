@@ -146,14 +146,14 @@ bool XC::SymSparseLinSolver::setLinearSOE(LinearSOE *soe)
 bool XC::SymSparseLinSolver::setLinearSOE(SymSparseLinSOE &theLinearSOE)
   { return setLinearSOE(&theLinearSOE); }
 
-
+//! @brief Send the object through the given communicator.
 int XC::SymSparseLinSolver::sendSelf(Communicator &comm)
   {
     // doing nothing
     return 0;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::SymSparseLinSolver::recvSelf(const Communicator &comm)
   {
     // nothing to do

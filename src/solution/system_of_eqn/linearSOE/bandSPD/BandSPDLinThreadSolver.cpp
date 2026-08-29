@@ -222,13 +222,13 @@ int XC::BandSPDLinThreadSolver::setSize()
     return 0;
 }
 
-
+//! @brief Send the object through the given communicator.
 int XC::BandSPDLinThreadSolver::sendSelf(Communicator &comm)
 {
     // nothing to do
     return 0;
 }
-
+//! @brief Receive the object through the given communicator.
 int XC::BandSPDLinThreadSolver::recvSelf(const Communicator &comm)
 {
     // nothing to do

@@ -217,7 +217,7 @@ void XC::BandArpackppSOE::identityM(void)
     M.Identity();
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::BandArpackppSOE::sendSelf(Communicator &comm)
   { return 0; }
     

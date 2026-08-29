@@ -254,7 +254,7 @@ int XC::AlphaOSGeneralized::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(alphaI,alphaF,getDbTagData(),CommMetaData(11));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::AlphaOSGeneralized::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -268,7 +268,7 @@ int XC::AlphaOSGeneralized::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::AlphaOSGeneralized::recvSelf(const Communicator &comm)
   {
     inicComm(12);

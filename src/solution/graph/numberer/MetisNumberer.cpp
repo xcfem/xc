@@ -317,7 +317,7 @@ int XC::Metis::partition(Graph &theGraph, int numPart)
     
     return 0;
   }
-
+//! @brief Virtual constructor.
 XC::GraphNumberer *XC::Metis::getCopy(void) const
   { return new Metis(*this); }
 

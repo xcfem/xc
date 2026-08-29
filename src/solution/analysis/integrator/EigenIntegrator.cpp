@@ -237,10 +237,10 @@ const XC::EigenSOE *XC::EigenIntegrator::getEigenSOEPtr(void) const
     assert(sm);
     return sm->getEigenSOEPtr();
   }
-
+//! @brief Send the object through the given communicator.
 int XC::EigenIntegrator::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::EigenIntegrator::recvSelf(const Communicator &comm)
   { return 0; }
 

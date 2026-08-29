@@ -330,10 +330,10 @@ void XC::DistributedDiagonalSOE::zeroA(void)
     A.Zero();
     factored = false;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::DistributedDiagonalSOE::sendSelf(Communicator &comm)
   { return send(comm); }
-
+//! @brief Receive the object through the given communicator.
 int XC::DistributedDiagonalSOE::recvSelf(const Communicator &comm)
   { return receive(comm); }
 

@@ -262,9 +262,9 @@ void XC::ItpackLinSOE::zeroA(void)
     A.Zero();
     Aformed = false;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ItpackLinSOE::sendSelf(Communicator &comm)
   { return -1; }
-
+//! @brief Receive the object through the given communicator.
 int XC::ItpackLinSOE::recvSelf(const Communicator &comm)
   { return -1; }

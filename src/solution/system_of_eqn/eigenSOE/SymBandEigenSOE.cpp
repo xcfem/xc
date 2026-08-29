@@ -256,7 +256,7 @@ void XC::SymBandEigenSOE::identityM(void)
     for(int i=0;i<sz;i++)
       M(i)= 1.0;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::SymBandEigenSOE::sendSelf(Communicator &comm)
   { return 0; }
     

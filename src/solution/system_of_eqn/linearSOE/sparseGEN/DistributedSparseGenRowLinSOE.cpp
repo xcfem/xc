@@ -543,14 +543,14 @@ int XC::DistributedSparseGenRowLinSOE::addA(const XC::Matrix &m, const XC::ID &i
 
     return 0;
 }
-
+//! @brief Send the object through the given communicator.
 int XC::DistributedSparseGenRowLinSOE::sendSelf(Communicator &comm)
   {
     const int retval= send(comm);
     return retval;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::DistributedSparseGenRowLinSOE::recvSelf(const Communicator &comm)
   {
     const int retval= receive(comm);

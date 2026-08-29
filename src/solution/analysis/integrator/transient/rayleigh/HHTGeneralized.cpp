@@ -343,7 +343,7 @@ int XC::HHTGeneralized::recvData(const Communicator &comm)
     res+= comm.receiveMovable(Ualpha,getDbTagData(),CommMetaData(8));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::HHTGeneralized::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -356,7 +356,7 @@ int XC::HHTGeneralized::sendSelf(Communicator &comm)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::HHTGeneralized::recvSelf(const Communicator &comm)
   {
     inicComm(9);

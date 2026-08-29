@@ -420,10 +420,10 @@ double XC::SymBandEigenSolver::getRCond(const char &c)
 	return retval;
       }
   }
-
+//! @brief Send the object through the given communicator.
 int XC::SymBandEigenSolver::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::SymBandEigenSolver::recvSelf(const Communicator &comm)
   { return 0; }
 

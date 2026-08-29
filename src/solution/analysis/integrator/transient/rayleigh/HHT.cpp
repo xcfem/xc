@@ -105,7 +105,7 @@ XC::HHT::HHT(SolutionStrategy *owr,double _alpha, double _beta, double _gamma)
 //! @param rF: value of the Rayleigh damping factors.
 XC::HHT::HHT(SolutionStrategy *owr,double _alpha, double _beta, double _gamma,const RayleighDampingFactors &rF)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha,_beta,_gamma,rF) {}
-
+//! @brief Virtual constructor.
 XC::Integrator *XC::HHT::getCopy(void) const
   { return new HHT(*this); }
 

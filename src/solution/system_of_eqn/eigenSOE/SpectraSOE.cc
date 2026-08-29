@@ -286,7 +286,7 @@ boost::python::list XC::SpectraSOE::getAPy(void) const
       }
     return retval;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::SpectraSOE::sendSelf(Communicator &comm)
   { return 0; }
     

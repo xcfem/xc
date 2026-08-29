@@ -410,13 +410,13 @@ int XC::SuperLU::setSize(void)
         }
     return 0;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::SuperLU::sendSelf(Communicator &comm)
   {
     // nothing to do
     return 0;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::SuperLU::recvSelf(const Communicator &comm)
   {
     // nothing to do

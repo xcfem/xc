@@ -594,10 +594,10 @@ double XC::BandArpackSolver::getRCond(const char &c)
       }
     return retval;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::BandArpackSolver::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::BandArpackSolver::recvSelf(const Communicator &comm)
   {
     // nothing to do

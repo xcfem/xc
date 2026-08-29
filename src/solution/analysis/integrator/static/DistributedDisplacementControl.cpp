@@ -291,7 +291,7 @@ int XC::DistributedDisplacementControl::recvData(const Communicator &comm)
     res+= comm.receiveBool(allHaveDofID,DistributedObj::getDbTagData(),CommMetaData(17));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::DistributedDisplacementControl::sendSelf(Communicator &comm)
   {					 
     int sendID =0;
@@ -336,7 +336,7 @@ int XC::DistributedDisplacementControl::sendSelf(Communicator &comm)
     return 0;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::DistributedDisplacementControl::recvSelf(const Communicator &comm)
   {
     int sendID =0;

@@ -311,11 +311,11 @@ void XC::BandGenLinSOE::zeroA(void)
     A.Zero();
     factored = false;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::BandGenLinSOE::sendSelf(Communicator &comm)
   { return 0; }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::BandGenLinSOE::recvSelf(const Communicator &comm)
   { return 0; }
 

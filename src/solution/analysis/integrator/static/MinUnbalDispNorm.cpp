@@ -252,7 +252,7 @@ int XC::MinUnbalDispNorm::recvData(const Communicator &comm)
     res+= comm.receiveInts(signLastDeltaLambdaStep,signFirstStepMethod,getDbTagData(),CommMetaData(18));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::MinUnbalDispNorm::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -267,7 +267,7 @@ int XC::MinUnbalDispNorm::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::MinUnbalDispNorm::recvSelf(const Communicator &comm)
   {
     inicComm(19);

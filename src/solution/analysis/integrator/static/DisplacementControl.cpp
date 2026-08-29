@@ -317,14 +317,14 @@ int XC::DisplacementControl::domainChanged(void)
 		<< "; domain has not been set." << std::endl;
     return 0;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::DisplacementControl::sendSelf(Communicator &comm)
   {
     // TO FINISH
     return 0;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::DisplacementControl::recvSelf(const Communicator &comm)
   {
     // TO FINISH

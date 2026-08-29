@@ -429,7 +429,7 @@ int XC::DistributedProfileSPDLinSOE::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::DistributedProfileSPDLinSOE::recvSelf(const Communicator &comm)
   {
     const int res= receive(comm);

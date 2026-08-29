@@ -178,10 +178,10 @@ int XC::CentralDifferenceNoDamping::commit(void)
 
     return commitModel();
   }
-
+//! @brief Send the object through the given communicator.
 int XC::CentralDifferenceNoDamping::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::CentralDifferenceNoDamping::recvSelf(const Communicator &comm)
   { return 0; }
 

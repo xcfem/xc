@@ -325,10 +325,10 @@ bool XC::PetscSOE::setSolver(PetscSolver *newSolver)
     return FactoredSOEBase::setSolver(newSolver);
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::PetscSOE::sendSelf(Communicator &comm)
   { return send(comm); }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::PetscSOE::recvSelf(const Communicator &comm)
   { return receive(comm); }

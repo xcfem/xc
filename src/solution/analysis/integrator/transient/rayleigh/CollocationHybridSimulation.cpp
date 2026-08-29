@@ -347,7 +347,7 @@ int XC::CollocationHybridSimulation::recvData(const Communicator &comm)
     return res;
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::CollocationHybridSimulation::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -361,7 +361,7 @@ int XC::CollocationHybridSimulation::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::CollocationHybridSimulation::recvSelf(const Communicator &comm)
   {
     inicComm(7);

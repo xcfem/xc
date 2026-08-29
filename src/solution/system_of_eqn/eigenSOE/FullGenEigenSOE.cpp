@@ -269,11 +269,11 @@ void XC::FullGenEigenSOE::identityM(void)
     factored= false;
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::FullGenEigenSOE::sendSelf(Communicator &comm)
   { return 0; }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::FullGenEigenSOE::recvSelf(const Communicator &comm)
   { return 0; }
 

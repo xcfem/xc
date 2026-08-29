@@ -76,7 +76,7 @@
 //! @param max: maximum value for the load factor at each step.
 XC::LoadControl::LoadControl(SolutionStrategy *owr,double dLambda, int numIncr, double min, double max)
   :BaseControl(owr,INTEGRATOR_TAGS_LoadControl,numIncr), deltaLambda(dLambda), dLambdaMin(min), dLambdaMax(max) {}
-
+//! @brief Virtual constructor.
 XC::Integrator *XC::LoadControl::getCopy(void) const
   { return new LoadControl(*this); }
 
@@ -189,7 +189,7 @@ int XC::LoadControl::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(deltaLambda,dLambdaMin, dLambdaMax,getDbTagData(),CommMetaData(2));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::LoadControl::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -203,7 +203,7 @@ int XC::LoadControl::sendSelf(Communicator &comm)
                   << "; failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::LoadControl::recvSelf(const Communicator &comm)
   {
     inicComm(3);

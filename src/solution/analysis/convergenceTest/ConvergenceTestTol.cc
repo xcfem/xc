@@ -73,7 +73,7 @@ int XC::ConvergenceTestTol::recvData(const Communicator &comm)
     res+= comm.receiveDouble(tol,getDbTagData(),CommMetaData(3));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ConvergenceTestTol::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -87,7 +87,7 @@ int XC::ConvergenceTestTol::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::ConvergenceTestTol::recvSelf(const Communicator &comm)
   {
     inicComm(4);

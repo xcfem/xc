@@ -326,10 +326,10 @@ int XC::SymArpackSOE::addM(const Matrix &m, const ID &id, double fact)
 //! @brief Zeroes the matrix A.
 void XC::SymArpackSOE::zeroA(void)
   { factored = false; }
-
+//! @brief Send the object through the given communicator.
 int XC::SymArpackSOE::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::SymArpackSOE::recvSelf(const Communicator &comm)
   { return 0; }
 

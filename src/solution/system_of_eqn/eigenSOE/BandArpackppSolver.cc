@@ -191,9 +191,9 @@ int XC::BandArpackppSolver::setSize(void)
 //! @brief Return the dimension of eigenvectors.
 const int &XC::BandArpackppSolver::getSize(void) const
   { return theSOE->size; }
-
+//! @brief Send the object through the given communicator.
 int XC::BandArpackppSolver::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::BandArpackppSolver::recvSelf(const Communicator &comm)
   { return 0; }

@@ -325,7 +325,7 @@ int XC::HHTHybridSimulation::recvData(const Communicator &comm)
     res+= comm.receiveDouble(alphaF,getDbTagData(),CommMetaData(9));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::HHTHybridSimulation::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -339,7 +339,7 @@ int XC::HHTHybridSimulation::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::HHTHybridSimulation::recvSelf(const Communicator &comm)
   {
     inicComm(10);

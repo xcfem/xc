@@ -253,10 +253,10 @@ int XC::BandArpackSOE::addM(const Matrix &m, const ID &id, double fact)
     retval= this->addA(m, id, -shift);
     return retval;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::BandArpackSOE::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::BandArpackSOE::recvSelf(const Communicator &comm)
   { return 0; }
 

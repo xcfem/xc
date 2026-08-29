@@ -432,10 +432,10 @@ void XC::TransformationConstraintHandler::clearAll(void)
     numDOF= 0;
     ConstraintHandler::clearAll();
   }
-
+//! @brief Send the object through the given communicator.
 int XC::TransformationConstraintHandler::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::TransformationConstraintHandler::recvSelf(const Communicator &comm)
   { return 0; }
 

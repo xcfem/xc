@@ -172,7 +172,7 @@ int XC::MumpsSolverBase::recvData(const Communicator &comm)
     int res= comm.receiveInts(icntl7, icntl14, getDbTagData(),CommMetaData(0));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::MumpsSolverBase::sendSelf(Communicator &comm)
   {
     inicComm(3); 
@@ -185,7 +185,7 @@ int XC::MumpsSolverBase::sendSelf(Communicator &comm)
 		<< std::endl;
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::MumpsSolverBase::recvSelf(const Communicator &comm)  
   {
     // first we get the data about the state of the mesh for this cTag

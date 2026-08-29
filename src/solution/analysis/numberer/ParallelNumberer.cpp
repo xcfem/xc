@@ -369,7 +369,7 @@ int XC::ParallelNumberer::mergeSubGraph(Graph &theGraph, Graph &theSubGraph, ID 
   return 0;
 }
 
-
+//! @brief Send the object through the given communicator.
 int XC::ParallelNumberer::sendSelf(Communicator &comm)
   {
     int sendID =0;
@@ -408,7 +408,7 @@ int XC::ParallelNumberer::sendSelf(Communicator &comm)
       }
     return 0;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::ParallelNumberer::recvSelf(const Communicator &comm)
   {
     ID idData(1);

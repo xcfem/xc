@@ -545,7 +545,7 @@ int XC::MumpsParallelSOE::recvData(const Communicator &comm)
     this->setSolver(theSolvr);
     return 0;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::MumpsParallelSOE::sendSelf(Communicator &comm)
   {
     inicComm(3); 
@@ -557,7 +557,7 @@ int XC::MumpsParallelSOE::sendSelf(Communicator &comm)
               << "; communicator failed to send data.\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::MumpsParallelSOE::recvSelf(const Communicator &comm)  
   {
     // first we get the data about the state of the mesh for this cTag

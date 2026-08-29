@@ -258,7 +258,7 @@ XC::DbTagData &XC::DistributedSuperLU::getDbTagData(void) const
     static DbTagData retval(3);
     return retval;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::DistributedSuperLU::sendSelf(Communicator &comm)
   {
     int sendID =0;
@@ -309,7 +309,7 @@ int XC::DistributedSuperLU::sendSelf(Communicator &comm)
 	}	      
     return 0;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::DistributedSuperLU::recvSelf(const Communicator &comm)
   {
     static ID idData(3);

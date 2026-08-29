@@ -516,10 +516,10 @@ const XC::ID &XC::Metis::number(Graph &theGraph, int lastVertex)
 
 const XC::ID &XC::Metis::number(Graph &theGraph, const ID &lastVertices)
   { return this->number(theGraph); }
-
+//! @brief Send the object through the given communicator.
 int XC::Metis::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::Metis::recvSelf(const Communicator &comm)
   { return 0; }
 

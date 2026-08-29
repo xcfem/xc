@@ -329,7 +329,7 @@ int XC::HHTGeneralizedExplicit::recvData(const Communicator &comm)
     res+= comm.receiveInt(updateCount,getDbTagData(),CommMetaData(10));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::HHTGeneralizedExplicit::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -343,7 +343,7 @@ int XC::HHTGeneralizedExplicit::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::HHTGeneralizedExplicit::recvSelf(const Communicator &comm)
   {
     inicComm(9);

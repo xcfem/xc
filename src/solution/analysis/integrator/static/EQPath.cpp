@@ -517,7 +517,7 @@ int XC::EQPath::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(arclen,dl,sign,getDbTagData(),CommMetaData(1));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::EQPath::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -532,7 +532,7 @@ int XC::EQPath::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::EQPath::recvSelf(const Communicator &comm)
   {
     inicComm(3);

@@ -507,13 +507,13 @@ int XC::ProfileSPDLinDirectSolver::factor(int n)
     return 0;
 }
 */
-
+//! @brief Send the object through the given communicator.
 int XC::ProfileSPDLinDirectSolver::sendSelf(Communicator &comm)
   {
     return 0;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::ProfileSPDLinDirectSolver::recvSelf(const Communicator &comm)
   {
     return 0;

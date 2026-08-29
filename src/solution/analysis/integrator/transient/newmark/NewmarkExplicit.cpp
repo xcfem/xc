@@ -264,7 +264,7 @@ int XC::NewmarkExplicit::recvData(const Communicator &comm)
     return res;
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::NewmarkExplicit::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -278,7 +278,7 @@ int XC::NewmarkExplicit::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::NewmarkExplicit::recvSelf(const Communicator &comm)
   {
     inicComm(23);

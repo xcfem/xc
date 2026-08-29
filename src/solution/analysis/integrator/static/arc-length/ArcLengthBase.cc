@@ -67,7 +67,7 @@ int XC::ArcLengthBase::recvData(const Communicator &comm)
     res+= comm.receiveDouble(alpha2,getDbTagData(),CommMetaData(18));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ArcLengthBase::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -82,7 +82,7 @@ int XC::ArcLengthBase::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::ArcLengthBase::recvSelf(const Communicator &comm)
   {
     inicComm(19);

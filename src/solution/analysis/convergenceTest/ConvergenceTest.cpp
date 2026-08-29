@@ -232,7 +232,7 @@ int XC::ConvergenceTest::recvData(const Communicator &comm)
     res+= comm.receiveVector(norms,getDbTagData(),CommMetaData(2));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ConvergenceTest::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -247,7 +247,7 @@ int XC::ConvergenceTest::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::ConvergenceTest::recvSelf(const Communicator &comm)
   {
     inicComm(3);

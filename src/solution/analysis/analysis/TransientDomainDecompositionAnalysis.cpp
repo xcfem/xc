@@ -444,7 +444,7 @@ int XC::TransientDomainDecompositionAnalysis::sendSelf(Communicator &comm)
         }
     return 0;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::TransientDomainDecompositionAnalysis::recvSelf(const Communicator &comm)
   {
 

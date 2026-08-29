@@ -164,10 +164,10 @@ int XC::ItpackLinSolver::setSize(void)
 
   return 0;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ItpackLinSolver::sendSelf(Communicator &comm)
   { return -1; }
-
+//! @brief Receive the object through the given communicator.
 int XC::ItpackLinSolver::recvSelf(const Communicator &comm)
   { return -1; }
 

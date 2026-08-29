@@ -252,10 +252,10 @@ int XC::KrylovNewton::solveCurrentStep(void)
 
     return result;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::KrylovNewton::sendSelf(Communicator &comm)
   { return -1; }
-
+//! @brief Receive the object through the given communicator.
 int XC::KrylovNewton::recvSelf(const Communicator &comm)
   { return -1; }
 

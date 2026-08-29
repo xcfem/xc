@@ -169,7 +169,7 @@ int XC::IntegratorVectors::recvData(const Communicator &comm)
     res+= comm.receiveVector(phat,getDbTagData(),CommMetaData(6));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::IntegratorVectors::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -184,7 +184,7 @@ int XC::IntegratorVectors::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::IntegratorVectors::recvSelf(const Communicator &comm)
   {
     inicComm(7);

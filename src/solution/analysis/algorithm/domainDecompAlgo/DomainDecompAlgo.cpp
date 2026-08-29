@@ -115,10 +115,10 @@ int XC::DomainDecompAlgo::solveCurrentStep(void)
 	return -1;
       }
   }
-
+//! @brief Send the object through the given communicator.
 int XC::DomainDecompAlgo::sendSelf(Communicator &comm)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::DomainDecompAlgo::recvSelf(const Communicator &comm)
   { return 0; }
 

@@ -292,10 +292,10 @@ void  XC::Broyden::BroydenUpdate( IncrementalIntegrator *theIntegrator, LinearSO
       } //end for i
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::Broyden::sendSelf(Communicator &comm)
   { return -1; }
-
+//! @brief Receive the object through the given communicator.
 int XC::Broyden::recvSelf(const Communicator &comm)
   { return -1; }
 

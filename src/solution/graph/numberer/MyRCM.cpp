@@ -205,12 +205,11 @@ const XC::ID &XC::MyRCM::number(Graph &theGraph, int startVertex)
 
 
 
-int
-XC::MyRCM::sendSelf(Communicator &comm)
+int XC::MyRCM::sendSelf(Communicator &comm)
 {
     return 0;
 }
-
+//! @brief Receive the object through the given communicator.
 int XC::MyRCM::recvSelf(const Communicator &comm)
   { return 0; }
 

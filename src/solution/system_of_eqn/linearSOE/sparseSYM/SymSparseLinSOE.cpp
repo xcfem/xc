@@ -457,14 +457,14 @@ int XC::SymSparseLinSOE::setSymSparseLinSolver(SymSparseLinSolver *newSolver)
     return this->SparseSOEBase::setSolver(newSolver);
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::SymSparseLinSOE::sendSelf(Communicator &comm)
   {
     // not implemented.
     return 0;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::SymSparseLinSOE::recvSelf(const Communicator &comm)
   {
     // not implemented.

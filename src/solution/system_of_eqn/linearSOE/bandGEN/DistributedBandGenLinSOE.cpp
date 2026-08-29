@@ -313,7 +313,7 @@ int XC::DistributedBandGenLinSOE::sendSelf(Communicator &comm)
     return retval;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::DistributedBandGenLinSOE::recvSelf(const Communicator &comm)
   {
     const int retval= receive(comm);

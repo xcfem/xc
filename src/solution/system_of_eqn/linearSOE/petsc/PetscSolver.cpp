@@ -264,7 +264,7 @@ bool XC::PetscSolver::setLinearSOE(LinearSOE *soe)
 bool XC::PetscSolver::setLinearSOE(PetscSOE &theSys)
   { return setLinearSOE(&theSys); }
 
-
+//! @brief Send the object through the given communicator.
 int XC::PetscSolver::sendSelf(Communicator &comm)
   {
     static ID idData(3);
@@ -305,7 +305,7 @@ int XC::PetscSolver::sendSelf(Communicator &comm)
     comm.sendDoubles(rTol,aTol,dTol,getDbTagData(),CommMetaData(1));
     return 0;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::PetscSolver::recvSelf(const Communicator &comm)
   {
     static ID idData(3);
