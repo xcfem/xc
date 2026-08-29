@@ -330,72 +330,72 @@ XC::OpenSeesGFunEvaluator::createRecorders()
 
 
 
-int
-XC::OpenSeesGFunEvaluator::removeRecorders()
-{
-	char tclAssignment[50] = "";
-	sprintf(tclAssignment , "remove recorders");
+int XC::OpenSeesGFunEvaluator::removeRecorders()
+  {
+    char tclAssignment[50] = "";
+    sprintf(tclAssignment , "remove recorders");
+    Tcl_Eval( theTclInterp, tclAssignment);
+
+    return 0;
+  }
+
+char *XC::OpenSeesGFunEvaluator::rec_node_occurrence(char tempchar[100], bool createRecorder, int &line, int &col)
+  {
+    // Initial declarations
+    char tclAssignment[500]="";
+
+
+    // Get node and dof number etc.
+    int nodeNumber, direction;
+    char dispOrWhat[10];
+    char restString[100];
+    sscanf(tempchar,"rec_node_%s",restString);
+    if ( strncmp(restString, "disp",4) == 0) {
+      // recorder XC::Node fileName.out disp  -time -node 7 -dof 1  {rec_node_disp_7_1}
+      strcpy(dispOrWhat,"disp");
+      sscanf(restString,"disp_%i_%i", &nodeNumber, &direction);
+    }
+    else if ( strncmp(restString, "vel",3) == 0)
+      {
+	// recorder XC::Node fileName.out vel   -time -node 7 -dof 1  {rec_node_vel_7_1}
+	strcpy(dispOrWhat,"vel");
+	sscanf(restString,"vel_%i_%i", &nodeNumber, &direction);
+      }
+    else if ( strncmp(restString, "accel",5) == 0)
+      {
+	// recorder XC::Node fileName.out accel -time -node 7 -dof 1  {rec_node_accel_7_1}
+	strcpy(dispOrWhat,"accel");
+	sscanf(restString,"accel_%i_%i", &nodeNumber, &direction);
+      }
+    else
+      {
+	std::cerr << "ERROR in syntax of limit-state function with recorder." << std::endl;
+      }
+
+    // Determine variable name 
+    char *variableName= nullptr;
+    char tempString[100];
+    sprintf(tempString, "rec_node_%s_%d_%d", dispOrWhat, nodeNumber, direction);
+    variableName = new char[100];
+    strcpy(variableName,tempString);
+
+    if(createRecorder)
+      {
+	// Create the recorder
+	sprintf(tclAssignment , "recorder XC::Node %s.out %s -time -node %d -dof %d",variableName,dispOrWhat,nodeNumber,direction);
 	Tcl_Eval( theTclInterp, tclAssignment);
 
+	// Possibly create DDM gradient recorders				
+	sprintf(tclAssignment , "recorder NodeGrad %s_ddm.out %s -time -node %d -dof %d",variableName,dispOrWhat,nodeNumber,direction);
+	//	Tcl_Eval( theTclInterp, tclAssignment);
+	delete variableName;
 	return 0;
-}
+      }
 
-char *
-XC::OpenSeesGFunEvaluator::rec_node_occurrence(char tempchar[100], bool createRecorder, int &line, int &col)
-{
-	// Initial declarations
-	char tclAssignment[500]="";
-
-
-	// Get node and dof number etc.
-	int nodeNumber, direction;
-	char dispOrWhat[10];
-	char restString[100];
-	sscanf(tempchar,"rec_node_%s",restString);
-	if ( strncmp(restString, "disp",4) == 0) {
-		// recorder XC::Node fileName.out disp  -time -node 7 -dof 1  {rec_node_disp_7_1}
-		strcpy(dispOrWhat,"disp");
-		sscanf(restString,"disp_%i_%i", &nodeNumber, &direction);
-	}
-	else if ( strncmp(restString, "vel",3) == 0) {
-		// recorder XC::Node fileName.out vel   -time -node 7 -dof 1  {rec_node_vel_7_1}
-		strcpy(dispOrWhat,"vel");
-		sscanf(restString,"vel_%i_%i", &nodeNumber, &direction);
-	}
-	else if ( strncmp(restString, "accel",5) == 0) {
-		// recorder XC::Node fileName.out accel -time -node 7 -dof 1  {rec_node_accel_7_1}
-		strcpy(dispOrWhat,"accel");
-		sscanf(restString,"accel_%i_%i", &nodeNumber, &direction);
-	}
-	else {
-		std::cerr << "ERROR in syntax of limit-state function with recorder." << std::endl;
-	}
-
-	// Determine variable name 
-	char *variableName;
-	char tempString[100];
-	sprintf(tempString, "rec_node_%s_%d_%d", dispOrWhat, nodeNumber, direction);
-	variableName = new char[100];
-	strcpy(variableName,tempString);
-
-	if (createRecorder) {
-
-		// Create the recorder
-		sprintf(tclAssignment , "recorder XC::Node %s.out %s -time -node %d -dof %d",variableName,dispOrWhat,nodeNumber,direction);
-		Tcl_Eval( theTclInterp, tclAssignment);
-
-		// Possibly create DDM gradient recorders				
-		sprintf(tclAssignment , "recorder NodeGrad %s_ddm.out %s -time -node %d -dof %d",variableName,dispOrWhat,nodeNumber,direction);
-//		Tcl_Eval( theTclInterp, tclAssignment);
-
-		delete variableName;
-		return 0;
-	}
-
-	line = 0;
-	col = 2;
-	return variableName;
-}
+    line = 0;
+    col = 2;
+    return variableName;
+  }
 
 char *
 XC::OpenSeesGFunEvaluator::rec_element_occurrence(char tempchar[100], bool createRecorder, int &line, int &col)

@@ -185,9 +185,10 @@ int XC::StaticSensitivityIntegrator::update(const XC::Vector &deltaU)
 int XC::StaticSensitivityIntegrator::setDeltaLambda(double newDeltaLambda)
   { return 0; }
 
+//! @brief Send the object through the given communicator.
 int XC::StaticSensitivityIntegrator::sendSelf(Communicator &)
   { return 0; }
-
+//! @brief Receive the object through the given communicator.
 int XC::StaticSensitivityIntegrator::recvSelf(const Communicator &)
   { return 0; }
 

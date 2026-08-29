@@ -345,7 +345,7 @@ int XC::TaggedObjectStorage::sendData(Communicator &comm)
       }
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::TaggedObjectStorage::sendSelf(Communicator &comm)
   {
     inicComm(5);

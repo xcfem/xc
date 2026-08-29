@@ -77,7 +77,7 @@ int XC::MovableMatrix::sendSelf(Communicator &comm)
       }
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::MovableMatrix::recvSelf(const Communicator &comm)
   {
     inicComm(3);

@@ -80,7 +80,7 @@ int XC::Recorder::restart(void)
 
 int XC::Recorder::setDomain(Domain &theDomain)
   { return 0; }
-
+//! @brief Send the object through the given communicator.
 int XC::Recorder::sendSelf(Communicator &comm)
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -88,7 +88,7 @@ int XC::Recorder::sendSelf(Communicator &comm)
 	      << Color::def << std::endl;
     return 0;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::Recorder::recvSelf(const Communicator &comm)
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__

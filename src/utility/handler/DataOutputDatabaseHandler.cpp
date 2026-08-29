@@ -197,7 +197,7 @@ int XC::DataOutputDatabaseHandler::setDatabase(FE_Datastore &database, const std
     return 0;
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::DataOutputDatabaseHandler::sendSelf(Communicator &)
   {
     std::cerr << "XC::DataOutputDatabaseHandler::sendSelf() - not yet implemented\n";

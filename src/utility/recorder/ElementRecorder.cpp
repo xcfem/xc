@@ -271,10 +271,10 @@ int XC::ElementRecorder::initialize(void)
     return 0;
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::ElementRecorder::sendSelf(Communicator &comm)
   { return ElementRecorderBase::sendSelf(comm); }
-
+//! @brief Receive the object through the given communicator.
 int XC::ElementRecorder::recvSelf(const Communicator &comm)
   { return ElementRecorderBase::recvSelf(comm); }
 

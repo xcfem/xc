@@ -103,7 +103,7 @@ int XC::EnvelopeData::sendSelf(Communicator &comm)
     return res;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::EnvelopeData::recvSelf(const Communicator &comm)
   {
     inicComm(8);
