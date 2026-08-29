@@ -136,7 +136,7 @@ void XC::DistHingeIntegration::getSectionWeights(int numSections, double L,doubl
     //}
     //std::cerr << endln;
   }
-
+//! @brief Virtual constructor.
 XC::BeamIntegration *XC::DistHingeIntegration::getCopy(void) const
   { return new DistHingeIntegration(*this); }
 

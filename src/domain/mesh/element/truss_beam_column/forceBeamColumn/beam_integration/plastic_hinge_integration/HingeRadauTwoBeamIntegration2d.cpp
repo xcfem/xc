@@ -92,8 +92,7 @@ void XC::HingeRadauTwoBeamIntegration2d::getSectionWeights(int numSections, doub
     wt[i] = 1.0;
 }
 
-int
-XC::HingeRadauTwoBeamIntegration2d::addElasticFlexibility(double L, Matrix &fElastic)
+int XC::HingeRadauTwoBeamIntegration2d::addElasticFlexibility(double L, Matrix &fElastic)
 {
   double oneOverL = 1.0/L;
 
@@ -131,35 +130,33 @@ XC::HingeRadauTwoBeamIntegration2d::addElasticFlexibility(double L, Matrix &fEla
   return -1;
 }
 
-double XC::HingeRadauTwoBeamIntegration2d::getTangentDriftI(double L, double LI,double q2, double q3)
-{
-  double oneOverL = 1.0/L;
+double XC::HingeRadauTwoBeamIntegration2d::getTangentDriftI(double L, double LI,double q2, double q3, bool)
+  {
+    double oneOverL = 1.0/L;
 
-  double betaI = lpI*oneOverL;
+    double betaI = lpI*oneOverL;
 
-  double qq2 = (1-betaI)*q2 - betaI*q3;
+    double qq2 = (1-betaI)*q2 - betaI*q3;
+    
+    if (LI < lpI)
+      return 0.0;
+    else
+      return (LI-lpI)/3*(LI-lpI)*qq2/(E*I);
+  }
 
-  if (LI < lpI)
-    return 0.0;
-  else
-    return (LI-lpI)/3*(LI-lpI)*qq2/(E*I);
-}
+double XC::HingeRadauTwoBeamIntegration2d::getTangentDriftJ(double L, double LI, double q2, double q3, bool)
+  {
+    double oneOverL = 1.0/L;
 
-double
-XC::HingeRadauTwoBeamIntegration2d::getTangentDriftJ(double L, double LI,
-                                                 double q2, double q3)
-{
-  double oneOverL = 1.0/L;
+    double betaJ = lpJ*oneOverL;
 
-  double betaJ = lpJ*oneOverL;
+    double qq3 = (1-betaJ)*q3 - betaJ*q2;
 
-  double qq3 = (1-betaJ)*q3 - betaJ*q2;
-
-  if (LI > L-lpJ)
-    return 0.0;
-  else
-    return (L-LI-lpJ)/3*(L-LI-lpJ)*qq3/(E*I);
-}
+    if (LI > L-lpJ)
+      return 0.0;
+    else
+      return (L-LI-lpJ)/3*(L-LI-lpJ)*qq3/(E*I);
+  }
 
 //! @brief Virtual constructor.
 XC::BeamIntegration *XC::HingeRadauTwoBeamIntegration2d::getCopy(void) const
@@ -218,8 +215,7 @@ int XC::HingeRadauTwoBeamIntegration2d::setParameter(const std::vector<std::stri
       return -1;
   }
 
-int
-XC::HingeRadauTwoBeamIntegration2d::updateParameter(int parameterID,
+int XC::HingeRadauTwoBeamIntegration2d::updateParameter(int parameterID,
                                                 Information &info)
 {
   switch (parameterID) {
@@ -243,8 +239,7 @@ XC::HingeRadauTwoBeamIntegration2d::updateParameter(int parameterID,
   }
 }
 
-int
-XC::HingeRadauTwoBeamIntegration2d::activateParameter(int parameterID)
+int XC::HingeRadauTwoBeamIntegration2d::activateParameter(int parameterID)
 {
   // For Terje to do
   return 0;

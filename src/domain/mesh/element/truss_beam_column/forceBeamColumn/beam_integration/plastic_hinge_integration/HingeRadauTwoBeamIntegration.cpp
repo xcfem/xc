@@ -92,7 +92,7 @@ void XC::HingeRadauTwoBeamIntegration::getSectionWeights(int numSections, double
   for (int i = 6; i < numSections; i++)
     wt[i] = 1.0;
 }
-
+//! @brief Virtual constructor.
 XC::BeamIntegration *XC::HingeRadauTwoBeamIntegration::getCopy(void) const
   { return new HingeRadauTwoBeamIntegration(*this); }
 

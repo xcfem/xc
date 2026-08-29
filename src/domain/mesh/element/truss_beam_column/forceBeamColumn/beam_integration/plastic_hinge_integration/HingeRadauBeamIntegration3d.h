@@ -72,8 +72,8 @@ class HingeRadauBeamIntegration3d: public HingeBeamIntegration3d
   
     int addElasticFlexibility(double L, Matrix &fe);
 
-    double getTangentDriftI(double L, double LI, double q2, double q3, bool yAxis);
-    double getTangentDriftJ(double L, double LI, double q2, double q3, bool yAxis);
+    double getTangentDriftI(double L, double LI, double q2, double q3, bool yAxis, bool);
+    double getTangentDriftJ(double L, double LI, double q2, double q3, bool yAxis, bool);
 
     BeamIntegration *getCopy(void) const;
 

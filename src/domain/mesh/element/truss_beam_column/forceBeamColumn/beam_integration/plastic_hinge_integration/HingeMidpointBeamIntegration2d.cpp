@@ -124,7 +124,7 @@ int XC::HingeMidpointBeamIntegration2d::addElasticFlexibility(double L, Matrix &
     return -1;
   }
 
-double XC::HingeMidpointBeamIntegration2d::getTangentDriftI(double L, double LI,double q2, double q3)
+double XC::HingeMidpointBeamIntegration2d::getTangentDriftI(double L, double LI,double q2, double q3, bool)
   {
     double oneOverL = 1.0/L;
     double betaI = lpI*oneOverL;
@@ -136,7 +136,7 @@ double XC::HingeMidpointBeamIntegration2d::getTangentDriftI(double L, double LI,
       return (LI-lpI)/3*(LI-lpI)*qq2/(E*I);
   }
 
-double XC::HingeMidpointBeamIntegration2d::getTangentDriftJ(double L, double LI,double q2, double q3)
+double XC::HingeMidpointBeamIntegration2d::getTangentDriftJ(double L, double LI,double q2, double q3, bool)
   {
     double oneOverL = 1.0/L;
     double betaJ = lpJ*oneOverL;

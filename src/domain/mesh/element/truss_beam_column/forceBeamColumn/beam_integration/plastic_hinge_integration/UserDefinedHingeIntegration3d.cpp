@@ -170,13 +170,13 @@ int XC::UserDefinedHingeIntegration3d::addElasticFlexibility(double L, Matrix &f
 
 void XC::UserDefinedHingeIntegration3d::addElasticDeformations(ElementalLoad *theLoad,double loadFactor,double L, double *v0)
   { return; }
-
+//! @brief Virtual constructor.
 XC::BeamIntegration *XC::UserDefinedHingeIntegration3d::getCopy(void) const
   { return new UserDefinedHingeIntegration3d(*this); }
-
+//! @brief Send the object through the given communicator.
 int XC::UserDefinedHingeIntegration3d::sendSelf(Communicator &comm)
   { return -1; }
-
+//! @brief Receive the object through the given communicator.
 int XC::UserDefinedHingeIntegration3d::recvSelf(const Communicator &comm)
   { return -1; }
 

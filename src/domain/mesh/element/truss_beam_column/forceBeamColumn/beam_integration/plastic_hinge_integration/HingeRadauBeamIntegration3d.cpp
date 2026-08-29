@@ -175,7 +175,7 @@ double XC::HingeRadauBeamIntegration3d::getTangentDriftJ(double L, double LI,dou
           (L-LI-4*lpJ)/3*(L-LI-4*lpJ)*qq3/(EI);
       }
   }
-
+//! @brief Virtual constructor.
 XC::BeamIntegration *XC::HingeRadauBeamIntegration3d::getCopy(void) const
   { return new HingeRadauBeamIntegration3d(*this); }
 

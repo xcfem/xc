@@ -61,7 +61,7 @@ XC::HingeMidpointBeamIntegration3d::HingeMidpointBeamIntegration3d(int tag, doub
 
 XC::HingeMidpointBeamIntegration3d::HingeMidpointBeamIntegration3d(int tag, const CrossSectionProperties3d &cts,const double &lpi,const double &lpj)
   : HingeBeamIntegration3d(tag, BEAM_INTEGRATION_TAG_HingeMidpoint3d,cts,lpi,lpj) {}
-
+//! @brief Virtual constructor.
 XC::BeamIntegration *XC::HingeMidpointBeamIntegration3d::getCopy(void) const
   { return new HingeMidpointBeamIntegration3d(*this); }
 

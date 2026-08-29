@@ -89,7 +89,7 @@ void XC::HingeEndpointBeamIntegration::getSectionWeights(int numSections, double
     for(int i = 4; i < numSections; i++)
       wt[i] = 1.0;
   }
-
+//! @brief Virtual constructor.
 XC::BeamIntegration *XC::HingeEndpointBeamIntegration::getCopy(void) const
   { return new HingeEndpointBeamIntegration(*this); }
 

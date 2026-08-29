@@ -130,45 +130,43 @@ int XC::HingeRadauBeamIntegration2d::addElasticFlexibility(double L, Matrix &fEl
     return -1;
   }
 
-double XC::HingeRadauBeamIntegration2d::getTangentDriftI(double L, double LI,double q2, double q3)
-{
-  double oneOverL = 1.0/L;
+double XC::HingeRadauBeamIntegration2d::getTangentDriftI(double L, double LI,double q2, double q3, bool)
+  {
+    double oneOverL = 1.0/L;
 
-  double betaI = 4*lpI*oneOverL;
+    double betaI = 4*lpI*oneOverL;
 
-  double qq2 = (1-betaI)*q2 - betaI*q3;
+    double qq2 = (1-betaI)*q2 - betaI*q3;
 
-  betaI = 8.0/3*lpI*oneOverL;
+    betaI = 8.0/3*lpI*oneOverL;
 
-  double qqq2 = (1-betaI)*q2 - betaI*q3;
+    double qqq2 = (1-betaI)*q2 - betaI*q3;
 
-  if (LI < lpI)
-    return 0.0;
-  else
-    return (3*lpI)*(LI-8.0/3*lpI)*qqq2/(E*I) +
-      (LI-4*lpI)/3*(LI-4*lpI)*qq2/(E*I);
-}
+    if (LI < lpI)
+      return 0.0;
+    else
+      return (3*lpI)*(LI-8.0/3*lpI)*qqq2/(E*I) +
+	(LI-4*lpI)/3*(LI-4*lpI)*qq2/(E*I);
+  }
 
-double
-XC::HingeRadauBeamIntegration2d::getTangentDriftJ(double L, double LI,
-                                              double q2, double q3)
-{
-  double oneOverL = 1.0/L;
+double XC::HingeRadauBeamIntegration2d::getTangentDriftJ(double L, double LI, double q2, double q3, bool)
+  {
+    double oneOverL = 1.0/L;
 
-  double betaJ = 4*lpJ*oneOverL;
+    double betaJ = 4*lpJ*oneOverL;
 
-  double qq3 = (1-betaJ)*q3 - betaJ*q2;
+    double qq3 = (1-betaJ)*q3 - betaJ*q2;
 
-  betaJ = 8.0/3*lpJ*oneOverL;
+    betaJ = 8.0/3*lpJ*oneOverL;
 
-  double qqq3 = (1-betaJ)*q3 - betaJ*q2;
-
-  if (LI > L-lpJ)
-    return 0.0;
-  else
-    return (3*lpJ)*(L-LI-8.0/3*lpJ)*qqq3/(E*I) +
-      (L-LI-4*lpJ)/3*(L-LI-4*lpJ)*qq3/(E*I);
-}
+    double qqq3 = (1-betaJ)*q3 - betaJ*q2;
+    
+    if (LI > L-lpJ)
+      return 0.0;
+    else
+      return (3*lpJ)*(L-LI-8.0/3*lpJ)*qqq3/(E*I) +
+	(L-LI-4*lpJ)/3*(L-LI-4*lpJ)*qq3/(E*I);
+  }
 
 //! @brief Virtual constructor.
 XC::BeamIntegration *XC::HingeRadauBeamIntegration2d::getCopy(void) const
@@ -226,8 +224,7 @@ int XC::HingeRadauBeamIntegration2d::setParameter(const std::vector<std::string>
       return -1;
   }
 
-int
-XC::HingeRadauBeamIntegration2d::updateParameter(int parameterID,
+int XC::HingeRadauBeamIntegration2d::updateParameter(int parameterID,
                                              Information &info)
 {
   switch (parameterID) {
