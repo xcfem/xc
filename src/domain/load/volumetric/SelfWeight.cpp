@@ -93,7 +93,7 @@ int XC::SelfWeight::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(xFact, yFact, zFact,getDbTagData(),CommMetaData(3));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::SelfWeight::sendSelf(Communicator &comm)
   {
     static ID data(4);
@@ -105,7 +105,7 @@ int XC::SelfWeight::sendSelf(Communicator &comm)
       std::cerr << "SelfWeight::sendSelf - failed to send data\n";
     return result;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::SelfWeight::recvSelf(const Communicator &comm)
   {
     static ID data(4);

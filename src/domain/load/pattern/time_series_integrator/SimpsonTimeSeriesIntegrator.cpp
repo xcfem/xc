@@ -234,11 +234,11 @@ XC::TimeSeries* XC::SimpsonTimeSeriesIntegrator::differentiate(TimeSeries *theSe
     return retval;
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::SimpsonTimeSeriesIntegrator::sendSelf(Communicator &comm)
   { return 0; }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::SimpsonTimeSeriesIntegrator::recvSelf(const Communicator &comm)
   { return 0; }
 

@@ -222,11 +222,11 @@ void XC::DiscretizedRandomProcessSeries::setPyDict(const boost::python::dict &d)
     this->parameterID= boost::python::extract<int>(d["parameter_id"]);
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::DiscretizedRandomProcessSeries::sendSelf(Communicator &comm)
   { return 0; }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::DiscretizedRandomProcessSeries::recvSelf(const Communicator &comm)
   { return 0; }
 

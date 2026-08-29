@@ -71,7 +71,7 @@ int XC::BeamStrainLoad::recvData(const Communicator &comm)
     res+= comm.receiveMovable(frontEndDeformationPlane,getDbTagData(),CommMetaData(6));;
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::BeamStrainLoad::sendSelf(Communicator &comm)
   {
     static ID data(3);
@@ -82,7 +82,7 @@ int XC::BeamStrainLoad::sendSelf(Communicator &comm)
       std::cerr << "BeamStrainLoad::sendSelf() - failed to send extra data\n";    
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::BeamStrainLoad::recvSelf(const Communicator &comm)
   {
     static ID data(3);

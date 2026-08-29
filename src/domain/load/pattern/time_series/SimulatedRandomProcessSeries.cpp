@@ -157,7 +157,7 @@ void XC::SimulatedRandomProcessSeries::setPyDict(const boost::python::dict &d)
   }
 
 
-
+//! @brief Send the object through the given communicator.
 int XC::SimulatedRandomProcessSeries::sendSelf(Communicator &comm)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -166,7 +166,7 @@ int XC::SimulatedRandomProcessSeries::sendSelf(Communicator &comm)
     return 0;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::SimulatedRandomProcessSeries::recvSelf(const Communicator &comm)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__

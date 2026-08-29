@@ -92,7 +92,7 @@ double XC::TriangleSeries::getFactor(double pseudoTime) const
     else
       return 0;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::TriangleSeries::sendSelf(Communicator &comm)
   {
     static ID data(3);
@@ -105,7 +105,7 @@ int XC::TriangleSeries::sendSelf(Communicator &comm)
     return result;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::TriangleSeries::recvSelf(const Communicator &comm)
   {
     static ID data(3);

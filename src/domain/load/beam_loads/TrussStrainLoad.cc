@@ -117,7 +117,7 @@ int XC::TrussStrainLoad::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(e1,e2,getDbTagData(),CommMetaData(3));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::TrussStrainLoad::sendSelf(Communicator &comm)
   {
     inicComm(4);
@@ -129,7 +129,7 @@ int XC::TrussStrainLoad::sendSelf(Communicator &comm)
 	        << "; - failed to send extra data\n";
     return result;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::TrussStrainLoad::recvSelf(const Communicator &comm)
   {
     inicComm(4);

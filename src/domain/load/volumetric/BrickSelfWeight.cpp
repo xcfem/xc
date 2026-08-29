@@ -91,7 +91,7 @@ int XC::BrickSelfWeight::recvData(const Communicator &comm)
     int res= ThreedimLoad::recvData(comm);
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::BrickSelfWeight::sendSelf(Communicator &comm)
   {
     static ID data(5);
@@ -103,7 +103,7 @@ int XC::BrickSelfWeight::sendSelf(Communicator &comm)
       std::cerr << "BrickSelfWeight::sendSelf - failed to send data\n";
     return result;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::BrickSelfWeight::recvSelf(const Communicator &comm)
   {
     static ID data(5);

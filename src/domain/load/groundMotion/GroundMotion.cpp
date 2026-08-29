@@ -103,7 +103,7 @@ int  XC::GroundMotion::sendSelf(Communicator &comm)
     return 0;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::GroundMotion::recvSelf(const Communicator &comm)
   {
     std::cerr << "XC::GroundMotion::recvSelf not implemented." << std::endl;

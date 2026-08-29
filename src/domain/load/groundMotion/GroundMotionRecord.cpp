@@ -107,7 +107,7 @@ double XC::GroundMotionRecord::getVel(double time) const
 
 double XC::GroundMotionRecord::getDisp(double time) const
   { return history.getDisp(time); }
-
+//! @brief Send the object through the given communicator.
 int XC::GroundMotionRecord::sendSelf(Communicator &comm)
   {
     std::cerr << "XC::GroundMotionRecord::sendSelf not implemented." << std::endl;
@@ -182,7 +182,7 @@ int XC::GroundMotionRecord::sendSelf(Communicator &comm)
   return 0;
 }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::GroundMotionRecord::recvSelf(const Communicator &comm)
   {
     std::cerr << "XC::GroundMotionRecord::recvSelf not implemented." << std::endl;

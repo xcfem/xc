@@ -142,7 +142,7 @@ int XC::SurfaceLoad::recvData(const Communicator &comm)
     res+= comm.receiveDouble(pressure,getDbTagData(),CommMetaData(4));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::SurfaceLoad::sendSelf(Communicator &comm)
   {
     inicComm(5);
@@ -155,7 +155,7 @@ int XC::SurfaceLoad::sendSelf(Communicator &comm)
 	        << Color::def << std::endl;
     return result;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::SurfaceLoad::recvSelf(const Communicator &comm)
   {
     inicComm(5);

@@ -212,14 +212,14 @@ const XC::Vector &XC::InterpolatedGroundMotion::getDispVelAccel(double time) con
     return data;
   }
 
-
+//! @brief Send the object through the given communicator.
 int XC::InterpolatedGroundMotion::sendSelf(Communicator &comm)
   {
     std::cerr << "XC::InterpolatedGroundMotion::sendSelf() -- not yet implemented" << std::endl;
     return -1;
   }
 
-
+//! @brief Receive the object through the given communicator.
 int XC::InterpolatedGroundMotion::recvSelf(const Communicator &comm)
   {
     std::cerr << "XC::InterpolatedGroundMotion::recvSelf() -- not yet impelemented" << std::endl;

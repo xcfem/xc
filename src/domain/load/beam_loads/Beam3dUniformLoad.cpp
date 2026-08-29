@@ -257,7 +257,7 @@ int XC::Beam3dUniformLoad::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(wz,tx,getDbTagData(),CommMetaData(6));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::Beam3dUniformLoad::sendSelf(Communicator &comm)
   {
     inicComm(7);
@@ -269,7 +269,7 @@ int XC::Beam3dUniformLoad::sendSelf(Communicator &comm)
 	        << "; - failed to send extra data\n";
     return result;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::Beam3dUniformLoad::recvSelf(const Communicator &comm)
   {
     inicComm(7);

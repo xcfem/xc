@@ -123,7 +123,7 @@ int XC::TrussPrestressLoad::recvData(const Communicator &comm)
     res+= comm.receiveDoubles(this->sg1, this->sg2,getDbTagData(),CommMetaData(3));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::TrussPrestressLoad::sendSelf(Communicator &comm)
   {
     inicComm(4);
@@ -135,7 +135,7 @@ int XC::TrussPrestressLoad::sendSelf(Communicator &comm)
 	        << "; - failed to send extra data\n";
     return result;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::TrussPrestressLoad::recvSelf(const Communicator &comm)
   {
     inicComm(4);

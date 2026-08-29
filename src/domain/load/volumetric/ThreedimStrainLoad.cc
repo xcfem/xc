@@ -238,7 +238,7 @@ int XC::ThreedimStrainLoad::recvData(const Communicator &comm)
     res+= comm.receiveVectors(strains,getDbTagData(),CommMetaData(5));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::ThreedimStrainLoad::sendSelf(Communicator &comm)
   {
     inicComm(6);
@@ -252,7 +252,7 @@ int XC::ThreedimStrainLoad::sendSelf(Communicator &comm)
 	        << Color::def << std::endl;    
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::ThreedimStrainLoad::recvSelf(const Communicator &comm)
   {
     inicComm(6);

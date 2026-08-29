@@ -236,7 +236,7 @@ int XC::BidimStrainLoad::recvData(const Communicator &comm)
     res+= comm.receiveVectors(strains,getDbTagData(),CommMetaData(5));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::BidimStrainLoad::sendSelf(Communicator &comm)
   {
     inicComm(6);
@@ -250,7 +250,7 @@ int XC::BidimStrainLoad::sendSelf(Communicator &comm)
 	        << Color::def << std::endl;    
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::BidimStrainLoad::recvSelf(const Communicator &comm)
   {
     inicComm(6);
