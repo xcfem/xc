@@ -81,8 +81,9 @@ class InelasticYS2DGNL: public UpdatedLagrangianBeam2D
   virtual const Vector &getResistingForce(void) const;
   virtual const	Matrix &getTangentStiff(void) const;
   virtual int commitState(void);
-  virtual int update(void) const;
+  virtual int update(void);
   void Print(std::ostream &s, int flag =0) const;
+  
   int sendSelf(Communicator &);
   int recvSelf(const Communicator &);
 

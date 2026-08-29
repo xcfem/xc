@@ -52,11 +52,10 @@ int XC::QuadraticCyclic::createHalfCycleTask()
     return res;
   }
 
-
-XC::CyclicModel *XC::QuadraticCyclic::getCopy()
+//! @brief Virtual constructor.
+XC::CyclicModel *XC::QuadraticCyclic::getCopy() const
   {
-    XC::CyclicModel *newModel = new QuadraticCyclic(getTag(), weightFactor, facty);	
-    return newModel;
+    return new QuadraticCyclic(*this);
   }
 
 

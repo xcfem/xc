@@ -121,8 +121,8 @@ XC::InelasticYS2DGNL::~InelasticYS2DGNL(void)
   }
 
 // do everything here
-int XC::InelasticYS2DGNL::update(void) const
-{
+int XC::InelasticYS2DGNL::update(void)
+  {
     if(L == 0)
             return 0;
 
@@ -595,7 +595,8 @@ const XC::Matrix &XC::InelasticYS2DGNL::getTangentStiff(void) const
     // std::cerr << " getTangentStiff Called \n";
     if(!init)
       {
-        this->update();
+	InelasticYS2DGNL *this_no_const= const_cast<InelasticYS2DGNL *>(this);
+        this_no_const->update();
         init = true;
       }
 
@@ -620,7 +621,8 @@ const XC::Vector &XC::InelasticYS2DGNL::getResistingForce(void) const
     if(!init)
       {
         //~ eleForce.Zero();
-        this->update();
+	InelasticYS2DGNL *this_no_const= const_cast<InelasticYS2DGNL *>(this);
+        this_no_const->update();
         init = true;
       }
     // check for quick return
@@ -1500,7 +1502,7 @@ bool force_bal = false;
 
 
 
-
+//! @brief Commit the element state.
 int XC::InelasticYS2DGNL::commitState()
 {
 
@@ -1613,12 +1615,12 @@ void XC::InelasticYS2DGNL::Print(std::ostream &s, int flag) const
     s << " jNode: " << theNodes.getTagNode(1);
     //s << "\nElement Forces ";
 }
-
+//! @brief Send the object through the given communicator.
 int XC::InelasticYS2DGNL::sendSelf(Communicator &comm)
 {
         return -1;
 }
-
+//! @brief Receive the object through the given communicator.
 int XC::InelasticYS2DGNL::recvSelf(const Communicator &comm)
 {
         return -1;

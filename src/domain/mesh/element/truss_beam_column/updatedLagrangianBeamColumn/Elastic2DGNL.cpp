@@ -125,7 +125,7 @@ void XC::Elastic2dGNL::Print(std::ostream &s, int flag) const
         if(isLinear) s << "(1st-Order):\n";
         else                 s << "(2nd-Order):\n";
 }
-
+//! @brief Send the object through the given communicator.
 int XC::Elastic2dGNL::sendSelf(Communicator &comm)
 {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -133,7 +133,7 @@ int XC::Elastic2dGNL::sendSelf(Communicator &comm)
 		  << " method not implemented\n";
         return -1;
 }
-
+//! @brief Receive the object through the given communicator.
 int XC::Elastic2dGNL::recvSelf(const Communicator &comm)
 {
         std::cerr << getClassName() << "::" << __FUNCTION__

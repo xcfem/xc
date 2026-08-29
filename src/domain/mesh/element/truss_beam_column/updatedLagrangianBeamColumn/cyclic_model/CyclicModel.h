@@ -69,7 +69,7 @@ class CyclicModel: public TaggedObject, public MovableObject
 	
     int commitState(double newResidual);
     void update(double f, double d, bool yield);
-    virtual CyclicModel *getCopy()=0;
+    virtual CyclicModel *getCopy() const=0;
 	
     virtual double getFactor(void) const;
     // for now ignore

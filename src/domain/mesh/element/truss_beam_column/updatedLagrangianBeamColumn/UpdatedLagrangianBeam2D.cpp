@@ -165,7 +165,7 @@ int XC::UpdatedLagrangianBeam2D::update(void)
         return 0;
 }
 
-
+//! @brief Commit the element state.
 int XC::UpdatedLagrangianBeam2D::commitState()
 {
   int success = 0 ;
@@ -208,10 +208,10 @@ void XC::UpdatedLagrangianBeam2D::updateState(void) const
     //return;
     /////////////////////////////////////////////////////////////////////
 
-    const XC::Vector &end1Crd = end1Ptr()->getCrds();
-    const XC::Vector &end2Crd = end2Ptr()->getCrds();
-    const XC::Vector &end1Disp  = end1Ptr()->getTrialDisp();
-    const XC::Vector &end2Disp  = end2Ptr()->getTrialDisp();
+    const Vector &end1Crd = end1Ptr()->getCrds();
+    const Vector &end2Crd = end2Ptr()->getCrds();
+    const Vector &end1Disp  = end1Ptr()->getTrialDisp();
+    const Vector &end2Disp  = end2Ptr()->getTrialDisp();
 
     const double x1 = end1Crd(0) + end1Disp(0);
     const double y1 = end1Crd(1) + end1Disp(1);
@@ -232,7 +232,7 @@ void XC::UpdatedLagrangianBeam2D::updateState(void) const
     sn = dy/L;
   }
 
-
+//! @brief Revert to the last commited state.
 int XC::UpdatedLagrangianBeam2D::revertToLastCommit()
   {
         cs = cs_hist;

@@ -32,8 +32,8 @@
 XC::LinearCyclic::LinearCyclic(int tag)
   :CyclicModel(tag, -1) {}
 
-
-XC::CyclicModel *XC::LinearCyclic::getCopy()
+//! @brief Virtual constructor.
+XC::CyclicModel *XC::LinearCyclic::getCopy() const
   { return new LinearCyclic(*this); }
 
 double XC::LinearCyclic::getTaskFactor(void)

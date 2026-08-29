@@ -35,8 +35,8 @@ XC::BilinearCyclic::BilinearCyclic(int tag, double weight)
 
 }
 
-
-XC::CyclicModel *XC::BilinearCyclic::getCopy()
+//! @brief Virtual constructor.
+XC::CyclicModel *XC::BilinearCyclic::getCopy() const
   { return new BilinearCyclic(*this); }
 
 double XC::BilinearCyclic::getTaskFactor()

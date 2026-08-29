@@ -84,7 +84,7 @@ XC::Element* XC::Inelastic2DYS02::getCopy(void) const
 XC::Inelastic2DYS02::~Inelastic2DYS02()
   { delete cModel; }
 
-
+//! @brief Commit the element state.
 int XC::Inelastic2DYS02::commitState()
   {	
 	this->XC::InelasticYS2DGNL::commitState();

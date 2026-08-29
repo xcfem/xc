@@ -132,7 +132,7 @@ I2*I2*L1*L1*L1*L1+4*I2*L1*L1*L1*L2*I1+6*I2*L1*L1*L2*L2*I1+4*I2*L1*L2*L2*L2*I1+L2
    std::cerr << "\nInelastic2DYS03::getLocalStiff(..) = \n" << K;
   }//getLocalStiff
 
-
+//! @brief Commit the element state.
 int XC::Inelastic2DYS03::commitState(void)
   {
     // first let the super classes do their stuff

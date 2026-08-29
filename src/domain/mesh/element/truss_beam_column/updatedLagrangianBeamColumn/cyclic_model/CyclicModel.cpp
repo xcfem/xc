@@ -92,7 +92,7 @@ void XC::CyclicModel::update(double f, double d, bool yield)
     if(f_curr*f_hist < 0)
       state_curr= Crossover;
   }
-
+//! @brief Commit the element state.
 int XC::CyclicModel::commitState(double newRes)
   {
 //        d_curr= d;
