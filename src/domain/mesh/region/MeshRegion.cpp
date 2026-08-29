@@ -272,7 +272,7 @@ int XC::MeshRegion::recvData(const Communicator &comm)
     res+= comm.receiveInts(currentGeoTag,lastGeoSendTag,getDbTagData(),CommMetaData(5));
     return res;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::MeshRegion::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -286,7 +286,7 @@ int XC::MeshRegion::sendSelf(Communicator &comm)
 		<< "; failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::MeshRegion::recvSelf(const Communicator &comm)
   {
     inicComm(5);

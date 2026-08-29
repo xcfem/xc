@@ -208,7 +208,7 @@ int XC::DummyNode::getColor(void) const
 //    return theRealNode->getColor();
     return 0;
   }
-
+//! @brief Send the object through the given communicator.
 int XC::DummyNode::sendSelf(Communicator &comm)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -217,7 +217,7 @@ int XC::DummyNode::sendSelf(Communicator &comm)
     
     return theRealNode->sendSelf(comm);
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::DummyNode::recvSelf(const Communicator &comm)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__

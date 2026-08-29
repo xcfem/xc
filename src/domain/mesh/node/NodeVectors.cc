@@ -356,7 +356,7 @@ int XC::NodeVectors::sendSelf(Communicator &comm)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
-
+//! @brief Receive the object through the given communicator.
 int XC::NodeVectors::recvSelf(const Communicator &comm)
   {
     inicComm(2);
