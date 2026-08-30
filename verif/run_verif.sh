@@ -743,7 +743,7 @@ python tests/sample_problems/soil_subgrade_reaction/test_quasi_winkler.py
 python tests/sample_problems/soil_subgrade_reaction/test_foundation_slab.py
 echo "$BLEU" "  Earth retaining." "$NORMAL"
 python tests/sample_problems/earth_retaining/test_rail_retaining_wall.py
-echo "$BLEU" "  Strut-and-tie tests." "$NORMAL"
+echo "$BLEU" "  Composite structures tests." "$NORMAL"
 python tests/sample_problems/composite_structures/test_composite_structure_01.py
 
 echo "$BLEU" "Solution tests." "$NORMAL"
