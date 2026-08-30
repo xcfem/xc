@@ -1178,8 +1178,8 @@ class PredefinedSpace(object):
         elems.defaultMaterial= bearingMaterialName
         zl= elems.newElement("ZeroLength",xc.ID([newNode.tag,iNod]))
         zl.setupVectors(xc.Vector([direction[0],direction[1],0]),xc.Vector([-direction[1],direction[0],0]))
-        zl.clearMaterials()
-        zl.setMaterial(0,bearingMaterialName)
+        # zl.clearMaterials() # LP 30/08/2026 not needed anymore. 
+        # zl.setMaterial(0,bearingMaterialName) # LP 30/08/2026 not needed anymore. 
         # Boundary conditions: fix new node.
         numDOFs= newNode.getNumberDOF
         for i in range(0,numDOFs):
