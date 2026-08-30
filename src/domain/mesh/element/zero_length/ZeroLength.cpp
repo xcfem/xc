@@ -208,41 +208,98 @@ const XC::Material *XC::ZeroLength::get_material_ptr(const std::string &matName)
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << "; "
 		<< "material identified by: '" << matName
 		<< "' not found."
-	        << Color::def << std::endl;      
+	        << Color::def << std::endl;
     return retval;
   }
 
-//! @brief Set the material for the direction argument.
-//!
-//! @param dir: direction 
-void XC::ZeroLength::setMaterial(const int &dir,const std::string &matName)
+void XC::ZeroLength::set_material(const int &dir, const UniaxialMaterial *ptr_mat)
   {
-    if(dir>=this->numDOF)
+    if(ptr_mat)
+      {
+	if(dir>=this->numDOF)
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << "; "
+		      << "the element has : " << dimension
+		      << " degrees of freedom, but the DOF specified for the material identified by: '"
+		      <<  ptr_mat->getName()
+		      << "' is: " << dir
+		      << ". The command has no effect."
+		      << Color::def << std::endl;
+	  }
+	else
+	  {
+	    theMaterial1d.push_back(dir, ptr_mat);
+	    setTran1d();
+	  }
+      }
+    else
       {
 	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << "; "
-		  << "the element has : " << dimension
-		  << " degrees of freedom, but the DOF specified for the material identified by: '"
-	          <<  matName
-	          << "' is: " << dir
-	          << ". The command has no effect."
-	          << Color::def << std::endl;
+		  << " null pointer material. Exiting."
+		  << Color::def << std::endl;
+	exit(-1);
       }
+  }
+
+//! @brief Set the material for the given direction.
+//!
+//! @param dir: direction.
+//! @param matName: material name.
+void XC::ZeroLength::setMaterial(const int &dir,const std::string &matName)
+  {
     const Material *ptr_mat= get_material_ptr(matName);
     if(ptr_mat)
       {
 	const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);
 	if(tmp)
-	  theMaterial1d.push_back(dir,tmp);
+	  this->set_material(dir, tmp);
 	else
 	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << "; "
 		    << "material identified by: '" << matName
 		    << "' is not an uniaxial material."
 		    << Color::def << std::endl;
       }
-    if(theMaterial1d.size() > 0 )
-      setTran1d(elemType, theMaterial1d.size());
   }
 
+//! @brief Set the materials for the given directions.
+//!
+//! @param dirs: directions.
+//! @param matNames: material names.
+void XC::ZeroLength::set_materials(const std::deque<int> &dirs,const std::vector<const UniaxialMaterial *> &ptr_mats)
+  {
+    const size_t n= ptr_mats.size();
+    if(n!= dirs.size())
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; error in number of materials; number of directions: "
+		  << dirs.size()
+		  << " number of materials: " << n
+		  << Color::def << std::endl;
+      }
+    else
+      {
+	for(size_t i= 0;i<n;i++)
+          {
+            const UniaxialMaterial *ptr_mat_i= ptr_mats[i];
+	    const int dir_i= dirs[i];
+            if(ptr_mat_i)
+              { theMaterial1d.push_back(dir_i, ptr_mat_i); }
+	    else
+	      {
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << "; "
+			  << " null pointer material (i= "<< i << "). Exiting."
+			  << Color::def << std::endl;
+		exit(-1);
+	      }
+          }
+	setTran1d();
+      }
+  }
+
+//! @brief Set the materials for the given directions.
+//!
+//! @param dirs: directions.
+//! @param matNames: material names.
 void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<std::string> &matNames)
   {
     const size_t n= matNames.size();
@@ -252,6 +309,7 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
 	      << dirs.size()
               << " number of materials: " << n
 	      << Color::def << std::endl;
+    std::vector<const UniaxialMaterial *> ptr_mats(n, nullptr);
     Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
@@ -263,21 +321,26 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
               {
                 const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);
                 if(tmp)
-                  theMaterial1d.push_back(dirs[i],tmp);
+		  ptr_mats[i]= tmp;
                 else
-	      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << "; "
-			<< "el material de code: '" << matNames[i]
-			<< "' no corresponde a un material uniaxial."
-			<< Color::def << std::endl;
+		  {
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << "; "
+			      << "material with code: '" << matNames[i]
+			      << "' is not uniaxial."
+			      << Color::def << std::endl;
+		    exit(-1);
+		  }
               }
             else
-              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << "; "
-                        << "material identified by : '" << matNames[i]
-                        << "' not found."
-		        << Color::def << std::endl;
-          }
-        if(theMaterial1d.size() > 0 )
-          setTran1d(elemType, theMaterial1d.size());
+	      {
+		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__ << "; "
+			  << "material identified by : '" << matNames[i]
+			  << "' not found."
+			  << Color::def << std::endl;
+		exit(-1);
+	      }
+	  }
+	this->set_materials(dirs, ptr_mats);
       }
     else
       {
@@ -395,6 +458,12 @@ void XC::ZeroLength::setUpType(void)
       }
   }
 
+void XC::ZeroLength::setUpVectors(const Vector &x, const Vector &y)
+  {
+    Element0D::setUpVectors(x, y);
+    this->setTran1d();
+  }
+
 //! @brief Returns the value of the persistent (does not get wiped out by
 //! zeroLoad) initial deformation of the section.
 const XC::Vector &XC::ZeroLength::getPersistentInitialSectionDeformation(void) const
@@ -470,8 +539,7 @@ void XC::ZeroLength::setDomain(Domain *theDomain)
 
     // create the basic deformation-displacement transformation matrix for the element
     // for 1d materials (uniaxial materials)
-    if(theMaterial1d.size() > 0 )
-      setTran1d(elemType,theMaterial1d.size());
+    setTran1d();
   }
 
 //! @brief Commit state of element.
@@ -1193,96 +1261,100 @@ std::string XC::ZeroLength::getElementType(void) const
 
 //! @brief Set basic deformation-displacement transformation matrix for 1d
 //! uniaxial materials
-void XC::ZeroLength::setTran1d(Etype elemType,int numMat)
+void XC::ZeroLength::setTran1d()
   {
-    if(numDOF>0)
+    const int numMat= this->theMaterial1d.size();
+    if(numMat>0)
       {
-        enum Dtype { TRANS, ROTATE };
+	if(numDOF>0)
+	  {
+	    enum Dtype { TRANS, ROTATE };
 
-        // Create 1d transformation matrix
-        t1d= Matrix(numMat,numDOF);
+	    // Create 1d transformation matrix
+	    t1d= Matrix(numMat,numDOF);
 
-        // Use reference for convenience and zero matrix.
-        Matrix& tran= t1d;
-        tran.Zero();
+	    // Use reference for convenience and zero matrix.
+	    Matrix& tran= t1d;
+	    tran.Zero();
 
-        // loop over materials, setting row in tran for each material depending on dimensionality of element
-        int indx,dir;
-        Dtype dirType;
-        for(int i=0;i<numMat;i++)
-          {
-            dir= theMaterial1d.getDir(i); //! direction 0 to 5;
-            indx= dir % 3; //! direction 0, 1, 2 for axis of translation or rotation
+	    // loop over materials, setting row in tran for each material depending on dimensionality of element
+	    int indx,dir;
+	    Dtype dirType;
+	    for(int i=0;i<numMat;i++)
+	      {
+		dir= theMaterial1d.getDir(i); //! direction 0 to 5;
+		indx= dir % 3; //! direction 0, 1, 2 for axis of translation or rotation
 
-            // set direction type to translation or rotation
-            dirType= (dir<3) ? TRANS : ROTATE;
+		// set direction type to translation or rotation
+		dirType= (dir<3) ? TRANS : ROTATE;
 
-            // now switch on dimensionality of element
-            switch(elemType)
-              {
-              case D1N2:
-                if(dirType == TRANS)
-                  tran(i,1) = transformation(indx,0);
-                break;
-              case D2N4:
-                if(dirType == TRANS)
-                  {
-                    tran(i,2) = transformation(indx,0);
-                    tran(i,3) = transformation(indx,1);
-                  }
-                break;
-              case D2N6:
-                if(dirType == TRANS)
-                  {
-                    tran(i,3) = transformation(indx,0);
-                    tran(i,4) = transformation(indx,1);
-                    tran(i,5) = 0.0;
-                  }
-                else if(dirType == ROTATE)
-                  {
-                    tran(i,3) = 0.0;
-                    tran(i,4) = 0.0;
-                    tran(i,5) = transformation(indx,2);
-                  }
-                break;
+		// now switch on dimensionality of element
+		switch(this->elemType)
+		  {
+		  case D1N2:
+		    if(dirType == TRANS)
+		      tran(i,1) = transformation(indx,0);
+		    break;
+		  case D2N4:
+		    if(dirType == TRANS)
+		      {
+			tran(i,2) = transformation(indx,0);
+			tran(i,3) = transformation(indx,1);
+		      }
+		    break;
+		  case D2N6:
+		    if(dirType == TRANS)
+		      {
+			tran(i,3) = transformation(indx,0);
+			tran(i,4) = transformation(indx,1);
+			tran(i,5) = 0.0;
+		      }
+		    else if(dirType == ROTATE)
+		      {
+			tran(i,3) = 0.0;
+			tran(i,4) = 0.0;
+			tran(i,5) = transformation(indx,2);
+		      }
+		    break;
 
-              case D3N6:
-                if(dirType == TRANS)
-                  {
-                    tran(i,3) = transformation(indx,0);
-                    tran(i,4) = transformation(indx,1);
-                    tran(i,5) = transformation(indx,2);
-                  }
-                break;
-              case D3N12:
-                if(dirType == TRANS)
-                  {
-                    tran(i,6)  = transformation(indx,0);
-                    tran(i,7)  = transformation(indx,1);
-                    tran(i,8)  = transformation(indx,2);
-                    tran(i,9)  = 0.0;
-                    tran(i,10) = 0.0;
-                    tran(i,11) = 0.0;
-                  }
-                else if(dirType == ROTATE)
-                  {
-                    tran(i,6)  = 0.0;
-                    tran(i,7)  = 0.0;
-                    tran(i,8)  = 0.0;
-                    tran(i,9)  = transformation(indx,0);
-                    tran(i,10) = transformation(indx,1);
-                    tran(i,11) = transformation(indx,2);
-                  }
-                break;
-              } // end switch
+		  case D3N6:
+		    if(dirType == TRANS)
+		      {
+			tran(i,3) = transformation(indx,0);
+			tran(i,4) = transformation(indx,1);
+			tran(i,5) = transformation(indx,2);
+		      }
+		    break;
+		  case D3N12:
+		    if(dirType == TRANS)
+		      {
+			tran(i,6)  = transformation(indx,0);
+			tran(i,7)  = transformation(indx,1);
+			tran(i,8)  = transformation(indx,2);
+			tran(i,9)  = 0.0;
+			tran(i,10) = 0.0;
+			tran(i,11) = 0.0;
+		      }
+		    else if(dirType == ROTATE)
+		      {
+			tran(i,6)  = 0.0;
+			tran(i,7)  = 0.0;
+			tran(i,8)  = 0.0;
+			tran(i,9)  = transformation(indx,0);
+			tran(i,10) = transformation(indx,1);
+			tran(i,11) = transformation(indx,2);
+		      }
+		    break;
+		  } // end switch
 
-            // fill in first half of transformation matrix with
-            // negative sign
+		// fill in first half of transformation matrix with
+		// negative sign
 
-            for(int j=0; j < numDOF/2; j++ )
-                tran(i,j) = -tran(i,j+numDOF/2);
-        } // end loop over 1d materials
-      } //if numDOF>0
+		for(int j=0; j < numDOF/2; j++ )
+		    tran(i,j) = -tran(i,j+numDOF/2);
+	    } // end loop over 1d materials
+	  } //if numDOF>0
+      }
   }
 
 
@@ -1299,8 +1371,7 @@ double XC::ZeroLength::computeCurrentStrain1d(int mat,const XC::Vector& dispDiff
 void XC::ZeroLength::setUp(int Nd1, int Nd2,const Vector &x,const Vector &y)
   {
     Element0D::setUp(Nd1,Nd2, x, y);
-    if(theMaterial1d.size() > 0 )
-      setTran1d(elemType, theMaterial1d.size());
+    setTran1d();
   }
 
 void XC::ZeroLength::updateDir(const Vector& x, const Vector& y)

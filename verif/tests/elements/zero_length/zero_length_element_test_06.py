@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-'''Verifies that the "ZeroLength" element gives right results when not aligned with global axes.'''
+'''Verifies that the "ZeroLength" element gives the right results when not 
+aligned with global axes.'''
 
 from __future__ import print_function
 
@@ -33,27 +34,19 @@ k= typical_materials.defElasticMaterial(preprocessor, "k",K)
 
 ''' We define nodes at the points where loads will be applied.
     We will not compute stresses so we can use an arbitrary
-    cross section of unit area.'''
-    
+    cross section of unit area.'''    
 # Elements definition
-elements= preprocessor.getElementHandler
-elements.defaultMaterial= k.name
-elements.dimElem= 3 # Dimension of element space
-elements.defaultTag= 1
-zl1= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
+modelSpace.setDefaultMaterial(k)
+modelSpace.setElementDimension(3)
+zl1= modelSpace.newElement("ZeroLength", [n1.tag,n2.tag])
 zl1.setupVectors(xc.Vector([1,1,0]),xc.Vector([-1,1,0]))
-zl1.clearMaterials()
-zl1.setMaterial(0,"k")
-zl2= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
+zl2= modelSpace.newElement("ZeroLength", [n1.tag,n2.tag])
 zl2.setupVectors(xc.Vector([-1,1,0]),xc.Vector([-1,-1,0]))
-zl2.setMaterial(0,"k")
+
 
 # Constraints
-constraints= preprocessor.getBoundaryCondHandler
-spc= constraints.newSPConstraint(n1.tag,0,0.0) # Node 1
-spc= constraints.newSPConstraint(n1.tag,1,0.0)
-spc= constraints.newSPConstraint(n1.tag,2,0.0)
-spc= constraints.newSPConstraint(n2.tag,2,0.0) # Node 2
+modelSpace.fixNode('000', n1.tag)
+modelSpace.fixNode('FF0', n2.tag)
 
 
 # Load definition.
