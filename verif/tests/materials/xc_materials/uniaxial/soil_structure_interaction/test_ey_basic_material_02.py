@@ -124,9 +124,10 @@ NSpring= spring.getResistingForce()[0]
 leftForceDecrement= (leftMaterialForce-leftMaterialForceB)/leftMaterialForce
 leftForceDecrementRef= 0.9393081761006289
 ratio3= abs(leftForceDecrement-leftForceDecrementRef)/leftForceDecrementRef
-ratio4= abs(NSpring+(NRight-NLeft))/abs(NSpring)
+ratio4= abs(NSpring+(NRight+NLeft))/abs(NSpring)
 
 '''
+print('ratio0= ', ratio0)
 print('Initial state:')
 print('  right material displacement: ', rightMaterialDisp*1e3, ' mm')
 print('  right material force: ', rightMaterialForce/1e3, 'kN')
