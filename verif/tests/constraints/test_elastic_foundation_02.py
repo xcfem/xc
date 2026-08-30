@@ -71,7 +71,7 @@ modelSpace.addLoadCaseToDomain(cLC.name)
 
 # Solution
 #analysis= predefined_solutions.simple_static_linear(feProblem)
-analysis= predefined_solutions.penalty_newton_raphson(prb=feProblem,maxNumIter=10,convergenceTestTol=0.0001,printFlag=1)
+analysis= predefined_solutions.penalty_newton_raphson(prb=feProblem,maxNumIter=10,convergenceTestTol=0.0001,printFlag=0)
 result= analysis.analyze(1)
 
 # The tributary areas are also computed during the analysis. It will be useful
