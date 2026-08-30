@@ -57,7 +57,7 @@ elements.dimElem= 2 # Dimension of element space
 
 ### Left element.
 elements.defaultMaterial= soilResponse.name
-zlLeft= elements.newElement("ZeroLength",xc.ID([n4.tag,n3.tag]))
+zlLeft= elements.newElement("ZeroLength",xc.ID([n3.tag,n4.tag]))
 soilMaterialLeft= zlLeft.getMaterials()[0]
 zlLeft.setupVectors(xc.Vector([-1,0,0]),xc.Vector([0,-1,0]))
 elements.defaultMaterial= k.name
