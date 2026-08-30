@@ -458,6 +458,9 @@ void XC::ZeroLength::setUpType(void)
       }
   }
 
+//! @brief Set up the transformation matrix for orientation
+//! @param x: vector components in global coordinates defining local x-axis (vector x)
+//! @param y: vector components in global coordinates defining vector yp which lies in the local x-y plane for the element. The local z-axis is defined by the cross product between the vectors x and yp
 void XC::ZeroLength::setUpVectors(const Vector &x, const Vector &y)
   {
     Element0D::setUpVectors(x, y);
