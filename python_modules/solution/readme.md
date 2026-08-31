@@ -57,6 +57,8 @@ Once the analyst has defined the model, the next step is to define the analysis 
 - [Celestial OpenSeesing](https://portwooddigital.com/2025/09/14/celestial-openseesing/)
 
 ### Eigenvalue analysis
+ - [NAFEMS Test P18.FV2](https://openseesdigital.com/nafems/fv2/)
+ - [NAFEMS Test P18.FV73](https://openseesdigital.com/nafems/fv73/)
  - [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)
  - [Eigenvalues During an Analysis](https://portwooddigital.com/2021/11/09/eigenvalues-during-an-analysis/)
  - [More Than You or Eigen Chew](https://portwooddigital.com/2022/03/06/more-than-you-or-eigen-chew/)
