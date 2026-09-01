@@ -88,3 +88,20 @@ if (abs(ratio)<1e-7) :
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# #oh.displayFEMesh()
+# #oh.displayLocalAxes()
+# # oh.displayReactions()
+# oh.displayIntForcDiag(itemToDisp= 'N')
+# # oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+    
+# stressAfterLossAnch= tendon.stressAfterLossFriction-lssAnch
+# li= tendon.getCumLength()
+# si= tendon.stressAfterLossFriction
+# import matplotlib.pyplot as plt
+# plt.plot(li, si*1e-6)
+# plt.plot(li, stressAfterLossAnch*1e-6)
+# plt.show()
