@@ -113,6 +113,10 @@ class FrictionElementBase: public Element0D
     const Matrix &getTransformationGlobalToLocalSystem(void) const;
     void setTransformationLocalToBasicSystem(const Matrix &);
     const Matrix &getTransformationLocalToBasicSystem(void) const;
+
+    int revertToLastCommit();
+    int revertToStart();        
+    
   };
 } // end of XC namespace
 

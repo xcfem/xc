@@ -176,10 +176,8 @@ int XC::RJWatsonEQS3d::commitState()
 
 int XC::RJWatsonEQS3d::revertToLastCommit()
   {
-    // DON'T call Element::revertToLastCommit() because
-    // is a pure virtual method.
-    int errCode = this->frictionModels.revertToLastCommit();// revert friction model
-    errCode+= physicalProperties.revertToLastCommit();// revert material models
+    int errCode= SimpleBearingBase::revertToLastCommit();
+    ubPlastic= ubPlasticC;
     return errCode;
   }
 
@@ -189,20 +187,10 @@ int XC::RJWatsonEQS3d::revertToStart()
     int errCode= SimpleBearingBase::revertToStart();
     
     // reset trial history variables
-    ub.Zero();
     ubPlastic.Zero();
-    qb.Zero();
     
     // reset committed history variables
     ubPlasticC.Zero();
-    
-    // reset stiffness matrix in basic system
-    kb= this->kbInit;
-    
-    // revert friction model
-    errCode += this->frictionModels.revertToStart();
-    
-    errCode+= physicalProperties.revertToStart();// revert material models
     
     return errCode;
   }

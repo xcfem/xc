@@ -192,12 +192,8 @@ int XC::FlatSliderSimple2d::commitState()
 
 int XC::FlatSliderSimple2d::revertToLastCommit()
   {
-    // DON'T call Element::revertToLastCommit() because
-    // is a pure virtual method.
-    int errCode= 0;
-    
-    errCode += this->frictionModels.revertToLastCommit();// revert friction model    
-    errCode += physicalProperties.revertToLastCommit();// revert material models
+    int errCode= SimpleBearingBase::revertToLastCommit();
+    ubPlastic= ubPlasticC;
     return errCode;
   }
 
@@ -207,21 +203,11 @@ int XC::FlatSliderSimple2d::revertToStart()
     int errCode= SimpleBearingBase::revertToStart();
     
     // reset trial history variables
-    this->ub.Zero();
     this->ubPlastic= 0.0;
-    this->qb.Zero();
     
     // reset committed history variables
     this->ubPlasticC= 0.0;
     
-    // reset stiffness matrix in basic system
-    this->kb= this->kbInit;
-    
-    // revert friction model
-    errCode += this->frictionModels.revertToStart();
-    
-    
-    errCode += physicalProperties.revertToStart();// revert material models
     return errCode;
   }
 

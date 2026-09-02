@@ -152,8 +152,7 @@ double XC::VelNormalFrcDep::getDFFrcDVel(void) const
 
 int XC::VelNormalFrcDep::revertToStart()
   {
-    trialN   = 0.0;
-    trialVel = 0.0;
+    Coulomb::revertToStart();
     mu       = aSlow*pow(trialN,(nSlow-1.0));
     DmuDn    = 0.0;
     DmuDvel  = 0.0;

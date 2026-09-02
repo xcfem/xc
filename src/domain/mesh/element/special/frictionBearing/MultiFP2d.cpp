@@ -265,11 +265,12 @@ int XC::MultiFP2d::revertToLastCommit()
 
 int XC::MultiFP2d::revertToStart()
   {
-    theFrictionModel->revertToStart();
-    theVerticalModel->revertToStart();
+    int retval= Element0D::revertToStart();
+    retval+= theFrictionModel->revertToStart();
+    retval+= theVerticalModel->revertToStart();
     cW = W0;  
 
-    return 0;
+    return retval;
   }
 
 int XC::MultiFP2d::update()

@@ -215,6 +215,36 @@ int XC::FrictionElementBase::recvData(const Communicator &comm)
     return res;
   }
 
+int XC::FrictionElementBase::revertToLastCommit()
+  {
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
+    int errCode = this->frictionModels.revertToLastCommit();// revert friction model
+    errCode+= physicalProperties.revertToLastCommit();// revert material models
+    return errCode;
+  }
+
+//! @brief Revert the element to its initial state.
+int XC::FrictionElementBase::revertToStart()
+  {   
+    int errCode= Element0D::revertToStart();
+    
+    // reset trial history variables
+    ub.Zero();
+    qb.Zero();
+    
+    // reset stiffness matrix in basic system
+    kb = kbInit;
+    
+    // revert friction model
+    errCode+= this->frictionModels.revertToStart();
+    
+    
+    errCode+= physicalProperties.revertToStart();// revert material models
+    return errCode;
+  }
+
+
 //! @brief Specialized version for the sign of the given number
 //! (it considers the zero has no sign).
 double XC::FrictionElementBase::sgn(const double &x)
