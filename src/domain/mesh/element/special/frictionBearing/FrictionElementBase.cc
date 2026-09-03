@@ -232,6 +232,7 @@ int XC::FrictionElementBase::revertToStart()
     // reset trial history variables
     ub.Zero();
     qb.Zero();
+    ul.Zero();
     
     // reset stiffness matrix in basic system
     kb = kbInit;
