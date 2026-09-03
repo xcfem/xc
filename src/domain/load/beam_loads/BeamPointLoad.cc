@@ -62,6 +62,7 @@ XC::BeamPointLoad::BeamPointLoad(int tag, int classTag, double Pt, double dist, 
 XC::BeamPointLoad::BeamPointLoad(int tag, int classTag)
   :BeamMecLoad(tag, classTag), x(0.0) {}
 
+//! @brief Return the category of the load.
 std::string XC::BeamPointLoad::Category(void) const
   { return "punctual"; }
 
