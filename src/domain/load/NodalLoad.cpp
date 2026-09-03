@@ -136,6 +136,10 @@ XC::NodalLoad *XC::NodalLoad::getCopy(const int &tag)
     return retval;
   }
 
+//! @brief Return the category of the load.
+std::string XC::NodalLoad::Category(void) const
+  { return "punctual"; }
+
 //! @brief To set the associated Domain object.
 //! 
 //! To set the associated Domain object.
