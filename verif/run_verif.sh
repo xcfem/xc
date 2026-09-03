@@ -677,6 +677,7 @@ python tests/elements/bridge_bearings/friction_models/test_vel_dep_multilinear_0
 python tests/elements/bridge_bearings/friction_models/test_vel_pressure_dependent_01.py
 echo "$BLEU" "    Friction slider bearings." "$NORMAL"
 python tests/elements/bridge_bearings/friction_slider_bearings/test_flat_slider_simple_2d_01.py
+python tests/elements/bridge_bearings/friction_slider_bearings/test_flat_slider_simple_2d_02.py
 python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_2d_0.py
 python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_2d_1.py
 python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_2d_2.py
