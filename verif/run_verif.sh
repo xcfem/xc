@@ -684,6 +684,7 @@ python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_2d_2.
 python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_2d_3.py
 python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_2d_4.py
 python tests/elements/bridge_bearings/friction_slider_bearings/test_flat_slider_simple_3d_01.py
+python tests/elements/bridge_bearings/friction_slider_bearings/test_flat_slider_simple_3d_02.py
 python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_3d_0.py
 python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_3d_1.py
 python tests/elements/bridge_bearings/friction_slider_bearings/test_slider_3d_2.py
