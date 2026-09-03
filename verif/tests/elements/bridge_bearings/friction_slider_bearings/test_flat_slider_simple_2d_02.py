@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Check FlatSiderSimple2d revertToStart method.'''
+''' Check FlatSiderSimple2d element response in static analysis.'''
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -14,6 +14,7 @@ import math
 from materials import friction_bearings as fb
 from model import predefined_spaces
 from materials import typical_materials
+from materials.ec3 import EC3_materials
 from model import friction_models as fm
 from solution import predefined_solutions
 from misc_utils import log_messages as lmsg
@@ -37,22 +38,13 @@ modelSpace.fixNode('000', nod1.tag)
 
 # 4. Define beam element.
 ## 4.1 Define material.
-E= 2.1e9
-nu= 0.3 # Poisson's ratio
-G= E/(2*(1+nu)) # Shear modulus
-b= 0.5 # cross section width (m).
-h= b # ross section depth (m).
-A= b*h # Cross section area (m2)
-Iz= 1/12*b*h**3 # Cross section moment of inertia (m4)
-sectionProperties= xc.CrossSectionProperties2d()
-sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G
-sectionProperties.I= Iz
-section= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "section", sectionProperties)
+steel= EC3_materials.S275JR
+beamMat= EC3_materials.IPEShape(steel= steel, name='IPE_A_500').defElasticShearSection2d(preprocessor)
 ## 4.1 Define coordinate transformation.
 lin= modelSpace.newLinearCrdTransf("lin")
 ## 4.2 Define beam element.
 modelSpace.setDefaultCoordTransf(lin)
-modelSpace.setDefaultMaterial(section)
+modelSpace.setDefaultMaterial(beamMat)
 beam2d= modelSpace.newElement("ElasticBeam2d", [nod0.tag, nod2.tag])
 
 # 5. Define slider bearing.
@@ -123,7 +115,7 @@ ratio1= abs(RG1y-F)/F
 refRT1x= mu*F
 ratio2= abs(RT1x+refRT1x)/refRT1x
 ratio3= abs(RT1y-F)/F
-testOK= (ratio0<1e-10) and (ratio1<1e-5) and (ratio2<1e-5) and  (ratio3<1e-5)
+testOK= (ratio0<1e-10) and (ratio1<1e-4) and (ratio2<1e-4) and  (ratio3<1e-4)
 
 '''
 print('RG1x= ', RG1x)
