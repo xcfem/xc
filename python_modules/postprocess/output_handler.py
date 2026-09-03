@@ -811,12 +811,20 @@ class OutputHandler(object):
         retval= set()
         activeLoadPatterns= self.getActiveLoadPatterns()
         for lp in activeLoadPatterns:
-            lIter= lp.loads.getElementalLoadIter
-            elementLoad= lIter.next()
+            # Elemental loads.
+            elIter= lp.loads.getElementalLoadIter
+            elementLoad= elIter.next()
             while(elementLoad):
                 category= elementLoad.category
                 retval.add(category)
-                elementLoad= lIter.next()
+                elementLoad= elIter.next()
+            # Nodal loads.
+            nlIter= lp.loads.getNodalLoadIter
+            nodalLoad= nlIter.next()
+            while(nodalLoad):
+                category= nodalLoad.category
+                retval.add(category)
+                nodalLoad= elIter.next()
         return retval
 
     def getLoadRepresentationType(self):
@@ -1040,8 +1048,8 @@ class OutputHandler(object):
                            'transZComponent', 'epsilon_xx', 'epsilon_yy', 
                            'epsilon_zz', 'epsilon_xy', 'epsilon_xz', 
                            'epsilon_yz']
-        :param fUnitConv:  factor of conversion to be applied to the results
-                        (defaults to 1)
+        :param fUnitConv: factor of conversion to be applied to the results
+                          (defaults to 1)
         :param caption:   caption for the graphic
         :param fileName:  name of the file to plot the graphic. Defaults to None
                           in that case an screen display is generated
