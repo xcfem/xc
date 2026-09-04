@@ -501,14 +501,14 @@ class PredefinedSpace(object):
         return self.preprocessor.removeElement(element)
 
     def getElement(self, elementTag):
-        ''' Return the elements that correspond to the given tag.
+        ''' Return the element that correspond to the given tag.
 
         :param elementTag: element identifier.
         '''
         return self.getElementHandler().getElement(elementTag)
 
     def getElements(self, tags: Sequence[int]):
-        ''' Return the elements that correspond to the argument
+        ''' Return the elements that correspond to the given
             tags.
 
         :param tags: element tags.
