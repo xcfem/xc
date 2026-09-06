@@ -32,6 +32,8 @@
 template <class ARRAY_3D>
 class ConstantILayerVarRef: public Array3dBoxVarRef<ARRAY_3D>
   {
+  private:
+    using Array3dBoxVarRef<ARRAY_3D>::operator();
   public:
     typedef typename Array3dBoxVarRef<ARRAY_3D>::const_reference const_reference;
     typedef typename Array3dBoxVarRef<ARRAY_3D>::reference reference;
