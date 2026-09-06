@@ -80,8 +80,8 @@ class DistributedProfileSPDLinSOE: public ProfileSPDLinSOE, public DistributedBa
     SystemOfEqn *getCopy(void) const;
   public:
     // these methods need to be rewritten
-    int addA(const Matrix &, const ID &, double fact = 1.0);
-    int addB(const Vector &, const ID &,const double &fact= 1.0);    
+    int addA(const Matrix &, const ID &, const double &fact= 1.0);
+    int addB(const Vector &, const ID &, const double &fact= 1.0);    
     int setB(const Vector &, const double &fact= 1.0);            
     int setSize(Graph &theGraph);
     int solve(void);

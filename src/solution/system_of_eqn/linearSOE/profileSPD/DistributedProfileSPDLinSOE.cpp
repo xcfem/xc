@@ -251,7 +251,7 @@ int XC::DistributedProfileSPDLinSOE::setSize(Graph &theGraph)
   }
 
 
-int XC::DistributedProfileSPDLinSOE::addA(const Matrix &m, const ID &id, double fact)
+int XC::DistributedProfileSPDLinSOE::addA(const Matrix &m, const ID &id, const double &fact)
   {
     // check for a quick return 
     if(fact == 0.0)  return 0;
@@ -388,7 +388,7 @@ int XC::DistributedProfileSPDLinSOE::solve(void)
     return result(0);
   }
 
-int XC::DistributedProfileSPDLinSOE::addB(const Vector &v, const ID &id,const double &fact)
+int XC::DistributedProfileSPDLinSOE::addB(const Vector &v, const ID &id, const double &fact)
   { return DistributedBandLinSOE::addB(size,v,id,fact); }
 
 

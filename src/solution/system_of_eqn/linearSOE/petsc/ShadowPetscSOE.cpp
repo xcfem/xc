@@ -319,15 +319,15 @@ int XC::ShadowPetscSOE::setSize(Graph &theGraph)
 
 
 
-int XC::ShadowPetscSOE::addA(const XC::Matrix &m, const XC::ID &id, double fact)
+int XC::ShadowPetscSOE::addA(const Matrix &m, const ID &id, const double &fact)
   { return theSOE.addA(m, id, fact); }
 
     
-int XC::ShadowPetscSOE::addB(const XC::Vector &v, const XC::ID &id,const double &fact)
+int XC::ShadowPetscSOE::addB(const Vector &v, const ID &id, const double &fact)
   { return theSOE.addB(v, id, fact); }
 
 
-int XC::ShadowPetscSOE::setB(const XC::Vector &v,const double &fact)
+int XC::ShadowPetscSOE::setB(const Vector &v, const double &fact)
   { return theSOE.setB(v, fact); }
 
 

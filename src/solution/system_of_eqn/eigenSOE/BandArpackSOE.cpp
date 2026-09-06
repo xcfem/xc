@@ -92,7 +92,7 @@ int XC::BandArpackSOE::setSize(Graph &theGraph)
 
 //! @brief Assemblies in A the matrix being passed as parameter
 //! multiplied by the fact parameter.
-int XC::BandArpackSOE::addA(const Matrix &m, const ID &id, double fact)
+int XC::BandArpackSOE::addA(const Matrix &m, const ID &id, const double &fact)
   {
     // check for a quick return
     if(fact == 0.0)  return 0;
@@ -209,7 +209,7 @@ void XC::BandArpackSOE::zeroA(void)
 
 //! @brief Assemblies in M the matrix being passed as parameter
 //! multiplied by the fact parameter.
-int XC::BandArpackSOE::addM(const Matrix &m, const ID &id, double fact)
+int XC::BandArpackSOE::addM(const Matrix &m, const ID &id, const double &fact)
   {
     bool retval= 0;
     //Added by LCPT.

@@ -64,8 +64,8 @@ class SpectraSOE: public EigenSOE
   public:
     virtual int setSize(Graph &theGraph);
     
-    virtual int addA(const Matrix &, const ID &, double fact = 1.0);
-    virtual int addM(const Matrix &, const ID &, double fact = 1.0);    
+    virtual int addA(const Matrix &, const ID &, const double &fact= 1.0);
+    virtual int addM(const Matrix &, const ID &, const double &fact= 1.0);    
    
     virtual void zeroA(void);
     virtual void zeroM(void);

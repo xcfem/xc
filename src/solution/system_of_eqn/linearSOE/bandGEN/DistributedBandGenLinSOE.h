@@ -82,8 +82,8 @@ class DistributedBandGenLinSOE: public BandGenLinSOE, public DistributedBandLinS
   public:
     // these methods need to be rewritten
     int setSize(Graph &theGraph);
-    int addA(const Matrix &, const ID &, double fact = 1.0);
-    int addB(const Vector &, const ID &,const double &fact= 1.0);
+    int addA(const Matrix &, const ID &, const double &fact= 1.0);
+    int addB(const Vector &, const ID &, const double &fact= 1.0);
     int setB(const Vector &, const double &fact= 1.0);            
     Vector &getB(void);
     const Vector &getB(void) const;

@@ -342,7 +342,7 @@ int XC::MumpsParallelSOE::solve(void)
     return resSolver;
   }	
 
-int XC::MumpsParallelSOE::addB(const Vector &v, const ID &id, double fact)
+int XC::MumpsParallelSOE::addB(const Vector &v, const ID &id, const double &fact)
   {
     // check for a quick return 
     if (fact == 0.0)  return 0;
@@ -379,7 +379,7 @@ int XC::MumpsParallelSOE::addB(const Vector &v, const ID &id, double fact)
     return 0;
   }
 
-int XC::MumpsParallelSOE::setB(const Vector &v, double fact)
+int XC::MumpsParallelSOE::setB(const Vector &v, const double &fact)
   {
     // check for a quick return 
     if (fact == 0.0)  return 0;

@@ -218,7 +218,7 @@ int XC::SymSparseLinSOE::setSize(Graph &theGraph)
 
 /* Perform the element stiffness assembly here.
  */
-int XC::SymSparseLinSOE::addA(const XC::Matrix &in_m, const XC::ID &in_id, double fact)
+int XC::SymSparseLinSOE::addA(const Matrix &in_m, const ID &in_id, const double &fact)
 {
    // check for a quick return
    if(fact == 0.0)  
@@ -367,7 +367,7 @@ int XC::SymSparseLinSOE::addA(const XC::Matrix &in_m, const XC::ID &in_id, doubl
     
 /* assemble the force vector B (A*X = B).
  */
-int XC::SymSparseLinSOE::addB(const XC::Vector &in_v, const ID &in_id,const double &fact)
+int XC::SymSparseLinSOE::addB(const Vector &in_v, const ID &in_id,const double &fact)
   {
     // check for a quick return 
     if(fact == 0.0)  return 0;

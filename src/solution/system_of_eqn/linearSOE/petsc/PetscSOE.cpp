@@ -262,7 +262,7 @@ int XC::PetscSOE::setSize(Graph &theGraph)
   }
 
 
-int XC::PetscSOE::addA(const XC::Matrix &m, const XC::ID &id, double fact)
+int XC::PetscSOE::addA(const Matrix &m, const ID &id, const double &fact)
   {
     factored= false;
 

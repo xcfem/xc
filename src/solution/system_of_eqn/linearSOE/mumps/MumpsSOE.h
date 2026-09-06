@@ -91,7 +91,7 @@ class MumpsSOE : public SparseGenSOEBase
     void cppIndexing(void);
 
     virtual int setSize(Graph &theGraph);
-    virtual int addA(const Matrix &, const ID &, double fact = 1.0);
+    virtual int addA(const Matrix &, const ID &, const double &fact= 1.0);
     
     virtual int setMumpsSolver(MumpsSolver &newSolver);    
 

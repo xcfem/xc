@@ -137,7 +137,7 @@ int XC::BandArpackppSOE::addToMatrix(msp_double &MT,const Matrix &m, const ID &i
 
 //! @brief Assemblies into A the matrix being passed as parameter
 //! multimplied by the fact parameter.
-int XC::BandArpackppSOE::addA(const Matrix &a, const ID &id, double fact)
+int XC::BandArpackppSOE::addA(const Matrix &a, const ID &id, const double &fact)
   { return addToMatrix(A,a,id,fact); }
 
 //! @brief Zeroes the matrix A.
@@ -146,7 +146,7 @@ void XC::BandArpackppSOE::zeroA(void)
 
 //! @brief Assemblies into M the matrix being passed as parameter
 //! multimplied by the fact parameter.
-int XC::BandArpackppSOE::addM(const Matrix &m, const ID &id, double fact)
+int XC::BandArpackppSOE::addM(const Matrix &m, const ID &id, const double &fact)
   { 
     int retval= 0;
     //Added by LCPT.

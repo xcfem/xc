@@ -211,7 +211,7 @@ int XC::BandGenLinSOE::setSize(Graph &theGraph)
 //! @param m: matrix to assemble.
 //! @param id: row identifiers.
 //! @param fact: factor.
-int XC::BandGenLinSOE::addA(const Matrix &m, const ID &id, double fact)
+int XC::BandGenLinSOE::addA(const Matrix &m, const ID &id, const double &fact)
   {
     // check for a quick return
     if(fact == 0.0)  return 0;

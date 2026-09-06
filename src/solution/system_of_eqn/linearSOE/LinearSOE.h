@@ -125,7 +125,7 @@ class LinearSOE: public SystemOfEqn
     //! the range, i.e. $(-1,-1)$ the corresponding entry in \p M
     //! is not added to $A$. To return $0$ if successful, a
     //! negative number if not.
-    virtual int addA(const Matrix &M, const ID &loc, double fact = 1.0) =0;
+    virtual int addA(const Matrix &M, const ID &loc, const double &fact= 1.0) =0;
 
     //! The LinearSOE object assembles \p fact times the Vector \p V into
     //! the vector $b$. The Vector is assembled into $b$ at the locations
@@ -133,7 +133,7 @@ class LinearSOE: public SystemOfEqn
     //! location specified is outside the range, e.g. $-1$, the corresponding
     //! entry in {\em V} is not added to $b$. To return $0$ if successful, a
     //! negative number if not.
-    virtual int addB(const Vector &V, const ID &loc,const double &fact= 1.0) =0;    
+    virtual int addB(const Vector &V, const ID &loc, const double &fact= 1.0) =0;    
 
     //! The LinearSOE object sets the vector \p b to be \p fact times
     //! the vector \p V. To return $0$ if successful, a negative number if

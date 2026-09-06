@@ -200,7 +200,7 @@ int XC::BandSPDLinSOE::setSize(Graph &theGraph)
 //! i.e. \f$(-1,-1)\f$ the corresponding entry in \p M is not added to
 //! \f$A\f$. If \p fact is equal to \f$0.0\f$ or \f$1.0\f$, more efficient steps
 //! are performed. Returns \f$0\f$.
-int XC::BandSPDLinSOE::addA(const Matrix &m, const ID &id, double fact)
+int XC::BandSPDLinSOE::addA(const Matrix &m, const ID &id, const double &fact)
   {
     // check for a quick return
     if(fact == 0.0)  return 0;

@@ -55,8 +55,8 @@ class DistributedBandLinSOE: public DistributedLinSOE
     Vector myVectB;
 
     void setupMyB(const std::size_t &,const std::size_t &);
-    int addB(const int &size,const Vector &, const ID &,const double &);
-    int setB(const int &size,const Vector &, const double &);
+    int addB(const int &size, const Vector &, const ID &,const double &);
+    int setB(const int &size, const Vector &, const double &);
     void zeroB(void);
     int sendBArecvBX(LinearSOEData &,const bool &,double *,const int &,ID &);
     int recvBAsendBX(FactoredSOEBase &) const;

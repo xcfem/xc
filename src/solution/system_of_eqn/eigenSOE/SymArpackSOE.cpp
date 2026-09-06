@@ -182,7 +182,7 @@ int XC::SymArpackSOE::setSize(Graph &theGraph)
 
 //! @brief Assemblies into A the matrix being passed as parameter multiplied
 //! by the fact parameter.
-int XC::SymArpackSOE::addA(const Matrix &m, const ID &id, double fact)
+int XC::SymArpackSOE::addA(const Matrix &m, const ID &id, const double &fact)
   {
     // check for a quick return
     if(fact == 0.0)  
@@ -301,7 +301,7 @@ int XC::SymArpackSOE::addA(const Matrix &m, const ID &id, double fact)
 
 //! @brief Assemblies into M the matrix being passed as parameter multiplied
 //! by the fact parameter.
-int XC::SymArpackSOE::addM(const Matrix &m, const ID &id, double fact)
+int XC::SymArpackSOE::addM(const Matrix &m, const ID &id, const double &fact)
   { 
     //Added by LCPT.
     // check that m and id are of same size

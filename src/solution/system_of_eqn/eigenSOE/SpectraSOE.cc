@@ -135,7 +135,7 @@ int XC::SpectraSOE::addToMatrix(std::deque<T> &tripletList,const Matrix &m, cons
 
 //! @brief Assemblies into A the matrix being passed as parameter
 //! multimplied by the fact parameter.
-int XC::SpectraSOE::addA(const Matrix &a, const ID &id, double fact)
+int XC::SpectraSOE::addA(const Matrix &a, const ID &id, const double &fact)
   { return addToMatrix(tripletListA,a,id,fact); }
 
 //! @brief Zeroes the matrix A.
@@ -147,7 +147,7 @@ void XC::SpectraSOE::zeroA(void)
 
 //! @brief Assemblies into M the matrix being passed as parameter
 //! multimplied by the fact parameter.
-int XC::SpectraSOE::addM(const Matrix &m, const ID &id, double fact)
+int XC::SpectraSOE::addM(const Matrix &m, const ID &id, const double &fact)
   { 
     int retval= 0;
     if(fact!=0.0)

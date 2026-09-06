@@ -71,8 +71,8 @@ class LinearSOEData: public LinearSOE
     virtual void zero(void);
 
     virtual int addB(const Vector &, const double &fact= 1.0);    
-    virtual int addB(const Vector &, const ID &,const double &fact= 1.0);    
-    virtual int setB(const XC::Vector &v,const double &fact= 1.0);
+    virtual int addB(const Vector &, const ID &, const double &fact= 1.0);    
+    virtual int setB(const Vector &, const double &fact= 1.0);
     virtual void setX(int loc, double value);
     virtual void setX(const Vector &x);
     virtual const Vector &getX(void) const;

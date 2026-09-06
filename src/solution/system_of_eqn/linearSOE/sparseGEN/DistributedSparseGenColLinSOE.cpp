@@ -215,7 +215,7 @@ int XC::DistributedSparseGenColLinSOE::setSize(Graph &theGraph)
   }
 
 
-int XC::DistributedSparseGenColLinSOE::addA(const Matrix &m, const ID &id, double fact)
+int XC::DistributedSparseGenColLinSOE::addA(const Matrix &m, const ID &id, const double &fact)
  {
     // check for a quick return 
     if(fact == 0.0)  
@@ -290,7 +290,7 @@ int XC::DistributedSparseGenColLinSOE::addB(const Vector &v, const ID &id,const 
   { return DistributedBandLinSOE::addB(size,v,id,fact); }
 
 
-int XC::DistributedSparseGenColLinSOE::setB(const Vector &v,const double &fact)
+int XC::DistributedSparseGenColLinSOE::setB(const Vector &v, const double &fact)
   { return DistributedBandLinSOE::setB(size,v,fact); }
 
 

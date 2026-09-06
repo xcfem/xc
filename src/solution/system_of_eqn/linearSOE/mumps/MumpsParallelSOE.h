@@ -91,8 +91,8 @@ class MumpsParallelSOE : public MumpsSOE, DistributedLinSOE
 
     // these methods need to be rewritten
     int setSize(Graph &theGraph);
-    int addB(const Vector &, const ID &, double fact = 1.0);    
-    int setB(const Vector &, double fact = 1.0);            
+    int addB(const Vector &, const ID &, const double &fact= 1.0);    
+    int setB(const Vector &, const double &fact= 1.0);            
     const Vector &getB(void) const;
     void zeroB(void);
     int solve(void);

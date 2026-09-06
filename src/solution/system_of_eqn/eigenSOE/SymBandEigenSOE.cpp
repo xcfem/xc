@@ -119,7 +119,7 @@ int XC::SymBandEigenSOE::setSize(Graph &theGraph)
 
 //! @brief Assemblies into A the matrix being passed as parameter
 //! multimplied by the fact parameter.
-int XC::SymBandEigenSOE::addA(const Matrix &m, const ID &id, double fact)
+int XC::SymBandEigenSOE::addA(const Matrix &m, const ID &id, const double &fact)
   {
     // check for a quick return 
     if(fact == 0.0) return 0;
@@ -192,7 +192,7 @@ void XC::SymBandEigenSOE::zeroA(void)
 
 //! @brief Assemblies into A the matrix being passed as parameter
 //! multimplied by the fact parameter.
-int XC::SymBandEigenSOE::addM(const Matrix &m, const ID &id, double fact)
+int XC::SymBandEigenSOE::addM(const Matrix &m, const ID &id, const double &fact)
   {
     // check for a quick return 
     if(fact == 0.0)

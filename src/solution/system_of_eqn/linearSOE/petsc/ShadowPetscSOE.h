@@ -101,7 +101,7 @@ class ShadowPetscSOE: public LinearSOE
     int getNumEqn(void) const;
     int setSize(Graph &theGraph);
 
-    int addA(const Matrix &, const ID &, double fact = 1.0);
+    int addA(const Matrix &, const ID &, const double &fact= 1.0);
     int addB(const Vector &, const ID &, const double &fact= 1.0);
     int setB(const Vector &, const double &fact= 1.0);
 

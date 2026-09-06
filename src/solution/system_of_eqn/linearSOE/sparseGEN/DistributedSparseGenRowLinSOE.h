@@ -101,8 +101,8 @@ class DistributedSparseGenRowLinSolver;
     SystemOfEqn *getCopy(void) const;
   public:
     int setSize(Graph &theGraph);
-    int addA(const Matrix &, const ID &, double fact = 1.0);
-    int addB(const Vector &, const ID &, double fact = 1.0);
+    int addA(const Matrix &, const ID &, const double &fact= 1.0);
+    int addB(const Vector &, const ID &, const double &fact= 1.0);
     
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

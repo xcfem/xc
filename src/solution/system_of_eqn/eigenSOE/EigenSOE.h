@@ -88,8 +88,8 @@ class EigenSOE: public SystemOfEqn
     virtual double getRCond(const char &norm= '1');
      
     // pure virtual functions
-    virtual int addA(const Matrix &, const ID &, double fact = 1.0) = 0;
-    virtual int addM(const Matrix &, const ID &, double fact = 1.0) = 0;
+    virtual int addA(const Matrix &, const ID &, const double &fact = 1.0)= 0;
+    virtual int addM(const Matrix &, const ID &, const double &fact = 1.0)= 0;
 
     virtual int setSize(Graph &theGraph) = 0;
     virtual void zeroA(void) = 0;

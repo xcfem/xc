@@ -145,7 +145,7 @@ int XC::DistributedBandSPDLinSOE::setSize(Graph &theGraph)
   }
 
 
-int XC::DistributedBandSPDLinSOE::addA(const Matrix &m, const ID &id, double fact)
+int XC::DistributedBandSPDLinSOE::addA(const Matrix &m, const ID &id, const double &fact)
   {
     // check for a quick return 
     if(fact == 0.0)  return 0;
@@ -244,7 +244,7 @@ int XC::DistributedBandSPDLinSOE::solve(void)
   }	
 
 
-int XC::DistributedBandSPDLinSOE::addB(const Vector &v, const ID &id,const double &fact)
+int XC::DistributedBandSPDLinSOE::addB(const Vector &v, const ID &id, const double &fact)
   { return DistributedBandLinSOE::addB(size,v,id,fact); }
 
 

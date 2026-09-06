@@ -119,7 +119,7 @@ int XC::FullGenEigenSOE::setSize(Graph &theGraph)
   }
 
 
-int XC::FullGenEigenSOE::addA(const Matrix &a, const ID &id, double fact)
+int XC::FullGenEigenSOE::addA(const Matrix &a, const ID &id, const double &fact)
   {
     // check for quick return 
     if(fact == 0.0)
@@ -178,7 +178,7 @@ int XC::FullGenEigenSOE::addA(const Matrix &a, const ID &id, double fact)
   }
 
 
-int XC::FullGenEigenSOE::addM(const Matrix &m, const ID &id, double fact)
+int XC::FullGenEigenSOE::addM(const Matrix &m, const ID &id, const double &fact)
   {
     if(fact != 0.0)
       {

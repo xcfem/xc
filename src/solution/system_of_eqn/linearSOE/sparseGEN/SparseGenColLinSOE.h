@@ -148,7 +148,7 @@ class SparseGenColLinSOE: public SparseGenSOEBase
     SystemOfEqn *getCopy(void) const;
   public:
     virtual int setSize(Graph &theGraph);
-    virtual int addA(const Matrix &, const ID &, double fact = 1.0);
+    virtual int addA(const Matrix &, const ID &, const double &fact= 1.0);
 
     const ID &getRowA(void) const
       { return rowA; }

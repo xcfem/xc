@@ -501,7 +501,7 @@ int XC::DistributedSparseGenRowLinSOE::setSize(Graph &theGraph)
     return result;
 }
 
-int XC::DistributedSparseGenRowLinSOE::addA(const XC::Matrix &m, const XC::ID &id, double fact)
+int XC::DistributedSparseGenRowLinSOE::addA(const Matrix &m, const ID &id, const double &fact)
   {
     // check for a quick return 
     if(fact == 0.0)  
