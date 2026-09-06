@@ -92,7 +92,7 @@ class FiberSectionShear2d: public FiberSection2d
  
     void Print(std::ostream &s, int flag =0) const;
 
-    int setVariable(const std::string &argv);
+    int setVariable(const std::string &argv, Information &);
     int getVariable(int variableID, double &info) const;
 
   };

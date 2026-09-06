@@ -337,7 +337,7 @@ void XC::FiberSectionShear2d::Print(std::ostream &s, int flag) const
 
 //! @brief Returns the identifier of the variable which name is
 //! being passed as parameter.
-int XC::FiberSectionShear2d::setVariable(const std::string &argv)
+int XC::FiberSectionShear2d::setVariable(const std::string &argv, Information &)
   {
     // Axial strain
     if(argv =="axialStrain")
