@@ -139,7 +139,7 @@ void XC::PathSeriesBase::setPyDict(const boost::python::dict &d)
 //! @brief Send members through the communicator argument.
 int XC::PathSeriesBase::sendData(Communicator &comm)
   {
-    int res= sendData(comm);
+    int res= CFactorSeries::sendData(comm);
     res+= comm.sendVector(thePath,getDbTagData(),CommMetaData(1));
     res+= comm.sendBool(useLast,getDbTagData(),CommMetaData(2));
     return res;
@@ -148,7 +148,7 @@ int XC::PathSeriesBase::sendData(Communicator &comm)
 //! @brief Receives members through the communicator argument.
 int XC::PathSeriesBase::recvData(const Communicator &comm)
   {
-    int res= recvData(comm);
+    int res= CFactorSeries::recvData(comm);
     res+= comm.receiveVector(thePath,getDbTagData(),CommMetaData(1));
     res+= comm.receiveBool(useLast,getDbTagData(),CommMetaData(2));
     return res;
