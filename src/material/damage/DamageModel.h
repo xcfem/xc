@@ -122,7 +122,8 @@ class DamageModel:  public TaggedObject, public MovableObject
 
     virtual int setVariable(const std::string &argv, Information &)
       { return -1; }
-    virtual int getVariable(const std::string &varName, Information &info) const
+    using MovableObject::getVariable;
+    virtual int getVariable(int variableID, double &info) const
       { return -1; }
     
     using MovableObject::setParameter;

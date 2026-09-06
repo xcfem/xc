@@ -105,7 +105,8 @@ class Material: public TaggedObject, public MovableObject
     const Material *getMaterialByName(const std::string &) const;    
 
     virtual int setVariable(const std::string &argv, Information &);
-    virtual int getVariable(const std::string &varName, Information &info) const;
+    using MovableObject::getVariable;
+    virtual int getVariable(int variableID, double &info) const;
 
     virtual const ResponseId &getResponseType(void) const;
     

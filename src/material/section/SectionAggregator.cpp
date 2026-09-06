@@ -749,7 +749,7 @@ int XC::SectionAggregator::setVariable(const std::string &argv, Information &)
 
 //! @brief Returns the value of the variable which identifier
 //! is being passed as parameter.
-int XC::SectionAggregator::getVariable(const std::string &varName, Information &info) const
+int XC::SectionAggregator::getVariable(int variableID, double &info) const
   {
     int i;
     info= 0.0;
