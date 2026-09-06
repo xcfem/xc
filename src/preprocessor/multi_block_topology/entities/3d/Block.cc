@@ -576,14 +576,14 @@ void XC::Block::setNDivK(const size_t &nDiv)
 
 typedef std::tuple<size_t, size_t, size_t> ijk_node_key;
 
-struct ijk_node_key_hash : public std::unary_function<ijk_node_key, std::size_t>
+struct ijk_node_key_hash : public std::function<std::size_t(ijk_node_key)>
   {
     std::size_t operator()(const ijk_node_key& k) const
     {
       return std::get<0>(k) ^ std::get<1>(k) ^ std::get<2>(k);
     }
   };
-struct ijk_node_key_equal : public std::binary_function<ijk_node_key, ijk_node_key, bool>
+struct ijk_node_key_equal : public std::function<bool(ijk_node_key, ijk_node_key) >
   {
     bool operator()(const ijk_node_key& v0, const ijk_node_key& v1) const
       {
