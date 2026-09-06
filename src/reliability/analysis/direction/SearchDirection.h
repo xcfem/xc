@@ -71,15 +71,14 @@ namespace XC {
 class SearchDirection
   {
   public:
-	SearchDirection();
+    SearchDirection();
 
-	virtual int computeSearchDirection(	
-			int stepNumber,
-			Vector passed_u, 
-			double passed_gFunctionValue, 
-			Vector passedGradientInStandardNormalSpace) =0;
-	virtual Vector getSearchDirection() =0;
-};
+    virtual int computeSearchDirection(int stepNumber,
+				       Vector passed_u, 
+				       double passed_gFunctionValue, 
+				       Vector passedGradientInStandardNormalSpace) =0;
+    virtual Vector getSearchDirection() =0;
+  };
 } // end of XC namespace
 
 #endif

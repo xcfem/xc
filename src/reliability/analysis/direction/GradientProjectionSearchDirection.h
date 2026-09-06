@@ -82,11 +82,11 @@ class GradientProjectionSearchDirection: public SearchDirection
     RootFinding *theRootFindingAlgorithm;
   public:
     GradientProjectionSearchDirection(StepSizeRule *theStepSizeRule,
-    								  ProbabilityTransformation *theProbabilityTransformation,
-    								  GFunEvaluator *theGFunEvaluator,
-    								  RootFinding *theRootFindingAlgorithm);
+				      ProbabilityTransformation *theProbabilityTransformation,
+				      GFunEvaluator *theGFunEvaluator,
+				      RootFinding *theRootFindingAlgorithm);
 
-    int computeSearchDirection(int stepNumber,const Vector &u,const double &g, const Vector &gradG);
+    int computeSearchDirection(int stepNumber,const Vector &u, double g, const Vector &gradG);
     Vector getSearchDirection();
   };
 } // end of XC namespace

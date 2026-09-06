@@ -71,60 +71,56 @@ namespace XC {
 //!
 //! @brief ??
 class SQPsearchDirectionMeritFunctionAndHessian: public SearchDirection, public MeritFunctionCheck, public HessianApproximation
-{
+  {
+  private:
+    HessianApproximation *theHessianApproximation;
 
-public:
-	SQPsearchDirectionMeritFunctionAndHessian(double c_bar, double e_bar);
-	~SQPsearchDirectionMeritFunctionAndHessian();
+    // Parameters
+    double c_bar, e_bar, alpha;
+    
+    // To be returned...
+    Vector searchDirection;
+    double stepSize;
 
-	// METHODS FOR SEARCH DIRECTION
-	int computeSearchDirection(	int stepNumber, 
-								Vector passed_u, 
-								double passed_gFunctionValue, 
-								Vector passedGradientInStandardNormalSpace);
-	Vector getSearchDirection();
+    // History data
+    Matrix *B;
+    double delta, c, lambda; 
+    double kappa;
+  public:
+    SQPsearchDirectionMeritFunctionAndHessian(double c_bar, double e_bar);
+    ~SQPsearchDirectionMeritFunctionAndHessian();
 
-	// METHODS FOR MERIT FUNCTION CHECK
-	int	check(Vector u_old, 
-			  double g_old, 
-			  Vector grad_G_old, 
-			  double stepSize,
-			  Vector stepDirection,
-			  double g_new);
-	double getMeritFunctionValue(Vector u, double g, Vector grad_G);
-	int updateMeritParameters(Vector u, double g, Vector grad_G);
+    // METHODS FOR SEARCH DIRECTION
+    int computeSearchDirection(int stepNumber, 
+			       Vector passed_u, 
+			       double passed_gFunctionValue, 
+			       Vector passedGradientInStandardNormalSpace);
+    Vector getSearchDirection();
 
-	int setAlpha(double alpha);
+    // METHODS FOR MERIT FUNCTION CHECK
+    int	check(Vector u_old, 
+	      double g_old, 
+	      Vector grad_G_old, 
+	      double stepSize,
+	      Vector stepDirection,
+	      double g_new);
+    double getMeritFunctionValue(Vector u, double g, Vector grad_G);
+    int updateMeritParameters(Vector u, double g, Vector grad_G);
 
-	// METHODS FOR HESSIAN APPROXIMATION
-	Matrix  getHessianApproximation();
-	int     setHessianToIdentity(int size);
-	int     setHessianApproximation(HessianApproximation *theHessianApproximation);
-	int     updateHessianApproximation(Vector u_old,
-									   double g_old,
-									   Vector gradG_old,
-									   double stepSize,
-									   Vector searchDirection,
-									   double g_new,
-									   Vector grad_G_new);
+    int setAlpha(double alpha);
 
-protected:
-
-private:
-	HessianApproximation *theHessianApproximation;
-
-	// Parameters
-	double c_bar, e_bar, alpha;
-
-	// To be returned...
-	Vector searchDirection;
-	double stepSize;
-
-	// History data
-	Matrix *B;
-	double delta, c, lambda; 
-	double kappa;
-};
+    // METHODS FOR HESSIAN APPROXIMATION
+    Matrix getHessianApproximation();
+    int setHessianToIdentity(int size);
+    int setHessianApproximation(HessianApproximation *theHessianApproximation);
+    int updateHessianApproximation(Vector u_old,
+				   double g_old,
+				   Vector gradG_old,
+				   double stepSize,
+				   Vector searchDirection,
+				   double g_new,
+				   Vector grad_G_new);
+  };
 } // end of XC namespace
 
 #endif

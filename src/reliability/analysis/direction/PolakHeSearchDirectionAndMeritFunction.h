@@ -70,37 +70,33 @@ namespace XC {
 //!
 //! @brief ??
 class PolakHeSearchDirectionAndMeritFunction: public SearchDirection, public MeritFunctionCheck
-{
+  {
+  public:
+    PolakHeSearchDirectionAndMeritFunction(double gamma, double delta);
 
-public:
-	PolakHeSearchDirectionAndMeritFunction(double gamma, double delta);
+    int computeSearchDirection(int stepNumber, 
+			       Vector passed_u, 
+			       double passed_gFunctionValue, 
+			       Vector passedGradientInStandardNormalSpace);
+    Vector getSearchDirection();
 
-	int computeSearchDirection(	int stepNumber, 
-								Vector passed_u, 
-								double passed_gFunctionValue, 
-								Vector passedGradientInStandardNormalSpace);
-	Vector getSearchDirection();
+    int	check(Vector u_old, 
+		double g_old, 
+		Vector grad_G_old, 
+		double stepSize,
+		Vector stepDirection,
+		double g_new);
+    double getMeritFunctionValue(Vector u, double g, Vector grad_G);
+    int updateMeritParameters(Vector u, double g, Vector grad_G);
 
-	int	check(Vector u_old, 
-			  double g_old, 
-			  Vector grad_G_old, 
-			  double stepSize,
-			  Vector stepDirection,
-			  double g_new);
-	double getMeritFunctionValue(Vector u, double g, Vector grad_G);
-	int updateMeritParameters(Vector u, double g, Vector grad_G);
-
-	int setAlpha(double alpha);
-
-protected:
-
-private:
-	Vector searchDirection;
-	double thetaFunction;
-	double alpha;
-	double gamma;
-	double delta;
-};
+    int setAlpha(double alpha);
+  private:
+    Vector searchDirection;
+    double thetaFunction;
+    double alpha;
+    double gamma;
+    double delta;
+  };
 } // end of XC namespace
 
 #endif

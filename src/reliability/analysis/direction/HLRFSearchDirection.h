@@ -69,20 +69,19 @@ namespace XC {
 //!
 //! @brief ??
 class HLRFSearchDirection: public SearchDirection
-{
+  {
+  private:
+    Vector searchDirection;
+  public:
+    HLRFSearchDirection();
 
-public:
-	HLRFSearchDirection();
+    int computeSearchDirection(int stepNumber,
+			       Vector passed_u, 
+			       double passed_gFunctionValue, 
+			       Vector passedGradientInStandardNormalSpace);
+    Vector getSearchDirection();
 
-	int computeSearchDirection(	int stepNumber,
-								Vector passed_u, 
-								double passed_gFunctionValue, 
-								Vector passedGradientInStandardNormalSpace);
-	Vector getSearchDirection();
-private:
-	Vector searchDirection;
-
-};
+  };
 } // end of XC namespace
 
 #endif
