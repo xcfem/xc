@@ -388,7 +388,7 @@ char *XC::OpenSeesGFunEvaluator::rec_node_occurrence(char tempchar[100], bool cr
 	// Possibly create DDM gradient recorders				
 	sprintf(tclAssignment , "recorder NodeGrad %s_ddm.out %s -time -node %d -dof %d",variableName,dispOrWhat,nodeNumber,direction);
 	//	Tcl_Eval( theTclInterp, tclAssignment);
-	delete variableName;
+	delete [] variableName;
 	return 0;
       }
 
