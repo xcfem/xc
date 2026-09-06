@@ -76,14 +76,15 @@ class MeritFunctionCheck
   {
   public:
     MeritFunctionCheck(void);
-    virtual int check(Vector u_old, 
-					  double g_old, 
-					  Vector grad_G_old, 
-					  double stepSize,
-					  Vector stepDirection,
-					  double g_new) = 0;
-    virtual double getMeritFunctionValue(Vector u, double g, Vector grad_G) = 0;
-    virtual int updateMeritParameters(Vector u, double g, Vector grad_G) = 0;
+    virtual int check(const Vector &u_old, 
+		      double g_old, 
+		      const Vector &grad_G_old, 
+		      double stepSize,
+		      const Vector &stepDirection,
+		      double g_new
+		      const Vector &grad_G_new) = 0;
+    virtual double getMeritFunctionValue(const Vector &u, double g, const Vector &grad_G) = 0;
+    virtual int updateMeritParameters(const Vector &u, double g, const Vector &grad_G) = 0;
   };
 } // end of XC namespace
 

@@ -65,83 +65,79 @@
 
 XC::AdkZhangMeritFunctionCheck::AdkZhangMeritFunctionCheck(double pmulti, double padd, double pa)
 :MeritFunctionCheck()
-{
-	multi = pmulti;
-	add = padd;
-	a = pa;
-}
+  {
+    multi = pmulti;
+    add = padd;
+    a = pa;
+  }
 
-int
-XC::AdkZhangMeritFunctionCheck::check(Vector u_old, 
-								  double g_old, 
-								  Vector grad_G_old, 
-								  double stepSize,
-								  Vector stepDirection,
-								  double g_new)
-{
+int XC::AdkZhangMeritFunctionCheck::check(const Vector &u_old,
+					  double g_old, 
+					  const Vector &grad_G_old, 
+					  double stepSize,
+					  const Vector &stepDirection,
+					  double g_new,
+					  const Vector &)
+  {
 
-	// Update penalty parameter 'c' (should remain constant along the search direction)
-	this->updateMeritParameters(u_old,g_old,grad_G_old);
-
-	
-	// New point in standard normal space
-	Vector u_new = u_old + stepSize*stepDirection;
-
-
-	// Compute value of merit functions
-	Vector dummy(1);
-	double merit_old = this->getMeritFunctionValue(u_old,g_old,dummy);
-	double merit_new = this->getMeritFunctionValue(u_new,g_new,dummy);
+    // Update penalty parameter 'c' (should remain constant along the search direction)
+    this->updateMeritParameters(u_old,g_old,grad_G_old);
 
 	
-	// Gradient of the merit function
-	double signumG;
-	if (g_old != 0.0) {
-		signumG = g_old/fabs(g_old);
-	}
-	else {
-		signumG = 1.0;
-	}
-	Vector gradM_old = u_old + c * signumG * grad_G_old;
+    // New point in standard normal space
+    Vector u_new = u_old + stepSize*stepDirection;
 
 
-	// Do the check
-	if (  (merit_new-merit_old)  <=  a*stepSize*(gradM_old^stepDirection)  ) {
-		return 0;  // ok
-	}
-	else {
-		return -1; // not ok
-	}
+    // Compute value of merit functions
+    Vector dummy(1);
+    double merit_old = this->getMeritFunctionValue(u_old,g_old,dummy);
+    double merit_new = this->getMeritFunctionValue(u_new,g_new,dummy);
+
 	
-}
+    // Gradient of the merit function
+    double signumG;
+    if (g_old != 0.0)
+      {
+	signumG = g_old/fabs(g_old);
+      }
+    else
+      {
+	signumG = 1.0;
+      }
+    Vector gradM_old = u_old + c * signumG * grad_G_old;
+
+    // Do the check
+    if( (merit_new-merit_old)  <=  a*stepSize*(gradM_old^stepDirection)  )
+      {
+	return 0;  // ok
+      }
+    else
+      {
+	return -1; // not ok
+      }
+  }
 
 
+int XC::AdkZhangMeritFunctionCheck::updateMeritParameters(const Vector &u, 
+							  double g,
+							  const Vector &grad_G)
+  {
+    // Update penalty factor 'c'
+    c = (u.Norm() / grad_G.Norm()) * multi + add;
+    
+    return 0;
+  }
 
 
+double XC::AdkZhangMeritFunctionCheck::getMeritFunctionValue(const Vector &u, 
+							     double g,
+							     const Vector &grad_G)
+  {
+    // Note that it is correct to keep 'c' constant
 
-int
-XC::AdkZhangMeritFunctionCheck::updateMeritParameters(Vector u, 
-												  double g,
-												  Vector grad_G)
-{
-	// Update penalty factor 'c'
-	c = (u.Norm() / grad_G.Norm()) * multi + add;
+    // Compute merit function
+    double merit = 0.5 * (u ^ u) + c * fabs(g);
 
-	return 0;
-}
-
-
-double
-XC::AdkZhangMeritFunctionCheck::getMeritFunctionValue(Vector u, 
-												  double g,
-												  Vector grad_G)
-{
-	// Note that it is correct to keep 'c' constant
-
-	// Compute merit function
-	double merit = 0.5 * (u ^ u) + c * fabs(g);
-
-
-	// Return the result
-	return merit;
-}
+    // Return the result
+    return merit;
+  }

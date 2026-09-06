@@ -75,15 +75,15 @@ class CriteriaReductionMeritFunctionCheck: public MeritFunctionCheck
 
   public:
     CriteriaReductionMeritFunctionCheck(ReliabilityConvergenceCheck *theReliabilityConvergenceCheck);
-    int	check(Vector u_old, 
-		      double g_old, 
-		      Vector grad_G_old, 
-		      double stepSize,
-		      Vector stepDirection,
-		      double g_new, 
-		      Vector grad_G_new);
-    double getMeritFunctionValue(Vector u, double g, Vector grad_G);
-    int updateMeritParameters(Vector u, double g, Vector grad_G);
+    int	check(const Vector &u_old, 
+	      double g_old, 
+	      const Vector &grad_G_old, 
+	      double stepSize,
+	      const Vector &stepDirection,
+	      double g_new, 
+	      const Vector &grad_G_new);
+    double getMeritFunctionValue(const Vector &u, double g, const Vector &grad_G);
+    int updateMeritParameters(const Vector &u, double g, const Vector &grad_G);
   };
 } // end of XC namespace
 

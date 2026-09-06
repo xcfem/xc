@@ -66,86 +66,88 @@
 
 XC::CriteriaReductionMeritFunctionCheck::CriteriaReductionMeritFunctionCheck(ReliabilityConvergenceCheck *passedReliabilityConvergenceCheck)
 :MeritFunctionCheck()
-{
-	theReliabilityConvergenceCheck = passedReliabilityConvergenceCheck;
-}
+ {
+   theReliabilityConvergenceCheck = passedReliabilityConvergenceCheck;
+ }
 
-int XC::CriteriaReductionMeritFunctionCheck::check(Vector u_old, 
-								  double g_old, 
-								  Vector grad_G_old, 
-								  double stepSize,
-								  Vector stepDirection,
-								  double g_new, 
-								  Vector grad_G_new)
-{
-	// New point in standard normal space
-	Vector u_new = u_old + stepSize*stepDirection;
-
-
-	// Number of convergence criteria
-	int numCrit = theReliabilityConvergenceCheck->getNumberOfCriteria();
+int XC::CriteriaReductionMeritFunctionCheck::check(const Vector &u_old, 
+						   double g_old, 
+						   const Vector &grad_G_old, 
+						   double stepSize,
+						   const Vector &stepDirection,
+						   double g_new, 
+						   const Vector &grad_G_new)
+ {
+   // New point in standard normal space
+   const Vector u_new = u_old + stepSize*stepDirection;
 
 
-	// Initial declarations
-	int i;
-	Vector oldCriteriaValues(numCrit);
-	Vector newCriteriaValues(numCrit);
+   // Number of convergence criteria
+   int numCrit = theReliabilityConvergenceCheck->getNumberOfCriteria();
 
 
-	// Convergence checks for the old point
-	theReliabilityConvergenceCheck->check(u_old,g_old,grad_G_old);
-	for (i=1; i<=numCrit; i++) {
-		oldCriteriaValues(i-1) = theReliabilityConvergenceCheck->getCriteriaValue(i);
-	}
+   // Initial declarations
+   int i;
+   Vector oldCriteriaValues(numCrit);
+   Vector newCriteriaValues(numCrit);
+
+
+   // Convergence checks for the old point
+   theReliabilityConvergenceCheck->check(u_old,g_old,grad_G_old);
+   for (i=1; i<=numCrit; i++)
+     {
+       oldCriteriaValues(i-1) = theReliabilityConvergenceCheck->getCriteriaValue(i);
+     }
 	
 
-	// Convergence checks for the new point
-	theReliabilityConvergenceCheck->check(u_new,g_new,grad_G_new);
-	for (i=1; i<=numCrit; i++) {
-		newCriteriaValues(i-1) = theReliabilityConvergenceCheck->getCriteriaValue(i);
-	}
+   // Convergence checks for the new point
+   theReliabilityConvergenceCheck->check(u_new,g_new,grad_G_new);
+   for(i=1; i<=numCrit; i++)
+     {
+       newCriteriaValues(i-1) = theReliabilityConvergenceCheck->getCriteriaValue(i);
+     }
 
 
-	// All criteria must have improved for the step to be OK
-	bool OK = true;
-	for (i=1; i<=numCrit; i++) {
-		if (newCriteriaValues(i-1)>oldCriteriaValues(i-1)) {
-			OK = false;
-		}
-	}
+   // All criteria must have improved for the step to be OK
+   bool OK = true;
+   for(i=1; i<=numCrit; i++)
+     {
+       if (newCriteriaValues(i-1)>oldCriteriaValues(i-1))
+	 {
+	   OK = false;
+	 }
+     }
 
 
-	// Return
-	if (OK) {
-		return 1;
-	}
-	else {
-		return -1;
-	}
-}
+   // Return
+   if(OK)
+     {
+       return 1;
+     }
+   else
+     {
+       return -1;
+     }
+ }
 
 
-
-
-
-double
-XC::CriteriaReductionMeritFunctionCheck::getMeritFunctionValue(Vector u, 
-												  double g, 
-												  Vector grad_G)
-{
+double XC::CriteriaReductionMeritFunctionCheck::getMeritFunctionValue(const Vector &u,
+								      double g, 
+								      const Vector &grad_G)
+  {
 	std::cerr << "XC::CriteriaReductionMeritFunctionCheck::getMeritFunctionValue() -- this method" << std::endl
 		<< " is not implemented in this specific class." << std::endl;
 
 	return 0.0;
 }
 
-int
-XC::CriteriaReductionMeritFunctionCheck::updateMeritParameters(Vector u, 
-												  double g, 
-												  Vector grad_G)
-{
-	std::cerr << "XC::CriteriaReductionMeritFunctionCheck::updateMeritParameters() -- this method" << std::endl
-		<< " is not implemented in this specific class." << std::endl;
-
-	return 0;
-}
+int XC::CriteriaReductionMeritFunctionCheck::updateMeritParameters(const Vector &u,
+								   double g,
+								   const Vector &grad_G)
+  {
+    std::cerr << "XC::CriteriaReductionMeritFunctionCheck::updateMeritParameters() -- this method"
+	      << std::endl
+	      << " is not implemented in this specific class." << std::endl;
+    
+    return 0;
+  }
