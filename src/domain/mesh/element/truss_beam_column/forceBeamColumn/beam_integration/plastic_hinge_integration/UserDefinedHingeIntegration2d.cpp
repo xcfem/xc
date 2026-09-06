@@ -148,7 +148,7 @@ int XC::UserDefinedHingeIntegration2d::addElasticFlexibility(double L, Matrix &f
     return -1;
   }
 
-void XC::UserDefinedHingeIntegration2d::addElasticDeformations(ElementalLoad *theLoad, double loadFactor, double L, double *v0)
+void XC::UserDefinedHingeIntegration2d::addElasticDeformations(ElementalLoad *theLoad, double loadFactor, double L, FVector &)
   { return; }
 //! @brief Virtual constructor.
 XC::BeamIntegration *XC::UserDefinedHingeIntegration2d::getCopy(void) const

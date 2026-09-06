@@ -11,16 +11,16 @@
 //  of the original program (see copyright_opensees.txt)
 //  XC is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or 
+//  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 //
-//  This software is distributed in the hope that it will be useful, but 
+//  This software is distributed in the hope that it will be useful, but
 //  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details. 
+//  GNU General Public License for more details.
 //
 //
-// You should have received a copy of the GNU General Public License 
+// You should have received a copy of the GNU General Public License
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
@@ -103,7 +103,7 @@ void XC::DistHingeIntegration::getSectionLocations(int numSections, double L,dou
 
     double betaI = lpI/L;
     double betaJ = lpJ/L;
-  
+
     // Map from [0,L] to [L-lpJ,L]
     for(int i = 0; i < numPerHinge; i++)
       {
@@ -121,7 +121,7 @@ void XC::DistHingeIntegration::getSectionWeights(int numSections, double L,doubl
 
     const double betaI = lpI/L;
     const double betaJ = lpJ/L;
-  
+
     // Map from [0,lpI] to [L-lpJ,L]
     for(int i = 0; i < numPerHinge; i++)
       {
@@ -150,7 +150,7 @@ void XC::DistHingeIntegration::Print(std::ostream &s, int flag) const
     return;
   }
 
-void XC::DistHingeIntegration::getLocationsDeriv(int numSections, double L, double dLdh, double *dptsdh)
+void XC::DistHingeIntegration::getLocationsDeriv(int numSections, double L, double dLdh, double *dptsdh) const
   {
     int numPerHinge = numSections/2;
 
@@ -192,7 +192,7 @@ void XC::DistHingeIntegration::getLocationsDeriv(int numSections, double L, doub
     return;
   }
 
-void XC::DistHingeIntegration::getWeightsDeriv(int numSections, double L,double dLdh, double *dwtsdh)
+void XC::DistHingeIntegration::getWeightsDeriv(int numSections, double L,double dLdh, double *dwtsdh) const
   {
     int numPerHinge = numSections/2;
 

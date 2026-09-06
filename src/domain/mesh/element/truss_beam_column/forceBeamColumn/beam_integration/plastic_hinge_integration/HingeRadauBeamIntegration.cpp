@@ -11,16 +11,16 @@
 //  of the original program (see copyright_opensees.txt)
 //  XC is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or 
+//  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 //
-//  This software is distributed in the hope that it will be useful, but 
+//  This software is distributed in the hope that it will be useful, but
 //  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details. 
+//  GNU General Public License for more details.
 //
 //
-// You should have received a copy of the GNU General Public License 
+// You should have received a copy of the GNU General Public License
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
@@ -153,7 +153,7 @@ void XC::HingeRadauBeamIntegration::Print(std::ostream &s, int flag) const
     return;
   }
 
-void XC::HingeRadauBeamIntegration::getLocationsDeriv(int numSections,double L, double dLdh,double *dptsdh)
+void XC::HingeRadauBeamIntegration::getLocationsDeriv(int numSections,double L, double dLdh,double *dptsdh) const
   {
     double oneOverL = 1.0/L;
 
@@ -187,7 +187,7 @@ void XC::HingeRadauBeamIntegration::getLocationsDeriv(int numSections,double L, 
   return;
 }
 
-void XC::HingeRadauBeamIntegration::getWeightsDeriv(int numSections,double L, double dLdh,double *dwtsdh)
+void XC::HingeRadauBeamIntegration::getWeightsDeriv(int numSections,double L, double dLdh,double *dwtsdh) const
 {
   double oneOverL = 1.0/L;
 

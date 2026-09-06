@@ -168,8 +168,9 @@ int XC::UserDefinedHingeIntegration3d::addElasticFlexibility(double L, Matrix &f
     return -1;
   }
 
-void XC::UserDefinedHingeIntegration3d::addElasticDeformations(ElementalLoad *theLoad,double loadFactor,double L, double *v0)
+void XC::UserDefinedHingeIntegration3d::addElasticDeformations(ElementalLoad *theLoad,double loadFactor,double L, FVector &)
   { return; }
+
 //! @brief Virtual constructor.
 XC::BeamIntegration *XC::UserDefinedHingeIntegration3d::getCopy(void) const
   { return new UserDefinedHingeIntegration3d(*this); }

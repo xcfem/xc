@@ -11,16 +11,16 @@
 //  of the original program (see copyright_opensees.txt)
 //  XC is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or 
+//  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 //
-//  This software is distributed in the hope that it will be useful, but 
+//  This software is distributed in the hope that it will be useful, but
 //  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details. 
+//  GNU General Public License for more details.
 //
 //
-// You should have received a copy of the GNU General Public License 
+// You should have received a copy of the GNU General Public License
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
@@ -102,13 +102,13 @@ int XC::BeamIntegration::updateParameter(int parameterID, Information &info)
 int XC::BeamIntegration::activateParameter(int parameterID)
   { return 0; }
 
-void XC::BeamIntegration::getLocationsDeriv(int nIP, double L, double dLdh,double *dptsdh)
+void XC::BeamIntegration::getLocationsDeriv(int nIP, double L, double dLdh,double *dptsdh) const
   {
     for (int i = 0; i < nIP; i++)
       dptsdh[i] = 0.0;
   }
 
-void XC::BeamIntegration::getWeightsDeriv(int nIP, double L, double dLdh,double *dwtsdh)
+void XC::BeamIntegration::getWeightsDeriv(int nIP, double L, double dLdh,double *dwtsdh) const
   {
     for (int i = 0; i < nIP; i++)
       dwtsdh[i] = 0.0;
@@ -224,7 +224,7 @@ double XC::BeamIntegration::getIntegral(const ExprAlgebra &expr,int nIP,const Cr
   }
 
 //! @brief Send a pointer to beam integration through the communicator argument.
-//! 
+//!
 //! @param posClassTag: index of the class tags in the data vector
 //! @param posDbTag: index of the dbTag in the data vector
 int XC::sendBeamIntegrationPtr(BeamIntegration *ptr,int posClassTag, int posDbTag,DbTagData &dt,Communicator &comm)
@@ -250,7 +250,7 @@ XC::BeamIntegration *XC::receiveBeamIntegrationPtr(BeamIntegration* ptr,int posC
     const int matClass= dt.getDbTagDataPos(posClassTag);
     if(ptr && (ptr->getClassTag() == matClass))
       retval= ptr;
-    else 
+    else
       {
 
         // check if we have a beam integration object already & if we do if of right type
@@ -267,12 +267,12 @@ XC::BeamIntegration *XC::receiveBeamIntegrationPtr(BeamIntegration* ptr,int posC
       {
         int res= comm.receiveMovable(*retval,dt,CommMetaData(posDbTag));
         if(res<0)
-          std::cerr << __FUNCTION__ << "; WARNING " 
+          std::cerr << __FUNCTION__ << "; WARNING "
                     << "failed to receive beam integration.\n";
       }
     else
       std::cerr << __FUNCTION__ << "; WARNING "
                 << " failed to get a blank beam integration of type: "
-                << matClass << std::endl; 
+                << matClass << std::endl;
     return retval;
   }

@@ -42,7 +42,7 @@ class UserDefinedBeamIntegrationBase: public BeamIntegration
   {
   protected:
     Vector pts;
-    Vector wts;
+    mutable Vector wts;
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
   public:

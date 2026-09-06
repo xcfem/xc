@@ -11,16 +11,16 @@
 //  of the original program (see copyright_opensees.txt)
 //  XC is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or 
+//  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 //
-//  This software is distributed in the hope that it will be useful, but 
+//  This software is distributed in the hope that it will be useful, but
 //  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details. 
+//  GNU General Public License for more details.
 //
 //
-// You should have received a copy of the GNU General Public License 
+// You should have received a copy of the GNU General Public License
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
@@ -87,7 +87,7 @@ XC::MidDistanceBeamIntegration::MidDistanceBeamIntegration(int tag, int nIP,cons
   }
 
 
-void XC::MidDistanceBeamIntegration::getSectionLocations(int numSections, double L, double *xi)
+void XC::MidDistanceBeamIntegration::getSectionLocations(int numSections, double L, double *xi) const
   {
     const int nIP = pts.Size();
 
@@ -98,7 +98,7 @@ void XC::MidDistanceBeamIntegration::getSectionLocations(int numSections, double
       xi[i] = 0.0;
   }
 
-void XC::MidDistanceBeamIntegration::getSectionWeights(int numSections, double L, double *wt)
+void XC::MidDistanceBeamIntegration::getSectionWeights(int numSections, double L, double *wt) const
   {
     const int nIP = wts.Size();
 
@@ -164,14 +164,14 @@ void XC::MidDistanceBeamIntegration::Print(std::ostream &s, int flag) const
     s << " Weights: " << wts;
   }
 
-void XC::MidDistanceBeamIntegration::getLocationsDeriv(int numSections, double L, double *dptsdh)
+void XC::MidDistanceBeamIntegration::getLocationsDeriv(int numSections, double L, double, double *dptsdh) const
   {
     for (int i = 0; i < numSections; i++)
       dptsdh[i] = 0.0;
     return;
   }
 
-void XC::MidDistanceBeamIntegration::getWeightsDeriv(int numSections, double L, double *dwtsdh)
+void XC::MidDistanceBeamIntegration::getWeightsDeriv(int numSections, double L, double, double *dwtsdh) const
   {
     for (int i = 0; i < numSections; i++)
       dwtsdh[i] = 0.0;

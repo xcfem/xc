@@ -11,16 +11,16 @@
 //  of the original program (see copyright_opensees.txt)
 //  XC is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or 
+//  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 //
-//  This software is distributed in the hope that it will be useful, but 
+//  This software is distributed in the hope that it will be useful, but
 //  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details. 
+//  GNU General Public License for more details.
 //
 //
-// You should have received a copy of the GNU General Public License 
+// You should have received a copy of the GNU General Public License
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
@@ -76,19 +76,19 @@ XC::LowOrderBeamIntegration::LowOrderBeamIntegration(int tag, int nIP, const Vec
 	      sum += pow(pts(j),i)*wc(j);
             R(i) = 1.0/(i+1) - sum;
           }
-    
+
         Matrix J(nf,nf);
         for(int i = 0; i < nf; i++)
           for(int j = 0; j < nf; j++)
 	    J(i,j) = pow(pts(nc+j),i);
-    
+
         Vector wf(nf);
-    
+
         J.Solve(R, wf);
-    
+
         for(int i = 0; i < nf; i++)
           wts(nc+i) = wf(i);
-    
+
         for(int i = 0; i < nc; i++)
           wts(i) = wc(i);
       }
@@ -98,7 +98,7 @@ XC::LowOrderBeamIntegration::LowOrderBeamIntegration(int tag, int nIP, const Vec
     computed = true;
   }
 
-void XC::LowOrderBeamIntegration::getSectionLocations(int numSections, double L, double *xi)
+void XC::LowOrderBeamIntegration::getSectionLocations(int numSections, double L, double *xi) const
   {
     const int nIP = pts.Size();
 
@@ -109,7 +109,7 @@ void XC::LowOrderBeamIntegration::getSectionLocations(int numSections, double L,
       xi[i] = 0.0;
   }
 
-void XC::LowOrderBeamIntegration::getSectionWeights(int numSections, double L, double *wt)
+void XC::LowOrderBeamIntegration::getSectionWeights(int numSections, double L, double *wt) const
   {
     const int nIP = wts.Size();
 
@@ -125,16 +125,16 @@ void XC::LowOrderBeamIntegration::getSectionWeights(int numSections, double L, d
 	      sum += pow(pts(j),i)*wts(j);
             R(i) = 1.0/(i+1) - sum;
           }
-    
+
         Matrix J(Nf,Nf);
         for(int i = 0; i < Nf; i++)
           for(int j = 0; j < Nf; j++)
 	    J(i,j) = pow(pts(Nc+j),i);
-    
+
         Vector wf(Nf);
-    
+
         J.Solve(R, wf);
-    
+
         for(int i = 0; i < Nf; i++)
           wts(Nc+i) = wf(i);
       }
@@ -270,7 +270,7 @@ void XC::LowOrderBeamIntegration::Print(std::ostream &s, int flag) const
     s << " Condition Number: " << sum << std::endl;
   }
 
-void XC::LowOrderBeamIntegration::getLocationsDeriv(int numSections, double L, double dLdh, double *dptsdh)
+void XC::LowOrderBeamIntegration::getLocationsDeriv(int numSections, double L, double dLdh, double *dptsdh) const
   {
     for(int i = 0; i < numSections; i++)
       dptsdh[i] = 0.0;
@@ -289,7 +289,7 @@ void XC::LowOrderBeamIntegration::getLocationsDeriv(int numSections, double L, d
     return;
   }
 
-void XC::LowOrderBeamIntegration::getWeightsDeriv(int numSections, double L, double dLdh, double *dwtsdh)
+void XC::LowOrderBeamIntegration::getWeightsDeriv(int numSections, double L, double dLdh, double *dwtsdh) const
   {
     for(int i = 0; i < numSections; i++)
       dwtsdh[i] = 0.0;
@@ -304,7 +304,7 @@ void XC::LowOrderBeamIntegration::getWeightsDeriv(int numSections, double L, dou
         dxcdh[i] = 0.0;
         dxfdh[i] = 0.0;
       }
- 
+
     if(parameterID < 10) // xf
       dxfdh[parameterID-1] = 1.0;
     else if(parameterID < 20) // xc
@@ -341,13 +341,13 @@ void XC::LowOrderBeamIntegration::getWeightsDeriv(int numSections, double L, dou
         for(int i = 0; i < Nf; i++)
           for(int j = 0; j < Nf; j++)
 	    J(i,j) = pow(pts(Nc+j),i);
-    
+
         Vector dwfdh(Nf);
 
         J.Solve(R,dwfdh);
 
         for(int i = 0; i < Nf; i++)
-          dwtsdh[Nc+i] = dwfdh(i);    
+          dwtsdh[Nc+i] = dwfdh(i);
       }
 
     //for(int i = 0; i < numSections; i++)

@@ -12,16 +12,16 @@
 //  of the original program (see copyright_opensees.txt)
 //  XC is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or 
+//  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 //
-//  This software is distributed in the hope that it will be useful, but 
+//  This software is distributed in the hope that it will be useful, but
 //  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details. 
+//  GNU General Public License for more details.
 //
 //
-// You should have received a copy of the GNU General Public License 
+// You should have received a copy of the GNU General Public License
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
@@ -68,16 +68,16 @@ class HingeEndpointBeamIntegration: public PlasticLengthsBeamIntegration
   public:
     HingeEndpointBeamIntegration(int tag);
     HingeEndpointBeamIntegration(int tag, double lpI, double lpJ);
-  
+
     void getSectionLocations(int numSections, double L, double *xi) const;
     void getSectionWeights(int numSections, double L, double *wt) const;
-  
+
     BeamIntegration *getCopy(void) const;
 
     void Print(std::ostream &s, int flag = 0) const;
 
-    void getLocationsDeriv(int nIP, double L, double dLdh, double *dptsdh);
-    void getWeightsDeriv(int nIP, double L, double dLdh, double *dwtsdh); 
+    void getLocationsDeriv(int nIP, double L, double dLdh, double *dptsdh) const;
+    void getWeightsDeriv(int nIP, double L, double dLdh, double *dwtsdh) const;
   };
 } // end of XC namespace
 

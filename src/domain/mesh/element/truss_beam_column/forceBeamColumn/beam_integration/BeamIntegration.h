@@ -12,16 +12,16 @@
 //  of the original program (see copyright_opensees.txt)
 //  XC is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or 
+//  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 //
-//  This software is distributed in the hope that it will be useful, but 
+//  This software is distributed in the hope that it will be useful, but
 //  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details. 
+//  GNU General Public License for more details.
 //
 //
-// You should have received a copy of the GNU General Public License 
+// You should have received a copy of the GNU General Public License
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
@@ -87,7 +87,7 @@ class BeamIntegration: public TaggedObject, public MovableObject
     const BeamIntegratorHandler *getBeamIntegratorHandler(void) const;
     BeamIntegratorHandler *getBeamIntegratorHandler(void);
     std::string getName(void) const;
-    
+
     virtual void getSectionWeights(int nIP, double L, double *wt) const= 0;
     boost::python::list getSectionWeightsPy(int nIP, double L) const;
     const Vector &getIntegrPointWeights(int nIP, double L) const;
@@ -121,8 +121,8 @@ class BeamIntegration: public TaggedObject, public MovableObject
     virtual int updateParameter(int parameterID, Information &info);
     virtual int activateParameter(int parameterID);
 
-    virtual void getLocationsDeriv(int nIP, double L, double dLdh,double *dptsdh);
-    virtual void getWeightsDeriv(int nIP, double L, double dLdh,double *dwtsdh);
+    virtual void getLocationsDeriv(int nIP, double L, double dLdh,double *dptsdh) const;
+    virtual void getWeightsDeriv(int nIP, double L, double dLdh,double *dwtsdh) const;
   // Return 0 if there is no elastic interior, -1 otherwise
     virtual int addElasticFlexDeriv(double L, Matrix &dfedh,double dLdh = 0.0) {return 0;}
 

@@ -77,13 +77,13 @@ void XC::FixedLocationBeamIntegration::Print(std::ostream &s, int flag) const
     s << " Condition Number: " << sum << std::endl;
   }
 
-void XC::FixedLocationBeamIntegration::getLocationsDeriv(int numSections, double L, double dLdh, double *dptsdh)
+void XC::FixedLocationBeamIntegration::getLocationsDeriv(int numSections, double L, double dLdh, double *dptsdh) const
   {
     for(int i = 0; i < numSections; i++)
       dptsdh[i] = 0.0;
   }
 
-void XC::FixedLocationBeamIntegration::getWeightsDeriv(int numSections, double L, double dLdh, double *dwtsdh)
+void XC::FixedLocationBeamIntegration::getWeightsDeriv(int numSections, double L, double dLdh, double *dwtsdh) const
   {
     for(int i = 0; i < numSections; i++)
       dwtsdh[i] = 0.0;
