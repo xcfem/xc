@@ -83,7 +83,7 @@ class SectionRepres: public TaggedObject
 
   protected:
     MaterialHandler *material_handler; //!< Material handler (searching,...).
-    const SectionGeometry *gmSecc; //!< Section geometry.
+    SectionGeometry *gmSecc; //!< Section geometry.
 
   public:
     //Constructores
@@ -99,8 +99,13 @@ class SectionRepres: public TaggedObject
     // Section inquiring functions
     virtual int getType(void) const = 0;
     int getNumCells(void) const;
-    const SectionGeometry *getGeom(void) const;
-    void setGeom(const SectionGeometry *);
+    //! @brief Returns a pointer to section geometry.
+    inline const SectionGeometry *getGeom(void) const
+      { return gmSecc; }
+    //! @brief Returns a pointer to section geometry.
+    inline SectionGeometry *getGeom(void)
+      { return gmSecc; }
+    void setGeom(SectionGeometry *);
     void setGeomNamed(const std::string &);
 
 

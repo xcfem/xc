@@ -70,7 +70,7 @@ XC::SectionRepres::SectionRepres(const SectionRepres &other)
 //! @brief Assignment operator.
 XC::SectionRepres &XC::SectionRepres::operator=(const SectionRepres &other)
   {
-    SectionRepres::operator=(other);
+    TaggedObject::operator=(other);
     material_handler= other.material_handler;
     gmSecc= other.gmSecc;
     return *this;
@@ -96,7 +96,7 @@ const XC::MaterialHandler *XC::SectionRepres::getMaterialHandler(void) const
 //! @brief Sets section geometry from its name.
 void XC::SectionRepres::setGeomNamed(const std::string &nmbGeom)
   {
-    const SectionGeometry *tmp= material_handler->find_ptr_section_geometry(nmbGeom);
+    SectionGeometry *tmp= material_handler->find_ptr_section_geometry(nmbGeom);
     if(tmp)
       setGeom(tmp);
     else
@@ -107,12 +107,8 @@ void XC::SectionRepres::setGeomNamed(const std::string &nmbGeom)
   }
 
 //! @brief Sets section geometry.
-void XC::SectionRepres::setGeom(const SectionGeometry *g)
+void XC::SectionRepres::setGeom(SectionGeometry *g)
   { gmSecc= g; }
-
-//! @brief Returns a pointer to section geometry.
-const XC::SectionGeometry *XC::SectionRepres::getGeom(void) const
-  { return gmSecc; }
 
 //! @brief Printing...
 void XC::SectionRepres::Print(std::ostream &s, int flag) const

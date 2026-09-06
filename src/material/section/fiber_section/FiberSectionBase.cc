@@ -253,8 +253,20 @@ const XC::SectionGeometry *XC::FiberSectionBase::getSectionGeometry(void) const
 //! @brief Returns a pointer to section geometry.
 XC::SectionGeometry *XC::FiberSectionBase::getSectionGeometry(void)
   {
-    FiberSectionBase *this_no_const= const_cast<XC::FiberSectionBase *>(this);
-    return this_no_const->getSectionGeometry();
+    SectionGeometry *retval= nullptr;
+    if(section_repres)
+      {
+        retval= section_repres->getGeom();
+        if(!retval)
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		    << "; section geometry not defined."
+                    << Color::def << std::endl;
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; fiber section representation not defined."
+                << Color::def << std::endl;
+    return retval;
   }
 
 //! @brief Returns cross section contour.

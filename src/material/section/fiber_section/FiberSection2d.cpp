@@ -303,7 +303,7 @@ int XC::FiberSection2d::updateParameter (int parameterID, Information &info)
         int materialTag= (int)( floor((double)parameterID) / (1000) );
         parameterID= parameterID - materialTag*1000;
 
-        int ok= fibers.updateParameter(materialTag,parameterID,info);
+        int ok= fibers.updateMatParameter(materialTag,parameterID,info);
         if(ok < 0)
           {
             std::cerr <<  getClassName() << "::" << __FUNCTION__
