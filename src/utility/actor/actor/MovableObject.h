@@ -143,7 +143,7 @@ class MovableObject: public DistributedBase
     virtual int activateParameter(int parameterID);
 
     virtual int setVariable(const std::string &variable, Information &);
-    virtual int getVariable(const std::string &variable, Information &);
+    virtual int getVariable(const std::string &variable, Information &) const;
   };
 
 
