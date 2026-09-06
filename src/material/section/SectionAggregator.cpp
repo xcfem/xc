@@ -734,12 +734,12 @@ int XC::SectionAggregator::getResponse(int responseID, Information &info)
 
 //! @brief Returns the identifier of the variable which name
 //! is being passed as parameter.
-int XC::SectionAggregator::setVariable(const std::string &argv)
+int XC::SectionAggregator::setVariable(const std::string &argv, Information &)
   {
     // Axial strain
     if(argv =="axialStrain")
       return 1;
-    else if (argv == "curvatureZ") //Curvature about the section z-axis
+    else if(argv == "curvatureZ") //Curvature about the section z-axis
       return 2;
     else if(argv == "curvatureY") // Curvature about the section y-axis
       return 3;
@@ -749,7 +749,7 @@ int XC::SectionAggregator::setVariable(const std::string &argv)
 
 //! @brief Returns the value of the variable which identifier
 //! is being passed as parameter.
-int XC::SectionAggregator::getVariable(int variableID, double &info)
+int XC::SectionAggregator::getVariable(const std::string &varName, Information &info) const
   {
     int i;
     info= 0.0;

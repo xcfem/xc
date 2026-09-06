@@ -154,8 +154,8 @@ class SectionAggregator: public PrismaticBarCrossSection
     Response *setResponse(const std::vector<std::string> &argv, Information &info);
     int getResponse(int responseID, Information &info);
 
-    int setVariable(const std::string &argv);
-    int getVariable(int variableID, double &info);
+    int setVariable(const std::string &argv, Information &);
+    int getVariable(const std::string &varName, Information &info) const;
 
   };
 } // end of XC namespace

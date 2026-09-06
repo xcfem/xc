@@ -92,9 +92,6 @@ class ID;
 //! in the domain. 
 class Material: public TaggedObject, public MovableObject
   {
-  private:
-    using MovableObject::getVariable;
-    using MovableObject::setVariable;
   protected:
     bool isEqual(const Material &) const;
   public:
@@ -107,8 +104,8 @@ class Material: public TaggedObject, public MovableObject
     std::string getName(void) const;
     const Material *getMaterialByName(const std::string &) const;    
 
-    virtual int setVariable(const std::string &argv);
-    virtual int getVariable(int variableID, double &info);
+    virtual int setVariable(const std::string &argv, Information &);
+    virtual int getVariable(const std::string &varName, Information &info) const;
 
     virtual const ResponseId &getResponseType(void) const;
     

@@ -350,7 +350,7 @@ int XC::FiberSectionShear2d::setVariable(const std::string &argv)
 
 //! @brief Returns the value of the variable which name is
 //! being passed as parameter.
-int XC::FiberSectionShear2d::getVariable(int variableID, double &info)
+int XC::FiberSectionShear2d::getVariable(const std::string &varName, Information &info) const
   {
     int i;
     info= 0.0;

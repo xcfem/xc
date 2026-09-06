@@ -107,7 +107,7 @@ class FiberSectionShear3d: public FiberSection3d
     void Print(std::ostream &s, int flag =0) const;
 
     int setVariable(const std::string &argv);
-    int getVariable(int variableID, double &info);
+    int getVariable(const std::string &varName, Information &info) const;
 
   };
 } // end of XC namespace

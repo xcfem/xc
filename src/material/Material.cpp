@@ -176,10 +176,10 @@ std::string XC::Material::getName(void) const
     return retval;
   }
 
-int XC::Material::setVariable(const std::string &argv)
+int XC::Material::setVariable(const std::string &argv, Information &)
   { return -1; }
 
-int XC::Material::getVariable(int variableID, double &info)
+int XC::Material::getVariable(const std::string &varName, Information &info) const
   { return -1; }
 
 
