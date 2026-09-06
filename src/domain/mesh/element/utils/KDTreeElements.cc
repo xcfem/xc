@@ -40,7 +40,7 @@ XC::ElemPos::ElemPos(const Pos3d &p)
   
 //! @brief Constructor.
 XC::KDTreeElements::KDTreeElements(void)
-  : tree_type(std::ptr_fun(ElemPos::tac)), pend_optimizar(0) {}
+  : tree_type(std::function(ElemPos::tac)), pend_optimizar(0) {}
 
 
 void XC::KDTreeElements::insert(const Element &n)
