@@ -99,9 +99,6 @@ class HystereticEnergy: public DamageModel
     
     DamageModel *getCopy(void) const;
     
-    int setVariable(const std::string &argv);
-    int getVariable(int variableID, double &info);
-    
     int setParameter(const std::vector<std::string> &argv, Information &eleInformation);
     int updateParameter(int responseID, Information &eleInformation);	
     

@@ -278,16 +278,6 @@ XC::DamageModel *XC::Mehanny::getCopy(void) const
     return theCopy;
   }
 
-//! @brief Returns the identifier of the variable cuyo
-//! name being passed as parameter.
-int XC::Mehanny::setVariable(const std::string &argv)
-  { return -1; }
-
-//! @brief Returns the value of the variable cuyo
-//! identifier being passed as parameter.
-int XC::Mehanny::getVariable(int variableID, double &info)
-  { return -1; }
-
 int XC::Mehanny::setParameter(const std::vector<std::string> &argv, Information &eleInformation)
   { return -1; }
 
