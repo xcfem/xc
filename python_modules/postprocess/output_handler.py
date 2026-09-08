@@ -669,7 +669,7 @@ class OutputHandler(object):
         unitDescription= self.outputStyle.getForceUnitsDescription()
         if not captionText:
             captionText= self.getCaptionText(itemToDisp, setToDisplay, includeLoadCaseName= True)
-        diagram= ifd.InternalForceDiagram(scaleFactor= scaleFactor, lRefModSize= LrefModSize,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp, defaultDirection= defaultDirection)
+        diagram= ifd.InternalForceDiagram(scaleFactor= scaleFactor, lRefModSize= LrefModSize,fUnitConv= unitConversionFactor,sets=[setToDisplay], attributeName= "intForce", component= itemToDisp, defaultDirection= defaultDirection)
         diagram.addDiagram() # add the diagram to the scene.
         displaySettings= self.getDisplaySettingsFE()
         displaySettings.setupGrid(setToDisplay)
