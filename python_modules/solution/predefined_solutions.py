@@ -1492,28 +1492,79 @@ def ordinary_eigenvalues(prb):
     return solProc.getAnalysis()
 
 
-class FrequencyAnalysis(SolutionProcedure):
+class FrequencyAnalysisBase(SolutionProcedure):
     ''' Return a natural frequency computation procedure.'''
 
-    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'sym_band', numberingMethod= 'rcm', shift:float= None):
+    def __init__(self, prb, name= None, printFlag= 0, soeType= 'sym_band_eigen_soe', solverType= 'sym_band_eigen_solver', numberingMethod= 'rcm', constraintHandlerType= 'transformation', shift:float= None):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param printFlag: if not zero print convergence results on each step.
+        :param soeType: type of the system of equations object for the 
+                        eigen analysis.
+        :param solverType: type of the solver for the eigenanalysis.
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
+        :param constraintHandlerType: type of the constraint handler to use.
+        :param shift: shift-and-invert mode (used with ARPACK).
+        '''        
+        super(FrequencyAnalysisBase,self).__init__(name, constraintHandlerType= constraintHandlerType, printFlag= printFlag, numberingMethod= numberingMethod, soeType= soeType, solverType= solverType, shift= shift, integratorType= 'eigen_integrator', solutionAlgorithmType= 'frequency_soln_algo', analysisType= 'modal_analysis')
+        
+class FrequencyAnalysis(FrequencyAnalysisBase):
+    ''' Return a natural frequency computation procedure.'''
+
+    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'sym_band', numberingMethod= 'rcm', constraintHandlerType= 'transformation', shift:float= None):
         ''' Constructor.
 
         :param prb: XC finite element problem.
         :param name: identifier for the solution procedure.
         :param printFlag: if not zero print convergence results on each step.
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
+        :param constraintHandlerType: type of the constraint handler to use.
+        :param shift: shift-and-invert mode (used with ARPACK).
         '''        
         self.systemPrefix= systemPrefix
         soe_string= self.systemPrefix+'_eigen_soe'
         solver_string= self.systemPrefix+'_eigen_solver'
-        super(FrequencyAnalysis,self).__init__(name, 'transformation', printFlag, numberingMethod= numberingMethod, soeType= soe_string, solverType= solver_string, shift= shift, integratorType= 'eigen_integrator', solutionAlgorithmType= 'frequency_soln_algo', analysisType= 'modal_analysis')
+        super(FrequencyAnalysis,self).__init__(name, constraintHandlerType= constraintHandlerType, printFlag= printFlag, numberingMethod= numberingMethod, soeType= soe_string, solverType= solver_string, shift= shift)
         self.setFEProblem(prb)
         
 ### Convenience function
 def frequency_analysis(prb, systemPrefix= 'sym_band', shift:float= None):
     ''' Return a solution procedure that computes the natural
-        frequencies of the model.'''
+        frequencies of the model.
+
+    :param shift: shift-and-invert mode (used with ARPACK).
+    '''
     solProc= FrequencyAnalysis(prb, systemPrefix= systemPrefix, shift= shift)
+    solProc.setup()
+    return solProc.getAnalysis()
+
+class SpectraFrequencyAnalysis(FrequencyAnalysisBase):
+    ''' Return a natural frequency computation procedure.'''
+
+    def __init__(self, prb, name= None, printFlag= 0, numberingMethod= 'rcm', constraintHandlerType= 'transformation', shift:float= None):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param printFlag: if not zero print convergence results on each step.
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
+        :param constraintHandlerType: type of the constraint handler to use.
+        :param shift: shift-and-invert mode (used with ARPACK).
+        '''        
+        super(SpectraFrequencyAnalysis,self).__init__(name, constraintHandlerType= constraintHandlerType, printFlag= printFlag, numberingMethod= numberingMethod, soeType= 'spectra_soe', solverType= 'spectra_solver', shift= shift)
+        self.setFEProblem(prb)
+        
+### Convenience function
+def spectra_frequency_analysis(prb, shift:float= None):
+    ''' Return a solution procedure that computes the natural
+        frequencies of the model.
+
+    :param prb: XC finite element problem.
+    :param shift: shift-and-invert mode (used with ARPACK).
+    '''
+    solProc= SpectraFrequencyAnalysis(prb, shift= shift)
     solProc.setup()
     return solProc.getAnalysis()
 
