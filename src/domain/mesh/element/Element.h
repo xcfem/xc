@@ -159,6 +159,8 @@ class Element: public MeshComponent
     virtual BoolArray3d getNodePattern(void) const;
     virtual NodePtrsWithIDs &getNodePtrs(void)= 0;	
     virtual const NodePtrsWithIDs &getNodePtrs(void) const= 0;	
+    Node *getNodePtr(const size_t &);
+    const Node *getNodePtr(const size_t &) const;
     std::vector<int> getIdxNodes(void) const;
     //! @brief return the number of DOF associated with the element.
     //!

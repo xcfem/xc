@@ -183,9 +183,12 @@ int XC::NodePtrs::find(const Node *nPtr) const
     return retval;
   }
 
-//! @brief Returns a pointer to the node at the position
-//! being passed as parameter.
+//! @brief Returns a pointer to the node at the given position.
 XC::Node *XC::NodePtrs::getNodePtr(const size_t &i)
+  { return (*this)[i]; }
+
+//! @brief Returns a const pointer to the node at the given position.
+const XC::Node *XC::NodePtrs::getNodePtr(const size_t &i) const
   { return (*this)[i]; }
 
 //! @brief Returns a const reference to the node at the position

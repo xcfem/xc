@@ -86,6 +86,7 @@ class NodePtrs: public CommandEntity, public std::vector<Node *>
     int find(const Node *) const;
 
     Node *getNodePtr(const size_t &);
+    const Node *getNodePtr(const size_t &) const;
     const_reference operator()(const size_t &i) const;
     void set_node(const size_t &i,Node *);
 

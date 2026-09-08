@@ -30,6 +30,7 @@
 Pos2d (XC::Element::*getProjection2D)(const Pos2d &,bool) const= &XC::Element::getProjection;
 Pos3d (XC::Element::*getProjection3D)(const Pos3d &,bool) const= &XC::Element::getProjection;
 XC::NodePtrsWithIDs &(XC::Element::*getNodePtrsRef)(void)= &XC::Element::getNodePtrs;
+XC::Node *(XC::Element::*get_node_ptr)(const size_t &)= &XC::Element::getNodePtr;
 const XC::Vector &(XC::Element::*getResistingForceRef)(void) const= &XC::Element::getResistingForce;
 const XC::Vector &(XC::Element::*getNodeResistingForceINOD)(const size_t &iNod) const= &XC::Element::getNodeResistingForce;
 const XC::Vector &(XC::Element::*getNodeResistingForceIncInertiaINOD)(const size_t &iNod) const= &XC::Element::getNodeResistingForceIncInertia;
@@ -68,6 +69,7 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .add_property("getNodes", make_function( getNodePtrsRef, return_internal_reference<>() ),"DEPRECATED; return the element nodes.")
   .add_property("nodes", make_function( getNodePtrsRef, return_internal_reference<>() ),"Return the element nodes.")
   .add_property("numNodes", &XC::Element::getNumExternalNodes, "Return the number of nodes.")
+  .def("getNode",make_function( get_node_ptr, return_internal_reference<>() ), "getNode(i): return the i-th node of the element.")
   .def("find",&XC::Element::find,"Return the index of the node in the element (-1 if not found).")
   .add_property("getIdxNodes",&XC::Element::getIdxNodes,"Return the node indices for its use in VTK arrays.")
   .def("setIdNodes", setIdNodesRef," setIdNodes(xc.ID([idNode0, idNode1,...]) set the element nodes.")

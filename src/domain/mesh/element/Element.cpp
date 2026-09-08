@@ -119,6 +119,14 @@ XC::DefaultTag &XC::Element::getDefaultTag(void)
 int XC::Element::getNumEdges(void) const
   { return getNumExternalNodes(); }
 
+//! @brief Returns a pointer to the node at the given position.
+XC::Node *XC::Element::getNodePtr(const size_t &i)
+{ return this->getNodePtrs().getNodePtr(i); }
+  
+//! @brief Returns a const pointer to the node at the given position.
+const XC::Node *XC::Element::getNodePtr(const size_t &i) const
+  { return this->getNodePtrs().getNodePtr(i); }
+
 //! @brief Commit the current element state.
 //!
 //! The element is to commit its current state. To return 0 if
