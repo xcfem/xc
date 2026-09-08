@@ -798,6 +798,7 @@ python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_06.py
 python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_07.py
 python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_08.py
 python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_09.py
+python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_10.py
 echo "$BLEU" "    Modal analysis tests." "$NORMAL"
 python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_01.py
 python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_02.py
