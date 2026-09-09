@@ -1215,12 +1215,13 @@ class OutputHandler(object):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; the given set (named '+setToDisplay.name+') has: '+str(len(setToDisplay.elements))+' elements, so it cannot be displayed. Did you forget to call the fillDownwards() method?')
 
-    def extractEigenvectorComponents(self, mode= 1, setToDisplay=None, defFScale=0.0, extractDispComponents= True, extractRotComponents= True):
+    def extractEigenvectorComponents(self, mode= 1, setToDisplay=None, defFScale=0.0, extractDispComponents= True, extractRotComponents= True, treshold= 1e-2):
         '''Displays the computed eigenvectors on the set argument.
 
         :param mode: mode to which the eigenvectors belong.
         :param setToDisplay: set of elements to be displayed (defaults to total set)
-        :param defFScale: deformation scale factor. Factor to apply to the shape                          of the eigenmode so that the displayed position of 
+        :param defFScale: deformation scale factor. Factor to apply to the shape
+                          of the eigenmode so that the displayed position of 
                           each node equals to the initial position plus its 
                           eigenVector multiplied by this factor. (Defaults 
                           to 0.0  i.e. display of initial/undeformed shape).
@@ -1228,6 +1229,8 @@ class OutputHandler(object):
                                       components of the eigenvectors.
         :param extractRotComponents: if false, don't extract the rotational 
                                      components of the eigenvectors.
+        :param threshold: minimum value of the eigenvector modulus to be 
+                          displayed.
         '''
         preprocessor= self.modelSpace.preprocessor
         domain= preprocessor.getDomain
@@ -1242,8 +1245,8 @@ class OutputHandler(object):
                 if(not norm):
                     AssertionError('Can\'t normalize eigenvectors.')
             #auto-scale
-            LrefModSize=setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
-            threshold= LrefModSize/1000.0
+            LrefModSize=setToDisplay.getBnd(defFScale).diagonal.getModulus() # representative length of set size (to autoscale)
+            threshold= 1e-3 #LrefModSize/1e4
             for n in setToDisplay.nodes:
                 if(extractDispComponents): # extract displacement components.
                     disp3d= n.getEigenvectorDisp3dComponents(mode)
@@ -1270,7 +1273,7 @@ class OutputHandler(object):
             lmsg.error(className+'.'+methodName+'; mode: '+str(mode)+' out of range (1,'+str(numModes)+')')
         return dispPairs, rotPairs, LrefModSize, maxAbs
         
-    def displayEigenvectors(self, mode= 1, setToDisplay=None, caption= None, fileName=None, defFScale=0.0, showDispComponents= True, showRotComponents= True):
+    def displayEigenvectors(self, mode= 1, setToDisplay=None, caption= None, fileName=None, defFScale=0.0, showDispComponents= True, showRotComponents= True, period= None):
         '''Displays the computed eigenvectors on the set argument.
 
         :param mode: mode to which the eigenvectors belong.
@@ -1303,13 +1306,20 @@ class OutputHandler(object):
             scaleFactor*=0.15*LrefModSize/(maxAbs)
         # Set caption.
         if(not caption):
-            caption= 'Mode '+ str(mode) + ' eigenvectors' + ' '+setToDisplay.description
+            periodFreqStr= ''
+            if(period):
+                freq= 1/period
+                periodFreqStr= 'T= '+"{:.4f}".format(period)+' s f= '+"{:.4f}".format(freq)+' Hz'
+                caption= 'Mode '+ str(mode) + '('+periodFreqStr+') eigenvectors' + ' '+setToDisplay.description
+
+            else:
+                caption= 'Mode '+ str(mode) + '() eigenvectors' + ' '+setToDisplay.description
         if(showDispComponents):
             displacementFieldName= 'Deigenvectors'
         else:
             displacementFieldName= None
         if(showRotComponents):
-            rotationFieldName= 'Deigenvectors'
+            rotationFieldName= 'Reigenvectors'
         else:
             rotationFieldName= None
         vFieldD, vFieldR= vf.get_disp_and_rotation_vector_fields(dispFieldName= displacementFieldName, dispPairs= dispPairs, rotationFieldName= rotationFieldName, rotationPairs= rotPairs, fUnitConv= 1.0, scaleFactor= scaleFactor, showPushing= False)
