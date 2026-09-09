@@ -11,7 +11,6 @@ import xc
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
-# from postprocess import output_handler
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -113,6 +112,7 @@ else:
     lmsg.error(fname+' ERROR.')
     
 # #Graphic stuff.
+# from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
 # for mode in range(1,numModes+1):
