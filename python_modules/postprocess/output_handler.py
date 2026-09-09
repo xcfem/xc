@@ -1310,10 +1310,10 @@ class OutputHandler(object):
             if(period):
                 freq= 1/period
                 periodFreqStr= 'T= '+"{:.4f}".format(period)+' s f= '+"{:.4f}".format(freq)+' Hz'
-                caption= 'Mode '+ str(mode) + '('+periodFreqStr+') eigenvectors' + ' '+setToDisplay.description
+                caption= 'Mode '+ str(mode) + ' ('+periodFreqStr+') eigenvectors' + ' '+setToDisplay.description
 
             else:
-                caption= 'Mode '+ str(mode) + '() eigenvectors' + ' '+setToDisplay.description
+                caption= 'Mode '+ str(mode) + 'eigenvectors' + ' '+setToDisplay.description
         if(showDispComponents):
             displacementFieldName= 'Deigenvectors'
         else:
