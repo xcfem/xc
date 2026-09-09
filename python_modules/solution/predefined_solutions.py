@@ -1557,11 +1557,12 @@ class SpectraFrequencyAnalysis(FrequencyAnalysisBase):
         self.setFEProblem(prb)
         
 ### Convenience function
-def spectra_frequency_analysis(prb, shift:float= None):
+def spectra_frequency_analysis(prb, constraintHandlerType= 'transformation', shift:float= None):
     ''' Return a solution procedure that computes the natural
         frequencies of the model.
 
     :param prb: XC finite element problem.
+    :param constraintHandlerType: type of the constraint handler to use.
     :param shift: shift-and-invert mode (used with ARPACK).
     '''
     solProc= SpectraFrequencyAnalysis(prb, shift= shift)
