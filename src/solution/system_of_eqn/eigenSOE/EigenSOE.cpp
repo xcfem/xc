@@ -370,7 +370,7 @@ XC::Matrix XC::EigenSOE::getDistributionFactors(void) const
     return retval;
   }
 
-//! @brief Return the effective modal mass for the i-th mode.
+//! @brief Return the effective modal mass correspondig to the given mode.
 double XC::EigenSOE::getEffectiveModalMass(int i) const
   {
     const double tau= getModalParticipationFactor(i);
@@ -384,7 +384,7 @@ double XC::EigenSOE::getEffectiveModalMass(int i) const
     return tau*p;
   }
 
-//! @brief Returns the effective modal masses for each mode.
+//! @brief Returns the effective modal masses for each of the computed modes.
 XC::Vector XC::EigenSOE::getEffectiveModalMasses(void) const
   {
     const int nm= getNumModes();

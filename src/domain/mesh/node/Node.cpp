@@ -1729,12 +1729,12 @@ XC::Vector XC::Node::getModalParticipationFactors(const std::set<int> &dofs) con
 XC::Vector XC::Node::getModalParticipationFactorsForDOFs(const boost::python::list &l) const
   {
     std::set<int> tmp= set_int_from_py_list(l);
-    return getModalParticipationFactors(tmp);
+    return this->getModalParticipationFactors(tmp);
   }
 
 //! @brief Returns the distribution factor corresponding to the i-th mode.
 XC::Vector XC::Node::getDistributionFactor(int i) const
-  { return getModalParticipationFactor(i)*getEigenvector(i); }
+  { return this->getModalParticipationFactor(i)*getEigenvector(i); }
 
 //! @brief Returns the distribution factor corresponding to the mode
 //! being passed as parameter. If dofs argument
@@ -1743,7 +1743,7 @@ XC::Vector XC::Node::getDistributionFactor(int i) const
 //! @param mode: index of the mode.
 //! @param dofs: degrees of freedom to project on.
 XC::Vector XC::Node::getDistributionFactor(int mode,const std::set<int> &dofs) const
-  { return getModalParticipationFactor(mode,dofs)*getEigenvector(mode); }
+  { return this->getModalParticipationFactor(mode,dofs)*getEigenvector(mode); }
 
 //! @brief Returns the matrix with the computed distribution factors
 //! placed by columns.
@@ -1768,20 +1768,20 @@ XC::Matrix XC::Node::getDistributionFactors(void) const
     return retval;
   }
 
-//! @brief Return the effective modal mass
-//! that corresponds to i mode.
+//! @brief Return the effective modal mass that corresponds to the given mode.
 double XC::Node::getEffectiveModalMass(int mode) const
   {
     double retval= 0;
     const Vector ev= getEigenvector(mode);
     const int sz= ev.Size();
-    const double tau= getModalParticipationFactor(mode);
+    const double tau= this->getModalParticipationFactor(mode);
     const Vector J(sz,1.0);
     retval= tau*dot(ev,(mass*J));
     return retval;
   }
 
-//! @brief Returns the effective modal masses.
+//! @brief Returns the effective modal masses corresponding to each of the
+//! computed eigenmodes.
 XC::Vector XC::Node::getEffectiveModalMasses(void) const
   {
     const int nm= getNumModes();

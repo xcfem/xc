@@ -61,14 +61,14 @@ class_<XC::EigenAnalysis , bases<XC::Analysis>, boost::noncopyable >("EigenAnaly
   .def("getDomainStamp",&XC::EigenAnalysis::getDomainStamp, "Get the value of the domain stamp.")
   .def("setDomainStamp",&XC::EigenAnalysis::setDomainStamp, "Set the value of the domain stamp.")
   //Modal participation factors.
-  .def("getModalParticipationFactor",&XC::EigenAnalysis::getModalParticipationFactor)
-  .def("getModalParticipationFactors",&XC::EigenAnalysis::getModalParticipationFactors)
+  .def("getModalParticipationFactor",&XC::EigenAnalysis::getModalParticipationFactor, "Return the modal participation factor corresponding to the given mode.")
+  .def("getModalParticipationFactors",&XC::EigenAnalysis::getModalParticipationFactors, "Return the modal participation factor corresponding to each of the computed modes.")
   //Distribution factors.
   .def("getDistributionFactor",&XC::EigenAnalysis::getDistributionFactor)
   .def("getDistributionFactors",&XC::EigenAnalysis::getDistributionFactors)
   //Effective modal masses.
-  .def("getEffectiveModalMass",&XC::EigenAnalysis::getEffectiveModalMass)
-  .def("getEffectiveModalMasses",&XC::EigenAnalysis::getEffectiveModalMasses)
+  .def("getEffectiveModalMass",&XC::EigenAnalysis::getEffectiveModalMass, "Return the effective modal mass corresponding to the given mode.")
+  .def("getEffectiveModalMasses",&XC::EigenAnalysis::getEffectiveModalMasses, "Return the effective modal masses for each of the computed eigenmodes.")
   .def("getTotalMass",&XC::EigenAnalysis::getTotalMass)
   //Static equivalent load.
   .def("getEquivalentStaticLoad",&XC::EigenAnalysis::getEquivalentStaticLoad)
