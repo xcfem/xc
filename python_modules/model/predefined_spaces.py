@@ -1685,6 +1685,44 @@ class PredefinedSpace(object):
             retval= domain.getMesh.normalizeEigenvectors(mode)
             retval= domain.getMesh.getEigenvectorsMaxNormInf(mode)
         return retval
+
+    def getTotalMass(self):
+        ''' Return the total mass matrix of the FE model.'''
+        domain= self.preprocessor.getDomain
+        return domain.getTotalMass()
+    
+    def getTotalMassComponent(self, dof:int):
+        ''' Return the total mass matrix component for the given DOF.
+
+        :param dof: DOF of interest.
+        '''
+        domain= self.preprocessor.getDomain
+        return domain.getTotalMassComponent(dof)
+
+    def getEffectiveModalMass(self, mode:int):
+        ''' Return the effective modal mass corresponding to the given mode.
+
+        :param mode: mode of interest.
+        '''
+        domain= self.preprocessor.getDomain
+        return domain.getEffectiveModalMass(mode)
+     
+    def getEffectiveModalMasses(self):
+        ''' Return the effective modal mass corresponding to the given mode.
+
+        :param mode: mode of interest.
+        '''
+        domain= self.preprocessor.getDomain
+        return domain.getEffectiveModalMasses()
+    
+    def getTotalEffectiveModalMass(self):
+        ''' Return the sum of the efrective modal masses corresponding to the 
+            computed eigenmodes.
+
+        :param mode: mode of interest.
+        '''
+        domain= self.preprocessor.getDomain
+        return domain.getTotalEffectiveModalMass()
     
     def zeroEnergyModes(self, numModes= 1):
         ''' Obtains the zero energy modes of the finite element model.
