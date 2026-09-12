@@ -168,7 +168,7 @@ class Truss: public TrussBase
     const Vector & getResistingForceSensitivity(int gradNumber);
     const Matrix & getKiSensitivity(int gradNumber);
     const Matrix & getMassSensitivity(int gradNumber);
-    int            commitSensitivity(int gradNumber, int numGrads);
+    int commitSensitivity(int gradNumber, int numGrads);
     // AddingSensitivity:END ///////////////////////////////////////////
   };
 } // end of XC namespace

@@ -261,7 +261,7 @@ class Element: public MeshComponent
     virtual const Matrix &getInitialStiffSensitivity(int gradNumber);
     virtual const Matrix &getDampSensitivity(int gradNumber);
     virtual const Matrix &getMassSensitivity(int gradNumber);
-    virtual int   commitSensitivity(int gradNumber, int numGrads);
+    virtual int commitSensitivity(int gradNumber, int numGrads);
 // AddingSensitivity:END ///////////////////////////////////////////
 
     virtual int addResistingForceToNodalReaction(bool inclInertia);
