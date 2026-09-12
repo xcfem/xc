@@ -26,18 +26,21 @@
 #include "Array3dRange.h"
 
 
-//! @ingroup arrays3d
 //
 //! @brief Reference to a layer of the array which points have constant I index.
+//! @ingroup arrays3d
 template <class ARRAY_3D>
 class ConstantILayerVarRef: public Array3dBoxVarRef<ARRAY_3D>
   {
-  private:
-    using Array3dBoxVarRef<ARRAY_3D>::operator();
   public:
     typedef typename Array3dBoxVarRef<ARRAY_3D>::const_reference const_reference;
     typedef typename Array3dBoxVarRef<ARRAY_3D>::reference reference;
-
+  private:
+    inline const_reference operator()(size_t, size_t iRow,size_t col) const
+      { return Array3dBoxVarRef<ARRAY_3D>::operator()(1,iRow,col); }
+    inline reference operator()(size_t, size_t iRow,size_t col)
+      { return Array3dBoxVarRef<ARRAY_3D>::operator()(1,iRow,col); }
+  public:
     explicit ConstantILayerVarRef(ARRAY_3D &m,const size_t &iLayer=1,const size_t &f= 1,const size_t &c= 1);
     ConstantILayerVarRef(ARRAY_3D &m,const size_t &,const size_t &,const size_t &,const size_t &,const size_t &);
     ConstantILayerVarRef(ARRAY_3D &t,const size_t &iLayer,const RangoIndice &row_range,const RangoIndice &column_range);

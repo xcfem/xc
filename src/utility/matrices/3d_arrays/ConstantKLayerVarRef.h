@@ -31,12 +31,15 @@
 template <class ARRAY_3D>
 class ConstantKLayerVarRef: public Array3dBoxVarRef<ARRAY_3D>
   {
-  private:
-    using Array3dBoxVarRef<ARRAY_3D>::operator();
   public:
     typedef typename Array3dBoxVarRef<ARRAY_3D>::const_reference const_reference;
     typedef typename Array3dBoxVarRef<ARRAY_3D>::reference reference;
-
+  private:
+    inline const_reference operator()(size_t iLayer,size_t iRow, size_t) const
+      { return Array3dBoxVarRef<ARRAY_3D>::operator()(iLayer,iRow,1); }
+    inline reference operator()(size_t iLayer,size_t iRow, size_t)
+      { return Array3dBoxVarRef<ARRAY_3D>::operator()(iLayer,iRow,1); }
+  public:
     explicit ConstantKLayerVarRef(ARRAY_3D &m,const size_t &c=1,const size_t &iLayer= 1,const size_t &f= 1);
     ConstantKLayerVarRef(ARRAY_3D &m,const size_t &,const size_t &,const size_t &,const size_t &,const size_t &);
     ConstantKLayerVarRef(ARRAY_3D &t,const RangoIndice &column_range,const RangoIndice &row_range,const size_t &c);
