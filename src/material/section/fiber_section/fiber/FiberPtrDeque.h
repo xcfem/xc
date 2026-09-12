@@ -182,7 +182,7 @@ class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>, public Mo
     int revertToStart(FiberSection2d &,CrossSectionKR &);
     const Matrix &getInitialTangent(const FiberSection2d &) const;
     const Vector &getStressResultantSensitivity(int gradNumber, bool conditional);
-    int commitSensitivity(const XC::Vector& defSens, int gradNumber, int numGrads);
+    int commitSensitivity(const Vector& defSens, int gradNumber, int numGrads);
 
     int updateKRCenterOfMass(FiberSection3d &,CrossSectionKR &);
     int setInitialSectionDeformation(const FiberSection3d &);

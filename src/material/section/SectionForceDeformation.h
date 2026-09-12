@@ -180,7 +180,7 @@ class SectionForceDeformation: public Material
     virtual const Matrix &getInitialTangentSensitivity(int gradIndex);
     virtual const Matrix &getInitialFlexibilitySensitivity(int gradIndex);
     virtual double getRhoSensitivity(int gradNumber);
-    virtual int commitSensitivity(const Vector& sectionDeformationGradient, int gradNumber, int numGrads);
+    virtual int commitSensitivity(const Vector &sectionDeformationGradient, int gradNumber, int numGrads);
 // AddingSensitivity:END ///////////////////////////////////////////
     virtual double getEnergy(void) const;
   };

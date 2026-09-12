@@ -178,7 +178,7 @@ class NDMaterial: public Material
     virtual const Matrix & getTangentSensitivity(int gradIndex);
     virtual const Matrix & getDampTangentSensitivity(int gradIndex);
     virtual double getRhoSensitivity(int gradIndex);
-    virtual int commitSensitivity(Vector & strainGradient, int gradIndex, int numGrads);
+    virtual int commitSensitivity(Vector &strainGradient, int gradIndex, int numGrads);
 // AddingSensitivity:END ///////////////////////////////////////////
 
   };

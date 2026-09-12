@@ -122,7 +122,7 @@ class FiberSection2d: public FiberSectionBase
     const Vector & getStressResultantSensitivity(int gradNumber, bool conditional);
     const Vector & getSectionDeformationSensitivity(int gradNumber);
     const Matrix & getSectionTangentSensitivity(int gradNumber);
-    int   commitSensitivity(const Vector& sectionDeformationGradient, int gradNumber, int numGrads);
+    int commitSensitivity(const Vector &sectionDeformationGradient, int gradNumber, int numGrads);
     // AddingSensitivity:END ///////////////////////////////////////////
     inline virtual double getCenterOfMassZ(void) const
       { return 0.0; }
