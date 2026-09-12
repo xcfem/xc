@@ -330,7 +330,7 @@ int XC::TDConcreteMC10NL::commitState(void)
     return 0;
   }
 
-void XC::TDConcreteMC10NL::Print(std::ostream &s, int flag)
+void XC::TDConcreteMC10NL::Print(std::ostream &s, int flag) const
   {
     s << "TDConcreteMC10NL:(strain, stress, tangent) "
       << hstv.eps << " " << hstv.sig << " " << hstv.e

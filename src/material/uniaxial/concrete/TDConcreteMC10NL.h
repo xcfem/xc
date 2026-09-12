@@ -114,7 +114,7 @@ class TDConcreteMC10NL : public TDConcreteMC10Base
     
     int commitState(void);
     
-    void Print(std::ostream &, int flag =0);
+    void Print(std::ostream &, int flag =0) const;
   };
 
 } // end of XC namespace
