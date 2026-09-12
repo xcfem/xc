@@ -79,7 +79,7 @@ class CompressionOnlyMaterial : public HalfDiagramMaterial
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     double getStressSensitivity     (int gradIndex, bool conditional);
     double getDampTangentSensitivity(int gradIndex);
-    int    commitSensitivity        (double strainGradient, int gradIndex, int numGrads);
+    int    commitSensitivity(double strainGradient, int gradIndex, int numGrads);
     // AddingSensitivity:END ///////////////////////////////////////////
   };
 } // end of XC namespace

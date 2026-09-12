@@ -136,7 +136,7 @@ class HardeningMaterial: public UniaxialMaterial
     int    activateParameter        (int parameterID);
     double getStressSensitivity     (int gradNumber, bool conditional);
     double getInitialTangentSensitivity    (int gradNumber);
-    int commitSensitivity        (double strainGradient, int gradNumber, int numGrads);
+    int commitSensitivity(double strainGradient, int gradNumber, int numGrads);
 // AddingSensitivity:END ///////////////////////////////////////////
   };
 } // end of XC namespace

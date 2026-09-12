@@ -135,7 +135,7 @@ class Bilinear: public UniaxialMaterial
     double getTangentSensitivity    (int gradNumber);
     double getDampTangentSensitivity(int gradNumber);
     double getRhoSensitivity        (int gradNumber);
-    int    commitSensitivity        (double strainGradient, int gradNumber, int numGrads);
+    int    commitSensitivity(double strainGradient, int gradNumber, int numGrads);
   */
 
  protected:

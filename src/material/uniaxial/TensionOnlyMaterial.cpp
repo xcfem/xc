@@ -136,8 +136,7 @@ double XC::TensionOnlyMaterial::getDampTangentSensitivity(int gradIndex)
       return tmp->getDampTangentSensitivity(gradIndex);
   }
 
-int XC::TensionOnlyMaterial::commitSensitivity(double strainGradient,
-				       int gradIndex, int numGrads)
+int XC::TensionOnlyMaterial::commitSensitivity(double strainGradient, int gradIndex, int numGrads)
   {
     UniaxialMaterial *tmp= this->getMaterial();
     const double f = tmp->getStress();

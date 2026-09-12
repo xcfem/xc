@@ -98,7 +98,7 @@ class InvertMaterial : public EncapsulatedUniaxialMaterial
     double getInitialTangentSensitivity(int gradIndex);
     double getDampTangentSensitivity(int gradIndex);
     double getRhoSensitivity        (int gradIndex);
-    int    commitSensitivity        (double strainGradient, int gradIndex, int numGrads);
+    int    commitSensitivity(double strainGradient, int gradIndex, int numGrads);
     // AddingSensitivity:END ///////////////////////////////////////////
   };
 } // end of XC namespace
