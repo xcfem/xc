@@ -609,7 +609,7 @@ double XC::Concrete01::getStressSensitivity(int gradNumber, bool conditional)
 
 
 
-int XC::Concrete01::commitSensitivity(const double &strainGradient, int gradNumber, int numGrads)
+int XC::Concrete01::commitSensitivity(double strainGradient, int gradNumber, int numGrads)
   {
     // Initialize unconditaional stress sensitivity
     UniaxialStateVars trialStateSensitivity;
