@@ -259,8 +259,11 @@ class SetMeshComp: public SetBase
     boost::python::list createInertiaLoads(const Vector &);
     
     // mass distribution
-    Matrix getTotalMass(void) const;
+    Matrix getTotalMass() const;
     double getTotalMassComponent(const int &) const;
+    Vector getTotalLumpedMass() const;
+    Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
+    Vector getCenterOfMassCoordinates(bool initialGeometry= true) const;    
 
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);

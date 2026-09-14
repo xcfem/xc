@@ -54,7 +54,8 @@ size_t (XC::Node::*get_number_of_connected_elements_node_set)(const XC::SetBase 
 boost::python::list (XC::Node::*get_connected_elements_node_py)(void)= &XC::Node::getConnectedElementsPy;    
 boost::python::list (XC::Node::*get_connected_elements_node_set_py)(const XC::SetBase *)= &XC::Node::getConnectedElementsPy; 
 boost::python::list (XC::Node::*get_connected_elements_tags_node_py)(void) const= &XC::Node::getConnectedElementTags;    
-boost::python::list (XC::Node::*get_connected_elements_tags_node_set_py)(const XC::SetBase *) const= &XC::Node::getConnectedElementTags; 
+boost::python::list (XC::Node::*get_connected_elements_tags_node_set_py)(const XC::SetBase *) const= &XC::Node::getConnectedElementTags;
+XC::Vector (XC::Node::*node_get_3d_coordinates)() const= &XC::Node::getCrds3d;
 class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Node", no_init)
   .add_property("getCoo", make_function( getCooRef, return_internal_reference<>() ),"Return node coordinates.")
   .add_property("getNumberDOF", &XC::Node::getNumberDOF,"Return the number of DOFs of the node.")
@@ -62,7 +63,7 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .add_property("dim", &XC::Node::getDim,"Return the dimension of the node coordinates vector.")
   .add_property("mass", make_function(&XC::Node::getMass, return_internal_reference<>()) ,&XC::Node::setMass,"Node mass matrix.")
   .def("getMassComponent", &XC::Node::getMassComponent,"Return the mass matrix component for the DOF argument.")
-  .add_property("get3dCoo", &XC::Node::getCrds3d,"Return 3D coordinates of the node.")
+  .add_property("get3dCoo", node_get_3d_coordinates,"Return 3D coordinates of the node.")
   .def("getPos2d", &XC::Node::getPosition2d,"getPosition2d(v), returns the 2D position obtained by adding the vector to the position of node.")
   .def("getPos3d", &XC::Node::getPosition3d,"getPosition3d(v), returns the 3D position obtained by adding the vector to the position of node..")
   .add_property("getInitialPos2d", &XC::Node::getInitialPosition2d,"Returns 2D initial position of node.")

@@ -1486,11 +1486,23 @@ Pos3d XC::Element::getCenterOfMassPosition(bool initialGeometry) const
 //! @param initialGeometry: if true, use undeformed element geometry.
 XC::Vector XC::Element::getCenterOfMassCoordinates(bool initialGeometry) const
   {
-    const Pos3d center_of_mass= getCenterOfMassPosition(initialGeometry);
-    Vector retval(3);
-    retval(0)= center_of_mass.x();
-    retval(1)= center_of_mass.y();
-    retval(2)= center_of_mass.z();
+    Vector retval;
+    const Node *nodePtr= this->getNodePtr(0);
+    if(nodePtr)
+      {
+	const Pos3d center_of_mass= this->getCenterOfMassPosition(initialGeometry);
+	const size_t dim= nodePtr->getDim();
+	retval= Vector(dim);
+	for(size_t i= 0; i<dim; i++)
+	  retval(i)= center_of_mass[i];
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << " pointer to node 0 is null."
+		  << Color::def << std::endl;
+	exit(-1);
+      }
     return retval;
   }
 

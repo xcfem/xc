@@ -558,6 +558,77 @@ double XC::SetMeshComp::getTotalMassComponent(const int &dof) const
     const double retval= dot(J,tmp);
     return retval;
   }
+//! @brief Return the lumped mass matrix as a a diagonal approximation of
+//! a node mass by summing the rows of the consistent matrix and puting them
+//! onto the diagonal.
+XC::Vector XC::SetMeshComp::getTotalLumpedMass(void) const
+  {
+    const Matrix consistentMassMatrix= this->getTotalMass();
+    const size_t sz= consistentMassMatrix.noRows();
+    Vector retval(sz);
+    for(size_t i = 0; i < sz; ++i)
+      {
+        double rowSum = 0.0;
+        for(size_t j = 0; j < sz; ++j)
+	  { rowSum+=  consistentMassMatrix(i, j); }
+        retval[i]= rowSum;
+      }
+    return retval;
+  }
+
+//! @brief Returns the coordinates of the center of gravity of the set.
+//! @param initialGeometry: if true, use undeformed element geometry.
+Pos3d XC::SetMeshComp::getCenterOfMassPosition(bool initialGeometry) const
+  {
+    const Vector center_of_mass= this->getCenterOfMassCoordinates(initialGeometry);
+    Pos3d retval;
+    const size_t sz= center_of_mass.Size();
+    if(sz>0)
+      {
+        retval.SetX(center_of_mass(0));
+	if(sz>1)
+	  {
+	    retval.SetY(center_of_mass(1));
+	    if(sz>2)
+	      retval.SetZ(center_of_mass(2));
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Returns the coordinates of the center of mass of the set.
+//! @param initialGeometry: if true, use undeformed element geometry.
+XC::Vector XC::SetMeshComp::getCenterOfMassCoordinates(bool initialGeometry) const
+  {
+    const Vector nodes_cog= nodes.getCenterOfMassCoordinates(initialGeometry);
+    const size_t dimSpace= nodes_cog.Size();
+    std::vector<int> v(dimSpace); // 1. Create vector with appropriate size.
+    std::iota(v.begin(), v.end(), 0); // 2. Fill it starting from 0
+    const ID rows(v);
+    const Matrix nodesTotalMass= nodes.getTotalMass()(rows, rows);
+    Vector retval= nodesTotalMass*nodes_cog;
+    if(!elements.empty())
+      {
+	const Vector elements_cog= elements.getCenterOfMassCoordinates(initialGeometry);
+	const Matrix elementsTotalMass= elements.getTotalMass()(rows, rows);
+	retval+= elementsTotalMass*elements_cog;
+      }
+    const Vector lumpedMass= this->getTotalLumpedMass();
+    const int sz= std::min(lumpedMass.Size(), retval.Size());
+    for(int j= 0; j<sz; j++)
+      {
+	if(lumpedMass(j)!=0.0)
+	  retval(j)/= lumpedMass(j);
+	else
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; zero lumped mass matrix component i= " << j
+		      << Color::def << std::endl;
+	  }
+      }
+    return retval;
+  }
+
 
 //! @brief Returns true if the node with the tag
 //! being passed as parameter, belongs to the set.

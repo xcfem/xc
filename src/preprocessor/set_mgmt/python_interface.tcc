@@ -57,6 +57,7 @@ class_<XC::DqPtrsNode, bases<dq_ptrs_node> >("DqPtrsNode",no_init)
   .def("createInertiaLoads", &XC::DqPtrsNode::createInertiaLoads,"Create the inertia load for the given acceleration vector.")
   .add_property("totalMass", &XC::DqPtrsNode::getTotalMass, "Return the total mass matrix.")
   .def("getTotalMassComponent", &XC::DqPtrsNode::getTotalMassComponent,"Return the total mass matrix component for the DOF argument.")
+  .def("getCenterOfMass", &XC::DqPtrsNode::getCenterOfMassPosition,"Return the denter of mass of the nodes in this container")
   ;
 
 typedef XC::DqPtrs<XC::Element> dq_ptrs_element;
@@ -110,7 +111,8 @@ class_<XC::DqPtrsElem, bases<dq_ptrs_element> >("DqPtrsElem",no_init)
   .def(self + self)
   .def(self - self)
   .def(self * self)
-   ;
+  .def("getCenterOfMass", &XC::DqPtrsElem::getCenterOfMassPosition,"Return the denter of mass of the elements in this container")
+  ;
 
 typedef XC::DqPtrs<XC::Constraint> dq_ptrs_constraint;
 class_<dq_ptrs_constraint, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_constraint",no_init)
@@ -212,6 +214,7 @@ class_<XC::SetMeshComp, XC::SetMeshComp *, bases<XC::SetBase> >("SetMeshComp",no
   .def("createInertiaLoads", &XC::SetMeshComp::createInertiaLoads,"Create the inertia load for the given acceleration vector.")
   .add_property("totalMass", &XC::SetMeshComp::getTotalMass, "Return the total mass matrix.")
   .def("getTotalMassComponent", &XC::SetMeshComp::getTotalMassComponent,"Return the total mass matrix component for the DOF argument.")
+  .def("getCenterOfMass", &XC::SetMeshComp::getCenterOfMassPosition,"Return the denter of mass of the elements in this container")
   // The following operators return copies of the object stored in MapSet
   // and then the operations in those objects are lost. For now we'll
   // leave them aside.

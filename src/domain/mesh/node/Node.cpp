@@ -668,8 +668,32 @@ size_t XC::Node::getDim(void) const
 const XC::Vector &XC::Node::getCrds(void) const
   { return Crd; }
 
+//! @brief Returns the current node coordinates.
+//! @param factor: return initCrd+ factor * nodDisplacement.
+XC::Vector XC::Node::getCrds(const double &factor) const
+  {
+    Vector retval= this->getCrds();
+    if(factor!= 0.0)
+      {
+	Vector fd= factor*getDisp();
+	if(fd.isnan()) //Something went wrong.
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << " displacement vector for node: "
+		      << getTag() << " is NOT VALID"
+		      << " returning original position."
+		      << Color::def << std::endl;
+	    fd.Zero();
+	  }
+	const size_t sz= retval.Size();
+	for(size_t i= 0; i<sz; i++)
+	  retval(i)+= fd(i);
+      }
+    return retval;
+  }
+
 //! @brief Return a reference to the vector of nodal coordinates.
-//! 
+//! s
 //! Returns the original coordinates in a Vector. The size of the vector
 //! is 2 if node object was created for a 2d problem and the size is 3 if
 //! created for a 3d problem.
@@ -677,7 +701,8 @@ XC::Vector &XC::Node::getCrds(void)
   { return Crd; }
 
 //! @brief Returns the node coordinates in a 3D space.
-XC::Vector XC::Node::getCrds3d(void) const
+//! @param factor: return initCrd+ factor * nodDisplacement.
+XC::Vector XC::Node::getCrds3d() const
   {
     Vector retval(3,0.0);
     const size_t sz= getDim();
@@ -690,6 +715,28 @@ XC::Vector XC::Node::getCrds3d(void) const
             if(sz>2)
               retval[2]= Crd[2];
           }
+      }
+    return retval;
+  }
+
+//! @brief Returns the node current coordinates in a 3D space.
+//! @param factor: return initCrd+ factor * nodDisplacement.
+XC::Vector XC::Node::getCrds3d(const double &factor) const
+  {
+    Vector retval= this->getCrds3d();
+    if(factor!= 0.0)
+      {
+	Vector fd= factor*getDisp();
+	if(fd.isnan()) //Something went wrong.
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << " displacement vector for node: "
+		      << getTag() << " is NOT VALID"
+		      << " returning original position."
+		      << Color::def << std::endl;
+	    fd.Zero();
+	  }
+	retval+= fd;
       }
     return retval;
   }

@@ -26,6 +26,7 @@
 //----------------------------------------------------------------------------
 
 #include "DqPtrsNode.h"
+#include <numeric> // Required for std::iota
 #include "domain/mesh/node/Node.h"
 #include "domain/load/NodalLoad.h"
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
@@ -211,6 +212,99 @@ double XC::DqPtrsNode::getTotalMassComponent(const int &dof) const
     Vector tmp(sz);
     tmp.addMatrixVector(1.0, totalMass, J, 1.0);
     const double retval= dot(J,tmp);
+    return retval;
+  }
+
+//! @brief Returns the coordinates of the center of gravity of the nodes.
+//! @param initialGeometry: if true, use undeformed element geometry.
+Pos3d XC::DqPtrsNode::getCenterOfMassPosition(bool initialGeometry) const
+  {
+    const Vector center_of_mass= this->getCenterOfMassCoordinates(initialGeometry);
+    Pos3d retval;
+    const size_t sz= center_of_mass.Size();
+    if(sz>0)
+      {
+        retval.SetX(center_of_mass(0));
+	if(sz>1)
+	  {
+	    retval.SetY(center_of_mass(1));
+	    if(sz>2)
+	      retval.SetZ(center_of_mass(2));
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the lumped mass matrix as a a diagonal approximation of
+//! a node mass by summing the rows of the consistent matrix and puting them
+//! onto the diagonal.
+XC::Vector XC::DqPtrsNode::getTotalLumpedMass(void) const
+  {
+    const Matrix consistentMassMatrix= this->getTotalMass();
+    const size_t sz= consistentMassMatrix.noRows();
+    Vector retval(sz);
+    for(size_t i = 0; i < sz; ++i)
+      {
+        double rowSum = 0.0;
+        for(size_t j = 0; j < sz; ++j)
+	  { rowSum+=  consistentMassMatrix(i, j); }
+        retval[i]= rowSum;
+      }
+    return retval;
+  }
+
+//! @brief Return the dimension of the space.
+int XC::DqPtrsNode::get_dim_space() const
+  {
+    int retval= 0;
+    if(!empty())
+      {
+	const_iterator i= this->begin();
+	retval= (*i)->getDim();
+      }
+    return retval;
+  }
+
+//! @brief Returns the coordinates of the center of mass of the nodes.
+//! @param initialGeometry: if true, use undeformed element geometry.
+XC::Vector XC::DqPtrsNode::getCenterOfMassCoordinates(bool initialGeometry) const
+  {
+    Vector retval;
+    const int dimSpace= this->get_dim_space();
+    if(dimSpace>0)
+      {
+	std::vector<int> v(dimSpace); // 1. Create vector with appropriate size.
+	std::iota(v.begin(), v.end(), 0); // 2. Fill it starting from 0
+	const ID rows(v);
+	retval= Vector(dimSpace, 0.0);
+	for(const_iterator i= begin();i!=end();i++)
+	  {
+	    const Matrix nodeMass= (*i)->getMass()(rows, rows);
+	    const int sz= nodeMass.noRows();
+	    Vector nodeCrds(sz);
+	    if(initialGeometry)
+	      nodeCrds= (*i)->getCrds();
+	    else
+	      nodeCrds= (*i)->getCrds(1.0);
+	    retval+= nodeMass*nodeCrds;
+	  }
+	const Vector lumpedMass= this->getTotalLumpedMass();
+	const int sz= std::min(lumpedMass.Size(), retval.Size());
+	for(int j= 0; j<sz; j++)
+	  {
+	    if(lumpedMass(j)!=0.0)
+	      retval(j)/= lumpedMass(j);
+	    else
+	      {
+		if(retval(j)!= 0.0)
+		  {
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			      << "; zero lumped mass matrix component i= " << j
+			      << Color::def << std::endl;
+		  }
+	      }
+	  }
+      }
     return retval;
   }
 

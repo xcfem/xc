@@ -1025,6 +1025,13 @@ python tests/preprocessor/sets/test_set_substract_elements.py
 python tests/preprocessor/sets/test_set_substract_points.py
 python tests/preprocessor/sets/test_set_substract_lines.py
 python tests/preprocessor/sets/test_set_substract_set.py
+python tests/preprocessor/sets/test_center_of_mass_set_01.py
+python tests/preprocessor/sets/test_center_of_mass_set_02.py
+python tests/preprocessor/sets/test_center_of_mass_set_03.py
+python tests/preprocessor/sets/test_center_of_mass_set_04.py
+python tests/preprocessor/sets/test_center_of_mass_set_05.py
+python tests/preprocessor/sets/test_center_of_mass_set_06.py
+python tests/preprocessor/sets/test_center_of_mass_set_07.py
 
 echo "$BLEU" "    Sets geometry queries." "$NORMAL"
 python tests/preprocessor/sets/geometric_queries/test_get_element_set_contour_01.py

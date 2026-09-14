@@ -321,6 +321,96 @@ double XC::DqPtrsElem::getTotalMassComponent(const int &dof) const
     return retval;
   }
 
+//! @brief Return the lumped mass matrix as a a diagonal approximation of
+//! a node mass by summing the rows of the consistent matrix and puting them
+//! onto the diagonal.
+XC::Vector XC::DqPtrsElem::getTotalLumpedMass(void) const
+  {
+    const Matrix consistentMassMatrix= this->getTotalMass();
+    const size_t sz= consistentMassMatrix.noRows();
+    Vector retval(sz);
+    for(size_t i = 0; i < sz; ++i)
+      {
+        double rowSum = 0.0;
+        for(size_t j = 0; j < sz; ++j)
+	  { rowSum+=  consistentMassMatrix(i, j); }
+        retval[i]= rowSum;
+      }
+    return retval;
+  }
+
+//! @brief Returns the coordinates of the center of gravity of the elements.
+//! @param initialGeometry: if true, use undeformed element geometry.
+Pos3d XC::DqPtrsElem::getCenterOfMassPosition(bool initialGeometry) const
+  {
+    const Vector center_of_mass= this->getCenterOfMassCoordinates(initialGeometry);
+    Pos3d retval;
+    const size_t sz= center_of_mass.Size();
+    if(sz>0)
+      {
+        retval.SetX(center_of_mass(0));
+	if(sz>1)
+	  {
+	    retval.SetY(center_of_mass(1));
+	    if(sz>2)
+	      retval.SetZ(center_of_mass(2));
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the dimension of the space.
+int XC::DqPtrsElem::get_dim_space() const
+  {
+    int retval= 0;
+    if(!empty())
+      {
+	const_iterator i= this->begin();
+	const Node *nodePtr= (*i)->getNodePtr(0);
+	if(nodePtr)
+	  retval= nodePtr->getDim();
+      }
+    return retval;
+  }
+
+//! @brief Returns the coordinates of the center of mass of the elements.
+//! @param initialGeometry: if true, use undeformed element geometry.
+XC::Vector XC::DqPtrsElem::getCenterOfMassCoordinates(bool initialGeometry) const
+  {
+    Vector retval;
+    const int dimSpace= this->get_dim_space();
+    if(dimSpace>0)
+      {
+	std::vector<int> v(dimSpace); // 1. Create vector with appropriate size.
+	std::iota(v.begin(), v.end(), 0); // 2. Fill it starting from 0
+	const ID rows(v);
+	retval= Vector(dimSpace, 0.0);
+	for(const_iterator i= begin();i!=end();i++)
+	  {
+	    const Matrix elementMass= (*i)->getTotalMass()(rows, rows);
+	    Vector elementCrds= (*i)->getCenterOfMassCoordinates(initialGeometry);
+	    retval+= elementMass*elementCrds;
+	  }
+	const Vector lumpedMass= this->getTotalLumpedMass();
+	const int sz= std::min(lumpedMass.Size(), retval.Size());
+	for(int j= 0; j<sz; j++)
+	  {
+	    if(lumpedMass(j)!=0.0)
+	      retval(j)/= lumpedMass(j);
+	    else
+	      {
+		if(retval(j)!= 0.0)
+		  {
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			      << "; zero lumped mass matrix component i= " << j
+			      << Color::def << std::endl;
+		  }
+	      }
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Deactivates the elements.
 void XC::DqPtrsElem::kill_elements(void)
   {

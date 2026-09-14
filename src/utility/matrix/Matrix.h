@@ -148,7 +148,7 @@ class Matrix: public CommandEntity
     int resize(int numRow, int numCol);
     //void from_string(const std::string &str);
 
-    int  Assemble(const Matrix &,const ID &rows, const ID &cols, double fact = 1.0);
+    int Assemble(const Matrix &,const ID &rows, const ID &cols, double fact = 1.0);
 
     int Solve(const Vector &V, Vector &res) const;
     int Solve(const Matrix &M, Matrix &res) const;
