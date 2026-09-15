@@ -391,22 +391,18 @@ XC::Vector XC::DqPtrsElem::getCenterOfMassCoordinates(bool initialGeometry) cons
 	    Vector elementCrds= (*i)->getCenterOfMassCoordinates(initialGeometry);
 	    retval+= elementMass*elementCrds;
 	  }
-	const Vector lumpedMass= this->getTotalLumpedMass();
-	const int sz= std::min(lumpedMass.Size(), retval.Size());
-	for(int j= 0; j<sz; j++)
+	const Matrix totalMass= this->getTotalMass()(rows, rows);
+	Vector tmp(dimSpace, 0.0);
+	int result= totalMass.Solve(retval, tmp);
+	if(result!=0)
 	  {
-	    if(lumpedMass(j)!=0.0)
-	      retval(j)/= lumpedMass(j);
-	    else
-	      {
-		if(retval(j)!= 0.0)
-		  {
-		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-			      << "; zero lumped mass matrix component i= " << j
-			      << Color::def << std::endl;
-		  }
-	      }
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; error when solving SOE; mass matrix= " << totalMass
+		      << Color::def << std::endl;
+	    exit(1);
 	  }
+	else
+	  retval= tmp;
       }
     return retval;
   }
