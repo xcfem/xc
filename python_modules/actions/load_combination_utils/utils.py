@@ -430,3 +430,32 @@ def json_to_xc(inputFileName, preprocessor, situations= ['SLSRare', 'SLSFrequent
             for combKey in sitCombinations: # for each combination.
                 combExpr= sitCombinations[combKey]
                 comb= xcCombinations.newLoadCombination(combKey, combExpr)
+
+def extract_load_factor_pairs(loadCombinations):
+    ''' Extract (load, factor) pairs from load combination expressions.
+
+    :param loadCombinations: dictionary of the form:
+                             loadCombinations[lCombName:str]= lCombExpr:str 
+    :returns: 
+        - a dictionary of the form: 
+             retval[lCombName:str][looaCaseName:str]= factor
+        - a set populates with the names of the load cases.
+    '''
+    retval= dict()
+    loadCaseNames= set()
+    for lc in loadCombinations:
+        retval[lc]= dict()
+        lc_expr= loadCombinations[lc]
+        lc_expr= lc_expr.replace('+', '\+')
+        lc_expr= lc_expr.replace('-', '\-')
+        comb_lst= lc_expr.split('\\')
+        for token in comb_lst:
+            if(len(token)>0):
+                pair= token.split('*')
+                factor= float(pair[0])
+                load_name= pair[1]
+                retval[lc][load_name]= factor
+                loadCaseNames.add(load_name)
+    return retval, loadCaseNames
+    
+    

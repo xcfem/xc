@@ -425,6 +425,7 @@ python tests/actions/load_combinations/test_action.py
 python tests/actions/load_combinations/test_action_group.py
 python tests/actions/load_combinations/test_combination_dict.py
 python tests/actions/load_combinations/test_split_combination.py
+python tests/actions/load_combinations/test_extract_load_factor_pairs.py
 echo "$BLEU" "  Forming load combination tests." "$NORMAL"
 echo "$BLEU" "    Forming load combination according to EHE." "$NORMAL"
 python tests/actions/load_combinations/ehe/test_ehe_secondaries_00.py
