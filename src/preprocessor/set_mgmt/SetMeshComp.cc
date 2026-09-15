@@ -541,8 +541,16 @@ boost::python::list XC::SetMeshComp::createInertiaLoads(const Vector &accel)
 XC::Matrix XC::SetMeshComp::getTotalMass(void) const
   {
     Matrix retval= nodes.getTotalMass();
-    if(elements.size()>0)
-      retval+= elements.getTotalMass();
+    if(retval.noRows()>0)
+      {
+	if(elements.size()>0)
+	  retval+= elements.getTotalMass();
+      }
+    else
+      {
+	if(elements.size()>0)
+	  retval= elements.getTotalMass();
+      }
     return retval;
   }
 
@@ -600,18 +608,38 @@ Pos3d XC::SetMeshComp::getCenterOfMassPosition(bool initialGeometry) const
 //! @param initialGeometry: if true, use undeformed element geometry.
 XC::Vector XC::SetMeshComp::getCenterOfMassCoordinates(bool initialGeometry) const
   {
+    Vector retval;
+    ID rows;
     const Vector nodes_cog= nodes.getCenterOfMassCoordinates(initialGeometry);
-    const size_t dimSpace= nodes_cog.Size();
-    std::vector<int> v(dimSpace); // 1. Create vector with appropriate size.
-    std::iota(v.begin(), v.end(), 0); // 2. Fill it starting from 0
-    const ID rows(v);
-    const Matrix nodesTotalMass= nodes.getTotalMass()(rows, rows);
-    Vector retval= nodesTotalMass*nodes_cog;
+    size_t dimSpace= nodes_cog.Size();
+    if(dimSpace>0)
+      {
+	std::vector<int> v(dimSpace); // 1. Create vector with appropriate size.
+	std::iota(v.begin(), v.end(), 0); // 2. Fill it starting from 0
+	rows= ID(v);
+	const Matrix nodesTotalMass= nodes.getTotalMass()(rows, rows);
+	retval= nodesTotalMass*nodes_cog;
+      }
     if(!elements.empty())
       {
 	const Vector elements_cog= elements.getCenterOfMassCoordinates(initialGeometry);
-	const Matrix elementsTotalMass= elements.getTotalMass()(rows, rows);
-	retval+= elementsTotalMass*elements_cog;
+	if(dimSpace==0) // No nodes with mass.
+	  {
+	    dimSpace= elements_cog.Size();
+	    if(dimSpace>0) // Elements with mass.
+	      {
+		std::vector<int> v(dimSpace); // 1. Create vector with appropriate size.
+		std::iota(v.begin(), v.end(), 0); // 2. Fill it starting from 0
+		rows= ID(v);
+		const Matrix elementsTotalMass= elements.getTotalMass()(rows, rows);
+		retval= elementsTotalMass*elements_cog;
+	      }
+	  }
+	else
+	  {
+	    const Matrix elementsTotalMass= elements.getTotalMass()(rows, rows);
+	    retval+= elementsTotalMass*elements_cog;
+	  }
       }
     const Matrix totalMass= this->getTotalMass()(rows, rows);
     Vector tmp(dimSpace, 0.0);
