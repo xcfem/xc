@@ -12,7 +12,6 @@ To find the CR coordinates $(X_{CR}, Y_{CR})$ at a specific floor level, the FE 
 * Load Case 1 (Force in X): Apply a global unit lateral force ($F_x = 1$) at the arbitrary master node $(X_M, Y_M)$. Record the resulting global rotation of the diaphragm around the vertical Z-axis, denoted as $R_{zx}$. [2, 3, 4] 
 * Load Case 2 (Force in Y): Apply a global unit lateral force ($F_y = 1$) at the same arbitrary master node $(X_M, Y_M)$. Record the resulting global rotation of the diaphragm, denoted as $R_{zy}$. [2, 3] 
 * Load Case 3 (Moment around Z): Apply a global unit torsional moment ($M_z = 1$) at the same master node. Record the resulting global rotation of the diaphragm, denoted as $R_{zz}$. [2, 3] 
-* 
 
 ## 2. Calculate the Center of Rigidity
 
