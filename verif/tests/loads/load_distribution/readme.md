@@ -15,6 +15,7 @@ To find the CR coordinates $(X_{CR}, Y_{CR})$ at a specific floor level, the FE 
 * 
 
 ## 2. Calculate the Center of Rigidity
+
 By definition, the Center of Rigidity is the point where a lateral force causes pure translation and zero floor rotation. Using the structural rotations captured from the unit load cases, back-calculate the lever arms to locate this point relative to your arbitrary loading node: [3, 6, 7] 
 $$X_{CR} = X_M - \frac{R_{zy}}{R_{zz}}$$ 
 $$Y_{CR} = Y_M + \frac{R_{zx}}{R_{zz}}$$ 
