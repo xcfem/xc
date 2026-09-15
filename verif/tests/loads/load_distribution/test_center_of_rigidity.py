@@ -84,7 +84,7 @@ lVector= xc.Vector([0,F,0,0,0,0]) # Fx, Fy, Fz, Mx, My, Mz
 yLoadP= modelSpace.newLoadPattern(name= 'yLoadP', setCurrent= True)
 ySlidingVectorLoad= loads.SlidingVectorLoad(name= 'yLoad', nodes= loadedNodes, pntCoord= loadPointCoord, loadVector= lVector)
 ySlidingVectorLoad.appendLoadToCurrentLoadPattern()
-# 3.2 Unit force along the global Y-direction at the COG.
+# 3.3 Unit force along the global Y-direction at the COG.
 lVector= xc.Vector([0,0,0,0,0,M]) # Fx, Fy, Fz, Mx, My, Mz
 tLoadP= modelSpace.newLoadPattern(name= 'tLoadP', setCurrent= True)
 tSlidingVectorLoad= loads.SlidingVectorLoad(name= 'tLoad', nodes= loadedNodes, pntCoord= loadPointCoord, loadVector= lVector)
@@ -106,9 +106,12 @@ yCR= -Rzx/Rzz
 cor= cog+geom.Vector3d(xCR, yCR, 0.0)
 dist= cor.dist(cog)
     
-# print(cog)
-# print(cor)
-# print(dist)
+# print('Rzx= ', Rzx*1e3, 'mrad')
+# print('Rzy= ', Rzy*1e3, 'mrad')
+# print('Rzz= ', Rzz*1e3, 'mrad')
+# print('Center of gravity: ', cog)
+# print('Center of rigidity: ', cor)
+# print('Distance between them: ', dist)
 
 import os
 from misc_utils import log_messages as lmsg
