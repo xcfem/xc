@@ -24,6 +24,7 @@
 #include "SlidingVector2d.h"
 #include "utility/geom/d1/Line2d.h"
 #include "utility/geom/coo_sys/ref_sys/Ref2d2d.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 
 SlidingVectorsSystem2d::SlidingVectorsSystem2d(const Pos2d &O,const Vector2d &R,const GEOM_FT &Mo)
@@ -79,38 +80,48 @@ SlidingVectorsSystem2d SlidingVectorsSystem2d::reduceTo(const Pos2d &Q) const
 std::vector<SlidingVector2d> SlidingVectorsSystem2d::distribute(const std::vector<Pos2d> &point_list) const
   {
     const size_t sz= point_list.size();
-    // Calculate the position of the center of gravity:
-    Vector2d num;
-    const double W(sz);
-    for(size_t i= 0;i<sz;i++)
-      {
-	const Pos2d p_i= point_list[i];
-	num+= p_i.VectorPos();
-      }
-    Pos2d cg(0,0);
-    cg+= (num/W);
-    // Calculate the equivalent sliding vector system at cg:
-    SlidingVectorsSystem2d newSVS= this->reduceTo(cg);
-    const Vector2d Fcg= newSVS.getResultant();
-    const double Mcg= newSVS.getMoment();
-    std::vector<Vector2d> f_i(sz);
-    std::vector<Vector2d> p_i(sz);
-    double denom= 0.0; 
-    for(size_t i= 0;i<sz;i++)
-      {
-	f_i[i]= Fcg/W; // force distribution.
-	const Pos2d pt_i= point_list[i];
-	const Vector2d r_i= pt_i-cg;
-	p_i[i]= Mcg*Vector2d(-r_i.y(),r_i.x()); // cross product moment distribution.
-	denom+= dot(r_i,r_i);
-      }
     std::vector<SlidingVector2d> retval(sz);
-    const double factor= 1.0/denom;
-    for(size_t i= 0;i<sz;i++)
+    if(sz>1)
       {
-	const Pos2d pt_i= point_list[i];
-	p_i[i]= factor*p_i[i];
-	retval[i]= SlidingVector2d(pt_i, f_i[i]+p_i[i]);
+	// Calculate the position of the center of gravity:
+	Vector2d num;
+	const double W(sz);
+	for(size_t i= 0;i<sz;i++)
+	  {
+	    const Pos2d p_i= point_list[i];
+	    num+= p_i.VectorPos();
+	  }
+	Pos2d cg(0,0);
+	cg+= (num/W);
+	// Calculate the equivalent sliding vector system at cg:
+	SlidingVectorsSystem2d newSVS= this->reduceTo(cg);
+	const Vector2d Fcg= newSVS.getResultant();
+	const double Mcg= newSVS.getMoment();
+	std::vector<Vector2d> f_i(sz);
+	std::vector<Vector2d> p_i(sz);
+	double denom= 0.0; 
+	for(size_t i= 0;i<sz;i++)
+	  {
+	    f_i[i]= Fcg/W; // force distribution.
+	    const Pos2d pt_i= point_list[i];
+	    const Vector2d r_i= pt_i-cg;
+	    p_i[i]= Mcg*Vector2d(-r_i.y(),r_i.x()); // cross product moment distribution.
+	    denom+= dot(r_i,r_i);
+	  }
+	const double factor= 1.0/denom;
+	for(size_t i= 0;i<sz;i++)
+	  {
+	    const Pos2d pt_i= point_list[i];
+	    p_i[i]= factor*p_i[i];
+	    retval[i]= SlidingVector2d(pt_i, f_i[i]+p_i[i]);
+	  }
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << " Error; at least two points are needed."
+		  << Color::def << std::endl;
+	exit(-1);
       }
     return retval;
   }
@@ -141,9 +152,9 @@ std::vector<SlidingVector2d> SlidingVectorsSystem2d::distribute(const std::vecto
     const size_t szpl= point_list.size();
     const size_t szw= weights.size();
     if(szpl!=szw)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; point list and weight list of different sizes."
-	        << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << " Error; point list and weight list of different sizes."
+	        << Color::def << std::endl;
     const size_t sz= std::min(szpl,szw);
     // Calculate the position of the center of gravity:
     Vector2d num;
@@ -193,9 +204,9 @@ boost::python::list SlidingVectorsSystem2d::distributePy(const boost::python::li
     const size_t szpl= len(pt_list);
     const size_t szw= len(w);
     if(szpl!=szw)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; point list and weight list of different sizes."
-                << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << " Error; point list and weight list of different sizes."
+                << Color::def << std::endl;
     const size_t sz= std::min(szpl,szw);
     std::vector<Pos2d> point_list(sz);
     std::vector<double> weights(sz);
@@ -326,18 +337,20 @@ Line2d SlidingVectorsSystem2d::getZeroMomentLine(void) const
         retval= Line2d(Pos2d(x,0.0),Pos2d(x,1e3));
       }
     else if(mom==0.0)
-      std::clog << getClassName() << "::" << __FUNCTION__
-	        << "; all points have zero moment." << std::endl; 
+      std::clog  << Color::yellow << getClassName() << "::" << __FUNCTION__
+		 << " Error; all points have zero moment."
+		 << Color::def << std::endl; 
     else
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 	        << "; no point has zero moment." << std::endl;
     const Pos2d p= retval.Point();
     const GEOM_FT m= getMoment(p);
     if(abs(m)>1E-6)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "ERROR in computing zero moment line; "
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	        << " ERROR in computing zero moment line; "
                 << " moment for point: " << p
-	        << " m= " << m << " not zero." << std::endl;
+	        << " m= " << m << " not zero."
+		<< Color::def << std::endl;
     return retval;
   }
 

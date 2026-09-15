@@ -25,7 +25,7 @@
 #include "utility/geom/d2/Plane.h"
 #include "utility/geom/d1/Line3d.h"
 #include "utility/geom/coo_sys/ref_sys/Ref3d3d.h"
-
+#include "utility/utils/misc_utils/colormod.h"
 
 
 //Equation of the cross product: x ^ a = b
@@ -41,10 +41,14 @@ Line3d sol_eq_prod_vect(const Vector3d &a,const Vector3d &b)
   {
     //Condición de compatibilidad.
     if(!cond_compat_eq_prod_vect(a,b))
-      std::cerr << "La ecuación del producto vectorial no tiene solución." << std::endl;
+      std::cerr << Color::red << __FUNCTION__
+		<< " Error; la ecuación del producto vectorial no tiene solución."
+		<< Color::def << std::endl;
     const GEOM_FT sqr_abs_a= Abs2(a);
     if(sqr_abs_a<=0)
-      std::cerr << "La ecuación del producto vectorial no tiene solución: el vector a es nulo" << std::endl;
+      std::cerr << Color::red << __FUNCTION__
+		<< " Error; la ecuación del producto vectorial no tiene solución: el vector a es nulo"
+		<< Color::def << std::endl;
     const Pos3d org= Origin3d + ((a ^ b)*(1/sqr_abs_a));
     Pos3d dest= org+1000*a;
     return Line3d(org,dest);
@@ -93,11 +97,14 @@ Pos3d SlidingVectorsSystem3d::PointOfApplication(const Plane &p) const
         if(ptos.size()>0)
           retval= (*ptos.begin());
         else
-          std::cerr << "The line of zero moment points is parallel to the plane."
-		    << std::endl;
+          std::cerr << Color::red << __FUNCTION__
+		    << " Error; the line of zero moment points is parallel to the plane."
+		    << Color::def << std::endl;
       }
     else
-      std::cerr << "There are no points with zero moment." << std::endl;
+      std::cerr << Color::red << __FUNCTION__
+		<< " Error; there are no points with zero moment."
+		<< Color::def << std::endl;
     return retval;
   }
 
@@ -172,38 +179,48 @@ SlidingVectorsSystem3d SlidingVectorsSystem3d::reduceTo(const Pos3d &Q) const
 std::vector<SlidingVector3d> SlidingVectorsSystem3d::distribute(const std::vector<Pos3d> &point_list) const
   {
     const size_t sz= point_list.size();
-    // Calculate the position of the center of gravity:
-    Vector3d num;
-    const double W(sz);
-    for(size_t i= 0;i<sz;i++)
-      {
-	const Pos3d p_i= point_list[i];
-	num+= p_i.VectorPos();
-      }
-    Pos3d cg(0,0,0);
-    cg+= (num/W);
-    // Calculate the equivalent sliding vector system at cg:
-    SlidingVectorsSystem3d newSVS= this->reduceTo(cg);
-    const Vector3d Fcg= newSVS.getResultant();
-    const Vector3d Mcg= newSVS.getMoment();
-    std::vector<Vector3d> f_i(sz);
-    std::vector<Vector3d> p_i(sz);
-    double denom= 0.0; 
-    for(size_t i= 0;i<sz;i++)
-      {
-	f_i[i]= Fcg/W; // force distribution.
-	const Pos3d pt_i= point_list[i];
-	const Vector3d r_i= pt_i-cg;
-	p_i[i]= cross(Mcg,r_i); // moment distribution.
-	denom+= dot(r_i,r_i);
-      }
     std::vector<SlidingVector3d> retval(sz);
-    const double factor= 1.0/denom;
-    for(size_t i= 0;i<sz;i++)
+    if(sz>1)
       {
-	const Pos3d pt_i= point_list[i];
-	p_i[i]= factor*p_i[i];
-	retval[i]= SlidingVector3d(pt_i, f_i[i]+p_i[i]);
+	// Calculate the position of the center of gravity:
+	Vector3d num;
+	const double W(sz);
+	for(size_t i= 0;i<sz;i++)
+	  {
+	    const Pos3d p_i= point_list[i];
+	    num+= p_i.VectorPos();
+	  }
+	Pos3d cg(0,0,0);
+	cg+= (num/W);
+	// Calculate the equivalent sliding vector system at cg:
+	SlidingVectorsSystem3d newSVS= this->reduceTo(cg);
+	const Vector3d Fcg= newSVS.getResultant();
+	const Vector3d Mcg= newSVS.getMoment();
+	std::vector<Vector3d> f_i(sz);
+	std::vector<Vector3d> p_i(sz);
+	double denom= 0.0; 
+	for(size_t i= 0;i<sz;i++)
+	  {
+	    f_i[i]= Fcg/W; // force distribution.
+	    const Pos3d pt_i= point_list[i];
+	    const Vector3d r_i= pt_i-cg;
+	    p_i[i]= cross(Mcg,r_i); // moment distribution.
+	    denom+= dot(r_i,r_i);
+	  }
+	const double factor= 1.0/denom;
+	for(size_t i= 0;i<sz;i++)
+	  {
+	    const Pos3d pt_i= point_list[i];
+	    p_i[i]= factor*p_i[i];
+	    retval[i]= SlidingVector3d(pt_i, f_i[i]+p_i[i]);
+	  }
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << " Error; at least two points are needed."
+		  << Color::def << std::endl;
+	exit(-1);
       }
     return retval;
   }
@@ -234,9 +251,9 @@ std::vector<SlidingVector3d> SlidingVectorsSystem3d::distribute(const std::vecto
     const size_t szpl= point_list.size();
     const size_t szw= weights.size();
     if(szpl!=szw)
-      std::cerr << getClassName() << "::" << __FUNCTION__
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; point list and weight list of different sizes."
-	        << std::endl;
+	        << Color::def << std::endl;
     const size_t sz= std::min(szpl,szw);
     // Calculate the position of the center of gravity:
     Vector3d num;
@@ -286,9 +303,9 @@ boost::python::list SlidingVectorsSystem3d::distributePy(const boost::python::li
     const size_t szpl= len(pt_list);
     const size_t szw= len(w);
     if(szpl!=szw)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; point list and weight list of different sizes."
-                << std::endl;
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                << " Error; point list and weight list of different sizes."
+                << Color::def << std::endl;
     const size_t sz= std::min(szpl,szw);
     std::vector<Pos3d> point_list(sz);
     std::vector<double> weights(sz);
