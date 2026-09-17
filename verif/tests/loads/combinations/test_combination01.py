@@ -86,12 +86,12 @@ deltax= n2.getDisp[0]
 deltay= n2.getDisp[2]
 
 beam3d.getResistingForce()
-N1= beam3d.getN1 # Axial force at the back end of the beam
-N2= beam3d.getN2 # Axial force at the front end of the beam
-Mz1= beam3d.getMz1 # Moment at the back end of the beam
-Mz2= beam3d.getMz2 # Moment at the front end of the beam
-Vy1= beam3d.getVy1 # Shear force at the back end of the beam
-Vy2= beam3d.getVy2 # Shear force at the front end of the beam
+N1= beam3d.getN1 # Axial force at the back end of the beam.
+N2= beam3d.getN2 # Axial force at the front end of the beam.
+Mz1= beam3d.getMz1 # Moment at the back end of the beam.
+Mz2= beam3d.getMz2 # Moment at the front end of the beam.
+Vy1= beam3d.getVy1 # Shear force at the back end of the beam.
+Vy2= beam3d.getVy2 # Shear force at the front end of the beam.
 
 deltaxteor= (1.33*f*L**2/(2*E*A))
 ratio1= (deltax/deltaxteor)
