@@ -63,9 +63,10 @@ class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >
   .add_property("getKVector", &XC::QuadSurface::getKVector,"Return the local x vector.")
   .def("getLocalAxes",&XC::QuadSurface::getLocalAxes,"Return the surface local axes as matrix rows: [[x1,y1,z1],[x2,y2,z2],...·] .")
    ;
-
+   
+void (XC::PolygonalFace::*polygonal_face_gen_mesh)(XC::meshing_dir, bool)= &XC::PolygonalFace::genMesh;
 class_<XC::PolygonalFace, XC::PolygonalFace *, bases<XC::Face>, boost::noncopyable >("PolygonalFace", no_init)
-  .def("genMesh", &XC::PolygonalFace::genMesh, "Generate mesh.")
+  .def("genMesh", polygonal_face_gen_mesh, "Generate mesh.")
    ;
 
 
