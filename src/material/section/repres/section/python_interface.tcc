@@ -22,8 +22,9 @@
 //python_interface.tcc
 
 XC::MaterialHandler *(XC::SectionRepres::*getMaterialHandlerPtr)(void)= &XC::SectionRepres::getMaterialHandler;
+XC::SectionGeometry *(XC::SectionRepres::*get_section_geometry)(void)= &XC::SectionRepres::getGeom;
 class_<XC::SectionRepres, bases<XC::TaggedObject>, boost::noncopyable >("SectionRepres", no_init)
-  .add_property("geometry",make_function(&XC::SectionRepres::getGeom,return_internal_reference<>()),&XC::SectionRepres::setGeom,"Get/set the section geometry.")
+  .add_property("geometry",make_function(get_section_geometry, return_internal_reference<>()),&XC::SectionRepres::setGeom,"Get/set the section geometry.")
   .def("setGeomNamed",&XC::SectionRepres::setGeomNamed)
   .add_property("getMaterialHandler", make_function(getMaterialHandlerPtr, return_internal_reference<>() ), "Return a reference to the material handler.")
   ;
