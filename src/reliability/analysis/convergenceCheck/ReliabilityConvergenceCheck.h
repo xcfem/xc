@@ -73,7 +73,7 @@ class ReliabilityConvergenceCheck
   public:
 	ReliabilityConvergenceCheck();
 
-	virtual int	check(Vector u, double g, Vector gradG) = 0;
+	virtual int check(const Vector &u, double g, const Vector &gradG) = 0;
 	virtual int getNumberOfCriteria() = 0;
 	virtual double getCriteriaValue(int whichCriteria) = 0;
 	virtual int setScaleValue(double scaleValue) = 0;

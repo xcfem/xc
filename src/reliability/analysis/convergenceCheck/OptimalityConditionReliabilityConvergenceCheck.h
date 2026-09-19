@@ -76,7 +76,7 @@ class OptimalityConditionReliabilityConvergenceCheck: public ReliabilityConverge
 public:
 	OptimalityConditionReliabilityConvergenceCheck(double e1, double e2, double scaleValue, int print);
 
-	int	check(Vector u, double g, Vector gradG);
+	int check(const Vector &u, double g, const Vector &gradG);
 	int getNumberOfCriteria();
 	double getCriteriaValue(int whichCriteria);
 	int setScaleValue(double scaleValue);

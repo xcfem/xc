@@ -94,8 +94,7 @@ XC::OptimalityConditionReliabilityConvergenceCheck::setScaleValue(double passedS
 }
 
 
-int	
-XC::OptimalityConditionReliabilityConvergenceCheck::check(Vector u, double g, Vector gradG)
+int XC::OptimalityConditionReliabilityConvergenceCheck::check(const Vector &u, double g, const Vector &gradG)
 {
 	if (scaleValue == 0.0) {
 		std::cerr << "XC::OptimalityConditionReliabilityConvergenceCheck::check() --" << std::endl

@@ -76,9 +76,9 @@ class HLRFSearchDirection: public SearchDirection
     HLRFSearchDirection();
 
     int computeSearchDirection(int stepNumber,
-			       Vector passed_u, 
+			       const Vector &passed_u, 
 			       double passed_gFunctionValue, 
-			       Vector passedGradientInStandardNormalSpace);
+			       const Vector &passedGradientInStandardNormalSpace);
     Vector getSearchDirection();
 
   };

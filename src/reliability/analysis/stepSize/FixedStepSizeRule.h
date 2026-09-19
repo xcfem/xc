@@ -75,7 +75,7 @@ class FixedStepSizeRule: public StepSizeRule
   public:
     FixedStepSizeRule(double stepSize);
 
-    int computeStepSize(Vector u, Vector grad_G, double G, Vector d, int stepNumber);
+    int computeStepSize(const Vector &u, const Vector &grad_G, double G, const Vector &d, int stepNumber);
     double getStepSize(void);
     double getInitialStepSize(void);
     double getGFunValue(void);

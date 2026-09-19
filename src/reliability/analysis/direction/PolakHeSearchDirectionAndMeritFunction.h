@@ -75,19 +75,20 @@ class PolakHeSearchDirectionAndMeritFunction: public SearchDirection, public Mer
     PolakHeSearchDirectionAndMeritFunction(double gamma, double delta);
 
     int computeSearchDirection(int stepNumber, 
-			       Vector passed_u, 
+			       const Vector &passed_u, 
 			       double passed_gFunctionValue, 
-			       Vector passedGradientInStandardNormalSpace);
+			       const Vector &passedGradientInStandardNormalSpace);
     Vector getSearchDirection();
 
-    int	check(Vector u_old, 
-		double g_old, 
-		Vector grad_G_old, 
-		double stepSize,
-		Vector stepDirection,
-		double g_new);
-    double getMeritFunctionValue(Vector u, double g, Vector grad_G);
-    int updateMeritParameters(Vector u, double g, Vector grad_G);
+    int	check(const Vector &u_old, 
+	      double g_old, 
+	      const Vector &grad_G_old, 
+	      double stepSize,
+	      const Vector &stepDirection,
+	      double g_new,
+	      const Vector &);
+    double getMeritFunctionValue(const Vector &u, double g, const Vector &grad_G);
+    int updateMeritParameters(const Vector &u, double g, const Vector &grad_G);
 
     int setAlpha(double alpha);
   private:

@@ -121,9 +121,9 @@ XC::SQPsearchDirectionMeritFunctionAndHessian::getSearchDirection()
 int
 XC::SQPsearchDirectionMeritFunctionAndHessian::computeSearchDirection(
 							int stepNumber,
-							Vector u, 
+							const Vector &u, 
 							double g, 
-							Vector gradG )
+							const Vector &gradG)
 {
 	// Initial declarations
 	int i,j;
@@ -250,18 +250,17 @@ XC::SQPsearchDirectionMeritFunctionAndHessian::computeSearchDirection(
 }
 
 
-double 
-XC::SQPsearchDirectionMeritFunctionAndHessian::getMeritFunctionValue(Vector u, double g, Vector grad_G)
-{
-	std::cerr << "WARNING: XC::SQPsearchDirectionMeritFunctionAndHessian::getMeritFunctionValue() --" << std::endl
-		<< " no explicit merit function value is computed." << std::endl;
+double XC::SQPsearchDirectionMeritFunctionAndHessian::getMeritFunctionValue(const Vector &u, double g, const Vector &grad_G)
+  {
+    std::cerr << "WARNING: XC::SQPsearchDirectionMeritFunctionAndHessian::getMeritFunctionValue() --" << std::endl
+	      << " no explicit merit function value is computed." << std::endl;
 	return 0.0;
-}
+  }
 
 
 
 int
-XC::SQPsearchDirectionMeritFunctionAndHessian::updateMeritParameters(Vector u, double g, Vector grad_G)
+XC::SQPsearchDirectionMeritFunctionAndHessian::updateMeritParameters(const Vector &u, double g, const Vector &grad_G)
 {
 	std::cerr << "WARNING: XC::SQPsearchDirectionMeritFunctionAndHessian::updateMeritParameters() --" << std::endl
 		<< " no explicit merit function value is computed." << std::endl;
@@ -271,13 +270,13 @@ XC::SQPsearchDirectionMeritFunctionAndHessian::updateMeritParameters(Vector u, d
 
 
 
-int
-XC::SQPsearchDirectionMeritFunctionAndHessian::check(Vector u_old, 
-										  double g_old, 
-										  Vector grad_G_old, 
-										  double stepSize,
-										  Vector stepDirection,
-										  double g_new)
+int XC::SQPsearchDirectionMeritFunctionAndHessian::check(const Vector &u_old, 
+							 double g_old, 
+							 const Vector &grad_G_old, 
+							 double stepSize,
+							 const Vector &stepDirection,
+							 double g_new,
+							 const Vector &)
 {
 	// Have 'c' and 'delta' and 'lambda' as history parameters
 	// and 'kappa' stored to be used in this method
@@ -351,21 +350,19 @@ XC::SQPsearchDirectionMeritFunctionAndHessian::setAlpha(double palpha)
 
 
 
- XC::Matrix
-XC::SQPsearchDirectionMeritFunctionAndHessian::getHessianApproximation()
-{
-	return (*B);
-}
+XC::Matrix XC::SQPsearchDirectionMeritFunctionAndHessian::getHessianApproximation()
+  {
+    return (*B);
+  }
 
-int
-XC::SQPsearchDirectionMeritFunctionAndHessian::updateHessianApproximation(Vector u_old,
-													  double g_old,
-													  Vector gradG_old,
-													  double stepSize,
-													  Vector searchDirection,
-													  double g_new,
-													  Vector gradG_new)
-{
+int XC::SQPsearchDirectionMeritFunctionAndHessian::updateHessianApproximation(const Vector &u_old,
+									  double g_old,
+									  const Vector &gradG_old,
+									  double stepSize,
+									  const Vector &searchDirection,
+									  double g_new,
+									  const Vector &gradG_new)
+  {
 	if (B == 0) {
 		this->setHessianToIdentity(u_old.Size());
 	}

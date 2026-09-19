@@ -76,7 +76,7 @@ class StandardReliabilityConvergenceCheck: public ReliabilityConvergenceCheck
 public:
 	StandardReliabilityConvergenceCheck(double e1, double e2, double scaleValue, int printFlag);
 
-	int	check(Vector u, double g, Vector gradG);
+	int check(const Vector &u, double g, const Vector &gradG);
 	int getNumberOfCriteria();
 	double getCriteriaValue(int whichCriteria);
 	int setScaleValue(double scaleValue);

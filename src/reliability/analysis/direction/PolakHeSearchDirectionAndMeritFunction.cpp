@@ -90,9 +90,9 @@ XC::PolakHeSearchDirectionAndMeritFunction::setAlpha(double palpha)
 int
 XC::PolakHeSearchDirectionAndMeritFunction::computeSearchDirection(
 							int stepNumber, 
-							Vector u, 
+							const Vector &u, 
 							double gFunctionValue, 
-							Vector gradientInStandardNormalSpace)
+							const Vector &gradientInStandardNormalSpace)
 {
 	// Advise the user if the start value of the limit-state function 
 	// is out of the 'ideal range' for the Polak-He algorithm
@@ -192,18 +192,16 @@ XC::PolakHeSearchDirectionAndMeritFunction::computeSearchDirection(
 
 
 
-double 
-XC::PolakHeSearchDirectionAndMeritFunction::getMeritFunctionValue(Vector u, double g, Vector grad_G)
-{
+double XC::PolakHeSearchDirectionAndMeritFunction::getMeritFunctionValue(const Vector &u, double g, const Vector &grad_G)
+  {
 	std::cerr << "WARNING: XC::PolakHeSearchDirectionAndMeritFunction::getMeritFunctionValue() --" << std::endl
 		<< " no explicit merit function value is computed." << std::endl;
 	return 0.0;
-}
+  }
 
 
 
-int 
-XC::PolakHeSearchDirectionAndMeritFunction::updateMeritParameters(Vector u, double g, Vector grad_G)
+int XC::PolakHeSearchDirectionAndMeritFunction::updateMeritParameters(const Vector &u, double g, const Vector &grad_G)
 {
 	std::cerr << "WARNING: XC::PolakHeSearchDirectionAndMeritFunction::updateMeritParameters() --" << std::endl
 		<< " no explicit merit function value is computed." << std::endl;
@@ -214,13 +212,13 @@ XC::PolakHeSearchDirectionAndMeritFunction::updateMeritParameters(Vector u, doub
 
 
 
-int
-XC::PolakHeSearchDirectionAndMeritFunction::check(Vector u_old, 
-											  double g_old, 
-											  Vector grad_G_old, 
-											  double stepSize,
-											  Vector stepDirection,
-											  double g_new)
+int XC::PolakHeSearchDirectionAndMeritFunction::check(const Vector &u_old, 
+						      double g_old, 
+						      const Vector &grad_G_old, 
+						      double stepSize,
+						      const Vector &stepDirection,
+						      double g_new,
+						      const Vector &)
 {
 	// New point in standard normal space
 	Vector u_new = u_old + stepSize*stepDirection;

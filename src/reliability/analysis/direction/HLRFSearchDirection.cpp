@@ -78,11 +78,10 @@ XC::HLRFSearchDirection::getSearchDirection()
 
 
 int
-XC::HLRFSearchDirection::computeSearchDirection(
-							int stepNumber,
-							Vector u, 
-							double gFunctionValue, 
-							Vector gradientInStandardNormalSpace )
+XC::HLRFSearchDirection::computeSearchDirection(int stepNumber,
+						const Vector &u, 
+						double gFunctionValue, 
+						const Vector &gradientInStandardNormalSpace )
 {
 
 	// Compute the norm of the gradient

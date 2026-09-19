@@ -84,7 +84,7 @@ class AdkZhangMeritFunctionCheck: public MeritFunctionCheck
 	      const Vector &grad_G_old, 
 	      double stepSize,
 	      const Vector &stepDirection,
-	      double g_new
+	      double g_new,
 	      const Vector &grad_G_new);
     double getMeritFunctionValue(const Vector &u, double g, const Vector &grad_G);
     int updateMeritParameters(const Vector &u, double g, const Vector &grad_G);

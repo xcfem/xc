@@ -71,11 +71,11 @@ XC::FixedStepSizeRule::FixedStepSizeRule(double passedStepSize)
 	gFunValue = -1;
 }
 
-int XC::FixedStepSizeRule::computeStepSize(Vector u, 
-									Vector grad_G, 
-									double G, 
-									Vector d,
-									int stepNumber)
+int XC::FixedStepSizeRule::computeStepSize(const Vector &u, 
+					   const Vector &grad_G, 
+					   double G, 
+					   const Vector &d,
+					   int stepNumber)
 {
 	// This method is in fact not necessary 
 	// for the fixed step size rule. The 

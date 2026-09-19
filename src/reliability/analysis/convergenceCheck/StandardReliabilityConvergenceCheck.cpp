@@ -97,8 +97,7 @@ XC::StandardReliabilityConvergenceCheck::setScaleValue(double passedScaleValue)
 }
 
 
-int	
-XC::StandardReliabilityConvergenceCheck::check(Vector u, double g, Vector gradG)
+int XC::StandardReliabilityConvergenceCheck::check(const Vector &u, double g, const Vector &gradG)
 {
 	if (scaleValue == 0.0) {
 		std::cerr << "XC::StandardReliabilityConvergenceCheck::check() --" << std::endl

@@ -81,7 +81,7 @@ class MeritFunctionCheck
 		      const Vector &grad_G_old, 
 		      double stepSize,
 		      const Vector &stepDirection,
-		      double g_new
+		      double g_new,
 		      const Vector &grad_G_new) = 0;
     virtual double getMeritFunctionValue(const Vector &u, double g, const Vector &grad_G) = 0;
     virtual int updateMeritParameters(const Vector &u, double g, const Vector &grad_G) = 0;

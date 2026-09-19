@@ -75,7 +75,7 @@ class HessianApproximation
 
     virtual Matrix getHessianApproximation() = 0;
     virtual int setHessianToIdentity(int size) = 0;
-    virtual int updateHessianApproximation(Vector u_old, double g_old,Vector gradG_old, double stepSize, Vector searchDirection, double g_new, Vector gradG_new) = 0;
+    virtual int updateHessianApproximation(const Vector &u_old, double g_old, const Vector &gradG_old, double stepSize, const Vector &searchDirection, double g_new, const Vector &gradG_new) = 0;
   };
 } // end of XC namespace
 

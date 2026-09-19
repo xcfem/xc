@@ -121,11 +121,11 @@ double XC::ArmijoStepSizeRule::getGFunValue()
   { return gFunValue; }
 
 
-int XC::ArmijoStepSizeRule::computeStepSize(Vector u_old, 
-									Vector grad_G_old, 
-									double g_old, 
-									Vector dir_old,
-									int stepNumber)
+int XC::ArmijoStepSizeRule::computeStepSize(const Vector &u_old, 
+					    const Vector &grad_G_old, 
+					    double g_old, 
+					    const Vector &dir_old,
+					    int stepNumber)
   {
 
 	// Initial declarations
@@ -268,7 +268,8 @@ int XC::ArmijoStepSizeRule::computeStepSize(Vector u_old,
 	int i = 1;
 	bool mustGoOn = false;
 
-	if (theMeritFunctionCheck->check(u_old, g_old, grad_G_old, lambda_new, dir_old, g_new)<0) {
+	const Vector dummy;
+	if (theMeritFunctionCheck->check(u_old, g_old, grad_G_old, lambda_new, dir_old, g_new, dummy)<0) {
 		mustGoOn = true;
 	}
 	if (!FEconvergence) {
@@ -392,7 +393,8 @@ int XC::ArmijoStepSizeRule::computeStepSize(Vector u_old,
 		// Check if we need to go on
 		mustGoOn = false;
 
-		if (theMeritFunctionCheck->check(u_old, g_old, grad_G_old, lambda_new, dir_old, g_new)<0) {
+		const Vector dummy;
+		if (theMeritFunctionCheck->check(u_old, g_old, grad_G_old, lambda_new, dir_old, g_new, dummy)<0) {
 			mustGoOn = true;
 		}
 		if (!FEconvergence) {

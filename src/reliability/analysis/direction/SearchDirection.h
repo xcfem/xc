@@ -74,9 +74,9 @@ class SearchDirection
     SearchDirection();
 
     virtual int computeSearchDirection(int stepNumber,
-				       Vector passed_u, 
+				       const Vector &passed_u, 
 				       double passed_gFunctionValue, 
-				       Vector passedGradientInStandardNormalSpace) =0;
+				       const Vector &passedGradientInStandardNormalSpace) =0;
     virtual Vector getSearchDirection() =0;
   };
 } // end of XC namespace

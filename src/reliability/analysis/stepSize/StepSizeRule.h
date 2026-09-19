@@ -74,7 +74,7 @@ class StepSizeRule
   public:
     StepSizeRule(void);
 
-    virtual int	computeStepSize(Vector u, Vector grad_G, double G, Vector d, int stepNumber) =0;
+    virtual int	computeStepSize(const Vector &u, const Vector &grad_G, double G, const Vector &d, int stepNumber) =0;
     virtual double getStepSize(void) =0;
     virtual double getInitialStepSize(void) =0;
     virtual double getGFunValue(void) =0;
