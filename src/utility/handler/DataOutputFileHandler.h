@@ -74,7 +74,7 @@ class DataOutputFileHandler: public DataOutputHandler
     int recvData(const Communicator &comm);
 
   public:
-    DataOutputFileHandler(const std::string &fileName =0, echoMode = NONE, openMode mode = OVERWRITE);
+    DataOutputFileHandler(const std::string &fileName ="", echoMode = NONE, openMode mode = OVERWRITE);
 
     int open(const std::vector<std::string> &dataDescription);
     int write(Vector &data);

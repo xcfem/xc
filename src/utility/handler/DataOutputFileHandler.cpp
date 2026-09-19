@@ -88,9 +88,9 @@ int setFile(std::ofstream &theFile,const std::string &name, XC::openMode mode)
 
 XC::DataOutputFileHandler::DataOutputFileHandler(const std::string &theFileName, echoMode theEMode, openMode theOMode)
   :DataOutputHandler(DATAHANDLER_TAGS_DataOutputFileHandler),
-   fileName(""), theEchoMode(theEMode), theOpenMode(theOMode), numColumns(-1)
+   fileName(theFileName), theEchoMode(theEMode), theOpenMode(theOMode), numColumns(-1)
   {
-    if(fileName != "" && setFile(outputFile,fileName, theOpenMode) < 0)
+    if(this->fileName != "" && setFile(outputFile,this->fileName, theOpenMode) < 0)
       {
         std::cerr << "XC::DataOutputFileHandler::DataOutputFileHandler() - setFile() failed\n";
         fileName= "";
