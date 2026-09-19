@@ -172,7 +172,7 @@ INCLUDE_DIRECTORIES(${LIBXC_SOURCE_DIR})
 #ADD_DEFINITIONS(-Wall -O0 -frounding-math -g)
 # For RELEASE
 # C++ flags.
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++17 ${CMAKE_CXX_FLAGS_RELEASE} -Wall -march=native -pedantic -Wno-unused-but-set-variable ${MPI_CXX_COMPILE_OPTIONS} ${OpenMP_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++23 ${CMAKE_CXX_FLAGS_RELEASE} -Wall -march=native -pedantic -Wno-unused-but-set-variable ${MPI_CXX_COMPILE_OPTIONS} ${OpenMP_CXX_FLAGS}")
 # Avoid pragma message about Boost placeholders
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_BIND_GLOBAL_PLACEHOLDERS")
 # ignore BOOST deprecated headers
