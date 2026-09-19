@@ -74,6 +74,8 @@ namespace XC {
 //! alpha machines in 509 Davis Hall.
 class AlphaMachineBroker: public AlphaBaseMachineBroker
   {
+  private:
+    using AlphaBaseMachineBroker::startActor;
   public:
     AlphaMachineBroker(FEM_ObjectBroker *theBroker);
 

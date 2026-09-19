@@ -74,6 +74,8 @@ namespace XC {
 //! millennium machines in Soda Hall.
 class MillMachineBroker: public AlphaBaseMachineBroker
   {
+  private:
+    using AlphaBaseMachineBroker::startActor;
   public:
     MillMachineBroker(FEM_ObjectBroker *theBroker);
 

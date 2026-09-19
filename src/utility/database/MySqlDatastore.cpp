@@ -216,7 +216,7 @@ int XC::MySqlDatastore::sendMatrix(int dbTag, int commitTag, const XC::Matrix &t
             return -3;
           }
       }
-    delete tmp;
+    delete [] tmp;
     return 0;
   }
 
@@ -345,7 +345,7 @@ int XC::MySqlDatastore::sendVector(int dbTag, int commitTag, const XC::Vector &t
             return -3;
           }
       }
-    delete tmp;
+    delete [] tmp;
     return 0;
   }
 
@@ -471,7 +471,7 @@ int XC::MySqlDatastore::sendID(int dbTag, int commitTag, const XC::ID &theID, Ch
             return -3;
           }
       }
-    delete tmp;
+    delete [] tmp;
     return 0;
   }
 
