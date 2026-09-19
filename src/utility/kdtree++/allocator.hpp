@@ -74,7 +74,9 @@ namespace kd_tree
       void
       _M_destroy_node(_Node_* __p)
       {
-        _M_node_allocator.destroy(__p);
+	// _M_node_allocator.destroy(__p); DEPRECATED.
+        using allocator_traits = std::allocator_traits<decltype(_M_node_allocator)>;
+	allocator_traits::destroy(_M_node_allocator, __p);
       }
     };
 
