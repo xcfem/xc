@@ -1,15 +1,16 @@
 cmake_minimum_required(VERSION 3.10.0)
-set(CMAKE_BUILD_TYPE to "Release")
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+endif()
 #cygwin
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
-set(CMAKE_VERSION_STRING ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION})
-IF (${CMAKE_VERSION_STRING} GREATER 3.20.0)
+if(CMAKE_VERSION VERSION_GREATER 3.20)
   cmake_policy(SET CMP0017 NEW) 
   cmake_policy(SET CMP0115 NEW) 
   MESSAGE ("CMake version is greater than 3.20.0")
-ELSE (${CMAKE_VERSION_STRING} GREATER 3.20.0)
+else()
   MESSAGE ("CMake version is not greater than 3.20.0")
-ENDIF (${CMAKE_VERSION_STRING} GREATER 3.20.0)
+endif()
 set(OpenGL_GL_PREFERENCE "GLVND")
 # CMake policy CMP0167 (boost libraries).
 if(POLICY CMP0167)
@@ -24,25 +25,23 @@ endif()
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Colorize output.
-if(NOT WIN32)
-  string(ASCII 27 Esc)
-  set(ColourReset "${Esc}[m")
-  set(ColourBold  "${Esc}[1m")
-  set(Red         "${Esc}[31m")
-  set(Green       "${Esc}[32m")
-  set(Yellow      "${Esc}[33m")
-  set(Blue        "${Esc}[34m")
-  set(Magenta     "${Esc}[35m")
-  set(Cyan        "${Esc}[36m")
-  set(White       "${Esc}[37m")
-  set(BoldRed     "${Esc}[1;31m")
-  set(BoldGreen   "${Esc}[1;32m")
-  set(BoldYellow  "${Esc}[1;33m")
-  set(BoldBlue    "${Esc}[1;34m")
-  set(BoldMagenta "${Esc}[1;35m")
-  set(BoldCyan    "${Esc}[1;36m")
-  set(BoldWhite   "${Esc}[1;37m")
-endif()
+string(ASCII 27 Esc)
+set(ColourReset "${Esc}[m")
+set(ColourBold  "${Esc}[1m")
+set(Red         "${Esc}[31m")
+set(Green       "${Esc}[32m")
+set(Yellow      "${Esc}[33m")
+set(Blue        "${Esc}[34m")
+set(Magenta     "${Esc}[35m")
+set(Cyan        "${Esc}[36m")
+set(White       "${Esc}[37m")
+set(BoldRed     "${Esc}[1;31m")
+set(BoldGreen   "${Esc}[1;32m")
+set(BoldYellow  "${Esc}[1;33m")
+set(BoldBlue    "${Esc}[1;34m")
+set(BoldMagenta "${Esc}[1;35m")
+set(BoldCyan    "${Esc}[1;36m")
+set(BoldWhite   "${Esc}[1;37m")
 
 # Project name.
 PROJECT(LIBXC)
@@ -51,25 +50,25 @@ SET(build_setup_dir $ENV{HOME}/.xc_build)
 SET(build_setup_file ${build_setup_dir}/xc_dirs.cmake)
 
 #XC
-string(REGEX REPLACE "xc/src.*" "xc/" DIR_FUENTES_XC ${CMAKE_SOURCE_DIR})
-message(STATUS "xc project dir: " ${DIR_FUENTES_XC})
+string(REGEX REPLACE "xc/src.*" "xc/" xc_src_dir ${CMAKE_SOURCE_DIR})
+message(STATUS "xc project dir: " ${xc_src_dir})
 set(libXC_INC ${CMAKE_SOURCE_DIR}/)
 message(STATUS "xc include dir: " ${libXC_INC})
-set(libXC_LIB ${DIR_FUENTES_XC}lib)
+set(libXC_LIB ${xc_src_dir}lib)
 message(STATUS "xc lib dir: " ${libXC_LIB})
-file(WRITE ${build_setup_file} "SET(xc_src_dir ${DIR_FUENTES_XC})\n")
+file(WRITE ${build_setup_file} "SET(xc_src_dir ${xc_src_dir})\n")
 file(APPEND ${build_setup_file} "SET(xc_inc_dir ${libXC_INC})\n")
 file(APPEND ${build_setup_file} "SET(xc_lib_dir ${libXC_LIB})\n")
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${xc_utils_DIR}/CMake")
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${DIR_FUENTES_XC}/CMake")
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${xc_src_dir}/CMake")
 
-SET(LIBXC_SOURCE_DIR ${DIR_FUENTES_XC}/src)
-SET(LIBRARY_OUTPUT_PATH ${DIR_FUENTES_XC}/lib)
+SET(LIBXC_SOURCE_DIR ${xc_src_dir}/src)
+SET(LIBRARY_OUTPUT_PATH ${xc_src_dir}/lib)
 
 INCLUDE(${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
 
-INCLUDE(${DIR_FUENTES_XC}CMake/GetGitRevisionDescription.cmake)
+INCLUDE(${xc_src_dir}CMake/GetGitRevisionDescription.cmake)
 git_describe(VERSION --tags --dirty=-d)
 
 # parse the version information into pieces.
@@ -79,14 +78,12 @@ string(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" VERSION_PATCH "${VER
 string(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.[0-9]+(.*)" "\\1" VERSION_SHA1 "${VERSION}")
 set(VERSION_SHORT "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
-configure_file(${DIR_FUENTES_XC}CMake/version.cc.in
-                ${DIR_FUENTES_XC}src/version.cc)
-set(version_file "${DIR_FUENTES_XC}src/version.cc")
+configure_file(${xc_src_dir}CMake/version.cc.in
+                ${xc_src_dir}src/version.cc)
+set(version_file "${xc_src_dir}src/version.cc")
 
 enable_language(Fortran)
-INCLUDE(${DIR_FUENTES_XC}CMake/find_packages.cmake)
-#MESSAGE(STATUS "Boost_LIBRARIES: " ${Boost_LIBRARIES})
-
+INCLUDE(${xc_src_dir}CMake/find_packages.cmake)
 # Check GMSH version
 if(GMSH_FOUND)
    if(GMSH_VERSION VERSION_LESS "4.8")
@@ -536,5 +533,5 @@ set_target_properties(xc PROPERTIES PREFIX "" )
 
 
 INSTALL(TARGETS geom loadCombinations XcBib DESTINATION lib)
-#INSTALL(DIRECTORY ${DIR_FUENTES_XC}/macros/ DESTINATION lib/macros_xc)
+#INSTALL(DIRECTORY ${xc_src_dir}/macros/ DESTINATION lib/macros_xc)
 
