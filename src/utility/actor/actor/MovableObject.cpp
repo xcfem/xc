@@ -136,6 +136,6 @@ int XC::MovableObject::setVariable(const std::string &var, Information &theInfo)
   { return -1; }
 
 //! @brief Return the value of the variable idenfified by \p var.
-int XC::MovableObject::getVariable(const std::string &variable, Information &theInfo)
+int XC::MovableObject::getVariable(const std::string &variable, Information &theInfo) const
   { return -1; }
 
