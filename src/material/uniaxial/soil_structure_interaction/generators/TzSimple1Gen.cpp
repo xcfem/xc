@@ -208,7 +208,6 @@ void XC::TzSimple1Gen::GetTzSimple1(const std::string &file1, const std::string 
     double z, maxz, c= -1, mt;
     double ztrib1, ztrib2, dzsub, zsub, depthsub, sublength, tult, z50, numtzshared;
     mt = 1.0;
-    std::string mattype= nullptr;
 
     // Initialize output stream
     std::ofstream TzOut;
@@ -233,6 +232,7 @@ void XC::TzSimple1Gen::GetTzSimple1(const std::string &file1, const std::string 
     GetPileElements(file4);
     
     // Loop over nodes
+    std::string mattype= "";
     for(int i=0;i<NumTzEle;i++)
       {
         // Initialize variables to zero.  Note that elements and nodes must be assigned numbers larger than zero
@@ -298,13 +298,13 @@ void XC::TzSimple1Gen::GetTzSimple1(const std::string &file1, const std::string 
 
         // Calculate tz material properties and write to file
         if(TzIndex != -1)
-        {
+	  {
             // subdivide tributary length into 10 sublayers, and integrate pult over tributary length
             dzsub = (ztrib2 - ztrib1)/10.0; // sublayer incremental depth change
             sublength = fabs(dzsub);  // thickness of sublayer
             tult = 0.0;
             for(int k=0;k<10;k++)
-            {            
+	      {            
                 zsub = ztrib1 + dzsub/2.0 + k*dzsub; // z-coordinate at sublayer center
                 depthsub = maxz - zsub;
             
@@ -313,7 +313,7 @@ void XC::TzSimple1Gen::GetTzSimple1(const std::string &file1, const std::string 
                   {
                     if(zsub<=z_t[j] && zsub>=z_b[j])
                       {
-                        mattype = MatType[j];
+                        mattype= MatType[j];
                         // linearly interpolate parameters at z
                         p = linterp(z_t[j], z_b[j], p_t[j], p_b[j], zsub);
                         ca = linterp(z_t[j], z_b[j], ca_t[j], ca_b[j], zsub);
@@ -350,31 +350,31 @@ void XC::TzSimple1Gen::GetTzSimple1(const std::string &file1, const std::string 
                 // calculate vertical effective stress and integrate over tributary length
                 stress = GetVStress(zsub);
                 tult = GetTult(mattype)*sublength*mt + tult;
-            }
+	      }
 
             z50 = GetZ50(mattype);
 
             // Calculate the number of t-z elements that share nodes with the current t-z element
             numtzshared = 1.0;
             for(int j=0;j<NumTzEle;j++)
-            {
+	      {
                 if(j!=i)
-                {
+		  {
                     if(TzNode1[j] == TzNode1[i] || TzNode1[j] == TzNode2[i])
                         numtzshared += 1.0;
-                }
-            }
+		  }
+	      }
 
             TzOut << "uniaxialMaterial TzSimple1 " << tzmat << " " << stype << " " << tult/numtzshared << " " << z50 << " " << c << std::endl;
-        }
-    }
+	  }
+      }
 
     // Write footer for output file
     TzOut << std::endl << "## End XC::Material Properties for tz Elements" << std::endl;
     TzOut << "########################################################################################" << std::endl;
 
     TzOut.close();
-}
+  }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // Function to get applied constraints
