@@ -107,8 +107,14 @@ XC::ArrayGraph::~ArrayGraph(void)
 //! array at location {\em vertexTag}. If this fails it adds at the first
 //! empty location it comes to. Returns a 0 if successful addition, a
 //! $-1$ otherwise and a message to cerr explaining the problem.  
-bool XC::ArrayGraph::addVertex(const Vertex &vrt)
+bool XC::ArrayGraph::addVertex(const Vertex &vrt, bool checkAdjacency)
   {
+    if(checkAdjacency)
+      {
+	std::cerr << typeid(*this).name() << "::" << __FUNCTION__
+		  << "; check adjacency not implemented yet."
+	          << std::endl;	
+      }
     Vertex *vertexPtr= new Vertex(vrt);
     // check the vertex * and its adjacency list
     if(!vertexPtr)
@@ -267,7 +273,7 @@ int XC::ArrayGraph::getArraySize(void) const
 //! and then on each newline prints the vertexTag and the edges for that
 //! vertex. It does this by going through theVertices array and invoking
 //! Print()  on each non-zero pointer.
-void XC::ArrayGraph::Print(std::ostream &s) const
+void XC::ArrayGraph::Print(std::ostream &s, int) const
   {
     s << numVertex << " " << numEdge << std::endl;
     

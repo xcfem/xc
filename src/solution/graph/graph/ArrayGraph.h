@@ -106,7 +106,7 @@ class ArrayGraph: public Graph
     ArrayGraph(int arraySize);
     virtual ~ArrayGraph(void);
 
-    virtual bool addVertex(const Vertex &vertexPtr);
+    virtual bool addVertex(const Vertex &vertexPtr, bool checkAdjacency = false);
     virtual int addEdge(int vertexTag, int otherVertexTag);
     
     virtual Vertex *getVertexPtr(int vertexTag);
@@ -115,7 +115,7 @@ class ArrayGraph: public Graph
     int getNumVertex(void) const;
     int getNumEdge(void) const;
 
-    virtual void Print(std::ostream &s) const;
+    virtual void Print(std::ostream &s, int flag =0) const;
     friend std::ostream &operator<<(std::ostream &, const ArrayGraph &);    
   };
 

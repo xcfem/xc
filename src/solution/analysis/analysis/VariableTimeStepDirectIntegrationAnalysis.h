@@ -78,6 +78,8 @@ class ConvergenceTest;
 //! using a direct integration scheme.
 class VariableTimeStepDirectIntegrationAnalysis: public DirectIntegrationAnalysis
   {
+  private:
+    using DirectIntegrationAnalysis::analyze;
   protected:
     virtual double determineDt(double dT, double dtMin, double dtMax, int Jd,ConvergenceTest *theTest);
 

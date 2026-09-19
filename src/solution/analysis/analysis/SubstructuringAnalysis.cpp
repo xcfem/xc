@@ -86,7 +86,7 @@ XC::Analysis *XC::SubstructuringAnalysis::getCopy(void) const
   { return new SubstructuringAnalysis(*this); }
 
 //! @brief Performs the analysis.
-int XC::SubstructuringAnalysis::analyze(void)
+int XC::SubstructuringAnalysis::analyze(double)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; does nothing and should not have been called\n";

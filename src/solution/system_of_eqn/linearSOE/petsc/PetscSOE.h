@@ -94,6 +94,8 @@ class PetscSOE: public FactoredSOEBase, public DistributedLinSOE
 
     int startRow, endRow;
     void InvokePetscDestructors(void);
+    
+    using FactoredSOEBase::setSolver;
   protected:
     inline ChannelQueue &getChannels(void)
       { return theChannels; }

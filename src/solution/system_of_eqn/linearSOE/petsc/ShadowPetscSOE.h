@@ -93,6 +93,8 @@ class ShadowPetscSOE: public LinearSOE
     friend class SolutionStrategy;
     ShadowPetscSOE(SolutionStrategy *,PetscSolver &theSolver, int blockSize);
     SystemOfEqn *getCopy(void) const;
+    
+    using LinearSOE::setSolver;
   public:
     ~ShadowPetscSOE(void);
 

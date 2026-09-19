@@ -1,4 +1,4 @@
-s// -*-c++-*-
+// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.

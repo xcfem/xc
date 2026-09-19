@@ -82,7 +82,7 @@ class SubstructuringAnalysis: public DomainDecompositionAnalysis
     SubstructuringAnalysis(Subdomain &theDomain,DomainSolver &theSolver,SolutionStrategy *s= nullptr);
     Analysis *getCopy(void) const;
   public:
-    virtual int analyze(void);
+    virtual int analyze(double);
   };
 
 } // end of XC namespace

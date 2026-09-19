@@ -46,6 +46,7 @@ class LinearBucklingEigenAnalysis: public EigenAnalysis
   private:
     using EigenAnalysis::setAlgorithm;
     using EigenAnalysis::setIntegrator;
+    using EigenAnalysis::setEigenSOE;
   protected:
     friend class SolutionProcedure;
     friend class LinearBucklingAnalysis;

@@ -95,7 +95,7 @@ XC::PetscSOE::~PetscSOE(void)
 //! @brief Set the system size.
 int XC::PetscSOE::setSize(Graph &theGraph)
   {
-    PetscInitialize(0, PETSC_NULL, (char *)0, PETSC_NULL);
+    PetscInitialize(0, PETSC_NULLPTR, (char *)0, PETSC_NULLPTR);
     MPI_Comm_size(PETSC_COMM_WORLD, &numProcesses);
     MPI_Comm_rank(PETSC_COMM_WORLD, &processID);
   
@@ -205,7 +205,7 @@ int XC::PetscSOE::setSize(Graph &theGraph)
 	// 
 	// Call Petsc VecCreate & MatCreate; NOTE: using previously allocated storage
 	// for vectors
-	//      ierr = PetscOptionsGetInt(PETSC_NULL, "-n", &size, &flg); CHKERRQ(ierr);
+	//      ierr = PetscOptionsGetInt(PETSC_NULLPTR, "-n", &size, &flg); CHKERRQ(ierr);
 
 	if (blockSize == 1)
 	  {
@@ -238,7 +238,7 @@ int XC::PetscSOE::setSize(Graph &theGraph)
 	//
 
 	//Modified LCPT 6/9/2018
-	ierr= PetscOptionsGetInt(PETSC_NULL, nullptr, "-n", &size, &flg); CHKERRQ(ierr);
+	ierr= PetscOptionsGetInt(PETSC_NULLPTR, nullptr, "-n", &size, &flg); CHKERRQ(ierr);
 	//End of modification
 	ierr= MatCreate(PETSC_COMM_WORLD, &A); CHKERRQ(ierr);
 	//ierr= MatCreate(PETSC_COMM_WORLD, PETSC_DECIDE, PETSC_DECIDE,size, size, ); CHKERRQ(ierr);

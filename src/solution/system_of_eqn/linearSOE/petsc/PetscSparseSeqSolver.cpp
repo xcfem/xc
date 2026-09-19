@@ -62,7 +62,7 @@ XC::PetscSparseSeqSolver::PetscSparseSeqSolver(KSPType meth, PCType pre)
   :SparseGenRowLinSolver(SOLVER_TAGS_PetscSparseSeqSolver), 
    rTol(PETSC_DEFAULT), aTol(PETSC_DEFAULT), dTol(PETSC_DEFAULT), maxIts(PETSC_DEFAULT)
 {
-  PetscInitialize(0, PETSC_NULL, (char *)0, PETSC_NULL);
+  PetscInitialize(0, PETSC_NULLPTR, (char *)0, PETSC_NULLPTR);
 
   method = meth;
   preconditioner = pre;
@@ -72,7 +72,7 @@ XC::PetscSparseSeqSolver::PetscSparseSeqSolver(KSPType meth, PCType pre, double 
   :SparseGenRowLinSolver(SOLVER_TAGS_PetscSparseSeqSolver), 
    rTol(relTol), aTol(absTol), dTol(divTol), maxIts(maxIterations)
 {
-  PetscInitialize(0, PETSC_NULL, (char *)0, PETSC_NULL);
+  PetscInitialize(0, PETSC_NULLPTR, (char *)0, PETSC_NULLPTR);
 
   method = meth;
   preconditioner = pre;
@@ -123,7 +123,7 @@ int XC::PetscSparseSeqSolver::setSize()
     PetscBool flg;
     int n= theSOE->size;
     //Modified LCPT 6/9/2018
-    PetscErrorCode ierr= PetscOptionsGetInt(PETSC_NULL,nullptr,"-n", &n, &flg); CHKERRQ(ierr);
+    PetscErrorCode ierr= PetscOptionsGetInt(PETSC_NULLPTR, nullptr,"-n", &n, &flg); CHKERRQ(ierr);
     //End of modification
     const double *Xdata = theSOE->getPtrX();
     ierr = VecCreateSeqWithArray(PETSC_COMM_WORLD, n, n, Xdata, &x); CHKERRQ(ierr); //LCPT

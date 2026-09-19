@@ -91,6 +91,8 @@ class DirectIntegrationAnalysis: public TransientAnalysis
     SensitivityAlgorithm *theSensitivityAlgorithm;
 #endif
     // AddingSensitivity:END ///////////////////////////////
+    using TransientAnalysis::setAlgorithm;
+    using TransientAnalysis::setIntegrator;
   protected:
     friend class SolutionProcedure;
     DirectIntegrationAnalysis(SolutionStrategy *analysis_aggregation);
