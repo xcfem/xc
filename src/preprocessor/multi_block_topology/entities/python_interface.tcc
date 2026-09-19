@@ -29,6 +29,8 @@ XC::Element *(XC::EntMdlr::*getElementEntMdlr)(const size_t &i,const size_t &,co
 XC::Element *(XC::EntMdlr::*getNearestElementEntMdlr)(const Pos3d &)= &XC::EntMdlr::getNearestElement;
 boost::python::list (XC::EntMdlr::*get_ent_mdlr_elements_connected_to_node)(const XC::Node *)= &XC::EntMdlr::getConnectedElementsPy;
 boost::python::list (XC::EntMdlr::*get_elements_connected_to_ent_mdlr)(void)= &XC::EntMdlr::getConnectedElementsPy;
+bool (XC::EntMdlr::*_in)(const GeomObj3d &, const double &) const= &XC::EntMdlr::In;
+bool (XC::EntMdlr::*_out)(const GeomObj3d &, const double &) const= &XC::EntMdlr::Out;
 class_<XC::EntMdlr, bases<XC::SetEstruct>, boost::noncopyable >("EntMdlr", no_init)
   .add_property("description", &XC::EntMdlr::getDescription, "Description (string) of the entity.")
   .add_property("getIdx", &XC::EntMdlr::getIdx)
@@ -40,8 +42,8 @@ class_<XC::EntMdlr, bases<XC::SetEstruct>, boost::noncopyable >("EntMdlr", no_in
   .def("getElement",make_function(getElementEntMdlr, return_internal_reference<>() ),"Returns (i,j,k) element.")
   .def("getNearestElement",make_function(getNearestElementEntMdlr, return_internal_reference<>() ),"Returns nearest element.")
   .def("getSimpsonWeights", &XC::EntMdlr::getSimpsonWeights,"Returns weights for Simpson's rule integration.")
-  .def("In", &XC::EntMdlr::In,"\n""In(geomObject,tolerance) \n""Return true if this object lies inside the geometric object.")
-  .def("Out", &XC::EntMdlr::Out,"\n""Out(geomObject,tolerance) \n""Return true if this object lies outside the geometric object.")
+  .def("In", _in,"\n""In(geomObject,tolerance) \n""Return true if this object lies inside the geometric object.")
+  .def("Out", _out,"\n""Out(geomObject,tolerance) \n""Return true if this object lies outside the geometric object.")
   .def("getPosCentroid", &XC::EntMdlr::getCentroid,"Returns the centroid of the object.")
   .def("getConnectedElements",get_ent_mdlr_elements_connected_to_node,"Returns the elements of this object connected to the given node.")
   .def("getConnectedElements",get_elements_connected_to_ent_mdlr,"Returns elements connected to the any node of this object.")
