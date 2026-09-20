@@ -123,7 +123,7 @@ class FullGenLinSOE: public FactoredSOEBase
   public:
     int setSize(Graph &theGraph);
     
-    int addA(const Matrix &, const ID &, double fact = 1.0);
+    int addA(const Matrix &, const ID &, const double &fact = 1.0);
     void zeroA(void);
     virtual boost::python::list getAPy(void) const;
     

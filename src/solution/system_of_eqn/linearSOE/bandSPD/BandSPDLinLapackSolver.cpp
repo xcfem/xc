@@ -206,11 +206,11 @@ double XC::BandSPDLinLapackSolver::getRCond(const char &c)
 	int n = theSOE->size;
 	int kd = theSOE->half_band -1;
 	int ldA = kd+1;
-	int info;
 	double *Aptr = theSOE->A.getDataPtr();
 
 	char strU[]= "U";
 	// now compute condition number
+	int info= 0;
 	if(theSOE->factored == false) // factorize
 	  {
 	    dpbtrf_(strU,&n,&kd,Aptr,&ldA,&info);

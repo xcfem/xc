@@ -199,11 +199,11 @@ double XC::BandGenLinLapackSolver::getRCond(const char &c)
 	int kl = theSOE->numSubD;
 	int ku = theSOE->numSuperD;
 	const int ldA = 2*kl + ku +1;
-	int info;
 	double *Aptr= theSOE->A.getDataPtr();
 	int *iPIV = iPiv.getDataPtr();
 
 	//now solve
+	int info= 0;
 	if(theSOE->factored == false) // factorize
 	  dgbtrf_(&n,&n,&kl,&ku,Aptr,&ldA,iPIV,&info);
 	
