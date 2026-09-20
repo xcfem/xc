@@ -94,8 +94,8 @@ int XC::MFreedom_FE::determineConstrainedDOFsIDs(const int &offset)
 int XC::MFreedom_FE::determineRetainedDOFsIDs(const int &offset)
   {
     int retval= offset;
-    DOF_Group *theRetainedNodesDOFs = theRetainedNode->getDOF_GroupPtr();
-    if(theRetainedNodesDOFs == 0)
+    const DOF_Group *theRetainedNodesDOFs = theRetainedNode->getDOF_GroupPtr();
+    if(theRetainedNodesDOFs == nullptr)
      {
 	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING - no DOF_Group with Retained node."

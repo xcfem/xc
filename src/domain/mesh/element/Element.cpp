@@ -119,6 +119,14 @@ XC::DefaultTag &XC::Element::getDefaultTag(void)
 int XC::Element::getNumEdges(void) const
   { return getNumExternalNodes(); }
 
+//! @brief Returns a pointer to the node at the given position.
+XC::Node *XC::Element::getNodePtr(const size_t &i)
+{ return this->getNodePtrs().getNodePtr(i); }
+  
+//! @brief Returns a const pointer to the node at the given position.
+const XC::Node *XC::Element::getNodePtr(const size_t &i) const
+  { return this->getNodePtrs().getNodePtr(i); }
+
 //! @brief Commit the current element state.
 //!
 //! The element is to commit its current state. To return 0 if
@@ -905,7 +913,7 @@ int XC::Element::addResistingForceToNodalReaction(bool inclInertia)
 XC::ParticlePos3d XC::Element::getNaturalCoordinates(const Pos3d &, bool initialGeometry) const
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-              << "; must be overloaded in derived classes."
+              << "; for 3D elements must be overloaded in derived classes."
               << Color::def << std::endl;
     static const ParticlePos3d retval;
     return retval;
@@ -916,7 +924,7 @@ XC::ParticlePos3d XC::Element::getNaturalCoordinates(const Pos3d &, bool initial
 XC::Vector XC::Element::getInterpolationFactors(const ParticlePos3d &) const
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-              << "; must be overloaded in derived classes."
+              << "; for 3D elements must be overloaded in derived classes."
               << Color::def << std::endl;
     static const int numberNodes= getNumExternalNodes();
     return Vector(numberNodes);
@@ -926,7 +934,39 @@ XC::Vector XC::Element::getInterpolationFactors(const ParticlePos3d &) const
 XC::Vector XC::Element::getInterpolationFactors(const Pos3d &) const
   {
     std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-              << "; must be overloaded in derived classes."
+              << "; for 3D elements must be overloaded in derived classes."
+              << Color::def << std::endl;
+    static const int numberNodes= getNumExternalNodes();
+    return Vector(numberNodes);
+  }
+
+//! @brief Return the natural coordinates that correspond to the given position.
+//! @param initialGeometry: if true, use undeformed element geometry.
+XC::ParticlePos2d XC::Element::getNaturalCoordinates(const Pos2d &, bool initialGeometry) const
+  {
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; for 2D elements must be overloaded in derived classes."
+              << Color::def << std::endl;
+    static const ParticlePos2d retval;
+    return retval;
+  }
+
+
+//! @brief Returns interpolation factors for a material point.
+XC::Vector XC::Element::getInterpolationFactors(const ParticlePos2d &) const
+  {
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; for 2D elements must be overloaded in derived classes."
+              << Color::def << std::endl;
+    static const int numberNodes= getNumExternalNodes();
+    return Vector(numberNodes);
+  }
+
+//! @brief Returns interpolation factors for a material point.
+XC::Vector XC::Element::getInterpolationFactors(const Pos2d &) const
+  {
+    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+              << "; for 2D elements must be overloaded in derived classes."
               << Color::def << std::endl;
     static const int numberNodes= getNumExternalNodes();
     return Vector(numberNodes);
@@ -1446,11 +1486,23 @@ Pos3d XC::Element::getCenterOfMassPosition(bool initialGeometry) const
 //! @param initialGeometry: if true, use undeformed element geometry.
 XC::Vector XC::Element::getCenterOfMassCoordinates(bool initialGeometry) const
   {
-    const Pos3d center_of_mass= getCenterOfMassPosition(initialGeometry);
-    Vector retval(3);
-    retval(0)= center_of_mass.x();
-    retval(1)= center_of_mass.y();
-    retval(2)= center_of_mass.z();
+    Vector retval;
+    const Node *nodePtr= this->getNodePtr(0);
+    if(nodePtr)
+      {
+	const Pos3d center_of_mass= this->getCenterOfMassPosition(initialGeometry);
+	const size_t dim= nodePtr->getDim();
+	retval= Vector(dim);
+	for(size_t i= 0; i<dim; i++)
+	  retval(i)= center_of_mass[i];
+      }
+    else
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << " pointer to node 0 is null."
+		  << Color::def << std::endl;
+	exit(-1);
+      }
     return retval;
   }
 

@@ -71,10 +71,10 @@ tendon= presconc.PrestressTendon([])
 tendon.roughCoordMtr= np.array([x_parab_rough,y_parab_rough,z_parab_rough])
 # Interpolated 3D spline 
 tendon.pntsInterpTendon(n_points_fine,smoothness=1,kgrade=3)
-# Losses of prestressing due to friction
-lssFrict=tendon.getLossFriction(coefFric=mu,k=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
-# Losses of prestressing due to anchorage slip (loss due to friction must be
-# previously calculated
+# Compute the losses of prestressing due to friction
+lssFrict=tendon.getLossFriction(coefFric= mu, k=k, sigmaP0_extr1=sigmap0max, sigmaP0_extr2=0.0)
+# Compute the losses of prestressing due to anchorage slip (loss due to
+# friction must be previously calculated.
 lssAnch=tendon.getLossAnchor(Ep=Ep,anc_slip_extr1=deltaL,anc_slip_extr2=0.0)
 
 Laffected=tendon.projXYcoordZeroAnchLoss[0] # effective length of tendon
@@ -104,3 +104,12 @@ if (ratio1<5.e-3 and ratio2<5.e-4  and ratio3<5.e-3):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+
+# # Graphic stuff.
+# stressAfterLossAnch= tendon.stressAfterLossFriction-lssAnch
+# li= tendon.getCumLength()
+# si= tendon.stressAfterLossFriction
+# import matplotlib.pyplot as plt
+# plt.plot(li, si*1e-6)
+# plt.plot(li, stressAfterLossAnch*1e-6)
+# plt.show()

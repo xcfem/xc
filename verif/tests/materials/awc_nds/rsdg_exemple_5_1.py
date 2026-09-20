@@ -75,7 +75,7 @@ ratio8= abs(fcT-FcT_adj)/FcT_adj
 # Deflection
 l= 13.8*0.3048
 W= joistSpacing*(L)
-beam= sb.SimpleBeam(E,Is,l)
+beam= sb.SimpleBeam(E= E, I= Is, l= l)
 delta= beam.getDeflectionUnderUniformLoad(W,beam.l/2.0)
 deltaRef= l/360.0
 ratio9= abs(delta-deltaRef)/deltaRef
@@ -83,7 +83,7 @@ ratio9= abs(delta-deltaRef)/deltaRef
 # Floor vibration
 l= 12.5*0.3048
 W= joistSpacing*(40*47.88026)
-beam= sb.SimpleBeam(E,Is,l)
+beam= sb.SimpleBeam(E= E, I= Is, l= l)
 delta= beam.getDeflectionUnderUniformLoad(W,beam.l/2.0)
 deltaRef= l/360.0
 ratio10= abs(delta-deltaRef)/deltaRef

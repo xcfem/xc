@@ -57,6 +57,8 @@ class ParticlePos3d: public ParticlePos2d
       { return t; }
     inline void set_t_coordinate(const double &t_coord)
       { t= t_coord; }
+    inline void increment_t_coordinate(const double &d)
+      { t+= d; }
     bool operator==(const ParticlePos3d &) const;
     void Print(std::ostream &) const;
   };

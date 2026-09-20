@@ -1600,17 +1600,100 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
                                     0.7 otherwise.
         '''
         return bondConditionsCoeff*tendonTypeCoeff*concrete.fctd()
+
+    def getBondStress(self, concrete, pos, t= 28, alpha_ct= 1.0):
+        ''' Return the bond stress for the tendon according to equation (8.15)
+            of the clause 8.10.2.2 of EN 1992-1-1:2004.
+
+        :param phi: nominal diameter of the wire, or prestressing strand.
+        :param concrete: concrete material.
+        :param pos: bond condition and the position of the bar during 
+                    concreting (see Figure 8.2 of EN 1992-1-1:2004)
+                    (I: good adherence, II: poor adherence).
+        :param t: concrete age at the moment of the prestress transmission
+                  expressed in days.
+        :param alpha_ct: a coefficient taking into account long-term effects 
+                         on the tensile strength and unfavorable loading 
+                         effects. The recommended value in Eurocode 2 is 
+                         1.0 (though individual National Annexes can 
+                         modify this).
+        '''
+        eta_p1= 3.2
+        if(self.tendonClass=='wire'):
+            eta_p1= 2.7 # indented of crimped wires
+        eta_1= 1.0
+        if(pos=='II'):
+            eta_1= 0.7
+        # 3.1.2 (9) and 3.1.2 (6)
+        fctm= self.getFctmT(t= t)
+        fctd_t= alpha_ct*0.7*fctm/self.gammaC
+        return eta_p1*eta_1*fctd_t
+
+    def getTransmissionLength(self, phi, concrete, pos, sg_pm0, suddenRelease= True, t= 28, alpha_ct= 1.0):
+        ''' Return the length of transmission for the tendon according
+            to equation (8.16) of the clause 8.10.2.2 of EN 1992-1-1:2004.
+
+        :param phi: nominal diameter of the wire, or prestressing strand.
+        :param concrete: concrete material.
+        :param pos: bond condition and the position of the bar during 
+                    concreting (see Figure 8.2 of EN 1992-1-1:2004)
+                    (I: good adherence, II: poor adherence).
+        :param sg_pm0: steel stress just after release.
+        :param suddenRelease: if true, prestressing is transfered to concrete
+                              in a very short time.
+        :param t: concrete age at the moment of the prestress transmission
+                  expressed in days.
+        :param alpha_ct: a coefficient taking into account long-term effects 
+                         on the tensile strength and unfavorable loading 
+                         effects. The recommended value in Eurocode 2 is 
+                         1.0 (though individual National Annexes can 
+                         modify this).
+        '''
+        alpha1= 1.25
+        if(not suddenRelease): # gradual release.
+            alpha1= 1.0
+        alpha2= 0.25
+        if(self.tendonClass=='wire'): # 3 and 7-wire strands.
+            alpha2= 0.19
+        fbpt= self.getBondStress(concrete= concrete, pos= pos, t= t, alpha_ct= alpha_ct)
+        return alpha1*alpha2*phi*sg_pm0/fbpt
+
+    def getDesignTransmissionLength(self, phi, concrete, pos, sg_pm0, suddenRelease= True, t= 28, alpha_ct= 1.0):
+        ''' Return the design value of the length of transmission for the 
+            tendon according to equations (8.17) and (8.18) of the clause 
+            8.10.2.2 of EN 1992-1-1:2004.
+
+        :param phi: nominal diameter of the wire, or prestressing strand.
+        :param concrete: concrete material.
+        :param pos: bond condition and the position of the bar during 
+                    concreting (see Figure 8.2 of EN 1992-1-1:2004)
+                    (I: good adherence, II: poor adherence).
+        :param sg_pm0: steel stress just after release.
+        :param suddenRelease: if true, prestressing is transfered to concrete
+                              in a very short time.
+        :param t: concrete age at the moment of the prestress transmission
+                  expressed in days.
+        :param alpha_ct: a coefficient taking into account long-term effects 
+                         on the tensile strength and unfavorable loading 
+                         effects. The recommended value in Eurocode 2 is 
+                         1.0 (though individual National Annexes can 
+                         modify this).
+        '''
+        lpt= self.getTransmissionLength(phi= phi, concrete= concrete, pos= pos, sg_pm0= sg_pm0, suddenRelease= suddenRelease, t= t, alpha_ct= alpha_ct)
+        return (1.2*lpt, 0.8*lpt)
     
-    def getAnchorageLength(self, transmissionLength, concrete, tendonDiameter, sigma_pd, sigma_pminf, bondConditionsCoeff= 0.7, tendonTypeCoeff= 1.2, alpha2= 0.25):
+    def getAnchorageLength(self, phi, concrete, pos, sigma_pd, sg_pm0, sigma_pminf, bondConditionsCoeff= 0.7, tendonTypeCoeff= 1.2, alpha2= 0.25, alpha_ct= 1.0):
         ''' Return the bond strength for anchorage according to expression
             (8.20) of to clause 8.10.2.3(2) of EN 1992-1-1:2004.
 
-        :param transmisionLength: upper design value of transmission length, 
-                                  see 8.10.2.2 (3).
+        :param phi: nominal diameter of the wire, or prestressing strand.
         :param concrete: concrete material.
-        :param tendonDiameter: diameter of the tendon.
+        :param pos: bond condition and the position of the bar during 
+                    concreting (see Figure 8.2 of EN 1992-1-1:2004)
+                    (I: good adherence, II: poor adherence).
         :param sigma_pd: tendon stress corresponding to the force described in
                          paragraph (1) of clause 8.10.2.3.
+        :param sg_pm0: steel stress just after release.
         :param sigma_pminf: prestress after all losses.
         :param tendonTypeCoeff: coefficient that takes into account the type 
                                 of tendon and the bond situation at anchorage
@@ -1620,14 +1703,136 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
                                     0.7 otherwise.
         :param alpha2: 0.25 for tendons with circular corss section, and 0.19
                        for 3 and 7-wire strands.
+        :param alpha_ct: a coefficient taking into account long-term effects 
+                         on the tensile strength and unfavorable loading 
+                         effects. The recommended value in Eurocode 2 is 
+                         1.0 (though individual National Annexes can 
+                         modify this).
         '''
         fbpd= self.getUltimateBondStress(concrete= concrete, bondConditionsCoeff= bondConditionsCoeff, tendonTypeCoeff= tendonTypeCoeff)
-        return transmissionLength+alpha2*tendonDiameter*(sigma_pd-sigma_pminf)/fbpd
+        transmissionLength= self.getDesignTransmissionLength(phi= phi, concrete= concrete, pos= pos, sg_pm0= sg_pm0, suddenRelease= suddenRelease, t= t, alpha_ct= alpha_ct)
+        return transmissionLength+alpha2*phi*(sigma_pd-sigma_pminf)/fbpd
         
+class Y1860S7Strand(PrestressingSteel):
+    ''' Uncoated strand 7-Steel wire for prestressed concrete
+        according to EN 10138 - 3 Prestressing steels: March 2011.
 
+     :ivar diameter: strand diameter.
+     :ivar area: cross sectional area.
+     '''
+    def __init__(self, diameter, area):
+        ''' Constructor.
+
+        :param diameter: strand diameter.
+        :param area: cross sectional area.
+        '''
+        super(Y1860S7Strand,self).__init__(steelName= "Y1860S7", fp01k= 1171e6, fmax= 1860e6, tendonClass= 'strand')
+        self.diameter= diameter
+        self.area= area
+
+    def massPerMeter(self):
+        ''' Return the mass per meter of the strand.'''
+        return self.area*7810.35496123245 # Adjusted value for steel density.
+
+    def Fm(self):
+        ''' Return the characteristic value of maximum force.'''
+        return self.area*self.fmax
+
+    def Fm_max(self):
+        ''' Return the maximum value of the maximum force.'''
+        return self.gammaS*self.Fm()
+
+    def Fp(self):
+        return 0.86*self.Fm()
+
+    def getTransmissionLength(self, concrete, pos, sg_pm0, suddenRelease= True, t= 28, alpha_ct= 1.0):
+        ''' Return the length of transmission for the tendon according
+            to equation (8.16) of the clause 8.10.2.2 of EN 1992-1-1:2004.
+
+        :param concrete: concrete material.
+        :param pos: bond condition and the position of the bar during 
+                    concreting (see Figure 8.2 of EN 1992-1-1:2004)
+                    (I: good adherence, II: poor adherence).
+        :param sg_pm0: steel stress just after release.
+        :param suddenRelease: if true, prestressing is transfered to concrete
+                              in a very short time.
+        :param t: concrete age at the moment of the prestress transmission
+                  expressed in days.
+        :param alpha_ct: a coefficient taking into account long-term effects 
+                         on the tensile strength and unfavorable loading 
+                         effects. The recommended value in Eurocode 2 is 
+                         1.0 (though individual National Annexes can 
+                         modify this).
+        '''
+        return super(Y1860S7Strand,self).getTransmissionLength(phi= self.diameter, concrete= concrete, pos= pos, sg_pm0= sg_pm0, suddenRelease= suddenRelease, t= t, alpha_ct= alpha_ct)
     
+    def getDesignTransmissionLength(self, concrete, pos, sg_pm0, suddenRelease= True, t= 28, alpha_ct= 1.0):
+        ''' Return the design value of the length of transmission for the 
+            tendon according to equations (8.17) and (8.18) of the clause 
+            8.10.2.2 of EN 1992-1-1:2004.
+
+        :param concrete: concrete material.
+        :param pos: bond condition and the position of the bar during 
+                    concreting (see Figure 8.2 of EN 1992-1-1:2004)
+                    (I: good adherence, II: poor adherence).
+        :param sg_pm0: steel stress just after release.
+        :param suddenRelease: if true, prestressing is transfered to concrete
+                              in a very short time.
+        :param t: concrete age at the moment of the prestress transmission
+                  expressed in days.
+        :param alpha_ct: a coefficient taking into account long-term effects 
+                         on the tensile strength and unfavorable loading 
+                         effects. The recommended value in Eurocode 2 is 
+                         1.0 (though individual National Annexes can 
+                         modify this).
+        '''
+        return super(Y1860S7Strand,self).getDesignTransmissionLength(phi= self.diameter, concrete= concrete, pos= pos, sg_pm0= sg_pm0, suddenRelease= suddenRelease, t= t, alpha_ct= alpha_ct)
+
+    def getAnchorageLength(self, concrete, pos, sigma_pd, sg_pm0, sigma_pminf, bondConditionsCoeff= 0.7, tendonTypeCoeff= 1.2, alpha2= 0.25, alpha_ct= 1.0):
+        ''' Return the bond strength for anchorage according to expression
+            (8.20) of to clause 8.10.2.3(2) of EN 1992-1-1:2004.
+
+        :param concrete: concrete material.
+        :param pos: bond condition and the position of the bar during 
+                    concreting (see Figure 8.2 of EN 1992-1-1:2004)
+                    (I: good adherence, II: poor adherence).
+        :param sigma_pd: tendon stress corresponding to the force described in
+                         paragraph (1) of clause 8.10.2.3.
+        :param sg_pm0: steel stress just after release.
+        :param sigma_pminf: prestress after all losses.
+        :param tendonTypeCoeff: coefficient that takes into account the type 
+                                of tendon and the bond situation at anchorage
+                                (1.4 for indented wires and 1.2 for 7-wire
+                                strands.
+        :param bondConditionsCoeff: 1.0 for good bond conditions (see 8.4.2)
+                                    0.7 otherwise.
+        :param alpha2: 0.25 for tendons with circular corss section, and 0.19
+                       for 3 and 7-wire strands.
+        :param alpha_ct: a coefficient taking into account long-term effects 
+                         on the tensile strength and unfavorable loading 
+                         effects. The recommended value in Eurocode 2 is 
+                         1.0 (though individual National Annexes can 
+                         modify this).
+        '''
+        return super(Y1860S7Strand,self).getAnchorageLength(phi= self.diameter, concrete= concrete, pos= pos, sg_pm0= sg_pm0, suddenRelease= suddenRelease, t= t, alpha_ct= alpha_ct)
         
         
 # Prestressing steel.
 Y1860S7= PrestressingSteel(steelName= "Y1860S7",fp01k= 0.85*1860e6, fmax= 1860e6)
 Y1770= PrestressingSteel(steelName= "Y1770",fp01k= 1520e6, fmax= 1770e6, steelRelaxationClass= 2)
+
+# Strands mechanical properties.   
+Y1860S7Strand_6_9= Y1860S7Strand(diameter= 6.90e-3, area= 29.00e-6)
+Y1860S7Strand_7_0= Y1860S7Strand(diameter= 7.00e-3, area= 30.00e-6)
+Y1860S7Strand_8_0= Y1860S7Strand(diameter= 8.00e-3, area= 38.00e-6)
+Y1860S7Strand_9_0= Y1860S7Strand(diameter= 9.00e-3, area= 50.00e-6)
+Y1860S7Strand_9_3= Y1860S7Strand(diameter= 9.30e-3, area= 52.00e-6)
+Y1860S7Strand_9_6= Y1860S7Strand(diameter= 9.60e-3, area= 55.00e-6)
+Y1860S7Strand_11_0= Y1860S7Strand(diameter= 11.00e-3, area= 70.00e-6)
+Y1860S7Strand_11_3= Y1860S7Strand(diameter= 11.30e-3, area= 75.00e-6)
+Y1860S7Strand_12_5= Y1860S7Strand(diameter= 12.50e-3, area= 93.00e-6)
+Y1860S7Strand_12_9= Y1860S7Strand(diameter= 12.90e-3, area= 100.00e-6)
+Y1860S7Strand_13_0= Y1860S7Strand(diameter= 13.00e-3, area= 102.00e-6)
+Y1860S7Strand_15_2= Y1860S7Strand(diameter= 15.20e-3, area= 139.00e-6)
+Y1860S7Strand_15_3= Y1860S7Strand(diameter= 15.30e-3, area= 140.00e-6)
+Y1860S7Strand_15_7= Y1860S7Strand(diameter= 15.70e-3, area= 150.00e-6)

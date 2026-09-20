@@ -187,7 +187,8 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
 		  << " DOF_Groups array of size " << numDOF << std::endl;
         return -3;
       }
-    theDOFs= std::vector<DOF_Group *>(numDOF,static_cast<DOF_Group *>(nullptr));
+    
+    this->theDOFs= std::vector<DOF_Group *>(numDOF,static_cast<DOF_Group *>(nullptr));
 
 
     //create a DOF_Group for each node and add it to the analysis model.

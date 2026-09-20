@@ -133,3 +133,13 @@ boost::python::list XC::SystemOfEqn::getAPy(void) const
     boost::python::list retval;
     return retval;
   }
+
+//! @brief Return a Python list containing the rows of the system matrix.
+boost::python::list XC::SystemOfEqn::getBPy(void) const
+  {
+    std::cerr << Color::red <<  getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << Color::def << std::endl;
+    boost::python::list retval;
+    return retval;
+  }

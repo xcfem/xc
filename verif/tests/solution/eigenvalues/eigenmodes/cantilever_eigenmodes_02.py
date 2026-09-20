@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-# Tomado del example A47 del SOLVIA Verification Manual
-import xc
+''' Taken from the example A47 of the del SOLVIA Verification Manual.'''
 
+import xc
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials

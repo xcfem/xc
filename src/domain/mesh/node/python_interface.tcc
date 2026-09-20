@@ -54,7 +54,8 @@ size_t (XC::Node::*get_number_of_connected_elements_node_set)(const XC::SetBase 
 boost::python::list (XC::Node::*get_connected_elements_node_py)(void)= &XC::Node::getConnectedElementsPy;    
 boost::python::list (XC::Node::*get_connected_elements_node_set_py)(const XC::SetBase *)= &XC::Node::getConnectedElementsPy; 
 boost::python::list (XC::Node::*get_connected_elements_tags_node_py)(void) const= &XC::Node::getConnectedElementTags;    
-boost::python::list (XC::Node::*get_connected_elements_tags_node_set_py)(const XC::SetBase *) const= &XC::Node::getConnectedElementTags; 
+boost::python::list (XC::Node::*get_connected_elements_tags_node_set_py)(const XC::SetBase *) const= &XC::Node::getConnectedElementTags;
+XC::Vector (XC::Node::*node_get_3d_coordinates)() const= &XC::Node::getCrds3d;
 class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Node", no_init)
   .add_property("getCoo", make_function( getCooRef, return_internal_reference<>() ),"Return node coordinates.")
   .add_property("getNumberDOF", &XC::Node::getNumberDOF,"Return the number of DOFs of the node.")
@@ -62,7 +63,7 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .add_property("dim", &XC::Node::getDim,"Return the dimension of the node coordinates vector.")
   .add_property("mass", make_function(&XC::Node::getMass, return_internal_reference<>()) ,&XC::Node::setMass,"Node mass matrix.")
   .def("getMassComponent", &XC::Node::getMassComponent,"Return the mass matrix component for the DOF argument.")
-  .add_property("get3dCoo", &XC::Node::getCrds3d,"Return 3D coordinates of the node.")
+  .add_property("get3dCoo", node_get_3d_coordinates,"Return 3D coordinates of the node.")
   .def("getPos2d", &XC::Node::getPosition2d,"getPosition2d(v), returns the 2D position obtained by adding the vector to the position of node.")
   .def("getPos3d", &XC::Node::getPosition3d,"getPosition3d(v), returns the 3D position obtained by adding the vector to the position of node..")
   .add_property("getInitialPos2d", &XC::Node::getInitialPosition2d,"Returns 2D initial position of node.")
@@ -150,12 +151,13 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("getDistributionFactorForDOFs",getDistributionFactorForDOFs,"getDistributionFactorForDOFs(i,dofs): returns the 'dofs' components of the distribution factor corresponding to the i-th mode.")
   .add_property("getDistributionFactors",&XC::Node::getDistributionFactors,"Returns the distribution factor corresponding to all the computed modes.")
 
-  .def("getEffectiveModalMass",&XC::Node::getEffectiveModalMass,"Returns the effective modal mass corresponding to the i-th mode.")
+  .def("getEffectiveModalMass",&XC::Node::getEffectiveModalMass,"Returns the effective modal mass corresponding to the given mode.")
   .add_property("getEffectiveModalMasses",&XC::Node::getEffectiveModalMasses,"Returns the effective modal masses for all the computed modes.")
   .def("getEquivalentStaticLoad",&XC::Node::getEquivalentStaticLoad,"getEquivalentStaticLoad(mode,modeAccel): return the equivalent static load for the mode being passed as parameter and the acceleration corresponding to that mode.")
   .def("clearEigenvectors", &XC::Node::clearEigenvectors,"Remove the stored eigenvectors.")
 
   .def("newLoad",make_function(&XC::Node::newLoad, return_internal_reference<>() ),"Create a new load on the node and put it on the current load pattern.")
+  .def("createInertiaLoad", make_function(&XC::Node::createInertiaLoad, return_internal_reference<>() ),"Create the inertia load for the given acceleration vector.")
 
   .add_property("numberOfConnectedConstraints", get_number_of_connected_constraints_node, "Returns the number of constraints that affect this node.")
   .def("getNumberOfConnectedConstraints", get_number_of_connected_constraints_node_set, "Returns the number of constraints of the given set that affect this node.")

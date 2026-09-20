@@ -1255,11 +1255,12 @@ const double &XC::Domain::getModalParticipationFactor(int i) const
 const XC::Vector &XC::Domain::getModalParticipationFactors(void) const
   { return modalParticipationFactors; }
 
-//! @brief Return the effective modal mass of the i-th mode.
+//! @brief Return the effective modal mass corresponding to the given mode.
 const double XC::Domain::getEffectiveModalMass(int i) const
   { return mesh.getEffectiveModalMass(i); }
 
-//! @brief Return the effective modal masses for each mode.
+//! @brief Return the effective modal masses for each of the computed
+//! eigenmodes.
 XC::Vector XC::Domain::getEffectiveModalMasses(void) const
   {
     const int nm= getNumModes();
@@ -1270,10 +1271,10 @@ XC::Vector XC::Domain::getEffectiveModalMasses(void) const
 double XC::Domain::getTotalEffectiveModalMass(void) const
   {
     double retval= 0;
-    const Vector masas= getEffectiveModalMasses();
-    const size_t sz= masas.Size();
+    const Vector masses= getEffectiveModalMasses();
+    const size_t sz= masses.Size();
     for(size_t i=0;i<sz;i++)
-      retval+= masas(i);
+      retval+= masses(i);
     return retval;
   }
 

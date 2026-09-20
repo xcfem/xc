@@ -31,6 +31,7 @@ class_<XC::SectRegion, XC::SectRegion *, bases<XC::DiscretBase>, boost::noncopya
   .def("getPyz",&XC::SectRegion::Pyz, "Return the product of inertia with respect to the y and z axes.")
   .def("getCenterOfMass", make_function(&XC::SectRegion::getCenterOfMass,return_internal_reference<>()), "Return the center of mass of the section.")
   .def("swap",&XC::SectRegion::swap, "Reverse the orientation of the region.")
+  .def("getLinearRho", &XC::SectRegion::getLinearRho, "Return the mass per unit length of the section.")
   ;
 
 
@@ -86,6 +87,7 @@ class_<XC::RegionContainer, bases<XC::SectionMassProperties>, boost::noncopyable
   .def("clear", &XC::RegionContainer::clear, "Removes previously defined regions from the container.")
   .def("getRegionsContours",&XC::RegionContainer::getRegionsContoursPy, "Return a Python list containing the contour of each region.")
   .def("getMaterials",&XC::RegionContainer::getMaterialsPy, "Return a Python list containing the different materials of the regions.")
+  .def("getLinearRho", &XC::RegionContainer::getLinearRho, "Return the mass per unit length of the section.")
    ;
 
 

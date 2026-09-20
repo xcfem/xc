@@ -3,7 +3,10 @@ An eigenmode is a natural vibration of a system such that various parts all move
 
 
 ## References
+ - [NAFEMS Test P18.FV2](https://openseesdigital.com/nafems/fv2/)
+ - [NAFEMS Test P18.FV73](https://openseesdigital.com/nafems/fv73/)
  - [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)
+ - [The Rayleigh Quotient](https://portwooddigital.com/2021/06/06/the-rayleigh-quotient/)
  - [Eigenvalues During an Analysis](https://portwooddigital.com/2021/11/09/eigenvalues-during-an-analysis/)
  - [More Than You or Eigen Chew](https://portwooddigital.com/2022/03/06/more-than-you-or-eigen-chew/)
  - [Eigenvalues and eigenvectors](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors)
@@ -14,4 +17,4 @@ An eigenmode is a natural vibration of a system such that various parts all move
  - [Quick (and Dirty) Modal Damping](https://portwooddigital.com/2022/11/08/quick-and-dirty-modal-damping/)
  - [Eigenvalues of the Stiffness Matrix](https://portwooddigital.com/2023/01/16/eigenvalues-of-the-stiffness-matrix/)
  - [Spectra. C++ Library For Large Scale Eigenvalue Problems](https://spectralib.org/)
-  - [Eigen Almost Hear You Sigh](https://portwooddigital.com/2025/12/30/eigen-almost-hear-you-sigh/)
+ - [Eigen Almost Hear You Sigh](https://portwooddigital.com/2025/12/30/eigen-almost-hear-you-sigh/)

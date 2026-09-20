@@ -30,6 +30,7 @@
 Pos2d (XC::Element::*getProjection2D)(const Pos2d &,bool) const= &XC::Element::getProjection;
 Pos3d (XC::Element::*getProjection3D)(const Pos3d &,bool) const= &XC::Element::getProjection;
 XC::NodePtrsWithIDs &(XC::Element::*getNodePtrsRef)(void)= &XC::Element::getNodePtrs;
+XC::Node *(XC::Element::*get_node_ptr)(const size_t &)= &XC::Element::getNodePtr;
 const XC::Vector &(XC::Element::*getResistingForceRef)(void) const= &XC::Element::getResistingForce;
 const XC::Vector &(XC::Element::*getNodeResistingForceINOD)(const size_t &iNod) const= &XC::Element::getNodeResistingForce;
 const XC::Vector &(XC::Element::*getNodeResistingForceIncInertiaINOD)(const size_t &iNod) const= &XC::Element::getNodeResistingForceIncInertia;
@@ -57,11 +58,18 @@ double (XC::Element::*getDist2Pos3d)(const Pos3d &,bool initialGeometry) const= 
 boost::python::list (XC::Element::*get_connected_elements_element_py)(void)= &XC::Element::getConnectedElementsPy;    
 boost::python::list (XC::Element::*get_connected_elements_element_set_py)(const XC::SetBase *)= &XC::Element::getConnectedElementsPy; 
 boost::python::list (XC::Element::*get_connected_elements_tags_element_py)(void) const= &XC::Element::getConnectedElementTags;    
-boost::python::list (XC::Element::*get_connected_elements_tags_element_set_py)(const XC::SetBase *) const= &XC::Element::getConnectedElementTags; 
+boost::python::list (XC::Element::*get_connected_elements_tags_element_set_py)(const XC::SetBase *) const= &XC::Element::getConnectedElementTags;
+XC::ParticlePos3d (XC::Element::*getNaturalCoordinates3d)(const Pos3d &, bool initialGeometry) const= &XC::Element::getNaturalCoordinates;
+XC::Vector (XC::Element::*getParticlePos3dInterpolationFactors)(const XC::ParticlePos3d &) const= &XC::Element::getInterpolationFactors;
+XC::Vector (XC::Element::*getPos3dInterpolationFactors)(const Pos3d &) const= &XC::Element::getInterpolationFactors;
+XC::ParticlePos2d (XC::Element::*getNaturalCoordinates2d)(const Pos2d &, bool initialGeometry) const= &XC::Element::getNaturalCoordinates;
+XC::Vector (XC::Element::*getParticlePos2dInterpolationFactors)(const XC::ParticlePos2d &) const= &XC::Element::getInterpolationFactors;
+XC::Vector (XC::Element::*getPos2dInterpolationFactors)(const Pos2d &) const= &XC::Element::getInterpolationFactors;
 class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >("Element", no_init)
   .add_property("getNodes", make_function( getNodePtrsRef, return_internal_reference<>() ),"DEPRECATED; return the element nodes.")
   .add_property("nodes", make_function( getNodePtrsRef, return_internal_reference<>() ),"Return the element nodes.")
   .add_property("numNodes", &XC::Element::getNumExternalNodes, "Return the number of nodes.")
+  .def("getNode",make_function( get_node_ptr, return_internal_reference<>() ), "getNode(i): return the i-th node of the element.")
   .def("find",&XC::Element::find,"Return the index of the node in the element (-1 if not found).")
   .add_property("getIdxNodes",&XC::Element::getIdxNodes,"Return the node indices for its use in VTK arrays.")
   .def("setIdNodes", setIdNodesRef," setIdNodes(xc.ID([idNode0, idNode1,...]) set the element nodes.")
@@ -127,6 +135,7 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getIVector3d",&XC::Element::getIVector3d,"Return a 3D vector in the direction of the local axis 1.")
   .def("getJVector3d",&XC::Element::getJVector3d,"Return a 3D vector in the direction of the local axis 2.")
   .def("getKVector3d",&XC::Element::getKVector3d,"Return a 3D vector in the direction of the local axis 3.")
+  .def("getPosNode", &XC::Element::getPosNode," getPosNode(i, initialGeometry) return the position of the i-th node of the element. If initialGeometry is false, return the current position of the node.")
   .def("getGaussModel",make_function(&XC::Element::getGaussModel, return_internal_reference<>() ),"Return the element Gauss quadrature.")
   .def("getCoordinateSystem",&XC::Element::getCooSys,"Return the element coordinate system.")
   .def("get2DCoordinateSystem",&XC::Element::getCooSys2d,"Return the element coordinate system in a two-dimensional space.")
@@ -141,7 +150,13 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getConnectedElements", get_connected_elements_element_set_py, "Returns the elements from the given set that are connected to any of the nodes of this element.")
 .add_property("connectedElementTags", get_connected_elements_tags_element_py, "Returns the tags of the elements connected to any of the nodes of this element.")
   .def("getConnectedElementTags", get_connected_elements_tags_element_set_py, "Returns the tags of the elements from the given set that are connected to any of the nodes of this element.")
-   ;
+  .def("getNaturalCoordinates", getNaturalCoordinates3d, "Returns natural coordinates of the given 3D point.")
+  .def("getPos3dInterpolationFactors",getPos3dInterpolationFactors, "Return the values of the interpolation factors at the given point.")
+  .def("getParticlePos3dInterpolationFactors",getParticlePos3dInterpolationFactors, "Return the values of the interpolation factors at the given point expressed in natural coordinates..")
+  .def("getNaturalCoordinates", getNaturalCoordinates2d, "Returns natural coordinates of the given 2D point.")
+  .def("getPos2dInterpolationFactors",getPos2dInterpolationFactors, "Return the values of the interpolation factors at the given point.")
+  .def("getParticlePos2dInterpolationFactors",getParticlePos2dInterpolationFactors, "Return the values of the interpolation factors at the given point expressed in natural coordinates..")
+  ;
 
 XC::Element *(XC::ElementIter::*element_iter_parenthesis_op)(void)= &XC::ElementIter::operator();
 class_<XC::ElementIter, boost::noncopyable >("ElementIter", no_init)

@@ -69,7 +69,7 @@ int XC::MPBase_FE::determineConstrainedDOFsIDs(const MFreedom_ConstraintBase &th
 		      << constrained << " at constrained node: "
 		      << theConstrainedNode->getTag()
 		      << Color::def << std::endl;
-	    myID(i+offset) = -1; // modify so nothing will be added to equations
+	    this->myID(i+offset) = -1; // modify so nothing will be added to equations
 	    retval = -3;
 	  }    	
 	else
@@ -79,11 +79,11 @@ int XC::MPBase_FE::determineConstrainedDOFsIDs(const MFreedom_ConstraintBase &th
 		std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 			  << "; WARNING nodes DOF_Group too small"
 			  << Color::def << std::endl;
-		myID(i+offset) = -1; // modify so nothing will be added to equations
+		this->myID(i+offset) = -1; // modify so nothing will be added to equations
 		retval = -4;
 	      }
 	    else
-	      myID(i+offset) = theConstrainedNodesID(constrained);
+	      this->myID(i+offset) = theConstrainedNodesID(constrained);
 	  }
       }
     return retval;

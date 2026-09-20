@@ -3,7 +3,9 @@
 The classes on this folder implement the algorithms needed so solve standard and generalized eigenvalue problems.
 
 ## References
-
+ - [NAFEMS Test P18.FV2](https://openseesdigital.com/nafems/fv2/)
+ - [NAFEMS Test P18.FV73](https://openseesdigital.com/nafems/fv73/)
+ - [Ordinary Eigenvalues](https://portwooddigital.com/2020/11/13/ordinary-eigenvalues/)
  - [The Rayleigh Quotient](https://portwooddigital.com/2021/06/06/the-rayleigh-quotient/)
  - [Eigenvalues During an Analysis](https://portwooddigital.com/2021/11/09/eigenvalues-during-an-analysis/)
  - [Eigenvalue and eigenvector](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors) computation related verification tests.

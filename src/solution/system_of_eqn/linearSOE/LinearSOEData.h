@@ -79,6 +79,7 @@ class LinearSOEData: public LinearSOE
     virtual Vector &getX(void);
     virtual const Vector &getB(void) const;
     virtual Vector &getB(void);
+    virtual boost::python::list getBPy(void) const;
     virtual double normRHS(void) const;
 
     void receiveB(const Communicator &);

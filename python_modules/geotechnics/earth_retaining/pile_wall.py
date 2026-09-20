@@ -569,7 +569,7 @@ class PileWall(object):
                 # Material for the left spring
                 elements.defaultMaterial= leftSoilResponseMaterial.name
                 # Springs on the left side of the beam
-                zlLeft= elements.newElement("ZeroLength",xc.ID([pair[1].tag, pair[0].tag]))
+                zlLeft= elements.newElement("ZeroLength",xc.ID([pair[0].tag, pair[1].tag]))
                 zlLeft.setupVectors(xc.Vector([-1,0,0]),xc.Vector([0,-1,0]))
                 self.leftZLElements[nodeTag]= zlLeft
             if(rightSoilResponseMaterial): # Spring at right defined for this node.

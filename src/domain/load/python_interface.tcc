@@ -29,6 +29,7 @@ class_<XC::NodalLoad, XC::NodalLoad *, bases<XC::Load>, boost::noncopyable >("No
   .add_property("getLoadVector", make_function(&XC::NodalLoad::getLoadVector,return_internal_reference<>()),"Returns the load vector.")
   .add_property("getForce", make_function(&XC::NodalLoad::getForce,return_internal_reference<>()),"Returns the force components of the load vector.")
   .add_property("getMoment", make_function(&XC::NodalLoad::getMoment,return_internal_reference<>()),"Returns the moment components of the load vector.")
+  .add_property("category", &XC::NodalLoad::Category," Return the category of the load (punctual)")
   ;
 
 class_<XC::NodalLoadIter, boost::noncopyable >("NodalLoadIter", no_init)

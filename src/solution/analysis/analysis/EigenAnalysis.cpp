@@ -414,8 +414,7 @@ XC::Matrix XC::EigenAnalysis::getDistributionFactors(void) const
     return retval;
   }
 
-//! @brief Return the masa modal efectiva 
-//! correspondiente al modo i.
+//! @brief Return the effective modal mass corresponding to the given mode.
 double XC::EigenAnalysis::getEffectiveModalMass(int mode) const
   {
     double retval= 0.0;
@@ -425,7 +424,8 @@ double XC::EigenAnalysis::getEffectiveModalMass(int mode) const
     return retval;
   }
 
-//! @brief Returns the masas modales efectivas.
+//! @brief Returns the effective modal masses corresponding to each of the
+//! computed eigenmodes.
 XC::Vector XC::EigenAnalysis::getEffectiveModalMasses(void) const
   {
     Vector retval;

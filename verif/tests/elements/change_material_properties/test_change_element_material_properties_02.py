@@ -49,10 +49,9 @@ mat= typical_materials.defElasticShearSection2d(preprocessor, "scc",A,E,G,I,alph
 lin= modelSpace.newLinearCrdTransf("lin")
 
 ## Define element.
-elements= preprocessor.getElementHandler
-elements.defaultMaterial= mat.name
-elements.defaultTransformation= lin.name
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
+modelSpace.setDefaultMaterial(mat)
+modelSpace.setDefaultCoordTransf(lin)
+beam2d= modelSpace.newElement("ElasticBeam2d", [n1.tag,n2.tag])
 beam2d.h= h
 
 ## Constraints

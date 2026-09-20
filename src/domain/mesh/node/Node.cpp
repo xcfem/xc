@@ -668,8 +668,32 @@ size_t XC::Node::getDim(void) const
 const XC::Vector &XC::Node::getCrds(void) const
   { return Crd; }
 
+//! @brief Returns the current node coordinates.
+//! @param factor: return initCrd+ factor * nodDisplacement.
+XC::Vector XC::Node::getCrds(const double &factor) const
+  {
+    Vector retval= this->getCrds();
+    if(factor!= 0.0)
+      {
+	Vector fd= factor*getDisp();
+	if(fd.isnan()) //Something went wrong.
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << " displacement vector for node: "
+		      << getTag() << " is NOT VALID"
+		      << " returning original position."
+		      << Color::def << std::endl;
+	    fd.Zero();
+	  }
+	const size_t sz= retval.Size();
+	for(size_t i= 0; i<sz; i++)
+	  retval(i)+= fd(i);
+      }
+    return retval;
+  }
+
 //! @brief Return a reference to the vector of nodal coordinates.
-//! 
+//! s
 //! Returns the original coordinates in a Vector. The size of the vector
 //! is 2 if node object was created for a 2d problem and the size is 3 if
 //! created for a 3d problem.
@@ -677,7 +701,8 @@ XC::Vector &XC::Node::getCrds(void)
   { return Crd; }
 
 //! @brief Returns the node coordinates in a 3D space.
-XC::Vector XC::Node::getCrds3d(void) const
+//! @param factor: return initCrd+ factor * nodDisplacement.
+XC::Vector XC::Node::getCrds3d() const
   {
     Vector retval(3,0.0);
     const size_t sz= getDim();
@@ -690,6 +715,28 @@ XC::Vector XC::Node::getCrds3d(void) const
             if(sz>2)
               retval[2]= Crd[2];
           }
+      }
+    return retval;
+  }
+
+//! @brief Returns the node current coordinates in a 3D space.
+//! @param factor: return initCrd+ factor * nodDisplacement.
+XC::Vector XC::Node::getCrds3d(const double &factor) const
+  {
+    Vector retval= this->getCrds3d();
+    if(factor!= 0.0)
+      {
+	Vector fd= factor*getDisp();
+	if(fd.isnan()) //Something went wrong.
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << " displacement vector for node: "
+		      << getTag() << " is NOT VALID"
+		      << " returning original position."
+		      << Color::def << std::endl;
+	    fd.Zero();
+	  }
+	retval+= fd;
       }
     return retval;
   }
@@ -1729,12 +1776,12 @@ XC::Vector XC::Node::getModalParticipationFactors(const std::set<int> &dofs) con
 XC::Vector XC::Node::getModalParticipationFactorsForDOFs(const boost::python::list &l) const
   {
     std::set<int> tmp= set_int_from_py_list(l);
-    return getModalParticipationFactors(tmp);
+    return this->getModalParticipationFactors(tmp);
   }
 
 //! @brief Returns the distribution factor corresponding to the i-th mode.
 XC::Vector XC::Node::getDistributionFactor(int i) const
-  { return getModalParticipationFactor(i)*getEigenvector(i); }
+  { return this->getModalParticipationFactor(i)*getEigenvector(i); }
 
 //! @brief Returns the distribution factor corresponding to the mode
 //! being passed as parameter. If dofs argument
@@ -1743,7 +1790,7 @@ XC::Vector XC::Node::getDistributionFactor(int i) const
 //! @param mode: index of the mode.
 //! @param dofs: degrees of freedom to project on.
 XC::Vector XC::Node::getDistributionFactor(int mode,const std::set<int> &dofs) const
-  { return getModalParticipationFactor(mode,dofs)*getEigenvector(mode); }
+  { return this->getModalParticipationFactor(mode,dofs)*getEigenvector(mode); }
 
 //! @brief Returns the matrix with the computed distribution factors
 //! placed by columns.
@@ -1768,20 +1815,20 @@ XC::Matrix XC::Node::getDistributionFactors(void) const
     return retval;
   }
 
-//! @brief Return the effective modal mass
-//! that corresponds to i mode.
+//! @brief Return the effective modal mass that corresponds to the given mode.
 double XC::Node::getEffectiveModalMass(int mode) const
   {
     double retval= 0;
     const Vector ev= getEigenvector(mode);
     const int sz= ev.Size();
-    const double tau= getModalParticipationFactor(mode);
+    const double tau= this->getModalParticipationFactor(mode);
     const Vector J(sz,1.0);
     retval= tau*dot(ev,(mass*J));
     return retval;
   }
 
-//! @brief Returns the effective modal masses.
+//! @brief Returns the effective modal masses corresponding to each of the
+//! computed eigenmodes.
 XC::Vector XC::Node::getEffectiveModalMasses(void) const
   {
     const int nm= getNumModes();
@@ -2818,6 +2865,17 @@ Vector3d XC::Node::get3dForceComponents(const Vector &v) const
                     << dim
 		    << Color::def << std::endl;
       }
+    else if(numberDOF==1)
+      {
+	if(dim==1) // 1D solid mechanics
+	  retval= Vector3d(v[0],0.0,0.0);
+	else
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << " not implemented for numDOFs= "	
+                    << numberDOF << " and spaceDim= "
+                    << dim
+		    << Color::def << std::endl;
+      }
     else if(numberDOF== 6) // 3D structural
       retval= Vector3d(v[0],v[1],v[2]);
     else
@@ -2848,6 +2906,15 @@ Vector3d XC::Node::get3dMomentComponents(const Vector &v) const
     else if(numberDOF==2)
       {
 	if(dim!=2) // NOT 2D solid mechanics => error.
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << " not implemented for numDOFs= "	
+                    << numberDOF << " and spaceDim= "
+                    << dim
+		    << Color::def << std::endl;
+      }
+    else if(numberDOF==1)
+      {
+	if(dim!=1) // NOT 1D solid mechanics => error.
 	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	            << " not implemented for numDOFs= "	
                     << numberDOF << " and spaceDim= "
@@ -2911,6 +2978,17 @@ Vector2d XC::Node::get2dForceComponents(const Vector &v) const
 		    << " and spaceDim= " << dim
 		    << Color::def << std::endl;
       }
+    else if(numberDOF==1)
+      {
+	if(dim==1) // 1D solid mechanics
+	  retval= Vector2d(v[0],0.0);
+	else
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << " not implemented for numDOFs= "	
+                    << numberDOF << " and spaceDim= "
+                    << dim
+		    << Color::def << std::endl;
+      }
     else
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	        << " not implemented for numDOFs= " << numberDOF
@@ -2941,6 +3019,15 @@ double XC::Node::get2dMomentComponent(const Vector &v) const
 	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		    << " not implemented for numDOFs= " << numberDOF
 		    << " and spaceDim= " << dim
+		    << Color::def << std::endl;
+      }
+    else if(numberDOF==1)
+      {
+	if(dim!=1) // NOT 1D solid mechanics => error.
+	  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	            << " not implemented for numDOFs= "	
+                    << numberDOF << " and spaceDim= "
+                    << dim
 		    << Color::def << std::endl;
       }
     else

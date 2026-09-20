@@ -121,6 +121,10 @@ class Shell4NBase: public QuadBase4N<SectionFDPhysicalProperties>
     ElementalLoad *strainLoad(const Matrix &);
     virtual ElementalLoad *createInertiaLoad(const Vector &);
 
+    // Mass methods.
+    bool haveRho(void) const;
+    boost::python::list getRhoiPy() const;
+    
     // methods for applying loads
     void zeroLoad(void);
     int addLoad(ElementalLoad *, double);

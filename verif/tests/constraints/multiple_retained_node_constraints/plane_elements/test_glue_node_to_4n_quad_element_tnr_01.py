@@ -1,0 +1,118 @@
+# -*- coding: utf-8 -*-
+''' Check newGlueNodeToElement function with transformation Newton-Raphson solution
+algorithm.
+
+The problem is linear, so there is no need to use a non-linear solver, BUT the 
+multi-row, multi-freedom constraints gave an error with this kind of solver. 
+This is a regression test for that error.
+'''
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2026, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+import math
+import geom
+import xc
+from model import predefined_spaces
+from materials import typical_materials
+from postprocess.quick_inquiry import nodal_reactions
+from solution import predefined_solutions
+from misc_utils import log_messages as lmsg
+
+E= 2.1e6 # Young modulus of the steel en kg/cm2.
+nu= 0.3 # Poisson's ratio.
+h= 0.1 # Thickness.
+rho= 1.33 # Density kg/m2.
+
+# Problem type
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
+nodes= preprocessor.getNodeHandler
+modelSpace= predefined_spaces.SolidMechanics2D(nodes)
+
+# Nodes.
+n1= modelSpace.newNode(0,0)
+n2= modelSpace.newNode(1,0)
+n3= modelSpace.newNode(1,1)
+n4= modelSpace.newNode(0,1)
+
+nA= modelSpace.newNode(0.5,0.5) # node to be glued.
+
+# Define material.
+elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
+# Define elements.
+modelSpace.setDefaultMaterial(elast2d)
+elem= modelSpace.newElement("FourNodeQuad",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
+
+# Constraints
+constraints= preprocessor.getBoundaryCondHandler
+modelSpace.fixNode('00', n1.tag)
+for n in [n2, n3, n4]:
+    modelSpace.fixNode('F0', n.tag)
+
+## Glued node.
+gluedDOFs= [0,1]
+for i in range(0,2):
+    if i not in gluedDOFs:
+        modelSpace.constraints.newSPConstraint(nA.tag,i,0.0)
+
+glue= modelSpace.glueNodeToElement(nA.tag, elem.tag, xc.ID(gluedDOFs))
+
+# Loads definition
+lp0= modelSpace.newLoadPattern(name= '0')
+F= 1000
+loadVector= xc.Vector([0, -F])
+lp0.newNodalLoad(nA.tag, loadVector)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
+
+# Solution
+# LP 14/08/2026.
+# The problem is linear, so there is no need to use a non-linear solver, BUT
+# the multi-row, multi-freedom constraints gave an error with this kind of
+# solver. This is a regression test for that error.
+analysis= predefined_solutions.transformation_newton_raphson_band_gen(feProblem, maxNumIter= 2) # => OK
+result= analysis.analyze(1)
+if(result!= 0):
+    lmsg.error("Can't solve.")
+    exit(1)
+
+nodes.calculateNodalReactions(False,1e-7)
+
+reactionNodeA= nA.getReaction
+ratio1= reactionNodeA.Norm()
+
+reactions= list()
+for n in [n1, n2, n3, n4]:
+    reactions.append(n.getReaction)
+
+refReactions= 4*[(0.0, F/4)]
+error= 0.0
+for R, refR in zip(reactions, refReactions):
+    for i in [0, 1]:
+        error+= (R[i]-refR[i])**2
+error= math.sqrt(error)
+
+'''
+print("ratio1= ", ratio1)
+print("error= ", error)
+'''
+
+import os
+fname= os.path.basename(__file__)
+if (abs(ratio1)<1e-10) & (abs(error)<1e-10):
+    print('test '+fname+': ok.')
+else:
+    lmsg.error(fname+' ERROR.')
+ 
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayDispRot(itemToDisp='uX', defFScale= 100.0)
+# oh.displayDispRot(itemToDisp='uY', defFScale= 100.0)
+# # oh.displayLocalAxes()
+# oh.displayLoads()
+# oh.displayReactions()

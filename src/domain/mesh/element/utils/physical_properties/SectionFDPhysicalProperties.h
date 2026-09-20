@@ -54,6 +54,7 @@ class SectionFDPhysicalProperties: public PhysicalProperties<SectionForceDeforma
 
     bool haveRho(void) const;
     Vector getRhoi(void) const;
+    boost::python::list getRhoiPy() const;
     
     int getResponse(int responseID, Information &eleInformation);
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);

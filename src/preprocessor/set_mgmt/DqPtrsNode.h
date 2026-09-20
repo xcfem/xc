@@ -45,6 +45,7 @@ class Plane;
 class PrincipalAxes3D;
 
 namespace XC {
+class Domain;
 class TrfGeom;
 
 //!  @ingroup Set
@@ -53,6 +54,8 @@ class TrfGeom;
 //! 
 class DqPtrsNode: public DqPtrsKDTree<Node,KDTreeNodes>
   {
+  protected:
+    int get_dim_space() const;
   public:
     DqPtrsNode(CommandEntity *owr= nullptr);
     DqPtrsNode(const DqPtrsNode &);
@@ -87,6 +90,9 @@ class DqPtrsNode: public DqPtrsKDTree<Node,KDTreeNodes>
     // mass distribution
     Matrix getTotalMass(void) const;
     double getTotalMassComponent(const int &) const;
+    Vector getTotalLumpedMass() const;
+    Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
+    Vector getCenterOfMassCoordinates(bool initialGeometry= true) const;    
   };
 
 DqPtrsNode operator+(const DqPtrsNode &a,const DqPtrsNode &b);

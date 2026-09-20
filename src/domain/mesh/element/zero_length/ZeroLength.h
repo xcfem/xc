@@ -118,7 +118,7 @@ class ZeroLength: public Element0D
     void checkDirection(ID &dir) const;
     
     void setUp(int Nd1, int Nd2,const Vector &x,const Vector &y);
-    void setTran1d ( Etype e, int n );
+    void setTran1d();
     double computeCurrentStrain1d(int mat, const Vector& diff ) const;    
 
 
@@ -142,7 +142,8 @@ class ZeroLength: public Element0D
     int recvData(const Communicator &);
     
     const Material *get_material_ptr(const std::string &) const;
-
+    void set_material(const int &, const UniaxialMaterial *);
+    void set_materials(const std::deque<int> &, const std::vector<const UniaxialMaterial *> &);
   public:
     ZeroLength(int tag= 0);
     // Constructor for a single 1d material model
@@ -153,6 +154,8 @@ class ZeroLength: public Element0D
     Element *getCopy(void) const;
     ~ZeroLength(void);
 
+    void setUpVectors(const Vector &, const Vector &);
+    
     inline void setUseRayleighDampingFlag(const int &i)
       { this->useRayleighDamping= i; }
     int getUseRayleighDampingFlag(void) const
@@ -166,8 +169,8 @@ class ZeroLength: public Element0D
     
     inline void clearMaterials(void)
       { theMaterial1d.clear(); }
-    void setMaterial(const int &,const std::string &);
-    void setMaterials(const std::deque<int> &,const std::vector<std::string> &);
+    void setMaterial(const int &, const std::string &);
+    void setMaterials(const std::deque<int> &, const std::vector<std::string> &);
     ZeroLengthMaterials &getMaterials(void)
       { return theMaterial1d; }
     // public methods to set the state of the element    

@@ -787,8 +787,7 @@ XC::Graph &XC::Mesh::getNodeGraph(void)
     return theNodeGraph;
   }
 
-//! @brief Return the masa modal efectiva 
-//! corresponding to the mode i.
+//! @brief Return the effective modal mass corresponding to the given mode.
 const double XC::Mesh::getEffectiveModalMass(int mode) const
   {
     double retval= 0;
@@ -800,7 +799,8 @@ const double XC::Mesh::getEffectiveModalMass(int mode) const
     return retval;
   }
 
-//! @brief Returns the masas modales efectivas.
+//! @brief Returns the effective modal masses correponding to each of the
+//! computed eigenmodes.
 XC::Vector XC::Mesh::getEffectiveModalMasses(const int &numModes) const
   {
     Vector retval(numModes);

@@ -43,9 +43,9 @@ zeta= 0.02
 C= 2*m*wn*zeta
 
 # Damper properties
-Kd= 25
-Cd= 20.7452
-ad= 0.35
+Kd= 25 # Elastic stiffness of linear spring to model the axial flexibility of a viscous damper (e.g. combined stiffness of the supporting brace and internal damper portion) 
+Cd= 20.7452 # Damping coefficient.
+ad= 0.35 # Velocity exponent.
 
 # Model definition
 feProblem= xc.FEProblem()

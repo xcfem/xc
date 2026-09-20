@@ -134,6 +134,8 @@ class BridgeModeller(object):
                 s1.connectedComponents['prev'][key]= ln
                 if(label):
                     ln.setProp('label', label)
+                ln.setProp('prev_cross_section', s0)
+                ln.setProp('next_cross_section', s1)
             s0= s1
             
     def getSurfaceConnections(self, placement):

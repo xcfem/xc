@@ -3,7 +3,6 @@
 when "softing" the element at the left side due to a minor depth caused
 by an excavation.'''
 
-
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
@@ -60,7 +59,7 @@ elements.dimElem= 2 # Dimension of element space
 
 ### Left element.
 elements.defaultMaterial= nlSpringMaterial.name
-zlLeft= elements.newElement("ZeroLength",xc.ID([n2.tag,n1.tag]))
+zlLeft= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
 soilMaterialLeft= zlLeft.getMaterials()[0]
 zlLeft.setupVectors(xc.Vector([-1,0,0]),xc.Vector([0,-1,0]))
 
@@ -125,9 +124,10 @@ NSpring= spring.getResistingForce()[0]
 leftForceDecrement= (leftMaterialForce-leftMaterialForceB)/leftMaterialForce
 leftForceDecrementRef= 0.9393081761006289
 ratio3= abs(leftForceDecrement-leftForceDecrementRef)/leftForceDecrementRef
-ratio4= abs(NSpring+(NRight-NLeft))/abs(NSpring)
+ratio4= abs(NSpring+(NRight+NLeft))/abs(NSpring)
 
 '''
+print('ratio0= ', ratio0)
 print('Initial state:')
 print('  right material displacement: ', rightMaterialDisp*1e3, ' mm')
 print('  right material force: ', rightMaterialForce/1e3, 'kN')

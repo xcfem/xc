@@ -54,9 +54,34 @@ class UnbalAndTangent
 
     const Matrix &getTangent(void) const;
     Matrix &getTangent(void);
-    const Vector &getResidual(void) const;
-    Vector &getResidual(void);
+    const Vector &getUnbalance(void) const;
+    Vector &getUnbalance(void);
   };
+  
+//! @brief Return the tangent stiffness matrix.
+inline const Matrix &UnbalAndTangent::getTangent(void) const
+  {
+    return unbalAndTangentArray->getTangent(this->nDOF);
+  }
+
+//! @brief Return the tangent stiffness matrix.
+inline Matrix &UnbalAndTangent::getTangent(void)
+  {
+    return unbalAndTangentArray->getTangent(this->nDOF);
+  }
+
+//! @brief Returns the residual vector.
+inline const Vector &UnbalAndTangent::getUnbalance(void) const
+  {
+    return unbalAndTangentArray->getUnbalance(this->nDOF);
+  }
+
+//! @brief Return the residual vector.
+inline Vector &UnbalAndTangent::getUnbalance(void)
+  {
+    return unbalAndTangentArray->getUnbalance(this->nDOF);
+  }
+  
 } // end of XC namespace
 
 #endif

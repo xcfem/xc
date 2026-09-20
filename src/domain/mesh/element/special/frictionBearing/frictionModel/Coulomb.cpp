@@ -91,10 +91,10 @@ int XC::Coulomb::setTrial(double normalForce, double velocity)
 
 double XC::Coulomb::getFrictionForce(void) const
   {
+    double retval= 0.0;
     if(trialN > 0.0)
-      return mu*trialN;
-    else
-      return 0.0;
+      retval= mu*trialN;
+    return retval;
   }
 
 

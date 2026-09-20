@@ -98,6 +98,7 @@ class DqVectors;
 class DqMatrices;
 class DefaultTag;
 class GaussModel;
+class ParticlePos2d;
 class ParticlePos3d;
 
 //! @ingroup Mesh
@@ -158,6 +159,8 @@ class Element: public MeshComponent
     virtual BoolArray3d getNodePattern(void) const;
     virtual NodePtrsWithIDs &getNodePtrs(void)= 0;	
     virtual const NodePtrsWithIDs &getNodePtrs(void) const= 0;	
+    Node *getNodePtr(const size_t &);
+    const Node *getNodePtr(const size_t &) const;
     std::vector<int> getIdxNodes(void) const;
     //! @brief return the number of DOF associated with the element.
     //!
@@ -310,6 +313,9 @@ class Element: public MeshComponent
     virtual ParticlePos3d getNaturalCoordinates(const Pos3d &, bool initialGeometry= true) const;
     virtual Vector getInterpolationFactors(const ParticlePos3d &) const;
     virtual Vector getInterpolationFactors(const Pos3d &) const;
+    virtual ParticlePos2d getNaturalCoordinates(const Pos2d &, bool initialGeometry= true) const;
+    virtual Vector getInterpolationFactors(const ParticlePos2d &) const;
+    virtual Vector getInterpolationFactors(const Pos2d &) const;
 
     virtual int getVtkCellType(void) const;
     virtual const GaussModel &getGaussModel(void) const;

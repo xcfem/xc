@@ -3,17 +3,15 @@
     is changed in the seed element handler.
 '''
 
-from __future__ import print_function
-from __future__ import division
-import xc
-from model import predefined_spaces
-from materials import typical_materials
-
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import xc
+from model import predefined_spaces
+from materials import typical_materials
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -46,7 +44,7 @@ seedElem= modelSpace.newSeedElement('ElasticBeam3d')
 # Generate mesh on l1.
 l1.genMesh(xc.meshDir.I)
 
-# Another geometric transformation.
+# Another material.
 sectionB= typical_materials.defElasticSection3d(preprocessor, "sectionB",2,2,2,2,2,2)
 
 modelSpace.setDefaultMaterial(sectionB) # Material for the new elements

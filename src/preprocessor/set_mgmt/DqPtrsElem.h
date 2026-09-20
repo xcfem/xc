@@ -52,6 +52,8 @@ class MeshEdges;
 class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
   {
     Element1D *get_nearest_element_1d(const Vector &, const std::string &);
+  protected:
+    int get_dim_space() const;
   public:
     DqPtrsElem(CommandEntity *owr= nullptr);
     DqPtrsElem(const DqPtrsElem &);
@@ -103,6 +105,9 @@ class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
     // mass distribution
     Matrix getTotalMass(void) const;
     double getTotalMassComponent(const int &) const;
+    Vector getTotalLumpedMass(void) const;
+    Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
+    Vector getCenterOfMassCoordinates(bool initialGeometry= true) const;    
   };
 
 DqPtrsElem operator+(const DqPtrsElem &a,const DqPtrsElem &b);

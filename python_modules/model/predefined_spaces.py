@@ -501,14 +501,14 @@ class PredefinedSpace(object):
         return self.preprocessor.removeElement(element)
 
     def getElement(self, elementTag):
-        ''' Return the elements that correspond to the given tag.
+        ''' Return the element that correspond to the given tag.
 
         :param elementTag: element identifier.
         '''
         return self.getElementHandler().getElement(elementTag)
 
     def getElements(self, tags: Sequence[int]):
-        ''' Return the elements that correspond to the argument
+        ''' Return the elements that correspond to the given
             tags.
 
         :param tags: element tags.
@@ -1178,8 +1178,8 @@ class PredefinedSpace(object):
         elems.defaultMaterial= bearingMaterialName
         zl= elems.newElement("ZeroLength",xc.ID([newNode.tag,iNod]))
         zl.setupVectors(xc.Vector([direction[0],direction[1],0]),xc.Vector([-direction[1],direction[0],0]))
-        zl.clearMaterials()
-        zl.setMaterial(0,bearingMaterialName)
+        # zl.clearMaterials() # LP 30/08/2026 not needed anymore. 
+        # zl.setMaterial(0,bearingMaterialName) # LP 30/08/2026 not needed anymore. 
         # Boundary conditions: fix new node.
         numDOFs= newNode.getNumberDOF
         for i in range(0,numDOFs):
@@ -1556,12 +1556,18 @@ class PredefinedSpace(object):
             lp= self.addLoadCaseToDomain(lpName)
             lp.gammaF= factor
                 
-    def createSelfWeightLoad(self, xcSet: xc.Set, gravityVector, alreadyLoaded= None):
+    def createSelfWeightLoad(self, xcSet: xc.Set, gravityVector, alreadyLoadedElements= None, alreadyLoadedNodes= None):
         ''' Creates the self-weight load on the elements. Return the 
             identifiers of the loaded elements.
 
         :param xcSet: set with the elements to load.
         :param gravityVector: gravity acceleration vector.
+        :param alreadyLoadedElements: identifiers of the elements that have been
+                                      already loaded and must not be loaded
+                                      again.
+        :param alreadyLoadedNodes: identifiers of the nodes that have been
+                                      already loaded and must not be loaded
+                                      again.
         '''
         spaceDimension= self.getSpaceDimension()
         if(len(gravityVector)!= spaceDimension):
@@ -1571,15 +1577,23 @@ class PredefinedSpace(object):
             errMsg+= str(spaceDimension)+'.\n'
             lmsg.error(className+'.'+methodName+errMsg)
             exit(1)
-        retval= set()
-        if(alreadyLoaded):
-            retval.update(alreadyLoaded)
+        loadedElements= set()
+        if(alreadyLoadedElements):
+            loadedElements.update(alreadyLoadedElements)
         for e in xcSet.getElements:
             tag= e.tag
-            if(tag not in retval):
+            if(tag not in loadedElements):
                 e.createInertiaLoad(gravityVector)
-                retval.add(tag)
-        return retval
+                loadedElements.add(tag)
+        loadedNodes= set()
+        if(alreadyLoadedNodes):
+            loadedNodes.update(alreadyLoadedNodes)
+        for n in xcSet.getNodes:
+            tag= n.tag
+            if(tag not in loadedNodes):
+                n.createInertiaLoad(gravityVector)
+                loadedNodes.add(tag)
+        return loadedElements, loadedNodes
 
     def setSolutionProcedureType(self, solutionProcedureType: predefined_solutions.SolutionProcedure):
         ''' Set the solution procedure that will be used
@@ -1671,6 +1685,44 @@ class PredefinedSpace(object):
             retval= domain.getMesh.normalizeEigenvectors(mode)
             retval= domain.getMesh.getEigenvectorsMaxNormInf(mode)
         return retval
+
+    def getTotalMass(self):
+        ''' Return the total mass matrix of the FE model.'''
+        domain= self.preprocessor.getDomain
+        return domain.getTotalMass()
+    
+    def getTotalMassComponent(self, dof:int):
+        ''' Return the total mass matrix component for the given DOF.
+
+        :param dof: DOF of interest.
+        '''
+        domain= self.preprocessor.getDomain
+        return domain.getTotalMassComponent(dof)
+
+    def getEffectiveModalMass(self, mode:int):
+        ''' Return the effective modal mass corresponding to the given mode.
+
+        :param mode: mode of interest.
+        '''
+        domain= self.preprocessor.getDomain
+        return domain.getEffectiveModalMass(mode)
+     
+    def getEffectiveModalMasses(self):
+        ''' Return the effective modal mass corresponding to the given mode.
+
+        :param mode: mode of interest.
+        '''
+        domain= self.preprocessor.getDomain
+        return domain.getEffectiveModalMasses()
+    
+    def getTotalEffectiveModalMass(self):
+        ''' Return the sum of the efrective modal masses corresponding to the 
+            computed eigenmodes.
+
+        :param mode: mode of interest.
+        '''
+        domain= self.preprocessor.getDomain
+        return domain.getTotalEffectiveModalMass()
     
     def zeroEnergyModes(self, numModes= 1):
         ''' Obtains the zero energy modes of the finite element model.
@@ -2143,6 +2195,31 @@ class SolidMechanics1D(PredefinedSpace):
                                   the reaction values.
         '''
         self.fixNode('0', nodeTag, restrainedNodeId)
+        
+    def getForceComponents(self):
+        ''' Return the components of the load vectors that correspond to
+            forces.'''
+        return [0]
+
+    def getMomentComponents(self):
+        ''' Return the components of the load vectors that correspond to
+            moments.'''
+        return []
+    
+    def getDispComponentIndexFromName(self, compName: str):
+        '''Return the component index from the
+           displacement component name.
+
+        :param compName: displacement component name.
+        '''
+        retval= 0
+        if compName == 'uX':
+            retval= self.Ux
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: uX')
+        return retval
 
 class SolidMechanics2D(PredefinedSpace):
     def __init__(self,nodes, solProcType: predefined_solutions.SolutionProcedure = defaultSolutionProcedureType):

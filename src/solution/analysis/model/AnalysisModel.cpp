@@ -710,7 +710,7 @@ void XC::AnalysisModel::setAccel(const Vector &accel)
   {
     DOF_GrpIter &theDOFGrps= this->getDOFGroups();
     DOF_Group *dofPtr= nullptr;
-    while ((dofPtr= theDOFGrps()) != 0) 
+    while ((dofPtr= theDOFGrps()) != nullptr) 
         dofPtr->setNodeAccel(accel);        
   }
 
@@ -724,7 +724,7 @@ void XC::AnalysisModel::incrDisp(const Vector &disp)
   {
     DOF_GrpIter &theDOFGrps= this->getDOFGroups();
     DOF_Group *dofPtr= nullptr;
-    while ((dofPtr= theDOFGrps()) != 0) 
+    while ((dofPtr= theDOFGrps()) != nullptr) 
         dofPtr->incrNodeDisp(disp);
   }
         

@@ -1055,6 +1055,40 @@ const XC::EigenSOE *XC::SolutionStrategy::getEigenSOEPtr(void) const
     return ptr;
   }
 
+//! @brief Return a Python list containing the rows of the system matrix.
+boost::python::list XC::SolutionStrategy::getAPy(void) const
+  {
+    boost::python::list retval;
+    if(this->theSOE)
+      retval= this->theSOE->getAPy();
+    else
+      {
+	std::clog << Color::yellow <<  getClassName() << "::" << __FUNCTION__
+		  << "; system of equations not defined yet."
+	          << " Returning an empty list."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Return a Python list containing the components of the RHS
+//! force vector.
+boost::python::list XC::SolutionStrategy::getBPy(void) const
+  {
+    boost::python::list retval;
+    if(this->theSOE)
+      retval= this->theSOE->getBPy();
+    else
+      {
+	std::clog << Color::yellow <<  getClassName() << "::" << __FUNCTION__
+		  << "; system of equations not defined yet."
+	          << " Returning an empty list."
+		  << Color::def << std::endl;
+      }
+    return retval;
+  }
+
+
 //! @brief Returns, if possible, a pointer to the incremental integrator
 //! otherwise it returns nullptr.
 XC::IncrementalIntegrator *XC::SolutionStrategy::getIncrementalIntegratorPtr(void)

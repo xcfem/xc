@@ -23,6 +23,7 @@
 
 class_<XC::SystemOfEqn, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("SystemOfEqn", no_init)
   .def("getA", &XC::SystemOfEqn::getAPy, "Return a python list containing the rows of the system matrix.")
+  .def("getB", &XC::SystemOfEqn::getBPy, "Return a python list containing the rows of the components of the RHS vector.")
   ;
 
 class_<XC::Solver, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("Solver", no_init)

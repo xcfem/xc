@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' home made test. Verify that "ZeroLength" element gives right results
- when not aligned with global axes. '''
+''' home made test. Verify that "ZeroLength" element gives the correct results
+ when not aligned with global axes.'''
 
 from __future__ import print_function
 
@@ -36,24 +36,15 @@ k= typical_materials.defElasticMaterial(preprocessor, "k",K)
     cross section of unit area.'''
 
 # Elements definition
-elements= preprocessor.getElementHandler
-elements.defaultMaterial= k.name
-elements.dimElem= 3 # Dimension of element space
-zl= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
-zl.clearMaterials()
-## Define vector local axes.
+modelSpace.setDefaultMaterial(k)
+modelSpace.setElementDimension(3)
+zl= modelSpace.newElement("ZeroLength", [n1.tag,n2.tag])
+## Define element local axes.
 zl.setupVectors(xc.Vector([0,1,0]),xc.Vector([-1,0,0]))
-## Define material 
-zl.setMaterial(0,"k")
 
-# Constraints
-constraints= preprocessor.getBoundaryCondHandler
-spc= constraints.newSPConstraint(n1.tag,0,0.0) # Node 1
-spc= constraints.newSPConstraint(n1.tag,1,0.0)
-spc= constraints.newSPConstraint(n1.tag,2,0.0)
-spc= constraints.newSPConstraint(n2.tag,0,0.0) # Node 2
-spc= constraints.newSPConstraint(n2.tag,2,0.0) # Node 2
-
+# Constraints.
+modelSpace.fixNode('000', n1.tag)
+modelSpace.fixNode('0F0', n2.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')

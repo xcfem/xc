@@ -50,18 +50,19 @@ XC::PenaltyMRMFreedom_FE::PenaltyMRMFreedom_FE(int tag, Domain &theDomain,
   :MRMFreedom_FE(tag, TheMRMP.getNumDofGroups(),TheMRMP.getNumDofs(), TheMRMP,Alpha)
   {
     const ID &id1 = theMRMP->getConstrainedDOFs();
-    const int nDOFs= id1.Size();
-    const int numNodes= 1+theMRMP->getRetainedNodeTags().Size();//1 constrained node + numb. of retained nodes
-    const int size= nDOFs*numNodes;
+    const int nConstrainedDOFs= id1.Size();
+    const int numRetainedNodes= theMRMP->getRetainedNodeTags().Size();
+    const int nRetainedDOFs= theMRMP->getRetainedDOFs().Size();
+    const int size= nConstrainedDOFs+numRetainedNodes*nRetainedDOFs;
 
     tang= Matrix(size,size);
     resid= Vector(size);
-    C= Matrix(nDOFs,size);
+    C= Matrix(nConstrainedDOFs,size);
 
     theConstrainedNode = theDomain.getNode(theMRMP->getNodeConstrained());
     myDOF_Groups(0)= determineConstrainedNodeDofGrpPtr()->getTag();
 
-    determineRetainedNodesDofGrpPtr(theDomain, 1);
+    this->determineRetainedNodesDofGrpPtr(theDomain, 1);
 
     if(theMRMP->isTimeVarying() == false)
       this->determineTangent();
@@ -88,7 +89,26 @@ const XC::Matrix &XC::PenaltyMRMFreedom_FE::getTangent(Integrator *theNewIntegra
 
 const XC::Vector &XC::PenaltyMRMFreedom_FE::getResidual(Integrator *theNewIntegrator)
   {
-    // zero residual, CD = 0
+    // get the solution vector [Uc Ur]
+    static Vector UU;
+    const ID &id1= theMRMP->getConstrainedDOFs();
+    const int id1Sz= id1.Size();
+    const ID &id2 = theMRMP->getRetainedDOFs();
+    const int numRetainedNodes= theMRMP->getRetainedNodeTags().Size();
+    const int id2Sz= numRetainedNodes*id2.Size();
+    const int size= id1Sz + id2Sz;
+    UU.resize(size);
+    // Constrained DOFs.
+    this->assemble_constrained_DOF_displacements(UU);
+
+    // Retained DOFs.
+    this->assemble_retained_DOF_displacements(UU, id1Sz);
+
+    // compute residual
+    const Matrix& KK = this->getTangent(theNewIntegrator);
+    resid.addMatrixVector(0.0, KK, UU, -1.0);
+
+    // done
     return resid;
   }
 
@@ -144,13 +164,14 @@ void XC::PenaltyMRMFreedom_FE::determineTangent(void)
     const Matrix &constraint = theMRMP->getConstraint();
     const int noRows = constraint.noRows();
     const int noCols = constraint.noCols();
+    
 
     for(int j=0; j<noRows; j++)
       C(j,j) = -1.0;
     
     for(int i=0; i<noRows; i++)
       for(int j=0; j<noCols; j++)
-	C(i,j+noRows) = constraint(i,j);
+	C(i,j+noRows)= constraint(i,j);
     
     // now form the tangent: [K] = alpha * [C]^t[C]
     // *(tang) = C^C;
@@ -164,8 +185,8 @@ void XC::PenaltyMRMFreedom_FE::determineTangent(void)
       tang.addMatrixProduct(0.0, CT, Cref, alpha);
     */
     // workaround no longer required
-    const Matrix &Cref= C;
-    tang.addMatrixTransposeProduct(0.0, Cref, Cref, alpha);
+    tang.addMatrixTransposeProduct(0.0, C, C, alpha);
+    C.resize(0, 0); // C is no longer required.
   }
 
 

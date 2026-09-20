@@ -175,7 +175,6 @@ class FigureDefinition(SlideDefinition):
 
     def defField(self, xcSet):
         ''' Define field.'''
-        #self.field= fields.ExtrapolatedScalarField(self.attributeName,"getProp",None,1.0,xcSet)
         self.field= fields.get_scalar_field_from_control_var(attributeName=self.attributeName,argument=self.argument,xcSet=xcSet,component=None,fUnitConv=1.0,rgMinMax=None)
 
     def genGraphicFile(self,displaySettings, xcSet, graphFileName, convertToEPS= False):

@@ -474,6 +474,28 @@ class SolutionProcedure(object):
             exit(1)
         return retvalSOE, retvalSolver
 
+    def getA(self):
+        ''' Return the SOE stiffness matrix.'''
+        if(self.solutionStrategy):
+            retval= self.solutionStrategy.getA()
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; solution strategy not set.')
+            retval= None
+        return retval
+    
+    def getB(self):
+        ''' Return the SOE stiffness matrix.'''
+        if(self.solutionStrategy):
+            retval= self.solutionStrategy.getB()
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; solution strategy not set.')
+            retval= None
+        return retval
+
     def analysisSetup(self, analysisType, numModes= None):
         ''' Create the analysis object.
 

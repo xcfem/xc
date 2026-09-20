@@ -73,6 +73,7 @@
 
 #include "material/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 XC::Matrix XC::ElasticBeam3d::K(12,12);
 XC::Vector XC::ElasticBeam3d::P(12);
@@ -172,8 +173,11 @@ int XC::ElasticBeam3d::commitState(void)
     int retVal = 0;
     // call element commitState to do any base class stuff
     if((retVal = this->ElasticBeam3dBase::commitState()) != 0)
-      { std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; failed in base class."; }
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; failed in base class."
+	          << Color::def << std::endl;
+      }
     retVal += theCoordTransf->commitState();
     return retVal;
   }
@@ -198,17 +202,19 @@ int XC::ElasticBeam3d::revertToStart()
 const XC::Matrix &XC::ElasticBeam3d::getTangentStiff(void) const
   {
     const Vector &v= getSectionDeformation();
-    //Ignore sections with product moment
-    //of inertia not zero.
+    // Warn about sections with product moment of inertia not zero.
     const CrossSectionProperties3d &sprop= getSectionProperties();
-    const double eiyz= sprop.EIyz();
-    const double eimax= std::max(sprop.EIz(),sprop.EIy());
-    if(std::abs(eiyz/eimax)>1e-5) //Product of inertia not null.
-      std::cerr << getClassName() << "::" << __FUNCTION__
+    // Check that the product of inertia is small enough.
+    const bool pyzOK= sprop.checkProductOfInertia(1e-3);
+    if(!pyzOK) //Product of inertia not small enough.
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
 		<< "; this element must not"
-                << " be used with section that have a non-zero"
-                << " product of inertia."
-                << std::endl;
+                << " be used with a section that have a non-zero"
+                << " product of inertia. Element tag: "
+	        << this->getTag()
+	        << " principal angle: " << sprop.getTheta()*1e3
+	        << " mrad."
+                << Color::def << std::endl;
 
     const double E= sprop.E();
     const double EA= sprop.A()*E; // EA
@@ -311,14 +317,17 @@ const XC::Matrix &XC::ElasticBeam3d::getInitialStiff(void) const
     //Ignore sections with product moment
     //of inertia not zero.
     const CrossSectionProperties3d &sprop= getSectionProperties();
-    const double eiyz= sprop.EIyz();
-    const double eimax= std::max(sprop.EIz(),sprop.EIy());
-    if(std::abs(eiyz/eimax)>1e-5) //Product of inertia not null.
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; this element must not"
-                << " be used with sections that has "
-                << " a non-zero product of inertia."
-                << std::endl;
+    // Check that the product of inertia is small enough.
+    const bool pyzOK= sprop.checkProductOfInertia(1e-3);
+    if(!pyzOK) //Product of inertia not small enough.
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
+		<< "; this element must not"
+                << " be used with a section that have a non-zero"
+                << " product of inertia. Element tag: "
+	        << this->getTag()
+	        << " principal angle: " << sprop.getTheta()*1e3
+	        << " mrad."
+                << Color::def << std::endl;
 
     const double L = theCoordTransf->getInitialLength();
     const double oneOverL = 1.0/L;
@@ -414,10 +423,10 @@ void XC::ElasticBeam3d::zeroLoad(void)
 int XC::ElasticBeam3d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << getClassName() << "::" << __FUNCTION__ 
+      std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__ 
                 << "; load over inactive element: "
                 << getTag()  
-                << std::endl;
+                << Color::def << std::endl;
     else
       {
         if(const BeamMecLoad *beamMecLoad= dynamic_cast<const BeamMecLoad *>(theLoad))
@@ -438,8 +447,10 @@ int XC::ElasticBeam3d::addLoad(ElementalLoad *theLoad, double loadFactor)
           }
         else
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; load type unknown for element with tag: " << this->getTag() << std::endl;
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "; load type unknown for element with tag: "
+		      << this->getTag()
+		      << Color::yellow << std::endl;
             return -1;
           }
       }
@@ -458,8 +469,9 @@ int XC::ElasticBeam3d::addInertiaLoadToUnbalance(const XC::Vector &accel)
 
     if(6 != Raccel1.Size() || 6 != Raccel2.Size())
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; matrix and vector sizes are incompatible.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; matrix and vector sizes are incompatible."
+	          << Color::def << std::endl;
         return -1;
       }
 
@@ -649,8 +661,9 @@ int XC::ElasticBeam3d::sendSelf(Communicator &comm)
     const int dataTag= getDbTag();
     res= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; could not send data Vector\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; could not send data Vector."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -661,8 +674,9 @@ int XC::ElasticBeam3d::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res = comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send ID data\n";
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send ID data."
+	        << Color::def << std::endl;
     else
       res+= recvData(comm);
     return res;

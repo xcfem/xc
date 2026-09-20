@@ -33,7 +33,7 @@ Fb= joist.getFb()
 E= joist.wood.E
 Fv= joist.wood.Fv
 
-beam= sb.SimpleBeam(E,I,span)
+beam= sb.SimpleBeam(E= E, I=I, l= span)
 delta= beam.getDeflectionUnderUniformLoad(designLoad,beam.l/2.0)
 
 

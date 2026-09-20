@@ -50,13 +50,13 @@ elements.dimElem= 2 # Dimension of element space
 
 ### Left element.
 elements.defaultMaterial= nlSpringMaterial.name
-zlLeft= elements.newElement("ZeroLength",xc.ID([n2.tag,n1.tag]))
+zlLeft= elements.newElement("ZeroLength",xc.ID([n1.tag, n2.tag]))
 soilMaterialLeft= zlLeft.getMaterials()[0]
 zlLeft.setupVectors(xc.Vector([-1,0,0]),xc.Vector([0,-1,0]))
 
 ### Right element.
 elements.defaultMaterial= nlSpringMaterial.name
-zlRight= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
+zlRight= elements.newElement("ZeroLength",xc.ID([n1.tag, n2.tag]))
 soilMaterialRight= zlRight.getMaterials()[0]
 zlRight.setupVectors(xc.Vector([1,0,0]),xc.Vector([0,1,0]))
 

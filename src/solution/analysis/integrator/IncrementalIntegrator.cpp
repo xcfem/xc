@@ -322,7 +322,9 @@ int XC::IncrementalIntegrator::formNodalUnbalance(void)
       { 
         //      std::cerr << getClassName() << "::" << __FUNCTION__
 	//                << "NODPTR: " << dofGroupPtr->getUnbalance(this);
-	if(theSOE->addB(dofGroupPtr->getUnbalance(this),dofGroupPtr->getID()) <0)
+	const Vector &unbalance= dofGroupPtr->getUnbalance(this);
+	const ID &dofs= dofGroupPtr->getID();
+	if(theSOE->addB(unbalance, dofs) <0)
           {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING failed in addB for ID: "
@@ -330,7 +332,7 @@ int XC::IncrementalIntegrator::formNodalUnbalance(void)
 	    res = -2;
 	  }
       }
-    return res;
+   return res;
   }
 
 //! @brief Builds the unbalanced load vector of the elements.

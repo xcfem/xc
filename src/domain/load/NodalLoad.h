@@ -106,6 +106,8 @@ class NodalLoad: public Load
     NodalLoad(int tag, int node, const Vector &load, bool isLoadConstant = false);
     NodalLoad *getCopy(const int &) const;
 
+    std::string Category(void) const;
+    
     virtual void setDomain(Domain *newDomain);
     inline const Node *getNode(void) const
       { return get_node_ptr(); }

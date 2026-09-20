@@ -541,7 +541,16 @@ boost::python::list XC::SetMeshComp::createInertiaLoads(const Vector &accel)
 XC::Matrix XC::SetMeshComp::getTotalMass(void) const
   {
     Matrix retval= nodes.getTotalMass();
-    retval+= elements.getTotalMass();
+    if(retval.noRows()>0)
+      {
+	if(elements.size()>0)
+	  retval+= elements.getTotalMass();
+      }
+    else
+      {
+	if(elements.size()>0)
+	  retval= elements.getTotalMass();
+      }
     return retval;
   }
 
@@ -557,6 +566,96 @@ double XC::SetMeshComp::getTotalMassComponent(const int &dof) const
     const double retval= dot(J,tmp);
     return retval;
   }
+//! @brief Return the lumped mass matrix as a a diagonal approximation of
+//! a node mass by summing the rows of the consistent matrix and puting them
+//! onto the diagonal.
+XC::Vector XC::SetMeshComp::getTotalLumpedMass(void) const
+  {
+    const Matrix consistentMassMatrix= this->getTotalMass();
+    const size_t sz= consistentMassMatrix.noRows();
+    Vector retval(sz);
+    for(size_t i = 0; i < sz; ++i)
+      {
+        double rowSum = 0.0;
+        for(size_t j = 0; j < sz; ++j)
+	  { rowSum+=  consistentMassMatrix(i, j); }
+        retval[i]= rowSum;
+      }
+    return retval;
+  }
+
+//! @brief Returns the coordinates of the center of gravity of the set.
+//! @param initialGeometry: if true, use undeformed element geometry.
+Pos3d XC::SetMeshComp::getCenterOfMassPosition(bool initialGeometry) const
+  {
+    const Vector center_of_mass= this->getCenterOfMassCoordinates(initialGeometry);
+    Pos3d retval;
+    const size_t sz= center_of_mass.Size();
+    if(sz>0)
+      {
+        retval.SetX(center_of_mass(0));
+	if(sz>1)
+	  {
+	    retval.SetY(center_of_mass(1));
+	    if(sz>2)
+	      retval.SetZ(center_of_mass(2));
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Returns the coordinates of the center of mass of the set.
+//! @param initialGeometry: if true, use undeformed element geometry.
+XC::Vector XC::SetMeshComp::getCenterOfMassCoordinates(bool initialGeometry) const
+  {
+    Vector retval;
+    ID rows;
+    const Vector nodes_cog= nodes.getCenterOfMassCoordinates(initialGeometry);
+    size_t dimSpace= nodes_cog.Size();
+    if(dimSpace>0)
+      {
+	std::vector<int> v(dimSpace); // 1. Create vector with appropriate size.
+	std::iota(v.begin(), v.end(), 0); // 2. Fill it starting from 0
+	rows= ID(v);
+	const Matrix nodesTotalMass= nodes.getTotalMass()(rows, rows);
+	retval= nodesTotalMass*nodes_cog;
+      }
+    if(!elements.empty())
+      {
+	const Vector elements_cog= elements.getCenterOfMassCoordinates(initialGeometry);
+	if(dimSpace==0) // No nodes with mass.
+	  {
+	    dimSpace= elements_cog.Size();
+	    if(dimSpace>0) // Elements with mass.
+	      {
+		std::vector<int> v(dimSpace); // 1. Create vector with appropriate size.
+		std::iota(v.begin(), v.end(), 0); // 2. Fill it starting from 0
+		rows= ID(v);
+		const Matrix elementsTotalMass= elements.getTotalMass()(rows, rows);
+		retval= elementsTotalMass*elements_cog;
+	      }
+	  }
+	else
+	  {
+	    const Matrix elementsTotalMass= elements.getTotalMass()(rows, rows);
+	    retval+= elementsTotalMass*elements_cog;
+	  }
+      }
+    const Matrix totalMass= this->getTotalMass()(rows, rows);
+    Vector tmp(dimSpace, 0.0);
+    int result= totalMass.Solve(retval, tmp);
+    if(result!=0)
+      {
+	std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		  << "; error when solving SOE; mass matrix= " << totalMass
+		  << Color::def << std::endl;
+	exit(1);
+      }
+    else
+      retval= tmp;
+    return retval;
+  }
+
 
 //! @brief Returns true if the node with the tag
 //! being passed as parameter, belongs to the set.

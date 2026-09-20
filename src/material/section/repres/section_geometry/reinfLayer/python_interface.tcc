@@ -33,6 +33,7 @@ class_<XC::ReinfLayer,XC::ReinfLayer *, bases<XC::DiscretBase>, boost::noncopyab
   .def("getSpacing", &XC::ReinfLayer::getSpacing,"Returns the distance between consecutive bars.")
   .def("setSpacing", &XC::ReinfLayer::setSpacing,"Set the distance between consecutive bars (and return the resulting number of them).")
   .def("getReinfBarsCenterPositions", &XC::ReinfLayer::getReinfBarsCenterPositionsPy, "Return the positions of the rebar centers.")
+  .def("getLinearRho", &XC::ReinfLayer::getLinearRho, "Return the mass per unit length of the section.")
   ;
 
 class_<XC::SingleBar , bases<XC::ReinfLayer>, boost::noncopyable >("SingleBar", no_init);
@@ -92,4 +93,5 @@ class_<XC::ListReinfLayer, bases<XC::SectionMassProperties,list_ptr_reinf_layer>
   .def("getCover",&XC::ListReinfLayer::getCover,"returns concrete cover of the bars.")
   .def("getMaterials",&XC::ListReinfLayer::getMaterialsPy, "Return a Python list containing the different materials of the reinforcement.")
   .def("getBnd",&XC::ListReinfLayer::getBnd, "Returns reinforcement layer boundary.")
+  .def("getLinearRho", &XC::ListReinfLayer::getLinearRho, "Return the mass per unit length of the section.")
   ;
