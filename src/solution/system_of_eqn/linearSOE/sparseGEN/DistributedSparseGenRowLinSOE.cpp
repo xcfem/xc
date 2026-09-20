@@ -543,6 +543,7 @@ int XC::DistributedSparseGenRowLinSOE::addA(const Matrix &m, const ID &id, const
 
     return 0;
 }
+
 //! @brief Send the object through the given communicator.
 int XC::DistributedSparseGenRowLinSOE::sendSelf(Communicator &comm)
   {
