@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-'''Functions to compute thermal loads according to Eurocode 1: Actions on structures - Part 1-5: General actions - Thermal actions.'''
+'''Functions to compute thermal loads according to Eurocode 1: Actions on
+structures - Part 1-5: General actions - Thermal actions.'''
 
 from __future__ import print_function
 from __future__ import division
@@ -11,7 +12,8 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
 import math
-import scipy.interpolate
+import numpy as np
+from misc_utils import math_utils
 from misc_utils import log_messages as lmsg
 
 # Bridge type.
@@ -91,7 +93,7 @@ minAnnualShadeAirTemp= [[-7.0, -11.0, -11.0, -6.0, -5.0, -6.0, 6.0],
                         [-31.0, -26.0, -25.0, -24.0, -32.0, -21.0, -8.0],
                         [-33.0, -28.0, -27.0, -26.0, -35.0, -22.0, -10.0]]
 # Minimum shade air temperature interpolation.
-fMinAnnualShadeAirTemp= scipy.interpolate.interp2d(climateZone, height, minAnnualShadeAirTemp, kind='linear')
+fMinAnnualShadeAirTemp= math_utils.StaticGridBilinearInterpolator(climateZone, height, minAnnualShadeAirTemp)
 
 def getMinAnnualShadeAirTemp(climateZn: int, height: float):
     ''' Return the minimal annual shade air temperature for a return period 
@@ -100,7 +102,8 @@ def getMinAnnualShadeAirTemp(climateZn: int, height: float):
     :param climateZn: climate zone according to figure AN.2 of the Spanish National Annes (identical to figure 4.3-b of IAP-11).
     :param height: height of the bridge location.
     '''
-    return float(fMinAnnualShadeAirTemp(climateZn, height))
+    retval= fMinAnnualShadeAirTemp(np.array([climateZn]), np.array([height]))
+    return float(retval[0])
 
 # Uniform temperature component on bridges.
 def getMinAnnualUniformBridgeTemp(climateZn: int, height: float, returnPeriod: float= 100):
@@ -150,7 +153,8 @@ kSurTopWarmerThanBottom=[[0.70, 0.90, 0.80],
                          [0.60, 0.80, 0.60]]
 
 #### k_sur value interpolation for top warmer than bottom
-fKSurTopWarmerThanBottom= scipy.interpolate.interp2d(bridgeType, surfacingThickness, kSurTopWarmerThanBottom, kind='linear')
+fKSurTopWarmerThanBottom= math_utils.StaticGridBilinearInterpolator(surfacingThickness, bridgeType, kSurTopWarmerThanBottom)
+
 ### Bottom warmer than top
 kSurBottomWarmerThanTop=[[0.90, 1.00, 1.10], 
                          [1.00, 1.00, 1.00], 
@@ -159,7 +163,7 @@ kSurBottomWarmerThanTop=[[0.90, 1.00, 1.10],
                          [1.40, 1.20, 1.00]]
 
 #### k_sur value interpolation for top warmer than bottom
-fKSurBottomWarmerThanTop= scipy.interpolate.interp2d(bridgeType, surfacingThickness, kSurBottomWarmerThanTop, kind='linear')
+fKSurBottomWarmerThanTop= math_utils.StaticGridBilinearInterpolator(surfacingThickness, bridgeType, kSurBottomWarmerThanTop)
 
 
 def getKSur(bridgeType:int, topWarmerThanBottom= True, surfacingDepth= 50e-3, ballast= False, waterproofedOnly= False):
@@ -170,7 +174,7 @@ def getKSur(bridgeType:int, topWarmerThanBottom= True, surfacingDepth= 50e-3, ba
     :param topWarmerThanBottom: true if the user requires the increment when the top surface is warmer than the deck bottom (deck heated), otherwise the bottom warmer than the top (deck cooled) is returned.
     :param surfacingDepth: depth of surfacing.
     :param ballast: true if the bridge deck is covered with ballast (0.75 m thick).
-    :param waterproofedOnly: true if the bridge deck is only waterproofed with a darck color waterproofing layer.
+    :param waterproofedOnly: true if the bridge deck is only waterproofed with a dark color waterproofing layer.
     '''
     if(ballast):
         if(int(bridgeType)==concrete_deck_type): # type 3
@@ -213,9 +217,17 @@ def getKSur(bridgeType:int, topWarmerThanBottom= True, surfacingDepth= 50e-3, ba
 
     else:
         if(topWarmerThanBottom):
-            retval= float(fKSurTopWarmerThanBottom(bridgeType, surfacingDepth))
+            print('bridgeType= ', bridgeType)
+            print('surfacingDepth= ', surfacingDepth)
+            retval= fKSurTopWarmerThanBottom(np.array([surfacingDepth]), np.array([int(bridgeType)]))
+            retval= float(retval[0])
+            print('retval= ', retval)
         else:
-            retval= float(fKSurBottomWarmerThanTop(bridgeType, surfacingDepth))
+            print('bridgeType= ', bridgeType)
+            print('surfacingDepth= ', surfacingDepth)
+            retval= fKSurBottomWarmerThanTop(np.array([surfacingDepth]), np.array([int(bridgeType)]))
+            retval= float(retval[0])
+            print('retval= ', retval)
     return retval
         
 def getLinearTemperatureDifferenceComponent(bridgeType:int, topWarmerThanBottom= True, surfacingDepth= 50e-3, ballast= False, waterproofedOnly= False):
@@ -227,7 +239,7 @@ def getLinearTemperatureDifferenceComponent(bridgeType:int, topWarmerThanBottom=
     :param topWarmerThanBottom: true if the user requires the increment when the top surface is warmer than the deck bottom (deck heated), otherwise the bottom warmer than the top (deck cooled) is returned.
     :param surfacingDepth: depth of surfacing.
     :param ballast: true if the bridge deck is covered with ballast (0.75 m thick).
-    :param waterproofedOnly: true if the bridge deck is only waterproofed with a darck color waterproofing layer.
+    :param waterproofedOnly: true if the bridge deck is only waterproofed with a dark color waterproofing layer.
     '''
     k_sur= getKSur(bridgeType= bridgeType, topWarmerThanBottom= topWarmerThanBottom, surfacingDepth= surfacingDepth, ballast= ballast, waterproofedOnly= waterproofedOnly)
     retval= k_sur

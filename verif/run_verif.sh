@@ -49,6 +49,7 @@ python tests/utility/test_execPy.py
 python tests/utility/test_copy_properties.py
 python tests/utility/misc_utils/testStairCaseFunction.py
 python tests/utility/misc_utils/test_linear_interpolation.py
+python tests/utility/misc_utils/test_bilinear_interpolation.py
 python tests/utility/misc_utils/test_remove_accents.py
 python tests/utility/misc_utils/test_mplgraphic.py
 python tests/utility/misc_utils/test_eq_operator.py

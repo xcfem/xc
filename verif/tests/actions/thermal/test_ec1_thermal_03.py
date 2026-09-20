@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test based on example 35-S Characteristic thermal actions in bridges ‐ Temperature difference components of the publication:
+''' Test based on example 34-S Characteristic thermal actions in bridges ‐ Temperature difference components of the publication:
 
 EN 1990, EN 1991 - Eurocodes 0-1 - Worked Examples. Carlo Sigmund. 2014. ISBN n.: 978-1-291-84215-9. https://eurocodespreadsheets.jimdo.com/tech-docs-en/
 '''
@@ -29,9 +29,11 @@ err= (kSurHeat-0.7)**2+(kSurCool-1.2)**2
 err+= (DeltaTmHeat-12.6)**2+(DeltaTmCool-15.6)**2
 err= math.sqrt(err)
 
-# print(kSurHeat, kSurCool)
-# print(DeltaTmHeat, DeltaTmCool)
-# print(err)
+'''
+print(kSurHeat, kSurCool)
+print(DeltaTmHeat, DeltaTmCool)
+print(err)
+'''
 
 import os
 from misc_utils import log_messages as lmsg

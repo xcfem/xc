@@ -14,7 +14,7 @@ import sys
 import math
 import numpy as np
 import scipy.interpolate
-from misc_utils import bilinear_interpolation
+from misc_utils import math_utils
 from misc_utils import log_messages as lmsg
 from actions.wind import base_wind
 
@@ -326,7 +326,7 @@ zHidingFactor= [[0.75, 0.40, 0.31, 0.22, 0.13, 0.06, 0.06],
                 [1.00, 1.00, 0.92, 0.85, 0.77, 0.69, 0.69],
                 [1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00]] # hiding factor
 
-fHidingFactor= bilinear_interpolation.StaticGridBilinearInterpolator(rsHidingFactor, srHidingFactor, zHidingFactor)
+fHidingFactor= math_utils.StaticGridBilinearInterpolator(rsHidingFactor, srHidingFactor, zHidingFactor)
 
 def get_hiding_factor(relativeSpacing: float, solidityRatio: float):
     '''Return the hiding factor of a surface with respect to other
@@ -336,7 +336,7 @@ def get_hiding_factor(relativeSpacing: float, solidityRatio: float):
                             clause 4.2.3 of IAP-11.
     :param solidityRatio: solidity ratio  according to clause 4.2.3 of IAP-11.
     '''
-    retval= fHidingFactor( np.array([relativeSpacing]), np.array([solidityRatio]))
+    retval= fHidingFactor(np.array([relativeSpacing]), np.array([solidityRatio]))
     return float(retval[0])
 
 
