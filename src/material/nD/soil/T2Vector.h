@@ -25,18 +25,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//<<<<<<< T2Vector.h
-//<<<<<<< T2Vector.h
+// T2Vector.h
 // $Revision: 1.7 $
 // $Date: 2002/05/16 00:07:47 $
-//=======
-// $Revision: 1.7 $
-// $Date: 2002/05/16 00:07:47 $
-//>>>>>>> 1.4
-//=======
-// $Revision: 1.7 $
-// $Date: 2002/05/16 00:07:47 $
-//>>>>>>> 1.6
 // $Source: /usr/local/cvs/OpenSees/SRC/material/nD/soil/T2Vector.h,v $
                                                                         
 // Written: ZHY

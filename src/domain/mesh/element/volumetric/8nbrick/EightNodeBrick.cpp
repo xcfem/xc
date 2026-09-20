@@ -1058,7 +1058,7 @@ void XC::EightNodeBrick::set_strain_stress_tensor(FILE *fp, double * u)
                 // if set total displ, then it should be elstic material
                 Constitutive=  ( matpoint[where].matmodel)->getTangentTensor();
 
-                stress= Constitutive("ijkl") * strain("kl");   //<<<<<<<<<<<<<<<
+                stress= Constitutive("ijkl") * strain("kl"); //<<
                 stress.null_indices();
 
 		std::cerr << "\n  strain tensor at GAUSS point " <<  where+1 << std::endl;
