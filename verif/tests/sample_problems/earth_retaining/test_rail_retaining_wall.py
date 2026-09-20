@@ -88,11 +88,13 @@ pileWall= pw.PileWall(pileSection= pileSection, soilLayersDepths= soilLayersDept
 pileWall.genMesh()
 
 
+print('A')
 # Solve
 lmsg.setLevel(lmsg.INFO) # print excavation level at each step.
 reactionCheckTolerance= 1e-5
 pileWall.solve(excavationSide= 'left', convergenceTestTol= 1e-5, reactionCheckTolerance= reactionCheckTolerance, krylov= True, logDepth= False)
 
+print('B')
 # Apply surcharge.
 qd= gammaQ/gammaG*1500*g
 Q= -pileSpacing*3000.0*g
@@ -140,7 +142,7 @@ print('height of the tension zone, h_cr= ',h_cr)
 if(waterTableDepths[1]):
     print('hydrostatic pressure gradient: ', abs(waterTableDepths[1]-waterTableDepths[0]))
 else:
-     print('hydrostatic pressure gradient: ', 0.0)
+    print('hydrostatic pressure gradient: ', 0.0)
 print('\nUMax= ', UMax*1e3, 'mm')
 print('UMin= ', UMin*1e3, 'mm')
 print('\nMkMax= ', MkMax/1e3, 'kN.m')
