@@ -12,11 +12,11 @@ __email__= "l.pereztato@gmail.com"
 
 from actions.wind import IAP_wind
 
-ratio1= abs(IAP_wind.getHidingFactor(0.5, 0.1)-0.75)/0.75
-ratio2= abs(IAP_wind.getHidingFactor(0.5, 1.0)-0.06)/0.06
-ratio3= abs(IAP_wind.getHidingFactor(3, 0.3)-0.72)/0.72
-ratio4= abs(IAP_wind.getHidingFactor(6, 0.1)-1.0)/1.0
-ratio5= abs(IAP_wind.getHidingFactor(6, 1.0)-1.0)/1.0
+ratio1= abs(IAP_wind.get_hiding_factor(0.5, 0.1)-0.75)/0.75
+ratio2= abs(IAP_wind.get_hiding_factor(0.5, 1.0)-0.06)/0.06
+ratio3= abs(IAP_wind.get_hiding_factor(3, 0.3)-0.72)/0.72
+ratio4= abs(IAP_wind.get_hiding_factor(6, 0.1)-1.0)/1.0
+ratio5= abs(IAP_wind.get_hiding_factor(6, 1.0)-1.0)/1.0
 
 '''
 print("ratio1= ",ratio1)
