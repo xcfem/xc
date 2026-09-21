@@ -142,7 +142,7 @@ recAccel.setNodes(xc.ID([nC.tag]))
 recAccel.callbackRecord= "cAccel.append([self.getDomain.getTimeTracker.getCurrentTime,self.getAccel])"
 
 ### Dynamic analysis.
-preprocessor.getDomain.setTime(0.0)
+preprocessor.getDomain.setTime(0.0) # initialize time.
 solProc= predefined_solutions.PlainLinearNewmark(feProblem, numSteps= numSteps, timeStep= dT)
 if(solProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')

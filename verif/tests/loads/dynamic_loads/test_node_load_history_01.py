@@ -69,7 +69,7 @@ recRBase.callbackRecord= "rBase.append([self.getDomain.getTimeTracker.getCurrent
 recRBase.callbackSetup= "self.getDomain.calculateNodalReactions(True,1e-4)"
 
 ### Dynamic analysis.
-preprocessor.getDomain.setTime(0.0)
+preprocessor.getDomain.setTime(0.0) # initialize time.
 duration= ts.getDuration()
 numberOfSteps= int(duration/dT)
 

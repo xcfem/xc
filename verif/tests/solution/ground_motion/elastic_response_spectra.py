@@ -71,7 +71,7 @@ def analyze_SDOF(period, damping_ratio):
     #We add the load case to domain.
     lPatterns.addToDomain(gm.name)
 
-    preprocessor.getDomain.setTime(timeValues[0])
+    preprocessor.getDomain.setTime(timeValues[0]) # set the domain time.
     solProc= predefined_solutions.PlainLinearNewmark(feProblem, numSteps= 1, timeStep= dt, constraintHandlerType= 'transformation', maxNumIter= 10, printFlag= 0)
     solProc.setup()
     analysis= solProc.getAnalysis()

@@ -114,7 +114,7 @@ recAccel.setNodes(xc.ID(nodeTagList))
 recAccel.callbackRecord= "cAccel.append([self.tag,self.getDomain.getTimeTracker.getCurrentTime,self.getAccel])"
 
 ### Dynamic analysis.
-preprocessor.getDomain.setTime(0.0)
+preprocessor.getDomain.setTime(0.0) # initialize time.
 duration= ti[-1]-ti[0]
 numberOfSteps= int(duration/dT)
 

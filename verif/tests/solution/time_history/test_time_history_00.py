@@ -80,7 +80,7 @@ timeStep= 1/(25*f)
 numberOfSteps= int(duration/timeStep)+1
 aMaxRef= amplitudeRef*w**2
 ### Dynamic analysis.
-prep.getDomain.setTime(0.0)
+prep.getDomain.setTime(0.0) # initialize time.
 solProc= predefined_solutions.PlainLinearNewmark(feProblem, numSteps= numberOfSteps, timeStep= timeStep)
 if(solProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')

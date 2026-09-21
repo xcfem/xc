@@ -97,8 +97,8 @@ if(solProc.solve()!=0):
     lmsg.error('Failed to solve for: '+lp0.name)
     quit()
 
-prep.getDomain.setLoadConstant()
-prep.getDomain.setTime(0.0)
+prep.getDomain.setLoadConstant() # Keep constant current applied loads.
+prep.getDomain.setTime(0.0) # initialize time.
 
 ### Define RECORDERS
 #### Record node 2 displacements.
