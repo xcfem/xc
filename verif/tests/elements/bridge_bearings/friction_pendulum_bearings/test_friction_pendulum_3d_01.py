@@ -58,7 +58,7 @@ kFactUplift= frictionPendulumBearing.getStiffnessFactorWhenUplift()
 storedMass= frictionPendulumBearing.getBearingElementMass()
 maxIter= frictionPendulumBearing.getMaxIter()
 tol= frictionPendulumBearing.getTol()
-length= frictionPendulumBearing.getLength()
+length= frictionPendulumBearing.getBearingLength()
 
 dirError= math.sqrt((localXDir-xc.Vector([0,1,0])).Norm2()+(localYDir-xc.Vector([-1,0,0])).Norm2())
 testOK= (dirError<1e-12)

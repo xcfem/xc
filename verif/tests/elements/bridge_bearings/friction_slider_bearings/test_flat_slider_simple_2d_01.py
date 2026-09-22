@@ -57,7 +57,7 @@ kFactUplift= flatSliderBearing.getStiffnessFactorWhenUplift()
 storedMass= flatSliderBearing.getBearingElementMass()
 maxIter= flatSliderBearing.getMaxIter()
 tol= flatSliderBearing.getTol()
-length= flatSliderBearing.getLength()
+length= flatSliderBearing.getBearingLength()
 
 dirError= math.sqrt((localXDir-xc.Vector([0,1,0])).Norm2()+(localYDir-xc.Vector([-1,0,0])).Norm2())
 testOK= (dirError<1e-12)
