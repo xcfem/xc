@@ -93,7 +93,7 @@ minAnnualShadeAirTemp= [[-7.0, -11.0, -11.0, -6.0, -5.0, -6.0, 6.0],
                         [-31.0, -26.0, -25.0, -24.0, -32.0, -21.0, -8.0],
                         [-33.0, -28.0, -27.0, -26.0, -35.0, -22.0, -10.0]]
 # Minimum shade air temperature interpolation.
-fMinAnnualShadeAirTemp= math_utils.StaticGridBilinearInterpolator(climateZone, height, minAnnualShadeAirTemp)
+fMinAnnualShadeAirTemp= math_utils.StaticGridBilinearInterpolator(height, climateZone, minAnnualShadeAirTemp)
 
 def getMinAnnualShadeAirTemp(climateZn: int, height: float):
     ''' Return the minimal annual shade air temperature for a return period 
@@ -102,7 +102,7 @@ def getMinAnnualShadeAirTemp(climateZn: int, height: float):
     :param climateZn: climate zone according to figure AN.2 of the Spanish National Annes (identical to figure 4.3-b of IAP-11).
     :param height: height of the bridge location.
     '''
-    retval= fMinAnnualShadeAirTemp(np.array([climateZn]), np.array([height]))
+    retval= fMinAnnualShadeAirTemp(np.array([height]), np.array([climateZn]))
     return float(retval[0])
 
 # Uniform temperature component on bridges.
