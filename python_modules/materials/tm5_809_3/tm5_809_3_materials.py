@@ -4,10 +4,12 @@ from __future__ import division
 from __future__ import print_function
 
 import math
+import numpy as np
 import scipy.interpolate
 from materials.aci import ACI_materials
 from misc_utils import log_messages as lmsg
 from misc_utils import units_utils
+from misc_utils.math_utils import StaticGridBilinearInterpolator
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
@@ -93,7 +95,7 @@ class CMUWallFabric(object):
         [2.42, 3.1, 3.56, 4.01],
         [2.38, 3.03, 3.47, 3.90],
         [2.00, 2.50, 2.75, 3.00]]
-    fEquivalentThickness= scipy.interpolate.interp2d(xT,yT,zT)
+    fEquivalentThickness= StaticGridBilinearInterpolator(yT, xT, zT)
     # Interpolation of the effective area
     xA= [6,8,10,12] # nominal wall thickness (inches)
     yA= [0.0,16.0,24.0,32.0,40.0,48.0,56.0,64.0,72.0,1e6] # spacing inches
@@ -107,7 +109,7 @@ class CMUWallFabric(object):
        [29.0, 37.0, 43.0, 48.0],
        [28.0, 36.0, 42.0, 47.0],
        [24.0, 30.0, 33.0, 36.0]]
-    fEffectiveArea= scipy.interpolate.interp2d(xA,yA,zA)
+    fEffectiveArea= StaticGridBilinearInterpolator(yA, xA, zA)
     # Interpolation of the gross moment of inertia
     xI= [6,8,10,12] # nominal wall thickness (inches)
     yI= [8.0, 16.0, 24.0, 32.0, 40.0, 48.0] # effective width
@@ -117,7 +119,7 @@ class CMUWallFabric(object):
         [377.0, 907.0, 1714.0, 2879.0],
         [0.0, 1113.0, 2092.0, 3499.0],
         [0.0, 1319.0, 2470.0, 4119.0]] # gross moment of inertia in**4
-    fInertia= scipy.interpolate.interp2d(xI,yI,zI)
+    fInertia= StaticGridBilinearInterpolator(yI,xI,zI)
     # Cracking moment strength
     xM= xI # nominal wall thickness (inches)
     yM= yI # effective width
@@ -127,7 +129,7 @@ class CMUWallFabric(object):
         [1027.0, 1822.0, 2727.0, 3792.0],
         [0.0, 2235.0, 3328.0, 4608.0],
         [0.0, 2648.0, 3929.0, 5424.0]]
-    fMoment=  scipy.interpolate.interp2d(xM,yM,zM)
+    fMoment= StaticGridBilinearInterpolator(yM,xM,zM)
     # Weigth of CMU walls (pounds per square foot)
     xW= [6,8,10,12] # nominal wall thickness (inches)
     yW= [0.0,16.0,24.0,32.0,40.0,48.0,56.0,64.0,72.0,1e6] # spacing inches
@@ -141,7 +143,7 @@ class CMUWallFabric(object):
          [47.0, 57.0, 69.0, 81.0],
          [46.0, 56.0, 68.0, 80.0],
          [43.0, 50.0, 59.0, 69.0]]
-    fWeight=  scipy.interpolate.interp2d(xW,yW,zW)
+    fWeight= StaticGridBilinearInterpolator(yW,xW,zW)
     # depth of the masonry element effective in resisting the
     # out-of-plane shear (table 5.1 of TM 5-809-3).
     xD1= [6,8,10,12]
@@ -170,7 +172,18 @@ class CMUWallFabric(object):
             self.cellReinf= cellReinf
         else:
             self.cellReinf= None
-    
+
+    def _get_equivalent_thickness(self, th, sp):
+        ''' Return the equivalent wall thickness according to
+                table 5-2 of TM 5-809-3.
+
+        :param th: thickness (in inches).
+        :param sp: spacing (in inches).
+        '''
+        retval= self.fEquivalentThickness(np.array([sp]), np.array([th]))
+        retval= float(retval[0])
+        return retval
+
     def getEquivalentWallThickness(self):
         ''' Return the equivalent wall thickness according to
             table 5-2 of TM 5-809-3.'''
@@ -187,8 +200,19 @@ class CMUWallFabric(object):
                 lmsg.error('thickness: '+str(self.thickness)+' out of range (too thick).')
             else:
                 th_inches= 12.0
-        return self.fEquivalentThickness(th_inches,sp_inch)[0]*units_utils.inchToMeter
+        return self._get_equivalent_thickness(th_inches,sp_inch)*units_utils.inchToMeter
     
+    def _get_effective_area(self, th, sp):
+        ''' Return the effective area per unit length according to
+            table 5-3 of TM 5-809-3.
+
+        :param th: thickness (in inches).
+        :param sp: spacing (in inches).
+        '''
+        retval= self.fEffectiveArea(np.array([sp]), np.array([th]))
+        retval= float(retval[0])
+        return retval
+
     def getEffectiveAreaPerUnitLength(self):
         ''' Return the effective area per unit length according to
             table 5-3 of TM 5-809-3.'''
@@ -205,7 +229,7 @@ class CMUWallFabric(object):
                 lmsg.error('thickness: '+str(self.thickness)+' out of range (too thick).')
             else:
                 th_inches= 12.0
-        retval= float(self.fEffectiveArea(th_inches,sp_inch)[0]) #in2/ft
+        retval= self._get_effective_area(th_inches,sp_inch) #in2/ft
         retval/= units_utils.footToMeter #in2/m
         retval*= (units_utils.inchToMeter**2) #in2/m->m2/m
         return retval
@@ -219,6 +243,7 @@ class CMUWallFabric(object):
            resisting out-of-plane shear as shown in figure
            5-2c and given in table 5-1 of TM 5-809-3.'''
         return 7.5*units_utils.inchToMeter
+    
     def getEffectiveWidth(self):
         '''Return the effective width of the fabric
            according to remark 2 on table 5-4
@@ -227,31 +252,65 @@ class CMUWallFabric(object):
         retval= min(6*self.thickness,retval)
         return min(retval,48.0*units_utils.inchToMeter)
         
+    def _get_gross_moment_of_inertia(self, th, sp):
+        ''' Return the gross moment of inertia
+           according to table 5-4 of TM 5-809-3.
+
+        :param th: thickness (in inches).
+        :param sp: spacing (in inches).
+        '''
+        retval= self.fInertia(np.array([sp]), np.array([th]))
+        retval= float(retval[0])
+        return retval
+    
     def getGrossMomentOfInertia(self):
         '''Return the gross moment of inertia
            according to table 5-4 of TM 5-809-3.
         '''
         th_inches= self.thickness/units_utils.inchToMeter
         b_inch= self.getEffectiveWidth()/units_utils.inchToMeter
-        return self.fInertia(th_inches,b_inch)[0]*units_utils.inchToMeter**4 #in**4->m**4
+        return self._get_gross_moment_of_inertia(th_inches,b_inch)*units_utils.inchToMeter**4 #in**4->m**4
 
     def getSectionModulus(self):
         ''' Return the section modulus
             (see TM 5-809-3 page 5-4).'''
         return  2.0*self.getGrossMomentOfInertia()/self.thickness
+
+    def _get_cracking_moment_strength(self, th, sp):
+        ''' Return the cracking moment strength of the fabric
+           according to equation 5-7 of  TM 5-809-3.
+
+        :param th: thickness (in inches).
+        :param sp: spacing (in inches).
+        '''
+        retval= self.fMoment(np.array([sp]), np.array([th]))
+        retval= float(retval[0])
+        return retval
+    
     def getCrackingMomentStrength(self):
         '''Return the cracking moment strength of the fabric
            according to equation 5-7 of  TM 5-809-3.'''
         th_inches= self.thickness/units_utils.inchToMeter
         b_inch= self.getEffectiveWidth()/units_utils.inchToMeter
-        return self.fMoment(th_inches,b_inch)[0]/8.85 #lbf.ft-> N.m
+        return self._get_cracking_moment_strength(th_inches,b_inch)/8.85 #lbf.ft-> N.m
+    
+    def _get_mass_per_square_meter(self, th, sp):
+        ''' Return the mass of the fabric per square meter
+           according to table 5-5 of TM 5-809-3.
+
+        :param th: thickness (in inches).
+        :param sp: spacing (in inches).
+        '''
+        retval= self.fWeight(np.array([sp]), np.array([th]))
+        retval= float(retval[0])
+        return retval
     
     def getMassPerSquareMeter(self):
         '''Return the mass of the fabric per square meter
            according to table 5-5 of TM 5-809-3.'''
         th_inches= self.thickness/units_utils.inchToMeter
         b_inch= self.getEffectiveWidth()/units_utils.inchToMeter
-        return self.fWeight(th_inches,b_inch)[0]*4.88242764 #pounds/sqft-> kg/m2
+        return self._get_mass_per_square_meter(th_inches,b_inch)*4.88242764 #pounds/sqft-> kg/m2
 
     def getEffectiveDepth(self):
         ''' Return the total depth from the compression face to 

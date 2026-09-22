@@ -26,10 +26,14 @@ zT= [[5.62, 7.62, 9.62, 11.62],
      [2.00, 2.50, 2.75, 3.00]]
 fEquivalentThickness= math_utils.StaticGridBilinearInterpolator(yT, xT, zT)
 
-def get_equivalent_thickness(xT, yT):
+def get_equivalent_thickness(th, sp):
     ''' Return the equivalent wall thickness according to
-            table 5-2 of TM 5-809-3.'''
-    retval= fEquivalentThickness(np.array([yT]), np.array([xT]))
+            table 5-2 of TM 5-809-3.
+
+    :param th: thicness.
+    :param sp: spacing.
+    '''
+    retval= fEquivalentThickness(np.array([sp]), np.array([th]))
     retval= float(retval[0])
     return retval
 
