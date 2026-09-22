@@ -23,7 +23,6 @@ ratio4= abs(Tmin4+10)/10
 Tmin5= IAP_thermal.getMinAnnualTemp(climateZn= 4, height= 1000.0, returnPeriod= 50.0)
 ratio5= abs(Tmin5+16)/16
 
-'''
 print('Tmin1= ', Tmin1)
 print('ratio1= ', ratio1)
 print('Tmin2= ', Tmin2)
@@ -34,6 +33,7 @@ print('Tmin4= ', Tmin4)
 print('ratio4= ', ratio4)
 print('Tmin5= ', Tmin5)
 print('ratio5= ', ratio5)
+'''
 '''
 
 import os
