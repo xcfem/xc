@@ -37,7 +37,6 @@ err= 0.0
 for j, xt in enumerate(xT):
     for i, yt in enumerate(yT):
         et= get_equivalent_thickness(xt, yt)
-        print(et, zT[i][j])
         err+=(et- zT[i][j])**2
         
 import os
