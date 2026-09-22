@@ -71,9 +71,12 @@ zlRight.setupVectors(xc.Vector([1,0,0]),xc.Vector([0,1,0]))
 elements.defaultMaterial= k.name
 rightSpring= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
 
-# Solve 
+# Solve
+print('A')
 solProc= predefined_solutions.PenaltyKrylovNewton(prb= feProblem, numSteps= 10)
+print('B')
 solProc.solve()
+print('C')
 dispXN2= n2.getDisp[0]
 dispXN4= n4.getDisp[0]
 ratio0= abs(dispXN2+dispXN4)
