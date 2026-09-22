@@ -58,14 +58,6 @@ for x, y, z in zip(xi, yi, zi):
     count+= 1
 # The nodes at the center of the floors (x= 72.0, y= 72.0) are the master
 # nodes of that floor.
-
-# 2. Constraints.
-for key in [1, 8, 15, 22]:
-    modelSpace.fixNode('000_000', nodeDict[key].tag)
-for key in range(29, 35):
-    modelSpace.fixNode('FF0_000', nodeDict[key].tag)
-# Set the multi-point constraints
-# rigidDiaphragm perpDir mNodeTag sNodeTags    
 floorNodes= dict()
 floorNodes[29]= [2, 9, 16, 23]
 floorNodes[30]= [3, 10, 17, 24]
@@ -73,10 +65,19 @@ floorNodes[31]= [4, 11, 18, 25]
 floorNodes[32]= [5, 12, 19, 26]
 floorNodes[33]= [6, 13, 20, 27]
 floorNodes[34]= [7, 14, 21, 28]
+
+# 2. Constraints.
+for key in [1, 8, 15, 22]:
+    modelSpace.fixNode('000_000', nodeDict[key].tag)
+for key in floorNodes:
+    modelSpace.fixNode('FF0_000', nodeDict[key].tag)
+# Set the multi-point constraints
+# rigidDiaphragm perpDir mNodeTag sNodeTags
+linkedDOFs= xc.ID([0,1])
 for key in floorNodes:
     masterNode= nodeDict[key]
     for key2 in floorNodes[key]:
-        modelSpace.newEqualDOF(masterNode.tag, nodeDict[key2].tag, dofs= xc.ID([0,1]))
+        modelSpace.newEqualDOF(masterNode.tag, nodeDict[key2].tag, dofs= linkedDOFs)
 
 # 3. Define materials.
 mv= 6.0*mass
@@ -105,10 +106,11 @@ frictionModel= fm.def_coulomb_friction_model(preprocessor, name= "frictionModel"
 Reff= 34.68 # Effective radius of concave sliding dish.
 bearingDict= dict()
 count= 1
+kInit= 2500 # 250.0 produces an slightly negative eigenvalue.
 for (keyN1, keyN2) in [(1, 2), (8, 9), (15, 16), (22, 23)]:
     nI= nodeDict[keyN1]
     nJ= nodeDict[keyN2]
-    bearingDict[count]= fb.def_single_friction_pendulum_bearing_3d(modelSpace, n1= nI, n2= nJ, frictionModel= frictionModel, vertResp= vertResp, rotRespX= rotResp, rotRespY= rotResp, rotRespZ= rotResp, rEff= Reff, kInit= 250.0, x= xc.Vector([1,0,0]))
+    bearingDict[count]= fb.def_single_friction_pendulum_bearing_3d(modelSpace, n1= nI, n2= nJ, frictionModel= frictionModel, vertResp= vertResp, rotRespX= rotResp, rotRespY= rotResp, rotRespZ= rotResp, rEff= Reff, kInit= kInit, x= xc.Vector([1,0,0]))
     count+= 1
 
 '''
@@ -130,13 +132,46 @@ lin3= modelSpace.newLinearCrdTransf("lin3", xzVector= xc.Vector([0, -1, 0]))
 modelSpace.setDefaultMaterial(scc)
 beamDict= dict()
 count= 1
-for (keyN1, keyN2, cTrf) in [(2, 3, lin2), (3, 4, lin2), (4, 5, lin2), (5, 6, lin2), (6, 7, lin2), (9, 10, lin2), (10, 11, lin2), (11, 12, lin2), (12, 13, lin2), (13, 14, lin2), (16, 17, lin2), (17, 18, lin2), (18, 19, lin2), (19, 20, lin2), (20, 21, lin2), (23, 24, lin2), (24, 25, lin2), (25, 26, lin2), (26, 27, lin2), (27, 28, lin2), (2, 9, lin3), (16, 23, lin3), (2, 16, lin1), (9, 23, lin1), (3, 10, lin3), (17, 24, lin3), (3, 17, lin1), (10, 24, lin1), (4, 11, lin3), (18, 25, lin3), (4, 18, lin1), (11, 25, lin1), (5, 12, lin3), (19, 26, lin3), (5, 19, lin1), (12, 26, lin1), (6, 13, lin3), (20, 27, lin3), (6, 20, lin1), (13, 27, lin1), (7, 14, lin3), (21, 28, lin3), (7, 21, lin1), (14, 28, lin1)]:
+columnTuples= [(2, 3, lin2), (3, 4, lin2), (4, 5, lin2), (5, 6, lin2), (6, 7, lin2), (9, 10, lin2), (10, 11, lin2), (11, 12, lin2), (12, 13, lin2), (13, 14, lin2), (16, 17, lin2), (17, 18, lin2), (18, 19, lin2), (19, 20, lin2), (20, 21, lin2), (23, 24, lin2), (24, 25, lin2), (25, 26, lin2), (26, 27, lin2), (27, 28, lin2)]
+# Define columns.
+columnElements= list()
+for (keyN1, keyN2, cTrf) in columnTuples:
     nI= nodeDict[keyN1]
     nJ= nodeDict[keyN2]
     modelSpace.setDefaultCoordTransf(cTrf)
-    beamDict[count]= modelSpace.newElement("ElasticBeam3d", [nI.tag, nJ.tag])
+    newElement= modelSpace.newElement("ElasticBeam3d", [nI.tag, nJ.tag])
+    columnElements.append(newElement)
+    beamDict[count]= newElement
     count+= 1
-    
+columnElementSet= modelSpace.defSet('columnElementSet', elements= columnElements)
+columnElementSet.fillDownwards()
+# Define beams.
+beamTuples= [(2, 9, lin3), (16, 23, lin3), (2, 16, lin1), (9, 23, lin1), (3, 10, lin3), (17, 24, lin3), (3, 17, lin1), (10, 24, lin1), (4, 11, lin3), (18, 25, lin3), (4, 18, lin1), (11, 25, lin1), (5, 12, lin3), (19, 26, lin3), (5, 19, lin1), (12, 26, lin1), (6, 13, lin3), (20, 27, lin3), (6, 20, lin1), (13, 27, lin1), (7, 14, lin3), (21, 28, lin3), (7, 21, lin1), (14, 28, lin1)]
+beamElements= list()
+for (keyN1, keyN2, cTrf) in beamTuples:
+    nI= nodeDict[keyN1]
+    nJ= nodeDict[keyN2]
+    modelSpace.setDefaultCoordTransf(cTrf)
+    newElement= modelSpace.newElement("ElasticBeam3d", [nI.tag, nJ.tag])
+    beamElements.append(newElement)
+    beamDict[count]= newElement
+    count+= 1
+beamElementSet= modelSpace.defSet('beamElementSet', elements= beamElements)
+beamElementSet.fillDownwards()
+# Define diagonals.
+diagonalTuples= []
+diagonalElements= list()
+for (keyN1, keyN2, cTrf) in diagonalTuples:
+    nI= nodeDict[keyN1]
+    nJ= nodeDict[keyN2]
+    modelSpace.setDefaultCoordTransf(cTrf)
+    newElement= modelSpace.newElement("ElasticBeam3d", [nI.tag, nJ.tag])
+    diagonalElements.append(newElement)
+    beamDict[count]= newElement
+    count+= 1
+diagonalElementSet= modelSpace.defSet('diagonalElementSet', elements= diagonalElements)
+diagonalElementSet.fillDownwards()
+
 # 6. Define gravity loads
 ## Create a Plain load pattern with a Linear TimeSeries
 lts= modelSpace.newTimeSeries(name= 'lts', tsType= 'linear_ts')
@@ -149,11 +184,11 @@ modelSpace.addLoadCaseToDomain(glp.name)
 
 # 7. Solution procedure.
 numSteps= 10
-solProc= predefined_solutions.PlainNewtonRaphsonBandGen(feProblem, maxNumIter= 10, convergenceTestTol= 1e-12, printFlag= 0, numSteps= numSteps, numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test')
-solProc.setup()
-integrator= solProc.getIntegrator()
+staticSolProc= predefined_solutions.PlainNewtonRaphsonBandGen(feProblem, maxNumIter= 10, convergenceTestTol= 1e-12, printFlag= 0, numSteps= numSteps, numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test')
+staticSolProc.setup()
+integrator= staticSolProc.getIntegrator()
 integrator.dLambda1= .1
-analysis= solProc.getAnalysis()
+staticAnalysis= staticSolProc.getAnalysis()
 
 # 8. Define recorders.
 ## Record node displacements.
@@ -178,7 +213,7 @@ bearingRecorder.setElements(xc.ID(bearingsOfInterest))
 bearingRecorder.callbackRecord= "bearingForces[self.tag].append((self.getDomain.getTimeTracker.getCurrentTime,self.getNodeResistingForceIncInertia(1).getList()))"
 
 # 9. Perform the gravity analysis.
-analOK= analysis.analyze(10)
+analOK= staticAnalysis.analyze(10)
 if(analOK!= 0):
     lmsg.error("Can't solve.")
     exit(1)
@@ -190,16 +225,20 @@ if(not silent):
 domain.removeRecorders()
 
 # 10. Perform an eigenvalue analysis-
-analysis= predefined_solutions.frequency_analysis(feProblem)
-analOk= analysis.analyze(42) # Compute 42 eigenvalues.
-eigenvalues= analysis.getEigenvalues()
+eigenAnalysis= predefined_solutions.frequency_analysis(feProblem)
+analOk= eigenAnalysis.analyze(42) # Compute 42 eigenvalues.
+eigenvalues= eigenAnalysis.getEigenvalues()
 eigenvaluesTable= list([['Eigenvalues at start of transient'],
                         ["lambda","omega","period","frequency"]])
 for lambdA in eigenvalues:
-    omega= math.sqrt(lambdA)
-    period= 2*math.pi/omega
-    freq= 1/period
-    eigenvaluesTable.append(["{:.3e}".format(lambdA), "{:.4f}".format(omega), "{:.4f}".format(period), "{:.4f}".format(freq)])
+    if(lambdA>0):
+        omega= math.sqrt(lambdA)
+        period= 2*math.pi/omega
+        freq= 1/period
+        eigenvaluesTable.append(["{:.3e}".format(lambdA), "{:.4f}".format(omega), "{:.4f}".format(period), "{:.4f}".format(freq)])
+    else:
+        lmsg.error('Negative eigenvalue: ', lambdA)
+        exit(1)
 if(not silent):
     import tabulate
     print(tabulate.tabulate(eigenvaluesTable))
