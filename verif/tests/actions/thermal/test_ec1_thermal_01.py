@@ -45,6 +45,7 @@ err+= (deltaTMheat-13.2)**2
 err+= (deltaTMcool-8.48)**2
 err= math.sqrt(err)
 
+'''
 print('  maximum shade air temperature (T= 50 years): ', TmaxAir)
 print('  minimum shade air temperature (T= 50 years): ', TminAir)
 print('  Maximum and minimum annual temperatures at the bridge location.')
@@ -59,7 +60,6 @@ print('  characteristic value of the maximum expansion range: ', ATexp)
 print('  top warmer than bottom temperature increment: ', deltaTMheat)
 print('  bottom warmer than top temperature increment: ', deltaTMcool)
 print(err)
-'''
 '''
 
 import os

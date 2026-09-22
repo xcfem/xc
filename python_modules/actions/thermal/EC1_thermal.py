@@ -217,17 +217,11 @@ def getKSur(bridgeType:int, topWarmerThanBottom= True, surfacingDepth= 50e-3, ba
 
     else:
         if(topWarmerThanBottom):
-            print('bridgeType= ', bridgeType)
-            print('surfacingDepth= ', surfacingDepth)
             retval= fKSurTopWarmerThanBottom(np.array([surfacingDepth]), np.array([int(bridgeType)]))
             retval= float(retval[0])
-            print('retval= ', retval)
         else:
-            print('bridgeType= ', bridgeType)
-            print('surfacingDepth= ', surfacingDepth)
             retval= fKSurBottomWarmerThanTop(np.array([surfacingDepth]), np.array([int(bridgeType)]))
             retval= float(retval[0])
-            print('retval= ', retval)
     return retval
         
 def getLinearTemperatureDifferenceComponent(bridgeType:int, topWarmerThanBottom= True, surfacingDepth= 50e-3, ballast= False, waterproofedOnly= False):
