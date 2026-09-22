@@ -35,14 +35,21 @@ elements.defaultMaterial= section.name
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
 
 crdTransf= beam2d.getCoordTransf
-# print("vector I:",getIVector)
-# print("vector J:",getJVector)
-vILocal= crdTransf.getVectorLocalCoordFromGlobal(crdTransf.getIVector)
-vJLocal= crdTransf.getVectorLocalCoordFromGlobal(crdTransf.getJVector)
-# print("vector I en locales:",vILocal)
-# print("vector J en locales:",vJLocal)
+iVector= crdTransf.getIVector
+jVector= crdTransf.getJVector
+vILocal= crdTransf.getVectorLocalCoordFromGlobal(iVector)
+vJLocal= crdTransf.getVectorLocalCoordFromGlobal(jVector)
 ratio1= (vILocal-xc.Vector([1,0])).Norm()
 ratio2= (vJLocal-xc.Vector([0,1])).Norm()
+
+'''
+print("I vector:", iVector)
+print("J vector:", jVector)
+print("local coordinates I vector:",vILocal)
+print('ratio1= ', ratio1)
+print("local coordinates J vector:",vJLocal)
+print('ratio2= ', ratio2)
+'''
 
 import os
 from misc_utils import log_messages as lmsg

@@ -37,19 +37,27 @@ beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
 
 crdTransf= beam3d.getCoordTransf
 
-# \print{"vector I:",getIVector
-#print("vector J:",getJVector)
-#print("vector K:",getKVector})
-vILocal= crdTransf.getVectorLocalCoordFromGlobal(crdTransf.getIVector)
-vJLocal= crdTransf.getVectorLocalCoordFromGlobal(crdTransf.getJVector)
-vKLocal= crdTransf.getVectorLocalCoordFromGlobal(crdTransf.getKVector)
-# \print{"vector I en locales:",vILocal
-#print("vector J en locales:",vJLocal)
-#print("vector K en locales:",vKLocal})
+iVector= crdTransf.getIVector
+jVector= crdTransf.getJVector
+kVector= crdTransf.getKVector
+vILocal= crdTransf.getVectorLocalCoordFromGlobal(iVector)
+vJLocal= crdTransf.getVectorLocalCoordFromGlobal(jVector)
+vKLocal= crdTransf.getVectorLocalCoordFromGlobal(kVector)
 ratio1= (vILocal-xc.Vector([1,0,0])).Norm()
 ratio2= (vJLocal-xc.Vector([0,1,0])).Norm()
 ratio3= (vKLocal-xc.Vector([0,0,1])).Norm()
 
+'''
+print("I vector:", iVector)
+print("J vector:", jVector)
+print("K vector:", kVector)
+print("local coordinates I vector:",vILocal)
+print('ratio1= ', ratio1)
+print("local coordinates J vector:",vJLocal)
+print('ratio2= ', ratio2)
+print("local coordinates K vector:",vKLocal)
+print('ratio2= ', ratio3)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
