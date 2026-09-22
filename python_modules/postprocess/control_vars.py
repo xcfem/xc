@@ -18,7 +18,7 @@ __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es"
 import os
 import sys
 import json
-import scipy
+import numpy
 from misc_utils import log_messages as lmsg
 from postprocess.reports import common_formats as fmt
 from postprocess import extrapolate_elem_attr as ext
@@ -2004,7 +2004,7 @@ def write_control_vars_from_phantom_elements(controlVarsDict, outputCfg):
         capacityFactors= get_capacity_factors_from_control_vars(controlVarsDict= controlVarsDict)[controlVarName]
         retval= list()
         for key in capacityFactors:
-            retval.append(scipy.mean(capacityFactors[key]))
+            retval.append(float(numpy.mean(capacityFactors[key])))
     return retval
 
 def getControlVarImportModuleStr(preprocessor, outputCfg, sections):
@@ -2094,7 +2094,7 @@ def write_control_vars_from_elements(preprocessor, controlVarsDict, outputCfg, s
         capacityFactors= get_capacity_factors_from_control_vars(controlVarsDict= controlVarsDict)[controlVarName]
         retval= list()
         for key in capacityFactors:
-            retval.append(scipy.mean(capacityFactors[key]))
+            retval.append(float(numpy.mean(capacityFactors[key])))
     return retval
 
 
@@ -2155,7 +2155,7 @@ def write_control_vars_from_elements_for_ansys(preprocessor, outputCfg, sectionN
     # os.system("rm -f "+"/tmp/elems.xci")
     os.system("rm -f "+"/tmp/texOutput1.tmp")
     os.system("rm -f "+"/tmp/texOutput2.tmp")
-    retval= [scipy.mean(fcs1),scipy.mean(fcs2)]
+    retval= [float(numpy.mean(fcs1)),float(numpy.mean(fcs2))]
     return retval
 
 def get_control_var_values_from_elements(elements, propName, argument):
