@@ -36,9 +36,9 @@ deltaTMcool= EC1_thermal.getLinearTemperatureDifferenceComponent(bridgeType=EC1_
 # Check computed values.
 err= (TminAir+11.9)**2
 err+= (TmaxBridge-45.6987676947775)**2
-err+= (TminBridge+13.216417024588038)**2
+err+= (TminBridge+13.21641702458804)**2
 err+= (TmaxBridgeComp-47.6987676947775)**2
-err+= (TminBridgeComp+5.216417024588038)**2
+err+= (TminBridgeComp+5.21641702458804)**2
 err+= (ATcon-20.21641702458804)**2
 err+= (ATexp-32.6987676947775)**2
 err+= (deltaTMheat-13.2)**2
