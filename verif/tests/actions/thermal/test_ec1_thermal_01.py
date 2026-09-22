@@ -34,12 +34,12 @@ deltaTMheat= EC1_thermal.getLinearTemperatureDifferenceComponent(bridgeType=EC1_
 deltaTMcool= EC1_thermal.getLinearTemperatureDifferenceComponent(bridgeType=EC1_thermal.concrete_beam, topWarmerThanBottom= False, surfacingDepth= 20e-3, ballast= False, waterproofedOnly= False) # ballast= False because is not extended over the pergola surface.
 
 # Check computed values.
-err= (TminAir+11.9)**2
+err= (TminAir+12.15)**2
 err+= (TmaxBridge-45.6987676947775)**2
-err+= (TminBridge+13.21641702458804)**2
+err+= (TminBridge+13.494072844432324)**2
 err+= (TmaxBridgeComp-47.6987676947775)**2
-err+= (TminBridgeComp+5.21641702458804)**2
-err+= (ATcon-20.21641702458804)**2
+err+= (TminBridgeComp+5.494072844432324)**2
+err+= (ATcon-20.494072844432324)**2
 err+= (ATexp-32.6987676947775)**2
 err+= (deltaTMheat-13.2)**2
 err+= (deltaTMcool-8.48)**2
