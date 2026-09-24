@@ -61,13 +61,13 @@ class VerifOutVars(object):
         '''
         if appendToResFile not in [True,False]:
             lmsg.error("Argument 'appendToResFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if listFile not in [True,False]:
             lmsg.error("Argument 'listFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if calcMeanCF not in [True,False]:
             lmsg.error("Argument 'calcMeanCF' must be True or False")
-            exit(1)
+            sys.exit(1)
         self.setCalc= setCalc
         self.appendToResFile= appendToResFile
         self.listFile= listFile
@@ -175,7 +175,7 @@ class LimitStateData(object):
            methodName= sys._getframe(0).f_code.co_name
            errMsg= "; envConfig not set. Use setEnvConfig method to set it."  
            lmsg.warning(className+'.'+methodName+errMsg)
-           exit(1)
+           sys.exit(1)
         return retval
         
     def getInternalForcesResultsPath(self):
@@ -316,7 +316,7 @@ class LimitStateData(object):
             errorMsg= '; file: '+resultsDataFileName+' not found.'
             errorMsg+= ' Have you performed the limit state checking?'
             lmsg.error(className+'.'+methodName+errorMsg)
-            exit(1)
+            sys.exit(1)
         return retval
     
     def getOutputDataFileName(self):
@@ -774,13 +774,13 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
         '''
         if appendToResFile not in [True,False]:
             lmsg.error("Argument 'appendToResFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if listFile not in [True,False]:
             lmsg.error("Argument 'listFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if calcMeanCF not in [True,False]:
             lmsg.error("Argument 'calcMeanCF' must be True or False")
-            exit(1)
+            sys.exit(1)
         dct= self.eheBucklingParametersDict['element_parameters']
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         controlVarsDict= crossSections.check(limitStateData= self, matDiagType= "d", outputCfg= outputCfg, threeDim= threeDim)
@@ -810,7 +810,7 @@ class BucklingParametersLimitStateData(ULS_LimitStateData):
                         className= type(self).__name__
                         methodName= sys._getframe(0).f_code.co_name
                         lmsg.error(className+'.'+methodName+"; can't get item: "+str(mode)+' from list: '+str(Leffi))
-                        exit(1)
+                        sys.exit(1)
 
         retval= cv.write_control_vars_from_phantom_elements(controlVarsDict= controlVarsDict, outputCfg= outputCfg)
         return retval
@@ -854,13 +854,13 @@ class NormalStressesRCLimitStateData(ULS_LimitStateData):
         '''
         if appendToResFile not in [True,False]:
             lmsg.error("Argument 'appendToResFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if listFile not in [True,False]:
             lmsg.error("Argument 'listFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if calcMeanCF not in [True,False]:
             lmsg.error("Argument 'calcMeanCF' must be True or False")
-            exit(1)
+            sys.exit(1)
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
         
@@ -900,13 +900,13 @@ class NormalStressesSteelLimitStateData(ULS_LimitStateData):
         '''
         if appendToResFile not in [True,False]:
             lmsg.error("Argument 'appendToResFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if listFile not in [True,False]:
             lmsg.error("Argument 'listFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if calcMeanCF not in [True,False]:
             lmsg.error("Argument 'calcMeanCF' must be True or False")
-            exit(1)
+            sys.exit(1)
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return self.runChecking(outputCfg= outputCfg)
     
@@ -948,13 +948,13 @@ class ShearResistanceRCLimitStateData(ULS_LimitStateData):
         '''
         if appendToResFile not in [True,False]:
             lmsg.error("Argument 'appendToResFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if listFile not in [True,False]:
             lmsg.error("Argument 'listFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if calcMeanCF not in [True,False]:
             lmsg.error("Argument 'calcMeanCF' must be True or False")
-            exit(1)
+            sys.exit(1)
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
         
@@ -993,13 +993,13 @@ class ShearResistanceSteelLimitStateData(ULS_LimitStateData):
         '''
         if appendToResFile not in [True,False]:
             lmsg.error("Argument 'appendToResFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if listFile not in [True,False]:
             lmsg.error("Argument 'listFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if calcMeanCF not in [True,False]:
             lmsg.error("Argument 'calcMeanCF' must be True or False")
-            exit(1)
+            sys.exit(1)
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return self.runChecking(outputCfg= outputCfg)
     
@@ -1042,13 +1042,13 @@ class TorsionResistanceRCLimitStateData(ULS_LimitStateData):
         '''
         if appendToResFile not in [True,False]:
             lmsg.error("Argument 'appendToResFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if listFile not in [True,False]:
             lmsg.error("Argument 'listFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if calcMeanCF not in [True,False]:
             lmsg.error("Argument 'calcMeanCF' must be True or False")
-            exit(1)
+            sys.exit(1)
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
 
@@ -1116,13 +1116,13 @@ class CrackControlRCLimitStateData(SLS_LimitStateData):
         '''
         if appendToResFile not in [True,False]:
             lmsg.error("Argument 'appendToResFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if listFile not in [True,False]:
             lmsg.error("Argument 'listFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if calcMeanCF not in [True,False]:
             lmsg.error("Argument 'calcMeanCF' must be True or False")
-            exit(1)
+            sys.exit(1)
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return super().check(crossSections= crossSections, outputCfg= outputCfg, threeDim= threeDim)
     
@@ -1298,13 +1298,13 @@ class VonMisesStressLimitStateData(ULS_LimitStateData):
         '''
         if appendToResFile not in [True,False]:
             lmsg.error("Argument 'appendToResFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if listFile not in [True,False]:
             lmsg.error("Argument 'listFile' must be True or False")
-            exit(1)
+            sys.exit(1)
         if calcMeanCF not in [True,False]:
             lmsg.error("Argument 'calcMeanCF' must be True or False")
-            exit(1)
+            sys.exit(1)
         outputCfg= VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
         return self.runChecking(outputCfg= outputCfg)
 
