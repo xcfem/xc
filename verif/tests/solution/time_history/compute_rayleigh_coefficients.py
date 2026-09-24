@@ -17,7 +17,7 @@ from solution import rayleigh_damping as rd
 # --- USER INPUT VALUES ---
 freq1= 1.0 # Fundamental frequency (Hz)
 freq2= 10.0 # Dominant higher-mode frequency (Hz)
-target_zeta= 0.03  # 5% target structural damping
+target_zeta= 0.03  # 3% target structural damping
 
 # Compute coefficients
 alpha, beta = rd.compute_rayleigh_damping(freq1, freq2, target_zeta)
