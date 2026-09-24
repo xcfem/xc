@@ -12,3 +12,6 @@ Classes and functions that are useful for the implementation of the finite eleme
 - [More Ado About Damping](https://portwooddigital.com/2022/11/29/more-ado-about-damping/)
 - [Modal and Stiffness Proportional Damping](https://portwooddigital.com/2023/01/25/modal-and-stiffness-proportional-damping/)
 - [Damping Is a Sensitive Subject](https://portwooddigital.com/2025/02/09/damping-is-a-sensitive-subject/)
+- [Unintended Consequences of Modeling Damping in Structures](https://www.pismin.com/10.1061/%28ASCE%290733-9445%282008%29134:4%28581%29)
+- [Experimental Verification of Viscous Damping Modeling for Inelastic Time History Analyzes](https://sci-hub.box/10.1080/13632460801925822)
+- [Problems Encountered from the Use (or Misuse) of Rayleigh Damping](https://www.usbr.gov/damsafety/TechDev/DSOTechDev/DSO-07-03.pdf)
