@@ -840,6 +840,7 @@ python tests/solution/geom_nl/crisfield_1_2_example_displacement_control.py
 
 ## Time history.
 echo "$BLEU" "  Time history solution tests." "$NORMAL"
+python tests/solution/time_history/compute_rayleigh_coefficients.py
 python tests/solution/time_history/test_time_history_00.py
 python tests/solution/time_history/test_time_history_01.py
 python tests/solution/time_history/test_pseudo_time_history.py
