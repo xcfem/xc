@@ -843,6 +843,7 @@ echo "$BLEU" "  Time history solution tests." "$NORMAL"
 python tests/solution/time_history/compute_rayleigh_coefficients.py
 python tests/solution/time_history/test_time_history_00.py
 python tests/solution/time_history/test_time_history_01.py
+python tests/solution/time_history/test_time_history_02.py
 python tests/solution/time_history/test_pseudo_time_history.py
 
 ## Ground motion.
