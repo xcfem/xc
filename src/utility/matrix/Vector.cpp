@@ -483,10 +483,9 @@ int XC::Vector::addMatrixVector(double thisFact, const Matrix &m, const XC::Vect
     if(thisFact == 1.0 && otherFact == 0.0)
       return 0;
 
-  // check the sizes are compatible
 #ifdef _G3DEBUG
-  // check the sizes are compatible
-    if((sz != m.noRows()) && (m.noCols() != v.sz))
+    // this = m * v  =>  size(this)==m.rows, size(v)==m.cols
+    if((sz != m.noRows()) || (m.noCols() != v.sz))
       {
         // otherwise incompatible sizes
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -618,8 +617,8 @@ int XC::Vector::addMatrixTransposeVector(double thisFact, const XC::Matrix &m, c
       return 0;
 
 #ifdef _G3DEBUG
-  // check the sizes are compatible
-    if((sz != m.noRows()) && (m.noRows() != v.sz))
+    // this = m^T * v  =>  size(this)==m.cols, size(v)==m.rows
+    if((sz != m.noRows()) || (m.noRows() != v.sz))
       {
         // otherwise incompatible sizes
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -1325,14 +1324,37 @@ XC::Vector XC::Vector::operator/(const Matrix &M) const
     Vector res(M.noRows());
     if(M.noRows() != M.noCols())
       { // if not square do least squares solution
-        Matrix A(M^M);
-        A.Solve(*this, res);    
+	// Normal equations: (M^T M) x = M^T b, with x sized to M.noCols()
+	if (sz != M.noRows())
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	              << "Error; vector size " << sz
+		      << " incompatible with Matrix rows " << M.noRows()
+		      << Color::def << std::endl;
+	  }
+	else
+	  {
+	    Matrix A(M^M);
+	    Vector Atb(M.noCols());
+	    Atb.addMatrixTransposeVector(0.0, M, *this, 1.0);
+	    A.Solve(Atb, res);
+	  }
       }
     else
       {
-        M.Solve(*this, res);
+	if (sz != M.noRows())
+	  {
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << "Error; vector size "
+		      << sz
+		      << " incompatible with square Matrix size "
+		      << M.noRows()
+		      <<  Color::def <<std::endl;
+	  }
+	else
+	  M.Solve(*this, res);
       }
-    return res;
+    return res;    
   }
 
 //! @brief Write vector on a binary file.
