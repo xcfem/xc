@@ -40,7 +40,7 @@ void XC::MeshComponent::check_matrices(const std::deque<Matrix> &matrices,const 
     for(size_t i=0; i<numMatrices; i++)
       if(matrices[i].noRows() == ndof)
         {
-          index= i;
+          this->matrixIndex= i;
           i= numMatrices;
         }
   }
@@ -50,24 +50,25 @@ void XC::MeshComponent::new_matrix(std::deque<Matrix> &matrices,const int &ndof)
   {
     const size_t numMatrices= matrices.size();
     matrices.push_back(Matrix(ndof,ndof));
-    index= numMatrices;
+    this->matrixIndex= numMatrices;
   }
 
 //! @brief Initializes the matrix container.
-void XC::MeshComponent::setup_matrices(std::deque<Matrix> &matrices,const int &ndof) const
+void XC::MeshComponent::setGlobalMatrices(std::deque<Matrix> &matrices,const int &ndof) const
   {
-    check_matrices(matrices,ndof);
-    if(index == -1)
+    if(this->matrixIndex == -1)
+      check_matrices(matrices,ndof);
+    if(this->matrixIndex == -1)
       new_matrix(matrices,ndof);
   }
 
 //! @brief Constructor.
 XC::MeshComponent::MeshComponent(int classTag)
-  : ContinuaReprComponent(0,classTag), index(-1){}
+  : ContinuaReprComponent(0,classTag), matrixIndex(-1) {}
 
 //! @brief Constructor.
 XC::MeshComponent::MeshComponent(int tag, int classTag)
-  : ContinuaReprComponent(tag,classTag), index(-1){}
+  : ContinuaReprComponent(tag,classTag), matrixIndex(-1) {}
 
 //! @brief Send labelsthrough the communicator argument.
 int XC::MeshComponent::sendIdsLabels(int posDbTag,Communicator &comm)
@@ -110,7 +111,7 @@ int XC::MeshComponent::recvIdsLabels(int posDbTag,const Communicator &comm)
 int XC::MeshComponent::sendData(Communicator &comm)
   {
     int res= ContinuaReprComponent::sendData(comm);
-    comm.sendInt(index,getDbTagData(),CommMetaData(2));
+    res+= comm.sendInt(matrixIndex, getDbTagData(),CommMetaData(2));
     res+= sendIdsLabels(3,comm);
     return res;
   }
@@ -119,8 +120,22 @@ int XC::MeshComponent::sendData(Communicator &comm)
 int XC::MeshComponent::recvData(const Communicator &comm)
   {
     int res= ContinuaReprComponent::recvData(comm);
-    comm.receiveInt(index,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveInt(matrixIndex, getDbTagData(),CommMetaData(2));
     res+= recvIdsLabels(3,comm);
     return res;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::MeshComponent::getPyDict(void) const
+  {
+    boost::python::dict retval= ContinuaReprComponent::getPyDict();
+    retval["matrixIndex"]= matrixIndex;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::MeshComponent::setPyDict(const boost::python::dict &d)
+  {
+    ContinuaReprComponent::setPyDict(d);
+    matrixIndex= boost::python::extract<int>(d["matrixIndex"]);
+  }
