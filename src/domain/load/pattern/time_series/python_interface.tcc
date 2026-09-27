@@ -61,6 +61,9 @@ class_<XC::PathSeries, bases<XC::PathSeriesBase>, boost::noncopyable >("PathSeri
   .def("setTimeIncr",&XC::PathSeries::setTimeIncr,"setTimeIncr(factor): sets time increment.")
   .add_property("timeIncr", get_time_increment_void, &XC::PathSeries::setTimeIncr, "Get/set the time increment value.")
   .add_property("startTime", &XC::PathSeries::getStartTime, &XC::PathSeries::setStartTime, "Get/set the start time.")
+  .def("getPrependZero", &XC::PathSeries::getPrependZero,"getPrependZero(): return the value of the prependZero flag.")
+  .def("settPrependZero", &XC::PathSeries::setPrependZero,"setPrependZero(bool): set the value of the prependZero flag.")
+  .add_property("prependZero", &XC::PathSeries::getPrependZero, &XC::PathSeries::setPrependZero, "get/set the value of the prependZero flag.")
   .def("readFromFile",&XC::PathSeries::readFromFile,"Read motion data from file.")
   ;
 
