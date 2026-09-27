@@ -844,6 +844,7 @@ python tests/solution/time_history/compute_rayleigh_coefficients.py
 python tests/solution/time_history/test_time_history_00.py
 python tests/solution/time_history/test_time_history_01.py
 python tests/solution/time_history/test_time_history_02.py
+python tests/solution/time_history/test_time_history_03.py
 python tests/solution/time_history/test_pseudo_time_history.py
 
 ## Ground motion.
@@ -1174,6 +1175,7 @@ python tests/loads/time_series/test_triang_01.py
 python tests/loads/time_series/test_rectang_01.py
 python tests/loads/time_series/test_pulse_01.py
 echo "$BLEU" "    Ground motion time series tests." "$NORMAL"
+python tests/loads/time_series/test_motion_history_01.py
 python tests/loads/time_series/test_ground_motion_01.py
 python tests/loads/time_series/test_ground_motion_02.py
 python tests/loads/time_series/test_ground_motion_03.py
