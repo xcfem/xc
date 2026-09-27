@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Checks computation of velocities and displacements from accelearion history
+''' Checks computation of velocities and displacements from acceleration history
     using the Simpson integrator.
 
     The equations of motion are as follows:
