@@ -24,7 +24,7 @@ pth= os.path.dirname(__file__)
 # print("pth= ", pth)
 if(not pth):
     pth= '.'
-accelFilePath= pth+'/../../aux/load_patterns/ground_motions/LOR_20110511_164726.acc'
+accelFilePath= pth+'/../../../aux/load_patterns/ground_motions/LOR_20110511_164726.acc'
 lorca_raw= np.loadtxt(accelFilePath, skiprows= 5)
 timeValues= lorca_raw[:,0]
 accelerationValues= list(lorca_raw[:,1]*g)
@@ -42,7 +42,7 @@ zeta_list= np.array([0.02, 0.03, 0.05])
 
 data_frame= rs.compute_response_spectrum(accelerations= accelerationValues, dtA= dtF, dt= None, zLst= zeta_list, T_min= T_min, T_max= T_max, Fy= Fy, alpha= alpha, silent= silent)
     
-refFilePath= pth+"/../../aux/reference_files/"
+refFilePath= pth+"/../../../aux/reference_files/"
 fname= os.path.basename(__file__)
 jsonFileName= refFilePath+'/ref_'+fname.replace('.py', '.json')
 # # Save output as reference.

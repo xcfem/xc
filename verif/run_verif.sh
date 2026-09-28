@@ -848,10 +848,10 @@ python tests/solution/time_history/test_time_history_03.py
 python tests/solution/time_history/test_pseudo_time_history.py
 
 ## Ground motion.
-echo "$BLEU" "  Ground motion solution tests." "$NORMAL"
-python tests/solution/ground_motion/elastic_response_spectra.py
-python tests/solution/ground_motion/test_sdof_response_01.py
-python tests/solution/ground_motion/test_sdof_response_02.py
+echo "$BLEU" "    Ground motion solution tests." "$NORMAL"
+python tests/solution/time_history/ground_motion/elastic_response_spectra.py
+python tests/solution/time_history/ground_motion/test_sdof_response_01.py
+python tests/solution/time_history/ground_motion/test_sdof_response_02.py
 
 ## Convergence tests.
 echo "$BLEU" "  Convergence tests." "$NORMAL"
