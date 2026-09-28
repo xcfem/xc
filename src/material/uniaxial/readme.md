@@ -1,6 +1,31 @@
 # Uniaxial materials
 A UniaxialMaterial object represents uniaxial stress-strain (or force-deformation) relationships.
 
+## Tangent stiffness for elastic material
+The damping tangent (eta parameter) of the elastic uniaxial materials represents a material-level tangent viscosity that creates a viscous stress proportional to the strain rate. Combined, an elastic material with a non-zero $eta$ behaves physically like a Kelvin-Voigt viscoelastic element (a spring and a dashpot connected in parallel), generating a stress-strain relation of: 
+
+$$
+\sigma (t)=E\cdot \varepsilon (t)+\eta \cdot \.{\varepsilon }(t)
+$$
+
+### Purpose and usage
+
+- It allows you to introduce internal or material-specific viscous damping directly into specific elements, fibers, or springs without relying exclusively on global Rayleigh Damping.
+- It is frequently used in geotechnical or structural components (such as dashpot boundary elements or soil-structure interaction springs like PySimple1 or TzSimple1 extensions) to represent localized energy dissipation or radiation damping.
+
+### How to calculate eta
+Because the material operates like a Kelvin-Voigt element, its relationship to the structural damping ratio ($\zeta$) at a specific angular frequency $\omega$ (in radians/second) is defined by:
+
+$$
+\eta =\frac{2\cdot \zeta \cdot E}{\omega }
+$$
+
+Where:
+
+• $\zeta$ (Zeta): The target damping ratio (e.g., $0.02$ for $2\%$ or $0.05$ for $5\%$).
+• $E$: The elastic modulus or stiffness assigned to that specific material.
+• $\omega $: The targeted natural frequency of the component or structure ($\omega = 2\pi f$).
+
 ## References
 - [OpenSees page about uniaxial materials](https://opensees.berkeley.edu/wiki/index.php/UniaxialMaterial_Command)
 - [Uniaxial multi-tool](https://portwooddigital.com/2020/12/09/uniaxial-multi-tool/)
