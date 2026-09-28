@@ -79,10 +79,10 @@ int XC::LinearBucklingAnalysis::analyze(int numSteps)
     for(int i=0; i<numSteps; i++)
       {
         if(i == linear_buckling_analysis_step)
-          linearBucklingEigenAnalysis.setupPreviousStep(); //Prepara el linear buckling Analysis.
+          linearBucklingEigenAnalysis.setupPreviousStep(); //Prepares the linear buckling Analysis.
 
         if(i == (linear_buckling_analysis_step+1))
-          linearBucklingEigenAnalysis.analyze(numModes); //Performs el linear buckling Analysis.
+          linearBucklingEigenAnalysis.analyze(this->numModes); //Performs the linear buckling Analysis.
 
         result= run_analysis_step(i,numSteps);
 
