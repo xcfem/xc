@@ -162,15 +162,15 @@ int XC::Element::revertToStart(void)
 //! @brief Set Rayleigh damping factors.
 int XC::Element::setRayleighDampingFactors(const RayleighDampingFactors &rF) const
   {
-    rayFactors= rF;
+    this->rayFactors= rF;
 
     // check that memory has been allocated to store compute/return
     // damping matrix & residual force calculations
-    if(index == -1) 
+    if(this->matrixIndex == -1) 
       {
-        int numDOF = this->getNumDOF();
+        const int numDOF = this->getNumDOF();
 
-        setup_matrices(theMatrices,numDOF);
+        setGlobalMatrices(theMatrices,numDOF);
         if(theVectors1.size()<theMatrices.size())
           {
             Vector theVector1(numDOF);
@@ -403,11 +403,11 @@ void XC::Element::compute_damping_matrix(Matrix &theMatrix) const
 //! \f]
 const XC::Matrix &XC::Element::getDamp(void) const
   {
-    if(index == -1) // If setRayleighDampingFactors has not been called.
+    if(this->matrixIndex == -1) // If setRayleighDampingFactors has not been called.
       setRayleighDampingFactors(this->rayFactors); //Allocate memory.
 
     // now compute the damping matrix
-    Matrix &theMatrix= theMatrices[index];
+    Matrix &theMatrix= theMatrices[this->matrixIndex];
     compute_damping_matrix(theMatrix);
     // return the computed matrix
     return theMatrix;
@@ -424,11 +424,11 @@ const XC::Matrix &XC::Element::getDamp(void) const
 //! \f]
 const XC::Matrix &XC::Element::getMass(void) const
   {
-    if(index  == -1) // If setRayleighDampingFactors has not been called.
+    if(this->matrixIndex  == -1) // If setRayleighDampingFactors has not been called.
       setRayleighDampingFactors(this->rayFactors); //Allocate memory.
 
     // zero the matrix & return it
-    Matrix &theMatrix= theMatrices[index];
+    Matrix &theMatrix= theMatrices[this->matrixIndex];
     theMatrix.Zero();
     return theMatrix;
   }
@@ -494,12 +494,12 @@ double XC::Element::getTotalMassComponent(const int &dof) const
 //! Computes damping matrix.
 const XC::Vector &XC::Element::getResistingForceIncInertia(void) const
   {
-    if(index == -1) // If setRayleighDampingFactors has not been called.
+    if(this->matrixIndex == -1) // If setRayleighDampingFactors has not been called.
       setRayleighDampingFactors(this->rayFactors); //Allocate memory.
 
-    Matrix &theMatrix= theMatrices[index];
-    Vector &theVector= theVectors2[index];
-    Vector &theVector2= theVectors1[index];
+    Matrix &theMatrix= theMatrices[this->matrixIndex];
+    Vector &theVector= theVectors2[this->matrixIndex];
+    Vector &theVector2= theVectors1[this->matrixIndex];
 
     //
     // perform: R = P(U) - Pext(t);
@@ -662,12 +662,12 @@ XC::Matrix XC::Element::getEquivalentStaticNodalLoads(int mode,const double &acc
 const XC::Vector &XC::Element::getRayleighDampingForces(void) const
   {
 
-    if(index == -1) // If setRayleighDampingFactors has not been called.
+    if(this->matrixIndex == -1) // If setRayleighDampingFactors has not been called.
       setRayleighDampingFactors(this->rayFactors); //Allocate memory.
 
-    Matrix &theMatrix= theMatrices[index];
-    Vector &theVector= theVectors2[index];
-    Vector &theVector2= theVectors1[index];
+    Matrix &theMatrix= theMatrices[this->matrixIndex];
+    Vector &theVector= theVectors2[this->matrixIndex];
+    Vector &theVector2= theVectors1[this->matrixIndex];
 
     //
     // perform: R = (rayFactors.getAlphaM() * M + rayFactors.getBetaK0() * K0 + rayFactors.getBetaK() * K) * v
@@ -778,11 +778,11 @@ int XC::Element::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accel, b
 
 const XC::Matrix &XC::Element::getDampSensitivity(int gradNumber)
   {
-    if(index  == -1) // If setRayleighDampingFactors has not been called.
+    if(this->matrixIndex == -1) // If setRayleighDampingFactors has not been called.
       setRayleighDampingFactors(this->rayFactors); //Allocate memory.
 
     // now compute the damping matrix
-    Matrix &theMatrix= theMatrices[index];
+    Matrix &theMatrix= theMatrices[this->matrixIndex];
     theMatrix.Zero();
     if(rayFactors.getAlphaM() != 0.0)
       theMatrix.addMatrix(0.0, this->getMassSensitivity(gradNumber), rayFactors.getAlphaM());
@@ -1680,7 +1680,7 @@ boost::python::list XC::Element::getValuesAtNodes(const std::string &code, bool 
 int XC::Element::sendData(Communicator &comm)
   {
     int res= MeshComponent::sendData(comm);
-    setDbTagDataPos(4,nodeIndex);
+    res+= comm.sendInt(nodeIndex, getDbTagData(), CommMetaData(4));
     res+= comm.sendVector(load,getDbTagData(),CommMetaData(5));
     return res;
   }
@@ -1689,8 +1689,8 @@ int XC::Element::sendData(Communicator &comm)
 int XC::Element::recvData(const Communicator &comm)
   {
     int res= MeshComponent::recvData(comm);
-    nodeIndex= getDbTagDataPos(4);
-    res+= comm.receiveVector(load,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveInt(nodeIndex, getDbTagData(), CommMetaData(4));
+    res+= comm.receiveVector(load, getDbTagData(),CommMetaData(5));
     return res;
   }
 

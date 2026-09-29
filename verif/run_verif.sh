@@ -840,15 +840,18 @@ python tests/solution/geom_nl/crisfield_1_2_example_displacement_control.py
 
 ## Time history.
 echo "$BLEU" "  Time history solution tests." "$NORMAL"
+python tests/solution/time_history/compute_rayleigh_coefficients.py
 python tests/solution/time_history/test_time_history_00.py
 python tests/solution/time_history/test_time_history_01.py
+python tests/solution/time_history/test_time_history_02.py
+python tests/solution/time_history/test_time_history_03.py
 python tests/solution/time_history/test_pseudo_time_history.py
 
 ## Ground motion.
-echo "$BLEU" "  Ground motion solution tests." "$NORMAL"
-python tests/solution/ground_motion/elastic_response_spectra.py
-python tests/solution/ground_motion/test_sdof_response_01.py
-python tests/solution/ground_motion/test_sdof_response_02.py
+echo "$BLEU" "    Ground motion solution tests." "$NORMAL"
+python tests/solution/time_history/ground_motion/elastic_response_spectra.py
+python tests/solution/time_history/ground_motion/test_sdof_response_01.py
+python tests/solution/time_history/ground_motion/test_sdof_response_02.py
 
 ## Convergence tests.
 echo "$BLEU" "  Convergence tests." "$NORMAL"
@@ -1172,6 +1175,7 @@ python tests/loads/time_series/test_triang_01.py
 python tests/loads/time_series/test_rectang_01.py
 python tests/loads/time_series/test_pulse_01.py
 echo "$BLEU" "    Ground motion time series tests." "$NORMAL"
+python tests/loads/time_series/test_motion_history_01.py
 python tests/loads/time_series/test_ground_motion_01.py
 python tests/loads/time_series/test_ground_motion_02.py
 python tests/loads/time_series/test_ground_motion_03.py

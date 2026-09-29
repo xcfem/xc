@@ -113,3 +113,51 @@ def uniform_excitation_from_csv_file(modelSpace, name, dof, inputFileName, accel
     # Read the accelerations from the file.
     accelValues= get_accelerations_from_csv_file(inputFileName, accelColumnNumber)
     return get_uniform_excitation_from_accel_values(modelSpace= modelSpace, name= name, dof= dof, accelValues= accelValues, dt= dt, cod_ts= cod_ts, factor= factor, vel0= vel0)
+
+class MinMaxTracker(object):
+    ''' Track maximum and minimum values.
+
+    :ivar min: minimum value.
+    :ivar t_min: time when minimum value occurs.
+    :ivar max: maximum value.
+    :ivar t_max: time when maximum value occurs.
+    '''
+    def __init__(self):
+        # Initialize with infinity boundaries
+        self.min = float('inf')
+        self.max = float('-inf')
+        self.t_min= None # Time when min occurs.
+        self.t_max= None # Time when max occurs.
+
+    def update(self, value, t):
+        ''' Update maximum and minimum values.
+
+        :param value: value to update the extrema.
+        :param t: time when the given value occurs.
+        '''
+        assert(isinstance(t, float))
+        if value < self.min:
+            self.min = value
+            self.t_min= t
+        if value > self.max:
+            self.max = value
+            self.t_max= t
+
+    def getDict(self):
+        ''' Return a dictionary with the values of the object members.'''
+        retval= {
+            "min": self.min if self.t_min is not None else None,
+            "t_min": self.t_min,
+            "max": self.max if self.t_max is not None else None,
+            "t_max": self.t_max,
+        }
+        return retval
+
+    def setFromDict(self, dct):
+        ''' Set the member values from those in the given dictionary.'''
+        self.min = float('inf') if dct["min"] is None else dct["min"]
+        self.max = float('-inf') if dct["max"] is None else dct["max"]
+        self.t_min = dct["t_min"]
+        self.t_max = dct["t_max"]
+
+    

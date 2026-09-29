@@ -138,7 +138,7 @@ if(not silent):
 ## Read the excitation data.
 pth= os.path.dirname(__file__)
 if(not pth):
-  pth= "."
+    pth= "."
 horizAccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCS052.AT2'
 vertAccelFilePath= pth+'/../../../aux/load_patterns/ground_motions/SCSUP.AT2'
 

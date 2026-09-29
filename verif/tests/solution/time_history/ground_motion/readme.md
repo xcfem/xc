@@ -1,14 +1,10 @@
-# Check code for bridge bearing modelization 
+# Ground motion seismic analysis verification tests.
+Ground motion seismic analysis evaluates how earthquake shaking impacts structures using key parameters like amplitude, frequency content, and duration. It relies on selecting or simulating accelerograms and applying them via response spectra or dynamic history models. 
 
-The verification tests in this folder check the results obtained with the different scripts used to simulate bridge bearings.
+## References
 
-# References
-
-- [Bridge bearing](https://en.wikipedia.org/wiki/Bridge_bearing)
-- [Bearings (Freyssinet)](https://www.freyssinet.com/solution/build/bearings/)
-- [Elastomeric bridge bearing](https://en.wikipedia.org/wiki/Elastomeric_bridge_bearing)
-- [Expansion joint](https://en.wikipedia.org/wiki/Expansion_joint)
-- [Elastomeric Bearings for Bridges: Stiffness and Tips for Modeling (midas Bridge)](https://www.midasbridge.com/en/blog/bridge-insight/elastomeric-bearings-for-bridges-stiffness-and-tips-for-modeling)
+- [How Many Clicks Does It Take?](https://openseesdigital.com/2021/02/14/how-many-clicks-does-it-take/)
+- [Elastic Response Spectra](https://github.com/AmirHosseinNamadchi/OpenSeesPy-Examples/blob/master/Elastic%20Response%20Spectra.ipynb)
 
 ### Rayleigh damping
 - [Rayleigh Damping Coefficients](https://portwooddigital.com/2020/11/08/rayleigh-damping-coefficients/)
@@ -22,9 +18,3 @@ The verification tests in this folder check the results obtained with the differ
 - [Unintended Consequences of Modeling Damping in Structures](https://www.pismin.com/10.1061/%28ASCE%290733-9445%282008%29134:4%28581%29)
 - [Experimental Verification of Viscous Damping Modeling for Inelastic Time History Analyzes](https://sci-hub.box/10.1080/13632460801925822)
 - [Problems Encountered from the Use (or Misuse) of Rayleigh Damping](https://www.usbr.gov/damsafety/TechDev/DSOTechDev/DSO-07-03.pdf)
-
-## Standards
-- [LRFD Bridge Design. Section 14. Joints and bearings](https://dot.state.mn.us/bridge/pdf/lrfdmanual/section14.pdf)
-- [AASTHO design guidelines for elastomeric bearings](https://itd.idaho.gov/wp-content/bridge/manual/14%20Joints%20and%20Bearings/14.7.5%20&%2014.7.6%20Design%20Guidelines%20for%20Elastomeric%20Bearings.pdf)
-- [EN 1337-3:2005 Structural bearings - Part 3: Elastomeric bearings](https://www.une.org/encuentra-tu-norma/busca-tu-norma/norma?c=N0034962)
-- [Bridge design, Part 4: Bearings and deck joints](https://store.standards.org.au/reader/as-5100-4-2017?preview=1)

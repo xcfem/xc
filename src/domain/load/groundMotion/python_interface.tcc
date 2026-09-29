@@ -42,6 +42,12 @@ class_<XC::MotionHistory, bases<CommandEntity>, boost::noncopyable >("MotionHist
   .add_property("vel", make_function( &XC::MotionHistory::getVelHistory, return_internal_reference<>()),&XC::MotionHistory::setVelHistory,"Get/set the history of velocities.")
   .add_property("disp", make_function( &XC::MotionHistory::getDispHistory, return_internal_reference<>()),&XC::MotionHistory::setDispHistory,"Get/set the history of displacements.")
   .def("getNumberOfDataPoints",&XC::MotionHistory::getNumDataPoints,"Returns the number of data points.")
+  .def("getPeakAccel",&XC::MotionHistory::getPeakAccel,"Returns motion's peak acceleration")
+  .def("getPeakVel",&XC::MotionHistory::getPeakVel,"Returns motion's peak velocity.")
+  .def("getPeakDisp",&XC::MotionHistory::getPeakDisp,"Returns motion's peak displacement.")
+  .def("getAccel", &XC::MotionHistory::getAccel,"Returns the acceleration at the given time.")
+  .def("getVel", &XC::MotionHistory::getVel,"Returns the velocity at the given time.")
+  .def("getDisp", &XC::MotionHistory::getDisp,"Returns the displacement at the given time.")
   ;
 
 class_<XC::GroundMotionRecord , bases<XC::GroundMotion>, boost::noncopyable >("GroundMotionRecord", no_init)

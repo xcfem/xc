@@ -115,7 +115,7 @@ XC::Node::Node(int theClassTag)
   reaction(numberDOF), alphaM(0.0), tributary(0.0)
   {
     // for FEM_ObjectBroker, recvSelf() must be invoked on object
-    parameterID = 0;
+    parameterID= 0;
     // AddingSensitivity:END ///////////////////////////////////////////
   }
 
@@ -139,7 +139,7 @@ XC::Node::Node(int tag, int theClassTag)
     if(tag>=0) 
         defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
-    parameterID = 0;
+    parameterID= 0;
     // AddingSensitivity:END ///////////////////////////////////////////
   }
 
@@ -160,7 +160,7 @@ XC::Node::Node(int tag, int ndof, double Crd1)
   : MeshComponent(tag,NOD_TAG_Node),
     numberDOF(ndof), theDOF_GroupPtr(nullptr),
     Crd(1), disp(), vel(), accel(),
-    mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
+    mass(), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
     reaction(numberDOF), alphaM(0.0), tributary(0.0)
   {
     // tag= -1 is reserved for the seed node, don't modify the default tag
@@ -168,13 +168,11 @@ XC::Node::Node(int tag, int ndof, double Crd1)
     if(tag>=0) 
       defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
-    parameterID = 0;
+    parameterID= 0;
     // AddingSensitivity:END ///////////////////////////////////////////
 
-    Crd(0) = Crd1;
+    Crd(0)= Crd1;
 
-    index = -1;
-    setup_matrices(theMatrices,ndof);
   }
 
 
@@ -195,7 +193,7 @@ XC::Node::Node(int tag, int ndof, double Crd1)
 XC::Node::Node(int tag, int ndof, double Crd1, double Crd2)
   :MeshComponent(tag,NOD_TAG_Node),numberDOF(ndof), theDOF_GroupPtr(nullptr),
    Crd(2), disp(), vel(), accel(),
-   mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
+   mass(), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
    reaction(numberDOF), alphaM(0.0), tributary(0.0)
   {
     // tag= -1 is reserved for the seed node, don't modify the default tag
@@ -203,14 +201,12 @@ XC::Node::Node(int tag, int ndof, double Crd1, double Crd2)
     if(tag>=0) 
       defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
-    parameterID = 0;
+    parameterID= 0;
     // AddingSensitivity:END ///////////////////////////////////////////
 
     Crd(0)= Crd1;
     Crd(1)= Crd2;
 
-    index = -1;
-    setup_matrices(theMatrices,ndof);
   }
 
 
@@ -232,7 +228,7 @@ XC::Node::Node(int tag, int ndof, double Crd1, double Crd2)
 XC::Node::Node(int tag, int ndof, double Crd1, double Crd2, double Crd3)
   :MeshComponent(tag,NOD_TAG_Node), numberDOF(ndof), theDOF_GroupPtr(nullptr),
    Crd(3), disp(), vel(), accel(),
-   mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
+   mass(), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
    reaction(numberDOF), alphaM(0.0), tributary(0.0)
   {
     // tag= -1 is reserved for the seed node, don't modify the default tag
@@ -240,15 +236,13 @@ XC::Node::Node(int tag, int ndof, double Crd1, double Crd2, double Crd3)
     if(tag>=0) 
       defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
-    parameterID = 0;
+    parameterID= 0;
     // AddingSensitivity:END ///////////////////////////////////////////
 
-    Crd(0) = Crd1;
-    Crd(1) = Crd2;
-    Crd(2) = Crd3;
+    Crd(0)= Crd1;
+    Crd(1)= Crd2;
+    Crd(2)= Crd3;
 
-    index= -1;
-    setup_matrices(theMatrices,ndof);
   }
 
 //! @brief Constructor.
@@ -259,7 +253,7 @@ XC::Node::Node(int tag, int ndof, const Vector &crds)
   :MeshComponent(tag,NOD_TAG_Node),
    numberDOF(ndof), theDOF_GroupPtr(nullptr),
    Crd(crds), disp(), vel(), accel(),
-   mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
+   mass(), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
    reaction(numberDOF), alphaM(0.0), tributary(0.0)
   {
     // tag= -1 is reserved for the seed node, don't modify the default tag
@@ -267,11 +261,9 @@ XC::Node::Node(int tag, int ndof, const Vector &crds)
     if(tag>=0) 
       defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
-    parameterID = 0;
+    parameterID= 0;
     // AddingSensitivity:END ///////////////////////////////////////////
 
-    index= -1;
-    setup_matrices(theMatrices,ndof);
   }
 
 //! @brief  used for domain decomposition & external nodes
@@ -285,11 +277,11 @@ XC::Node::Node(const Node &otherNode, bool copyMass)
    unbalLoadWithInertia(otherNode.unbalLoadWithInertia),
    reaction(otherNode.reaction), alphaM(otherNode.alphaM),
    tributary(otherNode.tributary), theEigenvectors(otherNode.theEigenvectors),
-   connected(otherNode.connected),
+   connected(otherNode.connected), 
    freeze_constraints(otherNode.freeze_constraints)
   {
     // AddingSensitivity:BEGIN /////////////////////////////////////////
-    parameterID = 0;
+    parameterID= 0;
     // AddingSensitivity:END ///////////////////////////////////////////
 
     unbalLoad.Zero();
@@ -297,8 +289,6 @@ XC::Node::Node(const Node &otherNode, bool copyMass)
     if(copyMass == true)
       mass= otherNode.mass;
 
-    index = -1;
-    setup_matrices(theMatrices,numberDOF);
   }
 
 //! @brief Inserts a component (element, constraint,...) to the connected component list.
@@ -1204,14 +1194,17 @@ const XC::NodalLoad *XC::Node::newLoad(const Vector &v)
 const XC::NodalLoad *XC::Node::createInertiaLoad(const Vector &accel)
   {
     const NodalLoad *retval= nullptr;
-    Vector v= unbalLoad;
-    v.Zero();
-    const size_t sz= accel.Size();
-    for(size_t i= 0;i<sz;i++)
-      v[i]-= mass(i,i)*accel(i); //Like Ansys.
-    const double norm= v.Norm2();
-    if(norm>0.0)
-      retval= newLoad(v); //Put the load in the current load pattern.
+    if(!mass.isEmpty())
+      {
+	Vector v(this->unbalLoad);
+	v.Zero();
+	const size_t sz= accel.Size();
+	for(size_t i= 0;i<sz;i++)
+	  v[i]-= mass(i,i)*accel(i); //Like Ansys.
+	const double norm= v.Norm2();
+	if(norm>0.0)
+	  retval= newLoad(v); //Put the load in the current load pattern.
+      }
     return retval;
   }
 
@@ -1264,9 +1257,9 @@ int XC::Node::addUnbalancedLoad(const Vector &add, double fact)
 int XC::Node::addInertiaLoadToUnbalance(const Vector &accelG, double fact)
   {
     // simply return if node has no mass or R matrix
-    if(R.isEmpty() || isDead())
+    if(mass.isEmpty() || R.isEmpty() || isDead())
       return 0;
-
+    
     // otherwise we must determine MR accelG
     if(accelG.Size() != R.noCols())
       {
@@ -1276,6 +1269,7 @@ int XC::Node::addInertiaLoadToUnbalance(const Vector &accelG, double fact)
         return -1;
       }
 
+    
     // form - fact * M*R*accelG and add it to the unbalanced load
     //unbalLoad-= ((mass) * R * accelG)*fact;
     Matrix MR(mass.noRows(), R.noCols());
@@ -1288,7 +1282,7 @@ int XC::Node::addInertiaLoadToUnbalance(const Vector &accelG, double fact)
 int XC::Node::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accelG, double fact, bool somethingRandomInMotions)
   {
     // simply return if node has no R matrix
-    if(R.isEmpty())
+    if(R.isEmpty() || mass.isEmpty())
       return 0;
 
     // otherwise we must determine MR accelG
@@ -1306,7 +1300,7 @@ int XC::Node::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accelG, dou
 
     Matrix massSens(mass.noRows(),mass.noCols());
     if(parameterID != 0)
-      { massSens(parameterID-1,parameterID-1) = 1.0; }
+      { massSens(parameterID-1,parameterID-1)= 1.0; }
 
     Matrix MR(mass.noRows(), R.noCols());
 
@@ -1340,6 +1334,7 @@ const XC::Vector &XC::Node::getUnbalancedLoadIncInertia(void) const
         const Vector &theAccel= getTrialAccel(); // in case accel not created
         unbalLoadWithInertia.addMatrixVector(1.0, mass, theAccel, -1.0);
 
+	// Add damping force.
         if(alphaM != 0.0)
           {
             const Vector &theVel= getTrialVel(); // in case vel not created
@@ -1415,24 +1410,38 @@ int XC::Node::revertToStart(void)
 //! message is printed and the program terminated if no space is available
 //! on the heap for this matrix.
 const XC::Matrix &XC::Node::getMass(void) const
-  { return mass; }
+  {
+    if(this->matrixIndex == -1)
+      { setGlobalMatrices(theMatrices,this->numberDOF); }
+    if(mass.isEmpty())
+      {
+	theMatrices[this->matrixIndex].Zero();
+	return theMatrices[this->matrixIndex];
+      }
+    else
+      return mass;
+  }
 
 //! @brief Return the mass matrix component for the DOF argument.
 double XC::Node::getMassComponent(const int &dof) const
   {
-    const size_t sz= mass.noRows();
-    Vector J(sz);
-    J(dof)= 1.0;
-    Vector tmp(sz);
-    tmp.addMatrixVector(1.0, mass, J, 1.0);
-    const double retval= dot(J,tmp);
+    double retval= 0.0;
+    if(!mass.isEmpty())
+      {
+	const size_t sz= mass.noRows();
+	Vector J(sz);
+	J(dof)= 1.0;
+	Vector tmp(sz);
+	tmp.addMatrixVector(1.0, mass, J, 1.0);
+	retval= dot(J,tmp);
+      }
     return retval;
   }
 
 //! @brief Sets the Rayleigh dumping factor.
 int XC::Node::setRayleighDampingFactor(double alpham)
   {
-    alphaM = alpham;
+    alphaM= alpham;
     return 0;
   }
 
@@ -1443,15 +1452,17 @@ double XC::Node::getRayleighDampingFactor(void) const
 //! @brief Return the damping matrix of the node.
 const XC::Matrix &XC::Node::getDamp(void) const
   {
+    if(this->matrixIndex == -1)
+      { setGlobalMatrices(theMatrices,this->numberDOF); }
     // make sure it was created before we return it
-    if(alphaM == 0.0)
+    if(mass.isEmpty() || (alphaM == 0.0))
       {
-        theMatrices[index].Zero();
-        return theMatrices[index];
+        theMatrices[this->matrixIndex].Zero();
+        return theMatrices[this->matrixIndex];
       }
     else
       {
-        Matrix &result= theMatrices[index];
+        Matrix &result= theMatrices[this->matrixIndex];
         result= mass;
         result*= alphaM;
         return result;
@@ -1473,17 +1484,19 @@ const double &XC::Node::getTributary(void) const
 
 const XC::Matrix &XC::Node::getDampSensitivity(void) const
   {
+    if(this->matrixIndex == -1)
+      { setGlobalMatrices(theMatrices,this->numberDOF); }
     // make sure it was created before we return it
-    if(alphaM == 0.0)
+    if(mass.isEmpty() || (alphaM == 0.0))
       {
-        theMatrices[index].Zero();
-        return theMatrices[index];
+        theMatrices[this->matrixIndex].Zero();
+        return theMatrices[this->matrixIndex];
       }
     else
       {
-        Matrix &result= theMatrices[index];
+        Matrix &result= theMatrices[this->matrixIndex];
         result.Zero();
-        //result = *mass;
+        //result= *mass;
         //result *= alphaM;
         return result;
       }
@@ -1732,7 +1745,7 @@ double XC::Node::getModalParticipationFactor(int mode,const std::set<int> &dofs)
     double retval= 0;
     if(dofs.empty())
       { retval= getModalParticipationFactor(mode); }
-    else
+    else if(!mass.isEmpty())
       {
         const Vector ev= getEigenvector(mode);
         const int sz= ev.Size();
@@ -1819,11 +1832,14 @@ XC::Matrix XC::Node::getDistributionFactors(void) const
 double XC::Node::getEffectiveModalMass(int mode) const
   {
     double retval= 0;
-    const Vector ev= getEigenvector(mode);
-    const int sz= ev.Size();
-    const double tau= this->getModalParticipationFactor(mode);
-    const Vector J(sz,1.0);
-    retval= tau*dot(ev,(mass*J));
+    if(!mass.isEmpty())
+      {
+	const Vector ev= getEigenvector(mode);
+	const int sz= ev.Size();
+	const double tau= this->getModalParticipationFactor(mode);
+	const Vector J(sz,1.0);
+	retval= tau*dot(ev,(mass*J));
+      }
     return retval;
   }
 
@@ -1842,8 +1858,13 @@ XC::Vector XC::Node::getEffectiveModalMasses(void) const
 //! being passed as parameter and the acceleration corresponding to that mode.
 XC::Vector XC::Node::getEquivalentStaticLoad(int mode,const double &accel_mode) const
   {
-    Vector retval= mass*getDistributionFactor(mode);
-    retval*=(accel_mode);
+    const Vector df= this->getDistributionFactor(mode);
+    Vector retval(df.Size(), 0.0);
+    if(!mass.isEmpty())
+      {
+	retval= mass*df;
+	retval*=(accel_mode);
+      }
     return retval;
   }
 
@@ -1965,7 +1986,7 @@ int XC::Node::recvData(const Communicator &comm)
     res+= comm.receiveMatrix(R,getDbTagData(),CommMetaData(10));
     res+= comm.receiveDoubles(alphaM,tributary,getDbTagData(),CommMetaData(11));
     res+= comm.receiveMatrix(theEigenvectors,getDbTagData(),CommMetaData(12));
-    this->index= -1;
+    this->matrixIndex= -1;
     res+= comm.receiveMovable(disp,getDbTagData(),CommMetaData(13));
     res+= comm.receiveMovable(vel,getDbTagData(),CommMetaData(14));
     res+= comm.receiveMovable(accel,getDbTagData(),CommMetaData(15));
@@ -1974,7 +1995,6 @@ int XC::Node::recvData(const Communicator &comm)
     std::vector<ID> constraintsTags;
     res+= comm.receiveIDs(constraintsTags, getDbTagData(),CommMetaData(17));
     set_id_constraints(nodeLockersTags, constraintsTags);
-    setup_matrices(theMatrices,numberDOF);
     return res;
   }
 
@@ -2019,7 +2039,7 @@ void XC::Node::setPyDict(const boost::python::dict &d)
     this->alphaM= boost::python::extract<double>(d["alphaM"]);
     this->tributary= boost::python::extract<double>(d["tributary"]);
     theEigenvectors= Matrix(boost::python::extract<boost::python::list>(d["theEigenvectors"]));
-    this->index= -1;
+    this->matrixIndex= -1;
     disp.setPyDict(boost::python::extract<boost::python::dict>(d["disp"]));
     vel.setPyDict(boost::python::extract<boost::python::dict>(d["vel"]));
     accel.setPyDict(boost::python::extract<boost::python::dict>(d["accel"]));
@@ -2032,7 +2052,6 @@ void XC::Node::setPyDict(const boost::python::dict &d)
 	constraintsTags[i]= ID(boost::python::extract<boost::python::list>(pyList[i]));
       }
     this->set_id_constraints(nodeLockersTags, constraintsTags);
-    setup_matrices(theMatrices,numberDOF);    
   }
 
 //! @brief Send the object through the communicator argument.
@@ -2077,7 +2096,7 @@ int XC::Node::recvSelf(const Communicator &comm)
   {
     const int dataTag= getDbTag();
     inicComm(22);
-    int res = comm.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; failed to receive ID data"
@@ -2155,10 +2174,32 @@ void XC::Node::Print(std::ostream &s, int flag) const
 
 XC::Matrix XC::Node::getMassSensitivity(void) const
   {
-    Matrix massSens(mass.noRows(),mass.noCols());
-    if( (parameterID == 1) || (parameterID == 2) || (parameterID == 3) )
-     { massSens(parameterID-1,parameterID-1) = 1.0; }
-    return massSens;
+    if(this->matrixIndex == -1)
+      { setGlobalMatrices(theMatrices,this->numberDOF); }
+    // make sure it was created before we return it
+    if(mass.isEmpty())
+      {
+        theMatrices[this->matrixIndex].Zero();
+        return theMatrices[this->matrixIndex];
+      }
+    else
+      {
+	Matrix massSens(mass.noRows(),mass.noCols());
+	if( (parameterID == 1) || (parameterID == 2) || (parameterID == 3) )
+	  { massSens(parameterID-1,parameterID-1)= 1.0; }
+	else if(parameterID == 7)
+	  {
+	    massSens(0,0) = 1.0;
+	    massSens(1,1) = 1.0;
+	  }
+	else if(parameterID == 8)
+	  {
+	    massSens(0,0) = 1.0;
+	    massSens(1,1) = 1.0;
+	    massSens(2,2) = 1.0;
+	  }
+	return massSens;
+      }
   }
 
 
@@ -2188,23 +2229,23 @@ int XC::Node::setParameter(const std::vector<std::string> &argv, Parameter &para
 
     if((strstr(argv[0].c_str(),"mass") != 0) || (strstr(argv[0].c_str(),"-mass") != 0))
       { 
-        int direction = 0; // atoi(argv[1]);
+        int direction= 0; // atoi(argv[1]);
         if((argv[1] == "x")||(argv[1] == "X")||(argv[1] == "1"))
-          direction = 1;
+          direction= 1;
         else if((argv[1] == "y")||(argv[1] == "Y")||(argv[1] == "2"))
-          direction = 2;
+          direction= 2;
         else if((argv[1] == "z")||(argv[1] == "Z")||(argv[1] == "3"))                                        
-          direction = 3;
+          direction= 3;
         else if((argv[1] == "xy")||(argv[1] == "XY"))
-          direction = 7;
+          direction= 7;
         else if((argv[1] == "xyz")||(argv[1] == "XYZ"))
-          direction = 8;
+          direction= 8;
         if((direction >= 1 && direction <= 3) || direction == 7 || direction == 8)
           return param.addObject(direction, this);
       }
     else if(strstr(argv[0].c_str(),"coord") != 0)
       {
-        int direction = atoi(argv[1]);
+        int direction= atoi(argv[1]);
         if(direction >= 1 && direction <= 3)
           return param.addObject(direction+3, this);
       }
@@ -2220,20 +2261,20 @@ int XC::Node::setParameter(const std::vector<std::string> &argv, Parameter &para
 int XC::Node::updateParameter(int pparameterID, Information &info)
   {
     if( (pparameterID == 1) || (pparameterID == 2) || (pparameterID == 3) )
-      { mass(pparameterID-1,pparameterID-1) = info.theDouble; }
+      { mass(pparameterID-1,pparameterID-1)= info.theDouble; }
     else
       if( (pparameterID == 4) || (pparameterID == 5) || (pparameterID == 6) )
         {
           if(Crd(pparameterID-4) != info.theDouble)
             {
               //Set the coordinate value.
-              Crd(pparameterID-4) = info.theDouble;
+              Crd(pparameterID-4)= info.theDouble;
 
               // Need to "setDomain" to make the change take effect.
-              Domain *theDomain = this->getDomain();
-              ElementIter &theElements = theDomain->getElements();
+              Domain *theDomain= this->getDomain();
+              ElementIter &theElements= theDomain->getElements();
               Element *theElement;
-              while((theElement = theElements()) != 0)
+              while((theElement= theElements()) != 0)
                 { theElement->setDomain(theDomain); }
             }
           else
@@ -2247,7 +2288,7 @@ int XC::Node::updateParameter(int pparameterID, Information &info)
 
 int XC::Node::activateParameter(int passedParameterID)
   {
-    parameterID = passedParameterID;
+    parameterID= passedParameterID;
     return 0;
   }
 
@@ -2271,13 +2312,13 @@ int XC::Node::saveSensitivity(Vector *v,Vector *vdot,Vector *vdotdot, int gradNu
 
     // Put GRADIENT VECTORS into COLUMNS of matrices
     for(i=0; i<numberDOF; i++ )
-      { dispSensitivity(i,gradNum-1) = (*v)(i); }
+      { dispSensitivity(i,gradNum-1)= (*v)(i); }
     if( (vdot!=0) && (vdotdot!=0) )
       {
         for(i=0; i<numberDOF; i++ )
-          { velSensitivity(i,gradNum-1) = (*vdot)(i); }
+          { velSensitivity(i,gradNum-1)= (*vdot)(i); }
         for(i=0; i<numberDOF; i++ )
-          { accSensitivity(i,gradNum-1) = (*vdotdot)(i); }
+          { accSensitivity(i,gradNum-1)= (*vdotdot)(i); }
       }
     return 0;
   }

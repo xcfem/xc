@@ -157,10 +157,10 @@ double XC::PathSeries::getFactor(double pseudoTime) const
   {
     double retval= 0.0;
     const long long size= thePath.Size();
-    if(pseudoTime >= this->startTime && (size>0))
+    if((pseudoTime >= this->startTime) && (size>0))
       {
         // determine indexes into the data array whose boundary holds the time
-        const double incr= (pseudoTime-startTime)/pathTimeIncr;
+        const double incr= (pseudoTime-this->startTime)/this->pathTimeIncr;
         const long long incr1= static_cast<long long>(floor(incr));
         const long long incr2= incr1+1;
 
@@ -168,7 +168,7 @@ double XC::PathSeries::getFactor(double pseudoTime) const
           {
             const double &value1= thePath[incr1];
             const double &value2= thePath[incr2];
-            retval= cFactor*(value1 + (value2-value1)*(incr - incr1));
+	    retval= cFactor*(value1 + (value2-value1)*(incr - incr1));
           }
 	else
 	  {

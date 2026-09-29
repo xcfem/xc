@@ -47,10 +47,10 @@ class MeshComponent: public ContinuaReprComponent
     void check_matrices(const std::deque<Matrix> &,const int &) const;
     void new_matrix(std::deque<Matrix> &,const int &) const;
   protected:
-    mutable int index; //!< Index for VTK arrays.
+    mutable int matrixIndex; //!< Index of the corresponding matrix.
     LabelContainer labels; //!< Label container.
 
-    void setup_matrices(std::deque<Matrix> &,const int &) const;
+    void setGlobalMatrices(std::deque<Matrix> &,const int &) const;
     int sendIdsLabels(int posDbTag,Communicator &);
     int recvIdsLabels(int posDbTag,const Communicator &);
     int sendData(Communicator &);
@@ -60,6 +60,9 @@ class MeshComponent: public ContinuaReprComponent
     // constructors
     MeshComponent(int classTag);
     MeshComponent(int tag, int classTag);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 } // end of XC namespace

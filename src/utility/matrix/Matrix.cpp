@@ -867,10 +867,10 @@ int XC::Matrix::addMatrixTransposeProduct(double thisFact,
 
 //! @brief to perform this += T' * B * T
 int XC::Matrix::addMatrixTripleProduct(double thisFact, 
-			       const XC::Matrix &T, 
-			       const XC::Matrix &B, 
-			       double otherFact)
-{
+				       const Matrix &T, 
+				       const Matrix &B, 
+				       double otherFact)
+  {
     if(thisFact == 1.0 && otherFact == 0.0)
       return 0;
 #ifdef _G3DEBUG
@@ -976,15 +976,16 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
 
 //! @brief to perform this += At * B * C
 int XC::Matrix::addMatrixTripleProduct(double thisFact, 
-			       const Matrix &A, 
-			       const Matrix &B,
-			       const Matrix &C,
-			       double otherFact)
+				       const Matrix &A, 
+				       const Matrix &B,
+				       const Matrix &C,
+				       double otherFact)
   {
+    // Computes (*this) += thisFact * (*this) + otherFact * (A^T * B * C)
     if(thisFact == 1.0 && otherFact == 0.0)
       return 0;
 #ifdef _G3DEBUG
-    if((numRows != A.numRows) || (A.numCols != B.numRows) || (B.numCols != C.numRows) ||
+    if((numRows != A.numCols) || (A.numRows != B.numRows) || (B.numCols != C.numRows) ||
 	(C.numCols != numCols))
       {
 	std::cerr  << Color::red << getClassName() << "::" << __FUNCTION__
@@ -994,7 +995,8 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
       }
 #endif
 
-    // cheack work area can hold the temporary matrix
+    // check work area can hold the temporary matrix
+    // work holds B*C, size (m x q) = (B.numRows x numCols)
     const size_t sizeWork = B.numRows * numCols;
 
     if(sizeWork > auxMatrix.getSizeDoubleWork()) {
@@ -1010,20 +1012,23 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
     // now form B * C * fact store in matrixWork == A area
     // NOTE: looping as per blas3 dgemm_: j,k,i
     
-    int rowsB = B.numRows;
-    const double *ckjPtr  = &(C.data)[0];
-    for(int j=0; j<numCols; j++) {
-      double *aijPtrA = &matrixWork[j*rowsB];
-      for(int k=0; k<rowsB; k++) {
-	double tmp = *ckjPtr++ * otherFact;
-	double *aijPtr = aijPtrA;
-	const double *bikPtr = &(B.data)[k*rowsB];
-	for(int i=0; i<rowsB; i++) 
-	  *aijPtr++ += *bikPtr++ * tmp;
+    const int rowsB= B.numRows;
+    const int colsB= B.numCols;
+    const double *ckjPtr= &(C.data)[0];
+    for(int j=0; j<numCols; j++)
+      {
+	double *aijPtrA = &matrixWork[j*rowsB];
+	for(int k=0; k<colsB; k++)
+	  {
+	    double tmp= *ckjPtr++ * otherFact;
+	    double *aijPtr= aijPtrA;
+	    const double *bikPtr = &(B.data)[k*rowsB];
+	    for(int i=0; i<rowsB; i++) 
+	      *aijPtr++ += *bikPtr++ * tmp;
+	  }
       }
-    }
 
-    // now form A' * matrixWork
+    // now form A^T * matrixWork
     // NOTE: looping as per blas3 dgemm_: j,i,k
     int dimB = rowsB;
     if(thisFact == 1.0) {
