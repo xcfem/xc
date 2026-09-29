@@ -52,6 +52,7 @@ class RawLineSetToMesh(SetToMesh):
             seedElemHandler.defaultTransformation= self.coordinateTransformation.getName()
         else:
             seedElemHandler.defaultTransformation= 'None'
+        
         return seedElemHandler.newElement(self.elemType)
 
     def generateMesh(self, preprocessor,sectGeom='N'):
@@ -61,6 +62,7 @@ class RawLineSetToMesh(SetToMesh):
                   for each element (defaults to 'N')
         '''
         elem= self.getSeedElement(preprocessor)
+        
         if(__debug__):
             if(not elem):
                 AssertionError('Can\'t create the seed element.')        
@@ -80,8 +82,11 @@ def getDefaultCoordinateTransformation(preprocessor,coordTransfName,coordTransfT
         retval= trfs.newPDeltaCrdTransf3d(coordTransfName)
     elif coordTransfType.lower()=='corotational':
         retval= trfs.newCorotCrdTransf3d(coordTransfName)
-    else:
+    elif coordTransfType.lower()=='linear':
         retval= trfs.newLinearCrdTransf3d(coordTransfName)
+    else:
+         lmsg.error('coord. transformation type: "'+coordTransfType+'" not known, only "linear", "pdelta" or "corotational" types are allowed')
+         sys.exit(1)
     retval.xzVector= vDir
     return retval
 
