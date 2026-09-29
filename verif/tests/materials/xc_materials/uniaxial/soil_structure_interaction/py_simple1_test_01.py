@@ -13,19 +13,18 @@ import os
 import xc
 import math
 import numpy as np
+from materials import soil_structure_interaction as ssi
 from misc_utils import log_messages as lmsg
 
 feProblem= xc.FEProblem()
 preprocessor= feProblem.getPreprocessor
-materials= preprocessor.getMaterialHandler
-pyS1= materials.newMaterial('py_simple1','pyS1')
-pyS1.soilType= 1 #Soft clay.
-pyS1.ultimateCapacity= 1958.0
-pyS1.y50= 0.125
-pyS1.dashPot= 0
-pyS1.dragResistanceFactor= 0.0
-pyS1.initialize()
-
+pyS1= ssi.def_pysimple1_material(preprocessor,
+                                 matName= 'pyS1',
+                                 soilType= 1, #Soft clay.
+                                 pult= 1958.0,
+                                 Y50= 0.125,
+                                 c= 0.0,
+                                 Cd= 0.0)
 epsMin= 0.0
 epsMax= 3*pyS1.y50
 incEps=(epsMax-epsMin)/25.0
