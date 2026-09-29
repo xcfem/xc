@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
+''' Test of PySimple1 uniaxial material object.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) "
 __copyright__= "Copyright 2018, LCPT"
@@ -8,7 +8,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es "
 
 
-''' Test of PySimple1 uniaxial material object.'''
 import os
 import xc
 import math
@@ -16,6 +15,7 @@ import numpy as np
 from materials import soil_structure_interaction as ssi
 from misc_utils import log_messages as lmsg
 
+# Define material.
 feProblem= xc.FEProblem()
 preprocessor= feProblem.getPreprocessor
 pyS1= ssi.def_pysimple1_material(preprocessor,
