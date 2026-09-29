@@ -79,6 +79,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 
+# Check results.
 R= n2.getReaction[1]
 R_ref= 0.5*trussMassRefZ*gravity
 ratio2= abs(R-R_ref)/R_ref
