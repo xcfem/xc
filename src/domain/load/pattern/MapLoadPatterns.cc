@@ -247,7 +247,7 @@ XC::TimeSeries *XC::MapLoadPatterns::newTimeSeries(const std::string &type, cons
       ts= create_time_series<RectangularSeries>(cod_ts);
     else if(type == "triangular_ts")
       ts= create_time_series<TriangleSeries>(cod_ts);
-    else if(type == "trig_ts")
+    else if((type == "trig_ts") || (type == "sine_ts")
       ts= create_time_series<TrigSeries>(cod_ts);
     else
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
