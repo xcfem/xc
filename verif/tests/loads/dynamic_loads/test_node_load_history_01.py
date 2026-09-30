@@ -13,7 +13,7 @@ __email__= "l.pereztato@gmail.com"
 import math
 from scipy import interpolate
 import xc
-from solution import predefined_solutions
+from solution import transient
 from model import predefined_spaces
 from materials import typical_materials
 from misc_utils import log_messages as lmsg
@@ -73,7 +73,7 @@ preprocessor.getDomain.setTime(0.0) # initialize time.
 duration= ts.getDuration()
 numberOfSteps= int(duration/dT)
 
-solProc= predefined_solutions.PlainLinearNewmark(feProblem, numSteps= numberOfSteps, timeStep= dT)
+solProc= transient.PlainLinearNewmark(feProblem, numSteps= numberOfSteps, timeStep= dT)
 if(solProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')
     quit()

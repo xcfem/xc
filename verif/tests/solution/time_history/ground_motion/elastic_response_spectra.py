@@ -11,6 +11,7 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
+from solution import transient
 
 def analyze_SDOF(period, damping_ratio):
     
@@ -72,7 +73,7 @@ def analyze_SDOF(period, damping_ratio):
     lPatterns.addToDomain(gm.name)
 
     preprocessor.getDomain.setTime(timeValues[0]) # set the domain time.
-    solProc= predefined_solutions.PlainLinearNewmark(feProblem, numSteps= 1, timeStep= dt, constraintHandlerType= 'transformation', maxNumIter= 10, printFlag= 0)
+    solProc= transient.PlainLinearNewmark(feProblem, numSteps= 1, timeStep= dt, constraintHandlerType= 'transformation', maxNumIter= 10, printFlag= 0)
     solProc.setup()
     analysis= solProc.getAnalysis()
     

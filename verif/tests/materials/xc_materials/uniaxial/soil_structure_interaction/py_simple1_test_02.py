@@ -13,7 +13,7 @@ import xc
 import math
 from model import predefined_spaces
 from materials import soil_structure_interaction as ssi
-from solution import predefined_solutions
+from solution import transient
 from actions.quake import ground_motion_utils as gmu
 from misc_utils import log_messages as lmsg
 
@@ -51,7 +51,7 @@ preprocessor.getDomain.commit()
 
 # Solution procedure.
 timeStep= .01
-solProc= predefined_solutions.PlainNewmarkNewtonRaphson(prb= feProblem, numSteps= 0, timeStep= timeStep, maxNumIter= 10, convTestType= 'norm_unbalance_conv_test', printFlag= 0)
+solProc= transient.PlainNewmarkNewtonRaphson(prb= feProblem, numSteps= 0, timeStep= timeStep, maxNumIter= 10, convTestType= 'norm_unbalance_conv_test', printFlag= 0)
 solProc.setup()
 analysis= solProc.getAnalysis()
 

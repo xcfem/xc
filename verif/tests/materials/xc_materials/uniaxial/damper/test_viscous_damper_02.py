@@ -19,7 +19,7 @@ from model import predefined_spaces
 from materials import typical_materials
 from materials import damper_materials
 from actions.quake import ground_motion_utils as gmu
-from solution import predefined_solutions
+from solution import transient
 
 silent= True # If false, display results.
 
@@ -117,9 +117,9 @@ damperRecorder2.callbackRecord= callbackRecord
 
 # Perform the dynamic analysis.
 numberOfSteps= gmSz
-transientSolProc= predefined_solutions.PlainNewmarkNewtonRaphson(feProblem, numSteps= numberOfSteps, timeStep= .01, gamma= 0.5, beta= 0.25, maxNumIter= 25, convergenceTestTol= 1e-12, printFlag= 0)
-# transientSolProc= predefined_solutions.PlainLinearNewmark(feProblem, numSteps= numberOfSteps, timeStep= .01, gamma= 0.5, beta= 0.25, maxNumIter= 25, convergenceTestTol= 1e-12, printFlag= 0)
-# transientSolProc= predefined_solutions.PlainNewmarkKrylovNewton(feProblem, numSteps= numberOfSteps, timeStep= .01, gamma= 0.5, beta= 0.25, maxNumIter= 25, convergenceTestTol= 1e-12, printFlag= 0, convTestType= 'energy_incr_conv_test', soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver')
+transientSolProc= transient.PlainNewmarkNewtonRaphson(feProblem, numSteps= numberOfSteps, timeStep= .01, gamma= 0.5, beta= 0.25, maxNumIter= 25, convergenceTestTol= 1e-12, printFlag= 0)
+# transientSolProc= transient.PlainLinearNewmark(feProblem, numSteps= numberOfSteps, timeStep= .01, gamma= 0.5, beta= 0.25, maxNumIter= 25, convergenceTestTol= 1e-12, printFlag= 0)
+# transientSolProc= transient.PlainNewmarkKrylovNewton(feProblem, numSteps= numberOfSteps, timeStep= .01, gamma= 0.5, beta= 0.25, maxNumIter= 25, convergenceTestTol= 1e-12, printFlag= 0, convTestType= 'energy_incr_conv_test', soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver')
 if(transientSolProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')
     quit()

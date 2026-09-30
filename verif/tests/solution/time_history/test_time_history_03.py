@@ -18,6 +18,7 @@ from scipy.constants import g
 from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
+from solution import transient
 from actions.quake import ground_motion_utils as gmu
 from misc_utils import log_messages as lmsg
 
@@ -115,7 +116,7 @@ domain.setRayleighDampingFactors(rayleigh)
 ## Perform the analysis.
 numberOfSteps= 2*xGMSize
 domain.setTime(0.0) # initialize time.
-solProc= predefined_solutions.PlainNewmarkNewtonRaphson(prb= feProblem, numSteps= numberOfSteps, timeStep= timeStep, maxNumIter= 1, convTestType= 'energy_incr_conv_test', printFlag= 0)
+solProc= transient.PlainNewmarkNewtonRaphson(prb= feProblem, numSteps= numberOfSteps, timeStep= timeStep, maxNumIter= 1, convTestType= 'energy_incr_conv_test', printFlag= 0)
 if(solProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')
     quit()

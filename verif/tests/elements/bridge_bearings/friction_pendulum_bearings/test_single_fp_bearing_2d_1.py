@@ -18,6 +18,7 @@ import xc
 from materials import typical_materials
 from model import predefined_spaces
 from solution import predefined_solutions
+from solution import transient
 from model import friction_models as fm
 from materials import friction_bearings as fb
 from actions.quake import ground_motion_utils as gmu
@@ -204,7 +205,7 @@ bearingRecorder2.callbackRecord= callbackRecord
 
 # 13. Perform the dynamic analysis.
 numberOfSteps= max(exc1GMsz, exc2GMsz)
-transientSolProc= predefined_solutions.PlainNewmarkNewtonRaphson(feProblem, numSteps= numberOfSteps, timeStep= dt, gamma= 0.5, beta= 0.25, maxNumIter= 25, convergenceTestTol= 1e-12, printFlag= 0)
+transientSolProc= transient.PlainNewmarkNewtonRaphson(feProblem, numSteps= numberOfSteps, timeStep= dt, gamma= 0.5, beta= 0.25, maxNumIter= 25, convergenceTestTol= 1e-12, printFlag= 0)
 if(transientSolProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')
     quit()

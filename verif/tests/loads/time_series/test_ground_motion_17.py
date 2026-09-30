@@ -12,7 +12,7 @@ import xc
 import numpy as np
 from scipy.integrate import cumulative_trapezoid
 from model import predefined_spaces
-from solution import predefined_solutions
+from solution import transient
 
 time_values= np.linspace(0.0, 5.0, 251)
 duration= time_values[-1] - time_values[0]
@@ -87,7 +87,7 @@ recDFree.callbackRecord= "dFree.append([self.getDomain.getTimeTracker.getCurrent
 
 # Define the solution procedure.
 Nsteps = int(duration/dt)
-solProc= predefined_solutions.PlainLinearNewmark(feProblem, numSteps= Nsteps, timeStep= dt)
+solProc= transient.PlainLinearNewmark(feProblem, numSteps= Nsteps, timeStep= dt)
 
 load_patterns= [accelLP, velLP, dispLP]
 disp_results= list()
