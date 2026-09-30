@@ -734,6 +734,15 @@ class PredefinedSpace(object):
         ''' Return the value of the committed pseudo-time.'''
         return self.preprocessor.getDomain.commitedTime
 
+    def setCurrentTimeSeries(self, tsName):
+        ''' Set the current time series.
+
+        :param tsName: time series name.
+        '''
+        lPatterns= self.getLoadHandler().getLoadPatterns
+        lPatterns.currentTimeSeries= tsName
+        return lPatterns.getTimeSeries(tsName)
+        
     def newTimeSeries(self, name= 'ts', tsType= 'constant_ts', setCurrent= True):
         ''' Creates a times series -modulation of the load
             in time-.
