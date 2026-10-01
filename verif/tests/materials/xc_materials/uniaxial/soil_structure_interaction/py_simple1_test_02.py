@@ -17,7 +17,7 @@ from solution import transient
 from actions.quake import ground_motion_utils as gmu
 from misc_utils import log_messages as lmsg
 
-silent= False
+silent= True
 
 # Define FE problem.
 feProblem= xc.FEProblem()
@@ -90,13 +90,13 @@ tFXmax= fXExtrema.t_max
 err+= (tFXmax-0.39)**2
 err= math.sqrt(err)
 
-'''
-print('Minimum displacement: ', uXmin, ' at time: ', tUXmin)
-print('Maximum displacement: ', uXmax, ' at time: ', tUXmax)
-print('Minimum soil reaction: ', fXmin, ' at time: ', tFXmin)
-print('Maximum soil reaction: ', fXmax, ' at time: ', tFXmax)
-print(err)
-'''
+if not silent:
+    print('Minimum displacement: ', uXmin, ' at time: ', tUXmin)
+    print('Maximum displacement: ', uXmax, ' at time: ', tUXmax)
+    print('Minimum soil reaction: ', fXmin, ' at time: ', tFXmin)
+    print('Maximum soil reaction: ', fXmax, ' at time: ', tFXmax)
+    print('err= ', err)
+
 
 import os
 fname= os.path.basename(__file__)
