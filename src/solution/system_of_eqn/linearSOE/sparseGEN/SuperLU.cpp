@@ -129,7 +129,7 @@ void XC::SuperLU::free_mem(void)
     if(etree.Size()>0)
       {
          etree.resize(0);	
-         StatFree(&stat);
+         StatFree(&superlu_stat);
       }
   }
 
@@ -178,7 +178,7 @@ void XC::SuperLU::alloc(const size_t &n)
       {
         alloc_permutation_vectors(n);
         // initialization
-        StatInit(&stat);
+        StatInit(&superlu_stat);
         alloc_matrices(n);
       }
   }
@@ -270,7 +270,7 @@ int XC::SuperLU::factorize(void)
 	GlobalLU_t Glu; /* Not needed on return. */
 
 	//dPrint_CompCol_Matrix("AC",&AC);
-        dgstrf(&options, &AC, relax, panelSize,etree.getDataPtr(), nullptr, 0, perm_c.getDataPtr(), perm_r.getDataPtr(), &L, &U, &Glu, &stat, &info);	
+        dgstrf(&options, &AC, relax, panelSize,etree.getDataPtr(), nullptr, 0, perm_c.getDataPtr(), perm_r.getDataPtr(), &L, &U, &Glu, &superlu_stat, &info);	
 	
         if(info != 0)
           {        
@@ -340,7 +340,7 @@ int XC::SuperLU::solve(void)
                     int info= 0; // 0: successful exit
                                  // < 0: if info = -i, the i-th argument
 		                 // had an illegal value.
-                    dgstrs(trans, &L, &U, perm_c.getDataPtr(), perm_r.getDataPtr(), &B, &stat, &info);
+                    dgstrs(trans, &L, &U, perm_c.getDataPtr(), perm_r.getDataPtr(), &B, &superlu_stat, &info);
                     if(info != 0)
                       {        
                         std::cerr << getClassName() << "::" << __FUNCTION__
