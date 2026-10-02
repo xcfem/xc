@@ -134,6 +134,16 @@ class SolutionProcedure(sp.SolutionProcedure):
         retval= None
         if(self.integratorType=='newmark_integrator'):
             retval= super().integratorSetup(integratorType= self.integratorType,gamma= self.gamma, beta= self.beta)
+        elif(self.integratorType.startswith('HHT')):
+             if(self.integratorType=='HHT_integrator'):
+                 retval= super().integratorSetup(integratorType= self.integratorType, alpha= self.alpha_hht, beta= self.beta_hht, gamma= self.gamma_hht)
+             else:
+                 className= type(self).__name__
+                 methodName= sys._getframe(0).f_code.co_name
+                 errorMsg= '; not implemented yet for integrators of type: '
+                 errorMsg+= self.integratorType
+                 lmsg.error(className+'.'+methodName+errorMsg)
+                 sys.exit(1)
         elif(self.integratorType=='displacement_control_integrator'):
             retval= super().integratorSetup(integratorType= self.integratorType, node= self.dispControlNode, dof= self.dispControlDof, increment= self.dispControlIncrement)
         elif(self.integratorType in  ["arc-length_integrator", "arc-length1_integrator", "HS_constraint_integrator"]): # Arc-Length control.
@@ -184,7 +194,8 @@ class SolutionProcedure(sp.SolutionProcedure):
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; unknown constraint handler type: '+self.cHandlerType)
+            errorMsg= '; unknown constraint handler type: '+self.cHandlerType
+            lmsg.error(className+'.'+methodName+errorMsg)
         return retval
 
     def analysisSetup(self):
