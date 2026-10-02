@@ -56,7 +56,7 @@
 //
 // What: "@(#) HHT.cpp, revA"
 
-#include <solution/analysis/integrator/transient/rayleigh/HHT.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/HHT.h>
 #include <solution/analysis/model/fe_ele/FE_Element.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <solution/analysis/model/AnalysisModel.h>
@@ -74,8 +74,18 @@ XC::HHT::HHT(SolutionStrategy *owr)
 //! @brief Constructor.
 //!
 //! @param owr: analysis aggregation that will own this object.
+//! @param _alpha: alpha factor.
 XC::HHT::HHT(SolutionStrategy *owr,double _alpha)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha) {}
+
+//! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that will own this object.
+//! @param _alpha: value for the alpha factor.
+//! @param _beta: value for the beta factor.
+//! @param _gamma: value for the gamma factor.
+XC::HHT::HHT(SolutionStrategy *owr, double _alpha, double _beta, double _gamma)
+  : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha,_beta,_gamma) {}
 
 //! @brief Constructor.
 //!
@@ -83,6 +93,7 @@ XC::HHT::HHT(SolutionStrategy *owr,double _alpha)
 //! and \f$\beta\f$ to \f$0.25*\alpha^2\f$.
 //!
 //! @param owr: analysis aggregation that will own this object.
+//! @param _alpha: alpha factor.
 //! @param rF: value of the Rayleigh damping factors.
 XC::HHT::HHT(SolutionStrategy *owr,double _alpha,const RayleighDampingFactors &rF)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha,rF) {}
@@ -90,18 +101,9 @@ XC::HHT::HHT(SolutionStrategy *owr,double _alpha,const RayleighDampingFactors &r
 //! @brief Constructor.
 //!
 //! @param owr: analysis aggregation that will own this object.
-//! @param _alpha: value for the alpha parameter.
-//! @param _beta: value for the beta parameter.
-//! @param _gamma: value for the gamma parameter.
-XC::HHT::HHT(SolutionStrategy *owr,double _alpha, double _beta, double _gamma)
-  : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha,_beta,_gamma) {}
-
-//! @brief Constructor.
-//!
-//! @param owr: analysis aggregation that will own this object.
-//! @param _alpha: value for the alpha parameter.
-//! @param _beta: value for the beta parameter.
-//! @param _gamma: value for the gamma parameter.
+//! @param _alpha: value for the alpha factor.
+//! @param _beta: value for the beta factor.
+//! @param _gamma: value for the gamma factor.
 //! @param rF: value of the Rayleigh damping factors.
 XC::HHT::HHT(SolutionStrategy *owr,double _alpha, double _beta, double _gamma,const RayleighDampingFactors &rF)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha,_beta,_gamma,rF) {}

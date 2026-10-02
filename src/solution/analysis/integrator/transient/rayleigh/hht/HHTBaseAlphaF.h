@@ -44,72 +44,76 @@
 **   Filip C. Filippou (filippou@ce.berkeley.edu)                     **
 **                                                                    **
 ** ****************************************************************** */
-                                                                        
-// $Revision: 1.4 $
-// $Date: 2003/02/14 23:00:48 $
-// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/HHT1.h,v $
-                                                                        
-                                                                        
-#ifndef HHT1_h
-#define HHT1_h
 
-// Written: fmk 
-//
-// Description: This file contains the class definition for HHT1.
-// HHT1 is an algorithmic class for performing a transient analysis
-// using the HHT1 integration scheme.
-//
-// What: "@(#) HHT1.h, revA"
+// $Revision: 1.1 $
+// $Date: 2005/12/19 22:39:21 $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/HHTBaseAlphaF.h,v $
 
-#include "DampingFactorsIntegrator.h"
-#include "ResponseQuantities.h"
+#ifndef HHTBaseAlphaF_h
+#define HHTBaseAlphaF_h
+
+// Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
+// Created: 10/05
+// Revision: A
+//
+// Description: This file contains the class definition for HHTBaseAlphaF.
+// HHTBaseAlphaF is an algorithmic class for performing a transient analysis
+// using the HHTBaseAlphaF integration scheme.
+//
+// What: "@(#) HHTBaseAlphaF.h, revA"
+
+#include "solution/analysis/integrator/transient/rayleigh/hht/HHTBase.h"
 
 namespace XC {
+class DOF_Group;
+class FE_Element;
+class Vector;
+class ConvergenceTest;
 
-//! @ingroup TransientIntegrator
+//! @ingroup RayleighIntegrator
 //
-//! @brief The three parameter Hilbert-Hughes-Taylor time-stepping method.
-class HHT1: public DampingFactorsIntegrator
+//! @brief HHTBaseAlphaF is an algorithmic class
+//! for performing a transient analysis
+//! using the HHTBaseAlphaF integration scheme.
+class HHTBaseAlphaF: public HHTBase
   {
-  private:
-    double alpha;
-    double gamma;
-    double beta;
-
-    double c1, c2, c3; //!< some constants we need to keep
-    ResponseQuantities Ut; //!< response quantities at time t
-    ResponseQuantities U; //!< response quantities at time t + delta t
-    ResponseQuantities Ualpha; //!< response quantities at time t+alpha delta t
   protected:
+    double alphaF;
+
+    inline const double &alphaI(void) const
+      { return alpha; }
+    inline double &alphaI(void)
+      { return alpha; }
+
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
     friend class SolutionStrategy;
-    HHT1(SolutionStrategy *);
-    HHT1(SolutionStrategy *,double alpha);
-    HHT1(SolutionStrategy *,double alpha,const RayleighDampingFactors &rF);        
-    Integrator *getCopy(void) const;
+    HHTBaseAlphaF(SolutionStrategy *, int classTag);
+    HHTBaseAlphaF(SolutionStrategy *, int classTag,
+		  double alphaI, double alphaF);
+    HHTBaseAlphaF(SolutionStrategy *, int classTag,
+		  double alphaI, double alphaF,
+		  const RayleighDampingFactors &rF);
+    HHTBaseAlphaF(SolutionStrategy *,int classTag,
+		  double alphaI, double alphaF,
+		  double beta, double gamma);
+    HHTBaseAlphaF(SolutionStrategy *,int classTag,
+		  double alphaI, double alphaF,
+		  double beta, double gamma,
+		  const RayleighDampingFactors &rF);    
   public:
-    // methods which define what the FE_Element and DOF_Groups add
-    // to the system of equation object.
-    int formEleTangent(FE_Element *theEle);
-    int formNodTangent(DOF_Group *theDof);        
-
-    int domainChanged(void);    
-    int initialize(void);        
-    int newStep(double deltaT);    
-    int update(const Vector &deltaU);
-
-    int commit(void);
-
-    virtual int sendSelf(Communicator &);
-    virtual int recvSelf(const Communicator &);
-
-    void Print(std::ostream &s, int flag =0) const;        
+    inline double getAlphaI(void) const
+      { return this->alphaI(); } 
+    inline void setAlphaI(const double &d)
+      { this->alphaI()= d; }
+    inline double getAlphaF(void) const
+      { return this->alphaF; } 
+    inline void setAlphaF(const double &d)
+      { this->alphaF= d; }
+  
+    void Print(std::ostream &s, int flag = 0) const;
   };
-inline Integrator *HHT1::getCopy(void) const
-  { return new HHT1(*this); }
 } // end of XC namespace
 
 #endif
-

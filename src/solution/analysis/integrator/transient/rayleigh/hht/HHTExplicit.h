@@ -65,7 +65,7 @@
 //
 // What: "@(#) HHTExplicit.h, revA"
 
-#include "solution/analysis/integrator/transient/rayleigh/HHTRayleighBase.h"
+#include "solution/analysis/integrator/transient/rayleigh/hht/HHTRayleighBase.h"
 
 namespace XC {
 class DOF_Group;

@@ -50,6 +50,11 @@ class RayleighBase: public DampingFactorsIntegrator
 
     RayleighBase(SolutionStrategy *,int classTag);
     RayleighBase(SolutionStrategy *,int classTag,const RayleighDampingFactors &);
+  public:
+    inline double getDeltaT(void) const
+      { return this->deltaT; } 
+    inline void setDeltaT(const double &d)
+      { this->deltaT= d; }
   };
 } // end of XC namespace
 

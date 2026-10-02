@@ -25,39 +25,48 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//NewmarkBase.h
+//HHTRayleighBase.h
 
-#ifndef NewmarkBase_h
-#define NewmarkBase_h
 
-#include <solution/analysis/integrator/transient/DampingFactorsIntegrator.h>
+#ifndef HHTRayleighBase_h
+#define HHTRayleighBase_h
+
+#include <solution/analysis/integrator/transient/RayleighBase.h>
 #include "solution/analysis/integrator/transient/ResponseQuantities.h"
 
 namespace XC {
-class Vector;
-class ID;
 
-//! @addtogroup NewmarkIntegrator Newmark method for the numerical integration of the equation.
-//! @ingroup TransientIntegrator
+//! @ingroup RayleighIntegrator
 //
-//! @brief Base class for the two parameter time-stepping method developed by
-//! Nathan M. Newmark.
-class NewmarkBase: public DampingFactorsIntegrator
+//! @brief HHTRayleighBase is a base for the
+//! classes performing a transient analysis
+//! using the Hilber-Hughes-Taylor integration scheme.
+class HHTRayleighBase: public RayleighBase
   {
   protected:
-    double gamma; //!< gamma factor for Newmark method.
+    double alpha; //!< \alpha should be between 0.67 and 1.0
+                  //! (alpha factor corresponds to Newmark method. 
+    double gamma; //!< \gamma factor.
     
     double c2, c3; //!< some constants we need to keep
-    ResponseQuantities U; //!< response quantities at time t+deltaT = predicted + corrected
+    ResponseQuantities Ut; //!< response quantities at time t
+    ResponseQuantities U; //!< response quantities at time t + delta t
+    ResponseQuantities Ualpha; //!< response quantities at time t+alpha delta t
 
-    void PopulateUs(AnalysisModel *model);
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    NewmarkBase(SolutionStrategy *,int classTag);
-    NewmarkBase(SolutionStrategy *,int classTag,double gamma);
-    NewmarkBase(SolutionStrategy *,int classTag,double gamma,const RayleighDampingFactors &rF);
+    HHTRayleighBase(SolutionStrategy *,int classTag);
+    HHTRayleighBase(SolutionStrategy *,int classTag,double alpha);
+    HHTRayleighBase(SolutionStrategy *,int classTag,double alpha,const RayleighDampingFactors &rF);
+    HHTRayleighBase(SolutionStrategy *,int classTag,double alpha, double gamma);
+    HHTRayleighBase(SolutionStrategy *,int classTag,double alpha, double gamma,const RayleighDampingFactors &rF);
+    
   public:
+    inline double getAlpha(void) const
+      { return this->alpha; } 
+    inline void setAlpha(const double &d)
+      { this->alpha= d; }
     inline double getGamma(void) const
       { return this->gamma; } 
     inline void setGamma(const double &d)

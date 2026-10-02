@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //HHTRayleighBase.cpp
 
-#include <solution/analysis/integrator/transient/rayleigh/HHTRayleighBase.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/HHTRayleighBase.h>
 
 //! @brief Constructor.
 //!

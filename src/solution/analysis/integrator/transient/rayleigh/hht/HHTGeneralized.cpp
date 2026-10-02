@@ -56,7 +56,7 @@
 //
 // What: "@(#) HHTGeneralized.cpp, revA"
 
-#include <solution/analysis/integrator/transient/rayleigh/HHTGeneralized.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/HHTGeneralized.h>
 #include <solution/analysis/model/fe_ele/FE_Element.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <solution/analysis/model/AnalysisModel.h>

@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //AlphaOSBase.cpp
 
-#include <solution/analysis/integrator/transient/rayleigh/AlphaOSBase.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/AlphaOSBase.h>
 #include <solution/analysis/model/fe_ele/FE_Element.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <solution/analysis/model/AnalysisModel.h>

@@ -56,7 +56,7 @@
 //
 // What: "@(#)E XC::AlphaOS.cpp, revA"
 
-#include <solution/analysis/integrator/transient/rayleigh/AlphaOS.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/AlphaOS.h>
 #include <solution/analysis/model/fe_ele/FE_Element.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <solution/analysis/model/AnalysisModel.h>

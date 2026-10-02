@@ -50,6 +50,11 @@ class NewmarkBase2: public NewmarkBase
     NewmarkBase2(SolutionStrategy *,int classTag);
     NewmarkBase2(SolutionStrategy *,int classTag,double gamma, double beta);
     NewmarkBase2(SolutionStrategy *,int classTag,double gamma, double beta,const RayleighDampingFactors &rF); 
+  public:
+    inline double getBeta(void) const
+      { return this->beta; } 
+    inline void setBeta(const double &d)
+      { this->beta= d; }
   };
 } // end of XC namespace
 

@@ -56,7 +56,7 @@
 //
 // What: "@(#) HHTBase.cpp, revA"
 
-#include <solution/analysis/integrator/transient/rayleigh/HHTBase.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/HHTBase.h>
 
 //! @brief Constructor.
 //!

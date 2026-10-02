@@ -45,50 +45,46 @@
 **                                                                    **
 ** ****************************************************************** */
 
-// $Revision: 1.1 $
-// $Date: 2005/12/19 22:39:21 $
-// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/CollocationHybridSimulation.h,v $
+// $Revision: 1.2 $
+// $Date: 2005/12/21 00:32:57 $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/HHTGeneralizedExplicit.h,v $
 
-#ifndef CollocationHybridSimulation_h
-#define CollocationHybridSimulation_h
 
+#ifndef HHTGeneralizedExplicit_h
+#define HHTGeneralizedExplicit_h
+
+// File: ~/analysis/integrator/HHTGeneralizedExplicit.h
+// 
 // Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
 // Created: 10/05
 // Revision: A
 //
-// Description: This file contains the class definition for CollocationHybridSimulation.
-// CollocationHybridSimulation is an algorithmic class for performing a transient analysis
-// using the CollocationHybridSimulation integration scheme.
+// Description: This file contains the class definition for HHTGeneralizedExplicit.
+// HHTGeneralizedExplicit is an algorithmic class for performing a transient analysis
+// using the HHTGeneralizedExplicit integration scheme.
 //
-// What: "@(#) CollocationHybridSimulation.h, revA"
+// What: "@(#) HHTGeneralizedExplicit.h, revA"
 
-#include "solution/analysis/integrator/transient/rayleigh/HHTBase.h"
+#include "solution/analysis/integrator/transient/rayleigh/hht/HHTBaseAlphaF.h"
 
 namespace XC {
-class ConvergenceTest;
 
 //! @ingroup RayleighIntegrator
 //
-//! @brief CollocationHybridSimulation is an algorithmic class
-//! for performing a transient analysis using the 
-//! CollocationHybridSimulation integration scheme.
-class CollocationHybridSimulation: public HHTBase
+//! @brief HHTGeneralizedExplicit is an algorithmic class
+//! for performing a transient analysis
+//! using the HHTGeneralizedExplicit integration scheme.
+class HHTGeneralizedExplicit: public HHTBaseAlphaF
   {
   private:
-    double theta;
-    double rFact; //!< displacement increment reduction factor
-
-    ConvergenceTest *theTest; //!< convergence test
+    int updateCount; //!< method should only have one update per step
   protected:
-    int sendData(Communicator &);
-    int recvData(const Communicator &);
-
     friend class SolutionStrategy;
-    CollocationHybridSimulation(SolutionStrategy *);
-    CollocationHybridSimulation(SolutionStrategy *,double theta, ConvergenceTest &);
-    CollocationHybridSimulation(SolutionStrategy *,double theta, ConvergenceTest &,const RayleighDampingFactors &);
-    CollocationHybridSimulation(SolutionStrategy *,double theta, double beta, double gamma, ConvergenceTest &theTest);
-    CollocationHybridSimulation(SolutionStrategy *,double theta, double beta, double gamma, ConvergenceTest &,const RayleighDampingFactors &);
+    HHTGeneralizedExplicit(SolutionStrategy *);
+    HHTGeneralizedExplicit(SolutionStrategy *,double rhoB, double alphaF);
+    HHTGeneralizedExplicit(SolutionStrategy *,double rhoB, double alphaF,const RayleighDampingFactors &rF);
+    HHTGeneralizedExplicit(SolutionStrategy *,double alphaI, double alphaF, double beta, double gamma);
+    HHTGeneralizedExplicit(SolutionStrategy *,double alphaI, double alphaF, double beta, double gamma,const RayleighDampingFactors &rF);
     Integrator *getCopy(void) const;
   public:
     
@@ -97,10 +93,10 @@ class CollocationHybridSimulation: public HHTBase
     int formEleTangent(FE_Element *theEle);
     int formNodTangent(DOF_Group *theDof);        
     
-    int domainChanged(void);
-    int newStep(double deltaT);
-    int revertToLastStep(void);
-    int update(const Vector &deltaU);
+    int domainChanged(void);    
+    int newStep(double deltaT);    
+    int revertToLastStep(void);        
+    int update(const Vector &aiPlusOne);
     int commit(void);
     
     virtual int sendSelf(Communicator &);
@@ -108,8 +104,8 @@ class CollocationHybridSimulation: public HHTBase
     
     void Print(std::ostream &s, int flag = 0) const;        
   };
-inline Integrator *CollocationHybridSimulation::getCopy(void) const
-  { return new CollocationHybridSimulation(*this); }
+inline Integrator *HHTGeneralizedExplicit::getCopy(void) const
+  { return new HHTGeneralizedExplicit(*this); }
 } // end of XC namespace
 
 #endif

@@ -25,45 +25,37 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//HHTBase.h,v $
+//AlphaOSBase.h
 
 
-#ifndef HHTBase_h
-#define HHTBase_h
+#ifndef AlphaOSBase_h
+#define AlphaOSBase_h
 
-// Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
-// Created: 02/05
-// Revision: A
-//
-// Description: This file contains the class definition for HHTBase.
-// HHTBase is an algorithmic class for performing a transient analysis
-// using the HHTBase integration scheme.
-//
-// What: "@(#) HHTBase.h, revA"
-
-#include "solution/analysis/integrator/transient/rayleigh/HHTRayleighBase.h"
+#include "solution/analysis/integrator/transient/rayleigh/hht/HHTBase.h"
 
 namespace XC {
+class Vector;
 
 //! @ingroup RayleighIntegrator
 //
-//! @brief HHTBase is an algorithmic class
-//! for performing a transient analysis
-//! using the HHTBase integration scheme.
-class HHTBase: public HHTRayleighBase
+//! @brief AlphaOSBase is an algorithmic class for performing a transient
+//! analysis using the Alpha-Operator-Splitting integration scheme.
+//! The parameter alpha corresponds to 1+alpha_{HHT}.
+class AlphaOSBase: public HHTBase
   {
   protected:
-    double beta; //! \beta parameter
-    double c1;   //!< some constants we need to keep
-
+    int updateCount; //! method should only have one update per step
+    ResponseQuantities Upt; //!< predictor quantities at time t
+  protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    HHTBase(SolutionStrategy *,int classTag);
-    HHTBase(SolutionStrategy *,int classTag,double alpha);
-    HHTBase(SolutionStrategy *,int classTag,double alpha,const RayleighDampingFactors &rF);
-    HHTBase(SolutionStrategy *,int classTag,double alpha, double beta, double gamma);
-    HHTBase(SolutionStrategy *,int classTag,double alpha, double beta, double gamma,const RayleighDampingFactors &rF);    
+    AlphaOSBase(SolutionStrategy *,int classTag);
+    AlphaOSBase(SolutionStrategy *,int classTag,double beta, double gamma);
+    AlphaOSBase(SolutionStrategy *,int classTag,double beta, double gamma,const RayleighDampingFactors &rF);
+  public:
+    int newStep(double deltaT);    
+    int revertToLastStep(void);
   };
 } // end of XC namespace
 

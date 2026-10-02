@@ -46,10 +46,10 @@
                                                                         
 // $Revision: 1.7 $
 // $Date: 2003/02/14 23:00:48 $
-// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/HHT1.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/transient/rayleigh/hht/HHT1.cpp,v $
                                                                         
                                                                         
-// File: ~/analysis/integrator/HHT1.C
+// File: ~/analysis/integrator/transient/rayleigh/hht/HHT1.cpp
 // 
 // Written: fmk 
 // Created: 11/98
@@ -59,7 +59,7 @@
 //
 // What: "@(#) HHT1.C, revA"
 
-#include <solution/analysis/integrator/transient/HHT1.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/HHT1.h>
 #include <solution/analysis/model/fe_ele/FE_Element.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <solution/analysis/model/AnalysisModel.h>

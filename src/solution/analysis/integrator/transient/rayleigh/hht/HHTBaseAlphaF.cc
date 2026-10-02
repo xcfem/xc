@@ -1,4 +1,3 @@
-// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -45,72 +44,85 @@
 **                                                                    **
 ** ****************************************************************** */
 
-// $Revision: 1.2 $
-// $Date: 2005/12/21 00:31:57 $
-// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/AlphaOS.h,v $
-
-
-#ifndef AlphaOS_h
-#define AlphaOS_h
+// $Revision: 1.1 $
+// $Date: 2005/12/19 22:39:21 $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/HHTBaseAlphaF.cpp,v $
 
 // Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
-// Created: 02/05
+// Created: 10/05
 // Revision: A
 //
-// Description: This file contains the class definition for AlphaOS.
-// AlphaOS is an algorithmic class for performing a transient analysis
-// using the Alpha-Operator-Splitting integration scheme.
-// The parameter alpha corresponds to 1+alpha_{HHT}.
+// Description: This file contains the implementation of the XC::HHTBaseAlphaF class.
 //
-// What: "@(#) AlphaOS.h, revA"
+// What: "@(#) HHTBaseAlphaF.cpp, revA"
 
-#include <solution/analysis/integrator/transient/rayleigh/AlphaOSBase.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/HHTBaseAlphaF.h>
+#include <solution/analysis/model/fe_ele/FE_Element.h>
+#include <solution/system_of_eqn/linearSOE/LinearSOE.h>
+#include <solution/analysis/model/AnalysisModel.h>
+#include <utility/matrix/Vector.h>
+#include <solution/analysis/model/dof_grp/DOF_Group.h>
+#include <solution/analysis/model/DOF_GrpIter.h>
+#include <solution/analysis/model/AnalysisModel.h>
+#include <solution/analysis/convergenceTest/ConvergenceTest.h>
 
-namespace XC {
-class DOF_Group;
-class FE_Element;
+//! @brief Constructor.
+XC::HHTBaseAlphaF::HHTBaseAlphaF(SolutionStrategy *owr, int classTag)
+  : HHTBase(owr,classTag, 1.0),
+    alphaF(1.0) {}
 
-//! @ingroup RayleighIntegrator
-//
-//! @brief AlphaOS is an algorithmic class for performing a transient analysis
-//! using the Alpha-Operator-Splitting integration scheme.
-//! The parameter alpha corresponds to 1+alpha_{HHT}.
-class AlphaOS: public AlphaOSBase
+//! @brief Constructor.
+XC::HHTBaseAlphaF::HHTBaseAlphaF(SolutionStrategy *owr, int classTag,
+				 double _alphaI, double _alphaF)
+    : HHTBase(owr, classTag, _alphaI),
+      alphaF(_alphaF) {}
+
+//! @brief Constructor.
+XC::HHTBaseAlphaF::HHTBaseAlphaF(SolutionStrategy *owr, int classTag,
+				 double _alphaI, double _alphaF,
+				 const RayleighDampingFactors &rF)
+    : HHTBase(owr, classTag,_alphaI,rF),
+      alphaF(_alphaF) {}
+
+//! @brief Constructor.
+XC::HHTBaseAlphaF::HHTBaseAlphaF(SolutionStrategy *owr, int classTag,
+				 double _alphaI, double _alphaF,
+				 double beta, double gamma)
+  : HHTBase(owr, classTag,_alphaI, beta, gamma),
+    alphaF(_alphaF) {}
+
+//! @brief Constructor.
+XC::HHTBaseAlphaF::HHTBaseAlphaF(SolutionStrategy *owr, int classTag,
+				 double _alphaI, double _alphaF,
+				 double beta, double gamma,
+				 const RayleighDampingFactors &rF)
+  : HHTBase(owr, classTag,_alphaI, beta, gamma, rF),
+    alphaF(_alphaF) {}
+
+
+//! @brief Send object members through the communicator argument.
+int XC::HHTBaseAlphaF::sendData(Communicator &comm)
   {
-  private:
-    double alpha;    
-  protected:
-    int sendData(Communicator &);
-    int recvData(const Communicator &);
-    virtual int formElementResidual(void);
+    int res= HHTBase::sendData(comm);
+    res+= comm.sendDouble(alphaF,getDbTagData(),CommMetaData(9));
+    return res;
+  }
 
-    friend class SolutionStrategy;
-    AlphaOS(SolutionStrategy *);
-    AlphaOS(SolutionStrategy *,double alpha);
-    AlphaOS(SolutionStrategy *,double alpha,const RayleighDampingFactors &rF);
-    AlphaOS(SolutionStrategy *,double alpha, double beta, double gamma);
-    AlphaOS(SolutionStrategy *,double alpha, double beta, double gamma,const RayleighDampingFactors &rF);
-    Integrator *getCopy(void) const;
-  public:
-    
-    // methods which define what the FE_Element and DOF_Groups add
-    // to the system of equation object.
-    int formEleTangent(FE_Element *theEle);
-    int formNodTangent(DOF_Group *theDof);       
-    
-    int domainChanged(void);
-    int newStep(double deltaT);    
-    int revertToLastStep(void);
-    int update(const Vector &deltaU);
-    int commit(void);
-    
-    virtual int sendSelf(Communicator &);
-    virtual int recvSelf(const Communicator &);
-    
-    void Print(std::ostream &s, int flag = 0) const;        
-  };
-inline Integrator *AlphaOS::getCopy(void) const
-  { return new AlphaOS(*this); }
-} // end of XC namespace
+//! @brief Receives object members through the communicator argument.
+int XC::HHTBaseAlphaF::recvData(const Communicator &comm)
+  {
+    int res= HHTBase::recvData(comm);
+    res+= comm.receiveDouble(alphaF,getDbTagData(),CommMetaData(9));
+    return res;
+  }
 
-#endif
+void XC::HHTBaseAlphaF::Print(std::ostream &s, int flag) const
+  {
+    HHTBase::Print(s,flag);
+    s << "  alphaI: " << alphaI()
+      << " alphaF: " << alphaF
+      << " beta: " << beta
+      << " gamma: " << gamma
+      << std::endl;
+  }
+

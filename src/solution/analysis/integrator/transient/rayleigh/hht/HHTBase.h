@@ -25,43 +25,50 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//HHTRayleighBase.h
+//HHTBase.h,v $
 
 
-#ifndef HHTRayleighBase_h
-#define HHTRayleighBase_h
+#ifndef HHTBase_h
+#define HHTBase_h
 
-#include <solution/analysis/integrator/transient/RayleighBase.h>
-#include "solution/analysis/integrator/transient/ResponseQuantities.h"
+// Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
+// Created: 02/05
+// Revision: A
+//
+// Description: This file contains the class definition for HHTBase.
+// HHTBase is an algorithmic class for performing a transient analysis
+// using the HHTBase integration scheme.
+//
+// What: "@(#) HHTBase.h, revA"
+
+#include "solution/analysis/integrator/transient/rayleigh/hht/HHTRayleighBase.h"
 
 namespace XC {
 
 //! @ingroup RayleighIntegrator
 //
-//! @brief HHTRayleighBase is a base for the
-//! classes performing a transient analysis
-//! using the Hilber-Hughes-Taylor integration scheme.
-class HHTRayleighBase: public RayleighBase
+//! @brief HHTBase is an algorithmic class
+//! for performing a transient analysis
+//! using the HHTBase integration scheme.
+class HHTBase: public HHTRayleighBase
   {
   protected:
-    double alpha; //!< \alpha should be between 0.67 and 1.0
-                  //! (alpha factor corresponds to Newmark method. 
-    double gamma; //!< \gamma factor.
-    
-    double c2, c3;              // some constants we need to keep
-    ResponseQuantities Ut; //!< response quantities at time t
-    ResponseQuantities U; //!< response quantities at time t + delta t
-    ResponseQuantities Ualpha; //!< response quantities at time t+alpha delta t
+    double beta; //! \beta parameter
+    double c1;   //!< some constants we need to keep
 
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    HHTRayleighBase(SolutionStrategy *,int classTag);
-    HHTRayleighBase(SolutionStrategy *,int classTag,double alpha);
-    HHTRayleighBase(SolutionStrategy *,int classTag,double alpha,const RayleighDampingFactors &rF);
-    HHTRayleighBase(SolutionStrategy *,int classTag,double alpha, double gamma);
-    HHTRayleighBase(SolutionStrategy *,int classTag,double alpha, double gamma,const RayleighDampingFactors &rF);
-    
+    HHTBase(SolutionStrategy *,int classTag);
+    HHTBase(SolutionStrategy *,int classTag,double alpha);
+    HHTBase(SolutionStrategy *,int classTag,double alpha, double beta, double gamma);
+    HHTBase(SolutionStrategy *,int classTag,double alpha, const RayleighDampingFactors &rF);
+    HHTBase(SolutionStrategy *,int classTag,double alpha, double beta, double gamma,const RayleighDampingFactors &rF);    
+  public:
+    inline double getBeta(void) const
+      { return this->beta; } 
+    inline void setBeta(const double &d)
+      { this->beta= d; }
   };
 } // end of XC namespace
 

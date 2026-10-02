@@ -45,62 +45,87 @@
 **                                                                    **
 ** ****************************************************************** */
 
-// $Revision: 1.2 $
-// $Date: 2005/12/21 00:31:57 $
-// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/AlphaOSGeneralized.h,v $
+// $Revision: 1.7 $
+// $Date: 2005/12/19 22:43:36 $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/HHT.h,v $
 
-#ifndef AlphaOSGeneralized_h
-#define AlphaOSGeneralized_h
+
+#ifndef HHT_h
+#define HHT_h
 
 // Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
-// Created: 10/05
+// Created: 02/05
 // Revision: A
 //
-// Description: This file contains the class definition for AlphaOSGeneralized.
-// AlphaOSGeneralized is an algorithmic class for performing a transient analysis
-// using the generalized Alpha-Operator-Splitting integration scheme.
-// The parameters alpha correspond to 1+alpha_{HHT}.
+// Description: This file contains the class definition for HHT.
+// HHT is an algorithmic class for performing a transient analysis
+// using the HHT integration scheme.
 //
-// What: "@(#) AlphaOSGeneralized.h, revA"
+// What: "@(#) HHT.h, revA"
 
-#include <solution/analysis/integrator/transient/rayleigh/AlphaOSBase.h>
+#include "solution/analysis/integrator/transient/rayleigh/hht/HHTBase.h"
 #include "solution/analysis/integrator/transient/ResponseQuantities.h"
 
 namespace XC {
-class DOF_Group;
-class FE_Element;
 
 //! @ingroup RayleighIntegrator
 //
-//! @brief AlphaOSGeneralized is an algorithmic class for performing a
-//! transient analysis using the generalized Alpha-Operator-Splitting
-//! integration scheme. The parameters alpha correspond to \f$1+\alpha_{HHT}\f$.
-class AlphaOSGeneralized: public AlphaOSBase
+//! @brief HHT is an algorithmic class
+//! for performing a transient analysis
+//! using the Hilber-Hughes-Taylor integration scheme.
+//!
+//! HHT is a subclass of TransientIntegrator which implements
+//! the Hilber-Hughes-Taylor (HHT) method. In the HHT method, to determine the
+//! velocities, accelerations and displacements at time \f$t + \Delta t\f$,
+//! by solving the following equilibrium equation.
+//!
+//! \noindent {\bf Description} 
+//! \indent 
+//! 
+//! \[ R (U_{t + \Delta t}) = P(t + \Delta t) -
+//! F_I(Udd_{t+\Delta t}) - F_R(Ud_{t + \alpha \Delta t},U_{t +
+//! \alpha \Delta t}) \] 
+//! 
+//! \noindent where
+//! 
+//! \[ U_{t + \alpha} = \left( 1 - \alpha \right) U_t + \alpha U_{t +
+//! \Delta t} \]
+//! 
+//! \[ Ud_{t + \alpha} = \left( 1 - \alpha \right) Ud_t + \alpha Ud_{t +
+//! \Delta t} \]
+//! 
+//! \noindent and the velocities and accelerations at time \f$t + \Delta t\f$
+//! are determined using the Newmark relations. The HHT method results in
+//! the following for determining the response at \f$t + \Delta t\f$
+//! 
+//! \[ \left[ \frac{1}{\beta \Delta t^2} M + \frac{\alpha \gamma}{\beta
+//! \Delta t} C + \alpha K \right] \Delta U_{t + \Delta t}^{(i)} = P(t
+//! + \Delta t) - F_I\left(Udd_{t+\Delta  t}^{(i-1)}\right)
+//! - F_R\left(Ud_{t + \alpha \Delta t}^{(i-1)},U_{t + \alpha \Delta
+//! t}^{(i-1)}\right) \] 
+class HHT: public HHTBase
   {
-  private:
-    double alphaI;
-    double alphaF;
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
-    virtual int formElementResidual(void);
 
     friend class SolutionStrategy;
-    AlphaOSGeneralized(SolutionStrategy *);
-    AlphaOSGeneralized(SolutionStrategy *,double rhoInf);
-    AlphaOSGeneralized(SolutionStrategy *,double rhoInf,const RayleighDampingFactors &rF);
-    AlphaOSGeneralized(SolutionStrategy *,double alphaI, double alphaF, double beta, double gamma);
-    AlphaOSGeneralized(SolutionStrategy *,double alphaI, double alphaF, double beta, double gamma,const RayleighDampingFactors &rF);
+    friend class FEM_ObjectBroker;
+    HHT(SolutionStrategy *);
+    HHT(SolutionStrategy *,double alpha);
+    HHT(SolutionStrategy *,double alpha, double beta, double gamma);
+    HHT(SolutionStrategy *,double alpha, const RayleighDampingFactors &rF);
+    HHT(SolutionStrategy *,double alpha, double beta, double gamma, const RayleighDampingFactors &);
     Integrator *getCopy(void) const;
-
-  public:
+  public:    
     // methods which define what the FE_Element and DOF_Groups add
     // to the system of equation object.
     int formEleTangent(FE_Element *theEle);
-    int formNodTangent(DOF_Group *theDof);
-
-    int domainChanged(void);
+    int formNodTangent(DOF_Group *theDof);        
+    
+    int domainChanged(void);    
     int newStep(double deltaT);    
+    int revertToLastStep(void);        
     int update(const Vector &deltaU);
     int commit(void);
     
@@ -109,8 +134,6 @@ class AlphaOSGeneralized: public AlphaOSBase
     
     void Print(std::ostream &s, int flag = 0) const;        
   };
-inline Integrator *AlphaOSGeneralized::getCopy(void) const
-  { return new AlphaOSGeneralized(*this); }
 } // end of XC namespace
 
 #endif

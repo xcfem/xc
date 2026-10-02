@@ -51,6 +51,8 @@ class DampingFactorsIntegrator: public TransientIntegrator
     DampingFactorsIntegrator(SolutionStrategy *,int classTag);
     DampingFactorsIntegrator(SolutionStrategy *,int classTag,const RayleighDampingFactors &rF);
   public:
+    void setRayleighDampingFactors(const RayleighDampingFactors &rf);
+    const RayleighDampingFactors &getRayleighDampingFactors(void) const;
     void Print(std::ostream &s, int flag = 0) const;        
     
   };

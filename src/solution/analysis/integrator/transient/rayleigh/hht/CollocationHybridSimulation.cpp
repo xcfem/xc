@@ -46,17 +46,17 @@
 
 // $Revision: 1.1 $
 // $Date: 2005/12/19 22:39:21 $
-// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/HHTHybridSimulation.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/transient/rayleigh/hht/CollocationHybridSimulation.cpp,v $
 
 // Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
 // Created: 10/05
 // Revision: A
 //
-// Description: This file contains the implementation of the XC::HHTHybridSimulation class.
+// Description: This file contains the implementation of XC::CollocationHybridSimulation.
 //
-// What: "@(#) HHTHybridSimulation.cpp, revA"
+// What: "@(#) CollocationHybridSimulation.cpp, revA"
 
-#include <solution/analysis/integrator/transient/rayleigh/HHTHybridSimulation.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/CollocationHybridSimulation.h>
 #include <solution/analysis/model/fe_ele/FE_Element.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <solution/analysis/model/AnalysisModel.h>
@@ -67,137 +67,153 @@
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 
 //! @brief Constructor.
-XC::HHTHybridSimulation::HHTHybridSimulation(SolutionStrategy *owr)
-  : HHTBase(owr,INTEGRATOR_TAGS_HHTHybridSimulation,1.0),
-    alphaF(1.0), theTest(nullptr), rFact(1.0) {}
+XC::CollocationHybridSimulation::CollocationHybridSimulation(SolutionStrategy *owr)
+    : HHTBase(owr,INTEGRATOR_TAGS_CollocationHybridSimulation),
+    theta(1.0), rFact(1.0), theTest(nullptr) {}
 
 //! @brief Constructor.
-XC::HHTHybridSimulation::HHTHybridSimulation(SolutionStrategy *owr,double _rhoInf, ConvergenceTest &theT)
-  : HHTBase(owr,INTEGRATOR_TAGS_HHTHybridSimulation,(2.0-_rhoInf)/(1.0+_rhoInf),1.0/(1.0+_rhoInf)/(1.0+_rhoInf),0.5*(3.0-_rhoInf)/(1.0+_rhoInf)), alphaF(1.0/(1.0+_rhoInf)),theTest(&theT),
-    rFact(1.0)
-  {}
+XC::CollocationHybridSimulation::CollocationHybridSimulation(SolutionStrategy *owr,double _theta,ConvergenceTest &theT)
+  : HHTBase(owr,INTEGRATOR_TAGS_CollocationHybridSimulation,_theta,0.0,0.5),
+    theta(_theta), rFact(1.0), theTest(&theT)
+  {
+    beta = -6.018722044382699e+002 * pow(theta,9) +
+            6.618777151634235e+003 * pow(theta,8) +
+           -3.231561059595987e+004 * pow(theta,7) +
+            9.195359004558867e+004 * pow(theta,6) +
+           -1.680788908312227e+005 * pow(theta,5) +
+            2.047005794710718e+005 * pow(theta,4) +
+           -1.661421563528177e+005 * pow(theta,3) +
+            8.667950092619179e+004 * pow(theta,2) +
+           -2.638652989051994e+004 * theta +
+            3.572862280471971e+003;
+  }
 
 //! @brief Constructor.
-XC::HHTHybridSimulation::HHTHybridSimulation(SolutionStrategy *owr,double _rhoInf, ConvergenceTest &theT,const RayleighDampingFactors &rF)
-  : HHTBase(owr,INTEGRATOR_TAGS_HHTHybridSimulation,(2.0-_rhoInf)/(1.0+_rhoInf),1.0/(1.0+_rhoInf)/(1.0+_rhoInf),0.5*(3.0-_rhoInf)/(1.0+_rhoInf),rF), alphaF(1.0/(1.0+_rhoInf)),
-    theTest(&theT), rFact(1.0) {}
+XC::CollocationHybridSimulation::CollocationHybridSimulation(SolutionStrategy *owr,double _theta, ConvergenceTest &theT,const RayleighDampingFactors &rF)
+    : HHTBase(owr,INTEGRATOR_TAGS_CollocationHybridSimulation,_theta,0.0,0.5,rF),
+      theta(_theta), rFact(1.0)
+  {
+    beta = -6.018722044382699e+002 * pow(theta,9) +
+            6.618777151634235e+003 * pow(theta,8) +
+           -3.231561059595987e+004 * pow(theta,7) +
+            9.195359004558867e+004 * pow(theta,6) +
+           -1.680788908312227e+005 * pow(theta,5) +
+            2.047005794710718e+005 * pow(theta,4) +
+           -1.661421563528177e+005 * pow(theta,3) +
+            8.667950092619179e+004 * pow(theta,2) +
+           -2.638652989051994e+004 * theta +
+            3.572862280471971e+003;
+  }
 
 //! @brief Constructor.
-XC::HHTHybridSimulation::HHTHybridSimulation(SolutionStrategy *owr,double _alphaI, double _alphaF, double _beta, double _gamma, ConvergenceTest &theT)
-    : HHTBase(owr,INTEGRATOR_TAGS_HHTHybridSimulation,_alphaI,_beta,_gamma),
-    alphaF(_alphaF), theTest(&theT), rFact(1.0) {}
+XC::CollocationHybridSimulation::CollocationHybridSimulation(SolutionStrategy *owr,double _theta,
+    double _beta, double _gamma, ConvergenceTest &theT)
+  : HHTBase(owr,INTEGRATOR_TAGS_CollocationHybridSimulation,_theta,_beta,_gamma),
+    theta(_theta), rFact(1.0), theTest(&theT) {}
 
 //! @brief Constructor.
-XC::HHTHybridSimulation::HHTHybridSimulation(SolutionStrategy *owr,double _alphaI, double _alphaF,
+XC::CollocationHybridSimulation::CollocationHybridSimulation(SolutionStrategy *owr,double _theta,
     double _beta, double _gamma, ConvergenceTest &theT,const RayleighDampingFactors &rF)
-    : HHTBase(owr,INTEGRATOR_TAGS_HHTHybridSimulation,_alphaI,_beta,_gamma,rF), alphaF(_alphaF),
-    theTest(&theT), rFact(1.0) {}
+    : HHTBase(owr,INTEGRATOR_TAGS_CollocationHybridSimulation,_theta,_beta,_gamma,rF),
+    theta(_theta), rFact(1.0), theTest(&theT) {}
 
 
-
-int XC::HHTHybridSimulation::newStep(double _deltaT)
-{
+int XC::CollocationHybridSimulation::newStep(double _deltaT)
+  {
     deltaT = _deltaT;
-    if (beta == 0 || gamma == 0 )  {
-        std::cerr << "XC::HHTHybridSimulation::newStep() - error in variable\n";
-        std::cerr << "gamma = " << gamma << " beta = " << beta << std::endl;
+    if (theta <= 0.0 )  {
+        std::cerr << "XC::CollocationHybridSimulation::newStep() - error in variable\n";
+        std::cerr << "theta: " << theta << " <= 0.0\n";
         return -1;
     }
     
     if (deltaT <= 0.0)  {
-        std::cerr << "XC::HHTHybridSimulation::newStep() - error in variable\n";
+        std::cerr << "XC::CollocationHybridSimulation::newStep() - error in variable\n";
         std::cerr << "dT = " << deltaT << std::endl;
-        return -2;	
+        return -2;
     }
-
+    
     // get a pointer to the XC::AnalysisModel
     AnalysisModel *theModel = this->getAnalysisModelPtr();
-    
+
     // set the constants
     c1 = 1.0;
-    c2 = gamma/(beta*deltaT);
-    c3 = 1.0/(beta*deltaT*deltaT);
-       
+    c2 = gamma/(beta*theta*deltaT);
+    c3 = 1.0/(beta*theta*theta*deltaT*deltaT);
+    
     if (U.get().Size() == 0)  {
-        std::cerr << "XC::HHTHybridSimulation::newStep() - domainChange() failed or hasn't been called\n";
+        std::cerr << "XC::CollocationHybridSimulation::newStep() - domainChange() failed or hasn't been called\n"; 
         return -3;	
     }
     
     // set response at t to be that at t+deltaT of previous step
-    Ut= U;        
+    Ut= U;
 
-    // increment the time to t+alpha*deltaT and apply the load
+    // increment the time to t+theta*deltaT and apply the load
     double time = getCurrentModelTime();
-    time += alphaF*deltaT;
+    time += theta*deltaT;
 //    theModel->applyLoadDomain(time);
     if(updateModel(time, deltaT) < 0)
       {
-        std::cerr << "XC::HHTHybridSimulation::newStep() - failed to update the domain\n";
+        std::cerr << "XC::CollocationHybridSimulation::newStep() - failed to update the domain\n";
         return -4;
       }
-
-    // determine new_ velocities and accelerations at t+deltaT
-    double a1 = (1.0 - gamma/beta);
-    double a2 = deltaT*(1.0 - 0.5*gamma/beta);
-    U.getDot().addVector(a1, Ut.getDotDot(), a2);
     
-    double a3 = -1.0/(beta*deltaT);
-    double a4 = 1.0 - 0.5/beta;  
+    // determine new_ velocities and accelerations at t+theta*deltaT
+    double a1 = (1.0 - gamma/beta); 
+    double a2 = theta*deltaT*(1.0 - 0.5*gamma/beta);
+    U.getDot().addVector(a1, Ut.getDotDot(), a2);
+      
+    double a3 = -1.0/(beta*theta*deltaT);
+    double a4 = 1.0 - 0.5/beta;
     U.getDotDot().addVector(a4, Ut.getDot(), a3);
     
-    // determine the velocities and accelerations at t+alpha*deltaT
-    (Ualpha.getDot()) = Ut.getDot();
-    Ualpha.get().addVector((1.0-alphaF), U.getDot(), alphaF);
-    
-    (Ualpha.getDotDot()) = Ut.getDotDot();
-     Ualpha.getDotDot().addVector((1.0-alphaI()), U.getDotDot(), alphaI());
-
     // set the trial response quantities for the nodes
-    theModel->setVel(Ualpha.getDot());
-    theModel->setAccel(Ualpha.getDotDot());
-        
+    theModel->setVel(U.getDot());
+    theModel->setAccel(U.getDotDot());
+    
     return 0;
 }
 
 
-int XC::HHTHybridSimulation::revertToLastStep()
+int XC::CollocationHybridSimulation::revertToLastStep(void)
   {
     // set response at t+deltaT to be that at t .. for next step
-    if(U.get().Size() != 0)
-      { U= Ut;    }
+    if(U.get().Size()>0)
+      U= Ut;
     return 0;
   }
 
 
-int XC::HHTHybridSimulation::formEleTangent(FE_Element *theEle)
-  {
+int XC::CollocationHybridSimulation::formEleTangent(FE_Element *theEle)
+{
     theEle->zeroTangent();
     if (statusFlag == CURRENT_TANGENT)  {
-        theEle->addKtToTang(alphaF*c1);
-        theEle->addCtoTang(alphaF*c2);
-        theEle->addMtoTang(alphaI()*c3);
+        theEle->addKtToTang(c1);
+        theEle->addCtoTang(c2);
+        theEle->addMtoTang(c3);
     } else if (statusFlag == INITIAL_TANGENT)  {
-        theEle->addKiToTang(alphaF*c1);
-        theEle->addCtoTang(alphaF*c2);
-        theEle->addMtoTang(alphaI()*c3);
+        theEle->addKiToTang(c1);
+        theEle->addCtoTang(c2);
+        theEle->addMtoTang(c3);
     }
     
     return 0;
-  }    
+}
 
 
-int XC::HHTHybridSimulation::formNodTangent(DOF_Group *theDof)
-  {
+int XC::CollocationHybridSimulation::formNodTangent(DOF_Group *theDof)
+{
     theDof->zeroTangent();
 
-    theDof->addCtoTang(alphaF*c2);
-    theDof->addMtoTang(alphaI()*c3);
+    theDof->addCtoTang(c2);
+    theDof->addMtoTang(c3);
     
     return 0;
-  }
+}    
 
 
-int XC::HHTHybridSimulation::domainChanged(void)
+int XC::CollocationHybridSimulation::domainChanged(void)
   {
     AnalysisModel *myModel = this->getAnalysisModelPtr();
     LinearSOE *theLinSOE = this->getLinearSOEPtr();
@@ -208,10 +224,8 @@ int XC::HHTHybridSimulation::domainChanged(void)
     
     if(Ut.get().Size() != size)
       {
-        
         Ut.resize(size);
         U.resize(size);
-        Ualpha.resize(size);
       }
     
     // now go through and populate U, Udot and Udotdot by iterating through
@@ -221,7 +235,7 @@ int XC::HHTHybridSimulation::domainChanged(void)
     
     while((dofGroupPtr = theDOFGroups()) != 0)
       {
-        const ID &id = dofGroupPtr->getID();
+        const XC::ID &id = dofGroupPtr->getID();
         const Vector &disp = dofGroupPtr->getCommittedDisp();	
         U.setDisp(id,disp);
         const Vector &vel = dofGroupPtr->getCommittedVel();
@@ -230,27 +244,28 @@ int XC::HHTHybridSimulation::domainChanged(void)
         U.setAccel(id,accel);
         // NOTE WE CAN't DO TOGETHER BECAUSE DOF_GROUPS USING SINGLE VECTOR
       }
+    
     return 0;
   }
 
 
-int XC::HHTHybridSimulation::update(const XC::Vector &deltaU)
-{
+int XC::CollocationHybridSimulation::update(const XC::Vector &deltaU)
+  {
     AnalysisModel *theModel = this->getAnalysisModelPtr();
     if (theModel == 0)  {
-        std::cerr << "WARNING XC::HHTHybridSimulation::update() - no XC::AnalysisModel set\n";
+        std::cerr << "WARNING XC::CollocationHybridSimulation::update() - no XC::AnalysisModel set\n";
         return -1;
     }	
     
     // check domainChanged() has been called, i.e. Ut will not be zero
     if (Ut.get().Size() == 0)  {
-        std::cerr << "WARNING XC::HHTHybridSimulation::update() - domainChange() failed or not called\n";
+        std::cerr << "WARNING XC::CollocationHybridSimulation::update() - domainChange() failed or not called\n";
         return -2;
     }	
     
     // check deltaU is of correct size
     if (deltaU.Size() != U.get().Size())  {
-        std::cerr << "WARNING XC::HHTHybridSimulation::update() - Vectors of incompatible size ";
+        std::cerr << "WARNING XC::CollocationHybridSimulation::update() - Vectors of incompatible size ";
         std::cerr << " expecting " << U.get().Size() << " obtained " << deltaU.Size() << std::endl;
         return -3;
     }
@@ -258,79 +273,86 @@ int XC::HHTHybridSimulation::update(const XC::Vector &deltaU)
     // determine the displacement increment reduction factor
     rFact = 1.0/(theTest->getMaxNumTests() - theTest->getNumTests() + 1.0);
 
-    //  determine the response at t+deltaT
+    // determine the response at t+theta*deltaT
     (U.get()) += rFact*deltaU;
 
     U.getDot().addVector(1.0, deltaU, rFact*c2);
     
     U.getDotDot().addVector(1.0, deltaU, rFact*c3);
-
-    // determine displacement and velocity at t+alpha*deltaT
-    (Ualpha.get()) = Ut.get();
-    Ualpha.get().addVector((1.0-alphaF), U.get(), alphaF);
-
-    (Ualpha.getDot()) = Ut.getDot();
-    Ualpha.get().addVector((1.0-alphaF), U.getDot(), alphaF);
     
-    (Ualpha.getDotDot()) = Ut.getDotDot();
-    Ualpha.getDotDot().addVector((1.0-alphaI()), U.getDotDot(), alphaI());
-
     // update the response at the DOFs
-    theModel->setResponse(Ualpha.get(),Ualpha.getDot(),Ualpha.getDotDot());
+    theModel->setResponse(U.get(),U.getDot(),U.getDotDot());        
     if(updateModel() < 0)
       {
-        std::cerr << "XC::HHTHybridSimulation::update() - failed to update the domain\n";
+        std::cerr << "XC::CollocationHybridSimulation::update() - failed to update the domain\n";
         return -4;
       }
     return 0;
-  }
+  }    
 
 
-int XC::HHTHybridSimulation::commit(void)
+int XC::CollocationHybridSimulation::commit(void)
   {
-    AnalysisModel *theModel = this->getAnalysisModelPtr();
-    if(theModel == 0)
-      {
-        std::cerr << "WARNING XC::HHTHybridSimulation::commit() - no XC::AnalysisModel set\n";
-        return -1;
-      }
     
+    AnalysisModel *theModel = this->getAnalysisModelPtr();
+    if (theModel == 0)  {
+        std::cerr << "WARNING XC::CollocationHybridSimulation::commit() - no XC::AnalysisModel set\n";
+        return -1;
+    }	  
+        
+    // determine response quantities at t+deltaT
+    U.getDotDot().addVector(1.0/theta, Ut.getDotDot(), (theta-1.0)/theta);
+    
+    (U.getDot()) = Ut.getDot();
+    double a1 = deltaT*(1.0 - gamma);
+    double a2 = deltaT*gamma;
+    U.getDot().addVector(1.0, Ut.getDotDot(), a1);
+    U.getDot().addVector(1.0, U.getDotDot(), a2);
+    
+    (U.get()) = Ut.get();
+    U.get().addVector(1.0, Ut.getDot(), deltaT);
+    double a3 = deltaT*deltaT*(0.5 - beta);
+    double a4 = deltaT*deltaT*beta;
+    U.get().addVector(1.0, Ut.getDotDot(), a3);
+    U.get().addVector(1.0, U.getDotDot(), a4);
+
     // update the response at the DOFs
-    theModel->setResponse(U.get(),U.getDot(),U.getDotDot());
+    theModel->setResponse(U.get(),U.getDot(),U.getDotDot());        
 //    if (theModel->updateDomain() < 0)  {
-//        std::cerr << "XC::HHTHybridSimulation::commit() - failed to update the domain\n";
+//        std::cerr << "XC::CollocationHybridSimulation::commit() - failed to update the domain\n";
 //        return -4;
 //    }
     
-    // set the time to be t+deltaT
+    // set the time to be t+delta t
     double time = getCurrentModelTime();
-    time+= (1.0-alphaF)*deltaT;
+    time += (1.0-theta)*deltaT;
     setCurrentModelTime(time);
-
+    
     return commitModel();
   }
 
 //! @brief Send object members through the communicator argument.
-int XC::HHTHybridSimulation::sendData(Communicator &comm)
+int XC::CollocationHybridSimulation::sendData(Communicator &comm)
   {
     int res= HHTBase::sendData(comm);
-    res+= comm.sendDouble(alphaF,getDbTagData(),CommMetaData(9));
+    res+= comm.sendDoubles(theta,rFact,getDbTagData(),CommMetaData(9));
     return res;
   }
 
 //! @brief Receives object members through the communicator argument.
-int XC::HHTHybridSimulation::recvData(const Communicator &comm)
+int XC::CollocationHybridSimulation::recvData(const Communicator &comm)
   {
     int res= HHTBase::recvData(comm);
-    res+= comm.receiveDouble(alphaF,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveDoubles(theta,rFact,getDbTagData(),CommMetaData(9));
     return res;
   }
 
-int XC::HHTHybridSimulation::sendSelf(Communicator &comm)
+
+int XC::CollocationHybridSimulation::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(10);
+    inicComm(7);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -340,9 +362,9 @@ int XC::HHTHybridSimulation::sendSelf(Communicator &comm)
   }
 
 
-int XC::HHTHybridSimulation::recvSelf(const Communicator &comm)
+int XC::CollocationHybridSimulation::recvSelf(const Communicator &comm)
   {
-    inicComm(10);
+    inicComm(7);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
@@ -359,10 +381,8 @@ int XC::HHTHybridSimulation::recvSelf(const Communicator &comm)
   }
 
 
-void XC::HHTHybridSimulation::Print(std::ostream &s, int flag) const
+void XC::CollocationHybridSimulation::Print(std::ostream &s, int flag) const
   {
     HHTBase::Print(s,flag);
-    s << "  alphaI: " << alphaI() << " alphaF: " << alphaF  << " beta: " << beta  << " gamma: " << gamma << std::endl;
-    s << "  c1: " << c1 << " c2: " << c2 << " c3: " << c3 << std::endl;
+    s << "  theta: " << theta << std::endl;
   }
-

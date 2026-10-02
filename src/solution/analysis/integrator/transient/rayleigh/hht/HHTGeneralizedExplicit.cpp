@@ -46,20 +46,20 @@
 
 // $Revision: 1.2 $
 // $Date: 2005/12/21 00:32:57 $
-// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/HHTExplicit.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/HHTGeneralizedExplicit.cpp,v $
 
 
-// File: ~/analysis/integrator/HHTExplicit.cpp
+// File: ~/analysis/integrator/HHTGeneralizedExplicit.cpp
 // 
 // Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
 // Created: 10/05
 // Revision: A
 //
-// Description: This file contains the implementation of the XC::HHTExplicit class.
+// Description: This file contains the implementation of the XC::HHTGeneralizedExplicit class.
 //
-// What: "@(#) HHTExplicit.cpp, revA"
+// What: "@(#) HHTGeneralizedExplicit.cpp, revA"
 
-#include <solution/analysis/integrator/transient/rayleigh/HHTExplicit.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/HHTGeneralizedExplicit.h>
 #include <solution/analysis/model/fe_ele/FE_Element.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <solution/analysis/model/AnalysisModel.h>
@@ -67,41 +67,63 @@
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 #include <solution/analysis/model/DOF_GrpIter.h>
 #include <solution/analysis/model/AnalysisModel.h>
+#include <cmath>
 
 //! @brief Constructor.
-XC::HHTExplicit::HHTExplicit(SolutionStrategy *owr)
-    : HHTRayleighBase(owr,INTEGRATOR_TAGS_HHTExplicit) {}
+XC::HHTGeneralizedExplicit::HHTGeneralizedExplicit(SolutionStrategy *owr)
+  : HHTBaseAlphaF(owr,INTEGRATOR_TAGS_HHTGeneralizedExplicit) {}
 
 //! @brief Constructor.
-XC::HHTExplicit::HHTExplicit(SolutionStrategy *owr,double _alpha)
-  : HHTRayleighBase(owr,INTEGRATOR_TAGS_HHTExplicit,_alpha,0.5) {}
+XC::HHTGeneralizedExplicit::HHTGeneralizedExplicit(SolutionStrategy *owr,double _rhoB, double _alphaF)
+  : HHTBaseAlphaF(owr,INTEGRATOR_TAGS_HHTGeneralizedExplicit,
+		  ((2.0-_rhoB)/(1.0+_rhoB)), _alphaF)
+  {
+    beta= ((5.0-3*_rhoB+3*_alphaF*(-2.0-_rhoB+pow(_rhoB,2))
+    +pow(_alphaF,2)*(2.0+3*_rhoB-pow(_rhoB,3)))
+	   /((-1.0+_alphaF)*(-2.0+_rhoB)*pow(1.0+_rhoB,2)));
+    gamma= (0.5+alphaI()-_alphaF);
+  }
 
 //! @brief Constructor.
-XC::HHTExplicit::HHTExplicit(SolutionStrategy *owr,double _alpha,const RayleighDampingFactors &rF)
-    : HHTRayleighBase(owr,INTEGRATOR_TAGS_HHTExplicit,_alpha,0.5,rF) {}
+XC::HHTGeneralizedExplicit::HHTGeneralizedExplicit(SolutionStrategy *owr,double _rhoB, double _alphaF,const RayleighDampingFactors &rF)
+  : HHTBaseAlphaF(owr,INTEGRATOR_TAGS_HHTGeneralizedExplicit,
+		  ((2.0-_rhoB)/(1.0+_rhoB)), _alphaF,
+		  rF)
+  {
+    beta= ((5.0-3*_rhoB+3*_alphaF*(-2.0-_rhoB+pow(_rhoB,2))
+    +pow(_alphaF,2)*(2.0+3*_rhoB-pow(_rhoB,3)))
+	   /((-1.0+_alphaF)*(-2.0+_rhoB)*pow(1.0+_rhoB,2)));
+    gamma= (0.5+alphaI()-_alphaF);
+  }
 
 //! @brief Constructor.
-XC::HHTExplicit::HHTExplicit(SolutionStrategy *owr,double _alpha, double _gamma)
-    : HHTRayleighBase(owr,INTEGRATOR_TAGS_HHTExplicit,_alpha,_gamma) {}
+XC::HHTGeneralizedExplicit::HHTGeneralizedExplicit(SolutionStrategy *owr,double _alphaI, double _alphaF,
+    double _beta, double _gamma)
+  : HHTBaseAlphaF(owr,INTEGRATOR_TAGS_HHTGeneralizedExplicit,
+		  _alphaI,_alphaF,
+		  _beta,_gamma) {}
 
 //! @brief Constructor.
-XC::HHTExplicit::HHTExplicit(SolutionStrategy *owr,double _alpha, double _gamma,const RayleighDampingFactors &rF)
-    : HHTRayleighBase(owr,INTEGRATOR_TAGS_HHTExplicit,_alpha,_gamma,rF) {}
+XC::HHTGeneralizedExplicit::HHTGeneralizedExplicit(SolutionStrategy *owr,double _alphaI, double _alphaF, double _beta, double _gamma,const RayleighDampingFactors &rF)
+  : HHTBaseAlphaF(owr,INTEGRATOR_TAGS_HHTGeneralizedExplicit,
+		  _alphaI, _alphaF,
+		  _beta,_gamma,
+		  rF) {}
 
 
-int XC::HHTExplicit::newStep(double _deltaT)
+int XC::HHTGeneralizedExplicit::newStep(double _deltaT)
   {
     updateCount = 0;
 
     deltaT = _deltaT;
-    if(gamma == 0 )  {
+    if (gamma == 0 )  {
         std::cerr << "XC::HHTExplicit::newStep() - error in variable\n";
         std::cerr << "gamma = " << gamma << std::endl;
         return -1;
     }
     
-    if(deltaT <= 0.0)  {
-        std::cerr << "XC::HHTExplicit::newStep() - error in variable\n";
+    if (deltaT <= 0.0)  {
+        std::cerr << "XC::HHTGeneralizedExplicit::newStep() - error in variable\n";
         std::cerr << "dT = " << deltaT << std::endl;
         return -2;	
     }
@@ -110,88 +132,94 @@ int XC::HHTExplicit::newStep(double _deltaT)
     AnalysisModel *theModel = this->getAnalysisModelPtr();
 
     // set the constants
+    c1 = beta*deltaT*deltaT;
     c2 = gamma*deltaT;
     c3 = 1.0;
        
-    if(U.get().Size() == 0)  {
-        std::cerr << "XC::HHTExplicit::newStep() - domainChange() failed or hasn't been called\n";
+    if(U.get().Size() == 0)
+      {
+        std::cerr << "XC::HHTGeneralizedExplicit::newStep() - domainChange() failed or hasn't been called\n";
         return -3;	
-    }
+      }
     
     // set response at t to be that at t+deltaT of previous step
     Ut= U;
 
+
     // determine new_ displacements and velocities at time t+deltaT
     U.get().addVector(1.0, Ut.getDot(), deltaT);
-    double a1 = 0.5*deltaT*deltaT;
+    double a1 = (0.5 - beta)*deltaT*deltaT;
     U.get().addVector(1.0, Ut.getDotDot(), a1);
     
     double a2 = deltaT*(1.0 - gamma);
     U.getDot().addVector(1.0, Ut.getDotDot(), a2);
 
-    // determine the displacements and velocities at t+alpha*deltaT
-    (Ualpha.get()) = Ut.get();
-    Ualpha.get().addVector((1.0-alpha), U.get(), alpha);
+    // determine the displacements and velocities at t+alphaF*deltaT
+    (Ualpha.get())= Ut.get();
+    Ualpha.get().addVector((1.0-alphaF), U.get(), alphaF);
     
-    (Ualpha.getDot()) = Ut.getDot();
-    Ualpha.get().addVector((1.0-alpha), U.getDot(), alpha);
+    (Ualpha.getDot())= Ut.getDot();
+    Ualpha.getDot().addVector((1.0-alphaF), U.getDot(), alphaF);
         
     // set the trial response quantities for the elements
     theModel->setDisp(Ualpha.get());
     theModel->setVel(Ualpha.getDot());
 
-    // increment the time to t+alpha*deltaT and apply the load
+    // increment the time to t+alphaF*deltaT and apply the load
     double time = getCurrentModelTime();
-    time += alpha*deltaT;
+    time += alphaF*deltaT;
     if(updateModel(time, deltaT) < 0)
       {
-        std::cerr << "XC::HHTExplicit::newStep() - failed to update the domain\n";
+        std::cerr << "XC::HHTGeneralizedExplicit::newStep() - failed to update the domain\n";
         return -4;
       }
     
-    // determine the accelerations at t+alpha*deltaT
-    U.getDotDot().Zero();
+    // determine the accelerations at t+alphaI()*deltaT
+    (Ualpha.getDotDot()) = (1.0-alphaI())*(Ut.getDotDot());
     
     // set the new_ trial response quantities for the nodes
-    theModel->setAccel(U.getDotDot());
+    theModel->setAccel(Ualpha.getDotDot());
     
     return 0;
 }
 
 
-int XC::HHTExplicit::revertToLastStep()
-  {
+int XC::HHTGeneralizedExplicit::revertToLastStep()
+{
     // set response at t+deltaT to be that at t .. for next step
-    if(U.get().Size()!=0)
-      U= Ut;
+  if(U.get().Size() != 0)
+      {
+        U= Ut;
+      }
+
     return 0;
-  }
+}
 
 
-int XC::HHTExplicit::formEleTangent(FE_Element *theEle)
+int XC::HHTGeneralizedExplicit::formEleTangent(FE_Element *theEle)
 {
     theEle->zeroTangent();
     
-    theEle->addCtoTang(alpha*c2);
-    theEle->addMtoTang(c3);
+    theEle->addCtoTang(alphaF*c2);
+    theEle->addMtoTang(alphaI()*c3);
     
     return 0;
 }    
 
 
-int XC::HHTExplicit::formNodTangent(DOF_Group *theDof)
+int XC::HHTGeneralizedExplicit::formNodTangent(DOF_Group *theDof)
 {
     theDof->zeroTangent();
 
-    theDof->addCtoTang(alpha*c2);
-    theDof->addMtoTang(c3);
+    theDof->addCtoTang(alphaF*c2);
+    theDof->addMtoTang(alphaI()*c3);
     
     return 0;
 }
 
 
-int XC::HHTExplicit::domainChanged()
-{
+int XC::HHTGeneralizedExplicit::domainChanged()
+  {
     AnalysisModel *myModel = this->getAnalysisModelPtr();
     LinearSOE *theLinSOE = this->getLinearSOEPtr();
     const XC::Vector &x = theLinSOE->getX();
@@ -201,111 +229,101 @@ int XC::HHTExplicit::domainChanged()
     
     if(Ut.get().Size() != size)
       {
+        
         Ut.resize(size);
         U.resize(size);
         Ualpha.resize(size);
       }
     
-    // now go through and populate U, Udot and Udotdot by iterating through
+    // now go through and populate U by iterating through
     // the DOF_Groups and getting the last committed velocity and accel
     DOF_GrpIter &theDOFGroups = myModel->getDOFGroups();
     DOF_Group *dofGroupPtr= nullptr;
     
-    while ((dofGroupPtr = theDOFGroups()) != 0)
+    while((dofGroupPtr = theDOFGroups()) != 0)
       {
-        const XC::ID &id = dofGroupPtr->getID();
+        const ID &id = dofGroupPtr->getID();
+        
         const Vector &disp = dofGroupPtr->getCommittedDisp();	
         U.setDisp(id,disp);
         const Vector &vel = dofGroupPtr->getCommittedVel();
         U.setVel(id,vel);
         const Vector &accel = dofGroupPtr->getCommittedAccel();
         U.setAccel(id,accel);
-
-        // NOTE WE CAN't DO TOGETHER BECAUSE DOF_GROUPS USING SINGLE VECTOR **
+        // NOTE WE CAN't DO TOGETHER BECAUSE DOF_GROUPS USING SINGLE VECTOR ******
       }    
     
     return 0;
   }
 
 
-int XC::HHTExplicit::update(const Vector &aiPlusOne)
+int XC::HHTGeneralizedExplicit::update(const XC::Vector &aiPlusOne)
 {
     updateCount++;
-    if(updateCount > 1)  {
-        std::cerr << "WARNING XC::HHTExplicit::update() - called more than once -";
-        std::cerr << " HHTExplicit integration scheme requires a LINEAR solution algorithm\n";
+    if (updateCount > 1)  {
+        std::cerr << "WARNING XC::HHTGeneralizedExplicit::update() - called more than once -";
+        std::cerr << " HHTGeneralizedExplicit integration scheme requires a LINEAR solution algorithm\n";
         return -1;
     }
 
     AnalysisModel *theModel = this->getAnalysisModelPtr();
-    if(theModel == 0)  {
-        std::cerr << "WARNING XC::HHTExplicit::update() - no XC::AnalysisModel set\n";
+    if (theModel == 0)  {
+        std::cerr << "WARNING XC::HHTGeneralizedExplicit::update() - no XC::AnalysisModel set\n";
         return -1;
     }	
     
     // check domainChanged() has been called, i.e. Ut will not be zero
-    if(Ut.get().Size() == 0)  {
-        std::cerr << "WARNING XC::HHTExplicit::update() - domainChange() failed or not called\n";
+    if(Ut.get().Size() == 0)
+      {
+        std::cerr << "WARNING XC::HHTGeneralizedExplicit::update() - domainChange() failed or not called\n";
         return -2;
-    }	
+      }	
     
     // check aiPlusOne is of correct size
-    if(aiPlusOne.Size() != U.get().Size())  {
-        std::cerr << "WARNING XC::HHTExplicit::update() - Vectors of incompatible size ";
+    if (aiPlusOne.Size() != U.get().Size())  {
+        std::cerr << "WARNING XC::HHTGeneralizedExplicit::update() - Vectors of incompatible size ";
         std::cerr << " expecting " << U.get().Size() << " obtained " << aiPlusOne.Size() << std::endl;
         return -3;
     }
     
     //  determine the response at t+deltaT
-    U.getDot().addVector(1.0, aiPlusOne, c2);
-
-    (U.getDotDot()) = aiPlusOne;
+    U.get().addVector(1.0, aiPlusOne, c1);
     
+    U.getDot().addVector(1.0, aiPlusOne, c2);
+    
+    U.getDotDot()= aiPlusOne;
+        
     // update the response at the DOFs
-    theModel->setVel(U.getDot());
-    theModel->setAccel(U.getDotDot());
+    theModel->setResponse(U.get(),U.getDot(),U.getDotDot());        
+//    if (theModel->updateDomain() < 0)  {
+//        std::cerr << "XC::HHTGeneralizedExplicit::update() - failed to update the domain\n";
+//        return -4;
+//    }
     
     return 0;
 }
 
 
-int XC::HHTExplicit::commit(void)
+int XC::HHTGeneralizedExplicit::commit(void)
   {
     AnalysisModel *theModel = this->getAnalysisModelPtr();
-    if(theModel == 0)  {
-        std::cerr << "WARNING XC::HHTExplicit::commit() - no XC::AnalysisModel set\n";
+    if (theModel == 0)  {
+        std::cerr << "WARNING XC::HHTGeneralizedExplicit::commit() - no XC::AnalysisModel set\n";
         return -1;
     }	  
         
     // set the time to be t+deltaT
-    double time = getCurrentModelTime();
-    time += (1.0-alpha)*deltaT;
+    double time= getCurrentModelTime();
+    time += (1.0-alphaF)*deltaT;
     setCurrentModelTime(time);
-
     return commitModel();
   }
 
-//! @brief Send object members through the communicator argument.
-int XC::HHTExplicit::sendData(Communicator &comm)
-  {
-    int res= HHTRayleighBase::sendData(comm);
-    res+= comm.sendInt(updateCount,getDbTagData(),CommMetaData(8));
-    return res;
-  }
-
-//! @brief Receives object members through the communicator argument.
-int XC::HHTExplicit::recvData(const Communicator &comm)
-  {
-    int res= HHTRayleighBase::recvData(comm);
-    res+= comm.receiveInt(updateCount,getDbTagData(),CommMetaData(8));
-    return res;
-  }
-
-int XC::HHTExplicit::sendSelf(Communicator &comm)
+int XC::HHTGeneralizedExplicit::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(27);
+    inicComm(9);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -315,9 +333,9 @@ int XC::HHTExplicit::sendSelf(Communicator &comm)
   }
 
 
-int XC::HHTExplicit::recvSelf(const Communicator &comm)
+int XC::HHTGeneralizedExplicit::recvSelf(const Communicator &comm)
   {
-    inicComm(27);
+    inicComm(9);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
@@ -333,12 +351,14 @@ int XC::HHTExplicit::recvSelf(const Communicator &comm)
     return res;
   }
 
-void XC::HHTExplicit::Print(std::ostream &s, int flag) const
+
+void XC::HHTGeneralizedExplicit::Print(std::ostream &s, int flag) const
   {
-    RayleighBase::Print(s,flag);
-    s << "  alpha: " << alpha << " gamma: " << gamma << std::endl;
-    s << "  c2: " << c2 << " c3: " << c3 << std::endl;
+    HHTBaseAlphaF::Print(s,flag);
+    s << "  c1: " << c1 << " c2: " << c2 << " c3: " << c3 << std::endl;
   }
+
+
 
 
 

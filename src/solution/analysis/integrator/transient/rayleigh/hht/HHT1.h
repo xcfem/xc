@@ -44,46 +44,39 @@
 **   Filip C. Filippou (filippou@ce.berkeley.edu)                     **
 **                                                                    **
 ** ****************************************************************** */
+                                                                        
+// $Revision: 1.4 $
+// $Date: 2003/02/14 23:00:48 $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/HHT1.h,v $
+                                                                        
+                                                                        
+#ifndef HHT1_h
+#define HHT1_h
 
-// $Revision: 1.1 $
-// $Date: 2005/12/19 22:39:21 $
-// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/HHTGeneralized.h,v $
-
-#ifndef HHTGeneralized_h
-#define HHTGeneralized_h
-
-// Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
-// Created: 10/05
-// Revision: A
+// Written: fmk 
 //
-// Description: This file contains the class definition for HHTGeneralized.
-// HHTGeneralized is an algorithmic class for performing a transient analysis
-// using the HHTGeneralized integration scheme.
+// Description: This file contains the class definition for HHT1.
+// HHT1 is an algorithmic class for performing a transient analysis
+// using the HHT1 integration scheme.
 //
-// What: "@(#) HHTGeneralized.h, revA"
+// What: "@(#) HHT1.h, revA"
 
-#include <solution/analysis/integrator/transient/RayleighBase.h>
+#include "solution/analysis/integrator/transient/DampingFactorsIntegrator.h"
 #include "solution/analysis/integrator/transient/ResponseQuantities.h"
 
 namespace XC {
-class DOF_Group;
-class FE_Element;
-class Vector;
 
-//! @ingroup RayleighIntegrator
+//! @ingroup TransientIntegrator
 //
-//! @brief HHTGeneralized is an algorithmic class
-//! for performing a transient analysis
-//! using the HHTGeneralized integration scheme.
-class HHTGeneralized: public RayleighBase
+//! @brief The three parameter Hilbert-Hughes-Taylor time-stepping method.
+class HHT1: public DampingFactorsIntegrator
   {
   private:
-    double alphaI;
-    double alphaF;
-    double beta;
+    double alpha;
     double gamma;
-    
-    double c1, c2, c3;                          // some constants we need to keep
+    double beta;
+
+    double c1, c2, c3; //!< some constants we need to keep
     ResponseQuantities Ut; //!< response quantities at time t
     ResponseQuantities U; //!< response quantities at time t + delta t
     ResponseQuantities Ualpha; //!< response quantities at time t+alpha delta t
@@ -92,32 +85,44 @@ class HHTGeneralized: public RayleighBase
     int recvData(const Communicator &);
 
     friend class SolutionStrategy;
-    HHTGeneralized(SolutionStrategy *);
-    HHTGeneralized(SolutionStrategy *,double rhoInf);
-    HHTGeneralized(SolutionStrategy *,double rhoInf,const RayleighDampingFactors &rF);
-    HHTGeneralized(SolutionStrategy *,double alphaI, double alphaF, double beta, double gamma);
-    HHTGeneralized(SolutionStrategy *,double alphaI, double alphaF, double beta, double gamma,const RayleighDampingFactors &rF);
+    HHT1(SolutionStrategy *);
+    HHT1(SolutionStrategy *,double alpha);
+    HHT1(SolutionStrategy *,double alpha,const RayleighDampingFactors &rF);        
     Integrator *getCopy(void) const;
   public:
-
+    inline double getAlpha(void) const
+      { return this->alpha; } 
+    inline void setAlpha(const double &d)
+      { this->alpha= d; }
+    inline double getBeta(void) const
+      { return this->beta; } 
+    inline void setBeta(const double &d)
+      { this->beta= d; }
+    inline double getGamma(void) const
+      { return this->gamma; } 
+    inline void setGamma(const double &d)
+      { this->gamma= d; }
+    
     // methods which define what the FE_Element and DOF_Groups add
     // to the system of equation object.
     int formEleTangent(FE_Element *theEle);
     int formNodTangent(DOF_Group *theDof);        
-    
+
     int domainChanged(void);    
+    int initialize(void);        
     int newStep(double deltaT);    
-    int revertToLastStep(void);        
     int update(const Vector &deltaU);
+
     int commit(void);
-    
+
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
-    
-    void Print(std::ostream &s, int flag = 0) const;        
+
+    void Print(std::ostream &s, int flag =0) const;        
   };
-inline Integrator *HHTGeneralized::getCopy(void) const
-  { return new HHTGeneralized(*this); }
+inline Integrator *HHT1::getCopy(void) const
+  { return new HHT1(*this); }
 } // end of XC namespace
 
 #endif
+

@@ -62,7 +62,7 @@
 //
 // What: "@(#) HHTHybridSimulation.h, revA"
 
-#include "solution/analysis/integrator/transient/rayleigh/HHTBase.h"
+#include "solution/analysis/integrator/transient/rayleigh/hht/HHTBaseAlphaF.h"
 
 namespace XC {
 class DOF_Group;
@@ -75,15 +75,9 @@ class ConvergenceTest;
 //! @brief HHTHybridSimulation is an algorithmic class
 //! for performing a transient analysis
 //! using the HHTHybridSimulation integration scheme.
-class HHTHybridSimulation: public HHTBase
+class HHTHybridSimulation: public HHTBaseAlphaF
   {
   private:
-    double alphaF;
-
-    inline const double &alphaI(void) const
-      { return alpha; }
-    inline double &alphaI(void)
-      { return alpha; }
     ConvergenceTest *theTest; //!< convergence test
     double rFact; //!< displacement increment reduction factor
   protected:

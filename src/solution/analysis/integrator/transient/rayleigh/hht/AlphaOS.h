@@ -46,65 +46,62 @@
 ** ****************************************************************** */
 
 // $Revision: 1.2 $
-// $Date: 2005/12/21 00:32:57 $
-// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/HHTGeneralizedExplicit.h,v $
+// $Date: 2005/12/21 00:31:57 $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/AlphaOS.h,v $
 
 
-#ifndef HHTGeneralizedExplicit_h
-#define HHTGeneralizedExplicit_h
+#ifndef AlphaOS_h
+#define AlphaOS_h
 
-// File: ~/analysis/integrator/HHTGeneralizedExplicit.h
-// 
 // Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
-// Created: 10/05
+// Created: 02/05
 // Revision: A
 //
-// Description: This file contains the class definition for HHTGeneralizedExplicit.
-// HHTGeneralizedExplicit is an algorithmic class for performing a transient analysis
-// using the HHTGeneralizedExplicit integration scheme.
+// Description: This file contains the class definition for AlphaOS.
+// AlphaOS is an algorithmic class for performing a transient analysis
+// using the Alpha-Operator-Splitting integration scheme.
+// The parameter alpha corresponds to 1+alpha_{HHT}.
 //
-// What: "@(#) HHTGeneralizedExplicit.h, revA"
+// What: "@(#) AlphaOS.h, revA"
 
-#include "solution/analysis/integrator/transient/rayleigh/HHTBase.h"
+#include <solution/analysis/integrator/transient/rayleigh/hht/AlphaOSBase.h>
 
 namespace XC {
+class DOF_Group;
+class FE_Element;
 
 //! @ingroup RayleighIntegrator
 //
-//! @brief HHTGeneralizedExplicit is an algorithmic class
-//! for performing a transient analysis
-//! using the HHTGeneralizedExplicit integration scheme.
-class HHTGeneralizedExplicit: public HHTBase
+//! @brief AlphaOS is an algorithmic class for performing a transient analysis
+//! using the Alpha-Operator-Splitting integration scheme.
+//! The parameter alpha corresponds to 1+alpha_{HHT}.
+class AlphaOS: public AlphaOSBase
   {
   private:
-    double alphaF;
-    int updateCount; //!< method should only have one update per step
-    inline const double &alphaI(void) const
-      { return alpha; }
-    inline double &alphaI(void)
-      { return alpha; }
+    double alpha;    
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
+    virtual int formElementResidual(void);
 
     friend class SolutionStrategy;
-    HHTGeneralizedExplicit(SolutionStrategy *);
-    HHTGeneralizedExplicit(SolutionStrategy *,double rhoB, double alphaF);
-    HHTGeneralizedExplicit(SolutionStrategy *,double rhoB, double alphaF,const RayleighDampingFactors &rF);
-    HHTGeneralizedExplicit(SolutionStrategy *,double alphaI, double alphaF, double beta, double gamma);
-    HHTGeneralizedExplicit(SolutionStrategy *,double alphaI, double alphaF, double beta, double gamma,const RayleighDampingFactors &rF);
+    AlphaOS(SolutionStrategy *);
+    AlphaOS(SolutionStrategy *,double alpha);
+    AlphaOS(SolutionStrategy *,double alpha,const RayleighDampingFactors &rF);
+    AlphaOS(SolutionStrategy *,double alpha, double beta, double gamma);
+    AlphaOS(SolutionStrategy *,double alpha, double beta, double gamma,const RayleighDampingFactors &rF);
     Integrator *getCopy(void) const;
   public:
     
     // methods which define what the FE_Element and DOF_Groups add
     // to the system of equation object.
     int formEleTangent(FE_Element *theEle);
-    int formNodTangent(DOF_Group *theDof);        
+    int formNodTangent(DOF_Group *theDof);       
     
-    int domainChanged(void);    
+    int domainChanged(void);
     int newStep(double deltaT);    
-    int revertToLastStep(void);        
-    int update(const Vector &aiPlusOne);
+    int revertToLastStep(void);
+    int update(const Vector &deltaU);
     int commit(void);
     
     virtual int sendSelf(Communicator &);
@@ -112,8 +109,8 @@ class HHTGeneralizedExplicit: public HHTBase
     
     void Print(std::ostream &s, int flag = 0) const;        
   };
-inline Integrator *HHTGeneralizedExplicit::getCopy(void) const
-  { return new HHTGeneralizedExplicit(*this); }
+inline Integrator *AlphaOS::getCopy(void) const
+  { return new AlphaOS(*this); }
 } // end of XC namespace
 
 #endif
