@@ -20,7 +20,7 @@ class HHT1(transient.DampingFactorsIntegrator):
     :ivar beta_hht: beta factor for HHT1 integrator.
     :ivar gamma_hht: gamma factor for HHT1 integrator.
     '''
-    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, alpha, solutionAlgorithmType, analysisType, beta= None, gamma= None):
+    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, alpha, solutionAlgorithmType, analysisType= 'direct_integration_analysis', beta= None, gamma= None):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -258,7 +258,7 @@ class HHT(HHTBase):
     ''' Base class for HHT solvers.
 
     '''
-    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, alpha, solutionAlgorithmType, analysisType, beta= None, gamma= None):
+    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, alpha, solutionAlgorithmType, analysisType= 'direct_integration_analysis', beta= None, gamma= None):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -288,7 +288,7 @@ class HHTExplicitIntegrator(HHTRayleighBase):
     ''' Base class for solvers based on  HHT explicit integration method.
 
     '''
-    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, alpha, solutionAlgorithmType, analysisType, gamma= None):
+    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, alpha, solutionAlgorithmType, analysisType= 'direct_integration_analysis', gamma= None):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -316,7 +316,7 @@ class HHTGeneralizedIntegrator(transient.RayleighBase):
     ''' Base class for HHTGeneralizedIntegrator solvers.
 
     '''
-    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, solutionAlgorithmType, analysisType):
+    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, solutionAlgorithmType, analysisType= 'direct_integration_analysis'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -426,7 +426,7 @@ class HHTBaseAlphaF(HHTBase):
         HHTHybridSimulationIntegrator solvers.
 
     '''
-    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, solutionAlgorithmType, analysisType):
+    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, solutionAlgorithmType, analysisType= 'direct_integration_analysis'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -495,7 +495,7 @@ class HHTGeneralizedExplicitIntegrator(HHTBaseAlphaF):
     ''' Base class for HHTGeneralizedExplicitIntegrator solvers.
 
     '''
-    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, solutionAlgorithmType, analysisType):
+    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, solutionAlgorithmType, analysisType= 'direct_integration_analysis'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -519,7 +519,7 @@ class HHTHybridSimulationIntegrator(HHTBaseAlphaF):
     ''' Wrapper for xc.HHTHybridSimulation solvers.
 
     '''
-    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, solutionAlgorithmType, analysisType):
+    def __init__(self, prb, timeStep, name, constraintHandlerType, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType, solverType, solutionAlgorithmType, analysisType= 'direct_integration_analysis'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
