@@ -59,65 +59,65 @@ class HHT1(transient.DampingFactorsIntegrator):
         if(gamma is None):
             self.gamma_hht= (1.5-self.alpha_hht)
 
-        def getAlpha(self):
-            ''' Return the alpha factor of the Newmark based integrator.'''
-            retval= None
-            integrator= self.getIntegrator()
-            if(integrator):
-                retval= integrator.getAlpha()
-            return retval
+    def getAlpha(self):
+        ''' Return the alpha factor of the Newmark based integrator.'''
+        retval= None
+        integrator= self.getIntegrator()
+        if(integrator):
+            retval= integrator.getAlpha()
+        return retval
 
-        # def setAlpha(self, alpha:float):
-        #     ''' Set the alpha factor of the Newmark based integrator.
+    # def setAlpha(self, alpha:float):
+    #     ''' Set the alpha factor of the Newmark based integrator.
 
-        #     :param alpha: value of the alpha factor.
-        #     '''
-        #     retval= False
-        #     integrator= self.getIntegrator()
-        #     if(integrator):
-        #         integrator.setAlpha(alpha)
-        #         retval= True
-        #     return retval
+    #     :param alpha: value of the alpha factor.
+    #     '''
+    #     retval= False
+    #     integrator= self.getIntegrator()
+    #     if(integrator):
+    #         integrator.setAlpha(alpha)
+    #         retval= True
+    #     return retval
 
-        def getBeta(self):
-            ''' Return the beta factor of the Newmark based integrator.'''
-            retval= None
-            integrator= self.getIntegrator()
-            if(integrator):
-                retval= integrator.getBeta()
-            return retval
+    def getBeta(self):
+        ''' Return the beta factor of the Newmark based integrator.'''
+        retval= None
+        integrator= self.getIntegrator()
+        if(integrator):
+            retval= integrator.getBeta()
+        return retval
 
-        # def setBeta(self, beta:float):
-        #     ''' Set the beta factor of the Newmark based integrator.
+    # def setBeta(self, beta:float):
+    #     ''' Set the beta factor of the Newmark based integrator.
 
-        #     :param beta: value of the beta factor.
-        #     '''
-        #     retval= False
-        #     integrator= self.getIntegrator()
-        #     if(integrator):
-        #         integrator.setBeta(beta)
-        #         retval= True
-        #     return retval
+    #     :param beta: value of the beta factor.
+    #     '''
+    #     retval= False
+    #     integrator= self.getIntegrator()
+    #     if(integrator):
+    #         integrator.setBeta(beta)
+    #         retval= True
+    #     return retval
         
-        def getGamma(self):
-            ''' Return the gamma factor of the Newmark based integrator.'''
-            retval= None
-            integrator= self.getIntegrator()
-            if(integrator):
-                retval= integrator.getGamma()
-            return retval
+    def getGamma(self):
+        ''' Return the gamma factor of the Newmark based integrator.'''
+        retval= None
+        integrator= self.getIntegrator()
+        if(integrator):
+            retval= integrator.getGamma()
+        return retval
 
-        # def setGamma(self, gamma:float):
-        #     ''' Set the gamma factor of the Newmark based integrator.
+    # def setGamma(self, gamma:float):
+    #     ''' Set the gamma factor of the Newmark based integrator.
 
-        #     :param gamma: value of the gamma factor.
-        #     '''
-        #     retval= False
-        #     integrator= self.getIntegrator()
-        #     if(integrator):
-        #         integrator.setGamma(gamma)
-        #         retval= True
-        #     return retval
+    #     :param gamma: value of the gamma factor.
+    #     '''
+    #     retval= False
+    #     integrator= self.getIntegrator()
+    #     if(integrator):
+    #         integrator.setGamma(gamma)
+    #         retval= True
+    #     return retval
 
 class HHTRayleighBase(transient.RayleighBase):
     ''' Base class for solvers based on Rayleigh integration.
@@ -160,25 +160,25 @@ class HHTRayleighBase(transient.RayleighBase):
         if(gamma is None):
             self.gamma_hht= (1.5-self.alpha_hht)
             
-     def getAlpha(self):
-            ''' Return the alpha factor of the Newmark based integrator.'''
-            retval= None
-            integrator= self.getIntegrator()
-            if(integrator):
-                retval= integrator.getAlpha()
-            return retval
+    def getAlpha(self):
+        ''' Return the alpha factor of the Newmark based integrator.'''
+        retval= None
+        integrator= self.getIntegrator()
+        if(integrator):
+            retval= integrator.getAlpha()
+        return retval
 
-        # def setAlpha(self, alpha:float):
-        #     ''' Set the alpha factor of the Newmark based integrator.
+    # def setAlpha(self, alpha:float):
+    #     ''' Set the alpha factor of the Newmark based integrator.
 
-        #     :param alpha: value of the alpha factor.
-        #     '''
-        #     retval= False
-        #     integrator= self.getIntegrator()
-        #     if(integrator):
-        #         integrator.setAlpha(alpha)
-        #         retval= True
-        #     return retval
+    #     :param alpha: value of the alpha factor.
+    #     '''
+    #     retval= False
+    #     integrator= self.getIntegrator()
+    #     if(integrator):
+    #         integrator.setAlpha(alpha)
+    #         retval= True
+    #     return retval
 
     def getGamma(self):
         ''' Return the gamma factor of the Newmark based integrator.'''
@@ -234,25 +234,25 @@ class HHTBase(HHTRayleighBase):
         if(beta is None):
             self.beta_hht= (2-self.alpha_hht)*(2-self.alpha_hht)*0.25
 
-        def getBeta(self):
-            ''' Return the beta factor of the Newmark based integrator.'''
-            retval= None
-            integrator= self.getIntegrator()
-            if(integrator):
-                retval= integrator.getBeta()
-            return retval
+    def getBeta(self):
+        ''' Return the beta factor of the Newmark based integrator.'''
+        retval= None
+        integrator= self.getIntegrator()
+        if(integrator):
+            retval= integrator.getBeta()
+        return retval
 
-        # def setBeta(self, beta:float):
-        #     ''' Set the beta factor of the Newmark based integrator.
+    # def setBeta(self, beta:float):
+    #     ''' Set the beta factor of the Newmark based integrator.
 
-        #     :param beta: value of the beta factor.
-        #     '''
-        #     retval= False
-        #     integrator= self.getIntegrator()
-        #     if(integrator):
-        #         integrator.setBeta(beta)
-        #         retval= True
-        #     return retval
+    #     :param beta: value of the beta factor.
+    #     '''
+    #     retval= False
+    #     integrator= self.getIntegrator()
+    #     if(integrator):
+    #         integrator.setBeta(beta)
+    #         retval= True
+    #     return retval
         
 class HHT(HHTBase):
     ''' Base class for HHT solvers.
@@ -312,7 +312,7 @@ class HHTExplicitIntegrator(HHTRayleighBase):
         '''
         super(HHTExplicitIntegrator,self).__init__(prb= prb, timeStep= timeStep, name= name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, alpha= alpha, integratorType= 'HHT_explicit_integrator', solutionAlgorithmType= solutionAlgorithmType, analysisType= analysisType, gamma= gamma)
 
-class HHTGeneralizedIntegrator(RayleighBase):
+class HHTGeneralizedIntegrator(transient.RayleighBase):
     ''' Base class for HHTGeneralizedIntegrator solvers.
 
     '''
@@ -341,85 +341,85 @@ class HHTGeneralizedIntegrator(RayleighBase):
         sys.exit(1)
         # super(HHTGeneralizedIntegrator,self).__init__(prb= prb, timeStep= timeStep, name= name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= 'HHT_generalized_integrator', solutionAlgorithmType= solutionAlgorithmType, analysisType= analysisType)
         
-        def getAlphaI(self):
-            ''' Return the alphaI factor of the Newmark based integrator.'''
-            retval= None
-            integrator= self.getIntegrator()
-            if(integrator):
-                retval= integrator.getAlphaI()
-            return retval
+    def getAlphaI(self):
+        ''' Return the alphaI factor of the Newmark based integrator.'''
+        retval= None
+        integrator= self.getIntegrator()
+        if(integrator):
+            retval= integrator.getAlphaI()
+        return retval
 
-        # def setAlphaI(self, alphaI:float):
-        #     ''' Set the alphaI factor of the Newmark based integrator.
+    # def setAlphaI(self, alphaI:float):
+    #     ''' Set the alphaI factor of the Newmark based integrator.
 
-        #     :param alphaI: value of the alphaI factor.
-        #     '''
-        #     retval= False
-        #     integrator= self.getIntegrator()
-        #     if(integrator):
-        #         integrator.setAlphaI(alphaI)
-        #         retval= True
-        #     return retval
+    #     :param alphaI: value of the alphaI factor.
+    #     '''
+    #     retval= False
+    #     integrator= self.getIntegrator()
+    #     if(integrator):
+    #         integrator.setAlphaI(alphaI)
+    #         retval= True
+    #     return retval
 
-        def getAlphaF(self):
-            ''' Return the alphaF factor of the Newmark based integrator.'''
-            retval= None
-            integrator= self.getIntegrator()
-            if(integrator):
-                retval= integrator.getAlphaF()
-            return retval
+    def getAlphaF(self):
+        ''' Return the alphaF factor of the Newmark based integrator.'''
+        retval= None
+        integrator= self.getIntegrator()
+        if(integrator):
+            retval= integrator.getAlphaF()
+        return retval
 
-        # def setAlphaF(self, alphaF:float):
-        #     ''' Set the alphaF factor of the Newmark based integrator.
+    # def setAlphaF(self, alphaF:float):
+    #     ''' Set the alphaF factor of the Newmark based integrator.
 
-        #     :param alphaF: value of the alphaF factor.
-        #     '''
-        #     retval= False
-        #     integrator= self.getIntegrator()
-        #     if(integrator):
-        #         integrator.setAlphaF(alphaF)
-        #         retval= True
-        #     return retval
+    #     :param alphaF: value of the alphaF factor.
+    #     '''
+    #     retval= False
+    #     integrator= self.getIntegrator()
+    #     if(integrator):
+    #         integrator.setAlphaF(alphaF)
+    #         retval= True
+    #     return retval
 
-        def getBeta(self):
-            ''' Return the beta factor of the Newmark based integrator.'''
-            retval= None
-            integrator= self.getIntegrator()
-            if(integrator):
-                retval= integrator.getBeta()
-            return retval
+    def getBeta(self):
+        ''' Return the beta factor of the Newmark based integrator.'''
+        retval= None
+        integrator= self.getIntegrator()
+        if(integrator):
+            retval= integrator.getBeta()
+        return retval
 
-        # def setBeta(self, beta:float):
-        #     ''' Set the beta factor of the Newmark based integrator.
+    # def setBeta(self, beta:float):
+    #     ''' Set the beta factor of the Newmark based integrator.
 
-        #     :param beta: value of the beta factor.
-        #     '''
-        #     retval= False
-        #     integrator= self.getIntegrator()
-        #     if(integrator):
-        #         integrator.setBeta(beta)
-        #         retval= True
-        #     return retval
-        
-        def getGamma(self):
-            ''' Return the gamma factor of the Newmark based integrator.'''
-            retval= None
-            integrator= self.getIntegrator()
-            if(integrator):
-                retval= integrator.getGamma()
-            return retval
+    #     :param beta: value of the beta factor.
+    #     '''
+    #     retval= False
+    #     integrator= self.getIntegrator()
+    #     if(integrator):
+    #         integrator.setBeta(beta)
+    #         retval= True
+    #     return retval
 
-        # def setGamma(self, gamma:float):
-        #     ''' Set the gamma factor of the Newmark based integrator.
+    def getGamma(self):
+        ''' Return the gamma factor of the Newmark based integrator.'''
+        retval= None
+        integrator= self.getIntegrator()
+        if(integrator):
+            retval= integrator.getGamma()
+        return retval
 
-        #     :param gamma: value of the gamma factor.
-        #     '''
-        #     retval= False
-        #     integrator= self.getIntegrator()
-        #     if(integrator):
-        #         integrator.setGamma(gamma)
-        #         retval= True
-        #     return retval
+    # def setGamma(self, gamma:float):
+    #     ''' Set the gamma factor of the Newmark based integrator.
+
+    #     :param gamma: value of the gamma factor.
+    #     '''
+    #     retval= False
+    #     integrator= self.getIntegrator()
+    #     if(integrator):
+    #         integrator.setGamma(gamma)
+    #         retval= True
+    #     return retval
 
 class HHTBaseAlphaF(HHTBase):
     ''' Base class for HHTGeneralizedExplicitIntegrator and  
@@ -451,45 +451,45 @@ class HHTBaseAlphaF(HHTBase):
         sys.exit(1)
         # super(HHTBaseAlphaF, self).__init__(prb= prb, timeStep= timeStep, name= name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType, integratorType= 'HHT_generalized_explicit_integrator', solutionAlgorithmType= solutionAlgorithmType, analysisType= analysisType)
 
-        def getAlphaI(self):
-            ''' Return the alphaI factor of the Newmark based integrator.'''
-            retval= None
-            integrator= self.getIntegrator()
-            if(integrator):
-                retval= integrator.getAlphaI()
-            return retval
+    def getAlphaI(self):
+        ''' Return the alphaI factor of the Newmark based integrator.'''
+        retval= None
+        integrator= self.getIntegrator()
+        if(integrator):
+            retval= integrator.getAlphaI()
+        return retval
 
-        # def setAlphaI(self, alphaI:float):
-        #     ''' Set the alphaI factor of the Newmark based integrator.
+    # def setAlphaI(self, alphaI:float):
+    #     ''' Set the alphaI factor of the Newmark based integrator.
 
-        #     :param alphaI: value of the alphaI factor.
-        #     '''
-        #     retval= False
-        #     integrator= self.getIntegrator()
-        #     if(integrator):
-        #         integrator.setAlphaI(alphaI)
-        #         retval= True
-        #     return retval
+    #     :param alphaI: value of the alphaI factor.
+    #     '''
+    #     retval= False
+    #     integrator= self.getIntegrator()
+    #     if(integrator):
+    #         integrator.setAlphaI(alphaI)
+    #         retval= True
+    #     return retval
 
-        def getAlphaF(self):
-            ''' Return the alphaF factor of the Newmark based integrator.'''
-            retval= None
-            integrator= self.getIntegrator()
-            if(integrator):
-                retval= integrator.getAlphaF()
-            return retval
+    def getAlphaF(self):
+        ''' Return the alphaF factor of the Newmark based integrator.'''
+        retval= None
+        integrator= self.getIntegrator()
+        if(integrator):
+            retval= integrator.getAlphaF()
+        return retval
 
-        # def setAlphaF(self, alphaF:float):
-        #     ''' Set the alphaF factor of the Newmark based integrator.
+    # def setAlphaF(self, alphaF:float):
+    #     ''' Set the alphaF factor of the Newmark based integrator.
 
-        #     :param alphaF: value of the alphaF factor.
-        #     '''
-        #     retval= False
-        #     integrator= self.getIntegrator()
-        #     if(integrator):
-        #         integrator.setAlphaF(alphaF)
-        #         retval= True
-        #     return retval
+    #     :param alphaF: value of the alphaF factor.
+    #     '''
+    #     retval= False
+    #     integrator= self.getIntegrator()
+    #     if(integrator):
+    #         integrator.setAlphaF(alphaF)
+    #         retval= True
+    #     return retval
         
 class HHTGeneralizedExplicitIntegrator(HHTBaseAlphaF):
     ''' Base class for HHTGeneralizedExplicitIntegrator solvers.
