@@ -52,7 +52,6 @@
 //transient
 #include <solution/analysis/integrator/transient/CentralDifferenceAlternative.h>
 #include <solution/analysis/integrator/transient/CentralDifferenceNoDamping.h>
-#include <solution/analysis/integrator/transient/HHT1.h>
 #include <solution/analysis/integrator/transient/TRBDF2.h>
 #include <solution/analysis/integrator/transient/TRBDF3.h>
 #include <solution/analysis/integrator/transient/newmark/Newmark.h>
@@ -60,14 +59,15 @@
 #include <solution/analysis/integrator/transient/newmark/NewmarkExplicit.h>
 #include <solution/analysis/integrator/transient/newmark/NewmarkHybridSimulation.h>
 
-#include <solution/analysis/integrator/transient/rayleigh/AlphaOS.h>
-#include <solution/analysis/integrator/transient/rayleigh/AlphaOSGeneralized.h>
 #include <solution/analysis/integrator/transient/rayleigh/CentralDifference.h>
 #include <solution/analysis/integrator/transient/rayleigh/Collocation.h>
-#include <solution/analysis/integrator/transient/rayleigh/CollocationHybridSimulation.h>
-#include <solution/analysis/integrator/transient/rayleigh/HHT.h>
-#include <solution/analysis/integrator/transient/rayleigh/HHTExplicit.h>
-#include <solution/analysis/integrator/transient/rayleigh/HHTGeneralized.h>
-#include <solution/analysis/integrator/transient/rayleigh/HHTGeneralizedExplicit.h>
-#include <solution/analysis/integrator/transient/rayleigh/HHTHybridSimulation.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/HHT1.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/HHT.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/HHTExplicit.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/HHTGeneralized.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/HHTGeneralizedExplicit.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/HHTHybridSimulation.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/AlphaOS.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/AlphaOSGeneralized.h>
+#include <solution/analysis/integrator/transient/rayleigh/hht/CollocationHybridSimulation.h>
 #include <solution/analysis/integrator/transient/rayleigh/WilsonTheta.h>
