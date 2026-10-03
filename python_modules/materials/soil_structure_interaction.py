@@ -45,10 +45,49 @@ def def_pysimple1_material(preprocessor, matName, soilType:int, pult:float, Y50:
     '''
     materials= preprocessor.getMaterialHandler
     retval= materials.newMaterial('py_simple1', matName)
-    retval.soilType= soilType
-    retval.ultimateCapacity= pult
-    retval.y50= Y50
-    retval.dragResistanceFactor= Cd
-    retval.dashPot= c
+    retval.setSoilType(soilType)
+    retval.setUltimateCapacity(pult)
+    retval.setY50(Y50)
+    retval.setDragResistanceFactor(Cd)
+    retval.setDashPot(c)
+    retval.initialize()
+    return retval
+
+def def_tzsimple1_material(preprocessor, matName, tzType:int, tult:float, z50:float, c:float= 0.0):
+    ''' Create a TzSimple1 uniaxial material object. It is normally used to 
+        simulate the load-transfer behavior (t-z curves) for the skin 
+        friction/axial shear resistance of deep foundation piles
+
+        -tzType= 1 Backbone of t-z curve approximates Reese & O’Neill (1987) 
+                   relation.
+
+        -tzType= 2 Backbone of t-z curve approximates Mosher (1984) relation.
+
+    The “tult” argument is the ultimate capacity of the t-z material. Note 
+    that “t” or “tult” are shear stresses [force per unit area of pile surface]
+    in common design equations, but are both loads for this uniaxialMaterial
+    [i.e., shear stress times the tributary area of the pile].
+
+    The optional argument c is the viscous damping term (dashpot) on the 
+    far-field (elastic) component of the displacement rate (velocity). This 
+    argument defaults to zero. Nonzero c values are used to represent 
+    radiation damping effects.
+
+    :param preprocessor: pre-processor of the finite element problem.
+    :param matName: name for the new material (if None: let the preprocessor
+                    assign the name).
+    :param tzType: = 1 for Reese & O’Neill relation; = 2 for Mosher relation.
+                   See previous notes.
+    :param tult: Ultimate capacity of the t-z material.
+    :param z50: Displacement at which 50% of tult is mobilized in monotonic 
+                loading.
+    :param c: The viscous damping term (dashpot). (optional Default = 0.0).
+    '''
+    materials= preprocessor.getMaterialHandler
+    retval= materials.newMaterial('tz_simple1', matName)
+    retval.setTzType(tzType)
+    retval.setUltimateCapacity(tult)
+    retval.setZ50(z50)
+    retval.setDashPot(c)
     retval.initialize()
     return retval

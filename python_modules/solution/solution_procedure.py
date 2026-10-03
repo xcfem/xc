@@ -417,6 +417,22 @@ class SolutionProcedure(object):
         if(self.solutionStrategy):
             retval= self.solutionStrategy.getIntegrator
         return retval
+
+    def setDeltaLambda(self, dLambda1:float):
+        ''' Set the load factor increment between steps (if supported by the
+            integrator).
+
+        :param dLambda1: the load factor increment.
+        '''
+        integrator= self.getIntegrator()
+        integrator.setDeltaLambda(dLambda1)
+        
+    def getDeltaLambda(self):
+        ''' Get the load factor increment between steps (if supported by the
+            integrator).
+        '''
+        integrator= self.getIntegrator()
+        return integrator.getDeltaLambda()
             
     def solutionAlgorithmSetup(self, solutionAlgorithmType):
         ''' Define the solution strategy.
