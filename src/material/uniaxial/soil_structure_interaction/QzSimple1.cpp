@@ -56,16 +56,13 @@
 const int QZmaxIterations= 20;
 const double QZtolerance= 1.0e-12;
 
-/////////////////////////////////////////////////////////////////////
-//        Constructor with data
-
+//! @brief Constructor with data
 XC::QzSimple1::QzSimple1(int tag, int qzChoice, double Q_ult, double z_50,
                                  double suctionRatio, double dash_pot)
   :PQyzBase(tag,MAT_TAG_QzSimple1,qzChoice,Q_ult,z_50,dash_pot),suction(suctionRatio)
   {
-    // Initialize QzSimple variables and history variables
-    this->revertToStart();
-    initialTangent= T.tang();
+    // Initialize QzSimple variables and history variables.
+    this->initialize();
   }
 
 //! @brief Constructor.
@@ -82,7 +79,6 @@ XC::QzSimple1::QzSimple1(int tag, int classtag)
     // these values don't change
   }
 
-/////////////////////////////////////////////////////////////////////
 //! @brief Default constructor
 XC::QzSimple1::QzSimple1(void)
   :PQyzBase(0,MAT_TAG_QzSimple1),suction(0.0)
@@ -96,6 +92,12 @@ XC::QzSimple1::QzSimple1(void)
     // these values don't change
   }
 
+//! @brief Initial values for the material state variables.
+void XC::QzSimple1::initialize(void)
+  {
+    this->revertToStart();
+    this->initialTangent= this->T.tang();
+  }
 
 /////////////////////////////////////////////////////////////////////
 void XC::QzSimple1::getGap(double zlast, double dz, double dz_old)

@@ -5,7 +5,7 @@ TzSimple1 is a uniaxial material model used to simulate the load-transfer behavi
 '''
 
 __author__= "Luis C. Pérez Tato (LCPT) "
-__copyright__= "Copyright 2018, LCPT"
+__copyright__= "Copyright 2026, LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es "

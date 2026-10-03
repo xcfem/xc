@@ -84,9 +84,28 @@ class QzSimple1: public PQyzBase
     QzSimple1(int tag, int qzType, double Qult, double z50, double suction,double dashpot);
     QzSimple1(int tag, int classtag= MAT_TAG_QzSimple1);
     QzSimple1(void);
-
+    UniaxialMaterial *getCopy(void) const;
+    
     void set_suction(const double &);
     double get_suction(void) const;
+    //! @brief Set q-z backbone curve approximation (= 1 for Reese & O’Neill
+    //! relation for drilled shafts in clay. = 2 for Vijayvergiya’s (1977)
+    //! relation for piles in sand.
+    inline void setQzType(const int &i)
+      { PQyzBase::setSoilType(i); }
+    //! @brief Get q-z backbone curve approximation (= 1 for Reese & O’Neill
+    //! relation for drilled shafts in clay. = 2 for Vijayvergiya’s (1977)
+    //! relation for piles in sand.
+    inline int getQzType(void) const
+      { return PQyzBase::getSoilType(); }
+    //! @brief Set the displacement at which 50% of tult is mobilized in
+    //! monotonic loading. 
+    inline void setZ50(const double &d)
+      { PQyzBase::setY50(d); }
+    //! @brief Get the displacement at which 50% of tult is mobilized in
+    //! monotonic loading. 
+    inline double getZ50(void) const
+      { return PQyzBase::getY50(); }
     
     int setTrialStrain(double z, double zRate); 
     double getStress(void) const;
@@ -96,7 +115,7 @@ class QzSimple1: public PQyzBase
     int revertToLastCommit(void);    
     int revertToStart(void);        
 
-    UniaxialMaterial *getCopy(void) const;
+    void initialize();
     
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);

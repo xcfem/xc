@@ -91,3 +91,49 @@ def def_tzsimple1_material(preprocessor, matName, tzType:int, tult:float, z50:fl
     retval.setDashPot(c)
     retval.initialize()
     return retval
+
+def def_qzsimple1_material(preprocessor, matName, qzType:int, qult:float, z50:float, suction:float= 0.0, c:float= 0.0):
+    ''' Create a QzSimple1 uniaxial material object. It is normally used to 
+        simulate the end-bearing resistance (q-z behavior) at the very tip 
+        or toe of a foundation pile or drilled shaft.
+
+        -qzType= 1 Backbone of q-z curve approximates Reese and O’Neill’s
+                   (1987) relation for drilled shafts in clay.
+
+        -qzType= 2 Backbone of q-z curve approximates Vijayvergiya’s (1977) 
+                   relation for piles in sand.
+
+    The “qult” argument is the ultimate capacity of the q-z material. Note 
+    that “q” or “qult” are stresses [force per unit area of pile tip] in common
+    design equations, but are both loads for this uniaxialMaterial [i.e., stress
+    times tip area].
+
+    The value of suction must be 0.0 to 0.1.*
+
+    The optional argument c is the viscous damping term (dashpot) on the 
+    far-field (elastic) component of the displacement rate (velocity). This 
+    argument defaults to zero. Nonzero c values are used to represent 
+    radiation damping effects.*
+
+    (*): optional args suction and c must either both be omitted or both provided.
+
+    :param preprocessor: pre-processor of the finite element problem.
+    :param matName: name for the new material (if None: let the preprocessor
+                    assign the name).
+    :param qzType: = 1 for Reese & O’Neill relation; = 2 for Vijayvergiya’s
+                     relation. See previous notes.
+    :param qult: Ultimate capacity of the q-z material.
+    :param z50: Displacement at which 50% of qult is mobilized in monotonic 
+                loading.
+    :param suction: Uplift resistance is equal to suction*qult. (optional Default = 0.0).
+    :param c: The viscous damping term (dashpot). (optional Default = 0.0).
+    '''
+    materials= preprocessor.getMaterialHandler
+    retval= materials.newMaterial('qz_simple1', matName)
+    retval.setQzType(qzType)
+    retval.setUltimateCapacity(qult)
+    retval.setZ50(z50)
+    retval.setSuction(suction)
+    retval.setDashPot(c)
+    retval.initialize()
+    return retval

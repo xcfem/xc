@@ -69,7 +69,16 @@ class_<XC::PySimple1, bases<XC::PQyzBase>, boost::noncopyable >("PySimple1", no_
   ;
 
 class_<XC::QzSimple1 , bases<XC::PQyzBase>, boost::noncopyable >("QzSimple1", no_init)
+  .def("getQzType", &XC::QzSimple1::getQzType,"Get the q-z backbone curve approximation (= 1 for Reese & O’Neill relation for drilled shafts in clay. = 2 for Vijayvergiya’s (1977) relation for piles in sand.")
+  .def("setQzType", &XC::QzSimple1::setQzType,"Set the q-z backbone curve approximation (= 1 for Reese & O’Neill relation for drilled shafts in clay. = 2 for Vijayvergiya’s (1977) relation for piles in sand.")
+  .add_property("qzType", &XC::QzSimple1::getQzType,  &XC::QzSimple1::setQzType,"Get/set the q-z backbone curve approximation (= 1 for Reese & O’Neill relation for drilled shafts in clay. = 2 for Vijayvergiya’s (1977) relation for piles in sand.")
+  .def("getZ50", &XC::QzSimple1::getZ50,"Get the displacement at which 50% of tult is mobilized in monotonic loading.")
+  .def("setZ50", &XC::QzSimple1::setZ50,"Set the displacement at which 50% of tult is mobilized in monotonic loading.")
+  .add_property("z50", &XC::QzSimple1::getZ50,  &XC::QzSimple1::setZ50,"displacement at which 50% of tult is mobilized in monotonic loading.")
+  .def("getSuction", &XC::QzSimple1::get_suction, "Get the suction parameter (Uplift resistance is equal to suction*qult). The value of suction must be 0.0 to 0.1.")
+  .def("setSuction", &XC::QzSimple1::set_suction,"Set the suction parameter (Uplift resistance is equal to suction*qult). The value of suction must be 0.0 to 0.1.")
   .add_property("suction", &XC::QzSimple1::get_suction,  &XC::QzSimple1::set_suction,"Get/set the suction parameter (Uplift resistance is equal to suction*qult). The value of suction must be 0.0 to 0.1.")
+  .def("initialize",&XC::QzSimple1::initialize,"Initialize material state variables.")
   ;
 
 class_<XC::PyLiq1 , bases<XC::PySimple1>, boost::noncopyable >("PyLiq1", no_init)
