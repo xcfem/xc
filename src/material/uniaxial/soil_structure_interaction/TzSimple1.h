@@ -51,7 +51,6 @@
 
 #include "PYBase.h"
 
-
 namespace XC {
 //! @ingroup PYMat
 //
@@ -70,19 +69,37 @@ class TzSimple1: public PYBase
 
     
   public:
-    TzSimple1(int tag, int classtag, int tzType, double tult, double z50, double dashpot);
-    TzSimple1(int tag, int classtag= MAT_TAG_TzSimple1);
     TzSimple1(void);
+    TzSimple1(int tag, int classtag= MAT_TAG_TzSimple1);
+    TzSimple1(int tag, int classtag, int tzType, double tult, double z50, double dashpot);
+    UniaxialMaterial *getCopy(void) const;
 
     int setTrialStrain(double y, double yRate); 
     double getStress(void) const;
     double getDampTangent(void) const;
 
+    //! @brief Set t-z backbone relation (= 1 for Reese & O’Neill relation;
+    //! = 2 for Mosher relation.
+    inline void setTzType(const int &i)
+      { PYBase::setSoilType(i); }
+    //! @brief Get t-z backbone relation (= 1 for Reese & O’Neill relation;
+    //! = 2 for Mosher relation.
+    inline int getTzType(void) const
+      { return PYBase::getSoilType(); }
+    //! @brief Set the displacement at which 50% of tult is mobilized in
+    //! monotonic loading. 
+    inline void setZ50(const double &d)
+      { PYBase::setY50(d); }
+    //! @brief Get the displacement at which 50% of tult is mobilized in
+    //! monotonic loading. 
+    inline double getZ50(void) const
+      { return PYBase::getY50(); }
+    
     int commitState(void);
     int revertToLastCommit(void);    
     int revertToStart(void);        
 
-    UniaxialMaterial *getCopy(void) const;
+    void initialize();
     
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);

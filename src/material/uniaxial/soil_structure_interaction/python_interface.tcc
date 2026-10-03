@@ -30,22 +30,42 @@
  //class_<XC::InternalParamsLRIn, bases<XC::InternalParamsLR>, boost::noncopyable >("InternalParamsLRIn", no_init);
 
 class_<XC::PYBase, bases<XC::UniaxialMaterial>, boost::noncopyable >("PYBase", no_init)
+  .def("getSoilType", &XC::PYBase::getSoilType,"Return the soil type (1: soft clay, 2: sand).")
+  .def("setSoilType", &XC::PYBase::setSoilType,"Set the soil type (1: soft clay, 2: sand).")
   .add_property("soilType", &XC::PYBase::getSoilType,  &XC::PYBase::setSoilType,"soil type (1: soft clay, 2: sand).")
+  .def("getUltimateCapacity", &XC::PYBase::getUltimateCapacity, "Get the ultimate capacity of the p-y material (force).")
+  .def("setUltimateCapacity", &XC::PYBase::setUltimateCapacity,"Set the ultimate capacity of the p-y material (force).")
   .add_property("ultimateCapacity", &XC::PYBase::getUltimateCapacity,  &XC::PYBase::setUltimateCapacity,"ultimate capacity of the p-y material (force).")
+  .def("getY50", &XC::PYBase::getY50,"Get the displacement at which 50% of pult is mobilized in monotonic loading.")
+  .def("setY50", &XC::PYBase::setY50,"Set the displacement at which 50% of pult is mobilized in monotonic loading.")
   .add_property("y50", &XC::PYBase::getY50,  &XC::PYBase::setY50,"displacement at which 50% of pult is mobilized in monotonic loading.")
+  .def("getDashPot", &XC::PYBase::getDashPot,"Get the viscous damping term (dashpot) on the far-field (elastic) component of the displacement rate (velocity).")
+  .def("setDashPot", &XC::PYBase::setDashPot,"Set the viscous damping term (dashpot) on the far-field (elastic) component of the displacement rate (velocity).")
   .add_property("dashPot", &XC::PYBase::getDashPot,  &XC::PYBase::setDashPot,"viscous damping term (dashpot) on the far-field (elastic) component of the displacement rate (velocity).")
+  .def("getInitialTangent", &XC::PYBase::getInitialTangent,"Return the initial stiffness.")
+  .def("setInitialTangent", &XC::PYBase::setInitialTangent,"Set the initial stiffness.")
   .add_property("initialTangent", &XC::PYBase::getInitialTangent,  &XC::PYBase::setInitialTangent,"initial stiffness.")
   ;
 
 class_<XC::PQyzBase, bases<XC::PYBase>, boost::noncopyable >("PQyzBase", no_init);
 
-class_<XC::TzSimple1, bases<XC::PYBase>, boost::noncopyable >("TzSimple1", no_init);
+class_<XC::TzSimple1, bases<XC::PYBase>, boost::noncopyable >("TzSimple1", no_init)
+  .def("getTzType", &XC::TzSimple1::getTzType,"Get the t-z backbone relation (= 1 for Reese & O’Neill relation; = 2 for Mosher relation.")
+  .def("setTzType", &XC::TzSimple1::setTzType,"Set the t-z backbone relation (= 1 for Reese & O’Neill relation; = 2 for Mosher relation.")
+  .add_property("tzType", &XC::TzSimple1::getTzType,  &XC::TzSimple1::setTzType,"Get/set the t-z backbone relation (= 1 for Reese & O’Neill relation; = 2 for Mosher relation.")
+  .def("getZ50", &XC::TzSimple1::getZ50,"Get the displacement at which 50% of tult is mobilized in monotonic loading.")
+  .def("setZ50", &XC::TzSimple1::setZ50,"Set the displacement at which 50% of tult is mobilized in monotonic loading.")
+  .add_property("z50", &XC::TzSimple1::getZ50,  &XC::TzSimple1::setZ50,"displacement at which 50% of tult is mobilized in monotonic loading.")
+  .def("initialize",&XC::TzSimple1::initialize,"Initialize material state variables.")
+  ;
 
 class_<XC::TzLiq1 , bases<XC::TzSimple1>, boost::noncopyable >("TzLiq1", no_init);
 
 class_<XC::PySimple1, bases<XC::PQyzBase>, boost::noncopyable >("PySimple1", no_init)
-  .add_property("dragResistanceFactor", &XC::PySimple1::getDragResistanceFactor,  &XC::PySimple1::setDragResistanceFactor,"variable that sets the drag resistance within a fully-mobilized gap as Cd*getUltimateCapacity().")
-  .def("initialize",&XC::PySimple1::initialize,"Initialize material variables and history variables.")
+  .def("getDragResistanceFactor", &XC::PySimple1::getDragResistanceFactor, "Get the drag resistance within a fully-mobilized gap as Cd*getUltimateCapacity().")
+  .def("setDragResistanceFactor", &XC::PySimple1::setDragResistanceFactor,"Set the drag resistance within a fully-mobilized gap as Cd*getUltimateCapacity().")
+  .add_property("dragResistanceFactor", &XC::PySimple1::getDragResistanceFactor,  &XC::PySimple1::setDragResistanceFactor,"Drag resistance within a fully-mobilized gap as Cd*getUltimateCapacity().")
+  .def("initialize",&XC::PySimple1::initialize,"Initialize material state variables.")
   ;
 
 class_<XC::QzSimple1 , bases<XC::PQyzBase>, boost::noncopyable >("QzSimple1", no_init)
