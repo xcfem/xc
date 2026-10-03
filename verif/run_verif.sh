@@ -845,6 +845,7 @@ python tests/solution/time_history/test_time_history_00.py
 python tests/solution/time_history/test_time_history_01.py
 python tests/solution/time_history/test_time_history_02.py
 python tests/solution/time_history/test_time_history_03.py
+python tests/solution/time_history/test_hht_integrator_01.py
 python tests/solution/time_history/test_pseudo_time_history.py
 
 ## Ground motion.
