@@ -52,10 +52,9 @@ sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
 section= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "section",sectionProperties)
 
 # Elements definition
-elements= preprocessor.getElementHandler
-elements.defaultTransformation= lin.name
-elements.defaultMaterial= section.name
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
+modelSpace.setDefaultCoordTransf(lin)
+modelSpace.setDefaultMaterial(section)
+beam3d= modelSpace.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
 
 # Constraints
 modelSpace.fixNode000_000(n1.tag)
