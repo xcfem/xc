@@ -66,11 +66,11 @@ for step in range(numSteps):
     time= step*timeStep
     uX=n1.getDisp[0]
     displacements.append(uX)
-    uXExtrema.update(uX, time)
+    uXExtrema.update(uX, time, n1.tag)
     modelSpace.calculateNodalReactions(includeInertia= True, reactionCheckTolerance= 1e-5)
     F= n2.getReaction[0]
     forces.append(F)
-    fXExtrema.update(F, time)
+    fXExtrema.update(F, time, n2.tag)
     
 uXmin= uXExtrema.min
 err= (uXmin-0.003464799897535181)**2

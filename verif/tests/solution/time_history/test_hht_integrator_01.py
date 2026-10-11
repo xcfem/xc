@@ -87,8 +87,8 @@ for step in range(steps):
 
 # Check results.
 uXExtrema= gmu.MinMaxTracker()
-for t, ux in zip(ti, xi):
-    uXExtrema.update(ux, t)
+for i, (t, ux) in enumerate(zip(ti, xi)):
+    uXExtrema.update(ux, t, i)
 
 # Check the analysis goes as expected.
 uXMinRef= -0.1792411538484657
