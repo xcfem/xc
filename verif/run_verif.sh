@@ -854,6 +854,7 @@ echo "$BLEU" "    Ground motion solution tests." "$NORMAL"
 python tests/solution/time_history/ground_motion/elastic_response_spectra.py
 python tests/solution/time_history/ground_motion/test_sdof_response_01.py
 python tests/solution/time_history/ground_motion/test_sdof_response_02.py
+python tests/solution/time_history/ground_motion/test_pile_damping.py
 
 ## Convergence tests.
 echo "$BLEU" "  Convergence tests." "$NORMAL"

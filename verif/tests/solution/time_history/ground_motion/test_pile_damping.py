@@ -28,6 +28,7 @@ from solution import transient
 from solution import hht
 from actions.quake import ground_motion_utils as gmu
 from scipy.constants import g
+from solution import rayleigh_damping as rd
 from misc_utils import log_messages as lmsg
 
 # Pile geometry and mesh
@@ -109,29 +110,40 @@ tributaryLengths= sets_mng.get_tributary_lengths(xcSet= pileLine, initialGeometr
 modelSpace.setElementDimension(3)
 springNodes= list()
 springElements= list()
+soilNu= 0.3
+f_design= 0.8826 # Fundamental frequency (Hz).
+omega_design= 2*math.pi*f_design
 for n in pileLine.nodes:
     nPos= n.getInitialPos3d
     pyDepth= L2-nPos.z
     tributaryLength=  tributaryLengths[n.tag]
     pult, y50= pile.get_py_param(pyDepth, soilRho, soilPhi, pileDiameter, tributaryLength, puSwitch, kSwitch, gwtSwitch)
+    # Compute viscous damping for p-y spring materials.
+    Gz= soilG*math.sqrt(max(pyDepth, 0.5)/L2)  # example G(z) ~ sqrt(depth), reduce for strain
+    Vs= math.sqrt(Gz/soilRho)
+    Vla= 3.4*Vs/(math.pi*(1-soilNu))
+    a0= omega_design*pileDiameter/Vs
+    c_py= 6.0*soilRho*Vs*pileDiameter*a0**(-0.25)*tributaryLength # N·s/m
     pyMatName= 'pyS_'+str(n.tag)
     pyMat= ssi.def_pysimple1_material(preprocessor,
                                       matName= pyMatName,
                                       soilType= 2, # Sand.
                                       pult= pult,
                                       Y50= y50,
-                                      c= 0.0,
+                                      c= c_py,
                                       Cd= 0.0)
 
     sigV= soilRho*g*pyDepth # Vertical stress.
     tult, z50= pile.get_tz_param(soilPhi, pileDiameter, sigV, tributaryLength)
+    # Compute viscous damping for t-z spring materials.
+    c_tz= math.pi*pileDiameter*soilRho*Vs*tributaryLength
     tzMatName= 'tzS:'+str(n.tag)
     tzMat= ssi.def_tzsimple1_material(preprocessor,
                                       matName= tzMatName,
                                       tzType= 2, # Mosher relation.
                                       tult= tult, # Ultimate skin friction capacity.
                                       z50= z50, # 50% capacity reached at 0.05 units of displacement
-                                      c= 0.0)
+                                      c= c_tz)
     # Create spring.
     fixNode= modelSpace.duplicateNode(n)
     modelSpace.fixNode('000_000', fixNode.tag)
@@ -161,13 +173,16 @@ sigVq= soilRho*g * pileTipNodeDepth # (N)
 qult, z50q = pile.get_qz_param(phi= soilPhi, b= pileDiameter, sigV= sigVq, G= soilG)
 # op.uniaxialMaterial('QzSimple1', 101, 2, qult, z50q) #, 0.0, 0.0
 # op.uniaxialMaterial('TzSimple1', 101, 2, qult, z50q, 0.0)
+# Compute viscous damping for q-z spring material. 
+Vs_tip= math.sqrt(soilG/soilRho)
+c_qz= 3.4*soilRho*Vs_tip*(pileDiameter/2)**2/(1-soilNu)
 qzMat= ssi.def_qzsimple1_material(preprocessor,
                                   matName= 'qzS1_'+str(pileTipNode.tag),
                                   qzType= 2, # 2 = Sand (Vijayvergiya, 1977 behavior).
                                   qult= qult, # Ultimate tip capacity.
                                   z50= z50q, # 50% capacity reached at 0.005 units of displacement
                                   suction= 0.0, # No suction during tension/uplift
-                                  c= 0.0) # No viscous damping for this static test
+                                  c= c_qz)
 pileTipFixNode= modelSpace.duplicateNode(pileTipNode)
 modelSpace.fixNode('000_000', pileTipFixNode.tag)
 modelSpace.setDefaultMaterial(qzMat)
@@ -198,11 +213,15 @@ if(result!=0):
     exit(1)
 
 ## Set the Rayleigh damping factors for nodes & elements.
+freq1= f_design # Fundamental frequency (Hz)
+freq2= 10.0 # Dominant higher-mode frequency (Hz)
+target_zeta= 0.05  # 5% target structural damping
+alph, beta = rd.compute_rayleigh_damping(freq1, freq2, target_zeta)
 domain= modelSpace.getDomain()
-alphaM= .05 # mass proportional damping.
+alphaM= alph # mass proportional damping.
 betaK= 0.0 # current stiffness proportional damping.
 betaKinit= 0.0 # initial stiffness proportional damping.
-betaKcomm=  0.0 # commited stiffness proportional damping.
+betaKcomm= beta # commited stiffness proportional damping.
 rayleigh= xc.RayleighDampingFactors(alphaM, betaK, betaKinit, betaKcomm)
 domain.setRayleighDampingFactors(rayleigh)
 
@@ -246,7 +265,7 @@ scale= 1.0
 ## Define ground motion as uniform excitation.
 motionName= 'el_centro'
 cod_ts= motionName+'_accel'
-xGM, xGMSize= gmu.get_uniform_excitation_from_accel_values(modelSpace, name= motionName, dof= targetDOF, accelValues= accelerationValues, dt= timeStep, cod_ts= cod_ts, factor= g*scale, vel0= 0.0)
+xGM, xGMSize= gmu.get_uniform_excitation_from_accel_values(modelSpace, name= motionName, dof= targetDOF, accelValues= accelerationValues, dt= timeStep, cod_ts= cod_ts, factor= scale, vel0= 0.0)
 modelSpace.addLoadCaseToDomain(xGM.name)
 
 ## Perform the analysis.
@@ -308,10 +327,10 @@ if(not silent):
     # oh.displayIntForcDiag(itemToDisp='Vy',setToDisplay=pile)
     # oh.displayIntForcDiag(itemToDisp='Mz',setToDisplay=pile)
     
-ratio1= abs(uxMax-2.4508807988231696)/2.4508807988231696
-ratio2= abs(tUxMax-5.02)/5.02
-ratio3= abs(axMax/g+3.15444615191563)/3.15444615191563
-ratio4= abs(tAxMax-4.56)/4.56
+ratio1= abs(uxMax-0.08121043651530387)/0.08121043651530387
+ratio2= abs(tUxMax-6.2)/6.2
+ratio3= abs(axMax/g-0.4152671861335448)/0.4152671861335448
+ratio4= abs(tAxMax-2.02)/2.02
 
 if(not silent):
     print('time increment: ', dt, 's')
