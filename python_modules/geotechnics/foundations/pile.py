@@ -433,11 +433,11 @@ class CircularPile(Pile):
 # Brinch Hansen, J. (1961). "The ultimate resistance of rigid piles against
 # transversal forces." Bulletin No. 12, Geoteknisk Institute, Copenhagen, 59.
 #
-#  Boulanger, R. W., Kutter, B. L., Brandenberg, S. J., Singh, P., and Chang,
-#  D. (2003). Pile Foundations in liquefied and laterally spreading ground
-#  during earthquakes: Centrifuge experiments and analyses. Center for
-#  Geotechnical Modeling, University of California at Davis, Davis, CA.
-#  Rep. UCD/CGM-03/01.
+# Boulanger, R. W., Kutter, B. L., Brandenberg, S. J., Singh, P., and Chang,
+# D. (2003). Pile Foundations in liquefied and laterally spreading ground
+# during earthquakes: Centrifuge experiments and analyses. Center for
+# Geotechnical Modeling, University of California at Davis, Davis, CA.
+# Rep. UCD/CGM-03/01.
 #
 # Reese, L.C. and Van Impe, W.F. (2001), Single Piles and Pile Groups Under
 # Lateral Loading. A.A. Balkema, Rotterdam, Netherlands.
@@ -652,16 +652,16 @@ def get_py_param(pyDepth, rho, phi, b, tribLength, puSwitch, kSwitch, gwtSwitch)
 #                                                         #
 ###########################################################
 
-# references
-#  Meyerhof G.G. (1976). "Bearing capacity and settlement of pile foundations." 
-#   J. Geotech. Eng. Div., ASCE, 102(3), 195-228.
+# References
+# Meyerhof G.G. (1976). "Bearing capacity and settlement of pile foundations." 
+# J. Geotech. Eng. Div., ASCE, 102(3), 195-228.
 #
-#  Vijayvergiya, V.N. (1977). "Load-movement characteristics of piles."
-#   Proc., Ports 77 Conf., ASCE, New York.
+# Vijayvergiya, V.N. (1977). "Load-movement characteristics of piles."
+# Proc., Ports 77 Conf., ASCE, New York.
 #
-#  Kulhawy, F.H. ad Mayne, P.W. (1990). Manual on Estimating Soil Properties for 
-#   Foundation Design. Electrical Power Research Institute. EPRI EL-6800, 
-#   Project 1493-6 Final Report.
+# Kulhawy, F.H. ad Mayne, P.W. (1990). Manual on Estimating Soil Properties for 
+# Foundation Design. Electrical Power Research Institute. EPRI EL-6800, 
+# Project 1493-6 Final Report.
 
 def get_qz_param(phi, b, sigV, G):
     '''
@@ -729,7 +729,7 @@ def get_tz_param(phi, b, sigV, tribLength):
 
     References:
      Mosher, R.L. (1984). "Load transfer criteria for numerical analysis of
-      axial loaded piles in sand." U.S. Army Engineering and Waterways
+      axially loaded piles in sand." U.S. Army Engineering and Waterways
       Experimental Station, Automatic Data Processing Center, Vicksburg, Miss.
 
      Kulhawy, F.H. (1991). "Drilled shaft foundations." Foundation engineering
