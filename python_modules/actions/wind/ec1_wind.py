@@ -636,9 +636,14 @@ def get_free_standing_wall_abcd_cp(length:float, height:float, returnCornersLeng
             abcd= [2.1, 1.8, 1.4, 1.2]
         else:
             factor= (1.0-returnCornersLength/height)
-            a= factor*float(fsw_cpnet_a(l_h))
-            b= factor*float(fsw_cpnet_b(l_h))
-            c= factor*float(fsw_cpnet_c(l_h))
+            if(l_h<=3.0):
+                a= 2.3; b= 1.4; c= 1.2 # first row.
+            elif(l_h<10.0):
+                a= factor*float(fsw_cpnet_a(l_h))
+                b= factor*float(fsw_cpnet_b(l_h))
+                c= factor*float(fsw_cpnet_c(l_h))
+            else:
+                a= 3.4; b= 2.1; c= 1.7 # third row.
             d= factor*1.2
             if(returnCornersLength==0.0):
                 abcd= [a, b, c, d]
