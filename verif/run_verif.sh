@@ -58,6 +58,8 @@ python tests/utility/misc_utils/test_xc_json_03.py
 python tests/utility/misc_utils/test_xc_json_04.py
 python tests/utility/misc_utils/test_xc_json_05.py
 python tests/utility/misc_utils/test_xc_json_06.py
+python tests/utility/matrix/test_matrix_vector_otherfact.py
+
 echo "$BLEU" "  Config tests." "$NORMAL"
 python tests/utility/config/test_project_dir_tree_01.py
 echo "$BLEU" "  Geometry tests." "$NORMAL"
