@@ -77,7 +77,10 @@ class_<XC::Vector, bases<CommandEntity> >("Vector")
   .def("Normalized",&XC::Vector::Normalized,"Returns normalized vector (euclidean norm).")
 //.def("assemble", &XC::Vector::Assemble, "assemble(V:XC::Vector, l:XC::ID, fact:float) Assemble the given vector into this one using the specified positions.")
   .def("Zero", &XC::Vector::Zero,"Set to zero all the components of the vector.")
-  ;
+  .def("addVector", &XC::Vector::addVector,"addVector(factThis:float, other:xc.Vector, factOther:float) add a factor fact times the vector other to the current vector.")
+  .def("addMatrixVector", &XC::Vector::addMatrixVector, "addMatrixVector(thisFact:float, m:xc.Matrix, v:xc.Vector, otherFact:float).")
+  .def("addMatrixTransposeVector", &XC::Vector::addMatrixTransposeVector, "addMatrixTransposeVector(thisFact:float, m:xc.Matrix, v:xc.Vector, otherFact:float).")
+;
 
 
 implicitly_convertible<XC::Vector,boost::python::list>();
@@ -89,6 +92,8 @@ class_<std_vector_xc_vector>("std_vector_xc_vector")
   ;
 
 double &(XC::Matrix::*at)(int,int)= &XC::Matrix::operator();
+int (XC::Matrix::*add_matrix_triple_product_2)(double, const XC::Matrix &, const XC::Matrix &, double)= &XC::Matrix::addMatrixTripleProduct;
+int (XC::Matrix::*add_matrix_triple_product_3)(double, const XC::Matrix &, const XC::Matrix &, const XC::Matrix &, double)= &XC::Matrix::addMatrixTripleProduct;
 class_<XC::Matrix, bases<CommandEntity> >("Matrix")
   .def(init<boost::python::list>())
   .def(init<const XC::Matrix &>())
@@ -119,6 +124,12 @@ class_<XC::Matrix, bases<CommandEntity> >("Matrix")
   .def("RCond",&XC::Matrix::RCond,".Return an estimation of the reciprocal of the condition number using the 1-norm.")
   .def("getInverse",&XC::Matrix::getInverse,"Return the inverse of the matrix.")
   .def("Zero", &XC::Matrix::Zero,"Set to zero all the elements of the matrix.")
+  .def("addMatrix", &XC::Matrix::addMatrix,"addMatrix(factThis:float, other:xc.Matrix, factOther:float) add a factor fact times the matrix other to the current matrix.")
+  .def("addMatrixTranspose", &XC::Matrix::addMatrixTranspose,"addMatrixTranspose(factThis:float, other:xc.Matrix, factOther:float) add a factor fact times the transposed matrix other to the current matrix.")
+  .def("addMatrixTransposeProduct", &XC::Matrix::addMatrixTransposeProduct,"addMatrixTransposeProduct(factThis:float, B:xc.Matrix, C:xc.Matrix, factOther:float).")
+  .def("addMatrixProduct", &XC::Matrix::addMatrixProduct,"addMatrixProduct(factThis:float, B:xc.Matrix, C:xc.Matrix, factOther:float).")
+  .def("addMatrixTripleProduct", add_matrix_triple_product_2,"addMatrixTransposeProduct(factThis:float, T:xc.Matrix, B:xc.Matrix, factOther:float). Perform this += T' * B * T")
+  .def("addMatrixTripleProduct", add_matrix_triple_product_3,"addMatrixTransposeProduct(factThis:float, A:xc.Matrix, B:xc.Matrix. C:xc.Matrix, factOther:float). Perform this += At * B * C")
    ;
 
 
