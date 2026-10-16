@@ -161,41 +161,50 @@ mom1n(0.0), rot1n(0.0), mom2n(0.0), rot2n(0.0), mom3n(0.0), rot3n(0.0)
 
 int XC::HystereticMaterial::setTrialStrain(double strain, double strainRate)
   {
+    if(TloadIndicator == 0 && strain == 0.0)
+      return 0;
+    
     TrotMax = CrotMax;
     TrotMin = CrotMin;
     TenergyD = CenergyD;
     TrotPu = CrotPu;
     TrotNu = CrotNu;
 
-        trial.Strain() = strain;
-        double dStrain = trial.getStrain() - converged.getStrain();
+    trial.Strain() = strain;
+    const double dStrain= trial.getStrain() - converged.getStrain();
 
-        TloadIndicator = CloadIndicator;
+    if (fabs(dStrain) < DBL_EPSILON)
+      return this->revertToLastCommit(); // Restore committed state on early return in setTrialStrain() (see OpenSees #1818).
+    
+    TloadIndicator = CloadIndicator;
         
-        if(TloadIndicator == 0)
-                TloadIndicator = (dStrain < 0.0) ? 2 : 1;
+    if(TloadIndicator == 0)
+      TloadIndicator = (dStrain < 0.0) ? 2 : 1;
 
-        if(trial.getStrain() >= CrotMax) {
-                TrotMax = trial.getStrain();
-                trial.Tangent()= posEnvlpTangent(trial.getStrain());
-                trial.Stress()= posEnvlpStress(trial.getStrain());
-        }
-        else if(trial.getStrain() <= CrotMin) {
-                TrotMin = trial.getStrain();
-                trial.Tangent()= negEnvlpTangent(trial.getStrain());
-                trial.Stress()= negEnvlpStress(trial.getStrain());
-        }
-        else {
-          if(dStrain < 0.0)
-            negativeIncrement(dStrain);
-          else if(dStrain > 0.0)
-            positiveIncrement(dStrain);
-        }
+    if(trial.getStrain() >= CrotMax)
+      {
+	TrotMax = trial.getStrain();
+	trial.Tangent()= posEnvlpTangent(trial.getStrain());
+	trial.Stress()= posEnvlpStress(trial.getStrain());
+      }
+    else if(trial.getStrain() <= CrotMin)
+      {
+	TrotMin = trial.getStrain();
+	trial.Tangent()= negEnvlpTangent(trial.getStrain());
+	trial.Stress()= negEnvlpStress(trial.getStrain());
+      }
+    else
+      {
+	if(dStrain < 0.0)
+	  negativeIncrement(dStrain);
+	else if(dStrain > 0.0)
+	  positiveIncrement(dStrain);
+      }
 
-        TenergyD = CenergyD + 0.5*(converged.getStress()+trial.getStress())*dStrain;
+    TenergyD= CenergyD + 0.5*(converged.getStress()+trial.getStress())*dStrain;
 
-        return 0;
-}
+    return 0;
+  }
 
 
 double XC::HystereticMaterial::getStrain(void) const
