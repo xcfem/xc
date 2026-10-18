@@ -18,7 +18,7 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 from materials.ec2 import EC2_materials
-from model.boundary_cond import spring_bound_cond
+from model.boundary_cond import shallow_elastic_foundation as sef
 
 # Problem geometry
 foundationWidth= 5.0
@@ -52,7 +52,7 @@ modelSpace.newSeedElement('ShellMITC4')
 xcTotalSet.genMesh(xc.meshDir.I)
 
 ## Boundary conditions.
-elasticFoundation= spring_bound_cond.ElasticFoundation(wModulus= 10.858e6, cRoz= 0.01)
+elasticFoundation= sef.ShallowElasticFoundation(wModulus= 10.858e6, cRoz= 0.01)
 
 elasticFoundation.generateSprings(xcSet= xcTotalSet)
 

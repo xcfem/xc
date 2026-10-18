@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Check tributary ElasticFoundation class. Test based on equilibrium considerations.
+''' Check computation of tributary areas.
 '''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
