@@ -27,9 +27,9 @@ for i, z in enumerate(zi):
     ref_pu= refPu_i[i]
     err+= (pu-ref_pu)**2
 
-# err= math.sqrt(err)
+err= math.sqrt(err)
 
-print(err)
+# print(err)
 
 import os
 from misc_utils import log_messages as lmsg
