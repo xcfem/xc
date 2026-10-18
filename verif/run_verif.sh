@@ -1997,6 +1997,7 @@ python tests/geotechnics/foundations/test_micropile_03.py
 python tests/geotechnics/foundations/test_micropile_04.py
 python tests/geotechnics/foundations/test_foundation_settlement_01.py
 python tests/geotechnics/foundations/test_pad_footing_bearing_capacity.py
+python tests/geotechnics/foundations/test_pu_pile_in_weak_rock.py
 ## Soil mechanics (basic utilities)
 echo  "$BLEU" "  Soil mechanics (basic utilities)." "$NORMAL"
 python tests/geotechnics/soil_mechanics/test_frictional_soil_01.py
