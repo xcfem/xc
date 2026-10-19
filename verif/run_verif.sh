@@ -1468,6 +1468,7 @@ python tests/materials/xc_materials/uniaxial/soil_structure_interaction/py_simpl
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/py_simple1_test_02.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/qz_simple1_test_01.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/tz_simple1_test_01.py
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_shallow_foundation_friction_material_01.py
 echo "$BLEU" "      Rail structure interaction materials." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/track_structure_interaction/test_track_structure_interaction_spring_01.py
 echo "$BLEU" "      Damper materials." "$NORMAL"

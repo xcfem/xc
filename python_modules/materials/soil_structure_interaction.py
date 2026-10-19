@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 ''' Soil-structure interaction materials.'''
 
-from __future__ import division
-from __future__ import print_function
-
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2026, AO_O and LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
+
+from materials.typical_materials import defElasticPPMaterial
 
 def def_pysimple1_material(preprocessor, matName, soilType:int, pult:float, Y50:float, Cd:float, c:float= 0.0):
     ''' Create a PySimple1 uniaxial material object.
@@ -137,3 +136,15 @@ def def_qzsimple1_material(preprocessor, matName, qzType:int, qult:float, z50:fl
     retval.setDashPot(c)
     retval.initialize()
     return retval
+
+def def_shallow_foundation_friction_material(preprocessor, matName, initialStiffness:float, yieldForce:float):
+    ''' Create a EyBasic uniaxial material object adapted to represent the
+        friction between a shallow foundation and the soil that supports it.
+
+    :param preprocessor: pre-processor of the finite element problem.
+    :param matName: name for the new material (if None: let the preprocessor
+                    assign the name).
+    :param initialStiffness: Initial stiffness (F/L).
+    :param yieldForce: yield force (F).
+    '''
+    return defElasticPPMaterial(preprocessor= preprocessor, name= matName, E= initialStiffness, fyp= yieldForce, fyn= -yieldForce) 
