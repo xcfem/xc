@@ -80,9 +80,10 @@ class PySimple1: public PQyzBase
     int recvData(const Communicator &);
 
   public:
-    PySimple1(int tag, int classtag, int soilType, double pult, double y50,double drag, double dashpot);
-    PySimple1(int tag, int classtag= MAT_TAG_PySimple1);
     PySimple1(void);
+    PySimple1(int tag, int classtag= MAT_TAG_PySimple1);
+    PySimple1(int tag, int classtag, int soilType, double pult, double y50,double drag, double dashpot);
+    UniaxialMaterial *getCopy(void) const;
 
     int setTrialStrain(double y, double yRate);
     double getStress(void) const;
@@ -94,7 +95,6 @@ class PySimple1: public PQyzBase
     int revertToLastCommit(void);
     int revertToStart(void);
 
-    UniaxialMaterial *getCopy(void) const;
 
     void initialize(void);
 

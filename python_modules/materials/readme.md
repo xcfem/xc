@@ -47,7 +47,11 @@ Python modules that make easier to define materials as defined in structural cod
 - [EN 1337-3:2005 Structural bearings - Part 3: Elastomeric bearings](https://www.une.org/encuentra-tu-norma/busca-tu-norma/norma?c=N0034962)
 - [Bridge design, Part 4: Bearings and deck joints](https://store.standards.org.au/reader/as-5100-4-2017?preview=1)
 
-## Track structure interaction
+## Soil-structure interaction
+
+- [PySimple1 Material](https://opensees.github.io/OpenSeesDocumentation/user/manual/material/uniaxialMaterials/PySimple1.html#pysimple1-material)
+
+## Track-structure interaction
 
 - [Rail structure interaction: an essential methodology for improving bridge safety and passenger comfort](https://trid.trb.org/view/1925438)
 - [UIC. 774-3 R Track/ bridge interaction. Recomendations for calculation](https://shop.uic.org/en/77-structural-works/2342-track-bridge-interaction-recommendations-for-calculations.html)

@@ -37,6 +37,7 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
+from solution import transient
 from scipy.integrate import trapz
 from misc_utils import log_messages as lmsg
 
@@ -178,7 +179,7 @@ loadPatterns.addToDomain(gm.getName()) # Append load pattern to domain.
 solProc.clear()
 dT= 0.01
 numberOfSteps= int(duration/dT)
-solProc= predefined_solutions.PlainLinearNewmark(FEcase, numSteps= numberOfSteps, timeStep= dT)
+solProc= transient.PlainLinearNewmark(FEcase, numSteps= numberOfSteps, timeStep= dT)
 if(solProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')
     quit()

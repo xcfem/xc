@@ -32,7 +32,7 @@ XC::DOF_Numberer *(XC::ModelWrapper::*model_wrapper_get_dof_numberer_ptr)(void)=
 class_<XC::ModelWrapper, bases<CommandEntity>, boost::noncopyable >("ModelWrapper","\n" "Wrapper for the finite element model 'seen' from the solver. \n" "The model wrapper is a container for: \n""- Domain of the finite element model. \n""- Analysis model. \n""- Constraint handler. \n""- DOF numberer. \n",no_init)
 // DOF numberer.
   .def("newNumberer", &XC::ModelWrapper::newNumberer,return_internal_reference<>(),"\n""newNumberer(nmb)\n""Create a new DOF numberer\n""Parameters: \n""nmb: name of the type of numberer. Available types of numberers: 'default_numberer', 'plain_numberer', 'parallel_numberer'. \n")
-.def("getNumberer", make_function(model_wrapper_get_dof_numberer_ptr, return_internal_reference<>()), "Return the DOF numberer.")
+  .def("getNumberer", make_function(model_wrapper_get_dof_numberer_ptr, return_internal_reference<>()), "Return the DOF numberer.")
 // Constraint handler.
   .def("newConstraintHandler", &XC::ModelWrapper::newConstraintHandler,return_internal_reference<>(),"\n""newConstraintHandler(nmb)\n""Create a new constraint handler. \n""Parameters: \n"" nmb: name of the type of handler. Available types of constraint handlers: 'lagrange_constraint_handler', 'penalty_constraint_handler', 'plain_handler', 'transformation_constraint_handler'. \n") 
   .add_property("name",&XC::ModelWrapper::getName,"Return the name of the model wrapper.")

@@ -23,7 +23,12 @@
 
 class_<XC::NewmarkExplicit , bases<XC::NewmarkBase>, boost::noncopyable >("NewmarkExplicit", no_init);
 
-class_<XC::NewmarkBase2 , bases<XC::NewmarkBase>, boost::noncopyable >("NewmarkBase2", no_init);
+void (XC::NewmarkBase2::*set_newmark_beta)(const double &)= &XC::NewmarkBase2::setBeta;
+double (XC::NewmarkBase2::*get_newmark_beta)(void) const= &XC::NewmarkBase2::getBeta;
+class_<XC::NewmarkBase2 , bases<XC::NewmarkBase>, boost::noncopyable >("NewmarkBase2", no_init)
+  .def("setBeta", set_newmark_beta, "Set the beta factor.")
+  .def("getBeta", get_newmark_beta, "Get the beta factor.")
+  ;
 
 class_<XC::Newmark , bases<XC::NewmarkBase2>, boost::noncopyable >("Newmark", no_init);
 

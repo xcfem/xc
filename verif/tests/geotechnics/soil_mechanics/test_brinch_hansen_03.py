@@ -31,7 +31,7 @@ Beff= 5.5 # Effective foundation width
 Leff= 9.0 # Effective foundation length
 V= 3000.0 # Vertical load
 H= 225.0 # Horizontal load.
-q= 4.4
+q= 4.4 # overburden load.
 
 quCohesiveSoil= cohesiveSoil.qu(q= q, D= D, Beff= Beff, Leff= Leff, Vload= V, HloadB= H, HloadL= 0.0, NgammaCoef= 1.8)
 quFrictionalSoil= frictionalSoil.qu(q= q, D= D, Beff= Beff, Leff= Leff, Vload= V, HloadB= H, HloadL= 0.0, NgammaCoef= 1.8)

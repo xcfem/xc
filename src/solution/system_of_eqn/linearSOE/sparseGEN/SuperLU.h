@@ -112,8 +112,7 @@ class SuperLU: public SparseGenColLinSolver
     int relax, permSpec, panelSize;
     char symmetric;
     superlu_options_t options; //! @brief Specifies whether or not the elimination tree will be re-used.
-    SuperLUStat_t stat; //!< Record the statistics on runtime and
-                        // floating-point operation count.
+    SuperLUStat_t superlu_stat; //!< Record the statistics on runtime and floating-point operation count.
     void free_matricesLU(void);
     void free_matricesABAC(void);
     void free_matrices(void);

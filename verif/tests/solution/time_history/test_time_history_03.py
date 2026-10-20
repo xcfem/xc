@@ -18,6 +18,7 @@ from scipy.constants import g
 from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
+from solution import transient
 from actions.quake import ground_motion_utils as gmu
 from misc_utils import log_messages as lmsg
 
@@ -115,21 +116,21 @@ domain.setRayleighDampingFactors(rayleigh)
 ## Perform the analysis.
 numberOfSteps= 2*xGMSize
 domain.setTime(0.0) # initialize time.
-solProc= predefined_solutions.PlainNewmarkNewtonRaphson(prb= feProblem, numSteps= numberOfSteps, timeStep= timeStep, maxNumIter= 1, convTestType= 'energy_incr_conv_test', printFlag= 0)
+solProc= transient.PlainNewmarkNewtonRaphson(prb= feProblem, numSteps= numberOfSteps, timeStep= timeStep, maxNumIter= 1, convTestType= 'energy_incr_conv_test', printFlag= 0)
 if(solProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')
     quit()
 
 uXExtrema= gmu.MinMaxTracker()
-for t, ux in cDisp:
-    uXExtrema.update(ux[0], t)
+for i, (t, ux) in enumerate(cDisp):
+    uXExtrema.update(ux[0], t, i)
 aXExtrema= gmu.MinMaxTracker()
-for t, ax in cAccel:
-    aXExtrema.update(ax[0], t)
+for i, (t, ax) in enumerate(cAccel):
+    aXExtrema.update(ax[0], t, i)
 
 # Check results.
-refUxDict= {'min': -0.09897163226374574, 't_min': 26.399999999999526, 'max': 0.09953642581381053, 't_max': 26.65999999999952}
-refAxDict= {'min': -15.748154993570607, 't_min': 27.6599999999995, 'max': 15.517578072567902, 't_max': 26.399999999999526}
+refUxDict= {'min': -0.09897163226374574, 't_min': 26.399999999999526, 'item_min': 1319, 'max': 0.09953642581381053, 't_max': 26.65999999999952, 'item_max': 1332}
+refAxDict= {'min': -15.748154993570607, 't_min': 27.6599999999995, 'item_min': 1382, 'max': 15.517578072567902, 't_max': 26.399999999999526, 'item_max': 1319}
 
 err= 0.0
 uXDict= uXExtrema.getDict()

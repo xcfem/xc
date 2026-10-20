@@ -15,7 +15,7 @@ import math
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-from solution import predefined_solutions
+from solution import transient
 from misc_utils import log_messages as lmsg
 
 
@@ -81,7 +81,7 @@ numberOfSteps= int(duration/timeStep)+1
 aMaxRef= amplitudeRef*w**2
 ### Dynamic analysis.
 prep.getDomain.setTime(0.0) # initialize time.
-solProc= predefined_solutions.PlainLinearNewmark(feProblem, numSteps= numberOfSteps, timeStep= timeStep)
+solProc= transient.PlainLinearNewmark(feProblem, numSteps= numberOfSteps, timeStep= timeStep)
 if(solProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')
     quit()

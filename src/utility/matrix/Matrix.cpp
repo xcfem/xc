@@ -565,8 +565,23 @@ XC::Matrix XC::Matrix::getInverse(void) const
 //! genMatrix. 
 int XC::Matrix::addMatrix(double factThis, const Matrix &other, double factOther)
   {
-    if(factThis == 1.0 && factOther == 0.0)
-      return 0;
+    const int dataSize= data.Size();
+    if(factOther == 0.0)
+      {
+	if(factThis == 1.0)
+	  return 0;
+	else if(factThis == 0.0)
+	  {
+	    this->Zero();
+	    return 0;
+	  }
+	else
+	  {
+	    for (int i=0; i<dataSize; i++)
+	      data[i]*= factThis;
+	  }
+	return 0;
+      }
 
 #ifdef _G3DEBUG
     if((other.numRows != numRows) || (other.numCols != numCols)) {
@@ -576,66 +591,102 @@ int XC::Matrix::addMatrix(double factThis, const Matrix &other, double factOther
       return -1;
     }
 #endif
-    const int dataSize= data.Size();
 
-    if(factThis == 1.0) {
-
-      // want: this += other * factOther
-      double *dblDataPtr= getDataPtr();
-      if(factOther == 1.0) {
+    if(factThis == 1.0)
+      {
+	// want: this += other * factOther
+	double *dblDataPtr= this->getDataPtr();
 	const double *otherDataPtr= other.getDataPtr();		    
-	for(int i=0; i<dataSize; i++)
-	  *dblDataPtr++ += *otherDataPtr++;
-      } else {
-	const double *otherDataPtr= other.getDataPtr();
-	for(int i=0; i<dataSize; i++)
-	  *dblDataPtr++ += *otherDataPtr++ * factOther;
-      }
-    } 
-
-    else if(factThis == 0.0) {
-
-      // want: this= other * factOther
-      double *dblDataPtr= getDataPtr();
-      if(factOther == 1.0) {
-	const double *otherDataPtr= other.getDataPtr();		    
-	for(int i=0; i<dataSize; i++)
-	  *dblDataPtr++= *otherDataPtr++;
-      } else {
-	const double *otherDataPtr= other.getDataPtr();		    
-	for(int i=0; i<dataSize; i++)
-	  *dblDataPtr++= *otherDataPtr++ * factOther;
-      }
-    } 
-
-    else {
-
-      // want: this= this * thisFact + other * factOther
-      double *dblDataPtr= getDataPtr();
-      if(factOther == 1.0) {
-	const double *otherDataPtr= getDataPtr();
-	for(int i=0; i<dataSize; i++)
-          {
-	    const double value= *dblDataPtr * factThis + *otherDataPtr++;
-	    *dblDataPtr++= value;
+	if(factOther == 1.0)
+	  {
+	    for(int i=0; i<dataSize; i++)
+	      *dblDataPtr++ += *otherDataPtr++;
 	  }
-      } else {
-	const double *otherDataPtr= other.getDataPtr();		    
-	for(int i=0; i<dataSize; i++) {
-	  double value= *dblDataPtr * factThis + *otherDataPtr++ * factOther;
-	  *dblDataPtr++= value;
-	}
+	else if(factOther == -1.0)
+	  {
+	    for (int i=0; i<dataSize; i++)
+	      *dblDataPtr++ -= *otherDataPtr++;
+	  }
+	else
+	  {
+	    for(int i=0; i<dataSize; i++)
+	      *dblDataPtr++ += *otherDataPtr++ * factOther;
+	  }
       }
-    } 
-
+    else if(factThis == 0.0)
+      {
+	// want: this= other * factOther
+	double *dblDataPtr= getDataPtr();
+	const double *otherDataPtr= other.getDataPtr();		    
+	if(factOther == 1.0)
+	  {
+	    for(int i=0; i<dataSize; i++)
+	      *dblDataPtr++= *otherDataPtr++;
+	  }
+	else if(factOther == -1.0)
+	  {
+	    for (int i=0; i<dataSize; i++)
+	      *dblDataPtr++ = -(*otherDataPtr++);
+	  }
+	else
+	  {
+	    for(int i=0; i<dataSize; i++)
+	      *dblDataPtr++= *otherDataPtr++ * factOther;
+	  }
+      } 
+    else
+      {
+	// want: this= this * thisFact + other * factOther
+	double *dblDataPtr= this->getDataPtr();
+	const double *otherDataPtr= other.getDataPtr();
+	if(factOther == 1.0)
+	  {
+	    for(int i=0; i<dataSize; i++)
+	      {
+		const double value= *dblDataPtr * factThis + *otherDataPtr++;
+		*dblDataPtr++= value;
+	      }
+	  }
+	else if(factOther == -1.0)
+	  {
+	    for(int i=0; i<dataSize; i++)
+	      {
+		const double value = *dblDataPtr * factThis - *otherDataPtr++;
+		*dblDataPtr++ = value;
+	      }
+	  }
+	else
+	  {
+	    for(int i=0; i<dataSize; i++)
+	      {
+		const double value= *dblDataPtr * factThis + *otherDataPtr++ * factOther;
+		*dblDataPtr++= value;
+	      }
+	  }
+      }
     // successful
     return 0;
-}
+  }
 
 int XC::Matrix::addMatrixTranspose(double factThis, const Matrix &other, double factOther)
   {
-    if(factThis == 1.0 && factOther == 0.0)
-      return 0;
+    const int dataSize= data.Size();
+    if(factOther == 0.0)
+      {
+	if(factThis == 1.0)
+	  return 0;
+	else if(factThis == 0.0)
+	  {
+	    this->Zero();
+	    return 0;
+	  }
+	else
+	  {
+	    for(int i=0; i<dataSize; i++)
+	      data[i] *= factThis;
+	  }
+	return 0;
+      }
 
 #ifdef _G3DEBUG
     if((other.numRows != numCols) || (other.numCols != numRows))
@@ -648,42 +699,55 @@ int XC::Matrix::addMatrixTranspose(double factThis, const Matrix &other, double 
 
     if(factThis == 1.0)
       {
-
-      // want: this += other^T * factOther
-      if(factOther == 1.0)
-	{
-          double *dataPtr = getDataPtr();
-          for(int j=0; j<numCols; j++)
-	    {
-              for(int i=0; i<numRows; i++)
-	        *dataPtr++ += (other.data)[j+i*numCols];
-	    }
-        }
-      else
-	{
-	  double *dataPtr = getDataPtr();
-          for(int j=0; j<numCols; j++)
-	    {
-              for(int i=0; i<numRows; i++)
-	        *dataPtr++ += (other.data)[j+i*numCols] * factOther;
-	    }
-	}
+	// want: this += other^T * factOther
+	double *dataPtr = getDataPtr();
+	if(factOther == 1.0)
+	  {
+	    for(int j=0; j<numCols; j++)
+	      {
+		for(int i=0; i<numRows; i++)
+		  *dataPtr++ += (other.data)[j+i*numCols];
+	      }
+	  }
+	else if (factOther == -1.0)
+	  {
+	    for(int j=0; j<numCols; j++)
+	      {
+		for(int i=0; i<numRows; i++)
+		*dataPtr++ -= (other.data)[j+i*numCols];
+	      }
+	  }
+	else
+	  {
+	    for(int j=0; j<numCols; j++)
+	      {
+		for(int i=0; i<numRows; i++)
+		  *dataPtr++ += (other.data)[j+i*numCols] * factOther;
+	      }
+	  }
       }
     else if(factThis == 0.0)
       {
         // want: this = other^T * factOther
+	double *dataPtr = getDataPtr();
         if(factOther == 1.0)
 	  {
-	    double *dataPtr = getDataPtr();
             for(int j=0; j<numCols; j++)
 	      {
                 for(int i=0; i<numRows; i++)
 	          *dataPtr++ = (other.data)[j+i*numCols];
 	      }
           }
+	else if (factOther == -1.0)
+	  {
+	    for(int j=0; j<numCols; j++)
+	      {
+		for (int i=0; i<numRows; i++)
+		  *dataPtr++ = -(other.data)[j+i*numCols];
+	      }
+	  }
 	else
 	  {
-	    double *dataPtr = getDataPtr();
             for(int j=0; j<numCols; j++)
 	      {
                 for(int i=0; i<numRows; i++)
@@ -694,9 +758,9 @@ int XC::Matrix::addMatrixTranspose(double factThis, const Matrix &other, double 
     else
       {
         // want: this = this * thisFact + other^T * factOther
+	double *dataPtr = getDataPtr();
         if(factOther == 1.0)
 	  {
-	    double *dataPtr = getDataPtr();
             for(int j=0; j<numCols; j++)
 	      {
                 for(int i=0; i<numRows; i++)
@@ -706,9 +770,19 @@ int XC::Matrix::addMatrixTranspose(double factThis, const Matrix &other, double 
 		  }
 	      }
 	  }
+	else if(factOther == -1.0)
+	  {
+	    for (int j=0; j<numCols; j++)
+	      {
+		for (int i=0; i<numRows; i++)
+		  {
+		    const double value= *dataPtr * factThis - (other.data)[j+i*numCols];
+		    *dataPtr++ = value;
+		  }
+	      }
+	  }
 	else
 	  {
-	    double *dataPtr= getDataPtr();
             for(int j=0; j<numCols; j++)
 	      {
                 for(int i=0; i<numRows; i++)
@@ -726,8 +800,23 @@ int XC::Matrix::addMatrixTranspose(double factThis, const Matrix &other, double 
 
 int XC::Matrix::addMatrixProduct(double thisFact, const Matrix &B, const Matrix &C, double otherFact)
   {
-    if(thisFact == 1.0 && otherFact == 0.0)
-      return 0;
+    const int dataSize= data.Size();
+    if(otherFact == 0.0)
+      {
+       if(thisFact == 1.0)
+        return 0;
+       else if(thisFact == 0.0)
+	 {
+	   this->Zero();
+	   return 0;
+	 }
+       else
+	 {
+	   for(int i=0; i<dataSize; i++)
+	     data[i] *= thisFact;
+	 }
+       return 0;
+      }
 #ifdef _G3DEBUG
     if((B.numRows != numRows) || (C.numCols != numCols) || (B.numCols != C.numRows))
       {
@@ -737,133 +826,159 @@ int XC::Matrix::addMatrixProduct(double thisFact, const Matrix &B, const Matrix 
 	return -1;
       }
 #endif
-    const int dataSize= data.Size();
+    if(thisFact == 0.0)
+      {
+	this->Zero();
+      }
+    else if (thisFact != 1.0)
+      {
+	for (int i=0; i<dataSize; i++)
+	  data[i] *= thisFact;
+      }
+    
     // NOTE: looping as per blas3 dgemm_: j,k,i
-    if(thisFact == 1.0) {
-
-      // want: this += B * C  otherFact
-      const int numColB= B.numCols;
-      const double *ckjPtr = &(C.data)[0];
-      for(int j=0; j<numCols; j++)
-        {
-	  double *aijPtrA= &data(j*numRows);
-	  for(int k=0; k<numColB; k++)
-            {
-	      const double tmp= *ckjPtr++ * otherFact;
-	      double *aijPtr= aijPtrA;
-	      const double *bikPtr= &(B.data)(k*numRows);
-	      for(int i=0; i<numRows; i++)
-	        *aijPtr++ += *bikPtr++ * tmp;
-	    }
-        }
-    }
-
-    else if(thisFact == 0.0) {
-
-      // want: this= B * C  otherFact
-      double *dblDataPtr= data.getDataPtr();
-      for(int i=0; i<dataSize; i++)
-	  *dblDataPtr++= 0.0;
-      const int numColB= B.numCols;
-      const double *ckjPtr = &(C.data)(0);
-      for(int j=0; j<numCols; j++) {
-	double *aijPtrA= &data[j*numRows];
-	for(int k=0; k<numColB; k++) {
-	  double tmp= *ckjPtr++ * otherFact;
-	  double *aijPtr= aijPtrA;
-	  const double *bikPtr= &(B.data)(k*numRows);
-	  for(int i=0; i<numRows; i++)
-	    *aijPtr++ += *bikPtr++ * tmp;
-	}
+    const int numColB= B.numCols;
+    const double *ckjPtr= C.getDataPtr();
+    if(otherFact == 1.0)
+      {
+	for(int j=0; j<numCols; j++)
+	  {
+	    double *aijPtrA= &data[j*numRows];
+	    for(int k=0; k<numColB; k++)
+	      {
+		const double tmp= *ckjPtr++; // positive.
+		double *aijPtr= aijPtrA;
+		const double *bikPtr= &(B.data)[k*numRows];
+		for(int i=0; i<numRows; i++)
+		  *aijPtr++ += *bikPtr++ * tmp;
+	      }
+	  }
       }
-    } 
-
-    else {
-      // want: this= B * C  otherFact
-      double *dblDataPtr= getDataPtr();
-      for(int i=0; i<dataSize; i++)
-	*dblDataPtr++ *= thisFact;
-      int numColB= B.numCols;
-      const double *ckjPtr = &(C.data)(0);
-      for(int j=0; j<numCols; j++) {
-	double *aijPtrA= &data[j*numRows];
-	for(int k=0; k<numColB; k++) {
-	  double tmp= *ckjPtr++ * otherFact;
-	  double *aijPtr= aijPtrA;
-	  const double *bikPtr= &(B.data)(k*numRows);
-	  for(int i=0; i<numRows; i++)
-	    *aijPtr++ += *bikPtr++ * tmp;
-	}
+    else if(otherFact == -1.0)
+      {
+	for(int j=0; j<numCols; j++)
+	  {
+	    double *aijPtrA= &data[j*numRows];
+	    for(int k=0; k<numColB; k++)
+	      {
+		const double tmp= -(*ckjPtr++); // negative.
+		double *aijPtr= aijPtrA;
+		const double *bikPtr= &(B.data)[k*numRows];
+		for(int i=0; i<numRows; i++)
+		  *aijPtr++ += *bikPtr++ * tmp;
+	      }
+	  }
       }
-    } 
+    else
+      {
+	for(int j=0; j<numCols; j++)
+	  {
+	    double *aijPtrA= &data[j*numRows];
+	    for(int k=0; k<numColB; k++)
+	      {
+		const double tmp= *ckjPtr++ * otherFact; // true product.
+		double *aijPtr= aijPtrA;
+		const double *bikPtr= &(B.data)[k*numRows];
+		for(int i=0; i<numRows; i++)
+		  *aijPtr++ += *bikPtr++ * tmp;
+	      }
+	  }
+      }
 
     return 0;
-}
+  }
 
 int XC::Matrix::addMatrixTransposeProduct(double thisFact, 
 				  const Matrix &B, 
 				  const Matrix &C, 
 				  double otherFact)
   {
-  if(thisFact == 1.0 && otherFact == 0.0)
-    return 0;
+    const int dataSize= data.Size();
+    if(otherFact == 0.0)
+      {
+	if(thisFact == 1.0)
+	  return 0;
+	else if(thisFact == 0.0)
+	  {
+	    this->Zero();
+	    return 0;
+	  }
+	else
+	  {
+	    for(int i=0; i<dataSize; i++)
+	      data[i] *= thisFact;
+	  }
+	return 0;
+      }
 
 #ifdef _G3DEBUG
-  if((B.numCols != numRows) || (C.numCols != numCols) || (B.numRows != C.numRows))
-    {
-      std::cerr << "Matrix::addMatrixProduct(): incompatible matrices, this"
+    if((B.numCols != numRows) || (C.numCols != numCols) || (B.numRows != C.numRows))
+      {
+	std::cerr << "Matrix::addMatrixProduct(): incompatible matrices, this"
 		<< Color::def << std::endl;
-      return -1;
-    }
+	return -1;
+      }
 #endif
 
-  if(thisFact == 1.0) {
-    int numMults = C.numRows;
-    double *aijPtr = getDataPtr();
-    for(int j=0; j<numCols; j++) {
-      for(int i=0; i<numRows; i++) {
-	const double *bkiPtr  = &(B.data)[i*numMults];
-	const double *cjkPtr  = &(C.data)[j*numMults];
-	double sum = 0.0;
-	for(int k=0; k<numMults; k++) {
-	  sum += *bkiPtr++ * *cjkPtr++;
-	}
-	*aijPtr++ += sum * otherFact;
+    if(thisFact == 0.0)
+      {
+	this->Zero();
       }
-    } 
-  } else if(thisFact == 0.0) {
-    int numMults = C.numRows;
-    double *aijPtr = getDataPtr();
-    for(int j=0; j<numCols; j++) {
-      for(int i=0; i<numRows; i++) {
-	const double *bkiPtr  = &(B.data)[i*numMults];
-	const double *cjkPtr  = &(C.data)[j*numMults];
-	double sum = 0.0;
-	for(int k=0; k<numMults; k++) {
-	  sum += *bkiPtr++ * *cjkPtr++;
-	}
-	*aijPtr++ = sum * otherFact;
+    else if (thisFact != 1.0)
+      {
+	for(int i=0; i<dataSize; i++)
+	  data[i] *= thisFact;
       }
-    } 
-  } else {
-    int numMults = C.numRows;
-    double *aijPtr = getDataPtr();
-    for(int j=0; j<numCols; j++) {
-      for(int i=0; i<numRows; i++) {
-	const double *bkiPtr  = &(B.data)[i*numMults];
-	const double *cjkPtr  = &(C.data)[j*numMults];
-	double sum = 0.0;
-	for(int k=0; k<numMults; k++) {
-	  sum += *bkiPtr++ * *cjkPtr++;
-	}
-	*aijPtr = *aijPtr * thisFact + sum * otherFact;
-	aijPtr++;
-      }
-    } 
-  }
 
-  return 0;
-}
+    const int numMults= C.numRows;
+    double *aijPtr = this->getDataPtr();
+    if(otherFact == 1.0)
+      {
+	for(int j=0; j<numCols; j++)
+	  {
+	    for(int i=0; i<numRows; i++)
+	      {
+		const double *bkiPtr= &(B.data)[i*numMults];
+		const double *cjkPtr= &(C.data)[j*numMults];
+		double sum= 0.0;
+		for(int k=0; k<numMults; k++)
+		  sum += *bkiPtr++ * *cjkPtr++;
+		*aijPtr++ += sum;
+	      }
+	  }
+      }
+    else if(otherFact == -1.0)
+      {
+	for(int j=0; j<numCols; j++)
+	  {
+	    for(int i=0; i<numRows; i++)
+	      {
+		const double *bkiPtr= &(B.data)[i*numMults];
+		const double *cjkPtr= &(C.data)[j*numMults];
+		double sum= 0.0;
+		for(int k=0; k<numMults; k++)
+		  sum += *bkiPtr++ * *cjkPtr++;
+		*aijPtr++ -= sum;
+	      }
+	  }
+      }
+    else
+      {
+	for(int j=0; j<numCols; j++)
+	  {
+	    for(int i=0; i<numRows; i++)
+	      {
+		const double *bkiPtr= &(B.data)[i*numMults];
+		const double *cjkPtr= &(C.data)[j*numMults];
+		double sum= 0.0;
+		for(int k=0; k<numMults; k++)
+		  sum += *bkiPtr++ * *cjkPtr++;
+		*aijPtr++ += sum * otherFact;
+	      }
+	  }
+      }
+    return 0;
+  }
 
 //! @brief to perform this += T' * B * T
 int XC::Matrix::addMatrixTripleProduct(double thisFact, 
@@ -871,8 +986,23 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
 				       const Matrix &B, 
 				       double otherFact)
   {
-    if(thisFact == 1.0 && otherFact == 0.0)
-      return 0;
+    const int dataSize= data.Size();
+    if(otherFact == 0.0)
+      {
+	if(thisFact == 1.0)
+	  return 0;
+	else if(thisFact == 0.0)
+	  {
+	    this->Zero();
+	    return 0;
+	  }
+	else
+	  {
+	    for (int i=0; i<dataSize; i++)
+	      data[i] *= thisFact;
+	  }
+	return 0;
+      }
 #ifdef _G3DEBUG
     if((numCols != numRows) || (B.numCols != B.numRows) || (T.numCols != numRows) ||
 	(T.numRows != B.numCols))
@@ -904,18 +1034,53 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
 
     double *matrixWork= auxMatrix.getMatrixWork();
     const double *tkjPtr = &(T.data)(0);
-    for(int j=0; j<numCols; j++)
+    //=====================================================    
+    if(otherFact == 1.0)
       {
-        double *aijPtrA= &matrixWork[j*dimB];
-        for(int k=0; k<dimB; k++)
-          {
-	    double tmp= *tkjPtr++ * otherFact;
-	    double *aijPtr= aijPtrA;
-	    const double *bikPtr= &(B.data)(k*dimB);
-	    for(int i=0; i<dimB; i++) 
-	      *aijPtr++ += *bikPtr++ * tmp;
-          }
+	for(int j=0; j<numCols; j++)
+	  {
+	    double *aijPtrA= &matrixWork[j*dimB];
+	    for(int k=0; k<dimB; k++)
+	      {
+		const double tmp= *tkjPtr++;
+		double *aijPtr= aijPtrA;
+		const double *bikPtr= &(B.data)[k*dimB];
+		for(int i=0; i<dimB; i++)
+		  *aijPtr++ += *bikPtr++ * tmp;
+	      }
+	  }
       }
+    else if(otherFact == -1.0)
+      {
+	for(int j=0; j<numCols; j++)
+	  {
+	    double *aijPtrA= &matrixWork[j*dimB];
+	    for(int k=0; k<dimB; k++)
+	      {
+		const double tmp= -(*tkjPtr++);
+		double *aijPtr= aijPtrA;
+		const double *bikPtr= &(B.data)[k*dimB];
+		for(int i=0; i<dimB; i++)
+		  *aijPtr++ += *bikPtr++ * tmp;
+	      }
+	  }
+      }
+    else
+      {
+	for(int j=0; j<numCols; j++)
+	  {
+	    double *aijPtrA= &matrixWork[j*dimB];
+	    for(int k=0; k<dimB; k++)
+	      {
+		const double tmp= *tkjPtr++ * otherFact;
+		double *aijPtr= aijPtrA;
+		const double *bikPtr= &(B.data)[k*dimB];
+		for(int i=0; i<dimB; i++)
+		  *aijPtr++ += *bikPtr++ * tmp;
+	      }
+	  }
+      }
+    //=====================================================    
 
     // now form T' * matrixWork
     // NOTE: looping as per blas3 dgemm_: j,i,k
@@ -982,8 +1147,24 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
 				       double otherFact)
   {
     // Computes (*this) += thisFact * (*this) + otherFact * (A^T * B * C)
-    if(thisFact == 1.0 && otherFact == 0.0)
-      return 0;
+    // A is (m x n), B is (m x p), C is (p x q), result is (n x q).
+    const int dataSize= data.Size();
+    if(otherFact == 0.0)
+      {
+	if(thisFact == 1.0)
+	  return 0;
+	else if(thisFact == 0.0)
+	  {
+	    this->Zero();
+	    return 0;
+	  }
+	else
+	  {
+	    for (int i=0; i<dataSize; i++)
+	      data[i] *= thisFact;
+	  }
+	return 0;
+      }
 #ifdef _G3DEBUG
     if((numRows != A.numCols) || (A.numRows != B.numRows) || (B.numCols != C.numRows) ||
 	(C.numCols != numCols))
@@ -999,83 +1180,126 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
     // work holds B*C, size (m x q) = (B.numRows x numCols)
     const size_t sizeWork = B.numRows * numCols;
 
-    if(sizeWork > auxMatrix.getSizeDoubleWork()) {
-      this->addMatrix(thisFact, A^B*C, otherFact);
-      return 0;
-    }
+    if(sizeWork > auxMatrix.getSizeDoubleWork())
+      {
+	this->addMatrix(thisFact, A^B*C, otherFact);
+	return 0;
+      }
 
     // zero out the work area
-    double *matrixWork= auxMatrix.getMatrixWork();
+    double *matrixWorkPtr= auxMatrix.getMatrixWork();
     for(size_t l=0; l<sizeWork; l++)
-      *matrixWork++ = 0.0;
+      *matrixWorkPtr++ = 0.0;
 
     // now form B * C * fact store in matrixWork == A area
     // NOTE: looping as per blas3 dgemm_: j,k,i
-    
     const int rowsB= B.numRows;
     const int colsB= B.numCols;
-    const double *ckjPtr= &(C.data)[0];
-    for(int j=0; j<numCols; j++)
+    const double *ckjPtr= C.getDataPtr();
+    double *matrixWork= auxMatrix.getMatrixWork();
+    //===========================================================
+    if (otherFact == 1.0)
+    {
+      for (int j = 0; j < numCols; j++)
       {
-	double *aijPtrA = &matrixWork[j*rowsB];
-	for(int k=0; k<colsB; k++)
-	  {
-	    double tmp= *ckjPtr++ * otherFact;
-	    double *aijPtr= aijPtrA;
-	    const double *bikPtr = &(B.data)[k*rowsB];
-	    for(int i=0; i<rowsB; i++) 
-	      *aijPtr++ += *bikPtr++ * tmp;
-	  }
-      }
-
-    // now form A^T * matrixWork
-    // NOTE: looping as per blas3 dgemm_: j,i,k
-    int dimB = rowsB;
-    if(thisFact == 1.0) {
-      double *dataPtr = &data[0];
-      for(int j=0; j< numCols; j++) {
-	double *workkjPtrA = &matrixWork[j*dimB];
-	for(int i=0; i<numRows; i++) {
-	  const double *akiPtr = &(A.data)[i*dimB];
-	  double *workkjPtr = workkjPtrA;
-	  double aij = 0.0;
-	  for(int k=0; k< dimB; k++)
-	    aij += *akiPtr++ * *workkjPtr++;
-	  *dataPtr++ += aij;
+	double *aijPtrA = &matrixWork[j * rowsB];
+	for (int k = 0; k < colsB; k++)
+	{
+	  const double tmp = *ckjPtr++; //1.0
+	  double *aijPtr = aijPtrA;
+	  const double *bikPtr = &(B.data)[k * rowsB];
+	  for (int i = 0; i < rowsB; i++)
+	    *aijPtr++ += *bikPtr++ * tmp;
 	}
       }
-    } else if(thisFact == 0.0) {
-      double *dataPtr = &data[0];
-      for(int j=0; j< numCols; j++) {
-	double *workkjPtrA = &matrixWork[j*dimB];
-	for(int i=0; i<numRows; i++) {
-	  const double *akiPtr = &(A.data)[i*dimB];
-	  double *workkjPtr = workkjPtrA;
-	  double aij = 0.0;
-	  for(int k=0; k< dimB; k++)
-	    aij += *akiPtr++ * *workkjPtr++;
-	  *dataPtr++ = aij;
+    }
+    else if (otherFact == -1.0)
+    {
+      for (int j = 0; j < numCols; j++)
+      {
+	double *aijPtrA = &matrixWork[j * rowsB];
+	for (int k = 0; k < colsB; k++)
+	{
+	  const double tmp = -(*ckjPtr++); //-1.0
+	  double *aijPtr = aijPtrA;
+	  const double *bikPtr = &(B.data)[k * rowsB];
+	  for (int i = 0; i < rowsB; i++)
+	    *aijPtr++ += *bikPtr++ * tmp;
 	}
       }
-
-    } else {
-      double *dataPtr = &data[0];
-      for(int j=0; j< numCols; j++) {
-	double *workkjPtrA = &matrixWork[j*dimB];
-	for(int i=0; i<numRows; i++) {
-	  const double *akiPtr = &(A.data)[i*dimB];
-	  double *workkjPtr = workkjPtrA;
-	  double aij = 0.0;
-	  for(int k=0; k< dimB; k++)
-	    aij += *akiPtr++ * *workkjPtr++;
-	  double value = *dataPtr * thisFact + aij;
-	  *dataPtr++ = value;
+    }
+    else
+    {
+      for (int j = 0; j < numCols; j++)
+      {
+	double *aijPtrA = &matrixWork[j * rowsB];
+	for (int k = 0; k < colsB; k++)
+	{
+	  const double tmp = *ckjPtr++ * otherFact; //true product.
+	  double *aijPtr = aijPtrA;
+	  const double *bikPtr = &(B.data)[k * rowsB];
+	  for (int i = 0; i < rowsB; i++)
+	    *aijPtr++ += *bikPtr++ * tmp;
 	}
       }
     }
 
+    // now form A^T * matrixWork
+    // NOTE: looping as per blas3 dgemm_: j,i,k
+    const int dimB = rowsB;
+    double *dataPtr = &data[0];
+    if(thisFact == 1.0)
+      {
+	for(int j=0; j< numCols; j++)
+	  {
+	    const double *workkjPtrA = &matrixWork[j*dimB];
+	    for(int i=0; i<numRows; i++)
+	      {
+		const double *akiPtr = &(A.data)[i*dimB];
+		const double *workkjPtr = workkjPtrA;
+		double aij = 0.0;
+		for(int k=0; k< dimB; k++)
+		  aij += *akiPtr++ * *workkjPtr++;
+		*dataPtr++ += aij;
+	      }
+	  }
+      }
+    else if(thisFact == 0.0)
+      {
+	for(int j=0; j< numCols; j++)
+	  {
+	    const double *workkjPtrA = &matrixWork[j*dimB];
+	    for(int i=0; i<numRows; i++)
+	      {
+		const double *akiPtr = &(A.data)[i*dimB];
+		const double *workkjPtr = workkjPtrA;
+		double aij = 0.0;
+		for(int k=0; k< dimB; k++)
+		  aij += *akiPtr++ * *workkjPtr++;
+		*dataPtr++ = aij;
+	      }
+	  }
+      }
+    else
+      {
+	for(int j=0; j< numCols; j++)
+	  {
+	    const double *workkjPtrA= &matrixWork[j*dimB];
+	    for(int i=0; i<numRows; i++)
+	      {
+		const double *akiPtr = &(A.data)[i*dimB];
+		const double *workkjPtr = workkjPtrA;
+		double aij = 0.0;
+		for(int k=0; k< dimB; k++)
+		  aij += *akiPtr++ * *workkjPtr++;
+		const double value = *dataPtr * thisFact + aij;
+		*dataPtr++ = value;
+	      }
+	  }
+      }
+
     return 0;
-}
+  }
 
 
 //

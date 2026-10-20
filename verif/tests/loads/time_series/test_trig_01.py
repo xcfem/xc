@@ -10,6 +10,7 @@ __email__= "l.pereztato@gmail.com"
 
 import math
 import xc
+from actions import time_series
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -21,14 +22,7 @@ end= 2
 period= 1
 shift= 0
 #Load modulation.
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-ts= lPatterns.newTimeSeries("trig_ts","ts")
-ts.factor= scaleFactor
-ts.tStart= begin
-ts.tFinish= end
-ts.period= period
-ts.shift= shift
+ts= time_series.def_trig_time_series(preprocessor, name= 'ts', tStart= begin, tEnd= end, period= period, cFactor= scaleFactor, shift= shift)
 
 duration= ts.getDuration()
 durationRef= end-begin

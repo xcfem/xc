@@ -119,37 +119,48 @@ class MinMaxTracker(object):
 
     :ivar min: minimum value.
     :ivar t_min: time when minimum value occurs.
+    :ivar item_min: item (node element or whatever) where the minimum value
+                    occurs.
     :ivar max: maximum value.
     :ivar t_max: time when maximum value occurs.
+    :ivar item_max: item (node element or whatever) where the maximum value
+                    occurs.
     '''
     def __init__(self):
         # Initialize with infinity boundaries
         self.min = float('inf')
         self.max = float('-inf')
         self.t_min= None # Time when min occurs.
+        self.item_min= None # Where min occurs.
         self.t_max= None # Time when max occurs.
+        self.item_max= None # Where max occurs.
 
-    def update(self, value, t):
+    def update(self, value, t, item):
         ''' Update maximum and minimum values.
 
         :param value: value to update the extrema.
         :param t: time when the given value occurs.
+        :param item: item where the given value occurs.
         '''
         assert(isinstance(t, float))
         if value < self.min:
             self.min = value
             self.t_min= t
+            self.item_min= item
         if value > self.max:
             self.max = value
             self.t_max= t
+            self.item_max= item
 
     def getDict(self):
         ''' Return a dictionary with the values of the object members.'''
         retval= {
             "min": self.min if self.t_min is not None else None,
             "t_min": self.t_min,
+            "item_min": self.item_min,
             "max": self.max if self.t_max is not None else None,
             "t_max": self.t_max,
+            "item_max": self.item_max,
         }
         return retval
 
@@ -158,6 +169,8 @@ class MinMaxTracker(object):
         self.min = float('inf') if dct["min"] is None else dct["min"]
         self.max = float('-inf') if dct["max"] is None else dct["max"]
         self.t_min = dct["t_min"]
+        self.item_min = dct["item_min"]
         self.t_max = dct["t_max"]
+        self.item_max = dct["item_max"]
 
     

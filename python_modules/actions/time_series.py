@@ -14,6 +14,30 @@ import math
 from misc_utils import log_messages as lmsg
 import matplotlib.pyplot as plt
 
+def def_trig_time_series(preprocessor, name, tStart:float, tEnd:float, period:float, cFactor:float= 1.0, shift:float= 0.0):
+    ''' Return a sine or trigonometric time series that defines a sinusoidal 
+        load factor λ(t) as a function of time. The defined time series returns
+        cFactor*math.sin(2*math.pi(t-tStart)/period+shift) between tStart
+        and tEnd and 0.0 outside this time window.
+
+    :param preprocessor: Pre-processor of the FE problem at hand.
+    :param name: name for the new time series.
+    :param tStart: Start time of the non-zero load factor.
+    :param tEnd: End time of the non-zero load factor.
+    :param period: Characteristic period of the sine wave.
+    :param cFactor: Amplification or peak factor multiplier (default: 1.0).
+    :param shift: Phase shift in radians (default: 0.0)
+    '''
+    loadHandler= preprocessor.getLoadHandler
+    lPatterns= loadHandler.getLoadPatterns
+    retval= lPatterns.newTimeSeries("trig_ts","ts")
+    retval.factor= cFactor
+    retval.tStart= tStart
+    retval.tFinish= tEnd
+    retval.period= period
+    retval.shift= shift
+    return retval
+
 def plot_time_series(timeSeries, timeIncrement= None, timeUnits= None):
     ''' Shows a diagram of the time series.
 

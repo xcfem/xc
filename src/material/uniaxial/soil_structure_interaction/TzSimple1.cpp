@@ -60,7 +60,7 @@ const double TZtolerance= 1.0e-12;
 //        Constructor with data
 
 XC::TzSimple1::TzSimple1(int tag,int classtag, int tz_type,double t_ult,double z_50,double dash_pot)
-  :PYBase(tag,classtag,tz_type,t_ult,z_50,dash_pot)
+  : PYBase(tag, classtag,tz_type,t_ult,z_50,dash_pot)
   {
     // Initialize TzSimple variables and history variables
     //
@@ -68,8 +68,9 @@ XC::TzSimple1::TzSimple1(int tag,int classtag, int tz_type,double t_ult,double z
     initialTangent= T.tang();
   }
 
+//! @brief Constructor.
 XC::TzSimple1::TzSimple1(int tag,int classtag)
-  :PYBase(tag,classtag)
+  : PYBase(tag,classtag)
   {
     // Initialize variables .. WILL NOT WORK AS NOTHING SET
     // this->revertToStart();
@@ -81,11 +82,10 @@ XC::TzSimple1::TzSimple1(int tag,int classtag)
     // these values don't change
   }
 
-/////////////////////////////////////////////////////////////////////
-//        Default constructor
 
+//! @brief Default constructor.
 XC::TzSimple1::TzSimple1(void)
- :PYBase(0,0)
+ : PYBase(0,0)
   {
     // Initialize variables .. WILL NOT WORK AS NOTHING SET
     // this->revertToStart();
@@ -95,11 +95,22 @@ XC::TzSimple1::TzSimple1(void)
     // BTW maxIterations and tolerance should not be private variables, they
     // should be static .. all XC::PySimple1 materials share the same values & 
     // these values don't change
+  }
+
+//! @brief Virtual constructor.
+XC::UniaxialMaterial *XC::TzSimple1::getCopy(void) const
+  { return new TzSimple1(*this); }
+
+//! @brief Initial values for the material state variables.
+void XC::TzSimple1::initialize(void)
+  {
+    revertToStart();
+    initialTangent= T.tang();
   }
 
 /////////////////////////////////////////////////////////////////////
 void XC::TzSimple1::getNearField(double zlast, double dz, double dz_old)
-{
+  {
     // Limit "dz" step size if it is osillating and not shrinking.
     //
     if(dz*dz_old < 0.0 && fabs(dz/dz_old) > 0.5) dz= -dz_old/2.0;
@@ -112,12 +123,12 @@ void XC::TzSimple1::getNearField(double zlast, double dz, double dz_old)
     // Treat as elastic if dzTotal is below TZtolerance
     //
     if(fabs(dzTotal*TNF.tang()/matCapacity) < 10.0*TZtolerance) 
-    {
-            TNF.T()= TNF.T() + dz*TNF.tang();
-            if(fabs(TNF.T()) >=(1.0-TZtolerance)*matCapacity) 
-                    TNF.T() =(TNF.T()/fabs(TNF.T()))*(1.0-TZtolerance)*matCapacity;
-            return;
-    }
+      {
+	TNF.T()= TNF.T() + dz*TNF.tang();
+	if(fabs(TNF.T()) >=(1.0-TZtolerance)*matCapacity) 
+	  TNF.T() =(TNF.T()/fabs(TNF.T()))*(1.0-TZtolerance)*matCapacity;
+	return;
+      }
 
     // Reset the history terms to the last Committed values, and let them
     // reset if the reversal of loading persists in this step.
@@ -169,7 +180,7 @@ void XC::TzSimple1::getNearField(double zlast, double dz, double dz_old)
 
 /////////////////////////////////////////////////////////////////////
 int XC::TzSimple1::setTrialStrain (double newz, double zRate)
-{
+  {
     // Set trial values for displacement and load in the material
     // based on the last Tangent modulus.
     //
@@ -192,20 +203,20 @@ int XC::TzSimple1::setTrialStrain (double newz, double zRate)
     // Main loop over the required number of substeps
     //
     for(int istep=1; istep <= numSteps; istep++)
-    {
-            T.z()= T.z() + dz;
-            dt= T.tang() * dz;
+      {
+	T.z()= T.z() + dz;
+	dt= T.tang() * dz;
             
-            // May substep in NearField component if not making progress due to oscillation
-            // The following history term is initialized here.
-            //
-            double dz_nf_old= ((T.T()+dt) - TNF.T())/TNF.tang();
+	// May substep in NearField component if not making progress due to oscillation
+	// The following history term is initialized here.
+	//
+	double dz_nf_old= ((T.T()+dt) - TNF.T())/TNF.tang();
             
-    // Iterate to distribute displacement between elastic & plastic components.
-    // Use the incremental iterative strain & iterate at this strain.
+	// Iterate to distribute displacement between elastic & plastic components.
+	// Use the incremental iterative strain & iterate at this strain.
     //
-    for (int j=1; j < TZmaxIterations; j++)
-    {
+	for (int j=1; j < TZmaxIterations; j++)
+	  {
             T.T()= T.T() + dt;
             if(fabs(T.T()) >(1.0-TZtolerance)*matCapacity) T.T()=(1.0-TZtolerance)*matCapacity*(T.T()/fabs(T.T()));
 
@@ -218,19 +229,19 @@ int XC::TzSimple1::setTrialStrain (double newz, double zRate)
             double zres_nf= (T.T() - TNF.T())/TNF.tang();
             dz_nf_old= dz_nf;
 
-        // Stress & strain update in Far Field element
-        const double z_far= TFar.updateField(T.T());
-        getFarField(z_far);
+	    // Stress & strain update in Far Field element
+	    const double z_far= TFar.updateField(T.T());
+	    getFarField(z_far);
 
             // Residuals in Far Field element
-        double t_unbalance2= TFar.unbalance(T.T());
-        double zres_far= TFar.residual(T.T());
+	    double t_unbalance2= TFar.unbalance(T.T());
+	    double zres_far= TFar.residual(T.T());
 
             // Update the combined tangent modulus
-        T.tang()= pow(1.0/TNF.tang() + 1.0/TFar.tang(), -1.0);
+	    T.tang()= pow(1.0/TNF.tang() + 1.0/TFar.tang(), -1.0);
 
             // Residual deformation across combined element
-        double dv= T.z() - (TNF.z() + zres_nf) - (TFar.z() + zres_far);
+	    double dv= T.z() - (TNF.z() + zres_nf) - (TFar.z() + zres_far);
 
             // Residual "t" increment 
             dt= T.tang() * dv;
@@ -238,11 +249,11 @@ int XC::TzSimple1::setTrialStrain (double newz, double zRate)
             // Test for convergence
             double tsum= fabs(t_unbalance) + fabs(t_unbalance2);
             if(tsum/matCapacity < TZtolerance) break;
-    }
-    }
-
+	  }
+      }
     return 0;
   }
+
 /////////////////////////////////////////////////////////////////////
 double XC::TzSimple1::getStress(void) const
   {
@@ -384,9 +395,6 @@ int XC::TzSimple1::revertToStart(void)
     return retval;
   }
 
-/////////////////////////////////////////////////////////////////////
-XC::UniaxialMaterial *XC::TzSimple1::getCopy(void) const
-  { return new TzSimple1(*this); }
 
 //! @brief Send object members through the communicator argument.
 int XC::TzSimple1::sendData(Communicator &comm)

@@ -58,6 +58,8 @@ python tests/utility/misc_utils/test_xc_json_03.py
 python tests/utility/misc_utils/test_xc_json_04.py
 python tests/utility/misc_utils/test_xc_json_05.py
 python tests/utility/misc_utils/test_xc_json_06.py
+python tests/utility/matrix/test_matrix_vector_otherfact.py
+
 echo "$BLEU" "  Config tests." "$NORMAL"
 python tests/utility/config/test_project_dir_tree_01.py
 echo "$BLEU" "  Geometry tests." "$NORMAL"
@@ -744,6 +746,7 @@ echo "$BLEU" "  Soil subgrade reaction." "$NORMAL"
 python tests/sample_problems/soil_subgrade_reaction/test_winkler.py
 python tests/sample_problems/soil_subgrade_reaction/test_quasi_winkler.py
 python tests/sample_problems/soil_subgrade_reaction/test_foundation_slab.py
+python tests/sample_problems/soil_subgrade_reaction/test_laterally_loaded_pile_foundation.py
 echo "$BLEU" "  Earth retaining." "$NORMAL"
 python tests/sample_problems/earth_retaining/test_rail_retaining_wall.py
 echo "$BLEU" "  Composite structures tests." "$NORMAL"
@@ -845,6 +848,7 @@ python tests/solution/time_history/test_time_history_00.py
 python tests/solution/time_history/test_time_history_01.py
 python tests/solution/time_history/test_time_history_02.py
 python tests/solution/time_history/test_time_history_03.py
+python tests/solution/time_history/test_hht_integrator_01.py
 python tests/solution/time_history/test_pseudo_time_history.py
 
 ## Ground motion.
@@ -852,6 +856,7 @@ echo "$BLEU" "    Ground motion solution tests." "$NORMAL"
 python tests/solution/time_history/ground_motion/elastic_response_spectra.py
 python tests/solution/time_history/ground_motion/test_sdof_response_01.py
 python tests/solution/time_history/ground_motion/test_sdof_response_02.py
+python tests/solution/time_history/ground_motion/test_pile_damping.py
 
 ## Convergence tests.
 echo "$BLEU" "  Convergence tests." "$NORMAL"
@@ -1452,7 +1457,6 @@ python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_ey_
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_ey_basic_material_02.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_ey_basic_material_03.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_ey_basic_material_04.py
-python tests/materials/xc_materials/uniaxial/soil_structure_interaction/py_simple1_test.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_01.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_02.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_03.py
@@ -1460,6 +1464,11 @@ python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soi
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_05.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_06.py
 python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_soil_response_07.py
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/py_simple1_test_01.py
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/py_simple1_test_02.py
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/qz_simple1_test_01.py
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/tz_simple1_test_01.py
+python tests/materials/xc_materials/uniaxial/soil_structure_interaction/test_shallow_foundation_friction_material_01.py
 echo "$BLEU" "      Rail structure interaction materials." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/track_structure_interaction/test_track_structure_interaction_spring_01.py
 echo "$BLEU" "      Damper materials." "$NORMAL"
@@ -1989,6 +1998,7 @@ python tests/geotechnics/foundations/test_micropile_03.py
 python tests/geotechnics/foundations/test_micropile_04.py
 python tests/geotechnics/foundations/test_foundation_settlement_01.py
 python tests/geotechnics/foundations/test_pad_footing_bearing_capacity.py
+python tests/geotechnics/foundations/test_pu_pile_in_weak_rock.py
 ## Soil mechanics (basic utilities)
 echo  "$BLEU" "  Soil mechanics (basic utilities)." "$NORMAL"
 python tests/geotechnics/soil_mechanics/test_frictional_soil_01.py
@@ -1998,6 +2008,7 @@ python tests/geotechnics/soil_mechanics/test_rankine.py
 python tests/geotechnics/soil_mechanics/test_brinch_hansen_01.py
 python tests/geotechnics/soil_mechanics/test_brinch_hansen_02.py
 python tests/geotechnics/soil_mechanics/test_brinch_hansen_03.py
+python tests/geotechnics/soil_mechanics/test_brinch_hansen_04.py
 python tests/geotechnics/soil_mechanics/test_stratified_soil.py
 python tests/geotechnics/soil_mechanics/test_cohesive_soil_01.py
 python tests/geotechnics/soil_mechanics/test_cohesive_soil_02.py

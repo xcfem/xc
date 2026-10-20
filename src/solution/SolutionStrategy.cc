@@ -350,11 +350,36 @@ bool XC::SolutionStrategy::alloc_integrator(const std::string &nmb,const Vector 
       }
     else if(nmb=="HHT_integrator")
       {
-	if(numberOfParameters>0)
-	  std::clog << Color::yellow << getClassName() << "::" << __FUNCTION__
-	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << Color::def << std::endl;
-        theIntegrator= new HHT(this);
+	switch(numberOfParameters)
+	  {
+	  case 0:
+	    theIntegrator= new HHT(this);
+	    break;
+	  case 1:
+	    // alpha= params[0]
+	    theIntegrator= new HHT(this, params[0]);
+	    break;
+	  case 2:
+	    // const double &alpha= params[0];
+	    // const double &beta= params[1];
+	    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		      << ' ' << nmb
+		      << " beta and gamma factors must be specified together."
+	              << " Exiting."
+		      << Color::def << std::endl;
+	    exit(1);
+	    theIntegrator= new HHT(this, params[0]);
+	    break;
+	  case 3:
+	    // const double &alpha= params[0];
+	    // const double &beta= params[1];
+	    // const double &gamma= params[1];
+	    theIntegrator= new HHT(this, params[0], params[1], params[2]);
+	    break;
+	  default:
+	    theIntegrator= new HHT(this);
+	    break;
+	  }
       }
     else if(nmb=="HHT1_integrator")
       {

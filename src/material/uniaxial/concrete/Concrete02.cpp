@@ -203,7 +203,7 @@ int XC::Concrete02::setTrialStrain(double trialStrain, double strainRate)
     const double deps= hstv.eps - hstvP.eps;
 
     if(fabs(deps) < DBL_EPSILON)
-      return 0;
+      return this->revertToLastCommit(); // Restore committed Concrete02 state on early return (following S. Mazzoni OpenSees PR #1837).
 
     // if the current strain is less than the smallest previous strain 
     // call the monotonic envelope in compression and reset minimum strain 

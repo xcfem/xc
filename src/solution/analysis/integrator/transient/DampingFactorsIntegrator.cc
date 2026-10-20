@@ -51,6 +51,14 @@ void XC::DampingFactorsIntegrator::setRayleighDampingFactors(void)
       Integrator::setRayleighDampingFactors(rayFactors);
   }
 
+//! @brief Set the values of the Rayleigh damping factors.
+void XC::DampingFactorsIntegrator::setRayleighDampingFactors(const RayleighDampingFactors &rf)
+  { this->rayFactors= rf; }
+  
+//! @brief Get the values of the Rayleigh damping factors.
+const XC::RayleighDampingFactors &XC::DampingFactorsIntegrator::getRayleighDampingFactors(void) const
+  { return this->rayFactors; }
+
 void XC::DampingFactorsIntegrator::Print(std::ostream &s, int flag) const
   {
     TransientIntegrator::Print(s,flag);

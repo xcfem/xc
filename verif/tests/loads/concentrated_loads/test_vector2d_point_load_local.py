@@ -63,8 +63,7 @@ modelSpace.fixNode000(n1.tag)
 
 
 # Load definition.
-lp0= modelSpace.newLoadPattern(name= '0')
-modelSpace.setCurrentLoadPattern("0")
+lp0= modelSpace.newLoadPattern(name= '0', setCurrent= True)
 
 mesh= feProblem.getDomain.getMesh
 eIter= mesh.getElementIter

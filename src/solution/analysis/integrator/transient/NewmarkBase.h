@@ -50,13 +50,18 @@ class NewmarkBase: public DampingFactorsIntegrator
     double c2, c3; //!< some constants we need to keep
     ResponseQuantities U; //!< response quantities at time t+deltaT = predicted + corrected
 
-    void PopulateUs(XC::AnalysisModel *model);
+    void PopulateUs(AnalysisModel *model);
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
     NewmarkBase(SolutionStrategy *,int classTag);
     NewmarkBase(SolutionStrategy *,int classTag,double gamma);
     NewmarkBase(SolutionStrategy *,int classTag,double gamma,const RayleighDampingFactors &rF);
+  public:
+    inline double getGamma(void) const
+      { return this->gamma; } 
+    inline void setGamma(const double &d)
+      { this->gamma= d; }
   };
 } // end of XC namespace
 

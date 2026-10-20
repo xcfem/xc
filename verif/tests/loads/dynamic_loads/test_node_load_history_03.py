@@ -13,7 +13,7 @@ __email__= "l.pereztato@gmail.com"
 import math
 import geom
 import xc
-from solution import predefined_solutions
+from solution import transient
 from model import predefined_spaces
 from materials import typical_materials
 from misc_utils import log_messages as lmsg
@@ -125,7 +125,7 @@ recAccel.callbackRecord= "cAccel.append([self.getDomain.getTimeTracker.getCurren
 
 ### Dynamic analysis.
 preprocessor.getDomain.setTime(0.0) # initialize time.
-solProc= predefined_solutions.PlainLinearNewmark(feProblem, numSteps= numSteps, timeStep= dT)
+solProc= transient.PlainLinearNewmark(feProblem, numSteps= numSteps, timeStep= dT)
 if(solProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')
     quit()

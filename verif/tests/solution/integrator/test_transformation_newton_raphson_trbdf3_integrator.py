@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Trivial test to check plain linear Newmark solver. Home made test.'''
+''' Trivial test to check TRBDF3 solver. Home made test.'''
 
 from __future__ import print_function
 
@@ -16,6 +16,7 @@ F= 1 # Force magnitude
 import math
 import xc
 from solution import predefined_solutions
+from solution import transient
 from materials import typical_materials
 
 # Model definition
@@ -70,7 +71,7 @@ recDFree.callbackRecord= "dFree.append([self.getDomain.getTimeTracker.getCurrent
 duration= 10
 dT= 0.1
 numberOfSteps= int(duration/dT)
-solProc= predefined_solutions.TransformationTRBDF3NewtonRaphson(feProblem, numSteps= numberOfSteps, timeStep= dT)
+solProc= transient.TransformationTRBDF3NewtonRaphson(feProblem, numSteps= numberOfSteps, timeStep= dT)
 if(solProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')
     quit()

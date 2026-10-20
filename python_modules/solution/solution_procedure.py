@@ -318,7 +318,26 @@ class SolutionProcedure(object):
         retval= None
         if(self.solutionStrategy):
             integratorType= 'newmark_integrator'
-            integratorParameters= xc.Vector([self.gamma, self.beta])
+            integratorParameters= xc.Vector([gamma, beta])
+            retval= self.solutionStrategy.newIntegrator(integratorType, integratorParameters)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; solution strategy not set.')
+            exit(1)
+        return retval
+
+    def hhtIntegratorSetup(self, alpha_htt, beta_htt, gamma_htt):
+        ''' Define an HTT integrator.
+
+        :param alpha_htt: alpha factor.
+        :param beta_htt: beta factor.
+        :param gamma_htt: gamma factor.
+        '''
+        retval= None
+        if(self.solutionStrategy):
+            integratorType= 'HHT_integrator'
+            integratorParameters= xc.Vector([alpha_htt, beta_htt, gamma_htt])
             retval= self.solutionStrategy.newIntegrator(integratorType, integratorParameters)
         else:
             className= type(self).__name__
@@ -380,6 +399,8 @@ class SolutionProcedure(object):
             retval= self.integrator_setup(integratorType)
         elif(integratorType=='newmark_integrator'):
             retval= self.newmarkIntegratorSetup(gamma, beta)
+        elif(integratorType=='HHT_integrator'):
+            retval= self.hhtIntegratorSetup(alpha, beta, gamma)
         elif(integratorType=='displacement_control_integrator'):
             retval= self.displacementControlIntegratorSetup(node= node, dof= dof, increment= increment, numIter= numIter, dUmin= dUmin, dUmax= dUmax)
         elif(integratorType in ["arc-length_integrator", "arc-length1_integrator", "HS_constraint_integrator"]): # Arc-Length control.
@@ -396,6 +417,22 @@ class SolutionProcedure(object):
         if(self.solutionStrategy):
             retval= self.solutionStrategy.getIntegrator
         return retval
+
+    def setDeltaLambda(self, dLambda1:float):
+        ''' Set the load factor increment between steps (if supported by the
+            integrator).
+
+        :param dLambda1: the load factor increment.
+        '''
+        integrator= self.getIntegrator()
+        integrator.setDeltaLambda(dLambda1)
+        
+    def getDeltaLambda(self):
+        ''' Get the load factor increment between steps (if supported by the
+            integrator).
+        '''
+        integrator= self.getIntegrator()
+        return integrator.getDeltaLambda()
             
     def solutionAlgorithmSetup(self, solutionAlgorithmType):
         ''' Define the solution strategy.

@@ -1,4 +1,4 @@
-# Pedestrian traffic loads.
+# Pedestrian traffic loads
 
 ## References
 

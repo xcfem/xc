@@ -28,3 +28,4 @@ Determing the next time step for an analysis including inertial effects can be d
 - [Damping Is a Sensitive Subject](https://portwooddigital.com/2025/02/09/damping-is-a-sensitive-subject/)
 - [Double Inverted Pendulum](https://portwooddigital.com/2025/09/08/double-inverted-pendulum/)
 - [Celestial OpenSeesing](https://portwooddigital.com/2025/09/14/celestial-openseesing/)
+- [Hilber-Hughes-Taylor Method](https://opensees.github.io/OpenSeesDocumentation/user/manual/analysis/integrator/HHT.html#hilberhughestaylormethod)

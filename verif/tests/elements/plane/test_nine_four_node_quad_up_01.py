@@ -12,7 +12,7 @@ __email__= "l.pereztato@gmail.com"
 import math
 import xc
 from materials import typical_materials
-from solution import predefined_solutions
+from solution import transient
 from misc_utils import log_messages as lmsg
 
 # Define finite element problem.
@@ -141,7 +141,7 @@ recDFree.callbackRecord= "ti.append(self.getDomain.getTimeTracker.getCurrentTime
 duration= 10
 dT= 0.1
 numberOfSteps= int(duration/dT)
-solProc= predefined_solutions.TransformationNewmarkNewtonRaphson(feProblem, numSteps= numberOfSteps, timeStep= dT, gamma= 0.5, beta= 0.25, printFlag= 0)
+solProc= transient.TransformationNewmarkNewtonRaphson(feProblem, numSteps= numberOfSteps, timeStep= dT, gamma= 0.5, beta= 0.25, printFlag= 0)
 if(solProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')
     quit()

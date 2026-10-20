@@ -381,10 +381,22 @@ XC::Vector XC::normalize_inf(const Vector &v)
 //! or \f$1\f$. 
 int XC::Vector::addVector(double thisFact, const Vector &other, double otherFact )
   {
-    // check if quick return
-    if(otherFact == 0.0 && thisFact == 1.0)
-      return 0; 
-
+    if(otherFact == 0.0)
+      {
+	if(thisFact == 1.0)
+	  return 0;
+	else if(thisFact == 0.0)
+	  {
+	    this->Zero();
+	    return 0;
+	  }
+	else
+	  {
+	    for(int i=0; i<sz; i++)
+	      theData[i] *= thisFact;
+	  }
+	return 0;
+      }
     // if sizes are compatible add
 #ifdef _G3DEBUG
     if(sz != other.sz)
@@ -397,11 +409,11 @@ int XC::Vector::addVector(double thisFact, const Vector &other, double otherFact
       }
 #endif
 
+    double *dataPtr= this->theData;
+    const double *otherDataPtr= other.theData;
     if(thisFact == 1.0)
       {
         // want: this += other * otherFact
-        double *dataPtr= theData;
-        double *otherDataPtr= other.theData;
         if(otherFact == 1.0)
           { // no point doing a multiplication if otherFact == 1.0
             for(int i=0; i<sz; i++) 
@@ -410,7 +422,7 @@ int XC::Vector::addVector(double thisFact, const Vector &other, double otherFact
         else if(otherFact == -1.0)
           { // no point doing a multiplication if otherFact == 1.0
             for(int i=0; i<sz; i++) 
-  	    *dataPtr++ -= *otherDataPtr++;
+	      *dataPtr++ -= *otherDataPtr++;
           }
         else 
           for(int i=0; i<sz; i++) 
@@ -419,17 +431,15 @@ int XC::Vector::addVector(double thisFact, const Vector &other, double otherFact
     else if(thisFact == 0.0)
       {
         // want: this= other * otherFact
-        double *dataPtr= theData;
-        double *otherDataPtr= other.theData;
         if(otherFact == 1.0)
           { // no point doing a multiplication if otherFact == 1.0
             for(int i=0; i<sz; i++) 
-  	    *dataPtr++= *otherDataPtr++;
+	      *dataPtr++= *otherDataPtr++;
           }
         else if(otherFact == -1.0)
           { // no point doing a multiplication if otherFact == 1.0
             for(int i=0; i<sz; i++) 
-  	    *dataPtr++= *otherDataPtr++;
+	      *dataPtr++= -(*otherDataPtr++);
           }
         else 
           for(int i=0; i<sz; i++) 
@@ -438,13 +448,11 @@ int XC::Vector::addVector(double thisFact, const Vector &other, double otherFact
     else
       {
         // want: this= this * thisFact + other * otherFact
-        double *dataPtr= theData;
-        double *otherDataPtr= other.theData;
         if(otherFact == 1.0)
           { // no point doing a multiplication if otherFact == 1.0
             for(int i=0; i<sz; i++)
               {
-  	        double value= *dataPtr * thisFact + *otherDataPtr++;
+  	        const double value= *dataPtr * thisFact + *otherDataPtr++;
   	        *dataPtr++= value;
               }
           }
@@ -452,14 +460,14 @@ int XC::Vector::addVector(double thisFact, const Vector &other, double otherFact
           { // no point doing a multiplication if otherFact == 1.0
             for(int i=0; i<sz; i++)
               {
-  	        double value= *dataPtr * thisFact - *otherDataPtr++;
+  	        const double value= *dataPtr * thisFact - *otherDataPtr++;
   	        *dataPtr++= value;
               }
           }
         else 
           for(int i=0; i<sz; i++)
             {
-              double value= *dataPtr * thisFact + *otherDataPtr++ * otherFact;
+              const double value= *dataPtr * thisFact + *otherDataPtr++ * otherFact;
   	      *dataPtr++= value;
             }
       } 
@@ -479,9 +487,22 @@ int XC::Vector::addVector(double thisFact, const Vector &other, double otherFact
 //! is \f$0\f$ or \f$1\f$. 
 int XC::Vector::addMatrixVector(double thisFact, const Matrix &m, const XC::Vector &v, double otherFact )
   {
-    // see if quick return
-    if(thisFact == 1.0 && otherFact == 0.0)
-      return 0;
+    if(otherFact == 0.0)
+      {
+	if(thisFact == 1.0)
+	  return 0;
+	else if(thisFact == 0.0)
+	  {
+	    this->Zero();
+	    return 0;
+	  }
+	else
+	  {
+	    for(int i=0; i<sz; i++)
+	      theData[i] *= thisFact;
+	  }
+	return 0;
+      }
 
 #ifdef _G3DEBUG
     // this = m * v  =>  size(this)==m.rows, size(v)==m.cols
@@ -612,9 +633,22 @@ int XC::Vector::addMatrixVector(double thisFact, const Matrix &m, const XC::Vect
 
 int XC::Vector::addMatrixTransposeVector(double thisFact, const XC::Matrix &m, const XC::Vector &v, double otherFact)
   {
-  // see if quick return
-    if(otherFact == 0.0 && thisFact == 1.0)
-      return 0;
+    if(otherFact == 0.0)
+      {
+	if(thisFact == 1.0)
+	  return 0;
+	else if(thisFact == 0.0)
+	  {
+	    this->Zero();
+	    return 0;
+	  }
+	else
+	  {
+	    for(int i=0; i<sz; i++)
+	      theData[i] *= thisFact;
+	  }
+	return 0;
+      }
 
 #ifdef _G3DEBUG
     // this = m^T * v  =>  size(this)==m.cols, size(v)==m.rows

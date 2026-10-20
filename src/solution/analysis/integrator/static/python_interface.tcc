@@ -46,7 +46,9 @@ class_<XC::MinUnbalDispNorm, bases<XC::DispBase>, boost::noncopyable >("MinUnbal
 // class_<XC::DistributedDisplacementControl, bases<XC::DisplacementControl>, boost::noncopyable >("DistributedDisplacementControl", no_init);
 
 class_<XC::LoadControl , bases<XC::BaseControl>, boost::noncopyable >("LoadControl", no_init)
-  .add_property("dLambda1",&XC::LoadControl::getDeltaLambda,&XC::LoadControl::setDeltaLambda,"assign/retrieve dLambda value.")
+  .def("getDeltaLambda",&XC::LoadControl::getDeltaLambda,"Get the load factor increment between steps.")
+  .def("setDeltaLambda",&XC::LoadControl::setDeltaLambda,"Set the load factor increment between steps.")
+  .add_property("dLambda1",&XC::LoadControl::getDeltaLambda,&XC::LoadControl::setDeltaLambda,"Get/set the load factor increment between steps.")
   ;
 
 class_<XC::LoadPath, bases<XC::StaticIntegrator>, boost::noncopyable >("LoadPath", no_init);

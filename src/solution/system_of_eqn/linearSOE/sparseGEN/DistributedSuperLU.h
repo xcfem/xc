@@ -95,7 +95,7 @@ class DistributedSuperLU: public SparseGenColLinSolver, public DistributedLinSOE
   {
   private:
     superlu_dist_options_t options;
-    SuperLUStat_t stat;
+    SuperLUStat_t superlu_stat;
     SuperMatrix A;
     ScalePermstruct_t ScalePermstruct;
     LUstruct_t LUstruct;

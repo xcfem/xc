@@ -13,7 +13,7 @@ __email__= "l.pereztato@gmail.com"
 import math
 import geom
 import xc
-from solution import predefined_solutions
+from solution import transient
 from model import predefined_spaces
 from materials.ec3 import EC3_materials # Steel shapes.
 from misc_utils import log_messages as lmsg
@@ -118,7 +118,7 @@ preprocessor.getDomain.setTime(0.0) # initialize time.
 duration= ti[-1]-ti[0]
 numberOfSteps= int(duration/dT)
 
-solProc= predefined_solutions.PlainLinearNewmark(feProblem, numSteps= numberOfSteps, timeStep= dT)
+solProc= transient.PlainLinearNewmark(feProblem, numSteps= numberOfSteps, timeStep= dT)
 if(solProc.solve()!=0):
     lmsg.error('Dynamic analysis failed.')
     quit()

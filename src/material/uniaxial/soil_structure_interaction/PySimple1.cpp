@@ -71,12 +71,15 @@ XC::PySimple1::PySimple1(int tag, int classtag, int soil, double p_ult, double y
 XC::PySimple1::PySimple1(int tag,int classtag)
   :PQyzBase(tag,classtag),drag(0.0) {}
 
-/////////////////////////////////////////////////////////////////////
 //! @brief Default constructor.
 XC::PySimple1::PySimple1(void)
   :PQyzBase(0,0),drag(0.0) {}
 
-//! @brief Initial values for the material parameters.
+//! @brief Virtual constructor.
+XC::UniaxialMaterial *XC::PySimple1::getCopy(void) const
+  { return new PySimple1(*this); }
+
+//! @brief Initial values for the material state variables.
 void XC::PySimple1::initialize(void)
   {
     revertToStart();
@@ -613,10 +616,6 @@ void XC::PySimple1::setDragResistanceFactor(const double &Cd)
 //! fully-mobilized gap as Cd*getUltimateCapacity().
 double XC::PySimple1::getDragResistanceFactor(void) const
   { return drag; }
-
-/////////////////////////////////////////////////////////////////////
-XC::UniaxialMaterial *XC::PySimple1::getCopy(void) const
-  { return new PySimple1(*this); }
 
 //! @brief Send object members through the communicator argument.
 int XC::PySimple1::sendData(Communicator &comm)

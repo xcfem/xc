@@ -159,7 +159,7 @@ int XC::DistributedSuperLU::solve(void)
     //
 
     pdgssvx_ABglobal(&options, &A, &ScalePermstruct, Xptr, ldb, nrhs, &grid,
-		     &LUstruct, berr, &stat, &info);
+		     &LUstruct, berr, &superlu_stat, &info);
 
     if(theSOE->getFactored() == false)
       {
@@ -218,7 +218,7 @@ int XC::DistributedSuperLU::setSize()
   //
   // Initialize the statistics variables.
   //
-  PStatInit(&stat);
+  PStatInit(&superlu_stat);
   
   //
   // Create compressed column matrix for A. 
@@ -247,7 +247,7 @@ int XC::DistributedSuperLU::setSize()
     //
     // Initialize the statistics variables. 
     //
-    PStatInit(&stat);
+    PStatInit(&superlu_stat);
     return 0;
   }
 
