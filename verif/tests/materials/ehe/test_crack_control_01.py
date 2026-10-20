@@ -8,8 +8,6 @@ from __future__ import print_function
 import xc
 from misc import scc3d_testing_bench
 from solution import predefined_solutions # Solution procedure
-
-
 from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking
 from model import predefined_spaces
