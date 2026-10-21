@@ -133,7 +133,7 @@ reinfConcreteSectionDistribution.assignFromElementProperties(elemSet= xcTotalSet
 # Checking cracking
 ## Build controller.
 controller= limitState.getController()
-controller.verbose= True #False # Don't display log messages.
+controller.verbose= True # Display log messages if any.
 ## Perform checking.
 ## variables that control the output of the checking:
 ### setCalc: set of elements to be checked.
