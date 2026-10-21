@@ -226,7 +226,7 @@ def ro_eff(A_s, width, h_c_eff):
     retval=A_s/width/h_c_eff
     return retval
 
-def s_r_max(k1,k2,k3,k4,cover,fiReinf,ro_eff):
+def s_r_max(k1, k2, k3, k4,cover,fiReinf,ro_eff):
     ''' Returns the maximum crack spacing, according to expresion 7.11 of
     clause 7.34 of EC2:2004
  
@@ -459,12 +459,15 @@ class CrackController(lscb.LimitStateControllerBase):
                         in a section, an equivalent diameter is used (see 
                         clause 7.3.4 EC2).
         :param spacing: spacing of the bonded reinforcement.
-        :param h: overall depth of the section.
-        :param x: depth of the neutral axis.
+        :param h: overall depth of the section (not used).
+        :param x: depth of the neutral axis (not used).
         '''
-        s_r_max= self.s_r_max(k2= k2, cover= cover, reinfPhi= reinfPhi, spacing= spacing, ro_eff= ro_eff)
-        meanStrainDifference= self.meanStrainDifference(sigma_s= sigma_s, steel= steel, concrete= concrete, ro_eff= ro_eff)
-        return meanStrainDifference*s_r_max
+        # Compute maximum crack spacing.
+        s_rmax= self.s_r_max(k2= k2, cover= cover, reinfPhi= reinfPhi, spacing= spacing, ro_eff= ro_eff)
+        # Compute the mean strain difference.
+        mean_strain_difference= self.meanStrainDifference(sigma_s= sigma_s, steel= steel, concrete= concrete, ro_eff= ro_eff)
+        wk= mean_strain_difference*s_rmax
+        return wk, s_rmax
 
     def checkSection(self, sct):
         ''' Check shear on the section argument.
@@ -493,9 +496,7 @@ class CrackController(lscb.LimitStateControllerBase):
                     rfSteel= sctCrkProp.sctProp.getReinfSteelType()
                     k2= self.EC2_k2(sctCrkProp.eps1, sctCrkProp.eps2)
                     ro_s_eff= sctCrkProp.As/Aceff #effective ratio of reinforcement
-                    s_rmax= self.s_r_max(k2= k2, cover= sctCrkProp.cover, reinfPhi= sctCrkProp.fiEqu, spacing= sctCrkProp.spacing, ro_eff= ro_s_eff)
-                    meanStrainDifference= self.meanStrainDifference(sigma_s= sigma_s, steel= rfSteel, concrete= concrete, ro_eff= ro_s_eff)
-                    wk= meanStrainDifference*s_rmax
+                    wk, s_rmax= self.computeWk(sigma_s= sigma_s, steel= rfSteel, concrete= concrete, ro_eff= ro_s_eff, k2= k2, cover= sctCrkProp.cover, reinfPhi= sctCrkProp.fiEqu, spacing= sctCrkProp.spacing)
         CF= wk/self.wk_lim # Capacity factor.
         N= sct.getStressResultantComponent("N")
         My= sct.getStressResultantComponent("My")
