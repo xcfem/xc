@@ -58,7 +58,7 @@ ratio1= abs(s_r_max-274.1230178669006e-3)/274.1230178669006e-3
 meanStrainDifference= crackController.meanStrainDifference(sigma_s= sg_max, steel= steel, concrete= concrete, ro_eff= ro_eff)
 ratio2= abs(meanStrainDifference-0.0005535415351842659)/0.0005535415351842659
 # Compute Wk
-Wk= crackController.computeWk(sigma_s= sg_max, steel= steel, concrete= concrete, ro_eff= ro_eff, k2= k2, cover= c, reinfPhi= rebarRow.getDiam(), spacing= rebarSpacing)
+Wk, s_rmax= crackController.computeWk(sigma_s= sg_max, steel= steel, concrete= concrete, ro_eff= ro_eff, k2= k2, cover= c, reinfPhi= rebarRow.getDiam(), spacing= rebarSpacing)
 ratio3= abs(Wk-0.15173847613938812e-3)/0.15173847613938812e-3
 
 '''
