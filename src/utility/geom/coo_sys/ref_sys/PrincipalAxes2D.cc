@@ -23,6 +23,7 @@
 #include "PrincipalAxes2D.h"
 #include "utility/utils/misc_utils/inertia.h"
 #include "utility/geom/coo_sys/ref_sys/Ref2d2d.h"
+#include "utility/geom/d1/Line2d.h"
 
 
 //! @brief Constructor.
@@ -72,6 +73,14 @@ const GEOM_FT &PrincipalAxes2D::I2(void) const
 //! principal axis of inertia.
 Vector2d PrincipalAxes2D::getAxis2VDir(void) const
   { return Vector2d(-axis1.y(),axis1.x()); }
+
+//! @brief Return the line of the major axis of inertia.
+Line2d PrincipalAxes2D::getAxis1Line(void) const
+  { return Line2d(this->getOrg(), this->getAxis1VDir()); }
+
+//! @brief Return the line of the minor axis of inertia.
+Line2d PrincipalAxes2D::getAxis2Line(void) const
+  { return Line2d(this->getOrg(), this->getAxis2VDir()); }
 
 std::ostream &operator<<(std::ostream &os,const PrincipalAxes2D &axis)
   {

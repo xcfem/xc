@@ -49,6 +49,8 @@ class PrincipalAxes2D
     inline Vector2d getAxis1VDir(void) const
       { return axis1; }
     Vector2d getAxis2VDir(void) const;
+    Line2d getAxis1Line(void) const;
+    Line2d getAxis2Line(void) const;
   };
 
 std::ostream &operator<<(std::ostream &os,const PrincipalAxes2D &axis);
