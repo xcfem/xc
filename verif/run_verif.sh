@@ -1757,6 +1757,7 @@ python tests/materials/ec2/shrinkage_creep/test_ec2_tdconcrete_fiber_section_03.
 echo "$BLEU" "    EC2 crack amplitude determination tests." "$NORMAL"
 python tests/materials/ec2/crack_control/test_crack_control_without_direct_calculation_01.py
 python tests/materials/ec2/crack_control/test_crack_control_01.py
+python tests/materials/ec2/crack_control/test_crack_control_02.py
 python tests/materials/ec2/crack_control/test_smearedCracking_01.py
 python tests/materials/ec2/crack_control/test_smearedCracking_02.py
 python tests/materials/ec2/crack_control/test_smearedCracking_03.py
