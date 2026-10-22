@@ -85,13 +85,16 @@ scc= zlElement.getSection()
 secHAParamsFis.computeWk(scc,concr.getMatTagK(),EHE_materials.B500S.getMatTagK(),concr.fctm())
 
 # wkcomp changed from 0.550225e-3 to 0.55189e-3 after considering fmaxK=fck instead of 0.85fck
+# 22/10/2026 wkcomp changed from 0.55189e-3 to .45318777804878867e-3 after
+# fixing the error in the computation of Ac_eff in FiberSectionBase.cc
 
-ratio1= ((secHAParamsFis.Wk- 0.55189e-3)/0.55189e-3)
+wkcomp= 0.45318777804878867e-3
+ratio1= ((secHAParamsFis.Wk- wkcomp)/wkcomp)
 
 
 '''
-    printParamFis("secHAParamsFis")
-    print("ratio1= ",ratio1)
+print(secHAParamsFis.Wk)
+print("ratio1= ",ratio1)
 '''
 
 
