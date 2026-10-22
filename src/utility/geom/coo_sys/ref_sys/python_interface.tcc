@@ -161,8 +161,10 @@ class_<PrincipalAxes2D>("PrincipalAxes2D",init<const Pos2d &,const GEOM_FT &,con
   .add_property("I1",  make_function( &PrincipalAxes2D::I1,  return_value_policy<copy_const_reference>() ),"first principal moment of inertia.")
   .add_property("I2",  make_function( &PrincipalAxes2D::I2,  return_value_policy<copy_const_reference>() ),"second principal moment of inertia.")
   .def("getAxis", &PrincipalAxes2D::getAxis,"Returns the reference system corresponding to principal axes.")
-  .def("getAxis1VDir", &PrincipalAxes2D::getAxis1VDir,"Returns the direction vector of the first principal axis.")
-  .def("getAxis2VDir", &PrincipalAxes2D::getAxis2VDir,"Returns the direction vector of the second principal axis.")
+  .def("getAxis1VDir", &PrincipalAxes2D::getAxis1VDir,"Returns the direction vector of the first (major) principal axis.")
+  .def("getAxis1Line", &PrincipalAxes2D::getAxis1Line,"Returns the line corresponding to the the first (major) principal axis.")
+  .def("getAxis2VDir", &PrincipalAxes2D::getAxis2VDir,"Returns the direction vector of the second (minor) principal axis.")
+  .def("getAxis2Line", &PrincipalAxes2D::getAxis2Line,"Returns the line corresponding to the the second (minor) principal axis.")
  ;
 
 class_<PrincipalAxes3D>("PrincipalAxes3D",init<const Pos3d &, const GEOM_FT &, const GEOM_FT &, const GEOM_FT &, const GEOM_FT &, const GEOM_FT &, const GEOM_FT &>())
