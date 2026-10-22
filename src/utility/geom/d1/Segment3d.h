@@ -73,6 +73,8 @@ class Segment3d : public Linear3d
     GEOM_FT dist(const Pos3d &p) const;
     void Put(const Pos3d &p1,const Pos3d &p2);
 
+    
+    Line3d getParallel(const Pos3d &v) const;
     bool isParallel(const Line3d &r) const;
     bool isParallel(const Ray3d &sr) const;
     bool isParallel(const Segment3d &r) const;

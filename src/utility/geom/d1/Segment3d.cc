@@ -188,6 +188,10 @@ GEOM_FT Segment3d::dist2(const Pos3d &p) const
 GEOM_FT Segment3d::dist(const Pos3d &p) const
   { return sqrt(dist2(p)); }
 
+//! @brief Return the line parallel to the segment through p.
+Line3d Segment3d::getParallel(const Pos3d &p) const
+  { return getSupportLine().getParallel(p); }
+
 bool Segment3d::isParallel(const Line3d &r) const
   { return parallel(getSupportLine(),r); }
 bool Segment3d::isParallel(const Ray3d &sr) const

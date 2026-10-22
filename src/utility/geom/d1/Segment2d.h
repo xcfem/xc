@@ -104,7 +104,7 @@ class Segment2d : public Linear2d
     Vector2d Projection(const Vector2d &) const;
 
     Line2d Perpendicular(const Pos2d &p) const;
-    Line2d isParallel(const Pos2d &v) const;
+    Line2d getParallel(const Pos2d &v) const;
     Line2d getPerpendicularBisector(void) const;
 
     bool isParallel(const Line2d &r) const

@@ -176,8 +176,8 @@ Line2d Segment2d::Perpendicular(const Pos2d &p) const
   { return getSupportLine().Perpendicular(p); }
 
 //! @brief Return the line parallel to the segment through p.
-Line2d Segment2d::isParallel(const Pos2d &p) const
-  { return getSupportLine().isParallel(p); }
+Line2d Segment2d::getParallel(const Pos2d &p) const
+  { return getSupportLine().getParallel(p); }
 
 //! @brief Return the a copy of the segment translated along
 //! the vector argument.
