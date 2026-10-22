@@ -2197,7 +2197,7 @@ class CrackStraightController(CrackController):
             sctCrkProp.setupStrghCrackDist()
             hceff=self.EHE_hceff(sct.getAnchoMecanico(),sctCrkProp.h,sctCrkProp.x)
             #Acgross=sct.getGrossEffectiveConcreteArea(hceff)
-            Aceff=sct.getNetEffectiveConcreteArea(hceff,"tensSetFb",15.0)
+            Aceff=sct.getNetEffectiveConcreteArea(hceff,"tensSetFb", 15.0)
             rfSteel= sctCrkProp.sctProp.getReinfSteelType()
             concrete= sctCrkProp.sctProp.getConcreteType()
             k1=self.EHE_k1(sctCrkProp.eps1,sctCrkProp.eps2)
@@ -2335,7 +2335,9 @@ class CrackControl(lscb.CrackControlBaseParameters):
                 self.hEfMax= self.depthMecanico/4.0 # Pieza tipo losa
             else:
                 self.hEfMax= self.depthMecanico/2.0
-            self.netEffectiveArea= scc.computeFibersEffectiveConcreteArea(self.hEfMax,self.tensionedRebarsFiberSetName,15)
+            # If more than one effective area (more than one family in tension)
+            # consider the sum of them.
+            self.netEffectiveArea= sum(scc.computeFibersEffectiveConcreteAreas(self.hEfMax,self.tensionedRebarsFiberSetName, 15))
 
             self.tensionedRebars.setup(tensionedReinforcement)
             self.Wk= self.computeWkOnBars(tensionedReinforcement)
