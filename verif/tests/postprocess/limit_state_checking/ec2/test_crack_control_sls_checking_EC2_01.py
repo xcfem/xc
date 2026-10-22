@@ -153,8 +153,12 @@ meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDist
 # the code: fixed error in main reinforcement layers definition:
 #   old value: meanCFs[0]= 0.690962456127247
 #   old value: meanCFs[1]= 0.6924600272040474
-ratio1= abs(meanCFs[0]-0.6697180550535626)/0.6697180550535626
-ratio2= abs(meanCFs[1]-0.6924610261209984)/0.6924610261209984
+# Check results (22/10/2026): Update the capacity factors after last changes in
+# the code: fixed error in main Ac_eff calculation:
+#   old value: meanCFs[0]= 0.6697180550535626
+#   old value: meanCFs[1]= 0.6924610261209984
+ratio1= abs(meanCFs[0]-0.8169292832905395)/0.8169292832905395
+ratio2= abs(meanCFs[1]-0.7001912656635033)/0.7001912656635033
 
 '''
 print('meanCFs= ',meanCFs)

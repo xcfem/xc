@@ -77,11 +77,9 @@ l.genMesh(xc.meshDir.I) # Generate mesh.
 ## Constraints.
 modelSpace.fixNode('000_000',pt1.getNode().tag) # Fully supported at bottom.
 
-
-
 # Actions
 ## Load definition
-Mx= 79.6336e3
+Mx= 72.62101e3 # Value adjusted to get CF \approx 1.0
 My= -Mx
 Fz= -100e3 # Axial force.
 
@@ -134,8 +132,8 @@ controller.verbose= True #False # Don't display log messages.
 ###               meant to be calculated (defaults to False)
 meanCFs= limitState.check(setCalc= None, crossSections= reinfConcreteSectionDistribution,listFile=False,calcMeanCF=True, controller= controller)
 
-ratio1= abs(meanCFs[0]-1.0000530846623346)/1.0000530846623346
-ratio2= abs(meanCFs[1]-1.0000530846614253)/1.0000530846614253
+ratio1= abs(meanCFs[0]-1)
+ratio2= abs(meanCFs[1]-1)
 
 # print(meanCFs)
 
