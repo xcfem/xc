@@ -104,7 +104,7 @@ Line2d GeomObj2d::IAxis_a(void) const
 Line2d GeomObj2d::IAxis_b(void) const
   { return Line2d(getCenterOfMass(),IAxisDir_b()); }
 
-//! @brief Return los principal axis of inertia.
+//! @brief Return the principal axis of inertia.
 Ref2d2d GeomObj2d::PrincipalAxesOfInertia(void) const
   { return Ref2d2d(getCenterOfMass(),IAxisDir_a()); }
 
