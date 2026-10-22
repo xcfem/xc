@@ -376,8 +376,7 @@ class CrackController(lscb.LimitStateControllerBase):
         :param x: depth of the neutral fiber.
 
         '''
-        hceff= min(2.5*(h-d),abs(h+x)/3.,h/2.)
-        return hceff
+        return min(2.5*(h-d),abs(h+x)/3.,h/2.)
 
     def s_r_max(self, k2, cover, reinfPhi, spacing , ro_eff, h= None, x= None):
         ''' Returns the maximum crack spacing, according to expressions 7.11 
@@ -406,6 +405,17 @@ class CrackController(lscb.LimitStateControllerBase):
             retval= self.k3*cover + self.k1*k2*self.k4*reinfPhi/ro_eff
         return retval
 
+    def getKt(self):
+        ''' Return the factor dependent on the duration of the load which 
+            takes values kt = 0.6 for short-term loading and kt = 0.4 for 
+            lond-term loading. Intermediate values possible for a combination 
+            of load durations, nevertheless, this is not implemented yet.
+        '''
+        retval= 0.4
+        if(self.shortTermLoading):
+            retval= 0.6
+        return retval
+
     def meanStrainDifference(self, sigma_s, steel, concrete, ro_eff):
         ''' Returns the mean strain difference according to expression 7.9 of
             clause 7.3.4 of EC2:2004.
@@ -421,9 +431,7 @@ class CrackController(lscb.LimitStateControllerBase):
         :param ro_eff: effective reinforcement ratio computed according to
                        expression 7.10 of EC2:2004 part 1.
         '''
-        kt= 0.4
-        if(self.shortTermLoading):
-            kt= 0.6
+        kt= self.getKt() # Factor dependent on the load duration.
         fct_eff= concrete.fctm() # mean value of the tensile strength of the
                                  # concrete effective at the time when the
                                  # cracks may first be expected to occur.
@@ -469,13 +477,23 @@ class CrackController(lscb.LimitStateControllerBase):
         wk= mean_strain_difference*s_rmax
         return wk, s_rmax
 
+    def getPropertiesFromFiberSection(self, sct):
+        ''' Return the basic properties associatted to a fiber section
+        in order to be used in the checking this limit state.
+
+        :param sct: XC fiber section object.
+        '''
+        retval= lscb.FibSectLSProperties(sct)
+        retval.setupStrghCrackDist()
+        return retval
+        
+
     def checkSection(self, sct):
         ''' Check shear on the section argument.
 
         :param sct: reinforced concrete section object to check crack on.
         '''
-        sctCrkProp= lscb.FibSectLSProperties(sct)
-        sctCrkProp.setupStrghCrackDist()
+        sctCrkProp= self.getPropertiesFromFiberSection(sct)
         sigma_s= sctCrkProp.getMaxReinforcementTensileStress()
         if(sctCrkProp.eps1<=0): # No tensile strains.
             s_rmax= 0.0
@@ -487,15 +505,16 @@ class CrackController(lscb.LimitStateControllerBase):
                 s_rmax= 0.0
                 wk= 0.0
             else:
-                hceff= self.EC2_hceff(sctCrkProp.h,sctCrkProp.d,sctCrkProp.x)
-                Aceff= sct.getNetEffectiveConcreteArea(hceff,'tensSetFb',15.0)
+                x= max(sctCrkProp.x, 0.0) # Depth of the compressed zone.
+                hceff= self.EC2_hceff(sctCrkProp.h,sctCrkProp.d, x)
+                Aceff= sct.getNetEffectiveConcreteArea(hceff,'tensSetFb', 15.0)
                 if(Aceff<=0):
                     s_rmax= 0.0
                     wk= 0.0
                 else:
                     rfSteel= sctCrkProp.sctProp.getReinfSteelType()
                     k2= self.EC2_k2(sctCrkProp.eps1, sctCrkProp.eps2)
-                    ro_s_eff= sctCrkProp.As/Aceff #effective ratio of reinforcement
+                    ro_s_eff= sctCrkProp.As/Aceff # effective ratio of reinforcement.
                     wk, s_rmax= self.computeWk(sigma_s= sigma_s, steel= rfSteel, concrete= concrete, ro_eff= ro_s_eff, k2= k2, cover= sctCrkProp.cover, reinfPhi= sctCrkProp.fiEqu, spacing= sctCrkProp.spacing)
         CF= wk/self.wk_lim # Capacity factor.
         N= sct.getStressResultantComponent("N")
@@ -584,7 +603,7 @@ class CrackStraightController(CrackController):
             sctCrkProp.setupStrghCrackDist()
             hceff= self.EC2_hceff(sctCrkProp.h,sctCrkProp.d,sctCrkProp.x)
             # Acgross=sct.getGrossEffectiveConcreteArea(hceff)
-            Aceff= sct.getNetEffectiveConcreteArea(hceff,'tensSetFb',15.0)
+            Aceff= sct.getNetEffectiveConcreteArea(hceff,'tensSetFb', 15.0)
             concrete= EC2_materials.concrOfName[sctCrkProp.concrName]
             rfSteel= EC2_materials.steelOfName[sctCrkProp.rsteelName]
             k2= self.EC2_k2(sctCrkProp.eps1, sctCrkProp.eps2)
