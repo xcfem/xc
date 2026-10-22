@@ -430,7 +430,7 @@ Line2d Line2d::offset(const Vector2d &v) const
   }
 
 //! @brief Return a parallel line passing through p.
-Line2d Line2d::isParallel(const Pos2d &p) const
+Line2d Line2d::getParallel(const Pos2d &p) const
   {
     const Vector2d v= p-Point();
     return offset(v);

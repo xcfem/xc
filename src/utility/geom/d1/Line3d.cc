@@ -356,6 +356,13 @@ GEOM_FT Line3d::linearLeastSquaresFittingPy(const boost::python::list &lp)
     return this->linearLeastSquaresFitting(tmp);
   }
 
+//! @brief Return a parallel line passing through p.
+Line3d Line3d::getParallel(const Pos3d &p) const
+  {
+    const Dir3d d= this->GetDir();
+    return Line3d(p, d);
+  }
+
 //! @brief Return true if the lines are parallel.
 bool Line3d::isParallel(const Line3d &r) const
   { return parallel(GetDir(),r.GetDir()); }

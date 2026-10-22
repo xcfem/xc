@@ -119,7 +119,7 @@ class Line2d : public Linear2d
     virtual GEOM_FT dist(const Pos2d &p) const;
 
     Line2d Perpendicular(const Pos2d &p) const;
-    Line2d isParallel(const Pos2d &v) const;
+    Line2d getParallel(const Pos2d &v) const;
     Line2d offset(const Vector2d &v) const;
     Line2d offset(const GEOM_FT &d) const;
     void Put(const Pos2d &p1,const Pos2d &p2);

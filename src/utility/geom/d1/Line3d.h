@@ -118,6 +118,7 @@ class Line3d : public Linear3d
     //! @brief Set the points that define the line.
     void Put(const Pos3d &p1,const Pos3d &p2)
       { TwoPoints(p1,p2); }
+    Line3d getParallel(const Pos3d &v) const;
     bool isParallel(const Line3d &r) const;
 
     bool intersects(const Line3d &r2) const;
