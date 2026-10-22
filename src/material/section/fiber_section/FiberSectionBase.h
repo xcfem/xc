@@ -67,6 +67,7 @@ class FiberSectionBase: public PrismaticBarCrossSection
 
     void free_section_repres(void);
     void alloc_section_repres(const FiberSectionRepr *);
+    std::list<Polygon2d> _get_gross_effective_concrete_area_contour_for_bending_axis(const double &, const Polygon2d &, const Line2d &) const;
   protected:
     CrossSectionKR kr; //!< Stiffness and internal forces resultant on the section.
     FiberContainer fibers; //!< Fiber container.
@@ -144,7 +145,8 @@ class FiberSectionBase: public PrismaticBarCrossSection
     Line2d getEffectiveConcreteAreaLimitLine(const double &) const;
     double getGrossEffectiveConcreteArea(const double &) const;
     double getNetEffectiveConcreteArea(const double &,const std::string &,const double &factor= 15) const;
-    double computeFibersEffectiveConcreteArea(const double &hEfMax,const std::string &,const double &factor= 15) const;
+    std::list<double> computeFibersEffectiveConcreteAreas(const double &hEfMax,const std::string &,const double &factor= 15) const;
+    boost::python::list computeFibersEffectiveConcreteAreasPy(const double &hEfMax,const std::string &,const double &factor= 15) const;
     std::list<Polygon2d> getGrossEffectiveConcreteAreaContour(const double &) const;
     void computeCovers(const std::string &) const;
     void computeSpacing(const std::string &) const;

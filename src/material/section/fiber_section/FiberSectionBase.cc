@@ -49,6 +49,7 @@
 #include "utility/geom/d2/2d_polygons/polygon2d_bool_op.h"
 #include "utility/geom/d1/Ray2d.h"
 #include "utility/geom/d1/Segment2d.h"
+#include "utility/geom/coo_sys/ref_sys/PrincipalAxes2D.h"
 #include "utility/recorder/response/MaterialResponse.h"
 #include "material/uniaxial/UniaxialMaterial.h"
 #include "utility/utils/misc_utils/colormod.h"
@@ -407,6 +408,67 @@ Line2d XC::FiberSectionBase::getEffectiveConcreteAreaLimitLine(const double &hEf
   }
 
 //! @brief Returns the contours of the concrete effective area \f$A_{c,ef}\f$
+//! when all the section is tensioned and there is a small bending moment
+//! around the given axis.
+std::list<Polygon2d> XC::FiberSectionBase::_get_gross_effective_concrete_area_contour_for_bending_axis(const double &hEfMax, const Polygon2d &contour, const Line2d &bendingAxis) const
+  {
+    std::list<Polygon2d> retval;
+    const HalfPlane2d hPlane(bendingAxis);
+    // Get the farthest vertices.
+    const size_t sz= contour.getNumVertices();
+    Pos2d minVertex= contour.Vertice0(0);
+    Pos2d maxVertex= minVertex;
+    double minDist= std::numeric_limits<double>::infinity();
+    double maxDist= -minDist;
+    for(size_t i= 0; i<sz;i++)
+      {
+	const Pos2d v= contour.Vertice0(i);
+	const GEOM_FT signedDist= hPlane.DistSigno(v);
+	if(signedDist<minDist)
+	  {
+	    minDist= signedDist;
+	    minVertex= v;
+	  }
+	if(signedDist>maxDist)
+	  {
+	    maxDist= signedDist;
+	    maxVertex= v;
+	  }
+      }
+    if(minDist<0)
+      {
+	const Pos2d proj= bendingAxis.Projection(minVertex);
+	const Segment2d sg= Segment2d(minVertex, proj);
+	// Point at at a distance hEfMax from minVertex.
+	const Pos2d limitPt= sg.getPointAtLength(hEfMax);
+	const HalfPlane2d minHalfPlane(bendingAxis.getParallel(limitPt), minVertex);
+	std::list<Polygon2d> tmp= contour.getIntersection(minHalfPlane);
+	retval.insert(retval.end(), tmp.begin(), tmp.end());
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; cant find a minimum vertex for the section contour: "
+		<< contour 
+		<< Color::def << std::endl;
+    if(maxDist>0)
+      {
+	const Pos2d proj= bendingAxis.Projection(maxVertex);
+	const Segment2d sg= Segment2d(maxVertex, proj);
+	// Point at at a distance hEfMax from maxVertex.
+	const Pos2d limitPt= sg.getPointAtLength(hEfMax);
+	const HalfPlane2d maxHalfPlane(bendingAxis.getParallel(limitPt), maxVertex);
+	std::list<Polygon2d> tmp= contour.getIntersection(maxHalfPlane);
+	retval.insert(retval.end(), tmp.begin(), tmp.end());
+      }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; cant find a maximum vertex for the section contour: "
+		<< contour 
+		<< Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Returns the contours of the concrete effective area \f$A_{c,ef}\f$
 //! the area that CAN "collaborate" with rebars to resist tension in SLS.
 //! 
 //! Concrete effective area as in article 49.2.4 from EHE-08 (hatched area
@@ -415,20 +477,40 @@ Line2d XC::FiberSectionBase::getEffectiveConcreteAreaLimitLine(const double &hEf
 std::list<Polygon2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour(const double &hEfMax) const
   {
     std::list<Polygon2d> retval;
-    Polygon2d contour= getRegionsContour(); //Computes cross-section contour.
-
     const double epsMin= fibers.getStrainMin(); //Minimal strain.
     const double epsMax= fibers.getStrainMax(); //Maximal strain.
-    if(epsMin>0) //Full section is in tension.
-      retval.push_back(contour); // TOCHECK: Is this an error?.
-    else if(epsMax>0) //Some (epsMin<=0) but not all the section is compressed.
+    if(hEfMax>1e-6)
       {
-        if(hEfMax>1e-6)
-          {
+	Polygon2d contour= getRegionsContour(); //Computes cross-section contour.
+	if(epsMin>0) //Full section is in tension.
+	  {
+	    if((epsMax-epsMin)>(epsMax/1000)) // Some gradient.
+	      {
+		const Pos2d org= contour.getCenterOfMass();
+		const double My= this->getMy();
+		const double Mz= this->getMz();
+		const Vector2d bendingDir(My, Mz);
+		const Line2d bendingAxis(org, bendingDir);
+		retval= this->_get_gross_effective_concrete_area_contour_for_bending_axis(hEfMax, contour, bendingAxis);
+	      }
+	    else // Zero or very small gradient.
+	      {
+		const PrincipalAxes2D principalAxes= contour.Inertia();
+		// There is no bending (or almost) so we use the minor axis
+		// of the contour as bending axis. Perhaps it would be better
+		// to use the direction of the minor axis of the tensioned
+		// rebars.
+		const Line2d minorAxis= principalAxes.getAxis2Line();
+		retval= this->_get_gross_effective_concrete_area_contour_for_bending_axis(hEfMax, contour, minorAxis);
+
+	      }
+	  }
+	else if(epsMax>0) //Some (epsMin<=0) but not all the section is compressed.
+	  {
 	    // Compute the line that limits the effective area contour
-            const Line2d limit= getEffectiveConcreteAreaLimitLine(hEfMax);
-            if(limit.exists())
-              {
+	    const Line2d limit= getEffectiveConcreteAreaLimitLine(hEfMax);
+	    if(limit.exists())
+	      {
 		if(contour.Overlap(limit))
 		  {
 		    // Compute the half plane that is in tension.
@@ -455,15 +537,15 @@ std::list<Polygon2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour(
 			    << limit << " outside section contour: " << contour
 			    << ";  hEfMax= " << hEfMax
 			    << Color::def << std::endl;
-              }
-            else
-              retval.push_back(contour);
-          }
-        else
-          std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
-	            << "; maximum effective height is zero."
-		    << Color::def << std::endl;
+	      }
+	    else
+	      retval.push_back(contour);
+	  }
       }
+    else
+      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+		<< "; maximum effective height is zero."
+		<< Color::def << std::endl;
     if(retval.empty())
       {
         std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -500,7 +582,7 @@ double XC::FiberSectionBase::getNetEffectiveConcreteArea(const double &hEfMax,co
         if(i!=fiber_sets.end())
           {
             const FiberPtrDeque &rebars= (*i).second; //Rebar family.
-            retval+= rebars.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
+            retval+= rebars.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour, factor);
           }
         else
           std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -515,10 +597,10 @@ double XC::FiberSectionBase::getNetEffectiveConcreteArea(const double &hEfMax,co
     return retval;
   }
 
-//! @brief Computes crack effective concrete areas around the fibers.
-double XC::FiberSectionBase::computeFibersEffectiveConcreteArea(const double &hEfMax,const std::string &rebarSetName,const double &factor) const
+//! @brief Computes crack effective concrete areas around the fibers in tension.
+std::list<double> XC::FiberSectionBase::computeFibersEffectiveConcreteAreas(const double &hEfMax,const std::string &rebarSetName,const double &factor) const
   {
-    double retval= 0;
+    std::list<double> retval;
     std::list<Polygon2d> grossEffectiveConcreteAreaContour= getGrossEffectiveConcreteAreaContour(hEfMax);
     if(!grossEffectiveConcreteAreaContour.empty())
       {
@@ -526,7 +608,7 @@ double XC::FiberSectionBase::computeFibersEffectiveConcreteArea(const double &hE
         if(i!=fiber_sets.end())
           {
             const FiberPtrDeque &rebars= (*i).second; //Rebars.
-            retval= rebars.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
+            retval.push_back(rebars.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor));
           }
         else
           std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
@@ -538,6 +620,17 @@ double XC::FiberSectionBase::computeFibersEffectiveConcreteArea(const double &hE
       std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		<< "; can't compute effective area."
 		<< Color::def << std::endl;
+    return retval;
+  }
+
+//! @brief Computes crack effective concrete areas around the fibers in tension
+//! and returns them in a Python list.
+boost::python::list XC::FiberSectionBase::computeFibersEffectiveConcreteAreasPy(const double &hEfMax,const std::string &rebarSetName,const double &factor) const
+  {
+    boost::python::list retval;
+    std::list<double> tmp= this->computeFibersEffectiveConcreteAreas(hEfMax, rebarSetName, factor);
+    for(std::list<double>::const_iterator i= tmp.begin(); i!=tmp.end();i++)
+      retval.append(*i);
     return retval;
   }
 

@@ -1572,19 +1572,19 @@ double XC::FiberPtrDeque::computeFibersEffectiveConcreteArea(const std::list<Pol
         const double L= factor*dm; //Side of the square prescribed by the standard.
         const double R= L*sqrt(2/(n*sin(2*M_PI/n)));
         const Pos2d pos= (*this)[i]->getPos();
-        tmp= Circle2d(pos,R).getInscribedPolygon(n);
-        if(tmp.Overlap(grossEffectiveConcreteAreaContour))
-          for(std::list<Polygon2d>::const_iterator j= grossEffectiveConcreteAreaContour.begin();j!=grossEffectiveConcreteAreaContour.end();j++)
-            {
-              if((*j).In(tmp))
-                dq_ac_effective[i].push_back(tmp);
-              else if((*j).Overlap(tmp))
-                {
-                  std::list<Polygon2d> tmpLst= intersection(tmp,*j);
-                  assert(!tmpLst.empty());
-                  dq_ac_effective[i].insert(dq_ac_effective[i].end(),tmpLst.begin(),tmpLst.end());
-                }
-            }
+	tmp= Circle2d(pos,R).getInscribedPolygon(n);
+	if(tmp.Overlap(grossEffectiveConcreteAreaContour))
+	  for(std::list<Polygon2d>::const_iterator j= grossEffectiveConcreteAreaContour.begin();j!=grossEffectiveConcreteAreaContour.end();j++)
+	    {
+	      if((*j).In(tmp))
+		dq_ac_effective[i].push_back(tmp);
+	      else if((*j).Overlap(tmp))
+		{
+		  std::list<Polygon2d> tmpLst= intersection(tmp,*j);
+		  assert(!tmpLst.empty());
+		  dq_ac_effective[i].insert(dq_ac_effective[i].end(),tmpLst.begin(),tmpLst.end());
+		}
+	    }
       }
     //Clip computed intersections.
     for(size_t i= 0;i<sz;i++)
