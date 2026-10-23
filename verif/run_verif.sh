@@ -1153,13 +1153,14 @@ python tests/constraints/skew_constraints/test_symmetry_constraint_02.py
 python tests/constraints/skew_constraints/test_symmetry_constraint_03.py
 python tests/constraints/skew_constraints/test_symmetry_constraint_04.py
 python tests/constraints/skew_constraints/test_symmetry_constraint_05.py
+echo "$BLEU" "  Shallow foundation constraints tests." "$NORMAL"
+python tests/constraints/shallow_foundation/test_shallow_elastic_foundation_01.py
+python tests/constraints/shallow_foundation/test_shallow_elastic_foundation_02.py
 echo "$BLEU" "  Misc. freedom constraints tests." "$NORMAL"
 python tests/constraints/test_elastic_bearing_01.py
 python tests/constraints/test_elastic_bearing_02.py
 python tests/constraints/test_elastic_bearing_03.py
 python tests/constraints/test_elastic_bearing_04.py
-python tests/constraints/test_elastic_foundation_01.py
-python tests/constraints/test_elastic_foundation_02.py
 python tests/constraints/test_huge_beam.py
 python tests/constraints/test_huge_truss.py
 python tests/constraints/test_fulcrum_01.py
