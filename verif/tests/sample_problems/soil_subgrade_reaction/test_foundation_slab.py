@@ -52,7 +52,7 @@ modelSpace.newSeedElement('ShellMITC4')
 xcTotalSet.genMesh(xc.meshDir.I)
 
 ## Boundary conditions.
-elasticFoundation= sef.ShallowElasticFoundation(wModulus= 10.858e6, cRoz= 0.01)
+elasticFoundation= sef.ShallowElasticFoundation(wModulus= 10.858e6, hModulusFraction= 0.01)
 
 elasticFoundation.generateSprings(xcSet= xcTotalSet)
 
