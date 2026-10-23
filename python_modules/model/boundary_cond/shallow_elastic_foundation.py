@@ -24,23 +24,25 @@ class ShallowElasticFoundation(object):
     '''Region resting on springs (Winkler elastic foundation)
 
     :ivar wModulus: Winkler modulus of the foundation (springs in Z direction)
-    :ivar cRoz:     fraction of the Winkler modulus to apply for friction in
-                the contact plane (springs in X, Y directions)
+    :ivar hModulusFraction: fraction of the Winkler modulus to apply as 
+                            stiffness in the contact plane (springs in X and Y 
+                            directions)
     :ivar noTensionZ: if True springs in Z direction are made of 
                       no-tension material (defaults to None)
     '''
-    def __init__(self, wModulus, cRoz, noTensionZ=False):
+    def __init__(self, wModulus, hModulusFraction, noTensionZ=False):
         ''' Constructor.
 
         :param wModulus: Winkler modulus of the foundation (springs in Z 
                          direction).
-        :param cRoz: fraction of the Winkler modulus to apply for friction
-                     in the contact plane (springs in X, Y directions).
+        :param hModulusFraction: fraction of the Winkler modulus to apply as 
+                                 stiffness in the contact plane (springs in X 
+                                 and Y directions).
         :param noTensionZ: if True springs in Z direction are made of 
                            no-tension material (defaults to None)
         '''
         self.wModulus= wModulus
-        self.cRoz= cRoz
+        self.hModulusFraction= hModulusFraction
         self.noTensionZ= noTensionZ
         self.xSpring= None
         self.ySpring= None
@@ -163,12 +165,12 @@ class ShallowElasticFoundation(object):
         sNod= self.foundationSet.nodes
         for n in sNod:
             nodeTributaryArea= self.tributaryAreas[n.tag]
-            self.xSpring.E= self.cRoz*self.wModulus*nodeTributaryArea
+            self.xSpring.E= self.hModulusFraction*self.wModulus*nodeTributaryArea
             if(dimSpace==2): # Two-dimensional problem.
                 self.ySpring.E= self.wModulus*nodeTributaryArea
                 nodeSprings= [self.xSpringName,self.ySpringName]
             else: # Three-dimensional problem.
-                self.ySpring.E= self.cRoz*self.wModulus*nodeTributaryArea
+                self.ySpring.E= self.hModulusFraction*self.wModulus*nodeTributaryArea
                 self.zSpring.E= self.wModulus*nodeTributaryArea
                 nodeSprings= [self.xSpringName, self.ySpringName,self.zSpringName]
             newNode, springElement= modelSpace.setBearing(n.tag, nodeSprings)
