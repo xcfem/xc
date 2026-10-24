@@ -380,10 +380,12 @@ class EarthPressLoad():
           HorizontalLoadOnBackfill to define (if any) surcharge loads
           acting in horizontal direction on the backfill (defaults to
           [], no loads)
+    :ivar globalVdir: True if vDir is given in global coordinates
+                      (defaults to True)
 
 
     '''
-    def __init__(self,name, xcSet,soilData, vDir):
+    def __init__(self,name, xcSet,soilData, vDir,globalVdir=True):
 #        super(EarthPressLoad,self).__init__(name,vDir)
         self.name=name
         self.xcSet=xcSet
@@ -392,19 +394,20 @@ class EarthPressLoad():
         self.stripLoads=list()
         self.lineLoads=list()
         self.horzLoads=list()
+        self.globalVdir=globalVdir
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
         self.xcSet.fillDownwards()
         if(self.soilData!=None):
             # self.soilData.xcSet=self.xcSet; self.soilData.vDir=self.vDir
-            self.soilData.appendLoadToCurrentLoadPattern(xcSet=self.xcSet,vDir=self.vDir)
+            self.soilData.appendLoadToCurrentLoadPattern(xcSet=self.xcSet,vDir=self.vDir,globalVdir=self.globalVdir)
         for stripL in self.stripLoads:
             # stripL.xcSet=self.xcSet ; stripL.vDir=self.vDir
-            stripL.appendLoadToCurrentLoadPattern(xcSet= self.xcSet, vDir= self.vDir)
+            stripL.appendLoadToCurrentLoadPattern(xcSet= self.xcSet, vDir= self.vDir,globalVdir=self.globalVdir)
         for lineL in self.lineLoads:
             # lineL.xcSet=self.xcSet; lineL.vDir=self.vDir
-            lineL.appendLoadToCurrentLoadPattern(xcSet= self.xcSet, vDir= self.vDir)
+            lineL.appendLoadToCurrentLoadPattern(xcSet= self.xcSet, vDir= self.vDir,globalVdir=self.globalVdir)
         for horzL in self.horzLoads:
             # horzL.xcSet=self.xcSet; horzL.vDir=self.vDir
             horzL.appendLoadToCurrentLoadPattern(xcSet= self.xcSet, vDir= self.vDir)
