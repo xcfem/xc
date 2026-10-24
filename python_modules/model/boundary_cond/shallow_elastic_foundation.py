@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 '''Generation of shallow elastic foundation with boundary conditions based on 
-   springs.'''
+   springs.
+
+The problem with the friction materials created in this model is that the 
+friction force is independent of the normal reaction in the contact, and that 
+does not correspond to the physical reality.
+'''
 
 from __future__ import division
 
@@ -86,13 +91,11 @@ class ShallowElasticFoundation(object):
            
             xSpringMaterialName= name + '_xSpring'
             ySpringMaterialName= name + '_ySpring'
-            self.xSpringName= xSpringMaterialName
-            self.xSpring= typical_materials.defElasticMaterial(preprocessor,self.xSpringName,0.1)
-            self.ySpringName= ySpringMaterialName
+            self.xSpring= typical_materials.defElasticMaterial(preprocessor, xSpringMaterialName,0.1)
             if self.noTensionZ:
-                self.ySpring= typical_materials.defElastNoTensMaterial(preprocessor,self.ySpringName,1)
+                self.ySpring= typical_materials.defElastNoTensMaterial(preprocessor, ySpringMaterialName,1)
             else:
-                self.ySpring= typical_materials.defElasticMaterial(preprocessor,self.ySpringName,1)
+                self.ySpring= typical_materials.defElasticMaterial(preprocessor,ySpringMaterialName,1)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -115,15 +118,12 @@ class ShallowElasticFoundation(object):
             xSpringMaterialName= name + '_xSpring'
             ySpringMaterialName= name + '_ySpring'
             zSpringMaterialName= name + '_zSpring'
-            self.xSpringName= xSpringMaterialName
-            self.xSpring=typical_materials.defElasticMaterial(preprocessor,self.xSpringName,0.1)
-            self.ySpringName= ySpringMaterialName
-            self.ySpring=typical_materials.defElasticMaterial(preprocessor,self.ySpringName,0.1)
-            self.zSpringName= zSpringMaterialName
+            self.xSpring=typical_materials.defElasticMaterial(preprocessor, xSpringMaterialName, 0.1)
+            self.ySpring=typical_materials.defElasticMaterial(preprocessor, ySpringMaterialName, 0.1)
             if self.noTensionZ:
-                self.zSpring=typical_materials.defElastNoTensMaterial(preprocessor,self.zSpringName,1)
+                self.zSpring=typical_materials.defElastNoTensMaterial(preprocessor, zSpringMaterialName, 1)
             else:
-                self.zSpring=typical_materials.defElasticMaterial(preprocessor,self.zSpringName,1)
+                self.zSpring=typical_materials.defElasticMaterial(preprocessor, zSpringMaterialName, 1)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -165,14 +165,17 @@ class ShallowElasticFoundation(object):
         sNod= self.foundationSet.nodes
         for n in sNod:
             nodeTributaryArea= self.tributaryAreas[n.tag]
-            self.xSpring.E= self.hModulusFraction*self.wModulus*nodeTributaryArea
+            # Tangent stiffness.
+            tangentStiffness= self.hModulusFraction*self.wModulus*nodeTributaryArea
+            normalStiffness= self.wModulus*nodeTributaryArea
+            self.xSpring.setE(tangentStiffness) 
             if(dimSpace==2): # Two-dimensional problem.
-                self.ySpring.E= self.wModulus*nodeTributaryArea
-                nodeSprings= [self.xSpringName,self.ySpringName]
+                self.ySpring.setE(normalStiffness)
+                nodeSprings= [self.xSpring.name,self.ySpring.name]
             else: # Three-dimensional problem.
-                self.ySpring.E= self.hModulusFraction*self.wModulus*nodeTributaryArea
-                self.zSpring.E= self.wModulus*nodeTributaryArea
-                nodeSprings= [self.xSpringName, self.ySpringName,self.zSpringName]
+                self.ySpring.setE(tangentStiffness)
+                self.zSpring.setE(normalStiffness)
+                nodeSprings= [self.xSpring.name, self.ySpring.name,self.zSpring.name]
             newNode, springElement= modelSpace.setBearing(n.tag, nodeSprings)
             if __debug__:
                 if(not newNode):
