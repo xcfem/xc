@@ -13,7 +13,7 @@ from scipy.constants import g
 
 phi= math.radians(32)
 gammaMPhi= 1.25
-soil= fs.FrictionalSoil(phi= phi, rho= 1.8e3/g, gammaMPhi= gammaMPhi)
+soil= fs.FrictionalSoil(phi= phi, rho= 18e3/g, gammaMPhi= gammaMPhi)
 
 designPhi= soil.getDesignPhi()
 designPhiRef= math.atan(math.tan(phi)/gammaMPhi)
