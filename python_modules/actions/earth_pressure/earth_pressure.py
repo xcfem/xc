@@ -92,7 +92,7 @@ class PressureModelBase(object):
             retval+= forceVector
         return retval
 
-    def appendLoadToCurrentLoadPattern(self, xcSet, vDir, iCoo= 2, delta= 0.0):
+    def appendLoadToCurrentLoadPattern(self, xcSet, vDir, iCoo= 2, delta= 0.0,globalVdir=True):
         '''Append earth thrust on a set of elements to the current load pattern.
 
         :param xcSet: set that contains the elements (shells and/or beams) that
@@ -100,7 +100,10 @@ class PressureModelBase(object):
         :param vDir: unit xc vector defining pressures direction
         :param iCoo: index of the coordinate that represents depth.
         :param delta: soil-wall friction angle (usually: delta= 2/3*Phi).
+        :param globalVdir: True if pressure applied in vDir global coordinates
+                           (defaults to True)
         '''
+        
         tanDelta= math.tan(delta)
         tanVector= xc.Vector([-vDir[1],vDir[0]]) #iCoo= 1 => 2D
         if(iCoo==2): #3D
@@ -112,7 +115,10 @@ class PressureModelBase(object):
                 presElem= self.getPressure(centroid[iCoo])
                 loadVector= presElem*(vDir+tanDelta*tanVector)
                 if(presElem!=0.0):
-                    e.vector3dUniformLoadGlobal(loadVector)
+                    if globalVdir:
+                        e.vector3dUniformLoadGlobal(loadVector)
+                    else:
+                        e.vector3dUniformLoadLocal(loadVector)
                     dim= e.getDimension
                     if(dim==2):
                         area= e.getArea(False)
@@ -133,13 +139,16 @@ class PressureModelBase(object):
                 presElem= self.getPressure(centroid[iCoo])
                 loadVector= presElem*(vDir+tanDelta*tanVector)
                 if(presElem!=0.0):
-                    e.vector2dUniformLoadGlobal(loadVector)
+                    if globalVdir:
+                        e.vector2dUniformLoadGlobal(loadVector)
+                    else:
+                        e.vector2dUniformLoadLocal(loadVector)
                     length= e.getLength(False)
                     totalLoad= loadVector*length
                     retval+= geom.SlidingVector2d(geom.Pos2d(centroid[0], centroid[1]), geom.Vector2d(totalLoad[0], totalLoad[1]))
         return retval # Sliding vector system (checking purposes)
     
-    def appendVerticalLoadToCurrentLoadPattern(self, vLoad, xcSet, vDir, iXCoo= 0,iZCoo= 2, alph= math.radians(30)):
+    def appendVerticalLoadToCurrentLoadPattern(self, vLoad, xcSet, vDir, iXCoo= 0,iZCoo= 2, alph= math.radians(30),globalVdir=True):
         '''Append to the current load pattern the vertical pressures on 
            a set of elements due to this load. 
 
@@ -149,6 +158,8 @@ class PressureModelBase(object):
         :param iXCoo: index of the horizontal coordinate.
         :param iZCoo: index of the vertical coordinate.
         :param alph: angle of stress spreading.
+        :param globalVdir: True if pressure applied in vDir global coordinates
+                           (defaults to True)
         '''
         sigma_v= vLoad
         if(sigma_v!= 0.0):
@@ -158,7 +169,10 @@ class PressureModelBase(object):
                 for e in xcSet.elements:
                     centroid= e.getCooCentroid(False)
                     area= e.getArea(False)
-                    e.vector3dUniformLoadGlobal(loadVector)
+                    if globalVdir:
+                        e.vector3dUniformLoadGlobal(loadVector)
+                    else:
+                        e.vector3dUniformLoadLocal(loadVector)
                     # Return sliding vector system for checking purposes.
                     totalLoad= loadVector*area
                     retval+= geom.SlidingVector3d(geom.Pos3d(centroid[0], centroid[1], centroid[2]), geom.Vector3d(totalLoad[0], totalLoad[1], totalLoad[2]))
@@ -167,7 +181,10 @@ class PressureModelBase(object):
                 for e in xcSet.elements:
                     centroid= e.getCooCentroid(False)
                     length= e.getLength(False)
-                    e.vector2dUniformLoadGlobal(loadVector)
+                    if globalVdir:
+                        e.vector2dUniformLoadGlobal(loadVector)
+                    else:
+                        e.vector2dUniformLoadLocal(loadVector)
                     # Return sliding vector system for checking purposes.
                     totalLoad= loadVector*length
                     retval+= geom.SlidingVector2d(geom.Pos2d(centroid[0], centroid[1]), geom.Vector2d(totalLoad[0], totalLoad[1]))
@@ -496,7 +513,7 @@ class StripLoadOnBackfill(UniformLoadOnStem):
             ret_press=self.coef*self.qLoad/math.pi*(beta-math.sin(beta)*math.cos(2*omega))
         return ret_press
 
-    def appendVerticalLoadToCurrentLoadPattern(self, xcSet, vDir, iXCoo= 0, iZCoo= 2, alph= math.radians(30)):
+    def appendVerticalLoadToCurrentLoadPattern(self, xcSet, vDir, iXCoo= 0, iZCoo= 2, alph= math.radians(30),globalVdir=True):
         '''Append to the current load pattern the vertical pressures on 
            a set of elements due to the strip load. According to
            11.3.4 in the book "Mecánica de suelos" of Llano, J.J.S.
@@ -507,6 +524,8 @@ class StripLoadOnBackfill(UniformLoadOnStem):
         :param iXCoo: index of the horizontal coordinate.
         :param iZCoo: index of the vertical coordinate.
         :param alph: angle of stress spreading.
+        :param globalVdir: True if pressure applied in vDir global coordinates
+                           (defaults to True)
         '''
         tanAlph= math.tan(alph)
         avgZCoo= 0.0
@@ -526,12 +545,19 @@ class StripLoadOnBackfill(UniformLoadOnStem):
           for e in xcSet.elements:
               xElem= e.getCooCentroid(False)[iXCoo]
               if (sigma_v!=0.0) and (xElem>xMin) and (xElem<xMax):
-                  e.vector3dUniformLoadGlobal(sigma_v*vDir)
+                  if globalVdir:
+                      e.vector3dUniformLoadGlobal(sigma_v*vDir)
+                  else:
+                      e.vector3dUniformLoadLocal(sigma_v*vDir)
+                      
         else: #2D load.
           for e in xcSet.elements:
               xElem= e.getCooCentroid(False)[iXCoo]
               if (sigma_v!=0.0) and (xElem>xMin) and (xElem<xMax):
-                  e.vector2dUniformLoadGlobal(sigma_v*vDir)
+                  if globalVdir:
+                      e.vector2dUniformLoadGlobal(sigma_v*vDir)
+                  else:
+                      e.vector2dUniformLoadLocal(sigma_v*vDir)
 
     def getMaxMagnitude(self, xcSet):
         '''Return an estimation of the maximum magnitude of the vector loads 
@@ -646,12 +672,14 @@ class PointVerticalLoadOnBackfill(object):
             ret_press=PN0*(math.cos(psi))**2
         return ret_press
     
-    def appendLoadToCurrentLoadPattern(self, xcSet, vDir):
+    def appendLoadToCurrentLoadPattern(self, xcSet, vDir,globalVdir=True):
         '''Append earth thrust on a set of elements to the current
            load pattern.
 
         :param xcSet: set that contains the elements (shells and/or beams)
         :param vDir: unit xc vector defining pressures direction
+        :param globalVdir: True if pressure applied in vDir global coordinates
+                           (defaults to True)
         '''
         retval= geom.SlidingVector3d() # checking purposes.
         for e in xcSet.elements:
@@ -659,7 +687,10 @@ class PointVerticalLoadOnBackfill(object):
             presElem=self.getPressure(coo[0],coo[1],coo[2])
             if(presElem!=0.0):
                 loadVector= presElem*vDir
-                e.vector3dUniformLoadGlobal(loadVector)
+                if globalVdir:
+                    e.vector3dUniformLoadGlobal(loadVector)
+                else:
+                    e.vector3dUniformLoadLocal(loadVector)
                 area= e.getArea(False)
                 totalLoad= loadVector*area
                 retval+= geom.SlidingVector3d(geom.Pos3d(coo[0], coo[1], coo[2]), geom.Vector3d(totalLoad[0], totalLoad[1], totalLoad[2]))
@@ -768,7 +799,7 @@ class HorizontalLoadOnBackfill(PressureModelBase):
         sg2d= geom.Segment2d(pBottom, pTop)
         return super().getForces2D(segment2d= sg2d, numDiv= numDiv, beta= beta)
     
-    def appendLoadToCurrentLoadPattern(self, xcSet, vDir, iCoo= 2, delta= 0.0):
+    def appendLoadToCurrentLoadPattern(self, xcSet, vDir, iCoo= 2, delta= 0.0,globalVdir=True):
         '''Append to the current load pattern the earth thrust on a set of 
         elements due to the horizontal load.
 
@@ -776,6 +807,7 @@ class HorizontalLoadOnBackfill(PressureModelBase):
         :param vDir: unit xc vector defining pressures direction
         :param iCoo: index of the coordinate that represents depth.
         :param delta: soil-wall friction angle (usually: delta= 2/3*Phi).
+        
         '''
         return super(HorizontalLoadOnBackfill,self).appendLoadToCurrentLoadPattern(xcSet= xcSet, vDir= vDir, iCoo= iCoo, delta= delta)
 
@@ -983,12 +1015,14 @@ class EarthPressureSlopedBackfill(object):
             ret_press=0.0
         return ret_press
         
-    def appendLoadToCurrentLoadPattern(self, xcSet, vDir):
+    def appendLoadToCurrentLoadPattern(self, xcSet, vDir,globalVdir=True):
         '''Append pressure on a set of elements to the current
            load pattern.
 
         :param xcSet: set of elements to which apply the loads
         :param vDir: unit xc vector defining pressures direction
+        :param globalVdir: True if pressure applied in vDir global coordinates
+                           (defaults to True)
         '''
         retval= geom.SlidingVector3d()  # checking purposes.
         for e in xcSet.elements:
@@ -996,7 +1030,10 @@ class EarthPressureSlopedBackfill(object):
             presElem= self.getPressure(coo[0],coo[1],coo[2])
             if(presElem!=0.0):
                 loadVector= presElem*vDir
-                e.vector3dUniformLoadGlobal(loadVector)
+                if globalVdir:
+                    e.vector3dUniformLoadGlobal(loadVector)
+                else:
+                    e.vector3dUniformLoadLocal(loadVector)
                 area= e.getArea(False)
                 totalLoad= loadVector*area
                 retval+= geom.SlidingVector3d(geom.Pos3d(coo[0], coo[1], coo[2]), geom.Vector3d(totalLoad[0], totalLoad[1], totalLoad[2]))
@@ -1050,12 +1087,14 @@ class WeightDistrEmbankment(object):
             ret_press=0.0
         return ret_press
 
-    def appendLoadToCurrentLoadPattern(self, xcSet, vDir= xc.Vector([0,0,-1])):
+    def appendLoadToCurrentLoadPattern(self, xcSet, vDir= xc.Vector([0,0,-1]),globalVdir=True):
         '''Append pressure on a set of elements to the current
            load pattern.
 
         :param xcSet: set of elements to which apply the loads
         :param vDir: unit xc vector defining pressures direction
+        :param globalVdir: True if pressure applied in vDir global coordinates
+                           (defaults to True)
         '''
         retval= geom.SlidingVector3d() # checking purposes.
         for e in xcSet.elements:
@@ -1063,7 +1102,10 @@ class WeightDistrEmbankment(object):
             presElem=max(0,self.getPressure(coo[0],coo[1],coo[2]))
             if(presElem!=0.0):
                 loadVector= presElem*vDir
-                e.vector3dUniformLoadGlobal(loadVector)
+                if globalVdir:
+                    e.vector3dUniformLoadGlobal(loadVector)
+                else:
+                    e.vector3dUniformLoadLocal(loadVector)
                 area= e.getArea(False)
                 totalLoad= loadVector*area
                 retval+= geom.SlidingVector3d(geom.Pos3d(coo[0], coo[1], coo[2]), geom.Vector3d(totalLoad[0], totalLoad[1], totalLoad[2]))

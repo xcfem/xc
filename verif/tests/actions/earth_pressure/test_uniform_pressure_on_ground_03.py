@@ -90,7 +90,7 @@ lp0= modelSpace.newLoadPattern(name= '0', setCurrent= True)
 # vDir: unit xc vector defining pressures direction
 # iCoo: index of the coordinate that represents depth.
 # delta: soil-wall friction angle (usually: delta= 2/3*Phi).
-pressure.appendLoadToCurrentLoadPattern(xcSet= xcTotalSet, vDir= vDir, iCoo= 1, delta= 0.0)
+pressure.appendLoadToCurrentLoadPattern(xcSet= xcTotalSet, vDir= vDir, iCoo= 1, delta= 0.0,globalVdir=True)
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
