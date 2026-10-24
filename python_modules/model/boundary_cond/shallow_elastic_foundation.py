@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 '''Generation of shallow elastic foundation with boundary conditions based on 
-   springs.'''
+   springs.
+
+The problem with the friction materials created in this model is that the 
+friction force is independent of the normal reaction in the contact, and that 
+does not correspond to the physical reality.
+'''
 
 from __future__ import division
 

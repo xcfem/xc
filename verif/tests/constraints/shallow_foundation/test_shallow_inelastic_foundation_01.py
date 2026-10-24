@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 ''' Check ShallowInelasticFoundation class. Test based on equilibrium considerations.
 
-The problem with the friction materials in this model is that the friction force is independent of the normal reaction in the contact, and that does not correspond to the physical reality.
+The problem with the friction materials in this model is that the friction 
+force is independent of the normal reaction in the contact, and that does not 
+correspond to the physical reality.
 '''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
