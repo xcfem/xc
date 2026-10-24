@@ -2,7 +2,7 @@
 '''Laterally-loaded pile foundation.
 
 Static pushover of a single pile, modeled as a beam on a nonlinear Winkler 
-foundation.  Lateral soil response is described by p-y springs. Vertical soil 
+foundation. Lateral soil response is described by p-y springs. Vertical soil 
 response described by t-z and q-z springs.
 
 Based on the example 14.4.1 of OpenSees (see https://openseespydoc.readthedocs.io/en/stable/src/pile.html) by Pavan Chigullapally from University of Auckland, Auckland.
@@ -23,6 +23,7 @@ from model.sets import sets_mng
 from materials import soil_structure_interaction as ssi
 from materials import typical_materials
 from geotechnics.foundations import pile
+from geotechnics.foundations import pytzqz_functions as pytzqzf
 from solution import predefined_solutions
 from actions.quake import ground_motion_utils as gmu
 from scipy.constants import g
@@ -103,7 +104,7 @@ for n in l1.nodes:
     nPos= n.getInitialPos3d
     pyDepth= L2-nPos.z
     tributaryLength=  tributaryLengths[n.tag]
-    pult, y50= pile.get_py_param(pyDepth, soilRho, soilPhi, pileDiameter, tributaryLength, puSwitch, kSwitch, gwtSwitch)
+    pult, y50= pytzqzf.get_py_param(pyDepth, soilRho, soilPhi, pileDiameter, tributaryLength, puSwitch, kSwitch, gwtSwitch)
     pyMatName= 'pyS_'+str(n.tag)
     pyMat= ssi.def_pysimple1_material(preprocessor,
                                       matName= pyMatName,
@@ -114,7 +115,7 @@ for n in l1.nodes:
                                       Cd= 0.0)
 
     sigV= soilRho*g*pyDepth # Vertical stress.
-    tult, z50= pile.get_tz_param(soilPhi, pileDiameter, sigV, tributaryLength)
+    tult, z50= pytzqzf.get_tz_param(soilPhi, pileDiameter, sigV, tributaryLength)
     tzMatName= 'tzS:'+str(n.tag)
     tzMat= ssi.def_tzsimple1_material(preprocessor,
                                       matName= tzMatName,
@@ -148,7 +149,7 @@ tipNodePos= tipNode.getInitialPos3d
 tipNodeDepth= L2-tipNodePos.z
 ### vertical effective stress at pile tip, no water table (depth is embedded pile length)
 sigVq= soilRho*g * tipNodeDepth # (N)
-qult, z50q = pile.get_qz_param(phi= soilPhi, b= pileDiameter, sigV= sigVq, G= soilG)
+qult, z50q = pytzqzf.get_qz_param(phi= soilPhi, b= pileDiameter, sigV= sigVq, G= soilG)
 # op.uniaxialMaterial('QzSimple1', 101, 2, qult, z50q) #, 0.0, 0.0
 # op.uniaxialMaterial('TzSimple1', 101, 2, qult, z50q, 0.0)
 qzMat= ssi.def_qzsimple1_material(preprocessor,

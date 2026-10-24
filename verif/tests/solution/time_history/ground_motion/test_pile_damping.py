@@ -23,6 +23,7 @@ from materials.ec2 import EC2_materials
 from materials.sections.fiber_section import def_column_RC_section
 from materials import typical_materials
 from geotechnics.foundations import pile
+from geotechnics.foundations import pytzqz_functions as pytzqzf
 from solution import predefined_solutions
 from solution import transient
 from solution import hht
@@ -117,7 +118,7 @@ for n in pileLine.nodes:
     nPos= n.getInitialPos3d
     pyDepth= L2-nPos.z
     tributaryLength=  tributaryLengths[n.tag]
-    pult, y50= pile.get_py_param(pyDepth, soilRho, soilPhi, pileDiameter, tributaryLength, puSwitch, kSwitch, gwtSwitch)
+    pult, y50= pytzqzf.get_py_param(pyDepth, soilRho, soilPhi, pileDiameter, tributaryLength, puSwitch, kSwitch, gwtSwitch)
     # Compute viscous damping for p-y spring materials.
     Gz= soilG*math.sqrt(max(pyDepth, 0.5)/L2)  # example G(z) ~ sqrt(depth), reduce for strain
     Vs= math.sqrt(Gz/soilRho)
@@ -134,7 +135,7 @@ for n in pileLine.nodes:
                                       Cd= 0.0)
 
     sigV= soilRho*g*pyDepth # Vertical stress.
-    tult, z50= pile.get_tz_param(soilPhi, pileDiameter, sigV, tributaryLength)
+    tult, z50= pytzqzf.get_tz_param(soilPhi, pileDiameter, sigV, tributaryLength)
     # Compute viscous damping for t-z spring materials.
     c_tz= math.pi*pileDiameter*soilRho*Vs*tributaryLength
     tzMatName= 'tzS:'+str(n.tag)
@@ -170,7 +171,7 @@ pileTipNodePos= pileTipNode.getInitialPos3d
 pileTipNodeDepth= L2-pileTipNodePos.z
 ### vertical effective stress at pile tip, no water table (depth is embedded pile length)
 sigVq= soilRho*g * pileTipNodeDepth # (N)
-qult, z50q = pile.get_qz_param(phi= soilPhi, b= pileDiameter, sigV= sigVq, G= soilG)
+qult, z50q = pytzqzf.get_qz_param(phi= soilPhi, b= pileDiameter, sigV= sigVq, G= soilG)
 # op.uniaxialMaterial('QzSimple1', 101, 2, qult, z50q) #, 0.0, 0.0
 # op.uniaxialMaterial('TzSimple1', 101, 2, qult, z50q, 0.0)
 # Compute viscous damping for q-z spring material. 
