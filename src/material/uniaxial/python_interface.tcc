@@ -46,6 +46,8 @@ class_<XC::UniaxialMaterial,XC::UniaxialMaterial *, bases<XC::Material>, boost::
    ;
 
 class_<XC::ElasticBaseMaterial, bases<XC::UniaxialMaterial>, boost::noncopyable >("ElasticBaseMaterial", no_init)
+  .def("getE", &XC::ElasticBaseMaterial::getE, "Get the value of the elastic modulus.")
+  .def("setE", &XC::ElasticBaseMaterial::setE, "Set the value of the elastic modulus.")
   .add_property("E", &XC::ElasticBaseMaterial::getE, &XC::ElasticBaseMaterial::setE, "Get/set the value of the elastic modulus.")
   ;
 
@@ -55,7 +57,11 @@ class_<XC::ElasticMaterial, bases<XC::ElasticBaseMaterial> >("ElasticMaterial")
   ;
 
 class_<XC::ENTNCBaseMaterial , bases<XC::ElasticBaseMaterial>, boost::noncopyable >("ENTNCBaseMaterial", no_init)
+  .def("get_a", &XC::ENTNCBaseMaterial::getA,"Get the a parameter of the material.")
+  .def("set_a", &XC::ENTNCBaseMaterial::setA,"Set the a parameter of the material.")
   .add_property("a", &XC::ENTNCBaseMaterial::getA, &XC::ENTNCBaseMaterial::setA,"Get/set the a parameter of the material.")
+  .def("get_b", &XC::ENTNCBaseMaterial::getB,"Get the b parameter of the material.")
+  .def("set_b", &XC::ENTNCBaseMaterial::setB,"Set the b parameter of the material.")
   .add_property("b", &XC::ENTNCBaseMaterial::getB, &XC::ENTNCBaseMaterial::setB,"Get/set the a parameter of the material.")
   ;
 
@@ -70,9 +76,17 @@ class_<XC::EPPBaseMaterial , bases<XC::ElasticBaseMaterial>, boost::noncopyable 
 class_<XC::EPPGapMaterial , bases<XC::EPPBaseMaterial>, boost::noncopyable >("EPPGapMaterial", no_init);
 
 class_<XC::ElasticPPMaterialBase , bases<XC::EPPBaseMaterial>, boost::noncopyable >("ElasticPPMaterialBase", no_init)
-  .add_property("fyp", &XC::ElasticPPMaterialBase::get_fyp, &XC::ElasticPPMaterialBase::set_fyp,"Positive yield stress.")
+  .def("get_fyp", &XC::ElasticPPMaterialBase::get_fyp,"Get the positive yield stress.")
+  .def("set_fyp", &XC::ElasticPPMaterialBase::set_fyp,"Set the positive yield stress.")
+  .add_property("fyp", &XC::ElasticPPMaterialBase::get_fyp, &XC::ElasticPPMaterialBase::set_fyp,"Get/set the positive yield stress.")
+  .def("get_eyp", &XC::ElasticPPMaterialBase::get_eyp,"Get the positive yield strain.")
+  .def("set_eyp", &XC::ElasticPPMaterialBase::set_eyp,"Set the positive yield strain.")
   .add_property("eyp", &XC::ElasticPPMaterialBase::get_eyp,"Positive yield strain.")
+  .def("get_fyn", &XC::ElasticPPMaterialBase::get_fyn,"Get the negative yield stress.")
+  .def("set_fyn", &XC::ElasticPPMaterialBase::set_fyn,"Set the negative yield stress.")
   .add_property("fyn", &XC::ElasticPPMaterialBase::get_fyn, &XC::ElasticPPMaterialBase::set_fyn,"Negative yield stress.")
+  .def("get_eyn", &XC::ElasticPPMaterialBase::get_eyn,"Get the negative yield strain.")
+  .def("set_eyn", &XC::ElasticPPMaterialBase::set_eyn,"Set the negative yield strain.")
   .add_property("eyn", &XC::ElasticPPMaterialBase::get_eyn,"Negative yield strain.")
   ;
 
