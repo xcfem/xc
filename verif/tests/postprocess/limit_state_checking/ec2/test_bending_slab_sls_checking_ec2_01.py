@@ -209,7 +209,10 @@ for e in xcTotalSet.elements:
 # Check results (22/03/2026): Update the capacity factor after last changes in
 # the code: fixed error in main reinforcement layers definition:
 #   old value: maxCF= 0.8588526206837556
-ratio1= abs(maxCF-0.8236093652838707)/0.8236093652838707
+# Check results (24/10/2026): Update the capacity factor after last changes in
+# the code: fixed error in computation of Ac_eff. See commit #ffa3ed4
+#   old value: maxCF= 0.8236093652838707
+ratio1= abs(maxCF-0.8478590093642627)/0.8478590093642627
 
 '''
 print(maxCF)
