@@ -223,6 +223,7 @@ def get_py_param(pyDepth, rho, phi, b, tribLength, puSwitch, kSwitch, gwtSwitch)
     :param rho: soil unit mass (kg/m3).
     :param phi: soil internal friction angle (radians).
     :param b: pile diameter (m).
+    :param tribLength: tributary length (m).
     :param puSwitch: if (puSwitch= 1) compute pult according to API 
                      recommendations (Reese and Van Impe, 2001 or API, 1987).
                      if (puSwitch= 2) compute pult according to the method 

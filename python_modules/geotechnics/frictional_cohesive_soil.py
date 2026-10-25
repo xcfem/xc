@@ -74,6 +74,10 @@ class FrictionalCohesiveSoil(fs.FrictionalSoil):
         self.c= c
         self.gammaMc= gammaMc
 
+    def getCohesion(self):
+        ''' Return the soil cohesion.'''
+        return self.c
+
     def getDesignC(self):
         '''Return the design value of the soil cohesion.'''
         return self.c/self.gammaMc

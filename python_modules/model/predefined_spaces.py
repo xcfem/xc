@@ -391,7 +391,6 @@ class PredefinedSpace(object):
         '''
         self.preprocessor.getNodeHandler.numDOFs= nDOFs
         
-
     def setDefaultMaterial(self, material):
         ''' Assigns the material to be used when creating new elements. The
         seed element will be created again when appropriate to take account
@@ -668,6 +667,23 @@ class PredefinedSpace(object):
         '''
         return self.preprocessor.getMaterialHandler.materialExists(name)
     
+    def removeMaterial(self, material):
+        ''' Remove the definition ot the given material from its container.
+
+        :param material: material to remove.
+        '''
+        matName= material.name
+        defaultMaterialNames= self.getDefaultMaterials()
+        if(matName in defaultMaterialNames):
+            newDefaultMaterials= [None, None]
+            if(matName==defaultMaterialNames[0]):
+                newDefaultMaterials[0]= 'nil'
+            if(matName==defaultMaterialNames[1]):
+                newDefaultMaterials[1]= 'nil'
+            self.setDefaultMaterials(newDefaultMaterials)
+        matHandler= self.getMaterialHandler()
+        matHandler.removeMaterial(matName)
+        
     def setCreepOn(self):
         ''' Activates creep for TD concrete materials.'''
         self.getMaterialHandler().setCreepOn()

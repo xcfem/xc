@@ -58,9 +58,10 @@ def def_tzsimple1_material(preprocessor, matName, tzType:int, tult:float, z50:fl
         friction/axial shear resistance of deep foundation piles
 
         -tzType= 1 Backbone of t-z curve approximates Reese & O’Neill (1987) 
-                   relation.
+                   relation (clay).
 
-        -tzType= 2 Backbone of t-z curve approximates Mosher (1984) relation.
+        -tzType= 2 Backbone of t-z curve approximates Mosher (1984) relation
+                 (sand).
 
     The “tult” argument is the ultimate capacity of the t-z material. Note 
     that “t” or “tult” are shear stresses [force per unit area of pile surface]
@@ -75,7 +76,8 @@ def def_tzsimple1_material(preprocessor, matName, tzType:int, tult:float, z50:fl
     :param preprocessor: pre-processor of the finite element problem.
     :param matName: name for the new material (if None: let the preprocessor
                     assign the name).
-    :param tzType: = 1 for Reese & O’Neill relation; = 2 for Mosher relation.
+    :param tzType: = 1 for Reese & O’Neill relation (clay); = 2 for Mosher 
+                     relation (sand).
                    See previous notes.
     :param tult: Ultimate capacity of the t-z material.
     :param z50: Displacement at which 50% of tult is mobilized in monotonic 

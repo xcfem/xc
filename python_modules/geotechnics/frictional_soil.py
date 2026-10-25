@@ -52,6 +52,10 @@ class FrictionalSoil(object):
         self.E= E
         self.nu= nu
 
+    def getCohesion(self):
+        ''' Return the soil cohesion.'''
+        return 0.0 # Pure frictional soil.
+    
     def K0Jaky(self, designValue= False):
         '''Returns Jaky's coefficient (earth pressure at rest).
 

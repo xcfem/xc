@@ -183,7 +183,8 @@ class Pile(object):
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; pile element set not defined.')
+            errorMsg= '; pile element set not defined.'
+            lmsg.error(className+'.'+methodName+errorMsg)
         return retval
     
     def getZMin(self):
