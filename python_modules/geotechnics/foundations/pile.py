@@ -114,15 +114,18 @@ class SoilLayers(object):
 
     :ivar waterTableZ: global Z coordinate of the water table. 
     :ivar groundLevel: global Z coordinate of the ground level.
+    :ivar waterDensity: density of the water.
     '''
-    def __init__(self, waterTableZ= -100, groundLevel= 0.0):
+    def __init__(self, waterTableZ= -math.inf, groundLevel= 0.0, waterDensity= 1e3):
         ''' Constructor.
 
         :param waterTableZ: global Z coordinate of the water table.
         :param groundLevel: global Z coordinate of the ground level.
+        :param waterDensity: density of the water.
         '''
         self.waterTableZ= waterTableZ
         self.groundLevel= groundLevel
+        self.waterDensity= waterDensity
 
     def submerged(self, z):
         ''' Return true if z<waterTableZ.'''
