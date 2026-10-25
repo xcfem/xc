@@ -41,7 +41,7 @@ depths= [-(i+0.5) for i in range(0, 9)]
 
 vStresses= list()
 for depth in depths:
-    verticalStress= soilLayers.getVerticalStress(depth)
+    verticalStress= soilLayers.getVerticalStressAtDepth(depth)
     vStresses.append(verticalStress/1e3)
 
 zWaterTable= -5.0
@@ -50,7 +50,7 @@ wetSoilLayers= pytzqz_pile.SoilLayers(soilProfile= soilRows, groundLevel= zGroun
 waterPressures= list()
 wetVStresses= list()
 for depth in depths:
-    verticalStress= wetSoilLayers.getVerticalStress(depth)
+    verticalStress= wetSoilLayers.getVerticalStressAtDepth(depth)
     wetVStresses.append(verticalStress/1e3)
 
 # Check results.
