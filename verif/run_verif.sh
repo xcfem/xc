@@ -1840,6 +1840,7 @@ python tests/materials/steel_shapes/test_arcelor_metric_shapes_04.py
 python tests/materials/steel_shapes/test_en_10210_shapes_01.py
 python tests/materials/steel_shapes/test_en_13674_1_rail_shapes_01.py
 python tests/materials/steel_shapes/test_en_13674_1_rail_shapes_02.py
+python tests/materials/steel_shapes/test_plate_shape.py
 echo "$BLEU" "    EC3 tests." "$NORMAL"
 echo "$BLEU" "      EC3 member design tests." "$NORMAL"
 python tests/materials/ec3/member_design/compare_mech_properties.py
