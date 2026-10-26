@@ -1852,6 +1852,7 @@ python tests/materials/ec3/member_design/test_biax_bend_coeff.py
 python tests/materials/ec3/member_design/test_section_classification_01.py
 python tests/materials/ec3/member_design/test_section_classification_02.py
 python tests/materials/ec3/member_design/test_section_classification_03.py
+python tests/materials/ec3/member_design/test_section_classification_04.py
 python tests/materials/ec3/member_design/test_beam_with_full_lateral_restraint.py
 python tests/materials/ec3/member_design/compressed_section_test_01.py
 echo "$BLEU" "        buckling tests." "$NORMAL"

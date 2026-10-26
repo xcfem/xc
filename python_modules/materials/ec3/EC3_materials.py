@@ -198,10 +198,14 @@ class EC3Shape(object):
         ratioCT= ratioCT if ratioCT is not None else self.widthToThicknessWeb()
         eps= math.sqrt(235e6/self.steelType.fy)
         limits=[33*eps, 38*eps, 42*eps]
-        classif=0
-        while ratioCT>limits[classif]:
-            classif+=1
-        return (classif+1)
+        if(ratioCT>limits[-1]):
+            classif= 4
+        else:
+            classif=1
+            while ratioCT>limits[classif-1]:
+                classif+=1
+                classif= min(classif, 3) # Otherwise index out of range.
+        return classif
     
     def getClassInternalPartInBending(self, ratioCT=None):
         '''Return the cross-section classification of internal part 
@@ -209,15 +213,18 @@ class EC3Shape(object):
 
         :param ratioCT: ratio c/t width-to-thickness of the internal
                         compressed part (defaults to widthToThicknessWeb)
-        
         '''
         ratioCT=ratioCT if ratioCT is not None else self.widthToThicknessWeb()
         eps=math.sqrt(235e6/self.steelType.fy)
         limits=[72*eps,83*eps,124*eps]
-        classif=0
-        while ratioCT>limits[classif]:
-            classif+=1
-        return (classif+1)
+        if(ratioCT>limits[-1]):
+            classif= 4
+        else:
+            classif=1
+            while ratioCT>limits[classif-1]:
+                classif+=1
+                classif= min(classif, 3) # Otherwise index out of range.
+        return classif
         
         
     # def getClassInternalPartInBending(self):
@@ -231,10 +238,14 @@ class EC3Shape(object):
     #     ratioCT=self.widthToThicknessWeb()
     #     eps=math.sqrt(235e6/self.steelType.fy)
     #     limits=[72*eps,83*eps,124*eps]
-    #     classif=0
-    #     while ratioCT>limits[classif]:
-    #         classif+=1
-    #     return (classif+1)
+    #     if(ratioCT>limits[-1]):
+    #         classif= 4
+    #     else:
+    #         classif= 1
+    #         while ratioCT>limits[classif-1]:
+    #             classif+=1
+    #             classif= min(classif, 3) # Otherwise index out of range.
+    #     return classif
         
 
     def getClassOutstandPartInCompression(self, ratioCT=None):
@@ -249,10 +260,14 @@ class EC3Shape(object):
         ratioCT=ratioCT if ratioCT is not None else self.widthToThicknessFlange()
         eps=math.sqrt(235e6/self.steelType.fy)
         limits=[9*eps,10*eps,14*eps]
-        classif=0
-        while ratioCT>limits[classif]:
-            classif+=1
-        return (classif+1)
+        if(ratioCT>limits[-1]):
+            classif= 4
+        else:
+            classif= 1
+            while ratioCT>limits[classif-1]:
+                classif+=1
+                classif= min(classif, 3) # Otherwise index out of range.
+        return classif
 
     def getClassInCompression(self, ratioCT=None):
         '''Return the cross-section classification in compression. 
@@ -1224,6 +1239,51 @@ class RShape(EC3Shape, arcelor_metric_shapes.RShape):
         '''
         super(RShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.RShape.__init__(self,steel,name)
+        
+from materials.sections.structural_shapes import plate_shapes
+
+class PlateShape(EC3Shape, plate_shapes.PlateShape):
+    """Plate shape with Eurocode 3 verification routines."""
+    def __init__(self, steel, name:str, thickness:float, width:float):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. #200x20)
+        '''
+        super(PlateShape, self).__init__(name= name, typo= 'rolled')
+        plate_shapes.PlateShape.__init__(self, steel= steel, name= name, thickness= thickness, width= width)
+
+    def getWidthToThicknessRatio(self):
+        ''' Return the width to thickness ratio. '''
+        if(self.b>self.h):
+            h= self.b
+            t= self.h
+        else:
+            h= self.h
+            t= self.b
+        return h/t
+        
+    def getClassInCompression(self):
+        '''Return the cross-section classification of the section subject to 
+           compression. Clause 5.5 EC3-1-1 and table 5.2 (sheet 3 of 3).
+        '''
+        h_t= self.getWidthToThicknessRatio()
+        eps= math.sqrt(235e6/self.steelType.fy)
+        retval= 4
+        if(h_t<15*eps): # The condition ((b+h)/(2*t)<11.5*eps) with b= 0
+                        # is less restrictive.
+            retval= 3
+        return retval
+    
+    def getClassInBending(self, ratioCT=None):
+        '''Return the cross-section classification in bending. 
+           Clause 5.5 EC3-1-1
+
+        :param ratioCT: ratio c/t width-to-thickness of the compressed 
+                        part.        
+        '''
+        h_t= self.getWidthToThicknessRatio()
+        return self.getClassInternalPartInBending(ratioCT= h_t)
 
 from materials.sections.structural_shapes import common_micropile_tubes
 

@@ -56,6 +56,14 @@ class PlateShape(sp.RectangularSection):
         self.steelType= eval(steelTypeClassName)
         self.steelType.setFromDict(dct['steelType'])
 
+    def getThickness(self):
+        ''' Return the thickness of the plate.'''
+        return self.b
+
+    def getWidth(self):
+        ''' Return the thickness of the plate.'''
+        return self.h
+    
     def getRho(self):
         ''' Returns mass per unit length. '''
         return self.A()*self.steelType.getRho()
@@ -107,6 +115,15 @@ class PlateShape(sp.RectangularSection):
         '''
         return Leq/self.getGyrationRadiusZ()
 
+    def getSlendernessRatio(self):
+        ''' Return the slenderness ratio computed as the maximum dimension of
+            the plate divided by two times its thickness.
+        '''
+        if(self.b>self.h):
+            return self.b/(2*self.h)
+        else:
+            return self.h/(2*self.b)
+        
     def J(self):
         '''return torsional moment of inertia of the section'''
         return super.J()*self.torsionalStiffnessFactor
