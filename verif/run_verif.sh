@@ -1995,18 +1995,22 @@ echo "$BLEU" "  Other materials tests." "$NORMAL"
 python tests/materials/test_elastomeric_bearing_stiffness.py
 
 echo "$BLEU" "  Foundation design tests." "$NORMAL"
+python tests/geotechnics/foundations/test_foundation_settlement_01.py
+python tests/geotechnics/foundations/test_pad_footing_bearing_capacity.py
 python tests/geotechnics/foundations/test_skin_friction.py
+echo "$BLEU" "    Piles." "$NORMAL"
 python tests/geotechnics/foundations/test_pile_01.py
 python tests/geotechnics/foundations/test_pile_02.py
 python tests/geotechnics/foundations/test_pile_03.py
+python tests/geotechnics/foundations/test_pu_pile_in_weak_rock.py
+python tests/geotechnics/foundations/test_pytzqz_pytzqz_soil_layers.py
+python tests/geotechnics/foundations/test_pytzqz_pile_01.py
+echo "$BLEU" "    Micropiles." "$NORMAL"
 python tests/geotechnics/foundations/test_micropile_cross_section.py
 python tests/geotechnics/foundations/test_micropile_01.py
 python tests/geotechnics/foundations/test_micropile_02.py
 python tests/geotechnics/foundations/test_micropile_03.py
 python tests/geotechnics/foundations/test_micropile_04.py
-python tests/geotechnics/foundations/test_foundation_settlement_01.py
-python tests/geotechnics/foundations/test_pad_footing_bearing_capacity.py
-python tests/geotechnics/foundations/test_pu_pile_in_weak_rock.py
 ## Soil mechanics (basic utilities)
 echo  "$BLEU" "  Soil mechanics (basic utilities)." "$NORMAL"
 python tests/geotechnics/soil_mechanics/test_frictional_soil_01.py
