@@ -126,7 +126,7 @@ class PlateShape(sp.RectangularSection):
         
     def J(self):
         '''return torsional moment of inertia of the section'''
-        return super.J()*self.torsionalStiffnessFactor
+        return super().J()*self.torsionalStiffnessFactor
 
     def It(self):
         '''Return Saint Venant torsional constant.'''
