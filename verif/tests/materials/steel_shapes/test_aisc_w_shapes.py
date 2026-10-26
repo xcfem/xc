@@ -13,24 +13,6 @@ from materials.sections.structural_shapes import aisc_metric_shapes
 from sympy.physics import units
 
 
-ratio1= 10
-ratio2= 10
-ratio3= 10
-ratio4= 10
-ratio5= 10
-ratio6= 10
-ratio7= 10
-ratio8= 10
-ratio9= 10
-ratio10= 10
-ratio11= 10
-ratio12= 10
-ratio13= 10
-ratio14= 10
-ratio15= 10
-ratio16= 10
-ratio17= 10
-
 wSection= aisc_metric_shapes.W['W8X21']
 meter= units.m
 meter2= units.m*units.m
