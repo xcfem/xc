@@ -2004,7 +2004,7 @@ python tests/geotechnics/foundations/test_pile_01.py
 python tests/geotechnics/foundations/test_pile_02.py
 python tests/geotechnics/foundations/test_pile_03.py
 python tests/geotechnics/foundations/test_pu_pile_in_weak_rock.py
-python tests/geotechnics/foundations/test_pytzqz_pytzqz_soil_layers.py
+python tests/geotechnics/foundations/test_pytzqz_soil_layers.py
 python tests/geotechnics/foundations/test_pytzqz_pile_01.py
 echo "$BLEU" "    Micropiles." "$NORMAL"
 python tests/geotechnics/foundations/test_micropile_cross_section.py
