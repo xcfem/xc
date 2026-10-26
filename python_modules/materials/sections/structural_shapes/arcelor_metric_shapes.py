@@ -12,6 +12,7 @@ import sys
 import math
 from materials.sections.structural_shapes import arcelor_shapes_dictionaries
 from materials.sections.structural_shapes import steel_shapes_utils as utils
+from materials.sections import structural_steel
 
 
 # European I beams
@@ -330,7 +331,6 @@ for item in UB:
     shape['AreaQz']= A-hi*tw
 
   
-from materials.sections import structural_steel
 
 def find_nearest_steel_shape_by_depth(namePattern:str, depth:float):
     ''' Return the steel shape whose name matches the pattern argument
