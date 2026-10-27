@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-Check that the Mz bending moment diagram is oriented towards the the "belly" 
+Check that the Mz bending moment diagram is oriented towards the "belly" 
 due that belly.'''
 
 from __future__ import division
