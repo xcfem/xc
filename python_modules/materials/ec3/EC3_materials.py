@@ -1250,7 +1250,7 @@ class PlateShape(EC3Shape, plate_shapes.PlateShape):
         :param steel: steel material.
         :param name: shape name (i.e. #200x20)
         '''
-        super(PlateShape, self).__init__(name= name, typo= 'rolled')
+        super(PlateShape, self).__init__(name= name, typo= 'other')
         plate_shapes.PlateShape.__init__(self, steel= steel, name= name, thickness= thickness, width= width)
 
     def getWidthToThicknessRatio(self):
