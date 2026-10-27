@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
+
+import sys
 import math
 import scipy.interpolate
+from misc_utils import log_messages as lmsg
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
@@ -341,10 +343,15 @@ def esbeltezAdim(c,tRig,fy,Es):
     :param fy: Steel yield strength.
     :param Es: Steel elastic modulus.
     '''
-    return (2.53/math.pi)*c/tRig*math.sqrt(fy/Es) 
+    retval= (2.53/math.pi)*c/tRig*math.sqrt(fy/Es)
+    if(retval>3.8): # Validity range exceeded.
+        methodName= sys._getframe(0).f_code.co_name
+        errorMsg= '; slenderness out of range: '+str(retval)+'>3.8'
+        lmsg.error(methodName+errorMsg)
+        sys.exit(-1)
+    return retval
 
 
-  
 def coefEscuadra(coefLambda):
     '''
     Return stiffener square coefficient according to clause 61.6 of EAE.
