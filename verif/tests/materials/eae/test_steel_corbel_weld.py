@@ -50,10 +50,15 @@ fyd= fy/1.0 # Strength reduction factor
 Es= 2.1e6*9.81/1e-4 # Elastic modulus of the steel.
 
 # Partial results.
-c= EAE_limit_state_checking.widthMax(topPlateThickness, corbelLength,corbelHeight)
-lmbd= EAE_limit_state_checking.esbeltezAdim(c,topPlateThickness,fy,Es)
+## Compute the maximum depth of the corbel.
+c= EAE_limit_state_checking.widthMax(topPlateThickness, corbelLength, corbelHeight)
+## Compute the dimensionless slenderness of the corbel.
+lmbd= EAE_limit_state_checking.esbeltezAdim(c,stiffenerThickness,fy,Es)
+## Compute the square coefficient.
 CE= EAE_limit_state_checking.coefEscuadra(lmbd)
+## Compute the plastic moment of the corbel.
 MplRd= EAE_limit_state_checking.momPlastRig(stiffenerThickness,c,fy)
+## Compute the ultimate load of the corbel.
 VRd2= EAE_limit_state_checking.ultimateLoadRig(CE,d,MplRd)
 
 '''The difference between this value for cTeor and the one used here
