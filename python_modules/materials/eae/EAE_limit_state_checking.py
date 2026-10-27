@@ -347,7 +347,7 @@ def esbeltezAdim(c,tRig,fy,Es):
   
 def coefEscuadra(coefLambda):
     '''
-    Return stiffener square coefficient.
+    Return stiffener square coefficient according to clause 61.6 of EAE.
 
     :param coefLambda: stiffener dimensionless slenderness.
     '''
