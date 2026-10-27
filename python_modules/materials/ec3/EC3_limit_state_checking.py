@@ -27,7 +27,7 @@ from materials import steel_member_base
 def getLateralTorsionalBucklingCurve(steelShape):
     ''' Returns the lateral torsional bukling curve name (a,b,c or d) depending of the type of section (rolled, welded,...). EC3 EN 1993-1-1 Table 6.4, 6.3.2.2(2).
     :param steelShape: cross section shape.
-    :param rypo: 'rolled' or 'welded' shape
+    :param typo: 'rolled' or 'welded' shape
     '''
     if(steelShape.typo=='rolled'):
         if((steelShape.h()/steelShape.b())<=2):
@@ -167,7 +167,7 @@ class BeamSupportCoefficients(object):
      :param ky: lateral bending coefficient ky= 1.0 => free lateral bending
                                             ky= 0.5 => prevented lateral bending
      :param kw: warping coefficient kw= 1.0 => free warping
-                                    ky= 0.5 => prevented warping
+                                    kw= 0.5 => prevented warping
      :param k1: warping AND lateral bending coefficient at left end
                                     k1= 1.0 => free warping AND lateral bending
                                     k1= 0.5 => prevented warp. AND lateral bending
