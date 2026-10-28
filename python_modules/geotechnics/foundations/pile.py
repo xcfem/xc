@@ -162,7 +162,6 @@ class Pile(object):
             self.pileSet= pileSet
         self.rho= rho
 
-     
     def getElasticMaterialData(self, overrideRho= None):
         '''Return the elastic material constitutive model of the pile itself.
 
@@ -384,6 +383,19 @@ class Pile(object):
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; not implemented for '+str(numDOFs) + ' degrees of freedom.')
         return retval
+
+    def getSpringFixedNodes(self):
+        ''' Return the nodes to which the springs are fixed.'''
+        retval= list()
+        shaftNodes= set()
+        for n in self.pileSet.nodes:
+            shaftNodes.add(n.tag)
+        for zlElement in self.springs:
+            for n in zlElement.nodes:
+                if(n.tag not in shaftNodes):
+                    retval.append(n)
+        return retval
+
             
 class CircularPile(Pile):
     ''' Pile with circular cross-section.'''
