@@ -15,6 +15,9 @@ from model import predefined_spaces
 from materials.ec2 import EC2_materials
 from geotechnics.foundations import pytzqz_pile
 from geotechnics import frictional_soil as fs
+from solution import predefined_solutions
+
+silent= True
 
 # Data
 pileDiameter= 1.5  # pile diameter [m]
@@ -43,19 +46,12 @@ sandySoil.suction= 0.0
 soils=[[-100.0, sandySoil]] # Properties of the soil layers:
 soilLayers= pytzqz_pile.SoilLayers(soilProfile= soils, groundLevel= zGround)
 
-
-# Loads
-Fh=706.9e3+572.5e3
-N=-1532e3-1470.1e3
-Fh=706.9e3
-N=-1532e3
-
 # Materials
 concrete= EC2_materials.C30
 
 # Define FE problem.
-FEcase= xc.FEProblem()
-preprocessor=FEcase.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 # Problem type
@@ -63,11 +59,11 @@ modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 ## Problem geometry
 pTop= modelSpace.newKPoint(0, 0)
 pBottom= modelSpace.newKPoint(0,-lPile)
-l= modelSpace.newLine(pTop, pBottom)
+pileLine= modelSpace.newLine(pTop, pBottom)
 eSize= 0.24 # length of elements
-l.setElemSize(eSize)
+pileLine.setElemSize(eSize)
 
-pileBC= pytzqz_pile.PyTzQzCircularPile(pileSet= l, diameter= pileDiameter, E= concrete.Ecm(), pileType='endBearing', soilLayers= soilLayers)
+pileBC= pytzqz_pile.PyTzQzCircularPile(pileSet= pileLine, diameter= pileDiameter, E= concrete.Ecm(), pileType='endBearing', soilLayers= soilLayers)
 
 ## Create mesh.
 ### Finite element material
@@ -80,15 +76,37 @@ modelSpace.setDefaultCoordTransf(lin)
 ### Set element type.
 modelSpace.newSeedElement('ElasticBeam2d')
 ### Generate mesh.
-l.genMesh(xc.meshDir.I)
+pileLine.genMesh(xc.meshDir.I)
 
 ### Constraints.
 pileBC.generateSpringsPile()
 
 # Just check the springs are created.
 numberOfShaftSprings= len(pileBC.springs)
-numberOfNodes= len(l.nodes)
+numberOfNodes= len(pileLine.nodes)
 testOK= (numberOfShaftSprings==numberOfNodes)
+
+# Loads
+Fv= -5500e3
+lp0= modelSpace.newLoadPattern(name= 'lp0', setCurrent= True)
+pileTopNode= pTop.getNode()
+lp0.newNodalLoad(pileTopNode.tag, xc.Vector([0.0, Fv, 0.0]))
+modelSpace.addLoadCaseToDomain(lp0.name)
+
+# Solution procedure.
+solProc= predefined_solutions.TransformationNewtonRaphsonBandGen(feProblem, convergenceTestTol= 1e-7, convTestType= 'norm_disp_incr_conv_test', maxNumIter= 10, printFlag= 0)
+solProc.setup()
+solProc.getAnalysis().analyze(1)
+
+# Check results.
+uY= pileTopNode.getDisp[1]
+ratio1= abs(uY+2.1541611566793932e-3)/2.1541611566793932
+testOK&= (ratio1<1e-5)
+
+if(not silent):
+    print('Number of springs along the shaft: ', numberOfShaftSprings)
+    print('Number of nodes along the shaft: ', numberOfNodes)
+    print('vertical displacement: ', uZ*1e3, 'mm')
 
 import os
 from misc_utils import log_messages as lmsg
@@ -97,3 +115,24 @@ if testOK:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+if(not silent):
+## Compute spring stiffness for each node.
+    springElementSet= modelSpace.defSet('springElementSet', elements= pileBC.springs)
+    springElementSet.fillDownwards()
+    for n in pileLine.nodes:
+        elements= n.getConnectedElements(springElementSet)
+        for e in elements:
+            materials= e.getMaterials()
+            kx= materials[0].getTangent()
+            n.setProp('k_x', kx)
+    from postprocess import output_handler
+    oh= output_handler.OutputHandler(modelSpace)
+    # oh.displayBlocks()
+    # oh.displayFEMesh()
+    # oh.displayLocalAxes()
+    oh.displayLoads()
+    oh.displayDispRot(itemToDisp='uX', defFScale= 10.0)
+    oh.displayDispRot(itemToDisp='uY', defFScale= 10.0)
+    oh.displayReactions()
+    oh.displayNodeValueDiagram(itemToDisp= 'k_x', caption= 'Spring stiffness x direction', defaultDirection= 'X', defaultValue= 0.0)
