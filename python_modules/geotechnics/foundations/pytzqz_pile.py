@@ -125,7 +125,7 @@ class SoilLayers(pile.SoilLayers):
         :param depth: depth of the point of interest.
         '''
         waterTableDepth= self.getWaterTableDepth()
-        if(depth<waterTableDepth):
+        if(depth>waterTableDepth):
             retval= 1
         else:
             retval= 2
