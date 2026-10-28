@@ -22,158 +22,89 @@ from model import predefined_spaces
 from model.sets import sets_mng 
 from materials import soil_structure_interaction as ssi
 from materials import typical_materials
+from materials.ec2 import EC2_materials
+from geotechnics import frictional_soil as fs
 from geotechnics.foundations import pile
-from geotechnics.foundations import pytzqz_functions as pytzqzf
+from geotechnics.foundations import pytzqz_pile
 from solution import predefined_solutions
 from actions.quake import ground_motion_utils as gmu
 from scipy.constants import g
-from materials.sections import section_properties as sp
 
-# Pile geometry and mesh
+# Pile geometry.
 columnLength = 1.0 # length of pile head (above ground surface) (m)
 pileLength = 20.0 # length of embedded pile (below ground surface) (m)
 pileDiameter = 1.0 # pile diameter
 eleSize= 0.25 # pile element length 
 
-# Define FE problem.
-feProblem= xc.FEProblem()
-preprocessor=  feProblem.getPreprocessor
-nodeHandler= preprocessor.getNodeHandler
-modelSpace= predefined_spaces.StructuralMechanics3D(nodeHandler)
-
-# K-points.
-pileTipPt= modelSpace.newKPoint(0.0, 0.0, 0.0) # pile tip.
-pileHead= modelSpace.newKPoint(0.0, 0.0, pileLength)
-columnHead= modelSpace.newKPoint(0.0, 0.0, columnLength+pileLength) # pile head.
-
-# Lines.
-pileLine= modelSpace.newLine(pileTipPt, pileHead)
-columnLine= modelSpace.newLine(pileHead, columnHead)
-
-# Create mesh.
-## Pile section.
-pileSectionGeom= sp.CircularSection(name= None, Rext= pileDiameter/2.0, Rint=0.0)
-# E = 25e9
-# nu= 0.3
-# G= E/(2*(1+nu))
-# A = 0.785
-# Iz = 0.049
-# Iy = 0.049
-# J = 0.098
-# print(A, pileSectionGeom.A())
-# print(Iz, pileSectionGeom.Iz())
-# sectionProperties= xc.CrossSectionProperties3d()
-# sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G
-# sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
-# pileSection= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "section",sectionProperties)
-elasticMaterialData= typical_materials.MaterialData(name= None, E= 25e9, nu= 0.3, rho= 2.5e3)
-pileSection= pileSectionGeom.defElasticShearSection3d(preprocessor= preprocessor, material= elasticMaterialData)
-# Coordinate transfomration.
-lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,-1,0]))
-## Create elements.
-modelSpace.setDefaultCoordTransf(lin)
-modelSpace.setDefaultMaterial(pileSection)
-modelSpace.newSeedElement("ElasticBeam3d")
-for l in [pileLine, columnLine]:
-    l.setElemSize(eleSize)
-    l.genMesh(xc.meshDir.I)
-pileSet= modelSpace.defSet('pileSet', lines= [pileLine, columnLine])
-pileSet.fillDownwards()
-
-# Soil properties
-soilRho= 17e3/g # soil density kg/m3
-soilPhi= math.radians(36.0) # soil internal friction angle (radians)
-soilG= 150000000.0 # soil shear modulus at pile tip (Pa).
-
+## Soil data.
+zGround= pileLength
+soil= fs.FrictionalSoil(phi= math.radians(36.0), rho= 17e3/g, gammaMPhi= 1.0)
 # select pult definition method for p-y curves
-# API (default) --> 1
+# API --> 1
 # Brinch Hansen --> 2
-puSwitch= 1 
-
+soil.puSwitch= 1
 # variation in coefficent of subgrade reaction with depth for p-y curves
 # API linear variation (default)   --> 1
 # modified API parabolic variation --> 2
-kSwitch= 1
+soil.kSwitch= 1
+# Viscous damping term (dashpot).
+soil.dashpotC= 0.0
+# Cofficient to compute the  drag resistance within a fully-mobilized gap as
+# Cd*pult.
+soil.Cd= 0.0
+# Soil shear modulus at pile tip.
+soil.G= 150000000.0 
+# Soil suction at pile tip during tension/uplift.
+soil.suction= 0.0
 
-# effect of ground water on subgrade reaction modulus for p-y curves
-# above gwt --> 1
-# below gwt --> 2
-gwtSwitch = 1
+soils=[[-100.0, soil]] # Properties of the soil layers:
+soilLayers= pytzqz_pile.SoilLayers(soilProfile= soils, groundLevel= zGround)
+
+# Materials
+concrete= EC2_materials.C20
+
+# Define FE problem.
+feProblem= xc.FEProblem()
+preprocessor= feProblem.getPreprocessor
+nodes= preprocessor.getNodeHandler
+
+# Problem type
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes) 
+## Problem geometry
+### K-points.
+pileTipPt= modelSpace.newKPoint(0.0, 0.0, 0.0) # pile tip.
+pileHead= modelSpace.newKPoint(0.0, 0.0, pileLength)
+columnHead= modelSpace.newKPoint(0.0, 0.0, columnLength+pileLength) # pile head.
+# Lines.
+pileLine= modelSpace.newLine(pileTipPt, pileHead)
+columnLine= modelSpace.newLine(pileHead, columnHead)
+pileLine.setElemSize(eleSize)
+
+pileBC= pytzqz_pile.PyTzQzCircularPile(pileSet= pileLine, diameter= pileDiameter, E= concrete.Ecm(), pileType='endBearing', soilLayers= soilLayers)
+
+## Create mesh.
+### Finite element material
+xcSection= pileBC.defElasticShearSection3d(preprocessor)
+modelSpace.setDefaultMaterial(xcSection)
+
+### Geometric transformations
+xzVector= xc.Vector([0, -1, 0])
+lin= modelSpace.newLinearCrdTransf("lin", xzVector= xzVector)
+modelSpace.setDefaultCoordTransf(lin)
+### Set element type.
+modelSpace.newSeedElement('ElasticBeam3d')
+### Generate mesh.
+pileLine.genMesh(xc.meshDir.I)
+columnLine.genMesh(xc.meshDir.I)
+
+pileSet= modelSpace.defSet('pileSet', lines= [pileLine, columnLine])
+pileSet.fillDownwards()
 
 ## Create springs along the pile shaft.
-tributaryLengths= sets_mng.get_tributary_lengths(xcSet= pileLine, initialGeometry= True)
-
-modelSpace.setElementDimension(3)
-springNodes= list()
-springElements= list()
-for n in pileLine.nodes:
-    nPos= n.getInitialPos3d
-    pyDepth= pileLength-nPos.z
-    tributaryLength=  tributaryLengths[n.tag]
-    pult, y50= pytzqzf.get_py_param(pyDepth, soilRho, soilPhi, pileDiameter, tributaryLength, puSwitch, kSwitch, gwtSwitch)
-    pyMatName= 'pyS_'+str(n.tag)
-    pyMat= ssi.def_pysimple1_material(preprocessor,
-                                      matName= pyMatName,
-                                      soilType= 2, # Sand.
-                                      pult= pult,
-                                      Y50= y50,
-                                      c= 0.0,
-                                      Cd= 0.0)
-
-    sigV= soilRho*g*pyDepth # Vertical stress.
-    tult, z50= pytzqzf.get_tz_param(soilPhi, pileDiameter, sigV, tributaryLength)
-    tzMatName= 'tzS:'+str(n.tag)
-    tzMat= ssi.def_tzsimple1_material(preprocessor,
-                                      matName= tzMatName,
-                                      tzType= 2, # Mosher relation.
-                                      tult= tult, # Ultimate skin friction capacity.
-                                      z50= z50, # 50% capacity reached at 0.05 units of displacement
-                                      c= 0.0)
-    # Create spring.
-    fixNode= modelSpace.duplicateNode(n)
-    modelSpace.fixNode('000_000', fixNode.tag)
-    modelSpace.setDefaultMaterial(pyMat)
-    pileShaftSpring= modelSpace.newElement("ZeroLength", [fixNode.tag, n.tag])
-    pileShaftSpring.clearMaterials()
-    pileShaftSpring.setMaterial(0, pyMat.name)
-    pileShaftSpring.setMaterial(1, pyMat.name)
-    pileShaftSpring.setMaterial(2, tzMat.name)
-    springNodes.append(fixNode)
-    springElements.append(pileShaftSpring)
-
-springElementSet= modelSpace.defSet('springElementSet', elements= springElements)
+pileBC.generateSpringsPile()
+### Put the springs in a set.
+springElementSet= modelSpace.defSet('springElementSet', elements= pileBC.springs)
 springElementSet.fillDownwards()
-
-## Create spring at the pile tip.
-### q-z spring material
-    
-tipNode= pileTipPt.getNode()
-### Fix vertical rotation of tip node.
-modelSpace.fixNode('FFF_FF0', tipNode.tag)
-### Compute tip node depth.
-tipNodePos= tipNode.getInitialPos3d
-tipNodeDepth= pileLength-tipNodePos.z
-### vertical effective stress at pile tip, no water table (depth is embedded pile length)
-sigVq= soilRho*g * tipNodeDepth # (N)
-qult, z50q = pytzqzf.get_qz_param(phi= soilPhi, b= pileDiameter, sigV= sigVq, G= soilG)
-# op.uniaxialMaterial('QzSimple1', 101, 2, qult, z50q) #, 0.0, 0.0
-# op.uniaxialMaterial('TzSimple1', 101, 2, qult, z50q, 0.0)
-qzMat= ssi.def_qzsimple1_material(preprocessor,
-                                  matName= 'qzS1_'+str(tipNode.tag),
-                                  qzType= 2, # 2 = Sand (Vijayvergiya, 1977 behavior).
-                                  qult= qult, # Ultimate tip capacity.
-                                  z50= z50q, # 50% capacity reached at 0.005 units of displacement
-                                  suction= 0.0, # No suction during tension/uplift
-                                  c= 0.0) # No viscous damping for this static test
-pileTipFixNode= modelSpace.duplicateNode(tipNode)
-modelSpace.fixNode('000_000', pileTipFixNode.tag)
-modelSpace.setDefaultMaterial(qzMat)
-modelSpace.setElementDimension(3)
-pileTipSpring= modelSpace.newElement("ZeroLength", [pileTipFixNode.tag, tipNode.tag])
-# Vertical direction.
-pileTipSpring.setupVectors(xc.Vector([0,0,1]),xc.Vector([0,-1,0]))
-pileTipSpring.clearMaterials()
-pileTipSpring.setMaterial(0, qzMat.name)
 
 # Create recorders.
 domain= modelSpace.getDomain()
@@ -188,6 +119,7 @@ dispRecorder.setNodes(xc.ID(pileNodeTags))
 dispRecorder.callbackRecord= "displacements[self.tag].append((self.getDomain.getTimeTracker.getCurrentTime, self.getDisp.getList()))"
 ## Record reaction force in the p-y springs
 reactions= dict()
+springNodes= pileBC.getSpringFixedNodes()
 springNodeTags= [n.tag for n in springNodes]
 for tag in springNodeTags:
     reactions[tag]= list()
@@ -206,10 +138,7 @@ iForcesRecorder.callbackRecord= "internal_forces[self.tag].append((self.getDomai
 # record information at specified increments
 timeStep = 0.5
 
-#----------------------------------------------------------
-#  create the loading
-#----------------------------------------------------------
-
+# Create loads.
 domain.currentTime= 10.0 
 
 ## Apply point load at the uppermost pile node in the x-direction
@@ -243,18 +172,18 @@ for key in reactions:
     for (t, R) in nodeReactions:
         fXExtrema.update(R[0], t, key)
         
-uXMinRef= -0.003117348550855237
+uXMinRef= -0.00286142601800859
 tUXMinRef= 20.05
-uXMaxRef= .4678316947456062
+uXMaxRef= .3928310360864577
 tUXMaxRef= 20.05
 ratio1= abs(uXExtrema.min-uXMinRef)/uXMinRef # Minimum displacement.
 ratio2= abs(uXExtrema.t_min-tUXMinRef)/tUXMinRef
 ratio3= abs(uXExtrema.max-uXMaxRef)/uXMaxRef
 ratio4= abs(uXExtrema.t_max-tUXMaxRef)/tUXMaxRef
 
-fXMinRef= -643.2907540549348e3
+fXMinRef= -622.4289515574546e3
 tFXMinRef= 20.05
-fXMaxRef= 484.1599029457742e3
+fXMaxRef= 450.68899505561825e3
 tFXMaxRef= 20.05
 ratio5= abs(fXExtrema.min-fXMinRef)/fXMinRef
 ratio6= abs(fXExtrema.t_min-tFXMinRef)/tFXMinRef
@@ -299,18 +228,17 @@ if((abs(ratio1)<1e-12) and (abs(ratio2)<1e-12) and (abs(ratio3)<1e-12) and (abs(
 else:
     lmsg.error(fname+' ERROR.')
     
-# Graphic stuff.
-## Compute spring stiffness for each node.
-for n in pileLine.nodes:
-    elements= n.getConnectedElements(springElementSet)
-    for e in elements:
-        materials= e.getMaterials()
-        kx= materials[0].getTangent()
-        n.setProp('k_x', kx)
-        ky= materials[1].getTangent()
-        n.setProp('k_y', ky)
-    
+# Graphic stuff.    
 if(not silent):
+    ## Compute spring stiffness for each node.
+    for n in pileLine.nodes:
+        elements= n.getConnectedElements(springElementSet)
+        for e in elements:
+            materials= e.getMaterials()
+            kx= materials[0].getTangent()
+            n.setProp('k_x', kx)
+            ky= materials[1].getTangent()
+            n.setProp('k_y', ky)
     from postprocess import output_handler
     oh= output_handler.OutputHandler(modelSpace)
     # oh.displayBlocks()
