@@ -534,7 +534,7 @@ class PyTzQzPile(pile.Pile):
         modelSpace.setElementDimension(2)
         pileTipSpring= modelSpace.newElement("ZeroLength", [pileTipFixNode.tag, tipNode.tag])
         # Vertical direction.
-        pileTipSpring.setupVectors(xc.Vector([0,0,1]),xc.Vector([0,-1,0]))
+        pileTipSpring.setupVectors(xc.Vector([0,1,0]),xc.Vector([-1,0,0]))
         pileTipSpring.clearMaterials()
         pileTipSpring.setMaterial(0, qzMat.name)
         # Remove material that is no longer needed.
