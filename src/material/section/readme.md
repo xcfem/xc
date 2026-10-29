@@ -15,3 +15,4 @@ The aim of the classes on this folder is to represent section materials. Those m
 - [Full Fiber Circle](https://portwooddigital.com/2022/06/15/full-fiber-circle/)
 - [Rectangular Hollow Structural Sections](https://portwooddigital.com/2023/11/24/rectangular-hollow-structural-sections/)
 - [Flipping Rotation Axes](https://portwooddigital.com/2023/11/12/flipping-rotation-axes/)
+- [A moment of constant confusion](https://openseesdigital.com/2026/09/30/a-moment-of-constant-confusion/)

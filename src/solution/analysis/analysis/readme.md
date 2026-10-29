@@ -41,6 +41,10 @@ Classes that implement the different types of analysis:
 - [Modal and Stiffness Proportional Damping](https://portwooddigital.com/2023/01/25/modal-and-stiffness-proportional-damping/)
 - [Just Fillin’ Up the Tank](https://portwooddigital.com/2024/08/08/just-fillin-up-the-tank/)
 - [Minimal Random Process Example](https://portwooddigital.com/2025/09/28/minimal-random-process-example/)
+- [Double Inverted Pendulum](https://portwooddigital.com/2025/09/08/double-inverted-pendulum/)
+- [Celestial OpenSeesing](https://portwooddigital.com/2025/09/14/celestial-openseesing/)
+- [The OpenSees Are Pounding](https://openseesdigital.com/2026/10/11/the-opensees-are-pounding/)
+- [Heat Conduction in OpenSees](https://openseesdigital.com/2026/10/15/heat-conduction-in-opensees/)
 
 #### Rotary inertia terms
 - [ShellMITC4 creates indeterminate matrix in explicit analysis](https://github.com/OpenSees/OpenSees/issues/998)

@@ -6,5 +6,7 @@ Verifications tests for the sections defined in section_properties module.
 - [Torsion constant](https://en.wikipedia.org/wiki/Torsion_constant)
 - [Section properties](https://www.steelforlifebluebook.co.uk/explanatory-notes/ec3-ukna/properties/)
 - [Section modulus](https://en.wikipedia.org/wiki/Section_modulus#Plastic_section_modulus)
+- [A moment of constant confusion](https://openseesdigital.com/2026/09/30/a-moment-of-constant-confusion/)
+
 #### Material properties.
 - [Shear modulus](https://en.wikipedia.org/wiki/Shear_modulus)

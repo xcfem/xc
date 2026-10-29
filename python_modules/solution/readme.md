@@ -55,6 +55,8 @@ Once the analyst has defined the model, the next step is to define the analysis 
 - [Minimal Random Process Example](https://portwooddigital.com/2025/09/28/minimal-random-process-example/)
 - [Double Inverted Pendulum](https://portwooddigital.com/2025/09/08/double-inverted-pendulum/)
 - [Celestial OpenSeesing](https://portwooddigital.com/2025/09/14/celestial-openseesing/)
+- [The OpenSees Are Pounding](https://openseesdigital.com/2026/10/11/the-opensees-are-pounding/)
+- [Heat Conduction in OpenSees](https://openseesdigital.com/2026/10/15/heat-conduction-in-opensees/)
 
 ### Eigenvalue analysis
  - [NAFEMS Test P18.FV2](https://openseesdigital.com/nafems/fv2/)
