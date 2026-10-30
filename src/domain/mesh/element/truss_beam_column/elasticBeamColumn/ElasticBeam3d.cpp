@@ -590,12 +590,10 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForceIncInertia(void) const
 
     // add the damping forces if rayleigh damping
     if(!rayFactors.nullValues())
-      P+= this->getRayleighDampingForces();
+      P.addVector(1.0, this->getRayleighDampingForces(), 1.0);
 
     const double rho= getRho();
-    if(rho == 0.0)
-      return P;
-    else
+    if(rho != 0.0)
       {
         const Vector &accel1= theNodes[0]->getTrialAccel();
         const Vector &accel2= theNodes[1]->getTrialAccel();
@@ -610,10 +608,10 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForceIncInertia(void) const
         P(6) += m * accel2(0);
         P(7) += m * accel2(1);
         P(8) += m * accel2(2);
-        return P;
       }
     if(isDead())
       P*=dead_srf;
+    return P;
   }
 
 
