@@ -443,7 +443,7 @@ const XC::Vector &XC::ElasticBeam2d::getResistingForceIncInertia(void) const
 
     // add the damping forces if rayleigh damping
     if(!rayFactors.nullValues())
-      P+= this->getRayleighDampingForces();
+      P.addVector(1.0, this->getRayleighDampingForces(), 1.0);
 
     const double rho= getRho();
     if(rho!=0.0)
