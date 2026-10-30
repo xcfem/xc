@@ -351,21 +351,20 @@ const XC::Vector &XC::ElasticTimoshenkoBeam2d::getResistingForceIncInertia(void)
     if(!rayFactors.nullValues())
       theVector.addVector(1.0, this->getRayleighDampingForces(), 1.0);
     
-    // check for quick return
     const double rho= getRho();
-    if (rho == 0.0)
-        return theVector;
-    
-    // add inertia forces from element mass
-    const Vector &accel1 = theNodes[0]->getTrialAccel();
-    const Vector &accel2 = theNodes[1]->getTrialAccel();
-    static Vector accel(6);
-    for (int i=0; i<3; i++)
+    if(rho != 0.0)
       {
-        accel(i)   = accel1(i);
-        accel(i+3) = accel2(i);
+	// add inertia forces from element mass
+	const Vector &accel1 = theNodes[0]->getTrialAccel();
+	const Vector &accel2 = theNodes[1]->getTrialAccel();
+	static Vector accel(6);
+	for (int i=0; i<3; i++)
+	  {
+	    accel(i)   = accel1(i);
+	    accel(i+3) = accel2(i);
+	  }
+	theVector.addMatrixVector(1.0, M, accel, 1.0);
       }
-    theVector.addMatrixVector(1.0, M, accel, 1.0);
     
     if(isDead())
       theVector*=dead_srf;
