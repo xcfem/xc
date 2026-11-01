@@ -5,6 +5,7 @@
 import sys
 import math
 from misc_utils import log_messages as lmsg
+from geotechnics.foundations import soil_layers
 from geotechnics.foundations import pile
 from scipy import interpolate
 
@@ -146,7 +147,7 @@ def soilReactionModulus(soilType, soilState, relativeDensity= None, consistency=
     a_p= alpha_p(soilType= soilType, soilState= soilState)
     return EM*6/(4/3.0*pow(2.65,a_p)+a_p)
 
-class SandySoilLayers(pile.SoilLayers):
+class SandySoilLayers(soil_layers.SoilLayers):
     ''' Class to compute the value of the soil reaction modulus according 
         to the table A-6.7 of the "Guía..." document.
 

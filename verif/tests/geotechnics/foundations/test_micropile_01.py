@@ -13,7 +13,7 @@ __email__= "l.pereztato@gmail.com"
 from materials.ec3 import EC3_materials
 from materials.api import API_materials
 from materials.ehe import EHE_materials
-from geotechnics.foundations import pile
+from geotechnics.foundations import soil_layers
 from geotechnics.foundations import guia_micropilotes_oc as guia
 
 # Material
@@ -39,7 +39,7 @@ Fe= 1.5
 # Fuc: reduction factor of the cross-section area due to the  type of the
 #      union taken from table 3.4.
 Fuc= 0.5
-micropile= guia.Micropile(pileSet= None, pileDiam= 152.4e-3, soilLayers= pile.SoilLayers(), mortarMaterial= mortar, pipeSection= pipeShape, axialRebar= rebar, pileType= 'endBearing', soilAggressivity= soilAggressivity, designLife= designLife, Fe= Fe, Fuc= Fuc)
+micropile= guia.Micropile(pileSet= None, pileDiam= 152.4e-3, soilLayers= soil_layers.SoilLayers(), mortarMaterial= mortar, pipeSection= pipeShape, axialRebar= rebar, pileType= 'endBearing', soilAggressivity= soilAggressivity, designLife= designLife, Fe= Fe, Fuc= Fuc)
 
 # Axial strength
 ## C_R: adimensional coefficient from the table 3.6 of the "Guía".

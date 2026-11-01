@@ -109,29 +109,6 @@ def generate_springs_pile_3d(modelSpace, nodes, linearSpringsConstants, storeAsP
                 n.setProp('k_z', k_i[2])
     return retval
 
-class SoilLayers(object):
-    ''' Base class for soil horizons in pile computations.
-
-    :ivar waterTableZ: global Z coordinate of the water table. 
-    :ivar groundLevel: global Z coordinate of the ground level.
-    :ivar waterDensity: density of the water.
-    '''
-    def __init__(self, waterTableZ= -math.inf, groundLevel= 0.0, waterDensity= 1e3):
-        ''' Constructor.
-
-        :param waterTableZ: global Z coordinate of the water table.
-        :param groundLevel: global Z coordinate of the ground level.
-        :param waterDensity: density of the water.
-        '''
-        self.waterTableZ= waterTableZ
-        self.groundLevel= groundLevel
-        self.waterDensity= waterDensity
-
-    def submerged(self, z):
-        ''' Return true if z<waterTableZ.'''
-        return z<self.waterTableZ
-
-
 class Pile(object):
     '''Pile basic properties.
     

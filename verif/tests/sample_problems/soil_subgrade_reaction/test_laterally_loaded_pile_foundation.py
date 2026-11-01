@@ -24,7 +24,7 @@ from materials import soil_structure_interaction as ssi
 from materials import typical_materials
 from materials.ec2 import EC2_materials
 from geotechnics import frictional_soil as fs
-from geotechnics.foundations import pile
+from geotechnics.foundations import pytzqz_soil_layers
 from geotechnics.foundations import pytzqz_pile
 from solution import predefined_solutions
 from actions.quake import ground_motion_utils as gmu
@@ -58,7 +58,7 @@ soil.G= 150000000.0
 soil.suction= 0.0
 
 soils=[[-100.0, soil]] # Properties of the soil layers:
-soilLayers= pytzqz_pile.SoilLayers(soilProfile= soils, groundLevel= zGround)
+soilLayers= pytzqz_soil_layers.SoilLayers(soilProfile= soils, groundLevel= zGround)
 
 # Materials
 concrete= EC2_materials.C20

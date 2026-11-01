@@ -9,10 +9,11 @@ __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es "
 
 import sys
+from geotechnics.foundations import soil_layers
 from geotechnics.foundations import pile
 from misc_utils import log_messages as lmsg
 
-class SoilLayers(pile.SoilLayers):
+class SoilLayers(soil_layers.SoilLayers):
     ''' Class to compute the value of the soil reaction modulus according 
         to the table A-6.7 of the "Guía..." document.
 

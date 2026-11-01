@@ -35,7 +35,7 @@ for i in range(0, 10):
     depth= -(i+1)
     soilRows.append((depth, dummySoil))
 
-soilLayers= pytzqz_pile.SoilLayers(soilProfile= soilRows, groundLevel= zGround, waterTableZ= None)
+soilLayers= pytzqz_soil_layers.SoilLayers(soilProfile= soilRows, groundLevel= zGround, waterTableZ= None)
 
 depths= [-(i+0.5) for i in range(0, 9)]
 
@@ -45,7 +45,7 @@ for depth in depths:
     vStresses.append(verticalStress/1e3)
 
 zWaterTable= -5.0
-wetSoilLayers= pytzqz_pile.SoilLayers(soilProfile= soilRows, groundLevel= zGround, waterTableZ= zWaterTable, waterDensity= 1e4/g)
+wetSoilLayers= pytzqz_soil_layers.SoilLayers(soilProfile= soilRows, groundLevel= zGround, waterTableZ= zWaterTable, waterDensity= 1e4/g)
 
 waterPressures= list()
 wetVStresses= list()

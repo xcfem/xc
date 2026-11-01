@@ -13,6 +13,7 @@ import xc
 from scipy.constants import g
 from model import predefined_spaces
 from materials.ec2 import EC2_materials
+from geotechnics.foundations import pytzqz_soil_layers
 from geotechnics.foundations import pytzqz_pile
 from geotechnics import frictional_soil as fs
 from solution import predefined_solutions
@@ -44,7 +45,7 @@ sandySoil.G= 150000000.0
 sandySoil.suction= 0.0
 
 soils=[[-100.0, sandySoil]] # Properties of the soil layers:
-soilLayers= pytzqz_pile.SoilLayers(soilProfile= soils, groundLevel= zGround)
+soilLayers= pytzqz_soil_layers.SoilLayers(soilProfile= soils, groundLevel= zGround)
 
 # Materials
 concrete= EC2_materials.C30
