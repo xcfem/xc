@@ -13,6 +13,7 @@ import xc
 from scipy.constants import g
 from model import predefined_spaces
 from materials.ec2 import EC2_materials
+from geotechnics.foundations import pytzqz_soil_layers
 from geotechnics.foundations import pytzqz_pile
 from geotechnics import frictional_soil as fs
 
