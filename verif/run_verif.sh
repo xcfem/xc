@@ -2004,6 +2004,7 @@ python tests/geotechnics/foundations/piles/test_skin_friction.py
 python tests/geotechnics/foundations/piles/test_broms_lateral_subgrade_reaction_modulus_01.py
 python tests/geotechnics/foundations/piles/test_matlock_formulas_01.py
 python tests/geotechnics/foundations/piles/test_tz_formulas_for_clay_01.py
+python tests/geotechnics/foundations/piles/test_qz_formulas_for_clay_01.py
 python tests/geotechnics/foundations/piles/test_soil_sampled_data_01.py
 python tests/geotechnics/foundations/piles/test_pu_pile_in_weak_rock.py
 python tests/geotechnics/foundations/piles/test_pile_soil_layers_01.py
