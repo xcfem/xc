@@ -188,7 +188,7 @@ class SoilLayers(soil_layers.SoilLayers):
         soil= self.getSoilAtDepth(depth)
         return soil.suction
         
-    def getPyParametersAtDepth(self, depth, pileDiameter, tributaryLength):
+    def getPyParametersAtDepth(self, depth, pileDiameter, tributaryLength, verticalStressOnSurface= 0.0):
         '''  Compute the ultimate resistance (pult) according to API 
             recommendations (Reese and Van Impe, 2001 or API, 1987) for puSwitch= 1
             OR per the method of Brinch Hansen (1961) for puSwitch= 2 and the
@@ -197,15 +197,18 @@ class SoilLayers(soil_layers.SoilLayers):
         :param depth: depth of the poing of interest (m).
         :param pileDiameter: pile diameter (m).
         :param tributaryLength: tributary length.
+        :param verticalStressOnSurface: vertical stress on the soil surface.
         '''
         soil= self.getSoilAtDepth(depth)
         if(soil):
-            soilRho= soil.rho # density.
+            # soilRho= soil.rho # density.
             soilPhi= soil.phi # internal friction angle.
+            soilCu= soil.getCohesion() # soil undrained cohesion.
+            sigV= self.getVerticalStressAtDepth(depth, verticalStressOnSurface) # Vertical stress.
             puSwitch= soil.puSwitch
             kSwitch= soil.kSwitch
             gwtSwitch= self.getGroundWaterSwitchAtDepth(depth)
-            pult, y50= pytzqzf.get_py_param(pyDepth= depth, rho= soilRho, phi= soilPhi, b= pileDiameter, tribLength= tributaryLength, puSwitch= puSwitch, kSwitch= kSwitch, gwtSwitch= gwtSwitch)
+            pult, y50= pytzqzf.get_py_param(pyDepth= depth, phi= soilPhi, cu= soilCu, sigV= sigV, b= pileDiameter, tribLength= tributaryLength, puSwitch= puSwitch, kSwitch= kSwitch, gwtSwitch= gwtSwitch)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name

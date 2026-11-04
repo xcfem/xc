@@ -14,24 +14,39 @@ import sys
 import json
 import math
 import numpy as np
+from scipy.constants import g
 from scipy import interpolate
+from geotechnics.foundations import soil_layers
+from geotechnics.foundations import pytzqz_functions as pytzqzf
 from matplotlib import pyplot, transforms
 from misc_utils import log_messages as lmsg
 
-class SoilSampledData(object):
+class SoilSampledData(soil_layers.SoilLayers):
     ''' Class to store the values of the geotechnical parameters along the
-        depth of a set of piles.
+        depth of a pile.
     '''
-    def __init__(self, code, pile_data= None):
+    def __init__(self, code, pile_data= None, puSwitch= 1, kSwitch= 1, waterTableZ= -math.inf, waterDensity= 1e3):
         ''' Constructor.
 
         :param code: code for the geotechnical parameters.
         :param pile_data: dictionary containing the geotechnical data of the
                           piles.
+        :param puSwitch: select pult definition method for p-y curves
+                         API --> 1
+                         Brinch Hansen --> 2
+        :param kSwitch: select variation in coefficent of subgrade reaction 
+                        with depth for p-y curves
+                        API linear variation (default)   --> 1
+                        modified API parabolic variation --> 2
+        :param waterTableZ: global Z coordinate of the water table.
+        :param waterDensity: density of the water.
         '''
+        super().__init__(waterTableZ= waterTableZ, groundLevel= None, waterDensity= waterDensity)
         self.code= code
         self.pileData= pile_data
         self.interpolationsDict= dict()
+        self.puSwitch= puSwitch
+        self.kSwitch= kSwitch
         
     def readFromFile(self, inputFileName):
         ''' Read the geotechnical data from the given file.
@@ -261,7 +276,7 @@ class SoilSampledData(object):
         return self._get_bearing_property_along_pile_depth(propName= 'gammai')
 
     def getUnitWeightAtDepth(self, depth):
-        ''' Return the value of the cohesion at the given depth.
+        ''' Return the value of the soil unit weight at the given depth.
 
         :param depth: desired depth.
         '''
@@ -269,6 +284,45 @@ class SoilSampledData(object):
         depths, values= self.getUnitWeightAlongDepth()
         interpolation= self._get_staircase_property_interpolation(propName= 'gammai', depths= depths, values= values)
         retval= float(interpolation(depth))
+        return retval
+    
+    def getUnitMassAtDepth(self, depth):
+        ''' Return the value of the soil unit mass at the given depth.
+
+        :param depth: desired depth.
+        '''
+        retval= self.getUnitWeightAtDepth(depth)
+        retval/= g
+        return retval
+
+    def getVerticalStressAtDepth(self, depth, verticalStressOnSurface):
+        ''' Return the value of the vertical stress at the given depth.
+
+        :param depth: desired depth.
+        :param verticalStressOnSurface: additional stress on the soil surface.
+        '''
+        retval= verticalStressOnSurface
+        depths, values= self.getUnitWeightAlongDepth()
+        if(len(depths)>1):
+            depth0= depths[0]
+            v0= values[0]
+            for depth1, v1 in zip(depths[1:], values[1:]):
+                if(depth1<depth):
+                    retval+= 0.5*(depth1-depth0)*(v0+v1)
+                else:
+                    v1= self.getUnitWeightAtDepth(depth)
+                    retval+= 0.5*(depth-depth0)*(v0+v1)
+                    break
+                v0= v1
+                depth0= depth1
+        elif(len(depths)>0):
+            retval= depth*values[0]
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= '; not enough data to compute vertical pressure.'
+            lmsg.error(className+'.'+methodName+errMsg)
+            sys.exit(1)
         return retval
     
     def plotUnitWeightAlongDepth(self, unitConvFactor= 1e-3, unitSymbol= 'kN/m3'):
@@ -430,7 +484,181 @@ class SoilSampledData(object):
         propName= '$K_{h}$'
         if(khi is not None):
             tmp= [kh*unitConvFactor for kh in khi]
-            self._plot_property_along_pile_depth(propName= propName, depths= depthi, values= tmp, unitSymbol= unitSymbol)        
+            self._plot_property_along_pile_depth(propName= propName, depths= depthi, values= tmp, unitSymbol= unitSymbol)
+                    
+    def getDashpotCAlongDepth(self):
+        ''' Return the horizontal modulus of subgrade reaction of the pile 
+            corresponding to different depths.
+
+        '''
+        return self._get_bearing_property_along_pile_depth(propName= 'dashpotci')
+            
+    def getDashpotCAtDepth(self, depth):
+        ''' Return the value of the horizontal modulus of subgrade reaction 
+            at the given depth.
+
+        :param depth: desired depth.
+        '''
+        depths, values= self.getDashpotCAlongDepth()
+        interpolation= self._get_staircase_property_interpolation(propName= 'dashpotc', depths= depths, values= values)
+        return float(interpolation(depth))
+                                                                  
+    def plotDashpotCAlongDepth(self, unitConvFactor= 1e-3, unitSymbol= '$kN.s/m$'):
+        ''' Plot the horizontal modulus of subgrade reaction of the pile 
+            corresponding to different depths.
+
+        :param unitConvFactor: unit conversion factor.
+        :param unitSymbol: unit simbol.
+        '''
+        depthi, dashpotCi= self.getDashpotCAlongDepth()
+        propName= '$c$'
+        if(dashpotCi is not None):
+            tmp= [dashpotC*unitConvFactor for dashpotC in dashpotCi]
+            self._plot_property_along_pile_depth(propName= propName, depths= depthi, values= tmp, unitSymbol= unitSymbol)
+        
+    def getDragResistanceAlongDepth(self):
+        ''' Return the horizontal modulus of subgrade reaction of the pile 
+            corresponding to different depths.
+
+        '''
+        return self._get_bearing_property_along_pile_depth(propName= 'drag_resistance_i')
+            
+    def getDragResistanceAtDepth(self, depth):
+        ''' Return the value of the horizontal modulus of subgrade reaction 
+            at the given depth.
+
+        :param depth: desired depth.
+        '''
+        depths, values= self.getDragResistanceAlongDepth()
+        interpolation= self._get_staircase_property_interpolation(propName= 'drag_resistance', depths= depths, values= values)
+        return float(interpolation(depth))
+                                                                  
+    def plotDragResistanceAlongDepth(self, unitConvFactor= 1e-3, unitSymbol= '$kN$'):
+        ''' Plot the horizontal modulus of subgrade reaction of the pile 
+            corresponding to different depths.
+
+        :param unitConvFactor: unit conversion factor.
+        :param unitSymbol: unit simbol.
+        '''
+        depthi, drag_resistance_i= self.getDragResistanceAlongDepth()
+        propName= '$C_{d}$'
+        if(drag_resistance_i is not None):
+            tmp= [drag_resistance*unitConvFactor for drag_resistance in drag_resistance_i]
+            self._plot_property_along_pile_depth(propName= propName, depths= depthi, values= tmp, unitSymbol= unitSymbol)
+
+    def getShearModulusAlongDepth(self):
+        ''' Return the horizontal modulus of subgrade reaction of the pile 
+            corresponding to different depths.
+
+        '''
+        return self._get_bearing_property_along_pile_depth(propName= 'gi')
+            
+    def getShearModulusAtDepth(self, depth):
+        ''' Return the value of the horizontal modulus of subgrade reaction 
+            at the given depth.
+
+        :param depth: desired depth.
+        '''
+        depths, values= self.getShearModulusAlongDepth()
+        interpolation= self._get_staircase_property_interpolation(propName= 'shear_modulus', depths= depths, values= values)
+        return float(interpolation(depth))
+                                                                  
+    def plotShearModulusAlongDepth(self, unitConvFactor= 1e-6, unitSymbol= '$MPa$'):
+        ''' Plot the horizontal modulus of subgrade reaction of the pile 
+            corresponding to different depths.
+
+        :param unitConvFactor: unit conversion factor.
+        :param unitSymbol: unit simbol.
+        '''
+        depthi, shear_modulus_i= self.getShearModulusAlongDepth()
+        propName= '$G$'
+        if(shear_modulus_i is not None):
+            tmp= [shear_modulus*unitConvFactor for shear_modulus in shear_modulus_i]
+            self._plot_property_along_pile_depth(propName= propName, depths= depthi, values= tmp, unitSymbol= unitSymbol)
+            
+    def getSuctionAlongDepth(self):
+        ''' Return the horizontal modulus of subgrade reaction of the pile 
+            corresponding to different depths.
+
+        '''
+        return self._get_bearing_property_along_pile_depth(propName= 'suction_i')
+            
+    def getSuctionAtDepth(self, depth):
+        ''' Return the value of the horizontal modulus of subgrade reaction 
+            at the given depth.
+
+        :param depth: desired depth.
+        '''
+        depths, values= self.getSuctionAlongDepth()
+        interpolation= self._get_staircase_property_interpolation(propName= 'suction', depths= depths, values= values)
+        return float(interpolation(depth))
+                                                                  
+    def plotSuctionAlongDepth(self, unitConvFactor= 1e-6, unitSymbol= '$MPa$'):
+        ''' Plot the horizontal modulus of subgrade reaction of the pile 
+            corresponding to different depths.
+
+        :param unitConvFactor: unit conversion factor.
+        :param unitSymbol: unit simbol.
+        '''
+        depthi, suction_i= self.getSuctionAlongDepth()
+        propName= '$G$'
+        if(suction_i is not None):
+            tmp= [suction*unitConvFactor for suction in suction_i]
+            self._plot_property_along_pile_depth(propName= propName, depths= depthi, values= tmp, unitSymbol= unitSymbol)
+            
+    def getPyParametersAtDepth(self, depth, pileDiameter, tributaryLength, gwtSwitch, verticalStressOnSurface= 0.0):
+        '''  Compute the ultimate resistance (pult) according to API 
+            recommendations (Reese and Van Impe, 2001 or API, 1987) for puSwitch= 1
+            OR per the method of Brinch Hansen (1961) for puSwitch= 2 and the
+            displacement at 50% lateral capacity (y50).
+
+        :param depth: depth of the poing of interest (m).
+        :param pileDiameter: pile diameter (m).
+        :param tributaryLength: tributary length.
+        :param gwtSwitch: gwtSwitch= 1, k soil above the groundwater table,
+                          gwtSwitch= 2, k soil below the groundwater table,
+        :param verticalStressOnSurface: vertical stress on the soil surface.
+        '''
+        #soilRho= self.getUnitMassAtDepth(depth) # density.
+        sigV= self.getVerticalStressAtDepth(depth, verticalStressOnSurface) # Vertical stress.
+        print('*** sigV= ', sigV)
+        soilPhi= self.getInternalFrictionAngleAtDepth(depth) # internal friction angle.
+        soilCu= self.getCohesionAtDepth(depth)
+        print('*** soilPhi= ', math.degrees(soilPhi))
+        print('*** depth= ', depth)
+        print('*** gwtSwitch= ', gwtSwitch)
+        pult, y50= pytzqzf.get_py_param(pyDepth= depth, phi= soilPhi, cu= soilCu, sigV= sigV, b= pileDiameter, tribLength= tributaryLength, puSwitch= self.puSwitch, kSwitch= self.kSwitch, gwtSwitch= gwtSwitch)
+        return pult, y50
+    
+    def getTzParametersAtDepth(self, depth, pileDiameter, tributaryLength, verticalStressOnSurface= 0.0):
+        ''' Return the ultimate resistance, tult, and displacement at 50% 
+            mobilization of tult, z50, for use in t-z curves for cohesionless
+            soil.
+
+        :param depth: depth of the poing of interest (m).
+        :param pileDiameter: pile diameter (m).
+        :param tributaryLength: tributary length.
+        :param verticalStressOnSurface: vertical stress on the soil surface.
+        '''
+        sigV= self.getVerticalStressAtDepth(depth, verticalStressOnSurface) # Vertical stress.
+        soilPhi= self.getInternalFrictionAngleAtDepth(depth) # internal friction angle.
+        tult, z50= pytzqzf.get_tz_param(phi= soilPhi, b= pileDiameter, sigV= sigV, tribLength= tributaryLength)
+        return tult, z50
+    
+    def getQzParametersAtDepth(self, depth, pileDiameter, verticalStressOnSurface= 0.0):
+        '''  Return the ultimate resistance, qult, and displacement at 50% 
+            mobilization of qult, z50, for use in q-z curves for cohesionless
+            soil.
+
+        :param depth: depth of the poing of interest (m).
+        :param pileDiameter: pile diameter (m).
+        :param verticalStressOnSurface: additional stress on the soil surface.
+        '''
+        sigV= self.getVerticalStressAtDepth(depth, verticalStressOnSurface) # Vertical stress.
+        soilPhi= self.getInternalFrictionAngleAtDepth(depth) # internal friction angle.
+        soilG= self.getShearModulusAtDepth(depth) # soil shear modulus.
+        qult, z50= pytzqzf.get_qz_param(phi= soilPhi, b= pileDiameter, sigV= sigV, G= soilG)
+        return qult, z50
 
 class SoilSampledDataSet(object):
     ''' Class to store the values of the geotechnical parameters for many piles.

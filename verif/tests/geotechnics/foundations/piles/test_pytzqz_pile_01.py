@@ -30,13 +30,13 @@ sandySoil= fs.FrictionalSoil(phi= math.radians(30.0), rho= 18e3/g, gammaMPhi= 1.
 # API --> 1
 # Brinch Hansen --> 2
 sandySoil.puSwitch= 1
-# variation in coefficent of subgrade reaction with depth for p-y curves
+# select variation in coefficent of subgrade reaction with depth for p-y curves
 # API linear variation (default)   --> 1
 # modified API parabolic variation --> 2
 sandySoil.kSwitch= 1
 # Viscous damping term (dashpot).
 sandySoil.dashpotC= 0.0
-# Cofficient to compute the  drag resistance within a fully-mobilized gap as
+# Cofficient to compute the drag resistance within a fully-mobilized gap as
 # Cd*pult.
 sandySoil.Cd= 0.0
 # Soil shear modulus.

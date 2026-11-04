@@ -118,7 +118,8 @@ for n in pileLine.nodes:
     nPos= n.getInitialPos3d
     pyDepth= L2-nPos.z
     tributaryLength=  tributaryLengths[n.tag]
-    pult, y50= pytzqzf.get_py_param(pyDepth, soilRho, soilPhi, pileDiameter, tributaryLength, puSwitch, kSwitch, gwtSwitch)
+    sigV= soilRho*g*pyDepth # vertical stress.
+    pult, y50= pytzqzf.get_py_param(pyDepth= pyDepth, phi= soilPhi, cu= 0.0, sigV= sigV, b= pileDiameter, tribLength= tributaryLength, puSwitch= puSwitch, kSwitch= kSwitch, gwtSwitch= gwtSwitch)
     # Compute viscous damping for p-y spring materials.
     Gz= soilG*math.sqrt(max(pyDepth, 0.5)/L2)  # example G(z) ~ sqrt(depth), reduce for strain
     Vs= math.sqrt(Gz/soilRho)

@@ -28,8 +28,8 @@ class PyTzQzPile(pile.Pile):
     def __init__(self, E, crossSection, pileType, soilLayers, pileSet= None, rho= 2.5e3):
         ''' Constructor.
 
-        :param crossSection: cross-section of the pile.
         :param E: elastic modulus of pile material
+        :param crossSection: cross-section of the pile.
         :param pileType: "endBearing" for end bearing piles 
                         "friction" for friction piles
         :param soilLayers:  properties of the soil horizons.
@@ -432,26 +432,4 @@ class PyTzQzCircularPile(PyTzQzPile):
         ''' Return the pile equivalent diameter.'''
         return self.getDiameter()
             
-    def defElasticShearSection2d(self, preprocessor, majorAxis= True, overrideRho= None):
-        '''elastic section appropriate for 2D beam analysis, including shear 
-           deformations.
-
-        :param preprocessor: preprocessor object.
-        :param majorAxis: true if bending occurs in the section major axis.
-        :param overrideRho: if defined (not None), override the value of 
-                            the material density.
-        '''
-        matData= self.getElasticMaterialData(overrideRho= overrideRho)        
-        return self.crossSection.defElasticShearSection2d(preprocessor= preprocessor, material= matData, majorAxis= majorAxis, overrideRho= overrideRho)
-    
-    def defElasticShearSection3d(self, preprocessor, overrideRho= None):
-        '''elastic section appropriate for 3D beam analysis, including shear 
-           deformations.
-
-        :param preprocessor: preprocessor object.
-        :param overrideRho: if defined (not None), override the value of 
-                            the material density.
-        '''
-        matData= self.getElasticMaterialData(overrideRho= overrideRho)        
-        return self.crossSection.defElasticShearSection3d(preprocessor= preprocessor, material= matData, overrideRho= overrideRho)
     
