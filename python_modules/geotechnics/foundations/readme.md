@@ -2,6 +2,10 @@
 
 Code for foundation design.
 
+## Undrained shear strength ($s_u$) vs cohesion ($c$)
+
+Undrained shear strength ($s_u$) is the maximum shear stress a saturated clay can withstand under quick loading conditions where pore water cannot escape, whereas cohesion (or $c$) is a fundamental strength parameter in the Mohr-Coulomb failure criterion representing a soil's inherent ability to stick together. In short-term undrained total stress analysis, clay is treated as purely cohesive with a friction angle of zero ($\phi= 0$), making the undrained shear strength numerically equal to the undrained cohesion ($s_u= c_u$).
+
 
 ## References
 
