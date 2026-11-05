@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Trivial test for PyTzQzPile class.'''
+'''Trivial test for SoilLayers class of pytzqz_soil_layers module.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2026, LCPT and AO_O"
@@ -14,7 +14,6 @@ from scipy.constants import g
 from model import predefined_spaces
 from materials.ec2 import EC2_materials
 from geotechnics.foundations import pytzqz_soil_layers
-from geotechnics.foundations import pytzqz_pile
 from geotechnics import frictional_soil as fs
 
 # Data
@@ -33,12 +32,12 @@ for i in range(0, 10):
     # API linear variation (default)   --> 1
     # modified API parabolic variation --> 2
     dummySoil.kSwitch= 1
-    depth= -(i+1)
-    soilRows.append((depth, dummySoil))
+    z= -(i+1)
+    soilRows.append((z, dummySoil))
 
 soilLayers= pytzqz_soil_layers.SoilLayers(soilProfile= soilRows, groundLevel= zGround, waterTableZ= None)
 
-depths= [-(i+0.5) for i in range(0, 9)]
+depths= [(i+0.5) for i in range(0, 9)]
 
 vStresses= list()
 for depth in depths:
@@ -55,21 +54,26 @@ for depth in depths:
     wetVStresses.append(verticalStress/1e3)
 
 # Check results.
-refVStresses= [-5, -20, -45, -80, -125, -180, -245, -320, -405]
+refVStresses= [5, 20, 45, 80, 125, 180, 245, 320, 405]
 error= 0.0
 for vS, rVs in zip(vStresses, refVStresses):
     error+= (vS-rVs)**2
-refWetVStresses= [-5, -20, -45, -80, -125, -175, -230, -295, -370]
+refWetVStresses= [5, 20, 45, 80, 125, 175, 230, 295, 370]
 for vS, rVs in zip(wetVStresses, refWetVStresses):
     error+= (vS-rVs)**2
 
 error= math.sqrt(error)
 
 '''
-print(refWetVStresses)
-print(wetVStresses)
-print(error)
+print('Dry soil.')
+print('  computed pressure values: ', vStresses)
+print('  reference pressure values: ', refVStresses)
+print('Wet soil.')
+print('  computed pressure values: ', wetVStresses)
+print('  reference pressure values: ', refWetVStresses)
+print('error= ', error)
 '''
+
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
