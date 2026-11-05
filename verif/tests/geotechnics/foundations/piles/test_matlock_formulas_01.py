@@ -15,7 +15,7 @@ z = 3.5 # Depth of the spring.
 B = 0.8 # Pile diameter.
 L_trib = 1.0 # Tributary length.
 sigV= gamma*z
-pult= pytzqzf._get_pult_matlock(pyDepth= z, cu= cu, sigV= sigV, b= B, tribLength= 1.0)
+pult= pytzqzf._get_pult_matlock(pyDepth= z, cu= cu, sigV= sigV, b= B, tribLength= L_trib)
 y50= pytzqzf._get_y_50_matlock(cu= cu, b= B)
 
 # Check results.
