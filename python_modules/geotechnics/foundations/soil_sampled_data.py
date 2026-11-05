@@ -630,7 +630,7 @@ class SoilSampledData(soil_layers.SoilLayers):
         pult, y50= pytzqzf.get_py_param(pyDepth= depth, phi= soilPhi, cu= soilCu, sigV= sigV, b= pileDiameter, tribLength= tributaryLength, puSwitch= self.puSwitch, kSwitch= self.kSwitch, gwtSwitch= gwtSwitch)
         return pult, y50
     
-    def getTzParametersAtDepth(self, depth, pileDiameter, tributaryLength, verticalStressOnSurface= 0.0):
+    def getTzParametersAtDepth(self, depth, pileDiameter, tributaryLength, verticalStressOnSurface= 0.0, drilledShaft= True):
         ''' Return the ultimate resistance, tult, and displacement at 50% 
             mobilization of tult, z50, for use in t-z curves for cohesionless
             soil.
@@ -639,13 +639,16 @@ class SoilSampledData(soil_layers.SoilLayers):
         :param pileDiameter: pile diameter (m).
         :param tributaryLength: tributary length.
         :param verticalStressOnSurface: vertical stress on the soil surface.
+        :param drilledShaft: true when the pile is drilled instead of driven.
         '''
         sigV= self.getVerticalStressAtDepth(depth, verticalStressOnSurface) # Vertical stress.
+        porePressure= self.getPorePressureAtDepth(depth) # pore pressure.
         soilPhi= self.getInternalFrictionAngleAtDepth(depth) # internal friction angle.
-        tult, z50= pytzqzf.get_tz_param(phi= soilPhi, b= pileDiameter, sigV= sigV, tribLength= tributaryLength)
+        soilCu= self.getCohesionAtDepth(depth) # soil cohesion.
+        tult, z50= pytzqzf.get_tz_param(phi= soilPhi, su= soilCu, b= pileDiameter, sigV= sigV, porePressure= porePressure, tribLength= tributaryLength, drilledShaft= drilledShaft)
         return tult, z50
     
-    def getQzParametersAtDepth(self, depth, pileDiameter, verticalStressOnSurface= 0.0):
+    def getQzParametersAtDepth(self, depth, pileDiameter, verticalStressOnSurface= 0.0, drilledShaft= True):
         '''  Return the ultimate resistance, qult, and displacement at 50% 
             mobilization of qult, z50, for use in q-z curves for cohesionless
             soil.
@@ -653,11 +656,13 @@ class SoilSampledData(soil_layers.SoilLayers):
         :param depth: depth of the poing of interest (m).
         :param pileDiameter: pile diameter (m).
         :param verticalStressOnSurface: additional stress on the soil surface.
+        :param drilledShaft: true when the pile is drilled instead of driven.
         '''
         sigV= self.getVerticalStressAtDepth(depth, verticalStressOnSurface) # Vertical stress.
         soilPhi= self.getInternalFrictionAngleAtDepth(depth) # internal friction angle.
+        soilCu= self.getCohesionAtDepth(depth) # soil cohesion.
         soilG= self.getShearModulusAtDepth(depth) # soil shear modulus.
-        qult, z50= pytzqzf.get_qz_param(phi= soilPhi, b= pileDiameter, sigV= sigV, G= soilG)
+        qult, z50= pytzqzf.get_qz_param(qzDepth= depth, phi= soilPhi, su= soilCu, b= pileDiameter, sigV= sigV, G= soilG, drilledShaft= drilledShaft)
         return qult, z50
 
 class SoilSampledDataSet(object):

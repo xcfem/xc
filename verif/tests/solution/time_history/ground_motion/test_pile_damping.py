@@ -136,7 +136,7 @@ for n in pileLine.nodes:
                                       Cd= 0.0)
 
     sigV= soilRho*g*pyDepth # Vertical stress.
-    tult, z50= pytzqzf.get_tz_param(soilPhi, pileDiameter, sigV, tributaryLength)
+    tult, z50= pytzqzf.get_tz_param(phi= soilPhi, su= 0.0, b= pileDiameter, sigV= sigV, porePressure= 0.0, tribLength= tributaryLength, drilledShaft= True)
     # Compute viscous damping for t-z spring materials.
     c_tz= math.pi*pileDiameter*soilRho*Vs*tributaryLength
     tzMatName= 'tzS:'+str(n.tag)
@@ -172,7 +172,7 @@ pileTipNodePos= pileTipNode.getInitialPos3d
 pileTipNodeDepth= L2-pileTipNodePos.z
 ### vertical effective stress at pile tip, no water table (depth is embedded pile length)
 sigVq= soilRho*g * pileTipNodeDepth # (N)
-qult, z50q = pytzqzf.get_qz_param(phi= soilPhi, b= pileDiameter, sigV= sigVq, G= soilG)
+qult, z50q = pytzqzf.get_qz_param(qzDepth= pileTipNodeDepth, phi= soilPhi, su= 0.0, b= pileDiameter, sigV= sigVq, G= soilG, drilledShaft= True)
 # op.uniaxialMaterial('QzSimple1', 101, 2, qult, z50q) #, 0.0, 0.0
 # op.uniaxialMaterial('TzSimple1', 101, 2, qult, z50q, 0.0)
 # Compute viscous damping for q-z spring material. 

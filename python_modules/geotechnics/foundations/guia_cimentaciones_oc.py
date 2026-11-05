@@ -30,7 +30,7 @@ class SoilLayers(soil_layers.SoilLayers):
                                   shear strength of the saturated
                                   cohesive soil.
     '''
-    def __init__(self, groundLevel, soilProfile):
+    def __init__(self, groundLevel, soilProfile, waterTableZ= None):
         ''' Constructor.
 
         :param soilProfile: properties of the levels of soil, defined from 
@@ -45,10 +45,10 @@ class SoilLayers(soil_layers.SoilLayers):
                             -'su' for clay soil, corresponding to the 
                                   shear strength of the saturated
                                   cohesive soil.
-        :param waterTableZ: global Z coordinate of the water table.
         :param groundLevel: global Z coordinate of the ground level.
+        :param waterTableZ: global Z coordinate of the water table.
         '''
-        super().__init__(groundLevel= groundLevel, waterTableZ= None)
+        super().__init__(groundLevel= groundLevel, waterTableZ= waterTableZ)
         self.soilProfile= soilProfile
     
 

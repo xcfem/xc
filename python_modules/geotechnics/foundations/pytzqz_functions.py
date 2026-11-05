@@ -543,12 +543,12 @@ def _get_z_50_reese_and_oneill(su, b, drilledShaft= True):
         retval= 0.01125*b # Simplified API Standard (driven piles).
     return retval
 
-def _get_qz_param_clay(pyDepth, su, b, sigV, drilledShaft= True):
+def _get_qz_param_clay(qzDepth, su, b, sigV, drilledShaft= True):
     '''
     Compute ultimate tip resistance, qult, and displacement at 50%
     mobilization of qult, z50, for use in q-z curves for cohesive soil.
 
-    :param pyDepth: depth of the point of interest (m).
+    :param qzDepth: depth of the point of interest (m).
     :param su: undrained shear strength of the cohesive soil at the pile tip base.
     :param b: pile diameter (m).
     :param sigV: vertical stress (Pa).
@@ -556,25 +556,25 @@ def _get_qz_param_clay(pyDepth, su, b, sigV, drilledShaft= True):
     '''
     qult= 0.0
     z50= 100*b
-    if(pyDepth/b>=5.0):
+    if(qzDepth/b>=5.0):
         Nc= 9.0
         qult= Nc*su+sigV
     else:
         methodName= sys._getframe(0).f_code.co_name
         errorMsg= '; depth of the pile tip ('
-        errorMsg+= str(pyDepth)+') must be greater than five diameters ('
+        errorMsg+= str(qzDepth)+') must be greater than five diameters ('
         errorMsg+= str(5*b)+').'
         lmsg.error(methodName+errorMsg)
         sys.exit(-1)
     z50= _get_z_50_reese_and_oneill(su= su, b= b, drilledShaft= drilledShaft)
     return qult, z50
 
-def get_qz_param(pyDepth, phi, su, b, sigV, G, drilledShaft= True):
+def get_qz_param(qzDepth, phi, su, b, sigV, G, drilledShaft= True):
     '''
     Compute ultimate tip resistance, qult, and displacement at 50%
     mobilization of qult, z50, for use in q-z curves for cohesionless soil.
 
-    :param pyDepth: depth of the point of interest (m).
+    :param qzDepth: depth of the point of interest (m).
     :param phi: soil internal friction angle (radians).
     :param su: undrained shear strength of the cohesive soil at the pile tip base.
     :param b: pile diameter (m).
@@ -585,7 +585,7 @@ def get_qz_param(pyDepth, phi, su, b, sigV, G, drilledShaft= True):
     if(math.degrees(phi)>_api_1987_internal_friction_angle_values_[0]):
         qult, z50= _get_qz_param_sand(phi= phi, b= b, sigV= sigV, G= G)
     else:
-        qult, z50= _get_qz_param_clay(pyDepth= pyDepth, su= su, sigV= sigV, b= b, drilledShaft= drilledShaft)
+        qult, z50= _get_qz_param_clay(qzDepth= qzDepth, su= su, sigV= sigV, b= b, drilledShaft= drilledShaft)
     return qult, z50
 
 ##########################################################
@@ -670,7 +670,7 @@ def _get_tz_param_sand(phi, b, sigV, tribLength):
 #                                                         #
 ###########################################################
 
-def _get_tz_param_clay(su, b, sigV, tribLength, porePressure, drilledShaft= True):
+def _get_tz_param_clay(su, b, sigV, porePressure, tribLength, drilledShaft= True):
     '''
     Computes ultimate parameters (t_ult) and 50% mobilization displacements (z50)
     for t-z curves in cohesive soil (clays) based on API RP 2GEO guidelines.
@@ -678,8 +678,8 @@ def _get_tz_param_clay(su, b, sigV, tribLength, porePressure, drilledShaft= True
     :param su: undrained shear strength of the cohesive soil at the pile tip base.
     :param b: pile diameter (m).
     :param sigV: vertical stress (Pa).
-    :param tribLength: tributary length (m).
     :param porePressure: pore pressure (Pa).
+    :param tribLength: tributary length (m).
     :param drilledShaft: true when the pile is drilled instead of driven.
     '''
     # =========================================================================
@@ -712,7 +712,7 @@ def _get_tz_param_clay(su, b, sigV, tribLength, porePressure, drilledShaft= True
         z50= 0.31 * z_peak
     return tult, z50
 
-def get_tz_param(phi, su, b, sigV, tribLength, drilledShaft= True):
+def get_tz_param(phi, su, b, sigV, porePressure, tribLength, drilledShaft= True):
     '''
     Computes ultimate parameters (t_ult) and 50% mobilization displacements (z50)
     for t-z curves.
@@ -721,10 +721,12 @@ def get_tz_param(phi, su, b, sigV, tribLength, drilledShaft= True):
     :param su: undrained shear strength of the cohesive soil at the pile tip base.
     :param b: pile diameter (m).
     :param sigV: vertical stress (Pa).
+    :param porePressure: pore pressure (Pa).
+    :param tribLength: tributary length (m).
     :param drilledShaft: true when the pile is drilled instead of driven.
     '''
     if(math.degrees(phi)>_api_1987_internal_friction_angle_values_[0]):
         tult, z50= _get_tz_param_sand(phi= phi, b= b, sigV= sigV, tribLength= tribLength)
     else:
-        tult, z50= _get_tz_param_clay(su= su, sigV= sigV, b= b, tribLength= tribLength, drilledShaft= drilledShaft)
+        tult, z50= _get_tz_param_clay(su= su, sigV= sigV, b= b, tribLength= tribLength, porePressure= porePressure, drilledShaft= drilledShaft)
     return tult, z50

@@ -25,7 +25,7 @@ class PyTzQzPile(pile.Pile):
        and QzSimple1 materials.
     
     '''
-    def __init__(self, E, crossSection, pileType, soilLayers, pileSet= None, rho= 2.5e3):
+    def __init__(self, E, crossSection, pileType, soilLayers, pileSet= None, rho= 2.5e3, drilledShaft= True):
         ''' Constructor.
 
         :param E: elastic modulus of pile material
@@ -35,8 +35,9 @@ class PyTzQzPile(pile.Pile):
         :param soilLayers:  properties of the soil horizons.
         :param pileSet: set of nodes and elements defining a single pile.
         :param rho: material density.
+        :param drilledShaft: true when the pile is drilled instead of driven.
         '''
-        super().__init__(E= E, crossSection= crossSection, pileType= pileType, soilLayers= soilLayers, pileSet= pileSet, rho= rho)
+        super().__init__(E= E, crossSection= crossSection, pileType= pileType, soilLayers= soilLayers, pileSet= pileSet, rho= rho, drilledShaft= drilledShaft)
      
     def getDepth(self, z):
         ''' Return the depth corresponding to the given z coordinate.'''
@@ -80,7 +81,7 @@ class PyTzQzPile(pile.Pile):
         retval= None
         if(self.soilLayers):
             pileDiameter= self.getPileEquivalentDiameter()
-            tult, z50= self.soilLayers.getTzParametersAtDepth(depth, pileDiameter, tributaryLength, verticalStressOnSurface)
+            tult, z50= self.soilLayers.getTzParametersAtDepth(depth, pileDiameter, tributaryLength, verticalStressOnSurface, drilledShaft= self.drilledShaft)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -99,7 +100,7 @@ class PyTzQzPile(pile.Pile):
         retval= None
         if(self.soilLayers):
             pileDiameter= self.getPileEquivalentDiameter()
-            qult, z50= self.soilLayers.getQzParametersAtDepth(depth, pileDiameter, verticalStressOnSurface)
+            qult, z50= self.soilLayers.getQzParametersAtDepth(depth, pileDiameter, verticalStressOnSurface, drilledShaft= self.drilledShaft)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name

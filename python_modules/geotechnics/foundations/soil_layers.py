@@ -11,6 +11,7 @@ __email__= "l.pereztato@gmail.com"
 
 import sys
 import math
+from scipy.constants import g
 from misc_utils import log_messages as lmsg
 
 class SoilLayers(object):
@@ -35,4 +36,29 @@ class SoilLayers(object):
         ''' Return true if z<waterTableZ.'''
         return z<self.waterTableZ
 
+    def getWaterTableDepth(self):
+        ''' Return the depth of the water table.'''
+        if(self.waterTableZ is not None):
+            retval= self.groundLevel-self.waterTableZ
+        else:
+            retval= math.inf
+        return retval
 
+    def getWaterPressure(self, depth):
+        ''' Return the pressure of the water (if any) at the given depth.
+
+        :param depth: depth of the desired soil.
+        '''
+        retval= 0.0
+        waterTableDepth= self.getWaterTableDepth()
+        if(depth>waterTableDepth):
+            waterThickness= depth-waterTableDepth
+            retval= waterThickness*self.waterDensity*g
+        return retval
+
+    def getPorePressureAtDepth(self, depth):
+        ''' Return the pore pressure at the given depth.
+
+        :param depth: depth of the poing of interest (m).
+        '''
+        return self.getWaterPressure(depth)

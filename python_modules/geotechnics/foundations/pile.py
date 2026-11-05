@@ -118,8 +118,9 @@ class Pile(object):
                     "friction" for friction piles
     :ivar soilLayers:  properties of the soils horizons.
     :ivar pileSet: set of nodes and elements defining a single pile.
+    :ivar drilledShaft: true when the pile is drilled instead of driven.
     '''
-    def __init__(self, E, crossSection, pileType, soilLayers, pileSet= None, rho= 2.5e3):
+    def __init__(self, E, crossSection, pileType, soilLayers, pileSet= None, rho= 2.5e3, drilledShaft= True):
         ''' Constructor.
 
         :param E: elastic modulus of pile material
@@ -129,6 +130,7 @@ class Pile(object):
         :param soilLayers:  properties of the soil horizons.
         :param pileSet: set of nodes and elements defining a single pile.
         :param rho: material density.
+        :param drilledShaft: true when the pile is drilled instead of driven.
         '''
         self.E= E
         self.crossSection= crossSection
@@ -138,6 +140,7 @@ class Pile(object):
         if(pileSet):
             self.pileSet= pileSet
         self.rho= rho
+        self.drilledShaft= drilledShaft
 
     def getElasticMaterialData(self, overrideRho= None):
         '''Return the elastic material constitutive model of the pile itself.
