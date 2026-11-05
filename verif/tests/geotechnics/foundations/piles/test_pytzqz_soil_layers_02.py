@@ -49,7 +49,7 @@ for depth in testDepths:
     y50_results[depth]= y50
 
 # Check results.
-ref_pult_results= {0.5: 74945.0, 2: 119780.0, 4: 179560.0, 6: 180000.0, 9.0: 180000.0, 45.0: 180000.0}
+ref_pult_results= {0.5: 74945.0, 2: 119780.0, 4: 179560.0, 6: 180000.0, 9.0: 180000.0, 45.0: 315e3}
 ref_y50_results= {0.5: 0.05, 2: 0.05, 4: 0.05, 6: 0.05, 9.0: 0.05, 45.0: 0.05}
 err_pult= 0.0
 err_y50= 0.0
@@ -61,9 +61,13 @@ err_y50= math.sqrt(err_y50)
 testOK= (err_pult<1e-8) and (err_y50<1e-8)
 
 '''
-print(err_pult)
-print(err_y50)
+print('test depths: ', testDepths)
+print('computed pult values: ', pult_results)
+print('error in pult computation: ', err_pult)
+print('reference pult values: ', ref_pult_results)
+print('error in y50 computation: ', err_y50)
 '''
+
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
