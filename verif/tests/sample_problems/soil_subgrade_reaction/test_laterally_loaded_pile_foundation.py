@@ -172,18 +172,18 @@ for key in reactions:
     for (t, R) in nodeReactions:
         fXExtrema.update(R[0], t, key)
         
-uXMinRef= -0.00286142601800859
+uXMinRef= -0.003691188170343326
 tUXMinRef= 20.05
-uXMaxRef= .3928310360864577
+uXMaxRef= .4021357657657003
 tUXMaxRef= 20.05
 ratio1= abs(uXExtrema.min-uXMinRef)/uXMinRef # Minimum displacement.
 ratio2= abs(uXExtrema.t_min-tUXMinRef)/tUXMinRef
 ratio3= abs(uXExtrema.max-uXMaxRef)/uXMaxRef
 ratio4= abs(uXExtrema.t_max-tUXMaxRef)/tUXMaxRef
 
-fXMinRef= -622.4289515574546e3
+fXMinRef= -575.5408951459239e3
 tFXMinRef= 20.05
-fXMaxRef= 450.68899505561825e3
+fXMaxRef= 365.69257815526436e3
 tFXMaxRef= 20.05
 ratio5= abs(fXExtrema.min-fXMinRef)/fXMinRef
 ratio6= abs(fXExtrema.t_min-tFXMinRef)/tFXMinRef
