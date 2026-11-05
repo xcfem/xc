@@ -16,7 +16,7 @@ sigmaV_prime= 150e3
 porePressure= sigmaV-sigmaV_prime
 L_trib = 1.0 # Tributary length.
 
-qult, z50= pytzqzf._get_qz_param_clay(pyDepth= 14.0, su= su, sigV= sigmaV, b= B, drilledShaft= False)
+qult, z50= pytzqzf._get_qz_param_clay(qzDepth= 14.0, su= su, sigV= sigmaV, b= B, drilledShaft= False)
 
 # Check results.
 err= max( abs(qult-1015e3), abs(z50-11.25e-3))
