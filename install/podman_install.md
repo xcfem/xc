@@ -86,7 +86,7 @@ To mount multiple project folders instead of `workspace`, replace the existing `
       - ./project-b:/home/ubuntu/project-b
 ```
 
-Each entry maps a host folder on the left to a container folder on the right. Create the host folders before starting the container.
+Each entry maps a host folder on the left to a container folder on the right. Compose can create a missing host folder, but you can also create it yourself before starting the container.
 
 
 > On Linux systems enforcing SELinux, the workspace mount may need an appropriate container label. For a workspace used exclusively by this container, the mount can be written as `./workspace:/home/ubuntu:Z`; this relabels the host directory. Do not apply it to a shared or system directory.
