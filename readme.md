@@ -37,8 +37,8 @@ See <a href="https://github.com/xcfem/xc/blob/master/install/install.md" target=
 ### Container Installation
 The easiest way to use XC is to run it through a container. The container mounts a local folder on your host computer, so you can still source control your files without the need to include any XC source code or its dependencies. Choose the tool that fits your setup:
 
-- [Docker installation](./install/docker_install.md): use this if you already use Docker or prefer its container tools.
-- [Podman installation](./install/podman_install.md): use this for a rootless Podman setup, including with Podman Desktop on Windows.
+- [Docker installation](./install/docker_install.md): use this if you already use Docker or prefer its container tools. Instructions use `docker run` commands.
+- [Podman installation](./install/podman_install.md): use this for a rootless Podman setup, including with Podman Desktop on Windows. Instructions use a Compose file.
 
 
 ### For Previous version of Docker
