@@ -1,6 +1,9 @@
 # Podman installation with Compose
 
-Run the prebuilt XC image with rootless Podman and a Compose file. The image is hosted on Docker Hub and is compatible with Podman.
+Run the prebuilt XC image with rootless Podman and a Compose file.
+
+Podman "is designed to be a more secure and lightweight alternative to Docker" 
+([source](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html#podman-as-an-alternative-to-docker)). The XC image is hosted on Docker Hub and is compatible with Podman.
 
 ## Install Podman and Compose
 
