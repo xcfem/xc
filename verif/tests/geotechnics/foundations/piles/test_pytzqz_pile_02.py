@@ -34,18 +34,24 @@ sandySoil.puSwitch= 1
 # API linear variation (default)   --> 1
 # modified API parabolic variation --> 2
 sandySoil.kSwitch= 1
-# Viscous damping term (dashpot).
-sandySoil.dashpotC= 0.0
+# Viscous damping term (dashpot) for lateral displacement.
+sandySoil.pyDashpotC= 0.0
+# Viscous damping term (dashpot) for vertical displacement of the pile shaft.
+sandySoil.tzDashpotC= 0.0
+# Viscous damping term (dashpot) for vertical displacement of the pile tip.
+sandySoil.qzDashpotC= 0.0
 # Cofficient to compute the  drag resistance within a fully-mobilized gap as
 # Cd*pult.
-sandySoil.Cd= 0.0
+sand_Cd= 0.0
+clay_Cd= 0.0
 # Soil shear modulus.
 sandySoil.G= 150000000.0
-# Soil suction at pile tip during tension/uplift.
-sandySoil.suction= 0.0
+# Soil suction at pile tip during tension/uplift. Uplift resistance is computed
+# as suction*qult.The value of suction must be 0.0 to 0.1.
+suction= 0.0
 
 soils=[[-100.0, sandySoil]] # Properties of the soil layers:
-soilLayers= pytzqz_soil_layers.SoilLayers(soilProfile= soils, groundLevel= zGround)
+soilLayers= pytzqz_soil_layers.SoilLayers(soilProfile= soils, groundLevel= zGround, clay_Cd= clay_Cd, sand_Cd= sand_Cd, suction= suction)
 
 # Materials
 concrete= EC2_materials.C30
