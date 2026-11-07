@@ -687,7 +687,20 @@ def _get_tz_param_clay(su, b, sigV, porePressure, tribLength, drilledShaft= True
     # =========================================================================
     # Total stress Alpha-method factor selection
     sigV_prime= sigV-porePressure
-    su_over_sigma_prime= su/sigV_prime
+    if(sigV_prime>0.0):
+        su_over_sigma_prime= su/sigV_prime
+    elif(sigV_prime==0.0):
+        su_over_sigma_prime= 10.0 # >1.0 used only to compute alpha.
+    else:
+        # Liquefaction: pore pressure exceeds total vertical stress.
+        # methodName= sys._getframe(0).f_code.co_name
+        # errorMsg= '; pore pressure ('
+        # errorMsg+= str(porePressure)
+        # errorMsg+= ') exceeds total vertical stress ('
+        # errorMsg+= str(sigV)+' soil is liquefacting.'
+        # lmsg.error(methodName+errorMsg)
+        # sys.exit(-1)
+        return 0.0, 10e3
     
     if(su_over_sigma_prime <= 1.0):
         alpha = 0.5 * (su_over_sigma_prime) ** -0.5

@@ -25,7 +25,7 @@ class SoilSampledData(soil_layers.SoilLayers):
     ''' Class to store the values of the geotechnical parameters along the
         depth of a pile.
     '''
-    def __init__(self, code, pile_data= None, puSwitch= 1, kSwitch= 1, waterTableZ= -math.inf, waterDensity= 1e3):
+    def __init__(self, code, pile_data= None, puSwitch= 1, kSwitch= 1, waterTableZ= -math.inf, waterDensity= 1e3, clay_Cd= 0.3, sand_Cd= 0.3, suction= 0.0):
         ''' Constructor.
 
         :param code: code for the geotechnical parameters.
@@ -40,8 +40,12 @@ class SoilSampledData(soil_layers.SoilLayers):
                         modified API parabolic variation --> 2
         :param waterTableZ: global Z coordinate of the water table.
         :param waterDensity: density of the water.
+        :param clay_Cd: drag resistance coefficient for clays (defaults to 0.3).
+        :param sand_Cd: drag resistance coefficient for clays (defaults to 1.0).
+        :param suction: Uplift resistance is equal to suction*qult. 
+                        Default = 0.0. The value of suction must be 0.0 to 0.1.
         '''
-        super().__init__(waterTableZ= waterTableZ, groundLevel= None, waterDensity= waterDensity)
+        super().__init__(waterTableZ= waterTableZ, groundLevel= None, waterDensity= waterDensity, clay_Cd= clay_Cd, sand_Cd= sand_Cd, suction= suction)
         self.code= code
         self.pileData= pile_data
         self.interpolationsDict= dict()
@@ -80,7 +84,7 @@ class SoilSampledData(soil_layers.SoilLayers):
             the given code.
         '''
         return self.pileData['kh_data']
-
+    
     def _plot_property_along_pile_depth(self, propName, depths, values, unitSymbol, lengthUnitSymbol= 'm'):
         ''' Plot the values of a property along the pile depth.
 
@@ -98,6 +102,14 @@ class SoilSampledData(soil_layers.SoilLayers):
         pyplot.ylabel('Depth ('+str(lengthUnitSymbol)+')')#, fontweight='bold')
 
         pyplot.show()
+
+    def _bearing_property_exists(self, propName):
+        ''' Return True if the property with the given name exits.
+
+        :param propName: name of the property.
+        '''
+        bearingProperties= self.getBearingProperties()
+        return (propName in bearingProperties)
 
     def _get_bearing_property_along_pile_depth(self, propName):
         ''' Return the values of the property with the given name along the
@@ -133,46 +145,54 @@ class SoilSampledData(soil_layers.SoilLayers):
         '''
         retval= None
         interpolationFunctionName= propName+'_interpolation'
-        if(interpolationFunctionName in self.interpolationsDict):
-            retval= self.interpolationsDict[interpolationFunctionName]
-        else:
-            bearingData= self._get_bearing_data()
-            depths_size= len(depths)
-            values_size= len(values)
-            # Create a staircase shaped interpolation.
-            if(depths_size==values_size):
-                if(depths_size==1):
-                    z= depths[0]
-                    value= values[0]
-                    retval= interpolate.interp1d([0.0, z], [value, value], fill_value='extrapolate')
-                elif(depths_size==2):
-                    z1= depths[0]
-                    z2= depths[1]
-                    value1= values[0]
-                    value2= values[1]
-                    retval= interpolate.interp1d([0.0, z1-1e-3,z1+1e-3,z2], [value1, value1,value2,value2], fill_value='extrapolate')
-                elif(depths_size>=3):
-                    zi= [0.0]
-                    for depth in depths[:-1]:
-                        zi.append(depth-1e-3)
-                        zi.append(depth+1e-3)
-                    zi.append(depths[-1])
-                    vi= list()
-                    for v in values:
-                        vi.append(v)
-                        vi.append(v)
-                    retval= interpolate.interp1d(zi, vi, fill_value='extrapolate')
+        if(depths is not None):
+            if(interpolationFunctionName in self.interpolationsDict):
+                retval= self.interpolationsDict[interpolationFunctionName]
+            else:
+                bearingData= self._get_bearing_data()
+                depths_size= len(depths)
+                values_size= len(values)
+                # Create a staircase shaped interpolation.
+                if(depths_size==values_size):
+                    if(depths_size==1):
+                        z= depths[0]
+                        value= values[0]
+                        retval= interpolate.interp1d([0.0, z], [value, value], fill_value='extrapolate')
+                    elif(depths_size==2):
+                        z1= depths[0]
+                        z2= depths[1]
+                        value1= values[0]
+                        value2= values[1]
+                        retval= interpolate.interp1d([0.0, z1-1e-3,z1+1e-3,z2], [value1, value1,value2,value2], fill_value='extrapolate')
+                    elif(depths_size>=3):
+                        zi= [0.0]
+                        for depth in depths[:-1]:
+                            zi.append(depth-1e-3)
+                            zi.append(depth+1e-3)
+                        zi.append(depths[-1])
+                        vi= list()
+                        for v in values:
+                            vi.append(v)
+                            vi.append(v)
+                        retval= interpolate.interp1d(zi, vi, fill_value='extrapolate')
+                    else:
+                        methodName= sys._getframe(0).f_code.co_name
+                        errorMsg= '; too many values ('+str(depthi_size)+')'
+                        lmsg.error(methodName+errorMsg)
+                if(retval is not None):
+                    self.interpolationsDict[interpolationFunctionName]= retval
                 else:
                     methodName= sys._getframe(0).f_code.co_name
-                    errorMsg= '; too many values ('+str(depthi_size)+')'
+                    errorMsg= '; incompatible sizes: '+str(pierCode)+' '+str(depthi_size)+' '+str(khi_size)
                     lmsg.error(methodName+errorMsg)
-            if(retval is not None):
-                self.interpolationsDict[interpolationFunctionName]= retval
-            else:
-                methodName= sys._getframe(0).f_code.co_name
-                errorMsg= '; incompatible sizes: '+str(pierCode)+' '+str(depthi_size)+' '+str(khi_size)
-                lmsg.error(methodName+errorMsg)
-                exit(1)
+                    sys.exit(-1)
+        # else:
+        #     className= type(self).__name__
+        #     methodName= sys._getframe(0).f_code.co_name
+        #     errMsg= "; not sampled data for soil property: '"
+        #     errMsg+= propName+"'."
+        #     lmsg.error(className+'.'+methodName+errMsg)
+        #     sys.exit(-1)
         return retval
         
     def _get_linear_property_interpolation(self, propName, depths, values):
@@ -183,20 +203,21 @@ class SoilSampledData(soil_layers.SoilLayers):
         :param values: sampled values.
         '''
         retval= None
-        depths_size= len(depths)
-        values_size= len(values)
-        interpolationFunctionName= propName+'_interpolation'
-        if(interpolationFunctionName in self.interpolationsDict):
-            retval= self.interpolationsDict[interpolationFunctionName]
-        else:
-            if(depths_size==values_size):
-                retval= interpolate.interp1d(depths, values, fill_value='extrapolate')
-                self.interpolationsDict[interpolationFunctionName]= retval
+        if(depths is not None):
+            depths_size= len(depths)
+            values_size= len(values)
+            interpolationFunctionName= propName+'_interpolation'
+            if(interpolationFunctionName in self.interpolationsDict):
+                retval= self.interpolationsDict[interpolationFunctionName]
             else:
-                methodName= sys._getframe(0).f_code.co_name
-                errorMsg= '; incompatible sizes: '+str(pierCode)+' '+str(depths_size)+' '+str(values_size)
-                lmsg.error(methodName+errorMsg)
-                exit(1)
+                if(depths_size==values_size):
+                    retval= interpolate.interp1d(depths, values, fill_value='extrapolate')
+                    self.interpolationsDict[interpolationFunctionName]= retval
+                else:
+                    methodName= sys._getframe(0).f_code.co_name
+                    errorMsg= '; incompatible sizes: '+str(pierCode)+' '+str(depths_size)+' '+str(values_size)
+                    lmsg.error(methodName+errorMsg)
+                    exit(1)
         return retval
         
     def getPileCodes(self):
@@ -212,7 +233,7 @@ class SoilSampledData(soil_layers.SoilLayers):
 
     def getInternalFrictionAngleAlongDepth(self):
         ''' Return the values of the internal friction angles along the pile
-            shaft.
+            depth.
 
         '''
         return self._get_bearing_property_along_pile_depth(propName= 'phii')
@@ -232,7 +253,7 @@ class SoilSampledData(soil_layers.SoilLayers):
     
     def plotInternalFrictionAngleAlongDepth(self, degrees=True):
         ''' Plot the values of the internal friction angles along the pile
-            shaft.
+            depth.
 
         :param degrees: if True, transform the angles to degrees.
         '''
@@ -269,7 +290,49 @@ class SoilSampledData(soil_layers.SoilLayers):
         if(ci is not None):
             tmp= [c*unitConvFactor for c in ci]
             self._plot_property_along_pile_depth(propName= 'c', depths= depthi, values= tmp, unitSymbol= unitSymbol)
-            
+
+    def getSoilTypeAtDepth(self, depth):
+        ''' Return the soil type corresponding to the given depth.
+
+        -soilType= 1 Backbone of p-y curve approximates Matlock (1970) soft 
+                   clay relation.
+
+        -soilType= 2 Backbone of p-y curve approximates API (1993) 
+                   sand relation.
+
+        :param depth: depth of the desired soil.
+        '''
+        retval= None
+        c= self.getCohesionAtDepth(depth)
+        if(c>0.0):
+            retval= 1 # clay.
+        else:
+            phi_degrees= math.degrees(self.getInternalFrictionAngleAtDepth(depth))
+            if(phi_degrees>pytzqzf._api_1987_internal_friction_angle_values_[0]):
+                retval= 2  # sand.
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                warnMsg= '; internal friction angle: '+str(phi_degrees)
+                warnMsg+= ' too small for soil type 2'
+                warnMsg+= '. Returning soil type 1.'
+                lmsg.warning(className+'.'+methodName+warnMsg)
+                retval= 1 # clay.
+        return retval
+
+    def getDragResistanceCoefficientAtDepth(self, depth):
+        ''' Return the coefficient to compute the drag resistance within a 
+            fully-mobilized gap as Cd*pult.
+
+        :param depth: desired depth.
+        '''
+        soilType= self.getSoilTypeAtDepth(depth)
+        if(soilType==1): # clay
+            retval= self.clay_Cd
+        else:
+            retval= self.sand_Cd
+        return retval
+    
     def getUnitWeightAlongDepth(self):
         ''' Return the values of the soil unit weight along the pile depth.
         '''
@@ -486,26 +549,47 @@ class SoilSampledData(soil_layers.SoilLayers):
             tmp= [kh*unitConvFactor for kh in khi]
             self._plot_property_along_pile_depth(propName= propName, depths= depthi, values= tmp, unitSymbol= unitSymbol)
                     
-    def getDashpotCAlongDepth(self):
-        ''' Return the horizontal modulus of subgrade reaction of the pile 
-            corresponding to different depths.
+    def getPyDashpotCAlongDepth(self):
+        ''' Return the viscous damping term (dashpot) for lateral 
+            displacement along the pile depth.
 
         '''
-        return self._get_bearing_property_along_pile_depth(propName= 'dashpotci')
-            
-    def getDashpotCAtDepth(self, depth):
-        ''' Return the value of the horizontal modulus of subgrade reaction 
-            at the given depth.
+        return self._get_bearing_property_along_pile_depth(propName= 'pydashpotci')
+
+    def getPyDashpotCAtDepth(self, depth, pileDiameter= None):
+        ''' Return the value of the viscous damping parameter for lateral
+            displacement at the given depth.
 
         :param depth: desired depth.
+        :param pileDiameter: pile diameter (used only when no sampled data are
+                             available).
         '''
-        depths, values= self.getDashpotCAlongDepth()
-        interpolation= self._get_staircase_property_interpolation(propName= 'dashpotc', depths= depths, values= values)
-        return float(interpolation(depth))
+        retval= None
+        propName= 'pydashpotc'
+        if(self._bearing_property_exists(propName)):
+            depths, values= self.getDashpotCAlongDepth()
+            interpolation= self._get_staircase_property_interpolation(propName= propName, depths= depths, values= values)
+            if(interpolation is not None):
+                retval= float(interpolation(depth))
+        else: # No sampled data: use a simplified estimation.
+            if(pileDiameter is not None):
+                Vs= self.getShearWaveVelocityAtDepth(depth)
+                rho= self.getUnitMassAtDepth(depth)
+                retval= 4.0*pileDiameter*rho*Vs
+                print('PY dashpot C= ', retval)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errMsg= '; pileDiameter is needed to etimate the viscous'
+                errMsg+= ' damping parameter when no sampled data'
+                errMsg+= ' are available.'
+                lmsg.error(className+'.'+methodName+errMsg)
+                sys.exit(1)
+        return retval
                                                                   
-    def plotDashpotCAlongDepth(self, unitConvFactor= 1e-3, unitSymbol= '$kN.s/m$'):
-        ''' Plot the horizontal modulus of subgrade reaction of the pile 
-            corresponding to different depths.
+    def plotPyDashpotCAlongDepth(self, unitConvFactor= 1e-3, unitSymbol= '$kN.s/m$'):
+        ''' Plot the value of the viscous damping parameter for lateral
+            displacement corresponding to different depths.
 
         :param unitConvFactor: unit conversion factor.
         :param unitSymbol: unit simbol.
@@ -515,14 +599,147 @@ class SoilSampledData(soil_layers.SoilLayers):
         if(dashpotCi is not None):
             tmp= [dashpotC*unitConvFactor for dashpotC in dashpotCi]
             self._plot_property_along_pile_depth(propName= propName, depths= depthi, values= tmp, unitSymbol= unitSymbol)
+
+    def getPyViscousDampingTermAtDepth(self, depth, pileDiameter= None):
+        ''' Return the viscous damping term (dashpot).
+
+        :param depth: depth of the point of interest.
+        :param pileDiameter: pile diameter (used only when no sampled data are
+                             available).
+        '''
+        return self.getPyDashpotCAtDepth(depth, pileDiameter= pileDiameter)
         
+    def getTzDashpotCAlongDepth(self):
+        ''' Return the viscous damping term (dashpot) for vertical 
+            displacement of the shaft along the pile depth.
+
+        '''
+        return self._get_bearing_property_along_pile_depth(propName= 'tzdashpotci')
+
+    def getTzDashpotCAtDepth(self, depth, pileDiameter= None):
+        ''' Return the value of the viscous damping parameter for vertical
+            displacement of the shaft at the given depth.
+
+        :param depth: desired depth.
+        :param pileDiameter: pile diameter (used only when no sampled data are
+                             available).
+        '''
+        retval= None
+        propName= 'tzdashpotc'
+        if(self._bearing_property_exists(propName)):
+            depths, values= self.getDashpotCAlongDepth()
+            interpolation= self._get_staircase_property_interpolation(propName= propName, depths= depths, values= values)
+            if(interpolation is not None):
+                retval= float(interpolation(depth))
+        else: # No sampled data: use a simplified estimation.
+            if(pileDiameter is not None):
+                Vs= self.getShearWaveVelocityAtDepth(depth)
+                rho= self.getUnitMassAtDepth(depth)
+                perimeter= math.pi*pileDiameter
+                retval= perimeter*rho*Vs
+                print('TZ dashpot C= ', retval)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errMsg= '; pileDiameter is needed to etimate the viscous'
+                errMsg+= ' damping parameter when no sampled data'
+                errMsg+= ' are available.'
+                lmsg.error(className+'.'+methodName+errMsg)
+                sys.exit(1)
+        return retval
+                                                                  
+    def plotTzDashpotCAlongDepth(self, unitConvFactor= 1e-3, unitSymbol= '$kN.s/m$'):
+        ''' Plot the value of the viscous damping parameter for lateral
+            displacement corresponding to different depths.
+
+        :param unitConvFactor: unit conversion factor.
+        :param unitSymbol: unit simbol.
+        '''
+        depthi, dashpotCi= self.getDashpotCAlongDepth()
+        propName= '$c$'
+        if(dashpotCi is not None):
+            tmp= [dashpotC*unitConvFactor for dashpotC in dashpotCi]
+            self._plot_property_along_pile_depth(propName= propName, depths= depthi, values= tmp, unitSymbol= unitSymbol)
+
+    def getTzViscousDampingTermAtDepth(self, depth, pileDiameter= None):
+        ''' Return the viscous damping term (dashpot) for vertical 
+            displacement along the shaft.
+
+        :param depth: depth of the point of interest.
+        :param pileDiameter: pile diameter (used only when no sampled data are
+                             available).
+        '''
+        return self.getTzDashpotCAtDepth(depth, pileDiameter= pileDiameter)
+            
+    def getQzDashpotCAlongDepth(self):
+        ''' Return the viscous damping term (dashpot) for vertical 
+            displacement of the pile tip along depth.
+
+        '''
+        return self._get_bearing_property_along_pile_depth(propName= 'qzdashpotci')
+
+    def getQzDashpotCAtDepth(self, depth, pileDiameter= None):
+        ''' Return the value of the viscous damping parameter for vertical
+            displacement of the pile tip at the given depth.
+
+        :param depth: desired depth.
+        :param pileDiameter: pile diameter (used only when no sampled data are
+                             available).
+        '''
+        retval= None
+        propName= 'qzdashpotc'
+        if(self._bearing_property_exists(propName)):
+            depths, values= self.getDashpotCAlongDepth()
+            interpolation= self._get_staircase_property_interpolation(propName= propName, depths= depths, values= values)
+            if(interpolation is not None):
+                retval= float(interpolation(depth))
+        else: # No sampled data: use a simplified estimation.
+            if(pileDiameter is not None):
+                Vp= self.getPressureWaveVelocityAtDepth(depth)
+                rho= self.getUnitMassAtDepth(depth)
+                A= math.pi*(pileDiameter/2.0)**2
+                retval= rho*Vp*A
+                print('QZ dashpot C= ', retval)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errMsg= '; pileDiameter is needed to etimate the viscous'
+                errMsg+= ' damping parameter when no sampled data'
+                errMsg+= ' are available.'
+                lmsg.error(className+'.'+methodName+errMsg)
+                sys.exit(1)
+        return retval
+                                                                  
+    def plotQzDashpotCAlongDepth(self, unitConvFactor= 1e-3, unitSymbol= '$kN.s/m$'):
+        ''' Plot the value of the viscous damping parameter for vertical
+            displacement of the pile tipo corresponding to different depths.
+
+        :param unitConvFactor: unit conversion factor.
+        :param unitSymbol: unit simbol.
+        '''
+        depthi, dashpotCi= self.getDashpotCAlongDepth()
+        propName= '$c$'
+        if(dashpotCi is not None):
+            tmp= [dashpotC*unitConvFactor for dashpotC in dashpotCi]
+            self._plot_property_along_pile_depth(propName= propName, depths= depthi, values= tmp, unitSymbol= unitSymbol)
+
+    def getQzViscousDampingTermAtDepth(self, depth, pileDiameter= None):
+        ''' Return the viscous damping term (dashpot) for vertical 
+            displacement of the pile tip.
+
+        :param depth: depth of the point of interest.
+        :param pileDiameter: pile diameter (used only when no sampled data are
+                             available).
+        '''
+        return self.getQzDashpotCAtDepth(depth, pileDiameter= pileDiameter)
+    
     def getDragResistanceAlongDepth(self):
         ''' Return the horizontal modulus of subgrade reaction of the pile 
             corresponding to different depths.
 
         '''
         return self._get_bearing_property_along_pile_depth(propName= 'drag_resistance_i')
-            
+    
     def getDragResistanceAtDepth(self, depth):
         ''' Return the value of the horizontal modulus of subgrade reaction 
             at the given depth.
@@ -551,7 +768,10 @@ class SoilSampledData(soil_layers.SoilLayers):
             corresponding to different depths.
 
         '''
-        return self._get_bearing_property_along_pile_depth(propName= 'gi')
+        pileKhData= self.pileData['kh_data']
+        depths= pileKhData['depthi']
+        gi= pileKhData['gi']
+        return depths, gi
             
     def getShearModulusAtDepth(self, depth):
         ''' Return the value of the horizontal modulus of subgrade reaction 
@@ -559,9 +779,21 @@ class SoilSampledData(soil_layers.SoilLayers):
 
         :param depth: desired depth.
         '''
+        retval= None
         depths, values= self.getShearModulusAlongDepth()
         interpolation= self._get_staircase_property_interpolation(propName= 'shear_modulus', depths= depths, values= values)
-        return float(interpolation(depth))
+        if(interpolation is not None):
+            retval= float(interpolation(depth))
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= '; shear modulus is not available for pile: '
+            errMsg+= str(self.code)
+            errMsg+= '.'
+            lmsg.error(className+'.'+methodName+errMsg)
+            sys.exit(-1)
+            
+        return retval
                                                                   
     def plotShearModulusAlongDepth(self, unitConvFactor= 1e-6, unitSymbol= '$MPa$'):
         ''' Plot the horizontal modulus of subgrade reaction of the pile 
@@ -575,36 +807,89 @@ class SoilSampledData(soil_layers.SoilLayers):
         if(shear_modulus_i is not None):
             tmp= [shear_modulus*unitConvFactor for shear_modulus in shear_modulus_i]
             self._plot_property_along_pile_depth(propName= propName, depths= depthi, values= tmp, unitSymbol= unitSymbol)
-            
-    def getSuctionAlongDepth(self):
-        ''' Return the horizontal modulus of subgrade reaction of the pile 
-            corresponding to different depths.
+
+    def getElasticModulusAlongDepth(self):
+        ''' Return the elastic modulus of the soil corresponding to 
+            different depths.
 
         '''
-        return self._get_bearing_property_along_pile_depth(propName= 'suction_i')
+        pileKhData= self.pileData['kh_data']
+        depths= pileKhData['depthi']
+        emi= pileKhData['emi']
+        return depths, emi
             
-    def getSuctionAtDepth(self, depth):
-        ''' Return the value of the horizontal modulus of subgrade reaction 
-            at the given depth.
+    def getElasticModulusAtDepth(self, depth):
+        ''' Return the value of the elastic modulus at the given depth.
 
         :param depth: desired depth.
         '''
-        depths, values= self.getSuctionAlongDepth()
-        interpolation= self._get_staircase_property_interpolation(propName= 'suction', depths= depths, values= values)
-        return float(interpolation(depth))
+        retval= None
+        depths, values= self.getElasticModulusAlongDepth()
+        interpolation= self._get_staircase_property_interpolation(propName= 'elastic_modulus', depths= depths, values= values)
+        if(interpolation is not None):
+            retval= float(interpolation(depth))
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= '; elastic modulus is not available for pile: '
+            errMsg+= str(self.code)
+            errMsg+= '.'
+            lmsg.error(className+'.'+methodName+errMsg)
+            sys.exit(-1)
+            
+        return retval
                                                                   
-    def plotSuctionAlongDepth(self, unitConvFactor= 1e-6, unitSymbol= '$MPa$'):
-        ''' Plot the horizontal modulus of subgrade reaction of the pile 
-            corresponding to different depths.
+    def plotElasticModulusAlongDepth(self, unitConvFactor= 1e-6, unitSymbol= '$MPa$'):
+        ''' Plot the elastic modulus of the soil corresponding to different
+            depths.
 
         :param unitConvFactor: unit conversion factor.
         :param unitSymbol: unit simbol.
         '''
-        depthi, suction_i= self.getSuctionAlongDepth()
-        propName= '$G$'
-        if(suction_i is not None):
-            tmp= [suction*unitConvFactor for suction in suction_i]
+        depthi, elastic_modulus_i= self.getElasticModulusAlongDepth()
+        propName= '$E$'
+        if(elastic_modulus_i is not None):
+            tmp= [elastic_modulus*unitConvFactor for elastic_modulus in elastic_modulus_i]
             self._plot_property_along_pile_depth(propName= propName, depths= depthi, values= tmp, unitSymbol= unitSymbol)
+
+    def getPoissonCoefficientAtDepth(self, depth):
+        ''' Return the poisson coefficient at the given depth.
+
+        :param depth: desired depth.
+        '''
+        twoG= 2*self.getShearModulusAtDepth(depth)
+        E= self.getElasticModulusAtDepth(depth)
+        return (E/twoG-1.0)
+        
+
+    def getShearWaveVelocityAtDepth(self, depth):
+        ''' Return the shear wave (S wave) velocity of the soil at the given
+            depth.
+
+        :param depth: desired depth.
+        '''
+        G= self.getShearModulusAtDepth(depth)
+        retval= None
+        if(G is not None):
+            rho= self.getUnitMassAtDepth(depth)
+            retval= math.sqrt(G/rho)
+        return retval
+
+    def getPressureWaveVelocityAtDepth(self, depth):
+        ''' Return the pressure wave (P wave) velocity of the soil at the given
+            depth.
+
+        :param depth: desired depth.
+        '''
+        G= self.getShearModulusAtDepth(depth)
+        retval= None
+        if(G is not None):
+            nu= self.getPoissonCoefficientAtDepth(depth)
+            num= 2*G*(1-nu)
+            rho= self.getUnitMassAtDepth(depth)
+            denom= rho*(1-2*nu)
+            retval= math.sqrt(num/denom)
+        return retval
             
     def getPyParametersAtDepth(self, depth, pileDiameter, tributaryLength, gwtSwitch, verticalStressOnSurface= 0.0):
         '''  Compute the ultimate resistance (pult) according to API 
@@ -621,12 +906,8 @@ class SoilSampledData(soil_layers.SoilLayers):
         '''
         #soilRho= self.getUnitMassAtDepth(depth) # density.
         sigV= self.getVerticalStressAtDepth(depth, verticalStressOnSurface) # Vertical stress.
-        print('*** sigV= ', sigV)
         soilPhi= self.getInternalFrictionAngleAtDepth(depth) # internal friction angle.
         soilCu= self.getCohesionAtDepth(depth)
-        print('*** soilPhi= ', math.degrees(soilPhi))
-        print('*** depth= ', depth)
-        print('*** gwtSwitch= ', gwtSwitch)
         pult, y50= pytzqzf.get_py_param(pyDepth= depth, phi= soilPhi, cu= soilCu, sigV= sigV, b= pileDiameter, tribLength= tributaryLength, puSwitch= self.puSwitch, kSwitch= self.kSwitch, gwtSwitch= gwtSwitch)
         return pult, y50
     

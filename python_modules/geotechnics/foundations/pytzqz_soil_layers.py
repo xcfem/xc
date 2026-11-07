@@ -31,7 +31,7 @@ class SoilLayers(soil_layers.SoilLayers):
                                   FrictionalCohesiveSoil object that stores
                                   the relevant properies of the soil.
     '''
-    def __init__(self, soilProfile, groundLevel, waterTableZ= None, waterDensity= 1e3):
+    def __init__(self, soilProfile, groundLevel, waterTableZ= None, waterDensity= 1e3, clay_Cd= 0.3, sand_Cd= 0.3, suction= 0.0):
         ''' Constructor.
 
         :param soilProfile:  properties of the levels of soil, defined from 
@@ -45,8 +45,12 @@ class SoilLayers(soil_layers.SoilLayers):
         :param groundLevel: global Z coordinate of the ground level.
         :param waterTableZ: global Z coordinate of the water table.
         :param waterDensity: density of the water.
-        '''
-        super().__init__(groundLevel= groundLevel, waterTableZ= waterTableZ, waterDensity= waterDensity)
+        :param clay_Cd: drag resistance coefficient for clays (defaults to 0.3).
+        :param sand_Cd: drag resistance coefficient for clays (defaults to 1.0).
+        :param suction: Uplift resistance is equal to suction*qult. 
+                        Default = 0.0. The value of suction must be 0.0 to 0.1.
+       '''
+        super().__init__(groundLevel= groundLevel, waterTableZ= waterTableZ, waterDensity= waterDensity, clay_Cd= clay_Cd, sand_Cd= sand_Cd, suction= suction)
         self.soilProfile= soilProfile
 
     def getDepth(self, z):
@@ -109,6 +113,22 @@ class SoilLayers(soil_layers.SoilLayers):
         z= self.getZ(depth)
         return self.getSoilAtZ(z)
 
+    def getInternalFrictionAngleAtDepth(self, depth):
+        ''' Return the value of the internal friction angle at the given depth.
+
+        :param depth: desired depth.
+        '''
+        soil= self.getSoilAtDepth(depth)
+        return soil.phi
+
+    def getCohesionAtDepth(self, depth):
+        ''' Return the value of the cohesion at the given depth.
+
+        :param depth: desired depth.
+        '''
+        soil= self.getSoilAtDepth(depth)
+        return soil.getCohesion()
+
     def getSoilTypeAtDepth(self, depth):
         ''' Return the soil type corresponding to the given depth.
 
@@ -125,7 +145,17 @@ class SoilLayers(soil_layers.SoilLayers):
         if(soil.getCohesion()>0.0):
             retval= 1
         else:
-            retval= 2
+            phi_degrees= math.degrees(self.getInternalFrictionAngleAtDepth(depth))
+            if(phi_degrees>pytzqzf._api_1987_internal_friction_angle_values_[0]):
+                retval= 2
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                warnMsg= '; internal friction angle: '+str(phi_degrees)
+                warnMsg+= ' too small for soil type 2'
+                warnMsg+= '. Returning soil type 1.'
+                lmsg.warning(className+'.'+methodName+warnMsg)
+                retval= 1
         return retval        
 
     def getGroundWaterSwitchAtDepth(self, depth):
@@ -141,22 +171,48 @@ class SoilLayers(soil_layers.SoilLayers):
             retval= 2
         return retval
 
-    def getViscousDampingTermAtDepth(self, depth):
-        ''' Return the viscous damping term (dashpot).
+    def getPyViscousDampingTermAtDepth(self, depth, pileDiameter= None):
+        ''' Return the viscous damping term (dashpot) for lateral 
+            displacement of the pile.
 
         :param depth: depth of the point of interest.
+        :param pileDiameter: NOT USED pile diameter.
         '''
         soil= self.getSoilAtDepth(depth)
-        return soil.dashpotC
+        return soil.pyDashpotC
+    
+    def getTzViscousDampingTermAtDepth(self, depth, pileDiameter= None):
+        ''' Return the viscous damping term (dashpot) for lateral 
+            displacement of the pile shaft.
 
+        :param depth: depth of the point of interest.
+        :param pileDiameter: NOT USED pile diameter.
+        '''
+        soil= self.getSoilAtDepth(depth)
+        return soil.tzDashpotC
+
+    def getQzViscousDampingTermAtDepth(self, depth, pileDiameter= None):
+        ''' Return the viscous damping term (dashpot) for vertical 
+            displacement of the pile tip.
+
+        :param depth: depth of the point of interest.
+        :param pileDiameter: NOT USED pile diameter.
+        '''
+        soil= self.getSoilAtDepth(depth)
+        return soil.qzDashpotC
+    
     def getDragResistanceCoefficientAtDepth(self, depth):
         ''' Return the coefficient to compute the drag resistance within a 
             fully-mobilized gap as Cd*pult.
 
-        :param depth: depth of the point of interest.
+        :param depth: desired depth.
         '''
-        soil= self.getSoilAtDepth(depth)
-        return soil.Cd
+        soilType= self.getSoilTypeAtDepth(depth)
+        if(soilType==1): # clay
+            retval= self.clay_Cd
+        else:
+            retval= self.sand_Cd
+        return retval
 
     def getVerticalStressAtDepth(self, depth, verticalStressOnSurface= 0.0):
         ''' Return the vertical stress in the soil at the given depth.
@@ -179,14 +235,6 @@ class SoilLayers(soil_layers.SoilLayers):
             # pore pressure.
             retval-= self.getPorePressureAtDepth(depth)
         return retval
-
-    def getSuctionAtDepth(self, depth):
-        ''' Return the suction at pile tip during tension/uplift.
-
-        :param depth: depth of the poing of interest (m).
-        '''
-        soil= self.getSoilAtDepth(depth)
-        return soil.suction
         
     def getPyParametersAtDepth(self, depth, pileDiameter, tributaryLength, verticalStressOnSurface= 0.0):
         '''  Compute the ultimate resistance (pult) according to API 

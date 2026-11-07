@@ -129,14 +129,50 @@ class PyTzQzPile(pile.Pile):
             lmsg.error(className+'.'+methodName+errorMsg)
         return retval
 
-    def getViscousDampingTermAtDepth(self, depth):
-        ''' Return the viscous damping term (dashpot).
+    def getPyViscousDampingTermAtDepth(self, depth):
+        ''' Return the viscous damping term (dashpot) for horizontal 
+            displacement of the pile.
 
         :param depth: depth of the point of interest.
         '''
         retval= 0.0
         if(self.soilLayers):
-            retval= self.soilLayers.getViscousDampingTermAtDepth(depth)
+            pileDiameter= self.getPileEquivalentDiameter()
+            retval= self.soilLayers.getPyViscousDampingTermAtDepth(depth= depth, pileDiameter= pileDiameter)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= '; soil layers not defined.'
+            lmsg.error(className+'.'+methodName+errorMsg)
+        return retval
+
+    def getTzViscousDampingTermAtDepth(self, depth):
+        ''' Return the viscous damping term (dashpot) for vertical
+            displacement of the pile shaft.
+
+        :param depth: depth of the point of interest.
+        '''
+        retval= 0.0
+        if(self.soilLayers):
+            pileDiameter= self.getPileEquivalentDiameter()
+            retval= self.soilLayers.getTzViscousDampingTermAtDepth(depth= depth, pileDiameter= pileDiameter)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= '; soil layers not defined.'
+            lmsg.error(className+'.'+methodName+errorMsg)
+        return retval
+
+    def getQzViscousDampingTermAtDepth(self, depth):
+        ''' Return the viscous damping term (dashpot) for vertical
+            displacement of the pile tip.
+
+        :param depth: depth of the point of interest.
+        '''
+        retval= 0.0
+        if(self.soilLayers):
+            pileDiameter= self.getPileEquivalentDiameter()
+            retval= self.soilLayers.getQzViscousDampingTermAtDepth(depth= depth, pileDiameter= pileDiameter)
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
@@ -176,19 +212,20 @@ class PyTzQzPile(pile.Pile):
             lmsg.error(className+'.'+methodName+errorMsg)
         return retval
     
-    def getSuctionAtDepth(self, depth):
-        ''' Return the suction at pile tip during tension/uplift.
-
-        :param depth: depth of the poing of interest (m).
+    def getSuctionCoefficient(self):
+        ''' Return the suction coefficient. Uplift resistance is equal to 
+            suction*qult. Default = 0.0. The value of suction must be 0.0 
+            to 0.1.
         '''
         retval= 0.0
         if(self.soilLayers):
-            retval= self.soilLayers.getSuctionAtDepth(depth)
+            retval= self.soilLayers.getSuctionCoefficient()
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             errorMsg= '; soil layers not defined.'
             lmsg.error(className+'.'+methodName+errorMsg)
+            sys.exit(-1)
         return retval
 
     def getPileTipNode2D(self):
@@ -239,7 +276,7 @@ class PyTzQzPile(pile.Pile):
             # Create P-Y material.
             pult, y50= self.getPyParametersAtDepth(depth= nodeDepth, tributaryLength= tributaryLength)
             soilType= self.getSoilTypeAtDepth(depth= nodeDepth)
-            dashpotC= self.getViscousDampingTermAtDepth(depth= nodeDepth)
+            pyDashpotC= self.getPyViscousDampingTermAtDepth(depth= nodeDepth)*tributaryLength
             Cd= self.getDragResistanceCoefficientAtDepth(depth= nodeDepth)
             pyMatName= 'pyS_'+str(n.tag)
             pyMat= ssi.def_pysimple1_material(preprocessor,
@@ -247,17 +284,18 @@ class PyTzQzPile(pile.Pile):
                                               soilType= soilType,
                                               pult= pult,
                                               Y50= y50,
-                                              c= dashpotC,
+                                              c= pyDashpotC,
                                               Cd= Cd)
             # Create T-Z material.
             tult, z50= self.getTzParametersAtDepth(depth= nodeDepth, tributaryLength= tributaryLength, verticalStressOnSurface= verticalStressOnSurface)
             tzMatName= 'tzS:'+str(n.tag)
+            tzDashpotC= self.getTzViscousDampingTermAtDepth(depth= nodeDepth)*tributaryLength
             tzMat= ssi.def_tzsimple1_material(preprocessor,
                                               matName= tzMatName,
                                               tzType= soilType, # Mosher relation.
                                               tult= tult, # Ultimate skin friction capacity.
                                               z50= z50, # 50% capacity reached.
-                                              c= dashpotC)
+                                              c= tzDashpotC)
             # Create spring.
             fixNode= modelSpace.duplicateNode(n)
             modelSpace.fixNode('000', fixNode.tag)
@@ -279,16 +317,16 @@ class PyTzQzPile(pile.Pile):
         tipNodeDepth= self.getDepth(tipNodePos.y)
         ### vertical effective stress at pile tip.
         qult, z50q= self.getQzParametersAtDepth(depth= tipNodeDepth, verticalStressOnSurface= verticalStressOnSurface)
-        qzSoilType= self.getSoilTypeAtDepth(depth= nodeDepth)
-        qzDashpotC= self.getViscousDampingTermAtDepth(depth= nodeDepth)
-        qzSuction= self.getSuctionAtDepth(depth= nodeDepth)
+        qzSoilType= self.getSoilTypeAtDepth(depth= tipNodeDepth)
+        qzDashpotC= self.getQzViscousDampingTermAtDepth(depth= tipNodeDepth)
+        qzSuction= self.getSuctionCoefficient()
         qzMatName= 'qzS:'+str(tipNode.tag)
         qzMat= ssi.def_qzsimple1_material(preprocessor,
                                   matName= qzMatName,
                                   qzType= qzSoilType, # soil type.
                                   qult= qult, # Ultimate tip capacity.
                                   z50= z50q, # 50% capacity reached.
-                                  suction= qzSuction, # suction during tension/uplift.
+                                  suction= qzSuction, # suction factor during tension/uplift.
                                   c= qzDashpotC) # viscous damping.
         
         pileTipFixNode= modelSpace.duplicateNode(tipNode)
@@ -324,7 +362,7 @@ class PyTzQzPile(pile.Pile):
             # Create P-Y material.
             pult, y50= self.getPyParametersAtDepth(depth= nodeDepth, tributaryLength= tributaryLength)
             soilType= self.getSoilTypeAtDepth(depth= nodeDepth)
-            dashpotC= self.getViscousDampingTermAtDepth(depth= nodeDepth)
+            pyDashpotC= self.getPyViscousDampingTermAtDepth(depth= nodeDepth)*tributaryLength
             Cd= self.getDragResistanceCoefficientAtDepth(depth= nodeDepth)
             pyMatName= 'pyS_'+str(n.tag)
             pyMat= ssi.def_pysimple1_material(preprocessor,
@@ -332,17 +370,18 @@ class PyTzQzPile(pile.Pile):
                                               soilType= soilType,
                                               pult= pult,
                                               Y50= y50,
-                                              c= dashpotC,
+                                              c= pyDashpotC,
                                               Cd= Cd)
             # Create T-Z material.
             tult, z50= self.getTzParametersAtDepth(depth= nodeDepth, tributaryLength= tributaryLength, verticalStressOnSurface= verticalStressOnSurface)
             tzMatName= 'tzS:'+str(n.tag)
+            tzDashpotC= self.getTzViscousDampingTermAtDepth(depth= nodeDepth)*tributaryLength
             tzMat= ssi.def_tzsimple1_material(preprocessor,
                                               matName= tzMatName,
                                               tzType= soilType, # Mosher relation.
                                               tult= tult, # Ultimate skin friction capacity.
                                               z50= z50, # 50% capacity reached.
-                                              c= dashpotC)
+                                              c= tzDashpotC)
             # Create spring.
             fixNode= modelSpace.duplicateNode(n)
             modelSpace.fixNode('000_000', fixNode.tag)
@@ -367,16 +406,16 @@ class PyTzQzPile(pile.Pile):
         tipNodeDepth= self.getDepth(tipNodePos.z)
         ### vertical effective stress at pile tip.
         qult, z50q= self.getQzParametersAtDepth(depth= tipNodeDepth, verticalStressOnSurface= verticalStressOnSurface)
-        qzSoilType= self.getSoilTypeAtDepth(depth= nodeDepth)
-        qzDashpotC= self.getViscousDampingTermAtDepth(depth= nodeDepth)
-        qzSuction= self.getSuctionAtDepth(depth= nodeDepth)
+        qzSoilType= self.getSoilTypeAtDepth(depth= tipNodeDepth)
+        qzDashpotC= self.getQzViscousDampingTermAtDepth(depth= tipNodeDepth)
+        qzSuction= self.getSuctionCoefficient()
         qzMatName= 'qzS:'+str(tipNode.tag)
         qzMat= ssi.def_qzsimple1_material(preprocessor,
                                   matName= qzMatName,
                                   qzType= qzSoilType, # soil type.
                                   qult= qult, # Ultimate tip capacity.
                                   z50= z50q, # 50% capacity reached.
-                                  suction= qzSuction, # suction during tension/uplift.
+                                  suction= qzSuction, # suction factor during tension/uplift.
                                   c= qzDashpotC) # viscous damping.
         
         pileTipFixNode= modelSpace.duplicateNode(tipNode)

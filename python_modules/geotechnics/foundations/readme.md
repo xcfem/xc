@@ -6,6 +6,10 @@ Code for foundation design.
 
 Undrained shear strength ($s_u$) is the maximum shear stress a saturated clay can withstand under quick loading conditions where pore water cannot escape, whereas cohesion (or $c$) is a fundamental strength parameter in the Mohr-Coulomb failure criterion representing a soil's inherent ability to stick together. In short-term undrained total stress analysis, clay is treated as purely cohesive with a friction angle of zero ($\phi= 0$), making the undrained shear strength numerically equal to the undrained cohesion ($s_u= c_u$).
 
+## PySimple1 material. Recommended values for Cd.
+
+- Soft Clays (SoilType = 1): Stable gaps commonly form behind the pile during cyclic loading. Based on back-analyses of experimental data (such as the centrifuge tests conducted by Wilson in 1998), it is standard practice to adopt a value of $C_d= 0.3$. This implies that the residual drag resistance inside the gap is limited to 30% of the ultimate soil capacity.
+- Sands (SoilType = 2): Drained sands tend to cave in and backfill the voids around the pile as it displaces. Because of this self-healing behavior, an open-gap condition rarely persists. Therefore, a value of ⁠$C_d\geq 1.0$ is typically used to reflect that the material quickly recovers its full resistance upon reversing direction or closing the gap.
 
 ## References
 
