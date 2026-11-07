@@ -695,10 +695,12 @@ class SoilSampledData(soil_layers.SoilLayers):
                 retval= float(interpolation(depth))
         else: # No sampled data: use a simplified estimation.
             if(pileDiameter is not None):
-                Vp= self.getPressureWaveVelocityAtDepth(depth)
+                G= self.getShearModulusAtDepth(depth)
                 rho= self.getUnitMassAtDepth(depth)
-                A= math.pi*(pileDiameter/2.0)**2
-                retval= rho*Vp*A
+                nu= self.getPoissonCoefficientAtDepth(depth)
+                R= pileDiameter/2.0
+                # Lysmer formula.
+                retval= 3.4*R**2/(1-nu)*math.sqrt(rho*G)
                 print('QZ dashpot C= ', retval)
             else:
                 className= type(self).__name__
