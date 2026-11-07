@@ -1,8 +1,26 @@
 # Docker install process
 
-There is a prebuilt Docker image for convinience of use, you can find it on Docker hub on this [link](https://hub.docker.com/r/engthiago/xcfem)
+There is a prebuilt Docker image for convenience. You can find it on [Docker Hub](https://hub.docker.com/r/engthiago/xcfem).
 
-To get started, install Docker Desktop on your computer, you will likely need to setup and account and restart your computer.
+**Warning**: To run the image, it is recommended to install Docker in "[rootless mode](https://docs.docker.com/engine/security/rootless/)" in order "to mitigate potential vulnerabilities in the daemon and the container runtime". See below for the technical explanation.
+
+Windows users who want to run containers in rootless mode can use Podman as an alternative to Docker Desktop. See the [Podman installation instructions](./podman_install.md) for setup and how to select rootless mode.
+
+After reading the warning, proceed:
+
+- **Windows:** Install [Docker Desktop](https://docs.docker.com/desktop/setup/install/windows-install/).
+- **Linux:** Install Docker Desktop or Docker Engine and follow the [rootless mode guide](https://docs.docker.com/engine/security/rootless/).
+
+Security implications: 
+
+> On Linux, Docker Engine normally runs with root privileges, which give
+> it broad control over the system. For more information, see the
+> [OWASP Docker Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html).
+
+Additional notes on networking:
+> Docker Engine also changes host network and firewall settings for
+> container networking. During testing on Fedora, switching to
+> rootless Docker resolved a virtual machine connectivity issue.
 
 ## Option 1: Run the existing container
 
