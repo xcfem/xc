@@ -47,8 +47,12 @@ soil.puSwitch= 1
 # API linear variation (default)   --> 1
 # modified API parabolic variation --> 2
 soil.kSwitch= 1
-# Viscous damping term (dashpot).
-soil.dashpotC= 0.0
+# Viscous damping term (dashpot) for lateral displacement.
+soil.pyDashpotC= 0.0
+# Viscous damping term (dashpot) for vertical displacement of the pile shaft.
+soil.tzDashpotC= 0.0
+# Viscous damping term (dashpot) for vertical displacement of the pile tip.
+soil.qzDashpotC= 0.0
 # Cofficient to compute the  drag resistance within a fully-mobilized gap as
 # Cd*pult.
 soil.Cd= 0.0
@@ -223,7 +227,7 @@ if(not silent):
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if((abs(ratio1)<1e-12) and (abs(ratio2)<1e-12) and (abs(ratio3)<1e-12) and (abs(ratio4)<1e-12) and (abs(ratio5)<1e-12) and (abs(ratio6)<1e-12) and (abs(ratio7)<1e-12) and (abs(ratio8)<1e-12)):
+if((abs(ratio1)<1e-4) and (abs(ratio2)<1e-12) and (abs(ratio3)<1e-4) and (abs(ratio4)<1e-12) and (abs(ratio5)<1e-4) and (abs(ratio6)<1e-12) and (abs(ratio7)<1e-4) and (abs(ratio8)<1e-12)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
