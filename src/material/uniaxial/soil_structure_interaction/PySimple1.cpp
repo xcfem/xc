@@ -50,6 +50,7 @@
 
 #include "material/uniaxial/soil_structure_interaction/PySimple1.h"
 #include <utility/matrix/Vector.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 
 
@@ -530,9 +531,12 @@ int XC::PySimple1::revertToStart(void)
     //
     if(matCapacity <= 0.0 || v50 <= 0.0)
       {
-        std::cerr << "WARNING -- only accepts positive nonzero pult and y50" << std::endl;
-        std::cerr << "PyLiq1: " << std::endl;
-        std::cerr << "matCapacity: " << matCapacity << "   y50: " << v50 << std::endl;
+        std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+		  << "; ERROR -- only accepts positive nonzero pult and y50"
+		  << std::endl
+		  << "pult: " << matCapacity
+		  << "   y50: " << v50
+		  << Color::def << std::endl;
         exit(-1);
       }
 
@@ -566,10 +570,11 @@ int XC::PySimple1::revertToStart(void)
       }
     else
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING only accepts soilType of 1 or 2" << std::endl
 	          << "PyLiq1: " << std::endl
-		  << "soilType: " << soilType << std::endl;
+		  << "soilType: " << soilType
+		  << Color::def << std::endl;
         exit(-1);
       }
 
@@ -651,7 +656,9 @@ int XC::PySimple1::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+		<< "; failed to send data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -664,12 +671,16 @@ int XC::PySimple1::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+		<< "; failed to receive ids."
+	        << Color::def << std::endl;
     else
       {
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+		    << "; failed to receive data."
+		    << Color::def << std::endl;
       }
     return res;
   }

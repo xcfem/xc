@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-'''Calculation of ultimate reaction (force per unit length) of the rock
-        according to Reese, L. C. 1997. “Analysis of laterally loaded piles in 
-        weak rock,” Journal of Geotechnical and Geoenvironmental Engineering, 
-        Vol.123(11), ASCE, Reston, VA.'''
+''' Calculation of ultimate reaction (force per unit length) of the rock
+    according to Reese, L. C. 1997. “Analysis of laterally loaded piles in 
+    weak rock,” Journal of Geotechnical and Geoenvironmental Engineering, 
+    Vol.123(11), ASCE, Reston, VA.
+'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2026, LCPT and AO_O"

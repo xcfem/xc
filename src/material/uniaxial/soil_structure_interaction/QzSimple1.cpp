@@ -49,6 +49,7 @@
 #include <cmath>
 #include "material/uniaxial/soil_structure_interaction/QzSimple1.h"
 #include <utility/matrix/Vector.h>
+#include "utility/utils/misc_utils/colormod.h"
 
 
 
@@ -494,9 +495,9 @@ double XC::QzSimple1::getDampTangent(void) const
 void XC::QzSimple1::set_suction(const double &s)
   {
     if((s<0.0) or (s>0.1))
-      std::clog << getClassName() << "::" << __FUNCTION__
+      std::clog << Color::red << getClassName() << "::" << __FUNCTION__
 	        << "; the value of suction must be 0.0 to 0.1."
-	        << std::endl;
+	        << Color::def << std::endl;
     suction= s;
   }
 
@@ -538,7 +539,9 @@ int XC::QzSimple1::revertToStart(void)
     if(suction > 0.1)
       {
         suction= 0.1;
-        std::cerr << "XC::QzSimple1::QzSimple1 -- setting suction to max value of 0.1\n";
+        std::clog << Color::yellow << getClassName() << "::"<< __FUNCTION__
+		  << "; WARNING: setting suction to max value of 0.1"
+	          << Color::def << std::endl;
       }
 
     // Only allow zero or positive dashpot values
@@ -549,8 +552,15 @@ int XC::QzSimple1::revertToStart(void)
     //
     if(matCapacity <= 0.0 || v50 <= 0.0)
       {
-        std::cerr << "XC::QzSimple1::QzSimple1 -- only accepts positive nonzero Qult and z50\n";
-        exit(-1);
+	std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+	          << "; only accepts positive nonzero Qult and z50"
+		  << std::endl 
+		  << "Qult: " << matCapacity
+		  << " z50: " << v50
+		  << "tzType: " << soilType
+		  << Color::def << std::endl;
+
+	exit(-1);
       }
 
     // Initialize variables for Near Field rigid-plastic spring
@@ -575,8 +585,9 @@ int XC::QzSimple1::revertToStart(void)
       }
     else
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; only accepts QzType of 1 or 2\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+	          << "; only accepts QzType of 1 or 2"
+		  << Color::def << std::endl;
         exit(-1);
       }
 
@@ -648,7 +659,9 @@ int XC::QzSimple1::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+		<< "; failed to send data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -660,12 +673,16 @@ int XC::QzSimple1::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+		<< "; failed to receive ids."
+	        << Color::def << std::endl;
     else
       {
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+		    << "; failed to receive data."
+		    << Color::def << std::endl;
       }
     return res;
   }

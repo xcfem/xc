@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Base class for soil layers representation.'''
 
-from __future__ import print_function
-
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2022, LCPT"
 __license__= "GPL"

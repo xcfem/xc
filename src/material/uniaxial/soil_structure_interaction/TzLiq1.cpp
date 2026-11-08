@@ -50,11 +50,11 @@
 #include <material/nD/soil/FluidSolidPorousMaterial.h>
 #include <material/nD/NDMaterial.h>
 #include <utility/matrix/Vector.h>
-
 #include <cmath>
 #include <domain/mesh/element/plane/fourNodeQuad/FourNodeQuad.h>
 #include <iostream>
 #include "domain/mesh/node/Node.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 // Controls on internal iteration between spring components
 const int TZmaxIterations = 20;
@@ -101,16 +101,20 @@ int XC::TzLiq1::setTrialStrain (double newz, double zRate)
         //                Note: currently assuming y-axis is vertical, and that the
         //                out-of-plane normal stress equals sigma-xx.
         //
-        if(lastLoadStage ==0 && loadStage ==1){
+        if(lastLoadStage ==0 && loadStage ==1)
+	  {
 
                 meanConsolStress = getEffectiveStress();
-                if(meanConsolStress == 0.0){
-                        std::cerr << "WARNING meanConsolStress is 0 in solid elements, ru will divide by zero";
-                        std::cerr << "TzLiq1: " << std::endl;
-                        std::cerr << "Adjacent solidElems: " << solidElem1 << ", " << solidElem2 << std::endl;
-                        exit(-1);
-                }
-        }
+                if(meanConsolStress == 0.0)
+		  {
+		    std::cerr << Color::red << this->getClassName() << "::"<< __FUNCTION__
+			      << "; ERROR meanConsolStress is 0 in solid elements, ru will divide by zero.\n"
+			      << " Adjacent solidElems: " << solidElem1
+			      << ", " << solidElem2
+			      << Color::def << std::endl;
+		    exit(-1);
+		  }
+	  }
         lastLoadStage = loadStage;
 
         // Obtain the mean effective stress from the adjacent solid elements,
@@ -284,12 +288,16 @@ XC::TzLiq1::getEffectiveStress(void)
                 {        
                         Element *theElement1 = theDomain->getElement(solidElem1);
                         Element *theElement2 = theDomain->getElement(solidElem2);
-                        if (theElement1 == 0 || theElement2 == 0) {
-                                std::cerr << "WARNING solid element not found in getEffectiveStress" << std::endl;
-                                std::cerr << "TzLiq1: " << std::endl;
-                                std::cerr << "Adjacent solidElems: " << solidElem1 << ", " << solidElem2 << std::endl;
-                                exit(-1);
-                        }
+                        if (theElement1 == 0 || theElement2 == 0)
+			  {
+			    std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+				      << "; ERROR solid element not found in getEffectiveStress"
+				      << std::endl
+				      << "Adjacent solidElems: "
+				      << solidElem1 << ", " << solidElem2
+				      << Color::def << std::endl;
+			    exit(-1);
+			  }
 
                         // Check each of the allowable element types, starting with 4NodeQuads
                         theQuad1 = dynamic_cast<FourNodeQuad*>(theElement1);
@@ -329,13 +337,15 @@ XC::TzLiq1::getEffectiveStress(void)
                                 // Check other acceptable soil types.
                         }
 
-                        if(elemFlag.compare("NONE") == 0) {        // Never obtained a valid pointer set
-                                std::cerr << "WARNING: Adjoining solid elements did not return valid pointers";
-                                std::cerr << "TzLiq1: " << std::endl;
-                                std::cerr << "Adjacent solidElems: " << solidElem1 << ", " << solidElem2 << std::endl;
+                        if(elemFlag.compare("NONE") == 0)
+			  {        // Never obtained a valid pointer set
+                                std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+					  << "; ERROR: Adjoining solid elements did not return valid pointers.\n"
+					  << "Adjacent solidElems: " << solidElem1 << ", " << solidElem2
+					  << Color::def << std::endl;
                                 exit(-1);
                                 return meanStress;
-                        }
+			  }
         
                 }
         }
@@ -381,12 +391,14 @@ XC::TzLiq1::getEffectiveStress(void)
                         return meanStress;
                 }
                 
-                else {        // Never found a matching flag
-                        std::cerr << "WARNING: Something wrong with specification of elemFlag in getEffectiveStress";
-                        std::cerr << "TzLiq1: " << std::endl;
-                        std::cerr << "Adjacent solidElems: " << solidElem1 << ", " << solidElem2 << std::endl;
-                        exit(-1);
-                        return meanStress;
+                else
+		  {        // Never found a matching flag
+		    std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+			      << "; ERROR: Something wrong with specification of elemFlag in getEffectiveStress"
+			      << "Adjacent solidElems: " << solidElem1 << ", " << solidElem2
+			      << Color::def << std::endl;
+		    exit(-1);
+		    return meanStress;
                 }
         }
 
@@ -406,9 +418,9 @@ void XC::TzLiq1::updateMaterialStage(int stage)
   {
     if(stage !=0 && stage !=1)
       {
-        std::cerr << "TzLiq1::" << __FUNCTION__
-		  << "; WARNING stage must be 0 or 1"
-		  << std::endl;
+        std::cerr << Color::red << "XC::TzLiq1::"<< __FUNCTION__
+		  << "; ERROR stage must be 0 or 1"
+		  << Color::def << std::endl;
         exit(-1);
       }
     loadStage = stage;
@@ -476,7 +488,9 @@ int XC::TzLiq1::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+		<< "; failed to send data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -488,12 +502,16 @@ int XC::TzLiq1::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+		<< "; failed to receive ids."
+	        << Color::def << std::endl;
     else
       {
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+		    << "; failed to receive data."
+		    << Color::def << std::endl;
       }
     return res;
   }

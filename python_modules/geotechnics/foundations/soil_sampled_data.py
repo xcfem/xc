@@ -1,13 +1,39 @@
 # -*- coding: utf-8 -*-
 ''' Class to store the values of the geotechnical parameters along the 
     shaft of a pile.
+
+References:
+- Gazetas, G., & Dobry, R. (1984). "Simple Radiation Damping Model for Piles 
+  and Footings." Journal of Engineering Mechanics, ASCE, Vol. 110, No. 6, 
+  pp. 937-956.
+
+- Boulanger, R. W., Curras, C. J., Kutter, B. L., Wilson, D. W., & Abghari, 
+  A. (1999). "Seismic soil-pile-structure interaction experiments and 
+  analyses." Journal of Geotechnical and Geoenvironmental Engineering, ASCE, 
+  125(9), 750-759.
+
+- Novak, M. (1974). "Dynamic stiffness and damping of piles." 
+  Canadian Geotechnical Journal, 11(4), 574-598.
+
+- Novak, M., & Sheta, M. (1980). "Approximate approach to contact problems of 
+  piles." Proceedings of the ASCE National Convention, Dynamic Response of 
+  Pile Foundations: Analytical Aspects, 53-79.
+
+- Novak, M., Nogami, T., & Aboul-Ella, F. (1978). "Dynamic soil reactions for 
+  plane strain case." Journal of the Engineering Mechanics Division, ASCE, 
+  104(4), 953-959.
+
+- Lysmer, J., y Richart, F. E. (1966). "Dynamic Response of Footings to 
+  Vertical Loading." Journal of the Soil Mechanics and Foundations Division
+   (ASCE).  Vol. 92, No. 1, págs. 65-91. 
+
 '''
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2026, LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
+__email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es"
 
 import os
 import sys
@@ -25,7 +51,7 @@ class SoilSampledData(soil_layers.SoilLayers):
     ''' Class to store the values of the geotechnical parameters along the
         depth of a pile.
     '''
-    def __init__(self, code, pile_data= None, puSwitch= 1, kSwitch= 1, waterTableZ= -math.inf, waterDensity= 1e3, clay_Cd= 0.3, sand_Cd= 0.3, suction= 0.0):
+    def __init__(self, code, pile_data= None, puSwitch= 1, kSwitch= 1, waterTableZ= -math.inf, waterDensity= 1e3, clay_Cd= 0.3, sand_Cd= 0.3, suction= 0.0, rock_py50= 2.5e-3, rock_tz50= 0.5e-3):
         ''' Constructor.
 
         :param code: code for the geotechnical parameters.
@@ -44,6 +70,10 @@ class SoilSampledData(soil_layers.SoilLayers):
         :param sand_Cd: drag resistance coefficient for clays (defaults to 1.0).
         :param suction: Uplift resistance is equal to suction*qult. 
                         Default = 0.0. The value of suction must be 0.0 to 0.1.
+        :param rock_py50: horizontal displacement corresponding to one-half the ultimate 
+                          soil resistance for rocks.
+        :param rock_tz50: vertical displacement corresponding to one-half the ultimate 
+                          skin friction resistance for rocks.
         '''
         super().__init__(waterTableZ= waterTableZ, groundLevel= None, waterDensity= waterDensity, clay_Cd= clay_Cd, sand_Cd= sand_Cd, suction= suction)
         self.code= code
@@ -51,6 +81,8 @@ class SoilSampledData(soil_layers.SoilLayers):
         self.interpolationsDict= dict()
         self.puSwitch= puSwitch
         self.kSwitch= kSwitch
+        self.rock_py50= rock_py50
+        self.rock_tz50= rock_tz50
         
     def readFromFile(self, inputFileName):
         ''' Read the geotechnical data from the given file.
@@ -176,15 +208,17 @@ class SoilSampledData(soil_layers.SoilLayers):
                             vi.append(v)
                         retval= interpolate.interp1d(zi, vi, fill_value='extrapolate')
                     else:
+                        className= type(self).__name__
                         methodName= sys._getframe(0).f_code.co_name
                         errorMsg= '; too many values ('+str(depthi_size)+')'
-                        lmsg.error(methodName+errorMsg)
+                        lmsg.error(className+'.'+methodName+errorMsg)
                 if(retval is not None):
                     self.interpolationsDict[interpolationFunctionName]= retval
                 else:
+                    className= type(self).__name__
                     methodName= sys._getframe(0).f_code.co_name
                     errorMsg= '; incompatible sizes: '+str(pierCode)+' '+str(depthi_size)+' '+str(khi_size)
-                    lmsg.error(methodName+errorMsg)
+                    lmsg.error(className+'.'+methodName+errorMsg)
                     sys.exit(-1)
         # else:
         #     className= type(self).__name__
@@ -214,9 +248,10 @@ class SoilSampledData(soil_layers.SoilLayers):
                     retval= interpolate.interp1d(depths, values, fill_value='extrapolate')
                     self.interpolationsDict[interpolationFunctionName]= retval
                 else:
+                    className= type(self).__name__
                     methodName= sys._getframe(0).f_code.co_name
                     errorMsg= '; incompatible sizes: '+str(pierCode)+' '+str(depths_size)+' '+str(values_size)
-                    lmsg.error(methodName+errorMsg)
+                    lmsg.error(className+'.'+methodName+errorMsg)
                     exit(1)
         return retval
         
@@ -303,21 +338,25 @@ class SoilSampledData(soil_layers.SoilLayers):
         :param depth: depth of the desired soil.
         '''
         retval= None
-        c= self.getCohesionAtDepth(depth)
-        if(c>0.0):
-            retval= 1 # clay.
-        else:
-            phi_degrees= math.degrees(self.getInternalFrictionAngleAtDepth(depth))
-            if(phi_degrees>pytzqzf._api_1987_internal_friction_angle_values_[0]):
-                retval= 2  # sand.
-            else:
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                warnMsg= '; internal friction angle: '+str(phi_degrees)
-                warnMsg+= ' too small for soil type 2'
-                warnMsg+= '. Returning soil type 1.'
-                lmsg.warning(className+'.'+methodName+warnMsg)
+        soilPhi= self.getInternalFrictionAngleAtDepth(depth)
+        if(soilPhi is not None): # it's a soil.
+            c= self.getCohesionAtDepth(depth)
+            if(c>0.0):
                 retval= 1 # clay.
+            else:
+                phi_degrees= math.degrees(soilPhi)
+                if(phi_degrees>pytzqzf._api_1987_internal_friction_angle_values_[0]):
+                    retval= 2  # sand.
+                else:
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    warnMsg= '; internal friction angle: '+str(phi_degrees)
+                    warnMsg+= ' too small for soil type 2'
+                    warnMsg+= '. Returning soil type 1.'
+                    lmsg.warning(className+'.'+methodName+warnMsg)
+                    retval= 1 # clay.
+        else: # it's a rock.
+            retval= 1 # assimilated to clay. 
         return retval
 
     def getDragResistanceCoefficientAtDepth(self, depth):
@@ -399,8 +438,109 @@ class SoilSampledData(soil_layers.SoilLayers):
             tmp= [c*unitConvFactor for c in ci]
             self._plot_property_along_pile_depth(propName= '$\gamma$', depths= depthi, values= tmp, unitSymbol= unitSymbol)
             
+    def getPileSkinFrictionBearingCapacityAlongDepth(self, characteristic):
+        ''' Plot the values of skin friction bearing capacity of the pile 
+            corresponding to different depths.
+
+        :param characteristic: if true return the characteristic value, 
+                               otherwise return the design one.
+        '''
+        if(characteristic):
+            propName= 'rski'
+        else:
+            propName= 'rsdi'
+        return self._get_bearing_property_along_pile_depth(propName= propName)
+            
+    def getPileSkinFrictionBearingCapacityAtDepth(self, depth, characteristic):
+        ''' Return the value of the skin friction bearing capacity of the pile 
+            at the given depth.
+
+        :param depth: desired depth.
+        :param characteristic: if true return the characteristic value, 
+                               otherwise return the design one.
+        '''
+        retval= None
+        bearingProperties= self.getBearingProperties()
+        if(characteristic):
+            propName= 'rski'
+        else:
+            propName= 'rsdi'
+        if(propName in bearingProperties):
+            depths, values= self.getPileSkinFrictionBearingCapacityAlongDepth(characteristic)
+            interpolation= self._get_linear_property_interpolation(propName= propName, depths= depths, values= values)
+            retval= float(interpolation(depth))
+        return retval
+    
+    def plotPileSkinFrictionBearingCapacityAlongDepth(self, characteristic, unitConvFactor= 1e-3, unitSymbol= 'kN'):
+        ''' Plot the values of the skin friction bearing capacity along the
+            pile depth.
+
+        :param characteristic: if true return the characteristic value, 
+                               otherwise return the design one.
+        :param unitConvFactor: unit conversion factor.
+        :param unitSymbol: unit simbol.
+        '''
+        depthi, ri= self.getPileSkinFrictionBearingCapacityAlongDepth(characteristic)
+        if(characteristic):
+            propName= '$R_{sk}$'
+        else:
+            propName= '$R_{sd}$'
+        if(ri is not None):
+            tmp= [r*unitConvFactor for r in ri]
+            self._plot_property_along_pile_depth(propName= propName, depths= depthi, values= tmp, unitSymbol= unitSymbol)
+            
+    def getPileEndBearingCapacityAlongDepth(self, characteristic):
+        ''' Plot the values of end bearing capacity of the pile 
+            corresponding to different depths.
+
+        :param characteristic: if true return the characteristic value, 
+                               otherwise return the design one.
+        '''
+        if(characteristic):
+            propName= 'rbki'
+        else:
+            propName= 'rbdi'
+        return self._get_bearing_property_along_pile_depth(propName= propName)
+            
+    def getPileEndBearingCapacityAtDepth(self, depth, characteristic):
+        ''' Return the value of the end bearing capacity of the pile at the
+            given depth.
+
+        :param depth: desired depth.
+        :param characteristic: if true return the characteristic value, 
+                               otherwise return the design one.
+        '''
+        retval= None
+        bearingProperties= self.getBearingProperties()
+        if(characteristic):
+            propName= 'rbki'
+        else:
+            propName= 'rbdi'
+        if(propName in bearingProperties):
+            depths, values= self.getPileEndBearingCapacityAlongDepth(characteristic)
+            interpolation= self._get_linear_property_interpolation(propName= propName, depths= depths, values= values)
+            retval= float(interpolation(depth))
+        return retval
+    
+    def plotPileEndBearingCapacityAlongDepth(self, characteristic, unitConvFactor= 1e-3, unitSymbol= 'kN'):
+        ''' Plot the values of the end bearing capacity along the pile depth.
+
+        :param characteristic: if true return the characteristic value, 
+                               otherwise return the design one.
+        :param unitConvFactor: unit conversion factor.
+        :param unitSymbol: unit simbol.
+        '''
+        depthi, ri= self.getPileEndBearingCapacityAlongDepth(characteristic)
+        if(characteristic):
+            propName= '$R_{bk}$'
+        else:
+            propName= '$R_{bd}$'
+        if(ri is not None):
+            tmp= [r*unitConvFactor for r in ri]
+            self._plot_property_along_pile_depth(propName= propName, depths= depthi, values= tmp, unitSymbol= unitSymbol)
+
     def getPileBearingCapacityAlongDepth(self, characteristic):
-        ''' Plot the values of total bearing capacity of the pile 
+        ''' Plot the values of the total bearing capacity of the pile 
             corresponding to different depths.
 
         :param characteristic: if true return the characteristic value, 
@@ -423,9 +563,9 @@ class SoilSampledData(soil_layers.SoilLayers):
         retval= None
         bearingProperties= self.getBearingProperties()
         if(characteristic):
-            propName= 'rcki'
+            propName= 'rbki'
         else:
-            propName= 'rcdi'
+            propName= 'rbdi'
         if(propName in bearingProperties):
             depths, values= self.getPileBearingCapacityAlongDepth(characteristic)
             interpolation= self._get_linear_property_interpolation(propName= propName, depths= depths, values= values)
@@ -433,7 +573,7 @@ class SoilSampledData(soil_layers.SoilLayers):
         return retval
     
     def plotPileBearingCapacityAlongDepth(self, characteristic, unitConvFactor= 1e-3, unitSymbol= 'kN'):
-        ''' Plot the values of the soil unit weight along the pile depth.
+        ''' Plot the values of the total bearing capacity along the pile depth.
 
         :param characteristic: if true return the characteristic value, 
                                otherwise return the design one.
@@ -448,7 +588,7 @@ class SoilSampledData(soil_layers.SoilLayers):
         if(ri is not None):
             tmp= [r*unitConvFactor for r in ri]
             self._plot_property_along_pile_depth(propName= propName, depths= depthi, values= tmp, unitSymbol= unitSymbol)
-            
+
     def getQuAlongDepth(self):
         ''' Return the uniaxial unconfined compressive strength of intact rock
             of the pile corresponding to different depths.
@@ -575,8 +715,10 @@ class SoilSampledData(soil_layers.SoilLayers):
             if(pileDiameter is not None):
                 Vs= self.getShearWaveVelocityAtDepth(depth)
                 rho= self.getUnitMassAtDepth(depth)
-                retval= 4.0*pileDiameter*rho*Vs
-                print('PY dashpot C= ', retval)
+                # Gazetas and Dobry 1984. The 6 factor in the original
+                # formula is replaced by a 4 because the soil model (PySimple1)
+                # has already a dissipation mechanism.
+                retval= 4*pileDiameter*rho*Vs
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
@@ -636,8 +778,8 @@ class SoilSampledData(soil_layers.SoilLayers):
                 Vs= self.getShearWaveVelocityAtDepth(depth)
                 rho= self.getUnitMassAtDepth(depth)
                 perimeter= math.pi*pileDiameter
+                # Approximation based on Novak work.
                 retval= perimeter*rho*Vs
-                print('TZ dashpot C= ', retval)
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
@@ -701,7 +843,6 @@ class SoilSampledData(soil_layers.SoilLayers):
                 R= pileDiameter/2.0
                 # Lysmer formula.
                 retval= 3.4*R**2/(1-nu)*math.sqrt(rho*G)
-                print('QZ dashpot C= ', retval)
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
@@ -909,8 +1050,16 @@ class SoilSampledData(soil_layers.SoilLayers):
         #soilRho= self.getUnitMassAtDepth(depth) # density.
         sigV= self.getVerticalStressAtDepth(depth, verticalStressOnSurface) # Vertical stress.
         soilPhi= self.getInternalFrictionAngleAtDepth(depth) # internal friction angle.
-        soilCu= self.getCohesionAtDepth(depth)
-        pult, y50= pytzqzf.get_py_param(pyDepth= depth, phi= soilPhi, cu= soilCu, sigV= sigV, b= pileDiameter, tribLength= tributaryLength, puSwitch= self.puSwitch, kSwitch= self.kSwitch, gwtSwitch= gwtSwitch)
+        if(soilPhi is not None): # it's a soil.
+            soilCu= self.getCohesionAtDepth(depth)
+            pult, y50= pytzqzf.get_py_param(pyDepth= depth, phi= soilPhi, cu= soilCu, sigV= sigV, b= pileDiameter, tribLength= tributaryLength, puSwitch= self.puSwitch, kSwitch= self.kSwitch, gwtSwitch= gwtSwitch)
+        else: # it's a rock.
+            y50= self.rock_py50 # horizontal displacement corresponding to one-half the ultimate 
+                                # soil resistance for rocks.
+            kh= self.getKhAtDepth(depth)
+            pult= 2*y50*kh # Assume elastic response until yield.
+        assert (pult>0)
+        assert (y50>0)
         return pult, y50
     
     def getTzParametersAtDepth(self, depth, pileDiameter, tributaryLength, verticalStressOnSurface= 0.0, drilledShaft= True):
@@ -927,9 +1076,16 @@ class SoilSampledData(soil_layers.SoilLayers):
         sigV= self.getVerticalStressAtDepth(depth, verticalStressOnSurface) # Vertical stress.
         porePressure= self.getPorePressureAtDepth(depth) # pore pressure.
         soilPhi= self.getInternalFrictionAngleAtDepth(depth) # internal friction angle.
-        soilCu= self.getCohesionAtDepth(depth) # soil cohesion.
-        tult, z50= pytzqzf.get_tz_param(phi= soilPhi, su= soilCu, b= pileDiameter, sigV= sigV, porePressure= porePressure, tribLength= tributaryLength, drilledShaft= drilledShaft)
-        return tult, z50
+        if(soilPhi is not None): # it's a soil.
+            soilCu= self.getCohesionAtDepth(depth) # soil cohesion.
+            tult, tz50= pytzqzf.get_tz_param(phi= soilPhi, su= soilCu, b= pileDiameter, sigV= sigV, porePressure= porePressure, tribLength= tributaryLength, drilledShaft= drilledShaft)
+        else: # it's a rock.
+            tz50= self.rock_tz50 # vertical displacement corresponding to one-half the ultimate 
+                                # skin friction resistance for rocks.
+            tult= self.getPileSkinFrictionBearingCapacityAtDepth(depth, characteristic= True)*tributaryLength
+        assert (tult>0)
+        assert (tz50>0)
+        return tult, tz50
     
     def getQzParametersAtDepth(self, depth, pileDiameter, verticalStressOnSurface= 0.0, drilledShaft= True):
         '''  Return the ultimate resistance, qult, and displacement at 50% 
@@ -943,10 +1099,17 @@ class SoilSampledData(soil_layers.SoilLayers):
         '''
         sigV= self.getVerticalStressAtDepth(depth, verticalStressOnSurface) # Vertical stress.
         soilPhi= self.getInternalFrictionAngleAtDepth(depth) # internal friction angle.
-        soilCu= self.getCohesionAtDepth(depth) # soil cohesion.
-        soilG= self.getShearModulusAtDepth(depth) # soil shear modulus.
-        qult, z50= pytzqzf.get_qz_param(qzDepth= depth, phi= soilPhi, su= soilCu, b= pileDiameter, sigV= sigV, G= soilG, drilledShaft= drilledShaft)
-        return qult, z50
+        if(soilPhi is not None): # it's a soil.
+            soilCu= self.getCohesionAtDepth(depth) # soil cohesion.
+            soilG= self.getShearModulusAtDepth(depth) # soil shear modulus.
+            qult, qz50= pytzqzf.get_qz_param(qzDepth= depth, phi= soilPhi, su= soilCu, b= pileDiameter, sigV= sigV, G= soilG, drilledShaft= drilledShaft)
+        else: # it's a rock.
+            qult= self.getPileEndBearingCapacityAtDepth(depth, characteristic= True)
+            qz50= 0.04*pileDiameter # vertical displacement corresponding to one-half the ultimate 
+                                   # end bearing resistance for rocks.
+        assert (qult>0)
+        assert (qz50>0)
+        return qult, qz50
 
 class SoilSampledDataSet(object):
     ''' Class to store the values of the geotechnical parameters for many piles.

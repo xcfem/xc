@@ -48,9 +48,8 @@
 #include <cstdlib>
 #include "material/uniaxial/soil_structure_interaction/TzSimple1.h"
 #include <utility/matrix/Vector.h>
-
 #include <cmath>
-
+#include "utility/utils/misc_utils/colormod.h"
 
 // Controls on internal iteration between spring components
 const int TZmaxIterations= 20;
@@ -343,9 +342,13 @@ int XC::TzSimple1::revertToStart(void)
     //
     if(matCapacity <= 0.0 || v50 <= 0.0)
       {
-        std::cerr << "WARNING -- only accepts positive nonzero tult and z50" << std::endl;
-        std::cerr << "TzLiq1: " << std::endl
-		  << "tzType: " << soilType << std::endl;
+        std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+	          << "; ERROR only accepts positive nonzero tult and z50"
+		  << std::endl 
+		  << "tult: " << matCapacity
+		  << " z50: " << v50
+		  << " tzType: " << soilType
+		  << Color::def << std::endl;
         exit(-1);
       }
             
@@ -371,9 +374,11 @@ int XC::TzSimple1::revertToStart(void)
       }
     else
       {
-        std::cerr << "WARNING -- only accepts tzType of 1 or 2" << std::endl;
-        std::cerr << "TzLiq1: " << std::endl;
-        std::cerr << "tzType: " << soilType << std::endl;
+        std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+		  << "; ERROR -- only accepts tzType of 1 or 2"
+		  << std::endl
+		  << soilType
+		  << Color::def << std::endl;
         exit(-1);
       }
 
@@ -424,7 +429,9 @@ int XC::TzSimple1::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+		<< "; failed to send data."
+	        << Color::def << std::endl;
     return res;
   }
 
@@ -436,13 +443,17 @@ int XC::TzSimple1::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+		<< "; failed to receive ids."
+	        << Color::def << std::endl;
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << Color::red << getClassName() << "::"<< __FUNCTION__
+		    << "; failed to receive data."
+		    << Color::def << std::endl;
       }
     return res;
   }
