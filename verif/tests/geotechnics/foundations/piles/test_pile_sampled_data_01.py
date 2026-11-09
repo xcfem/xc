@@ -157,7 +157,9 @@ for pileCode in piles:
         error= (node_spring_constants-ref_depth_spring_constants).Norm()/ref_depth_spring_constants.Norm()
         kh_err= max(kh_err, error)
             
-
+# print('kv_err= ', kv_err)
+# print('kh_err= ', kh_err)
+        
 testOK= (abs(kv_err)<1e-4) and (abs(kh_err)<1e-4)
 
 from misc_utils import log_messages as lmsg
