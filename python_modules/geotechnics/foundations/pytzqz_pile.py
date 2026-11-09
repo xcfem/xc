@@ -342,11 +342,13 @@ class PyTzQzPile(pile.Pile):
         modelSpace.removeMaterial(qzMat)
         return self.springs
     
-    def generateSpringsPile3D(self, verticalStressOnSurface= 0.0):
+    def generateSpringsPile3D(self, verticalStressOnSurface= 0.0, fixZRotationOfTipNode= True):
         '''Generate the springs that simulate the soils along the pile in a 3D
            problem.
 
         :param verticalStressOnSurface: additional stress on the soil surface.
+        :param fixZRotationOfTipNode: fix the rotation around the z axis of 
+                                      the node at the pile tip.
         '''
         self.springs= list()
         # Get FE model pre-processor.
@@ -399,8 +401,8 @@ class PyTzQzPile(pile.Pile):
 
         # Create spring at the pile tip.
         tipNode= self.getPileTipNode3D()
-        ### Fix vertical rotation of tip node.
-        modelSpace.fixNode('FFF_FF0', tipNode.tag)
+        if(fixZRotationOfTipNode):
+            modelSpace.fixNode('FFF_FF0', tipNode.tag) # Fix vertical rotation of tip node.
         ### Compute tip node depth.
         tipNodePos= tipNode.getInitialPos3d
         tipNodeDepth= self.getDepth(tipNodePos.z)
@@ -431,21 +433,30 @@ class PyTzQzPile(pile.Pile):
         modelSpace.removeMaterial(qzMat)
         return self.springs
         
-    def generateSpringsPile(self):
+    def generateSpringsPile(self, fixZRotationOfTipNode= True):
         '''Generate the springs that simulate the soils along the pile
 
+        :param fixZRotationOfTipNode: fix the rotation around the z axis of 
+                                      the node at the pile tip.
         '''
-        preprocessor= self.pileSet.getPreprocessor
-        numDOFs= preprocessor.getNodeHandler.numDOFs
-        retval= None
-        if(numDOFs==6): # 3D structural mechanics
-            retval= self.generateSpringsPile3D()
-        elif(numDOFs==3):
-            retval= self.generateSpringsPile2D()
-        else:
+        if(hasattr(self, 'springs')):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; not implemented for '+str(numDOFs) + ' degrees of freedom.')
+            errMsg= '; springs have been already crated. Command ignored '
+            lmsg.error(className+'.'+methodName+errMsg)
+            retval= self.springs
+        else:
+            preprocessor= self.pileSet.getPreprocessor
+            numDOFs= preprocessor.getNodeHandler.numDOFs
+            retval= None
+            if(numDOFs==6): # 3D structural mechanics
+                retval= self.generateSpringsPile3D(fixZRotationOfTipNode= fixZRotationOfTipNode)
+            elif(numDOFs==3):
+                retval= self.generateSpringsPile2D()
+            else:
+                errMsg= '; not implemented for '+str(numDOFs)
+                errMsg+= ' degrees of freedom.'
+                lmsg.error(className+'.'+methodName+errMsg)
         return retval
             
 class PyTzQzCircularPile(PyTzQzPile):
