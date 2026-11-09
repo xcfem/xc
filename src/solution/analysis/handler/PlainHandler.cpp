@@ -77,6 +77,7 @@
 #include <utility/matrix/ID.h>
 #include "utility/matrix/Matrix.h"
 #include "domain/domain/subdomain/Subdomain.h"
+#include "utility/utils/misc_utils/colormod.h"
 
 //! @brief Constructor.
 //! @param owr: pointer to the model wrapper that owns the handler.
@@ -117,8 +118,9 @@ int XC::PlainHandler::handle(const ID *nodesLast)
     
     if((!theDomain) || (!theModel) || (!theIntegrator))
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-                  << "; domain, model or integrator was not set.\n";
+        std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+                  << "; domain, model or integrator was not set."
+	          << Color::def << std::endl;
         return -1;
       }
 
@@ -146,10 +148,11 @@ int XC::PlainHandler::handle(const ID *nodesLast)
             if(spPtr->getNodeTag() == nodeID)
               {
                 if(spPtr->isHomogeneous() == false)
-                  std::cerr << getClassName() << "::" << __FUNCTION__
+                  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                             << ";  non-homogeneos constraint"
                             << " for node " << spPtr->getNodeTag()
-                            << " homo assumed\n";
+                            << " homo assumed."
+		            << Color::def << std::endl;
                 const ID &id = dofPtr->getID();
                 int dof = spPtr->getDOF_Number();                
                 if(id(dof) == -2)
@@ -158,12 +161,14 @@ int XC::PlainHandler::handle(const ID *nodesLast)
                         countDOF--;        
                   }
                 else
-                  std::cerr << getClassName() << "::" << __FUNCTION__
-                            << "; multiple single pointconstraints at DOF "
-                            << dof << " for node " << spPtr->getNodeTag()
-                            << std::endl;
-              }
-
+		  {
+		    std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
+			      << "; multiple single point constraints at DOF "
+			      << dof << " for node " << spPtr->getNodeTag()
+			      << Color::def << std::endl;
+		  }
+	      }
+	
         // loop through the MFreedom_Constraints to see if any of the
         // DOFs are constrained, note constraint matrix must be diagonal
         // with 1's on the diagonal
@@ -174,18 +179,20 @@ int XC::PlainHandler::handle(const ID *nodesLast)
             if(mpPtr->getNodeConstrained() == nodeID)
               {
                 if(mpPtr->isTimeVarying() == true)
-                  std::cerr << getClassName() << "::" << __FUNCTION__
+                  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                             << ";  time-varying constraint"
                             << " for node " << nodeID
-                            << " non-varying assumed\n";
+                            << " non-varying assumed"
+			    << Color::def << std::endl;
                 const Matrix &C = mpPtr->getConstraint();
                 int numRows = C.noRows();
                 int numCols = C.noCols();
                 if(numRows != numCols)
-                  std::cerr << getClassName() << "::" << __FUNCTION__
+                  std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                             << " constraint matrix not diagonal,"
                             << " ignoring constraint for node "
-                            << nodeID << std::endl;
+                            << nodeID
+			    << Color::def << std::endl;
                 else
                   {
                     int ok = 0;
@@ -198,10 +205,11 @@ int XC::PlainHandler::handle(const ID *nodesLast)
                           ok = 1;
                       }
                     if(ok != 0)
-                      std::cerr << getClassName() << "::" << __FUNCTION__
+                      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                                 << "; constraint matrix not identity,"
                                 << " ignoring constraint for node "
-                                << nodeID << std::endl;
+                                << nodeID
+				<< Color::def << std::endl;
                     else
                       {
                         const ID &dofs = mpPtr->getConstrainedDOFs();
@@ -215,11 +223,12 @@ int XC::PlainHandler::handle(const ID *nodesLast)
                                 countDOF--;        
                               }
                             else
-                              std::cerr << getClassName() << "::" << __FUNCTION__
+                              std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
                                         << ";  constraint at dof " << dof
                                         << " already specified for constrained node"
                                         << " in MFreedom_Constraint at node "
-                                        << nodeID << std::endl;
+                                        << nodeID
+					<< Color::def << std::endl;
                           }
                       }
                   }
@@ -232,9 +241,9 @@ int XC::PlainHandler::handle(const ID *nodesLast)
         MRMFreedom_Constraint *mrmpPtr;
         while((mrmpPtr = theMRMPs()) != 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__
+            std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		      << "; loop through the MRMFreedom_Constraints."
-		      << std::endl;
+		      << Color::def << std::endl;
           }
       }
 
@@ -261,9 +270,10 @@ int XC::PlainHandler::handle(const ID *nodesLast)
                         count3++;
                       }
 		    else
-		      std::cerr << getClassName() << "::" << __FUNCTION__
+		      std::cerr << Color::red << getClassName() << "::" << __FUNCTION__
 		                << "; boundary sp constraint in subdomain"
-		                << " this should not be - results suspect \n";
+		                << " this should not be - results suspect."
+				<< Color::def << std::endl;
 	      }
 	  }
     
