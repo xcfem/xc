@@ -351,17 +351,26 @@ class Pile(object):
         :param storeAsPileNodeProperties: if true store the spring constants as
                                           properties of the pile nodes.
         '''
-        preprocessor= self.pileSet.getPreprocessor
-        numDOFs= preprocessor.getNodeHandler.numDOFs
-        retval= None
-        if(numDOFs==6): # 3D structural mechanics
-            retval= self.generateSpringsPile3D(alphaKh_x= alphaKh_x, alphaKh_y= alphaKh_y, alphaKv_z= alphaKv_z, storeAsPileNodeProperties= storeAsPileNodeProperties)
-        elif(numDOFs==3):
-            retval= self.generateSpringsPile2D(alphaKh_x= alphaKh_x, alphaKv_y= alphaKv_z, storeAsPileNodeProperties= storeAsPileNodeProperties)
-        else:
+        if(hasattr(self, 'springs')):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; not implemented for '+str(numDOFs) + ' degrees of freedom.')
+            errMsg= '; springs have been already crated. Command ignored '
+            lmsg.error(className+'.'+methodName+errMsg)
+            retval= self.springs
+        else:
+            preprocessor= self.pileSet.getPreprocessor
+            numDOFs= preprocessor.getNodeHandler.numDOFs
+            retval= None
+            if(numDOFs==6): # 3D structural mechanics
+                retval= self.generateSpringsPile3D(alphaKh_x= alphaKh_x, alphaKh_y= alphaKh_y, alphaKv_z= alphaKv_z, storeAsPileNodeProperties= storeAsPileNodeProperties)
+            elif(numDOFs==3):
+                retval= self.generateSpringsPile2D(alphaKh_x= alphaKh_x, alphaKv_y= alphaKv_z, storeAsPileNodeProperties= storeAsPileNodeProperties)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                errMsg= '; not implemented for '+str(numDOFs)
+                errMsg+= ' degrees of freedom.'
+                lmsg.error(className+'.'+methodName+errMsg)
         return retval
 
     def getSpringFixedNodes(self):
