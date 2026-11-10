@@ -566,16 +566,15 @@ class GridModel(object):
         :param xyRotCent: coordinates [x,y] of the axis Z of rotation
         '''
         theta=math.radians(angle)
-        sinTheta=math.sin(theta)
-        cosTheta=math.cos(theta)
         sPtMove=self.getSetPntRange(ijkRange,'sPtMove')
         xCent=xyRotCent[0]; yCent=xyRotCent[1]
         for p in sPtMove.getPoints:
             xp=p.getPos.x
             yp=p.getPos.y
             R=math.sqrt((xp-xCent)**2+(yp-yCent)**2)
-            p.getPos.x=xCent+R*cosTheta
-            p.getPos.y= yCent+R*sinTheta
+            angInit=math.atan2(yp-yCent,xp-xCent)
+            p.getPos.x=xCent+R*math.cos(angInit+theta)
+            p.getPos.y= yCent+R*math.sin(angInit+theta)
             #p.getPos.x= xyRotCent[0]+cosTheta*(xp-xyRotCent[0])-sinTheta*(yp-xyRotCent[1])
             #p.getPos.y= xyRotCent[1]+sinTheta*(xp-xyRotCent[0])+cosTheta*(yp-xyRotCent[1])
             print('end:',p.getPos.x,p.getPos.y)
@@ -608,14 +607,15 @@ class GridModel(object):
         :param yzRotCent: coordinates [y,z] of the axis X of rotation
         '''
         theta=math.radians(angle)
-        sinTheta=math.sin(theta)
-        cosTheta=math.cos(theta)
         sPtMove=self.getSetPntRange(ijkRange,'sPtMove')
+        yCent=yzRotCent[0];zCent=yzRotCent[1]
         for p in sPtMove.getPoints:
             yp=p.getPos.y
             zp=p.getPos.z
-            p.getPos.y= yzRotCent[0]+cosTheta*(yp-yzRotCent[0])-sinTheta*(zp-yzRotCent[1])
-            p.getPos.z= yzRotCent[1]+sinTheta*(yp-yzRotCent[0])+cosTheta*(zp-yzRotCent[1])
+            R=math.sqrt((yp-yCent)**2+(zp-zCent)**2)
+            angInit=math.atan2(zp-zCent,yp-yCent)
+            p.getPos.y= yCent+R*math.cos(angInit+theta)
+            p.getPos.z= zCent+R*math.sin(angInit+theta)
         sPtMove.clear()
         
     def rotPntsXYZrangeXAxis(self,XYZrange,angle,yzRotCent):
@@ -645,14 +645,15 @@ class GridModel(object):
         :param xzRotCent: coordinates [x,z] of the axis Y of rotation
         '''
         theta=math.radians(angle)
-        sinTheta=math.sin(theta)
-        cosTheta=math.cos(theta)
         sPtMove=self.getSetPntRange(ijkRange,'sPtMove')
+        xCent=xzRotCent[0]; zCent=xzRotCent[1]
         for p in sPtMove.getPoints:
             xp=p.getPos.x
             zp=p.getPos.z
-            p.getPos.x= xzRotCent[0]+cosTheta*(xp-xzRotCent[0])-sinTheta*(zp-xzRotCent[1])
-            p.getPos.z= xzRotCent[1]+sinTheta*(xp-xzRotCent[0])+cosTheta*(zp-xzRotCent[1])
+            R=math.sqrt((xp-xCent)**2+(zp-zCent)**2)
+            angInit=math.atan2(zp-zCent,xp-xCent)
+            p.getPos.x= xCent+R*math.cos(angInit+theta)
+            p.getPos.z= zCent+R*math.sin(angInit+theta)
         sPtMove.clear()
 
     def rotPntsXYZrangeYAxis(self,XYZrange,angle,xzRotCent):
