@@ -577,7 +577,6 @@ class GridModel(object):
             p.getPos.y= yCent+R*math.sin(angInit+theta)
             #p.getPos.x= xyRotCent[0]+cosTheta*(xp-xyRotCent[0])-sinTheta*(yp-xyRotCent[1])
             #p.getPos.y= xyRotCent[1]+sinTheta*(xp-xyRotCent[0])+cosTheta*(yp-xyRotCent[1])
-            print('end:',p.getPos.x,p.getPos.y)
         sPtMove.clear()
     
     def rotPntsXYZrangeZAxis(self,XYZrange,angle,xyRotCent):
