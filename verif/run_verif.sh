@@ -94,6 +94,7 @@ python tests/utility/geom/lines/line2d_test_02.py
 python tests/utility/geom/lines/line2d_test_03.py
 python tests/utility/geom/lines/line2d_test_04.py
 python tests/utility/geom/lines/line2d_test_05.py
+python tests/utility/geom/lines/line2d_test_06.py
 python tests/utility/geom/lines/line3d_test_01.py
 python tests/utility/geom/lines/line3d_test_02.py
 python tests/utility/geom/lines/line3d_test_03.py
