@@ -34,6 +34,7 @@ GeomObj::list_Pos2d (Line2d::*intersectionWithPline2D)(const Polyline2d &) const
 GeomObj::list_Pos2d (Line2d::*intersectionWithLineParallelToAxis)(unsigned short int , const double &) const= &Line2d::getIntersection;
 Pos2d (Line2d::*Pos2dProj)(const Pos2d &) const= &Line2d::Projection;
 Vector2d (Line2d::*Vector2dProj)(const Vector2d &) const= &Line2d::Projection;
+Pos2d (Line2d::*Pos2dSymmetry)(const Pos2d &) const= &Line2d::getSymmetric;
 class_<Line2d, bases<Linear2d> >("Line2d")
   .def(init<Pos2d, Pos2d>()) // Constructs the line from two points.
   .def(init<Pos2d, Dir2d>()) // Constructs the line from a point and a direction.
@@ -51,6 +52,8 @@ class_<Line2d, bases<Linear2d> >("Line2d")
   .def("getVector2dProj",Vector2dProj,"TO DEPRECATE return the projection of a vector onto the line.")
   .def("getProjection",Pos2dProj,"Return the projection of a point onto the line.")
   .def("getProjection",Vector2dProj,"Return the projection of a vector onto the line.")
+  .def("getSymmetry", Pos2dSymmetry, "getSymmetry(pos2d): return the reflection of the given point with respect to this line.")
+  .def("getSymmetry", &Line2d::getSymmetricPy, "getSymmetry(pos2dList): return the reflection of the given points with respect to this line.")
   .def("getPoint",&Line2d::getPointAtLength,"return a point on the line.")
   .def("getVDir",&Line2d::VDir,"return the line direction vector.")
   .def("getNormal", &Line2d::Normal,"return a vector perpendicular to the segment.")
