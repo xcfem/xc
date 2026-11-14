@@ -22,6 +22,7 @@ from postprocess.config import file_names as fn
 from misc_utils import log_messages as lmsg
 from materials import concrete_base
 from materials.sections import rebar_family as rf
+from materials.ec2 import EC2_limit_state_checking_annex_f
 
 class RebarController(lscb.EURebarController):
     '''Control of some parameters as development length 
@@ -1232,7 +1233,7 @@ def getMaximumShearFlangeStrutCrushingStress(concrete, flangeStrutAngle= math.pi
 
 def getConcreteFlangeShearStrength(concrete, hf, DeltaX, nationalAnnex= None):
     ''' Return the shear stress resisted by plain concrete according to
-        clause 6.2.4 (6) of EC2:2004.
+        equation 6.20 of clause 6.2.4 (6) of EC2:2004.
 
     :param concrete: concrete material.
     :param hf: flange thickness at the shear plane.
@@ -1822,190 +1823,49 @@ def get_nu_mu(concrete, steel, b, h, d, dp, x, As1, As2):
 
     return Nu, Mu
 
+def get_cracked_shear_concrete_strength_reduction_factor(concrete, nationalAnnex):
+    ''' Get the strength reduction factor for concrete cracked in shear, 
+        according to equation (6.6N) of clause 6.2.2 of EN 1992-1-1:2004.
+
+    :param concrete: concrete of the section.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    fck= -concrete.fck() # design value of concrete compressive strength (MPa).
+    recommendedValue= 0.6*(1.0-fck/250e6)
+    if((nationalAnnex is None) or (nationalAnnex=='Spain')):
+        # return the recommended value.
+        retval= recommendedValue
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        errMsg= methodName+"; national annex: "+str(nationalAnnex)
+        errMsg+= " not implemented yet. Returning recommended value."
+        lmsg.error(errMsg)
+        retval= recommendedValue
+    return retval
+
+def get_shear_resistance_at_concrete_interface(concrete, steel, surfaceClassification, sigma_n, rho, nationalAnnex, alpha= math.pi/2.0):
+    ''' Get the shear resistance at the interface between concrete cast at
+        different times according to equation (6.25) of clause 6.2.5 of 
+        EN 1992-1-1:2004.
+
+    :param concrete: concrete of the section.
+    :param steel: rebars steel material.
+    :param surfaceClassification: classification of the surface (very 
+                                  smooth, smooth, rough, indented or
+                                  solid). Solid means that there is
+                                  no interface so c= 1.0 and mu= 1.0. 
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    # XXX Continuar aquí.
+    
 #       ___ ___ ___    _     _                       ___ 
 #      | __/ __|_  )__/ |   /_\  _ _  _ _  _____ __ | __|
 #      | _| (__ / /___| |  / _ \| ' \| ' \/ -_) \ / | _| 
 #      |___\___/___|  |_| /_/ \_\_||_|_||_\___/_\_\ |_|  
 # EN 1992-1-1:2004. Annex F.
-# Tension reinforcement expressions for in-plane stress conditions
-class Ec2InPlaneStressLimitStateData(lsd.ULS_LimitStateData):
-    ''' In-plane stress conditions limit state data.
-
-    '''
-    def __init__(self, designSituations= lsd.default_uls_design_situations):
-        '''Constructor.
-
-        :param designSituations: design situations that will be checked; 
-                                 i. e. uls_permanent, uls_earthquake, etc.
-        '''
-        super(Ec2InPlaneStressLimitStateData,self).__init__(limitStateLabel= 'ULS_Ec2InPlaneStressResistance', outputDataBaseFileName= fn.ec2InPlaneStressVerificationResultsFile, designSituations= designSituations)
-        
-    def getStressesDict(self, nmbComb, elems):
-        '''Creates a dictionary with the element's stresses.
-
-        :param nmbComb: combination name.
-        :param elems: element set.
-        '''
-        return eif.get_stresses_dict(nmbComb, elems)
-    
-    def readInternalForces(self, setCalc):
-        ''' Read the stresses for the elements in the set argument.
-
-        :param setCalc: elements to read stresses for.
-        '''
-        return lsd.read_stresses_dict(self.getStressesFileName(), setCalc)
-
-    def getController(self):
-        ''' Return a controller corresponding to this limit state.
-
-        :param code_limit_state_checking: code used to check the limit state.
-        '''
-        return Ec2InPlaneStressController(limitStateLabel= self.label)
-        
-    def checkElements(self, elementsToCheck, outputCfg= lsd.VerifOutVars()):
-        '''Checking of stresses in ultimate limit states
-            (see self.dumpCombinations).
-
-        :param elementsToCheck: elements to check.
-        :param outputCfg: instance of class 'VerifOutVars' which defines the 
-               variables that control the output of the checking (set of 
-               elements to be analyzed, append or not the results to a file,
-               generation or not of lists, ...)
-        '''
-        return elementsToCheck.check(limitStateData= self, outputCfg= outputCfg, threeDim= True)
-    
-    def runChecking(self ,outputCfg):
-        '''This method reads, for the elements in setCalc, the stresses 
-        previously calculated and saved in the corresponding file.
-        Using the 'initControlVars' and 'updateEfficiencyForSet' methods of 
-        the controller, the appropriate attributes are assigned to the 
-        elements and the associated limit state verification is run.
-        The results are written to a file in order to be displayed or listed.
-
-        :param outputCfg: instance of class 'VerifOutVars' which defines the 
-               variables that control the output of the checking (set of 
-               elements to be analyzed, append or not the results to the 
-               result file [defatults to False], generation or not
-               of list file [defatults to False, ...)
-        '''
-        retval= super(Ec2InPlaneStressLimitStateData,self).runChecking(outputCfg, sections= [''])
-        return retval
-    
-    def check(self, setCalc, controller, appendToResFile=False, listFile=False, calcMeanCF=False):
-        ''' Perform limit state checking.
-
-        :param setCalc: set of elements to be checked (defaults to 'None' which 
-               means that all the elements in the file of internal forces
-               results are analyzed) 
-        :param controller: object that controls the limit state checking.
-        :param appendToResFile:  True if results are appended to 
-               existing file of results (defaults to False)
-        :param listFile: True if latex listing file of results 
-               is desired to be generated (defaults to False)
-        :param calcMeanCF: True if average capacity factor is
-               meant to be calculated (defaults to False)
-        '''
-        if appendToResFile not in [True,False]:
-            lmsg.error("Argument 'appendToResFile' must be True or False")
-            exit(1)
-        if listFile not in [True,False]:
-            lmsg.error("Argument 'listFile' must be True or False")
-            exit(1)
-        if calcMeanCF not in [True,False]:
-            lmsg.error("Argument 'calcMeanCF' must be True or False")
-            exit(1)
-        outputCfg= lsd.VerifOutVars(setCalc= setCalc, controller= controller, appendToResFile= appendToResFile, listFile= listFile, calcMeanCF= calcMeanCF, outputDataBaseFileName= self.getOutputDataBaseFileName())
-        return self.runChecking(outputCfg= outputCfg)
-
-ec2InPlaneStressResistance= Ec2InPlaneStressLimitStateData()
-
-class Ec2InPlaneStressController(lscb.LimitStateControllerBase):
-    '''Object that controls reinforced concrete ULS using the
-       expressions given in Annex F of EN 1992-1-1:2004.'''
-
-    ControlVars= cv.Ec2InPlaneStressControlVars
-    def __init__(self, limitStateLabel, solutionProcedureType= lscb.defaultStaticLinearSolutionProcedure):
-        ''' Constructor.
-
-        :param limitStateLabel: limit state identifier.
-        :param solutionProcedureType: type of the solution procedure to use
-                                      when computing load combination results.
-        '''
-        super(Ec2InPlaneStressController, self).__init__(limitStateLabel= limitStateLabel, solutionProcedureType= solutionProcedureType)
-
-    def initControlVars(self, elements):
-        '''Initialize control variables on the given elements.
-
-        :param elements: elements in which the control variables 
-                         will be defined.
-        '''
-        for e in elements:
-            e.setProp(self.limitStateLabel, self.ControlVars())
-            
-    def readStresses(self, stressesCombFileName, setCalc= None):
-        '''Launch checking.
-
-        :param stressesCombFileName: Name of the file containing the stresses 
-                                    on the element gauss points.
-        '''
-        # Read internal forces results.
-        intForcItems= lsd.read_internal_forces_file(stressesCombFileName, setCalc)
-        return intForcItems[2]
-            
-    def updateEfficiency(self, elem, elementStresses):
-        ''' Compute the efficiency of the element material
-            subjected to the stresses argument and update
-            its value if its bigger than the previous one.
-
-        :param elem: finite element whose section will be checked.
-        :param elementStresses: stresses on the element.
-        '''
-        # Get available strengths.
-        ftd1_avail= elem.getProp('ftd1_avail')
-        ftd2_avail= elem.getProp('ftd2_avail')
-        sigma_c_avail= elem.getProp('sigma_c_avail')
-        if(ftd1_avail and ftd2_avail and sigma_c_avail):
-            # Check each element section.
-            for stresses in elementStresses:
-                sigma_11= -stresses.sigma_11
-                sigma_12= stresses.sigma_12
-                sigma_22= -stresses.sigma_22
-                if(sigma_11>0.0 and sigma_22>0.0 and (sigma_11*sigma_22>sigma_12**2)): # no reinforcement needed.
-                   ftd1_req= 0.0
-                   ftd2_req= 0.0
-                   sigma_c_req= 0.0
-                   CFtmp= 0.0
-                else:
-                    
-                    abs_sigma_12= abs(sigma_12)
-                    if(sigma_11<abs_sigma_12):
-                        ftd1_req= abs_sigma_12-sigma_11
-                        ftd2_req= max(abs_sigma_12-sigma_22, 0)
-                        sigma_c_req= 2*abs_sigma_12
-                    else:
-                        ftd1_req= 0.0
-                        ftd2_req= sigma_12**2/sigma_11-sigma_22
-                        sigma_c_req= sigma_11*(1+(sigma_12/sigma_11)**2)
-                if(ftd1_req<0 or ftd2_req<0 or sigma_c_req<0):
-                    className= type(self).__name__
-                    methodName= sys._getframe(0).f_code.co_name
-                    errMsg= className+'.'+methodName+"; somethig when wrong.\n"
-                    if(ftd1_req<0):
-                        errMsg+= ' negative required strenght on axis 1: '+str(ftd1_req)+'\n'
-                    if(ftd2_req<0):
-                        errMsg+= ' negative required strenght on axis 2: '+str(ftd2_req)+'\n'
-                    if(sigma_c_req<0):
-                        errMsg+= ' negative required strenght for concrete: '+str(sigma_c_req)+'\n'
-                    lmsg.error(errMsg)
-                    exit(1)
-                ftd1_cf= ftd1_req/ftd1_avail
-                ftd2_cf= ftd2_req/ftd2_avail
-                sigma_c_cf= sigma_c_req/sigma_c_avail
-                CFtmp= max(ftd1_cf, ftd2_cf, sigma_c_cf)
-                CF= elem.getProp(self.limitStateLabel).CF
-                if(CFtmp>CF):
-                    cv= self.ControlVars(combName= stresses.idComb, CF= CFtmp, sigma_11= sigma_11, sigma_12= sigma_12, sigma_22= sigma_22, ftd1_req= ftd1_req, ftd2_req= ftd2_req, sigma_c_req= sigma_c_req, ftd1_cf= ftd1_cf, ftd2_cf= ftd2_cf, sigma_c_cf= sigma_c_cf)
-                    elem.setProp(self.limitStateLabel, cv)
+Ec2InPlaneStressLimitStateData= EC2_limit_state_checking_annex_f.Ec2InPlaneStressLimitStateData
+ec2InPlaneStressResistance= EC2_limit_state_checking_annex_f.ec2InPlaneStressResistance
+Ec2InPlaneStressController= EC2_limit_state_checking_annex_f.Ec2InPlaneStressController
 
 def get_punching_shear_C_Rd_c(concrete, u0= 0.0, dy= 0.0, dz= 0.0, isFoundation= False, nationalAnnex= None):
     ''' Return the value of C_RDc according to clause 6.4.4(1) of of EC2:2004.
