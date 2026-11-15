@@ -1782,6 +1782,7 @@ python tests/materials/ec2/shear/test_EC2_shear_04.py
 python tests/materials/ec2/shear/test_EC2_shear_05.py
 python tests/materials/ec2/shear/test_ec2_fiber_section_shear_01.py
 python tests/materials/ec2/shear/test_EC2_shear_between_web_and_flanges_01.py
+python tests/materials/ec2/shear/test_ec2_shear_resistance_at_concrete_interface.py
 echo "$BLEU" "    Torsion resistance determination tests." "$NORMAL"
 python tests/materials/ec2/torsion/test_geom_params_torsion_ec2_01.py
 python tests/materials/ec2/torsion/test_geom_params_torsion_ec2_02.py

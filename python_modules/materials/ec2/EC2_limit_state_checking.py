@@ -953,27 +953,41 @@ def getShearResistanceCrackedNoShearReinf(concrete, NEd, Ac, Asl, bw, d, nationa
 
     :param concrete: concrete material.
     :param NEd: axial force in the cross-section due to loading or prestressing.
-    :param Ac: area of concrete cross-section. 
+    :param Ac: area of concrete cross-section (m2)
     :param Asl: area of the tensile reinforcement, which extends beyond
-                the section considered (see clause 6.2.2 of EC2:2004).
+                the section considered (see clause 6.2.2 of EC2:2004) (m2)
     :param bw: smallest width of the cross-section in the tensile area.
-    :param d: effective depth of the cross-section.
+    :param d: effective depth of the cross-section (m).
     :param nationalAnnex: identifier of the national annex.
     '''
     ro_l= min(Asl/bw/d,.02) # Reinforcement ratio.
     fcdMPa= -concrete.fcd()/1e6 # design value of concrete compressive strength (MPa).
     sigma_cp= min(-NEd/Ac/1e6, .2*fcdMPa)
     gamma_c= concrete.gmmC
-    CRdc= 0.18/gamma_c # Shear resistance constant. Recommended value
-                       # and Spanish national annex.
-    k1= 0.15
+    if(nationalAnnex=='Germany'):
+        CRdc= 0.15/gamma_c
+    else:
+        CRdc= 0.18/gamma_c # Shear resistance constant. Recommended value
+                           # and Spanish national annex.
     fckMPa= -concrete.fck/1e6 # concrete characteristic compressive strength (MPa).
     k= min(1.0+math.sqrt(0.2/d),2) # Effective depth factor (d in meters).
     if(nationalAnnex=='Spain'):
         v_min= 0.075/gamma_c*math.pow(k,1.5)*math.sqrt(min(fckMPa,60))
+    elif(nationalAnnex=='Germany'):
+        if(d<0.6):
+            gFactor= 0.0525
+        elif(d>0.8):
+            gFactor= 0.035
+        else:
+            gFactor= (0.035-0.0525)/(0.8-0.6)*(d-0.6)+0.0525
+        v_min= gFactor/gamma_c*math.pow(k,1.5)*math.sqrt(fckMPa)
     else:
         v_min= 0.035*math.pow(k,1.5)*math.sqrt(fckMPa)
 
+    if(nationalAnnex=='Germany'):
+        k1= 0.12
+    else:
+        k1= 0.15
     vRdc_62a= (CRdc*k*math.pow(100.0*ro_l*fckMPa,1/3.0)+k1*sigma_cp)
     vRdc_62b= (v_min+k1*sigma_cp)
     retval= max(vRdc_62a, vRdc_62b)*bw*d*1e6
@@ -1830,18 +1844,90 @@ def get_cracked_shear_concrete_strength_reduction_factor(concrete, nationalAnnex
     :param concrete: concrete of the section.
     :param nationalAnnex: identifier of the national annex.
     '''
-    fck= -concrete.fck() # design value of concrete compressive strength (MPa).
-    recommendedValue= 0.6*(1.0-fck/250e6)
+    fck= -concrete.fck # design value of concrete compressive strength (MPa).
     if((nationalAnnex is None) or (nationalAnnex=='Spain')):
         # return the recommended value.
-        retval= recommendedValue
+        retval= 0.6*(1.0-fck/250e6)
+    elif(nationalAnnex=='Germany'):
+        # For shear force: retval= 0.675
+        # For torsion force: retval= 0.525
+        retval= 0.525 # assuming the worst case.
     else:
         methodName= sys._getframe(0).f_code.co_name
         errMsg= methodName+"; national annex: "+str(nationalAnnex)
         errMsg+= " not implemented yet. Returning recommended value."
         lmsg.error(errMsg)
-        retval= recommendedValue
+        retval= 0.6*(1.0-fck/250e6) # recommended valu.
     return retval
+
+def get_roughness_c_and_mu_factors(surfaceClassification):
+    ''' Return the values of c and mu parameters according to paragraph (2) of
+        clause 6.2.5 of EN 1992-1-1:2004.
+
+    :param surfaceClassification: classification of the surface (very 
+                                  smooth, smooth, rough, indented or
+                                  solid). Solid means that there is
+                                  no interface so c= 1.0 and mu= 1.0. 
+    '''
+    if(surfaceClassification=='very_smooth'):
+        c= .025
+        mu= 0.5
+    elif(surfaceClassification=='smooth'):
+        c= .2
+        mu= 0.6
+    elif(surfaceClassification=='rough'):
+        c= .4
+        mu= 0.7
+    elif(surfaceClassification=='indented'):
+        c= .5
+        mu= 0.9
+    elif(surfaceClassification=='no_joint'):
+        c= 1.0
+        mu= 1.0
+    else:
+        methodName= sys._getframe(0).f_code.co_name
+        errMsg= methodName+"; surface classification: "
+        errMsg+= str(surfaceClassification)
+        errMsg+= " unknown."
+        lmsg.error(errMsg)
+        sys.exit(-1)
+    return c, mu
+
+def get_cracked_shear_concrete_strength_reduction_factor_at_concrete_interface(concrete, surfaceClassification, nationalAnnex):
+    ''' Return the shear concrete strength reduction factor to use when 
+        computing the maximum value of the shear resistance at interface
+        (second member in the expression (6.25) of the clause 6.2.5 of 
+        EN 1992-1-1:2004.
+
+    :param concrete: concrete of the section.
+    :param surfaceClassification: classification of the surface (very 
+                                  smooth, smooth, rough, indented or
+                                  solid). Solid means that there is
+                                  no interface so c= 1.0 and mu= 1.0.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    if(nationalAnnex=='Germany'):
+        if(surfaceClassification=='very_smooth'):
+            retval= 0.0
+        elif(surfaceClassification=='smooth'):
+            retval= .2
+        elif(surfaceClassification=='rough'):
+            retval= .5
+        elif(surfaceClassification=='indented'):
+            retval= .7
+        elif(surfaceClassification=='no_joint'):
+            retval= 1.0
+        else:
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= methodName+"; surface classification: "
+            errMsg+= str(surfaceClassification)
+            errMsg+= " unknown."
+            lmsg.error(errMsg)
+            sys.exit(-1)
+    else:
+        retval= get_cracked_shear_concrete_strength_reduction_factor(concrete, nationalAnnex)
+    return retval
+        
 
 def get_shear_resistance_at_concrete_interface(concrete, steel, surfaceClassification, sigma_n, rho, nationalAnnex, alpha= math.pi/2.0):
     ''' Get the shear resistance at the interface between concrete cast at
@@ -1853,10 +1939,30 @@ def get_shear_resistance_at_concrete_interface(concrete, steel, surfaceClassific
     :param surfaceClassification: classification of the surface (very 
                                   smooth, smooth, rough, indented or
                                   solid). Solid means that there is
-                                  no interface so c= 1.0 and mu= 1.0. 
+                                  no interface so c= 1.0 and mu= 1.0.
+    :param sigma_n: stress per unit area caused by the minimum external 
+                    normal force across the interface that can act 
+                    simultaneously with the shear force, negative for
+                    compression, such that sigma_n > 0,6 fcd, and positive 
+                    for tension. When sigma_n is tensile c*fctd should be 
+                    taken as O.
+    :param rho: area of reinforcement per unit area of the joint.
+    :param alpha: angle of the reinforcement with respect to the joint plane.
     :param nationalAnnex: identifier of the national annex.
     '''
-    # XXX Continuar aquí.
+    c, mu= get_roughness_c_and_mu_factors(surfaceClassification)
+    if(sigma_n>0): # tension.
+        fctd= 0.0
+    else:
+        fctd= concrete.fctd() # concrete design tensile strength.
+    fyd= steel.fyd()
+    retval= c*fctd-mu*sigma_n+rho*fyd*(mu*math.sin(alpha)+math.cos(alpha))
+    fcd= -concrete.fcd()
+    nu= get_cracked_shear_concrete_strength_reduction_factor_at_concrete_interface(concrete, surfaceClassification, nationalAnnex)
+    retval= min(retval, 0.5*nu*fcd)
+    return retval
+
+    
     
 #       ___ ___ ___    _     _                       ___ 
 #      | __/ __|_  )__/ |   /_\  _ _  _ _  _____ __ | __|
