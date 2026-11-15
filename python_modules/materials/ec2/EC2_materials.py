@@ -9,19 +9,18 @@ Ductility grades:
    -C: seismic      eps_uk>=7.5% k>=1.15 k<1.35
 '''
 
-import sys
-import math
-import geom
-from materials import concrete_base
-from materials.sections import rebar_family
-from misc_utils import log_messages as lmsg
-
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
 
+import sys
+import math
+import geom
+from materials import concrete_base
+from materials.sections import rebar_family
+from misc_utils import log_messages as lmsg
 # Concrete according to Eurocode 2.
 
 
