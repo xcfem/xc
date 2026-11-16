@@ -945,6 +945,33 @@ def define_rebar_families(steel, cover, diameters= [8e-3, 10e-3, 12e-3, 14e-3, 1
 
 # EC2:2004 6.2 Shear
 
+def get_v_min(concrete, k, d= None, nationalAnnex= None):
+    ''' Return the value of $v_{min}$ according to equation (6.3N) of clause 
+        6.2.2 of of EC2:2004.
+
+    :param concrete: concrete material.
+    :param k: effective depth factor.
+    :param d: effective depth of the cross-section (m). Used only by German
+              national annex.
+    :param nationalAnnex: identifier of the national annex.
+    '''
+    fckMPa= -concrete.fck/1e6 # concrete characteristic compressive strength (MPa).
+    if(nationalAnnex=='Spain'):
+        retval= 0.075/concrete.gmmC*math.pow(k,1.5)*math.sqrt(min(fckMPa,60))
+    elif(nationalAnnex=='Germany'):
+        if(d<0.6):
+            gFactor= 0.0525
+        elif(d>0.8):
+            gFactor= 0.035
+        else:
+            gFactor= (0.035-0.0525)/(0.8-0.6)*(d-0.6)+0.0525
+        retval= gFactor/concrete.gmmC*math.pow(k,1.5)*math.sqrt(fckMPa)
+    else:
+        retval= 0.035*math.pow(k,1.5)*math.sqrt(fckMPa)
+
+    return retval
+
+
 # EC2:2004 6.2.2 Members not requiring design shear reinforcement
 def getShearResistanceCrackedNoShearReinf(concrete, NEd, Ac, Asl, bw, d, nationalAnnex= None):
     ''' Return the design value of the shear resistance VRdc for cracked 
@@ -963,26 +990,10 @@ def getShearResistanceCrackedNoShearReinf(concrete, NEd, Ac, Asl, bw, d, nationa
     ro_l= min(Asl/bw/d,.02) # Reinforcement ratio.
     fcdMPa= -concrete.fcd()/1e6 # design value of concrete compressive strength (MPa).
     sigma_cp= min(-NEd/Ac/1e6, .2*fcdMPa)
-    gamma_c= concrete.gmmC
-    if(nationalAnnex=='Germany'):
-        CRdc= 0.15/gamma_c
-    else:
-        CRdc= 0.18/gamma_c # Shear resistance constant. Recommended value
-                           # and Spanish national annex.
+    CRdc= concrete.getCRdc(nationalAnnex)
     fckMPa= -concrete.fck/1e6 # concrete characteristic compressive strength (MPa).
     k= min(1.0+math.sqrt(0.2/d),2) # Effective depth factor (d in meters).
-    if(nationalAnnex=='Spain'):
-        v_min= 0.075/gamma_c*math.pow(k,1.5)*math.sqrt(min(fckMPa,60))
-    elif(nationalAnnex=='Germany'):
-        if(d<0.6):
-            gFactor= 0.0525
-        elif(d>0.8):
-            gFactor= 0.035
-        else:
-            gFactor= (0.035-0.0525)/(0.8-0.6)*(d-0.6)+0.0525
-        v_min= gFactor/gamma_c*math.pow(k,1.5)*math.sqrt(fckMPa)
-    else:
-        v_min= 0.035*math.pow(k,1.5)*math.sqrt(fckMPa)
+    v_min= get_v_min(concrete= concrete, k= k, d= d, nationalAnnex= nationalAnnex)
 
     if(nationalAnnex=='Germany'):
         k1= 0.12
