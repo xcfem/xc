@@ -218,7 +218,20 @@ class EC2Concrete(concrete_base.Concrete):
         if(fckMPa>50):
             retval-= (fckMPa-50)/200 # for 50 < fck ≤ 90 MPa
         return retval
+
+    def getCRdc(self, nationalAnnex= None):
+        ''' Return the value of the shear resistance constant according to
+            paragraph (1) of clause 6.2.2 of EC2:2004.
         
+        :param nationalAnnex: identifier of the national annex.
+        '''
+        if(nationalAnnex=='Germany'):
+            retval= 0.15/self.gmmC
+        else:
+            retval= 0.18/self.gmmC # Shear resistance constant. Recommended
+                                   # value and Spanish national annex value.
+        return retval
+    
     def getShearStrengthReductionFactor(self, nationalAnnex= None):
         ''' Return the strength reduction factor for concrete cracked in shear
             according to expression 6.6N of EC2:2004 (clause 6.2.2).
