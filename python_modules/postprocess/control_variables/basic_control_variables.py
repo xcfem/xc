@@ -9,8 +9,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es"
 
-from materials import stresses
 from misc_utils import log_messages as lmsg
+from materials.stresses import Stresses2D
+from materials.sections.internal_forces import ShellMaterialInternalForces
 from postprocess.reports import common_formats as fmt
 
 #        ___         _           _        
@@ -596,7 +597,7 @@ class BiaxialBendingControlVars(UniaxialBendingControlVars):
 #      | .__/_\__,_|_||_\___| /__/\__|_| \__,_|_|_||_|   
 #      |_|                                               
 # Plane stress / plane strain control vars.
-class PlaneStressControlVars(ControlVarsBase, stresses.Stresses2D):
+class PlaneStressControlVars(ControlVarsBase, Stresses2D):
     '''2D solid mechanics stresses control vars.
 
     :ivar CF: capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
@@ -611,13 +612,13 @@ class PlaneStressControlVars(ControlVarsBase, stresses.Stresses2D):
         :param sigma_22:  (2,2) component of the stress tensor.
         '''
         ControlVarsBase.__init__(self, combName)
-        stresses.Stresses2D.__init__(self, sigma_11= sigma_11, sigma_12= sigma_12, sigma_22= sigma_22)
+        Stresses2D.__init__(self, sigma_11= sigma_11, sigma_12= sigma_12, sigma_22= sigma_22)
         self.CF= CF # Capacity factor or efficiency
 
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
         retval= ControlVarsBase.getDict(self)
-        retval.update(stresses.Stresses2D.getDict(self))
+        retval.update(Stresses2D.getDict(self))
         return retval
        
     def setFromDict(self,dct):
@@ -626,12 +627,64 @@ class PlaneStressControlVars(ControlVarsBase, stresses.Stresses2D):
         :param dct: dictionary containing the values of the object members.
         '''
         ControlVarsBase.setFromDict(self, dct)
-        stresses.Stresses2D.setFromDict(self, dct)
+        Stresses2D.setFromDict(self, dct)
 
     def getCF(self):
         ''' Return the capacity factor.'''
         return self.CF
-    
+
+#       ___ _        _ _   _     _                     _ 
+#      / __| |_  ___| | | (_)_ _| |_ ___ _ _ _ _  __ _| |
+#      \__ \ ' \/ -_) | | | | ' \  _/ -_) '_| ' \/ _` | |
+#      |___/_||_\___|_|_| |_|_||_\__\___|_| |_||_\__,_|_|
+#       / _|___ _ _ __ ___ ___                           
+#      |  _/ _ \ '_/ _/ -_|_-<                           
+#      |_| \___/_| \__\___/__/                           
+#                                                       
+# Internal forceson a material point of a shell element.      
+class ShellControlVars(ControlVarsBase, ShellMaterialInternalForces):
+    '''3D structural mechanics internal forces control vars.
+
+    :ivar CF: capacity factor (efficiency) (defaults to -1.0; 
+              CF<1.0 -> Ok; CF>1.0 -> KO).
+    '''
+    def __init__(self, combName= 'nil', CF= -1.0, n1= 0.0, n2= 0.0, n12= 0.0, m1= 0.0, m2= 0.0, m12= 0.0, q13= 0.0, q23= 0.0):
+        ''' Constructor.
+
+        :param combName: name of the load combinations to deal with
+        :param CF: capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
+        :param n1: axial force parallel to axis 1.
+        :param n2: axial force parallel to axis 2.
+        :param n12: in plane shear force.
+        :param m1: bending moment parallel to axis 1.
+        :param m2: bending moment parallel to axis 2.
+        :param m12: twisting stress resultant.
+        :param q13: out of plane shear force normal to axis 1 and parallel to axis 3.
+        :param q23: out of plane shear force normal to axis 1 and parallel to axis 3.
+        '''
+        ControlVarsBase.__init__(self, combName)
+        ShellMaterialInternalForces.__init__(self, n1= n1, n2= n2, n12= n12, m1= m1, m2= m2, m12= m12, q13= q13, q23= q23)
+        self.CF= CF # Capacity factor or efficiency
+
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= ControlVarsBase.getDict(self)
+        retval.update(ShellMaterialInternalForces.getDict(self))
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.
+
+        :param dct: dictionary containing the values of the object members.
+        '''
+        ControlVarsBase.setFromDict(self, dct)
+        ShellMaterialInternalForces.setFromDict(self, dct)
+
+    def getCF(self):
+        ''' Return the capacity factor.'''
+        return self.CF
+
+
 #       ___         _   _ _           
 #      | _ )_  _ __| |_| (_)_ _  __ _ 
 #      | _ \ || / _| / / | | ' \/ _` |
