@@ -223,6 +223,9 @@ class OutputStyle(object):
         elif(itemToDisp=='sectionArea'):
             fConvUnits= 1e4
             unitDescription= 'cm2'
+        elif(itemToDisp.startswith('as') and itemToDisp.endswith('_req')):
+            fConvUnits= 1e4
+            unitDescription= 'cm2'
         elif(itemToDisp=='thickness'):
             fConvUnits= 1e3
             unitDescription= '[mm]'
