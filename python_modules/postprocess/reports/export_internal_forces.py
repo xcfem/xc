@@ -59,7 +59,7 @@ def get_internal_forces_dict(nmbComb, elems, vonMisesStressId= 'max_von_mises_st
         if('Shell' in elementType):
             internalForces= internal_forces.ShellMaterialInternalForces()
             internalForces.setFromAverageInShellElement(e)
-            internalForces= internalForces.getWoodArmer(alsoForAxialForces= woodArmerAlsoForAxialForces)
+            woodArmerInternalForces= internalForces.getWoodArmer(alsoForAxialForces= woodArmerAlsoForAxialForces)
             # Silently ask about maximum Von-Mises stress.
             maxVonMisesAtNodes= e.getValuesAtNodes(vonMisesStressId, True)
             avgMaxVM= None
@@ -70,10 +70,10 @@ def get_internal_forces_dict(nmbComb, elems, vonMisesStressId= 'max_von_mises_st
                 avgMaxVM+= maxVonMisesAtNodes[2][0] # at node 3
                 avgMaxVM+= maxVonMisesAtNodes[3][0] # at node 4
                 avgMaxVM/= 4.0 # average of the max. value at nodes.
-            sz= len(internalForces)
+            sz= len(woodArmerInternalForces)
             internalForcesDict= dict()
             for i in range(0,sz):
-                force= internalForces[i]
+                force= woodArmerInternalForces[i]
                 internalForcesDict[i]= force.getDict()
                 if(avgMaxVM):
                     internalForcesDict[i].update({vonMisesStressId:avgMaxVM})
