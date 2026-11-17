@@ -1537,35 +1537,26 @@ def read_stresses_dict(stressesCombFileName, setCalc=None, vonMisesStressId= 'ma
     
     stressesValues= defaultdict(list)
     
-    if(not setCalc):
-        for comb in combStressesDict.keys():
-            idComb= str(comb)
-            idCombs.add(idComb)
-            elements= combStressesDict[comb]
-            for elemId in elements.keys():
-                tagElem= eval(elemId)
+    setElTags= None
+    if(setCalc):
+        setElTags= frozenset(setCalc.getElementTags()) # We construct a frozen set to accelerate searching.
+    for idComb in combStressesDict.keys():
+        idCombs.add(idComb)
+        elements= combStressesDict[idComb]
+        for elemId in elements.keys():
+            tagElem= eval(elemId)
+            processElement= True
+            if(setElTags):
+                if(not (tagElem in setElTags)):
+                    processElement= False
+            if(processElement): # search element tag
                 elementData= elements[elemId]
                 #elementType= elementData['type']
-                stresses= elementData['stresses']
-                for k in stresses.keys():
+                internalForces= elementData['stresses']
+                for k in internalForces.keys():
                     elementTags.add(tagElem)
                     stresses= get_gauss_point_stresses(stresses= internalForces, idComb= idComb, tagElem= tagElem, key= k, vonMisesStressId= vonMisesStressId)
                     stressesValues[tagElem].append(stresses)
-    else:
-        setElTags= frozenset(setCalc.getElementTags()) # We construct a frozen set to accelerate searching.
-        for idComb in combStressesDict.keys():
-            idCombs.add(idComb)
-            elements= combStressesDict[idComb]
-            for elemId in elements.keys():
-                tagElem= eval(elemId)
-                if(tagElem in setElTags): # search element tag
-                    elementData= elements[elemId]
-                    #elementType= elementData['type']
-                    internalForces= elementData['stresses']
-                    for k in internalForces.keys():
-                        elementTags.add(tagElem)
-                        stresses= get_gauss_point_stresses(stresses= internalForces, idComb= idComb, tagElem= tagElem, key= k, vonMisesStressId= vonMisesStressId)
-                        stressesValues[tagElem].append(stresses)
     return (elementTags, idCombs, stressesValues)
 
 
@@ -1589,12 +1580,20 @@ def old_read_int_forces_file(intForcCombFileName,setCalc=None):
     internalForcesValues= defaultdict(list)
     internalForcesListing= csv.reader(f)
     next(internalForcesListing) # skip first line (head)
-    if setCalc is None:
-        for lst in internalForcesListing: # lst: list of internal forces for each combination and element
-            if(len(lst)>0):
+    
+    setElTags= None
+    if(setCalc):
+        setElTags= frozenset(setCalc.getElementTags()) # We construct a frozen set to accelerate searching.
+    for lst in internalForcesListing:
+        if(len(lst)>0):
+            tagElem= eval(lst[1])
+            processElement= True
+            if(setElTags):
+                if(not (tagElem in setElTags)):
+                    processElement= False
+            if(processElement): # search element tag
                 idComb= lst[0]
                 idCombs.add(idComb)
-                tagElem= eval(lst[1])
                 idSection= eval(lst[2])
                 elementTags.add(tagElem)
                 crossSectionInternalForces= internal_forces.CrossSectionInternalForces()
@@ -1603,23 +1602,6 @@ def old_read_int_forces_file(intForcCombFileName,setCalc=None):
                 crossSectionInternalForces.tagElem= tagElem
                 crossSectionInternalForces.idSection= idSection
                 internalForcesValues[tagElem].append(crossSectionInternalForces)
-    else:
-        setElTags= frozenset(setCalc.getElementTags()) # We construct a frozen set to accelerate searching.
-        for lst in internalForcesListing:
-            if(len(lst)>0):
-                tagElem= eval(lst[1])
-                if tagElem in setElTags: # search element tag
-                    idComb= lst[0]
-                    idCombs.add(idComb)
-                    tagElem= eval(lst[1])
-                    idSection= eval(lst[2])
-                    elementTags.add(tagElem)
-                    crossSectionInternalForces= internal_forces.CrossSectionInternalForces()
-                    crossSectionInternalForces.setFromCSVString(lst,3)
-                    crossSectionInternalForces.idComb= idComb
-                    crossSectionInternalForces.tagElem= tagElem
-                    crossSectionInternalForces.idSection= idSection
-                    internalForcesValues[tagElem].append(crossSectionInternalForces)
     f.close()
     return (elementTags,idCombs,internalForcesValues)
 
