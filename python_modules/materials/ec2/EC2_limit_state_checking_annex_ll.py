@@ -16,6 +16,7 @@ import sys
 import math
 import json
 import statistics
+from typing import NamedTuple
 from collections import defaultdict
 from postprocess import limit_state_data as lsd
 from postprocess.reports import export_internal_forces as eif
@@ -31,107 +32,243 @@ SIGN_M_BOTTOM= +1
 # Same idea for the twisting moment: n_xy_bot = n_xy/2 + SIGN_MXY * m_xy/z
 SIGN_MXY= +1
 
+# Tolerance for "zero force" [N/m]
+FORCE_TOL = 1.0e-3
+
 # ---------------------------------------------------------------------------
 # 1) In-plane design of one layer (tension positive, forces per metre)
 # ---------------------------------------------------------------------------
-def design_layer(nx, ny, nxy):
-    ''' Compute the tensile forces in the x/y reinforcement, the compressive
-    force in the concrete layer and the description of the load state:
+class LayerResult(NamedTuple):
+    """Result of the in-plane design / check of one layer."""
+    f_tx: float          # tensile force for x reinforcement [N/m]
+    f_ty: float          # tensile force for y reinforcement [N/m]
+    f_c: float           # resultant concrete compressive force [N/m]
+    case: str            # text label (diagnostics only, never used in logic)
+    biaxial: bool        # True if the layer is in biaxial compression
+    both_tension: bool   # True if both reinforcement directions are in tension
+    eta: float = 0.0     # steel utilisation (check mode only)
+    cot: float = float("nan")  # cot(theta) of the strut vs reference axis
+    ref: str = ""        # reference axis of the strut angle ("x" or "y")
 
-        - 1: x+y tension.
-        - 2: x unreinforced.
-        - 3: y unreinforced.
-        - 4: biaxial compr.
 
-    Return (f_tx, f_ty, f_c, case).
+def annex_f_layer(nx, ny, nxy):
+    """Return a LayerResult (f_tx, f_ty, f_c, case, biaxial, both_tension).
 
-    f_tx, f_ty : tensile force to be taken by the x / y reinforcement [N/m]
-    f_c        : resultant compressive force in the concrete layer [N/m]
-    '''
-    a= abs(nxy)
+    nx, ny, nxy : in-plane forces of the layer [N/m], tension positive
+    f_tx, f_ty  : tensile force to be taken by the x / y reinforcement [N/m]
+    f_c         : resultant compressive force in the concrete layer [N/m]
+    """
+    a = abs(nxy)
 
     # Case 1: both reinforcement directions in tension, concrete strut at 45 deg
     if nx >= -a and ny >= -a:
-        return nx + a, ny + a, 2.0 * a, "1: x+y tension"
+        return LayerResult(nx + a, ny + a, 2.0 * a, "1: x+y tension", False, True)
 
     # Case 2: x direction would be in compression -> no x reinforcement
     if nx < -a:
-        fy= ny + nxy ** 2 / abs(nx)
+        fy = ny + nxy ** 2 / abs(nx)
         if fy >= 0.0:
-            return 0.0, fy, abs(nx) * (1.0 + (nxy / nx) ** 2), "2: x unreinforced"
-        return 0.0, 0.0, _principal_compression(nx, ny, nxy), "4: biaxial compr."
+            return LayerResult(0.0, fy, abs(nx) * (1.0 + (nxy / nx) ** 2),
+                               "2: x unreinforced", False, False)
+        return LayerResult(0.0, 0.0, _principal_compression(nx, ny, nxy),
+                           "4: biaxial compr.", True, False)
 
     # Case 3: y direction would be in compression -> no y reinforcement
-    fx= nx + nxy ** 2 / abs(ny)
+    fx = nx + nxy ** 2 / abs(ny)
     if fx >= 0.0:
-        return fx, 0.0, abs(ny) * (1.0 + (nxy / ny) ** 2), "3: y unreinforced"
-    return 0.0, 0.0, _principal_compression(nx, ny, nxy), "4: biaxial compr."
+        return LayerResult(fx, 0.0, abs(ny) * (1.0 + (nxy / ny) ** 2),
+                           "3: y unreinforced", False, False)
+    return LayerResult(0.0, 0.0, _principal_compression(nx, ny, nxy),
+                       "4: biaxial compr.", True, False)
 
 
 def _principal_compression(nx, ny, nxy):
-    n_min= 0.5 * (nx + ny) - math.hypot(0.5 * (nx - ny), nxy)
+    n_min = 0.5 * (nx + ny) - math.hypot(0.5 * (nx - ny), nxy)
     return abs(n_min)
 
+def check_layer(nx, ny, nxy, Fx, Fy, cot_min=1.0, cot_max=2.5):
+    """CHECK mode: assess PROVIDED reinforcement Fx, Fy [N/m per layer].
 
-# # ---------------------------------------------------------------------------
-# # 2) Sandwich model for one element
-# # ---------------------------------------------------------------------------
-# def layer_forces(n, m, mxy_like, z):
-#     return n / 2.0 + m / z, n / 2.0 - m / z
+    The strut angle is optimised so that the largest steel utilisation
+    max(f_x/Fx, f_y/Fy) is as small as possible. The angle is not tied to
+    one direction: neither of the two reinforcements is favoured.
 
-def design_element(iForces, h, d1, concrete, steel, ts_step=0.005, ts_max_frac=1.0 / 3.0, nationalAnnex= None):
-    '''Design the two outer layers. Iterates the layer thickness ts so that the
-    concrete stress stays below nu*fcd. Returns dict with results.
+    Lower-bound (equilibrium) model, a = |n_xy|, p = f_v - n_v > 0:
+        minimum force of the other direction (h) for a given force f_v
+            f_h(f_v) = max(0, n_h + a**2 / p)
+        concrete stress state  [[q, -a], [-a, p]],  q = f_h - n_h
+            f_c = (p + q)/2 + sqrt(((p - q)/2)**2 + a**2)
+        for a pure strut (q*p = a**2):  cot(theta) = p/a  (vs reference axis).
+    f_h decreases and f_v increases with p, so the min-max utilisation is the
+    crossing point (found by bisection). If at that point both steels are
+    active, cot(theta) is clamped to [cot_min, cot_max] (EC2 6.2.3); layers
+    with an unreinforced direction are not clamped.
+
+    REFERENCE AXIS: cot(theta) is measured from the direction with the larger
+    provided reinforcement (direction "v" in the model above); if Fx == Fy
+    the x direction is the reference. It is chosen independently for each
+    layer.
+
+    Returns a LayerResult: f_tx, f_ty = steel force USED at the optimum
+    angle [N/m], eta = max utilisation (<= 1 means the provided steel is
+    enough), ref = reference axis used.
+    """
+    a = abs(nxy)
+    ref = "x" if Fx >= Fy else "y"
+    if ref == "y": # reference (v) = y, other direction (h) = x
+        nh, nv, Fh, Fv = nx, ny, Fx, Fy
+    else: # reference (v) = x, other direction (h) = y
+        nh, nv, Fh, Fv = ny, nx, Fy, Fx
+    tol = FORCE_TOL
+    INF = float("inf")
+
+    def eta_of(f, F):
+        if F > tol:
+            return f / F
+        return 0.0 if f <= tol else INF
+
+    def steel_h(fv):
+        p = fv - nv
+        if p <= 0.0:
+            return INF
+        return max(0.0, nh + a * a / p)
+
+    def h_dominates(fv):
+        eh, ev = eta_of(steel_h(fv), Fh), eta_of(fv, Fv)
+        return eh >= ev
+    if a < tol: # no in-plane shear
+        fh, fv = max(0.0, nh), max(0.0, nv)
+    else:
+        lo = nv + 1e-9 * max(1.0, a) if nv >= 0.0 else 0.0
+        if not h_dominates(lo):
+            fv = lo
+        else:
+            hi = 1.0e12
+            for _ in range(100):
+                mid = 0.5 * (lo + hi)
+                if h_dominates(mid):
+                    lo = mid
+                else:
+                    hi = mid
+            fv = hi
+        fh = steel_h(fv)
+        if fh > tol and fv > tol: # both steels active: strut
+            p = fv - nv
+            pc = min(max(p, a * cot_min), a * cot_max)
+            if abs(pc - p) > 1e-9 * max(1.0, a):
+                if nv + pc < 0.0:
+                    pc = -nv # vertical steel not needed
+                fv = max(0.0, nv + pc)
+                fh = steel_h(fv)
+
+    eta = max(eta_of(fh, Fh), eta_of(fv, Fv))
+    c = 0.5 * ((fh - nh) + (fv - nv)) + math.hypot(
+        0.5 * ((fh - nh) - (fv - nv)), a)
+    active = fh > tol and fv > tol and a >= tol
+    cot = (fv - nv) / a if active else float("nan")
+    if active:
+        case = f"check: strut cot={cot:.2f}"
+    elif fh <= tol and fv <= tol:
+        case = "check: no steel needed"
+    elif fh <= tol:
+        case = "check: other dir. unreinforced"
+    else:
+        case = "check: reference dir. unreinforced"
+    fx, fy = (fh, fv) if ref == "y" else (fv, fh)
+    return LayerResult(fx, fy, c, case, fh <= tol and fv <= tol, active,
+                       eta=eta, cot=cot, ref=ref)
+
+
+
+
+
+
+# ---------------------------------------------------------------------------
+# 2) Sandwich model for one element
+# ---------------------------------------------------------------------------
+
+PROV_KEYS = ("asx_bot", "asy_bot", "asx_top", "asy_top")
+
+
+def design_element(iForces, h, d1, concrete, steel, ts_step=0.005, ts_max_frac=1.0 / 3.0,
+                   nu_biaxial=1.0, cot_min=1.0, cot_max=2.5, prov=None, nationalAnnex= None):
+    """Analyse the two outer layers of one element.
 
     :param iForces: internal forces of the shell element (N, m).
+                     n_x, n_y, n_xy [N/m] and m_x, m_y, m_xy [N*m/m].
     :param h: cross section thickness.
-    :param d1: concrete cover for bars in direction x.
+    :param d1: concrete cover for bars.
     :param concrete: concrete material.
     :param steel: steel material.
     :param ts_step: step between iterations.
     :param ts_max_frac: maximum thickness of the layers expressed as a fraction
                         of the total thickness.
+    :param prov: if None  -> DESIGN mode: required reinforcement (Annex F, 45 
+                 deg), else dict -> CHECK mode: provided reinforcement [m2/m]
+                 with keys asx_bot, asy_bot, asx_top, asy_top; the strut angle 
+                 is optimised (cot_min..cot_max) and the steel utilisation
+                 eta is returned.
     :param nationalAnnex: identifier of the national annex.
-    '''
-    ts= 2.0 * d1 # initial outer layer thickness
-    ts_max= ts_max_frac * h
-    nu= concrete.getShearStrengthReductionFactor(nationalAnnex)
-    fcd= -concrete.fcd()/1e6
-    ok= True
+
+    In both modes the layer thickness ts is iterated so that the concrete
+    stress stays below nu*fcd (nu_biaxial*fcd for biaxial compression).
+
+    Returns a dict; reinforcement areas Asx_*/Asy_* in m2/m.
+    """
+    ts = 2.0 * d1  # initial outer layer thickness
+    ts_max = ts_max_frac * h
+    fcd= -concrete.fcd()
+    fyd= steel.fyd()
+    ec2_nu= concrete.getShearStrengthReductionFactor(nationalAnnex)
     while True:
-        z= h - ts
-        # bottom / top layer membrane forces
-        nx_b= iForces["n_x"] / 2 + SIGN_M_BOTTOM * iForces["m_x"] / z
-        nx_t= iForces["n_x"] / 2 - SIGN_M_BOTTOM * iForces["m_x"] / z
-        ny_b= iForces["n_y"] / 2 + SIGN_M_BOTTOM * iForces["m_y"] / z
-        ny_t= iForces["n_y"] / 2 - SIGN_M_BOTTOM * iForces["m_y"] / z
-        nxy_b= iForces["n_xy"] / 2 + SIGN_MXY * iForces["m_xy"] / z
-        nxy_t= iForces["n_xy"] / 2 - SIGN_MXY * iForces["m_xy"] / z
+        z = h - ts
+        # bottom / top layer membrane forces [N/m]
+        nx_b = iForces["n_x"] / 2 + SIGN_M_BOTTOM * iForces["m_x"] / z
+        nx_t = iForces["n_x"] / 2 - SIGN_M_BOTTOM * iForces["m_x"] / z
+        ny_b = iForces["n_y"] / 2 + SIGN_M_BOTTOM * iForces["m_y"] / z
+        ny_t = iForces["n_y"] / 2 - SIGN_M_BOTTOM * iForces["m_y"] / z
+        nxy_b = iForces["n_xy"] / 2 + SIGN_MXY * iForces["m_xy"] / z
+        nxy_t = iForces["n_xy"] / 2 - SIGN_MXY * iForces["m_xy"] / z
 
-        bot= design_layer(nx_b, ny_b, nxy_b)
-        top= design_layer(nx_t, ny_t, nxy_t)
+        if prov is None:
+            bot = annex_f_layer(nx_b, ny_b, nxy_b)
+            top = annex_f_layer(nx_t, ny_t, nxy_t)
+        else:
+            kw = dict(cot_min=cot_min, cot_max=cot_max)
+            # provided area [m2/m] * fyd [Pa] = force [N/m]
+            bot = check_layer(nx_b, ny_b, nxy_b, prov["asx_bot"] * fyd,
+                              prov["asy_bot"] * fyd, **kw)
+            top = check_layer(nx_t, ny_t, nxy_t, prov["asx_top"] * fyd,
+                              prov["asy_top"] * fyd, **kw)
 
-        sig_b= bot[2] / 1e6 / ts   # N/m / m -> MPa  (kN/m^2= kPa -> /1000)
-        sig_t= top[2] / 1e6 / ts
-        sig_max= max(sig_b, sig_t)
-        if sig_max <= nu * fcd:
+        sig_b = bot.f_c / ts # N/m / m = Pa
+        sig_t = top.f_c / ts
+        # strength limit per layer: nu*fcd (cracked / transverse tension) or
+        # nu_biaxial*fcd (biaxial compression)
+        lim_b = (nu_biaxial if bot.biaxial else ec2_nu) * fcd
+        lim_t = (nu_biaxial if top.biaxial else ec2_nu) * fcd
+        util = max(sig_b / lim_b, sig_t / lim_t)
+        if util <= 1.0:
+            crush_ok = True
             break
-        ts += ts_step
-        if ts > ts_max:
-            ok= False
-            ts= ts_max
-            z= h - ts
+        if ts >= ts_max: # cannot thicken the layers any more
+            crush_ok = False
             break
+        ts = min(ts + ts_step, ts_max)
 
-    fydMPa= steel.fyd()/1e6
-    to_m2= 1e-6 / fydMPa # N/m -> m2/m
-    retval= {"ts": ts, "z": z, "crush_ok": ok,
-             "concrete_cf": sig_max / (nu * fcd),
-             "Asx_bot": bot[0] * to_m2, "Asy_bot": bot[1] * to_m2,
-             "Asx_top": top[0] * to_m2, "Asy_top": top[1] * to_m2,
-             "case_bot": bot[3], "case_top": top[3],
-            }
-    return retval
+    return {
+        "ts": ts, "z": z, "crush_ok": crush_ok,
+        "util_c": util,
+        # required (DESIGN) or used (CHECK) area: N/m / Pa = m2/m
+        "Asx_bot": bot.f_tx / fyd, "Asy_bot": bot.f_ty / fyd,
+        "Asx_top": top.f_tx / fyd, "Asy_top": top.f_ty / fyd,
+        "case_bot": bot.case, "case_top": top.case,
+        "eta_bot": bot.eta, "eta_top": top.eta, "eta_s": max(bot.eta, top.eta),
+        "cot_bot": bot.cot, "cot_top": top.cot,
+        "ref_bot": bot.ref, "ref_top": top.ref,
+        "layer_forces": {"nx_bot": nx_b, "ny_bot": ny_b, "nxy_bot": nxy_b,
+                         "nx_top": nx_t, "ny_top": ny_t, "nxy_top": nxy_t},
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -167,14 +304,16 @@ class Ec2AnnexLLController(lscb.LimitStateControllerBase):
     '''
 
     ControlVars= cv.Ec2AnnexLLControlVars
-    def __init__(self, limitStateLabel, nationalAnnex= None):
+    def __init__(self, limitStateLabel, ts_max_frac=1.0 / 3.0, nationalAnnex= None):
         ''' Constructor.
 
         :param limitStateLabel: limit state identifier.
-        :param crossSections: cross sections on each element.
+        :param ts_max_frac: maximum thickness of the layers expressed as a 
+                            fraction of the total thickness.
         :param nationalAnnex: identifier of the national annex.
         '''
         super(Ec2AnnexLLController, self).__init__(limitStateLabel= limitStateLabel, solutionProcedureType= None)
+        self.ts_max_frac= ts_max_frac
         self.nationalAnnex= nationalAnnex
 
     def initControlVars(self, elements):
@@ -217,6 +356,10 @@ class Ec2AnnexLLController(lscb.LimitStateControllerBase):
         as1_top_avail= rcSection1.getAsNeg()
         as2_top_avail= rcSection2.getAsNeg()
         concreteCover= statistics.mean(rcSection1.getCoverPos()+rcSection2.getCoverPos())
+        prov= {'asx_bot': as1_bottom_avail,
+               'asy_bot': as2_bottom_avail,
+               'asx_top': as1_top_avail,
+               'asy_top': as2_top_avail}
         # Check element section.
         for internalForces in elementInternalForces:
             iForces= {'n_x': internalForces.n1,
@@ -229,18 +372,26 @@ class Ec2AnnexLLController(lscb.LimitStateControllerBase):
                       'v_y': internalForces.q23
                       }
             # Normal stresses check.
-            bendingResults= design_element(iForces= iForces, h= h, d1= concreteCover, concrete= concrete, steel= steel, ts_max_frac= 1.0 / 10.0, nationalAnnex= self.nationalAnnex)
+            bendingResults= design_element(iForces= iForces, h= h, d1= concreteCover, concrete= concrete, steel= steel, ts_max_frac= self.ts_max_frac, prov= prov, nationalAnnex= self.nationalAnnex)
+            ts= bendingResults["ts"]
+            z= bendingResults["z"]
+            concrete_cf= bendingResults["util_c"]
+            concrete_OK= bendingResults["crush_ok"]
+            # required (DESIGN) or used (CHECK) area: N/m / Pa = m2/m
             as1_top_req= bendingResults["Asx_top"]
             as1_bottom_req= bendingResults["Asx_bot"]
             as2_top_req= bendingResults["Asy_top"]
             as2_bottom_req= bendingResults["Asy_bot"]
-            ts= bendingResults["ts"]
-            z= bendingResults["z"]
-            concrete_cf= bendingResults["concrete_cf"]
-            concrete_OK= bendingResults["crush_ok"]
             case_bottom= bendingResults["case_bot"]
             case_top= bendingResults["case_top"]
-            
+            # Steel utilisation (check mode only)
+            eta_bottom= bendingResults["eta_bot"]
+            eta_top= bendingResults["eta_top"]
+            eta_s= max(eta_bottom, eta_top)
+            # Reference axes.
+            ref_bot= bendingResults["ref_bot"]
+            ref_top= bendingResults["ref_top"]
+            layer_forces= bendingResults["layer_forces"]
             # Out of plane shear check.
             v_ed, v_rdc, shear_cf = out_of_plane_shear_check(vx= iForces["v_x"], vy= iForces["v_y"], h= h, d1= concreteCover, concrete= concrete, res= bendingResults, nationalAnnex= self.nationalAnnex)
 
@@ -300,13 +451,17 @@ class Ec2AnnexLLLimitStateData(lsd.ULS_LimitStateData):
 
     :ivar nationalAnnex: identifier of the national annex.
     '''
-    def __init__(self, designSituations= lsd.default_uls_design_situations, nationalAnnex= None):
+    def __init__(self, designSituations= lsd.default_uls_design_situations, ts_max_frac=1.0 / 3.0, nationalAnnex= None):
         '''Constructor.
 
         :param designSituations: design situations that will be checked; 
                                  i. e. uls_permanent, uls_earthquake, etc.
+        :param ts_max_frac: maximum thickness of the layers expressed as a 
+                            fraction of the total thickness.
+        :param nationalAnnex: identifier of the national annex.
         '''
         super(Ec2AnnexLLLimitStateData,self).__init__(limitStateLabel= 'ULS_Ec2AnnexLLResistance', outputDataBaseFileName= fn.ec2AnnexLLVerificationResultsFile, designSituations= designSituations)
+        self.ts_max_frac= ts_max_frac
         self.nationalAnnex= nationalAnnex
        
     def getInternalForcesDict(self, nmbComb, elems):
@@ -330,7 +485,7 @@ class Ec2AnnexLLLimitStateData(lsd.ULS_LimitStateData):
 
         :param crossSections: cross sections on each element.
         '''
-        return Ec2AnnexLLController(limitStateLabel= self.label, nationalAnnex= self.nationalAnnex)
+        return Ec2AnnexLLController(limitStateLabel= self.label, ts_max_frac= self.ts_max_frac, nationalAnnex= self.nationalAnnex)
         
     def checkElements(self, elementsToCheck, outputCfg= lsd.VerifOutVars()):
         '''Checking of internal forces in ultimate limit states
