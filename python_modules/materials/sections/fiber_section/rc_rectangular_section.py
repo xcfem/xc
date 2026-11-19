@@ -38,7 +38,10 @@ class RCRectangularSection(basic_rectangular_rc_section.BasicRectangularRCSectio
         :param depth: section depth.
         :param concrType: type of concrete (e.g. EHE_materials.HA25)     
         :param reinfSteelType: type of reinforcement steel.
-        :param swapReinforcementAxes: if true, swap the axes of reinforcement so the positive and negative reinforcement rows are placed rotated 90 degrees.
+        :param swapReinforcementAxes: if true, swap the axes of reinforcement 
+                                      so the positive and negative 
+                                      reinforcement rows are placed rotated 
+                                      90 degrees.
         '''
         super(RCRectangularSection,self).__init__(name= name, sectionDescr= sectionDescr, width= width, depth= depth, concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= nDivIJ, nDivJK= nDivJK, swapReinforcementAxes= swapReinforcementAxes)
             

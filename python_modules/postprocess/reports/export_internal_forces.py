@@ -15,7 +15,40 @@ from materials.sections import internal_forces
 from misc_utils import log_messages as lmsg
 from model import model_inquiry
 
-def get_internal_forces_dict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stress', woodArmerAlsoForAxialForces= False):
+def get_shell_raw_internal_forces_dict(nmbComb, elems):
+    '''Creates a dictionary with the element's internal forces.
+
+    :param nmbComb: combination name.
+    :param elems: element set.
+    '''
+    combInternalForcesDict= dict()
+    outDict= dict()
+    combInternalForcesDict[nmbComb]= outDict
+    for e in elems:
+        elemDict= dict()
+        outDict[e.tag]= elemDict
+        elementType= e.type()
+        elemDict['type']= elementType
+        if('Shell' in elementType):
+            e.getResistingForce()
+            internalForcesDict= dict()
+            # Get the materials at each gauss point.
+            materials= e.physicalProperties.getVectorMaterials
+            # Iterate through those materials
+            for i, mat in enumerate(materials):
+                gpInternalForces= dict()
+                for key in ['n1', 'n2', 'n12', 'm1', 'm2', 'm12', 'q13', 'q23']:
+                    gpInternalForces[key]= mat.getStressResultantComponent(key)
+                internalForcesDict[i]= gpInternalForces
+            elemDict['shell_internal_forces']= internalForcesDict
+        else:
+            methodName= sys._getframe(0).f_code.co_name
+            errorMsg= "; element type: '"+elementType
+            errorMsg+= "' cannot be processed using this function."
+            lmsg.error(methodName+errorMsg)
+    return combInternalForcesDict
+
+def get_internal_forces_dict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stress', woodArmerAlsoForAxialForces= False, shellRawInternalForces= False):
     '''Creates a dictionary with the element's internal forces.
 
     :param nmbComb: combination name.
@@ -47,7 +80,8 @@ def get_internal_forces_dict(nmbComb, elems, vonMisesStressId= 'max_von_mises_st
         if e.hasProp('FbE'): # AWC NDS-2018 critical buckling design value for bending.
             FbE= e.getProp('FbE')
         return chiLT, chiN, FcE, FbE
-           
+    if(shellRawInternalForces):
+        return get_shell_raw_internal_forces_dict(nmbComb= nmbComb, elems= elems)
     combInternalForcesDict= dict()
     outDict= dict()
     combInternalForcesDict[nmbComb]= outDict
@@ -59,7 +93,7 @@ def get_internal_forces_dict(nmbComb, elems, vonMisesStressId= 'max_von_mises_st
         if('Shell' in elementType):
             internalForces= internal_forces.ShellMaterialInternalForces()
             internalForces.setFromAverageInShellElement(e)
-            internalForces= internalForces.getWoodArmer(alsoForAxialForces= woodArmerAlsoForAxialForces)
+            woodArmerInternalForces= internalForces.getWoodArmer(alsoForAxialForces= woodArmerAlsoForAxialForces)
             # Silently ask about maximum Von-Mises stress.
             maxVonMisesAtNodes= e.getValuesAtNodes(vonMisesStressId, True)
             avgMaxVM= None
@@ -70,10 +104,10 @@ def get_internal_forces_dict(nmbComb, elems, vonMisesStressId= 'max_von_mises_st
                 avgMaxVM+= maxVonMisesAtNodes[2][0] # at node 3
                 avgMaxVM+= maxVonMisesAtNodes[3][0] # at node 4
                 avgMaxVM/= 4.0 # average of the max. value at nodes.
-            sz= len(internalForces)
+            sz= len(woodArmerInternalForces)
             internalForcesDict= dict()
             for i in range(0,sz):
-                force= internalForces[i]
+                force= woodArmerInternalForces[i]
                 internalForcesDict[i]= force.getDict()
                 if(avgMaxVM):
                     internalForcesDict[i].update({vonMisesStressId:avgMaxVM})

@@ -1457,7 +1457,7 @@ class GaussPointStresses(stresses.Stresses3D):
     :ivar idComb: identifier of the combination to which the stresses
                   are due.
     :ivar tagElem: identifier of the finite element.
-    :ivar idGaussPoint: identifier of the section in the element.
+    :ivar idGaussPoint: identifier of the Gauss point in the element.
     :ivar vonMisesStressId: identifier of the Von Mises stress to read
                             (see NDMaterial and MembranePlateFiberSection).
     '''
@@ -1497,12 +1497,12 @@ class GaussPointStresses(stresses.Stresses3D):
         retval.setFromDict(self.getDict())
         return retval
     
-def get_gauss_point_stresses(stresses, idComb, tagElem, key, vonMisesStressId):
-    ''' Return the CrossSectionInternalForces object containing the
-        internal forces in the given dictionary.
+def get_gauss_point_stresses(stressesDict, idComb, tagElem, key, vonMisesStressId):
+    ''' Return the GaussPointStresses object containing the
+        stresses in the given dictionary.
 
-    :param stresses: Python dictionary containing the values
-                           for the stresses.
+    :param stressesDict: Python dictionary containing the values
+                         for the stresses.
     :param idComb: identifier of the load combination.
     :param tagElem: identifier of the finite element.
     :param key: identifier of the gauss point in the element.
@@ -1510,10 +1510,10 @@ def get_gauss_point_stresses(stresses, idComb, tagElem, key, vonMisesStressId):
                             (see NDMaterial and MembranePlateFiberSection).
     '''
     retval= GaussPointStresses(idComb= idComb, tagElem= tagElem, idGaussPoint= eval(key))
-    strss= stresses[key]
+    strss= stressesDict[key]
     retval.setStressesFromDict(strss)
-    if(vonMisesStressId in stresses):
-        retval.vonMisesStress= stresses[vonMisesStressId]
+    if(vonMisesStressId in stressesDict):
+        retval.vonMisesStress= stressesDict[vonMisesStressId]
     return retval
 
 def read_stresses_dict(stressesCombFileName, setCalc=None, vonMisesStressId= 'max_von_mises_stress'):
@@ -1537,37 +1537,140 @@ def read_stresses_dict(stressesCombFileName, setCalc=None, vonMisesStressId= 'ma
     
     stressesValues= defaultdict(list)
     
-    if(not setCalc):
-        for comb in combStressesDict.keys():
-            idComb= str(comb)
-            idCombs.add(idComb)
-            elements= combStressesDict[comb]
-            for elemId in elements.keys():
-                tagElem= eval(elemId)
+    setElTags= None
+    if(setCalc):
+        setElTags= frozenset(setCalc.getElementTags()) # We construct a frozen set to accelerate searching.
+    for idComb in combStressesDict.keys():
+        idCombs.add(idComb)
+        elements= combStressesDict[idComb]
+        for elemId in elements.keys():
+            tagElem= eval(elemId)
+            processElement= True
+            if(setElTags):
+                if(not (tagElem in setElTags)):
+                    processElement= False
+            if(processElement): # search element tag
                 elementData= elements[elemId]
                 #elementType= elementData['type']
-                stresses= elementData['stresses']
-                for k in stresses.keys():
+                internalForces= elementData['stresses']
+                for k in internalForces.keys():
                     elementTags.add(tagElem)
-                    stresses= get_gauss_point_stresses(stresses= internalForces, idComb= idComb, tagElem= tagElem, key= k, vonMisesStressId= vonMisesStressId)
+                    stresses= get_gauss_point_stresses(stressesDict= internalForces, idComb= idComb, tagElem= tagElem, key= k, vonMisesStressId= vonMisesStressId)
                     stressesValues[tagElem].append(stresses)
-    else:
-        setElTags= frozenset(setCalc.getElementTags()) # We construct a frozen set to accelerate searching.
-        for idComb in combStressesDict.keys():
-            idCombs.add(idComb)
-            elements= combStressesDict[idComb]
-            for elemId in elements.keys():
-                tagElem= eval(elemId)
-                if(tagElem in setElTags): # search element tag
-                    elementData= elements[elemId]
-                    #elementType= elementData['type']
-                    internalForces= elementData['stresses']
-                    for k in internalForces.keys():
-                        elementTags.add(tagElem)
-                        stresses= get_gauss_point_stresses(stresses= internalForces, idComb= idComb, tagElem= tagElem, key= k, vonMisesStressId= vonMisesStressId)
-                        stressesValues[tagElem].append(stresses)
     return (elementTags, idCombs, stressesValues)
 
+class GaussPointShellInternalForces(internal_forces.ShellMaterialInternalForces):
+    ''' Definition of the internal forces in a Gauss point of a Shell element
+
+    :ivar idComb: identifier of the combination to which the internal forces
+                  are due.
+    :ivar tagElem: identifier of the finite element.
+    :ivar idGaussPoint: identifier of the Gauss point in the element.
+    '''
+    def __init__(self, idComb= None, tagElem= None, idGaussPoint=None, n1= 0.0, n2= 0.0, n12= 0.0, m1= 0.0, m2= 0.0, m12= 0.0, q13= 0.0, q23= 0.0):
+        '''Internal forces on a shell material.
+
+        :param idComb: identifier of the load combination.
+        :param tagElem: identifier of the finite element.
+        :param idGaussPoint: identifier of the section in the element.
+        :param n1: axial force parallel to axis 1.
+        :param n2: axial force parallel to axis 2.
+        :param n12: in plane shear force.
+        :param m1: bending moment parallel to axis 1.
+        :param m2: bending moment parallel to axis 2.
+        :param m12: twisting stress resultant.
+        :param q13: out of plane shear force normal to axis 1 and parallel to axis 3.
+        :param q23: out of plane shear force normal to axis 1 and parallel to axis 3.
+        '''
+        super().__init__(n1= n1, n2= n2, n12= n12, m1= m1, m2= m2, m12= m12, q13= q13, q23= q23)
+        self.idComb= idComb
+        self.tagElem= tagElem
+        self.idGaussPoint= idGaussPoint
+
+    def setInternalForcesFromDict(self, dct):
+        ''' Set the values of the internals forces from the given 
+            dictionary.
+
+        :param dct: dictionary to get the values from.
+        '''
+        super().setFromDict(dct)
+
+    def getDict(self):
+        '''returns a dictionary whith the values of the internal forces.'''
+        retval= super().getDict()
+        retval['idComb']= self.idComb;
+        retval['tagElem']= self.tagElem
+        retval['idGaussPoint']= self.idGaussPoint
+        return retval
+
+    def setFromDict(self, dct):
+        '''Sets the internal forces from the dictionary argument.'''
+        super().setFromDict(dct= dct)
+        self.idComb= dct['idComb']
+        self.tagElem= dct['tagElem']
+        self.idGaussPoint= dct['idSection']
+
+    def getCopy(self):
+        ''' Return a copy of this object.'''
+        retval= GaussPointShellInternalForces()
+        retval.setFromDict(self.getDict())
+        return retval
+
+def get_gauss_point_shell_internal_forces(internalForcesDict, idComb, tagElem, key):
+    ''' Return the GaussPointInternalForces object containing the shell 
+        internal forces in the given dictionary.
+
+    :param internalForcesDict: Python dictionary containing the values
+                               for the internal forces of shell elements.
+    :param idComb: identifier of the load combination.
+    :param tagElem: identifier of the finite element.
+    :param key: identifier of the gauss point in the element.
+    '''
+    shellInternalForces= internalForcesDict[key]
+    retval= GaussPointShellInternalForces(idComb= idComb, tagElem= tagElem, idGaussPoint= eval(key))
+    retval.setInternalForcesFromDict(shellInternalForces)
+    return retval
+
+def read_shell_raw_internal_forces_dict(internalForcesCombFileName, setCalc=None):
+    '''Extracts element and combination identifiers from the internal
+    forces JSON file. Return elementTags, idCombs and internal forces
+    values
+    
+    :param internalForcesCombFileName: name of the file containing the stresses
+                                       obtained for each element for  
+                                       the combinations analyzed
+    :param setCalc: set of elements to be analyzed (defaults to None which 
+                    means that all the elements in the file of internal forces
+                    results are analyzed)
+    '''        
+    elementTags= set()
+    idCombs= set()
+    with open(internalForcesCombFileName) as json_file:
+        combInternalForcesDict= json.load(json_file)
+    json_file.close()
+    
+    internalForcesValues= defaultdict(list)
+    
+    setElTags= None
+    if(setCalc):
+        setElTags= frozenset(setCalc.getElementTags()) # We construct a frozen set to accelerate searching.
+    for idComb in combInternalForcesDict.keys():
+        idCombs.add(idComb)
+        elements= combInternalForcesDict[idComb]
+        for elemId in elements.keys():
+            tagElem= eval(elemId)
+            processElement= True
+            if(setElTags):
+                if(not (tagElem in setElTags)):
+                    processElement= False
+            if(processElement):
+                elementData= elements[elemId]
+                internalForcesDict= elementData['shell_internal_forces']
+                for k in internalForcesDict.keys():
+                    elementTags.add(tagElem)
+                    gpInternalForces= get_gauss_point_shell_internal_forces(internalForcesDict= internalForcesDict, idComb= idComb, tagElem= tagElem, key= k)
+                    internalForcesValues[tagElem].append(gpInternalForces)
+    return (elementTags, idCombs, internalForcesValues)
 
 def old_read_int_forces_file(intForcCombFileName,setCalc=None):
     '''Extracts element and combination identifiers from the internal
@@ -1589,12 +1692,20 @@ def old_read_int_forces_file(intForcCombFileName,setCalc=None):
     internalForcesValues= defaultdict(list)
     internalForcesListing= csv.reader(f)
     next(internalForcesListing) # skip first line (head)
-    if setCalc is None:
-        for lst in internalForcesListing: # lst: list of internal forces for each combination and element
-            if(len(lst)>0):
+    
+    setElTags= None
+    if(setCalc):
+        setElTags= frozenset(setCalc.getElementTags()) # We construct a frozen set to accelerate searching.
+    for lst in internalForcesListing:
+        if(len(lst)>0):
+            tagElem= eval(lst[1])
+            processElement= True
+            if(setElTags):
+                if(not (tagElem in setElTags)):
+                    processElement= False
+            if(processElement): # search element tag
                 idComb= lst[0]
                 idCombs.add(idComb)
-                tagElem= eval(lst[1])
                 idSection= eval(lst[2])
                 elementTags.add(tagElem)
                 crossSectionInternalForces= internal_forces.CrossSectionInternalForces()
@@ -1603,23 +1714,6 @@ def old_read_int_forces_file(intForcCombFileName,setCalc=None):
                 crossSectionInternalForces.tagElem= tagElem
                 crossSectionInternalForces.idSection= idSection
                 internalForcesValues[tagElem].append(crossSectionInternalForces)
-    else:
-        setElTags= frozenset(setCalc.getElementTags()) # We construct a frozen set to accelerate searching.
-        for lst in internalForcesListing:
-            if(len(lst)>0):
-                tagElem= eval(lst[1])
-                if tagElem in setElTags: # search element tag
-                    idComb= lst[0]
-                    idCombs.add(idComb)
-                    tagElem= eval(lst[1])
-                    idSection= eval(lst[2])
-                    elementTags.add(tagElem)
-                    crossSectionInternalForces= internal_forces.CrossSectionInternalForces()
-                    crossSectionInternalForces.setFromCSVString(lst,3)
-                    crossSectionInternalForces.idComb= idComb
-                    crossSectionInternalForces.tagElem= tagElem
-                    crossSectionInternalForces.idSection= idSection
-                    internalForcesValues[tagElem].append(crossSectionInternalForces)
     f.close()
     return (elementTags,idCombs,internalForcesValues)
 

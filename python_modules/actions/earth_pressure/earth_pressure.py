@@ -576,6 +576,10 @@ class LineVerticalLoadOnBackfill(PressureModelBase):
     '''Lateral earth pressure on a retaining wall due to line surcharge 
     load acting in vertical direction on the backfill. (J.Calavera, pg.41)
 
+    Calavera Ruiz, J., and J. Calavera. Muros de contención y muros de sótano. 
+    España: Intemac, 1987. ISBN 9788439890928, 8439890923.
+    
+
     :ivar qLoad: surcharge load (force per unit length)
     :ivar zLoad: global Z coordinate where the line load acts
     :ivar distWall: horizontal distance between the wall and the line 
@@ -595,7 +599,9 @@ class LineVerticalLoadOnBackfill(PressureModelBase):
         self.distWall=abs(distWall)
         
     def getPressure(self,z):
-        '''Return the earth pressure acting on the points at global coordinate z.
+        '''Return the earth pressure acting on the points at global coordinate 
+           z. Method based on elasticity theory.
+
         :param z: global z coordinate.
         '''
         ret_press=0.0
@@ -605,15 +611,17 @@ class LineVerticalLoadOnBackfill(PressureModelBase):
             ret_press=self.qLoad/math.pi/difZ*(math.sin(2*omega))**2
         return ret_press
 
-    def getMaxMagnitude(self, xcSet):
+    def getMaxMagnitude(self, xcSet, zIndex= 2):
         '''Return an estimation of the maximum magnitude of the vector loads 
         (it's supposed to occur in a point placed 1/3L from the top).
 
         :param xcSet: set containing the elements.
+        :param zIndex: index of the z coordinate of the given nodes (1 for
+                       2D problems and 2 for 3D problems).
         '''
-        zmin=sets.get_min_coo_nod(xcSet,2)
-        zmax=sets.get_max_coo_nod(xcSet,2)
-        zcontrol=zmin+2/3.*(zmax-zmin)
+        zmin=sets.get_min_coo_nod(xcSet, zIndex)
+        zmax=sets.get_max_coo_nod(xcSet, xIndex)
+        zcontrol= zmin+2/3.*(zmax-zmin)
         maxEstValue=self.getPressure(zcontrol)
         return maxEstValue
     

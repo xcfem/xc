@@ -80,7 +80,15 @@ pth_to_awc_nds_section_data= xc_installation_target+'/materials/awc_nds/aux/'
 print('path to awc_nds shape data: '+pth_to_awc_nds_section_data)
 awc_nds_section_data= ['materials/awc_nds/aux/pr_400_i_joists.json']
 
-xc_python_packages= ['geom_utils', 'geotechnics', 'geotechnics.foundations', 'geotechnics.earth_retaining', 'geotechnics.earthworks', 'geotechnics.tuneles', 'rough_calculations','solution', 'model', 'model.boundary_cond','model.geometry', 'model.mesh','model.sets','postprocess','import_export','import_export.sciaXML','import_export.sciaXML.xml_basics','import_export.sciaXML.scia_loads','postprocess.gnuplot','postprocess.config','postprocess.reports','postprocess.elements','postprocess.quick_inquiry',"actions","actions.basic_loads","actions.quake","actions.earth_pressure","actions.pedestrian_traffic","actions.railway_traffic","actions.roadway_traffic","actions.snow","actions.weight","actions.wind","actions.thermal","actions.prestress","actions.imposed_strain",'actions.load_combination_utils', 'actions.utils','materials',"materials.aci","materials.aisi","materials.astm_aisc","materials.ec2", "materials.mc10","materials.ec3","materials.ec5","materials.ceb","materials.ehe", "materials.en_1337","materials.en_1337.aux","materials.nbe_ea95","materials.eae", "materials.en_13674_1", "materials.api","materials.sections","materials.sections.fiber_section","materials.sections.structural_shapes","materials.sections.structural_shapes.aux","materials.sia262","materials.sia263","materials.eota","materials.prestressing","materials.awc_nds", "materials.awc_nds.aux","materials.tm5_809_3","materials.tie_bars","materials.strut_and_tie", "import_export", "postprocess.serviceability_limit_states", "postprocess.xcVtk","postprocess.xcVtk.fields","postprocess.xcVtk.diagrams","postprocess.xcVtk.FE_model","postprocess.xcVtk.CAD_model", "connections.steel_connections","misc","misc.latex","misc.sqlite_utils","misc.vtk_utils","misc_utils"]
+pre_processor_python_packages= ['model', 'model.boundary_cond','model.geometry', 'model.mesh','model.sets']
+geotechnics_python_packages= ['geotechnics', 'geotechnics.foundations', 'geotechnics.earth_retaining', 'geotechnics.earthworks', 'geotechnics.tuneles', 'rough_calculations']
+materials_python_packages= ['materials','materials.aci','materials.aisi','materials.astm_aisc','materials.ec2', 'materials.mc10','materials.ec3','materials.ec5','materials.ceb','materials.ehe', 'materials.en_1337','materials.en_1337.aux','materials.nbe_ea95','materials.eae', 'materials.en_13674_1', 'materials.api','materials.sections','materials.sections.fiber_section','materials.sections.structural_shapes','materials.sections.structural_shapes.aux','materials.sia262','materials.sia263','materials.eota','materials.prestressing','materials.awc_nds', 'materials.awc_nds.aux','materials.tm5_809_3','materials.tie_bars','materials.strut_and_tie']
+actions_python_packages= ['actions','actions.basic_loads','actions.quake','actions.earth_pressure','actions.pedestrian_traffic','actions.railway_traffic','actions.roadway_traffic','actions.snow','actions.weight','actions.wind','actions.thermal','actions.prestress','actions.imposed_strain','actions.load_combination_utils', 'actions.utils']
+post_process_python_packages= ['postprocess','postprocess.gnuplot','postprocess.config', 'postprocess.control_variables','postprocess.reports','postprocess.elements','postprocess.quick_inquiry', 'postprocess.xcVtk','postprocess.xcVtk.fields','postprocess.xcVtk.diagrams','postprocess.xcVtk.FE_model','postprocess.xcVtk.CAD_model', 'postprocess.serviceability_limit_states']
+import_export_python_packages= ['import_export','import_export.sciaXML','import_export.sciaXML.xml_basics','import_export.sciaXML.scia_loads']
+misc_python_packages= ['misc','misc.latex','misc.sqlite_utils','misc.vtk_utils','misc_utils']
+
+xc_python_packages= ['geom_utils','solution', 'connections.steel_connections']+pre_processor_python_packages+materials_python_packages+actions_python_packages+post_process_python_packages+geotechnics_python_packages+misc_python_packages+import_export_python_packages
 
 
 retval= setup(name='XCModules',
@@ -91,4 +99,4 @@ retval= setup(name='XCModules',
       # If any package contains *.pickle or *.json files, include them:
       package_data={'': ['*.pickle', '*.json']},
      )
-
+print(retval)

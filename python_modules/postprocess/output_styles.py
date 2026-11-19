@@ -223,6 +223,9 @@ class OutputStyle(object):
         elif(itemToDisp=='sectionArea'):
             fConvUnits= 1e4
             unitDescription= 'cm2'
+        elif(itemToDisp.startswith('as') and itemToDisp.endswith('_req')):
+            fConvUnits= 1e4
+            unitDescription= 'cm2'
         elif(itemToDisp=='thickness'):
             fConvUnits= 1e3
             unitDescription= '[mm]'
@@ -285,6 +288,7 @@ sp_capTexts={
     'ULS_shearResistance': 'Comprobación ELU esfuerzo cortante',
     'ULS_VonMisesStressResistance': 'Comprobación ELU tensiones de Von Mises',
     'ULS_Ec2InPlaneStressResistance': 'Comprobación ELU de armaduras en elementos en tensión plana.',
+    'ULS_Ec2AnnexLLResistance': 'Comprob. ELU según EN 1992-2 Anejo LL.',
     'getMaxSteelStress': "tensión máxima en la armadura",
     'SLS_rareLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga raros',
     'SLS_frequentLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga frecuentes',
@@ -347,6 +351,7 @@ en_capTexts={
     'ULS_shearResistance': 'ULS shear check',
     'ULS_VonMisesStressResistance': 'ULS Von Mises stresses check',
     'ULS_Ec2InPlaneStressResistance': 'ULS tension reinforcement check for in-plane stress conditions.',
+    'ULS_Ec2AnnexLLResistance': 'ULS check according to EN 1992-2 Annex LL.',
     'getMaxSteelStress': 'steel maximum stress',
     'SLS_rareLoadsCrackControl': 'SLS cracking, rare actions',
     'SLS_frequentLoadsCrackControl': 'SLS cracking, frequent actions',
@@ -413,7 +418,8 @@ fr_capTexts={
     'normalStressCheck': 'Vérification ELU contraintes normales',
     'ULS_shearResistance': 'Vérification ELU effort tranchant',
     'ULS_VonMisesStressResistance': 'Vérification ELU contraintes de Von Mises.',
-    'ULS_Ec2InPlaneStressResistance': 'Verification ELU des armatures tendues dans les situations de contraintes planes.',
+    'ULS_Ec2InPlaneStressResistance': 'Vérification ELU des armatures tendues dans les situations de contraintes planes.',
+    'ULS_Ec2AnnexLLResistance': 'Vérification ELU selon EN 1992-2 Annexe LL.',
     'getMaxSteelStress': "contrainte maximale dans l'armature",
     'SLS_rareLoadsCrackControl': 'Vérification ELS fissuration, cas de charge rares',
     'SLS_frequentLoadsCrackControl': 'Vérification ELS fissuration, cas de charge fréquents',

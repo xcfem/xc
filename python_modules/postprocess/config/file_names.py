@@ -40,6 +40,11 @@ ec2InPlaneStressVerificationResultsFile= 'verifRsl_ec2_in-plane_stressULS'
 ec2InPlaneStressVerificationReportFile= 'report_ec2_in-plane_stressULS'
 ec2InPlaneStressDirectory= 'ec2_in-plane_stressULS/'
 
+# EN 1992-2:2005. Annex LL.
+ec2AnnexLLVerificationResultsFile= 'verifRsl_ec2_annex_ll_ULS'
+ec2AnnexLLVerificationReportFile= 'report_ec2_annex_ll_ULS'
+ec2AnnexLLDirectory= 'ec2_annex_ll_ULS/'
+
 # Von Mises stresses.
 vonMisesStressesVerificationResultsFile= 'verifRsl_VonMisesStressULS'
 vonMisesStressesVerificationReportFile= 'report_VonMisesStressULS'

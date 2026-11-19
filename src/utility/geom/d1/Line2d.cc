@@ -245,6 +245,51 @@ Vector2d Line2d::Projection(const Vector2d &v) const
     return dot(v,d)*d;
   }
 
+//! @brief Return the projections of the points onto the line.
+GeomObj::list_Pos2d Line2d::Project(const GeomObj::list_Pos2d &ptos) const
+  {
+    GeomObj::list_Pos2d retval;
+    for(GeomObj::list_Pos2d::const_iterator i= ptos.begin();i!=ptos.end();i++)
+      retval.push_back(Projection(*i));
+    return retval;
+  }
+
+//! @brief Return a Python list containing the projections of the points onto
+//! this line.
+boost::python::list Line2d::ProjectPy(const boost::python::list &ptos) const
+  {
+    boost::python::list retval;
+    GeomObj::list_Pos2d tmp= this->Project(python_to_list_pos2d(ptos));
+    for(GeomObj::list_Pos2d::const_iterator i= tmp.begin();i!=tmp.end();i++)
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return the reflection of the given point with respect tho this line.
+Pos2d Line2d::getSymmetric(const Pos2d &p) const
+  {
+    const Pos2d proj= this->Projection(p);
+    return proj + (proj-p);
+  }
+
+//! @brief Return the reflection of the given points with respect tho this line.
+GeomObj::list_Pos2d Line2d::getSymmetric(const GeomObj::list_Pos2d &ptos) const
+  {
+    GeomObj::list_Pos2d retval;
+    for(GeomObj::list_Pos2d::const_iterator i= ptos.begin();i!=ptos.end();i++)
+      retval.push_back(getSymmetric(*i));
+    return retval;
+  }
+
+boost::python::list Line2d::getSymmetricPy(const boost::python::list &ptos) const
+  {
+    boost::python::list retval;
+    GeomObj::list_Pos2d tmp= this->getSymmetric(python_to_list_pos2d(ptos));
+    for(GeomObj::list_Pos2d::const_iterator i= tmp.begin();i!=tmp.end();i++)
+      retval.append(*i);
+    return retval;
+  }
+
 //! @brief Returns the a parameter of the line equation in general
 //! form: a*x + b*y + c= 0
 GEOM_RT Line2d::a(void) const
@@ -404,15 +449,6 @@ GeomObj::list_Pos2d Line2d::Ordena(const GeomObj::list_Pos2d &ptos) const
 	      }
 	  }
       }
-    return retval;
-  }
-
-//! @brief Return the projections of the points onto the line.
-GeomObj::list_Pos2d Line2d::Project(const GeomObj::list_Pos2d &ptos) const
-  {
-    GeomObj::list_Pos2d retval;
-    for(GeomObj::list_Pos2d::const_iterator i= ptos.begin();i!=ptos.end();i++)
-      retval.push_back(Projection(*i));
     return retval;
   }
 

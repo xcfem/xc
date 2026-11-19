@@ -1534,8 +1534,8 @@ class OutputHandler(object):
         else:
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+'; caption for argument: '+str(argument)+" not found, we leave it empty.")
-            argumentCaption= ''
+            lmsg.warning(className+'.'+methodName+'; caption for argument: '+str(argument)+" not found, we use the argument itself as caption.")
+            argumentCaption= str(argument)
         captionBaseText= limitStateLabelCaption + ', ' + argumentCaption+ '. '+ setToDisplay.description.capitalize()
         caption= captionBaseText + ', ' + sectDescr
         field.display(displaySettings, caption= caption, unitDescription= unitDescription, fileName= fileName, defFScale= defFScale)

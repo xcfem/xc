@@ -94,6 +94,7 @@ python tests/utility/geom/lines/line2d_test_02.py
 python tests/utility/geom/lines/line2d_test_03.py
 python tests/utility/geom/lines/line2d_test_04.py
 python tests/utility/geom/lines/line2d_test_05.py
+python tests/utility/geom/lines/line2d_test_06.py
 python tests/utility/geom/lines/line3d_test_01.py
 python tests/utility/geom/lines/line3d_test_02.py
 python tests/utility/geom/lines/line3d_test_03.py
@@ -326,6 +327,7 @@ python tests/actions/earth_pressure/culmann_method_test_01.py
 python tests/actions/earth_pressure/culmann_method_test_02.py
 python tests/actions/earth_pressure/culmann_method_test_03.py
 python tests/actions/earth_pressure/test_embankment_weight_distr.py
+python tests/actions/earth_pressure/test_earth_pressure_line_load.py
 python tests/actions/earth_pressure/test_earth_pressure_point_load.py
 python tests/actions/earth_pressure/test_boussinesq_earth_pressure_01.py
 python tests/actions/earth_pressure/test_boussinesq_earth_pressure_02.py
@@ -1781,6 +1783,7 @@ python tests/materials/ec2/shear/test_EC2_shear_04.py
 python tests/materials/ec2/shear/test_EC2_shear_05.py
 python tests/materials/ec2/shear/test_ec2_fiber_section_shear_01.py
 python tests/materials/ec2/shear/test_EC2_shear_between_web_and_flanges_01.py
+python tests/materials/ec2/shear/test_ec2_shear_resistance_at_concrete_interface.py
 echo "$BLEU" "    Torsion resistance determination tests." "$NORMAL"
 python tests/materials/ec2/torsion/test_geom_params_torsion_ec2_01.py
 python tests/materials/ec2/torsion/test_geom_params_torsion_ec2_02.py
@@ -2185,6 +2188,7 @@ python tests/postprocess/limit_state_checking/ec2/test_crack_control_sls_checkin
 echo "$BLEU" "      EC2 limit state checking: slab example." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec2/test_bending_slab_sls_checking_ec2_01.py
 python tests/postprocess/limit_state_checking/ec2/test_bending_slab_uls_checking_ec2_01.py
+python tests/postprocess/limit_state_checking/ec2/test_bending_slab_uls_checking_ec2_annex_ll_01.py
 python tests/postprocess/limit_state_checking/ec2/test_bending_slab_uls_checking_ec2_02.py
 echo "$BLEU" "      EC2 limit state checking: annex F." "$NORMAL"
 python tests/postprocess/limit_state_checking/ec2/eurocode2_annex_f_test.py

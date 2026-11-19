@@ -260,7 +260,7 @@ class ShellMaterialInternalForces:
     :ivar q13: out of plane shear force normal to axis 1 and parallel to axis 3.
     :ivar q23: out of plane shear force normal to axis 1 and parallel to axis 3.
     '''
-    def __init__(self,n1= 0.0,n2= 0.0,n12= 0.0,m1= 0.0,m2= 0.0,m12= 0.0,q13= 0.0,q23= 0.0):
+    def __init__(self,n1= 0.0, n2= 0.0, n12= 0.0, m1= 0.0, m2= 0.0, m12= 0.0, q13= 0.0, q23= 0.0):
         '''Internal forces on a material point of a shell element
 
         :param n1: axial force parallel to axis 1.
