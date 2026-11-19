@@ -187,23 +187,29 @@ class UniformLoadOnTrusses(BaseVectorLoad):
 class UniformLoadOnLines(BaseVectorLoad):
     '''Uniform load applied to all the lines (not necessarily defined as lines
     for latter generation of beam elements, they can be lines belonging to 
-    surfaces for example) found in the xcSet
+    surfaces for example) found in the xcSet o given in the list lstLines 
     The uniform load is introduced as point loads in the nodes
     
     :ivar name:   name identifying the load
-    :ivar xcSet:  set that contains the lines
+    :ivar prep: preprocessor
     :ivar loadVector: xc.Vector with the six components of the load: 
                       xc.Vector([Fx,Fy,Fz,Mx,My,Mz]).
-    '''                            
-    def __init__(self,name,  xcSet, loadVector):
+    :ivar xcSet: set that contains the lines. If None the lines must be
+                given as a list (defaults to None)
+    :ivar lstLines: list of lines (ignored if xcSet is defined)
+     '''                            
+    def __init__(self,name, prep,loadVector,xcSet=None,lstLines=[]):
         super(UniformLoadOnLines,self).__init__(name,loadVector)
+        self.prep=prep
         self.xcSet=xcSet
+        self.lstLines=lstLines
 
     def appendLoadToCurrentLoadPattern(self):
-        self.xcSet.fillDownwards()
-        prep=self.xcSet.getPreprocessor
-        pointsCont=prep.getMultiBlockTopology.getPoints
-        for l in self.xcSet.getLines:
+        pointsCont=self.prep.getMultiBlockTopology.getPoints
+        if self.xcSet:
+            self.xcSet.fillDownwards()
+            self.lstLines=[l for l in self.xcSet.lines]
+        for l in self.lstLines:
             ptExt1tag=l.getKPoints()[0]
             ext1=pointsCont.get(ptExt1tag).getPos
             nod=[n for n in l.nodes]
