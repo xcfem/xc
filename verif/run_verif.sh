@@ -327,6 +327,7 @@ python tests/actions/earth_pressure/culmann_method_test_01.py
 python tests/actions/earth_pressure/culmann_method_test_02.py
 python tests/actions/earth_pressure/culmann_method_test_03.py
 python tests/actions/earth_pressure/test_embankment_weight_distr.py
+python tests/actions/earth_pressure/test_earth_pressure_line_load.py
 python tests/actions/earth_pressure/test_earth_pressure_point_load.py
 python tests/actions/earth_pressure/test_boussinesq_earth_pressure_01.py
 python tests/actions/earth_pressure/test_boussinesq_earth_pressure_02.py
