@@ -103,7 +103,6 @@ class PressureModelBase(object):
         :param globalVdir: True if pressure applied in vDir global coordinates
                            (defaults to True)
         '''
-        
         tanDelta= math.tan(delta)
         tanVector= xc.Vector([-vDir[1],vDir[0]]) #iCoo= 1 => 2D
         if(iCoo==2): #3D
