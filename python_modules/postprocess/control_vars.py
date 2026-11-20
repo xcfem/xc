@@ -27,7 +27,22 @@ from postprocess.control_variables import basic_control_variables as bcv
 
 __all__= ['AxialForceControlVars', 'BiaxialBendingControlVars', 'BiaxialBendingStrengthControlVars', 'CFN', 'CFNMy', 'CFNMyMz', 'CFVy', 'ControlVarsBase', 'CrackControlBaseVars', 'CrackControlVars', 'FatigueControlBaseVars', 'FatigueControlVars', 'N', 'NMy', 'NMyMz', 'RCCrackControlVars', 'RCCrackStraightControlVars', 'RCShearControlVars', 'SIATypeRCShearControlVars', 'ShVy', 'ShearYControlVars', 'SteelShapeUniaxialBendingControlVars', 'SteelShapeBiaxialBendingControlVars', 'UniaxialBendingControlVars', 'VonMisesControlVars', 'RCBucklingControlVars', 'SteelBucklingControlVars', 'StrutAndTieControlVars', 'extrapolate_control_var', 'getControlVarImportModuleStr', 'get_diagram_direction', 'get_element_internal_force_component_data', 'write_control_vars_from_elements', 'write_control_vars_from_elements_for_ansys', 'write_control_vars_from_phantom_elements']
 
+ControlVarsBase= bcv.ControlVarsBase
+N= bcv.N
+NMy= bcv.NMy
+NMyMz= bcv.NMyMz
+CFN= bcv.CFN
+CFNMy= bcv.CFNMy
+ShVy= bcv.ShVy
+CFVy= bcv.CFVy
 ShearYControlVars= bcv.ShearYControlVars
+UniaxialBendingControlVars= bcv.UniaxialBendingControlVars
+CFNMyMz= bcv.CFNMyMz
+AxialForceControlVars= bcv.AxialForceControlVars
+BiaxialBendingControlVars= bcv.BiaxialBendingControlVars
+PlaneStressControlVars= bcv.PlaneStressControlVars
+ShellControlVars= bcv.ShellControlVars
+BucklingControlVarsBase= bcv.BucklingControlVarsBase
 from postprocess.control_variables.ec2_annex_f_control_vars import Ec2InPlaneStressControlVars
 
 from postprocess.control_variables.von_mises_control_vars import VonMisesControlVars
