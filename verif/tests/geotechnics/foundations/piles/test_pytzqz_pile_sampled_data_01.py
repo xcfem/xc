@@ -257,14 +257,16 @@ if(not silent):
     plt.show()
 
     # Graphic stuff.
-    # from postprocess import output_handler
-    # oh= output_handler.OutputHandler(modelSpace)
-    # oh.displayFEMesh()
-    # oh.displayNodeValueDiagram(itemToDisp= 'k_x', caption= 'Spring stiffness x direction', defaultDirection= 'X', defaultValue= 0.0)
-    # oh.displayNodeValueDiagram(itemToDisp= 'k_y', caption= 'Spring stiffness y direction', defaultDirection= 'Y', defaultValue= 0.0)
-    # oh.displayDispRot(itemToDisp='uZ')
-    # oh.displayIntForcDiag(itemToDisp='Vy',setToDisplay=pile)
-    # oh.displayIntForcDiag(itemToDisp='Mz',setToDisplay=pile)
+    from postprocess import output_handler
+    oh= output_handler.OutputHandler(modelSpace)
+    oh.displayFEMesh()
+    oh.displayNodeValueDiagram(itemToDisp= 'k_x', caption= 'Spring stiffness x direction', defaultDirection= 'X', defaultValue= 0.0)
+    oh.displayNodeValueDiagram(itemToDisp= 'k_y', caption= 'Spring stiffness y direction', defaultDirection= 'Y', defaultValue= 0.0)
+    oh.displayDispRot(itemToDisp='uZ')
+    oh.displayIntForcDiag(itemToDisp='N')
+    # oh.displayIntForcDiag(itemToDisp='Vy')
+    # oh.displayIntForcDiag(itemToDisp='Mz')
+    
 ratio1= abs(uxMax-0.050468338234872755)/0.050468338234872755
 ratio2= abs(tUxMax-26.3)/26.3
 ratio3= abs(axMax/g-0.2628336061022945)/0.2628336061022945
