@@ -320,7 +320,7 @@ class Pile(object):
         return self.springs
 
     
-    def generateSpringsPile3D(self, alphaKh_x, alphaKh_y, alphaKv_z, storeAsPileNodeProperties= True):
+    def generateSpringsPile3D(self, alphaKh_x, alphaKh_y, alphaKv_z, storeAsPileNodeProperties= True, fixZRotationOfTipNode= False):
         '''Generate the springs that simulate the soils along the pile in a 3D
            problem.
 
@@ -332,14 +332,19 @@ class Pile(object):
                           a single pile in Z direction
         :param storeAsPileNodeProperties: if true store the spring constants as
                                           properties of the pile nodes.
+        :param fixZRotationOfTipNode: fix the rotation around the z axis of 
+                                      the node at the pile tip.
         '''
         linearSpringsConstants= self.getLinearSpringsConstants3D(alphaKh_x= alphaKh_x, alphaKh_y= alphaKh_y, alphaKv_z= alphaKv_z)
         prep= self.pileSet.getPreprocessor
         modelSpace= predefined_spaces.getModelSpace(prep)
         self.springs= generate_springs_pile_3d(modelSpace= modelSpace, nodes= self.pileSet.nodes, linearSpringsConstants= linearSpringsConstants, storeAsPileNodeProperties= storeAsPileNodeProperties)
+        if(fixZRotationOfTipNode):
+            tipNode= self.getPileTipNode3D()
+            modelSpace.fixNode('FFF_FF0', tipNode.tag) # Fix vertical rotation of tip node.
         return self.springs
         
-    def generateSpringsPile(self, alphaKh_x, alphaKh_y, alphaKv_z, storeAsPileNodeProperties= True):
+    def generateSpringsPile(self, alphaKh_x, alphaKh_y, alphaKv_z, storeAsPileNodeProperties= True, fixZRotationOfTipNode= False):
         '''Generate the springs that simulate the soils along the pile
 
         :param alphaKh_x: coefficient to be applied to the horizontal stiffness
@@ -350,6 +355,8 @@ class Pile(object):
                           a single pile in Z direction
         :param storeAsPileNodeProperties: if true store the spring constants as
                                           properties of the pile nodes.
+        :param fixZRotationOfTipNode: fix the rotation around the z axis of 
+                                      the node at the pile tip.
         '''
         if(hasattr(self, 'springs')):
             className= type(self).__name__
@@ -362,7 +369,7 @@ class Pile(object):
             numDOFs= preprocessor.getNodeHandler.numDOFs
             retval= None
             if(numDOFs==6): # 3D structural mechanics
-                retval= self.generateSpringsPile3D(alphaKh_x= alphaKh_x, alphaKh_y= alphaKh_y, alphaKv_z= alphaKv_z, storeAsPileNodeProperties= storeAsPileNodeProperties)
+                retval= self.generateSpringsPile3D(alphaKh_x= alphaKh_x, alphaKh_y= alphaKh_y, alphaKv_z= alphaKv_z, storeAsPileNodeProperties= storeAsPileNodeProperties, fixZRotationOfTipNode= fixZRotationOfTipNode)
             elif(numDOFs==3):
                 retval= self.generateSpringsPile2D(alphaKh_x= alphaKh_x, alphaKv_y= alphaKv_z, storeAsPileNodeProperties= storeAsPileNodeProperties)
             else:
