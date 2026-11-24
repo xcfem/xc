@@ -51,7 +51,7 @@ class SoilSampledData(soil_layers.SoilLayers):
     ''' Class to store the values of the geotechnical parameters along the
         depth of a pile.
     '''
-    def __init__(self, code, pile_data= None, puSwitch= 1, kSwitch= 1, waterTableZ= -math.inf, waterDensity= 1e3, clay_Cd= 0.3, sand_Cd= 0.3, suction= 0.0, rock_py50= 2.5e-3, rock_tz50= 0.5e-3):
+    def __init__(self, code, pile_data= None, puSwitch= 1, kSwitch= 1, waterTableZ= -math.inf, waterDensity= 1e3, groundLevel= 0.0, clay_Cd= 0.3, sand_Cd= 0.3, suction= 0.0, rock_py50= 2.5e-3, rock_tz50= 0.5e-3):
         ''' Constructor.
 
         :param code: code for the geotechnical parameters.
@@ -66,6 +66,7 @@ class SoilSampledData(soil_layers.SoilLayers):
                         modified API parabolic variation --> 2
         :param waterTableZ: global Z coordinate of the water table.
         :param waterDensity: density of the water.
+        :param groundLevel: global Z coordinate of the ground level.
         :param clay_Cd: drag resistance coefficient for clays (defaults to 0.3).
         :param sand_Cd: drag resistance coefficient for clays (defaults to 1.0).
         :param suction: Uplift resistance is equal to suction*qult. 
@@ -75,7 +76,7 @@ class SoilSampledData(soil_layers.SoilLayers):
         :param rock_tz50: vertical displacement corresponding to one-half the ultimate 
                           skin friction resistance for rocks.
         '''
-        super().__init__(waterTableZ= waterTableZ, groundLevel= None, waterDensity= waterDensity, clay_Cd= clay_Cd, sand_Cd= sand_Cd, suction= suction)
+        super().__init__(waterTableZ= waterTableZ, groundLevel= groundLevel, waterDensity= waterDensity, clay_Cd= clay_Cd, sand_Cd= sand_Cd, suction= suction)
         self.code= code
         self.pileData= pile_data
         self.interpolationsDict= dict()
