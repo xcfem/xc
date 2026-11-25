@@ -433,11 +433,26 @@ class PyTzQzPile(pile.Pile):
         modelSpace.removeMaterial(qzMat)
         return self.springs
         
-    def generateSpringsPile(self, fixZRotationOfTipNode= True):
+    def _storeSpringStiffnessesAsNodeProperties(self):
+        ''' Store the stiffness of the springs that support the pile as node
+            properties called 'k_x', 'k_y' and 'k_z'.
+        '''
+        propNames= ['k_x', 'k_y', 'k_z']
+        for spring in self.springs:
+            pileNode= spring.getNode(1)
+            materials= spring.getMaterials()
+            for propName, material in zip(propNames, materials):
+                k= material.getInitialTangent()
+                pileNode.setProp(propName, k)
+            
+    def generateSpringsPile(self, verticalStressOnSurface= 0.0, fixZRotationOfTipNode= True, storeAsPileNodeProperties= True):
         '''Generate the springs that simulate the soils along the pile
 
+        :param verticalStressOnSurface: additional stress on the soil surface.
         :param fixZRotationOfTipNode: fix the rotation around the z axis of 
                                       the node at the pile tip.
+        :param storeAsPileNodeProperties: if true store the spring constants as
+                                          properties of the pile nodes.
         '''
         if(hasattr(self, 'springs')):
             className= type(self).__name__
@@ -450,13 +465,15 @@ class PyTzQzPile(pile.Pile):
             numDOFs= preprocessor.getNodeHandler.numDOFs
             retval= None
             if(numDOFs==6): # 3D structural mechanics
-                retval= self.generateSpringsPile3D(fixZRotationOfTipNode= fixZRotationOfTipNode)
+                retval= self.generateSpringsPile3D(verticalStressOnSurface= verticalStressOnSurface, fixZRotationOfTipNode= fixZRotationOfTipNode)
             elif(numDOFs==3):
-                retval= self.generateSpringsPile2D()
+                retval= self.generateSpringsPile2D(verticalStressOnSurface= verticalStressOnSurface)
             else:
                 errMsg= '; not implemented for '+str(numDOFs)
                 errMsg+= ' degrees of freedom.'
                 lmsg.error(className+'.'+methodName+errMsg)
+        if(retval and storeAsPileNodeProperties):
+            self._storeSpringStiffnessesAsNodeProperties()
         return retval
             
 class PyTzQzCircularPile(PyTzQzPile):
