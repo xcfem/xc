@@ -26,6 +26,7 @@ from solution import predefined_solutions
 from solution import transient
 from solution import hht
 from actions.quake import ground_motion_utils as gmu
+from misc_utils import log_messages as lmsg
 
 
 feProblem= xc.FEProblem()
@@ -82,7 +83,6 @@ for pileCode in selectedPiles:
     # Set the ground level.
     line= pileLines[pileCode]
     groundLevel= max(line.getP1().getPos.z, line.getP2().getPos.z)
-    soilData= pgpSet.getSoilSampledData(pileCode)
     soilData.groundLevel= groundLevel
     
     # Create the pile.
