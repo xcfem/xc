@@ -556,9 +556,10 @@ def _get_qz_param_clay(qzDepth, su, b, sigV, drilledShaft= True):
     '''
     qult= 0.0
     z50= 100*b
+    crossSectionArea= math.pi*(b/2.0)**2
     if(qzDepth/b>=5.0):
         Nc= 9.0
-        qult= Nc*su+sigV
+        qult= (Nc*su+sigV)*crossSectionArea
     else:
         methodName= sys._getframe(0).f_code.co_name
         errorMsg= '; depth of the pile tip ('
