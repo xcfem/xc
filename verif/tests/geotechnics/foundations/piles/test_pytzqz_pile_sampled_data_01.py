@@ -206,6 +206,9 @@ motionName= 'el_centro'
 cod_ts= motionName+'_accel'
 xGM, xGMSize= gmu.get_uniform_excitation_from_accel_values(modelSpace, name= motionName, dof= targetDOF, accelValues= accelerationValues, dt= timeStep, cod_ts= cod_ts, factor= scale, vel0= 0.0)
 modelSpace.addLoadCaseToDomain(xGM.name)
+if(not silent):
+    peakAccel= xGM.motionRecord.getPeakAccel()
+    print('Peak acceleration: '+str(peakAccel/g)+str('g'))
 
 ## Perform the analysis.
 domain.setTime(0.0) # initialize time.
