@@ -2010,6 +2010,7 @@ python tests/geotechnics/foundations/piles/test_matlock_formulas_02.py
 python tests/geotechnics/foundations/piles/test_tz_formulas_for_clay_01.py
 python tests/geotechnics/foundations/piles/test_qz_formulas_for_clay_01.py
 python tests/geotechnics/foundations/piles/test_soil_sampled_data_01.py
+python tests/geotechnics/foundations/piles/test_soil_sampled_data_02.py
 python tests/geotechnics/foundations/piles/test_pu_pile_in_weak_rock.py
 python tests/geotechnics/foundations/piles/test_pile_soil_layers_01.py
 python tests/geotechnics/foundations/piles/test_pile_soil_layers_02.py
@@ -2019,6 +2020,7 @@ python tests/geotechnics/foundations/piles/test_pytzqz_soil_layers_02.py
 python tests/geotechnics/foundations/piles/test_pytzqz_pile_01.py
 python tests/geotechnics/foundations/piles/test_pytzqz_pile_02.py
 python tests/geotechnics/foundations/piles/test_pytzqz_pile_sampled_data_01.py
+python tests/geotechnics/foundations/piles/test_pytzqz_pile_sampled_data_02.py
 echo "$BLEU" "    Micropiles." "$NORMAL"
 python tests/geotechnics/foundations/piles/test_micropile_cross_section.py
 python tests/geotechnics/foundations/piles/test_micropile_01.py
