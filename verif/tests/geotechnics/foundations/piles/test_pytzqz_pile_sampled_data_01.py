@@ -165,8 +165,8 @@ if(not silent):
     print(tabulate.tabulate(eigenvaluesTable))
     
 ## Set the Rayleigh damping factors for nodes & elements.
-freq1= 1.168 # Lower frequency (Hz)
-freq2= 1.823 # Upper frequency (Hz)
+freq1= 1.823 # Lower frequency (Hz)
+freq2= 4.9457 # Upper frequency (Hz)
 target_zeta= 0.05  # 5% target structural damping
 alph, beta = rd.compute_rayleigh_damping(freq1, freq2, target_zeta)
 domain= modelSpace.getDomain()
@@ -270,10 +270,10 @@ if(not silent):
     # oh.displayIntForcDiag(itemToDisp='Vy')
     # oh.displayIntForcDiag(itemToDisp='Mz')
     
-ratio1= abs(uxMax-0.050468338234872755)/0.050468338234872755
-ratio2= abs(tUxMax-26.3)/26.3
-ratio3= abs(axMax/g-0.2628336061022945)/0.2628336061022945
-ratio4= abs(tAxMax-1.92)/1.92
+ratio1= abs(uxMax-0.0008788416925704864)/0.0008788416925704864
+ratio2= abs(tUxMax-2.44)/2.44
+ratio3= abs(axMax/g-0.20458108889955126)/0.20458108889955126
+ratio4= abs(tAxMax-2.44)/2.44
 
 if(not silent):
     print('time increment: ', dt, 's')
