@@ -11,6 +11,7 @@ __email__= "l.pereztato@gmail.com"
 
 import sys
 import math
+import xc
 from scipy.constants import g
 from misc_utils import log_messages as lmsg
 from materials.sections import section_properties as sp
@@ -142,6 +143,19 @@ class Pile(object):
         self.rho= rho
         self.drilledShaft= drilledShaft
 
+    def getPreprocessor(self):
+        ''' Return the preprocessor used to create the FE mesh of this pile.'''
+        retval= None
+        if(self.pileSet):
+            retval= self.pileSet.getPreprocessor
+        return retval
+
+    def getNumDOFs(self):
+        ''' Return the number of degrees of freedom as given in the preprocessor
+        '''
+        preprocessor= self.getPreprocessor()
+        return preprocessor.getNodeHandler.numDOFs
+       
     def getElasticMaterialData(self, overrideRho= None):
         '''Return the elastic material constitutive model of the pile itself.
 
@@ -314,7 +328,7 @@ class Pile(object):
         # Compute the 3D spring constants and ignore the second horizontal
         # component.
         linearSpringsConstants= self.getLinearSpringsConstants2D(alphaKh_x= alphaKh_x, alphaKv_y= alphaKv_y)
-        prep= self.pileSet.getPreprocessor
+        prep= self.getPreprocessor()
         modelSpace= predefined_spaces.getModelSpace(prep)
         self.springs= generate_springs_pile_2d(modelSpace= modelSpace, nodes= self.pileSet.nodes, linearSpringsConstants= linearSpringsConstants, storeAsPileNodeProperties= storeAsPileNodeProperties)
         return self.springs
@@ -336,7 +350,7 @@ class Pile(object):
                                       the node at the pile tip.
         '''
         linearSpringsConstants= self.getLinearSpringsConstants3D(alphaKh_x= alphaKh_x, alphaKh_y= alphaKh_y, alphaKv_z= alphaKv_z)
-        prep= self.pileSet.getPreprocessor
+        prep= self.getPreprocessor()
         modelSpace= predefined_spaces.getModelSpace(prep)
         self.springs= generate_springs_pile_3d(modelSpace= modelSpace, nodes= self.pileSet.nodes, linearSpringsConstants= linearSpringsConstants, storeAsPileNodeProperties= storeAsPileNodeProperties)
         if(fixZRotationOfTipNode):
@@ -365,12 +379,11 @@ class Pile(object):
             lmsg.error(className+'.'+methodName+errMsg)
             retval= self.springs
         else:
-            preprocessor= self.pileSet.getPreprocessor
-            numDOFs= preprocessor.getNodeHandler.numDOFs
+            numDOFs= self.getNumDOFs()
             retval= None
             if(numDOFs==6): # 3D structural mechanics
                 retval= self.generateSpringsPile3D(alphaKh_x= alphaKh_x, alphaKh_y= alphaKh_y, alphaKv_z= alphaKv_z, storeAsPileNodeProperties= storeAsPileNodeProperties, fixZRotationOfTipNode= fixZRotationOfTipNode)
-            elif(numDOFs==3):
+            elif(numDOFs==3): # 2D structural mechanics.
                 retval= self.generateSpringsPile2D(alphaKh_x= alphaKh_x, alphaKv_y= alphaKv_z, storeAsPileNodeProperties= storeAsPileNodeProperties)
             else:
                 className= type(self).__name__
@@ -389,6 +402,97 @@ class Pile(object):
         for zlElement in self.springs:
             for n in zlElement.nodes:
                 if(n.tag not in shaftNodes):
+                    retval.append(n)
+        return retval
+    
+    def getPileTipNode2D(self):
+        '''Return the node at the tip of the pile.'''
+        retval= None
+        nodeList= list(self.pileSet.nodes)
+        if(nodeList):
+            retval= nodeList[0]
+            yMin= retval.getInitialPos3d.y
+            for n in nodeList[1:]:
+                nY= n.getInitialPos3d.y
+                if(nY<yMin):
+                    yMin= nY
+                    retval= n
+        return retval
+
+    def getPileTipNode3D(self):
+        '''Return the node at the tip of the pile.'''
+        retval= None
+        nodeList= list(self.pileSet.nodes)
+        if(nodeList):
+            retval= nodeList[0]
+            zMin= retval.getInitialPos3d.z
+            for n in nodeList[1:]:
+                nZ= n.getInitialPos3d.z
+                if(nZ<zMin):
+                    zMin= nZ
+                    retval= n
+        return retval
+
+    def getPileTipNode(self):
+        '''Return the node at the tip of the pile.'''
+        retval= None
+        numDOFs= self.getNumDOFs()
+        if(numDOFs==6): # 3D structural mechanics
+            retval= self.getPileTipNode3D()
+        elif(numDOFs==3): # 2D structural mechanics.
+            retval= self.getPileTipNode2D()
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            errMsg= '; not implemented for '+str(numDOFs)
+            errMsg+= ' degrees of freedom.'
+            lmsg.error(className+'.'+methodName+errMsg)
+        return retval
+
+    def getPileTipSprings(self):
+        ''' Return the springs attached to the pile tip.
+        '''
+        pileTipNode= self.getPileTipNode()
+        candidateElements= pileTipNode.connectedElements
+        elementsToRemove= set()
+        for candidateElement in candidateElements:
+            for e in self.pileSet.elements:
+                if(e.tag==candidateElement.tag):
+                    elementsToRemove.add(e.tag)
+        retval= list()
+        for candidateElement in candidateElements:
+            if(candidateElement.tag not in elementsToRemove):
+                retval.append(candidateElement)
+        return retval
+
+    def getPileTipQzSprings(self):
+        ''' Return the springs attached to the pile tip that restraints its
+            vertical displacement.
+        '''
+        pileTipSprings= self.getPileTipSprings()
+        numDOFs= self.getNumDOFs()
+        if(numDOFs==6): # 3D structural mechanics
+            vDir= xc.Vector([0,0,1])
+        elif(numDOFs==3): # 2D structural mechanics.
+            vDir= xc.Vector([0,1])
+        retval= list()
+        for spring in pileTipSprings:
+            iVector= spring.getIVector
+            dot= iVector.dot(vDir)
+            if(dot>0.9):
+                retval.append(spring)
+        return retval
+            
+    def getPileTipQzFixedNodes(self):
+        ''' Return the fixed nodes that support the springs that restrain its
+            vertical displacement.
+        '''
+        pileTipNode= self.getPileTipNode()
+        pileTipQzSprings= self.getPileTipQzSprings()
+        retval= list()
+        for zlElement in pileTipQzSprings:
+            for n in zlElement.nodes:
+                if(n.tag != pileTipNode.tag):
                     retval.append(n)
         return retval
     
