@@ -144,6 +144,13 @@ class SoilSampledData(soil_layers.SoilLayers):
         bearingProperties= self.getBearingProperties()
         return (propName in bearingProperties)
 
+    def _get_sampled_depths(self):
+        ''' Return the depths of the sampled data.'''
+        depths= None
+        bearingProperties= self.getBearingProperties()
+        bearingData= self._get_bearing_data()
+        return bearingData['depthi']
+
     def _get_bearing_property_along_pile_depth(self, propName):
         ''' Return the values of the property with the given name along the
             pile depth.
@@ -239,12 +246,12 @@ class SoilSampledData(soil_layers.SoilLayers):
         '''
         retval= None
         if(depths is not None):
-            depths_size= len(depths)
-            values_size= len(values)
             interpolationFunctionName= propName+'_interpolation'
             if(interpolationFunctionName in self.interpolationsDict):
                 retval= self.interpolationsDict[interpolationFunctionName]
             else:
+                depths_size= len(depths)
+                values_size= len(values)
                 if(depths_size==values_size):
                     retval= interpolate.interp1d(depths, values, fill_value='extrapolate')
                     self.interpolationsDict[interpolationFunctionName]= retval
@@ -472,6 +479,33 @@ class SoilSampledData(soil_layers.SoilLayers):
             retval= float(interpolation(depth))
         return retval
     
+    def getAccumulatedPileSkinFrictionBearingCapacityAtDepth(self, depth, characteristic):
+        ''' Return the value of the total skin friction bearing capacity of the
+            pile from its head to the given depth.
+
+        :param depth: desired depth.
+        :param characteristic: if true return the characteristic value, 
+                               otherwise return the design one.
+        '''
+        retval= 0.0
+        depths= self._get_sampled_depths()
+        depth0= depths[0]
+        for depth1 in depths[1:]:
+            if(depth1<depth):
+                deltaL= depth1-depth0
+                deriv_rsk= self.getPileSkinFrictionBearingCapacityAtDepth(depth1, characteristic= characteristic)
+                inc_rsk= deltaL*deriv_rsk
+                retval+= inc_rsk
+                depth0= depth1
+            else:
+                break;
+        deltaL= depth-depth0
+        deriv_rsk= self.getPileSkinFrictionBearingCapacityAtDepth(depth, characteristic= characteristic)        
+        inc_rsk= deltaL*deriv_rsk
+        retval+= inc_rsk
+        depth0= depth1
+        return retval
+        
     def plotPileSkinFrictionBearingCapacityAlongDepth(self, characteristic, unitConvFactor= 1e-3, unitSymbol= 'kN'):
         ''' Plot the values of the skin friction bearing capacity along the
             pile depth.
@@ -547,12 +581,18 @@ class SoilSampledData(soil_layers.SoilLayers):
         :param characteristic: if true return the characteristic value, 
                                otherwise return the design one.
         '''
-        if(characteristic):
-            propName= 'rcki'
-        else:
-            propName= 'rcdi'
-        return self._get_bearing_property_along_pile_depth(propName= propName)
-            
+        # if(characteristic):
+        #     propName= 'rcki'
+        # else:
+        #     propName= 'rcdi'
+        # return self._get_bearing_property_along_pile_depth(propName= propName)
+        depths, rs_values= self.getAccumulatedPileSkinFrictionBearingCapacityAlongDepth(characteristic)
+        rc_values= list()
+        for depth, rs_value in zip(depths, rs_values):
+            rb_value= self.getPileEndBearingCapacityAtDepth(depth)
+            rb_values.append(rs_value+rb_value)
+        return depths, rc_values
+        
     def getPileBearingCapacityAtDepth(self, depth, characteristic):
         ''' Return the value of the total bearing capacity of the pile at the
             given depth.
@@ -561,16 +601,8 @@ class SoilSampledData(soil_layers.SoilLayers):
         :param characteristic: if true return the characteristic value, 
                                otherwise return the design one.
         '''
-        retval= None
-        bearingProperties= self.getBearingProperties()
-        if(characteristic):
-            propName= 'rbki'
-        else:
-            propName= 'rbdi'
-        if(propName in bearingProperties):
-            depths, values= self.getPileBearingCapacityAlongDepth(characteristic)
-            interpolation= self._get_linear_property_interpolation(propName= propName, depths= depths, values= values)
-            retval= float(interpolation(depth))
+        retval= self.getAccumulatedPileSkinFrictionBearingCapacityAtDepth(depth, characteristic)
+        retval+= self.getPileEndBearingCapacityAtDepth(depth, characteristic)
         return retval
     
     def plotPileBearingCapacityAlongDepth(self, characteristic, unitConvFactor= 1e-3, unitSymbol= 'kN'):
@@ -1080,6 +1112,9 @@ class SoilSampledData(soil_layers.SoilLayers):
         if(soilPhi is not None): # it's a soil.
             soilCu= self.getCohesionAtDepth(depth) # soil cohesion.
             tult, tz50= pytzqzf.get_tz_param(phi= soilPhi, su= soilCu, b= pileDiameter, sigV= sigV, porePressure= porePressure, tribLength= tributaryLength, drilledShaft= drilledShaft)
+            sampled_tult_data= self.getPileSkinFrictionBearingCapacityAtDepth(depth, characteristic= True)
+            if(sampled_tult_data is not None):
+                tult= sampled_tult_data
         else: # it's a rock.
             tz50= self.rock_tz50 # vertical displacement corresponding to one-half the ultimate 
                                 # skin friction resistance for rocks.
@@ -1098,16 +1133,21 @@ class SoilSampledData(soil_layers.SoilLayers):
         :param verticalStressOnSurface: additional stress on the soil surface.
         :param drilledShaft: true when the pile is drilled instead of driven.
         '''
-        sigV= self.getVerticalStressAtDepth(depth, verticalStressOnSurface) # Vertical stress.
         soilPhi= self.getInternalFrictionAngleAtDepth(depth) # internal friction angle.
         if(soilPhi is not None): # it's a soil.
+            sigV= self.getVerticalStressAtDepth(depth, verticalStressOnSurface) # Vertical stress.
             soilCu= self.getCohesionAtDepth(depth) # soil cohesion.
             soilG= self.getShearModulusAtDepth(depth) # soil shear modulus.
             qult, qz50= pytzqzf.get_qz_param(qzDepth= depth, phi= soilPhi, su= soilCu, b= pileDiameter, sigV= sigV, G= soilG, drilledShaft= drilledShaft)
+            # If the end bearing capacity is already calculated for this soil
+            # take that value:
+            sampled_qult_data= self.getPileEndBearingCapacityAtDepth(depth, characteristic= True)
+            if(sampled_qult_data is not None):
+                qult= sampled_qult_data
         else: # it's a rock.
             qult= self.getPileEndBearingCapacityAtDepth(depth, characteristic= True)
             qz50= 0.04*pileDiameter # vertical displacement corresponding to one-half the ultimate 
-                                   # end bearing resistance for rocks.
+                                    # end bearing resistance for rocks.
         assert (qult>0)
         assert (qz50>0)
         return qult, qz50
