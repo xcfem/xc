@@ -227,34 +227,6 @@ class PyTzQzPile(pile.Pile):
             lmsg.error(className+'.'+methodName+errorMsg)
             sys.exit(-1)
         return retval
-
-    def getPileTipNode2D(self):
-        '''Return the node at the tip of the pile.'''
-        retval= None
-        nodeList= list(self.pileSet.nodes)
-        if(nodeList):
-            retval= nodeList[0]
-            yMin= retval.getInitialPos3d.y
-            for n in nodeList[1:]:
-                nY= n.getInitialPos3d.y
-                if(nY<yMin):
-                    yMin= nY
-                    retval= n
-        return retval
-
-    def getPileTipNode3D(self):
-        '''Return the node at the tip of the pile.'''
-        retval= None
-        nodeList= list(self.pileSet.nodes)
-        if(nodeList):
-            retval= nodeList[0]
-            zMin= retval.getInitialPos3d.z
-            for n in nodeList[1:]:
-                nZ= n.getInitialPos3d.z
-                if(nZ<zMin):
-                    zMin= nZ
-                    retval= n
-        return retval
     
     def generateSpringsPile2D(self, verticalStressOnSurface= 0.0):
         '''Generate the springs that simulate the soils along the pile in a 2D
