@@ -7,6 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
+import math
 from geotechnics.foundations import pytzqz_functions as pytzqzf
 
 B = 1.0 # Pile diameter.
@@ -17,9 +18,10 @@ porePressure= sigmaV-sigmaV_prime
 L_trib = 1.0 # Tributary length.
 
 qult, z50= pytzqzf._get_qz_param_clay(qzDepth= 14.0, su= su, sigV= sigmaV, b= B, drilledShaft= False)
+crossSectionArea= math.pi*(B/2.0)**2
 
 # Check results.
-err= max( abs(qult-1015e3), abs(z50-11.25e-3))
+err= max( abs(qult-1015e3*crossSectionArea), abs(z50-11.25e-3))
 
 '''
 print('tult= ', qult/1e3)
